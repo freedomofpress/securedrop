@@ -1,0 +1,18 @@
+$def with (randomid, received=False)
+<h1>Upload documents</h1>
+
+$if received:
+    <p><strong>Thanks! We received your document.</strong></p>
+
+<form method="post" action="/upload/" enctype="multipart/form-data">
+<input type="hidden" name="id" value="$randomid" />
+<p>Alright, you can now upload files:</p>
+
+<p><input type="file" name="fh" /> <button type="submit">Submit</button></p>
+
+<p>Or just enter a message:</p>
+
+<textarea name="msg" cols="72" rows="20"></textarea><br />
+<button type="submit">Submit</button>
+
+</form>

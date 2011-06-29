@@ -1,4 +1,4 @@
-import hmac, hashlib, subprocess
+import hmac, hashlib, subprocess, random
 import gnupg
 import config
 
@@ -33,18 +33,21 @@ def genkeypair(name, secret):
       name_email="%s@wireleaks.example.com" % name
     ))
 
-def encrypt(name, s):
+def getkey(name):
+    for key in gpg.list_keys():
+        [0]['fingerprint']
+
+def encrypt(fp, s, output=None):
     """
     >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
     '-----BEGIN PGP MESSAGE-----\\nVersion: GnuPG v1.4.9 (Darwin)\\n\\nhQIMA3rf0hDNFTT'
     """
-    fp = gpg.list_keys(name)[0]['fingerprint']
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, [fp])
+        out = gpg.encrypt(s, [fp], output=output)
     else:
-        out = gpg.encrypt_file(s, [fp])
+        out = gpg.encrypt_file(s, [fp], output=output)
     return out.data
 
 def decrypt(name, secret, s):
