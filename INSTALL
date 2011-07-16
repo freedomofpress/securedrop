@@ -1,0 +1,23 @@
+git clone /path/to/wireleaks
+cd wireleaks
+mkdir keys store
+chmod go-rx keys store
+# if you already hae a key for your journalists, import it:
+gpg --homedir keys --import
+# otherwise, you'll need to make one
+gpg --homedir keys --gen-key
+# follow the prompts and you'll end up with a line like:
+# Key fingerprint = 4C44 603B AB40 E483 2523  8095 151A 304C 3972 FBB2
+# which you'll use below:
+
+cat > config.py <<EOF
+HMAC_SECRET = '[put a long random string here]'
+GPG_KEY_DIR = '/path/to/wireleaks/keys'
+JOURNALIST_KEY = '4C44 603B AB40 E483 2523  8095 151A 304C 3972 FBB2'
+STORE_DIR = '/path/to/wireleaks/store'
+EOF
+
+sudo apt-get install secure-delete
+sudo easy_install https://python-gnupg.googlecode.com/files/python-gnupg-0.2.7.tar.gz
+git clone git://github.com/webpy/webpy.git
+ln -s `pwd`/webpy/web .
