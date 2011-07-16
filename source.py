@@ -1,16 +1,17 @@
-import os, time
+import os, time, datetime
 import web
-import config, crypto
+import config, crypto, background, store
 web.config.debug = True
 
 urls = (
   '/', 'index',
   '/generate/', 'generate',
   '/lookup/', 'lookup',
-  '/upload/', 'upload'
+  '/upload/', 'upload',
+  '/delete/', 'delete'
 )
 
-render = web.template.render('templates/')
+render = web.template.render('source_templates/')
 
 class index:
     def GET(self):
@@ -21,37 +22,51 @@ class generate:
         raise web.seeother('/')
     
     def POST(self):
-        randomid = crypto.genrandomid()
-        return render.generate(randomid)
+        iid = crypto.geniid()
+        if os.path.exists(store.path(iid)):
+            # if this happens, we're not using very secure crypto
+            store.log('Got a duplicate ID.')
+        else:
+            os.mkdir(store.path(iid))
+            
+        return render.generate(iid)
 
 class lookup:
     def GET(self):
         return render.lookup_get()
     
     def POST(self):
-        i = web.input('id')
-        #@@look for messages
-        return render.lookup(i.id)
+        i = web.input('id', fh={}, msg=None, mid=None, action=None)
+        loc = store.path(crypto.shash(i.id))
+        if not os.path.exists(loc): raise web.notfound()
+        
+        received = False
+        
+        if i.action == 'upload':
+            loc += '/%s.enc' % time.time()
+            if i.msg:
+                crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc)
+            elif i.fh:
+                crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc)
 
-class upload:
-    def GET(self):
-        raise web.seeother('/lookup/')
-    
-    def POST(self):
-        i = web.input('id', fh={}, msg=None)
-        loc = '%s/%s' % (config.STORE_DIR, crypto.shash(i.id))
-        if not os.path.exists(loc): os.mkdir(loc)
+            if not crypto.getkey(crypto.shash(i.id)):
+                background.execute(lambda: crypto.genkeypair(crypto.shash(i.id), i.id))
+            
+            received = True
         
-        loc += '/%s.enc' % time.time()
-        if i.msg:
-            crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc)
-        elif i.fh:
-            crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc)
+        elif i.action == 'delete':
+            crypto.secureunlink(store.path(crypto.shash(i.id), i.mid))
         
-        return render.lookup(i.id, received=True)
-        #if nokey:
-        #    background.execute(lambda: crypto.genkeypair(crypto.shash(i.id), i.id))
-        
+        msgs = []
+        for fn in os.listdir(store.path(crypto.shash(i.id))):
+            if fn.startswith('reply-'):
+                msgs.append(web.storage(
+                  id=fn,
+                  date=datetime.datetime.fromtimestamp(float(store.cleanname(fn))),
+                  msg=crypto.decrypt(crypto.shash(i.id), i.id, file(store.path(crypto.shash(i.id), fn)).read())
+                ))
+        return render.lookup(i.id, msgs, received=received)
+           
 
 app = web.application(urls, locals())
 if __name__ == "__main__":

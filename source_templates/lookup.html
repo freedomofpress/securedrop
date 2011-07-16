@@ -1,0 +1,42 @@
+$def with (iid, msgs, received=False)
+<form method="post" action="">
+<a href="/">Home</a><br />
+<a href="/lookup/">Enter a secure ID</a><br />
+
+<input type="hidden" name="id" value="$iid" />
+<button type="submit">Reload</button>
+</form>
+<h1>Upload documents</h1>
+
+$if received:
+    <p><strong>Thanks! We received your document.</strong></p>
+
+$if msgs:
+    <hr />
+    <p><strong>You have received a reply.</strong> For your security, please delete all replies when you're done with them.</p>
+    
+    $for msg in msgs:
+        <form method="post" action="">
+        <input type="hidden" name="action" value="delete" />
+        <input type="hidden" name="mid" value="$msg.id" />
+        <input type="hidden" name="id" value="$iid" />
+        <p>Sent $msg.date:</p>
+        <blockquote>$msg.msg</blockquote>
+        <p><button type="submit">Delete</button></p>
+        </form>
+    <hr />
+
+<form method="post" action="" enctype="multipart/form-data">
+<input type="hidden" name="action" value="upload" />
+<input type="hidden" name="id" value="$iid" />
+<p>Alright, you can now upload files:</p>
+
+<p><input type="file" name="fh" /> <button type="submit">Submit</button></p>
+
+<p>Or just enter a message:</p>
+
+<textarea name="msg" cols="72" rows="20"></textarea><br />
+<button type="submit">Submit</button>
+</form>
+
+<p>Remember: Your secure identifier is <code>$iid</code></p>

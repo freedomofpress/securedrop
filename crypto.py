@@ -35,7 +35,9 @@ def genkeypair(name, secret):
 
 def getkey(name):
     for key in gpg.list_keys():
-        [0]['fingerprint']
+        for uid in key['uids']:
+            if ' <%s@' % name in uid: return key['fingerprint']
+    return None
 
 def encrypt(fp, s, output=None):
     """

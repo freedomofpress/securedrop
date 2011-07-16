@@ -1,13 +1,13 @@
-$def with (randomid)
+$def with (iid)
 <h1>Your ID</h1>
 
 <p>Your secure identifier is:</p>
 
-<h2>$randomid</h2>
+<h2>$iid</h2>
 
 <p>You will need this identifier to access any responses to your submission. Please save it in a secure place if you want to be able to get responses. (However, this identifier of course will help identify you as the submitter -- so don't keep it anywhere it might get discovered.)</p>
 
 <form method="post" action="/lookup/">
-<input type="hidden" name="id" value="$randomid" />
+<input type="hidden" name="id" value="$iid" />
 <p>Once you've taken care of that: <button type="submit">Continue...</button></p>
 </form>

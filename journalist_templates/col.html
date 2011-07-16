@@ -1,0 +1,22 @@
+$def with (docs, sid, haskey)
+<a href="/">All documents</a>
+<h1>Read documents: $sid[:10]...</h1>
+
+<p>Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+
+<ul>
+$for doc in docs:
+    $if doc.name.startswith('reply-'):
+        <li><i>$doc.name</i> (sent $doc.date)</li>
+    $else:
+        <li><a href="$doc.name">$doc.name</a> (uploaded $doc.date)</li>
+</ul>
+
+$if haskey:
+    <p>You can write a secure reply to the person who submitted these documents:</p>
+    
+    <form action="/reply/" method="post">
+      <input type="hidden" name="sid" value="$sid" />
+      <textarea name="msg" cols="72" rows="20"></textarea><br />
+      <button type="submit">Submit</button>
+    </form>

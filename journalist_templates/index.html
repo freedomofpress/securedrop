@@ -1,0 +1,10 @@
+$def with (cols)
+<h1>Read documents</h1>
+
+<p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
+
+<ul>
+$for col in cols:
+    <li><a href="$col.name/">$col.name</a> (last updated $col.date)</li>
+
+</ul>
