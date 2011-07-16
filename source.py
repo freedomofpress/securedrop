@@ -43,7 +43,7 @@ class lookup:
         received = False
         
         if i.action == 'upload':
-            loc += '/%s.enc' % time.time()
+            loc = store.path(crypto.shash(i.id), '%s.enc' % time.time())
             if i.msg:
                 crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc)
             elif i.fh:

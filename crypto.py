@@ -7,6 +7,8 @@ HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
 
+class CryptoException(Exception): pass
+
 def genrandomid():
     return hex(random.getrandbits(BITS_IN_RANDOM_ID))[2:-1]
 
@@ -44,13 +46,17 @@ def encrypt(fp, s, output=None):
     >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
     '-----BEGIN PGP MESSAGE-----\\nVersion: GnuPG v1.4.9 (Darwin)\\n\\nhQIMA3rf0hDNFTT'
     """
+    fp = fp.replace(' ', '')
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
         out = gpg.encrypt(s, [fp], output=output)
     else:
         out = gpg.encrypt_file(s, [fp], output=output)
-    return out.data
+    if out.ok:
+        return out.data
+    else:
+        raise CryptoException(out.stderr)
 
 def decrypt(name, secret, s):
     """
