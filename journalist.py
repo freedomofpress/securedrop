@@ -7,7 +7,7 @@ urls = (
   '/', 'index',
   '/reply/', 'reply',
   '/([a-f0-9]+)/', 'col',
-  '/([a-f0-9]+)/([0-9]+\.[0-9+]\.enc)', 'doc'
+  '/([a-f0-9]+)/([0-9]+\.[0-9]+\.enc)', 'doc'
 )
 
 render = web.template.render('journalist_templates/')
@@ -17,6 +17,7 @@ class index:
         dirs = os.listdir(config.STORE_DIR)
         cols = []
         for d in dirs:
+            if not os.listdir(store.path(d)): continue
             cols.append(web.storage(name=d, date=
               datetime.datetime.fromtimestamp(
                 os.stat(store.path(d)).st_mtime

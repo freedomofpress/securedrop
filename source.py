@@ -22,12 +22,12 @@ class generate:
         raise web.seeother('/')
     
     def POST(self):
-        iid = crypto.geniid()
+        iid = crypto.genrandomid()
         if os.path.exists(store.path(iid)):
             # if this happens, we're not using very secure crypto
             store.log('Got a duplicate ID.')
         else:
-            os.mkdir(store.path(iid))
+            os.mkdir(store.path(crypto.shash(iid)))
             
         return render.generate(iid)
 
