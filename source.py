@@ -46,7 +46,7 @@ class lookup:
             loc = store.path(crypto.shash(i.id), '%s.enc' % time.time())
             if i.msg:
                 crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc)
-            elif i.fh:
+            if i.fh:
                 crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc)
 
             if not crypto.getkey(crypto.shash(i.id)):
