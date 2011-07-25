@@ -43,11 +43,12 @@ class lookup:
         received = False
         
         if i.action == 'upload':
-            loc = store.path(crypto.shash(i.id), '%s.enc' % time.time())
             if i.msg:
-                crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc)
-            elif i.fh:
-                crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc)
+                loc1 = store.path(crypto.shash(i.id), '%s.enc' % time.time())
+                crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
+            if i.fh.file:
+                loc2 = store.path(crypto.shash(i.id), '%s00.enc' % time.time())
+                crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2)
 
             if not crypto.getkey(crypto.shash(i.id)):
                 background.execute(lambda: crypto.genkeypair(crypto.shash(i.id), i.id))
