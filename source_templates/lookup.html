@@ -1,7 +1,7 @@
 $def with (iid, msgs, received=False)
 <form method="post" action="">
 <a href="/">Home</a><br />
-<a href="/lookup/">Enter a secure ID</a><br />
+<a href="/lookup/">Enter a different code name</a><br />
 
 <input type="hidden" name="id" value="$iid" />
 <button type="submit">Reload this page</button>
@@ -39,4 +39,4 @@ $if msgs:
 <button type="submit">Submit</button>
 </form>
 
-<p>Remember: Your secure ID is <code>$iid</code></p>
+<p>Remember: Your code name is <code>$iid</code></p>
