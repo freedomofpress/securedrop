@@ -2,15 +2,17 @@ import hmac, hashlib, subprocess, random
 import gnupg
 import config
 
-BITS_IN_RANDOM_ID = 256
+WORDS_IN_RANDOM_ID = 2
+WORD_LIST = 'wordlist'
 HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
 
 class CryptoException(Exception): pass
 
+words = file(WORD_LIST).read().split('\n')
 def genrandomid():
-    return hex(random.getrandbits(BITS_IN_RANDOM_ID))[2:-1]
+    return ' '.join(random.choice(words) for x in range(WORDS_IN_RANDOM_ID))
 
 def shash(s):
     """
