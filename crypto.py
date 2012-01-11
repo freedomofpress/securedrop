@@ -34,7 +34,7 @@ def genkeypair(name, secret):
     return gpg.gen_key(gpg.gen_key_input(
       key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
       passphrase=secret,
-      name_email="%s@wireleaks.example.com" % name
+      name_email="%s@deaddrop.example.com" % name
     ))
 
 def getkey(name):

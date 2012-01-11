@@ -1,5 +1,5 @@
-git clone /path/to/wireleaks
-cd wireleaks
+git clone /path/to/deaddrop
+cd deaddrop
 mkdir keys store
 chmod go-rx keys store
 # if you already hae a key for your journalists, import it:
@@ -12,9 +12,9 @@ gpg --homedir keys --gen-key
 
 cat > config.py <<EOF
 HMAC_SECRET = '[put a long random string here]'
-GPG_KEY_DIR = '/path/to/wireleaks/keys'
+GPG_KEY_DIR = '/path/to/deaddrop/keys'
 JOURNALIST_KEY = '4C44 603B AB40 E483 2523  8095 151A 304C 3972 FBB2'
-STORE_DIR = '/path/to/wireleaks/store'
+STORE_DIR = '/path/to/deaddrop/store'
 EOF
 
 sudo apt-get install secure-delete
