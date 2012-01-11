@@ -52,9 +52,9 @@ def encrypt(fp, s, output=None):
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, [fp], output=output)
+        out = gpg.encrypt(s, [fp], output=output, always_trust=True)
     else:
-        out = gpg.encrypt_file(s, [fp], output=output)
+        out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
     if out.ok:
         return out.data
     else:
