@@ -1,42 +1,55 @@
 $def with (iid, msgs, received=False)
-<form method="post" action="">
-<a href="/">Home</a><br />
-<a href="/lookup/">Enter a different code name</a><br />
 
-<input type="hidden" name="id" value="$iid" />
-<button type="submit">Reload this page</button>
-</form>
-<h1>Upload documents</h1>
+<div id="content" class="user-view">
+<h2><span class="headline">Upload documents</span></h2>
 
 $if received:
     <p><strong>Thanks! We received your document.</strong></p>
 
 $if msgs:
-    <hr />
+    <div id="replies">
     <p><strong>You have received a reply.</strong> For your security, please delete all replies when you're done with them.</p>
     
     $for msg in msgs:
+		<div class="reply">
         <form method="post" action="">
         <input type="hidden" name="action" value="delete" />
         <input type="hidden" name="mid" value="$msg.id" />
         <input type="hidden" name="id" value="$iid" />
-        <p>Sent $msg.date:</p>
-        <blockquote>$msg.msg</blockquote>
-        <p><button type="submit">Delete</button></p>
+        <div class="date">Sent $msg.date:</div>
+        <blockquote class="message">$msg.msg</blockquote>
+        <p><button class="button-custom" type="submit">Delete</button></p>
         </form>
-    <hr />
+		</div>
+    </div>
+
+
+
 
 <form method="post" action="" enctype="multipart/form-data">
 <input type="hidden" name="action" value="upload" />
 <input type="hidden" name="id" value="$iid" />
-<p>Alright, you can now upload files:</p>
 
-<p><input type="file" name="fh" /> <button type="submit">Submit</button></p>
+<p style="padding-bottom: 0"><b>Upload a file:</b></p>
+<div id="browse-select">
+	<input type="file" name="fh" /> 
+	<button id="submit-button" class="button-custom" type="submit">Submit</button>
+</div>
 
-<p>Or just enter a message:</p>
+<p><b>Or just enter a message:</b></p>
 
-<textarea name="msg" cols="72" rows="20"></textarea><br />
-<button type="submit">Submit</button>
+<textarea name="msg" cols="72" rows="10"></textarea><br />
+<button  class="button-custom" type="submit">Submit</button>
 </form>
 
-<p>Remember: Your code name is <code>$iid</code></p>
+<p><b>Remember!</b> Your code name is: <span class="code-name">$iid</span></p>
+<form method="post" action="">
+
+<p><a href="">Enter a different code name...</a><br />
+<input type="hidden" name="id" value="$iid" />
+<button class="button-link" type="submit">Reload to check for new messages...</button>
+</p>
+</form>
+
+
+</div>

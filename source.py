@@ -11,7 +11,7 @@ urls = (
   '/delete/', 'delete'
 )
 
-render = web.template.render('source_templates/')
+render = web.template.render('source_templates/', base='base')
 
 class index:
     def GET(self):
