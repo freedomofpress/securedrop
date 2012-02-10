@@ -1,4 +1,5 @@
 import hmac, hashlib, subprocess, random
+myrandom = random.SystemRandom()
 import gnupg
 import config
 
@@ -10,9 +11,23 @@ GPG_KEY_LENGTH = "4096"
 
 class CryptoException(Exception): pass
 
+def clean(s):
+    """
+    >>> clean("Hello, world!")
+    Traceback (most recent call last):
+      ...
+    CryptoException: invalid input
+    >>> clean("Helloworld")
+    'Helloworld'
+    """
+    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    for c in s:
+        if c not in ok: raise CryptoException("invalid input")
+    return s
+
 words = file(WORD_LIST).read().split('\n')
 def genrandomid():
-    return ' '.join(random.choice(words) for x in range(WORDS_IN_RANDOM_ID))
+    return ' '.join(myrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
 
 def shash(s):
     """
@@ -21,7 +36,15 @@ def shash(s):
     """
     return hmac.HMAC(config.HMAC_SECRET, s, HASH_FUNCTION).hexdigest()
 
-gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+GPG_BINARY = 'gpg2'
+try:
+    p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
+except OSError:
+    GPG_BINARY = 'gpg'
+    p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
+
+assert p.stdout.readline().split()[-1].split('.')[0] == '2', "upgrade GPG to 2.0"
+gpg = gnupg.GPG(gpgbinary=GPG_BINARY, gnupghome=config.GPG_KEY_DIR)
 
 def genkeypair(name, secret):
     """
@@ -44,9 +67,9 @@ def getkey(name):
     return None
 
 def encrypt(fp, s, output=None):
-    """
+    r"""
     >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
-    '-----BEGIN PGP MESSAGE-----\\nVersion: GnuPG v1.4.9 (Darwin)\\n\\nhQIMA3rf0hDNFTT'
+    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG/MacGPG2 v2.0.17 (Darwin)\n\nhQIMA3'
     """
     fp = fp.replace(' ', '')
     if isinstance(s, unicode):
@@ -71,6 +94,9 @@ def decrypt(name, secret, s):
 
 def secureunlink(fn):
     return subprocess.check_call(['srm', fn])
+
+# crash if we don't have srm:
+subprocess.check_call(['srm', '--version'], stdout=subprocess.PIPE)
 
 if __name__ == "__main__":
     import doctest

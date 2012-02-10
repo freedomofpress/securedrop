@@ -1,7 +1,6 @@
 import os, time, datetime
 import web
 import config, crypto, background, store
-web.config.debug = True
 
 urls = (
   '/', 'index',
@@ -37,34 +36,40 @@ class lookup:
     
     def POST(self):
         i = web.input('id', fh={}, msg=None, mid=None, action=None)
-        loc = store.path(crypto.shash(i.id))
+        sid = crypto.shash(i.id)
+        loc = store.path(sid)
         if not os.path.exists(loc): raise web.notfound()
         
         received = False
         
         if i.action == 'upload':
             if i.msg:
-                loc1 = store.path(crypto.shash(i.id), '%s.enc' % time.time())
+                loc1 = store.path(sid, '%s.enc' % time.time())
                 crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
             if i.fh.file:
-                loc2 = store.path(crypto.shash(i.id), '%s00.enc' % time.time())
+                # we put two zeroes here so that we don't save a file 
+                # with the same name as the message
+                loc2 = store.path(sid, '%s00.enc' % time.time())
                 crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2)
 
-            if not crypto.getkey(crypto.shash(i.id)):
-                background.execute(lambda: crypto.genkeypair(crypto.shash(i.id), i.id))
+            if not crypto.getkey(sid):
+                background.execute(lambda: crypto.genkeypair(sid, i.id))
             
             received = True
         
         elif i.action == 'delete':
-            crypto.secureunlink(store.path(crypto.shash(i.id), i.mid))
+            potential_files = os.listdir(loc)
+            if i.mid not in potential_files: raise web.notfound()
+            assert '/' not in i.mid
+            crypto.secureunlink(store.path(sid, i.mid))
         
         msgs = []
-        for fn in os.listdir(store.path(crypto.shash(i.id))):
+        for fn in os.listdir(loc):
             if fn.startswith('reply-'):
                 msgs.append(web.storage(
                   id=fn,
                   date=datetime.datetime.fromtimestamp(float(store.cleanname(fn))),
-                  msg=crypto.decrypt(crypto.shash(i.id), i.id, file(store.path(crypto.shash(i.id), fn)).read())
+                  msg=crypto.decrypt(sid, i.id, file(store.path(sid, fn)).read())
                 ))
         return render.lookup(i.id, msgs, received=received)
            

@@ -1,7 +1,6 @@
 import os, time, datetime
 import web
 import config, crypto, store
-web.config.debug = True
 
 urls = (
   '/', 'index',
