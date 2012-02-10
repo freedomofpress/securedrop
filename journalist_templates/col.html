@@ -1,8 +1,14 @@
 $def with (docs, sid, haskey)
-<a href="/">All documents</a>
-<h1>Read documents: $sid[:10]...</h1>
+<div id="content" class="journalist-view-single">
+<h2><span class="headline">Read documents</span></h2>
 
-<p>Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+<p>
+	<a href="/">Back to latest submissions...</a>
+</p>	
+
+<h3>Collection from: <span class="code-name">$sid</span></h3>
+
+<p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
 <ul>
 $for doc in docs:
@@ -17,6 +23,7 @@ $if haskey:
     
     <form action="/reply/" method="post">
       <input type="hidden" name="sid" value="$sid" />
-      <textarea name="msg" cols="72" rows="20"></textarea><br />
-      <button type="submit">Submit</button>
+      <textarea name="msg" cols="72" rows="10"></textarea><br />
+      <button id="reply-button" class="button-custom" type="submit">Submit</button>
     </form>
+</div>

@@ -10,7 +10,7 @@ urls = (
   '/([a-f0-9]+)/([0-9]+\.[0-9]+\.enc)', 'doc'
 )
 
-render = web.template.render('journalist_templates/')
+render = web.template.render('journalist_templates/', base='base')
 
 class index:
     def GET(self):
