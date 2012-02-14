@@ -54,6 +54,7 @@ def genkeypair(name, secret):
     ...     u'P'
     u'P'
     """
+    name, secret = clean(name), clean(secret)
     return gpg.gen_key(gpg.gen_key_input(
       key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
       passphrase=secret,
