@@ -75,5 +75,6 @@ class lookup:
            
 
 app = web.application(urls, locals())
+application = app.wsgifunc()
 if __name__ == "__main__":
     app.run()
