@@ -97,7 +97,10 @@ def secureunlink(fn):
     return subprocess.check_call(['srm', fn])
 
 # crash if we don't have srm:
-subprocess.check_call(['srm', '--version'], stdout=subprocess.PIPE)
+try:
+    subprocess.check_call(['srm', '--version'], stdout=subprocess.PIPE)
+except subprocess.CalledProcessError:
+    pass
 
 if __name__ == "__main__":
     import doctest
