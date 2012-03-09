@@ -1,0 +1,956 @@
+#####################################################################################################
+#Base Install, should be done for each host
+#####################################################################################################
+#sudo to root user
+sudo su
+
+
+#Update the system
+apt-get update
+apt-get upgrade
+apt-get install gnupg2 sysstat
+
+
+#Config hosts file by adding (replace IP's with your IP scheme)
+xxx.xxx.xxx.xxx	monitor.tips            	monitor
+xxx.xxx.xxx.xxx	source.tips             	source
+xxx.xxx.xxx.xxx  	store.tips 		store
+xxx.xxx.xxx.xxx 	journalist.tips	journalist
+xxx.xxx.xxx.xxx	intVPN.tips		intVPN
+xxx.xxx.xxx.xxx	gmail-smtp-in.I.google.com	gmail-smtp-in.I.google.com
+
+
+#Limit SSH to protocol 2 only
+echo 'Protocol 2' >> /etc/ssh/ssh_config
+
+
+#Set the location of the warning banner
+echo 'Banner /etc/issue.net' >> /etc/ssh/sshd_config
+
+
+#Config tcpwrappers to only allow ssh connections from the internal vpn address
+echo 'sshd: intVPN.tips' >> /etc/hosts.allow
+echo 'ALL: ALL' >> /etc/hosts.deny
+
+
+#Add the following lines to the end of the /etc/sysctl.conf to disable IPv6 and limit certain types of IPv4 traffic
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.tcp_syncookies=1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.ip_forward = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+
+#Apply the new config
+sysctl -p
+
+
+#Limit what devices can be mounted and where
+vim /etc/fstab
+
+
+#Set a grub password
+grub-md5-crypt
+##copy the hash for the next step
+vim /boot/menu.lst
+
+
+#Disable core dumps by adding the following lines to the bottom of the /etc/security/limits.conf
+*               soft    core            0
+*               hard    core            0
+
+
+#Configure iptables for each of the hosts
+apt-get install iptables-persistent
+iptables-save > /etc/iptables/rules
+
+#Edit /etc/iptables.rules so the bottem looks like below adding the lines in bold
+
+##Monitor Server
+*filter
+:INPUT ACCEPT [655:68085]
+:FORWARD ACCEPT [0:0]
+:LOGNDROP - [0:0]
+:OUTPUT ACCEPT [4829:752680]
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -s intVPN -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -s source -p tcp -m tcp --dport 1514 -j ACCEPT
+-A INPUT -s store -p tcp -m tcp --dport 1514 -j ACCEPT
+-A INPUT -s journalist -p tcp -m tcp --dport 1514 -j ACCEPT
+-A INPUT -p udp -m udp --dport 68 -j ACCEPT
+-A INPUT -j LOGNDROP
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE " --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4 
+-A LOGNDROP -j DROP
+COMMIT
+
+
+##Source Server
+*filter
+:INPUT ACCEPT [655:68085]
+:FORWARD ACCEPT [0:0]
+:LOGNDROP - [0:0]
+:OUTPUT ACCEPT [4829:752680]
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -s intVPN -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 9050 -j ACCEPT
+-A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -p udp -m udp --dport 68 -j ACCEPT
+-A INPUT -j LOGNDROP
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -j DROP
+COMMIT
+
+##Store Server
+*filter
+:INPUT ACCEPT [655:68085]
+:FORWARD ACCEPT [0:0]
+:LOGNDROP - [0:0]
+:OUTPUT ACCEPT [4829:752680]
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -s intVPN -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -s source -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -s journalist -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p udp -m udp --dport 68 -j ACCEPT
+-A INPUT -j LOGNDROP
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -j DROP
+COMMIT
+
+##Journalist Server
+*filter
+:INPUT ACCEPT [655:68085]
+:FORWARD ACCEPT [0:0]
+:LOGNDROP - [0:0]
+:OUTPUT ACCEPT [4829:752680]
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -s intVPN -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -s intVPN -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -p udp -m udp --dport 68 -j ACCEPT
+-A INPUT -j LOGNDROP
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "IPTABLE" --log-level 4
+-A LOGNDROP -j DROP
+COMMIT
+
+#Apply the config
+iptables-restore < /etc/iptables/rules
+
+#verify it looks good
+iptables -L
+
+
+
+#Create a kernel from a vanilla kernel with Ubuntu over-lay and grsecurity patch applied
+##This step only needs to be done on the first server if all your servers are the same model
+## At the end of this step you will have 2 .deb files. Once they are created
+## you can just scp the two files  to all the other servers and and continue with the next step
+cd ~
+mkdir grsec
+cd grsec
+sudo apt-get install libncurses5-dev build-essential  kernel-package git-core
+git clone git://kernel.ubuntu.com/ubuntu/ubuntu-lucid.git
+cp -a /usr/share/kernel-package ubuntu-package
+cp ubuntu-lucid/debian/control-scripts/p* ubuntu-package/pkg/image/
+cp -a /usr/share/kernel-package ubuntu-package
+cp ubuntu-lucid/debian/control-scripts/p* ubuntu-package/pkg/image/
+cp ubuntu-lucid/debian/control-scripts/headers-postinst ubuntu-package/pkg/headers/
+
+##Download the current versions make sure the linux versions match correctly
+## go to http://grsecurity.net/download_stable.php and replace the parts in bold with 
+## appriopiate version so the all match
+wget http://www.kernel.org/pub/linux/kernel/v2.6/longterm/v2.6.32/linux-2.6.32.58.tar.bz2
+wget http://www.kernel.org/pub/linux/kernel/v2.6/longterm/v2.6.32/linux-2.6.32.58.tar.sign
+wget http://grsecurity.net/spender-gpg-key.asc
+wget http://grsecurity.net/stable/grsecurity-2.9-2.6.32.58-201203062047.patch
+wget http://grsecurity.net/stable/grsecurity-2.9-2.6.32.58-201203062047.patch.sig
+wget http://grsecurity.net/stable/gradm-2.9-201202232055.tar.gz
+wget http://grsecurity.net/stable/gradm-2.9-201202232055.tar.gz.sig
+
+##Verify the packages
+gpg --import spender-gpg-key.asc
+gpg --verify grsecurity-2.9-2.6.32.58-201203062047.patch.sig
+## If you see 'Good signature from'… then it is verified you will see an additional error if 
+##you didn't sign their key with yours. Don't worry about this error
+##gpg: WARNING: This key is not certified with a trusted signature!
+##gpg:          There is no indication that the signature belongs to the owner.
+gpg --verify gradm-2.9-201202232055.tar.gz.sig 
+gpg --recv-keys 6092693E
+bunzip2 linux-2.6.32.58.tar.bz2 
+gpg --verify linux-2.6.32.58.tar.sign
+
+##Make the patched kernel with the correct options
+tar -xf linux-2.6.32.58.tar
+cd linux-2.6.32.58
+patch -p1 < ../grsecurity-2.9-2.6.32.58-201203062047.patch
+make oldconfig
+yes "" | make oldconfig
+make menuconfig
+##This wil open a gui
+## navigate down 'Security options'
+##navigate to 'Grsecurity'
+##hit the space bar to enable Grsecurity
+##navigate to 'Security Level (Custom)
+##navigate to 'High' and hit space to enable it
+##navigate to 'Role Based Access Control Options
+##navigate to 'Hide kernel processes (NEW)' and hit spacebar to enable it
+##keep hitting exit till it promts you to save, save it and it will exit
+
+make-kpkg clean
+sed -rie 's/echo "\+"/#echo "\+"/' scripts/setlocalversion
+make-kpkg --initrd --overlay-dir=../ubuntu-package --append-to-version=-grsec kernel_image kernel_headers
+##this will take an hour or more, browse wired.com in the mean time but at the end of it you will have two .deb files. 
+##that you can just scp to the other hosts. You do not need to compile the custom kernel for each host if they are all 
+##the same model hardware.
+
+
+#Install the patched kernel
+cd ~/grsec
+dpkg -i *.deb
+
+
+#Review your boot menu and make sure it looks good and reboot into your patched kernel
+vim /boot/grub/menu.lst
+shutdown -r now
+
+
+#Verify that you are now booted into your patched kernel
+uname -r
+##should end in '-grsec'
+
+
+#Copy tested kernel .deb files to the other hosts with a command like 
+##replace user_name with your username
+cp /root/grsec/*.deb /home/user_name
+chown user_name /home/user_name/*.deb
+scp /home/user_name/*.deb user_name@source:.
+##then on the server you copied it to
+cd ~
+dpkg *.deb
+##reboot and run 'uname -r' to verify you booted to correct kernel
+
+
+#Install gradmin and set passwords
+##this has to be done after you are booted into the grsec patched kernel
+sudo su
+cd ~/grsec
+apt-get install libpam0g-dev flex bison build-essential subversion
+tar -xzf gradm-2.9-201202232055.tar.gz
+cd gradm2/
+make
+##it will prompt to create a gradmin 'RBAC' password save unique password to pw manager
+make install
+##it will promt to create gradmin shutdown password save unique password to pw manager
+gradm -P shutdown
+##it will prompt to create gradmin admin password save unique password to pw manager
+gradm -P admin 
+##ensure that grsec is diabled until after we finish build it
+gradm -S
+
+
+
+#Install Google 2 Factor Authentication
+cd ~
+mkdir g2fa
+cd g2fa
+apt-get install python-software-properties subversion
+add-apt-repository ppa:mercurial-ppa/releases
+apt-get update
+apt-get install gcc mercurial libpam0g-dev
+##verify you are running the correct version of mercurial now
+##you should see this or somehting newer
+##Mercurial Distributed SCM (version 2.1)
+hg --version
+##clone and install the pam module
+hg clone https://code.google.com/p/google-authenticator/ google-authenticator
+cd google-authenticator/libpam/
+make install
+##edit /etc/ssh/sshd_config file and change 'ChallengeResponseAuthentication' from 'no' to 'yes'
+vim /etc/ssh/sshd_config
+##edit /etc/pam.d/common-auth  and add
+## 'auth    required                        pam_google_authenticator.so'
+## so that it will look like the following
+### here are the per-package modules (the "Primary" block)
+auth    required                        pam_google_authenticator.so
+auth    [success=1 default=ignore]      pam_unix.so nullok_secure
+
+
+#Create your 2 Factor sync code
+##type exit so you are not the root user anymore. Each user that need SSH access will need to
+##create their own code. This will only need to be done once per user. Once created we will 
+##scp the file to all the other hosts. 
+##if confused what user you are type 'id'
+cd ~
+google-authenticator
+y
+##we will manually add the key to your phone later
+y
+y
+n
+y
+
+
+##set up you ios or android device
+##install 'google authenticator' app from the respective app store for ios and android devices
+##open the app and go to 'add key manually'
+##on the server run 'cat ~/.google-authenticator'
+##the first line is your key enter that exactly into the google-authenticator app
+##for the account name put your_username@tips
+
+
+#Restart ssh and test it in a new connection
+/etc/init.d/ssh restart
+##open a new terminal window and ssh into the server and verify you can login. do not close
+##the other window until after you verified that you didn't have any typos. 
+##that way you can still fix any errors before moving on
+
+
+#Copy you secret key to the other hosts with a command like this one
+scp /home/user_name/.google-authenticator user_name@source:.
+
+
+#Download and verify the ossec package
+sudo su
+##should now also be promted for you verification code which is the code from the 
+##google-authenticator app
+cd ~
+mkdir /ossec
+cd ossec
+apt-get install sysstat
+wget http://www.ossec.net/files/ossec-hids-2.6.tar.gz
+wget http://www.ossec.net/files/ossec-hids-2.6.tar.gz.sig
+wget http://www.ossec.net/files/OSSEC-GPG-KEY.asc
+gpg --import OSSEC-GPG-KEY.asc 
+gpg --verify ossec-hids-2.6.tar.gz.sig
+tar -zxf ossec-hids-2.6.tar.gz
+cd ossec-hids-2.6/
+
+
+
+#####################################################################################################
+#Get all the servers to this point
+#then move on
+#####################################################################################################
+
+
+#####################################################################################################
+#store server create deaddrop user and setup directory structure
+#####################################################################################################
+
+#Create the deaddrop group and user
+##will need to set a password for this account so we can copy the ssh key file
+##from the source and journalist servers later.
+##will also have to disable the google 2 factor auth at that time
+groupadd deaddrop -g 265
+useradd -d /deaddrop -g deaddrop -s /bin/bash -u 265 deaddrop
+passwd deaddrop
+
+#Create the correct directory structure for where the app will store the keys and the messages
+mkdir -p -m 700 /deaddrop/store /deaddrop/keys
+touch /deaddrop/store/test
+chown -R deaddrop:deaddrop /deaddrop
+
+
+
+#Add the source and journalist servers to the sshd tcp wrappers allow config so it looks like
+sshd: intVPN.tips source.tips journalist.tips
+
+#Temporaly disable google 2 factor authentication so you can copy the ssh key file 
+##and set permissions. We will re-enable this shortly
+##revert back the /etc/ssh/sshd_config from previos step
+##comment out the line we enetered previously in /etc/pam.d/common-auth
+##restart ssh with 'restart ssh'
+
+#####################################################################################################
+#Source server - configure deaddrop user and setup sshfs share
+#####################################################################################################
+
+#Install sshfs
+sudo su
+apt-get install sshfs
+
+
+#Create deaddrop user correct directories and set permissions
+groupadd deaddrop -g 265
+useradd -d /deaddrop -g deaddrop -s /bin/bash -u 265 deaddrop
+usermod -a -G fuse deaddrop
+mkdir -p -m 700 /deaddrop/store /deaddrop/keys
+chown -R deaddrop:deaddrop /deaddrop
+
+
+
+#Setup ssh keyfiles for the deaddrop user and copy it to the store server
+su deaddrop
+cd ~
+ssh-keygen -t rsa
+#save it to the deafult location /deaddrop/.ssh/id_rsa
+#do not enter a password for this
+ssh-copy-id -i ~/.ssh/id_rsa.pub deaddrop@store
+#Set a keep-alive so the sshfs mount doesn't timeout
+echo 'ServerAliveInterval 5' >> /etc/ssh/ssh_config
+
+
+#Test the deaddrop user's passwordless login to the store server
+ssh store uptime
+##if the command run's it worked
+
+
+#setup sshfs mount and ensure that you can see the test file you created before on
+##store/deaddrop/store/test then unmount it
+sshfs -o idmap=user deaddrop@store:/deaddrop/store /deaddrop/store
+sshfs -o idmap=user deaddrop@store:/deaddrop/keys /deaddrop/keys
+ls /deaddrop/store/
+ls /deaddrop/keys/
+fusermount -u /deaddrop/store
+fusermount -u /deaddrop/keys
+
+
+#edit /etc/fuse.conf so that that sshfs will work with the fstab config as root user
+exit
+echo 'user_allow_other' >> /etc/fuse.conf
+
+
+#add the following lines to your fstab as the root user
+echo "sshfs#deaddrop@store:/deaddrop/store   /deaddrop/store   fuse    comment=sshfs,noauto,users,exec,uid=265,gid=265,allow_other,reconnect,transform_symlinks,BatchMode=yes 0 0" >> /etc/fstab
+
+echo "sshfs#deaddrop@store:/deaddrop/keys    /deaddrop/keys    fuse    comment=sshfs,noauto,users,exec,uid=265,gid=265,allow_other,reconnect,transform_symlinks,BatchMode=yes 0 0" >> /etc/fstab
+
+
+#test the fstab config
+su deaddrop
+mount /deaddrop/store
+mount /deaddrop/keys
+
+#Use the script from Step3 Automounting your shares when you connect to the internet
+#so they will automount when the network comes up, like after a reboot. 
+ http://ubuntuforums.org/showthread.php?t=430312
+
+
+
+
+#####################################################################################################
+#Journalist server - configure deaddrop user and setup sshfs share
+#####################################################################################################
+
+#Install sshfs
+sudo su
+apt-get install sshfs
+
+
+#Create deaddrop user correct directories and set permissions
+groupadd deaddrop -g 265
+useradd -d /deaddrop -g deaddrop-s /bin/bash -u 265 deaddrop
+usermod -a -G fuse deaddrop
+mkdir -p -m 700 /deaddrop/store /deaddrop/keys
+chown -R deaddrop:deaddrop /deaddrop
+
+
+
+#Setup ssh keyfiles for the deaddrop user and copy it to the store server
+su deaddrop
+cd ~
+ssh-keygen -t rsa
+#save it to the deafult location /deaddrop/.ssh/id_rsa
+#leave the passphrase blank
+#google 2fa on the store server needs to be disabled to perform this step
+ssh-copy-id -i ~/.ssh/id_rsa.pub deaddrop@store
+
+
+#Test the deaddrop user's passwordless login to the store server
+ssh store uptime
+##if the command run's it worked
+
+
+#setup sshfs mount and ensure that you can see the test file you created before on
+##store/deaddrop/store/test then unmount it
+sshfs -o idmap=user deaddrop@store:/deaddrop/store /deaddrop/store
+sshfs -o idmap=user deaddrop@store:/deaddrop/keys /deaddrop/keys
+ls /deaddrop/store/
+ls /deaddrop/skeys/
+fusermount -u /deaddrop/store
+fusermount -u /deaddrop/keys
+
+
+#edit /etc/fuse.conf so that that sshfs will work with the fstab config as root user
+exit
+echo 'user_allow_other' >> /etc/fuse.conf
+
+
+#Copy and paste the following lines to add the entries to your fstab
+echo "sshfs#deaddrop@store:/deaddrop/store   /deaddrop/store   fuse    comment=sshfs,noauto,users,exec,uid=265,gid=265,allow_other,reconnect,transform_symlinks,BatchMode=yes 0 0"  >> /etc/fstab
+
+echo "sshfs#deaddrop@store:/deaddrop/keys    /deaddrop/keys    fuse    comment=sshfs,noauto,users,exec,uid=265,gid=265,allow_other,reconnect,transform_symlinks,BatchMode=yes 0 0"  >> /etc/fstab
+
+#As root set a keep-alive so the sshfs mount doesn't timeout
+echo 'ServerAliveInterval 5' >> /etc/ssh/ssh_config
+
+#test the fstab config
+su deaddrop
+mount /deaddrop/store
+mount /deaddrop/keys
+
+
+#Use the script from Step3 Automounting your shares when you connect to the internet
+#so they will automount when the network comes up, like after a reboot. 
+ http://ubuntuforums.org/showthread.php?t=430312
+
+#####################################################################################################
+#Store server - Lockdown the authorized ssh keys
+#####################################################################################################
+
+#Edit /etc/ssh/sshd_config and add the following lines
+Match User deaddrop
+ForceCommand internal-sftp
+
+#Edit /deaddrop/.ssh/authorized_keys putting the following line at the
+#beginning of the appropirate keys. Making sure the ip address matches
+#the correct key
+from="97.107.130.86",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty
+
+#Test mounting and unmounting the folders on both the journalist and source host
+
+
+#####################################################################################################
+#Journalist server - Install Apache, WSGI, Deaddrop, web.py
+#####################################################################################################
+
+#Install and configure Apache with mod-wsgi from apt
+sudo su
+groupadd -g 260 apache
+useradd apache -d /var/www -g apache -s /sbin/nologin -u 260 
+passwd -l apache
+apt-get install apache2-mpm-worker apache2-utils libapache2-mod-wsgi
+a2dismod auth_basic authn_file autoindex cgid deflate env negotiation setenvif status
+a2dissite default
+/etc/init.d/apache2 restart
+rm /var/www/index.html
+mkdir -p /var/www/journalist
+
+#copy the deaddrop files to the correct location
+cd /path_to_cloned_deaddrop/
+cp -R * /var/www/journalist/
+cd /var/www/journalist
+rm -R source.py source_templates
+
+cd /var/www/journalist
+
+#Create the deaddrop config.py by copying and pasting the block below
+##don't worry about setting the SOURCE_TEMPLATE_DIR on the journalist server and vise versa
+##just use your password manager random string generator, using upper lowercase letters and numbers 
+cat > config.py <<EOF
+HMAC_SECRET = '[put a long random string here]'
+GPG_KEY_DIR = '/deaddrop/keys'
+JOURNALIST_KEY = 'DF6B FB20 7E77 5F42 054D  3C53 7684 531F 316F E5D0'
+STORE_DIR = '/deaddrop/store'
+WORDLIST_DIR = '/var/www/journalist/wordlist'
+SOURCE_TEMPLATE_DIR = '/var/www/source/source_templates/'
+JOURNALIST_TEMPLATE_DIR = '/var/www/journalist/journalist_templates/'
+EOF
+
+
+
+#Edit /etc/apache2/envars and change the user and group to 'apache'
+sudo su
+vim /etc/apache2/envars
+
+
+#Copy and past the following into /etc/apache2/sites-available/journalist replacing journalist_IP_addr with the IP
+#<VirtualHost (journalist_IP_addr):80>
+
+#Edit /etc/apache2/ports.conf and change the line 
+## NameVirtualHost *:80
+##to
+##NameVirtualHost (journalist_IP_addr):80
+
+
+#Edit /etc/apache2/apache2.conf and remove the following lines
+LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %O" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+CustomLog /var/log/apache2/other_vhosts_access.log vhost_combined
+
+
+#Edit /etc/apache2/conf.d/security 
+##Uncomment the following lines and add the 'Options None' line so it looks like below
+<Directory />
+       Options None
+       AllowOverride None
+       Order Deny,Allow
+       Deny from all
+</Directory>
+
+##Change the 'ServerTokens OS' to 'Prod'
+ServerTokens Prod
+
+##Change the 'ServerSignature On' to 'Off'
+ServerSignature Off
+
+
+#Set correct permissions
+chown deaddrop:apache /var/www/journalist
+chown apache:apache /var/www/journalist/static
+
+#Enable the tips site
+a2ensite journalist
+
+
+#import the journalist public key and create the deaddrop keychain
+##the journalist gpg key should be created on the standalone machine
+##this is to ensure the journalist private key is never on a machine connected to the internet
+##create the keypair on standalone machine, export the key to removable drive
+##sneakernet the harddrive to the machine that can access the environment
+scp journalist_pub.key user_name@journalist:.
+cp /home/username/journalist_pub.key /deaddrop
+chown deaddrop:deaddrop /deaddrop/journalist_pub.key
+su deaddrop
+cd ~
+##Because we are installing the keychain on a remote location we need to disable the gpg lock
+gpg --lock-never --homedir /deaddrop/keys --import ../test_pub.key 
+
+#Get the journalist_pub.key fingerprint for following step
+gpg --homedir /deaddrop/keys --list-keys
+##should see the username for the key use it next step
+gpg --homedir keys --edit-key james
+##you will get a prompt like 'Command>' typ 'fpr' and hit enter
+##it will then show you the keys fingerprint should look like the line below
+4C44 603B AB40 E483 2523  8095 151A 304C 3972 FBB2
+DF6B FB20 7E77 5F42 054D  3C53 7684 531F 316F E5D0
+
+
+#Install other app dependicies 
+sudo apt-get install secure-delete python-pip git-core
+sudo easy_install https://python-gnupg.googlecode.com/files/python-gnupg-0.2.7.tar.gz
+cd /var/www/journalist
+
+
+git clone git://github.com/webpy/webpy.git
+ln -s `pwd`/webpy/web .
+
+
+
+#Set correct permissions
+chown deaddrop:apache /var/www/journalist
+chown apache:apache /var/www/journalist/static
+
+#Restart apache and then browse to the site
+/etc/init.d/apache2 restart
+
+
+#####################################################################################################
+#Source server - Install Tor Apache, WSGI, Deaddrop, web.py
+#####################################################################################################
+
+#Install tor and cofigure the hidden service
+sudo su
+echo 'deb     http://deb.torproject.org/torproject.org lucid main' >> /etc/apt/sources.list
+gpg --keyserver keys.gnupg.net --recv 886DDD89
+gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+apt-get update
+apt-get install tor tor-geoipdb
+usermod -s /sbin/nologin debian-tor
+passwd -l debian-tor
+##Edit the /etc/tor/torrc file and add the following lines
+RunAsDaemon 1
+HiddenServiceDir /var/lib/tor/hidden_service/
+HiddenServicePort 80 127.0.0.1:80
+
+#Restart tor
+/etc/init.d/tor restart
+
+
+#Install and configure Apache with mod-wsgi from apt
+sudo su
+groupadd -g 260 apache
+useradd apache -d /var/www -g apache -s /sbin/nologin -u 260 
+passwd -l apache
+apt-get install apache2-mpm-worker apache2-utils libapache2-mod-wsgi
+a2dismod auth_basic authn_file autoindex cgid deflate env negotiation setenvif status
+/etc/init.d/apache2 restart
+a2dissite default
+rm /var/www/index.html
+mkdir -p /var/www/source/static
+chown deaddrop:apache /var/www/source
+chown apache:apache /var/www/source/static
+touch /etc/apache2/sites-available/source
+
+
+#Edit /etc/apache2/envars and change the user and group to 'apache'
+vim /etc/apache2/envars
+
+
+#Copy the appropiate source/journalist config file the following into /etc/apache2/sites-available/source
+WSGIPythonPath /var/www/source
+<VirtualHost 127.0.0.1:80>
+        DocumentRoot /var/www/source/static
+        WSGIScriptAlias / /var/www/source/source.py/
+        Alias /static /var/www/source/static/
+        AddType text/html .py
+
+        <Directory /> 
+		Options None
+		AllowOverRide None
+		Order deny,allow 
+		Deny from all
+	</Directory>
+	
+	<Directory /var/www/source/static>
+		Options None
+		AllowOverRide None
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+        <Directory /var/www/source/>
+                AllowOverride None
+                Order deny,allow
+                Allow from all
+	</Directory>
+
+        ErrorLog /var/log/apache2/error.log
+        LogLevel warn
+
+</VirtualHost>
+#EOF
+
+#Edit /etc/apache2/ports.conf and change the line 
+NameVirtualHost *:80
+##to
+NameVirtualHost 127.0.0.1:80
+
+
+#Edit /etc/apache2/apache2.conf and remove the following lines
+LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %O" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+CustomLog /var/log/apache2/other_vhosts_access.log vhost_combined
+
+
+#Edit /etc/apache2/conf.d/security 
+##Uncomment the following lines and add the 'Options None' line so it looks like below
+<Directory />
+       Options None
+       AllowOverride None
+       Order Deny,Allow
+       Deny from all
+</Directory>
+
+##Change the 'ServerTokens OS' to 'Prod'
+ServerTokens Prod
+
+##Change the 'ServerSignature On' to 'Off'
+ServerSignature Off
+
+
+#Enable the tips site
+a2ensite tips
+
+
+#Set up the deaddrop app, changing the username with your username and unpack the files
+cd /home/username
+tar -xzf deaddrop.tar.gz
+
+
+#change directories into the folder that was just created and put the files in the correct locations
+cd deaddrop-deaddrop-2637db92645917269f0c8ba9f63158d6024700b1 
+cp *.py /var/www/source
+cp -R ./source_templates /var/www/source
+cp -R ./static /var/www/source
+cp wordlist /var/www/source
+
+
+#Install other app dependicies 
+sudo apt-get install secure-delete python-pip git-core
+sudo easy_install https://python-gnupg.googlecode.com/files/python-gnupg-0.2.7.tar.gz
+cd /var/www/source
+
+cat > config.py <<EOF
+HMAC_SECRET = 'fjksdfhsdakljfhdsjhfksdhfashfkdshfsdhjfkslahfljk'
+GPG_KEY_DIR = '/deaddrop/keys'
+JOURNALIST_KEY = 'DF6B FB20 7E77 5F42 054D  3C53 7684 531F 316F E5D0'
+STORE_DIR = '/deaddrop/store'
+EOF
+
+git clone git://github.com/webpy/webpy.git
+ln -s `pwd`/webpy/web .
+chown deaddrop:apache /var/www/source
+chown apache:apache /var/www/source/static
+vim /etc/apache2/envars
+
+#Edit /var/www/tips/crypto.py and put the fullpath to the wordlist file
+#Edit /var/www/tips/source.py and put the full path to the source_templates dir
+
+#The .onion url is in the following location
+cat /etc/lib/tor/hidden_service/hostname
+##will look like this 3z66j5exxj4nopbw.onion
+##open the tor browser bundle and paste the url
+
+#Re-enable Google's 2 factor authentication on the store server
+vim /etc/sshd_config
+##Change ChallendResponse line back to yes
+vim /etc/pam.d/common-auth
+##un-comment the line you inserted before
+restart ssh
+
+#Verify you can still access both sites
+
+
+
+#####################################################################################################
+#Monitor server install OSSEC server
+#####################################################################################################
+cd ~
+mkdir ~/ossec
+cd ~/ossec
+wget http://www.ossec.net/files/ossec-hids-2.6.tar.gz
+wget http://www.ossec.net/files/ossec-hids-2.6.tar.gz.sig
+wget http://www.ossec.net/files/OSSEC-GPG-KEY.asc
+gpg --import OSSEC-GPG-KEY.asc 
+gpg --verify ossec-hids-2.6.tar.gz.sig
+tar -zxf ossec-hids-2.6.tar.gz
+cd ossec-hids-2.6/
+./install.sh
+#What kind of installation do you want (server, agent, local or help)? server
+#Choose where to install the OSSEC HIDS [/var/ossec]: 
+#3.1- Do you want e-mail notification? (y/n) [y]: 
+#What's your e-mail address? youremailaddress@gmail.com
+#What's your SMTP server ip/host? gmail-smtp-in.l.google.com
+#Do you want to run the integrity check daemon? (y/n) [y]: 
+#Do you want to run the rootkit detection engine? (y/n) [y]: 
+#Do you want to enable active response? (y/n) [y]: n
+#Do you want to enable remote syslog (port 514 udp)? (y/n) [y]: n
+
+
+#Add the source, store, journalist, firewall to the Ossec config
+##Repeat these steps for each host
+/var/ossec/bin/manage_agents
+#Choose your action: A,E,L,R or Q: A
+#A name for the new agent: server_host_name (source, store, journalist)
+#The IP Address of the new agent: source's IP address
+#An ID for the new agent[001]: 
+#Confirm adding it?(y/n): Y
+
+#Copy the following files to the correct location
+#/var/ossec/etc/internal_options.conf file
+#/var/ossec/etc/ossec.conf
+# /var/ossec/etc/local_decoder.xml
+# /var/ossec/rules/local_rules.xml
+# /var/ossec/etc/internal_options.conf
+chown root:ossec /var/ossec/etc/local_decoder.xml /var/ossec/rules/local_rules.xml /var/ossec/etc/internal_options.conf
+chmod 440 /var/ossec/etc/local_decoder.xml /var/ossec/rules/local_rules.xml /var/ossec/etc/internal_options.conf
+
+
+
+#####################################################################################################
+#Source, Static, Journalist hosts install OSSEC agent
+#####################################################################################################
+
+sudo su
+cd ~
+tar -zxf ossec-hids-2.6.tar.gz
+cd ossec-hids-2.6/
+./install.sh
+#What kind of installation do you want (server, agent, local or help)? agent
+#Choose where to install the OSSEC HIDS [/var/ossec]:
+#What's the IP Address of the OSSEC HIDS server?: enter_hosts_ip
+#Do you want to run the integrity check daemon? (y/n) [y]: 
+#Do you want to run the rootkit detection engine? (y/n) [y]: 
+#Do you want to enable active response? (y/n) [y]: n
+
+/var/ossec/bin/manage_agents
+#Choose your action: I or Q: I
+##you then need to run /var/ossec/bin/manage_agents on the monitor server
+##select 'E' then the corresponding aggent id
+##to extract the key then copy and past it into the your other window
+#Confirm adding it?(y/n): y
+
+#On the monitor server need to link a file to get rid of the error and restart the ossec process
+ln -s /var/ossec/bin/ossec-logtest /var/ossec/ossec-logtest
+/var/ossec/bin/ossec-control restart
+
+#Start the OSSEC service on the remote host
+/var/ossec/bin/ossec-control start
+
+#Repeat pervious steps on the source, static, journalist servers
+
+
+#####################################################################################################
+#Firewall  configure OSSEC agent
+#####################################################################################################
+#OSSEC has agent configs and can also get logs through syslog
+#Check OSSEC for your condiguration
+
+
+#####################################################################################################
+#Verify agents are connected
+#####################################################################################################
+#When done installing it on all the hosts run the following command on the monitor server
+/var/ossec/bin/list_agents -c
+##you should see all 3 hosts appear
+
+
+
+#####################################################################################################
+#Turn gradmin on in learning mode
+#Copy the appropiate file for each host and past it into it's location
+#####################################################################################################
+gradm -F -L /etc/grsec/learning.logs
+##while in learning mode do not perform any admin tasks
+##the only task that you should perform while the rbac is in learning mode
+##is browse to the source and journalist sites and perform all the actions
+##you will need to leave it in learning mode for 24 hours to wait for ossec
+##to perform all it tasks. After the 24 hour period enable the learning policy
+##You should perform browse and perform all the sites actions over 3 time
+##to ensure that the policy gets info information to create the policy, also
+##while in learning mode have also logged out, login , sudo'd at least 3 times
+gradm -D
+gradm -F -L /etc/grsec/learning.logs -O /etc/grsec/policy
+##Before enabling the policy check to ensure that your account has 
+##Sudo permissions, should look like the line below
+# Role: james
+subject /usr/bin/sudo o {
+user_transition_allow james root
+group_transition_allow admin root
+
+
+#####################################################################################################
+#Clean Up Files
+#####################################################################################################
+apt-get remove build-essentials kernel-core 
+#delete all the files you downloaded to your home dir
+
+
+#####################################################################################################
+#Enable the policy and perform one last health check
+#####################################################################################################
+#Enable the policy that was just created
+gradm -E
+##Do not close current window. Open new window and make sure that
+##you can login, sudo and disable gradm
+#test the website functionality one more time 
+
+
+
