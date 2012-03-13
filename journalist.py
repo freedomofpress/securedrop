@@ -9,7 +9,7 @@ urls = (
   '/([a-f0-9]+)/([0-9]+\.[0-9]+\.enc)', 'doc'
 )
 
-render = web.template.render('journalist_templates/', base='base')
+render = web.template.render(config.JOURNALIST_TEMPLATES_DIR, base='base')
 
 class index:
     def GET(self):
@@ -55,5 +55,6 @@ class reply:
         
 
 app = web.application(urls, locals())
+application = app.wsgifunc()
 if __name__ == "__main__":
     app.run()
