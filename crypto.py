@@ -4,7 +4,6 @@ import gnupg
 import config
 
 WORDS_IN_RANDOM_ID = 2
-WORD_LIST = 'wordlist'
 HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
@@ -25,7 +24,7 @@ def clean(s):
         if c not in ok: raise CryptoException("invalid input")
     return s
 
-words = file(WORD_LIST).read().split('\n')
+words = file(config.WORD_LIST).read().split('\n')
 def genrandomid():
     return ' '.join(myrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
 
