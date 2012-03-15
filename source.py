@@ -72,9 +72,12 @@ class lookup:
                   msg=crypto.decrypt(sid, i.id, file(store.path(sid, fn)).read())
                 ))
         return render.lookup(i.id, msgs, received=received)
-           
+
+def notfound():
+    return web.notfound(render.notfound())
 
 app = web.application(urls, locals())
+app.notfound = notfound
 application = app.wsgifunc()
 if __name__ == "__main__":
     app.run()

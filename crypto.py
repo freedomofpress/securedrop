@@ -3,7 +3,7 @@ myrandom = random.SystemRandom()
 import gnupg
 import config
 
-WORDS_IN_RANDOM_ID = 2
+WORDS_IN_RANDOM_ID = 3
 WORD_LIST = 'wordlist'
 HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
