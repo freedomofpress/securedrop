@@ -11,7 +11,7 @@ GPG_KEY_LENGTH = "4096"
 
 class CryptoException(Exception): pass
 
-def clean(s):
+def clean(s, also=''):
     """
     >>> clean("Hello, world!")
     Traceback (most recent call last):
@@ -22,7 +22,7 @@ def clean(s):
     """
     ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
     for c in s:
-        if c not in ok: raise CryptoException("invalid input")
+        if c not in ok and c not in also: raise CryptoException("invalid input")
     return s
 
 words = file(WORD_LIST).read().split('\n')
@@ -59,7 +59,7 @@ def genkeypair(name, secret):
     ...     u'P'
     u'P'
     """
-    name, secret = clean(name), clean(secret)
+    name, secret = clean(name), clean(secret, ' ')
     return gpg.gen_key(gpg.gen_key_input(
       key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
       passphrase=secret,
