@@ -29,6 +29,11 @@ words = file(WORD_LIST).read().split('\n')
 def genrandomid():
     return ' '.join(myrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
 
+def displayid(n):
+    badrandom = random.WichmannHill()
+    badrandom.seed(n)
+    return ' '.join(badrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
+
 def shash(s):
     """
     >>> shash('Hello, world!')

@@ -17,7 +17,7 @@ class index:
         cols = []
         for d in dirs:
             if not os.listdir(store.path(d)): continue
-            cols.append(web.storage(name=d, date=
+            cols.append(web.storage(name=d, codename=crypto.displayid(d), date=
               datetime.datetime.fromtimestamp(
                 os.stat(store.path(d)).st_mtime
             )))
