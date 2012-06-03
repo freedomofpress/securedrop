@@ -9,4 +9,4 @@ def log(msg):
     file(path('NOTES'), 'a').write(msg)
 
 def cleanname(fn):
-    return web.lstrips(web.rstrips(fn, '.enc'), 'reply-')
+    return web.lstrips(web.rstrips(fn, '.gpg'), 'reply-')

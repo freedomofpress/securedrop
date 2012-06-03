@@ -6,7 +6,7 @@ urls = (
   '/', 'index',
   '/reply/', 'reply',
   '/([a-f0-9]+)/', 'col',
-  '/([a-f0-9]+)/([0-9]+\.[0-9]+\.enc)', 'doc'
+  '/([a-f0-9]+)/([0-9]+\.[0-9]+\.gpg)', 'doc'
 )
 
 render = web.template.render('journalist_templates/', base='base')
@@ -50,7 +50,7 @@ class reply:
     def POST(self):
         i = web.input('sid', 'msg')
         crypto.encrypt(crypto.getkey(i.sid), i.msg, output=
-          store.path(i.sid, 'reply-%s.enc' % time.time())
+          store.path(i.sid, 'reply-%s.gpg' % time.time())
         )
         return render.reply(i.sid)
         
