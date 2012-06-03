@@ -6,7 +6,7 @@ urls = (
   '/', 'index',
   '/reply/', 'reply',
   '/([a-f0-9]+)/', 'col',
-  '/([a-f0-9]+)/([0-9]+\.[0-9]+\.gpg)', 'doc'
+  '/([a-f0-9]+)/([0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg)', 'doc'
 )
 
 render = web.template.render('journalist_templates/', base='base')
