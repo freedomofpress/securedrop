@@ -57,8 +57,6 @@ class lookup:
 
             if not crypto.getkey(sid):
                 background.execute(lambda: crypto.genkeypair(sid, i.id))
-            
-            
         
         elif i.action == 'delete':
             potential_files = os.listdir(loc)
