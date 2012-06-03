@@ -32,12 +32,12 @@ class col:
         for f in fns:
             docs.append(web.storage(
               name=f, 
-              date=datetime.datetime.fromtimestamp(float(store.cleanname(f)
-            ))))
+              date=str(datetime.datetime.fromtimestamp(float(store.cleanname(f)))).split('.')[0]
+            ))
         docs.sort(lambda x,y: cmp(x.date, y.date))
         
         haskey = bool(crypto.getkey(sid))
-        return render.col(docs, sid, haskey)
+        return render.col(docs, sid, haskey, codename=crypto.displayid(sid))
  
 class doc:
     def GET(self, sid, fn):
