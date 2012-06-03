@@ -20,7 +20,7 @@ def clean(s):
     >>> clean("Helloworld")
     'Helloworld'
     """
-    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
     for c in s:
         if c not in ok: raise CryptoException("invalid input")
     return s
