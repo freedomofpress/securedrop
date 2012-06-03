@@ -15,6 +15,9 @@ HMAC_SECRET = '[put a long random string here]'
 GPG_KEY_DIR = '/path/to/deaddrop/keys'
 JOURNALIST_KEY = '4C44 603B AB40 E483 2523  8095 151A 304C 3972 FBB2'
 STORE_DIR = '/path/to/deaddrop/store'
+WORD_LIST = '/path/to/deaddrop/wordlist'
+SOURCE_TEMPLATES_DIR = '/path/to/deaddrop/source_templates'
+JOURNALIST_TEMPLATES_DIR = '/path/to/deaddrop/journalist_templates'
 EOF
 
 sudo apt-get install secure-delete
