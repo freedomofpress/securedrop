@@ -44,18 +44,21 @@ class lookup:
         
         if i.action == 'upload':
             if i.msg:
-                loc1 = store.path(sid, '%s.enc' % time.time())
+                loc1 = store.path(sid, '%s.gpg' % time.time())
                 crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
+                received = i.fh.filename or '[unnamed]'
+                
             if i.fh.file:
                 # we put two zeroes here so that we don't save a file 
                 # with the same name as the message
-                loc2 = store.path(sid, '%s00.enc' % time.time())
-                crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2)
+                loc2 = store.path(sid, '%s00.gpg' % time.time())
+                crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2, fn=i.fh.filename)
+                received = 2
 
             if not crypto.getkey(sid):
                 background.execute(lambda: crypto.genkeypair(sid, i.id))
             
-            received = True
+            
         
         elif i.action == 'delete':
             potential_files = os.listdir(loc)

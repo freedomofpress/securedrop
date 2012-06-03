@@ -3,8 +3,10 @@ $def with (iid, msgs, received=False)
 <div id="content" class="user-view">
 <h2><span class="headline">Upload documents</span></h2>
 
-$if received:
-    <p><strong>Thanks! We received your document.</strong></p>
+$if received == 2:
+    <p><strong>Thanks! We received your message.</strong></p>
+$elif received:
+    <p><strong>Thanks! We received your document '$received'.</strong></p>
 
 $if msgs:
     <div id="replies">

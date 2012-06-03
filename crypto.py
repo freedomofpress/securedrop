@@ -1,4 +1,4 @@
-import hmac, hashlib, subprocess, random
+import hmac, hashlib, subprocess, random, threading
 myrandom = random.SystemRandom()
 import gnupg
 import config
@@ -72,7 +72,11 @@ def getkey(name):
             if ' <%s@' % name in uid: return key['fingerprint']
     return None
 
-def encrypt(fp, s, output=None):
+def _shquote(s):
+    return "\\'".join("'" + p + "'" for p in s.split("'"))
+_gpghacklock = threading.Lock()
+
+def encrypt(fp, s, output=None, fn=None):
     r"""
     >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
     '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG/MacGPG2 v2.0.17 (Darwin)\n\nhQIMA3'
@@ -83,7 +87,14 @@ def encrypt(fp, s, output=None):
     if isinstance(s, str):
         out = gpg.encrypt(s, [fp], output=output, always_trust=True)
     else:
-        out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+        if fn:
+            with _gpghacklock:
+                oldname = gpg.gpgbinary
+                gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
+                out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+                gpg.gpgbinary = oldname
+        else:
+            out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
     if out.ok:
         return out.data
     else:
