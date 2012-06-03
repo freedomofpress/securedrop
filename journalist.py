@@ -18,9 +18,10 @@ class index:
         for d in dirs:
             if not os.listdir(store.path(d)): continue
             cols.append(web.storage(name=d, codename=crypto.displayid(d), date=
-              datetime.datetime.fromtimestamp(
+              str(datetime.datetime.fromtimestamp(
                 os.stat(store.path(d)).st_mtime
-            )))
+              )).split('.')[0]
+            ))
         cols.sort(lambda x,y: cmp(x.date, y.date), reverse=True)
         return render.index(cols)
 
