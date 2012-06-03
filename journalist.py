@@ -41,6 +41,8 @@ class col:
  
 class doc:
     def GET(self, sid, fn):
+        web.header('Content-Disposition', 'attachment; filename="' + 
+          crypto.displayid(sid).replace(' ', '_') + '_' + fn + '"')
         return file(store.path(sid, fn)).read()
 
 class reply:
