@@ -44,14 +44,14 @@ class lookup:
         
         if i.action == 'upload':
             if i.msg:
-                loc1 = store.path(sid, '%s_doc.gpg' % time.time())
+                loc1 = store.path(sid, '%s_msg.gpg' % time.time())
                 crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
                 received = 2
                 
             if i.fh.value:
                 # we put two zeroes here so that we don't save a file 
                 # with the same name as the message
-                loc2 = store.path(sid, '%s_msg.gpg' % time.time())
+                loc2 = store.path(sid, '%s_doc.gpg' % time.time())
                 crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2, fn=i.fh.filename)
                 received = i.fh.filename or '[unnamed]'
 
