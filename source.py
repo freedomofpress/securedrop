@@ -22,7 +22,7 @@ class generate:
     
     def POST(self):
         iid = crypto.genrandomid()
-        if os.path.exists(store.path(iid)):
+        if os.path.exists(store.path(crypto.shash(iid))):
             # if this happens, we're not using very secure crypto
             store.log('Got a duplicate ID.')
         else:
