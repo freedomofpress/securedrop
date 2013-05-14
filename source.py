@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os, time, datetime
 import web
 import config, crypto, background, store
@@ -6,8 +7,6 @@ urls = (
   '/', 'index',
   '/generate/', 'generate',
   '/lookup/', 'lookup',
-  '/upload/', 'upload',
-  '/delete/', 'delete'
 )
 
 render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base')
