@@ -5,7 +5,7 @@ import web
 import config
 
 # taken from store.urls mapping
-VALIDATE_FILENAME = re.compile("^[0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg$").match
+VALIDATE_FILENAME = re.compile("^(reply-)?[0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg$").match
 
 def verify(p):
     if os.path.commonprefix([config.STORE_DIR, p]) != config.STORE_DIR:
