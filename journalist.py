@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os, time, datetime
 import web
 import config, crypto, store
@@ -57,7 +58,9 @@ class reply:
         return render.reply(i.sid)
         
 
+web.config.debug = False
 app = web.application(urls, locals())
 application = app.wsgifunc()
+
 if __name__ == "__main__":
     app.run()

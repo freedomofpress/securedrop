@@ -76,8 +76,10 @@ class lookup:
 def notfound():
     return web.notfound(render.notfound())
 
+web.config.debug = False
 app = web.application(urls, locals())
 app.notfound = notfound
 application = app.wsgifunc()
+
 if __name__ == "__main__":
     app.run()
