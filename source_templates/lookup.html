@@ -14,10 +14,10 @@ $if msgs:
     
     $for msg in msgs:
 		<div class="reply">
-        <form method="post" action="">
-        <input type="hidden" name="action" value="delete" />
-        <input type="hidden" name="mid" value="$msg.id" />
-        <input type="hidden" name="id" value="$iid" />
+        <form method="post" action="" autocomplete="off">
+        <input type="hidden" name="action" value="delete" autocomplete="off"/>
+        <input type="hidden" name="mid" value="$msg.id" autocomplete="off"/>
+        <input type="hidden" name="id" value="$iid" autocomplete="off"/>
         <div class="date">Sent $msg.date:</div>
         <blockquote class="message">$msg.msg</blockquote>
         <p><button class="button-custom" type="submit">Delete</button></p>
@@ -28,13 +28,13 @@ $if msgs:
 
 
 
-<form method="post" action="" enctype="multipart/form-data">
-<input type="hidden" name="action" value="upload" />
-<input type="hidden" name="id" value="$iid" />
+<form method="post" action="" enctype="multipart/form-data" autocomplete="off">
+<input type="hidden" name="action" value="upload" autocomplete="off"/>
+<input type="hidden" name="id" value="$iid" autocomplete="off"/>
 
 <p style="padding-bottom: 0"><b>Upload a file:</b></p>
 <div id="browse-select">
-	<input type="file" name="fh" /> 
+	<input type="file" name="fh" autocomplete="off"/> 
 </div>
 
 <p><b>Or just enter a message:</b></p>
@@ -44,10 +44,10 @@ $if msgs:
 </form>
 
 <p><b>Remember!</b> Your code name is: <span class="code-name">$iid</span></p>
-<form method="post" action="">
+<form method="post" action="" autocomplete="off">
 
 <p><a href="">Enter a different code name...</a><br />
-<input type="hidden" name="id" value="$iid" />
+<input type="hidden" name="id" value="$iid" autocomplete="off"/>
 <button class="button-link" type="submit">Reload to check for new messages...</button>
 </p>
 </form>
