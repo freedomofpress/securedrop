@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import hmac, hashlib, subprocess, random, threading
 myrandom = random.SystemRandom()
 import gnupg
 import config
+import store
 
 WORDS_IN_RANDOM_ID = 3
 HASH_FUNCTION = hashlib.sha256
@@ -80,6 +82,8 @@ def encrypt(fp, s, output=None, fn=None):
     >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
     '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG/MacGPG2 v2.0.17 (Darwin)\n\nhQIMA3'
     """
+    if output:
+        store.verify(output)
     fp = fp.replace(' ', '')
     if isinstance(s, unicode):
         s = s.encode('utf8')
@@ -109,6 +113,7 @@ def decrypt(name, secret, s):
     return gpg.decrypt(s, passphrase=secret).data
 
 def secureunlink(fn):
+    store.verify(fn)
     return subprocess.check_call(['srm', fn])
 
 # crash if we don't have srm:
