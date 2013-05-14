@@ -24,6 +24,10 @@ class index:
               )).split('.')[0]
             ))
         cols.sort(lambda x,y: cmp(x.date, y.date), reverse=True)
+
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.index(cols)
 
 class col:
@@ -38,12 +42,20 @@ class col:
         docs.sort(lambda x,y: cmp(x.date, y.date))
         
         haskey = bool(crypto.getkey(sid))
+
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.col(docs, sid, haskey, codename=crypto.displayid(sid))
  
 class doc:
     def GET(self, sid, fn):
         web.header('Content-Disposition', 'attachment; filename="' + 
           crypto.displayid(sid).replace(' ', '_') + '_' + fn + '"')
+
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return file(store.path(sid, fn)).read()
 
 class reply:
@@ -55,6 +67,10 @@ class reply:
         crypto.encrypt(crypto.getkey(i.sid), i.msg, output=
           store.path(i.sid, 'reply-%s.gpg' % time.time())
         )
+
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.reply(i.sid)
         
 

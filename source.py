@@ -13,6 +13,9 @@ render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base')
 
 class index:
     def GET(self):
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.index()
 
 class generate:
@@ -27,10 +30,16 @@ class generate:
         else:
             os.mkdir(store.path(crypto.shash(iid)))
             
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.generate(iid)
 
 class lookup:
     def GET(self):
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.lookup_get()
     
     def POST(self):
@@ -71,9 +80,16 @@ class lookup:
                   date=datetime.datetime.fromtimestamp(float(store.cleanname(fn))),
                   msg=crypto.decrypt(sid, i.id, file(store.path(sid, fn)).read())
                 ))
+
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
         return render.lookup(i.id, msgs, received=received)
 
 def notfound():
+    web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+    web.header('Pragma', 'no-cache')
+    web.header('Expires', '-1')
     return web.notfound(render.notfound())
 
 web.config.debug = False
