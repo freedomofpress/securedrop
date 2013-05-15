@@ -5,7 +5,7 @@ import gnupg
 import config
 import store
 
-WORDS_IN_RANDOM_ID = 3
+WORDS_IN_RANDOM_ID = 4
 HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
