@@ -1,6 +1,6 @@
 # data directories - should be on secure media
-STORE_DIR='data/store'
-GPG_KEY_DIR='data/keys'
+STORE_DIR='/tmp/deaddrop/store'
+GPG_KEY_DIR='/tmp/deaddrop/keys'
 
 SOURCE_TEMPLATES_DIR='./source_templates'
 JOURNALIST_TEMPLATES_DIR='./journalist_templates'

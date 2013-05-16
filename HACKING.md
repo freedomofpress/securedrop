@@ -28,6 +28,11 @@ use the example config:
 
 	$ ln -s example_config.py config.py
 
+**NOTE**: the STORE_DIR and GPG_KEY_DIR must be absolute paths.
+Ensure they exist:
+
+       $ mkdir -p /tmp/deaddrop/{store,keys}
+
 running
 -------
 
