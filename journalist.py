@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, time, datetime
+import os, datetime, uuid
 import web
 import config, crypto, store
 
@@ -37,7 +37,7 @@ class col:
         for f in fns:
             docs.append(web.storage(
               name=f, 
-              date=str(datetime.datetime.fromtimestamp(float(store.cleanname(f)))).split('.')[0]
+              date=str(datetime.datetime.fromtimestamp(os.stat(store.path(sid, f)).st_mtime))
             ))
         docs.sort(lambda x,y: cmp(x.date, y.date))
         
@@ -65,7 +65,7 @@ class reply:
     def POST(self):
         i = web.input('sid', 'msg')
         crypto.encrypt(crypto.getkey(i.sid), i.msg, output=
-          store.path(i.sid, 'reply-%s.gpg' % time.time())
+          store.path(i.sid, 'reply-%.2f.gpg' % (uuid.uuid4().int, ))
         )
 
         web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
