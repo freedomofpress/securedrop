@@ -9,8 +9,9 @@ VALIDATE_FILENAME = re.compile("^(reply-)?[0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg$").m
 
 def verify(p):
     if not os.path.isabs(config.STORE_DIR):
-        raise Exception("config.STORE_DIR(%s) is not absolute",
-                        (config.STORE_DIR, ))
+        raise Exception("config.STORE_DIR(%s) is not absolute" % (
+                        config.STORE_DIR, ))
+
     if os.path.commonprefix([config.STORE_DIR, p]) != config.STORE_DIR:
         raise Exception("Invalid directory %s" % (p, ))
 
