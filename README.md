@@ -8,7 +8,7 @@ DeadDrop is free software: you can redistribute it and/or modify it under the te
 
 The code is is a Python application that accepts messages and documents from the web and GPG-encrypts them for secure storage. Essentially, it's a more secure alternative to the "contact us" form found on a typical news site.
 
-In operation, every source is given a unique "codename." The codename lets the source establish a relationship with the news organization without revealing her real identity or resorting to e-mail. She can enter the code name on a future visit to read any messages sent back from the journalist -- "Thanks for the Roswell photos! Got any more?? -- or submit additional documents or messages under the same persistent, but anonymous, identifier.
+In operation, every source is given a unique "codename." The codename lets the source establish a relationship with the news organization without revealing her real identity or resorting to e-mail. She can enter the code name on a future visit to read any messages sent back from the journalist -- "Thanks for the Roswell photos! Got any more??" -- or submit additional documents or messages under the same persistent, but anonymous, identifier.
 
 The source is known by a different code name on the journalist's side. All of that source's submissions are grouped together into a "collection." Every time there's a new submission by that source, their collection is bumped to the top of the submission queue.
 
