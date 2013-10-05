@@ -5,6 +5,10 @@ This document assumes your development environment is a Debian, Ubuntu
 or Fedora derivative.  If you're familiar with homebrew on OSX you
 should be able to follow along (documentation patches welcome).
 
+install gnupg2:
+    $ sudo yum install gnupg2
+    $ sudo apt-get install gnupg2
+
 install virtualenv:
 
 	$ sudo yum install python-virtualenv
