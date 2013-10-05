@@ -1,0 +1,15 @@
+name    'deaddrop-deaddrop'
+version '0.0.1'
+source 'UNKNOWN'
+author 'deaddrop'
+license 'GNU v3'
+summary 'Deaddrop app and environment installation'
+description 'This module will install the deaddrop application'
+project_page 'https://github.com/deaddrop'
+
+## Add dependencies, if any:
+# dependency 'username/name', '>= 1.2.0'
+dependency 'puppetlabs/apt', '>= 1.2.0'
+dependency 'puppetlabs/apache', '>= 0.9.0'
+dependency 'puppetlabs/firewall', '>= 0.4.1'
+dependency 'puppetlabs/git', '>= 0.0.2'

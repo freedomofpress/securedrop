@@ -1,0 +1,12 @@
+#!/bin/bash
+## http://ubuntuforums.org/showthread.php?t=430312
+
+# Not for loopback!
+[ "$IFACE" != "lo" ] || exit 0
+
+# comment this for testing
+exec 1>/dev/null # squelch output for non-interactive
+
+# umount all sshfs mounts
+mounted=`grep 'fuse.sshfs\|sshfs#' /etc/mtab | awk '{ print $2 }'`
+[ -n "$mounted" ] && { for mount in $mounted; do umount -l $mount; done; }
