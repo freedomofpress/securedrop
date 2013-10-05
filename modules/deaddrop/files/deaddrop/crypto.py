@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import hmac, hashlib, subprocess, random, threading
+import bcrypt, subprocess, random, threading
 myrandom = random.SystemRandom()
 import gnupg
 import config
 import store
 
 WORDS_IN_RANDOM_ID = 4
-HASH_FUNCTION = hashlib.sha256
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
 
@@ -38,9 +37,9 @@ def displayid(n):
 def shash(s):
     """
     >>> shash('Hello, world!')
-    '98015b0fbf815a630cbcda94b809d207490d7cc2c5c02cb33a242acfd5b73cc1'
+    '$2a$12$EW1aG/sVSDObG7QZu.xhHudPAJYajRpDaweePfwWK.iYn1C/tPnj6'
     """
-    return hmac.HMAC(config.HMAC_SECRET, s, HASH_FUNCTION).hexdigest()
+    return bcrypt.hashpw(s, config.BCRYPT_SALT)
 
 GPG_BINARY = 'gpg2'
 try:
