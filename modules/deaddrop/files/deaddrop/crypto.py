@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import bcrypt, subprocess, threading
 from Crypto.Random import random
+import random as badrandom
 import gnupg
 import config
 import store
@@ -30,10 +31,10 @@ words = file(config.WORD_LIST).read().split('\n')
 def genrandomid(words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
     return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
-def displayid(n):
-    badrandom = random.WichmannHill()
-    badrandom.seed(n)
-    return ' '.join(badrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
+def displayid(n, words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
+    badrandom_value = badrandom.WichmannHill()
+    badrandom_value.seed(n)
+    return ' '.join(badrandom_value.choice(words) for x in range(words_in_random_id))
 
 def shash(s):
     """
