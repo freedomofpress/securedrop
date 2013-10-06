@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import bcrypt, subprocess, random, threading
-myrandom = random.SystemRandom()
+import bcrypt, subprocess, threading
+from Crypto.Random import random
 import gnupg
 import config
 import store
 
-WORDS_IN_RANDOM_ID = 4
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
+
+DEFAULT_WORDS_IN_RANDOM_ID = 10
 
 class CryptoException(Exception): pass
 
@@ -26,8 +27,8 @@ def clean(s, also=''):
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
-def genrandomid():
-    return ' '.join(myrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
+def genrandomid(words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
+    return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
 def displayid(n):
     badrandom = random.WichmannHill()
