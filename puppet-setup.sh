@@ -86,7 +86,7 @@
   function downloadOSSECBinary {
     cd $CURRENTDIR
     echo ''
-    read -p 'Download OSSEC bianry from dropbox? (y/n) ' -e -i n DOWNLOADFROMINTERNET
+    read -p 'Download OSSEC binary from dropbox? (y/n) ' -e -i n DOWNLOADFROMINTERNET
 
     if [ $DOWNLOADFROMINTERNET == 'n' ]; then
       read -p 'Enter the full path to the OSSEC binary: ' -e -i ~/ossec-binary.tgz OSSECBINARY
@@ -145,7 +145,7 @@
     read monitor_ip
     awk -v value="'$monitor_ip'" '$1=="$monitor_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the Monitor fully quilfied domain: "
+    echo -n "Enter the Monitor fully qualified domain: "
     read monitor_fqdn
     sed -i "s/monitor_fqdn/$monitor_fqdn/" nodes.pp
 
@@ -153,7 +153,7 @@
     read source_ip
     awk -v value="'$source_ip'" '$1=="$source_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the Source Interface server's  fully quilfied domain: "
+    echo -n "Enter the Source Interface server's fully qualified domain: "
     read source_fqdn  
     sed -i "s/source_fqdn/$source_fqdn/" nodes.pp
 
@@ -161,7 +161,7 @@
     read journalist_ip
     awk -v value="'$journalist_ip'" '$1=="$journalist_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the Journalist Interface server's  fully quilfied domain: "
+    echo -n "Enter the Journalist Interface server's fully qualified domain: "
     read journalist_fqdn
     sed -i "s/journalist_fqdn/$journalist_fqdn/" nodes.pp
 
@@ -212,7 +212,7 @@
     echo ''
     echo '########################################################'
     echo 'This will install and configure puppet on the source and'
-    echo 'jouranlist servers using the IP addresses provided'
+    echo 'journalist servers using the IP addresses provided'
     echo '########################################################'
     echo ''
     echo -n 'What is your username on the Source and Journalist server? '

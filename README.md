@@ -107,7 +107,7 @@ To install everything, you need to run the localca.sh script. In Tails, open the
  
 At the end of running the localca.sh script you should have two folders in your home directory:  
 
-    /home/amnedia/Persistent/journalist_server/  
+    /home/amnesia/Persistent/journalist_server/  
     /home/amnesia/Persistent/journalist_user/
 
 tktktktk: explain how to make user certificates
