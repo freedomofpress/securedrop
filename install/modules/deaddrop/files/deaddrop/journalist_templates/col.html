@@ -1,0 +1,29 @@
+$def with (docs, sid, haskey, codename)
+<div id="content" class="journalist-view-single">
+<h2><span class="headline">Read documents</span></h2>
+
+<p>
+	<a href="/">Back to latest submissions...</a>
+</p>	
+
+<h3>Collection from: <span class="code-name">$codename</span></h3>
+
+<p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+
+<ul>
+$for doc in docs:
+    $if doc.name.startswith('reply-'):
+        <li><i>$doc.name</i> (sent $doc.date)</li>
+    $else:
+        <li><a href="$doc.name">$doc.name</a> (uploaded $doc.date)</li>
+</ul>
+
+$if haskey:
+    <p>You can write a secure reply to the person who submitted these documents:</p>
+    
+    <form action="/reply/" method="post" autocomplete="off">
+      <input type="hidden" name="sid" value="$sid" autocomplete="off"/>
+      <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea><br />
+      <button id="reply-button" class="button-custom" type="submit">Submit</button>
+    </form>
+</div>
