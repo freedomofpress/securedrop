@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import bcrypt, subprocess, random, threading
-myrandom = random.SystemRandom()
+import bcrypt, subprocess, threading
+from Crypto.Random import random
 import gnupg
 import config
 import store
 
-WORDS_IN_RANDOM_ID = 4
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
+
+DEFAULT_WORDS_IN_RANDOM_ID = 10
 
 class CryptoException(Exception): pass
 
@@ -26,8 +27,8 @@ def clean(s, also=''):
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
-def genrandomid():
-    return ' '.join(myrandom.choice(words) for x in range(WORDS_IN_RANDOM_ID))
+def genrandomid(words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
+    return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
 def displayid(n):
     badrandom = random.WichmannHill()
@@ -37,7 +38,7 @@ def displayid(n):
 def shash(s):
     """
     >>> shash('Hello, world!')
-    '$2a$12$EW1aG/sVSDObG7QZu.xhHudPAJYajRpDaweePfwWK.iYn1C/tPnj6'
+    '$2a$12$gLZnkcyhZBrWbCZKHKYgKee8g/Yb9O7.24/H.09Yu9Jt9hzW6n0Ky'
     """
     return bcrypt.hashpw(s, config.BCRYPT_SALT)
 
@@ -49,7 +50,7 @@ except OSError:
     p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
 
 assert p.stdout.readline().split()[-1].split('.')[0] == '2', "upgrade GPG to 2.0"
-gpg = gnupg.GPG(gpgbinary=GPG_BINARY, gnupghome=config.GPG_KEY_DIR)
+gpg = gnupg.GPG(binary=GPG_BINARY, homedir=config.GPG_KEY_DIR)
 
 def genkeypair(name, secret):
     """
@@ -78,8 +79,9 @@ _gpghacklock = threading.Lock()
 
 def encrypt(fp, s, output=None, fn=None):
     r"""
-    >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
-    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG/MacGPG2 v2.0.17 (Darwin)\n\nhQIMA3'
+    >>> key = genkeypair('randomid', 'randomid')
+    >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
+    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v2'
     """
     if output:
         store.verify(output)
@@ -104,8 +106,9 @@ def encrypt(fp, s, output=None, fn=None):
 
 def decrypt(name, secret, s):
     """
-    >>> decrypt(shash('randomid'), 'randomid',
-    ...   encrypt(shash('randomid'), 'Goodbye, cruel world!')
+    >>> key = genkeypair('randomid', 'randomid')
+    >>> decrypt('randomid', 'randomid',
+    ...   encrypt('randomid', 'Goodbye, cruel world!')
     ... )
     'Goodbye, cruel world!'
     """
