@@ -37,7 +37,7 @@ def displayid(n):
 def shash(s):
     """
     >>> shash('Hello, world!')
-    '$2a$12$EW1aG/sVSDObG7QZu.xhHudPAJYajRpDaweePfwWK.iYn1C/tPnj6'
+    '$2a$12$gLZnkcyhZBrWbCZKHKYgKee8g/Yb9O7.24/H.09Yu9Jt9hzW6n0Ky'
     """
     return bcrypt.hashpw(s, config.BCRYPT_SALT)
 
