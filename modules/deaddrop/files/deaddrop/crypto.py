@@ -78,8 +78,9 @@ _gpghacklock = threading.Lock()
 
 def encrypt(fp, s, output=None, fn=None):
     r"""
-    >>> encrypt(shash('randomid'), "Goodbye, cruel world!")[:75]
-    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG/MacGPG2 v2.0.17 (Darwin)\n\nhQIMA3'
+    >>> key = genkeypair('randomid', 'randomid')
+    >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
+    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v2'
     """
     if output:
         store.verify(output)
@@ -104,8 +105,9 @@ def encrypt(fp, s, output=None, fn=None):
 
 def decrypt(name, secret, s):
     """
-    >>> decrypt(shash('randomid'), 'randomid',
-    ...   encrypt(shash('randomid'), 'Goodbye, cruel world!')
+    >>> key = genkeypair('randomid', 'randomid')
+    >>> decrypt('randomid', 'randomid',
+    ...   encrypt('randomid', 'Goodbye, cruel world!')
     ... )
     'Goodbye, cruel world!'
     """
