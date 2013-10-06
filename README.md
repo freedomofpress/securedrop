@@ -1,7 +1,7 @@
 SecureDrop Environment Install Guide
 ====================================
 
-SecureDrop is a tool for sources communicating securely with journalists. The SecureDrop application environment uses four dedicated computers:
+SecureDrop is a tool for sources communicating securely with journalists. The SecureDrop application environment consists of four dedicated computers:
 
 * `Viewing`: An airgapped laptop running Tails from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
 * `Source Server`: Ubuntu server running a Tor hidden service that sources use to send messages and documents to journalists.
@@ -12,19 +12,55 @@ In addition to these computers, journalists use normal workstation computers:
 
 * `Journalist Workstations`: The every-day laptops that journalists use. They will use this computer to connect to the `Document Server` to respond to sources and download encrypted documents to copy to the `Viewing` station. They will also copy encrypted documents back from the `Viewing` station to this computer to do final work before publication.
 
-These computers should all physically be in your organization's office. You will need a total of three USB sticks:
+These computers should all physically be in your organization's office. 
 
+## Before You Begin
+
+Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for **Preparing Ubuntu servers for installation** and **Installing the grsec patched Ubuntu kernel**.
+
+You will also need a total of three USB sticks:
 * USB stick with Tails for the `Viewing` computer
 * USB stick for transfering files between the `Admin Workstation` and the `Viewing` computer
 * USB stick for transfering files between the `Viewing` computer and `Journalist Workstations`
 
-You will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
+Finally, you will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
 
 * `Viewing` station's Tails Persistent Volume
 * `Viewing` station's OpenPGP secret key
 * `Viewing` station's SSL certificate authority secret key (maybe?)
 
-Each journalist will also need to come up with a password to login to the `Document Server` with.
+Each journalist will also need to come up with a password for login to the `Document Server`.
+
+### Preparing servers for installation
+
+tktktktk move to external document
+
+### Install the grsec patched Ubuntu kernel
+
+tktktktk move to external document - easy way and hard way: download binary through PPA or patch the kernel yourself.
+
+The grsec patch increases the security of each of the servers.  
+
+        cd ..  
+        dpkg -i *.deb  
+
+Review boot menu and boot into new kernel  
+Verify that `/boot/grub/menu.lst` has the correct values. Make adjustments as necessary.  
+
+        sudo reboot 
+
+After the reboot check that you booted into the correct kernel.   
+
+        uname -r  
+
+It should end in '-grsec'  
+
+After finishing installing the ensure the grsec sysctl configs are applied and locked
+
+        sysctl -p  
+        sysctl -w kernel.grsecurity.grsec_lock = 1  
+        sysctl -p 
+
 
 ## Copy SecureDrop Code to USB Stick
 You will need one more USB stick to facilitate installation. Download the latest version of SecureDrop and extract it to this USB stick. For example, cd to the USB stick and run:
@@ -74,7 +110,7 @@ At the end of running the localca.sh script you should have two folders in your 
     /home/amnedia/Persistent/journalist_server/  
     /home/amnesia/Persistent/journalist_user/
 
-Todo: explain how to make user certificates
+tktktktk: explain how to make user certificates
 
 ### Generate the OpenPGP key
 
@@ -98,6 +134,8 @@ Export the Journalist's gpg public key
 Determine and record the application's gpg key's fingerprint  
 
     gpg --homedir /home/amnesia/Persistent/ --list-keys --with-fingerprint  
+    
+tktktktk explain this, too
 
 ## Journalist Workstation Setup
 
@@ -151,30 +189,8 @@ This script will install and run puppet
 
 
 
-## Install the grsec patched ubuntu kernel  
+## Installing the grsec patched Ubuntu kernel  
 
-### Install the grsec patched kernel  
-
-        cd ..  
-        dpkg -i *.deb  
-
-
-Review boot menu and boot into new kernel  
-Verify that `/boot/grub/menu.lst` has the correct values. Make adjustments as necessary.  
-
-        sudo reboot 
-
-After the reboot check that you booted into the correct kernel.   
-
-        uname -r  
-
-It should end in '-grsec'  
-
-After finishing installing the ensure the grsec sysctl configs are applied and locked
-
-        sysctl -p  
-        sysctl -w kernel.grsecurity.grsec_lock = 1  
-        sysctl -p 
 
 ## Clean up the system and puppet firewall rules  
 Once the environment is verified, run the clean up script to purge puppet and other install files
