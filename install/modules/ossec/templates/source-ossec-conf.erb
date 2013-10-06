@@ -1,0 +1,92 @@
+<ossec_config>
+  <client>
+    <server-ip><%= monitor_ip -%></server-ip>
+  </client>
+
+  <syscheck>
+    <alert_new_files>yes</alert_new_files>
+    
+    <!-- Directories to check  (perform all possible verifications) -->
+    <directories realtime="yes" check_all="yes" report_changes="yes">/etc,/usr/bin,/usr/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/bin,/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/ossec</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/lib/tor/hidden_service/,/var/lib/tor/lock</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/www</directories>
+
+    <!-- Files/directories to ignore -->
+    <ignore>/var/www/keys/pubring.gpg</ignore>
+    <ignore>/var/www/keys/secring.gpg</ignore>
+    <ignore>/var/www/keys/trustdb.gpg</ignore>
+    <ignore>/var/www/store</ignore>
+    <ignore>/var/ossec/queue</ignore>
+    <ignore>/var/ossec/logs</ignore>
+    <ignore>/var/ossec/stats</ignore>
+    <ignore>/var/ossec/var</ignore>
+    <ignore>/etc/mtab</ignore>
+    <ignore>/etc/mnttab</ignore>
+    <ignore>/etc/mail/statistics</ignore>
+    <ignore>/etc/random-seed</ignore>
+    <ignore>/etc/adjtime</ignore>
+    <ignore>/etc/httpd/logs</ignore>
+    <ignore>/etc/utmpx</ignore>
+    <ignore>/etc/wtmpx</ignore>
+    <ignore>/etc/cups/certs</ignore>
+    <ignore>/etc/dumpdates</ignore>
+    <ignore>/etc/svc/volatile</ignore>
+  </syscheck>
+
+  <rootcheck>
+    <disabled>yes</disabled>
+  </rootcheck>
+
+  <active-response>
+    <disabled>yes</disabled>
+  </active-response>
+
+  <!-- Files to monitor (localfiles) -->
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/messages</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/auth.log</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/syslog</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/mail.info</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/dpkg.log</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/kern.log</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/tor/log</location>
+  </localfile>
+
+  <localfile>
+    <log_format>command</log_format>
+    <command>df -h</command>
+  </localfile>
+
+  <localfile>
+    <log_format>full_command</log_format>
+    <command>netstat -tuan |grep -v :443 |grep -v :8080 | grep -v :80</command>
+  </localfile>
+</ossec_config>
