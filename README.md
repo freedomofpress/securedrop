@@ -6,7 +6,7 @@ SecureDrop is a tool for sources communicating securely with journalists. The Se
 * `Source Server`: Ubuntu server running a Tor hidden service that sources use to send messages and documents to journalists.
 * `Document Server`: Ubuntu server running a Tor hidden service that journalists use to download encrypted documents and respond to sources.
 * `Monitor`: Ubuntu server that monitors the `Source` and `Document` servers and sends email alerts.
-* `Viewing`: An airgapped computer without a hard drive running Tails from a USB stick that journalists use to decrypt and view submitted documents.
+* `Viewing`: An airgapped laptop running Tails from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
 
 In addition to these computers, journalists use normal workstation computers:
 
@@ -18,10 +18,18 @@ These computers should all physically be in your organization's office. You will
 * USB stick for transfering files between the `Admin Workstation` and the `Viewing` computer
 * USB stick for transfering files between the `Viewing` computer and `Journalist Workstations`
 
-## Copy Installation Scripts to USB Stick
+You will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
+
+* `Viewing` station's Tails Persistent Volume
+* `Viewing` station's OpenPGP secret key
+* `Viewing` station's SSL certificate authority secret key (maybe?)
+
+Each journalist will also need to come up with a password to login to the `Document Server` with.
+
+## Copy SecureDrop Code to USB Stick
 You will need one more USB stick to facilitate installation. Download the latest version of SecureDrop and extract it to this USB stick. For example, cd to the USB stick and run:
 
-    git clone https://github.com/freedomofpress/deaddrop.git
+    git clone https://github.com/freedomofpress/securedrop.git
 
 ## Source Server Installation
 
@@ -33,11 +41,63 @@ The `Viewing` computer will be air-gapped (never connected to the Internet) and 
 
 This computer will have two sets of crypto keys on it as well:
 
-* SSL keys.  
+* SSL keys. You will create a local Certificate Authority on this computer, as well as a user certificate for each journalist that will be accessing the `Document Server`. 
 
-* OpenPGP keys.
+* OpenPGP keys. You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing` station. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
 
-* Local Certificate Authority. Journalists access the `Document` server using both a username and password and also a special SSL certificate that's installed in their browser. 
+### Remove Hard Drive
+
+Turn off the laptop you want to use for the `Viewing` station. Physically open up the laptop to remove the hard drive. The directions are different depending on the make and model of the laptop you're using, but in general it requires using a small phillips head screwdriver. Once you have removed the hard drive, re-assemble the laptop.
+
+### Download, Install and Configure Tails
+
+* Visit https://tails.boum.org/download/index.en.html for instruction on downloading, verifying, and burning a Tails DVD.
+* After burning Tails to a DVD, boot to it on the `Viewing` station laptop. If this laptop does not have a DVD drive, use an external DVD drive.
+* Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Instructions for configuring the Persistent Volume are here: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
+* Reboot the `Viewing` laptop and boot into Tails again.
+
+### Copy SecureDrop Code to Viewing Station
+
+Plug in the USB stick with the SecureDrop code, and copy the securedrop directory to the `/home/amnesia/Persistent/` directory. You'll need to run scripts inside this code to set up the `Viewing` station.
+
+### Local Certificate Authority
+
+You'll need to generate a local SSL certificate authority and then generate a user certificate for each journalist that needs to access the `Document Server`. User certificates should be revoked when journalists no longer require access.
+
+To install everything, you need to run the localca.sh script. In Tails, open the Terminal program and type:
+
+    cd ~/Persistent/securedrop/install 
+    ./localca.sh  
+ 
+At the end of running the localca.sh script you should have two folders in your home directory:  
+
+    /home/amnedia/Persistent/journalist_server/  
+    /home/amnesia/Persistent/journalist_user/
+
+Todo: explain how to make user certificates
+
+### Generate the OpenPGP key
+
+    ./gengpg.sh  
+       
+The script will generate the application gpg key pair and save the application's public key `journalist.asc` in `/home/amnesia/Persistent/` directory  
+Generate the gpg v2 keys  
+
+	gpg2 --homedir  /home/amnesia/Persistent/ --gen-key  
+	
+>(1) RSA and RSA (default)  
+>key size: 4096  
+>real name: Journalist  
+
+Only the two selected journalist's should know the app's GPG keypair's passphrase. Follow your organization's password policy. http://howto.wired.com/wiki/Choose_a_Strong_Password  
+
+Export the Journalist's gpg public key  
+
+    gpg2 --export --output journalist.asc --armor Journalist  
+
+Determine and record the application's gpg key's fingerprint  
+
+    gpg --homedir /home/amnesia/Persistent/ --list-keys --with-fingerprint  
 
 ## Journalist Workstation Setup
 
@@ -54,67 +114,6 @@ You will have to do the following steps on each laptop that will be able to conn
 * If you ever re-install Tor Browser Bundle, you'll need to repeat the previous step.
 
 ![Installing client certificate in Tor Browser](https://raw.github.com/freedomofpress/deaddrop/install/images/torbrowser.png)
-
-## Local Certificate Authority Install  
-The journalist's interface uses ssl certificates for transport encryption and authentication that will be generated on the Local CA USB stick.  
-1. Steps to download, verify and install Tails to a usb stick can be found here `https://tails.boum.org/download/index.en.html`  
-2. Step to configure the Personal Data persistant storage feature to store the config file and root CA certs can be found here:
-        `https://tails.boum.org/doc/first_steps/persistence/index.en.html`   
-3. Ensure that Persistent Volume Feature 'Personal Data' is activated  
-4. The Local CA never needs to be connected to a network to generate the needed certificates, keys and revocation lists  
-5. The USB stick that the Local CA is installed on should be stored securely when not in use  
-6. The USB stick that the Local CA is installed on should be clearly labeled to avoid confusion with other USB sticks  
-7. User certificates should only be generated for approved journalists that require access to the journalist interface  
-8. Unique user certificates should be generated for each approved journalist  
-9. User certificates should be securely transported to the approved journalist  
-10. Server and user certificates should be set to expire to your organization's policy  
-11. A User certificate should be revoked if the journalist no longer requires access  
-
-### Generate the openssl certificates  
-Insert the USB stick that has the cloned git repos on it into the Tails computer. Copy `deaddropEnvironment/localca.sh` to `/home/amnesia/Persistent/`.
-
-The configuration files, certificates, and revocation lists are saved in the Persistant folder activated with the Personal Data feature of the Tails Persistent Volume Feature.  
-
-
-        cd /home/amnesia/Persistent/  
-        ./localca.sh  
- 
-
-At the end of running the localca.sh script you should have two folders in your home directory:  
-`/home/amnedia/Persistent/journalist_server/`  
-`/home/amnesia/Persistent/journalist_user/`  
-
-## Secure Viewing Station Install
-The Secure Viewing Station (SVS) never should be connected to a network. Transfering files to and from the SVS require the sneakernet.  
-1. Steps to download, verify and install Tails to a usb stick can be found here:  
-     `https://tails.boum.org/download/index.en.html`  
-2. Step to configure the Personal Data persistant storage feature to store the config file and root CA certs can be found here: `https://tails.boum.org/doc/first_steps/persistence/index.en.html`     
-3. Ensure that Persistent Volume Feature 'Personal Data' is activated  
-4. Copy the gengpg.sh script to the secure viewing stations `/home/amnesia/Persistent/` directory
-
-### Run gengpg.sh script
-
-        ./gengpg.sh  
-       
-The script will generate the application gpg key pair and save the application's public key `journalist.asc` in `/home/amnesia/Persistent/` directory  
-Generate the gpg v2 keys  
-
-	gpg2 --homedir  /home/amnesia/Persistent/ --gen-key  
-	
->(1) RSA and RSA (default)  
->key size: 4096  
->real name: Journalist  
-
-Only the two selected journalist's should know the app's GPG keypair's passphrase. Follow your organization's password policy. http://howto.wired.com/wiki/Choose_a_Strong_Password  
-
-Export the Journalist's gpg public key  
-
-	gpg2 --export --output journalist.asc --armor Journalist  
-
-Determine and record the application's gpg key's fingerprint  
-
-	gpg --homedir /home/amnesia/Persistent/ --list-keys --with-fingerprint  
- 
 
 ## Monitor Server Installation
 
