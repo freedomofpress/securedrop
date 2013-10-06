@@ -2,8 +2,9 @@
 
 The grsec patch increases the security of the Source, Document, and Monitor servers. For now, you have to patch the kernel yourself and make sure that it will boot alright.
 
-        cd ..  
-        dpkg -i *.deb  
+<!--        cd ..  
+            dpkg -i *.deb  
+-->
 
 ### Before You Get Started
 
