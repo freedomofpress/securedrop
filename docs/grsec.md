@@ -17,6 +17,8 @@ The grsec patch increases the security of the Source, Document, and Monitor serv
 
 (Todo: More detail about what you need to do before you can reboot.)
 
+### Rebooting
+
 Review boot menu and boot into the new kernel. Verify that `/boot/grub/menu.lst` has the correct values. Make adjustments as necessary.
 
         sudo reboot 
