@@ -86,7 +86,7 @@
   function downloadOSSECBinary {
     cd $CURRENTDIR
     echo ''
-    read -p 'Download OSSEC bianry from dropbox? (y/n) ' -e -i n DOWNLOADFROMINTERNET
+    read -p 'Download OSSEC binary from dropbox? (y/n) ' -e -i n DOWNLOADFROMINTERNET
 
     if [ $DOWNLOADFROMINTERNET == 'n' ]; then
       read -p 'Enter the full path to the OSSEC binary: ' -e -i ~/ossec-binary.tgz OSSECBINARY
