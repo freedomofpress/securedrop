@@ -3,10 +3,10 @@ SecureDrop Environment Install Guide
 
 SecureDrop is a tool for sources communicating securely with journalists. The SecureDrop application environment uses four dedicated computers:
 
+* `Viewing`: An airgapped laptop running Tails from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
 * `Source Server`: Ubuntu server running a Tor hidden service that sources use to send messages and documents to journalists.
 * `Document Server`: Ubuntu server running a Tor hidden service that journalists use to download encrypted documents and respond to sources.
 * `Monitor`: Ubuntu server that monitors the `Source` and `Document` servers and sends email alerts.
-* `Viewing`: An airgapped laptop running Tails from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
 
 In addition to these computers, journalists use normal workstation computers:
 
