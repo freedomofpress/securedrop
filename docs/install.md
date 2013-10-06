@@ -3,7 +3,7 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have 3 servers -- called the `Source Server`, the `Document Server`, and the `Monitor` -- with [Ubuntu configured](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md) and [grsec patches installed](https://github.com/freedomofpress/securedrop/blob/master/docs/grsec.md).
+* You must have 3 servers — called the `Source Server`, the `Document Server`, and the `Monitor` — with [Ubuntu configured](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md) and [grsec patches installed](https://github.com/freedomofpress/securedrop/blob/master/docs/grsec.md).
 
 * You must have 3 USB sticks -- 2 that will be used for for transferring files, and 1 that will be used to run the Tails operating system on the `Viewing` Station.
 
