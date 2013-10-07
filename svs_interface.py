@@ -33,26 +33,28 @@ class GpgApp(object):
             return fin
     def batch_decrypt(self):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-        dirname = 'decrypted_'+timestring
-        os.mkdir(dirname)
+        dirname = 'decrypted_'+timestring+'/'
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
         fin = askopenfilenames()
+        print fin
         for f in fin:
-            try:
-                decrypt_file(f, dirname+'/'+f+'_decrypted')
-            except:
-                print "Error decrypting: "+f
-        self.text.insert(END, 'Wrote decrypted files to '+dirname)
+            self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
+        except:
+             print "Error decrypting: "+f
+        self.text.insert(END, 'Wrote decrypted files to '+dirname+'\n')
     def batch_encrypt(self, recipient='placeholder@example.com'):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-        dirname = 'encrypted_'+timestring
-        os.mkdir(dirname)
+        dirname = 'encrypted_'+timestring+'/'
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
         fin = askopenfilenames()
         for f in fin:
             try:
-                encrypt_file(f, dirname+'/'+f+'_encrypted', recipient)
+                self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
             except:
                 print "Error encrypting: "+f
-        self.text.insert(END, 'Wrote encrypted files to '+dirname)
+        self.text.insert(END, 'Wrote encrypted files to '+dirname+'\n')
     def encrypt_file(self, input_file, output_file, recipient):
         args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
         subprocess.call(args)
