@@ -38,14 +38,15 @@ class generate:
     return render.generate(iid)
 
 class gen_ajax:
-    def GET(self):
-        request_params = web.input()
-        if 'words' in request_params:
-            word_num = int(request_params['words'])
-            uid = crypto.genrandomid(word_num)
-            return json.dumps({'result': 'success', 'id': uid})
-        else:
-            return json.dumps({'result': 'fail'})
+  def GET(self):
+    web.header('Content-Type', 'application/json')
+    request_params = web.input()
+    if 'words' in request_params:
+      word_num = int(request_params['words'])
+      uid = crypto.genrandomid(word_num)
+      return json.dumps({'result': 'success', 'id': uid})
+    else:
+      return json.dumps({'result': 'fail'})
 
 class lookup:
   def GET(self):
