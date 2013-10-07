@@ -39,9 +39,10 @@ class GpgApp(object):
         fin = askopenfilenames()
         print fin
         for f in fin:
-            self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
-        except:
-             print "Error decrypting: "+f
+            try:
+                self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
+            except:
+                print "Error decrypting: "+f
         self.text.insert(END, 'Wrote decrypted files to '+dirname+'\n')
     def batch_encrypt(self, recipient='placeholder@example.com'):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
