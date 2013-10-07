@@ -43,39 +43,42 @@ class GpgApp(object):
         recipient = tkSimpleDialog.askstring("Encrypt files", prompt)
         return recipient
     def batch_decrypt(self):
-        timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-        dirname = 'decrypted_'+timestring+'/'
-        if not os.path.isdir(dirname):
-            os.mkdir(dirname)
         fin = tkFileDialog.askopenfilenames()
+        if not fin:
+            return
+        dirname = self.get_timestamped_folder('decrypted')
         for f in fin:
-            try:
-                self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
-            except:
-                self.sane_insert("Error decrypting: "+f)
+            self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
         self.sane_insert('Wrote decrypted files to '+dirname)
     def batch_encrypt(self, recipient=None):
         recipient = self.get_recipient()
         if recipient is None:
             self.sane_insert("You must specify an email address for encryption")
             return
-        timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-        dirname = 'encrypted_'+timestring+'/'
-        if not os.path.isdir(dirname):
-            os.mkdir(dirname)
         fin = tkFileDialog.askopenfilenames()
+        if not fin:
+            return
+        dirname = self.get_timestamped_folder('encrypted')
         for f in fin:
-            try:
-                self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
-            except:
-                self.sane_insert("Error encrypting: "+f)
+            self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
         self.sane_insert('Wrote encrypted files to '+dirname)
     def encrypt_file(self, input_file, output_file, recipient):
         args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
-        subprocess.call(args)
+        self.do_subprocess(args)
     def decrypt_file(self, input_file, output_file):
         args = [GPG, '--output', output_file, '--decrypt', input_file]
-        subprocess.call(args)
+        self.do_subprocess(args)
+    def get_timestamped_folder(self, prefix):
+        timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+        dirname = prefix+'_'+timestring+'/'
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
+        return dirname
+    def do_subprocess(self, cmd):
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         stdin=subprocess.PIPE)
+        out, err = proc.communicate()
+        if err: self.sane_insert(err)
     def do_exit(self):
         root.destroy()
 
