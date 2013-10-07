@@ -19,7 +19,7 @@ class GpgApp(object):
         self.text.pack()
         self.sane_insert('Welcome to the decryption and encryption interface!\n')
         self.sane_insert('To encrypt and decrypt files, go to the File menu.')
-        self.sane_insert('Please remember to check the Terminal window for passphrase prompts.')
+        self.sane_insert('Please remember to check the Terminal window for passphrase prompts.\n')
         menu = Tkinter.Menu(master)
         root.config(menu=menu)
 
@@ -52,7 +52,7 @@ class GpgApp(object):
             try:
                 self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
             except:
-                print "Error decrypting: "+f
+                self.sane_insert("Error decrypting: "+f)
         self.sane_insert('Wrote decrypted files to '+dirname)
     def batch_encrypt(self, recipient=None):
         recipient = self.get_recipient()
@@ -68,7 +68,7 @@ class GpgApp(object):
             try:
                 self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
             except:
-                print "Error encrypting: "+f
+                self.sane_insert("Error encrypting: "+f)
         self.sane_insert('Wrote encrypted files to '+dirname)
     def encrypt_file(self, input_file, output_file, recipient):
         args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
