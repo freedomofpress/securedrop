@@ -3,86 +3,68 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have 3 servers — called the `Source Server`, the `Document Server`, and the `Monitor` — with [Ubuntu configured](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md) and [grsec patches installed](https://github.com/freedomofpress/securedrop/blob/master/docs/grsec.md).
+* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor` — with [Ubuntu configured](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md) and [grsec patches installed](https://github.com/freedomofpress/securedrop/blob/master/docs/grsec.md).
 
-* You must have 3 USB sticks -- 2 that will be used for for transferring files, and 1 that will be used to run the Tails operating system on the `Viewing` Station.
+* You must have a DVD configured as a Live DVD for the Tails operating system. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
-* Finally, you should have generated 3 secure passphrases for different components of the `Viewing` Station.
+* You must have three USB sticks — two that will be used for for transferring files, and one that will be used to run the Tails operating system on the `Viewing Station`.
 
-## Copy SecureDrop Code to USB Stick
-You will need one more USB stick to facilitate installation. Download the latest version of SecureDrop and extract it to this USB stick. For example, cd to the USB stick and run:
+* Finally, you should have selected three secure passphrases for different components of the `Viewing Station`.
 
-    git clone https://github.com/freedomofpress/securedrop.git
+## Viewing Station
 
-## Source Server Installation
-
-## Document Server Installation
-
-## Viewing Station Installation
-
-The `Viewing` computer will be air-gapped (never connected to the Internet) and will run the (Tails)[https://tails.boum.org/] operating system. Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
+The `Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
 
 This computer will have two sets of crypto keys on it as well:
 
 * SSL keys. You will create a local Certificate Authority on this computer, as well as a user certificate for each journalist that will be accessing the `Document Server`. 
 
-* OpenPGP keys. You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing` station. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
+* OpenPGP keys. You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
 
 ### Remove Hard Drive
 
-Turn off the laptop you want to use for the `Viewing` station. Physically open up the laptop to remove the hard drive. The directions are different depending on the make and model of the laptop you're using, but in general it requires using a small phillips head screwdriver. Once you have removed the hard drive, re-assemble the laptop.
+Turn off the laptop you want to use for the `Viewing Station`. Physically open up the laptop to remove the hard drive. The directions are different depending on the make and model of the laptop you're using, but in general it requires using a small phillips head screwdriver. Once you have removed the hard drive, re-assemble the laptop.
 
 ### Download, Install and Configure Tails
 
-* Visit https://tails.boum.org/download/index.en.html for instruction on downloading, verifying, and burning a Tails DVD.
-* After burning Tails to a DVD, boot to it on the `Viewing` station laptop. If this laptop does not have a DVD drive, use an external DVD drive.
-* Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Instructions for configuring the Persistent Volume are here: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
-* Reboot the `Viewing` laptop and boot into Tails again.
+If you already have a Tails Live USB, you can skip to the fourth step, where you configure the persistent volume.
+
+* Visit [the Tails website](https://tails.boum.org/download/index.en.html) for instruction on downloading, verifying, and burning a Tails DVD.
+* After burning Tails to a DVD, boot to it on the `Viewing Station` laptop. If this laptop does not have a DVD drive, use an external DVD drive.
+* Once you've booted into the Live DVD, you should create a Live USB stick with the USB drive set aside for Tails. Reboot the `Viewing Station` laptop into that Live USB drive.
+* Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Tails offers [instructions for configuring the Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html).
+* Reboot the `Viewing Station` laptop and boot into the Tails Live USB again.
+
+## Copy SecureDrop Code to USB Stick
+
+Download the latest version of SecureDrop to one of the other USB sticks. From any Internet-connected computer, in a terminal `cd` to the USB stick and run:
+
+    git clone https://github.com/freedomofpress/securedrop.git
 
 ### Copy SecureDrop Code to Viewing Station
 
-Plug in the USB stick with the SecureDrop code, and copy the securedrop directory to the `/home/amnesia/Persistent/` directory. You'll need to run scripts inside this code to set up the `Viewing` station.
+Plug the USB stick with the SecureDrop code into the `Viewing Station`, and copy the securedrop directory to the `/home/amnesia/Persistent/` directory. You'll need to run scripts inside this code to set up the `Viewing Station`.
 
 ### Local Certificate Authority
 
 You'll need to generate a local SSL certificate authority and then generate a user certificate for each journalist that needs to access the `Document Server`. User certificates should be revoked when journalists no longer require access.
 
-To install everything, you need to run the localca.sh script. In Tails, open the Terminal program and type:
+To install everything, you need to run the `viewingSetup.sh` script. In Tails, open the Terminal program and type:
 
-    cd ~/Persistent/securedrop/install 
-    ./localca.sh  
- 
-At the end of running the localca.sh script you should have two folders in your home directory:  
+    cd ~/Persistent/securedrop/ 
+    ./viewingSetup.sh  
 
-    /home/amnesia/Persistent/journalist_server/  
-    /home/amnesia/Persistent/journalist_user/
+This script will prompt for three different passphrases:
 
-tktktktk: explain how to make user certificates
+* A passphrase for the user certificate.
+* A passphrase for the `Document Server` certificate.
+* A passphrase for the SecureDrop application's GPG keypair.
 
-### Generate the OpenPGP key
+Only the two selected journalists should know the app's GPG keypair's passphrase.
 
-    ./gengpg.sh  
-       
-The script will generate the application gpg key pair and save the application's public key `journalist.asc` in `/home/amnesia/Persistent/` directory  
-Generate the gpg v2 keys  
+For each of these, follow your organization's password policy. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-	gpg2 --homedir  /home/amnesia/Persistent/ --gen-key  
-	
->(1) RSA and RSA (default)  
->key size: 4096  
->real name: Journalist  
-
-Only the two selected journalist's should know the app's GPG keypair's passphrase. Follow your organization's password policy. http://howto.wired.com/wiki/Choose_a_Strong_Password  
-
-Export the Journalist's gpg public key  
-
-    gpg2 --export --output journalist.asc --armor Journalist  
-
-Determine and record the application's gpg key's fingerprint  
-
-    gpg --homedir /home/amnesia/Persistent/ --list-keys --with-fingerprint  
-    
-tktktktk explain this, too
+When this script completes, it will have set up the `Viewing Station` and create two files: 1 called `certs.tgz`, and 1 `.pk12` file named after the journalist in `~/Persistent/securedrop`.
 
 ## Journalist Workstation Setup
 
@@ -90,56 +72,42 @@ The journalist workstation computer is the laptop that the journalist uses on a 
 
 You will have to do the following steps on each laptop that will be able to connect to the `Document Server`. If you want to give a new journalist access to the `Document Server` you will need to do these steps again for that new journalist.
 
-* Turn on the `Viewing` station and mount the persistent volume. Copy the user certificate that you created for the current journalist to a USB stick (a .p12 file). 
+* On the `Journalist Workstation`, [download and install the Tor Browser Bundle](https://www.torproject.org/download/download-easy.html.en). Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
 
-* On the `Journalist Workstation`, download and install the Tor Browser Bundle. Visit https://www.torproject.org/download/download-easy.html.en to find the download link. Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
+* On the `Viewing Station`, mount the Persistent volume. Copy the user certificate that you created for the current journalist, a .pk12 file named after the journalist, to a USB stick. 
 
 * Start the Tor Browser. When it has loaded, click Edit > Preferences. Go to the Advanced section at the top, and then switch to the Encryption tab. Click the View Certificates button, and switch to the Your Certificates tab. Click Import and navigate to the .p12 file to import it. When you are done with this step, the client certificate should be installed.
 
 * If you ever re-install Tor Browser Bundle, you'll need to repeat the previous step.
 
-![Installing client certificate in Tor Browser](https://raw.github.com/freedomofpress/deaddrop/install/images/torbrowser.png)
+![Installing client certificate in Tor Browser](https://raw.github.com/freedomofpress/securedrop/install/images/torbrowser.png)
 
-## Monitor Server Installation
+## Server Installation
 
-### Download the deaddrop puppet module
-Puppet is a tool to manage server configurations. SecureDrop uses a puppet module to set up the `Monitor` server. Download the that puppet module to the home directory of the server:
+All 3 servers should already have Ubuntu Server installed and the grsec kernel patches in place.
+
+### Download the SecureDrop configuration script
+
+Puppet is a tool to manage server configurations. SecureDrop uses a puppet module on the `Monitor` server to set up the other two servers: the `Document Server`, and the `Source Server`. From the `Monitor` server, download that puppet module to the home directory:
 
         cd ~
-        git clone https://github.com/freedomofpress/securedrop.git  
+        git clone https://github.com/freedomofpress/securedrop.git 
         
-### Gather the required files from the external harddrives  
-The `Monitor` server needs a copy of the journalist's public GPG key and the certificates on the `Viewing` Station generated by the Local Certificate Authority. Those files are prepared by the `localca.sh` script run earlier on the `Viewing` Station and should be copied from there to a USB stick. Those are located on the `Viewing` Station in these locations:
+### Gather the required files from the Viewing Station
+  
+The `Monitor` server needs a file containing the journalist's public GPG key and the certificates on the `Viewing Station` generated by the Local Certificate Authority. That file is prepared by the `viewingSetup.sh` script run earlier on the `Viewing Station` and should be copied from there to a USB stick. It is located on the `Viewing Station` in this locations:
 
-		tktktktktktk
-		tktktktktktk
-		
-Copy those from the `Viewing` Station to a USB stick, and then to the `Monitor`. Unzip those files:
+		~/Persistent/certs.tgz
 
-		tktktktktktk
-		tktktktktktk
+Copy that file from the `Viewing Station` to a USB stick, and then to the home directory on the `Monitor`.
 
-<!--
+### Run the `serverSetup.sh` script
 
-From the Secure Viewing Station copy the public GPG key to `~/environment/modules/deaddrop/files/journalist.asc`  
+With the `certs.tgz` file in place, you're ready to run the setup script:
 
-From the Local Certificate Authority copy the:  
-~/Persistent/journalist_server ===> `~/environment/modules/deaddrop/files/journalist_server`
-
--->
-
-### Run the `puppet-setup.sh` script
-This script will install and run puppet
-
-        cd ~/deaddropEnvironment  
-        ./puppet-setup.sh  
-
-
-## Clean up the system and puppet firewall rules  
-Once the environment is verified, run the clean up script to purge puppet and other install files
-
-
-        ./deaddrop_cleanup.sh
+        cd ~/securedrop  
+        ./serverSetup.sh
+        
+Follow the onscreen prompts, providing the required information about your configuration. These prompts will asks for server IP addresses, hostnames, internal VPN IP address, the application's GPG fingerprint, and the location of `certs.tgz`.
 
 ## Final State
-The final state should look like a,b,c,d....
