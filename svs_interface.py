@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import subprocess
-from Tkinter import *
-from tkFileDialog import *
+import Tkinter
+import tkFileDialog
+import tkSimpleDialog
 import os
 import datetime
 
@@ -12,14 +13,14 @@ DECRYPTED_PREFIX = 'decrypted'
 
 class GpgApp(object):
     def __init__(self, master):
-        frame = Frame(master)
+        frame = Tkinter.Frame(master)
         frame.pack()
-        self.text = Text()
+        self.text = Tkinter.Text()
         self.text.pack()
-        menu = Menu(master)
+        menu = Tkinter.Menu(master)
         root.config(menu=menu)
 
-        filemenu = Menu(menu, tearoff=0)
+        filemenu = Tkinter.Menu(menu, tearoff=0)
         menu.add_cascade(label="File", menu=filemenu)
         filemenu.add_command(label="Open", command=self.filename_open)
         filemenu.add_command(label="Decrypt files", command=self.batch_decrypt)
@@ -27,35 +28,35 @@ class GpgApp(object):
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.do_exit)
     def filename_open(self):
-        fin = askopenfilenames()
+        fin = tkFileDialog.askopenfilenames()
         if fin:
-            self.text.insert(END,fin)
+            self.text.insert(Tkinter.END,fin)
             return fin
     def batch_decrypt(self):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
         dirname = 'decrypted_'+timestring+'/'
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
-        fin = askopenfilenames()
+        fin = tkFileDialog.askopenfilenames()
         print fin
         for f in fin:
             try:
                 self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
             except:
                 print "Error decrypting: "+f
-        self.text.insert(END, 'Wrote decrypted files to '+dirname+'\n')
+        self.text.insert(Tkinter.END, 'Wrote decrypted files to '+dirname+'\n')
     def batch_encrypt(self, recipient='placeholder@example.com'):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
         dirname = 'encrypted_'+timestring+'/'
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
-        fin = askopenfilenames()
+        fin = tkFileDialog.askopenfilenames()
         for f in fin:
             try:
                 self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
             except:
                 print "Error encrypting: "+f
-        self.text.insert(END, 'Wrote encrypted files to '+dirname+'\n')
+        self.text.insert(Tkinter.END, 'Wrote encrypted files to '+dirname+'\n')
     def encrypt_file(self, input_file, output_file, recipient):
         args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
         subprocess.call(args)
@@ -66,7 +67,7 @@ class GpgApp(object):
         root.destroy()
 
 
-root = Tk()
+root = Tkinter.Tk()
 root.title("a simple GnuPG interface")
 app = GpgApp(root)
 root.mainloop()
