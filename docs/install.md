@@ -35,7 +35,7 @@ If you already have a Tails Live USB, you can skip to the fourth step, where you
 * Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Tails offers [instructions for configuring the Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html).
 * Reboot the `Viewing Station` laptop and boot into the Tails Live USB again.
 
-## Copy SecureDrop Code to USB Stick
+### Copy SecureDrop Code to USB Stick
 
 Download the latest version of SecureDrop to one of the other USB sticks. From any Internet-connected computer, in a terminal `cd` to the USB stick and run:
 
