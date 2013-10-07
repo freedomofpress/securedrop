@@ -5,6 +5,9 @@ from Tkinter import *
 from tkFileDialog import *
 import os
 
+GPG = 'gpg2'
+SERVER_KEY = ''  # replace with gpg key ID of server key
+
 class GpgApp(object):
     def __init__(self, master):
         frame = Frame(master)
@@ -24,6 +27,9 @@ class GpgApp(object):
         if fin:
             self.text.insert(END,fin)
             return fin
+    def encrypt_file(self, input_file, output_file, recipient):
+        args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
+        subprocess.call(args)
     def do_exit(self):
         root.destroy()
 
