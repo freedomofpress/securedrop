@@ -10,7 +10,7 @@ from base64 import b32encode
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
 
-DEFAULT_WORDS_IN_RANDOM_ID = 10
+DEFAULT_WORDS_IN_RANDOM_ID = 8
 
 class CryptoException(Exception): pass
 
