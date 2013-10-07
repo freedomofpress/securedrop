@@ -43,9 +43,9 @@ p {
 
 h2{
   font-size:26px;
-font-weight: 400;
-line-height: 30px;
-margin-bottom:20px;
+  font-weight: 400;
+  line-height: 30px;
+  margin-bottom:20px;
 }
 
 
@@ -62,19 +62,19 @@ margin-bottom:20px;
 
 
 #fancywrapper{
-min-height: 600px;
-background-attachment: fixed;
-background-image: url("/static/i/deaddrop-guy.png");
-background-position: center bottom;
-background-repeat: no-repeat;
-position: relative;
-padding-top: 30px;
+  min-height: 600px;
+  background-attachment: fixed;
+  background-image: url("/static/i/deaddrop-guy.png");
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  position: relative;
+  padding-top: 30px;
 }
 
 
 #innerwrapper{
-width: 600px;
-margin: 0 auto;
+  width: 600px;
+  margin: 0 auto;
 }
 
 
@@ -104,12 +104,12 @@ margin: 0 auto;
 
 
 form{
-padding-bottom:20px;
+  padding-bottom:20px;
 }
 
 
 #browse-select{
-padding-bottom:20px;
+  padding-bottom:20px;
 }
 
 form .button-custom{
@@ -162,7 +162,7 @@ ul li {
 }
 
 #replies{
-padding: 0 0 30px 0;
+  padding: 0 0 30px 0;
 }
 
 .reply {
@@ -192,5 +192,3 @@ padding: 0 0 30px 0;
 .reply .delete {
   text-transform:uppercase;
 }
-
-

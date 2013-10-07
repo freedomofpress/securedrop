@@ -63,8 +63,7 @@ h2{
 .user-view h3 .headline,
 .journalist-view-all h2 .headline,
 .journalist-view-single h2 .headline,
-.user-view h2 .headline
-{
+.user-view h2 .headline{
   display:none;
 }
 
