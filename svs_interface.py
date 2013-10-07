@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+
+"""
+A simple GPG2 interface to batch encrypt/decrypt files.
+"""
+
+# TODO:
+# * Get the user passphrase in a prompt instead of making them type it in the
+# terminal
+# * Make output messages more helpful
+# * Functionality for one-click secure wipes
+
+
 import subprocess
 import Tkinter
 import tkFileDialog
@@ -15,8 +27,11 @@ class GpgApp(object):
     def __init__(self, master):
         frame = Tkinter.Frame(master)
         frame.pack()
-        self.text = Tkinter.Text()
+        scrollbar = Tkinter.Scrollbar(master)
+        scrollbar.pack(side=Tkinter.RIGHT, fill=Tkinter.Y)
+        self.text = Tkinter.Text(master, yscrollcommand=scrollbar.set)
         self.text.pack()
+        scrollbar.config(command=self.text.yview)
         self.sane_insert('Welcome to the decryption and encryption interface!\n')
         self.sane_insert('To encrypt and decrypt files, go to the File menu.')
         self.sane_insert('Please remember to check the Terminal window for passphrase prompts.\n')
@@ -30,6 +45,7 @@ class GpgApp(object):
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.do_exit)
     def sane_insert(self, text):
+        """Insert text sanely into the UI notification box"""
         self.text.config(state=Tkinter.NORMAL)
         self.text.insert(Tkinter.END, text+'\n')
         self.text.config(state=Tkinter.DISABLED)
