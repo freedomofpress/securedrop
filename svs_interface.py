@@ -32,6 +32,10 @@ class GpgApp(object):
         if fin:
             self.text.insert(Tkinter.END,fin)
             return fin
+    def get_recipient(self):
+        prompt = "Enter the email address to encrypt files to: "
+        recipient = tkSimpleDialog.askstring("Encrypt files", prompt)
+        return recipient
     def batch_decrypt(self):
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
         dirname = 'decrypted_'+timestring+'/'
@@ -45,7 +49,11 @@ class GpgApp(object):
             except:
                 print "Error decrypting: "+f
         self.text.insert(Tkinter.END, 'Wrote decrypted files to '+dirname+'\n')
-    def batch_encrypt(self, recipient='placeholder@example.com'):
+    def batch_encrypt(self, recipient=None):
+        recipient = self.get_recipient()
+        if recipient is None:
+            self.text.insert(Tkinter.END, "You must specify an email address for encryption\n")
+            return
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
         dirname = 'encrypted_'+timestring+'/'
         if not os.path.isdir(dirname):
