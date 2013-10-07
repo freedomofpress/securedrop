@@ -5,6 +5,7 @@ import random as badrandom
 import gnupg
 import config
 import store
+from base64 import b32encode
 
 GPG_KEY_TYPE = "RSA"
 GPG_KEY_LENGTH = "4096"
@@ -41,7 +42,7 @@ def shash(s):
     >>> shash('Hello, world!')
     '$2a$12$gLZnkcyhZBrWbCZKHKYgKee8g/Yb9O7.24/H.09Yu9Jt9hzW6n0Ky'
     """
-    return bcrypt.hashpw(s, config.BCRYPT_SALT)
+    return b32encode(bcrypt.hashpw(s, config.BCRYPT_SALT))
 
 GPG_BINARY = 'gpg2'
 try:

@@ -18,17 +18,13 @@ def verify(p):
     filename = os.path.basename(p)
     ext = os.path.splitext(filename)[-1]
 
-    if not ext:
-        # if there's no extension, we're at a subdirectory
-        return
+    if os.path.isfile(p):
+        if ext != '.gpg':
+            # if there's an extension, verify it's a GPG
+            raise Exception("Invalid file extension %s" % (ext, ))
 
-    elif ext != '.gpg':
-        # if there's an extension, verify it's a GPG
-        raise Exception("Invalid file extension %s" % (ext, ))
-
-    if not VALIDATE_FILENAME(filename):
-        raise Exception("Invalid filename %s" % (filename, ))
-    return
+        if not VALIDATE_FILENAME(filename):
+            raise Exception("Invalid filename %s" % (filename, ))
 
 def path(*s):
     joined = os.path.join(os.path.abspath(config.STORE_DIR), *s)
