@@ -1,58 +1,58 @@
 * {
-	padding:0;
-	margin:0;
+  padding:0;
+  margin:0;
 }
 
 
 body {
-	background:#000;
-	color:#DDD;
-	font-family: Helvetica, Arial, Verdana, sans-serif;
-	font-size:13px;
-	line-height:20px; 
-	background-image: url("/static/i/deaddrop-bg.jpg");
-	background-position: top center;
-	background-repeat: repeat;
+  background:#000;
+  color:#DDD;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  font-size:13px;
+  line-height:20px; 
+  background-image: url("/static/i/deaddrop-bg.jpg");
+  background-position: top center;
+  background-repeat: repeat;
 }
 
 a {
-	color:#00aeef;
-	text-decoration:none;
+  color:#00aeef;
+  text-decoration:none;
 }
 
 form .button-link {
-	background: none;
-	border: none;
-	color: #00aeef;
-	font-family: Helvetica, Arial, Verdana, sans-serif;
-	font-size:13px;
-	line-height:20px; 
+  background: none;
+  border: none;
+  color: #00aeef;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  font-size:13px;
+  line-height:20px; 
 }
 
 form .button-link:hover, a:hover {
-	color:#d0e52b;
-	cursor: pointer;
+  color:#d0e52b;
+  cursor: pointer;
 }
 
 
 p {
-	padding-bottom:20px;
+  padding-bottom:20px;
 }
 
 
 
 h2{
-	font-size:26px;
-    font-weight: 400;
-    line-height: 30px;
-    margin-bottom:20px;
+  font-size:26px;
+font-weight: 400;
+line-height: 30px;
+margin-bottom:20px;
 }
 
 
 .code-name {
-	color:#d0e52b;
-	font-size:16px;
-	font-weight:bold;
+  color:#d0e52b;
+  font-size:16px;
+  font-weight:bold;
 }
 
 
@@ -62,24 +62,24 @@ h2{
 
 
 #fancywrapper{
-    min-height: 600px;
-    background-attachment: fixed;
-    background-image: url("/static/i/deaddrop-guy.png");
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    position: relative;
-    padding-top: 30px;
+min-height: 600px;
+background-attachment: fixed;
+background-image: url("/static/i/deaddrop-guy.png");
+background-position: center bottom;
+background-repeat: no-repeat;
+position: relative;
+padding-top: 30px;
 }
 
 
 #innerwrapper{
-    width: 600px;
-    margin: 0 auto;
+width: 600px;
+margin: 0 auto;
 }
 
 
 #content{
-	width:400px;
+  width:400px;
 }
 
 
@@ -88,18 +88,18 @@ h2{
 
 
 #footer{
-	font-size:10px;
-	line-height:15px; 
-	color:#888;
-	margin-top:60px;
-	padding-bottom:20px;
+  font-size:10px;
+  line-height:15px; 
+  color:#888;
+  margin-top:60px;
+  padding-bottom:20px;
 }
 
 
 #deaddrop_logo{
-	float:right; 
-	margin:0 0 30px 40px;
-	text-align:right; 
+  float:right; 
+  margin:0 0 30px 40px;
+  text-align:right; 
 }
 
 
@@ -113,52 +113,52 @@ padding-bottom:20px;
 }
 
 form .button-custom{
-	color:#ffffff;
-	background:#00aeef;
-	border:none;
-	font-family: Helvetica, Arial, Verdana, sans-serif;  
-	text-transform:uppercase;
-	height:30px;
-	font-weight:600;
-	padding:0 10px;
-	font-size:16px;
-	margin:0 5px 0 0;
+  color:#ffffff;
+  background:#00aeef;
+  border:none;
+  font-family: Helvetica, Arial, Verdana, sans-serif;  
+  text-transform:uppercase;
+  height:30px;
+  font-weight:600;
+  padding:0 10px;
+  font-size:16px;
+  margin:0 5px 0 0;
 }
 
 form textarea{
-	color:#666;
-	border:none;
-	font-family: Helvetica, Arial, Verdana, sans-serif;  
-	font-weight:400;
-	font-size:12px;
-	margin-bottom:20px;
+  color:#666;
+  border:none;
+  font-family: Helvetica, Arial, Verdana, sans-serif;  
+  font-weight:400;
+  font-size:12px;
+  margin-bottom:20px;
 }
 
 form input#filename{
-	color:#666;
-	border:none;
-	font-family: Helvetica, Arial, Verdana, sans-serif;  
-	font-weight:400;
-	font-size:12px;
-	height:30px;
-	margin:0 5px 0 0;
-	padding:0 10px;
+  color:#666;
+  border:none;
+  font-family: Helvetica, Arial, Verdana, sans-serif;  
+  font-weight:400;
+  font-size:12px;
+  height:30px;
+  margin:0 5px 0 0;
+  padding:0 10px;
 }
 
 
 
 ul {
-	padding:0 0 20px 0;
+  padding:0 0 20px 0;
 }
 
 ul li {
-	list-style:none;
-	padding-bottom:10px;
+  list-style:none;
+  padding-bottom:10px;
 }
 
 .journalist-view-all ul {
-	width:600px;
-	color:#888;
+  width:600px;
+  color:#888;
 }
 
 #replies{
@@ -166,31 +166,31 @@ padding: 0 0 30px 0;
 }
 
 .reply {
-	border-top:1px solid #333;
-	border-bottom:1px solid #333;
-	padding:10px; 
-	font-size:12px; 
-	background:#333 ; 
+  border-top:1px solid #333;
+  border-bottom:1px solid #333;
+  padding:10px; 
+  font-size:12px; 
+  background:#333 ; 
 }
 
 .reply .date {
-	font-size:10px;
-	display:block;
-	border-bottom:1px solid #666;
-	padding-bottom:5px;
-	margin-bottom:5px;
+  font-size:10px;
+  display:block;
+  border-bottom:1px solid #666;
+  padding-bottom:5px;
+  margin-bottom:5px;
 }
 
 
 .reply .message {
-	display:block;
-	padding-bottom:20px;
+  display:block;
+  padding-bottom:20px;
 }
 
 
 
 .reply .delete {
-	text-transform:uppercase;
+  text-transform:uppercase;
 }
 
 
