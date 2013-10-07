@@ -1,16 +1,17 @@
 $def with (iid)
 <div id="content" class="submit-2">
-
-<p>To protect your identity, we're assigning you a code name.</p>
-
-<p><b>Your code name is:</b><br />
-
-<span class="code-name">$iid</span>
-</p>
-
-<p>You will need this code name to access any responses to your submission. Please memorize it or save it in a secure place if you want to be able to get responses. (However, this code name of course will help identify you as the submitter &mdash; so don't keep it anywhere it might get discovered.)</p>
-
-<form method="post" action="/lookup/" autocomplete="off">
-<input type="hidden" name="id" value="$iid" autocomplete="off"/>
-<p>Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button></p>
-</form>
+  <p>To protect your identity, we're assigning you a code name.</p>
+  <p>
+    <b>Your code name is:</b><br />
+    <span class="code-name">$iid</span>
+  </p>
+  <p>
+    You will need this code name to access any responses to your submission. Please memorize it or save it in a secure place if you want to be able to get responses. (However, this code name of course will help identify you as the submitter &mdash; so don't keep it anywhere it might get discovered.)
+  </p>
+  <form method="post" action="/lookup/" autocomplete="off">
+    <input type="hidden" name="id" value="$iid" autocomplete="off"/>
+    <p>
+      Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button>
+    </p>
+  </form>
+</div>
