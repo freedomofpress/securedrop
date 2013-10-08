@@ -66,15 +66,19 @@ class GpgApp(object):
         d.destroy()
 
     def get_entry(self, prompt, visible=True):
-        d = gtk.Dialog(prompt, None, None, (gtk.STOCK_OK, gtk.STOCK_CANCEL))
+        label = gtk.Label(prompt)
+        d = gtk.Dialog(title="Input needed", buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                                                      gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
         d.vbox.pack_start(label)
         e = gtk.Entry()
-        e.set_visiblity(visible)
+        e.set_visibility(visible)
         d.vbox.pack_start(e)
         d.show_all()
-        d.run()
+        response = d.run()
         answer = e.get_text()
         d.destroy()
+        if response == gtk.RESPONSE_REJECT:
+            answer = None
         return answer
 
     def get_recipient(self):
@@ -82,8 +86,35 @@ class GpgApp(object):
         recipient = self.get_entry(prompt)
         return recipient
 
-    def batch_decrypt(self):
-        fin = tkFileDialog.askopenfilenames()
+    def get_files(self):
+        chooser = gtk.FileChooserDialog(title="Select files",
+                                        action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                                        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                                 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+        chooser.set_default_response(gtk.RESPONSE_OK)
+        chooser.set_select_multiple(True)
+        f = gtk.FileFilter()
+        f.set_name("All files")
+        f.add_pattern("*")
+        chooser.add_filter(f)
+        f = gtk.FileFilter()
+        f.set_name(".gpg files")
+        filters = [(".gpg files", "*.gpg"),
+                   (".asc files",  "*.asc")]
+        for name, pattern in filters:
+            f = gtk.FileFilter()
+            f.set_name(name)
+            f.add_pattern(pattern)
+            chooser.add_filter(f)
+        response = chooser.run()
+        fn = chooser.get_filenames()
+        chooser.destroy()
+        if response == gtk.RESPONSE_CANCEL:
+            fn = None
+        return fn
+
+    def batch_decrypt(self, widget, data=None):
+        fin = self.get_files()
         if not fin:
             return
         dirname = self.get_timestamped_folder('decrypted')
@@ -91,12 +122,12 @@ class GpgApp(object):
             self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
         self.notify_popup('Wrote decrypted files to '+dirname)
 
-    def batch_encrypt(self, recipient=None):
+    def batch_encrypt(self, widget, data=None):
         recipient = self.get_recipient()
         if recipient is None:
             self.notify_popup("You must specify an email address for encryption")
             return
-        fin = tkFileDialog.askopenfilenames()
+        fin = self.get_files()
         if not fin:
             return
         dirname = self.get_timestamped_folder('encrypted')
