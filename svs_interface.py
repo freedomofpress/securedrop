@@ -61,7 +61,7 @@ class GpgApp(object):
 
     def notify_popup(self, message, level=gtk.MESSAGE_INFO):
         d = gtk.MessageDialog(type=level, buttons=gtk.BUTTONS_CLOSE)
-        d.set_markup(message)
+        gtk.text = message
         d.run()
         d.destroy()
 
