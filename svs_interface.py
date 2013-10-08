@@ -53,9 +53,9 @@ class GpgApp(object):
 
     def init_buttons(self):
         self.encrypt_button = gtk.Button(ENCRYPT_BUTTON_TEXT)
-        self.encrypt_button.connect("clicked", lambda x: self.notify_popup("encrypt"))
+        self.encrypt_button.connect("clicked", self.batch_encrypt)
         self.decrypt_button = gtk.Button(DECRYPT_BUTTON_TEXT)
-        self.decrypt_button.connect("clicked", lambda x: self.notify_popup("decrypt"))
+        self.decrypt_button.connect("clicked", self.batch_decrypt)
         self.hbox.pack_start(self.decrypt_button)
         self.hbox.pack_start(self.encrypt_button)
 
@@ -65,9 +65,21 @@ class GpgApp(object):
         d.run()
         d.destroy()
 
+    def get_entry(self, prompt, visible=True):
+        d = gtk.Dialog(prompt, None, None, (gtk.STOCK_OK, gtk.STOCK_CANCEL))
+        d.vbox.pack_start(label)
+        e = gtk.Entry()
+        e.set_visiblity(visible)
+        d.vbox.pack_start(e)
+        d.show_all()
+        d.run()
+        answer = e.get_text()
+        d.destroy()
+        return answer
+
     def get_recipient(self):
         prompt = "Enter the email address to encrypt files to: "
-        recipient = tkSimpleDialog.askstring("Encrypt files", prompt)
+        recipient = self.get_entry(prompt)
         return recipient
 
     def batch_decrypt(self):
