@@ -21,7 +21,6 @@ import gtk
 
 GPG = 'gpg2'
 SERVER_KEY = ''  # replace with gpg key ID of server key, eventually
-DECRYPTED_PREFIX = 'decrypted'
 DECRYPT_BUTTON_TEXT = 'Decrypt files'
 ENCRYPT_BUTTON_TEXT = 'Encrypt files'
 
@@ -44,7 +43,7 @@ class GpgApp(object):
 
     def init_text(self):
         start_text = """Welcome to the GPG interface!\n
-                        Click on the buttons below to encrypt and decrypt files. \n
+                        Click on the buttons below to encrypt and decrypt files.\n
                         You can select multiple files at once.\n"""
         textbox = gtk.TextView()
         text = gtk.TextBuffer()
@@ -54,14 +53,17 @@ class GpgApp(object):
 
     def init_buttons(self):
         self.encrypt_button = gtk.Button(ENCRYPT_BUTTON_TEXT)
+        self.encrypt_button.connect("clicked", lambda x: self.notify_popup("encrypt"))
         self.decrypt_button = gtk.Button(DECRYPT_BUTTON_TEXT)
+        self.decrypt_button.connect("clicked", lambda x: self.notify_popup("decrypt"))
         self.hbox.pack_start(self.decrypt_button)
         self.hbox.pack_start(self.encrypt_button)
 
     def notify_popup(self, message, level=gtk.MESSAGE_INFO):
-        d = gtk.MessageDialog(parent=self.window, type=level,
-                              buttons=gtk.BUTTONS_OK)
+        d = gtk.MessageDialog(type=level, buttons=gtk.BUTTONS_CLOSE)
         d.set_markup(message)
+        d.run()
+        d.destroy()
 
     def get_recipient(self):
         prompt = "Enter the email address to encrypt files to: "
