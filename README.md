@@ -1,3 +1,7 @@
+![SecureDrop](https://raw.github.com/freedomofpress/securedrop/master/docs/images/logo.png)
+
+You may be confused right now, but don't worry. Stay tuned for a big announcement. ;)
+
 SecureDrop Environment Install Guide
 ====================================
 
