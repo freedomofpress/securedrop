@@ -24,6 +24,9 @@ GPG = 'gpg2'
 SERVER_KEY = ''  # replace with gpg key ID of server key, eventually
 DECRYPT_BUTTON_TEXT = 'Decrypt files'
 ENCRYPT_BUTTON_TEXT = 'Encrypt files'
+if not os.path.isdir('/tmp/'):
+    os.mkdir('/tmp/')
+BASEDIR = '/tmp/'
 
 class GpgApp(object):
 
@@ -147,7 +150,7 @@ class GpgApp(object):
     def get_timestamped_folder(self, prefix):
         """Create a timestamped folder for encrypted/decrypted files"""
         timestring = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-        dirname = prefix+'_'+timestring+'/'
+        dirname = BASEDIR + prefix+'_'+timestring+'/'
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
         return dirname
