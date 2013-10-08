@@ -13,47 +13,55 @@ A simple GPG2 interface to batch encrypt/decrypt files.
 # * Make the UI less ugly
 
 import subprocess
-import Tkinter
-import tkFileDialog
-import tkSimpleDialog
 import os
 import datetime
-
+import pygtk
+pygtk.require('2.0')
+import gtk
 
 GPG = 'gpg2'
 SERVER_KEY = ''  # replace with gpg key ID of server key, eventually
 DECRYPTED_PREFIX = 'decrypted'
-
+DECRYPT_BUTTON_TEXT = 'Decrypt files'
+ENCRYPT_BUTTON_TEXT = 'Encrypt files'
 
 class GpgApp(object):
 
-    def __init__(self, master):
-        frame = Tkinter.Frame(master)
-        frame.pack()
-        # create the main notification text box with a scrollbar
-        scrollbar = Tkinter.Scrollbar(master)
-        scrollbar.pack(side=Tkinter.RIGHT, fill=Tkinter.Y)
-        self.text = Tkinter.Text(master, yscrollcommand=scrollbar.set)
-        self.text.pack()
-        scrollbar.config(command=self.text.yview)
-        self.sane_insert('Welcome to the decryption and encryption interface!\n')
-        self.sane_insert('To encrypt and decrypt files, go to the File menu.')
-        self.sane_insert('Please remember to check the Terminal window for passphrase prompts.\n')
-        # add a file menu
-        menu = Tkinter.Menu(master)
-        root.config(menu=menu)
-        filemenu = Tkinter.Menu(menu, tearoff=0)
-        menu.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label="Decrypt files", command=self.batch_decrypt)
-        filemenu.add_command(label="Encrypt files", command=self.batch_encrypt)
-        filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.do_exit)
+    def __init__(self):
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.connect("delete_event", self.delete_event)
+        self.window.connect("destroy", self.exit)
+        self.vbox = gtk.VBox()
+        self.vbox.pack_start(self.init_text())
+        self.hbox = gtk.HBox()
+        self.init_buttons()
+        self.vbox.pack_start(self.hbox)
+        self.window.add(self.vbox)
+        self.window.show_all()
 
-    def sane_insert(self, text):
-        """Insert text sanely into the UI notification box"""
-        self.text.config(state=Tkinter.NORMAL)
-        self.text.insert(Tkinter.END, text+'\n')
-        self.text.config(state=Tkinter.DISABLED)
+    def delete_event(self, widget, event, data=None):
+        return False
+
+    def init_text(self):
+        start_text = """Welcome to the GPG interface!\n
+                        Click on the buttons below to encrypt and decrypt files. \n
+                        You can select multiple files at once.\n"""
+        textbox = gtk.TextView()
+        text = gtk.TextBuffer()
+        text.set_text(start_text)
+        textbox.set_buffer(text)
+        return textbox
+
+    def init_buttons(self):
+        self.encrypt_button = gtk.Button(ENCRYPT_BUTTON_TEXT)
+        self.decrypt_button = gtk.Button(DECRYPT_BUTTON_TEXT)
+        self.hbox.pack_start(self.decrypt_button)
+        self.hbox.pack_start(self.encrypt_button)
+
+    def notify_popup(self, message, level=gtk.MESSAGE_INFO):
+        d = gtk.MessageDialog(parent=self.window, type=level,
+                              buttons=gtk.BUTTONS_OK)
+        d.set_markup(message)
 
     def get_recipient(self):
         prompt = "Enter the email address to encrypt files to: "
@@ -67,12 +75,12 @@ class GpgApp(object):
         dirname = self.get_timestamped_folder('decrypted')
         for f in fin:
             self.decrypt_file(f, dirname+os.path.basename(f)+'_decrypted')
-        self.sane_insert('Wrote decrypted files to '+dirname)
+        self.notify_popup('Wrote decrypted files to '+dirname)
 
     def batch_encrypt(self, recipient=None):
         recipient = self.get_recipient()
         if recipient is None:
-            self.sane_insert("You must specify an email address for encryption")
+            self.notify_popup("You must specify an email address for encryption")
             return
         fin = tkFileDialog.askopenfilenames()
         if not fin:
@@ -80,7 +88,7 @@ class GpgApp(object):
         dirname = self.get_timestamped_folder('encrypted')
         for f in fin:
             self.encrypt_file(f, dirname+os.path.basename(f)+'_encrypted', recipient)
-        self.sane_insert('Wrote encrypted files to '+dirname)
+        self.notify_popup('Wrote encrypted files to '+dirname)
 
     def encrypt_file(self, input_file, output_file, recipient):
         args = [GPG, '--output', output_file, '--recipient', recipient, '-sea', input_file]
@@ -102,14 +110,15 @@ class GpgApp(object):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          stdin=subprocess.PIPE)
         out, err = proc.communicate()
-        if err: self.sane_insert(err)
+        if err: self.notify_popup(err, level=gtk.MESSAGE_ERROR)
 
-    def do_exit(self):
+    def exit(self, widget, data=None):
         """Close the window and quit"""
-        root.destroy()
+        gtk.main_quit()
 
+    def main(self):
+        gtk.main()
 
-root = Tkinter.Tk()
-root.title("a simple GnuPG interface")
-app = GpgApp(root)
-root.mainloop()
+if __name__ == "__main__":
+    app = GpgApp()
+    app.main()
