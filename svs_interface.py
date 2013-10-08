@@ -18,6 +18,7 @@ import datetime
 import pygtk
 pygtk.require('2.0')
 import gtk
+import cgi
 
 GPG = 'gpg2'
 SERVER_KEY = ''  # replace with gpg key ID of server key, eventually
@@ -61,7 +62,7 @@ class GpgApp(object):
 
     def notify_popup(self, message, level=gtk.MESSAGE_INFO):
         d = gtk.MessageDialog(type=level, buttons=gtk.BUTTONS_CLOSE)
-        gtk.text = message
+        d.set_markup(cgi.escape(message))
         d.run()
         d.destroy()
 
