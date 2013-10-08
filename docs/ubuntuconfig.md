@@ -5,7 +5,7 @@ Preparing Ubuntu servers for installation
 
 After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 
-![Ubuntu Server](https://raw.github.com/freedomofpress/securedrop/master/docs/images/ubuntu_server.png?login=micahflee&token=9cee0154d755d4a03775cf9dad99d497)
+![Ubuntu Server](https://raw.github.com/freedomofpress/securedrop/master/docs/images/ubuntu_server.png)
 
 Follow the steps to choose your language and keyboard, and let the setup continue. When it asks for your hostname choose a name that makes sense. Each server should have its own hostname.  You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone. When you get to the partition step, choose "Guided - use entire disk and set up LVM". Then wait for base system to finish installing. 
 
