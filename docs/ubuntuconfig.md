@@ -1,5 +1,4 @@
-Preparing Ubuntu servers for installation
-=========================================
+# Preparing Ubuntu servers for installation
 
 `Source Server`, `Document Server`, and `Monitor Server` all require [Ubuntu Server 12.04.3](http://www.ubuntu.com/download/server). Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
 
@@ -17,43 +16,107 @@ After booting up for the first time, do updates.
 
     sudo apt-get update
     sudo apt-get upgrade
+    exit
 
-Install the grsec-Patched Ubuntu Kernel
-=======================================
+At this point it's easier to follow the rest of the instructions by sshing into these three servers from over the network.
 
-The grsec patch increases the security of the Source, Document, and Monitor servers. For now, you have to patch the kernel yourself and make sure that it will boot alright.
+# Install the grsec-Patched Ubuntu Kernel
 
-        cd ..  
-        dpkg -i *.deb  
+The grsec patch increases the security of the `Source Server`, `Document Server`, and `Monitor Server`. See the [grsecurity wikibook](https://en.wikibooks.org/wiki/Grsecurity) for more details.
 
-### Before You Get Started
+The following instructions will help you compile a new kernel that includes the grsec patch. If your servers all use the same hardware, you can do these steps on just one server (such as the `Monitor Server`) and then scp the .deb to install on the other servers (`Source Server` and `Document Server`). If your hardware is different, then apply these steps to each server. We will assume that the hardware is the same.
 
-(Todo: Explain that the patched kernel has only been tested on specific hardware, and list that hardware.)
-        
-### Obtaining the Patch
+## Gather files and packages needed for the ubuntu overlay
 
-(Todo: Explain how to obtain the patch, somewhere in the install script?)
+On the `Monitor Server`, run these commands.
 
-### Configuring and Installing the Patch
+    cd ~  
+    mkdir grsec  
+    cd grsec  
+    sudo apt-get install libncurses5-dev build-essential  kernel-package git-core -y  
+    git clone git://kernel.ubuntu.com/ubuntu/ubuntu-precise.git  
+    cp -a /usr/share/kernel-package ubuntu-package  
+    cp ubuntu-precise/debian/control-scripts/p* ubuntu-package/pkg/image/  
+    cp -a /usr/share/kernel-package ubuntu-package  
+    cp ubuntu-precise/debian/control-scripts/p* ubuntu-package/pkg/image/  
+    cp ubuntu-precise/debian/control-scripts/headers-postinst ubuntu-package/pkg/headers/  
 
-(Todo: More detail about what you need to do before you can reboot.)
+Install `gcc-4.6.-plugin-dev`.
 
-### Rebooting
+    apt-get install gcc-4.6-plugin-dev -y    
 
-Review boot menu and boot into the new kernel. Verify that `/boot/grub/menu.lst` has the correct values. Make adjustments as necessary.
+Download the kernel and grsecurity patch (see [Obtaining grsecurity](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity#Downloading_grsecurity) for more information).
 
-        sudo reboot 
+    wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.36.tar.bz2  
+    wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.36.tar.sign  
+    wget https://grsecurity.net/spender-gpg-key.asc  
+    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.36-201301032034.patch  
+    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.36-201301032034.patch.sig  
 
-After the reboot check that you booted into the correct kernel.   
+Verify the packages:
 
-        uname -r  
+    gpg --import spender-gpg-key.asc
+    gpg --verify grsecurity-2.9.1-3.2.36-201301032034.patch.sig
+    gpg --recv-keys 6092693E
+    bunzip2 linux-3.2.36.tar.bz2
+    gpg --verify linux-3.2.36.tar.sign
 
-It should end in '-grsec'  
+##  Apply the patch to the kernel and make the grsec kernel
 
-After finishing installing the patch, ensure the grsec sysctl configs are applied and locked.
+    tar -xf linux-3.2.36.tar
+    cd linux-3.2.36
+    patch -p1 <../grsecurity-2.9.1-3.2.36-201301032034.patch
 
-        sysctl -p  
-        sysctl -w kernel.grsecurity.grsec_lock = 1  
-        sysctl -p 
-        
+Apply the old hardware config to ensure that the correct options are retained.
+
+    yes "" | make oldconfig
+    make menuconfig
+
+In the GUI:
+
+* navigate to 'Security options'
+* navigate to 'Grsecurity'
+* enable the ‘Grsecurity’ option
+* Set ‘Configuration Method’ to ‘Automatic’
+* Set ‘Usage Type’ to ‘Server’
+* Set ‘Virtualization Type’ to ‘None’
+* Set ‘Required Priorities’ to ‘Security’
+* navigate to ‘Customize Configuration’
+* navigate to ‘Sysctl Support’ and enable ‘Sysctl support’
+* exit and save changes
+
+    make-kpkg clean  
+    make-kpkg --initrd --overlay-dir=../ubuntu-package kernel_image kernel_headers  
+
+Grab a cup of coffee. When the package is complete scp the .deb files to the `Source Server` and `Document Server`.
+
+Follow the rest of this guide on all three servers.
+
+## Resolve PAX grub issues
+
+    apt-get install paxctl -y  
+    paxctl -Cpm /usr/sbin/grub-probe  
+    paxctl -Cpm /usr/sbin/grub-mkdevicemap  
+    paxctl -Cpm /usr/sbin/grub-setup  
+    paxctl -Cpm /usr/bin/grub-script-check  
+    paxctl -Cpm /usr/bin/grub-mount  
+    update-grub  
+
+## Install the grsec patched kernel
+
+    sudo dpkg -i *.deb  
+
+Review boot menu and boot into new kernel. Verify that `/boot/grub/menu.lst` has the correct values. Make adjustments as necessary. 
+
+    sudo reboot 
+
+After the reboot check that you booted into the correct kernel. It should end in '-grsec'.
+
+    uname -r  
+
+After finishing installing the ensure the grsec sysctl configs are applied and locked.
+
+    sysctl -p  
+    sysctl -w kernel.grsecurity.grsec_lock = 1  
+
 Visit the official [Grsecurity documentation](http://en.wikibooks.org/wiki/Grsecurity) for more information about [obtaining](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity) and [configuring and installing](http://en.wikibooks.org/wiki/Grsecurity/Configuring_and_Installing_grsecurity) the kernel patch.
