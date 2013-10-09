@@ -3,14 +3,16 @@
 
 """
 A simple GPG2 interface to batch encrypt/decrypt files.
+
+Author: Yan Zhu (yan@mit.edu)
 """
 
 # TODO:
 # * Show interactive GPG prompts in popup windows instead of making user type in the
-# terminal. Might involve some subprocess pipe trickery.
-# * Make output messages more helpful
-# * Functionality for one-click secure wipes
+# terminal. DO NOT DO THIS FOR PASSPHRASES. gpg-agent takes care of it.
+# * Make the popup messages more helpful
 # * Make the UI less ugly
+# * Add a button to do secure wipes with one click
 
 import subprocess
 import os
