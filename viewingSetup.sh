@@ -250,8 +250,8 @@ if [ $CREATENEWGPGKEY == 'y' ]; then
     mkdir ./gpgKeyRing
     chmod 600 ./gpgKeyRing
     gpg2 --homedir ./gpgKeyRing --no-tty --batch --gen-key gpgConfig
-    gpg2 --homedir ./gpgKeyRing --export --output localca/journalist_certs/journalist.asc --armor Journalist
-    $FINGERPRINT=`gpg2 --homedir ./gpgKeyRing --fingerprint Journalist`
+    gpg2 --homedir ./gpgKeyRing --output localca/journalist_certs/journalist.asc --armor --export Journalist
+    FINGERPRINT=`gpg2 --homedir ./gpgKeyRing --fingerprint Journalist`
   fi
 fi
 
@@ -267,6 +267,7 @@ if [ $COMPRESS_JOURNALIST_SERVER_CERTS == 'y' ]; then
   echo "The servers ssl and public gpg keys are in $PERSISTENT_STORAGE/serverKeys.tar.gz copy serverKeys.tar.gz to the monitor server"
   echo ''
   echo "The application's GPG fingerprint is $FINGERPRINT"
+  echo ''
   echo "You will need the fingerprint during the serverInstall.sh script on the monitor server"
   echo ''
   echo "$JOURNALIST_NAME's certificate is located at $PERSISTENT_STORAGE/$LOCAL_CA/usercerts/$JOURNALIST_NAME.asc install on $JOURNALIST_NAME's browser"
