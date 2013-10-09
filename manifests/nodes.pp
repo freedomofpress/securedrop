@@ -9,7 +9,6 @@ $intFWlogs_ip = '76.169.229.227'
 $app_gpg_pub_key = 'journalist.asc'
 $hmac_secret = 'long random value'
 $app_gpg_fingerprint = 'E82A C40F 3158 9EA3 E73F 0C5D 0A20 6074 BE26 C950'
-$bcrypt_salt = ''
 $mail_server = 'gmail-smtp-in.l.google.com'
 $ossec_email_to = 'dolanjs@gmail.com'
 # The values in this section do not need to be changed

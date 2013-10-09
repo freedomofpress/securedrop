@@ -42,7 +42,7 @@ def shash(s):
     >>> shash('Hello, world!')
     '$2a$12$gLZnkcyhZBrWbCZKHKYgKee8g/Yb9O7.24/H.09Yu9Jt9hzW6n0Ky'
     """
-    return b32encode(bcrypt.hashpw(s, config.BCRYPT_SALT))
+    return b32encode(bcrypt.hashpw(s, bcrypt.gensalt()))
 
 GPG_BINARY = 'gpg2'
 try:
