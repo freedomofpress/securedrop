@@ -24,9 +24,9 @@ GPG = 'gpg2'
 SERVER_KEY = ''  # replace with gpg key ID of server key, eventually
 DECRYPT_BUTTON_TEXT = 'Decrypt files'
 ENCRYPT_BUTTON_TEXT = 'Encrypt files'
-if not os.path.isdir('/tmp/'):
-    os.mkdir('/tmp/')
-BASEDIR = '/tmp/'
+BASEDIR = os.path.expanduser('~')+'/tmp/'
+if not os.path.isdir(BASEDIR):
+    os.mkdir(BASEDIR)
 
 class GpgApp(object):
 
