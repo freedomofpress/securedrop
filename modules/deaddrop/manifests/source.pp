@@ -52,7 +52,7 @@ class deaddrop::source{
 
   package { "python-dev": ensure => installed }
 
-  $dependencies_install = [ "python-bcrypt ", "python-gnupg ", "pycrypto " ]
+  $dependencies_install = [ "python-bcrypt ", "gnupg ", "pycrypto " ]
 
   exec { "pip install $dependencies_install":
     path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
