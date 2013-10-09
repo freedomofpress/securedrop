@@ -159,7 +159,8 @@ class GpgApp(object):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          stdin=subprocess.PIPE)
         out, err = proc.communicate()
-        if err: self.notify_popup(err, level=gtk.MESSAGE_ERROR)
+        if proc.returncode > 0:
+            if err: self.notify_popup(err, level=gtk.MESSAGE_ERROR)
 
     def exit(self, widget, data=None):
         """Close the window and quit"""
