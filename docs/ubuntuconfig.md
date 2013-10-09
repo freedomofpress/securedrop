@@ -43,15 +43,15 @@ On the `Monitor Server`, run these commands.
 
 Install `gcc-4.6.-plugin-dev`.
 
-    apt-get install gcc-4.6-plugin-dev -y    
+    sudo apt-get install gcc-4.6-plugin-dev -y    
 
 Download the kernel and grsecurity patch (see [Obtaining grsecurity](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity#Downloading_grsecurity) for more information).
 
     wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.36.tar.bz2  
     wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.36.tar.sign  
     wget https://grsecurity.net/spender-gpg-key.asc  
-    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.36-201301032034.patch  
-    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.36-201301032034.patch.sig  
+    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.51-201309281102.patch
+    wget https://grsecurity.net/stable/grsecurity-2.9.1-3.2.51-201309281102.patch.sig
 
 Verify the packages:
 
