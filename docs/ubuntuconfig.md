@@ -56,7 +56,7 @@ Download the kernel and grsecurity patch (see [Obtaining grsecurity](http://en.w
 Verify the packages:
 
     gpg --import spender-gpg-key.asc
-    gpg --verify grsecurity-2.9.1-3.2.36-201301032034.patch.sig
+    gpg --verify grsecurity-2.9.1-3.2.51-201309281102.patch.sig
     gpg --recv-keys 6092693E
     bunzip2 linux-3.2.36.tar.bz2
     gpg --verify linux-3.2.36.tar.sign
