@@ -8,7 +8,7 @@ tsa_policy3 = 1.2.3.4.5.7
 [ ca ]
 default_ca	= CA_default		# The default ca section
 [ CA_default ]
-dir		= ./localca		# Where everything is kept
+dir		= ./local_ca		# Where everything is kept
 certs		= $dir/certs		# Where the issued certs are kept
 crl_dir		= $dir/crl		# Where the issued crl are kept
 database	= $dir/index.txt	# database index file.

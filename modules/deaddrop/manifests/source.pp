@@ -1,4 +1,5 @@
 class deaddrop::source{
+
   user { 'www-data' :
     home => '/var/www',
   }
@@ -44,60 +45,22 @@ class deaddrop::source{
     group   => 'root',
   }
 
-  apt::key { "tor":
-    key        => "886DDD89",
-    key_server => "keys.gnupg.net",
+  package { "python-pip": 
+    ensure => installed,
+    before => Package["python-dev"],
   }
 
-  apt::source { "tor":
-    location          => "http://deb.torproject.org/torproject.org",
-    release           => "precise",
-    repos             => "main",
-    required_packages => "deb.torproject.org-keyring",
-    key               => "886DDD89",
-    key_server        => "keys.gnupg.net",
-    before            => Package["tor"],
+  package { "python-dev": ensure => installed }
+
+  $dependencies_install = [ "python-bcrypt ", "python-gnupg ", "pycrypto " ]
+
+  exec { "pip install $dependencies_install":
+    path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    user => 'root',
+    group => 'root',
+    require => Package["python-dev"],
   }
 
-  package { 'tor':
-    ensure => "installed",
-  }
-
-  file { '/etc/tor/torrc':
-    ensure  => file,
-    source  => "puppet:///modules/deaddrop/torrc",
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    require => Package["tor"],
-  }
-
-  service { 'tor':
-    ensure     => running,
-    hasrestart => true,
-    hasstatus  => true,
-    subscribe  => File['/etc/tor/torrc'],
-    require    => Package['tor'],
-  }
-
-  exec { 'passwd -l debian-tor':
-    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-    user    => 'root',
-    group   => 'root',
-    require => Package["tor"],
-  }
-
-##### Install python_gnupg #####
-  package { 'python-setuptools': ensure => 'installed', } 
-
-  exec { 'easy_install https://python-gnupg.googlecode.com/files/python-gnupg-0.2.7.tar.gz':
-    cwd     => $deaddrop_home,
-    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-    user    => 'root',
-    group   => 'root',
-    require => Package["python-setuptools"],
-    unless  => "ls /usr/local/lib/python2.7/dist-packages/python_gnupg-0.2.7-py2.7.egg",
-  }
 ##### Install Apache #####
   package { 'apache2-mpm-worker':
     ensure => installed,
@@ -129,7 +92,7 @@ class deaddrop::source{
     refreshonly => true,
   }
 
-##### configure redirect and ssl vhosts #####
+##### configure vhost #####
   file { "$source_ip":
     path    => '/etc/apache2/sites-enabled/source',
     owner   => 'root',
@@ -338,5 +301,11 @@ class deaddrop::source{
     owner => 'root',
     group => 'root',
     mode => '0755',
+  }
+
+  exec { 'ssh journalist exit':
+    path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    user => $apache_user,
+    group => $apachae_user,
   }
 }
