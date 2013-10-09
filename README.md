@@ -1,9 +1,8 @@
 ![SecureDrop](https://raw.github.com/freedomofpress/securedrop/master/docs/images/logo.png)
 
-You may be confused right now, but don't worry. Stay tuned for a big announcement. ;)
+SecureDrop is an open-source whistleblower submission system managed by Freedom of the Press Foundation that media organizations use to securely accept documents from anonymous sources. It was originally coded by the late Aaron Swartz.
 
-SecureDrop Environment Install Guide
-====================================
+# Technical Summary
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of four dedicated computers:
 
@@ -36,3 +35,5 @@ Finally, you will also need to come up with and memorize a series of passphrases
 * `Viewing Station`'s SSL certificate authority secret key
 
 Each journalist will also need to come up with a password for login to the `Document Server`.
+
+After installing and configuring Ubuntu Server on `Source Server`, `Document Server`, and `Monitor Server`, and download, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md).
