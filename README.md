@@ -22,12 +22,12 @@ These computers should all physically be in your organization's office.
 
 Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md).
 
-You will need a DVD configured as a Live DVD for the Tails operating system. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
+You will need a DVD with the latest version of the [Tails](https://tails.boum.org/download/index.en.html) operating system burned to it. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
 You will also need a total of three USB sticks:
-* USB stick with Tails for the `Viewing` computer
-* USB stick for transfering files between the `Admin Workstation` and the `Viewing` computer
-* USB stick for transfering files between the `Viewing` computer and `Journalist Workstations`
+* USB stick with Tails for the `Viewing Station`
+* USB stick for transfering files from the `Journalist Workstations` to the `Viewing Station`
+* USB stick for transfering files from the `Viewing Station` to the `Journalist Workstations`
 
 Finally, you will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
 
