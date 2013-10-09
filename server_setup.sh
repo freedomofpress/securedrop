@@ -196,7 +196,7 @@ OSSECBINARY="ossec-binary.tgz"
     awk -v value="'$ossec_email_to'" '$1=="$ossec_email_to"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
     echo -n "Using 'date | sha256sum' to generate hmac_secret"
-    hmac_secret=`date | sha256sum`
+    hmac_secret=`date | sha256sum | cut -d ' ' -f1`
     echo "Your hmac_secret is $hmac_secret"
     awk -v value="'$hmac_secret'" '$1=="$hmac_secret"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
