@@ -1,4 +1,4 @@
-#!/bin/bash
+securedropbin/bash
 # 
 # Requirements:
 # 1. Working tails installation https://tails.boum.org
@@ -6,7 +6,7 @@
 #      The Local CA directory should be in this storage
 #      https://tails.boum.org/doc/first_steps/persistence/index.en.html
 # 3. openssl version install
-# 4. localCAOpenssl.cnf file
+# 4. local_ca_openssl.cnf file
 #
 #
 # This script will create a certificate authority and generate the server
@@ -91,7 +91,7 @@ fi
 # Export variable LOCAL_CA_OPENSSL_CNF
 echo "Exporting variable LOCAL_CA_OPENSSL_CNF..."
 
-export OPENSSL_CONF=$PERSISTENT_STORAGE/localCAOpenssl.cnf
+export OPENSSL_CONF=$PERSISTENT_STORAGE/local_ca_openssl.cnf
 
 catch_error $? "exporting variable LOCAL_CA_OPENSSL_CNF"
 
@@ -111,7 +111,7 @@ fi
 if [ $CREATE_NEW_CA == 'y' ]; then
   echo "Generating local ca's public certificate..."
 
-  awk -v value="ca" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
+  awk -v value="ca" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
 
   openssl req -x509 -extensions v3_ca -sha1 -new \
     -key $PERSISTENT_STORAGE/$LOCAL_CA/private/ca.key \
@@ -150,7 +150,7 @@ fi
 if [ $CREATE_NEW_JOURNALIST_SERVER_CERT == 'y' ]; then
   echo "Generating journalist server's certificate signin request..."
 
-  awk -v value="Enter_the_Journalist's_Server_FQDN" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
+  awk -v value="Enter_the_Journalist's_Server_FQDN" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
 
   openssl req -sha1 -new -nodes -key $PERSISTENT_STORAGE/$LOCAL_CA/private/journalist.key \
     -out $PERSISTENT_STORAGE/$LOCAL_CA/newcerts/journalist.csr -days $CERT_EXPIRATION
@@ -204,7 +204,7 @@ fi
 if [ $CREATE_NEW_JOURNALIST_USER_CERT == 'y' ]; then
   echo "Generating journalist interface user's csr..."
 
-  awk -v value="Enter_the_journalist's_name" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
+  awk -v value="Enter_the_journalist's_name" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
 
   openssl req -sha1 -new -nodes -key $PERSISTENT_STORAGE/$LOCAL_CA/private/$JOURNALIST_NAME.key \
     -out $PERSISTENT_STORAGE/$LOCAL_CA/newcerts/$JOURNALIST_NAME.csr \
@@ -247,11 +247,11 @@ if [ $CREATENEWGPGKEY == 'y' ]; then
     catch_error $? "checking for gpg2"
   else
     echo "Creating new Application's GPG keypair..."
-    mkdir ./gpgKeyRing
-    chmod 600 ./gpgKeyRing
-    gpg2 --homedir ./gpgKeyRing --no-tty --batch --gen-key gpgConfig
-    gpg2 --homedir ./gpgKeyRing --output localca/journalist_certs/journalist.asc --armor --export Journalist
-    FINGERPRINT=`gpg2 --homedir ./gpgKeyRing --fingerprint Journalist`
+    mkdir ./gpg_keyring
+    chmod 600 ./gpg_keyring
+    gpg2 --homedir ./gpg_keyring --no-tty --batch --gen-key gpg_config
+    gpg2 --homedir ./gpg_keyring --output localca/journalist_certs/journalist.asc --armor --export Journalist
+    FINGERPRINT=`gpg2 --homedir ./gpg_keyring --fingerprint Journalist`
   fi
 fi
 
@@ -261,10 +261,10 @@ read -p "Do you want to prepare the required server certs and keys to copy to th
 if [ $COMPRESS_JOURNALIST_SERVER_CERTS == 'y' ]; then
   echo "Compressing journalist server certs..."
 
-  tar czf $PERSISTENT_STORAGE/serverKeys.tar.gz -C $PERSISTENT_STORAGE/$LOCAL_CA/ journalist_certs 
+  tar czf $PERSISTENT_STORAGE/server_keys.tar.gz -C $PERSISTENT_STORAGE/$LOCAL_CA/ journalist_certs 
 
   echo ''
-  echo "The servers ssl and public gpg keys are in $PERSISTENT_STORAGE/serverKeys.tar.gz copy serverKeys.tar.gz to the monitor server"
+  echo "The servers ssl and public gpg keys are in $PERSISTENT_STORAGE/server_keys.tar.gz copy server_keys.tar.gz to the monitor server"
   echo ''
   echo "The application's GPG fingerprint is $FINGERPRINT"
   echo ''

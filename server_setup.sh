@@ -2,7 +2,7 @@
 # 
 # Requirements:
 # 1. 3 updated ubuntu 12.04 servers
-# 2. The 'serverKeys.tar.gz' file from the viewingSetup.sh script
+# 2. The 'server_keys.tar.gz' file from the viewing_setup.sh script
 #
 # Usage:
 #  ./serverSetup.sh 
@@ -86,7 +86,7 @@
   function downloadDeaddropFiles {
     cd $CURRENTDIR
     echo ''
-    read -p 'Enter the path to the deaddropEnvironment directory: ' -e -i $CURRENTDIR DEADDROPDIR
+    read -p 'Enter the path to the securedrop directory: ' -e -i $CURRENTDIR DEADDROPDIR
     cp -Rfp $DEADDROPDIR/{manifests,modules} /etc/puppet/
   }
 
