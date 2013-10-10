@@ -37,3 +37,9 @@ Finally, you will also need to come up with and memorize a series of passphrases
 Each journalist will also need to come up with a password for login to the `Document Server`.
 
 After installing and configuring Ubuntu Server on `Source Server`, `Document Server`, and `Monitor Server`, and download, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md).
+
+## License
+
+SecureDrop is open source and released under the [GNU General Public License v2](https://github.com/freedomofpress/securedrop/blob/master/LICENSE). 
+
+The [wordlist](https://github.com/freedomofpress/securedrop/blob/master/modules/deaddrop/files/deaddrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold. 
