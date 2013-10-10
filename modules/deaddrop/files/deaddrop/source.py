@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, uuid, datetime
 import web
-import config, crypto, background, store
+import config, crypto, background, store, version
 
 urls = (
   '/', 'index',
@@ -9,7 +9,8 @@ urls = (
   '/lookup/', 'lookup',
 )
 
-render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base')
+render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base',
+                             globals={'version':version.__version__})
 
 class index:
   def GET(self):
