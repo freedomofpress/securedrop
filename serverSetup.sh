@@ -1,5 +1,13 @@
 #!/bin/bash
-
+# 
+# Requirements:
+# 1. 3 updated ubuntu 12.04 servers
+# 2. The 'serverKeys.tar.gz' file from the viewingSetup.sh script
+#
+# Usage:
+#  ./serverSetup.sh 
+#  Then follow the instructions
+#
   # Check for root
   function rootCheck {
     if [[ $EUID -ne 0 ]]; then

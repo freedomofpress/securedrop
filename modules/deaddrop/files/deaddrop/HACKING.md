@@ -21,7 +21,7 @@ create and activate a new virtualenv:
 
 install dependencies:
 
-	$ pip install web.py python-gnupg python-bcrypt pycrypto
+	$ pip install web.py gnupg python-bcrypt pycrypto
 
 install srm (secure remove utility):
 

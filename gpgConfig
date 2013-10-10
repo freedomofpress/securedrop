@@ -1,0 +1,11 @@
+Key-Type: RSA
+Key-Length: 4096
+Subkey-Type: default
+Name-Real: Journalist
+Name-Comment: Secure Drop Application GPG keypair
+Name-Email: journalist@securedrop.com
+Expire-Date: 0
+%ask-passphrase
+# Do a commit here, so that we can later print "done" :-)
+%commit
+%echo done

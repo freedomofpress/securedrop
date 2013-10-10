@@ -6,17 +6,19 @@
 #      The Local CA directory should be in this storage
 #      https://tails.boum.org/doc/first_steps/persistence/index.en.html
 # 3. openssl version install
-# 4. local_ca_openssl.cnf file
+# 4. localCAOpenssl.cnf file
 #
 #
 # This script will create a certificate authority and generate the server
 #   and client SSL certificates for the journalist interface
 #
 # Usage:
-#  ./local_ca_install.sh 
+#  ./viewingInstall.sh 
 #  Answer the questions
 #
-PERSISTENT_STORAGE=`pwd`
+PERSISTENT_STORAGE=`dirname $0`
+cd $PERSISTENT_STORAGE
+PWD=`pwd`
 LOCAL_CA='localca'
 CERT_EXPIRATION='365'
 KEY_SIZE='4096'
@@ -33,13 +35,14 @@ if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root" 1>&2
   exit 1
 fi
+
 # Remove previous installation if present
 read -p "Do you want to delete previous installation? (y/n)? " -e -i y CREATE_NEW_CA
 
 if [ $CREATE_NEW_CA == 'y' ]; then 
   echo "Removing previous installation if present..."
 
-  rm -Rf $PERSISTENT_STORAGE/$LOCAL_CA/{certs,newcerts,usercerts,index.txt,serial,crlnumber,private}
+  rm -Rf $PERSISTENT_STORAGE/$LOCAL_CA
 
   catch_error $? "removing prevous installation if present"
 fi
@@ -88,7 +91,7 @@ fi
 # Export variable LOCAL_CA_OPENSSL_CNF
 echo "Exporting variable LOCAL_CA_OPENSSL_CNF..."
 
-export OPENSSL_CONF=$PERSISTENT_STORAGE/local_ca_openssl.cnf
+export OPENSSL_CONF=$PERSISTENT_STORAGE/localCAOpenssl.cnf
 
 catch_error $? "exporting variable LOCAL_CA_OPENSSL_CNF"
 
@@ -108,7 +111,7 @@ fi
 if [ $CREATE_NEW_CA == 'y' ]; then
   echo "Generating local ca's public certificate..."
 
-  awk -v value="ca" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
+  awk -v value="ca" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
 
   openssl req -x509 -extensions v3_ca -sha1 -new \
     -key $PERSISTENT_STORAGE/$LOCAL_CA/private/ca.key \
@@ -147,7 +150,7 @@ fi
 if [ $CREATE_NEW_JOURNALIST_SERVER_CERT == 'y' ]; then
   echo "Generating journalist server's certificate signin request..."
 
-  awk -v value="Enter_the_Journalist's_Server_FQDN" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
+  awk -v value="Enter_the_Journalist's_Server_FQDN" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
 
   openssl req -sha1 -new -nodes -key $PERSISTENT_STORAGE/$LOCAL_CA/private/journalist.key \
     -out $PERSISTENT_STORAGE/$LOCAL_CA/newcerts/journalist.csr -days $CERT_EXPIRATION
@@ -188,6 +191,7 @@ if [ $CREATE_NEW_JOURNALIST_USER_CERT == 'y' ]; then
 fi
 
 if [ $CREATE_NEW_JOURNALIST_USER_CERT == 'y' ]; then
+  echo ''
   echo "Generating journalist interface user's private key..."
 
   openssl genrsa -out $PERSISTENT_STORAGE/$LOCAL_CA/private/$JOURNALIST_NAME.key $KEY_SIZE
@@ -200,7 +204,7 @@ fi
 if [ $CREATE_NEW_JOURNALIST_USER_CERT == 'y' ]; then
   echo "Generating journalist interface user's csr..."
 
-  awk -v value="Enter_the_journalist's_name" '$1=="commonName_default"{$3=value}1' local_ca_openssl.cnf > local_ca_openssl.cnf.tmp && mv local_ca_openssl.cnf.tmp local_ca_openssl.cnf
+  awk -v value="Enter_the_journalist's_name" '$1=="commonName_default"{$3=value}1' localCAOpenssl.cnf > localCAOpenssl.cnf.tmp && mv localCAOpenssl.cnf.tmp localCAOpenssl.cnf
 
   openssl req -sha1 -new -nodes -key $PERSISTENT_STORAGE/$LOCAL_CA/private/$JOURNALIST_NAME.key \
     -out $PERSISTENT_STORAGE/$LOCAL_CA/newcerts/$JOURNALIST_NAME.csr \
@@ -234,17 +238,40 @@ if [ $CREATE_NEW_JOURNALIST_USER_CERT == 'y' ]; then
   catch_error $? "generating journalist interface user's cert to pskc12 format"
 fi
 
+# Create application's GPG keypair
+read -p 'Create new gpg keypair for the application (y/n)? ' -e -i y CREATENEWGPGKEY
+
+if [ $CREATENEWGPGKEY == 'y' ]; then
+  if ! type -P gpg2; then                     
+    echo "Requires the gnupg2 package to generate keypair"                  
+    catch_error $? "checking for gpg2"
+  else
+    echo "Creating new Application's GPG keypair..."
+    mkdir ./gpgKeyRing
+    chmod 600 ./gpgKeyRing
+    gpg2 --homedir ./gpgKeyRing --no-tty --batch --gen-key gpgConfig
+    gpg2 --homedir ./gpgKeyRing --output localca/journalist_certs/journalist.asc --armor --export Journalist
+    FINGERPRINT=`gpg2 --homedir ./gpgKeyRing --fingerprint Journalist`
+  fi
+fi
+
 # Prep Journalist server certs to be copied to journalist server
-read -p "Do you want to copy the journalist server ssl files to your home directory? " -e -i y COMPRESS_JOURNALIST_SERVER_CERTS
+read -p "Do you want to prepare the required server certs and keys to copy to the monitor server? " -e -i y COMPRESS_JOURNALIST_SERVER_CERTS
 
 if [ $COMPRESS_JOURNALIST_SERVER_CERTS == 'y' ]; then
   echo "Compressing journalist server certs..."
 
-  tar czf $PERSISTENT_STORAGE/journalist_server_ssl_files.tar.gz -C $PERSISTENT_STORAGE/$LOCAL_CA/ journalist_certs
+  tar czf $PERSISTENT_STORAGE/serverKeys.tar.gz -C $PERSISTENT_STORAGE/$LOCAL_CA/ journalist_certs 
 
-  echo "The journalist server file was created at $PERSISTENT_STORAGE/journalist_server_ssl_files.tar.gz"
-
-  echo "User certificates are located at $PERSISTENT_STORAGE/$LOCAL_CA/usercerts/"
+  echo ''
+  echo "The servers ssl and public gpg keys are in $PERSISTENT_STORAGE/serverKeys.tar.gz copy serverKeys.tar.gz to the monitor server"
+  echo ''
+  echo "The application's GPG fingerprint is $FINGERPRINT"
+  echo ''
+  echo "You will need the fingerprint during the serverInstall.sh script on the monitor server"
+  echo ''
+  echo "$JOURNALIST_NAME's certificate is located at $PERSISTENT_STORAGE/$LOCAL_CA/usercerts/$JOURNALIST_NAME.asc install on $JOURNALIST_NAME's browser"
+  echo ''
 
   catch_error $? "compressing journalist server certs"
 fi
