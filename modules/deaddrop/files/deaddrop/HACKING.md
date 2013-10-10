@@ -6,8 +6,14 @@ or Fedora derivative.  If you're familiar with homebrew on OSX you
 should be able to follow along (documentation patches welcome).
 
 install gnupg2:
+
     $ sudo yum install gnupg2
     $ sudo apt-get install gnupg2
+
+install srm (secure remove utility):
+
+	$ sudo yum install srm
+	$ sudo apt-get install secure-delete
 
 install virtualenv:
 
@@ -23,19 +29,25 @@ install dependencies:
 
 	$ pip install web.py gnupg python-bcrypt pycrypto
 
-install srm (secure remove utility):
+cp the config template and fill in empty values:
 
-	$ sudo yum install srm
-	$ sudo apt-get install secure-delete
+	$ cp example_config.py config.py
 
-use the example config:
+**NOTE**: the `STORE_DIR` and `GPG_KEY_DIR` must be absolute paths.
+Create them if necessary:
 
-	$ ln -s example_config.py config.py
+    $ mkdir -p /tmp/deaddrop/{store,keys}
 
-**NOTE**: the STORE_DIR and GPG_KEY_DIR must be absolute paths.
-Ensure they exist:
+**NOTE**: you will need to create a journalist key for development.
 
-       $ mkdir -p /tmp/deaddrop/{store,keys}
+    $ gpg2 --homedir /tmp/deaddrop/keys --gen-key
+
+Make sure you *only* use this key for development. We recommend using a userid
+like "Deaddrop Dev (DO NOT USE IN PRODUCTION) <dev@deaddrop.example.com>" so
+you don't forget!
+
+Once you've generated the dev key, copy the userid to the `JOURNALIST_KEY`
+field of `config.py`.
 
 running
 -------
