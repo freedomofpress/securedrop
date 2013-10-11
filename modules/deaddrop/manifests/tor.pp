@@ -20,10 +20,10 @@ class deaddrop::tor{
 
   file { '/etc/tor/torrc':
     ensure  => file,
-    source  => "puppet:///modules/deaddrop/torrc",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
+    content => template("deaddrop/torrc.erb"),
     require => Package["tor"],
   }
 

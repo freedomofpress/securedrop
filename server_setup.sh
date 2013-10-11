@@ -35,12 +35,12 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install puppetmaster required packages 
+  # On puppet master install puppetmaster required packages 
   function installPuppetMaster {
     apt-get install puppetmaster $PUPPETMASTERDEPENDENCIES -y 
   }
 
-  # If puppet master install puppet module tool
+  # On puppet master install puppet module tool
   function installPuppetModuleTool {
     if ! type -P puppet-module; then
       cd /etc/puppet/modules 
@@ -50,7 +50,7 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install rails
+  # On puppet master install rails
   function installRails {
     if [[ $(rails -v) != "Rails 2.2.2" ]]; then
       gem install rails -v 2.2.2
@@ -59,7 +59,7 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install puppet modules
+  # On puppet master install puppet modules
   function installPuppetModules {
     DIR='/etc/puppet/modules'
     cd $DIR
@@ -87,7 +87,7 @@ OSSECBINARY="ossec-binary.tgz"
   }
 
   #Install deaddrop files
-  function downloadDeaddropFiles {
+  function copyDeaddropFiles {
     cp -Rfp $CURRENTDIR/{manifests,modules} /etc/puppet/
   }
 
@@ -106,12 +106,12 @@ OSSECBINARY="ossec-binary.tgz"
     mv $OSSECBINARY /etc/puppet/modules/ossec/files/
   }
 
-  #Unpack and mv the the ssl keys and gpg key
+  #Move the application's public gpg key to the deaddrop puppet module's file dir
   function unpackServerKeys {
     cd $CURRENTDIR
     echo ''
-    read -p "Enter the full path to the server_keys.tar.gz file: " -e -i server_keys.tar.gz KEYFILES
-    tar xzf $KEYFILES -C /etc/puppet/modules/deaddrop/files
+    read -p "Enter the full path to application's public gpg key: " -e -i ./secure_drop.asc KEYFILES
+    cp -p $KEYFILES /etc/puppet/modules/deaddrop/files
   }
 
   #Downlaod webpy
@@ -326,7 +326,7 @@ OSSECBINARY="ossec-binary.tgz"
         installRails
         installPuppetModules
         enablePuppetStoredconfigs
-        downloadDeaddropFiles
+        copyDeaddropFiles
         downloadOSSECBinary
         unpackServerKeys
         downloadWebpy

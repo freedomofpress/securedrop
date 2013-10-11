@@ -1,0 +1,8 @@
+RunAsDaemon 1
+HiddenServiceDir /var/lib/tor/hidden_service/
+HiddenServicePort 80 127.0.0.1:8080
+DisableAllSwap 1
+SafeLogging 1
+<% if @role == 'journalist' -%>
+<%= "HiddenServiceAuthorizeClient stealth journalist1,journalist2" %>
+<% end %>
