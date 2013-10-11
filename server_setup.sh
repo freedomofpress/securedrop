@@ -294,6 +294,14 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
+  function displayTorURL {
+  echo "The source server's Tor URL is: "
+  ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
+
+  echo "The document server's Tor URL for the journalists are:"
+  ssh -t -t $REMOTEUSER@$JOURNALIST "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
+  }
+
   #Main
   function main {
     CURRENTDIR=`pwd`
@@ -351,6 +359,7 @@ OSSECBINARY="ossec-binary.tgz"
       "5")
         runPuppetManifests
         runPuppetManifests
+        displayTorURL
         main
         ;;
       #After installation confirmed successfull cleanup unneeded
