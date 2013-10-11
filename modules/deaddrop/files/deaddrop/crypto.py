@@ -52,7 +52,7 @@ except OSError:
     p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
 
 assert p.stdout.readline().split()[-1].split('.')[0] == '2', "upgrade GPG to 2.0"
-gpg = gnupg.GPG(binary=GPG_BINARY, homedir=config.GPG_KEY_DIR)
+gpg = gnupg.GPG(gpgbinary=GPG_BINARY, gnupghomedir=config.GPG_KEY_DIR)
 
 def genkeypair(name, secret):
     """
