@@ -6,8 +6,8 @@ SSLRandomSeed startup builtin
 SSLRandomSeed connect builtin
 SSLSessionCache none
 
-NameVirtualHost <%= @ipaddress -%>:443
-<VirtualHost <%= @ipaddress -%>:443>
+NameVirtualHost 127.0.0.1:443
+<VirtualHost 127.0.0.1:443>
   ServerName <%= @fqdn %>
   ServerAlias www.<%= @fqdn %>
   DocumentRoot <%= @docroot %>

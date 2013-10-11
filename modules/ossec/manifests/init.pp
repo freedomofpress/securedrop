@@ -98,7 +98,7 @@ class ossec {
       ensure  => present,
       owner   => 'root',
       group   => 'ossec',
-      mode    => 550,
+      mode    => 0440,
       content => template("ossec/${role}-ossec-conf.erb"),
       require => Exec["install-ossec"],
     }
@@ -120,6 +120,7 @@ class ossec {
       command => 'openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key',
       user    => 'root',
       creates => '/var/ossec/etc/sslmanger.key',
+      require => Exec["install-ossec"],
     }
 
     exec {'generate-cert':
@@ -139,6 +140,7 @@ class ossec {
       cwd     => '/var/ossec',
       command => '/var/ossec/bin/ossec-authd -p 1515 >/dev/null 2>&1 &',
       user    => 'root',
+      require => Exec["install-ossec"],
     }
   }
 
@@ -153,6 +155,7 @@ class ossec {
       group   => 'ossec',
       mode    => 550,
       content => template("ossec/${role}-ossec-conf.erb"),
+      require => Exec["install-ossec"],
    }
 
     exec {ossec-restart:
@@ -169,6 +172,7 @@ class ossec {
       cwd     => '/var/ossec/bin/',
       command => "/var/ossec/bin/agent-auth -m $monitor_ip",
       owner   => 'root',
+      require => Exec["install-ossec"],
     }
   }
 }

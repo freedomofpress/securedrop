@@ -1,4 +1,5 @@
 class deaddrop::journalist {
+
   user { 'www-data' :
     home => '/var/www',
   }
@@ -25,16 +26,20 @@ class deaddrop::journalist {
     require => File['/var/www/.ssh'],
   }
 
-##### Install python_gnupg #####
-  package { 'python-setuptools': ensure => 'installed', } 
+  package { 'python-pip':
+    ensure => installed,
+    before => Package["python-dev"],
+  }
 
-  exec { 'easy_install https://python-gnupg.googlecode.com/files/python-gnupg-0.2.7.tar.gz':
-    cwd     => $deaddrop_home,
-    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-    user    => 'root',
-    group   => 'root',
-    require => Package["python-setuptools"],
-    unless  => "ls /usr/local/lib/python2.7/dist-packages/python_gnupg-0.2.7-py2.7.egg",
+  package { 'python-dev': ensure => installed }
+
+  $dependencies_install = [ "python-bcrypt ", "gnupg ", "pycrypto " ]
+
+  exec { "pip install $dependencies_install":
+    path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    user => 'root',
+    group => 'root',
+    require => Package["python-dev"],
   }
 
 ##### Install Apache #####
@@ -209,7 +214,7 @@ class deaddrop::journalist {
     owner   => $apache_user,
     group   => $apache_user,
     mode    => '0700',
-    source  => "puppet:///modules/deaddrop/${app_gpg_pub_key}",
+    source  => "puppet:///modules/deaddrop/journalist_certs/${app_gpg_pub_key}",
     require => File["$deaddrop_home"],
   }
 

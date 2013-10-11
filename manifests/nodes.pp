@@ -1,16 +1,17 @@
 node basenode {
-#These values are modified by the deaddrop install script that uses space as delimiter
+#These values are modified by the deaddrop install script that uses spaces as delimiter
 $enable_2_step = 'false'
-$source_ip = '10.184.36.21'
-$journalist_ip = '10.242.74.245'
-$monitor_ip = '10.154.176.156'
-$admin_ip = '76.169.229.227'
-$intFWlogs_ip = '76.169.229.227'
+$source_ip = ''
+$journalist_ip = ''
+$monitor_ip = ''
+$admin_ip = ''
+$intFWlogs_ip = ''
 $app_gpg_pub_key = 'journalist.asc'
-$hmac_secret = 'long random value'
-$app_gpg_fingerprint = 'E82A C40F 3158 9EA3 E73F  0C5D 0A20 6074 BE26 C950'
+$hmac_secret = ''
+$bcrypt_salt = ''
+$app_gpg_fingerprint = ''
 $mail_server = 'gmail-smtp-in.l.google.com'
-$ossec_email_to = 'dolanjs@gmail.com'
+$ossec_email_to = ''
 # The values in this section do not need to be changed
   $puppetmaster_ip         = 'monitor'
   $apache_name             = 'apache2-mpm-worker'
@@ -50,6 +51,7 @@ node 'source_fqdn' inherits basenode {
   
   include deaddrop::base
   include deaddrop::cis_debian_v1_0
+  include deaddrop::tor
   include deaddrop::source
   include ossec::agent
 #  include deaddrop::grsec
@@ -61,6 +63,7 @@ node 'journalist_fqdn' inherits basenode {
 
   include deaddrop::base
   include deaddrop::cis_debian_v1_0
+  include deaddrop::tor
   include deaddrop::journalist
   include ossec::agent
 #  include deaddrop::grsec
