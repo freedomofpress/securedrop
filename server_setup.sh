@@ -200,6 +200,12 @@ OSSECBINARY="ossec-binary.tgz"
     echo "Your hmac_secret is $hmac_secret"
     awk -v value="'$hmac_secret'" '$1=="$hmac_secret"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
+    echo -n "Using python-bcrypt's bcrypt.gensalt to create bcrypt salt"
+    pip install python-bcrypt
+    bcrypt_salt=`python $CURRENTDIR/gen_bcrypt_salt.py`
+    echo $bcrypt_salt
+    awk -v value="'$bcrypt_salt'" '$1=="$bcrypt_salt"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
+
    echo ''
    echo '############################################################'
    echo '#Check the values entered                                  #'
