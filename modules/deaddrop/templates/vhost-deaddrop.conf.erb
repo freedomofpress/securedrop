@@ -29,9 +29,14 @@ NameVirtualHost 127.0.0.1:8080
     Order allow,deny
     allow from all
   </Directory>
-  
-  ErrorLog /dev/null
-  LogLevel crit
+  <% if @role =='source' -%>
+  <%= "ErrorLog /dev/null" %>
+  <%= "LogLevel crit" %>
+  <% elsif @role !='source' -%>
+  <%= "ErrorLog /var/log/apache2/#{ipaddress}_error.log" %>
+  <%= "CustomLog /var/log/apache2/#{ipaddress}_access.log combined" %>
+  <%= "LogLevel info" %>
+  <% end %> 
   ServerSignature Off
 </VirtualHost>
 
