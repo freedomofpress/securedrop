@@ -253,7 +253,7 @@ if [ $CREATENEWGPGKEY == 'y' ]; then
     chmod 600 ./gpg_key_ring
     gpg2 --homedir ./gpg_key_ring --no-tty --batch --gen-key gpg_config
     gpg2 --homedir ./gpg_key_ring --output $LOCAL_CA/journalist_certs/journalist.asc --armor --export Journalist
-    FINGERPRINT=`gpg2 --homedir ./gpgKeyRing --fingerprint Journalist`
+    FINGERPRINT=`gpg2 --homedir ./gpg_key_ring --fingerprint Journalist`
   fi
 fi
 
