@@ -21,9 +21,6 @@
 PERSISTENT_STORAGE=`pwd`
 cd $PERSISTENT_STORAGE
 PWD=`pwd`
-LOCAL_CA='local_ca'
-CERT_EXPIRATION='365'
-KEY_SIZE='4096'
 
 #Error handling function
 catch_error() {

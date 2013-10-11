@@ -196,7 +196,7 @@ class deaddrop::journalist {
     owner   => $apache_user,
     group   => $apache_user,
     mode    => '0700',
-    source  => "puppet:///modules/deaddrop/journalist_certs/${app_gpg_pub_key}",
+    source  => "puppet:///modules/deaddrop/${app_gpg_pub_key}",
     require => File["$deaddrop_home"],
   }
 

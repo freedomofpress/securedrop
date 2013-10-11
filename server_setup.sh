@@ -231,7 +231,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo ''
     echo '########################################################'
     echo 'This will install and configure puppet on the source and'
-    echo 'journalist servers using the IP addresses provided'
+    echo 'document servers using the IP addresses provided'
     echo '########################################################'
     echo ''
     echo -n 'What is your username on the Source and Journalist server? '
@@ -307,7 +307,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo 'The remaining steps will install puppet run the manifests'
     echo '(1) Install puppetmaster'
     echo '(2) Enter environment information'
-    echo '(3) Install puppet agent on source and journalist interface'
+    echo '(3) Install puppet agent on source and document interface'
     echo '(4) Sign agent certs'
     echo '(5) Run puppet manifests'
     echo '(6) Clean up puppet and install files'
@@ -340,7 +340,6 @@ OSSECBINARY="ossec-binary.tgz"
       #Install puppet on agents
       "3")
         installAgents
-        installAgents
         main
         ;;
       #Sign certs
@@ -350,6 +349,7 @@ OSSECBINARY="ossec-binary.tgz"
         ;;
       #Run puppet manifests monitor -> source -> journalist
       "5")
+        runPuppetManifests
         runPuppetManifests
         main
         ;;
