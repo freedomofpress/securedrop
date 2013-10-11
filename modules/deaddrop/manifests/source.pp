@@ -172,6 +172,7 @@ class deaddrop::source{
     group  => $apache_user,
     mode   => "0700",
     before => File["$deaddrop_home/keys"],
+    require => File["$deaddrop_home"],
   }
 
   file {"$deaddrop_home/keys":
@@ -206,6 +207,7 @@ class deaddrop::source{
     target => "$deaddrop_home/webpy/web",
     owner  => $apache_user,
     group  => $apache_user,
+    require => File["$deaddrop_home/webpy"],
   }
 
   file { '/var/www/deaddrop/static':
@@ -215,6 +217,7 @@ class deaddrop::source{
     group   => $apache_user,
     mode    => '0700',
     source  => "puppet:///modules/deaddrop/deaddrop/static/",
+    require => File["$deaddrop_home"],
   }
 
   package { 'sshfs':
