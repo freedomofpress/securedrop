@@ -31,7 +31,7 @@ COMMIT
 -A INPUT -s <%= @source_ip -%> -p tcp -m tcp --dport 22 -j ACCEPT
 -A INPUT -s <%= @monitor_ip -%> -p tcp -m tcp --dport 22 -j ACCEPT
 -A INPUT -s <%= @monitor_ip -%> -p udp --dport 1514 -j ACCEPT
--A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p tcp -m tcp --dport 443 -j ACCEPT
+-A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p tcp -m tcp --dport 8080 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 8140 -j ACCEPT
 -A INPUT -j LOGNDROP
 -A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-level 4
