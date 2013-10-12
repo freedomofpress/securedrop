@@ -52,7 +52,7 @@ class deaddrop::source{
 
   package { "python-dev": ensure => installed }
 
-  $dependencies_install = [ "python-bcrypt ", "python-gnupg ", "pycrypto " ]
+  $dependencies_install = [ "python-bcrypt ", "gnupg ", "pycrypto " ]
 
   exec { "pip install $dependencies_install":
     path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
@@ -306,7 +306,7 @@ class deaddrop::source{
     mode => '0755',
   }
 
-  exec { 'ssh journalist exit':
+  exec { "ssh ${journalist_ip} exit":
     path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
     user => $apache_user,
     group => $apachae_user,
