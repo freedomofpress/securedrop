@@ -28,11 +28,12 @@ You will also need a total of three USB sticks:
 * USB stick for transfering files from the `Journalist Workstations` to the `Viewing Station`
 * USB stick for transfering files from the `Viewing Station` to the `Journalist Workstations`
 
+The `Monitor Server` also sends emails. You will need an SMTP server, such as your company's mail server.
+
 Finally, you will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
 
 * `Viewing Station`'s Tails Persistent Volume
 * `Viewing Station`'s OpenPGP secret key
-* `Viewing Station`'s SSL certificate authority secret key
 
 Each journalist will also need to come up with a password for login to the `Document Server`.
 
