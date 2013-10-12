@@ -137,16 +137,13 @@ OSSECBINARY="ossec-binary.tgz"
     echo '##########################################################'
     echo 'You will need to provide the following environment'
     echo 'specific information.'
-    echo '- Monitor, Source and Document Server IP Address'
-    echo '- Monitor, Source and Documnet Servers Fully Qualified'
-    echo '    domain names'
-    echo '- The internal vpn IP address that the admin will be'
-    echo '    connecting from'
-    echo '- The internal management IP address of the FW'
-    echo '    Local CA usb'
-    echo "- The application gpg key's fingerprint"
-    echo '- The mail server for the OSSEC email alerts to use'
-    echo '- The email address to send OSSEC alerts'
+    echo '- Monitor, Source and Document Server IP address and fully'
+    echo '  qualified domain names'
+    echo '- The IP address that the admin will be SSHing from'
+    echo '- The IP address of the firewall'
+    echo "- The application PGP key's fingerprint"
+    echo '- The SMTP server for email alerts'
+    echo '- The email address to send alerts to'
     echo '##########################################################'
     echo ''
 
@@ -175,23 +172,23 @@ OSSECBINARY="ossec-binary.tgz"
     read journalist_fqdn
     sed -i "s/journalist_fqdn/$journalist_fqdn/" nodes.pp
 
-    echo -n "Enter the VPN's internal IP address for admin: "
+    echo -n "Enter the IP address that you will be SSHing to the Monitor Server from (other IPs will get blocked):"
     read admin_ip
     awk -v value="'$admin_ip'" '$1=="$admin_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the management IP address of the Firewall: "
+    echo -n "Enter the management IP address of the firewall (or 127.0.0.1 if you don't have one): "
     read intFWlogs_ip
     awk -v value="'$intFWlogs_ip'" '$1=="$intFWlogs_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the application gpg fingerprint generated on the viewing station: "
+    echo -n "Enter the application PGP fingerprint generated on the viewing station: "
     read app_gpg_fingerprint
     awk -v value="'$app_gpg_fingerprint'" '$1=="$app_gpg_fingerprint"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the mail server for the OSSEC email alerts to use:  "
+    echo -n "Enter the SMTP server for email alerts to use:  "
     read mail_server
     awk -v value="'$mail_server'" '$1=="$mail_server"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
-    echo -n "Enter the email address to send OSSEC alerts:  "
+    echo -n "Enter the email address to send alerts to:  "
     read ossec_email_to
     awk -v value="'$ossec_email_to'" '$1=="$ossec_email_to"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
