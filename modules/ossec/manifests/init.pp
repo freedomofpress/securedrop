@@ -138,7 +138,7 @@ class ossec {
 
     exec {'ossec-authd':
       cwd     => '/var/ossec',
-      command => '/var/ossec/bin/ossec-authd -p 1515 >/dev/null 2>&1 &',
+      command => "/var/ossec/bin/ossec-authd -p 1515 -i ${source_ip} ${journalist_ip} >/dev/null 2>&1 &",
       user    => 'root',
       require => Exec["install-ossec"],
     }
