@@ -307,8 +307,8 @@ OSSECBINARY="ossec-binary.tgz"
     openssl req -new -x509 -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
     chown root:ossec /var/ossec/etc/sslmanager.cert
     /var/ossec/bin/ossec-authd -p 1515 -i $journalist_ip $source_ip >/dev/null 2>&1 &
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'",
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'",
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'"
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'"
   }
 
   function displayTorURL {
@@ -374,10 +374,10 @@ OSSECBINARY="ossec-binary.tgz"
         ;;
       #Run puppet manifests monitor -> source -> journalist
       "5")
-#        runPuppetManifests
-#        runPuppetManifests
-#        displayTorURL
-        ossecAuthd
+        runPuppetManifests
+        runPuppetManifests
+        displayTorURL
+#        ossecAuthd
         main
         ;;
       #After installation confirmed successfull cleanup unneeded
