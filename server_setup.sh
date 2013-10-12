@@ -238,7 +238,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo 'document servers using the IP addresses provided'
     echo '########################################################'
     echo ''
-    echo -n 'What is your username on the Source and Journalist server? '
+    echo -n 'What is your username on the Source and Document server? '
     read REMOTEUSER
     SOURCE=$(awk '{if ($1=="$source_ip") print $3;}' nodes.pp | sed "s/'//g")
     JOURNALIST=$(awk '{if ($1=="$journalist_ip") print $3;}' nodes.pp | sed "s/'//g")
@@ -289,7 +289,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo ''
     service puppetmaster restart
     puppet agent -t
-    echo -n 'What is your username on the Source and Journalist server? '
+    echo -n 'What is your username on the Source and Document server? '
     read REMOTEUSER
     for agent in $AGENTS
     do
@@ -327,7 +327,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo 'The remaining steps will install puppet run the manifests'
     echo '(1) Install puppetmaster'
     echo '(2) Enter environment information'
-    echo '(3) Install puppet agent on source and document interface'
+    echo '(3) Install puppet agent on source and document servers'
     echo '(4) Sign agent certs'
     echo '(5) Run puppet manifests'
     echo '(6) Clean up puppet and install files'
