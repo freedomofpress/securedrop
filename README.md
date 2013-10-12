@@ -37,7 +37,13 @@ Finally, you will also need to come up with and memorize a series of passphrases
 
 Each journalist will also need to come up with a password for login to the `Document Server`.
 
+## How to Install SecureDrop
+
 After installing and configuring Ubuntu Server on `Source Server`, `Document Server`, and `Monitor Server`, and download, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md).
+
+## How to Use SecureDrop
+
+See [How to Use SecureDrop](https://github.com/freedomofpress/securedrop/blob/master/docs/user_manual.md).
 
 ## License
 

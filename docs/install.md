@@ -3,7 +3,7 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor` — with [Ubuntu configured and grsec patches installed](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md).
+* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor Server` with [Ubuntu Server installed](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md).
 
 * You must have a DVD configured as a Live DVD for the Tails operating system. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
@@ -119,4 +119,6 @@ You will have to do the following steps on each laptop that will be able to conn
 
 ![Installing client certificate in Tor Browser](https://raw.github.com/freedomofpress/securedrop/install/images/torbrowser.png)
 
+## Test It
 
+Once it's installed, test it out. See [How to Use SecureDrop](https://github.com/freedomofpress/securedrop/blob/master/docs/user_manual.md).
