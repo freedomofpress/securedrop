@@ -15,11 +15,7 @@ Before installing SecureDrop, you should make sure you've got the environment pr
 
 The `Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
 
-This computer will have two sets of crypto keys on it as well:
-
-* SSL keys. You will create a local Certificate Authority on this computer, as well as a user certificate for each journalist that will be accessing the `Document Server`. 
-
-* OpenPGP keys. You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
+You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
 
 ### Remove Hard Drive
 
@@ -33,26 +29,29 @@ If you already have a Tails Live USB, you can skip to the fourth step, where you
 * After burning Tails to a DVD, boot to it on the `Viewing Station` laptop. If this laptop does not have a DVD drive, use an external DVD drive.
 * Once you've booted into the Live DVD, you should create a Live USB stick with the USB drive set aside for Tails. Reboot the `Viewing Station` laptop into that Live USB drive.
 * Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Tails offers [instructions for configuring the Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html).
-* Reboot the `Viewing Station` laptop and boot into the Tails Live USB again.
 
-### Copy SecureDrop Code to USB Stick
+Reboot the `Viewing Station` laptop and boot into the Tails Live USB again. This time, when mount the persistent volume and choose Yes for "More Options?".
 
-Download the latest version of SecureDrop to one of the other USB sticks. From any Internet-connected computer, in a terminal `cd` to the USB stick and run:
+(screenshot)
 
-    git clone https://github.com/freedomofpress/securedrop.git
+On the next screen, set a temporary administrator password. You'll need this to set up the viewing station to begin with, but in the future when you boot the `Viewing Station` into Tails you can choose No for "More Options?". 
 
-### Copy SecureDrop Code to Viewing Station
+### Copy SecureDrop Code to the Viewing Station
 
-Plug the USB stick with the SecureDrop code into the `Viewing Station`, and copy the securedrop directory to the `/home/amnesia/Persistent/` directory. You'll need to run scripts inside this code to set up the `Viewing Station`.
+On your regular workstation computer, download the latest version of SecureDrop. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop.
 
-### Local Certificate Authority
+Copy the securedrop folder to one of the USB sticks. Plug it into the `Viewing Station` and copy the securedrop folder into the `~/Persistent` directory.
 
-You'll need to generate a local SSL certificate authority and then generate a user certificate for each journalist that needs to access the `Document Server`. User certificates should be revoked when journalists no longer require access.
+### Run the Setup Script
 
-To install everything, you need to run the `viewingSetup.sh` script. In Tails, open the Terminal program and type:
+To install everything, you need to run the `viewing_setup.sh` script as root. In Tails, open the Terminal program and type:
 
     cd ~/Persistent/securedrop/ 
-    ./viewingSetup.sh  
+    sudo ./viewing_setup.sh  
+
+Type the temporary administrator password you set earlier when booting into Tails.
+
+* It first asks: `Do you want to delete previous installation? (y/n)`. Choose `y` and press enter.
 
 This script will prompt for three different passphrases:
 
