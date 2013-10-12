@@ -18,10 +18,7 @@
 #  ./viewingInstall.sh 
 #  Answer the questions
 #
-PERSISTENT_STORAGE="~/Persistent"
-cd $PERSISTENT_STORAGE
-PWD=`pwd`
-echo $PWD
+PERSISTENT_STORAGE=/home/amnesia/Persistent
 
 #Error handling function
 catch_error() {
