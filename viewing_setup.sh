@@ -18,9 +18,10 @@
 #  ./viewingInstall.sh 
 #  Answer the questions
 #
-PERSISTENT_STORAGE=`pwd`
+PERSISTENT_STORAGE="~/Persistent"
 cd $PERSISTENT_STORAGE
 PWD=`pwd`
+echo $PWD
 
 #Error handling function
 catch_error() {
@@ -29,11 +30,6 @@ catch_error() {
     exit 1
   fi
   }
-
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root" 1>&2
-  exit 1
-fi
 
 # Create application's GPG keypair
 read -p 'Create new gpg keypair for the application (y/n)? ' -e -i y CREATENEWGPGKEY
@@ -45,11 +41,9 @@ if [ $CREATENEWGPGKEY == 'y' ]; then
     exit 1
   else
     echo "Creating new Application's GPG keypair..."
-    mkdir ./gpg_key_ring
-    chmod 600 ./gpg_key_ring
-    gpg2 --homedir ./gpg_key_ring --no-tty --batch --gen-key gpg_config
-    gpg2 --homedir ./gpg_key_ring --output $PERSISTENT_STORAGE/secure_drop.asc --armor --export Journalist
-    FINGERPRINT=`gpg2 --homedir ./gpg_key_ring --fingerprint Journalist | grep 'Key fingerprint'`
+    gpg2 --no-tty --batch --gen-key gpg_config
+    gpg2 --output $PERSISTENT_STORAGE/secure_drop.asc --armor --export Journalist
+    FINGERPRINT=`gpg2 --fingerprint Journalist | grep 'Key fingerprint'`
   fi
 fi
 

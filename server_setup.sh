@@ -301,6 +301,16 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
+  function ossecAuthd {
+    cd /var/ossec
+    openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key
+    openssl req -new -x509 -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+    chown root:ossec /var/ossec/etc/sslmanager.cert
+    /var/ossec/bin/ossec-authd -p 1515 -i $journalist_ip $source_ip >/dev/null 2>&1 &
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'",
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'",
+  }
+
   function displayTorURL {
   echo "The source server's Tor URL is: "
   ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
@@ -364,9 +374,10 @@ OSSECBINARY="ossec-binary.tgz"
         ;;
       #Run puppet manifests monitor -> source -> journalist
       "5")
-        runPuppetManifests
-        runPuppetManifests
-        displayTorURL
+#        runPuppetManifests
+#        runPuppetManifests
+#        displayTorURL
+        ossecAuthd
         main
         ;;
       #After installation confirmed successfull cleanup unneeded
