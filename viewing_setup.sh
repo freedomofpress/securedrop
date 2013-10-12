@@ -18,7 +18,7 @@
 #  ./viewingInstall.sh 
 #  Answer the questions
 #
-PERSISTENT_STORAGE="~/Persistent"
+PERSISTENT_STORAGE="/home/amnesia/Persistent"
 cd $PERSISTENT_STORAGE
 PWD=`pwd`
 echo $PWD
