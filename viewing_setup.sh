@@ -39,12 +39,12 @@ if [ $CREATENEWGPGKEY == 'y' ]; then
   else
     echo "Creating new Application's GPG keypair..."
     gpg2 --no-tty --batch --gen-key gpg_config
-    gpg2 --output $PERSISTENT_STORAGE/secure_drop.asc --armor --export Journalist
+    gpg2 --output $PERSISTENT_STORAGE/securedrop.asc --armor --export Journalist
     FINGERPRINT=`gpg2 --fingerprint Journalist | grep 'Key fingerprint'`
   fi
 fi
 
-echo "The application's public gpg is located at $PERSISTENT_STORAGE/secure_drop.asc"
+echo "The application's public gpg is located at $PERSISTENT_STORAGE/securedrop.asc"
 echo "The application's gpg key's fingerprint is:"
 echo "$FINGERPRINT"
 exit 0
