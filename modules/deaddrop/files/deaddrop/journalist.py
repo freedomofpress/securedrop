@@ -7,7 +7,7 @@ urls = (
   '/', 'index',
   '/reply/', 'reply',
   '/([A-Z1-7]+)/', 'col',
-  '/([A-Z1-7]+)/([0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg)', 'doc'
+  '/([A-Z1-7]+)/([0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg)', 'doc' 
 )
 
 render = web.template.render(config.JOURNALIST_TEMPLATES_DIR, base='base')

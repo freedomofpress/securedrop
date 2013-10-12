@@ -35,12 +35,12 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install puppetmaster required packages 
+  # On puppet master install puppetmaster required packages 
   function installPuppetMaster {
     apt-get install puppetmaster $PUPPETMASTERDEPENDENCIES -y 
   }
 
-  # If puppet master install puppet module tool
+  # On puppet master install puppet module tool
   function installPuppetModuleTool {
     if ! type -P puppet-module; then
       cd /etc/puppet/modules 
@@ -50,7 +50,7 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install rails
+  # On puppet master install rails
   function installRails {
     if [[ $(rails -v) != "Rails 2.2.2" ]]; then
       gem install rails -v 2.2.2
@@ -59,7 +59,7 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # If puppet master install puppet modules
+  # On puppet master install puppet modules
   function installPuppetModules {
     DIR='/etc/puppet/modules'
     cd $DIR
@@ -87,7 +87,7 @@ OSSECBINARY="ossec-binary.tgz"
   }
 
   #Install deaddrop files
-  function downloadDeaddropFiles {
+  function copyDeaddropFiles {
     cp -Rfp $CURRENTDIR/{manifests,modules} /etc/puppet/
   }
 
@@ -106,12 +106,12 @@ OSSECBINARY="ossec-binary.tgz"
     mv $OSSECBINARY /etc/puppet/modules/ossec/files/
   }
 
-  #Unpack and mv the the ssl keys and gpg key
+  #Move the application's public gpg key to the deaddrop puppet module's file dir
   function unpackServerKeys {
     cd $CURRENTDIR
     echo ''
-    read -p "Enter the full path to the server_keys.tar.gz file: " -e -i server_keys.tar.gz KEYFILES
-    tar xzf $KEYFILES -C /etc/puppet/modules/deaddrop/files
+    read -p "Enter the full path to application's public gpg key: " -e -i ./secure_drop.asc KEYFILES
+    cp -p $KEYFILES /etc/puppet/modules/deaddrop/files
   }
 
   #Downlaod webpy
@@ -200,6 +200,13 @@ OSSECBINARY="ossec-binary.tgz"
     echo "Your hmac_secret is $hmac_secret"
     awk -v value="'$hmac_secret'" '$1=="$hmac_secret"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
+    echo -n "Using python-bcrypt's bcrypt.gensalt to create bcrypt salt"
+    apt-get install python-pip python-dev -y
+    pip install python-bcrypt
+    bcrypt_salt=`python $CURRENTDIR/gen_bcrypt_salt.py`
+    echo $bcrypt_salt
+    awk -v value="'$bcrypt_salt'" '$1=="$bcrypt_salt"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
+
    echo ''
    echo '############################################################'
    echo '#Check the values entered                                  #'
@@ -231,7 +238,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo ''
     echo '########################################################'
     echo 'This will install and configure puppet on the source and'
-    echo 'journalist servers using the IP addresses provided'
+    echo 'document servers using the IP addresses provided'
     echo '########################################################'
     echo ''
     echo -n 'What is your username on the Source and Journalist server? '
@@ -294,6 +301,14 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
+  function displayTorURL {
+  echo "The source server's Tor URL is: "
+  ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
+
+  echo "The document server's Tor URL for the journalists are:"
+  ssh -t -t $REMOTEUSER@$JOURNALIST "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
+  }
+
   #Main
   function main {
     CURRENTDIR=`pwd`
@@ -307,7 +322,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo 'The remaining steps will install puppet run the manifests'
     echo '(1) Install puppetmaster'
     echo '(2) Enter environment information'
-    echo '(3) Install puppet agent on source and journalist interface'
+    echo '(3) Install puppet agent on source and document interface'
     echo '(4) Sign agent certs'
     echo '(5) Run puppet manifests'
     echo '(6) Clean up puppet and install files'
@@ -326,7 +341,7 @@ OSSECBINARY="ossec-binary.tgz"
         installRails
         installPuppetModules
         enablePuppetStoredconfigs
-        downloadDeaddropFiles
+        copyDeaddropFiles
         downloadOSSECBinary
         unpackServerKeys
         downloadWebpy
@@ -340,7 +355,6 @@ OSSECBINARY="ossec-binary.tgz"
       #Install puppet on agents
       "3")
         installAgents
-        installAgents
         main
         ;;
       #Sign certs
@@ -351,6 +365,8 @@ OSSECBINARY="ossec-binary.tgz"
       #Run puppet manifests monitor -> source -> journalist
       "5")
         runPuppetManifests
+        runPuppetManifests
+        displayTorURL
         main
         ;;
       #After installation confirmed successfull cleanup unneeded

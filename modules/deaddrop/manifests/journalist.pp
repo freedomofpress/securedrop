@@ -73,20 +73,12 @@ class deaddrop::journalist {
     refreshonly => true,
   }
 
-##### configure redirect and ssl vhosts #####
-  file { "redirect_https":
-    path    => '/etc/apache2/sites-enabled/redirect_https',
+##### configure vhost #####
+  file { "$source_ip":
+    path    => '/etc/apache2/sites-enabled/source',
     owner   => 'root',
     group   => 'root',
-    content => template("deaddrop/redirect_https.erb"),
-    require => Package['apache2-mpm-worker'],
-  }
-
-  file { "ssl_$journalist_ip":
-    path    => '/etc/apache2/sites-enabled/journalist',
-    owner   => 'root',
-    group   => 'root',
-    content => template("deaddrop/vhost-deaddrop-ssl.conf.erb"),
+    content => template("deaddrop/vhost-deaddrop.conf.erb"),
     require => Package['apache2-mpm-worker'],
   }
 
@@ -199,22 +191,12 @@ class deaddrop::journalist {
     require => File["$deaddrop_home/webpy"],
   }
 
-  file { 'journalist_certs':
-    ensure  => directory,
-    path    => '/etc/ssl/journalist_certs/',
-    recurse => true,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0400',
-    source  => "puppet:///modules/deaddrop/journalist_certs/",
-  }
-
   file { "/var/www/$app_gpg_pub_key":
     ensure  => file,
     owner   => $apache_user,
     group   => $apache_user,
     mode    => '0700',
-    source  => "puppet:///modules/deaddrop/journalist_certs/${app_gpg_pub_key}",
+    source  => "puppet:///modules/deaddrop/${app_gpg_pub_key}",
     require => File["$deaddrop_home"],
   }
 
