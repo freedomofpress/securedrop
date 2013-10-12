@@ -9,13 +9,13 @@ Before installing SecureDrop, you should make sure you've got the environment pr
 
 * You must have three USB sticks — two that will be used for for transferring files, and one that will be used to run the Tails operating system on the `Viewing Station`.
 
-* Finally, you should have selected three secure passphrases for different components of the `Viewing Station`.
+* Finally, you should have selected two secure passphrases for different components of the `Viewing Station`: one for the persistent volume and one for the PGP keypair. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
 ## Viewing Station
 
 The `Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
 
-You will need to create a PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
+You will need to create an PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's public key.
 
 ### Remove Hard Drive
 
@@ -30,40 +30,25 @@ If you already have a Tails Live USB, you can skip to the fourth step, where you
 * Once you've booted into the Live DVD, you should create a Live USB stick with the USB drive set aside for Tails. Reboot the `Viewing Station` laptop into that Live USB drive.
 * Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Tails offers [instructions for configuring the Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html).
 
-Reboot the `Viewing Station` laptop and boot into the Tails Live USB again. This time, when mount the persistent volume and choose Yes for "More Options?".
-
-(screenshot)
-
-On the next screen, set a temporary administrator password. You'll need this to set up the viewing station to begin with, but in the future when you boot the `Viewing Station` into Tails you can choose No for "More Options?". 
+Reboot the `Viewing Station` laptop and boot into the Tails Live USB again to continue with the setup.
 
 ### Copy SecureDrop Code to the Viewing Station
 
 On your regular workstation computer, download the latest version of SecureDrop. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop.
 
-Copy the securedrop folder to one of the USB sticks. Plug it into the `Viewing Station` and copy the securedrop folder into the `~/Persistent` directory.
+Copy the securedrop folder to one of the USB sticks. Plug it into the `Viewing Station` and copy the securedrop folder into the `/home/amnesia/Persistent` directory.
 
-### Run the Setup Script
+### Generate PGP Key and Import Journalist Public Keys
 
-To install everything, you need to run the `viewing_setup.sh` script as root. In Tails, open the Terminal program and type:
+In order to avoid transfering plaintext files between the `Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
-    cd ~/Persistent/securedrop/ 
-    sudo ./viewing_setup.sh  
+To generate the application PGP key, open the Terminal program and type:
 
-Type the temporary administrator password you set earlier when booting into Tails.
+    /home/amnesia/Persistent/securedrop/viewing_setup.sh
 
-* It first asks: `Do you want to delete previous installation? (y/n)`. Choose `y` and press enter.
+It will ask you: `Create new gpg keypair for the application? (y/n)`. Press enter to select `y`. It will pop up box that says "Enter passphrase". Enter the PGP passphrase that you generated earlier, click OK, and enter it a second time. Then wait for the key to generate.
 
-This script will prompt for three different passphrases:
-
-* A passphrase for the user certificate.
-* A passphrase for the `Document Server` certificate.
-* A passphrase for the SecureDrop application's GPG keypair.
-
-Only the two selected journalists should know the app's GPG keypair's passphrase.
-
-For each of these, follow your organization's password policy. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
-
-When this script completes, it will have set up the `Viewing Station` and create two files: 1 called `certs.tgz`, and 1 `.pk12` file named after the journalist in `~/Persistent/securedrop`.
+When it's done it will place your new PGP public key in /home/amnesia/Persistent/securedrop.asc. Copy that file to the USB stick.
 
 ## Journalist Workstation Setup
 
