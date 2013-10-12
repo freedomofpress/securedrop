@@ -12,7 +12,7 @@ PUPPETRELEASEDEB="https://apt.puppetlabs.com/puppetlabs-release-precise.deb"
 PUPPETDEBNAME="puppetlabs-release-precise.deb"i
 PUPPETMASTERDEPENDENCIES="rubygems sqlite3 libsqlite3-ruby"
 PUPPETMODULES='puppetlabs-apt puppetlabs-git puppetlabs-stdlib'
-OSSECBINARYURL="https://www.dropbox.com/s/eqdyzpjtpqanknr/ossec-binary.tgz"
+OSSECBINARYURL="https://pressfreedomfoundation.org/securedrop-files/ossec-binary.tgz"
 OSSECBINARY="ossec-binary.tgz"
 
   # Check for root
@@ -334,7 +334,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo '(4) Sign agent certs'
     echo '(5) Run puppet manifests'
     echo '(6) Clean up puppet and install files'
-    echo '(7) Apply GRSECURITY lock'
+    echo '(7) Apply GRSECURITY lock (if you have grsec-patched kernel)'
     echo '(0) quit'
     echo '###########################################################'
     echo ''
