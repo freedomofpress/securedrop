@@ -95,12 +95,10 @@ def encrypt(fingerprint, s, output=None, fn=None):
     else:
         if fn:
             with _gpghacklock:
-                oldname = gpg.gpgbinary
-                gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
-                out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
-                gpg.gpgbinary = oldname
+                print fn
+                out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
         else:
-            out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
+            out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
     if out.ok:
         return out.data
     else:
