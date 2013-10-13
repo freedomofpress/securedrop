@@ -95,9 +95,9 @@ def encrypt(fingerprint, s, output=None, fn=None):
     else:
         if fn:
             with _gpghacklock:
-                out = gpg.encrypt(s, fingerprint, output=_shquote(fn), always_trust=True)
+                out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
         else:
-            out = gpg.encrypt(s, fingerprint, output=_shquote(fn), always_trust=True)
+            out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
     if out.ok:
         return out.data
     else:
