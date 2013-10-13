@@ -1,37 +1,25 @@
 $def with (doc)
 <!DOCTYPE html>
-<html><head>
-	<link rel='stylesheet' href='/static/css/deaddrop.css' type='text/css' media='all' />
-	<link rel='stylesheet' href='/static/css/wired-tipbox.css' type='text/css' media='all' />
-	<title>Tip Box [powered by deaddrop]</title>
-</head><body>
-
-<div id="fancywrapper">
-	<div id="wired-header">
-	
-		<!-- custom logo goes here -->
-		
-		<div id="tipbox-logo">
-		<a href="/"><img src="/static/i/tipbox/tipbox-logo.png" alt="Tip Box"></a>
-		</div>
-	
-	</div>	
-
-<div id="innerwrapper">
-
-
-$:doc
-
-<div id="footer">
-	<div id="deaddrop_logo">
-			Powered by <img src="/static/i/deaddrop-logo.png" alt="deaddrop">
-	</div>
-		
-	Use this site at your own risk. Deaddrop makes no guarantees of its actual security. To remain anonymous, be sure to use Tor.
-	
-</div>
-
-</div>
-</div>	
-</body>
+<html>
+  <head>
+    <script type='text/javascript' src='/static/js/libs/jquery-1.10.2.min.js'></script>
+    <script type='text/javascript' src='/static/js/ui.js'></script>
+    <link rel='stylesheet' href='/static/css/securedrop.css' type='text/css' media='all' />
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <title>SecureDrop</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="header">
+        <a href="/"><img src="/static/i/securedrop.png" alt="SecureDrop"></a>
+      </div>
+      
+      $:doc
+      
+      <div id="footer">
+        Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
+        Powered by <em>SecureDrop $version</em>.
+      </div>
+    </div>	
+  </body>
 </html>
