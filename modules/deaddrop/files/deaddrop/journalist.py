@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, datetime, uuid
 import web
-import config, crypto, store
+import config, crypto, store, version
 
 urls = (
   '/', 'index',
@@ -10,7 +10,8 @@ urls = (
   '/([A-Z1-7]+)/([0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg)', 'doc' 
 )
 
-render = web.template.render(config.JOURNALIST_TEMPLATES_DIR, base='base')
+render = web.template.render(config.JOURNALIST_TEMPLATES_DIR, base='base', 
+    globals={'version':version.__version__})
 
 class index:
     def GET(self):

@@ -12,7 +12,7 @@ urls = (
 )
 
 render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base',
-                             globals={'version':version.__version__})
+    globals={'version':version.__version__})
 
 class index:
   def GET(self):
