@@ -95,7 +95,6 @@ def encrypt(fingerprint, s, output=None, fn=None):
     else:
         if fn:
             with _gpghacklock:
-                print "filename: "+fn
                 out = gpg.encrypt(s, fingerprint, output=_shquote(fn), always_trust=True)
         else:
             out = gpg.encrypt(s, fingerprint, output=_shquote(fn), always_trust=True)
