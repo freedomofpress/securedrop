@@ -91,16 +91,16 @@ def encrypt(fingerprint, s, output=None, fn=None):
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, [fingerprint], output=output, always_trust=True)
+        out = gpg.encrypt(s, fingerprint, output=output, always_trust=True)
     else:
         if fn:
             with _gpghacklock:
                 oldname = gpg.gpgbinary
                 gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
-                out = gpg.encrypt_file(s, [fingerprint], output=output, always_trust=True)
+                out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
                 gpg.gpgbinary = oldname
         else:
-            out = gpg.encrypt_file(s, [fingerprint], output=output, always_trust=True)
+            out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
     if out.ok:
         return out.data
     else:
