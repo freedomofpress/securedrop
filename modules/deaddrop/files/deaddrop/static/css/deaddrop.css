@@ -192,3 +192,24 @@ ul li {
 .reply .delete {
   text-transform:uppercase;
 }
+
+#regenerate-box{
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+form#regenerate-form{
+  padding-bottom: 0px;
+  padding-top: 10px;
+}
+
+span.regenerate-warning{
+  color: #E00;
+}
+
+div.regenerate-warning{
+  font-size: 90%;
+  margin-top: 10px;
+}
