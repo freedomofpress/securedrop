@@ -5,14 +5,29 @@ $def with (iid)
     <b>Your code name is:</b><br />
     <span id="code-name" class="code-name">$iid</span>
   </p>
-  <p>
-    If you would like to pick a differnt code name, please <a id='regenerate-link'>regenerate</a>.
-  </p>
+  <div id='regenerate-box'>
+    If you would like to pick a differnt code name, please regenerate.
+    <form id='regenerate-form' method='post'>
+      Desired code name length:
+      <select name='number-words' id='number-words'>
+        <option value='4'>4</option>
+        <option value='5'>5</option>
+        <option value='6'>6</option>
+        <option value='7'>7</option>
+        <option value='8' selected>8</option>
+        <option value='9'>9</option>
+        <option value='10'>10</option>
+      </select>
+      words.
+      <input type='submit' id='regenerate-submit' value='Generate'>
+      <div class='regenerate-warning'><span class='regenerate-warning'>Warning:</span> Choosing a code below 7 words is not recommended.</div>
+    </form>
+  </div>
   <p>
     You will need this code name to access any responses to your submission. Please memorize it or save it in a secure place if you want to be able to get responses. (However, this code name of course will help identify you as the submitter &mdash; so don't keep it anywhere it might get discovered.)
   </p>
-  <form method="post" action="/lookup/" autocomplete="off">
-    <input type="hidden" name="id" value="$iid" autocomplete="off"/>
+  <form method="post" action="/create/" autocomplete="off">
+    <input type="hidden" name="id" id='code-input' value="$iid" autocomplete="off"/>
     <p>
       Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button>
     </p>
