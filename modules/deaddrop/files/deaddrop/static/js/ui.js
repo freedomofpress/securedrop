@@ -3,12 +3,13 @@ var secure_drop = {
     this.regenerate_ui();
   },
   regenerate_ui: function(){
-    $('#regenerate-link').click(function(){
+    $('#regenerate-submit').click(function(){
       $.ajax({
-        url: '/gen_ajax/?words=10'
+        url: '/gen_ajax/?words='+$('#number-words').val()
       }).done(function(resp){
         if(resp.result == "success"){
           $("#code-name").text(resp.id);
+          $("#code-input").val(resp.id);
         } else {
           alert('Regenerate timed out.  Please try again.');
         }
