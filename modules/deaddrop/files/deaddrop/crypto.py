@@ -79,7 +79,7 @@ def _shquote(s):
     return "\\'".join("'" + p + "'" for p in s.split("'"))
 _gpghacklock = threading.Lock()
 
-def encrypt(fp, s, output=None, fn=None):
+def encrypt(fingerprint, s, output=None, fn=None):
     r"""
     >>> key = genkeypair('randomid', 'randomid')
     >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
@@ -87,20 +87,20 @@ def encrypt(fp, s, output=None, fn=None):
     """
     if output:
         store.verify(output)
-    fp = fp.replace(' ', '')
+    fingerprint = fingerprint.replace(' ', '')
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, [fp], output=output, always_trust=True)
+        out = gpg.encrypt(s, fingerprint, output=output, always_trust=True)
     else:
         if fn:
             with _gpghacklock:
                 oldname = gpg.gpgbinary
                 gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
-                out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+                out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
                 gpg.gpgbinary = oldname
         else:
-            out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+            out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
     if out.ok:
         return out.data
     else:
