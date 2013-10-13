@@ -3,7 +3,7 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor Server` with [Ubuntu Server installed](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md).
+* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor Server` with [Ubuntu Server installed](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntu_config.md).
 
 * You must have a DVD configured as a Live DVD for the Tails operating system. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 

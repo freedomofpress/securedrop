@@ -19,7 +19,7 @@ These computers should all physically be in your organization's office.
 
 ## Before You Begin
 
-Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntuconfig.md).
+Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntu_config.md).
 
 You will need a DVD with the latest version of the [Tails](https://tails.boum.org/download/index.en.html) operating system burned to it. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
