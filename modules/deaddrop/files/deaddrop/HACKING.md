@@ -12,26 +12,28 @@ install gnupg2:
 
 install srm (secure remove utility):
 
-	$ sudo yum install srm
-	$ sudo apt-get install secure-delete
+    $ sudo yum install srm
+    $ sudo apt-get install secure-delete
 
 install virtualenv:
 
-	$ sudo yum install python-virtualenv
-	$ sudo apt-get install python-virtualenv
+    $ sudo yum install python-virtualenv
+    $ sudo apt-get install python-virtualenv
 
 create and activate a new virtualenv:
 
-	$ virtualenv ~/envs/deaddrop
-	$ . ~/envs/deaddrop/bin/activate
+    $ virtualenv ~/envs/deaddrop
+    $ . ~/envs/deaddrop/bin/activate
 
 install dependencies:
 
-	$ pip install web.py gnupg python-bcrypt pycrypto
+    $ sudo yum install python-devel
+    $ sudo apt-get install python-dev
+    $ pip install web.py gnupg python-bcrypt pycrypto
 
 cp the config template and fill in empty values:
 
-	$ cp example_config.py config.py
+    $ cp example_config.py config.py
 
 **NOTE**: the `STORE_DIR` and `GPG_KEY_DIR` must be absolute paths.
 Create them if necessary:
@@ -55,7 +57,7 @@ running
 At this point you should be able to directly invoke source or
 journalist:
 
-	$ python journalist.py
-	$ python source.py
+    $ python journalist.py
+    $ python source.py
 
 And browse to http://localhost:8080/ in your browser.
