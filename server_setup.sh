@@ -147,6 +147,10 @@ OSSECBINARY="ossec-binary.tgz"
     cd $DIR
     awk -v value="'$app_gpg_pub_key'" '$1=="$app_gpg_pub_key"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
+    echo -n "Enter the application PGP fingerprint generated on the viewing station: "
+    read app_gpg_fingerprint
+    awk -v value="'$app_gpg_fingerprint'" '$1=="$app_gpg_fingerprint"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
+
     echo -n "Enter the Monitor server's IP address: "
     read monitor_ip
     awk -v value="'$monitor_ip'" '$1=="$monitor_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
@@ -154,6 +158,8 @@ OSSECBINARY="ossec-binary.tgz"
     echo -n "Enter the Monitor server's fully qualified domain: "
     read monitor_fqdn
     sed -i "s/monitor_fqdn/$monitor_fqdn/" nodes.pp
+    awk -v value="'$monitor_fqdn'" '$1=="$monitor_hostname"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
+
 
     echo -n "Enter the Source server's IP address: "
     read source_ip
@@ -162,6 +168,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo -n "Enter the Source server's fully qualified domain: "
     read source_fqdn
     sed -i "s/source_fqdn/$source_fqdn/" nodes.pp
+    awk -v value="'$source_fqdn'" '$1=="$source_hostname"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
     echo -n "Enter the Document server's IP address: "
     read journalist_ip
@@ -170,6 +177,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo -n "Enter the Document server's fully qualified domain: "
     read journalist_fqdn
     sed -i "s/journalist_fqdn/$journalist_fqdn/" nodes.pp
+    awk -v value="'$journalist_fqdn'" '$1=="$journalist_hostname"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
     echo -n "Enter the IP address that you will be SSHing to the Monitor Server from (other IPs will get blocked):"
     read admin_ip
@@ -178,10 +186,6 @@ OSSECBINARY="ossec-binary.tgz"
     echo -n "Enter the management IP address of the firewall (or 127.0.0.1 if you don't have one): "
     read intFWlogs_ip
     awk -v value="'$intFWlogs_ip'" '$1=="$intFWlogs_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
-
-    echo -n "Enter the application PGP fingerprint generated on the viewing station: "
-    read app_gpg_fingerprint
-    awk -v value="'$app_gpg_fingerprint'" '$1=="$app_gpg_fingerprint"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
     echo -n "Enter the SMTP server for email alerts to use:  "
     read mail_server
@@ -221,7 +225,7 @@ OSSECBINARY="ossec-binary.tgz"
        ;;
      *)
        echo 'invalid entry'
-       enterEnvironmentVariables
+       main
        ;;
    esac
   }
@@ -237,14 +241,33 @@ OSSECBINARY="ossec-binary.tgz"
     echo 'document servers using the IP addresses provided'
     echo '########################################################'
     echo ''
-    echo -n 'What is your username on the Source and Document server? '
-    read REMOTEUSER
     SOURCE=$(awk '{if ($1=="$source_ip") print $3;}' nodes.pp | sed "s/'//g")
     JOURNALIST=$(awk '{if ($1=="$journalist_ip") print $3;}' nodes.pp | sed "s/'//g")
     MONITOR=$(awk '{if ($1=="$monitor_ip") print $3;}' nodes.pp | sed "s/'//g")
+    SOURCE_HOSTNAME=$(awk '{if ($1=="$source_hostname") print $3;}' nodes.pp | sed "s/'//g")
+    JOURNALIST_HOSTNAME=$(awk '{if ($1=="$journalist_hostname") print $3;}' nodes.pp | sed "s/'//g")
+    MONITOR_HOSTNAME=$(awk '{if ($1=="$monitor_hostname") print $3;}' nodes.pp | sed "s/'//g")
     AGENTS="$SOURCE $JOURNALIST"
 
+
+    echo "Congiguring /etc/hosts file on $MONITOR_HOSTNAME server..."
     awk '$1=="127.0.0.1"{$3="puppet"}1' /etc/hosts > /etc/hosts.tmp && mv /etc/hosts.tmp /etc/hosts
+    if  ! grep -q "$SOURCE_HOSTNAME" /etc/hosts; then
+      echo "$SOURCE $SOURCE_HOSTNAME" >> /etc/hosts
+    fi
+
+    if ! grep -q "$JOURNALIST_HOSTNAME" /etc/hosts; then
+      echo "$JOURNALIST	$JOURNALIST_HOSTNAME" >> /etc/hosts
+    fi
+
+    if ! grep -q "$MONITOR_HOSTNAME" /etc/hosts; then
+      echo "$MONITOR $MONITOR_HOSTNAME" >> /etc/hosts
+    fi
+    cat /etc/hosts
+
+    echo -n 'What is your username on the Source and Document server? '
+    read REMOTEUSER
+
     for agent in $AGENTS
     do
     echo ''
@@ -253,7 +276,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo '#######################################################'
     echo ''
 
-    ssh -t -t $REMOTEUSER@$agent "sudo /bin/sh -c 'echo "$MONITOR puppet" >> /etc/hosts; wget "http://apt.puppetlabs.com/puppetlabs-release-precise.deb"; dpkg -i "puppetlabs-release-precise.deb"; apt-get update; apt-get install puppet -y; puppet agent -t'"
+    ssh -t -t $REMOTEUSER@$agent "sudo /bin/sh -c 'echo "$MONITOR $MONITOR_HOSTNAME puppet" >> /etc/hosts;echo "$SOURCE $SOURCE_HOSTNAME" >> /etc/hosts; echo "$JOURNALIST $JOURNALIST_HOSTNAME" >> /etc/hosts; wget "http://apt.puppetlabs.com/puppetlabs-release-precise.deb"; dpkg -i "puppetlabs-release-precise.deb"; apt-get update; apt-get install puppet -y; puppet agent -t'"
     done
 
     echo ''
