@@ -75,13 +75,13 @@ You'll also need to write down the 40 character hex fingerprint for this new key
 
 ## Server Installation
 
-All three servers should already have Ubuntu Server installed.
+All three servers should already have Ubuntu Server installed. To follow these instructions you should know how to navigate the command line.
 
-SSH to the `Monitor Server` and download the latest version of SecureDrop. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can use `wget` to download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop.
+Download the latest version of SecureDrop to your workstation. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop, and extract it. Then `scp` the `securedrop` folder to the home directory on the `Monitor Server`.
 
-The setup script needs the application PGP public key you created earlier, `securedrop.asc`. Plug in the USB stick that you copied it to into your workstation and copy it to the home directory of the `Monitor Server` using `scp`.
+The setup script needs the application PGP public key you created earlier, `SecureDrop.asc`. Plug in the USB stick that you copied it to into your workstation and `scp` it to the home directory of the `Monitor Server`.
 
-The run the setup script:
+Now SSH to the `Monitor Server`. When you're in, run the setup script:
 
     cd ~/securedrop
     sudo ./server_setup.sh
