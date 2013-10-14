@@ -1,11 +1,11 @@
 #!/bin/bash
-# 
+#
 # Requirements:
 # 1. 3 updated ubuntu 12.04 servers
 # 2. The 'serverKeys.tar.gz' file from the viewingSetup.sh script
 #
 # Usage:
-#  ./serverSetup.sh 
+#  ./serverSetup.sh
 #  Then follow the instructions
 #
 PUPPETRELEASEDEB="https://apt.puppetlabs.com/puppetlabs-release-precise.deb"
@@ -35,15 +35,15 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
-  # On puppet master install puppetmaster required packages 
+  # On puppet master install puppetmaster required packages
   function installPuppetMaster {
-    apt-get install puppetmaster $PUPPETMASTERDEPENDENCIES -y 
+    apt-get install puppetmaster $PUPPETMASTERDEPENDENCIES -y
   }
 
   # On puppet master install puppet module tool
   function installPuppetModuleTool {
     if ! type -P puppet-module; then
-      cd /etc/puppet/modules 
+      cd /etc/puppet/modules
       gem install puppet-module
     else
       echo "Puppet module tool already installed"
@@ -66,7 +66,7 @@ OSSECBINARY="ossec-binary.tgz"
     for PUPPETMODULE in $PUPPETMODULES
     do
       NAME=$(echo $PUPPETMODULE | awk -F "-" '{print $2}')
-      if [ ! -d "/etc/puppet/modules/$NAME" ]; then 
+      if [ ! -d "/etc/puppet/modules/$NAME" ]; then
         echo "Installing $NAME"
         puppet module install $PUPPETMODULE
       else
@@ -83,7 +83,7 @@ OSSECBINARY="ossec-binary.tgz"
 
     if ! grep "dbadpter" /etc/puppet/puppet.conf; then
       echo "dbadpter = sqlite3" >> /etc/puppet/puppet.conf
-    fi  
+    fi
   }
 
   #Install deaddrop files
@@ -124,12 +124,12 @@ OSSECBINARY="ossec-binary.tgz"
       if [ DOWNLOADFROMINTERNET == 'n' ]; then
         read -p 'Enter the full path to webpy directory: ' -e -i ~/webpy WEBPY
         mv $WEBPY /etc/puppet/deaddrop/files/
-      else 
+      else
         git clone git://github.com/webpy/webpy.git /etc/puppet/modules/deaddrop/files/webpy
       fi
     fi
   }
-   
+
   # Enter Environment Variables
   function enterEnvironmentVariables {
     DIR="/etc/puppet/manifests"
@@ -161,7 +161,7 @@ OSSECBINARY="ossec-binary.tgz"
     awk -v value="'$source_ip'" '$1=="$source_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
 
     echo -n "Enter the Source server's fully qualified domain: "
-    read source_fqdn  
+    read source_fqdn
     sed -i "s/source_fqdn/$source_fqdn/" nodes.pp
 
     echo -n "Enter the Document server's IP address: "
@@ -224,10 +224,10 @@ OSSECBINARY="ossec-binary.tgz"
        echo 'invalid entry'
        enterEnvironmentVariables
        ;;
-   esac  
+   esac
   }
 
-  # Install puppet on the source and jouranlist servers 
+  # Install puppet on the source and jouranlist servers
   function installAgents {
     DIR='/etc/puppet/manifests'
     cd $DIR
@@ -242,7 +242,7 @@ OSSECBINARY="ossec-binary.tgz"
     read REMOTEUSER
     SOURCE=$(awk '{if ($1=="$source_ip") print $3;}' nodes.pp | sed "s/'//g")
     JOURNALIST=$(awk '{if ($1=="$journalist_ip") print $3;}' nodes.pp | sed "s/'//g")
-    MONITOR=$(awk '{if ($1=="$monitor_ip") print $3;}' nodes.pp | sed "s/'//g") 
+    MONITOR=$(awk '{if ($1=="$monitor_ip") print $3;}' nodes.pp | sed "s/'//g")
     AGENTS="$SOURCE $JOURNALIST"
 
     awk '$1=="127.0.0.1"{$3="puppet"}1' /etc/hosts > /etc/hosts.tmp && mv /etc/hosts.tmp /etc/hosts
@@ -264,7 +264,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo '#######################################################'
     echo ''
   }
- 
+
   #Sign All Certs
   function signAllCerts {
     echo ''
