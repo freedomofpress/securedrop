@@ -40,9 +40,11 @@ def tearDownModule():
 class TestSource(unittest.TestCase):
 
     def _find_codename(self, body):
-        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 ]+)</p>'
+        # Codenames may contain HTML escape characters, and the wordlist
+        # contains various symbols.
+        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!]+)</p>'
         codename_match = re.search(codename_re, body)
-        if not codename_match:
+        if not codename_match: # debugging
             print body
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
