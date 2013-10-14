@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import bcrypt, subprocess, threading
 from Crypto.Random import random
 import random as badrandom
