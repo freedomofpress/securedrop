@@ -58,7 +58,7 @@ def store_endpoint(i):
       crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
       received = 2
       
-    if i.fh.value:
+    if i.fh:
       # we put two zeroes here so that we don't save a file 
       # with the same name as the message
       loc2 = store.path(sid, '%.2f_doc.gpg' % (uuid.uuid4().int, ))
