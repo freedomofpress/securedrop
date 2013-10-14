@@ -8,7 +8,7 @@ import store
 from base64 import b32encode
 
 GPG_KEY_TYPE = "RSA"
-GPG_KEY_LENGTH = "4096"
+GPG_KEY_LENGTH = "1024"
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
@@ -40,7 +40,7 @@ def displayid(n, words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
 def shash(s):
     """
     >>> shash('Hello, world!')
-    '$2a$12$gLZnkcyhZBrWbCZKHKYgKee8g/Yb9O7.24/H.09Yu9Jt9hzW6n0Ky'
+    'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
     """
     return b32encode(bcrypt.hashpw(s, config.BCRYPT_SALT))
 
