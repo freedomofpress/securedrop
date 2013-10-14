@@ -50,6 +50,15 @@ OSSECBINARY="ossec-binary.tgz"
     fi
   }
 
+  # On puppet master install rails
+  function installRails {
+    if [[ $(rails -v) != "Rails 2.2.2" ]]; then
+      gem install rails -v 2.2.2
+    else
+      echo "Rails already installed"
+    fi
+  }
+
   # On puppet master install puppet modules
   function installPuppetModules {
     DIR='/etc/puppet/modules'
@@ -334,6 +343,7 @@ OSSECBINARY="ossec-binary.tgz"
         puppetDownload
         installPuppetMaster
         installPuppetModuleTool
+        installRails
         installPuppetModules
         enablePuppetStoredconfigs
         copyDeaddropFiles
