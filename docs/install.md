@@ -32,23 +32,46 @@ If you already have a Tails Live USB, you can skip to the fourth step, where you
 
 Reboot the `Viewing Station` laptop and boot into the Tails Live USB again to continue with the setup.
 
-### Copy SecureDrop Code to the Viewing Station
-
-On your regular workstation computer, download the latest version of SecureDrop. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop.
-
-Copy the securedrop folder to one of the USB sticks. Plug it into the `Viewing Station` and copy the securedrop folder into the `/home/amnesia/Persistent` directory.
-
 ### Generate PGP Key and Import Journalist Public Keys
 
 In order to avoid transfering plaintext files between the `Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
-To generate the application PGP key, open the Terminal program and type:
+![Importing Journalist PGP Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing1.jpg)
 
-    /home/amnesia/Persistent/securedrop/viewing_setup.sh
+To generate the application PGP key, click in the clipboard icon in the top right and choose `Manage Keys`. A program called `Passwords and Encryption Keys` will open. You can click on the `Other Keys` tab to manage the keys that you just imported.
 
-It will ask you: `Create new gpg keypair for the application? (y/n)`. Press enter to select `y`. It will pop up box that says "Enter passphrase". Enter the PGP passphrase that you generated earlier, click OK, and enter it a second time. Then wait for the key to generate.
+![Tails PGP Clipboard](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing2.jpg)
 
-When it's done it will place your new PGP public key in /home/amnesia/Persistent/securedrop.asc. Copy that file to the USB stick. It will also display the 40 character hex fingerprint of this new key. Right it down, because you'll need it when setting up the servers in the next step.
+Click `File`, `New`. `Choose PGP Key`, and click Continue.
+
+![New...](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing3.jpg)
+
+Put these values in:
+
+* `Full Name`: SecureDrop
+* `Email Address`: (blank)
+* `Comment`: SecureDrop Application PGP Key
+
+Click the arrow to expland `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
+
+![New PGP Key](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing4.jpg)
+
+Type in the PGP passphrase that you came up with earlier twice and click OK. The wait while your key is being generated. 
+
+![Set Passphrase](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing5.jpg)
+![Key Generation](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing6.jpg)
+
+When it's done, you should see your key in the `My Personal Keys` tab.
+
+![My Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing7.jpg)
+
+Right-click on the key you just generated and click `Export`. Save it to your USB stick as `SecureDrop.asc`.
+
+![My Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing8.jpg)
+
+You'll also need to write down the 40 character hex fingerprint for this new key for the next step. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your PGP key fingerprint will be different than what's in this photo.)
+
+![Fingerprint](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing9.jpg)
 
 ## Server Installation
 
