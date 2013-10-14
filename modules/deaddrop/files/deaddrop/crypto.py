@@ -8,7 +8,7 @@ import store
 from base64 import b32encode
 
 GPG_KEY_TYPE = "RSA"
-GPG_KEY_LENGTH = "4096"
+GPG_KEY_LENGTH = 4096
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
@@ -95,12 +95,9 @@ def encrypt(fingerprint, s, output=None, fn=None):
     else:
         if fn:
             with _gpghacklock:
-                oldname = gpg.gpgbinary
-                gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
-                out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
-                gpg.gpgbinary = oldname
+                out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
         else:
-            out = gpg.encrypt_file(s, fingerprint, output=output, always_trust=True)
+            out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
     if out.ok:
         return out.data
     else:
