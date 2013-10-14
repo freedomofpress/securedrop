@@ -14,7 +14,7 @@ $if msgs:
     
     $for msg in msgs:
 		<div class="reply">
-        <form method="post" action="/lookup/" autocomplete="off">
+        <form class="message" method="post" action="/lookup/" autocomplete="off">
         <input type="hidden" name="action" value="delete" autocomplete="off"/>
         <input type="hidden" name="mid" value="$msg.id" autocomplete="off"/>
         <input type="hidden" name="id" value="$iid" autocomplete="off"/>
@@ -28,7 +28,7 @@ $if msgs:
 
 
 
-<form method="post" action="/lookup/" enctype="multipart/form-data" autocomplete="off">
+<form id="upload" method="post" action="/lookup/" enctype="multipart/form-data" autocomplete="off">
 <input type="hidden" name="action" value="upload" autocomplete="off"/>
 <input type="hidden" name="id" value="$iid" autocomplete="off"/>
 
