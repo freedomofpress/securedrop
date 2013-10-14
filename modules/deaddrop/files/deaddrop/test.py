@@ -82,14 +82,23 @@ class TestSource(unittest.TestCase):
     def test_create_submit_message(self):
         res, codename = self._navigate_to_create_page()
         upload_form = res.forms['upload']
-        upload_form.set('msg', 'For your eyes only')
+        upload_form.set('msg', 'This msg is for your eyes only')
         res = upload_form.submit()
         self.assertEqual(res.status, 200)
         self.assertIn("Thanks! We received your message.", res.normal_body)
 
     def test_create_submit_file(self):
-        # TODO: i don't know if I can mock file uploads with Paste... :(
-        pass
+        res, codename = self._navigate_to_create_page()
+        upload_form = res.forms['upload']
+        test_filename = 'secrets.txt'
+        res = self.app.post(upload_form.action,
+                params=upload_form.submit_fields(),
+                upload_files=[
+                    ('fh', test_filename, 'This file is for your eyes only'),
+                ])
+        self.assertEqual(res.status, 200)
+        self.assertIn("Thanks! We received your document '%s'." % test_filename,
+                res.normal_body)
 
     def test_create_submit_both(self):
         pass
