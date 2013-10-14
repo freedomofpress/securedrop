@@ -8,7 +8,12 @@ import store
 from base64 import b32encode
 
 GPG_KEY_TYPE = "RSA"
-GPG_KEY_LENGTH = "1024"
+if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
+    # Use small keys to speed up tests (and try to cheat and avoid issues with
+    # async key generation)
+    GPG_KEY_LENGTH = "1024"
+else:
+    GPG_KEY_LENGTH = "4096"
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
