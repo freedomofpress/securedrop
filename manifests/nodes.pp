@@ -2,8 +2,11 @@ node basenode {
 #These values are modified by the deaddrop install script that uses spaces as delimiter
 $enable_2_step = 'false'
 $source_ip = ''
+$source_hostname = ''
 $journalist_ip = ''
+$journalist_hostname = ''
 $monitor_ip = ''
+$monitor_hostname = ''
 $admin_ip = ''
 $intFWlogs_ip = ''
 $app_gpg_pub_key = 'secure_drop.asc'
