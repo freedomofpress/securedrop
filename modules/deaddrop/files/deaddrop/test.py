@@ -40,7 +40,7 @@ def tearDownModule():
 class TestSource(unittest.TestCase):
 
     def _find_codename(self, body):
-        codename_re = r'<span id="code-name" class="code-name">(?P<codename>[a-z0-9 ]+)</span>'
+        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 ]+)</p>'
         codename_match = re.search(codename_re, body)
         if not codename_match:
             print body
