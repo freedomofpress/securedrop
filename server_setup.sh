@@ -101,7 +101,7 @@ OSSECBINARY="ossec-binary.tgz"
   function unpackServerKeys {
     cd $CURRENTDIR
     echo ''
-    read -p "Enter the full path to application's public gpg key: " -e -i ./securedrop.asc KEYFILES
+    read -p "Enter the full path to application's public gpg key: " -e -i ../SecureDrop.asc KEYFILES
     cp -p $KEYFILES /etc/puppet/modules/deaddrop/files
   }
 
@@ -314,7 +314,7 @@ OSSECBINARY="ossec-binary.tgz"
 
     echo ''
     echo '############################################################'
-    echo 'This script expects ~/securedrop.asc to be the application PGP key'
+    echo 'This script expects ~/SecureDrop.asc to be the application PGP key'
     echo 'The remaining steps will install puppet run the manifests'
     echo '(1) Install puppetmaster'
     echo '(2) Enter environment information'
