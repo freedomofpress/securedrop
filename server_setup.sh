@@ -320,8 +320,8 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
-  function sshfsFix {                                                             
-    echo 'Running sshfs fix on source server'                                     
+  function sshfsFix {
+    echo 'Running sshfs fix on source server'
     ssh -t -t $REMOTEUSER@$SOURCE "su www-data /bin/sh -c "ssh $JOURNALIST exit""
     ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/etc/network/if-up.d/mountsshfs'"
   }
