@@ -320,6 +320,12 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
+  function sshfsFix {                                                             
+    echo 'Running sshfs fix on source server'                                     
+    ssh -t -t $REMOTEUSER@$SOURCE "su www-data /bin/sh -c "ssh $JOURNALIST exit""
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/etc/network/if-up.d/mountsshfs'"
+  }
+
   function ossecAuthd {
     cd /var/ossec
     openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key
@@ -392,6 +398,7 @@ OSSECBINARY="ossec-binary.tgz"
       "5")
         runPuppetManifests
         runPuppetManifests
+        sshfsFix
         displayTorURL
 #        ossecAuthd
         main
