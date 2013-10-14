@@ -42,7 +42,7 @@ To generate the application PGP key, click in the clipboard icon in the top righ
 
 ![Tails PGP Clipboard](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing2.jpg)
 
-Click `File`, `New`. `Choose PGP Key`, and click Continue.
+Click `File`, `New`. Choose `PGP Key`, and click Continue.
 
 ![New...](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing3.jpg)
 
@@ -56,7 +56,7 @@ Click the arrow to expland `Advanced key options`. Change the `Key Strength` fro
 
 ![New PGP Key](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing4.jpg)
 
-Type in the PGP passphrase that you came up with earlier twice and click OK. The wait while your key is being generated. 
+Type in the PGP passphrase that you came up with earlier twice and click OK. Then wait while your key is being generated. 
 
 ![Set Passphrase](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing5.jpg)
 ![Key Generation](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing6.jpg)
