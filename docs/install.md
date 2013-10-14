@@ -134,7 +134,7 @@ You will have to do the following steps on each laptop that will be able to conn
 * Open the torrc file which should be located in /tor-browser_en-US/Data/Tor/torrc
 * Add a line that begins with `HidServAuth` followed by the journalist's hidden service URL and Auth value that was outputed at the end of step 5 of the server_setup.sh script.  
 
-The torrc file for the first journalist should look something like:
+In this case the torrc file for the first journalist should look something like:
 
     # If non-zero, try to write to disk less frequently than we would otherwise. 
     AvoidDiskWrites 1 
@@ -151,7 +151,7 @@ The torrc file for the first journalist should look something like:
     ControlPort 9151 
     HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1 
 
-The torrc file for the second journalist should look like something this:  
+And the torrc file for the second journalist should look like something this:  
 
     # If non-zero, try to write to disk less frequently than we would otherwise. 
     AvoidDiskWrites 1 
