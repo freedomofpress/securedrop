@@ -110,19 +110,15 @@ At the end of this step it should display something like this:
 
 This lists the Tor hidden service URLs for the `Source Server` as well for the two journalists on the `Document Server`. It also lists the auth value for each journalist. Save those lines because you'll need them when setting up the `Journalist Workstations`.
 
-In this case, the `Source Server`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.
-The Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/
-The Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/
+In this case, the `Source Server`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.  
+The Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/  
+The Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB  
+The Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/  
+The Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR  
 
 * Step 6: Clean up puppet and install files.
 
-Then choose 0 to quit. When you are done, you then need to run some commands to help start the `sshfs` connection between the `Source Server` and the `Document Server`. SSH into the `Source Server` and run:
-
-    sudo -u www-data ssh journalist exit
-
-This tried to SSH into the `Document Server`. If the fingerprint is correct accept it. Then start `sshfs`.
-
-    sudo /etc/network/if-up.d/mountsshfs
+Then choose 0 to quit.
 
 Once you have completed these steps, the SecureDrop web application should be setup.
 
@@ -134,13 +130,46 @@ You will have to do the following steps on each laptop that will be able to conn
 
 * On the `Journalist Workstation`, [download and install the Tor Browser Bundle](https://www.torproject.org/download/download-easy.html.en). Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
 
-* On the `Viewing Station`, mount the Persistent volume. Copy the user certificate that you created for the current journalist, a .pk12 file named after the journalist, to a USB stick. 
+* Navigate to the Tor Browser Directory 
+* Open the torrc file which should be located in /tor-browser_en-US/Data/Tor/torrc
+* Add a line that begins with `HidServAuth` followed by the journalist's hidden service URL and Auth value that was outputed at the end of step 5 of the server_setup.sh script.  
 
-* Start the Tor Browser. When it has loaded, click Edit > Preferences. Go to the Advanced section at the top, and then switch to the Encryption tab. Click the View Certificates button, and switch to the Your Certificates tab. Click Import and navigate to the .p12 file to import it. When you are done with this step, the client certificate should be installed.
+The torrc file for the first journalist should look something like:
 
-* If you ever re-install Tor Browser Bundle, you'll need to repeat the previous step.
+    # If non-zero, try to write to disk less frequently than we would otherwise. 
+    AvoidDiskWrites 1 
+    # Store working data, state, keys, and caches here. 
+    DataDirectory ./Data/Tor 
+    GeoIPFile ./Data/Tor/geoip 
+    # Where to send logging messages.  Format is minSeverity[-maxSeverity] 
+    # (stderr|stdout|syslog|file FILENAME). 
+    Log notice stdout 
+    # Bind to this address to listen to connections from SOCKS-speaking 
+    # applications. 
+    SocksListenAddress 127.0.0.1 
+    SocksPort 9150                   
+    ControlPort 9151 
+    HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1 
 
-![Installing client certificate in Tor Browser](https://raw.github.com/freedomofpress/securedrop/install/images/torbrowser.png)
+The torrc file for the second journalist should look like something this:  
+
+    # If non-zero, try to write to disk less frequently than we would otherwise. 
+    AvoidDiskWrites 1 
+    # Store working data, state, keys, and caches here. 
+    DataDirectory ./Data/Tor 
+    GeoIPFile ./Data/Tor/geoip 
+    # Where to send logging messages.  Format is minSeverity[-maxSeverity] 
+    # (stderr|stdout|syslog|file FILENAME). 
+    Log notice stdout 
+    # Bind to this address to listen to connections from SOCKS-speaking 
+    # applications. 
+    SocksListenAddress 127.0.0.1 
+    SocksPort 9150 
+    ControlPort 9151 
+    HidServAuth kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
+
+* Open run the Tor Browser Bundle and enter the journalist's unique Tor hidden service URL without the Auth value  
+
 
 ## Test It
 
