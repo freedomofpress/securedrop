@@ -106,14 +106,6 @@ OSSECBINARY="ossec-binary.tgz"
     mv $OSSECBINARY /etc/puppet/modules/ossec/files/
   }
 
-  #Move the application's public gpg key to the deaddrop puppet module's file dir
-  function unpackServerKeys {
-    cd $CURRENTDIR
-    echo ''
-    read -p "Enter the full path to application's public gpg key: " -e -i ../SecureDrop.asc KEYFILES
-    cp -p $KEYFILES /etc/puppet/modules/deaddrop/files
-  }
-
   #Downlaod webpy
   function downloadWebpy {
     cd $CURRENTDIR
@@ -137,6 +129,7 @@ OSSECBINARY="ossec-binary.tgz"
     echo '##########################################################'
     echo 'You will need to provide the following environment'
     echo 'specific information.'
+    echo "- The application's public gpg key"
     echo '- Monitor, Source and Document Server IP address and fully'
     echo '  qualified domain names'
     echo '- The IP address that the admin will be SSHing from'
@@ -147,7 +140,13 @@ OSSECBINARY="ossec-binary.tgz"
     echo '##########################################################'
     echo ''
 
+    cd $CURRENTDIR
+    read -p "Enter the full path to application's public gpg key: " -e -i ../SecureDrop.asc KEYFILE
+    cp -p $KEYFILE /etc/puppet/modules/deaddrop/files
+    app_gpg_pub_key=$(basename "$KEYFILE")
     cd $DIR
+    awk -v value="'$app_gpg_pub_key'" '$1=="$app_gpg_pub_key"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
+
     echo -n "Enter the Monitor server's IP address: "
     read monitor_ip
     awk -v value="'$monitor_ip'" '$1=="$monitor_ip"{$3=value}1' nodes.pp > nodes.pp.tmp && mv nodes.pp.tmp nodes.pp
@@ -348,7 +347,6 @@ OSSECBINARY="ossec-binary.tgz"
         enablePuppetStoredconfigs
         copyDeaddropFiles
         downloadOSSECBinary
-        unpackServerKeys
         downloadWebpy
         main
         ;;
