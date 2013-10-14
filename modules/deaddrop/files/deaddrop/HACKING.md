@@ -29,7 +29,7 @@ install dependencies:
 
     $ sudo yum install python-devel
     $ sudo apt-get install python-dev
-    $ pip install web.py gnupg python-bcrypt pycrypto
+    $ pip install web.py python-gnupg python-bcrypt pycrypto
 
 cp the config template and fill in empty values:
 
