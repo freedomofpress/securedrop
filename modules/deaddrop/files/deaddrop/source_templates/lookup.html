@@ -4,13 +4,13 @@ $def with (iid, msgs, received=False)
 <h2><span class="headline">Upload documents</span></h2>
 
 $if received == 2:
-    <p><strong>Thanks! We received your message.</strong></p>
+    <p class="notification">Thanks! We received your message.</p>
 $elif received:
-    <p><strong>Thanks! We received your document '$received'.</strong></p>
+    <p class="notification">Thanks! We received your document '$received'.</p>
 
 $if msgs:
     <div id="replies">
-    <p><strong>You have received a reply.</strong> For your security, please delete all replies when you're done with them.</p>
+    <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
     
     $for msg in msgs:
 		<div class="reply">
@@ -18,10 +18,10 @@ $if msgs:
         <input type="hidden" name="action" value="delete" autocomplete="off"/>
         <input type="hidden" name="mid" value="$msg.id" autocomplete="off"/>
         <input type="hidden" name="id" value="$iid" autocomplete="off"/>
-        <div class="date">Sent $msg.date:</div>
         <blockquote class="message">$msg.msg</blockquote>
-        <p><button class="button-custom" type="submit">Delete</button></p>
+        <button type="submit">Delete</button>
         </form>
+        <div class="date">Sent $msg.date:</div>
 		</div>
     </div>
 
