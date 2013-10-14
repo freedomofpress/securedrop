@@ -8,7 +8,7 @@ import store
 from base64 import b32encode
 
 GPG_KEY_TYPE = "RSA"
-GPG_KEY_LENGTH = 4096
+GPG_KEY_LENGTH = "4096"
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
@@ -79,7 +79,7 @@ def _shquote(s):
     return "\\'".join("'" + p + "'" for p in s.split("'"))
 _gpghacklock = threading.Lock()
 
-def encrypt(fingerprint, s, output=None, fn=None):
+def encrypt(fp, s, output=None, fn=None):
     r"""
     >>> key = genkeypair('randomid', 'randomid')
     >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
@@ -87,17 +87,20 @@ def encrypt(fingerprint, s, output=None, fn=None):
     """
     if output:
         store.verify(output)
-    fingerprint = fingerprint.replace(' ', '')
+    fp = fp.replace(' ', '')
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, fingerprint, output=output, always_trust=True)
+        out = gpg.encrypt(s, [fp], output=output, always_trust=True)
     else:
         if fn:
             with _gpghacklock:
-                out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
+                oldname = gpg.gpgbinary
+                gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
+                out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+                gpg.gpgbinary = oldname
         else:
-            out = gpg.encrypt(s, fingerprint, output=fn, always_trust=True)
+            out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
     if out.ok:
         return out.data
     else:
