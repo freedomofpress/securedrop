@@ -341,6 +341,17 @@ OSSECBINARY="ossec-binary.tgz"
   ssh -t -t $REMOTEUSER@$JOURNALIST "sudo /bin/sh -c 'cat /var/lib/tor/hidden_service/hostname'"
   }
 
+  function cleanUp {
+    sysctl -p
+    apt-get purge rubygems puppetmaster puppet gcc make libncurses5-dev build-essential  kernel-package git-core g++ python-setuptools sqlite3 libsqlite3-ruby python-pip  
+
+    echo -n 'What is your username on the Source and Document server? '
+    read REMOTEUSER
+
+    ssh -t -t $REMOTEUSER@source "sudo /bin/sh -c 'apt-get purge puppet rubygems puppetmaster puppet gcc make libncurses5-dev build-essential  kernel-package git-core g++ python-setuptools sqlite3 libsqlite3-ruby python-pip'"
+    ssh -t -t $REMOTEUSER@journalist "sudo /bin/sh -c 'apt-get purge puppet rubygems puppetmaster puppet gcc make libncurses5-dev build-essential  kernel-package git-core g++ python-setuptools sqlite3 libsqlite3-ruby python-pip'"
+  }
+
   #Main
   function main {
     CURRENTDIR=`pwd`
@@ -402,6 +413,7 @@ OSSECBINARY="ossec-binary.tgz"
       #After installation confirmed successfull cleanup unneeded
       #programs and files
       "6")
+        cleanUp
         ;;
       #Steps to apply grsec lock
       "7")
@@ -415,4 +427,4 @@ OSSECBINARY="ossec-binary.tgz"
 main
 
 #end
-exit0
+exit 0
