@@ -16,7 +16,7 @@ If this is the first time you're using SecureDrop with this organization, click 
 
 ![Generating code name](https://raw.github.com/freedomofpress/securedrop/master/docs/images/manual/source2.png)
 
-SecureDrop will create a code name for you to use. In the preview screenshot the codename that was generated was `ridge rene alton lw chit fl sob euler`. You must either memorize this or write it down in a safe place. After you submit documents, you must know this code name in order to login and check for responses.
+SecureDrop will create a code name for you to use. In the preview screenshot the codename that was generated was `naiad edit carrie bahama brew hardy cannot gosh`. You must either memorize this or write it down in a safe place. After you submit documents, you must know this code name in order to login and check for responses.
 
 You can choose the length of your code name. Longer code names are more secure but harder to memorize, and shorter code names are less secure but easier to memorize, so use your discretion. Once you have generated a code name, click Continue.
 
