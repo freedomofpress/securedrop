@@ -4,6 +4,8 @@ class deaddrop::tor{
     key_server => "keys.gnupg.net",
   }
 
+  package { "deb.torproject.org-keyring": ensure => installed, }
+
   apt::source { "tor":
     location          => "http://deb.torproject.org/torproject.org",
     release           => "precise",
@@ -12,6 +14,7 @@ class deaddrop::tor{
     key               => "886DDD89",
     key_server        => "keys.gnupg.net",
     before            => Package["tor"],
+    require           => Package["deb.torproject.org-keyring"],
   }
 
   package { 'tor':
