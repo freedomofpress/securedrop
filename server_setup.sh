@@ -53,7 +53,7 @@ OSSECBINARY="ossec-binary.tgz"
   # On puppet master install rails
   function installRails {
     if [[ $(rails -v) != "Rails 2.2.2" ]]; then
-      gem install rails -v 2.2.2
+      gem install rails -v 2.2.2 --no-ri --no-rdoc
     else
       echo "Rails already installed"
     fi
