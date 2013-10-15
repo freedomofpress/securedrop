@@ -210,7 +210,6 @@ class deaddrop::cis_debian_v1_0 {
   file { "cron":
     ensure  => directory,
     path    => '/var/spool/cron',
-    recurse => true,
     mode    => '1700',
   }
 
