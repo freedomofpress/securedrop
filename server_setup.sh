@@ -301,6 +301,7 @@ OSSECBINARY="ossec-binary.tgz"
   function runPuppetManifests {
     DIR='/etc/puppet/manifests/'
     cd $DIR
+    MONITOR=$(awk '{if ($1=="$monitor_ip") print $3;}' nodes.pp | sed "s/'//g")
     SOURCE=$(awk '{if ($1=="$source_ip") print $3;}' nodes.pp | sed "s/'//g")
     JOURNALIST=$(awk '{if ($1=="$journalist_ip") print $3;}' nodes.pp | sed "s/'//g")
     AGENTS="$SOURCE $JOURNALIST"
@@ -320,20 +321,16 @@ OSSECBINARY="ossec-binary.tgz"
     done
   }
 
-  function sshfsFix {
-    echo 'Running sshfs fix on source server'
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo su www-data /bin/sh -c 'ssh $JOURNALIST exit'"
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/etc/network/if-up.d/mountsshfs'"
-  }
-
   function ossecAuthd {
     cd /var/ossec
-    openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key
-    openssl req -new -x509 -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
-    chown root:ossec /var/ossec/etc/sslmanager.cert
+    if [ ! -f /var/ossec/etc/sslmanager.cert ]; then
+      openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key
+      openssl req -new -x509 -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+      chown root:ossec /var/ossec/etc/sslmanager.cert
+    fi
     /var/ossec/bin/ossec-authd -p 1515 -i $journalist_ip $source_ip >/dev/null 2>&1 &
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'"
-    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $monitor_ip'"
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $MONITOR'"
+    ssh -t -t $REMOTEUSER@$SOURCE "sudo /bin/sh -c '/var/ossec/bin/agent-auth -m $MONITOR'"
   }
 
   function displayTorURL {
@@ -398,9 +395,8 @@ OSSECBINARY="ossec-binary.tgz"
       "5")
         runPuppetManifests
         runPuppetManifests
-        sshfsFix
         displayTorURL
-#        ossecAuthd
+        ossecAuthd
         main
         ;;
       #After installation confirmed successfull cleanup unneeded
