@@ -305,4 +305,28 @@ class deaddrop::source{
     group => 'root',
     mode => '0755',
   }
+
+  package { 'apparmor-profiles': ensure => installed, }
+
+  package { 'apparmor-utils': 
+    ensure  => 'installed',
+    require => Package["apparmor-profiles"],
+  } 
+  
+  file { '/etc/apparmor.d/usr.lib.apache2.mpm-worker.apache2':
+    ensure => file,
+    source => "puppet:///modules/deaddrop/usr.lib.apache2.mpm-worker.apache2.source-server",
+    owner => 'root',
+    group => 'root',
+    mode => '0622',
+    require => Package["apparmor-utils"],
+  }
+
+  exec { 'aa-enforce':
+    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    command => 'aa-enforce /usr/sbin/apache2',
+    user    => 'root',
+    group   => 'root',
+    require => File["/etc/apparmor.d/usr.lib.apache2.mpm-worker.apache2"],
+  }
 }
