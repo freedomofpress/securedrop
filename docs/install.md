@@ -170,7 +170,7 @@ And the `torrc` file for the second journalist should look like something this:
 
 * Open run the Tor Browser Bundle and enter the journalist's unique Tor hidden service URL without the Auth value  
 
-![Journalist_workstation1](https://raw.github.com/dolanjs/securedrop/issue69/docs/images/install/journalist_workstation1.png)
+![Journalist_workstation1](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/journalist_workstation1.png)
 
 ## Test It
 
