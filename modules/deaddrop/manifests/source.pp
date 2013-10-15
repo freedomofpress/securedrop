@@ -305,10 +305,4 @@ class deaddrop::source{
     group => 'root',
     mode => '0755',
   }
-
-  exec { "ssh ${journalist_ip} exit":
-    path   => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-    user => $apache_user,
-    group => $apachae_user,
-  }
 }
