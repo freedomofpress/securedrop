@@ -1,24 +1,43 @@
 class deaddrop::tor{
-  apt::key { "tor":
-    key        => "886DDD89",
-    key_server => "keys.gnupg.net",
+  exec { 'add_tor_source':
+    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    command => 'echo "deb     http://deb.torproject.org/torproject.org precise main" >> /etc/apt/sources.list',
+    user    => 'root',
+    group   => 'root',
   }
 
-  package { "deb.torproject.org-keyring": ensure => installed, }
+  exec { 'receive_tor_key':
+    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    command => 'gpg --keyserver keys.gnupg.net --recv 886DDD89',
+    user    => 'root',
+    group   => 'root',
+    require => Exec["add_tor_source"],
+  }
 
-  apt::source { "tor":
-    location          => "http://deb.torproject.org/torproject.org",
-    release           => "precise",
-    repos             => "main",
-    required_packages => "deb.torproject.org-keyring",
-    key               => "886DDD89",
-    key_server        => "keys.gnupg.net",
-    before            => Package["tor"],
-    require           => Package["deb.torproject.org-keyring"],
+  exec { 'add_tor_key':
+    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    command => 'gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -',
+    user    => 'root',
+    group   => 'root',
+    require => Exec["receive_tor_key"],
+  }
+
+  exec { 'tor_update':
+    path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
+    command => 'apt-get update',
+    user    => 'root',
+    group   => 'root',
+    require => Exec["add_tor_key"],
+  }
+
+  package { "deb.torproject.org-keyring":
+    ensure  => installed,
+    require => Exec["tor_update"],
   }
 
   package { 'tor':
-    ensure => "installed",
+    ensure  => "installed",
+    require => Package["deb.torproject.org-keyring"],
   }
 
   file { '/etc/tor/torrc':

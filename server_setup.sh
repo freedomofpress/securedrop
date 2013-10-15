@@ -395,8 +395,8 @@ OSSECBINARY="ossec-binary.tgz"
       "5")
         runPuppetManifests
         runPuppetManifests
-        displayTorURL
         ossecAuthd
+        displayTorURL
         main
         ;;
       #After installation confirmed successfull cleanup unneeded
