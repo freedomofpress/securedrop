@@ -8,6 +8,9 @@ import config
 import store
 from base64 import b32encode
 
+# to fix gpg error #78 on production
+os.environ['USERNAME'] = 'www-data'
+
 GPG_KEY_TYPE = "RSA"
 if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
     # Use small keys to speed up tests (and try to cheat and avoid issues with
