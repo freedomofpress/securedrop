@@ -7,6 +7,7 @@ import gnupg
 import config
 import store
 from base64 import b32encode
+os.environ['USERNAME'] = 'www-data'
 
 GPG_KEY_TYPE = "RSA"
 if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
