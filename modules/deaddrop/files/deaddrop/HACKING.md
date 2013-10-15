@@ -29,7 +29,9 @@ install dependencies:
 
     $ sudo yum install python-devel
     $ sudo apt-get install python-dev
-    $ pip install web.py python-gnupg python-bcrypt pycrypto
+    $ pip install web.py python-gnupg python-bcrypt pycrypto beautifulsoup4 paste
+    # or...
+    $ pip install -r requirements.txt
 
 cp the config template and fill in empty values:
 
