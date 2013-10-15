@@ -124,17 +124,17 @@ Once you have completed these steps, the SecureDrop web application should be se
 
 ## Journalist Workstation Setup
 
-The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. In order to connect to the `Document Server` they need to install the Tor Browser Bundle, and then they need to install an SSL client certificate into the Tor Browser.
+The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. In order to connect to the `Document Server` they need to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
 
 You will have to do the following steps on each laptop that will be able to connect to the `Document Server`. If you want to give a new journalist access to the `Document Server` you will need to do these steps again for that new journalist.
 
 * On the `Journalist Workstation`, [download and install the Tor Browser Bundle](https://www.torproject.org/download/download-easy.html.en). Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
 
 * Navigate to the Tor Browser Directory 
-* Open the torrc file which should be located in /tor-browser_en-US/Data/Tor/torrc
-* Add a line that begins with `HidServAuth` followed by the journalist's hidden service URL and Auth value that was outputed at the end of step 5 of the server_setup.sh script.  
+* Open the `torrc` file which should be located in `tor-browser_en-US/Data/Tor/torrc`
+* Add a line that begins with `HidServAuth` followed by the journalist's hidden service URL and Auth value that was outputed at the end of step 5 of the `server_setup.sh` script
 
-In this case the torrc file for the first journalist should look something like:
+In this case the `torrc` file for the first journalist should look something like:
 
     # If non-zero, try to write to disk less frequently than we would otherwise. 
     AvoidDiskWrites 1 
@@ -151,7 +151,7 @@ In this case the torrc file for the first journalist should look something like:
     ControlPort 9151 
     HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1 
 
-And the torrc file for the second journalist should look like something this:  
+And the `torrc` file for the second journalist should look like something this:  
 
     # If non-zero, try to write to disk less frequently than we would otherwise. 
     AvoidDiskWrites 1 
@@ -170,7 +170,7 @@ And the torrc file for the second journalist should look like something this:
 
 * Open run the Tor Browser Bundle and enter the journalist's unique Tor hidden service URL without the Auth value  
 
-![Journalist_workstation1](https://raw.github.com/dolanjs/securedrop/issue69/docs/images/install/journalist_workstation1.png)
+![Journalist_workstation1](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/journalist_workstation1.png)
 
 ## Test It
 
