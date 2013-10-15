@@ -211,7 +211,7 @@ class deaddrop::cis_debian_v1_0 {
     ensure  => directory,
     path    => '/var/spool/cron',
     recurse => true,
-    mode    => '0700',
+    mode    => '1700',
   }
 
   ############################################################################

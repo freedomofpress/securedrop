@@ -219,4 +219,22 @@ class deaddrop::journalist {
     source  => "puppet:///modules/deaddrop/deaddrop/static/",
     require => File["$deaddrop_home"],
   }
+
+  package { 'apparmor-profiles': ensure => installed, }
+
+
+  file { '/etc/apparmor.d/usr.lib.apache2.mpm-worker.apache2':
+    ensure => file,
+    source => "puppet:///modules/deaddrop/usr.lib.apache2.mpm-worker.apache2.document-server",
+    owner => 'root',
+    group => 'root',
+    mode => '0622',
+    require => Package["apparmor-profiles"],
+  }
+
+  exec { 'aa-enforce /usr/sbin/apache2':
+    user  => 'root',
+    group => 'root',
+  }
+
 }
