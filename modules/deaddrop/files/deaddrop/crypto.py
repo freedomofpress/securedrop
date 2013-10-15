@@ -34,7 +34,8 @@ def clean(s, also=''):
     """
     ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     for c in s:
-        if c not in ok and c not in also: raise CryptoException("invalid input")
+        if c not in ok and c not in also:
+            raise CryptoException("invalid input: %s" % s)
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
