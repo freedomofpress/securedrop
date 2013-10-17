@@ -266,7 +266,6 @@ Modify parameters and hostnames the first section of nodes.pp manifest
 >    $intFWlogs_hostname          = 'intFWlogs'  
 >    $puppetmaster_hostname       = 'monitor'  
 >    $app_gpg_pub_key             = 'journalist.acs'  
->    $hmac_secret                 = 'use_a_random_number_generater_for_this_value'  
 >    $app_gpg_fingerprint         = 'XXXX XXXX XXXX XXXX XXXX  XXXX XXXX XXXX XXXX XXXX'  
 >    $mailserver_ip               = 'gmail-smtp-in.l.google.com'  
 >    $ossec_emailto               = 'user_name@gmail.com'  
