@@ -2,13 +2,16 @@ development setup for deaddrop
 ==============================
 
 This document assumes your development environment is a Debian, Ubuntu
-or Fedora derivative.  If you're familiar with homebrew on OSX you
-should be able to follow along (documentation patches welcome).
+or Fedora derivative.
+
+If you're familiar with homebrew and pip on OSX you should be able to follow along. Secure RM
+may already installed as srm.
 
 install gnupg2:
 
     $ sudo yum install gnupg2
     $ sudo apt-get install gnupg2
+    $ brew install gnupg2
 
 install srm (secure remove utility):
 
@@ -19,6 +22,7 @@ install virtualenv:
 
     $ sudo yum install python-virtualenv
     $ sudo apt-get install python-virtualenv
+    $ pip install virtualenv
 
 create and activate a new virtualenv:
 
