@@ -54,8 +54,11 @@ Make sure you *only* use this key for development. We recommend using a userid
 like "Deaddrop Dev (DO NOT USE IN PRODUCTION) <dev@deaddrop.example.com>" so
 you don't forget!
 
-Once you've generated the dev key, copy the userid to the `JOURNALIST_KEY`
-field of `config.py`.
+Once you've generated the dev key, copy the key fingerprint to the `JOURNALIST_KEY`
+field of `config.py`. You can find the key fingerprint by running:
+
+    $ gpg2 --homedir /tmp/deaddrop/keys --fingerprint 
+
 
 running
 -------
