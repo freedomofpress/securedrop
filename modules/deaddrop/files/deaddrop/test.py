@@ -100,6 +100,24 @@ class TestSecureDrop(unittest.TestCase):
         codename = self._find_codename(res.normal_body)
         self.assertGreater(len(codename), 0)
 
+    def test_codename_regeneration(self):
+        res = self.source_app.get('/').click(href='/generate/')
+        codename1 = self._find_codename(res.normal_body)
+        # default codename length is 8 words
+        self.assertEqual(len(codename1.split()), 8)
+        # request another codename (leaving the default "desired code name
+        # length" of 8)
+        res = res.forms['regenerate-form'].submit()
+        codename2 = self._find_codename(res.normal_body)
+        self.assertEqual(len(codename2.split()), 8)
+        self.assertNotEqual(codename1, codename2)
+        # request another, different-length codename
+        form = res.forms['regenerate-form']
+        form['number-words'] = 4
+        res = form.submit()
+        codename3 = self._find_codename(res.normal_body)
+        self.assertEqual(len(codename3.split()), 4)
+
     def test_generate_click_continue(self):
         res, codename = self._navigate_to_create_page()
         self.assertIn("Upload a file:", res.normal_body)
