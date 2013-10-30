@@ -27,8 +27,10 @@ class generate:
     return self.GET(int(i['number-words']))
 
   def GET(self, number_of_words=8):
+    if (number_of_words not in range(4, 11)):
+      raise web.notfound()
     iid = crypto.genrandomid(number_of_words)
-     
+
     web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
     web.header('Pragma', 'no-cache')
     web.header('Expires', '-1')
