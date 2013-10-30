@@ -42,6 +42,8 @@ class gen_ajax:
     request_params = web.input()
     if 'words' in request_params:
       word_num = int(request_params['words'])
+      if (word_num not in range(4, 11)):
+        raise web.notfound()
       uid = crypto.genrandomid(word_num)
       return json.dumps({'result': 'success', 'id': uid})
     else:
