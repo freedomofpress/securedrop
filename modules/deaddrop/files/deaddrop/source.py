@@ -6,7 +6,6 @@ import config, crypto, background, store, version
 urls = (
   '/', 'index',
   '/generate/', 'generate',
-  '/gen_ajax/', 'gen_ajax',
   '/create/', 'create',
   '/lookup/', 'lookup',
 )
@@ -35,17 +34,6 @@ class generate:
     web.header('Pragma', 'no-cache')
     web.header('Expires', '-1')
     return render.generate(iid)
-
-class gen_ajax:
-  def GET(self):
-    web.header('Content-Type', 'application/json')
-    request_params = web.input()
-    if 'words' in request_params:
-      word_num = int(request_params['words'])
-      uid = crypto.genrandomid(word_num)
-      return json.dumps({'result': 'success', 'id': uid})
-    else:
-      return json.dumps({'result': 'fail'})
 
 def store_endpoint(i):
   sid = crypto.shash(i.id)
