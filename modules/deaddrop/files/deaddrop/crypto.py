@@ -87,9 +87,8 @@ def getkey(name):
 
 def _shquote(s):
     return "\\'".join("'" + p + "'" for p in s.split("'"))
-_gpghacklock = threading.Lock()
 
-def encrypt(fp, s, output=None, fn=None):
+def encrypt(fp, s, output=None):
     r"""
     >>> key = genkeypair('randomid', 'randomid')
     >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
@@ -103,14 +102,7 @@ def encrypt(fp, s, output=None, fn=None):
     if isinstance(s, str):
         out = gpg.encrypt(s, [fp], output=output, always_trust=True)
     else:
-        if fn:
-            with _gpghacklock:
-                oldname = gpg.gpgbinary
-                gpg.gpgbinary += ' --set-filename ' + _shquote(fn)
-                out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
-                gpg.gpgbinary = oldname
-        else:
-            out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+        out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
     if out.ok:
         return out.data
     else:

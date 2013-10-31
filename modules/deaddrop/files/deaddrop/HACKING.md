@@ -2,13 +2,16 @@ development setup for deaddrop
 ==============================
 
 This document assumes your development environment is a Debian, Ubuntu
-or Fedora derivative.  If you're familiar with homebrew on OSX you
-should be able to follow along (documentation patches welcome).
+or Fedora derivative.
+
+If you're familiar with homebrew and pip on OSX you should be able to follow along. Secure RM
+may already installed as srm.
 
 install gnupg2:
 
     $ sudo yum install gnupg2
     $ sudo apt-get install gnupg2
+    $ brew install gnupg2
 
 install srm (secure remove utility):
 
@@ -19,6 +22,7 @@ install virtualenv:
 
     $ sudo yum install python-virtualenv
     $ sudo apt-get install python-virtualenv
+    $ pip install virtualenv
 
 create and activate a new virtualenv:
 
@@ -50,8 +54,11 @@ Make sure you *only* use this key for development. We recommend using a userid
 like "Deaddrop Dev (DO NOT USE IN PRODUCTION) <dev@deaddrop.example.com>" so
 you don't forget!
 
-Once you've generated the dev key, copy the userid to the `JOURNALIST_KEY`
-field of `config.py`.
+Once you've generated the dev key, copy the key fingerprint to the `JOURNALIST_KEY`
+field of `config.py`. You can find the key fingerprint by running:
+
+    $ gpg2 --homedir /tmp/deaddrop/keys --fingerprint 
+
 
 running
 -------
