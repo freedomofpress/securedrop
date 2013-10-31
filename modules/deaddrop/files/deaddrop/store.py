@@ -5,7 +5,7 @@ import web
 import config
 
 # taken from store.urls mapping
-VALIDATE_FILENAME = re.compile("^(reply-)?[0-9]+\.[0-9]+(?:_msg|_doc|)\.gpg$").match
+VALIDATE_FILENAME = re.compile("^(reply-)?[0-9]+\.[0-9]+(?:_msg|_doc\.zip|)\.gpg$").match
 
 def verify(p):
     if not os.path.isabs(config.STORE_DIR):
