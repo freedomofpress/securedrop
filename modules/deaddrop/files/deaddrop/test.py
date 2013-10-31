@@ -4,6 +4,8 @@ import shutil
 import tempfile
 import unittest
 import re
+import cStringIO
+import zipfile
 from time import sleep
 
 import gnupg
@@ -177,7 +179,13 @@ class TestSecureDrop(unittest.TestCase):
         res = self.journalist_app.get(submission_url)
         decrypted_data = self.gpg.decrypt(res.body)
         self.assertTrue(decrypted_data.ok)
-        self.assertEqual(decrypted_data.data, test_file_contents)
+
+        s = cStringIO.StringIO(decrypted_data.data)
+        zip_file = zipfile.ZipFile(s, 'r')
+        unzipped_decrypted_data = zip_file.read('secrets.txt')
+        zip_file.close()
+
+        self.assertEqual(unzipped_decrypted_data, test_file_contents)
         # TODO: test the filename (encoding with gpg2 --set-filename; unclear
         # if it can be accessed using the gnupg library)
 
@@ -211,11 +219,17 @@ class TestSecureDrop(unittest.TestCase):
             submission_url = source_page_url + submission
             res = self.journalist_app.get(submission_url)
             decrypted_data = self.gpg.decrypt(res.body)
+
             self.assertTrue(decrypted_data.ok)
             if '_msg' in submission:
                 self.assertEqual(decrypted_data.data, test_msg)
             elif '_doc' in submission:
-                self.assertEqual(decrypted_data.data, test_file_contents)
+                s = cStringIO.StringIO(decrypted_data.data)
+                zip_file = zipfile.ZipFile(s, 'r')
+                unzipped_decrypted_data = zip_file.read('secrets.txt')
+                zip_file.close()
+
+                self.assertEqual(unzipped_decrypted_data, test_file_contents)
 
     def test_journalist_reply(self):
         # Submit the message through the source app
