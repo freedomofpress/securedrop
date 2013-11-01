@@ -39,7 +39,7 @@
   /var/www/.gnupg/ w,
   /var/www/deaddrop/ r,
   /var/www/deaddrop/* r,
-  /var/www/deaddrop/keys/* rwk,
+  /var/www/deaddrop/keys/* rwkl,
   /var/www/deaddrop/source_templates/ r,
   /var/www/deaddrop/source_templates/* r,
   /var/www/deaddrop/static/css/* r,
