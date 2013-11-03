@@ -99,8 +99,8 @@ def submit():
       flash("Thanks! We received your document '%s'."
           % fh.filename or '[unnamed]', "notification")
 
-    #if not crypto.getkey(sid):
-    #  background.execute(lambda: crypto.genkeypair(sid, codename))
+    if not crypto.getkey(sid):
+      background.execute(lambda: crypto.genkeypair(sid, codename))
 
   return redirect(url_for('lookup'))
 
