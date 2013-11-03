@@ -1,23 +1,26 @@
-$def with (doc)
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel='stylesheet' href='/static/css/securedrop.css' type='text/css' media='all' />
+    <link rel="stylesheet" href="/static/css/securedrop.css" type="text/css" media="all" />
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
     <title>SecureDrop</title>
   </head>
   <body>
     <div id="wrapper">
+      {% block header %}
       <div id="header">
         <a href="/"><img src="/static/i/securedrop.png" alt="SecureDrop"></a>
       </div>
-      
-      $:doc
-      
+      {% endblock %}
+
+      {% block body %}{% endblock %}
+
+      {% block footer %}
       <div id="footer">
         Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
-        Powered by <em>SecureDrop $version</em>.
+        Powered by <em>SecureDrop {{ version }}</em>.
       </div>
-    </div>	
+      {% endblock %}
+    </div>
   </body>
 </html>
