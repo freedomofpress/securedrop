@@ -19,6 +19,7 @@
 {% if haskey %}
 <p>You can write a secure reply to the person who submitted these documents:</p>
 <form action="/reply" method="post" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
   <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea><br />
   <button id="reply-button" class="button-custom" type="submit">Submit</button>

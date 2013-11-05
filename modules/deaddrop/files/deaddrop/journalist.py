@@ -4,11 +4,15 @@ from datetime import datetime
 import uuid
 
 from flask import Flask, request, render_template, send_file
+from flask_wtf.csrf import CsrfProtect
 
 import config, version, crypto, store, background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.secret_key = config.SECRET_KEY
+CsrfProtect(app)
+
+app.jinja_env.globals['version'] = version.__version__
 
 @app.after_request
 def no_cache(response):
@@ -22,10 +26,6 @@ def no_cache(response):
   for header, header_value in no_cache_headers.iteritems():
     response.headers.add(header, header_value)
   return response
-
-@app.context_processor
-def global_template_vars():
-  return dict(version=version.__version__)
 
 @app.route('/')
 def index():

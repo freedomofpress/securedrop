@@ -18,6 +18,7 @@
   {% for msg in msgs %}
   <div class="reply">
     <form class="message" method="post" action="/delete" autocomplete="off">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
       <blockquote class="message">{{ msg.msg }}</blockquote>
       <button type="submit">Delete</button>
@@ -29,6 +30,7 @@
 {% endif %}
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p style="padding-bottom: 0"><b>Upload a file:</b></p>
   <div id="browse-select">
     <input type="file" name="fh" autocomplete="off"/> 
@@ -42,6 +44,7 @@
 
 <p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
 <form method="post" action="/lookup" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <p><a href="">Enter a different code name...</a><br />
     <button class="button-link" type="submit">Reload to check for new messages...</button>
   </p>

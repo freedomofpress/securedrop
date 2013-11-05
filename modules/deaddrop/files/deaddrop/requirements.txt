@@ -1,7 +1,9 @@
 Flask==0.10.1
+Flask-WTF==0.9.3
 Jinja2==2.7.1
 MarkupSafe==0.18
 Paste==1.7.5.1
+WTForms==1.0.5
 Werkzeug==0.9.4
 argparse==1.2.1
 beautifulsoup4==4.3.2
