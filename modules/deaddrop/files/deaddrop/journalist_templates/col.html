@@ -6,12 +6,12 @@
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
-<ul>
+<ul id="submissions">
 {% for doc in docs %}
 {% if doc.name.startswith('reply-') %}
 <li><i>{{ doc.name }}</i> (sent {{ doc.date }})</li>
 {% else %}
-<li><a href="/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> (uploaded {{ doc.date }})</li>
+<li><a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> (uploaded {{ doc.date }})</li>
 {% endif %}
 {% endfor %}
 </ul>
@@ -19,7 +19,7 @@
 {% if haskey %}
 <p>You can write a secure reply to the person who submitted these documents:</p>
 <form action="/reply" method="post" autocomplete="off">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
   <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea><br />
   <button id="reply-button" class="button-custom" type="submit">Submit</button>

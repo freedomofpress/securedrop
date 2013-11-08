@@ -3,13 +3,7 @@
 <div id="content" class="user-view">
 <h2><span class="headline">Upload documents</span></h2>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-  {% for category, message in messages %}
-  <p class="{{ category }}">{{ message }}</p>
-  {% endfor %}
-{% endif %}
-{% endwith %}
+{% include 'flashed.html' %}
 
 {% if msgs %}
 <div id="replies">
@@ -18,7 +12,7 @@
   {% for msg in msgs %}
   <div class="reply">
     <form class="message" method="post" action="/delete" autocomplete="off">
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
       <blockquote class="message">{{ msg.msg }}</blockquote>
       <button type="submit">Delete</button>
@@ -30,7 +24,7 @@
 {% endif %}
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <p style="padding-bottom: 0"><b>Upload a file:</b></p>
   <div id="browse-select">
     <input type="file" name="fh" autocomplete="off"/> 
@@ -43,12 +37,8 @@
 </form>
 
 <p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
-<form method="post" action="/lookup" autocomplete="off">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p><a href="">Enter a different code name...</a><br />
-    <button class="button-link" type="submit">Reload to check for new messages...</button>
-  </p>
-</form>
+<p><a href="/login">Enter a different code name...</a><br/>
+<a href="/lookup">Reload to check for new messages...</a></p>
 
 </div>
 {% endblock %}
