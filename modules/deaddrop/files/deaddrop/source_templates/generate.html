@@ -29,7 +29,6 @@
   </p>
   <form id="create-form" method="post" action="/create" autocomplete="off">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <input type="hidden" name="codename" id='codename' value="{{ codename|sign }}" autocomplete="off"/>
     <p>
       Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button>
     </p>

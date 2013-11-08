@@ -10,7 +10,6 @@ import config, version, crypto, store, background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.secret_key = config.SECRET_KEY
-CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 
@@ -41,7 +40,7 @@ def index():
   cols.sort(key=lambda x: x['date'], reverse=True)
   return render_template('index.html', cols=cols)
 
-@app.route('/<sid>')
+@app.route('/col/<sid>')
 def col(sid):
   fns = os.listdir(store.path(sid))
   docs = []
@@ -57,7 +56,7 @@ def col(sid):
   return render_template("col.html", sid=sid,
       codename=crypto.displayid(sid), docs=docs, haskey=haskey)
 
-@app.route('/<sid>/<fn>')
+@app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
   if '..' in fn or fn.startswith('/'):
     abort(404)
@@ -71,4 +70,6 @@ def reply():
   return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
 
 if __name__ == "__main__":
+  # TODO: make sure this gets run by the web server
+  CsrfProtect(app)
   app.run(debug=True, port=8081)
