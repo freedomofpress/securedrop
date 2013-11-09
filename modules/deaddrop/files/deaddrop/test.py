@@ -9,7 +9,7 @@ import zipfile
 from time import sleep
 
 import gnupg
-from flask import session, escape
+from flask import session, g, escape
 from flask_testing import TestCase
 from flask_wtf import CsrfProtect
 # TODO: I think BeautifulSoup is the #1 reason these tests are so slow. Switch
@@ -22,6 +22,10 @@ os.environ['DEADDROPENV'] = 'test'
 import config, crypto
 
 import source, journalist
+
+def _block_on_reply_keypair_gen(codename):
+    sid = crypto.shash(codename)
+    while not crypto.getkey(sid): sleep(0.1)
 
 def shared_setup():
     """Set up the file system and GPG"""
@@ -152,6 +156,8 @@ class TestSource(TestCase):
         ), follow_redirects=True)
         self.assert200(rv)
         self.assertIn("Thanks! We received your message.", rv.data)
+        # Wait until the reply keypair is generated to avoid confusing errors
+        _block_on_reply_keypair_gen(codename)
 
     def test_submit_file(self):
         codename = self._new_codename()
@@ -162,6 +168,7 @@ class TestSource(TestCase):
         self.assert200(rv)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
+        _block_on_reply_keypair_gen(codename)
 
     def test_submit_both(self):
         codename = self._new_codename()
@@ -173,6 +180,7 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
+        _block_on_reply_keypair_gen(codename)
 
 class TestJournalist(TestCase):
 
@@ -201,29 +209,27 @@ class TestJournalist(TestCase):
 
 class TestIntegration(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         shared_setup()
         for app in (source.app, journalist.app):
             app.config['TESTING'] = True
             app.config['WTF_CSRF_ENABLED'] = False
             CsrfProtect(app)
-
-    @classmethod
-    def tearDownClass(cls):
-        shared_teardown()
-
-    def setUp(self):
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
         self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+
+    def tearDown(self):
+        shared_teardown()
 
     def test_submit_message(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_msg = "This is a test message."
 
-        rv = self.source_app.get('/generate')
-        rv = self.source_app.post('/create', follow_redirects=True)
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg=test_msg,
@@ -249,13 +255,17 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
+        _block_on_reply_keypair_gen(codename)
+
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_file_contents = "This is a test file."
         test_filename = "test.txt"
 
-        rv = self.source_app.get('/generate')
-        rv = self.source_app.post('/create', follow_redirects=True)
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg="",
@@ -281,12 +291,17 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_file_contents)
 
+        _block_on_reply_keypair_gen(codename)
+
     def test_reply(self):
         test_msg = "This is a test message."
         test_reply = "This is a test reply."
 
-        rv = self.source_app.get('/generate')
-        rv = self.source_app.post('/create', follow_redirects=True)
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
+            sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg=test_msg,
@@ -302,17 +317,16 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
-        # Block until the reply keypair has been generated
-        sid = col_url.split('/')[-1]
-        while not crypto.getkey(sid):
-            sleep(0.1)
+        # Block until the reply keypair has been generated, so we can test
+        # sending a reply
+        _block_on_reply_keypair_gen(codename)
         rv = self.journalist_app.post('/reply', data=dict(
             sid=sid,
             msg=test_reply,
         ))
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! Your reply has been stored.", rv.data)
-        
+
         rv = self.journalist_app.get(col_url)
         self.assertIn("reply-", rv.data)
 
