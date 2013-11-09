@@ -13,6 +13,19 @@ app.secret_key = config.SECRET_KEY
 
 app.jinja_env.globals['version'] = version.__version__
 
+def get_docs(sid):
+  """Get docs associated with source id `sid` sorted by submission date"""
+  fns = os.listdir(store.path(sid))
+  docs = []
+  for f in fns:
+    docs.append(dict(
+      name=f,
+      date=str(datetime.fromtimestamp(os.stat(store.path(sid, f)).st_mtime))
+    ))
+  # sort by date since ordering by filename is meaningless
+  docs.sort(key=lambda x: x['date'])
+  return docs
+
 @app.after_request
 def no_cache(response):
   """Minimize potential traces of site access by telling the browser not to
@@ -42,15 +55,7 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-  fns = os.listdir(store.path(sid))
-  docs = []
-  for f in fns:
-    docs.append(dict(
-      name=f,
-      date=str(datetime.fromtimestamp(os.stat(store.path(sid, f)).st_mtime))
-    ))
-
-  docs.sort(key=lambda x: x['date'])
+  docs = get_docs(sid)
   haskey = bool(crypto.getkey(sid))
 
   return render_template("col.html", sid=sid,
@@ -68,6 +73,19 @@ def reply():
   crypto.encrypt(crypto.getkey(sid), request.form['msg'], output=
     store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
   return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
+
+@app.route('/delete', methods=('POST',))
+def delete():
+  sid = request.form['sid']
+  doc_names_selected = request.form.getlist('doc_names_selected')
+  docs_selected = [doc for doc in get_docs(sid) if doc['name'] in doc_names_selected]
+  confirm_delete = bool(request.form.get('confirm_delete', False))
+  if confirm_delete:
+      for doc in docs_selected:
+          fn = store.path(sid, doc['name'])
+          crypto.secureunlink(fn)
+  return render_template('delete.html', sid=sid, codename=crypto.displayid(sid),
+                         docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 if __name__ == "__main__":
   # TODO: make sure this gets run by the web server

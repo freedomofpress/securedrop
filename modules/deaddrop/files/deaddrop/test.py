@@ -230,6 +230,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg=test_msg,
@@ -257,6 +258,37 @@ class TestIntegration(unittest.TestCase):
 
         _block_on_reply_keypair_gen(codename)
 
+        # delete submission
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("The following file has been selected for", rv.data)
+
+        # confirm delete submission
+        doc_name = soup.select
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name,
+            confirm_delete="1"
+        ))
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("File permanently deleted.", rv.data)
+
+        # confirm that submission deleted and absent in list of submissions
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("No documents to display.", rv.data)
+
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_file_contents = "This is a test file."
@@ -266,6 +298,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg="",
@@ -292,6 +325,37 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(decrypted_data.data, test_file_contents)
 
         _block_on_reply_keypair_gen(codename)
+
+        # delete submission
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("The following file has been selected for", rv.data)
+
+        # confirm delete submission
+        doc_name = soup.select
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name,
+            confirm_delete="1"
+        ))
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("File permanently deleted.", rv.data)
+
+        # confirm that submission deleted and absent in list of submissions
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("No documents to display.", rv.data)
 
     def test_reply(self):
         test_msg = "This is a test message."
