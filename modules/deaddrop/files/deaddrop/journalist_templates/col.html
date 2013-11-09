@@ -4,17 +4,29 @@
 <h2><span class="headline">Read documents</span></h2>
 <p><a href="/">Back to latest submissions...</a></p>	
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
-<p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
+{% if docs %}
+<p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+<form action="/delete" method="post">
 <ul id="submissions">
 {% for doc in docs %}
-{% if doc.name.startswith('reply-') %}
-<li><i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})</li>
-{% else %}
-<li><a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})</li>
-{% endif %}
+<li>
+  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
+  {% if doc.name.startswith('reply-') %}
+  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})
+  {% else %}
+  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})
+  {% endif %}
+</li>
 {% endfor %}
+<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+<p><input type="submit" value="Delete selected" /> (<span id="select_all">select all</span>, <span id="select_none">select none</span>)</p>
 </ul>
+</form>
+{% else %}
+<p>No documents to display.</p>
+{% endif %}
 
 {% if haskey %}
 <p>You can write a secure reply to the person who submitted these documents:</p>
@@ -28,4 +40,19 @@
 <p>A key is currently being generated, which will enable you to write a secure reply to the person who submitted these documents.  Please check this page again in a few minutes if you would like to write a reply.
 {% endif %}
 </div>
+
+<script src='/static/js/jquery-2.0.3.min.js'></script>
+<script>
+$(function () {
+  var all = $("#select_all");
+  var none = $("#select_none");
+  var checkboxes = $(":checkbox");
+
+  all.css('cursor', 'pointer');
+  none.css('cursor', 'pointer');
+
+  all.click( function() { checkboxes.prop('checked', true); });
+  none.click( function() { checkboxes.prop('checked', false); });
+});
+</script>
 {% endblock %}
