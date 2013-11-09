@@ -137,6 +137,10 @@ def login():
       flash("Sorry, that is not a recognized codename.", "error")
   return render_template('login.html')
 
+@app.route('/howto-disable-js')
+def howto_disable_js():
+    return render_template("howto-disable-js.html")
+
 @app.errorhandler(404)
 def page_not_found(error):
   return render_template('notfound.html'), 404

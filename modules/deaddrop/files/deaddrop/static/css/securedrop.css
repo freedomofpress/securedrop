@@ -192,3 +192,46 @@ div.regenerate-warning{
   color: #009900;
   font-size: 20px;
 }
+
+div#js-warning-dim {
+  z-index:1;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.2);
+}
+
+div.center {
+  width: 400px;
+  height: 300px;
+
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}
+
+div#js-warning-tbb {
+  width: 400px;
+  height: 240px;
+  background-color:#fff;
+  border:4px solid #BABABA;
+  color:#333;
+  padding: 8px;
+  z-index:2;
+}
+
+div#js-warning-no-tbb {
+  width: 400px;
+  height: 100px;
+  background-color:#fff;
+  border:4px solid #BABABA;
+  color:#333;
+  padding: 8px;
+  z-index:2;
+}
