@@ -78,7 +78,7 @@ class TestSource(TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!]+)</p>'
+        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
