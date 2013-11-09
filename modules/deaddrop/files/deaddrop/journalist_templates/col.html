@@ -9,9 +9,9 @@
 <ul id="submissions">
 {% for doc in docs %}
 {% if doc.name.startswith('reply-') %}
-<li><i>{{ doc.name }}</i> (sent {{ doc.date }})</li>
+<li><i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})</li>
 {% else %}
-<li><a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> (uploaded {{ doc.date }})</li>
+<li><a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})</li>
 {% endif %}
 {% endfor %}
 </ul>
