@@ -7,6 +7,7 @@ import gnupg
 import config
 import store
 from base64 import b32encode
+import re
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
@@ -16,7 +17,7 @@ if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
     # Optiimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
     GPG_KEY_LENGTH = "1024"
-    BCRYPT_SALT = bcrypt.gensalt(log_rounds=1)
+    BCRYPT_SALT = bcrypt.gensalt(log_rounds=0)
 else:
     GPG_KEY_LENGTH = "4096"
     BCRYPT_SALT = config.BCRYPT_SALT
@@ -34,7 +35,10 @@ def clean(s, also=''):
     >>> clean("Helloworld")
     'Helloworld'
     """
-    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    # safe characters for every possible word in the wordlist
+    # includes capital letters because bcrypt hashes are base32-encoded with
+    # capital letters
+    ok = '!#"%$\'&)(+*-.1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for c in s:
         if c not in ok and c not in also:
             raise CryptoException("invalid input: %s" % s)
