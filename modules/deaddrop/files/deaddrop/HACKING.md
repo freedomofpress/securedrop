@@ -29,17 +29,17 @@ create and activate a new virtualenv:
     $ virtualenv ~/envs/securedrop
     $ . ~/envs/securedrop/bin/activate
 
-install dependencies:
-
-    $ sudo yum install python-devel
-    $ sudo apt-get install python-dev
-    $ pip install -r requirements.txt
-
 Clone the repository if you haven't already:
 
     $ git clone https://github.com/freedomofpress/securedrop.git
 
 cd into the repo, then cd into `deaddrop` (we know, we still need to change the names :)
+
+install dependencies:
+
+    $ sudo yum install python-devel
+    $ sudo apt-get install python-dev
+    $ pip install -r requirements.txt
 
 cp the config template and fill in empty values:
 
