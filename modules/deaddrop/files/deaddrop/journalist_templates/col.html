@@ -6,15 +6,24 @@
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
+<form action="/delete" method="post">
 <ul id="submissions">
 {% for doc in docs %}
-{% if doc.name.startswith('reply-') %}
-<li><i>{{ doc.name }}</i> (sent {{ doc.date }})</li>
-{% else %}
-<li><a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> (uploaded {{ doc.date }})</li>
-{% endif %}
+<li id="doc-num-{{ loop.index }}">
+  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
+  {% if doc.name.startswith('reply-') %}
+  <i>{{ doc.name }}</i> (sent {{ doc.date }})
+  {% else %}
+  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> (uploaded {{ doc.date }})
+  {% endif %}
+</li>
 {% endfor %}
+<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+<p><input type="submit" value="Delete selected" /> (<span id="select_all">select all</span>, <span id="select_none">select none</span>)</p>
 </ul>
+</form>
+
 
 {% if haskey %}
 <p>You can write a secure reply to the person who submitted these documents:</p>
@@ -26,4 +35,20 @@
 </form>
 {% endif %}
 </div>
+
+<script src='/static/js/jquery-2.0.3.min.js'></script>
+<script>
+$(function () {
+    $('#select_all').css( 'cursor', 'pointer' );
+    $('#select_none').css( 'cursor', 'pointer' );
+    $('#select_all').click(
+        function() {
+            $( ":checkbox" ).prop('checked', true);
+        });
+    $('#select_none').click(
+        function() {
+            $( ":checkbox" ).prop('checked', false);
+        });
+});
+</script>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+
+{% if confirm_delete %}
+
+  <p class="notification">Files permanently deleted</p>
+
+{% else %}
+
+  {% with count=docs_selected|length %}
+  <p>The following {{ count }} file(s) have been selected for <strong>permanent deletion</strong></p>
+  {% endwith %}
+
+  <form action="/delete" method="post">
+  <ul>
+  {% for doc in docs_selected %}
+  <li id="doc-num-{{ loop.index }}">
+    {{ doc.name }}
+    <input type="hidden" name="doc_names_selected" value="{{ doc.name }}" />
+    {% if doc.name.startswith('reply-') %}
+      (sent {{ doc.date }})
+    {% else %}
+      (uploaded {{ doc.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+  <input type="hidden" name="confirm_delete" value="1" />
+  <p><input type="submit" value="Permanently delete files" /></p>
+  </ul>
+  </form>
+
+{% endif %}
+
+<p><a href="/col/{{ sid }}">Return to the list of documents for {{ codename }}...</a></p>
+{% endblock %}
