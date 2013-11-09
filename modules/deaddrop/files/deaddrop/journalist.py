@@ -45,9 +45,11 @@ def col(sid):
   fns = os.listdir(store.path(sid))
   docs = []
   for f in fns:
+    os_stat = os.stat(store.path(sid, f))
     docs.append(dict(
       name=f,
-      date=str(datetime.fromtimestamp(os.stat(store.path(sid, f)).st_mtime))
+      date=str(datetime.fromtimestamp(os_stat.st_mtime)),
+      size=os_stat.st_size
     ))
 
   docs.sort(key=lambda x: x['date'])
