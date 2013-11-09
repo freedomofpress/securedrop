@@ -24,6 +24,8 @@
   <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea><br />
   <button id="reply-button" class="button-custom" type="submit">Submit</button>
 </form>
+{% else %}
+<p>A key is currently being generated, which will enable you to write a secure reply to the person who submitted these documents.  Please check this page again in a few minutes if you would like to write a reply.
 {% endif %}
 </div>
 {% endblock %}
