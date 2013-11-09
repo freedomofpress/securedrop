@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup
 os.environ['DEADDROPENV'] = 'test'
 import config, crypto
 
-import source, journalist
+import source, store, journalist
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto.shash(codename)
@@ -343,6 +343,13 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Reply deleted", rv.data)
+
+class TestStore(unittest.TestCase):
+    '''The set of tests for store.py.'''
+    def test_verify(self):
+        with self.assertRaises(store.PathException):
+            store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+
 
 if __name__ == "__main__":
     unittest.main()
