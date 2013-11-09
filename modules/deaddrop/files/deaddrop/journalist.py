@@ -1,84 +1,77 @@
 # -*- coding: utf-8 -*-
-import os, datetime, uuid
-import web
-import config, crypto, store, version
+import os
+from datetime import datetime
+import uuid
 
-urls = (
-  '/', 'index',
-  '/reply/', 'reply',
-  '/([A-Z1-7]+)/', 'col',
-  '/([A-Z1-7]+)/([0-9]+\.[0-9]+(?:_msg|_doc\.zip|)\.gpg)', 'doc' 
-)
+from flask import Flask, request, render_template, send_file
+from flask_wtf.csrf import CsrfProtect
 
-render = web.template.render(config.JOURNALIST_TEMPLATES_DIR, base='base', 
-    globals={'version':version.__version__})
+import config, version, crypto, store, background
 
-class index:
-    def GET(self):
-        dirs = os.listdir(config.STORE_DIR)
-        cols = []
-        for d in dirs:
-            if not os.listdir(store.path(d)): continue
-            cols.append(web.storage(name=d, codename=crypto.displayid(d), date=
-              str(datetime.datetime.fromtimestamp(
-                os.stat(store.path(d)).st_mtime
-              )).split('.')[0]
-            ))
-        cols.sort(lambda x,y: cmp(x.date, y.date), reverse=True)
+app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
+app.secret_key = config.SECRET_KEY
 
-        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        web.header('Pragma', 'no-cache')
-        web.header('Expires', '-1')
-        return render.index(cols)
+app.jinja_env.globals['version'] = version.__version__
 
-class col:
-    def GET(self, sid):
-        fns = os.listdir(store.path(sid))
-        docs = []
-        for f in fns:
-            docs.append(web.storage(
-              name=f, 
-              date=str(datetime.datetime.fromtimestamp(os.stat(store.path(sid, f)).st_mtime))
-            ))
-        docs.sort(lambda x,y: cmp(x.date, y.date))
-        
-        haskey = bool(crypto.getkey(sid))
+@app.after_request
+def no_cache(response):
+  """Minimize potential traces of site access by telling the browser not to
+  cache anything"""
+  no_cache_headers = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '-1',
+      }
+  for header, header_value in no_cache_headers.iteritems():
+    response.headers.add(header, header_value)
+  return response
 
-        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        web.header('Pragma', 'no-cache')
-        web.header('Expires', '-1')
-        return render.col(docs, sid, haskey, codename=crypto.displayid(sid))
- 
-class doc:
-    def GET(self, sid, fn):
-        web.header('Content-Type', 'application/octet-stream')
-        web.header('Content-Disposition', 'attachment; filename="' + 
-          crypto.displayid(sid).replace(' ', '_') + '_' + fn + '"')
+@app.route('/')
+def index():
+  dirs = os.listdir(config.STORE_DIR)
+  cols = []
+  for d in dirs:
+    if not os.listdir(store.path(d)): continue
+    cols.append(dict(
+      name=d,
+      sid=crypto.displayid(d),
+      date=str(datetime.fromtimestamp(os.stat(store.path(d)).st_mtime)).split('.')[0]
+    ))
+  cols.sort(key=lambda x: x['date'], reverse=True)
+  return render_template('index.html', cols=cols)
 
-        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        web.header('Pragma', 'no-cache')
-        web.header('Expires', '-1')
-        return file(store.path(sid, fn)).read()
+@app.route('/col/<sid>')
+def col(sid):
+  fns = os.listdir(store.path(sid))
+  docs = []
+  for f in fns:
+    os_stat = os.stat(store.path(sid, f))
+    docs.append(dict(
+      name=f,
+      date=str(datetime.fromtimestamp(os_stat.st_mtime)),
+      size=os_stat.st_size
+    ))
 
-class reply:
-    def GET(self):
-        raise web.seeother('/')
-    
-    def POST(self):
-        i = web.input('sid', 'msg')
-        crypto.encrypt(crypto.getkey(i.sid), i.msg, output=
-          store.path(i.sid, 'reply-%.2f.gpg' % (uuid.uuid4().int, ))
-        )
+  docs.sort(key=lambda x: x['date'])
+  haskey = bool(crypto.getkey(sid))
 
-        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        web.header('Pragma', 'no-cache')
-        web.header('Expires', '-1')
-        return render.reply(i.sid)
-        
+  return render_template("col.html", sid=sid,
+      codename=crypto.displayid(sid), docs=docs, haskey=haskey)
 
-web.config.debug = False
-app = web.application(urls, locals())
-application = app.wsgifunc()
+@app.route('/col/<sid>/<fn>')
+def doc(sid, fn):
+  if '..' in fn or fn.startswith('/'):
+    abort(404)
+  return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
+
+@app.route('/reply', methods=('POST',))
+def reply():
+  sid, msg = request.form['sid'], request.form['msg']
+  crypto.encrypt(crypto.getkey(sid), request.form['msg'], output=
+    store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
+  return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
 
 if __name__ == "__main__":
-    app.run()
+  # TODO: make sure this gets run by the web server
+  CsrfProtect(app)
+  app.run(debug=True, port=8081)

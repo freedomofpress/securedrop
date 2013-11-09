@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import web
 import config
 
-# taken from store.urls mapping
-VALIDATE_FILENAME = re.compile("^(reply-)?[0-9]+\.[0-9]+(?:_msg|_doc\.zip|)\.gpg$").match
+VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc|)\.gpg$").match
 
 def verify(p):
     if not os.path.isabs(config.STORE_DIR):
@@ -34,6 +32,3 @@ def path(*s):
 
 def log(msg):
     file(path('NOTES'), 'a').write(msg)
-
-def cleanname(fn):
-    return web.rstrips(web.rstrips(web.lstrips(web.rstrips(fn, '.gpg'), 'reply-'), '_doc'), '_msg')

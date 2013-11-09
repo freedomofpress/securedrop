@@ -4,266 +4,345 @@ import shutil
 import tempfile
 import unittest
 import re
-import cStringIO
+from cStringIO import StringIO
 import zipfile
 from time import sleep
 
 import gnupg
-from paste.fixture import TestApp
+from flask import session, g, escape
+from flask_testing import TestCase
+from flask_wtf import CsrfProtect
+# TODO: I think BeautifulSoup is the #1 reason these tests are so slow. Switch
+# to lxml per comment in last paragraph of
+# http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors
 from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
 os.environ['DEADDROPENV'] = 'test'
 import config, crypto
 
-from source import app as source_app
-from journalist import app as journalist_app
+import source, journalist
 
-def setUpModule():
-    pass
+def _block_on_reply_keypair_gen(codename):
+    sid = crypto.shash(codename)
+    while not crypto.getkey(sid): sleep(0.1)
 
-def tearDownModule():
-    pass
+def shared_setup():
+    """Set up the file system and GPG"""
+    # Create directories for the file store and the GPG keyring
+    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR):
+        try:
+            os.mkdir(d)
+        except OSError:
+            # some of these dirs already exist because we import source and
+            # journalist, which import crypto, which calls gpg.GPG at module
+            # level, which auto-generates the GPG homedir if it does not exist
+            pass
+    # Initialize the GPG keyring
+    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+    # Import the journalist key for testing (faster to import a pre-generated
+    # key than to gen a new one every time)
+    for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
+        gpg.import_keys(open(keyfile).read())
 
-class TestSecureDrop(unittest.TestCase):
+def shared_teardown():
+    shutil.rmtree(config.TEST_DIR)
 
-    def setUp(self):
-        """Set up the file system and GPG"""
-        # Create directories for the file store and the GPG keyring
-        for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR):
-            try:
-                # some of these dirs already exist because we import source and
-                # journalist, which import crypto, which calls gpg.GPG at module
-                # level, which auto-generates the GPG homedir if it does not exist
-                os.mkdir(d)
-            except OSError:
-                pass
+class TestSource(TestCase):
 
-        # Initialize the GPG keyring
-        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+    @classmethod
+    def setUpClass(cls):
+        shared_setup()
 
-        # Import the journalist key for testing (faster to import a pre-generated
-        # key than to gen a new one every time)
-        for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
-            self.gpg.import_keys(open(keyfile).read())
+    @classmethod
+    def tearDownClass(cls):
+        shared_teardown()
 
-        middleware = []
-        self.source_app = TestApp(source_app.wsgifunc(*middleware))
-        self.journalist_app = TestApp(journalist_app.wsgifunc(*middleware))
+    def create_app(self):
+        app = source.app
+        app.config['TESTING'] = True
+        # TODO: this sucks. Would be remedied by switching the forms over to
+        # Flask-WTF, or rolling our own CSRF protection
+        app.config['WTF_CSRF_ENABLED'] = False
+        CsrfProtect(app)
+        return app
 
-    def _find_codename(self, body):
+    def test_index(self):
+        """Test that the landing page loads and looks how we expect"""
+        response = self.client.get('/')
+        self.assert200(response)
+        self.assertIn("Submit documents for the first time", response.data)
+        self.assertIn("Already submitted something?", response.data)
+
+    def _find_codename(self, html):
+        """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!]+)</p>'
-        codename_match = re.search(codename_re, body)
-        if not codename_match: # debugging
-            print body
+        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
 
-    def _navigate_to_create_page(self):
-        res = self.source_app.get('/').click(href='/generate/')
-        codename = self._find_codename(res.normal_body)
-        res = res.forms['create-form'].submit()
-        return res, codename
-
-    def _do_submission(self, msg=None, doc=None):
-        res, codename = self._navigate_to_create_page()
-        upload_form = res.forms['upload']
-        if msg:
-            upload_form.set('msg', msg)
-        upload_files = []
-        if doc:
-            # doc should be a tuple (filename, contents)
-            assert isinstance(doc, tuple) and len(doc) == 2
-            upload_files = [('fh', doc[0], doc[1])]
-        res = self.source_app.post(upload_form.action,
-                params=upload_form.submit_fields(),
-                upload_files=upload_files)
-        return res, codename
-
-    def test_source_index(self):
-        res = self.source_app.get('/')
-        self.assertEqual(res.status, 200)
-        self.assertIn("Submit documents for the first time", res.normal_body)
-        self.assertIn("Already submitted something?", res.normal_body)
-
-    def test_journalist_index(self):
-        res = self.journalist_app.get('/')
-        self.assertEqual(res.status, 200)
-        self.assertIn("Latest submissions", res.normal_body)
-        self.assertIn("Here are the various collections of documents that have been submitted, with the most recently updated first:", res.normal_body)
-
-    def test_index_click_submit_documents(self):
-        # The "Submit Documents" button is a form submit button
-        res = self.source_app.get('/').click(href='/generate/')
-        self.assertEqual(res.status, 200)
-        self.assertIn("To protect your identity, we're assigning you a code name.", res.normal_body)
-        codename = self._find_codename(res.normal_body)
-        self.assertGreater(len(codename), 0)
-
-    def test_codename_regeneration(self):
-        res = self.source_app.get('/').click(href='/generate/')
-        codename1 = self._find_codename(res.normal_body)
+    def test_generate(self):
+        with self.client as c:
+            rv = c.get('/generate')
+            self.assert200(rv)
+            session_codename = session['codename']
+        self.assertIn("Submit documents for the first time", rv.data)
+        self.assertIn("To protect your identity, we're assigning you a code name.", rv.data)
+        codename = self._find_codename(rv.data)
         # default codename length is 8 words
-        self.assertEqual(len(codename1.split()), 8)
-        # request another codename (leaving the default "desired code name
-        # length" of 8)
-        res = res.forms['regenerate-form'].submit()
-        codename2 = self._find_codename(res.normal_body)
-        self.assertEqual(len(codename2.split()), 8)
-        self.assertNotEqual(codename1, codename2)
-        # request another, different-length codename
-        form = res.forms['regenerate-form']
-        form['number-words'] = 4
-        res = form.submit()
-        codename3 = self._find_codename(res.normal_body)
-        self.assertEqual(len(codename3.split()), 4)
+        self.assertEquals(len(codename.split()), 8)
+        # codename is also stored in the session - make sure it matches the
+        # codename displayed to the source
+        self.assertEquals(codename, escape(session_codename))
 
-    def test_generate_click_continue(self):
-        res, codename = self._navigate_to_create_page()
-        self.assertIn("Upload a file:", res.normal_body)
-        self.assertIn("Or just enter a message:", res.normal_body)
-        self.assertIn(codename, res.normal_body)
+    def test_regenerate_valid_lengths(self):
+        """Make sure we can regenerate all valid length codenames"""
+        for codename_len in xrange(4,11):
+            response = self.client.post('/generate', data = {
+                'number-words': str(codename_len),
+            })
+            self.assert200(response)
+            codename = self._find_codename(response.data)
+            self.assertEquals(len(codename.split()), codename_len)
 
-    def test_create_submit_message(self):
-        # Submit the message through the source app
-        test_msg = 'This msg is for your eyes only'
-        res, codename = self._do_submission(msg=test_msg)
-        self.assertEqual(res.status, 200)
-        self.assertIn("Thanks! We received your message.", res.normal_body)
+    def test_regenerate_invalid_lengths(self):
+        """If the codename length is invalid, it should return 403 Forbidden"""
+        for codename_len in (2, 999):
+            response = self.client.post('/generate', data = {
+                'number-words': str(codename_len),
+            })
+            self.assert403(response)
 
-        # Check the journalist app for the submitted message
-        res = self.journalist_app.get('/')
-        soup = BeautifulSoup(res.normal_body)
-        self.assertEqual(len(soup.find_all('li')), 1) # we only submitted one message
+    def test_create(self):
+        with self.client as c:
+            rv = c.get('/generate')
+            codename = session['codename']
+            rv = c.post('/create', follow_redirects=True)
+            self.assertTrue(session['logged_in'])
+            # should be redirected to /lookup
+            self.assertIn("Upload documents", rv.data)
 
-        # Go to the source submissions page
-        source_page_url = '/' + soup.li.a['href']
-        res = self.journalist_app.get(source_page_url)
-        self.assertIn("Read documents", res.normal_body)
+    def _new_codename(self):
+        """Helper function to go through the "generate codename" flow"""
+        with self.client as c:
+            rv = c.get('/generate')
+            codename = session['codename']
+            rv = c.post('/create')
+        return codename
 
-        # Download the submission
-        soup = BeautifulSoup(res.normal_body)
-        self.assertEqual(len(soup.find_all('li')), 1) # we only submitted one message
-        submission_url = source_page_url + soup.li.a['href']
-        res = self.journalist_app.get(submission_url)
-        decrypted_data = self.gpg.decrypt(res.body)
+    def test_login(self):
+        rv = self.client.get('/login')
+        self.assert200(rv)
+        self.assertIn("Already submitted something?", rv.data)
+
+        codename = self._new_codename()
+        rv = self.client.post('/login', data=dict(codename=codename),
+                follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Upload documents", rv.data)
+
+        rv = self.client.post('/login', data=dict(codename='invalid'),
+                follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn('Sorry, that is not a recognized codename.', rv.data)
+
+    def test_submit_message(self):
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        # Wait until the reply keypair is generated to avoid confusing errors
+        _block_on_reply_keypair_gen(codename)
+
+    def test_submit_file(self):
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="",
+            fh=(StringIO('This is a test'), 'test.txt'),
+        ), follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
+                rv.data)
+        _block_on_reply_keypair_gen(codename)
+
+    def test_submit_both(self):
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(StringIO('This is a test'), 'test.txt'),
+        ), follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
+                rv.data)
+        _block_on_reply_keypair_gen(codename)
+
+class TestJournalist(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        shared_setup()
+
+    @classmethod
+    def tearDownClass(cls):
+        shared_teardown()
+
+    def create_app(self):
+        app = journalist.app
+        app.config['TESTING'] = True
+        # TODO: this sucks. Would be remedied by switching the forms over to
+        # Flask-WTF, or rolling our own CSRF protection
+        app.config['WTF_CSRF_ENABLED'] = False
+        CsrfProtect(app)
+        return app
+
+    def test_index(self):
+        rv = self.client.get('/')
+        self.assert200(rv)
+        self.assertIn("Latest submissions", rv.data)
+        self.assertIn("No documents have been submitted!", rv.data)
+
+class TestIntegration(unittest.TestCase):
+
+    def setUp(self):
+        shared_setup()
+        for app in (source.app, journalist.app):
+            app.config['TESTING'] = True
+            app.config['WTF_CSRF_ENABLED'] = False
+            CsrfProtect(app)
+        self.source_app = source.app.test_client()
+        self.journalist_app = journalist.app.test_client()
+        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+
+    def tearDown(self):
+        shared_teardown()
+
+    def test_submit_message(self):
+        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        test_msg = "This is a test message."
+
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
+        # redirected to submission form
+        rv = self.source_app.post('/submit', data=dict(
+            msg=test_msg,
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+
+        rv = self.journalist_app.get('/')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Latest submissions", rv.data)
+        soup = BeautifulSoup(rv.data)
+        col_url = soup.select('ul#cols > li a')[0]['href']
+
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        submission_url = soup.select('ul#submissions li a')[0]['href']
+        self.assertIn("_msg", submission_url)
+
+        rv = self.journalist_app.get(submission_url)
+        self.assertEqual(rv.status_code, 200)
+        decrypted_data = self.gpg.decrypt(rv.data)
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
-    def test_create_submit_file(self):
-        # Submit the file through the source app
-        test_filename = 'secrets.txt'
-        test_file_contents = 'This file is for your eyes only'
-        res, codename = self._do_submission(
-                doc=(test_filename, test_file_contents))
-        self.assertEqual(res.status, 200)
-        self.assertIn("Thanks! We received your document '%s'." % test_filename,
-                res.normal_body)
+        _block_on_reply_keypair_gen(codename)
 
-        # Check the journalist app for the submitted file
-        res = self.journalist_app.get('/')
-        soup = BeautifulSoup(res.normal_body)
-        self.assertEqual(len(soup.find_all('li')), 1) # we only submitted one message
+    def test_submit_file(self):
+        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        test_file_contents = "This is a test file."
+        test_filename = "test.txt"
 
-        # Go to the source submissions page
-        source_page_url = '/' + soup.li.a['href']
-        res = self.journalist_app.get(source_page_url)
-        self.assertIn("Read documents", res.normal_body)
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
+        # redirected to submission form
+        rv = self.source_app.post('/submit', data=dict(
+            msg="",
+            fh=(StringIO(test_file_contents), test_filename),
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
 
-        # Download the submission
-        soup = BeautifulSoup(res.normal_body)
-        self.assertEqual(len(soup.find_all('li')), 1) # we only submitted one message
-        submission_url = source_page_url + soup.li.a['href']
-        res = self.journalist_app.get(submission_url)
-        decrypted_data = self.gpg.decrypt(res.body)
+        rv = self.journalist_app.get('/')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Latest submissions", rv.data)
+        soup = BeautifulSoup(rv.data)
+        col_url = soup.select('ul#cols > li a')[0]['href']
+
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        submission_url = soup.select('ul#submissions li a')[0]['href']
+        self.assertIn("_doc", submission_url)
+
+        rv = self.journalist_app.get(submission_url)
+        self.assertEqual(rv.status_code, 200)
+        decrypted_data = self.gpg.decrypt(rv.data)
         self.assertTrue(decrypted_data.ok)
+        self.assertEqual(decrypted_data.data, test_file_contents)
 
-        s = cStringIO.StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        unzipped_decrypted_data = zip_file.read('secrets.txt')
-        zip_file.close()
+        _block_on_reply_keypair_gen(codename)
 
-        self.assertEqual(unzipped_decrypted_data, test_file_contents)
-        # TODO: test the filename (encoding with gpg2 --set-filename; unclear
-        # if it can be accessed using the gnupg library)
+    def test_reply(self):
+        test_msg = "This is a test message."
+        test_reply = "This is a test reply."
 
-    def test_create_submit_both(self):
-        test_msg = 'This msg is for your eyes only'
-        test_filename = 'secrets.txt'
-        test_file_contents = 'This file is for your eyes only'
-        res, codename = self._do_submission(msg=test_msg,
-                doc=(test_filename, test_file_contents))
-        self.assertEqual(res.status, 200)
-        # TODO: should we specifically mention receiving a message when both
-        # a message and a document are uploaded simultaneously?
-        self.assertIn("Thanks! We received your document '%s'." % test_filename,
-                res.normal_body)
+        with self.source_app as source_app:
+            rv = source_app.get('/generate')
+            rv = source_app.post('/create', follow_redirects=True)
+            codename = session['codename']
+            sid = g.sid
+        # redirected to submission form
+        rv = self.source_app.post('/submit', data=dict(
+            msg=test_msg,
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
 
-        # Check the journalist app for the submitted file
-        res = self.journalist_app.get('/')
-        soup = BeautifulSoup(res.normal_body)
-        self.assertEqual(len(soup.find_all('li')), 1)
+        rv = self.journalist_app.get('/')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Latest submissions", rv.data)
+        soup = BeautifulSoup(rv.data)
+        col_url = soup.select('ul#cols > li a')[0]['href']
 
-        # Go to the source submissions page
-        source_page_url = '/' + soup.li.a['href']
-        res = self.journalist_app.get(source_page_url)
-        self.assertIn("Read documents", res.normal_body)
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        # Block until the reply keypair has been generated, so we can test
+        # sending a reply
+        _block_on_reply_keypair_gen(codename)
+        rv = self.journalist_app.post('/reply', data=dict(
+            sid=sid,
+            msg=test_reply,
+        ))
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
-        # Download the submissions
-        soup = BeautifulSoup(res.normal_body)
-        submissions = [li.a['href'] for li in soup.find_all('li')]
-        self.assertEqual(len(submissions), 2)
-        for submission in submissions:
-            submission_url = source_page_url + submission
-            res = self.journalist_app.get(submission_url)
-            decrypted_data = self.gpg.decrypt(res.body)
+        rv = self.journalist_app.get(col_url)
+        self.assertIn("reply-", rv.data)
 
-            self.assertTrue(decrypted_data.ok)
-            if '_msg' in submission:
-                self.assertEqual(decrypted_data.data, test_msg)
-            elif '_doc' in submission:
-                s = cStringIO.StringIO(decrypted_data.data)
-                zip_file = zipfile.ZipFile(s, 'r')
-                unzipped_decrypted_data = zip_file.read('secrets.txt')
-                zip_file.close()
+        rv = self.source_app.get('/lookup')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+        self.assertIn(test_reply, rv.data)
 
-                self.assertEqual(unzipped_decrypted_data, test_file_contents)
-
-    def test_journalist_reply(self):
-        # Submit the message through the source app
-        test_msg = 'This msg is for your eyes only'
-        res, codename = self._do_submission(msg=test_msg)
-
-        # Wait until the source key has been generated...
-        # (the reply form won't be available unless the key exists)
-        source_id = crypto.shash(codename)
-        while not crypto.getkey(source_id):
-            sleep(0.1)
-
-        # Check the journalist app for the submitted message
-        res = self.journalist_app.get('/')
-        soup = BeautifulSoup(res.normal_body)
-        res = res.click(href=soup.li.a['href'])
-
-        # Send a reply to the source
-        test_reply = "Thanks for sharing this. We'll follow up soon."
-        res.form.set('msg', test_reply)
-        res = res.form.submit()
-        self.assertIn("Thanks! Your reply has been stored.", res.normal_body)
-
-        # Check the source page for a reply
-        res = self.source_app.get('/lookup/')
-        res.form.set('id', codename)
-        res = res.form.submit()
-        self.assertIn("You have received a reply. For your security, please delete all replies when you're done with them.", res.normal_body)
-        soup = BeautifulSoup(res.normal_body)
-        message = soup.find_all('blockquote', class_='message')[0].text
-        self.assertEquals(message, test_reply)
-
-    def tearDown(self):
-        shutil.rmtree(config.TEST_DIR)
+        soup = BeautifulSoup(rv.data)
+        msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+        rv = self.source_app.post('/delete', data=dict(
+            sid=sid,
+            msgid=msgid,
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Reply deleted", rv.data)
 
 if __name__ == "__main__":
     unittest.main()

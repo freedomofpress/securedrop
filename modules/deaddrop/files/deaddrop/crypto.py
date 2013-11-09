@@ -7,17 +7,20 @@ import gnupg
 import config
 import store
 from base64 import b32encode
+import re
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
 
 GPG_KEY_TYPE = "RSA"
 if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
-    # Use small keys to speed up tests (and try to cheat and avoid issues with
-    # async key generation)
+    # Optiimize crypto to speed up tests (at the expense of security - DO NOT
+    # use these settings in production)
     GPG_KEY_LENGTH = "1024"
+    BCRYPT_SALT = bcrypt.gensalt(log_rounds=0)
 else:
     GPG_KEY_LENGTH = "4096"
+    BCRYPT_SALT = config.BCRYPT_SALT
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
@@ -32,7 +35,10 @@ def clean(s, also=''):
     >>> clean("Helloworld")
     'Helloworld'
     """
-    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    # safe characters for every possible word in the wordlist
+    # includes capital letters because bcrypt hashes are base32-encoded with
+    # capital letters
+    ok = '!#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for c in s:
         if c not in ok and c not in also:
             raise CryptoException("invalid input: %s" % s)
@@ -52,7 +58,7 @@ def shash(s):
     >>> shash('Hello, world!')
     'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
     """
-    return b32encode(bcrypt.hashpw(s, config.BCRYPT_SALT))
+    return b32encode(bcrypt.hashpw(s, BCRYPT_SALT))
 
 GPG_BINARY = 'gpg2'
 try:

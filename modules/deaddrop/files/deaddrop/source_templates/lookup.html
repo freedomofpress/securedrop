@@ -1,56 +1,44 @@
-$def with (iid, msgs, received=False)
-
+{% extends "base.html" %}
+{% block body %}
 <div id="content" class="user-view">
 <h2><span class="headline">Upload documents</span></h2>
 
-$if received == 2:
-    <p class="notification">Thanks! We received your message.</p>
-$elif received:
-    <p class="notification">Thanks! We received your document '$received'.</p>
+{% include 'flashed.html' %}
 
-$if msgs:
-    <div id="replies">
-    <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
-    
-    $for msg in msgs:
-		<div class="reply">
-        <form class="message" method="post" action="/lookup/" autocomplete="off">
-        <input type="hidden" name="action" value="delete" autocomplete="off"/>
-        <input type="hidden" name="mid" value="$msg.id" autocomplete="off"/>
-        <input type="hidden" name="id" value="$iid" autocomplete="off"/>
-        <blockquote class="message">$msg.msg</blockquote>
-        <button type="submit">Delete</button>
-        </form>
-        <div class="date">Sent $msg.date:</div>
-		</div>
-    </div>
+{% if msgs %}
+<div id="replies">
+  <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
 
-
-
-
-<form id="upload" method="post" action="/lookup/" enctype="multipart/form-data" autocomplete="off">
-<input type="hidden" name="action" value="upload" autocomplete="off"/>
-<input type="hidden" name="id" value="$iid" autocomplete="off"/>
-
-<p style="padding-bottom: 0"><b>Upload a file:</b></p>
-<div id="browse-select">
-	<input type="file" name="fh" autocomplete="off"/> 
+  {% for msg in msgs %}
+  <div class="reply">
+    <form class="message" method="post" action="/delete" autocomplete="off">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
+      <blockquote class="message">{{ msg.msg }}</blockquote>
+      <button type="submit">Delete</button>
+    </form>
+    <div class="date">Sent {{ msg.date }}</div>
+  </div>
+  {% endfor %}
 </div>
+{% endif %}
 
-<p><b>Or just enter a message:</b></p>
+<form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <p style="padding-bottom: 0"><b>Upload a file:</b></p>
+  <div id="browse-select">
+    <input type="file" name="fh" autocomplete="off"/> 
+  </div>
 
-<textarea name="msg" cols="72" rows="10"></textarea><br />
-<button  class="button-custom" type="submit">Submit</button>
+  <p><b>Or just enter a message:</b></p>
+
+  <textarea name="msg" cols="72" rows="10"></textarea><br />
+  <button  class="button-custom" type="submit">Submit</button>
 </form>
 
-<p><b>Remember!</b> Your code name is: <span class="code-name">$iid</span></p>
-<form method="post" action="/lookup/" autocomplete="off">
-
-<p><a href="">Enter a different code name...</a><br />
-<input type="hidden" name="id" value="$iid" autocomplete="off"/>
-<button class="button-link" type="submit">Reload to check for new messages...</button>
-</p>
-</form>
-
+<p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
+<p><a href="/login">Enter a different code name...</a><br/>
+<a href="/lookup">Reload to check for new messages...</a></p>
 
 </div>
+{% endblock %}

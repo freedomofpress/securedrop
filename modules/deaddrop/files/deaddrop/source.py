@@ -1,123 +1,147 @@
 # -*- coding: utf-8 -*-
-import os, uuid, datetime, json
-import web
-import config, crypto, background, store, version, zipfile, cStringIO
+import os
+from datetime import datetime
+import uuid
+from functools import wraps
 
-urls = (
-  '/', 'index',
-  '/generate/', 'generate',
-  '/create/', 'create',
-  '/lookup/', 'lookup',
-)
+from flask import (Flask, request, render_template, session, redirect, url_for,
+    flash, abort, g)
+from flask_wtf.csrf import CsrfProtect
 
-render = web.template.render(config.SOURCE_TEMPLATES_DIR, base='base',
-    globals={'version':version.__version__})
+import config, version, crypto, store, background
 
-class index:
-  def GET(self):
-    web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-    web.header('Pragma', 'no-cache')
-    web.header('Expires', '-1')
-    return render.index()
+app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
+app.secret_key = config.SECRET_KEY
 
-class generate:
-  def POST(self):
-    i = web.input()
-    return self.GET(int(i['number-words']))
+app.jinja_env.globals['version'] = version.__version__
 
-  def GET(self, number_of_words=8):
-    if (number_of_words not in range(4, 11)):
-      raise web.notfound()
-    iid = crypto.genrandomid(number_of_words)
+def logged_in():
+  if 'logged_in' in session: return True
 
-    web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-    web.header('Pragma', 'no-cache')
-    web.header('Expires', '-1')
-    return render.generate(iid)
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not logged_in():
+            return redirect(url_for('lookup'))
+        return f(*args, **kwargs)
+    return decorated_function
 
-def store_endpoint(i):
-  sid = crypto.shash(i.id)
-  loc = store.path(sid)
-  if not os.path.exists(loc): raise web.notfound()
-  
-  received = False
-  
-  if i.action == 'upload':
-    if i.msg:
-      loc1 = store.path(sid, '%.2f_msg.gpg' % (uuid.uuid4().int, ))
-      crypto.encrypt(config.JOURNALIST_KEY, i.msg, loc1)
-      received = 2
-      
-    if not isinstance(i.fh, dict) and i.fh.done != -1 and i.fh.filename:
-      # we put two zeroes here so that we don't save a file 
-      # with the same name as the message
-      loc2 = store.path(sid, '%.2f_doc.zip.gpg' % (uuid.uuid4().int, ))
+@app.before_request
+def setup_g():
+  """Store commonly used values in Flask's special g object"""
+  if logged_in():
+    g.codename = session['codename']
+    g.sid = crypto.shash(g.codename)
+    g.loc = store.path(g.sid)
 
-      s = cStringIO.StringIO()
-      zip_file = zipfile.ZipFile(s, 'w')
-      zip_file.writestr(i.fh.filename, i.fh.file.getvalue())
-      zip_file.close()
-      s.reset()
+@app.after_request
+def no_cache(response):
+  """Minimize potential traces of site access by telling the browser not to
+  cache anything"""
+  no_cache_headers = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '-1',
+      }
+  for header, header_value in no_cache_headers.iteritems():
+    response.headers.add(header, header_value)
+  return response
 
-      crypto.encrypt(config.JOURNALIST_KEY, s, loc2)
-      received = i.fh.filename or '[unnamed]'
+@app.route('/')
+def index():
+  return render_template('index.html')
 
-    if not crypto.getkey(sid):
-      background.execute(lambda: crypto.genkeypair(sid, i.id))
-  
-  elif i.action == 'delete':
-    potential_files = os.listdir(loc)
-    if i.mid not in potential_files: raise web.notfound()
-    assert '/' not in i.mid
-    crypto.secureunlink(store.path(sid, i.mid))
-  
+@app.route('/generate', methods=('GET', 'POST'))
+def generate():
+  number_words = 8
+  if request.method == 'POST':
+    number_words = int(request.form['number-words'])
+    if number_words not in range(4, 11): abort(403)
+  session['codename'] = crypto.genrandomid(number_words)
+  return render_template('generate.html', codename=session['codename'])
+
+@app.route('/create', methods=['POST'])
+def create():
+  sid = crypto.shash(session['codename'])
+  if os.path.exists(store.path(sid)):
+    # if this happens, we're not using very secure crypto
+    store.log("Got a duplicate ID '%s'" % sid)
+  else:
+    os.mkdir(store.path(sid))
+  session['logged_in'] = True
+  return redirect(url_for('lookup'))
+
+@app.route('/lookup', methods=('GET',))
+@login_required
+def lookup():
   msgs = []
-  for fn in os.listdir(loc):
+  for fn in os.listdir(g.loc):
     if fn.startswith('reply-'):
-      msgs.append(web.storage(
+      msgs.append(dict(
         id=fn,
-        date=str(datetime.datetime.fromtimestamp(os.stat(store.path(sid, fn)).st_mtime)),
-        msg=crypto.decrypt(sid, i.id, file(store.path(sid, fn)).read())
+        date=str(datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)),
+        msg=crypto.decrypt(g.sid, g.codename, file(store.path(g.sid, fn)).read())
       ))
+  return render_template('lookup.html', codename=g.codename, msgs=msgs)
 
-  web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-  web.header('Pragma', 'no-cache')
-  web.header('Expires', '-1')
-  return render.lookup(i.id, msgs, received=received)
+@app.route('/submit', methods=('POST',))
+@login_required
+def submit():
+  msg = request.form['msg']
+  fh = request.files['fh']
+  if msg:
+    msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
+    crypto.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
+    flash("Thanks! We received your message.", "notification")
+  if fh:
+    file_loc = store.path(g.sid, "%s_doc.gpg" % uuid.uuid4())
+    # TODO - retain original filename
+    crypto.encrypt(config.JOURNALIST_KEY, fh, file_loc)
+    flash("Thanks! We received your document '%s'."
+        % fh.filename or '[unnamed]', "notification")
 
-class create:
-  def POST(self):
-    i = web.input('id', fh={}, msg=None, mid=None, action=None)
-    sid = crypto.shash(i.id)
+  # helper function to generate a keypair asynchronously
+  def async_genkey(sid, codename):
+    with app.app_context():
+      background.execute(lambda: crypto.genkeypair(sid, codename))
 
-    if os.path.exists(store.path(sid)):
-      # if this happens, we're not using very secure crypto
-      store.log('Got a duplicate ID.')
+  # Generate a keypair to encrypt replies from the journalist
+  if not crypto.getkey(g.sid):
+    async_genkey(g.sid, g.codename)
+
+  return redirect(url_for('lookup'))
+
+@app.route('/delete', methods=('POST',))
+@login_required
+def delete():
+  msgid = request.form['msgid']
+  assert '/' not in msgid
+  potential_files = os.listdir(g.loc)
+  if msgid not in potential_files: abort(404) # TODO are the checks necessary?
+  crypto.secureunlink(store.path(g.sid, msgid))
+  flash("Reply deleted.", "notification")
+
+  return redirect(url_for('lookup'))
+
+def valid_codename(codename):
+  return os.path.exists(store.path(crypto.shash(codename)))
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+  if request.method == 'POST':
+    codename = request.form['codename']
+    if valid_codename(codename):
+      session.update(codename=codename, logged_in=True)
+      return redirect(url_for('lookup'))
     else:
-      os.mkdir(store.path(sid))
-    return store_endpoint(i)
- 
-class lookup:
-  def GET(self):
-    web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-    web.header('Pragma', 'no-cache')
-    web.header('Expires', '-1')
-    return render.lookup_get()
-  
-  def POST(self):
-    i = web.input('id', fh={}, msg=None, mid=None, action=None)
-    return store_endpoint(i)
+      flash("Sorry, that is not a recognized codename.", "error")
+  return render_template('login.html')
 
-def notfound():
-  web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
-  web.header('Pragma', 'no-cache')
-  web.header('Expires', '-1')
-  return web.notfound(render.notfound())
-
-web.config.debug = False
-app = web.application(urls, locals())
-app.notfound = notfound
-application = app.wsgifunc()
+@app.errorhandler(404)
+def page_not_found(error):
+  return render_template('notfound.html'), 404
 
 if __name__ == "__main__":
-  app.run()
+  # TODO: make sure this gets run by the web server
+  CsrfProtect(app)
+  app.run(debug=True, port=8080)
