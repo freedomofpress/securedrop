@@ -39,16 +39,15 @@
 <script src='/static/js/jquery-2.0.3.min.js'></script>
 <script>
 $(function () {
-    $('#select_all').css( 'cursor', 'pointer' );
-    $('#select_none').css( 'cursor', 'pointer' );
-    $('#select_all').click(
-        function() {
-            $( ":checkbox" ).prop('checked', true);
-        });
-    $('#select_none').click(
-        function() {
-            $( ":checkbox" ).prop('checked', false);
-        });
+  var all = $("#select_all");
+  var none = $("#select_none");
+  var checkboxes = $(":checkbox");
+
+  all.css('cursor', 'pointer');
+  none.css('cursor', 'pointer');
+
+  all.click( function() { checkboxes.prop('checked', true); });
+  none.click( function() { checkboxes.prop('checked', false); });
 });
 </script>
 {% endblock %}
