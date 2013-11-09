@@ -1,6 +1,5 @@
 a
 a&p
-a's
 aa
 aaa
 aaaa
@@ -134,7 +133,6 @@ aiken
 ail
 aile
 aim
-ain't
 ainu
 air
 aires
@@ -461,7 +459,6 @@ az
 aztec
 azure
 b
-b's
 ba
 babe
 babel
@@ -1033,7 +1030,6 @@ byway
 byword
 bz
 c
-c's
 ca
 cab
 cabal
@@ -1075,7 +1071,6 @@ camel
 cameo
 camp
 can
-can't
 canal
 canary
 cancer
@@ -1565,8 +1560,6 @@ cz
 czar
 czech
 d
-d'art
-d's
 da
 dab
 dacca
@@ -1799,7 +1792,6 @@ dolly
 dolt
 dome
 don
-don't
 done
 doneck
 donna
@@ -1940,8 +1932,6 @@ dylan
 dyne
 dz
 e
-e'er
-e's
 ea
 each
 eagan
@@ -2176,7 +2166,6 @@ eyed
 ez
 ezra
 f
-f's
 fa
 faa
 faber
@@ -2523,7 +2512,6 @@ fx
 fy
 fz
 g
-g's
 ga
 gab
 gable
@@ -2853,7 +2841,6 @@ gypsy
 gyro
 gz
 h
-h's
 ha
 haag
 haas
@@ -2941,8 +2928,6 @@ hb
 hc
 hd
 he
-he'd
-he'll
 head
 heady
 heal
@@ -3166,11 +3151,6 @@ hymn
 hymnal
 hz
 i
-i'd
-i'll
-i'm
-i's
-i've
 ia
 iambic
 ian
@@ -3296,13 +3276,10 @@ isis
 islam
 island
 isle
-isn't
 israel
 issue
 it
 it&t
-it'd
-it'll
 italy
 itch
 item
@@ -3319,7 +3296,6 @@ ix
 iy
 iz
 j
-j's
 ja
 jab
 jack
@@ -3475,7 +3451,6 @@ jx
 jy
 jz
 k
-k's
 ka
 kabul
 kafka
@@ -3629,7 +3604,6 @@ kyle
 kyoto
 kz
 l
-l's
 la
 lab
 laban
@@ -3984,7 +3958,6 @@ lyric
 lz
 m
 m&m
-m's
 ma
 mabel
 mac
@@ -4379,7 +4352,6 @@ myself
 myth
 mz
 n
-n's
 na
 naacp
 nab
@@ -4558,8 +4530,6 @@ nymph
 nyu
 nz
 o
-o'er
-o's
 oa
 oaf
 oak
@@ -4715,7 +4685,6 @@ oz
 ozark
 ozone
 p
-p's
 pa
 pablo
 pabst
@@ -4880,7 +4849,6 @@ pewee
 pf
 pg
 ph
-ph.d
 phage
 phase
 phd
@@ -5156,7 +5124,6 @@ pyrex
 pyrite
 pz
 q
-q's
 qa
 qatar
 qb
@@ -5228,7 +5195,6 @@ qy
 qz
 r
 r&d
-r's
 ra
 rabat
 rabbi
@@ -5545,7 +5511,6 @@ ryder
 rye
 rz
 s
-s's
 sa
 sabine
 sable
@@ -5764,7 +5729,6 @@ shaw
 shawl
 shay
 she
-she'd
 shea
 sheaf
 shear
@@ -6147,7 +6111,6 @@ sss
 ssss
 sst
 st
-st.
 stab
 stack
 stacy
@@ -6346,7 +6309,6 @@ syria
 syrup
 sz
 t
-t's
 ta
 tab
 table
@@ -6765,7 +6727,6 @@ typo
 tyson
 tz
 u
-u's
 ua
 ub
 uc
@@ -6853,7 +6814,6 @@ ux
 uy
 uz
 v
-v's
 va
 vacua
 vacuo
@@ -6998,7 +6958,6 @@ vy
 vying
 vz
 w
-w's
 wa
 waals
 wac
@@ -7070,10 +7029,6 @@ wb
 wc
 wd
 we
-we'd
-we'll
-we're
-we've
 weak
 weal
 wealth
@@ -7144,7 +7099,6 @@ whit
 white
 whiz
 who
-who'd
 whoa
 whole
 whom
@@ -7220,7 +7174,6 @@ woman
 womb
 women
 won
-won't
 wonder
 wong
 wont
@@ -7284,7 +7237,6 @@ wyner
 wynn
 wz
 x
-x's
 xa
 xb
 xc
@@ -7318,7 +7270,6 @@ xylem
 xyz
 xz
 y
-y's
 ya
 yacht
 yah
@@ -7380,7 +7331,6 @@ yore
 york
 yost
 you
-you'd
 young
 your
 youth
@@ -7407,7 +7357,6 @@ yyy
 yyyy
 yz
 z
-z's
 za
 zag
 zaire
@@ -7753,7 +7702,6 @@ zzzz
 9th
 !
 !!
-"
 #
 ##
 $
