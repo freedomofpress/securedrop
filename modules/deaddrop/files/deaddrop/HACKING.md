@@ -1,4 +1,4 @@
-development setup for deaddrop
+development setup for securedrop
 ==============================
 
 This document assumes your development environment is a Debian, Ubuntu
@@ -26,15 +26,19 @@ install virtualenv:
 
 create and activate a new virtualenv:
 
-    $ virtualenv ~/envs/deaddrop
-    $ . ~/envs/deaddrop/bin/activate
+    $ virtualenv ~/envs/securedrop
+    $ . ~/envs/securedrop/bin/activate
+
+Clone the repository if you haven't already:
+
+    $ git clone https://github.com/freedomofpress/securedrop.git
+
+cd into the repo, then cd into `deaddrop` (we know, we still need to change the names :)
 
 install dependencies:
 
     $ sudo yum install python-devel
     $ sudo apt-get install python-dev
-    $ pip install web.py python-gnupg python-bcrypt pycrypto beautifulsoup4 paste
-    # or...
     $ pip install -r requirements.txt
 
 cp the config template and fill in empty values:
@@ -44,18 +48,30 @@ cp the config template and fill in empty values:
 **NOTE**: the `STORE_DIR` and `GPG_KEY_DIR` must be absolute paths.
 Create them if necessary:
 
-    $ mkdir -p /tmp/deaddrop/{store,keys}
+    $ mkdir -p /tmp/securedrop/{store,keys}
+
+**FYI**: most OS's erase `/tmp` on reboot. I'm working on a script to do all of
+this crap automatically, and might encourage putting these elsewhere for
+development. Otherwise you have to recreate the dirs and re-import the keys
+(below) after every reboot. **Alternatively**, you can just import the GPG key
+that is included for the tests to use in development:
+
+    $ gpg2 --homedir /tmp/deaddrop/keys --import test_journalist_key.*
 
 **NOTE**: you will need to create a journalist key for development.
 
-    $ gpg2 --homedir /tmp/deaddrop/keys --gen-key
+    $ gpg2 --homedir /tmp/securedrop/keys --gen-key
 
 Make sure you *only* use this key for development. We recommend using a userid
-like "Deaddrop Dev (DO NOT USE IN PRODUCTION) <dev@deaddrop.example.com>" so
+like "securedrop Dev (DO NOT USE IN PRODUCTION) <dev@securedrop.example.com>" so
 you don't forget!
 
-Once you've generated the dev key, copy the userid to the `JOURNALIST_KEY`
-field of `config.py`.
+Once you have the dev keypair, copy the key fingerprint to the `JOURNALIST_KEY`
+field of `config.py`. You can find the key fingerprint by running:
+
+    $ gpg2 --homedir /tmp/securedrop/keys --fingerprint
+
+You might have to manually remove the spaces.
 
 running
 -------

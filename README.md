@@ -45,6 +45,15 @@ After installing and configuring Ubuntu Server on `Source Server`, `Document Ser
 
 See [How to Use SecureDrop](https://github.com/freedomofpress/securedrop/blob/master/docs/user_manual.md).
 
+## Demo
+
+You can see live demos of the source and journalist websites at the following links. **These are for testing purposes only; please don't submit any documents here!**
+
+In an actual SecureDrop setup, these websites are Tor hidden services running on the `Source Server` and `Document Server`, respectively.
+
+* [Source website](http://SecureDropDemo.org)
+* [Journalist website](http://SecureDropDemo.org/journalist/) (needs the ending slash to work)
+
 ## License
 
 SecureDrop is open source and released under the [GNU General Public License v2](https://github.com/freedomofpress/securedrop/blob/master/LICENSE). 

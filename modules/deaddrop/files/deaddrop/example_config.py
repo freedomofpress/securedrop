@@ -15,4 +15,4 @@ if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
     TEST_DIR='/tmp/deaddrop_test'
     STORE_DIR=os.path.join(TEST_DIR, 'store')
     GPG_KEY_DIR=os.path.join(TEST_DIR, 'keys')
-    JOURNALIST_KEY='test@deaddrop.example.com'
+    JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441'

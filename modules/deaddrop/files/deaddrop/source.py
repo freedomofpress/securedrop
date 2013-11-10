@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import os, uuid, datetime, json
 import web
-import config, crypto, background, store, version
+import config, crypto, background, store, version, zipfile, cStringIO
 
 urls = (
   '/', 'index',
   '/generate/', 'generate',
-  '/gen_ajax/', 'gen_ajax',
   '/create/', 'create',
   '/lookup/', 'lookup',
 )
@@ -27,23 +26,14 @@ class generate:
     return self.GET(int(i['number-words']))
 
   def GET(self, number_of_words=8):
+    if (number_of_words not in range(4, 11)):
+      raise web.notfound()
     iid = crypto.genrandomid(number_of_words)
-     
+
     web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
     web.header('Pragma', 'no-cache')
     web.header('Expires', '-1')
     return render.generate(iid)
-
-class gen_ajax:
-  def GET(self):
-    web.header('Content-Type', 'application/json')
-    request_params = web.input()
-    if 'words' in request_params:
-      word_num = int(request_params['words'])
-      uid = crypto.genrandomid(word_num)
-      return json.dumps({'result': 'success', 'id': uid})
-    else:
-      return json.dumps({'result': 'fail'})
 
 def store_endpoint(i):
   sid = crypto.shash(i.id)
@@ -61,8 +51,15 @@ def store_endpoint(i):
     if not isinstance(i.fh, dict) and i.fh.done != -1 and i.fh.filename:
       # we put two zeroes here so that we don't save a file 
       # with the same name as the message
-      loc2 = store.path(sid, '%.2f_doc.gpg' % (uuid.uuid4().int, ))
-      crypto.encrypt(config.JOURNALIST_KEY, i.fh.file, loc2, fn=i.fh.filename)
+      loc2 = store.path(sid, '%.2f_doc.zip.gpg' % (uuid.uuid4().int, ))
+
+      s = cStringIO.StringIO()
+      zip_file = zipfile.ZipFile(s, 'w')
+      zip_file.writestr(i.fh.filename, i.fh.file.getvalue())
+      zip_file.close()
+      s.reset()
+
+      crypto.encrypt(config.JOURNALIST_KEY, s, loc2)
       received = i.fh.filename or '[unnamed]'
 
     if not crypto.getkey(sid):
