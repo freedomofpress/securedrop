@@ -10,9 +10,9 @@ function is_likely_tor_browser() {
 
 function warn_user(messageDiv) {
   var messageDiv = $('<div id="warning_text">').html(
-    '<b>WARNING:</b>Your browser currently has Javascript enabled.' +
-    '<a id="disable-js-anchor" href="/howto-disable-js">Click here</a>' +
-    'to learn how. Or click on this warning to continue. <strong>We recommend' +
+    '<b>WARNING:</b> Your browser currently has Javascript enabled. ' +
+    '<a id="disable-js-anchor" href="/howto-disable-js">Click here</a> ' +
+    'to learn how to disable it, or click on this warning to continue.<br><strong>We recommend' +
     'disabling Javascript to protect your anonymity. </strong>');
   var warningDiv = $('<div id="warning">').append(messageDiv);
 
