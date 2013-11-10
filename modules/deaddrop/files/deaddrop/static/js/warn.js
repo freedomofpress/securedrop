@@ -9,39 +9,45 @@ function is_likely_tor_browser() {
 }
 
 function warn_user(messageDiv) {
-  var messageDiv = $('<div id="warning_text">').html(
+  display_error(
     '<b>WARNING:</b> Your browser currently has Javascript enabled. ' +
     '<a id="disable-js-anchor" href="/howto-disable-js">Click here</a> ' +
-    'to learn how to disable it, or click on this warning to continue.<br><strong>We recommend' +
-    'disabling Javascript to protect your anonymity. </strong>');
-  var warningDiv = $('<div id="warning">').append(messageDiv);
-
-  $('#warning').remove();
-  $(document.body).append(warningDiv);
-  warningDiv.fadeIn(1000);
+    'to learn how to disable it, or ignore this warning to continue.<br>' +
+    '<strong>We recommend disabling Javascript to protect your anonymity.</strong>'
+  );
 }
 
 $(window).load(function() {
   warn_user();
-  if(is_likely_tor_browser())
-  $("#disable-js-anchor").click(function(){
-    $('#warning').remove();
-    var infoP = $('<p class="bubble">').html(
-      '<img id="" src=""/>You appear to be using the Tor Browser Bundle.' +
-      'You can disable Javascript with 3 quick steps!</p>' +
-      '<div style="width:75%;margin:0 auto;padding-bottom:1em;">' +
-      '<ol><li>Click the NoScript icon in the toolbar above</li>' +
-      '<li>Click on <img src="static/i/no16.png"/> "Forbid Scripts Globally (advised)"</li>' +
-      '<li>Refresh this page</li>' +
-      '</ol></div><p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a>'
-    );
-    $(document.body).append(infoP);
-    infoP.fadeIn(1000);
-    infoP.click(function() {
-      infoP.remove();
+  if(is_likely_tor_browser()){
+    $("#disable-js-anchor").click(function(){
+      $('#warning').remove();
+      var infoP = $('<p class="bubble">').html(
+        '<img id="" src=""/>You appear to be using the Tor Browser Bundle.' +
+        'You can disable Javascript with 3 quick steps!</p>' +
+        '<div style="width:75%;margin:0 auto;padding-bottom:1em;">' +
+        '<ol><li>Click the NoScript icon in the toolbar above</li>' +
+        '<li>Click on <img src="static/i/no16.png"/> "Forbid Scripts Globally (advised)"</li>' +
+        '<li>Refresh this page</li>' +
+        '</ol></div><p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a>'
+      );
+      $(document.body).append(infoP);
+      infoP.fadeIn(1000);
+      infoP.click(function() {
+        infoP.remove();
+      });
+      return false; // don't follow link
     });
-    return false; // don't follow link
-  });
+  }
 });
 
-    
+function display_error(msg){
+  $.gritter.add({
+    // (string | mandatory) the heading of the notification
+    title: 'Oops...',
+    // (string | mandatory) the text inside the notification
+    text: msg,
+    class_name: 'gritter-error',
+    sticky: true
+  });    
+}
