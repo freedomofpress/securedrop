@@ -26,13 +26,35 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def ignore_static(f):
+    """Only executes the wrapped function if we're not loading a static resource."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.path.startswith('/static'):
+            return # don't execute the decorated function
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.before_request
+@ignore_static
 def setup_g():
   """Store commonly used values in Flask's special g object"""
+  # ignore_static here because `crypto.shash` is bcrypt (very time consuming),
+  # and we don't need to waste time running if we're just serving a static
+  # resource that won't need to access these common values.
   if logged_in():
     g.codename = session['codename']
     g.sid = crypto.shash(g.codename)
     g.loc = store.path(g.sid)
+
+@app.before_request
+@ignore_static
+def check_tor2web():
+    # ignore_static here so we only flash a single message warning about Tor2Web,
+    # corresponding to the intial page load.
+    if 'X-tor2web' not in request.headers:
+        flash('<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does not</strong> provide anonymity. <a href="/tor2web-warning">Why is this dangeorus?</a>',
+              "header-warning")
 
 @app.after_request
 def no_cache(response):
@@ -140,6 +162,10 @@ def login():
 @app.route('/howto-disable-js')
 def howto_disable_js():
     return render_template("howto-disable-js.html")
+
+@app.route('/tor2web-warning')
+def tor2web_warning():
+    return render_template("tor2web-warning.html")
 
 @app.errorhandler(404)
 def page_not_found(error):
