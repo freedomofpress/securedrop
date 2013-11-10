@@ -52,7 +52,7 @@ def setup_g():
 def check_tor2web():
     # ignore_static here so we only flash a single message warning about Tor2Web,
     # corresponding to the intial page load.
-    if 'X-tor2web' not in request.headers:
+    if 'X-tor2web' in request.headers:
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does not</strong> provide anonymity. <a href="/tor2web-warning">Why is this dangeorus?</a>',
               "header-warning")
 
