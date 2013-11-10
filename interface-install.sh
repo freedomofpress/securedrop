@@ -31,7 +31,7 @@ EOF
 
   debootstrap --variant=buildd --arch amd64 precise /var/chroot/$JAIL http://us.archive.ubuntu.com/ubuntu
   useradd $JAIL
-  mkdir -p /opt/chroot/$JAIL
+  mkdir -p /var/chroot/$JAIL
   mkdir /var/chroot/$JAIL/{proc,etc}
   mkdir -p /var/chroot/$JAIL/etc/apt
   mount -o bind /proc /var/chroot/$JAIL/proc
