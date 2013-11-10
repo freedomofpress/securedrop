@@ -288,3 +288,10 @@ p.bubble:after {
   width:0px;
   height:0px;
 }
+
+body .gritter-close{
+  left: 268px;
+}
+body .gritter-item{
+  font-size: 12px;
+}
