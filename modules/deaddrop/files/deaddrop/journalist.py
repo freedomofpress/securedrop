@@ -2,11 +2,13 @@
 import os, datetime, uuid
 import web
 import config, crypto, store, version
+import zipfile
 
 urls = (
   '/', 'index',
   '/reply/', 'reply',
   '/([A-Z1-7]+)/', 'col',
+  '/([A-Z1-7]+)/download', 'download',
   '/([A-Z1-7]+)/([0-9]+\.[0-9]+(?:_msg|_doc\.zip|)\.gpg)', 'doc' 
 )
 
@@ -59,6 +61,26 @@ class doc:
         web.header('Pragma', 'no-cache')
         web.header('Expires', '-1')
         return file(store.path(sid, fn)).read()
+
+class download:
+    def POST(self, sid):
+        files = web.data().replace('=on','').split('&')
+        zipfilename = 'selected_' + str(datetime.datetime.now().microsecond) + '.zip'
+        zip = zipfile.ZipFile(zipfilename, 'w')
+        for file in files:
+            zip.write(store.path(sid, file), file)
+        zip.close()
+        
+        web.header('Content-Type', 'application/octet-stream')
+        web.header('Content-Disposition', 'attachment; filename="' + zipfilename + '"')
+        web.header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        web.header('Pragma', 'no-cache')
+        web.header('Expires', '-1')
+        
+        zip = open(zipfilename, 'r')
+        writeback = zip.read()
+        zip.close()
+        return writeback
 
 class reply:
     def GET(self):
