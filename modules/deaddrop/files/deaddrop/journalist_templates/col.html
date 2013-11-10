@@ -10,13 +10,17 @@ $def with (docs, sid, haskey, codename)
 
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
+<form action="download" method="POST">
 <ul>
 $for doc in docs:
     $if doc.name.startswith('reply-'):
         <li><i>$doc.name</i> (sent $doc.date)</li>
     $else:
-        <li><a href="$doc.name">$doc.name</a> (uploaded $doc.date)</li>
+        <li><input type="checkbox" name="$doc.name"/>&nbsp;&nbsp;<a href="$doc.name">$doc.name</a> (uploaded $doc.date)</li>
 </ul>
+<input type="submit" value="Download checked"/>
+</form>
+<br/>
 
 $if haskey:
     <p>You can write a secure reply to the person who submitted these documents:</p>
