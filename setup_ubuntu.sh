@@ -48,12 +48,12 @@ echo "Setting up configurations..."
 cp example_config.py config.py
 mkdir -p ./tmp/deaddrop/{store,keys}
 mkdir ./tmp/deaddrop_test
-storepath=$(pwd)/tmp/store
-keypath=$(pwd)/tmp/keys
+storepath=$(pwd)/tmp/deaddrop/store
+keypath=$(pwd)/tmp/deaddrop/keys
 testpath=$(pwd)/tmp/deaddrop_test
 sed -i "s@^STORE_DIR.*@STORE_DIR=\'$storepath\'@" config.py
 sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
-# TODO: replace below line so that indents are not hard-coded
+# TODO: replace below line so that indents are not hard-coded :/
 sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
 
 echo "" >> .gitignore
