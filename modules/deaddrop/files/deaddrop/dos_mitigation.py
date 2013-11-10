@@ -9,7 +9,12 @@ import scipy.stats
 class dos_mitigation(object):
     time = datetime.datetime.utcnow()
     map = {}
-    
+
+    #time.sleep(30*60)    
+    #while True:
+    #    doYourShit()
+    #    time.sleep(10)
+
     def addEvent(self, eventName):
         if map.__contains__(eventName):
             minute = map[eventName]
@@ -20,7 +25,6 @@ class dos_mitigation(object):
         else:
             minute[self.time.strftime("%Y:%m:%d:%H:%M")] = 1
             map[eventName] = minute
-            
             
     def doYourShit(self):
         for event, minute_dict in event.iteritems():
@@ -58,5 +62,3 @@ class dos_mitigation(object):
                     
     def alert(self):
         
-                
-                
