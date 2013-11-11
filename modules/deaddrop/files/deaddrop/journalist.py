@@ -45,7 +45,6 @@ def index():
   dirs = os.listdir(config.STORE_DIR)
   cols = []
   for d in dirs:
-    if not os.listdir(store.path(d)): continue
     cols.append(dict(
       name=d,
       sid=crypto.displayid(d),
