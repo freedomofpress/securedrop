@@ -71,11 +71,22 @@ def reply():
     store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
   return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
 
-@app.route('/delete', methods=('POST',))
-def delete():
+@app.route('/bulk', methods=('POST',))
+def bulk():
+  action = request.form['action']
+
   sid = request.form['sid']
   doc_names_selected = request.form.getlist('doc_names_selected')
-  docs_selected = [doc for doc in get_docs(sid) if doc['name'] in doc_names_selected]
+  docs_selected = [ doc for doc in get_docs(sid) if doc['name'] in doc_names_selected ]
+
+  if action == 'download':
+    return bulk_download(sid, docs_selected)
+  elif action == 'delete':
+    return bulk_delete(sid, docs_selected)
+  else:
+    abort(422)
+
+def bulk_delete(sid, docs_selected):
   confirm_delete = bool(request.form.get('confirm_delete', False))
   if confirm_delete:
       for doc in docs_selected:
@@ -84,6 +95,13 @@ def delete():
   return render_template('delete.html', sid=sid, codename=crypto.displayid(sid),
                          docs_selected=docs_selected, confirm_delete=confirm_delete)
 
+def bulk_download(sid, docs_selected):
+  filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+  zip = store.get_bulk_archive(filenames)
+  return send_file(zip, mimetype="application/zip",  attachment_filename=crypto.displayid(sid), as_attachment=True)
+
+
+  
 if __name__ == "__main__":
   # TODO: make sure this gets run by the web server
   CsrfProtect(app)
