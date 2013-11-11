@@ -15,12 +15,11 @@ if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     exit 1
 fi
 
-# stop setup script if any command fails
-set -e
-
 # define colored output for some statements
 bold=$(tput bold)
 blue=$(tput setaf 4)
+red=$(tput setaf 1)
+normalcolor=$(tput sgr 0)
 
 DEPENDENCIES='gnupg2 secure-delete haveged python-pip python-virtualenv'
 
@@ -63,9 +62,10 @@ cd securedrop/deaddrop
 pip install -r requirements.txt
 
 echo "Setting up configurations..."
+# create directories for keys and store
+# and add them to their respective environment variables in config.py
 cp example_config.py config.py
 mkdir -p ./tmp/deaddrop/{store,keys}
-mkdir ./tmp/deaddrop_test
 storepath=$(pwd)/tmp/deaddrop/store
 keypath=$(pwd)/tmp/deaddrop/keys
 testpath=$(pwd)/tmp/deaddrop_test
@@ -75,13 +75,15 @@ sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
 sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
 
 echo "" >> .gitignore
-echo "# tmp directory containing keys" >> .gitignore
+echo "# containing keys and storage for development application" >> .gitignore
 echo $(pwd)/tmp/ >> .gitignore
 
 echo ""
-echo "You will need a jouranlist key for development."
+echo "You will need a journalist key for development."
 echo "Would you like to generate one or use the key included?"
 echo "If you're not familiar with gpg2, you ought to import the key."
+echo "$bold$blue Use these keys for development and testing only, NEVER production."
+echo $normalcolor
 echo "Type 'g' and push ENTER to generate, otherwise leave blank and push ENTER."
 read genkey
 
@@ -93,15 +95,20 @@ else
     gpg2 --homedir ./tmp/deaddrop/keys --import test_journalist_key.*    
 fi
 
-echo "$bold$blue Once you've generated the dev key, copy the key fingerprint to the JOURNALIST_KEY field of config.py. You can find the key fingerprint by running:"
-echo "gpg2 --homedir /tmp/deaddrop/keys --fingerprint"
-tput sgr 0
+# get journalist key fingerpint from gpg2, remove spaces, and put into config file
+journalistkey=$(gpg2 --homedir ./tmp/deaddrop/keys --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')
+sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY=\'$journalistkey\'@" config.py
 
 echo ""
 echo "Running unit tests... these should all pass!"
 python test.py
 
-echo ""
+if [[ $? != 0 ]]; then
+    echo "$bold$red It looks like something went wrong in your dev setup."
+    echo "Feel free to open an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
+    echo $normalcolor
+fi
+
 echo "And you're done!"
 echo "To make sure everything works, try running the app in the virtual environment:"
 echo "python source.py"
