@@ -12,9 +12,6 @@ import gnupg
 from flask import session, g, escape
 from flask_testing import TestCase
 from flask_wtf import CsrfProtect
-# TODO: I think BeautifulSoup is the #1 reason these tests are so slow. Switch
-# to lxml per comment in last paragraph of
-# http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors
 from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
