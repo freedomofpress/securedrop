@@ -8,7 +8,7 @@ from flask import (Flask, request, render_template, session, redirect, url_for,
     flash, abort, g)
 from flask_wtf.csrf import CsrfProtect
 
-import config, version, crypto, store, background
+import config, version, crypto_util, store, background
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.secret_key = config.SECRET_KEY
@@ -39,12 +39,12 @@ def ignore_static(f):
 @ignore_static
 def setup_g():
   """Store commonly used values in Flask's special g object"""
-  # ignore_static here because `crypto.shash` is bcrypt (very time consuming),
+  # ignore_static here because `crypto_util.shash` is bcrypt (very time consuming),
   # and we don't need to waste time running if we're just serving a static
   # resource that won't need to access these common values.
   if logged_in():
     g.codename = session['codename']
-    g.sid = crypto.shash(g.codename)
+    g.sid = crypto_util.shash(g.codename)
     g.loc = store.path(g.sid)
 
 @app.before_request
@@ -79,12 +79,12 @@ def generate():
   if request.method == 'POST':
     number_words = int(request.form['number-words'])
     if number_words not in range(4, 11): abort(403)
-  session['codename'] = crypto.genrandomid(number_words)
+  session['codename'] = crypto_util.genrandomid(number_words)
   return render_template('generate.html', codename=session['codename'])
 
 @app.route('/create', methods=['POST'])
 def create():
-  sid = crypto.shash(session['codename'])
+  sid = crypto_util.shash(session['codename'])
   if os.path.exists(store.path(sid)):
     # if this happens, we're not using very secure crypto
     store.log("Got a duplicate ID '%s'" % sid)
@@ -102,7 +102,7 @@ def lookup():
       msgs.append(dict(
         id=fn,
         date=str(datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)),
-        msg=crypto.decrypt(g.sid, g.codename, file(store.path(g.sid, fn)).read())
+        msg=crypto_util.decrypt(g.sid, g.codename, file(store.path(g.sid, fn)).read())
       ))
   return render_template('lookup.html', codename=g.codename, msgs=msgs)
 
@@ -113,22 +113,22 @@ def submit():
   fh = request.files['fh']
   if msg:
     msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
-    crypto.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
+    crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
     flash("Thanks! We received your message.", "notification")
   if fh:
     file_loc = store.path(g.sid, "%s_doc.gpg" % uuid.uuid4())
     # TODO - retain original filename
-    crypto.encrypt(config.JOURNALIST_KEY, fh, file_loc)
+    crypto_util.encrypt(config.JOURNALIST_KEY, fh, file_loc)
     flash("Thanks! We received your document '%s'."
         % fh.filename or '[unnamed]', "notification")
 
   # helper function to generate a keypair asynchronously
   def async_genkey(sid, codename):
     with app.app_context():
-      background.execute(lambda: crypto.genkeypair(sid, codename))
+      background.execute(lambda: crypto_util.genkeypair(sid, codename))
 
   # Generate a keypair to encrypt replies from the journalist
-  if not crypto.getkey(g.sid):
+  if not crypto_util.getkey(g.sid):
     async_genkey(g.sid, g.codename)
 
   return redirect(url_for('lookup'))
@@ -140,13 +140,13 @@ def delete():
   assert '/' not in msgid
   potential_files = os.listdir(g.loc)
   if msgid not in potential_files: abort(404) # TODO are the checks necessary?
-  crypto.secureunlink(store.path(g.sid, msgid))
+  crypto_util.secureunlink(store.path(g.sid, msgid))
   flash("Reply deleted.", "notification")
 
   return redirect(url_for('lookup'))
 
 def valid_codename(codename):
-  return os.path.exists(store.path(crypto.shash(codename)))
+  return os.path.exists(store.path(crypto_util.shash(codename)))
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():

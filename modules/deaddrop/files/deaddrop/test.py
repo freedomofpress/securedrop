@@ -19,13 +19,13 @@ from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
 os.environ['DEADDROPENV'] = 'test'
-import config, crypto
+import config, crypto_util
 
 import source, store, journalist
 
 def _block_on_reply_keypair_gen(codename):
-    sid = crypto.shash(codename)
-    while not crypto.getkey(sid): sleep(0.1)
+    sid = crypto_util.shash(codename)
+    while not crypto_util.getkey(sid): sleep(0.1)
 
 def shared_setup():
     """Set up the file system and GPG"""
@@ -35,7 +35,7 @@ def shared_setup():
             os.mkdir(d)
         except OSError:
             # some of these dirs already exist because we import source and
-            # journalist, which import crypto, which calls gpg.GPG at module
+            # journalist, which import crypto_util, which calls gpg.GPG at module
             # level, which auto-generates the GPG homedir if it does not exist
             pass
     # Initialize the GPG keyring
