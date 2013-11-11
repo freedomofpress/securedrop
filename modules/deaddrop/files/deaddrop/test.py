@@ -183,7 +183,7 @@ class TestSource(TestCase):
         _block_on_reply_keypair_gen(codename)
 
     def test_tor2web_warning(self):
-        rv = self.client.get('/', environ_base={'X-tor2web': 'encrypted'})
+        rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assert200(rv)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
 
