@@ -70,20 +70,39 @@ def create():
   else:
     os.mkdir(store.path(sid))
   session['logged_in'] = True
+  session['flagged'] = False
   return redirect(url_for('lookup'))
 
 @app.route('/lookup', methods=('GET',))
 @login_required
 def lookup():
   msgs = []
+  flagged = False
   for fn in os.listdir(g.loc):
+    if fn == '_FLAG':
+        flagged = True
+        continue
     if fn.startswith('reply-'):
       msgs.append(dict(
         id=fn,
         date=str(datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)),
         msg=crypto.decrypt(g.sid, g.codename, file(store.path(g.sid, fn)).read())
       ))
-  return render_template('lookup.html', codename=g.codename, msgs=msgs)
+  if flagged:
+      session['flagged'] = True
+
+  def async_genkey(sid, codename):
+    with app.app_context():
+      background.execute(lambda: crypto.genkeypair(sid, codename))
+
+  # Generate a keypair to encrypt replies from the journalist
+  # Only do this if the journalist has flagged the source as one
+  # that they would like to reply to. (Issue #140.)
+  if not crypto.getkey(g.sid) and flagged:
+    async_genkey(g.sid, g.codename)
+
+  return render_template('lookup.html', codename=g.codename, msgs=msgs, flagged=flagged,
+          haskey=crypto.getkey(g.sid))
 
 @app.route('/submit', methods=('POST',))
 @login_required
@@ -100,18 +119,6 @@ def submit():
     crypto.encrypt(config.JOURNALIST_KEY, fh, file_loc)
     flash("Thanks! We received your document '%s'."
         % fh.filename or '[unnamed]', "notification")
-
-  # helper function to generate a keypair asynchronously
-  def async_genkey(sid, codename):
-    with app.app_context():
-      background.execute(lambda: crypto.genkeypair(sid, codename))
-
-  # Generate a keypair to encrypt replies from the journalist
-  # Only do this if the journalist has flagged the source as one
-  # that they would like to reply to. (Issue #140.)
-  if not crypto.getkey(g.sid) and g.flagged:
-    flash("A journalist has indicated that they would like to reply to you. Please check back shortly for their reply.")
-    async_genkey(g.sid, g.codename)
 
   return redirect(url_for('lookup'))
 
