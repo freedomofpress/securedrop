@@ -6,7 +6,7 @@ import uuid
 from flask import Flask, request, render_template, send_file
 from flask_wtf.csrf import CsrfProtect
 
-import config, version, crypto, store, background
+import config, version, crypto_util, store, background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.secret_key = config.SECRET_KEY
@@ -47,7 +47,7 @@ def index():
   for d in dirs:
     cols.append(dict(
       name=d,
-      sid=crypto.displayid(d),
+      sid=crypto_util.displayid(d),
       date=str(datetime.fromtimestamp(os.stat(store.path(d)).st_mtime)).split('.')[0]
     ))
   cols.sort(key=lambda x: x['date'], reverse=True)
@@ -55,8 +55,8 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-    return render_template("col.html", sid=sid, codename=crypto.displayid(sid),
-            docs=get_docs(sid), haskey=crypto.getkey(sid))
+    return render_template("col.html", sid=sid, codename=crypto_util.displayid(sid),
+            docs=get_docs(sid), haskey=crypto_util.getkey(sid))
 
 @app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
@@ -67,9 +67,9 @@ def doc(sid, fn):
 @app.route('/reply', methods=('POST',))
 def reply():
   sid, msg = request.form['sid'], request.form['msg']
-  crypto.encrypt(crypto.getkey(sid), request.form['msg'], output=
+  crypto_util.encrypt(crypto_util.getkey(sid), request.form['msg'], output=
     store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-  return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
+  return render_template('reply.html', sid=sid, codename=crypto_util.displayid(sid))
 
 @app.route('/delete', methods=('POST',))
 def delete():
@@ -80,8 +80,8 @@ def delete():
   if confirm_delete:
       for doc in docs_selected:
           fn = store.path(sid, doc['name'])
-          crypto.secureunlink(fn)
-  return render_template('delete.html', sid=sid, codename=crypto.displayid(sid),
+          crypto_util.secureunlink(fn)
+  return render_template('delete.html', sid=sid, codename=crypto_util.displayid(sid),
                          docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 if __name__ == "__main__":
