@@ -16,13 +16,13 @@ from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
 os.environ['DEADDROPENV'] = 'test'
-import config, crypto
+import config, crypto_util
 
 import source, store, journalist
 
 def _block_on_reply_keypair_gen(codename):
-    sid = crypto.shash(codename)
-    while not crypto.getkey(sid): sleep(0.1)
+    sid = crypto_util.shash(codename)
+    while not crypto_util.getkey(sid): sleep(0.1)
 
 def shared_setup():
     """Set up the file system and GPG"""
@@ -32,7 +32,7 @@ def shared_setup():
             os.mkdir(d)
         except OSError:
             # some of these dirs already exist because we import source and
-            # journalist, which import crypto, which calls gpg.GPG at module
+            # journalist, which import crypto_util, which calls gpg.GPG at module
             # level, which auto-generates the GPG homedir if it does not exist
             pass
     # Initialize the GPG keyring
@@ -175,6 +175,11 @@ class TestSource(TestCase):
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
 
+    def test_tor2web_warning(self):
+        rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
+        self.assert200(rv)
+        self.assertIn("You appear to be using Tor2Web.", rv.data)
+
 class TestJournalist(TestCase):
 
     @classmethod
@@ -223,6 +228,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg=test_msg,
@@ -250,6 +256,37 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
+        # delete submission
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("The following file has been selected for", rv.data)
+
+        # confirm delete submission
+        doc_name = soup.select
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name,
+            confirm_delete="1"
+        ))
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("File permanently deleted.", rv.data)
+
+        # confirm that submission deleted and absent in list of submissions
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("No documents to display.", rv.data)
+
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_file_contents = "This is a test file."
@@ -259,6 +296,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
             msg="",
@@ -284,7 +322,44 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         decrypted_data = self.gpg.decrypt(rv.data)
         self.assertTrue(decrypted_data.ok)
-        self.assertEqual(decrypted_data.data, test_file_contents)
+
+        s = StringIO(decrypted_data.data)
+        zip_file = zipfile.ZipFile(s, 'r')
+        unzipped_decrypted_data = zip_file.read('test.txt')
+        zip_file.close()
+
+        self.assertEqual(unzipped_decrypted_data, test_file_contents)
+
+        # delete submission
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("The following file has been selected for", rv.data)
+
+        # confirm delete submission
+        doc_name = soup.select
+        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        rv = self.journalist_app.post('/delete', data=dict(
+            sid=sid,
+            doc_names_selected=doc_name,
+            confirm_delete="1"
+        ))
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+        self.assertIn("File permanently deleted.", rv.data)
+
+        # confirm that submission deleted and absent in list of submissions
+        rv = self.journalist_app.get(col_url)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("No documents to display.", rv.data)
 
     def test_reply(self):
         test_msg = "This is a test message."

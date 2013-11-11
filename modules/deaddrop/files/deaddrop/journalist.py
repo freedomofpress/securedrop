@@ -6,12 +6,30 @@ import uuid
 from flask import Flask, request, render_template, send_file
 from flask_wtf.csrf import CsrfProtect
 
-import config, version, crypto, store, background
+import config, version, crypto_util, store, background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.secret_key = config.SECRET_KEY
 
 app.jinja_env.globals['version'] = version.__version__
+
+def get_docs(sid):
+    """Get docs associated with source id `sid` sorted by submission date"""
+    docs = []
+    flagged = False
+    for filename in os.listdir(store.path(sid)):
+        if filename == '_FLAG':
+            flagged = True
+            continue
+        os_stat = os.stat(store.path(sid, filename))
+        docs.append(dict(
+            name=filename,
+            date=str(datetime.fromtimestamp(os_stat.st_mtime)),
+            size=os_stat.st_size,
+        ))
+    # sort by date since ordering by filename is meaningless
+    docs.sort(key=lambda x: x['date'])
+    return docs, flagged
 
 @app.after_request
 def no_cache(response):
@@ -31,10 +49,9 @@ def index():
   dirs = os.listdir(config.STORE_DIR)
   cols = []
   for d in dirs:
-    if not os.listdir(store.path(d)): continue
     cols.append(dict(
       name=d,
-      sid=crypto.displayid(d),
+      sid=crypto_util.displayid(d),
       date=str(datetime.fromtimestamp(os.stat(store.path(d)).st_mtime)).split('.')[0]
     ))
   cols.sort(key=lambda x: x['date'], reverse=True)
@@ -42,25 +59,10 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-  fns = os.listdir(store.path(sid))
-  docs = []
-  flagged = False
-  for f in fns:
-    if f == '_FLAG':
-        flagged = True
-        continue
-    os_stat = os.stat(store.path(sid, f))
-    docs.append(dict(
-      name=f,
-      date=str(datetime.fromtimestamp(os_stat.st_mtime)),
-      size=os_stat.st_size
-    ))
-
-  docs.sort(key=lambda x: x['date'])
-  haskey = bool(crypto.getkey(sid))
-
+  docs, flagged = get_docs(sid)
+  haskey = crypto_util.getkey(sid)
   return render_template("col.html", sid=sid,
-      codename=crypto.displayid(sid), docs=docs, haskey=haskey,
+      codename=crypto_util.displayid(sid), docs=docs, haskey=haskey,
       flagged=flagged)
 
 @app.route('/col/<sid>/<fn>')
@@ -72,9 +74,22 @@ def doc(sid, fn):
 @app.route('/reply', methods=('POST',))
 def reply():
   sid, msg = request.form['sid'], request.form['msg']
-  crypto.encrypt(crypto.getkey(sid), request.form['msg'], output=
+  crypto_util.encrypt(crypto_util.getkey(sid), request.form['msg'], output=
     store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-  return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
+  return render_template('reply.html', sid=sid, codename=crypto_util.displayid(sid))
+
+@app.route('/delete', methods=('POST',))
+def delete():
+  sid = request.form['sid']
+  doc_names_selected = request.form.getlist('doc_names_selected')
+  docs_selected = [doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
+  confirm_delete = bool(request.form.get('confirm_delete', False))
+  if confirm_delete:
+      for doc in docs_selected:
+          fn = store.path(sid, doc['name'])
+          crypto_util.secureunlink(fn)
+  return render_template('delete.html', sid=sid, codename=crypto_util.displayid(sid),
+                         docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 @app.route('/flag', methods=('POST',))
 def flag():
@@ -85,7 +100,7 @@ def flag():
         return flag_file
     sid = request.form['sid']
     create_flag(sid)
-    return render_template('flag.html', sid=sid, codename=crypto.displayid(sid))
+    return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
 
 if __name__ == "__main__":
   # TODO: make sure this gets run by the web server

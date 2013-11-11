@@ -291,7 +291,16 @@ p.bubble:after {
 
 body .gritter-close{
   left: 268px;
+  outline:0;
 }
 body .gritter-item{
   font-size: 12px;
+}
+
+p.header-warning {
+  padding:1em 0 1.2em 0;
+  width:100%;
+  background:yellow;
+  text-align:center;
+  border-bottom:1px solid #FFE057;
 }

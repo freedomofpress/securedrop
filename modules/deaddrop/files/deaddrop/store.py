@@ -3,7 +3,7 @@ import os
 import re
 import config
 
-VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc|)\.gpg$").match
+VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
 
 class PathException(Exception):
     '''An exception raised by `store.verify` when it encounters a bad path. A path
