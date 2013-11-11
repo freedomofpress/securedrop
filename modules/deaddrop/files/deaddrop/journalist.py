@@ -54,9 +54,11 @@ def col(sid):
 
   docs.sort(key=lambda x: x['date'])
   haskey = bool(crypto.getkey(sid))
+  gettingkey = True
 
   return render_template("col.html", sid=sid,
-      codename=crypto.displayid(sid), docs=docs, haskey=haskey)
+      codename=crypto.displayid(sid), docs=docs, haskey=haskey,
+      gettingkey=gettingkey)
 
 @app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
@@ -70,6 +72,17 @@ def reply():
   crypto.encrypt(crypto.getkey(sid), request.form['msg'], output=
     store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
   return render_template('reply.html', sid=sid, codename=crypto.displayid(sid))
+
+@app.route('/flag', methods=('POST',))
+def flag():
+    def create_flag(sid):
+        """Flags a SID by creating an empty _FLAG file in their collection directory"""
+        flag_file = store.path(sid, '_FLAG')
+        open(flag_file, 'a').close()
+        return flag_file
+    sid = request.form['sid']
+    create_flag(sid)
+    return render_template('flag.html', sid=sid, codename=crypto.displayid(sid))
 
 if __name__ == "__main__":
   # TODO: make sure this gets run by the web server

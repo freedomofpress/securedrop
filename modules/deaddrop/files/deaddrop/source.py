@@ -30,6 +30,7 @@ def login_required(f):
 def setup_g():
   """Store commonly used values in Flask's special g object"""
   if logged_in():
+    g.flagged = session['flagged']
     g.codename = session['codename']
     g.sid = crypto.shash(g.codename)
     g.loc = store.path(g.sid)
@@ -106,7 +107,10 @@ def submit():
       background.execute(lambda: crypto.genkeypair(sid, codename))
 
   # Generate a keypair to encrypt replies from the journalist
-  if not crypto.getkey(g.sid):
+  # Only do this if the journalist has flagged the source as one
+  # that they would like to reply to. (Issue #140.)
+  if not crypto.getkey(g.sid) and g.flagged:
+    flash("A journalist has indicated that they would like to reply to you. Please check back shortly for their reply.")
     async_genkey(g.sid, g.codename)
 
   return redirect(url_for('lookup'))
