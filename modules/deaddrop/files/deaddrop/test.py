@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
 os.environ['DEADDROPENV'] = 'test'
-import config, crypto
+import config, crypto, store
 
 import source, store, journalist
 
@@ -27,10 +27,21 @@ def _block_on_reply_keypair_gen(codename):
     sid = crypto.shash(codename)
     while not crypto.getkey(sid): sleep(0.1)
 
+
+def _setup_test_docs(sid, files):
+    filenames = [ os.path.join(config.STORE_DIR, sid, file) for file in files ]
+    for file in filenames:
+        dirname = os.path.dirname(file)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        with open(file, 'w') as myfile:
+            myfile.write('test')
+    return filenames
+
 def shared_setup():
     """Set up the file system and GPG"""
     # Create directories for the file store and the GPG keyring
-    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR):
+    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR, config.TEMP_DIR):
         try:
             os.mkdir(d)
         except OSError:
@@ -189,12 +200,10 @@ class TestSource(TestCase):
 
 class TestJournalist(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(cls):
         shared_setup()
 
-    @classmethod
-    def tearDownClass(cls):
+    def tearDown(cls):
         shared_teardown()
 
     def create_app(self):
@@ -212,6 +221,19 @@ class TestJournalist(TestCase):
         self.assertIn("Latest submissions", rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
 
+    def test_bulk_download(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+
+        rv = self.client.post('/bulk', data=dict(
+            action='download',
+            sid=sid,
+            doc_names_selected=filenames
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        
 class TestIntegration(unittest.TestCase):
 
     def setUp(self):
@@ -270,7 +292,8 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
         doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/delete', data=dict(
+        rv = self.journalist_app.post('/bulk', data=dict(
+            action='delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -282,7 +305,8 @@ class TestIntegration(unittest.TestCase):
         # confirm delete submission
         doc_name = soup.select
         doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/delete', data=dict(
+        rv = self.journalist_app.post('/bulk', data=dict(
+            action='delete',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -340,7 +364,8 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
         doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/delete', data=dict(
+        rv = self.journalist_app.post('/bulk', data=dict(
+            action='delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -352,7 +377,8 @@ class TestIntegration(unittest.TestCase):
         # confirm delete submission
         doc_name = soup.select
         doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/delete', data=dict(
+        rv = self.journalist_app.post('/bulk', data=dict(
+            action='delete',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -419,10 +445,28 @@ class TestIntegration(unittest.TestCase):
 
 class TestStore(unittest.TestCase):
     '''The set of tests for store.py.'''
+    @classmethod
+    def setUp(self):
+        shared_setup()
+
+    @classmethod
+    def tearDown(self):
+        shared_teardown()
+
     def test_verify(self):
         with self.assertRaises(store.PathException):
             store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
 
+    def test_get_zip(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+
+        zip = store.get_bulk_archive(filenames)
+
+        zipfile_contents = zipfile.ZipFile(zip).namelist()
+        for file in files:
+            self.assertIn(file, zipfile_contents)
 
 if __name__ == "__main__":
     unittest.main()
