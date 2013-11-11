@@ -45,6 +45,8 @@ def col(sid):
   fns = os.listdir(store.path(sid))
   docs = []
   for f in fns:
+    if f == '_FLAG':
+        continue
     os_stat = os.stat(store.path(sid, f))
     docs.append(dict(
       name=f,
