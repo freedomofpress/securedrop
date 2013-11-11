@@ -12,9 +12,6 @@ import gnupg
 from flask import session, g, escape
 from flask_testing import TestCase
 from flask_wtf import CsrfProtect
-# TODO: I think BeautifulSoup is the #1 reason these tests are so slow. Switch
-# to lxml per comment in last paragraph of
-# http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors
 from bs4 import BeautifulSoup
 
 # Set the environment variable so config.py uses a test environment
@@ -156,8 +153,6 @@ class TestSource(TestCase):
         ), follow_redirects=True)
         self.assert200(rv)
         self.assertIn("Thanks! We received your message.", rv.data)
-        # Wait until the reply keypair is generated to avoid confusing errors
-        _block_on_reply_keypair_gen(codename)
 
     def test_submit_file(self):
         codename = self._new_codename()
@@ -168,7 +163,6 @@ class TestSource(TestCase):
         self.assert200(rv)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
-        _block_on_reply_keypair_gen(codename)
 
     def test_submit_both(self):
         codename = self._new_codename()
@@ -180,7 +174,6 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
-        _block_on_reply_keypair_gen(codename)
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
@@ -263,8 +256,6 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
-        _block_on_reply_keypair_gen(codename)
-
         # delete submission
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
@@ -339,8 +330,6 @@ class TestIntegration(unittest.TestCase):
 
         self.assertEqual(unzipped_decrypted_data, test_file_contents)
 
-        _block_on_reply_keypair_gen(codename)
-
         # delete submission
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
@@ -380,6 +369,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            flagged = session['flagged']
             sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
@@ -387,6 +377,7 @@ class TestIntegration(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
+        self.assertFalse(flagged)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -396,12 +387,32 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
+
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(
+                codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertFalse(session['flagged'])
+
+        rv = self.journalist_app.post('/flag', data=dict(
+            sid=sid))
+        self.assertEqual(rv.status_code, 200)
+
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(
+                codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertTrue(session['flagged'])
+            source_app.get('/lookup')
+            self.assertTrue(g.flagged)
+
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
         _block_on_reply_keypair_gen(codename)
+
         rv = self.journalist_app.post('/reply', data=dict(
             sid=sid,
-            msg=test_reply,
+            msg=test_reply
         ))
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! Your reply has been stored.", rv.data)
@@ -409,6 +420,7 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertIn("reply-", rv.data)
 
+        _block_on_reply_keypair_gen(codename)
         rv = self.source_app.get('/lookup')
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
@@ -423,12 +435,6 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Reply deleted", rv.data)
 
-class TestStore(unittest.TestCase):
-    '''The set of tests for store.py.'''
-    def test_verify(self):
-        with self.assertRaises(store.PathException):
-            store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
-
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

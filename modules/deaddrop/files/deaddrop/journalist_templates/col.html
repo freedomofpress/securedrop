@@ -36,8 +36,16 @@
   <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea><br />
   <button id="reply-button" class="button-custom" type="submit">Submit</button>
 </form>
+{% elif flagged %}
+<p class="notification">You've flagged this source for reply.</p>
+<p>An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.</p>
 {% else %}
-<p>A key is currently being generated, which will enable you to write a secure reply to the person who submitted these documents.  Please check this page again in a few minutes if you would like to write a reply.
+<p>Click below if you would like to write a reply to this source.</p>
+<form action="/flag" method="post">
+    <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off" />
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <button id="flag-button" class="button-custom" type="submit">Flag this source for reply.</button>
+</form>
 {% endif %}
 </div>
 

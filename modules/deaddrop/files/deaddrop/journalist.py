@@ -16,7 +16,11 @@ app.jinja_env.globals['version'] = version.__version__
 def get_docs(sid):
     """Get docs associated with source id `sid` sorted by submission date"""
     docs = []
+    flagged = False
     for filename in os.listdir(store.path(sid)):
+        if filename == '_FLAG':
+            flagged = True
+            continue
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
@@ -25,7 +29,7 @@ def get_docs(sid):
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
-    return docs
+    return docs, flagged
 
 @app.after_request
 def no_cache(response):
@@ -55,8 +59,11 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-    return render_template("col.html", sid=sid, codename=crypto_util.displayid(sid),
-            docs=get_docs(sid), haskey=crypto_util.getkey(sid))
+  docs, flagged = get_docs(sid)
+  haskey = crypto_util.getkey(sid)
+  return render_template("col.html", sid=sid,
+      codename=crypto_util.displayid(sid), docs=docs, haskey=haskey,
+      flagged=flagged)
 
 @app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
@@ -75,7 +82,7 @@ def reply():
 def delete():
   sid = request.form['sid']
   doc_names_selected = request.form.getlist('doc_names_selected')
-  docs_selected = [doc for doc in get_docs(sid) if doc['name'] in doc_names_selected]
+  docs_selected = [doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
   confirm_delete = bool(request.form.get('confirm_delete', False))
   if confirm_delete:
       for doc in docs_selected:
@@ -83,6 +90,17 @@ def delete():
           crypto_util.secureunlink(fn)
   return render_template('delete.html', sid=sid, codename=crypto_util.displayid(sid),
                          docs_selected=docs_selected, confirm_delete=confirm_delete)
+
+@app.route('/flag', methods=('POST',))
+def flag():
+    def create_flag(sid):
+        """Flags a SID by creating an empty _FLAG file in their collection directory"""
+        flag_file = store.path(sid, '_FLAG')
+        open(flag_file, 'a').close()
+        return flag_file
+    sid = request.form['sid']
+    create_flag(sid)
+    return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
 
 if __name__ == "__main__":
   # TODO: make sure this gets run by the web server

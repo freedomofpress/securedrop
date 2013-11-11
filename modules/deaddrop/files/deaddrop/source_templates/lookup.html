@@ -5,10 +5,12 @@
 
 {% include 'flashed.html' %}
 
+{% if flagged and not haskey %}
+  <p class="notification">A journalist would like to reply to you! Please check back shortly for their reply.</p>
+{% endif %}
 {% if msgs %}
 <div id="replies">
   <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
-
   {% for msg in msgs %}
   <div class="reply">
     <form class="message" method="post" action="/delete" autocomplete="off">
