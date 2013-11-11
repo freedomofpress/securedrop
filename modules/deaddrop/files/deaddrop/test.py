@@ -331,7 +331,13 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         decrypted_data = self.gpg.decrypt(rv.data)
         self.assertTrue(decrypted_data.ok)
-        self.assertEqual(decrypted_data.data, test_file_contents)
+
+        s = StringIO(decrypted_data.data)
+        zip_file = zipfile.ZipFile(s, 'r')
+        unzipped_decrypted_data = zip_file.read('test.txt')
+        zip_file.close()
+
+        self.assertEqual(unzipped_decrypted_data, test_file_contents)
 
         _block_on_reply_keypair_gen(codename)
 
