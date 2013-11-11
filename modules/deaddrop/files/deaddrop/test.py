@@ -302,7 +302,7 @@ class TestIntegration(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertEqual(flagged, False)
+        self.assertFalse(flagged)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -312,6 +312,13 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
+
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(
+                codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertFalse(session['flagged'])
+
         rv = self.journalist_app.post('/flag', data=dict(
             sid=sid))
         self.assertEqual(rv.status_code, 200)
@@ -320,7 +327,9 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertEqual(session['flagged'], True)
+            self.assertTrue(session['flagged'])
+            source_app.get('/lookup')
+            self.assertTrue(g.flagged)
 
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
@@ -336,6 +345,7 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertIn("reply-", rv.data)
 
+        _block_on_reply_keypair_gen(codename)
         rv = self.source_app.get('/lookup')
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
