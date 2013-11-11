@@ -291,6 +291,7 @@ p.bubble:after {
 
 body .gritter-close{
   left: 268px;
+  outline:0;
 }
 body .gritter-item{
   font-size: 12px;
