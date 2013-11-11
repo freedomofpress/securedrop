@@ -24,7 +24,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv libimage-exiftool-perl'
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 

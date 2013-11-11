@@ -178,6 +178,34 @@ class TestSource(TestCase):
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
 
+    def test_submit_dirty_file(self):
+        img = open('test_images/dirty.jpg')
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(img, 'dirty.jpg'),
+            notclean='True',
+        ), follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
+                      rv.data)
+        img.close()
+
+    def test_submit_clean_file(self):
+        img = open('test_images/clean.jpg')
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(img, 'clean.jpg'),
+            notclean='True',
+        ), follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'clean.jpg'."),
+                      rv.data)
+        img.close()
+
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assert200(rv)
