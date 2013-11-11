@@ -153,8 +153,6 @@ class TestSource(TestCase):
         ), follow_redirects=True)
         self.assert200(rv)
         self.assertIn("Thanks! We received your message.", rv.data)
-        # Wait until the reply keypair is generated to avoid confusing errors
-        _block_on_reply_keypair_gen(codename)
 
     def test_submit_file(self):
         codename = self._new_codename()
@@ -165,7 +163,6 @@ class TestSource(TestCase):
         self.assert200(rv)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
-        _block_on_reply_keypair_gen(codename)
 
     def test_submit_both(self):
         codename = self._new_codename()
@@ -177,7 +174,6 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                 rv.data)
-        _block_on_reply_keypair_gen(codename)
 
 class TestJournalist(TestCase):
 
@@ -254,8 +250,6 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
-        _block_on_reply_keypair_gen(codename)
-
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_file_contents = "This is a test file."
@@ -292,8 +286,6 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_file_contents)
 
-        _block_on_reply_keypair_gen(codename)
-
     def test_reply(self):
         test_msg = "This is a test message."
         test_reply = "This is a test reply."
@@ -302,6 +294,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
+            flagged = session['flagged']
             sid = g.sid
         # redirected to submission form
         rv = self.source_app.post('/submit', data=dict(
@@ -309,6 +302,7 @@ class TestIntegration(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
+        self.assertEqual(flagged, False)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -318,12 +312,23 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
+        rv = self.journalist_app.post('/flag', data=dict(
+            sid=sid))
+        self.assertEqual(rv.status_code, 200)
+
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(
+                codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(session['flagged'], True)
+
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
         _block_on_reply_keypair_gen(codename)
+
         rv = self.journalist_app.post('/reply', data=dict(
             sid=sid,
-            msg=test_reply,
+            msg=test_reply
         ))
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! Your reply has been stored.", rv.data)
@@ -344,12 +349,6 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Reply deleted", rv.data)
-
-class TestStore(unittest.TestCase):
-    '''The set of tests for store.py.'''
-    def test_verify(self):
-        with self.assertRaises(store.PathException):
-            store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
 
 
 if __name__ == "__main__":
