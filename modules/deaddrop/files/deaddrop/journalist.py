@@ -44,8 +44,10 @@ def index():
 def col(sid):
   fns = os.listdir(store.path(sid))
   docs = []
+  flagged = False
   for f in fns:
     if f == '_FLAG':
+        flagged = True
         continue
     os_stat = os.stat(store.path(sid, f))
     docs.append(dict(
@@ -56,11 +58,10 @@ def col(sid):
 
   docs.sort(key=lambda x: x['date'])
   haskey = bool(crypto.getkey(sid))
-  gettingkey = True
 
   return render_template("col.html", sid=sid,
       codename=crypto.displayid(sid), docs=docs, haskey=haskey,
-      gettingkey=gettingkey)
+      flagged=flagged)
 
 @app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
