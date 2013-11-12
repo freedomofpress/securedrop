@@ -1,6 +1,7 @@
 # data directories - should be on secure media
 STORE_DIR='/tmp/deaddrop/store'
 GPG_KEY_DIR='/tmp/deaddrop/keys'
+TEMP_DIR='/tmp/deaddrop/tmp'
 
 # fingerprint of the GPG key to encrypt submissions to
 JOURNALIST_KEY=''

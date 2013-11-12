@@ -2,6 +2,9 @@
 import os
 import re
 import config
+import zipfile
+import crypto
+import uuid
 
 VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
 
@@ -47,6 +50,15 @@ def path(*s):
     absolute = os.path.abspath(joined)
     verify(absolute)
     return absolute
+
+def get_bulk_archive(filenames):
+    zip_file_name = os.path.join(config.TEMP_DIR, str(uuid.uuid4()) + '.zip')
+    with zipfile.ZipFile(zip_file_name, 'w') as zip:
+        for filename in filenames:
+            verify(filename)
+            basename = os.path.basename(filename)
+            zip.write(filename, arcname=basename)
+    return zip_file_name
 
 def log(msg):
     file(path('NOTES'), 'a').write(msg)

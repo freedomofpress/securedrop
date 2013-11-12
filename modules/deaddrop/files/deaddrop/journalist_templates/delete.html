@@ -13,7 +13,7 @@
   <p>The following {% if count == 1 %}file has{% else %}{{ count }} files have{% endif %} been selected for <strong>permanent deletion</strong>:</p>
   {% endwith %}
 
-  <form action="/delete" method="post">
+  <form action="/bulk" method="post">
   <ul>
   {% for doc in docs_selected %}
   <li>
@@ -29,7 +29,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
   <input type="hidden" name="confirm_delete" value="1" />
-  <p><input type="submit" value="Permanently delete files" /></p>
+  <p><button type="submit" name="action" value="delete">Permanently delete files</button></p>
   </ul>
   </form>
 
