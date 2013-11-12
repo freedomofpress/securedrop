@@ -37,10 +37,11 @@ def verify(p):
     ext = os.path.splitext(filename)[-1]
 
     if os.path.isfile(p):
+        if filename == '_FLAG':
+            return True
         if ext != '.gpg':
             # if there's an extension, verify it's a GPG
             raise PathException("Invalid file extension %s" % (ext, ))
-
         if not VALIDATE_FILENAME(filename):
             raise PathException("Invalid filename %s" % (filename, ))
 
