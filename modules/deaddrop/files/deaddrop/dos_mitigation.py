@@ -1,7 +1,10 @@
-"""
-Class that detects dos attacks and performs mitigation procedure such as captchas
-"""
+#!/usr/bin/env python
 
+"""
+This daemon tails an event log and
+uses the data to detect a DOS attack.
+Upon detection it performs a mitigation action.
+"""
 
 # external imports
 import argparse
@@ -15,18 +18,18 @@ import string, sys, os, syslog, time
 
 
 class DOS_Mitigation(object):
+    """
+    Class that detects DOS attacks and performs mitigation procedure such as captchas
+    """
 
-    def __init__(self, inputLog, outputLog):
+    def __init__(self):
         self.underAttack    = False
         self.time           = datetime.datetime.utcnow()
         self.event_counts   = dict()
         self.deviant_events = dict()
 
-        self.input          = inputLog
-        self.output         = outputLog
-
     def addEvent(self, eventName, eventTime):
-        if self.event_counts.__contains__(eventName):
+        if eventName in self.event_counts:
             minute = self.event_counts[eventName]
             if minute.__contains__(eventTime):
                 minute[eventTime] += 1
@@ -41,8 +44,7 @@ class DOS_Mitigation(object):
             minute_list = list()
             
             for minute, count in minute_dict.iteritems():
-                temp = [minute, count]
-                minute_list.append(temp)
+                minute_list.append([minute, count])
             
             # sorts by minute
             minute_list = sorted(filter(self.excludeDeviantTimes(minute[0]), minute_list), key=lambda pair: pair[0])
@@ -94,7 +96,7 @@ class DOS_Mitigation(object):
                     
     def alert(self, eventName, deviantValue, deviantTime):
         # TODO write to log
-        break
+        pass
         
     def excludeDeviantTimes(self, minute):
         if self.deviant_events.has_key(minute):
@@ -237,10 +239,9 @@ def main():
     log = LogFile(args.eventlog)
 
     for line in log.tail():
-        try:
-            event_time, event_id = getEventIdAndTime(line)
-            event = (event_time, event_id)
-            mitigation.addEvent(event)
+        event_time, event_id = getEventIdAndTime(line)
+        mitigation.addEvent(event_id, event_time)
+        
 
 
 if __name__ == '__main__':
