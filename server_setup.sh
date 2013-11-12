@@ -25,6 +25,7 @@ OSSECBINARY="ossec-binary.tgz"
 
   # Download puppet ppa package
   function puppetDownload {
+    echo Downloading puppet
     if [ -f /etc/apt/sources.list.d/puppetlabs.list ]; then
       wget $PUPPETRELEASEDEB
       dpkg -i $PUPPETDEBNAME
@@ -37,13 +38,14 @@ OSSECBINARY="ossec-binary.tgz"
 
   # On puppet master install puppetmaster required packages
   function installPuppetMaster {
+    echo Installing puppet master
     apt-get install puppetmaster $PUPPETMASTERDEPENDENCIES -y
   }
 
   # On puppet master install puppet module tool
   function installPuppetModuleTool {
+    echo Installing puppet tool
     if ! type -P puppet-module; then
-      cd /etc/puppet/modules
       gem install puppet-module
     else
       echo "Puppet module tool already installed"
@@ -52,6 +54,7 @@ OSSECBINARY="ossec-binary.tgz"
 
   # On puppet master install rails
   function installRails {
+    echo 'Installing rails -- why???'
     if [[ $(rails -v) != "Rails 2.2.2" ]]; then
       gem install rails -v 2.2.2 --no-ri --no-rdoc
     else
@@ -61,10 +64,10 @@ OSSECBINARY="ossec-binary.tgz"
 
   # On puppet master install puppet modules
   function installPuppetModules {
+    echo Installing puppet modules
     DIR='/etc/puppet/modules'
     cd $DIR
-    for PUPPETMODULE in $PUPPETMODULES
-    do
+    for PUPPETMODULE in $PUPPETMODULES; do
       NAME=$(echo $PUPPETMODULE | awk -F "-" '{print $2}')
       if [ ! -d "/etc/puppet/modules/$NAME" ]; then
         echo "Installing $NAME"
@@ -77,6 +80,7 @@ OSSECBINARY="ossec-binary.tgz"
 
   #Enable puppet stored configs
   function enablePuppetStoredconfigs {
+    echo Enabling puppet stored configs
     if ! grep "thin_storeconfigs" /etc/puppet/puppet.conf; then
       echo "thin_storeconfigs = true" >> /etc/puppet/puppet.conf
     fi
@@ -88,6 +92,7 @@ OSSECBINARY="ossec-binary.tgz"
 
   #Install deaddrop files
   function copyDeaddropFiles {
+    echo Installing deaddrop files
     cp -Rfp $CURRENTDIR/{manifests,modules} /etc/puppet/
   }
 
@@ -95,15 +100,17 @@ OSSECBINARY="ossec-binary.tgz"
   function downloadOSSECBinary {
     cd $CURRENTDIR
     echo ''
-    read -p "Download OSSEC binary from $OSSECBINARYURL? (y/n) " -e -i n DOWNLOADFROMINTERNET
+    if [ ! -d '/etc/puppet/modules/ossec/files/' ]; then
+      read -p "Download OSSEC binary from $OSSECBINARYURL? (y/n) " -e -i n DOWNLOADFROMINTERNET
 
-    if [ $DOWNLOADFROMINTERNET == 'n' ]; then
-      read -p 'Enter the full path to the OSSEC binary: ' -e -i ~/$OSSECBINARY OSSECBINARY
-    else
-      wget $OSSECBINARYURL
+      if [ $DOWNLOADFROMINTERNET == 'n' ]; then
+        read -p 'Enter the full path to the OSSEC binary: ' -e -i ~/$OSSECBINARY OSSECBINARY
+      else
+        wget $OSSECBINARYURL
+      fi
+      mkdir -p /etc/puppet/modules/ossec/files/
+      mv $OSSECBINARY /etc/puppet/modules/ossec/files/
     fi
-    mkdir -p /etc/puppet/modules/ossec/files/
-    mv $OSSECBINARY /etc/puppet/modules/ossec/files/
   }
 
   #Downlaod webpy
@@ -373,15 +380,15 @@ OSSECBINARY="ossec-binary.tgz"
     case $option in
       #Install puppetmaster
       "1")
-        puppetDownload
-        installPuppetMaster
-        installPuppetModuleTool
-        installRails
-        installPuppetModules
-        enablePuppetStoredconfigs
-        copyDeaddropFiles
-        downloadOSSECBinary
-        downloadWebpy
+        puppetDownload &&
+        installPuppetMaster &&
+        installPuppetModuleTool &&
+        installRails &&
+        installPuppetModules &&
+        enablePuppetStoredconfigs &&
+        copyDeaddropFiles &&
+        downloadOSSECBinary &&
+        downloadWebpy &&
         main
         ;;
       #Enter Environment Variables
@@ -421,6 +428,10 @@ OSSECBINARY="ossec-binary.tgz"
       *) echo invalid options;;
     esac
   }
+
+#script seems to expect to be run from the directory in
+#which it is located. Helping it along by cd-ing to it (=
+cd $(dirname $0)
 main
 
 #end
