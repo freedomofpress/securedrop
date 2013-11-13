@@ -32,7 +32,7 @@ echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 # natural to expect that users will have cloned the repo, cd'ed into it, and
 # are now running ./setup_ubuntu.sh. We will check that this is the case, and
 # if so can skip some later steps.
-if [ -d ".git" && grep "securedrop" .git/config ]; then
+if [[ -d ".git" && -n `grep "securedrop" .git/config` ]]; then
     cd .. # run this script in the directory *containing* the securedrop git repo
 else
     echo "You are not running this script inside the Securedrop repo."
@@ -62,7 +62,7 @@ if [ ! -d "securedrop" ]; then
 fi
 
 echo "Installing dependencies: "$DEPENDENCIES
-sudo apt-get install $DEPENDENCIES
+sudo apt-get -y install $DEPENDENCIES
 
 echo "Setting up the virtual environment..."
 virtualenv securedrop/venv
@@ -74,12 +74,14 @@ echo "Setting up configurations..."
 # create directories for keys and store
 # and add them to their respective environment variables in config.py
 cp example_config.py config.py
-mkdir -p ./tmp/deaddrop/{store,keys}
+mkdir -p ./tmp/deaddrop/{store,keys,tmp}
 storepath=$(pwd)/tmp/deaddrop/store
 keypath=$(pwd)/tmp/deaddrop/keys
+temppath=$(pwd)/tmp/deaddrop/tmp
 testpath=$(pwd)/tmp/deaddrop_test
 sed -i "s@^STORE_DIR.*@STORE_DIR=\'$storepath\'@" config.py
 sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
+sed -i "s@^TEMP_DIR.*@TEMP_DIR=\'$temppath\'@" config.py
 # TODO: replace below line so that indents are not hard-coded :/
 sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
 
@@ -98,14 +100,17 @@ read genkey
 
 if [[ $genkey != "" ]]; then
     echo "Generating new key."
-    gpg2 --homedir ./tmp/deaddrop/keys --gen-key
+    gpg2 --homedir $keypath --gen-key
 else
     echo "Importing key included in the repo."
-    gpg2 --homedir ./tmp/deaddrop/keys --import test_journalist_key.*
+    gpg2 --homedir $keypath --import test_journalist_key.*
 fi
 
+# avoid the "unsafe permissions on GPG homedir" warning
+chmod 700 $keypath
+
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
-journalistkey=$(gpg2 --homedir ./tmp/deaddrop/keys --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')
+journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')
 sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY=\'$journalistkey\'@" config.py
 
 echo ""
@@ -119,7 +124,9 @@ if [[ $? != 0 ]]; then
     echo $normalcolor
 fi
 
+echo $bold$blue
 echo "And you're done!"
-echo "To make sure everything works, try running the app in the virtual environment:"
+echo $normalcolor
+echo "To make sure everything works, try running the app in the development environment:"
 echo "python source.py"
 echo "python journalist.py"
