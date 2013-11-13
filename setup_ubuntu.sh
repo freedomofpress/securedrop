@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# stop setup script if any command fails
+set -e
+
 #check platform and distro
 opsys=`uname`
 
@@ -21,35 +24,41 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-pip python-virtualenv'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv'
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
-echo "If you've already cloned the repo, run this script in the folder containing the repo. (That is, one level out.)"
-echo "Are you sure you want to proceed? [Y/N]"
-read goahead
 
-if [[ $goahead = 'n' || $goahead = 'N' ]]; then
-    echo "Exiting the installer."
-    exit 1
+# Since this script lives in the top level of the securedrop repository, it is
+# natural to expect that users will have cloned the repo, cd'ed into it, and
+# are now running ./setup_ubuntu.sh. We will check that this is the case, and
+# if so can skip some later steps.
+if [ -d ".git" && grep "securedrop" .git/config ]; then
+    cd .. # run this script in the directory *containing* the securedrop git repo
+else
+    echo "You are not running this script inside the Securedrop repo."
+    echo "Do you need to clone the SecureDrop repo? [Y/N]"
+    read gitans
+    if [[ $gitans = 'y' || $gitans = 'Y' ]]; then
+
+        echo "Type the path of where you would like to clone it, and then push ENTER."
+        read sdpath
+        cd $sdpath
+
+        echo "If you are cloning from your own fork, type your Github username and push ENTER. If not, leave it blank and push ENTER."
+        read gitusername
+        if [[ $gitusername != "" ]]; then
+            echo "Cloning the repo from "$gitusername "..."
+            git clone https://github.com/$gitusername/securedrop.git
+        else
+            echo "Cloning the repo..."
+            git clone https://github.com/freedomofpress/securedrop.git
+        fi
+    fi
 fi
 
-echo "Do you need to clone the SecureDrop repo? [Y/N]"
-read gitans
-if [[ $gitans = 'y' || $gitans = 'Y' ]]; then
-
-    echo "Type the path of where you would like to clone it, and then push ENTER."
-    read sdpath
-    cd $sdpath
-
-    echo "If you are cloning from your own fork, type your Github username and push ENTER. If not, leave it blank and push ENTER."
-    read gitusername
-    if [[ $gitusername != "" ]]; then
-        echo "Cloning the repo from "$gitusername "..."
-        git clone https://github.com/$gitusername/securedrop.git
-    else
-        echo "Cloning the repo..."
-        git clone https://github.com/freedomofpress/securedrop.git
-    fi
+if [ ! -d "securedrop" ]; then
+    echo "Couldn't find the securedrop repo... exiting!"
+    exit 1
 fi
 
 echo "Installing dependencies: "$DEPENDENCIES
@@ -92,7 +101,7 @@ if [[ $genkey != "" ]]; then
     gpg2 --homedir ./tmp/deaddrop/keys --gen-key
 else
     echo "Importing key included in the repo."
-    gpg2 --homedir ./tmp/deaddrop/keys --import test_journalist_key.*    
+    gpg2 --homedir ./tmp/deaddrop/keys --import test_journalist_key.*
 fi
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
@@ -101,6 +110,7 @@ sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY=\'$journalistkey\'@" config.py
 
 echo ""
 echo "Running unit tests... these should all pass!"
+set +e # turn this flag off so we can checks if the tests failed
 python test.py
 
 if [[ $? != 0 ]]; then
