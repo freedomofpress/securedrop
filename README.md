@@ -1,4 +1,4 @@
-![SecureDrop](https://raw.github.com/freedomofpress/securedrop/master/docs/images/logo.png)
+![SecureDrop](/docs/images/logo.png)
 
 SecureDrop is an open-source whistleblower submission system managed by Freedom of the Press Foundation that media organizations use to securely accept documents from anonymous sources. It was originally coded by the late Aaron Swartz.
 
@@ -19,7 +19,7 @@ These computers should all physically be in your organization's office.
 
 ## Before You Begin
 
-Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntu_config.md).
+Before beginning installation, you should have three servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](/docs/ubuntu_config.md).
 
 You will need a DVD with the latest version of the [Tails](https://tails.boum.org/download/index.en.html) operating system burned to it. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
@@ -39,11 +39,11 @@ Each journalist will also need to come up with a password for login to the `Docu
 
 ## How to Install SecureDrop
 
-After installing and configuring Ubuntu Server on `Source Server`, `Document Server`, and `Monitor Server`, and download, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md).
+After installing and configuring Ubuntu Server on `Source Server`, `Document Server`, and `Monitor Server`, and download, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](/docs/install.md).
 
 ## How to Use SecureDrop
 
-See [How to Use SecureDrop](https://github.com/freedomofpress/securedrop/blob/master/docs/user_manual.md).
+See [How to Use SecureDrop](/docs/user_manual.md).
 
 ## Demo
 
@@ -56,6 +56,6 @@ In an actual SecureDrop setup, these websites are Tor hidden services running on
 
 ## License
 
-SecureDrop is open source and released under the [GNU General Public License v2](https://github.com/freedomofpress/securedrop/blob/master/LICENSE). 
+SecureDrop is open source and released under the [GNU General Public License v2](/LICENSE). 
 
-The [wordlist](https://github.com/freedomofpress/securedrop/blob/master/modules/deaddrop/files/deaddrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold. 
+The [wordlist](/modules/deaddrop/files/deaddrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold. 
