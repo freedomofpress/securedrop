@@ -3,7 +3,7 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor Server` with [Ubuntu Server installed](https://github.com/freedomofpress/securedrop/blob/master/docs/ubuntu_config.md).
+* You must have three servers — called the `Source Server`, the `Document Server`, and the `Monitor Server` with [Ubuntu Server installed](/ubuntu_config.md).
 
 * You must have a DVD configured as a Live DVD for the Tails operating system. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
@@ -36,15 +36,15 @@ Reboot the `Viewing Station` laptop and boot into the Tails Live USB again to co
 
 In order to avoid transfering plaintext files between the `Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
-![Importing Journalist PGP Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing1.jpg)
+![Importing Journalist PGP Keys](/images/install/viewing1.jpg)
 
 To generate the application PGP key, click in the clipboard icon in the top right and choose `Manage Keys`. A program called `Passwords and Encryption Keys` will open. You can click on the `Other Keys` tab to manage the keys that you just imported.
 
-![Tails PGP Clipboard](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing2.jpg)
+![Tails PGP Clipboard](/images/install/viewing2.jpg)
 
 Click `File`, `New`. Choose `PGP Key`, and click Continue.
 
-![New...](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing3.jpg)
+![New...](/images/install/viewing3.jpg)
 
 Put these values in:
 
@@ -54,24 +54,24 @@ Put these values in:
 
 Click the arrow to expland `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
 
-![New PGP Key](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing4.jpg)
+![New PGP Key](/images/install/viewing4.jpg)
 
 Type in the PGP passphrase that you came up with earlier twice and click OK. Then wait while your key is being generated. 
 
-![Set Passphrase](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing5.jpg)
-![Key Generation](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing6.jpg)
+![Set Passphrase](/images/install/viewing5.jpg)
+![Key Generation](/images/install/viewing6.jpg)
 
 When it's done, you should see your key in the `My Personal Keys` tab.
 
-![My Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing7.jpg)
+![My Keys](/images/install/viewing7.jpg)
 
 Right-click on the key you just generated and click `Export`. Save it to your USB stick as `SecureDrop.asc`.
 
-![My Keys](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing8.jpg)
+![My Keys](/images/install/viewing8.jpg)
 
 You'll also need to write down the 40 character hex fingerprint for this new key for the next step. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your PGP key fingerprint will be different than what's in this photo.)
 
-![Fingerprint](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/viewing9.jpg)
+![Fingerprint](/images/install/viewing9.jpg)
 
 ## Server Installation
 
@@ -170,8 +170,8 @@ And the `torrc` file for the second journalist should look like something this:
 
 * Open run the Tor Browser Bundle and enter the journalist's unique Tor hidden service URL without the Auth value  
 
-![Journalist_workstation1](https://raw.github.com/freedomofpress/securedrop/master/docs/images/install/journalist_workstation1.png)
+![Journalist_workstation1](/images/install/journalist_workstation1.png)
 
 ## Test It
 
-Once it's installed, test it out. See [How to Use SecureDrop](https://github.com/freedomofpress/securedrop/blob/master/docs/user_manual.md).
+Once it's installed, test it out. See [How to Use SecureDrop](/user_manual.md).
