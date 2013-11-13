@@ -23,7 +23,7 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-APP_FILES=" $(basename -- "$(dirname $0)" )/deaddrop"
+APP_FILES="../deaddrop"
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root" 1>&2
@@ -75,6 +75,9 @@ echo ""
 echo "Installing tor on host system..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
 gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
+if [ -f tor.asc ]; then
+    rm tor.asc
+fi
 gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
 apt-key add tor.asc | tee -a build.log
 apt-get -y update | tee -a build.log
@@ -341,6 +344,7 @@ catch_error $? 'configuring /etc/apache2/security'
 echo '/etc/apache2/security configured for $JAIL'
 service apache2 stop
 FOE
+
 echo "FOE done for $JAIL"
 done
 
@@ -357,7 +361,7 @@ service tor restart | tee -a build.log
 cat << EOF > /etc/apache2/sites-enabled/source
 NameVirtualHost 127.0.0.1:80
 <VirtualHost 127.0.0.1:80>
-  ServerName 127.0.0.1
+  ServerName localhost
   DocumentRoot /var/www/deaddrop/static
   Alias /static /var/www/deaddrop/static
   WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/deaddrop
@@ -467,7 +471,8 @@ sleep 10
 echo "Source onion url is: "
 echo `cat /var/chroot/source/var/lib/tor/hidden_service/hostname`
 
-echo "Journalist onion url and auth values are you will need to append ':8080' to the end of the journalist onion url"
+echo "You will need to append ':8080' to the end of the journalist onion url"
+echo "The document interface's onion url and auth values:"
 echo `cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname`
 
 exit 0
