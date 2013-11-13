@@ -3,7 +3,7 @@ import os
 import re
 import config
 import zipfile
-import crypto
+import crypto_util
 import uuid
 
 VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
