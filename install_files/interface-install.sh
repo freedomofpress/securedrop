@@ -23,7 +23,7 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-APP_FILES=$(basename -- "$(dirname $0)" )
+APP_FILES=" $(basename -- "$(dirname $0)" )/deaddrop"
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root" 1>&2
@@ -41,7 +41,7 @@ catch_error() {
 
 #CD into the directory containing the interface-install.sh script
 cd $(dirname $0)
-
+CWD="$(dirname $0)"
 #Update system and install dependencies to generate bcyrpt salt
 apt-get update -y | tee -a build.log
 apt-get upgrade -y | tee -a build.log
@@ -61,7 +61,7 @@ SECRET_KEY=$( python gen_secret_key.py )
 read -p "Location of application pub gpg key? " -e -i SecureDrop.asc KEY
 cp $KEY $CWD
 APP_GPG_KEY=$( basename "$KEY" )
-APP_GPG_KEY_FINGERPRINT=$(gpg --with-fingerprint $APP_GPG_KEY) 
+APP_GPG_KEY_FINGERPRINT=$( gpg --with-colons --with-fingerprint $APP_GPG_KEY | awk -F: '$1=="fpr" {print $10;}' )
 echo "Verify GPG fingerpint:"
 echo $APP_GPG_KEY_FINGERPRINT
 read -p "Is this information correct? (Y|N): " -e -i Y ANS
@@ -123,16 +123,25 @@ EOF
   else
     read -p "chroot jail for $JAIL already exisits overwrite? (Y|N): " -e -i Y ANS
     if [ $ANS = Y -o $ANS = y ]; then
-      mkdir -p /tmp/tor/keys/  
-      cp /var/chroot/$JAIL/var/lib/tor/hidden_service/{client_keys,private_key} /tmp/tor/keys 
+      if [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys" ]; then
+        mkdir -p /tmp/tor/keys/$JAIL  
+        cp /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor/keys/$JAIL
+      elif [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/private_key" ]; then
+        mkdir -p /tmp/tor/keys/$JAIL
+        cp /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor/keys/$JAIL
+      fi 
+
       lsof | grep $JAIL | perl -ane 'kill 9,$F[1]'
       umount /var/chroot/$JAIL/var/www/deaddrop/store
       umount /var/chroot/$JAIL/var/www/deaddrop/keys
       umount /var/chroot/$JAIL/proc
       rm -Rf /var/chroot/$JAIL
       create_chroot_env
-      cp /tmp/tor/keys/{client_keys,private_key} /var/chroot/$JAIL/var/lib/tor/hidden_service/
-      srm -R /tmp/tor/keys
+      if [ -d "/tmp/tor/keys/$JAIL" ]; then
+        cp -p /tmp/tor/keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/var/lib/tor/hidden_service/
+        srm -R /tmp/tor/keys/$JAIL
+        catch_error $? "removing tmp keys"
+      fi
     fi
   fi
 
