@@ -23,7 +23,7 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-
+APP_FILES=$(basename -- "$(dirname $0)" )
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root" 1>&2
@@ -38,7 +38,6 @@ catch_error() {
     exit 1
   fi
 }
-
 
 #CD into the directory containing the interface-install.sh script
 cd $(dirname $0)
@@ -158,7 +157,7 @@ EOF
   cp tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
   cp /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
   cp /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
-  cp -R deaddrop /var/chroot/$JAIL/var/www/ | tee -a build.log
+  cp -R $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
   cp $APP_GPG_KEY /var/chroot/$JAIL/var/www/ | tee -a build.log
 
   #Generate the config.py file for the web interface
