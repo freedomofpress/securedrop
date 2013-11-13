@@ -10,7 +10,23 @@
 # /scripts/document_interface/
 # and it will be copied into the respective chroot jail and run as root
 #
+
 JAILS="source journalist"
+
+if [ "$1" = "--force-clean" ]; then
+    cd /var/chroot
+
+    for JAIL in $JAILS; do
+	lsof | grep $JAIL | awk '{print $2}' | xargs kill -9
+	umount $JAIL/var/www/deaddrop/store
+	umount $JAIL/var/www/deaddrop/keys
+	umount $JAIL/proc
+	rm -rf $JAIL
+    done
+
+    exit 0
+fi
+
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
