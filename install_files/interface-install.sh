@@ -40,6 +40,9 @@ catch_error() {
 }
 
 
+#CD into the directory containing the interface-install.sh script
+cd $(dirname $0)
+
 #Update system and install dependencies to generate bcyrpt salt
 apt-get update -y | tee -a build.log
 apt-get upgrade -y | tee -a build.log
@@ -56,9 +59,16 @@ SECRET_KEY=$( python gen_secret_key.py )
 
 
 #User Inputs the applications public gpg key and verifies fingerprint
-read -p "Location of application pub gpg key? " -e -i SecureDrop.asc APP_GPG_KEY
-read -p "What is the application's pub gpg key fingerprint? " APP_GPG_KEY_FINGERPRINT
-
+read -p "Location of application pub gpg key? " -e -i SecureDrop.asc KEY
+cp $KEY $CWD
+APP_GPG_KEY=$( basename "$KEY" )
+APP_GPG_KEY_FINGERPRINT=$(gpg --with-fingerprint $APP_GPG_KEY) 
+echo "Verify GPG fingerpint:"
+echo $APP_GPG_KEY_FINGERPRINT
+read -p "Is this information correct? (Y|N): " -e -i Y ANS
+if [ $ANS = N -o $ANS = n ]; then
+  exit 1
+fi
 
 #Install tor repo, keyring and tor 
 #save tor key to disk to be copied to chroot jails later
@@ -114,9 +124,9 @@ EOF
   else
     read -p "chroot jail for $JAIL already exisits overwrite? (Y|N): " -e -i Y ANS
     if [ $ANS = Y -o $ANS = y ]; then
-      mkdir /tmp/tor/keys/  
+      mkdir -p /tmp/tor/keys/  
       cp /var/chroot/$JAIL/var/lib/tor/hidden_service/{client_keys,private_key} /tmp/tor/keys 
-      lsof | grep source | perl -ane 'kill 9,$F[1]'
+      lsof | grep $JAIL | perl -ane 'kill 9,$F[1]'
       umount /var/chroot/$JAIL/var/www/deaddrop/store
       umount /var/chroot/$JAIL/var/www/deaddrop/keys
       umount /var/chroot/$JAIL/proc
