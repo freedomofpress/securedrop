@@ -20,7 +20,7 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-APP_FILES="../deaddrop"
+APP_FILES="../securedrop"
 
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
@@ -28,19 +28,37 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-
 #Catch error
 catch_error() {
-  if [ !$1 = "0" ]; then
+  if [ !"$1" = "0" ]; then
     echo "ERROR encountered $2"
     exit 1
   fi
 }
 
 
+
 #CD into the directory containing the interface-install.sh script
 cd $(dirname $0)
 CWD="$(dirname $0)"
+
+
+#User Inputs the applications public gpg key and verifies fingerprint
+read -p "Location of application pub gpg key? " -e -i SecureDrop.asc KEY
+APP_GPG_KEY=$( basename "$KEY" )
+
+if [ -f APP_GPG_KEY ]; then
+ cp $KEY $CWD
+ catch_error $? "moving $APP_GPG_KEY to current directory"
+fi
+
+APP_GPG_KEY_FINGERPRINT=$( gpg --with-colons --with-fingerprint $APP_GPG_KEY | awk -F: '$1=="fpr" {print $10;}' )
+echo "Verify GPG fingerpint:"
+echo $APP_GPG_KEY_FINGERPRINT
+read -p "Is this information correct? (Y|N): " -e -i Y ANS
+if [ $ANS = N -o $ANS = n ]; then
+  exit 1
+fi
 
 
 #Update system and install dependencies to generate bcyrpt salt
@@ -60,30 +78,18 @@ BCRYPT_SALT=$( python gen_bcrypt_salt.py )
 SECRET_KEY=$( python gen_secret_key.py )
 
 
-#User Inputs the applications public gpg key and verifies fingerprint
-read -p "Location of application pub gpg key? " -e -i SecureDrop.asc KEY
-cp $KEY $CWD
-APP_GPG_KEY=$( basename "$KEY" )
-APP_GPG_KEY_FINGERPRINT=$( gpg --with-colons --with-fingerprint $APP_GPG_KEY | awk -F: '$1=="fpr" {print $10;}' )
-echo "Verify GPG fingerpint:"
-echo $APP_GPG_KEY_FINGERPRINT
-read -p "Is this information correct? (Y|N): " -e -i Y ANS
-if [ $ANS = N -o $ANS = n ]; then
-  exit 1
-fi
-
 #Install tor repo, keyring and tor 
 #save tor key to disk to be copied to chroot jails later
 echo ""
 echo "Installing tor on host system..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
 
-gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
-
 if [ -f tor.asc ]; then
-    rm tor.asc
+  rm tor.asc
 fi
 
+gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
+catch_error $?
 gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
 
 if [ ! "$1" = "--no-updates" ]; then
@@ -141,14 +147,19 @@ EOF
     fi 
     
     echo "Stoping apache service in chroot jail $JAIL..."
-    schroot -c $JAIL -u root service apache2 stop --directory /
-    echo "apache service stopped for chroot jail $JAIL"
-    echo "Stopping tor service in chroot jail $JAIL..."
-    schroot -c $JAIL -u root service tor stop --directory /
-    echo "tor service stopped for chroot jail $JAIL"
+    if schroot -c $JAIL -u root "pgrep apache2"; then
+      schroot -c $JAIL -u root service apache2 stop --directory /
+      echo "apache service stopped for chroot jail $JAIL"
+    fi
+
+    if schroot -c $JAIL -u root "pgrep tor"; then
+      echo "Stopping tor service in chroot jail $JAIL..."
+      schroot -c $JAIL -u root service tor stop --directory /
+      echo "tor service stopped for chroot jail $JAIL"
+    fi
 
     lsof | grep $JAIL | perl -ane 'kill 9,$F[1]'
-    MOUNTED_DIRS="/var/chroot/$JAIL/var/www/deaddrop/store /var/chroot/$JAIL/var/www/deaddrop/keys /var/chroot/$JAIL/proc"
+    MOUNTED_DIRS="/var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys /var/chroot/$JAIL/proc"
     for MOUNTED_DIR in $MOUNTED_DIRS; do
       if [ -d $MOUNTED_DIR ]; then
         echo "un mounting $MOUNTED_DIR"
@@ -195,36 +206,31 @@ EOF
 
   #Creating needed directory structure and files for the chroot jail
   echo "Creating the needed directories and files for the $JAIL chroot jail..."
-  if [ -d /var/chroot/journalist ]; then
-    mkdir -p /var/chroot/journalist/var/www/deaddrop/temp/
-  fi
   mkdir -p /var/chroot/$JAIL/{proc,etc,var} | tee -a build.log
   mkdir -p /var/chroot/$JAIL/etc/{apt,tor} | tee -a build.log
-  mkdir -p /var/chroot/$JAIL/var/www/deaddrop/{store,keys} | tee -a build.log
-  mkdir -p /opt/deaddrop/{store,keys} | tee -a build.log
-  chown -R securedrop:securedrop /opt/deaddrop/ | tee -a build.log
+  mkdir -p /var/chroot/$JAIL/var/www/securedrop/{store,keys} | tee -a build.log
+  mkdir -p /opt/securedrop/{store,keys} | tee -a build.log
+  mkdir -p /var/chroot/$JAIL/etc/apache2/sites-enabled/ | tee -a build.log
+  chown -R securedrop:securedrop /opt/securedrop/ | tee -a build.log
   mount -o bind /proc /var/chroot/$JAIL/proc | tee -a build.log
-  mount -o bind /opt/deaddrop/store /var/chroot/$JAIL/var/www/deaddrop/store | tee -a build.log
-  mount -o bind /opt/deaddrop/keys /var/chroot/$JAIL/var/www/deaddrop/keys | tee -a build.log
-  cp $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
-  cp $JAIL.config.py /var/chroot/$JAIL/var/www/deaddrop/ | tee -a build.log
-  cp $JAIL.ports.conf /var/chroot/$JAIL/etc/apache2/ports.conf | tee -a build.log
-  cp $JAIL.wsgi /var/chroot/$JAIL/var/www/deaddrop/$JAIL.wsgi | tee -a build.log
-  cp $JAIL.security /var/chroot/$JAIL/etc/apache2/security | tee -a build.log
-  cp $JAIL.site /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
-  cp $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
-  cp tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
-  cp /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
+  mount -o bind /opt/securedrop/store /var/chroot/$JAIL/var/www/securedrop/store | tee -a build.log
+  mount -o bind /opt/securedrop/keys /var/chroot/$JAIL/var/www/securedrop/keys | tee -a build.log
+
   cp /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
-  cp -R $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
+  catch_error $? "copying source.list to chroot jail $JAIL"
+  cp tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
+  catch_error $? "copying tor.asc to chroot jail $JAIL"
+  cp /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
+  catch_error $? "copying resolv.conf to chroot jail $JAIL"
   cp $APP_GPG_KEY /var/chroot/$JAIL/var/www/ | tee -a build.log
-
-  #Generate the config.py file for the web interface
-  cp $JAIL.config.py /var/chroot/$JAIL/var/www/deaddrop/config.py
-  catch_error $? "copying $JAIL.config.py template"
-  sed -i "s/BCRYPT_SALT_VALUE/$BCRYPT_SALT/" /var/chroot/$JAIL/var/www/deaddrop/config.py
-  sed -i "s/SECRET_KEY_VALUE/$SECRET_KEY/" /var/chroot/$JAIL/var/www/deaddrop/config.py
-
+  catch_error $? "copying $APP_GPG_KEY to chroot jail $JAIL"
+  cp -R $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
+  catch_error $? "copying $APP_FILES to chroot jail $JAIL"
+  ls /var/chroot/$JAIL/var/www/securedrop
+  if [ -d /var/chroot/journalist ]; then
+    mkdir -p /var/chroot/journalist/var/www/securedrop/temp/
+  fi
+ 
   #schroot into the jail and configure it
   echo ""
   echo "schrooting into $JAIL and configuring it"
@@ -242,10 +248,10 @@ EOF
 
     #chown the needed file for the application user in the chroot jail
     chown $JAIL:$JAIL /var/www/$APP_GPG_KEY
-    chown -R $JAIL:$JAIL /var/www/deaddrop
-    chown -R $JAIL:$JAIL /var/www/deaddrop/{keys,store}
+    chown -R $JAIL:$JAIL /var/www/securedrop
+    chown -R $JAIL:$JAIL /var/www/securedrop/{keys,store}
 
-    #add the tor signing key and install ubuntu-minimal
+    #add the tor signing key and install interface dependencies
     if [ ! "$1" = "--no-updates" ]; then
       apt-key add /root/tor.asc
       apt-get -y update
@@ -269,7 +275,7 @@ EOF
     #Install pip dependendcies
     if [ ! "$1" = "--no-updates" ]; then
        echo 'Installing pip dependencies for $JAIL...'
-       pip install -r /var/www/deaddrop/requirements.txt | tee -a build.log
+       pip install -r /var/www/securedrop/requirements.txt | tee -a build.log
        echo 'pip dependencies installed for $JAIL'
     fi
 
@@ -295,23 +301,47 @@ EOF
     fi
 
     if [ -f /etc/apache2/sites-available/default ]; then
-      rm /etc/apache2/sites-available/default
+      rm /etc/apache2/sites-available/*default*
+      rm /etc/apache2/sites-enabled/*default*
     fi
 
     echo 'default apache sites removed for $JAIL'
 
-    #Configuring apache2.conf
-    echo 'Configuring /etc/apache2/apache2.conf for $JAIL'
 
     Service apache2 stop
+    catch_error $? "stopping apache"
 FOE
 done
+
+  cp $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
+  cp $JAIL.ports.conf /var/chroot/$JAIL/etc/apache2/ports.conf | tee -a build.log
+  cp $JAIL.wsgi /var/chroot/$JAIL/var/www/securedrop/$JAIL.wsgi | tee -a build.log
+  cp $JAIL.security /var/chroot/$JAIL/etc/apache2/security | tee -a build.log
+  cp $JAIL.site /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
+  cp -f $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
+  #Generate the config.py file for the web interface
+  cp $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
+  catch_error $? "copying $JAIL.config.py template"
+ 
+  cat /var/chroot/$JAIL/var/www/securedrop/config.py 
+  echo "Generating config.py values"
+  perl -pi -e "s/APP_GPG_KEY_FINGERPRINT/${APP_GPG_KEY_FINGERPRINT}/" /var/chroot/$JAIL/var/www/securedrop/config.py
+  echo "Generating BCRYPT SALT"
+  echo "BCRYPT_SALT='$BCRYPT_SALT'" >> /var/chroot/$JAIL/var/www/securedrop/config.py
+
+  if ! grep -q SECRET_KEY* /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "SECRET_KEY='$SECRET_KEY'" >> /var/chroot/$JAIL/var/www/securedrop/config.py
+  fi 
+  echo "Generating SECRET_KEY"
+  perl -pi -e "s/SECRET_KEY_VALUE/${SECRET_KEYi}/" /var/chroot/$JAIL/var/www/securedrop/config.py
+  cat  /var/chroot/$JAIL/var/www/securedrop/config.py
+
 
 #Configure the source interface specific settings
 echo ""
 echo "Configuring the source interface specific settings..."
 schroot -c source -u root --directory /root << FOE
-  rm -R /var/www/deaddrop/{journalist_templates,journalist.py,example*,*.md,test*}
+  rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
 
   if [ -d "/root/tor-keys/$JAIL" ]; then
     cp -p /root/tor-keys/$JAIL/{client_keys,private_key} /var/lib/tor/hidden_service/
@@ -330,10 +360,10 @@ echo ""
 echo "Configuring the journalist interface specific settings"
 schroot -c journalist -u root --directory /root << FOE
   echo "Starting to configure apache for journalist"
-  rm -R /var/www/deaddrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
+  rm -R /var/www/securedrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
 
   echo "Importing application gpg public key on $JAIL"
-  su -c "gpg2 --homedir /var/www/deaddrop/keys --import /var/www/$APP_GPG_KEY" $JAIL
+  su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" $JAIL
   service apache2 restart
   service tor restart
 FOE
@@ -342,10 +372,10 @@ cat <<EOF > /etc/rc.local
 #commands to be run after reboot for securedrop
 mount -o bind /proc /var/chroot/source/proc
 mount -o bind /proc /var/chroot/journalist/proc
-mount -o bind /opt/deaddrop/store /var/chroot/journalist/var/www/deaddrop/store
-mount -o bind /opt/deaddrop/store /var/chroot/source/var/www/deaddrop/store
-mount -o bind /opt/deaddrop/keys /var/chroot/source/var/www/deaddrop/keys
-mount -o bind /opt/deaddrop/keys /var/chroot/journalist/var/www/deaddrop/keys
+mount -o bind /opt/securedrop/store /var/chroot/journalist/var/www/securedrop/store
+mount -o bind /opt/securedrop/store /var/chroot/source/var/www/securedrop/store
+mount -o bind /opt/securedrop/keys /var/chroot/source/var/www/securedrop/keys
+mount -o bind /opt/securedrop/keys /var/chroot/journalist/var/www/securedrop/keys
 schroot -u root -a service apache2 restart --directory /root
 schroot -u root -a service tor restart --directory /root
 EOF

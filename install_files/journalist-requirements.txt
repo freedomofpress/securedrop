@@ -1,4 +1,4 @@
-ubuntu-minimal-install
+ubuntu-minimal
 secure-delete
 gnupg2
 haveged
