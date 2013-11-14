@@ -31,7 +31,7 @@ fi
 
 #Catch error
 catch_error() {
-  if [ !$1 = "0" ]; then
+  if [ ! $1 = "0" ]; then
     echo "ERROR encountered $2"
     exit 1
   fi
@@ -76,16 +76,23 @@ fi
 echo ""
 echo "Installing tor on host system..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
+catch_error $? "installing to repo"
+
 gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
+catch_error $? "downloading gpg key"
 if [ -f tor.asc ]; then
     rm tor.asc
 fi
 gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
+catch_error $? "outputing gpg key"
+
 if [ ! "$1" = "--no-updates" ]; then
   apt-key add tor.asc | tee -a build.log
+  catch_error $? "adding tor.asc key"
   apt-get -y update | tee -a build.log
+  catch_error $? "updating after adding tor key"
   apt-get -y install deb.torproject.org-keyring tor | tee -a build.log
-  catch_error $? "installing tor"
+  catch_error $? "installing deb.torproject.org-keyring"
   echo "tor installed on host system"
 fi
 
