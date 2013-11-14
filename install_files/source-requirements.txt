@@ -1,1 +1,10 @@
 ubuntu-minimal-install
+secure-delete
+gnupg2
+haveged
+apparmor-profiles
+apparmor-utils
+apache2-mpm-worker
+libapache2-mod-wsgi
+python-pip
+python-dev

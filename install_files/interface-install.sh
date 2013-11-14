@@ -12,9 +12,8 @@ JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
-HOST_DEPENDENCIES="secure-delete dchroot debootstrap python-dev python-pip gcc git python-software-properties"
+HOST_DEPENDENCIES="haveged secure-delete dchroot debootstrap python-dev python-pip gcc git python-software-properties"
 HOST_PYTHON_DEPENDENCIES="python-bcrypt"
-APP_DEPENDENCIES='secure-delete gnupg2 haveged apparmor-profiles apparmor-utils apache2-mpm-worker libapache2-mod-wsgi python-pip python-dev'
 DISABLE_MODS='auth_basic authn_file autoindex cgid env setenvif status'
 ENABLE_MODS='wsgi'
 BCRYPT_SALT=""
@@ -251,14 +250,8 @@ EOF
       apt-key add /root/tor.asc
       apt-get -y update
       apt-get -y upgrade
-      apt-get -y install $( cat $JAIL-requirements.txt )  | tee -a build.log
-
-      #Install dependencies
-      echo ""
-      echo "Installing dependencies for $JAIL..."
-      apt-get -y install $APP_DEPENDENCIES
+      apt-get install $(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")  | tee -a build.log
       catch_error $? "installing app dependencies"
-      echo "Dependencies installed"
 
       #Install tor repo, keyring and tor
       echo ""
