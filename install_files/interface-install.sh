@@ -48,8 +48,11 @@ if [ ! "$1" = "--no-updates" ]; then
   apt-get -y install $HOST_DEPENDENCIES | tee -a build.log
   catch_error $? "installing host dependencies"
 fi
-#pip install $HOST_PYTHON_DEPENDENCIES | tee -a build.log
-catch_error $? "installing host python dependencies"
+
+if [ ! "$1" = "--no-updates" ]; then
+  pip install $HOST_PYTHON_DEPENDENCIES | tee -a build.log
+  catch_error $? "installing host python dependencies"
+fi
 
 #Generate bcyrpt salt and secret key that will be used in hashing codenames and signing cookies
 BCRYPT_SALT=$( python gen_bcrypt_salt.py )
