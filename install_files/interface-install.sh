@@ -22,6 +22,7 @@ SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
 APP_FILES="../deaddrop"
+
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as root" 1>&2
@@ -37,9 +38,12 @@ catch_error() {
   fi
 }
 
+
 #CD into the directory containing the interface-install.sh script
 cd $(dirname $0)
 CWD="$(dirname $0)"
+
+
 #Update system and install dependencies to generate bcyrpt salt
 if [ ! "$1" = "--no-updates" ]; then
   apt-get update -y | tee -a build.log
@@ -47,9 +51,7 @@ if [ ! "$1" = "--no-updates" ]; then
 
   apt-get -y install $HOST_DEPENDENCIES | tee -a build.log
   catch_error $? "installing host dependencies"
-fi
 
-if [ ! "$1" = "--no-updates" ]; then
   pip install $HOST_PYTHON_DEPENDENCIES | tee -a build.log
   catch_error $? "installing host python dependencies"
 fi
@@ -76,11 +78,15 @@ fi
 echo ""
 echo "Installing tor on host system..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
+
 gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
+
 if [ -f tor.asc ]; then
     rm tor.asc
 fi
+
 gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
+
 if [ ! "$1" = "--no-updates" ]; then
   apt-key add tor.asc | tee -a build.log
   apt-get -y update | tee -a build.log
@@ -88,6 +94,7 @@ if [ ! "$1" = "--no-updates" ]; then
   catch_error $? "installing tor"
   echo "tor installed on host system"
 fi
+
 
 #Lock the tor user account
 echo "Locking the tor user account..."
@@ -162,7 +169,7 @@ EOF
     create_chroot_env
 
     if [ -d "/tmp/tor/keys/$JAIL" ]; then
-      echo "coping backuped tor keys to /var/chroot/$JAIL/root/tor-keys/$JAIL/..."
+      echo "copying tor keys to /var/chroot/$JAIL/root/tor-keys/$JAIL/..."
       cp -p /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL
       echo "backed up'd tor keys are copied to /var/chroot/$JAIL/root/tor-keys/$JAIL/" 
       echo "secure-deleting /tmp/tor/keys/$JAIL..."
@@ -189,15 +196,24 @@ EOF
 
   #Creating needed directory structure and files for the chroot jail
   echo "Creating the needed directories and files for the $JAIL chroot jail..."
+  if [ -d /var/chroot/journalist ]; then
+    mkdir -p /var/chroot/journalist/var/www/deaddrop/temp/
+  fi
   mkdir -p /var/chroot/$JAIL/{proc,etc,var} | tee -a build.log
-  mkdir -p /var/chroot/$JAIL/etc/apt | tee -a build.log
+  mkdir -p /var/chroot/$JAIL/etc/{apt,tor} | tee -a build.log
   mkdir -p /var/chroot/$JAIL/var/www/deaddrop/{store,keys} | tee -a build.log
   mkdir -p /opt/deaddrop/{store,keys} | tee -a build.log
   chown -R securedrop:securedrop /opt/deaddrop/ | tee -a build.log
   mount -o bind /proc /var/chroot/$JAIL/proc | tee -a build.log
   mount -o bind /opt/deaddrop/store /var/chroot/$JAIL/var/www/deaddrop/store | tee -a build.log
   mount -o bind /opt/deaddrop/keys /var/chroot/$JAIL/var/www/deaddrop/keys | tee -a build.log
-  cp $JAIL.wsgi /var/chroot/$JAIL/var/www/deaddrop/ | tee -a build.log
+  cp $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
+  cp $JAIL.config.py /var/chroot/$JAIL/var/www/deaddrop/ | tee -a build.log
+  cp $JAIL.ports.conf /var/chroot/$JAIL/etc/apache2/ports.conf | tee -a build.log
+  cp $JAIL.wsgi /var/chroot/$JAIL/var/www/deaddrop/$JAIL.wsgi | tee -a build.log
+  cp $JAIL.security /var/chroot/$JAIL/etc/apache2/security | tee -a build.log
+  cp $JAIL.site /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
+  cp $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
   cp tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
   cp /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
   cp /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
@@ -205,233 +221,114 @@ EOF
   cp $APP_GPG_KEY /var/chroot/$JAIL/var/www/ | tee -a build.log
 
   #Generate the config.py file for the web interface
-  cat << EOF > /var/chroot/$JAIL/var/www/deaddrop/config.py
-# data directories - should be on secure media
-STORE_DIR='/var/www/deaddrop/store'
-GPG_KEY_DIR='/var/www/deaddrop/keys'
-# fingerprint of the GPG key to encrypt submissions to
-JOURNALIST_KEY='$APP_GPG_KEY_FINGERPRINT'
-
-SOURCE_TEMPLATES_DIR='/var/www/deaddrop/source_templates'
-JOURNALIST_TEMPLATES_DIR='/var/www/deaddrop/journalist_templates'
-WORD_LIST='/var/www/deaddrop/wordlist'
-
-BCRYPT_SALT='$BCRYPT_SALT' # bcrypt.gensalt()
-SECRET_KEY='$SECRET_KEY' # import os; os.urandom(24)
-EOF
-
+  cp $JAIL.config.py /var/chroot/$JAIL/var/www/deaddrop/config.py
+  catch_error $? "copying $JAIL.config.py template"
+  sed -i "s/BCRYPT_SALT_VALUE/$BCRYPT_SALT/" /var/chroot/$JAIL/var/www/deaddrop/config.py
+  sed -i "s/SECRET_KEY_VALUE/$SECRET_KEY/" /var/chroot/$JAIL/var/www/deaddrop/config.py
 
   #schroot into the jail and configure it
   echo ""
   echo "schrooting into $JAIL and configuring it"
   schroot -c $JAIL -u root --directory /root <<FOE
-echo "Updating chroot system for $JAIL..."
-#create the application user in the jail
-useradd $JAIL
+    echo "Updating chroot system for $JAIL..."
+    #create the application user in the jail
+    useradd $JAIL
 
-catch_error() {
-  if [ !$1 = "0" ]; then
-    echo "ERROR encountered $2"
-    exit 1
-  fi
-}
+    catch_error() {
+      if [ !$1 = "0" ]; then
+        echo "ERROR encountered $2"
+        exit 1
+      fi
+    }
 
-#chown the needed file for the application user in the chroot jail
-chown $JAIL:$JAIL /var/www/$APP_GPG_KEY
-chown -R $JAIL:$JAIL /var/www/deaddrop
-chown -R $JAIL:$JAIL /var/www/deaddrop/{keys,store}
+    #chown the needed file for the application user in the chroot jail
+    chown $JAIL:$JAIL /var/www/$APP_GPG_KEY
+    chown -R $JAIL:$JAIL /var/www/deaddrop
+    chown -R $JAIL:$JAIL /var/www/deaddrop/{keys,store}
 
-#add the tor signing key and install ubuntu-minimal
-if [ ! "$1" = "--no-updates" ]; then
-  apt-key add /root/tor.asc
-  apt-get -y update
-  apt-get -y upgrade
-  apt-get -y install $( cat $JAIL-requirements.txt )  | tee -a build.log
+    #add the tor signing key and install ubuntu-minimal
+    if [ ! "$1" = "--no-updates" ]; then
+      apt-key add /root/tor.asc
+      apt-get -y update
+      apt-get -y upgrade
+      apt-get -y install $( cat $JAIL-requirements.txt )  | tee -a build.log
 
-  #Install dependencies
-  echo ""
-  echo "Installing dependencies for $JAIL..."
-  apt-get -y install $APP_DEPENDENCIES
-  catch_error $? "installing app dependencies"
-  echo "Dependencies installed"
+      #Install dependencies
+      echo ""
+      echo "Installing dependencies for $JAIL..."
+      apt-get -y install $APP_DEPENDENCIES
+      catch_error $? "installing app dependencies"
+      echo "Dependencies installed"
 
-  #Install tor repo, keyring and tor
-  echo ""
-  echo "Installing tor for $JAIL..."
-  apt-key add /root/tor.asc | tee -a build.log
-  apt-get -y install deb.torproject.org-keyring tor
-  catch_error $? "installing tor"
-  echo "Tor installed for $JAIL"
-fi
+      #Install tor repo, keyring and tor
+      echo ""
+      echo "Installing tor for $JAIL..."
+      apt-key add /root/tor.asc | tee -a build.log
+      apt-get -y install deb.torproject.org-keyring tor
+      catch_error $? "installing tor"
+      echo "Tor installed for $JAIL"
+    fi
 
-echo "Lock tor user..."
-passwd -l debian-tor
-echo "tor user locked"
+    echo "Lock tor user..."
+    passwd -l debian-tor
+    echo "tor user locked"
 
-cat << EOF > /etc/tor/torrc
-RunAsDaemon 1
-HiddenServiceDir /var/lib/tor/hidden_service/
-SafeLogging 1
-SocksPort 0
-EOF
+    #Install pip dependendcies
+    if [ ! "$1" = "--no-updates" ]; then
+       echo 'Installing pip dependencies for $JAIL...'
+       pip install -r /var/www/deaddrop/requirements.txt | tee -a build.log
+       echo 'pip dependencies installed for $JAIL'
+    fi
 
-echo ""
-echo "Restarting tor for $JAIL..."
-service tor restart
-catch_error $? "restarting tor"
+    #Disable unneeded apache modules
+    echo 'Disabling apache modules for $JAIL...'
+    a2dismod $DISABLE_MODS | tee -a build.log
+    echo 'Apache modules disabled for $JAIL'
 
-#Install pip dependendcies
-if [ ! "$1" = "--no-updates" ]; then
-  echo 'Installing pip dependencies for $JAIL...'
-  pip install -r /var/www/deaddrop/requirements.txt | tee -a build.log
-  echo 'pip dependencies installed for $JAIL'
-fi
+    #Enabling apache modules
+    echo 'Enabling apache modules for $JAIL...'
+    a2enmod $ENABLE_MODS | tee -a build.log
+    echo 'Apache modules enabled for $JAIL'
 
-#Disable unneeded apache modules
-echo 'Disabling apache modules for $JAIL...'
-a2dismod $DISABLE_MODS | tee -a build.log
-echo 'Apache modules disabled for $JAIL'
+    #removing default apache sites
+    echo 'Removing default apache sites for $JAIL...'
+    a2dissite default default-ssl | tee -a build.log
+    if [ -f /var/www/index.html ]; then
+      rm /var/www/index.html
+    fi
 
-#Enabling apache modules
-echo 'Enabling apache modules for $JAIL...'
-a2enmod $ENABLE_MODS | tee -a build.log
-echo 'Apache modules enabled for $JAIL'
+    if [ -f /etc/apache2/sites-available/default-ssl ]; then
+      rm /etc/apache2/sites-available/default-ssl
+    fi
 
-#removing default apache sites
-echo 'Removing default apache sites for $JAIL...'
-a2dissite default default-ssl | tee -a build.log
-if [ -f /var/www/index.html ]; then
-  rm /var/www/index.html
-fi
+    if [ -f /etc/apache2/sites-available/default ]; then
+      rm /etc/apache2/sites-available/default
+    fi
 
-if [ -f /etc/apache2/sites-available/default-ssl ]; then
-  rm /etc/apache2/sites-available/default-ssl
-fi
+    echo 'default apache sites removed for $JAIL'
 
-if [ -f /etc/apache2/sites-available/default ]; then
-  rm /etc/apache2/sites-available/default
-fi
-echo 'default apache sites removed for $JAIL'
+    #Configuring apache2.conf
+    echo 'Configuring /etc/apache2/apache2.conf for $JAIL'
 
-#Configuring ports.conf
-echo 'Configuring /etc/apache2/ports.conf for $JAIL'
-cat << EOF > /etc/apache2/ports.conf
-Listen 127.0.0.1:80
-EOF
-catch_error $? 'configuring ports.conf'
-echo '/etc/apache2/ports.conf configured'
-
-#Configuring apache2.conf
-echo 'Configuring /etc/apache2/apache2.conf for $JAIL'
-cat << EOF > /etc/apache2/apache2.conf
-LockFile $,,{APACHE_LOCK_DIR}/accept.lock
-PidFile $,,{APACHE_PID_FILE}
-Timeout 300
-KeepAlive On
-MaxKeepAliveRequests 100
-KeepAliveTimeout 5
-<IfModule mpm_worker_module>
-    StartServers          2
-    MinSpareThreads      25
-    MaxSpareThreads      75
-    ThreadLimit          64
-    ThreadsPerChild      25
-    MaxClients          150
-    MaxRequestsPerChild   0
-</IfModule>
-User $JAIL
-Group $JAIL
-
-AccessFileName .htaccess
-<Files ~ \"^\.ht\">
-    Order allow,deny
-    Deny from all
-    Satisfy all
-</Files>
-DefaultType None
-HostnameLookups Off
-ErrorLog /dev/null
-LogLevel crit
-Include mods-enabled/*.load
-Include mods-enabled/*.conf
-Include httpd.conf
-Include ports.conf
-Include conf.d/
-Include sites-enabled/
-EOF
-#need to fix this so to create the file outside the jail then cp it in
-#and change variables
-sed -i 's/,,//' /etc/apache2/apache2.conf
-catch_error $? 'configuring /etc/apache2/apache2.conf'
-
-echo '/etc/apache2/apache2.conf configured for $JAIL'
-
-
-#Configure /etc/apache2/security
-echo 'Configuring /etc/apache2/security for $JAIL...'
-cat << EOF > /etc/apache2/security
-ServerTokens Prod
-ServerSignature Off
-TraceEnable Off
-EOF
-catch_error $? 'configuring /etc/apache2/security'
-echo '/etc/apache2/security configured for $JAIL'
-service apache2 stop
+    Service apache2 stop
 FOE
-
-echo "FOE done for $JAIL"
 done
-echo "outside chroot"
 
 #Configure the source interface specific settings
 echo ""
 echo "Configuring the source interface specific settings..."
 schroot -c source -u root --directory /root << FOE
-rm -R /var/www/deaddrop/{journalist_templates,journalist.py,example*,*.md,test*}
+  rm -R /var/www/deaddrop/{journalist_templates,journalist.py,example*,*.md,test*}
 
-echo 'HiddenServicePort 80 127.0.0.1:80' >> /etc/tor/torrc
-service tor restart | tee -a build.log
-cat << EOF > /etc/apache2/sites-enabled/source
-NameVirtualHost 127.0.0.1:80
-<VirtualHost 127.0.0.1:80>
-  ServerName localhost
-  DocumentRoot /var/www/deaddrop/static
-  Alias /static /var/www/deaddrop/static
-  WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/deaddrop
-  WSGIProcessGroup source
-  WSGIScriptAlias / /var/www/deaddrop/source.wsgi/
-  AddType text/html .py
+  if [ -d "/root/tor-keys/$JAIL" ]; then
+    cp -p /root/tor-keys/$JAIL/{client_keys,private_key} /var/lib/tor/hidden_service/
+    srm -R /root/tor-keys/$JAIL
+    catch_error $? "removing tmp keys"
+  fi
 
-  <Directory />
-    Options None
-    AllowOverride None
-    Order deny,allow
-    Deny from all
-  </Directory>
-  <Directory /var/www/deaddrop>
-    Order allow,deny
-    allow from all
-  </Directory>
-  <Directory /var/www/deaddrop/static>
-    Options None
-    AllowOverride None
-    Order allow,deny
-    allow from all
-  </Directory>
-  ErrorLog /dev/null
-  LogLevel crit
-  ServerSignature Off
-</VirtualHost>
-EOF
-
-if [ -d "/root/tor-keys/$JAIL" ]; then
-  cp -p /root/tor-keys/$JAIL/{client_keys,private_key} /var/lib/tor/hidden_service/
-  srm -R /root/tor-keys/$JAIL
-  catch_error $? "removing tmp keys"
-fi
-service apache2 restart
-service tor restart
-echo "Done setting up $JAIL"
+  service apache2 restart
+  service tor restart
+  echo "Done setting up $JAIL"
 FOE
 echo "Done setting up the source interface specific settings"
 
@@ -439,66 +336,13 @@ echo "Done setting up the source interface specific settings"
 echo ""
 echo "Configuring the journalist interface specific settings"
 schroot -c journalist -u root --directory /root << FOE
-echo "Starting to configure apache for journalist"
-rm -R /var/www/deaddrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
+  echo "Starting to configure apache for journalist"
+  rm -R /var/www/deaddrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
 
-cat << EOF >> /etc/tor/torrc
-HiddenServicePort 8080 127.0.0.1:8080
-HiddenServiceAuthorizeClient stealth journalist1,journalist2
-EOF
-
-service tor restart | tee -a build.log
-echo 'Listen 127.0.0.1:8080' > /etc/apache2/ports.conf
-
-
-cat << EOF > /etc/apache2/sites-enabled/journalist
-NameVirtualHost 127.0.0.1:8080
-<VirtualHost 127.0.0.1:8080>
-  ServerName localhost
-  DocumentRoot /var/www/deaddrop/static
-  Alias /static /var/www/deaddrop/static
-  WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/deaddrop
-  WSGIProcessGroup journalist
-  WSGIScriptAlias / /var/www/deaddrop/journalist.wsgi/
-  AddType text/html .py
-
-  <Directory />
-    Options None
-    AllowOverride None
-    Order deny,allow
-    Deny from all
-  </Directory>
-  <Directory /var/www/deaddrop>
-    Order allow,deny
-    allow from all
-  </Directory>
-  <Directory /var/www/deaddrop/static>
-    Options None
-    AllowOverride None
-    Order allow,deny
-    allow from all
-  </Directory>
-  ErrorLog /var/log/apache2/error.log
-  CustomLog /var/log/apache2/access.log combined
-  LogLevel info
-  ServerSignature Off
-</VirtualHost>
-EOF
-echo "Done configuring apache for journalist"
-
-echo "adding /var/www/deaddrop/temp dir for document interface"
-mkdir /var/www/deaddrop/temp
-chown journalist:journalist /var/www/deaddrop/temp
-if ! grep "TEMP_DIR" /var/www/deaddrop/config.py; then
-echo 'TEMP_DIR="/var/www/deaddrop/temp"' >> /var/www/deaddrop/config.py
-echo "/var/www/deaddrop/temp directory created for document interface"
-fi
-
-echo "Done"
-echo "Importing application gpg public key on $JAIL"
-su -c "gpg2 --homedir /var/www/deaddrop/keys --import /var/www/$APP_GPG_KEY" $JAIL
-service apache2 restart
-service tor restart
+  echo "Importing application gpg public key on $JAIL"
+  su -c "gpg2 --homedir /var/www/deaddrop/keys --import /var/www/$APP_GPG_KEY" $JAIL
+  service apache2 restart
+  service tor restart
 FOE
 
 cat <<EOF > /etc/rc.local
