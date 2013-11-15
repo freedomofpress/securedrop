@@ -1,12 +1,16 @@
 #!/bin/bash
 #
 # Usage: ./install-scripts
-# Reads requirements.txt for python requirements
-# Reads source-requirements.txt for ubuntu dependencies on source interface
-# Reads journalist-requirements.txt for ubuntu packages on doc interface
 # --no-updates to run script without apt-get or pip install commands
 # --force-clean to delete chroot jails. backup tor private keys prior
-#
+# --force-clean to delete chroot jails.
+#securedrop.git
+#securedrop/securedrop/                           (web app code)
+#securedrop/securedrop/requirements.txt           (pip requirements)
+#securedrop/install_files/                        (config files and install scripts)
+#securedrop/install_files/SecureDrop.asc          (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt (source chroot jail package dependencies)
+#securedrop/install_files/journalist_requirements.txt    (journalist interface chroot package dependencies)#
 #
 JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
