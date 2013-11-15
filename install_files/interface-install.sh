@@ -1,15 +1,12 @@
 #!/bin/bash
 #
 # Usage: ./install-scripts
+# Reads requirements.txt for python requirements
+# Reads source-requirements.txt for ubuntu dependencies on source interface
+# Reads journalist-requirements.txt for ubuntu packages on doc interface
 # --no-updates to run script without apt-get or pip install commands
-# --force-clean to delete chroot jails.
-#securedrop.git
-#securedrop/securedrop/                           (web app code)
-#securedrop/securedrop/requirements.txt           (pip requirements)
-#securedrop/install_files/                        (config files and install scripts)
-#securedrop/install_files/SecureDrop.asc          (the app pub gpg key)
-#securedrop/install_files/source_requirements.txt (source chroot jail package dependencies)
-#securedrop/install_files/journalist_requireme    (journalist interface chroot package dependencies)
+# --force-clean to delete chroot jails. backup tor private keys prior
+#
 #
 JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
@@ -23,7 +20,9 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-APP_FILES="../securedrop"
+CWD="$(dirname $0)"
+PARENT_DIR="$(dirname "$CWD")"
+APP_FILES="$PARENT_DIR/securedrop"
 
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
@@ -40,10 +39,8 @@ catch_error() {
 }
 
 
-
 #CD into the directory containing the interface-install.sh script
-cd $(dirname $0)
-CWD="$(dirname $0)"
+cd $CWD
 
 
 #User Inputs the applications public gpg key and verifies fingerprint
@@ -212,12 +209,12 @@ EOF
   mkdir -p /var/chroot/$JAIL/{proc,etc,var} | tee -a build.log
   mkdir -p /var/chroot/$JAIL/etc/{apt,tor} | tee -a build.log
   mkdir -p /var/chroot/$JAIL/var/www/securedrop/{store,keys} | tee -a build.log
-  mkdir -p /opt/securedrop/{store,keys} | tee -a build.log
+  mkdir -p /var/securedrop/{store,keys} | tee -a build.log
   mkdir -p /var/chroot/$JAIL/etc/apache2/sites-enabled/ | tee -a build.log
-  chown -R securedrop:securedrop /opt/securedrop/ | tee -a build.log
+  chown -R securedrop:securedrop /var/securedrop/ | tee -a build.log
   mount -o bind /proc /var/chroot/$JAIL/proc | tee -a build.log
-  mount -o bind /opt/securedrop/store /var/chroot/$JAIL/var/www/securedrop/store | tee -a build.log
-  mount -o bind /opt/securedrop/keys /var/chroot/$JAIL/var/www/securedrop/keys | tee -a build.log
+  mount -o bind /var/securedrop/store /var/chroot/$JAIL/var/www/securedrop/store | tee -a build.log
+  mount -o bind /var/securedrop/keys /var/chroot/$JAIL/var/www/securedrop/keys | tee -a build.log
 
   cp -f /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
   catch_error $? "copying source.list to chroot jail $JAIL"
@@ -380,10 +377,10 @@ cat <<EOF > /etc/rc.local
 #commands to be run after reboot for securedrop
 mount -o bind /proc /var/chroot/source/proc
 mount -o bind /proc /var/chroot/journalist/proc
-mount -o bind /opt/securedrop/store /var/chroot/journalist/var/www/securedrop/store
-mount -o bind /opt/securedrop/store /var/chroot/source/var/www/securedrop/store
-mount -o bind /opt/securedrop/keys /var/chroot/source/var/www/securedrop/keys
-mount -o bind /opt/securedrop/keys /var/chroot/journalist/var/www/securedrop/keys
+mount -o bind /var/securedrop/store /var/chroot/journalist/var/www/securedrop/store
+mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
+mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys
+mount -o bind /var/securedrop/keys /var/chroot/journalist/var/www/securedrop/keys
 schroot -u root -a service apache2 restart --directory /root
 schroot -u root -a service tor restart --directory /root
 EOF
