@@ -9,22 +9,36 @@ WSGIScriptAlias / /var/www/securedrop/source.wsgi/
 AddType text/html .py
 
 <Directory />
-Options None
-AllowOverride None
-Order deny,allow
-Deny from all
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
 </Directory>
 <Directory /var/www/securedrop>
-Order allow,deny
-allow from all
+  Options -Indexes -Includes
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
 </Directory>
 <Directory /var/www/securedrop/static>
-Options None
-AllowOverride None
-Order allow,deny
-allow from all
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
 </Directory>
+
 ErrorLog /dev/null
 LogLevel crit
-ServerSignature Off
 </VirtualHost>

@@ -1,8 +1,15 @@
 #!/bin/bash
 #
-#
-DEPENDENCIES='secure-delete gnupg2 haveged syslog-ng ntp libpam-google-authenticator rng-tools unattended-upgrades inotify-tools sysstat iptables apparmor-profiles apparmor-utils python-software-properties' 
-
+# Usage: ./base_install.sh
+# --no-updates to run script without apt-get or pip install commands
+#securedrop.git                                       (repo base)
+#securedrop/securedrop/                               (web app code)
+#securedrop/securedrop/requirements.txt               (pip requirements)
+#securedrop/install_files/                            (config files and install scripts)
+#securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
+#securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)
+BASE_DEPENDENCIES="secure-delete gnupg2 haveged syslog-ng ntp libpam-google-authenticator rng-tools unattended-upgrades inotify-tools sysstat iptables apparmor-profiles apparmor-utils python-software-properties"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
@@ -58,16 +65,17 @@ fi
 
 #Update and upgrade system
 echo ""
-echo "Updating system..."
-apt-get update -y | tee build.log && apt-get upgrade -y | tee -a build.log
-catch_error $? "updating system"
-echo "System updated"
-
+if [ ! "$1" = "--no-updates" ]; then
+  echo "Updating system..."
+  apt-get update -y && apt-get upgrade -y | tee -a build.log
+  catch_error $? "updating system"
+  echo "System updated"
+fi
 
 #Install dependencies
 echo ""
 echo "Installing dependencies..."
-apt-get install $DEPENDENCIES -y | tee -a build.log
+apt-get install -y $BASE_DEPENDENCIES | tee -a build.log
 catch_error $? "installing dependencies"
 echo "Dependencies installed"
 
@@ -123,33 +131,8 @@ echo "Only the root user can run cron jobs"
 #sysctl.conf tweeks
 echo ""
 echo "Configuring sysctl.conf..."
-cat << EOF > /etc/sysctl.conf
-# Following 11 lines added by CISecurity Benchmark sec 5.1
-net.ipv4.tcp_max_syn_backlog = 4096
-net.ipv4.tcp_syncookies=1
-net.ipv4.conf.all.rp_filter = 1
-net.ipv4.conf.all.accept_source_route = 0
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv4.conf.all.secure_redirects = 0
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.conf.default.accept_source_route = 0
-net.ipv4.conf.default.accept_redirects = 0
-net.ipv4.conf.default.secure_redirects = 0
-net.ipv4.icmp_echo_ignore_broadcasts = 1
-#
-# Following 3 lines added by CISecurity Benchmark sec 5.2
-net.ipv4.ip_forward = 0
-net.ipv4.conf.all.send_redirects = 0
-net.ipv4.conf.default.send_redirects = 0
-#
-# Following 3 lines were added to disable IPv6 per CIS Debian
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-#
-# Grsecurity Kernel related configs
-#kernel.grsecurity.grsec.lock = 1
-EOF
+cp sysctl.conf /etc/sysctl.conf
+catch_error $? "copying sysctl.conf"
 sysctl -p /etc/sysctl.conf | tee -a build.log
 catch_error $? "configuring sysctl.conf"
 echo "Sysctl.conf configured"
@@ -171,13 +154,7 @@ echo "Tor installed"
 #Configure authenticated tor hidden service for ssh access
 echo ""
 echo "Configuing authenticated to hidden service for ssh access..."
-cat << EOF > /etc/tor/torrc
-SafeLogging 1
-RunAsDaemon 1
-HiddenServiceDir /var/lib/tor/hidden_service/
-HiddenServicePort 22 127.0.0.1:22
-HiddenServiceAuthorizeClient stealth admin1,admin2
-EOF
+cp base.torrc /etc/tor/torrc
 catch_error $? "configuring authenticated tor hidden service for ssh access"
 echo "Authenticated tor hidden service for ssh access created"
 
@@ -192,10 +169,20 @@ cat /var/lib/tor/hidden_service/hostname
 
 #Generate google 2 step auth
 generate_2_step_code() {
-echo -n "Enter the username to create a google authenticator value for: "
+echo "Create a google authenticator value for admin users requiring ssh access"
+echo "These will be the only users able to ssh into the system."
+echo -n "Enter first username: "
 read SSH_USER
 
+groupadd ssh
+
 if id -u "$SSH_USER" >/dev/null 2>&1; then
+  if [ ! $(groups $SSH_USER | awk -F ": " "{print $2}" | grep -q "ssh") ]; then
+    echo "Adding $SSH_USER to ssh group"
+    usermod -a -G ssh $SSH_USER
+    catch_error $? "adding $SSH_USER to the ssh group"
+  fi
+
   echo "Creating google authenticator code for $SSH_USER in their home directory"
   su $SSH_USER -c google-authenticator
   catch_error $? "generating google-authenticator code for $SSH_USER"
@@ -233,22 +220,9 @@ if [ ! -d /etc/iptables ]; then
   mkdir /etc/iptables
   catch_error $? "creating /etc/iptables directory"
 fi
-cat << EOF > /etc/iptables/rules_v4
-*filter
-:INPUT ACCEPT [0:0]
-:FORWARD ACCEPT [0:0]
-:LOGNDROP - [0:0]
-:OUTPUT ACCEPT [0:0]
--A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p tcp -m tcp -j ACCEPT
--A INPUT -s $OTHER_IP -p udp --dport 1514 -j ACCEPT
--A INPUT -j LOGNDROP
--A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-level 4
--A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-level 4
--A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-level 4 
--A LOGNDROP -j DROP
-COMMIT
-EOF
+sed -i -e "s/OTHER_IP/$OTHER_IP/g" base.rules_v4
+catch_error $? "replacing $OTHER_IP in base.rules_v4"
+cp base.rules_v4 /etc/iptables/rules_v4
 catch_error $? "creating iptables rules file /etc/iptables/rules_v4"
 echo "The /etc/iptables/rules_v4 file created"
 
@@ -297,15 +271,7 @@ catch_error $? "configuring tcp wrappers for sshd /etc/hosts.deny"
 #ssh_config tweeks
 echo ""
 echo "Configuring ssh_config..."
-cat << EOF > /etc/ssh/ssh_config
-Host *
-Port 22
-Protocol 2
-    SendEnv LANG LC_*
-    HashKnownHosts yes
-    GSSAPIAuthentication yes
-    GSSAPIDelegateCredentials no
-EOF
+cp base.ssh_config /etc/ssh/ssh_config
 catch_error $? "configuring ssh_config"
 echo "ssh_config configured"
 
@@ -313,95 +279,7 @@ echo "ssh_config configured"
 #sshd_config tweeks
 echo ""
 echo "Configuring sshd_config..."
-cat << EOF > /etc/ssh/sshd_config
-# Package generated configuration file
-# See the sshd_config(5) manpage for details
-
-# What ports, IPs and protocols we listen for
-Port 22
-# Use these options to restrict which interfaces/protocols sshd will bind to
-#ListenAddress ::
-ListenAddress 127.0.0.1
-Protocol 2
-# HostKeys for protocol version 2
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_dsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-#Privilege Separation is turned on for security
-UsePrivilegeSeparation yes
-
-# Lifetime and size of ephemeral version 1 server key
-KeyRegenerationInterval 3600
-ServerKeyBits 768
-
-# Logging
-SyslogFacility AUTH
-LogLevel INFO
-
-# Authentication:
-LoginGraceTime 120
-PermitRootLogin no
-StrictModes yes
-
-RSAAuthentication yes
-PubkeyAuthentication yes
-#AuthorizedKeysFile        %h/.ssh/authorized_keys
-
-# Don't read the user's ~/.rhosts and ~/.shosts files
-IgnoreRhosts yes
-# For this to work you will also need host keys in /etc/ssh_known_hosts
-RhostsRSAAuthentication no
-# similar for protocol version 2
-HostbasedAuthentication no
-# Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication
-#IgnoreUserKnownHosts yes
-
-# To enable empty passwords, change to yes (NOT RECOMMENDED)
-PermitEmptyPasswords no
-
-# Change to yes to enable challenge-response passwords (beware issues with
-# some PAM modules and threads)
-ChallengeResponseAuthentication yes
-
-# Change to no to disable tunnelled clear text passwords
-#PasswordAuthentication yes
-
-# Kerberos options
-#KerberosAuthentication no
-#KerberosGetAFSToken no
-#KerberosOrLocalPasswd yes
-#KerberosTicketCleanup yes
-
-# GSSAPI options
-#GSSAPIAuthentication no
-#GSSAPICleanupCredentials yes
-
-X11Forwarding yes
-X11DisplayOffset 10
-PrintMotd no
-PrintLastLog yes
-TCPKeepAlive yes
-#UseLogin no
-
-#MaxStartups 10:30:60
-#Banner /etc/issue.net
-
-# Allow client to pass locale environment variables
-AcceptEnv LANG LC_*
-
-Subsystem sftp /usr/lib/openssh/sftp-server
-
-# Set this to 'yes' to enable PAM authentication, account processing,
-# and session processing. If this is enabled, PAM authentication will
-# be allowed through the ChallengeResponseAuthentication and
-# PasswordAuthentication.  Depending on your PAM configuration,
-# PAM authentication via ChallengeResponseAuthentication may bypass
-# the setting of "PermitRootLogin without-password".
-# If you just want the PAM account and session checks to run without
-# PAM authentication, then enable this but set PasswordAuthentication
-# and ChallengeResponseAuthentication to 'no'.
-UsePAM yes
-EOF
+cp base.sshd_config /etc/ssh/sshd_config
 catch_error $? "configuring sshd_config"
 echo "sshd_config configured"
 
@@ -409,35 +287,7 @@ echo "sshd_config configured"
 #Configure /etc/pam.d/common-auth
 echo ""
 echo "Configuring /etc/pam.d/common-auth..."
-cat << EOF > /etc/pam.d/common-auth
-
-s file is included from other service-specific PAM config files,
-# and should contain a list of the authentication modules that define
-# the central authentication scheme for use on the system
-# (e.g., /etc/shadow, LDAP, Kerberos, etc.).  The default is to use the
-# traditional Unix authentication mechanisms.
-#
-# As of pam 1.0.1-6, this file is managed by pam-auth-update by default.
-# To take advantage of this, it is recommended that you configure any
-# local modules either before or after the default block, and use
-# pam-auth-update to manage selection of other modules.  See
-# pam-auth-update(8) for details.
-
-# here are the per-package modules (the "Primary" block)
-auth required pam_google_authenticator.so
-auth    [success=1 default=ignore]      pam_unix.so nullok_secure
-# here's the fallback if no module succeeds
-auth    requisite                       pam_deny.so
-# prime the stack with a positive return value if there isn't one already;
-# this avoids us returning an error just because nothing sets a success code
-# since the modules above will each just jump around
-auth    required                        pam_permit.so
-# and here are more per-package modules (the "Additional" block)
-auth    optional        pam_ecryptfs.so unwrap
-# end of pam-auth-update config
-
-exit 0
-EOF
+cp base.common-auth /etc/pam.d/common-auth
 catch_error $? "configuring /etc/pam.d/common-auth"
 echo "/etc/pam.d/common-auth configured"
 

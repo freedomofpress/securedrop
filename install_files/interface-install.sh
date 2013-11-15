@@ -25,8 +25,7 @@ SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
 CWD="$(dirname $0)"
-PARENT_DIR="$(dirname "$CWD")"
-APP_FILES="$PARENT_DIR/securedrop"
+APP_FILES="../securedrop"
 
 #Check that user is root
 if [[ $EUID -ne 0 ]]; then
@@ -36,7 +35,7 @@ fi
 
 #Catch error
 catch_error() {
-  if [ !"$1" = "0" ]; then
+  if [ $1 -ne "0" ]; then
     echo "ERROR encountered $2"
     exit 1
   fi
@@ -79,36 +78,47 @@ fi
 
 #Generate bcyrpt salt and secret key that will be used in hashing codenames and signing cookies
 BCRYPT_SALT=$( python gen_bcrypt_salt.py )
+catch_error $? "generating bcrypt_salt"
 SECRET_KEY=$( python gen_secret_key.py )
-
+catch_error $? "generating bcrypt_salt"
 
 #Install tor repo, keyring and tor 
 #save tor key to disk to be copied to chroot jails later
 echo ""
 echo "Installing tor on host system..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
+catch_error $? "with add-apt-repository -y $TOR_REPO"
 
 if [ -f tor.asc ]; then
   rm tor.asc
 fi
 
 gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
-catch_error $?
+catch_error $? "recving tor key $TOR_KEY_ID"
 gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
+catch_error $? "exporting tor key $TOR_KEY_FINGERPRINT"
 
 if [ ! "$1" = "--no-updates" ]; then
   apt-key add tor.asc | tee -a build.log
+  catch_error $? "adding tor.asc"
   apt-get -y update | tee -a build.log
   apt-get -y install deb.torproject.org-keyring tor | tee -a build.log
-  catch_error $? "installing tor"
+  catch_error $? "installing deb.torproject.org-keyring and/or tor on host"
   echo "tor installed on host system"
 fi
 
+#This is for systems that didn't have their torrc file configured by the 
+#base_install.sh script so that
+if grep -Fxq 'SocksPort=9050' /etc/tor/torrc; then
+  sed -i "s/SocksPort=9050/SocksPort=0/g" /etc/tor/torrc
+  service tor restart | tee -a build.log
+  catch_error $? "restating tor service on host"
+fi
 
 #Lock the tor user account
 echo "Locking the tor user account..."
 passwd -l debian-tor | tee -a build.log
-catch_error $? "locking tor user account"
+#catch_error $? "locking tor user account"
 echo "tor user account locked"
 
 
@@ -125,7 +135,7 @@ echo "Setting up chroot jail for $JAIL interface..."
 description=Ubuntu Precise
 directory=/var/chroot/$JAIL
 users=$JAIL
-groups=$JAIL
+groups=securedrop
 EOF
     echo "chroot jail config for $JAIL created"
   else
@@ -144,39 +154,32 @@ EOF
   clean_chroot_jail() {
     if [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys" ]; then
       mkdir -p /tmp/tor-keys/$JAIL  
+      catch_error $? "making /tmp/tor-key/$JAIL"
       cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor-keys/$JAIL
+      catch_error $? "copying client_keys for $JAIL"
     elif [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/private_key" ]; then
       mkdir -p /tmp/tor-keys/$JAIL
+      catch_error $? "making /tmp/tor-keys/$JAIL"
       cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor-keys/$JAIL
+      catch_error $? "cp private_key of $JAIL"
     fi 
-    
-    echo "Stoping apache service in chroot jail $JAIL..."
-    if schroot -c $JAIL -u root "pgrep apache2"; then
-      schroot -c $JAIL -u root service apache2 stop --directory /
-      echo "apache service stopped for chroot jail $JAIL"
-    fi
-
-    if schroot -c $JAIL -u root "pgrep tor"; then
-      echo "Stopping tor service in chroot jail $JAIL..."
-      schroot -c $JAIL -u root service tor stop --directory /
-      echo "tor service stopped for chroot jail $JAIL"
-    fi
 
     lsof | grep $JAIL | perl -ane 'kill 9,$F[1]'
-    MOUNTED_DIRS="/var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys /var/chroot/$JAIL/proc"
+    catch_error $? "killing $JAIL processes"
+    MOUNTED_DIRS="/var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys"
     for MOUNTED_DIR in $MOUNTED_DIRS; do
-      if [ -d $MOUNTED_DIR ]; then
+      if mount | grep -q $MOUNTED_DIR; then
         echo "un mounting $MOUNTED_DIR"
         umount $MOUNTED_DIR
         catch_error $? "umounting $MOUNTED_DIR"
         echo "$MOUNTED_DIR un mounted"
       fi
     done
-      
+
     if [ -d /var/chroot/$JAIL ]; then
       echo "secure-deleting /var/chroot/$JAIL..."
       rm -Rf /var/chroot/$JAIL
-      catch_error $? "secure-deleting /var/chroot/$JAIL"
+      catch_error $? "secure-deleting /var/chroot/$JAIL reboot and run --force-clean again"
       echo "/var/chroot/$JAIL secure-deleted"
     fi
 
@@ -185,6 +188,7 @@ EOF
     if [ -d "/tmp/tor/keys/$JAIL" ]; then
       echo "copying tor keys to /var/chroot/$JAIL/root/tor-keys/$JAIL/..."
       cp -p -f /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL
+      catch_error $? "copying tor-keys/$JAIL"
       echo "backed up'd tor keys are copied to /var/chroot/$JAIL/root/tor-keys/$JAIL/" 
       echo "secure-deleting /tmp/tor/keys/$JAIL..."
       srm -R /tmp/tor-keys/$JAIL
@@ -210,15 +214,26 @@ EOF
 
   #Creating needed directory structure and files for the chroot jail
   echo "Creating the needed directories and files for the $JAIL chroot jail..."
-  mkdir -p /var/chroot/$JAIL/{proc,etc,var} | tee -a build.log
+  mkdir -p /var/chroot/$JAIL/{proc,etc,var,root} | tee -a build.log
+  catch_error $? "creating /var/chroot/$JAIL/{proc,etc,var}"
   mkdir -p /var/chroot/$JAIL/etc/{apt,tor} | tee -a build.log
+  catch_error $? "creating /var/chroot/$JAIL/etc/{apt,tor}"
   mkdir -p /var/chroot/$JAIL/var/www/securedrop/{store,keys} | tee -a build.log
+  catch_error $? "creating /var/chroot/$JAIL/var/www/securedrop/{store,keys}"
   mkdir -p /var/securedrop/{store,keys} | tee -a build.log
+  catch_error $? "creating /var/securedrop/{store,keys}"
   mkdir -p /var/chroot/$JAIL/etc/apache2/sites-enabled/ | tee -a build.log
+  catch_error $? "creating /var/chroot/$JAIL/etc/apache2/sites-enabled/"
+  mkdir -p /var/chroot/$JAIL/etc/apache2/conf.d/ | tee -a build.log
+  catch_error $? "creating apache2/conf.d in $JAIL"
   chown -R securedrop:securedrop /var/securedrop/ | tee -a build.log
+  catch_error $? "chown'ing securedrop:securedrop /var/securedrop/"
   mount -o bind /proc /var/chroot/$JAIL/proc | tee -a build.log
+  catch_error $? "mounting /proc"
   mount -o bind /var/securedrop/store /var/chroot/$JAIL/var/www/securedrop/store | tee -a build.log
+  catch_error $? "mounting /var/securedrop/store"
   mount -o bind /var/securedrop/keys /var/chroot/$JAIL/var/www/securedrop/keys | tee -a build.log
+  catch_error $? "mounting /var/securedrop/keys"
 
   cp -f /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
   catch_error $? "copying source.list to chroot jail $JAIL"
@@ -230,25 +245,28 @@ EOF
   catch_error $? "copying $APP_GPG_KEY to chroot jail $JAIL"
   cp -R -f $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
   catch_error $? "copying $APP_FILES to chroot jail $JAIL"
-  ls /var/chroot/$JAIL/var/www/securedrop
   if [ -d /var/chroot/journalist ]; then
     mkdir -p /var/chroot/journalist/var/www/securedrop/temp/
+    catch_error $? "creating /var/chroot/journalist/var/www/securedrop/temp/"
   fi
- 
+
+  INT_REQS=$(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
+  echo ""
+
   #schroot into the jail and configure it
   echo ""
   echo "schrooting into $JAIL and configuring it"
   schroot -c $JAIL -u root --directory /root <<FOE
     echo "Updating chroot system for $JAIL..."
+    #catch_error() {
+    #  if [ "$1" -ne "0" ]; then
+    #    echo "ERROR encountered $2"
+    #    exit 1
+    #  fi
+    #}
+
     #create the application user in the jail
     useradd $JAIL
-
-    catch_error() {
-      if [ !"$1" = "0" ]; then
-        echo "ERROR encountered $2"
-        exit 1
-      fi
-    }
 
     #chown the needed file for the application user in the chroot jail
     chown $JAIL:$JAIL /var/www/$APP_GPG_KEY
@@ -259,61 +277,85 @@ EOF
 
     if [ ! "$1" = "--no-updates" ]; then
       apt-key add /root/tor.asc
-      apt-get -y update
-      apt-get -y upgrade
-      apt-get install $(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")  | tee -a build.log
-      catch_error $? "installing app dependencies"
-      echo $(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
+      apt-get -y update | tee -a build.log
+      apt-get -y upgrade | tee -a build.log
+      apt-get install -y ubuntu-minimal
+      echo "ubuntu-minimal installed"
+
+      echo ""
+      echo ""
+      apt-get install $INT_REQS
+      echo ""
+      echo "source/journo reqs installed"
+      #catch_error $? "installing app dependencies"
 
       #Install tor repo, keyring and tor
       echo ""
       echo "Installing tor for $JAIL..."
       apt-key add /root/tor.asc | tee -a build.log
-      apt-get -y install deb.torproject.org-keyring tor
-      catch_error $? "installing tor"
+      #catch_error $? "add /root/tor.asc for $JAIL"
+      apt-get install -y -q deb.torproject.org-keyring tor
+      #catch_error $? "installing tor and keyring for $JAIL"
       echo "Tor installed for $JAIL"
-    
+
       echo 'Installing pip dependencies for $JAIL...'
       pip install -r /var/www/securedrop/requirements.txt | tee -a build.log
+      #catch_error $? "installing pip requirements"
       echo 'pip dependencies installed for $JAIL'
-      echo "$(grep -vE "^\s*#" /var/www/securedrop/requirements.txt  | tr "\n" " ")"
     fi
 
     echo "Lock tor user..."
     passwd -l debian-tor
+    #catch_error $? "locking debian-tor"
     echo "tor user locked"
 
     #Disable unneeded apache modules
     echo 'Disabling apache modules for $JAIL...'
     a2dismod $DISABLE_MODS | tee -a build.log
+    #catch_error "disabling apache modules"
     echo 'Apache modules disabled for $JAIL'
 
     #Enabling apache modules
     echo 'Enabling apache modules for $JAIL...'
     a2enmod $ENABLE_MODS | tee -a build.log
+    #catch_error $? "disabling apache modules"
     echo 'Apache modules enabled for $JAIL'
 
     #removing default apache sites
     echo 'Removing default apache sites for $JAIL...'
     a2dissite default default-ssl | tee -a build.log
+    #catch_error $? "disabling default sites for $JAIL"
+    echo "default-ssl site disabled"
+
     if [ -f /var/www/index.html ]; then
       rm /var/www/index.html
+      #catch_error $? "deleting index.html for $JAIL"
     fi
 
     if [ -f /etc/apache2/sites-available/default-ssl ]; then
       rm /etc/apache2/sites-available/default-ssl
+      #catch_error $? "rm default-ssl for $JAIL"
     fi
 
-    if [ -f /etc/apache2/sites-available/default ]; then
-      rm /etc/apache2/sites-available/*default*
-      rm /etc/apache2/sites-enabled/*default*
+    if [ -f /etc/apache2/sites-enabled/default-ssl ]; then
+      rm /etc/apache2/sites-enabled/default-ssl
+      #catch_error $? "rm sites-enabled/default-ssl"
+    fi
+
+    if [ -f /etc/apache2/sites-available/000-default ]; then
+      rm /etc/apache2/sites-available/000-default
+      #catch_error $? "rm sites-available/000-default"
+    fi
+
+    if [ -f /etc/apache2/sites-enabled/000-default ]; then
+      rm /etc/apache2/sites-enabled/000-default
+      #catch_error $? "rm /etc/apache2/sites-enabled/000-default"
     fi
 
     echo 'default apache sites removed for $JAIL'
 
-
     service apache2 stop
-    catch_error $? "stopping apache"
+    #catch_error $? "stopping apache"
 FOE
 
   cp -f $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
@@ -331,36 +373,53 @@ FOE
   #Generate the config.py file for the web interface
   cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
   catch_error $? "copying $JAIL.config.py template"
- 
-  cat /var/chroot/$JAIL/var/www/securedrop/config.py 
-  echo "Generating config.py values"
-  perl -pi -e "s/APP_GPG_KEY_FINGERPRINT/${APP_GPG_KEY_FINGERPRINT}/" /var/chroot/$JAIL/var/www/securedrop/config.py
-  echo "Generating BCRYPT SALT"
-  echo "BCRYPT_SALT='$BCRYPT_SALT'" >> /var/chroot/$JAIL/var/www/securedrop/config.py
 
-  if ! grep -q SECRET_KEY* /var/chroot/$JAIL/var/www/securedrop/config.py; then
-    echo "SECRET_KEY='$SECRET_KEY'" >> /var/chroot/$JAIL/var/www/securedrop/config.py
-  fi 
-  echo "Generating SECRET_KEY"
-  perl -pi -e "s/SECRET_KEY_VALUE/${SECRET_KEYi}/" /var/chroot/$JAIL/var/www/securedrop/config.py
-  cat  /var/chroot/$JAIL/var/www/securedrop/config.py
+  if grep -q "APP_GPG_KEY_FINGERPRINT" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Copying GPG Fingerprint to $JAIL/var/www/securedrop/config.py"
+    sed -i -e "s|APP_GPG_KEY_FINGERPRINT|$APP_GPG_KEY_FINGERPRINT|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    catch_error $? "copying APP_GPG_KEY_FINGERPRINT to /var/chroot/$JAIL/var/www/securedrop/config.py"
+  fi
+
+  if grep -q "BCRYPT_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating BCRYPT SALT for $JAIL"
+    sed -i -e "s|BCRYPT_SALT_VALUE|${BCRYPT_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    catch_error $? "generating $BCRYPT_SALT in config.py for $JAIL"
+  fi
+
+  if grep -q "SECRET_KEY_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating SECRET_KEY for $JAIL"
+    sed -i -e "s|SECRET_KEY_VALUE|${SECRET_KEY}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    catch_error $? "generating $SECRET_KEY in config.py for $JAIL"
+  fi
+
 done
 
 #Configure the source interface specific settings
 echo ""
 echo "Configuring the source interface specific settings..."
 schroot -c source -u root --directory /root << FOE
-  rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
+  #catch_error() {
+  #  if [ "$1" -ne "0" ]; then
+  #    echo "ERROR encountered $2"
+  #    exit 1
+  #  fi
+  #}
 
-  if [ -d "/root/tor-keys/$JAIL" ]; then
-    cp -p /root/tor-keys/$JAIL/{client_keys,private_key} /var/lib/tor/hidden_service/
-    srm -R /root/tor-keys/$JAIL
-    catch_error $? "removing tmp keys"
+  rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
+  #catch_error $? "rm default content from other interface"
+
+  if [ -d "/root/tor-keys/source" ]; then
+    cp -p /root/tor-keys/source/private_key /var/lib/tor/hidden_service/
+    #catch_error $? "cp tor private keys on source"
+    srm -R /root/tor-keys/source
+    #catch_error $? "srm'ing tmp tor keys"
   fi
 
   service apache2 restart
+  #catch_error $? "restarting apache2"
   service tor restart
-  echo "Done setting up $JAIL"
+  #catch_error $? "restarting tor"
+  echo "Done setting up source"
 FOE
 echo "Done setting up the source interface specific settings"
 
@@ -368,33 +427,36 @@ echo "Done setting up the source interface specific settings"
 echo ""
 echo "Configuring the journalist interface specific settings"
 schroot -c journalist -u root --directory /root << FOE
+  #catch_error() {
+  #  if [ $1 -ne "0" ]; then
+  #    echo "ERROR encountered $2"
+  #    exit 1
+  #  fi
+  #}
+
   echo "Starting to configure apache for journalist"
   rm -R /var/www/securedrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
 
-  echo "Importing application gpg public key on $JAIL"
-  su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" $JAIL
+  echo "Importing application gpg public key on journalist"
+  su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" journalist
+  #catch_error $? "importing $APP_GPG_KEY in journalist"
   service apache2 restart
+  #catch_error $? "restarting apache2 in journalist jail"
   service tor restart
+  #catch_error $? "restarting tor in journalist jail"
 FOE
 
-cat <<EOF > /etc/rc.local
-#commands to be run after reboot for securedrop
-mount -o bind /proc /var/chroot/source/proc
-mount -o bind /proc /var/chroot/journalist/proc
-mount -o bind /var/securedrop/store /var/chroot/journalist/var/www/securedrop/store
-mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
-mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys
-mount -o bind /var/securedrop/keys /var/chroot/journalist/var/www/securedrop/keys
-schroot -u root -a service apache2 restart --directory /root
-schroot -u root -a service tor restart --directory /root
-EOF
+#Copy rc.local file to host system to mount and start the needed services
+#for the chroot jals
+cp host.rc.local /etc/rc.local | tee -a build.log
+catch_error $? "copying rc.local to host system"
 
 #Wait 10 seconds for tor keys to be configured and print tor onion urls
 sleep 10
 echo "Source onion url is: "
-echo `cat /var/chroot/source/var/lib/tor/hidden_service/hostname`
+echo "$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
 
 echo "You will need to append ':8080' to the end of the journalist onion url"
 echo "The document interface's onion url and auth values:"
-echo `cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname`
+echo "$(cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname)"
 exit 0
