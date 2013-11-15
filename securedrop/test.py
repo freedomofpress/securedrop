@@ -16,15 +16,21 @@ from bs4 import BeautifulSoup
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
-import config, crypto_util, store
-import source, journalist
+import config
+import crypto_util
+import store
+import source
+import journalist
+
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.shash(codename)
-    while not crypto_util.getkey(sid): sleep(0.1)
+    while not crypto_util.getkey(sid):
+        sleep(0.1)
+
 
 def _setup_test_docs(sid, files):
-    filenames = [ os.path.join(config.STORE_DIR, sid, file) for file in files ]
+    filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]
     for filename in filenames:
         dirname = os.path.dirname(filename)
         if not os.path.exists(dirname):
@@ -32,6 +38,7 @@ def _setup_test_docs(sid, files):
         with open(filename, 'w') as fp:
             fp.write('test')
     return filenames
+
 
 def shared_setup():
     """Set up the file system and GPG"""
@@ -51,8 +58,10 @@ def shared_setup():
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
 
+
 def shared_teardown():
     shutil.rmtree(config.TEST_DIR)
+
 
 class TestSource(TestCase):
 
@@ -89,7 +98,8 @@ class TestSource(TestCase):
             self.assert200(rv)
             session_codename = session['codename']
         self.assertIn("Submit documents for the first time", rv.data)
-        self.assertIn("To protect your identity, we're assigning you a code name.", rv.data)
+        self.assertIn(
+            "To protect your identity, we're assigning you a code name.", rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words
         self.assertEquals(len(codename.split()), 8)
@@ -99,8 +109,8 @@ class TestSource(TestCase):
 
     def test_regenerate_valid_lengths(self):
         """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(4,11):
-            response = self.client.post('/generate', data = {
+        for codename_len in xrange(4, 11):
+            response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
             self.assert200(response)
@@ -110,7 +120,7 @@ class TestSource(TestCase):
     def test_regenerate_invalid_lengths(self):
         """If the codename length is invalid, it should return 403 Forbidden"""
         for codename_len in (2, 999):
-            response = self.client.post('/generate', data = {
+            response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
             self.assert403(response)
@@ -139,12 +149,12 @@ class TestSource(TestCase):
 
         codename = self._new_codename()
         rv = self.client.post('/login', data=dict(codename=codename),
-                follow_redirects=True)
+                              follow_redirects=True)
         self.assert200(rv)
         self.assertIn("Upload documents", rv.data)
 
         rv = self.client.post('/login', data=dict(codename='invalid'),
-                follow_redirects=True)
+                              follow_redirects=True)
         self.assert200(rv)
         self.assertIn('Sorry, that is not a recognized codename.', rv.data)
 
@@ -165,7 +175,7 @@ class TestSource(TestCase):
         ), follow_redirects=True)
         self.assert200(rv)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                rv.data)
+                      rv.data)
 
     def test_submit_both(self):
         codename = self._new_codename()
@@ -176,12 +186,13 @@ class TestSource(TestCase):
         self.assert200(rv)
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                rv.data)
+                      rv.data)
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assert200(rv)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
 
 class TestJournalist(TestCase):
 
@@ -210,8 +221,9 @@ class TestJournalist(TestCase):
             sid=sid,
             doc_names_selected=filenames
         ))
-        
+
         self.assertEqual(rv.status_code, 200)
+
 
 class TestIntegration(unittest.TestCase):
 
@@ -264,7 +276,8 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
-        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
@@ -277,7 +290,8 @@ class TestIntegration(unittest.TestCase):
 
         # confirm delete submission
         doc_name = soup.select
-        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
@@ -340,7 +354,8 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
-        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
@@ -353,7 +368,8 @@ class TestIntegration(unittest.TestCase):
 
         # confirm delete submission
         doc_name = soup.select
-        doc_name = soup.select('ul > li > input[name="doc_names_selected"]')[0]['value']
+        doc_name = soup.select(
+            'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
@@ -431,7 +447,8 @@ class TestIntegration(unittest.TestCase):
         _block_on_reply_keypair_gen(codename)
         rv = self.source_app.get('/lookup')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+        self.assertIn(
+            "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
         self.assertIn(test_reply, rv.data)
 
         soup = BeautifulSoup(rv.data)
@@ -443,7 +460,9 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Reply deleted", rv.data)
 
+
 class TestStore(unittest.TestCase):
+
     '''The set of tests for store.py.'''
     @classmethod
     def setUp(self):

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-import bcrypt, subprocess, threading
+import bcrypt
+import subprocess
+import threading
 from Crypto.Random import random
 import random as badrandom
 import gnupg
@@ -24,7 +26,10 @@ else:
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
-class CryptoException(Exception): pass
+
+class CryptoException(Exception):
+    pass
+
 
 def clean(s, also=''):
     """
@@ -45,13 +50,17 @@ def clean(s, also=''):
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
-def genrandomid(words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
+
+
+def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
     return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
-def displayid(n, words_in_random_id = DEFAULT_WORDS_IN_RANDOM_ID):
+
+def displayid(n, words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
     badrandom_value = badrandom.WichmannHill()
     badrandom_value.seed(n)
     return ' '.join(badrandom_value.choice(words) for x in range(words_in_random_id))
+
 
 def shash(s):
     """
@@ -67,8 +76,10 @@ except OSError:
     GPG_BINARY = 'gpg'
     p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
 
-assert p.stdout.readline().split()[-1].split('.')[0] == '2', "upgrade GPG to 2.0"
+assert p.stdout.readline().split()[
+    -1].split('.')[0] == '2', "upgrade GPG to 2.0"
 gpg = gnupg.GPG(gpgbinary=GPG_BINARY, gnupghome=config.GPG_KEY_DIR)
+
 
 def genkeypair(name, secret):
     """
@@ -80,19 +91,23 @@ def genkeypair(name, secret):
     """
     name, secret = clean(name), clean(secret, ' ')
     return gpg.gen_key(gpg.gen_key_input(
-      key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
-      passphrase=secret,
-      name_email="%s@deaddrop.example.com" % name
+        key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
+        passphrase=secret,
+        name_email="%s@deaddrop.example.com" % name
     ))
+
 
 def getkey(name):
     for key in gpg.list_keys():
         for uid in key['uids']:
-            if ' <%s@' % name in uid: return key['fingerprint']
+            if ' <%s@' % name in uid:
+                return key['fingerprint']
     return None
+
 
 def _shquote(s):
     return "\\'".join("'" + p + "'" for p in s.split("'"))
+
 
 def encrypt(fp, s, output=None):
     r"""
@@ -114,6 +129,7 @@ def encrypt(fp, s, output=None):
     else:
         raise CryptoException(out.stderr)
 
+
 def decrypt(name, secret, s):
     """
     >>> key = genkeypair('randomid', 'randomid')
@@ -123,6 +139,7 @@ def decrypt(name, secret, s):
     'Goodbye, cruel world!'
     """
     return gpg.decrypt(s, passphrase=secret).data
+
 
 def secureunlink(fn):
     store.verify(fn)

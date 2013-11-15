@@ -6,14 +6,18 @@ import zipfile
 import crypto_util
 import uuid
 
-VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
+VALIDATE_FILENAME = re.compile(
+    "^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
+
 
 class PathException(Exception):
+
     '''An exception raised by `store.verify` when it encounters a bad path. A path
     can be bad when it is not absolute, not normalized, not within
     `config.STORE_DIR`, or doesn't match the filename format.
     '''
     pass
+
 
 def verify(p):
     '''Assert that the path is absolute, normalized, inside `config.STORE_DIR`, and
@@ -45,12 +49,14 @@ def verify(p):
         if not VALIDATE_FILENAME(filename):
             raise PathException("Invalid filename %s" % (filename, ))
 
+
 def path(*s):
     '''Get the normalized, absolute file path, within `config.STORE_DIR`.'''
     joined = os.path.join(os.path.abspath(config.STORE_DIR), *s)
     absolute = os.path.abspath(joined)
     verify(absolute)
     return absolute
+
 
 def get_bulk_archive(filenames):
     zip_file_name = os.path.join(config.TEMP_DIR, str(uuid.uuid4()) + '.zip')
@@ -60,6 +66,7 @@ def get_bulk_archive(filenames):
             basename = os.path.basename(filename)
             zip.write(filename, arcname=basename)
     return zip_file_name
+
 
 def log(msg):
     file(path('NOTES'), 'a').write(msg)
