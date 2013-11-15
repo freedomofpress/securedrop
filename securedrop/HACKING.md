@@ -13,6 +13,12 @@ install gnupg2:
     $ sudo apt-get install gnupg2
     $ brew install gnupg2
 
+install mysql, create a new database:
+
+    $ sudo yum install mysql-server mysql-devel
+    $ sudo apt-get install mysql-server libmysqlclient-dev
+    $ mysql -u root -p"ROOT_MYSQL_PW" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY 'SECUREDROP_PW';"
+
 install srm (secure remove utility):
 
     $ sudo yum install srm
@@ -39,6 +45,7 @@ install dependencies:
 
     $ sudo yum install python-devel
     $ sudo apt-get install python-dev
+    $ easy_install -U distribute
     $ pip install -r requirements.txt
 
 cp the config template and fill in empty values:
@@ -72,6 +79,10 @@ field of `config.py`. You can find the key fingerprint by running:
     $ gpg2 --homedir /tmp/securedrop/keys --fingerprint
 
 You might have to manually remove the spaces.
+
+populate the database:
+
+    $ python -c 'import db; db.create_tables()'
 
 running
 -------
