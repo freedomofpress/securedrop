@@ -12,7 +12,8 @@ import config, version, crypto_util, store, background, zipfile
 from cStringIO import StringIO
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
-app.secret_key = config.SECRET_KEY
+app.config.from_object(config.FlaskConfig)
+CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 
@@ -190,6 +191,5 @@ def page_not_found(error):
   return render_template('notfound.html'), 404
 
 if __name__ == "__main__":
-  # TODO: make sure this gets run by the web server
-  CsrfProtect(app)
+  # TODO make sure debug is not on in production
   app.run(debug=True, port=8080)

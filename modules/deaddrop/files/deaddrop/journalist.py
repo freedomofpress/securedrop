@@ -9,7 +9,8 @@ from flask_wtf.csrf import CsrfProtect
 import config, version, crypto_util, store, background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
-app.secret_key = config.SECRET_KEY
+app.config.from_object(config.FlaskConfig)
+CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 
@@ -121,6 +122,5 @@ def flag():
     return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
 
 if __name__ == "__main__":
-  # TODO: make sure this gets run by the web server
-  CsrfProtect(app)
+  # TODO make sure debug=False in production
   app.run(debug=True, port=8081)

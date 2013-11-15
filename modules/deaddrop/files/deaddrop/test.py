@@ -14,11 +14,10 @@ from flask_testing import TestCase
 from flask_wtf import CsrfProtect
 from bs4 import BeautifulSoup
 
-# Set the environment variable so config.py uses a test environment
-os.environ['DEADDROPENV'] = 'test'
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 import config, crypto_util, store
-
-import source, store, journalist
+import source, journalist
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.shash(codename)
@@ -66,13 +65,7 @@ class TestSource(TestCase):
         shared_teardown()
 
     def create_app(self):
-        app = source.app
-        app.config['TESTING'] = True
-        # TODO: this sucks. Would be remedied by switching the forms over to
-        # Flask-WTF, or rolling our own CSRF protection
-        app.config['WTF_CSRF_ENABLED'] = False
-        CsrfProtect(app)
-        return app
+        return source.app
 
     def test_index(self):
         """Test that the landing page loads and looks how we expect"""
@@ -199,13 +192,7 @@ class TestJournalist(TestCase):
         shared_teardown()
 
     def create_app(self):
-        app = journalist.app
-        app.config['TESTING'] = True
-        # TODO: this sucks. Would be remedied by switching the forms over to
-        # Flask-WTF, or rolling our own CSRF protection
-        app.config['WTF_CSRF_ENABLED'] = False
-        CsrfProtect(app)
-        return app
+        return journalist.app
 
     def test_index(self):
         rv = self.client.get('/')
@@ -230,10 +217,6 @@ class TestIntegration(unittest.TestCase):
 
     def setUp(self):
         shared_setup()
-        for app in (source.app, journalist.app):
-            app.config['TESTING'] = True
-            app.config['WTF_CSRF_ENABLED'] = False
-            CsrfProtect(app)
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
         self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)

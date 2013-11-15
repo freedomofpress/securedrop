@@ -13,7 +13,7 @@ import re
 os.environ['USERNAME'] = 'www-data'
 
 GPG_KEY_TYPE = "RSA"
-if 'DEADDROPENV' in os.environ and os.environ['DEADDROPENV'] == 'test':
+if os.environ.get('SECUREDROP_ENV') == 'test':
     # Optiimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
     GPG_KEY_LENGTH = "1024"
