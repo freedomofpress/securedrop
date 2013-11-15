@@ -1,11 +1,11 @@
 NameVirtualHost 127.0.0.1:8080
 <VirtualHost 127.0.0.1:8080>
 ServerName localhost
-DocumentRoot /var/www/deaddrop/static
-Alias /static /var/www/deaddrop/static
-WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/deaddrop
+DocumentRoot /var/www/securedrop/static
+Alias /static /var/www/securedrop/static
+WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
 WSGIProcessGroup journalist
-WSGIScriptAlias / /var/www/deaddrop/journalist.wsgi/
+WSGIScriptAlias / /var/www/securedrop/journalist.wsgi/
 AddType text/html .py
 
 <Directory />
@@ -14,11 +14,11 @@ AllowOverride None
 Order deny,allow
 Deny from all
 </Directory>
-<Directory /var/www/deaddrop>
+<Directory /var/www/securedrop>
 Order allow,deny
 allow from all
 </Directory>
-<Directory /var/www/deaddrop/static>
+<Directory /var/www/securedrop/static>
 Options None
 AllowOverride None
 Order allow,deny

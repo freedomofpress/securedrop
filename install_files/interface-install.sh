@@ -1,12 +1,15 @@
 #!/bin/bash
 #
 # Usage: ./install-scripts
-# Reads requirements.txt for python requirements
-# Reads source-requirements.txt for ubuntu dependencies on source interface
-# Reads journalist-requirements.txt for ubuntu packages on doc interface
 # --no-updates to run script without apt-get or pip install commands
-# --force-clean to delete chroot jails. backup tor private keys prior
-#
+# --force-clean to delete chroot jails.
+#securedrop.git
+#securedrop/securedrop/                           (web app code)
+#securedrop/securedrop/requirements.txt           (pip requirements)
+#securedrop/install_files/                        (config files and install scripts)
+#securedrop/install_files/SecureDrop.asc          (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt (source chroot jail package dependencies)
+#securedrop/install_files/journalist_requireme    (journalist interface chroot package dependencies)
 #
 JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
@@ -121,7 +124,7 @@ echo "Setting up chroot jail for $JAIL interface..."
 description=Ubuntu Precise
 directory=/var/chroot/$JAIL
 users=$JAIL
-groups=securedrop
+groups=$JAIL
 EOF
     echo "chroot jail config for $JAIL created"
   else
@@ -140,10 +143,10 @@ EOF
   clean_chroot_jail() {
     if [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys" ]; then
       mkdir -p /tmp/tor-keys/$JAIL  
-      cp /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor-keys/$JAIL
+      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor-keys/$JAIL
     elif [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/private_key" ]; then
       mkdir -p /tmp/tor-keys/$JAIL
-      cp /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor-keys/$JAIL
+      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor-keys/$JAIL
     fi 
     
     echo "Stoping apache service in chroot jail $JAIL..."
@@ -180,7 +183,7 @@ EOF
 
     if [ -d "/tmp/tor/keys/$JAIL" ]; then
       echo "copying tor keys to /var/chroot/$JAIL/root/tor-keys/$JAIL/..."
-      cp -p /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL
+      cp -p -f /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL
       echo "backed up'd tor keys are copied to /var/chroot/$JAIL/root/tor-keys/$JAIL/" 
       echo "secure-deleting /tmp/tor/keys/$JAIL..."
       srm -R /tmp/tor-keys/$JAIL
@@ -216,15 +219,15 @@ EOF
   mount -o bind /opt/securedrop/store /var/chroot/$JAIL/var/www/securedrop/store | tee -a build.log
   mount -o bind /opt/securedrop/keys /var/chroot/$JAIL/var/www/securedrop/keys | tee -a build.log
 
-  cp /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
+  cp -f /etc/apt/sources.list /var/chroot/$JAIL/etc/apt/ | tee -a build.log
   catch_error $? "copying source.list to chroot jail $JAIL"
-  cp tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
+  cp -f tor.asc /var/chroot/$JAIL/root/ | tee -a build.log
   catch_error $? "copying tor.asc to chroot jail $JAIL"
-  cp /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
+  cp -f /etc/resolv.conf /var/chroot/$JAIL/etc/resolv.conf | tee -a build.log
   catch_error $? "copying resolv.conf to chroot jail $JAIL"
   cp $APP_GPG_KEY /var/chroot/$JAIL/var/www/ | tee -a build.log
   catch_error $? "copying $APP_GPG_KEY to chroot jail $JAIL"
-  cp -R $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
+  cp -R -f $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
   catch_error $? "copying $APP_FILES to chroot jail $JAIL"
   ls /var/chroot/$JAIL/var/www/securedrop
   if [ -d /var/chroot/journalist ]; then
@@ -240,7 +243,7 @@ EOF
     useradd $JAIL
 
     catch_error() {
-      if [ !$1 = "0" ]; then
+      if [ !"$1" = "0" ]; then
         echo "ERROR encountered $2"
         exit 1
       fi
@@ -252,12 +255,14 @@ EOF
     chown -R $JAIL:$JAIL /var/www/securedrop/{keys,store}
 
     #add the tor signing key and install interface dependencies
+
     if [ ! "$1" = "--no-updates" ]; then
       apt-key add /root/tor.asc
       apt-get -y update
       apt-get -y upgrade
       apt-get install $(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")  | tee -a build.log
       catch_error $? "installing app dependencies"
+      echo $(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
 
       #Install tor repo, keyring and tor
       echo ""
@@ -266,18 +271,16 @@ EOF
       apt-get -y install deb.torproject.org-keyring tor
       catch_error $? "installing tor"
       echo "Tor installed for $JAIL"
+    
+      echo 'Installing pip dependencies for $JAIL...'
+      pip install -r /var/www/securedrop/requirements.txt | tee -a build.log
+      echo 'pip dependencies installed for $JAIL'
+      echo "$(grep -vE "^\s*#" /var/www/securedrop/requirements.txt  | tr "\n" " ")"
     fi
 
     echo "Lock tor user..."
     passwd -l debian-tor
     echo "tor user locked"
-
-    #Install pip dependendcies
-    if [ ! "$1" = "--no-updates" ]; then
-       echo 'Installing pip dependencies for $JAIL...'
-       pip install -r /var/www/securedrop/requirements.txt | tee -a build.log
-       echo 'pip dependencies installed for $JAIL'
-    fi
 
     #Disable unneeded apache modules
     echo 'Disabling apache modules for $JAIL...'
@@ -308,19 +311,24 @@ EOF
     echo 'default apache sites removed for $JAIL'
 
 
-    Service apache2 stop
+    service apache2 stop
     catch_error $? "stopping apache"
 FOE
-done
 
-  cp $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
-  cp $JAIL.ports.conf /var/chroot/$JAIL/etc/apache2/ports.conf | tee -a build.log
-  cp $JAIL.wsgi /var/chroot/$JAIL/var/www/securedrop/$JAIL.wsgi | tee -a build.log
-  cp $JAIL.security /var/chroot/$JAIL/etc/apache2/security | tee -a build.log
-  cp $JAIL.site /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
+  cp -f $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
+  catch_error $? "copying $JAIL.apache2.conf"
+  cp -f $JAIL.ports.conf /var/chroot/$JAIL/etc/apache2/ports.conf | tee -a build.log
+  catch_error $? "copying $JAIL.ports.conf"
+  cp -f $JAIL.wsgi /var/chroot/$JAIL/var/www/securedrop/$JAIL.wsgi | tee -a build.log
+  catch_error $? "copying $JAIL.wsgi"
+  cp -f $JAIL.security /var/chroot/$JAIL/etc/apache2/conf.d/security | tee -a build.log
+  catch_error $? "copying $JAIL.security"
+  cp -f $JAIL.site /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
+  catch_error $? "copying $JAIL.site"
   cp -f $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
+  catch_error $? "copying $JAIL.torrc"
   #Generate the config.py file for the web interface
-  cp $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
+  cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
   catch_error $? "copying $JAIL.config.py template"
  
   cat /var/chroot/$JAIL/var/www/securedrop/config.py 
@@ -335,7 +343,7 @@ done
   echo "Generating SECRET_KEY"
   perl -pi -e "s/SECRET_KEY_VALUE/${SECRET_KEYi}/" /var/chroot/$JAIL/var/www/securedrop/config.py
   cat  /var/chroot/$JAIL/var/www/securedrop/config.py
-
+done
 
 #Configure the source interface specific settings
 echo ""

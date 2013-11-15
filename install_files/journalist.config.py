@@ -1,12 +1,12 @@
 # data directories - should be on secure media
-STORE_DIR='/var/www/deaddrop/store'
-GPG_KEY_DIR='/var/www/deaddrop/keys'
-TEMP_DIR='/var/www/deaddrop/temp'
+STORE_DIR='/var/www/securedrop/store'
+GPG_KEY_DIR='/var/www/securedrop/keys'
+TEMP_DIR='/var/www/securedrop/temp'
 
 # fingerprint of the GPG key to encrypt submissions to
 JOURNALIST_KEY='APP_GPG_KEY_FINGERPRINT'
 
-SOURCE_TEMPLATES_DIR='/var/www/deaddrop/source_templates'
-JOURNALIST_TEMPLATES_DIR='/var/www/deaddrop/journalist_templates'
-WORD_LIST='/var/www/deaddrop/wordlist'
+SOURCE_TEMPLATES_DIR='/var/www/securedrop/source_templates'
+JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
+WORD_LIST='/var/www/securedrop/wordlist'
 
