@@ -4,6 +4,11 @@
 <h2><span class="headline">Read documents</span></h2>
 <p><a href="/">Back to latest submissions...</a></p>	
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
+<form action='/regenerate-code' method='post'>
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input type='hidden' name='sid' value='{{ sid }}'>
+  <input type='submit' value='Generate a new codename for this source'>
+</form>
 
 {% if docs %}
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
