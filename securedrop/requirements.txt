@@ -1,3 +1,4 @@
+distribute==0.6.34
 Flask==0.10.1
 Flask-Testing==0.4
 Flask-WTF==0.9.3
@@ -7,7 +8,6 @@ WTForms==1.0.5
 Werkzeug==0.9.4
 argparse==1.2.1
 beautifulsoup4==4.3.2
-distribute==0.6.34
 itsdangerous==0.23
 psutil==1.1.1
 pycrypto==2.6.1
