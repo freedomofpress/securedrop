@@ -1,2 +1,0 @@
-set superusers="$grub_superuser"
-password_pbkdf2 $grub_superuser $grub_superuserpassword 

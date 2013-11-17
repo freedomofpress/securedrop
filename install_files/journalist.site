@@ -1,0 +1,44 @@
+NameVirtualHost 127.0.0.1:8080
+<VirtualHost 127.0.0.1:8080>
+ServerName localhost
+DocumentRoot /var/www/securedrop/static
+Alias /static /var/www/securedrop/static
+WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
+WSGIProcessGroup journalist
+WSGIScriptAlias / /var/www/securedrop/journalist.wsgi/
+AddType text/html .py
+
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
+<Directory /var/www/securedrop>
+  Options -Indexes -Includes
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+<Directory /var/www/securedrop/static>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+ErrorLog /var/log/apache2/error.log
+CustomLog /var/log/apache2/access.log combined
+LogLevel info
+</VirtualHost>
