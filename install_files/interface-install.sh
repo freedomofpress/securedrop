@@ -253,6 +253,8 @@ EOF
   INT_REQS=$(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
   echo ""
 
+  cp ubuntu-minimal.preseed /var/chroot/$JAIL/tmp/
+
   #schroot into the jail and configure it
   echo ""
   echo "schrooting into $JAIL and configuring it"
@@ -279,6 +281,9 @@ EOF
       apt-key add /root/tor.asc
       apt-get -y update | tee -a build.log
       apt-get -y upgrade | tee -a build.log
+
+      apt-get install -y debconf-utils
+      debconf-set-selections /tmp/ubuntu-minimal.preseed
       apt-get install -y ubuntu-minimal
       echo "ubuntu-minimal installed"
 

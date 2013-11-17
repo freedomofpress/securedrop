@@ -67,7 +67,7 @@ sudo apt-get -y install $DEPENDENCIES
 echo "Setting up the virtual environment..."
 virtualenv securedrop/venv
 source securedrop/venv/bin/activate
-cd securedrop/deaddrop
+cd securedrop/securedrop
 pip install --upgrade distribute
 pip install -r requirements.txt
 
@@ -85,6 +85,12 @@ sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
 sed -i "s@^TEMP_DIR.*@TEMP_DIR=\'$temppath\'@" config.py
 # TODO: replace below line so that indents are not hard-coded :/
 sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
+
+# generate and store random values required by config.py
+secret_key=$(python -c 'import os; print os.urandom(24).__repr__().replace("\\","\\\\")')
+bcrypt_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
+sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
+sed -i "s@^BCRYPT_SALT.*@BCRYPT_SALT='$bcrypt_salt'@" config.py
 
 echo "" >> .gitignore
 echo "# containing keys and storage for development application" >> .gitignore
@@ -112,7 +118,8 @@ chmod 700 $keypath
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
 journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')
-sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY=\'$journalistkey\'@" config.py
+echo $journalistkey
+sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config.py
 
 echo ""
 echo "Running unit tests... these should all pass!"
