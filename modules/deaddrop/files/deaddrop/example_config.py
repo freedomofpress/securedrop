@@ -19,7 +19,6 @@ class TestingConfig(BaseConfig):
 # data directories - should be on secure media
 STORE_DIR='/tmp/deaddrop/store'
 GPG_KEY_DIR='/tmp/deaddrop/keys'
-TEMP_DIR='/tmp/deaddrop/tmp'
 
 JOURNALIST_KEY=''
 
