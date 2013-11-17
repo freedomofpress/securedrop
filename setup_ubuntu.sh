@@ -68,7 +68,8 @@ echo "Setting up the virtual environment..."
 virtualenv securedrop/venv
 source securedrop/venv/bin/activate
 cd securedrop/deaddrop
-pip install --upgrade -r requirements.txt
+pip install --upgrade distribute
+pip install -r requirements.txt
 
 echo "Setting up configurations..."
 # create directories for keys and store

@@ -39,7 +39,8 @@ install dependencies:
 
     $ sudo yum install python-devel
     $ sudo apt-get install python-dev
-    $ pip install --upgrade -r requirements.txt
+    $ pip install --upgrade distribute
+    $ pip install -r requirements.txt
 
 cp the config template and fill in empty values:
 
