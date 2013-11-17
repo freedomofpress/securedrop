@@ -37,7 +37,7 @@ def _setup_test_docs(sid, files):
 def shared_setup():
     """Set up the file system and GPG"""
     # Create directories for the file store and the GPG keyring
-    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR, config.TEMP_DIR):
+    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR):
         try:
             os.mkdir(d)
         except OSError:
