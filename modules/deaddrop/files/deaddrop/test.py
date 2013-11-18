@@ -8,6 +8,7 @@ from cStringIO import StringIO
 import zipfile
 from time import sleep
 import uuid
+from mock import patch
 
 import gnupg
 from flask import session, g, escape
@@ -209,14 +210,33 @@ class TestJournalist(TestCase):
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
         ))
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
+        import pdb; pdb.set_trace()
         # test client does not seem to handle binary data, so
         # just check that we didn't get an empty body
         self.assertTrue(len(rv.data) > 0)
+
+    @patch('store.add_tag')
+    def test_tag(self, mock_add_tag):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = 'the-test-tag'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='tag',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 302)
+        self.assertTrue(("/col/" + sid) in rv.location)
+        mock_add_tag.assert_called_once_with(filenames, test_tag)
 
 class TestIntegration(unittest.TestCase):
 

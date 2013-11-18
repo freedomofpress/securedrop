@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import uuid
 
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, redirect, url_for
 from flask_wtf.csrf import CsrfProtect
 
 import config, version, crypto_util, store, background
@@ -91,6 +91,8 @@ def bulk():
     return bulk_download(sid, docs_selected)
   elif action == 'delete':
     return bulk_delete(sid, docs_selected)
+  elif action == 'tag':
+    return bulk_tag(sid, docs_selected)
   else:
     abort(400)
 
@@ -109,6 +111,11 @@ def bulk_download(sid, docs_selected):
   return send_file(zip, mimetype="application/zip",
                    attachment_filename=crypto_util.displayid(sid) + ".zip",
                    as_attachment=True)
+
+def bulk_tag(sid, docs_selected):
+    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+    store.add_tag(filenames, request.form['tag'])
+    return redirect("/col/" + sid)
 
 @app.route('/flag', methods=('POST',))
 def flag():

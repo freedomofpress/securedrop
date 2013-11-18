@@ -7,6 +7,26 @@
 
 {% if docs %}
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+
+<p>
+    <label>
+        <input type="checkbox" name="tags"/>
+        read
+    </label>
+    <label>
+        <input type="checkbox" name="tags"/>
+        reply
+    </label>
+    <label>
+        <input type="checkbox" name="tags"/>
+        interesting
+    </label>
+    <label>
+        <input type="checkbox" name="tags"/>
+        useless
+    </label>
+</p>
+
 <form action="/bulk" method="post">
 <ul id="submissions">
 {% for doc in docs %}
@@ -24,6 +44,14 @@
 <p>
   <button type="submit" name="action" value="download">Download selected</button>
   <button type="submit" name="action" value="delete">Delete selected</button>
+  <br/>
+  <button type="submit" name="action" value="tag">Tag selected with</button>
+  <select name="tag">
+      <option value="">New Tag</option>
+      <option value="read">read</option>
+      <option value="interesting">interesting</option>
+  </select>
+  <br/>
   (<span id="select_all">select all</span>, <span id="select_none">select none</span>)</p>
 </ul>
 </form>
