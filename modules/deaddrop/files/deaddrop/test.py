@@ -209,14 +209,12 @@ class TestJournalist(TestCase):
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
         ))
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
-        # test client does not seem to handle binary data, so
-        # just check that we didn't get an empty body
-        self.assertTrue(len(rv.data) > 0)
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
 
 class TestIntegration(unittest.TestCase):
 
