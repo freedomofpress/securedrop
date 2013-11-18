@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 import uuid
 from functools import wraps
+import tempfile
+from shutil import copyfileobj
 
 from flask import (Flask, request, render_template, session, redirect, url_for,
     flash, abort, g)
@@ -10,6 +12,10 @@ from flask_wtf.csrf import CsrfProtect
 
 import config, version, crypto_util, store, background, zipfile
 from cStringIO import StringIO
+
+from MAT import mat
+from MAT import strippers
+
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -133,17 +139,35 @@ def lookup():
 def submit():
   msg = request.form['msg']
   fh = request.files['fh']
+  not_clean = True if 'notclean' in request.form else False
+
   if msg:
     msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
     crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
     flash("Thanks! We received your message.", "notification")
   if fh:
     file_loc = store.path(g.sid, "%s_doc.zip.gpg" % uuid.uuid4())
+    text_plain = fh.content_type == 'text/plain'
+
+    t = None
+    clean_file = False
+
+    if not_clean and not text_plain:
+      t = tempfile.NamedTemporaryFile()
+      copyfileobj(fh.stream, t)
+      t.flush()
+      file_meta = mat.create_class_file(t.name, False, add2archive=True)
+
+      if not file_meta.is_clean():
+        file_meta.remove_all()
+      clean_file = True
+      t.seek(0)
 
     s = StringIO()
     zip_file = zipfile.ZipFile(s, 'w')
-    zip_file.writestr(fh.filename, fh.read())
+    zip_file.writestr(fh.filename, t.read() if clean_file else fh.read())
     zip_file.close()
+    t.close() if clean_file else None
     s.reset()
 
     crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
