@@ -4,19 +4,23 @@
 # --no-updates to run script without apt-get or pip install commands
 # --force-clean to delete chroot jails. backup tor private keys prior
 # --force-clean to delete chroot jails.
+# --no-apparmor do not enforce the apache apparmor profile. This is a Secruity risk.
 #securedrop.git
 #securedrop/securedrop/                           (web app code)
+#securedrop/CONFIG_OPTIONS			  (user provided input)
 #securedrop/securedrop/requirements.txt           (pip requirements)
 #securedrop/install_files/                        (config files and install scripts)
+#securedrop/install_files/CONFIG_OPTIONS          (required user supplied input)
 #securedrop/install_files/SecureDrop.asc          (the app pub gpg key)
 #securedrop/install_files/source_requirements.txt (source chroot jail package dependencies)
 #securedrop/install_files/journalist_requirements.txt    (journalist interface chroot package dependencies)#
 #
+source ../CONFIG_OPTIONS
 JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
-HOST_DEPENDENCIES="haveged secure-delete dchroot debootstrap python-dev python-pip gcc git python-software-properties"
+HOST_DEPENDENCIES=$(grep -vE "^\s*#" chroot-requirements.txt  | tr "\n" " ")
 HOST_PYTHON_DEPENDENCIES="python-bcrypt"
 DISABLE_MODS='auth_basic authn_file autoindex cgid env setenvif status'
 ENABLE_MODS='wsgi'
@@ -47,13 +51,15 @@ cd $CWD
 
 
 #User Inputs the applications public gpg key and verifies fingerprint
-read -p "Location of application pub gpg key? " -e -i SecureDrop.asc KEY
-APP_GPG_KEY=$( basename "$KEY" )
-
-if [ -f APP_GPG_KEY ]; then
- cp $KEY $CWD
- catch_error $? "moving $APP_GPG_KEY to current directory"
+if [ -f $KEY ]; then
+  APP_GPG_KEY=$( basename "$KEY" )
+  cp $KEY $CWD
+else
+  echo "Cannot find the application puvlic gpg key: $KEY"
+  echo "Exiting with errors can not find $KEY"
+  exit 1
 fi
+
 
 APP_GPG_KEY_FINGERPRINT=$( gpg --with-colons --with-fingerprint $APP_GPG_KEY | awk -F: '$1=="fpr" {print $10;}' )
 echo "Verify GPG fingerpint:"
@@ -118,7 +124,7 @@ fi
 #Lock the tor user account
 echo "Locking the tor user account..."
 passwd -l debian-tor | tee -a build.log
-#catch_error $? "locking tor user account"
+catch_error $? "locking tor user account"
 echo "tor user account locked"
 
 
@@ -258,12 +264,14 @@ EOF
   echo "schrooting into $JAIL and configuring it"
   schroot -c $JAIL -u root --directory /root <<FOE
     echo "Updating chroot system for $JAIL..."
-    #catch_error() {
-    #  if [ "$1" -ne "0" ]; then
-    #    echo "ERROR encountered $2"
-    #    exit 1
-    #  fi
-    #}
+    catch_error() {
+      if [ ! "$1" = "0" ]; then
+        echo "ERROR encountered $2"
+        exit
+        exit 1
+        exit 1
+      fi
+    }
 
     #create the application user in the jail
     useradd $JAIL
@@ -279,15 +287,11 @@ EOF
       apt-key add /root/tor.asc
       apt-get -y update | tee -a build.log
       apt-get -y upgrade | tee -a build.log
-      apt-get install -y ubuntu-minimal
-      echo "ubuntu-minimal installed"
 
       echo ""
-      echo ""
-      apt-get install $INT_REQS
-      echo ""
-      echo "source/journo reqs installed"
+      apt-get install -y $INT_REQS | tee -a build.log
       #catch_error $? "installing app dependencies"
+      echo "the $JAIL interface's dependencies are installed"
 
       #Install tor repo, keyring and tor
       echo ""
@@ -398,12 +402,12 @@ done
 echo ""
 echo "Configuring the source interface specific settings..."
 schroot -c source -u root --directory /root << FOE
-  #catch_error() {
-  #  if [ "$1" -ne "0" ]; then
-  #    echo "ERROR encountered $2"
-  #    exit 1
-  #  fi
-  #}
+  catch_error() {
+    if [ ! "$1" = "0" ]; then
+      echo "ERROR encountered $2"
+      exit 1
+    fi
+  }
 
   rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
   #catch_error $? "rm default content from other interface"
@@ -427,12 +431,12 @@ echo "Done setting up the source interface specific settings"
 echo ""
 echo "Configuring the journalist interface specific settings"
 schroot -c journalist -u root --directory /root << FOE
-  #catch_error() {
-  #  if [ $1 -ne "0" ]; then
-  #    echo "ERROR encountered $2"
-  #    exit 1
-  #  fi
-  #}
+  catch_error() {
+    if [ ! "$1" = "0" ]; then
+      echo "ERROR encountered $2"
+      exit 1
+    fi
+  }
 
   echo "Starting to configure apache for journalist"
   rm -R /var/www/securedrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
@@ -451,12 +455,37 @@ FOE
 cp host.rc.local /etc/rc.local | tee -a build.log
 catch_error $? "copying rc.local to host system"
 
-#Wait 10 seconds for tor keys to be configured and print tor onion urls
-sleep 10
+#cp and secure-delete build.logs in chroot jails
+for JAIL in $JAILS; do
+  cp /var/chroot/$JAIL/root/build.log $JAIL.build.log
+  srm /var/chroot/$JAIL/root/build.log 
+done
+
+if [ ! "$1" = "--no-apparmor" ]; then
+  for JAIL in $JAILS; do
+    echo "coying apparmor profile"
+    cp var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2 /etc/apparmor.d/
+    echo "enforcing apparmor profile..."
+    aa-enforce /etc/apparmor.d/var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2
+    echo "restarting apache in $JAIL"
+    schroot -c $JAIL -u root service apache2 restart --directory /root
+  done
+fi
+
+#Copy files from import branch to be run as part of install
+if [ $RUN_DEV_SCRIPTS = "Y" -o $RUN_DEV_SCRIPTS = "y" ]; then
+  for DEV_SCRIPT_NAME in $DEV_SCRIPT_NAMES; do 
+    ./DEVSCRIPTNAME
+  done
+fi
+
+
+#Display tor hostname auth values.
 echo "Source onion url is: "
 echo "$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
 
 echo "You will need to append ':8080' to the end of the journalist onion url"
 echo "The document interface's onion url and auth values:"
 echo "$(cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname)"
+
 exit 0
