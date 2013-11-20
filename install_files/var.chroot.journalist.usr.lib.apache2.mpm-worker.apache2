@@ -1,11 +1,10 @@
-# Last Modified: Wed Nov 20 03:54:27 2013
+# Last Modified: Wed Nov 20 16:44:36 2013
 #include <tunables/global>
 
 /var/chroot/journalist/usr/lib/apache2/mpm-worker/apache2 {
   #include <abstractions/base>
   #include <abstractions/nameservice>
   #include <abstractions/tor>
-
 
   capability chown,
   capability kill,
@@ -32,12 +31,14 @@
   /var/chroot/journalist/etc/apache2/mods-available/deflate.load r,
   /var/chroot/journalist/etc/apache2/mods-available/dir.conf r,
   /var/chroot/journalist/etc/apache2/mods-available/dir.load r,
+  /var/chroot/journalist/etc/apache2/mods-available/headers.load r,
   /var/chroot/journalist/etc/apache2/mods-available/mime.conf r,
   /var/chroot/journalist/etc/apache2/mods-available/mime.load r,
   /var/chroot/journalist/etc/apache2/mods-available/negotiation.conf r,
   /var/chroot/journalist/etc/apache2/mods-available/negotiation.load r,
   /var/chroot/journalist/etc/apache2/mods-available/reqtimeout.conf r,
   /var/chroot/journalist/etc/apache2/mods-available/reqtimeout.load r,
+  /var/chroot/journalist/etc/apache2/mods-available/rewrite.load r,
   /var/chroot/journalist/etc/apache2/mods-available/wsgi.conf r,
   /var/chroot/journalist/etc/apache2/mods-available/wsgi.load r,
   /var/chroot/journalist/etc/apache2/mods-enabled/ r,
@@ -53,6 +54,7 @@
   /var/chroot/journalist/etc/nsswitch.conf r,
   /var/chroot/journalist/etc/passwd r,
   /var/chroot/journalist/etc/python2.7/sitecustomize.py r,
+  /var/chroot/journalist/etc/resolv.conf r,
   /var/chroot/journalist/lib/x86_64-linux-gnu/ld-*.so r,
   /var/chroot/journalist/lib/x86_64-linux-gnu/libbz2.so.* mr,
   /var/chroot/journalist/lib/x86_64-linux-gnu/libc-*.so mr,
@@ -98,9 +100,11 @@
   /var/chroot/journalist/usr/lib/apache2/modules/mod_authz_user.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_deflate.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_dir.so mr,
+  /var/chroot/journalist/usr/lib/apache2/modules/mod_headers.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_mime.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_negotiation.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_reqtimeout.so mr,
+  /var/chroot/journalist/usr/lib/apache2/modules/mod_rewrite.so mr,
   /var/chroot/journalist/usr/lib/apache2/modules/mod_wsgi.so-2.7 mr,
   /var/chroot/journalist/usr/lib/apache2/mpm-worker/apache2 mr,
   /var/chroot/journalist/usr/lib/lib*so* mr,
@@ -504,13 +508,13 @@
   /var/chroot/journalist/var/log/apache2/other_vhosts_access.log w,
   /var/chroot/journalist/var/www/securedrop/ r,
   /var/chroot/journalist/var/www/securedrop/background.py r,
-  /var/chroot/journalist/var/www/securedrop/background.pyc r,
+  /var/chroot/journalist/var/www/securedrop/background.pyc rw,
   /var/chroot/journalist/var/www/securedrop/config.py r,
-  /var/chroot/journalist/var/www/securedrop/config.pyc r,
+  /var/chroot/journalist/var/www/securedrop/config.pyc rw,
   /var/chroot/journalist/var/www/securedrop/crypto_util.py r,
-  /var/chroot/journalist/var/www/securedrop/crypto_util.pyc r,
+  /var/chroot/journalist/var/www/securedrop/crypto_util.pyc rw,
   /var/chroot/journalist/var/www/securedrop/journalist.py r,
-  /var/chroot/journalist/var/www/securedrop/journalist.pyc r,
+  /var/chroot/journalist/var/www/securedrop/journalist.pyc rw,
   /var/chroot/journalist/var/www/securedrop/journalist.wsgi r,
   /var/chroot/journalist/var/www/securedrop/journalist_templates/base.html r,
   /var/chroot/journalist/var/www/securedrop/journalist_templates/col.html r,
@@ -531,12 +535,12 @@
   /var/chroot/journalist/var/www/securedrop/static/i/favicon.png r,
   /var/chroot/journalist/var/www/securedrop/static/i/securedrop.png r,
   /var/chroot/journalist/var/www/securedrop/store.py r,
-  /var/chroot/journalist/var/www/securedrop/store.pyc r,
+  /var/chroot/journalist/var/www/securedrop/store.pyc rw,
   /var/chroot/journalist/var/www/securedrop/store/ r,
   /var/chroot/journalist/var/www/securedrop/store/** rw,
   /var/chroot/journalist/var/www/securedrop/temp/* rw,
   /var/chroot/journalist/var/www/securedrop/version.py r,
-  /var/chroot/journalist/var/www/securedrop/version.pyc r,
+  /var/chroot/journalist/var/www/securedrop/version.pyc rw,
   /var/chroot/journalist/var/www/securedrop/wordlist r,
 
 

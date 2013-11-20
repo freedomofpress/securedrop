@@ -1,4 +1,4 @@
-# Last Modified: Wed Nov 20 03:03:14 2013
+# Last Modified: Wed Nov 20 16:10:30 2013
 #include <tunables/global>
 
 /var/chroot/source/usr/lib/apache2/mpm-worker/apache2 {
@@ -6,7 +6,6 @@
   #include <abstractions/nameservice>
   #include <abstractions/nis>
   #include <abstractions/tor>
-
 
   capability chown,
   capability kill,
@@ -22,7 +21,6 @@
   /var/chroot/source/etc/apache2/conf.d/ r,
   /var/chroot/source/etc/apache2/conf.d/access.log w,
   /var/chroot/source/etc/apache2/conf.d/charset r,
-  /var/chroot/source/etc/apache2/conf.d/error.log w,
   /var/chroot/source/etc/apache2/conf.d/localized-error-pages r,
   /var/chroot/source/etc/apache2/conf.d/other-vhosts-access-log rw,
   /var/chroot/source/etc/apache2/conf.d/security r,
@@ -37,12 +35,14 @@
   /var/chroot/source/etc/apache2/mods-available/deflate.load r,
   /var/chroot/source/etc/apache2/mods-available/dir.conf r,
   /var/chroot/source/etc/apache2/mods-available/dir.load r,
+  /var/chroot/source/etc/apache2/mods-available/headers.load r,
   /var/chroot/source/etc/apache2/mods-available/mime.conf r,
   /var/chroot/source/etc/apache2/mods-available/mime.load r,
   /var/chroot/source/etc/apache2/mods-available/negotiation.conf r,
   /var/chroot/source/etc/apache2/mods-available/negotiation.load r,
   /var/chroot/source/etc/apache2/mods-available/reqtimeout.conf r,
   /var/chroot/source/etc/apache2/mods-available/reqtimeout.load r,
+  /var/chroot/source/etc/apache2/mods-available/rewrite.load r,
   /var/chroot/source/etc/apache2/mods-available/wsgi.conf r,
   /var/chroot/source/etc/apache2/mods-available/wsgi.load r,
   /var/chroot/source/etc/apache2/mods-enabled/ r,
@@ -104,9 +104,11 @@
   /var/chroot/source/usr/lib/apache2/modules/mod_authz_user.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_deflate.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_dir.so mr,
+  /var/chroot/source/usr/lib/apache2/modules/mod_headers.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_mime.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_negotiation.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_reqtimeout.so mr,
+  /var/chroot/source/usr/lib/apache2/modules/mod_rewrite.so mr,
   /var/chroot/source/usr/lib/apache2/modules/mod_wsgi.so-2.7 mr,
   /var/chroot/source/usr/lib/apache2/mpm-worker/apache2 mr,
   /var/chroot/source/usr/lib/lib*so* mr,
@@ -514,14 +516,14 @@
   /var/chroot/source/var/log/apache2/other_vhosts_access.log w,
   /var/chroot/source/var/www/securedrop/ r,
   /var/chroot/source/var/www/securedrop/background.py r,
-  /var/chroot/source/var/www/securedrop/background.pyc r,
+  /var/chroot/source/var/www/securedrop/background.pyc rw,
   /var/chroot/source/var/www/securedrop/config.py r,
-  /var/chroot/source/var/www/securedrop/config.pyc r,
+  /var/chroot/source/var/www/securedrop/config.pyc rw,
   /var/chroot/source/var/www/securedrop/crypto_util.py r,
-  /var/chroot/source/var/www/securedrop/crypto_util.pyc r,
-  /var/chroot/source/var/www/securedrop/keys/* rwkl,
+  /var/chroot/source/var/www/securedrop/crypto_util.pyc rw,
+  /var/chroot/source/var/www/securedrop/keys/* rwlk,
   /var/chroot/source/var/www/securedrop/source.py r,
-  /var/chroot/source/var/www/securedrop/source.pyc r,
+  /var/chroot/source/var/www/securedrop/source.pyc rw,
   /var/chroot/source/var/www/securedrop/source.wsgi r,
   /var/chroot/source/var/www/securedrop/source_templates/base.html r,
   /var/chroot/source/var/www/securedrop/source_templates/flashed.html r,
@@ -535,10 +537,10 @@
   /var/chroot/source/var/www/securedrop/static/i/securedrop.png r,
   /var/chroot/source/var/www/securedrop/static/libs/gritter/css/jquery.gritter.css r,
   /var/chroot/source/var/www/securedrop/store.py r,
-  /var/chroot/source/var/www/securedrop/store.pyc r,
+  /var/chroot/source/var/www/securedrop/store.pyc rw,
   /var/chroot/source/var/www/securedrop/store/** rw,
   /var/chroot/source/var/www/securedrop/version.py r,
-  /var/chroot/source/var/www/securedrop/version.pyc r,
+  /var/chroot/source/var/www/securedrop/version.pyc rw,
   /var/chroot/source/var/www/securedrop/wordlist r,
 
 
