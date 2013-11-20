@@ -55,7 +55,7 @@ def store_endpoint(i):
 
       s = cStringIO.StringIO()
       zip_file = zipfile.ZipFile(s, 'w')
-      zip_file.writestr(i.fh.filename, i.fh.file.getvalue())
+      zip_file.writestr(i.fh.filename, i.fh.file.read())
       zip_file.close()
       s.reset()
 
