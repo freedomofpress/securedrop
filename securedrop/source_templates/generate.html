@@ -11,9 +11,6 @@
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       Desired code name length:
       <select name="number-words" id="number-words">
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
         <option value="7">7</option>
         <option value="8" selected>8</option>
         <option value="9">9</option>
@@ -21,7 +18,6 @@
       </select>
       words.
       <input type="submit" id="regenerate-submit" value="Generate">
-      <div class='regenerate-warning'><span class='regenerate-warning'>Warning:</span> Choosing a code below 7 words is not recommended.</div>
     </form>
   </div>
   <p>
