@@ -1,4 +1,4 @@
-# Last Modified: Wed Nov 20 16:44:36 2013
+# Last Modified: Wed Nov 20 18:07:22 2013
 #include <tunables/global>
 
 /var/chroot/journalist/usr/lib/apache2/mpm-worker/apache2 {
@@ -371,6 +371,8 @@
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/helpers.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/json.py r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/json.pyc r,
+  /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/logging.py r,
+  /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/logging.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/module.py r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/module.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/flask/sessions.py r,
@@ -464,6 +466,8 @@
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/local.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/routing.py r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/routing.pyc r,
+  /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/test.py r,
+  /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/test.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/urls.py r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/urls.pyc r,
   /var/chroot/journalist/usr/local/lib/python2.7/dist-packages/werkzeug/utils.py r,
@@ -534,6 +538,8 @@
   /var/chroot/journalist/var/www/securedrop/static/css/securedrop.css r,
   /var/chroot/journalist/var/www/securedrop/static/i/favicon.png r,
   /var/chroot/journalist/var/www/securedrop/static/i/securedrop.png r,
+  /var/chroot/journalist/var/www/securedrop/static/js/journalist.js r,
+  /var/chroot/journalist/var/www/securedrop/static/js/libs/jquery-2.0.3.min.js r,
   /var/chroot/journalist/var/www/securedrop/store.py r,
   /var/chroot/journalist/var/www/securedrop/store.pyc rw,
   /var/chroot/journalist/var/www/securedrop/store/ r,
