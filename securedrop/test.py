@@ -7,6 +7,8 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
+import uuid
+from mock import patch
 
 import gnupg
 from flask import session, g, escape
@@ -36,14 +38,14 @@ def _setup_test_docs(sid, files):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         with open(filename, 'w') as fp:
-            fp.write('test')
+            fp.write(str(uuid.uuid4()))
     return filenames
 
 
 def shared_setup():
     """Set up the file system and GPG"""
     # Create directories for the file store and the GPG keyring
-    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR, config.TEMP_DIR):
+    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR):
         try:
             os.mkdir(d)
         except OSError:
@@ -219,7 +221,7 @@ class TestJournalist(TestCase):
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
         ))
 
         self.assertEqual(rv.status_code, 200)
@@ -234,6 +236,17 @@ class TestJournalist(TestCase):
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
         test_tag = 'the-test-tag'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='tag',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 302)
+        self.assertTrue(("/col/" + sid) in rv.location)
+        mock_add_tag.assert_called_once_with(filenames, test_tag)
 
 class TestIntegration(unittest.TestCase):
 
@@ -474,11 +487,9 @@ class TestIntegration(unittest.TestCase):
 class TestStore(unittest.TestCase):
 
     '''The set of tests for store.py.'''
-    @classmethod
     def setUp(self):
         shared_setup()
 
-    @classmethod
     def tearDown(self):
         shared_teardown()
 
@@ -491,11 +502,15 @@ class TestStore(unittest.TestCase):
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
 
-        zip = store.get_bulk_archive(filenames)
+        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
-        zipfile_contents = zipfile.ZipFile(zip).namelist()
-        for file in files:
-            self.assertIn(file, zipfile_contents)
+        archivefile_contents = archive.namelist()
+
+        for archived_file, actual_file in zip(archivefile_contents, filenames):
+            actual_file_content = open(actual_file).read()
+            zipped_file_content = archive.read(archived_file)
+            self.assertEquals(zipped_file_content, actual_file_content)
+
 
     def test_add_tag(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'

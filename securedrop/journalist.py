@@ -115,6 +115,8 @@ def bulk():
         return bulk_download(sid, docs_selected)
     elif action == 'delete':
         return bulk_delete(sid, docs_selected)
+    elif action == 'tag':
+        return bulk_tag(sid, docs_selected)
     else:
         abort(400)
 
@@ -137,6 +139,10 @@ def bulk_download(sid, docs_selected):
                      attachment_filename=crypto_util.displayid(sid) + ".zip",
                      as_attachment=True)
 
+def bulk_tag(sid, docs_selected):
+    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+    store.add_tag(filenames, request.form['tag'])
+    return redirect("/col/" + sid)
 
 @app.route('/flag', methods=('POST',))
 def flag():
