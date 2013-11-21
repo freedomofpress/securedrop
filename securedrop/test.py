@@ -223,7 +223,17 @@ class TestJournalist(TestCase):
         ))
 
         self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        # test client does not seem to handle binary data, so
+        # just check that we didn't get an empty body
+        self.assertTrue(len(rv.data) > 0)
 
+    @patch('store.add_tag')
+    def test_tag(self, mock_add_tag):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = 'the-test-tag'
 
 class TestIntegration(unittest.TestCase):
 
@@ -486,6 +496,14 @@ class TestStore(unittest.TestCase):
         zipfile_contents = zipfile.ZipFile(zip).namelist()
         for file in files:
             self.assertIn(file, zipfile_contents)
+
+    def test_add_tag(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+
+        store.add_tag(filenames, 'some-tag')
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

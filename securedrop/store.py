@@ -67,6 +67,8 @@ def get_bulk_archive(filenames):
             zip.write(filename, arcname=basename)
     return zip_file_name
 
+def add_tag(*tags):
+    pass
 
 def log(msg):
     file(path('NOTES'), 'a').write(msg)
