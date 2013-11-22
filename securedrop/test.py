@@ -19,6 +19,8 @@ from bs4 import BeautifulSoup
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
+import db
+from sqlalchemy.orm import sessionmaker
 import crypto_util
 import store
 import source
@@ -230,7 +232,7 @@ class TestJournalist(TestCase):
         # just check that we didn't get an empty body
         self.assertTrue(len(rv.data) > 0)
 
-    @patch('store.add_tag')
+    @patch('db.add_tag')
     def test_tag(self, mock_add_tag):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
@@ -512,13 +514,24 @@ class TestStore(unittest.TestCase):
             self.assertEquals(zipped_file_content, actual_file_content)
 
 
+class TestDb(unittest.TestCase):
+
     def test_add_tag(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
 
-        store.add_tag(filenames, 'some-tag')
+        db.add_tag(filenames, 'some-tag')
 
+        #read tags for filenames
+        #check that filenames have tag 'some-tag'
+        session = db.sqlalchemy_handle()
+
+        actual_tags = [ r[0] for r in session.query(db.tags.c.name).all() ]
+        import pdb; pdb.set_trace()
+        assert 'some-tag' in actual_tags
+
+        session.execute(db.tags.delete())
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

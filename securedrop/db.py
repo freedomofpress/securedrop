@@ -1,10 +1,15 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 import config
 import crypto_util
 
 metadata = MetaData()
+
+tags = Table('tags',metadata,
+             Column('id', Integer, primary_key=True),
+             Column('name',String(255), nullable=False)
+            )
 
 sources = Table('sources', metadata,
                 Column('filesystem_id', String(96), primary_key=True),
@@ -27,6 +32,7 @@ else:
 
 
 def create_tables():
+    metadata.drop_all(engine)
     metadata.create_all(engine)
 
 
@@ -60,5 +66,12 @@ def regenerate_display_id(filesystem_id):
                 display_id(filesystem_id, session))
         )
     session.execute(add)
+    session.commit()
+    session.close()
+
+def add_tag(filenames, *tags_to_add):
+    session = sqlalchemy_handle()
+    insert = tags.insert().values(name='slime')
+    session.execute(insert)
     session.commit()
     session.close()
