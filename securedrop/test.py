@@ -18,6 +18,8 @@ from bs4 import BeautifulSoup
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
+GPG_BINARY = os.getenv('GPG_BINARY', "gpg2")
+
 import config
 import db
 from sqlalchemy.orm import sessionmaker
@@ -56,7 +58,7 @@ def shared_setup():
             # level, which auto-generates the GPG homedir if it does not exist
             pass
     # Initialize the GPG keyring
-    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR, gpgbinary=GPG_BINARY)
     # Import the journalist key for testing (faster to import a pre-generated
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
@@ -256,7 +258,7 @@ class TestIntegration(unittest.TestCase):
         shared_setup()
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
-        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR, gpgbinary=GPG_BINARY)
 
     def tearDown(self):
         shared_teardown()
@@ -528,7 +530,6 @@ class TestDb(unittest.TestCase):
         session = db.sqlalchemy_handle()
 
         actual_tags = [ r[0] for r in session.query(db.tags.c.name).all() ]
-        import pdb; pdb.set_trace()
         assert 'some-tag' in actual_tags
 
         session.execute(db.tags.delete())

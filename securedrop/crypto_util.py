@@ -72,7 +72,7 @@ def shash(s):
     """
     return b32encode(bcrypt.hashpw(s, BCRYPT_SALT))
 
-GPG_BINARY = 'gpg2'
+GPG_BINARY = os.getenv('GPG_BINARY', "gpg2")
 try:
     p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
 except OSError:
