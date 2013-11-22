@@ -40,3 +40,12 @@ nosetests.xml
 .project
 .pydevproject
 *.swp
+
+# Vim temp files
+*~
+
+# Likely SQLite db file
+db.sql
+
+#Idea files
+.idea

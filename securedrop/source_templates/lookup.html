@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block body %}
+<div id="content" class="user-view">
+<h2><span class="headline">Upload documents</span></h2>
+
+{% include 'flashed.html' %}
+
+{% if flagged and not haskey %}
+  <p class="notification">A journalist would like to reply to you! Please check back shortly for their reply.</p>
+{% endif %}
+{% if msgs %}
+<div id="replies">
+  <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
+  {% for msg in msgs %}
+  <div class="reply">
+    <form class="message" method="post" action="/delete" autocomplete="off">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
+      <blockquote class="message">{{ msg.msg }}</blockquote>
+      <button type="submit">Delete</button>
+    </form>
+    <div class="date">Sent {{ msg.date }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <p style="padding-bottom: 0"><b>Upload a file:</b></p>
+  <div id="browse-select">
+    <input type="file" name="fh" autocomplete="off"/> 
+  </div>
+
+  <p><b>Or just enter a message:</b></p>
+
+  <textarea name="msg" cols="72" rows="10"></textarea><br />
+  <button  class="button-custom" type="submit">Submit</button>
+</form>
+
+<p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
+<p><a href="/login">Enter a different code name...</a><br/>
+<a href="/lookup">Reload to check for new messages...</a></p>
+
+</div>
+{% endblock %}
