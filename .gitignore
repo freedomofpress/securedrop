@@ -40,3 +40,9 @@ nosetests.xml
 .project
 .pydevproject
 *.swp
+
+# Vim temp files
+*~
+
+# Securedrop root for development
+.securedrop/

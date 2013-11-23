@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/css/securedrop.css" type="text/css" media="all" />
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <title>SecureDrop</title>
+    {% block extrahead %}{% endblock %}
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=["header-warning"]) %}
+      {% for category, message in messages %}
+      <p class="{{ category }}">{{ message|safe }}</p>
+      {% endfor %}
+    {% endwith %}
+
+    <div id="wrapper">
+      {% block header %}
+      <div id="header">
+        <a href="/"><img src="/static/i/securedrop.png" alt="SecureDrop"></a>
+      </div>
+      {% endblock %}
+
+      {% block body %}{% endblock %}
+
+      {% block footer %}
+      <div id="footer">
+        Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
+        Powered by <em>SecureDrop {{ version }}</em>.
+      </div>
+      {% endblock %}
+    </div>
+  </body>
+</html>

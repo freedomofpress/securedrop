@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<script type="text/javascript" src="/static/js/libs/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="/static/libs/gritter/js/jquery.gritter.min.js"></script>
+<link rel="stylesheet" href="/static/libs/gritter/css/jquery.gritter.css" type="text/css" media="all" />
+<script type="text/javascript" src="/static/js/warn.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="content" class="submit-1">
+  <div id="source-left">
+    <h2>Submit documents for the first time</h2>
+    <p>If this is your first time submitting documents to journalists, start here.</p>
+    <p><a class="button" href="/generate">Submit documents</a></p>
+  </div>
+  <div id="source-right">
+    <h2>Already submitted something?</h2>
+    <p>If you have already submitted documents in the past, login here to check for responses. You will need to know your code name.</p>
+    <p><a class="button" href="/login">Check for a response</a></p>
+  </div>
+  <div class="clear"></div>
+</div>
+{% endblock %}

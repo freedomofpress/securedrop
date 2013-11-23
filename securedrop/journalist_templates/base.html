@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/static/css/securedrop.css' type='text/css' media='all' />
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <title>SecureDrop</title>
+    <script src="/static/js/libs/jquery-2.0.3.min.js"></script>
+    <script src="/static/js/journalist.js"></script>
+  </head>
+  <body>
+    <div id="wrapper">
+      {% block header %}
+      <div id="header">
+        <a href="/"><img src="/static/i/securedrop.png" alt="SecureDrop"></a>
+      </div>
+      {% endblock %}
+      
+      {% block body %}{% endblock %}
+      
+      {% block footer %}
+      <div id="footer">
+        Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
+        Powered by <em>SecureDrop {{ version }}</em>.
+      </div>
+      {% endblock %}
+    </div>	
+  </body>
+</html>

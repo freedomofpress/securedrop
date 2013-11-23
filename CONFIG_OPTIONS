@@ -1,0 +1,18 @@
+#Global
+ROLE=""                 # (monitor|server) role of the server
+SOURCE_IP=""            # the source server's ip address
+MONITOR_IP=""           # the monitor server's ip address
+
+#interface_install.sh
+KEY="SecureDrop.asc"    # The application public gpg keypair
+RUN_DEV_SCRIPTS="No"    # (N|Y) to run dev scripts in the dev_scripts directory
+DEV_SCRIPT_NAMES=""     # Space separated list of script names in order to be run
+
+#base_install.sh options
+SSH_USERS=""            # Space separated list of usernames requiring ssh access
+SMTP_SERVER=""	      # IP address of the destination SMTP server
+EMAIL_DISTRO=""        # The email distribution list to send ossec alerts to
+EMAIL_FROM="ossec@test.com"	      # The email address that the ossec alert will appear to come from
+
+
+

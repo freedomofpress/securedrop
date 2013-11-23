@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+<div id="content" class="submit-2">
+  <h2>Submit documents for the first time</h2>
+  <p>To protect your identity, we're assigning you a code name.</p>
+  <p><b>Your code name is:</b></p>
+  <p id="code-name" class="code-name">{{ codename }}</p>
+  <div id='regenerate-box'>
+    If you would like to pick a differnt code name, please regenerate.
+    <form id="regenerate-form" method="post">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+      Desired code name length:
+      <select name="number-words" id="number-words">
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8" selected>8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      words.
+      <input type="submit" id="regenerate-submit" value="Generate">
+      <div class='regenerate-warning'><span class='regenerate-warning'>Warning:</span> Choosing a code below 7 words is not recommended.</div>
+    </form>
+  </div>
+  <p>
+    You will need this code name to access any responses to your submission. Please memorize it or save it in a secure place if you want to be able to get responses. (However, this code name of course will help identify you as the submitter &mdash; so don't keep it anywhere it might get discovered.)
+  </p>
+  <form id="create-form" method="post" action="/create" autocomplete="off">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <p>
+      Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button>
+    </p>
+  </form>
+</div>
+{% endblock %}

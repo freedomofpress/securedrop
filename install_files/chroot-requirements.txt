@@ -1,0 +1,17 @@
+haveged
+secure-delete
+dchroot
+debootstrap
+apparmor-utils
+apparmor-profiles
+python-software-properties
+
+
+#Everthing past this point will be purged at the end of the installation
+#PURGE_THESE
+python-pip
+gcc
+git
+make
+python-dev
+#PURGE_DONE
