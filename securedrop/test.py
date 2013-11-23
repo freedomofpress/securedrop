@@ -518,7 +518,17 @@ class TestStore(unittest.TestCase):
 
 class TestDb(unittest.TestCase):
 
+    def setUp(self):
+      self.session = db.sqlalchemy_handle()
+
+    def tearDown(self):
+      self.session.execute(db.tags.delete())
+      self.session.execute(db.files.delete())
+      self.session.commit()
+      self.session.close()
+
     def test_add_tag(self):
+        session = self.session
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
@@ -527,12 +537,24 @@ class TestDb(unittest.TestCase):
 
         #read tags for filenames
         #check that filenames have tag 'some-tag'
-        session = db.sqlalchemy_handle()
 
-        actual_tags = [ r[0] for r in session.query(db.tags.c.name).all() ]
+
+        actual_tags = [r[0] for r in session.query(db.tags.c.name).all()]
         assert 'some-tag' in actual_tags
 
-        session.execute(db.tags.delete())
+    def test_add_file(self):
+        session = self.session
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+
+        db.add_tag(filenames, 'some-tag')
+
+        actual_files = [r[0] for r in session.query(db.files.c.name).all()]
+
+        assert filenames[0] in actual_files
+
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

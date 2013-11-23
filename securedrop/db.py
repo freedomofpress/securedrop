@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKey
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 import config
@@ -8,13 +8,20 @@ metadata = MetaData()
 
 tags = Table('tags',metadata,
              Column('id', Integer, primary_key=True),
-             Column('name',String(255), nullable=False)
-            )
+             Column('name',String(255), nullable=False))
+
+files_to_tags = Table("files_tags", metadata,
+                      Column("id", Integer, primary_key=True),
+                      Column("tags_id", Integer, ForeignKey("tags.id")),
+                      Column("files_id", Integer, ForeignKey("files.id")))
+
+files = Table('files', metadata,
+              Column('id', Integer, primary_key=True),
+              Column('name', String(255), nullable=False))
 
 sources = Table('sources', metadata,
                 Column('filesystem_id', String(96), primary_key=True),
-                Column('journalist_designation', String(255), nullable=False)
-                )
+                Column('journalist_designation', String(255), nullable=False))
 
 if config.DATABASE_ENGINE == "sqlite":
     engine = create_engine(
@@ -71,7 +78,7 @@ def regenerate_display_id(filesystem_id):
 
 def add_tag(filenames, *tags_to_add):
     session = sqlalchemy_handle()
-    insert = tags.insert().values(name='slime')
-    session.execute(insert)
+    [session.execute(tags.insert().values(name=tag)) for tag in tags_to_add]
+    [session.execute(files.insert().values(name=fileName)) for fileName in filenames]
     session.commit()
     session.close()
