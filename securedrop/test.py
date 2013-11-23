@@ -43,14 +43,10 @@ def _setup_test_docs(sid, files):
 def shared_setup():
     """Set up the file system and GPG"""
     # Create directories for the file store and the GPG keyring
-    for d in (config.TEST_DIR, config.STORE_DIR, config.GPG_KEY_DIR, config.TEMP_DIR):
-        try:
+    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR,
+              config.TEMP_DIR):
+        if not os.path.isdir(d):
             os.mkdir(d)
-        except OSError:
-            # some of these dirs already exist because we import source and
-            # journalist, which import crypto_util, which calls gpg.GPG at module
-            # level, which auto-generates the GPG homedir if it does not exist
-            pass
     # Initialize the GPG keyring
     gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
     # Import the journalist key for testing (faster to import a pre-generated
@@ -60,7 +56,7 @@ def shared_setup():
 
 
 def shared_teardown():
-    shutil.rmtree(config.TEST_DIR)
+    shutil.rmtree(config.SECUREDROP_ROOT)
 
 
 class TestSource(TestCase):
