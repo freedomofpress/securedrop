@@ -1,0 +1,184 @@
+# Time zone:
+# Choices: Adelaide, Brisbane, Broken Hill, Canberra, Currie, Darwin, Eucla, Hobart, Lindeman, Lord Howe, Melbourne, Perth, Sydney, Yancowinna
+tzdata	tzdata/Zones/Australia	select	
+# Do you want system-wide readable home directories?
+adduser	adduser/homedir-permission	boolean	true
+# What do you want to do about modified configuration file ?
+# Choices: install the package maintainer's version, keep the local version currently installed, show the differences between the versions, show a side-by-side difference between the versions, start a new shell to examine the situation
+ucf	ucf/changeprompt	select	keep_current
+# Removing immutable filesystem bit from /etc/resolv.conf
+resolvconf	resolvconf/fixing-immutable	error	
+# Time zone:
+# Choices: Alaska, Aleutian, Arizona, Central, Eastern, Hawaii, Indiana-Starke, Michigan, Mountain, Pacific, Pacific-New, Samoa
+tzdata	tzdata/Zones/US	select	
+# Override local changes to /etc/pam.d/common-*?
+libpam-runtime	libpam-runtime/override	boolean	false
+# Use Control+Alt+Backspace to terminate the X server?
+keyboard-configuration	keyboard-configuration/ctrl_alt_bksp	boolean	false
+# Services to restart for PAM library upgrade:
+libpam0g:amd64	libpam0g/restart-services	string	
+# Reboot recommended
+resolvconf	resolvconf/downup-interfaces	note	
+# Services to restart for GNU libc library upgrade:
+libc6	glibc/restart-services	string	
+libc6:amd64	glibc/restart-services	string	
+# Time zone:
+# Choices: Aden, Almaty, Amman, Anadyr, Aqtau, Aqtobe, Ashgabat, Baghdad, Bahrain, Baku, Bangkok, Beirut, Bishkek, Brunei, Choibalsan, Chongqing, Colombo, Damascus, Dhaka, Dili, Dubai, Dushanbe, Gaza, Harbin, Hebron, Ho_Chi_Minh, Hong_Kong, Hovd, Irkutsk, Istanbul, Jakarta, Jayapura, Jerusalem, Kabul, Kamchatka, Karachi, Kashgar, Kathmandu, Khandyga, Kolkata, Krasnoyarsk, Kuala_Lumpur, Kuching, Kuwait, Macau, Magadan, Makassar, Manila, Muscat, Nicosia, Novokuznetsk, Novosibirsk, Omsk, Oral, Phnom_Penh, Pontianak, Pyongyang, Qatar, Qyzylorda, Rangoon, Riyadh, Riyadh87, Riyadh88, Riyadh89, Sakhalin, Samarkand, Seoul, Shanghai, Singapore, Taipei, Tashkent, Tbilisi, Tehran, Tel_Aviv, Thimphu, Tokyo, Ujung_Pandang, Ulaanbaatar, Urumqi, Ust-Nera, Vientiane, Vladivostok, Yakutsk, Yekaterinburg, Yerevan
+tzdata	tzdata/Zones/Asia	select	
+# PAM profiles to enable:
+# Choices: Unix authentication
+libpam-runtime	libpam-runtime/profiles	multiselect	unix
+# Restart services during package upgrades without asking?
+libc6	libraries/restart-without-asking	boolean	false
+libc6:amd64	libraries/restart-without-asking	boolean	false
+libpam0g:amd64	libraries/restart-without-asking	boolean	false
+# Character set to support:
+# Choices: . Arabic, # Armenian, # Cyrillic - KOI8-R and KOI8-U, # Cyrillic - non-Slavic languages, # Cyrillic - Slavic languages (also Bosnian and Serbian Latin), . Ethiopic, # Georgian, # Greek, # Hebrew, # Lao, # Latin1 and Latin5 - western Europe and Turkic languages, # Latin2 - central Europe and Romanian, # Latin3 and Latin8 - Chichewa; Esperanto; Irish; Maltese and Welsh, # Latin7 - Lithuanian; Latvian; Maori and Marshallese, . Latin - Vietnamese, # Thai, . Combined - Latin; Slavic Cyrillic; Hebrew; basic Arabic, . Combined - Latin; Slavic Cyrillic; Greek, . Combined - Latin; Slavic and non-Slavic Cyrillic
+console-setup	console-setup/codeset47	select	. Combined - Latin; Slavic Cyrillic; Greek
+# Prepare /etc/resolv.conf for dynamic updates?
+resolvconf	resolvconf/linkify-resolvconf	boolean	false
+# Unable to migrate to dependency-based boot system
+sysv-rc	sysv-rc/unable-to-convert	note	
+# Interface to use:
+# Choices: Dialog, Readline, Gnome, Kde, Editor, Noninteractive
+debconf	debconf/frontend	select	Dialog
+# Time zone:
+# Choices: GMT, GMT+0, GMT+1, GMT+10, GMT+11, GMT+12, GMT+2, GMT+3, GMT+4, GMT+5, GMT+6, GMT+7, GMT+8, GMT+9, GMT-0, GMT-1, GMT-10, GMT-11, GMT-12, GMT-13, GMT-14, GMT-2, GMT-3, GMT-4, GMT-5, GMT-6, GMT-7, GMT-8, GMT-9, GMT0, Greenwich, UCT, UTC, Universal, Zulu
+tzdata	tzdata/Zones/Etc	select	UTC
+# Migrate legacy boot sequencing to dependency-based sequencing?
+sysv-rc	sysv-rc/convert-legacy	boolean	true
+# for internal use
+console-setup	console-setup/codesetcode	string	Uni2
+# Time zone:
+# Choices: AST4, AST4ADT, CST6, CST6CDT, EST5, EST5EDT, HST10, MST7, MST7MDT, PST8, PST8PDT, YST9, YST9YDT
+tzdata	tzdata/Zones/SystemV	select	
+# Reboot recommended
+resolvconf	resolvconf/reboot-recommended-after-removal	note	
+# Failure restarting some services for OpenSSL upgrade
+libssl1.0.0:amd64	libssl1.0.0/restart-failed	error	
+# xscreensaver and xlockmore must be restarted before upgrading
+libc6	glibc/disable-screensaver	error	
+libc6:amd64	glibc/disable-screensaver	error	
+# Time zone:
+# Choices: Abidjan, Accra, Addis_Ababa, Algiers, Asmara, Bamako, Bangui, Banjul, Bissau, Blantyre, Brazzaville, Bujumbura, Cairo, Casablanca, Ceuta, Conakry, Dakar, Dar_es_Salaam, Djibouti, Douala, El_Aaiun, Freetown, Gaborone, Harare, Johannesburg, Juba, Kampala, Khartoum, Kigali, Kinshasa, Lagos, Libreville, Lome, Luanda, Lubumbashi, Lusaka, Malabo, Maputo, Maseru, Mbabane, Mogadishu, Monrovia, Nairobi, Ndjamena, Niamey, Nouakchott, Ouagadougou, Porto-Novo, Sao_Tome, Timbuktu, Tripoli, Tunis, Windhoek
+tzdata	tzdata/Zones/Africa	select	
+# for internal use
+keyboard-configuration	keyboard-configuration/modelcode	string	pc105
+# Conflicts found in three-way merge
+ucf	ucf/conflicts_found	error	
+# Keep default keyboard layout ()?
+keyboard-configuration	keyboard-configuration/unsupported_layout	boolean	true
+# Keep current keyboard options in the configuration file?
+keyboard-configuration	keyboard-configuration/unsupported_config_options	boolean	true
+# Time zone:
+# Choices: Adak, Anchorage, Anguilla, Antigua, Araguaina, Argentina/Buenos_Aires, Argentina/Catamarca, Argentina/Cordoba, Argentina/Jujuy, Argentina/La_Rioja, Argentina/Mendoza, Argentina/Rio_Gallegos, Argentina/Salta, Argentina/San_Juan, Argentina/San_Luis, Argentina/Tucuman, Argentina/Ushuaia, Aruba, Asuncion, Atikokan, Atka, Bahia, Bahia_Banderas, Barbados, Belem, Belize, Blanc-Sablon, Boa_Vista, Bogota, Boise, Cambridge_Bay, Campo_Grande, Cancun, Caracas, Cayenne, Cayman, Chicago, Chihuahua, Coral_Harbour, Costa_Rica, Creston, Cuiaba, Curacao, Danmarkshavn, Dawson, Dawson_Creek, Denver, Detroit, Dominica, Edmonton, Eirunepe, El_Salvador, Ensenada, Fortaleza, Glace_Bay, Godthab, Goose_Bay, Grand_Turk, Grenada, Guadeloupe, Guatemala, Guayaquil, Guyana, Halifax, Havana, Hermosillo, Indiana/Indianapolis, Indiana/Knox, Indiana/Marengo, Indiana/Petersburg, Indiana/Tell_City, Indiana/Vevay, Indiana/Vincennes, Indiana/Winamac, Inuvik, Iqaluit, Jamaica, Juneau, Kentucky/Louisville, Kentucky/Monticello, Kralendijk, La_Paz, Lima, Los_Angeles, Lower_Princes, Maceio, Managua, Manaus, Marigot, Martinique, Matamoros, Mazatlan, Menominee, Merida, Metlakatla, Mexico_City, Miquelon, Moncton, Monterrey, Montevideo, Montreal, Montserrat, Nassau, New_York, Nipigon, Nome, Noronha, North_Dakota/Beulah, North_Dakota/Center, North_Dakota/New_Salem, Ojinaga, Panama, Pangnirtung, Paramaribo, Phoenix, Port-au-Prince, Port_of_Spain, Porto_Acre, Porto_Velho, Puerto_Rico, Rainy_River, Rankin_Inlet, Recife, Regina, Resolute, Rio_Branco, Santa_Isabel, Santarem, Santiago, Santo_Domingo, Sao_Paulo, Scoresbysund, Shiprock, Sitka, St_Barthelemy, St_Johns, St_Kitts, St_Lucia, St_Thomas, St_Vincent, Swift_Current, Tegucigalpa, Thule, Thunder_Bay, Tijuana, Toronto, Tortola, Vancouver, Virgin, Whitehorse, Winnipeg, Yakutat, Yellowknife
+tzdata	tzdata/Zones/America	select	
+# for internal use
+keyboard-configuration	keyboard-configuration/variantcode	string	
+# Font for the console:
+# Choices: Fixed, Terminus, TerminusBold, TerminusBoldVGA, VGA, Do not change the boot/kernel font
+console-setup	console-setup/fontface47	select	Fixed
+# Keep the current keyboard layout in the configuration file?
+keyboard-configuration	keyboard-configuration/unsupported_config_layout	boolean	true
+# Method for toggling between national and Latin mode:
+# Choices: Caps Lock, Right Alt (AltGr), Right Control, Right Shift, Right Logo key, Menu key, Alt+Shift, Control+Shift, Control+Alt, Alt+Caps Lock, Left Control+Left Shift, Left Alt, Left Control, Left Shift, Left Logo key, Scroll Lock key, No toggling
+keyboard-configuration	keyboard-configuration/toggle	select	No toggling
+# Font size:
+# Choices: 13, 14, 15, 16, 18
+console-setup	console-setup/fontsize-text47	select	16
+# Display manager must be restarted manually
+libpam0g:amd64	libpam0g/xdm-needs-restart	error	
+# Keyboard model:
+# Choices: A4Tech KB-21, A4Tech KBS-8, A4Tech Wireless Desktop RFKB-23, Acer AirKey V, Acer C300, Acer Ferrari 4000, Acer Laptop, Advance Scorpius KI, Amiga, Apple, Apple Aluminium Keyboard (ANSI), Apple Aluminium Keyboard (ISO), Apple Aluminium Keyboard (JIS), Apple Laptop, Asus Laptop, Atari TT, Azona RF2300 wireless Internet Keyboard, BTC 5090, BTC 5113RF Multimedia, BTC 5126T, BTC 6301URF, BTC 9000, BTC 9000A, BTC 9001AH, BTC 9019U, BTC 9116U Mini Wireless Internet and Gaming, BenQ X-Touch, BenQ X-Touch 730, BenQ X-Touch 800, Brother Internet Keyboard, Cherry B.UNLIMITED, Cherry Blue Line CyBo@rd, Cherry Blue Line CyBo@rd (alternate option), Cherry CyBo@rd USB-Hub, Cherry CyMotion Expert, Cherry CyMotion Master Linux, Cherry CyMotion Master XPress, Chicony Internet Keyboard, Chicony KB-9885, Chicony KU-0108, Chicony KU-0420, Classmate PC, Compaq Easy Access Keyboard, Compaq Internet Keyboard (13 keys), Compaq Internet Keyboard (18 keys), Compaq Internet Keyboard (7 keys), Compaq iPaq Keyboard, Creative Desktop Wireless 7000, DTK2000, Dell, Dell 101-key PC, Dell Laptop/notebook Inspiron 6xxx/8xxx, Dell Laptop/notebook Precision M series, Dell Latitude series laptop, Dell Precision M65, Dell SK-8125, Dell SK-8135, Dell USB Multimedia Keyboard, Dexxa Wireless Desktop Keyboard, Diamond 9801 / 9802 series, Do not configure keyboard; keep kernel keymap, Ennyah DKB-1008, Everex STEPnote, FL90, Fujitsu-Siemens Computers AMILO laptop, Generic 101-key PC, Generic 102-key (Intl) PC, Generic 104-key PC, Generic 105-key (Intl) PC, Genius Comfy KB-12e, Genius Comfy KB-16M / Genius MM Keyboard KWD-910, Genius Comfy KB-21e-Scroll, Genius KB-19e NB, Genius KKB-2050HS, Gyration, HTC Dream, Happy Hacking Keyboard, Happy Hacking Keyboard for Mac, Hewlett-Packard Internet Keyboard, Hewlett-Packard Mini 110 Notebook, Hewlett-Packard Omnibook 500 FA, Hewlett-Packard Omnibook 5xx, Hewlett-Packard Omnibook 6000/6100, Hewlett-Packard Omnibook XE3 GC, Hewlett-Packard Omnibook XE3 GF, Hewlett-Packard Omnibook XT1000, Hewlett-Packard Pavilion ZT11xx, Hewlett-Packard Pavilion dv5, Hewlett-Packard SK-250x Multimedia Keyboard, Hewlett-Packard nx9020, Honeywell Euroboard, Htc Dream phone, IBM Rapid Access, IBM Rapid Access II, IBM Space Saver, IBM ThinkPad 560Z/600/600E/A22E, IBM ThinkPad R60/T60/R61/T61, IBM ThinkPad Z60m/Z60t/Z61m/Z61t, Intelligent Keyboard K04, Keytronic FlexPro, Kinesis, Laptop/notebook Compaq (eg. Armada) Laptop Keyboard, Laptop/notebook Compaq (eg. Presario) Internet Keyboard, Laptop/notebook eMachines m68xx, Logitech Access Keyboard, Logitech Cordless Desktop, Logitech Cordless Desktop (alternate option), Logitech Cordless Desktop EX110, Logitech Cordless Desktop LX-300, Logitech Cordless Desktop Navigator, Logitech Cordless Desktop Optical, Logitech Cordless Desktop Pro (alternate option 2), Logitech Cordless Desktop iTouch, Logitech Cordless Freedom/Desktop Navigator, Logitech G15 extra keys via G15daemon, Logitech Generic Keyboard, Logitech Internet 350 Keyboard, Logitech Internet Keyboard, Logitech Internet Navigator Keyboard, Logitech Media Elite Keyboard, Logitech Ultra-X Cordless Media Desktop Keyboard, Logitech Ultra-X Keyboard, Logitech diNovo Edge Keyboard, Logitech diNovo Keyboard, Logitech iTouch, Logitech iTouch Cordless Keyboard (model Y-RB6), Logitech iTouch Internet Navigator Keyboard SE, Logitech iTouch Internet Navigator Keyboard SE (USB), MacBook/MacBook Pro, MacBook/MacBook Pro (Intl), Macintosh, Macintosh Old, Memorex MX1998, Memorex MX2500 EZ-Access Keyboard, Memorex MX2750, Microsoft Comfort Curve Keyboard 2000, Microsoft Internet Keyboard, Microsoft Internet Keyboard Pro\, Swedish, Microsoft Natural, Microsoft Natural Keyboard Elite, Microsoft Natural Keyboard Pro / Microsoft Internet Keyboard Pro, Microsoft Natural Keyboard Pro OEM, Microsoft Natural Keyboard Pro USB / Microsoft Internet Keyboard Pro, Microsoft Natural Wireless Ergonomic Keyboard 4000, Microsoft Natural Wireless Ergonomic Keyboard 7000, Microsoft Office Keyboard, Microsoft Wireless Multimedia Keyboard 1.0A, Northgate OmniKey 101, OLPC, Ortek MCK-800 MM/Internet keyboard, PC-98xx Series, Propeller Voyager (KTEZ-1000), QTronix Scorpius 98N+, SILVERCREST Multimedia Wireless Keyboard, SK-1300, SK-2500, SK-6200, SK-7100, SVEN Ergonomic 2500, SVEN Slim 303, Samsung SDM 4500P, Samsung SDM 4510P, Sanwa Supply SKB-KG3, Sun Type 4, Sun Type 5, Sun Type 5/6, Super Power Multimedia Keyboard, Symplon PaceBook (tablet PC), Targa Visionary 811, Toshiba Satellite S3000, Trust Direct Access Keyboard, Trust Slimline, Trust Wireless Keyboard Classic, TypeMatrix EZ-Reach 2020, TypeMatrix EZ-Reach 2030 PS2, TypeMatrix EZ-Reach 2030 USB, TypeMatrix EZ-Reach 2030 USB (102/105:EU mode), TypeMatrix EZ-Reach 2030 USB (106:JP mode), Unitek KB-1925, ViewSonic KU-306 Internet Keyboard, Winbook Model XP5, Yahoo! Internet Keyboard
+keyboard-configuration	keyboard-configuration/model	select	Generic 105-key (Intl) PC
+# Failure restarting some services for GNU libc upgrade
+libc6	glibc/restart-failed	error	
+libc6:amd64	glibc/restart-failed	error	
+# Detect keyboard layout?
+keyboard-configuration	console-setup/ask_detect	boolean	false
+# Compose key:
+# Choices: No compose key, Right Alt (AltGr), Right Control, Right Logo key, Menu key, Left Logo key, Caps Lock
+keyboard-configuration	keyboard-configuration/compose	select	No compose key
+# Line by line differences between versions
+ucf	ucf/show_diff	note	
+# Country of origin for the keyboard:
+# Choices: Afghani, Albanian, Amharic, Arabic, Arabic (Morocco), Arabic (Syria), Armenian, Azerbaijani, Bambara, Belarusian, Belgian, Bengali, Bosnian, Braille, Bulgarian, Burmese, Catalan, Chinese, Croatian, Czech, Danish, Dhivehi, Dutch, Dzongkha, English (Cameroon), English (Ghana), English (Nigeria), English (South Africa), English (UK), English (US), Esperanto, Estonian, Faroese, Filipino, Finnish, French, French (Canada), French (Democratic Republic of the Congo), French (Guinea), Georgian, German, German (Austria), German (Switzerland), Greek, Hebrew, Hungarian, Icelandic, Indian, Iraqi, Irish, Italian, Japanese, Japanese (PC-98xx Series), Kazakh, Khmer (Cambodia), Korean, Kyrgyz, Lao, Latvian, Lithuanian, Macedonian, Maltese, Maori, Mongolian, Montenegrin, Nepali, Norwegian, Persian, Polish, Portuguese, Portuguese (Brazil), Romanian, Russian, Serbian (Cyrillic), Sinhala (phonetic), Slovak, Slovenian, Spanish, Spanish (Latin American), Swahili (Kenya), Swahili (Tanzania), Swedish, Taiwanese, Tajik, Thai, Tswana, Turkish, Turkmen, Ukrainian, Urdu (Pakistan), Uzbek, Vietnamese, Wolof
+keyboard-configuration	keyboard-configuration/layout	select	English (US)
+# Time zone:
+# Choices: Longyearbyen
+tzdata	tzdata/Zones/Arctic	select	
+# Use dash as the default system shell (/bin/sh)?
+dash	dash/sh	boolean	true
+# Keymap to use:
+# Choices: American English, Belarusian, Belgian, Brazilian (ABNT2 layout), Brazilian (EUA layout), British English, Bulgarian, Bulgarian (phonetic layout), Canadian French, Canadian Multilingual, Croatian, Czech, Danish, Dutch, Dvorak, Estonian, Finnish, French, German, Greek, Hebrew, Hungarian, Icelandic, Italian, Japanese, Kirghiz, Latin American, Latvian, Lithuanian, Macedonian, Norwegian, Polish, Portuguese, Romanian, Russian, Serbian (Cyrillic), Slovakian, Slovene, Spanish, Swedish, Swiss French, Swiss German, Thai, Turkish (F layout), Turkish (Q layout), Ukrainian
+keyboard-configuration	keyboard-configuration/xkb-keymap	select	us
+# for internal use
+keyboard-configuration	keyboard-configuration/layoutcode	string	us
+# Keyboard layout:
+# Choices: English (US), English (US) - Cherokee, English (US) - English (Colemak), English (US) - English (Dvorak alternative international no dead keys), English (US) - English (Dvorak international with dead keys), English (US) - English (Dvorak), English (US) - English (Macintosh), English (US) - English (US\, alternative international), English (US) - English (US\, international with dead keys), English (US) - English (US\, with euro on 5), English (US) - English (classic Dvorak), English (US) - English (international AltGr dead keys), English (US) - English (layout toggle on multiply/divide key), English (US) - English (left handed Dvorak), English (US) - English (programmer Dvorak), English (US) - English (right handed Dvorak), English (US) - Russian (US\, phonetic), English (US) - Serbo-Croatian (US)
+keyboard-configuration	keyboard-configuration/variant	select	English (US)
+# Failure restarting some services for PAM upgrade
+libpam0g:amd64	libpam0g/restart-failed	error	
+# Services to restart to make them use the new libraries:
+libssl1.0.0:amd64	libssl1.0.0/restart-services	string	
+# Time zone:
+# Choices: Apia, Auckland, Chatham, Chuuk, Easter, Efate, Enderbury, Fakaofo, Fiji, Funafuti, Galapagos, Gambier, Guadalcanal, Guam, Honolulu, Johnston, Kiritimati, Kosrae, Kwajalein, Majuro, Marquesas, Midway, Nauru, Niue, Norfolk, Noumea, Pago_Pago, Palau, Pitcairn, Pohnpei, Ponape, Port_Moresby, Rarotonga, Saipan, Samoa, Tahiti, Tarawa, Tongatapu, Truk, Wake, Wallis, Yap
+tzdata	tzdata/Zones/Pacific	select	
+# Geographic area:
+# Choices: Africa, America, Antarctica, Australia, Arctic, Asia, Atlantic, Europe, Indian, Pacific, SystemV, US, Etc
+tzdata	tzdata/Areas	select	Etc
+# Method for temporarily toggling between national and Latin input:
+# Choices: No temporary switch, Both Logo keys, Right Alt (AltGr), Right Logo key, Left Alt, Left Logo key
+keyboard-configuration	keyboard-configuration/switch	select	No temporary switch
+# for internal use
+console-setup	console-setup/store_defaults_in_debconf_db	boolean	true
+# Encoding to use on the console:
+# Choices: ARMSCII-8, CP1251, CP1255, CP1256, GEORGIAN-ACADEMY, GEORGIAN-PS, IBM1133, ISIRI-3342, ISO-8859-1, ISO-8859-10, ISO-8859-11, ISO-8859-13, ISO-8859-14, ISO-8859-15, ISO-8859-16, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-7, ISO-8859-8, ISO-8859-9, KOI8-R, KOI8-U, TIS-620, UTF-8, VISCII
+console-setup	console-setup/charmap47	select	UTF-8
+# Time zone:
+# Choices: Casey, Davis, DumontDUrville, Macquarie, Mawson, McMurdo, Palmer, Rothera, Syowa, Vostok
+tzdata	tzdata/Zones/Antarctica	select	
+# Do you want to upgrade glibc now?
+libc6	glibc/upgrade	boolean	true
+libc6:amd64	glibc/upgrade	boolean	true
+# Keep default keyboard options ()?
+keyboard-configuration	keyboard-configuration/unsupported_options	boolean	true
+# Font size:
+# Choices: 
+console-setup	console-setup/fontsize-fb47	select	16
+# for internal use
+keyboard-configuration	keyboard-configuration/store_defaults_in_debconf_db	boolean	true
+# Ignore questions with a priority less than:
+# Choices: critical, high, medium, low
+debconf	debconf/priority	select	high
+# Detecting your keyboard layout
+keyboard-configuration	console-setup/detect	detect-keyboard	
+# Keyboard layout detection complete
+keyboard-configuration	console-setup/detected	note	
+# Time zone:
+# Choices: Azores, Bermuda, Canary, Cape Verde, Faroe, Jan Mayen, Madeira, Reykjavik, South Georgia, St. Helena, Stanley
+tzdata	tzdata/Zones/Atlantic	select	
+# Key to function as AltGr:
+# Choices: The default for the keyboard layout, No AltGr key, Right Alt (AltGr), Right Control, Right Logo key, Menu key, Left Alt, Left Logo key, Keypad Enter key, Both Logo keys, Both Alt keys
+keyboard-configuration	keyboard-configuration/altgr	select	The default for the keyboard layout
+# What do you want to do about modified configuration file ?
+# Choices: install the package maintainer's version, keep the local version currently installed, show the differences between the versions, show a side-by-side difference between the versions, show a 3-way difference between available versions, do a 3-way merge between available versions (experimental), start a new shell to examine the situation
+ucf	ucf/changeprompt_threeway	select	keep_current
+# xscreensaver and xlockmore must be restarted before upgrading
+libpam-modules	libpam-modules/disable-screensaver	error	
+# for internal use
+keyboard-configuration	keyboard-configuration/optionscode	string	
+# Incompatible PAM profiles selected.
+libpam-runtime	libpam-runtime/conflicts	error	
+# Append original file to dynamic file?
+resolvconf	resolvconf/link-tail-to-original	boolean	true
+# for internal use
+console-setup	console-setup/fontsize	string	16
+# Time zone:
+# Choices: Amsterdam, Andorra, Athens, Belfast, Belgrade, Berlin, Bratislava, Brussels, Bucharest, Budapest, Busingen, Chisinau, Copenhagen, Dublin, Gibraltar, Guernsey, Helsinki, Isle_of_Man, Istanbul, Jersey, Kaliningrad, Kiev, Lisbon, Ljubljana, London, Luxembourg, Madrid, Malta, Mariehamn, Minsk, Monaco, Moscow, Nicosia, Oslo, Paris, Podgorica, Prague, Riga, Rome, Samara, San_Marino, Sarajevo, Simferopol, Skopje, Sofia, Stockholm, Tallinn, Tirane, Tiraspol, Uzhgorod, Vaduz, Vatican, Vienna, Vilnius, Volgograd, Warsaw, Zagreb, Zaporozhye, Zurich
+tzdata	tzdata/Zones/Europe	select	
+# No PAM profiles have been selected.
+libpam-runtime	libpam-runtime/no_profiles_chosen	error	
+# Time zone:
+# Choices: Antananarivo, Chagos, Christmas, Cocos, Comoro, Kerguelen, Mahe, Maldives, Mauritius, Mayotte, Reunion
+tzdata	tzdata/Zones/Indian	select	
