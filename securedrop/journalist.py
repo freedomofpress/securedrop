@@ -99,6 +99,7 @@ def reply():
 def generate_code():
     sid = request.form['sid']
     db.regenerate_display_id(sid)
+    #TODO: We shouldn't create this url manually redirect(url_for(col, sid=sid))
     return redirect('/col/' + sid)
 
 
@@ -142,6 +143,7 @@ def bulk_download(sid, docs_selected):
 def bulk_tag(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     db.add_tag_to_file(filenames, request.form['tag'])
+    #TODO: We shouldn't create this url manually redirect(url_for(col, sid=sid))
     return redirect("/col/" + sid)
 
 @app.route('/flag', methods=('POST',))
