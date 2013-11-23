@@ -43,3 +43,6 @@ nosetests.xml
 
 # Vim temp files
 *~
+
+# Likely SQLite db file
+db.sql

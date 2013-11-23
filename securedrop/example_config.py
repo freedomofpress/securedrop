@@ -1,15 +1,19 @@
 import os
 
+
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
-    SECRET_KEY = '' # import os; os.urandom(24)
+    SECRET_KEY = ''  # import os; os.urandom(24)
+
 
 class ProductionConfig(BaseConfig):
     pass
 
+
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
+
 
 class TestingConfig(BaseConfig):
     TESTING = True
@@ -17,25 +21,36 @@ class TestingConfig(BaseConfig):
     WTF_CSRF_ENABLED = False
 
 # data directories - should be on secure media
-STORE_DIR='/tmp/deaddrop/store'
-GPG_KEY_DIR='/tmp/deaddrop/keys'
-TEMP_DIR='/tmp/deaddrop/tmp'
+STORE_DIR = '/tmp/deaddrop/store'
+GPG_KEY_DIR = '/tmp/deaddrop/keys'
+TEMP_DIR = '/tmp/deaddrop/tmp'
 
-JOURNALIST_KEY=''
+JOURNALIST_KEY = ''
 
-SOURCE_TEMPLATES_DIR='./source_templates'
-JOURNALIST_TEMPLATES_DIR='./journalist_templates'
-WORD_LIST='./wordlist'
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
 
-BCRYPT_SALT='' # bcrypt.gensalt()
+BCRYPT_SALT = ''  # bcrypt.gensalt()
+
+# Database Configuration
+DATABASE_ENGINE = 'mysql'
+DATABASE_USERNAME = 'securedrop'
+DATABASE_PASSWORD = ''
+DATABASE_HOST = 'localhost'
+DATABASE_NAME = 'securedrop'
+
+# For sqlite:
+# DATABASE_ENGINE = 'sqlite'
+# DATABASE_FILE = 'db.sql'
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig = TestingConfig
-    TEST_DIR='/tmp/deaddrop_test'
-    STORE_DIR=os.path.join(TEST_DIR, 'store')
-    GPG_KEY_DIR=os.path.join(TEST_DIR, 'keys')
+    TEST_DIR = '/tmp/deaddrop_test'
+    STORE_DIR = os.path.join(TEST_DIR, 'store')
+    GPG_KEY_DIR = os.path.join(TEST_DIR, 'keys')
     # test_journalist_key.pub
-    JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441'
+    JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'
