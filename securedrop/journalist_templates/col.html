@@ -13,7 +13,28 @@
 {% if docs %}
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 
+
+
+<form action="/bulk" method="post">
+<ul id="submissions">
+{% for doc in docs %}
+<li>
+  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
+  {% if doc.name.startswith('reply-') %}
+  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})
+  {% else %}
+  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})
+  {% endif %}
+</li>
+{% endfor %}
+<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
 <p>
+
+  <button type="submit" name="action" value="download">Download selected</button>
+  <button type="submit" name="action" value="delete">Delete selected</button>
+  <br/>
+  <p>
     <label>
         <input type="checkbox" name="tags"/>
         read
@@ -31,25 +52,6 @@
         useless
     </label>
 </p>
-
-<form action="/bulk" method="post">
-<ul id="submissions">
-{% for doc in docs %}
-<li>
-  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
-  {% if doc.name.startswith('reply-') %}
-  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})
-  {% else %}
-  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})
-  {% endif %}
-</li>
-{% endfor %}
-<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-<input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-<p>
-  <button type="submit" name="action" value="download">Download selected</button>
-  <button type="submit" name="action" value="delete">Delete selected</button>
-  <br/>
   <button type="submit" name="action" value="tag">Tag selected with</button>
   <select name="tag">
       <option value="">New Tag</option>
