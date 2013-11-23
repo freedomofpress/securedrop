@@ -558,6 +558,10 @@ class TestDb(unittest.TestCase):
         actual_relationships = self.session.query(db.files_to_tags.c.tags_id, db.files_to_tags.c.files_id).all()
         print actual_relationships
         assert actual_relationships[0][0] == 1
+        assert actual_relationships[0][1] == 1
+        assert actual_relationships[1][0] == 1
+        assert actual_relationships[1][1] == 2
+
 
     def test_get_file(self):
         self.session.execute(db.files.insert().values(name=self.file_names[0]))
