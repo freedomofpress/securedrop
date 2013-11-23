@@ -9,6 +9,9 @@
 # then waits for the source server's agent to connect
 # The script then verifies that the source server's agent is active
 #
+CWD="$(dirname $0)"
+cd $CWD
+
 source ../CONFIG_OPTIONS
 OSSECBINARYURL="https://pressfreedomfoundation.org/securedrop-files/ossec-binary.tgz"
 OSSECBINARYURLSIG="https://pressfreedomfoundation.org/securedrop-files/ossec-binary.tgz.sig"
@@ -16,7 +19,6 @@ SIGNINGKEY="https://pressfreedomfoundation.org/securedrop-files/signing_key.asc"
 OSSECZIP="ossec-binary.tgz"
 OSSECVERSION="ossec-hids-2.7"
 TEMPDIR="/tmp/ossec"
-cd "$(dirname "$0")"
 
 
 # Check for root
@@ -129,9 +131,11 @@ restart_ossec() {
 gen_authd_keys() {
   #Generate OSSEC ssl key for authd
   echo "Generating keys for authd"
-  openssl ecparam -name prime256v1 -genkey -out /var/ossec/etc/sslmanager.key
-  
-  openssl req -new -x509 -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+
+  openssl req \
+    -new -newkey rsa:4096 -x509 -nodes -days 365 \
+    -subj '/C=US/ST=NewYork/L=NewYork/CN=monitor' \
+    -keyout /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert
 }
 
 

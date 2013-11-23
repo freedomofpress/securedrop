@@ -10,6 +10,9 @@
 #securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
 #securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
 #securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)
+CWD="$(dirname $0)"
+cd $CWD
+
 source ../CONFIG_OPTIONS
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 BASE_DEPENDENCIES=$(grep -vE "^\s*#" base-requirements.txt  | tr "\n" " ")

@@ -6,15 +6,18 @@
 # --force-clean to delete chroot jails.
 # --no-apparmor do not enforce the apache apparmor profile. This is a Secruity risk.
 #securedrop.git
-#securedrop/securedrop/                           (web app code)
-#securedrop/CONFIG_OPTIONS			  (user provided input)
-#securedrop/securedrop/requirements.txt           (pip requirements)
-#securedrop/install_files/                        (config files and install scripts)
-#securedrop/install_files/CONFIG_OPTIONS          (required user supplied input)
-#securedrop/install_files/SecureDrop.asc          (the app pub gpg key)
-#securedrop/install_files/source_requirements.txt (source chroot jail package dependencies)
-#securedrop/install_files/journalist_requirements.txt    (journalist interface chroot package dependencies)#
+#securedrop/production_installation.sh                (installation script)
+#securedrop/securedrop/                               (web app code)
+#securedrop/CONFIG_OPTIONS			                  (user provided input)
+#securedrop/securedrop/requirements.txt               (pip requirements)
+#securedrop/install_files/                            (config files and install scripts)
+#securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
+#securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)#
 #
+CWD="$(dirname $0)"
+cd $CWD
+
 source ../CONFIG_OPTIONS
 JAILS="source journalist"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
@@ -28,7 +31,6 @@ BCRYPT_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
-CWD="$(dirname $0)"
 APP_FILES="../securedrop"
 
 #Check that user is root
@@ -45,9 +47,6 @@ catch_error() {
   fi
 }
 
-
-#CD into the directory containing the interface-install.sh script
-cd $CWD
 
 
 #User Inputs the applications public gpg key and verifies fingerprint

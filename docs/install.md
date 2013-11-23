@@ -1,27 +1,27 @@
-ecureDrop Installation Guide
+SecureDrop Installation Guide
 =============================
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up. 
 
-* You must have two servers — called the `Source Server` and the `Monitor Server`, with [Ubuntu Server installed](/ubuntu_config.md).
+* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/ubuntu_config.md).
 
 * You must have a DVD configured as a Live DVD for the Tails operating system.
 
-* Each Admin must have 2 USB sticks — one will be used for transfering files and the other for their Tails OS peristent storage.
+* Each Admin must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for transferring files and the other for their Tails OS persitent storage.
 
-* Each Journalist must have 2 USB stick — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transfering files.
+* Each Journalist must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transferring files from their `Tails Workstation` to the `Air-Gapped Viewing Station`.
 
-* Each Airgapped `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage to store the application's private key. The other to transfer files to the air-gapped `Air-Gapped Viewing Station` to the corporate network for publication purposes.
+* Each `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage. The other to transfer files from the `Air-Gapped Viewing Station` to the corporate network for publication purposes.
 
-* You must have two external hard drives for cold storage of submitted documents, and the application's gpg keyring.
+* You must have two external hard drives for cold storage of submitted documents and the application's gpg keyring.
 
-* Finally, you should have selected two secure passphrases for different components of the `Viewing Station`: one for the persistent volume and one for the PGP keypair. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
+* Finally, you should have selected two secure passphrases for different components of the `Air-Gapped Viewing Station`: one for the persistent volume and one for the PGP keypair. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-## Viewing Station
+## Air-Gapped Viewing Station
 
-The `Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
+The `Air-Gapped Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
 
-You will need to create an PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's personnel public key.
+You will need to create an PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Air-Gapped Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's personnel public key.
 
 ### Remove Hard Drive
 
@@ -40,7 +40,7 @@ Reboot the `Air-Gapped Viewing Station` laptop and boot into the Tails Live USB 
 
 ### Generate PGP Key and Import Journalist Public Keys
 
-In order to avoid transfering plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist PGP Keys](/images/install/viewing1.jpg)
 
@@ -58,7 +58,7 @@ Put these values in:
 * `Email Address`: (blank)
 * `Comment`: SecureDrop Application PGP Key
 
-Click the arrow to expland `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
+Click the arrow to expand `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
 
 ![New PGP Key](/images/install/viewing4.jpg)
 
@@ -75,7 +75,7 @@ Right-click on the key you just generated and click `Export`. Save it to your US
 
 ![My Keys](/images/install/viewing8.jpg)
 
-You'll also need to write down the 40 character hex fingerprint for this new key for the next step. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your PGP key fingerprint will be different than what's in this photo.)
+You'll also need to verify the 40 character hex fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your PGP key fingerprint will be different than what's in this photo.)
 
 ![Fingerprint](/images/install/viewing9.jpg)
 
@@ -85,20 +85,23 @@ All three servers should already have Ubuntu Server installed. To follow these i
 
 Download the latest version of SecureDrop to your workstation. You can either get it from our git repository with `git clone https://github.com/freedomofpress/securedrop.git`, or you can download the latest tar.gz file from https://pressfreedomfoundation.org/securedrop, and extract it. 
 
-The setup script needs the application PGP public key you created earlier, `SecureDrop.asc`. Plug in the USB stick that you copied it to into your workstation and copy it to securedrop/install_files/
+The setup script needs the application PGP public key you created earlier, `SecureDrop.asc`. Plug in the USB stick that you copied `SecureDrop.asc` to and copy it to securedrop/install_files/
 
-Then `scp` the `securedrop` folder to the home directory on the `Monitor Server` and `Source Server`.
+Then `scp` the `securedrop` folder to the home directory on the `Monitor Server` and `App Server`.
 
-Now SSH to the `Monitor Server`. When you're in, configure the options file and run the installation script:
+Now SSH to the `Monitor Server`. When you're in, enter your environment details in the CONFIG_OPTIONS file and run the installation script:
 
     cd ~/securedrop
     nano CONFIG_OPTIONS
+
+Fill out the relevent options, exit and save.
+
     sudo ./production_installation.sh
 
 (Dependent on debootstrap and ossec server ssl key automation)
-The script will pause and instruct you to begin the instalation on the `Source Server`
+The script will install the pre-configured OSSEC manager and instruct when to begin the `App Server` installation
 
-When prompter SSH to the `Source Server`. Whe you're in configure the options file and run the installation script:
+When instructed by the installation script running on the `Monitor Server` SSH to the `App Server` and configure the options in CONFIG_OPTIONS then run the installation scripts.
 
     cd ~/securedrop
     nano CONFIG_OPTIONS
@@ -106,44 +109,46 @@ When prompter SSH to the `Source Server`. Whe you're in configure the options fi
     
 A google-authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
 
-A QR code will be generated follow the instructions for adding to your mobile google-authenticator app
+Follow the instructions for adding your secret key to your google-authenticator app
     
-At the end of a successfull `Source Server` installation the script will output the Source Interface onion url, the Journalist's interfaces stealth onion url and auth codes.
+At the end of a successfull `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface` onion URL and auth codes, the `App Server`'s SSH onion address and auth code. 
 
-    The source server's Tor URL is: 
+    The Source Interface's onion URL is: 
     bh33efgmt5ai32te.onion
-    The journalist interface's Tor URL and auth value are:
+    The Document Interface's onion URL and auth value are:
     b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
     kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
-    The Source Servers ssh ontion address and auth values are:
+    The App Server's ssh onion address and auth values are:
     sz3yuv5hdipt2icy.onion PKZ8sKjp5Z08AGq5BB7BKx # admin1
     oz4ezuhym2zfugjn.onion xCQf9IrFAXuoo7KfrMURzB # admin2
-    The Source Server's installation is complete.
+    The App Server's installation is complete.
     Please finsish the installation on the Monitor Server
     
-This lists the Tor hidden service URLs for the Source Interface, the two journalists on the Journalist Interface, and the onion addresses for SSH access. It also lists the auth value for each journalist and admin. Save those lines because you'll need them when setting up the `Journalist's Tail OS Workstations` and `Admin's Tails OS Workstation`.
+This lists the Tor hidden service URLs for the `Source Interface`, the two journalists on the `Document Interface`, and the onion addresses for SSH access. It also lists the auth value for each journalist and admin. Save those lines because you'll need them when setting up the Journalist's `Tails Workstations` and Admin's `Tails Workstation`.
 
-In this case, the `Source Server`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.  
-The Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/  
-The Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB  
-The Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/  
-The Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR  
-
-Once the `Source Server` installation is successfully completed. Go back to the SSH session to the `Monitor Server` and enter `Y` to continue.
+In this case, the `Source Interface`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.  
+The `Document Interface`'s Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/  
+The `Document Interface`'s Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB  
+The `Document Interface`'s Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/  
+The `Document Interface`'s Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR  
+The `App Server`'s Tor hidden service SSH address for the first admin is: sz3yuv5hdipt2icy.onion
+The `App Server`'s Tor hidden service SSH Auth value for the first admin is: PKZ8sKjp5Z08AGq5BB7BKx
+ 
+Once the `App Server`'s installation is successfully completed. Go back to the SSH session for the `Monitor Server` and enter `Y` to continue.
 
 A google-authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
 
-A QR code will be generated follow the instructions for adding to your mobile google-authenticator app
+Follow the instructions for adding your secret key to your mobile google-authenticator app
 
 At the end of a successful `Monitor Server` installation the script will output the `Monitor Server` SSH onion address. 
 
 Once you have completed these steps, the SecureDrop web application should be setup.
 
-## Journalist Workstation Setup
+## Journalist's and Admin's Tails Workstation Setup
 
-The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. In order to connect to the `Document Server` they need to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
+The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. In order to connect to the `App Server` they need to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
 
-You will have to do the following steps on each laptop that will be able to connect to the `Document Server`. If you want to give a new journalist access to the `Document Server` you will need to do these steps again for that new journalist.
+You will have to do the following steps on each laptop that will be able to connect to the `Document Interface` running on the `App Server`. If you want to give a new journalist access to the `Document Interface` you will need to do these steps again for that new journalist.
 
 * On the `Journalist Workstation`, [download and install the Tor Browser Bundle](https://www.torproject.org/download/download-easy.html.en). Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
 
