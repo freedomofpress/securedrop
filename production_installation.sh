@@ -92,11 +92,11 @@ elif [ $ROLE = 'source' ]; then
   echo "The installation in complete."
   echo "The source interfaces's Tor URL is:"
   cat /var/chroot/source/var/lib/tor/hidden_service/hostname
-  echo "The journalist interface's Tor URL and auth values are:"
+  echo "The document interface's Tor URL and auth values are:"
   cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname
-  echo "The Source Server's ssh onion address and auth values are:"
+  echo "The App Server's ssh onion address and auth values are:"
   cat /var/lib/tor/hidden_service/hostname
-  echo "The Source Server's installation is complete."
+  echo "The App Server's installation is complete."
   echo "Please finish the installation on the Monitor Server."
 
 else
