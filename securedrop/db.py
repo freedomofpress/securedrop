@@ -12,8 +12,8 @@ tags = Table('tags',metadata,
 
 files_to_tags = Table("files_tags", metadata,
                       Column("id", Integer, primary_key=True),
-                      Column("tags_id", Integer, ForeignKey("tags.id")),
-                      Column("files_id", Integer, ForeignKey("files.id")))
+                      Column("tags_id", Integer, ForeignKey('tags.id', onupdate="CASCADE", ondelete="CASCADE")),
+                      Column("files_id", Integer, ForeignKey("files.id", onupdate="CASCADE", ondelete="CASCADE")))
 
 files = Table('files', metadata,
               Column('id', Integer, primary_key=True),
