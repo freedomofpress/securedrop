@@ -533,6 +533,7 @@ class TestDb(unittest.TestCase):
 
         self.session = db.sqlalchemy_handle()
         self.file_names = _setup_test_docs(sid,files)
+        self.test_tag = 'some-tag'
 
     def tearDown(self):
         self.session.execute(db.tags.delete())
@@ -542,32 +543,37 @@ class TestDb(unittest.TestCase):
         self.session.close()
 
     def test_add_tag(self):
-        db.add_tag_to_file(self.file_names, 'some-tag')
+        db.add_tag_to_file(self.file_names, self.test_tag)
         actual_tags = [r[0] for r in self.session.query(db.tags.c.name).all()]
 
-        assert 'some-tag' in actual_tags
+        assert self.test_tag in actual_tags
 
     def test_add_file(self):
-        db.add_tag_to_file(self.file_names, 'some-tag')
+        db.add_tag_to_file(self.file_names, self.test_tag)
         actual_files = [r[0] for r in self.session.query(db.files.c.name).all()]
-
-        assert self.file_names[0] in actual_files
+        for file_name in self.file_names:
+            assert file_name in actual_files
 
     def test_add_file_to_tag(self):
-        db.add_tag_to_file(self.file_names, "some-tag")
+        db.add_tag_to_file(self.file_names, self.test_tag)
         actual_relationships = self.session.query(db.files_to_tags.c.tags_id, db.files_to_tags.c.files_id).all()
-        print actual_relationships
-        assert actual_relationships[0][0] == 1
-        assert actual_relationships[0][1] == 1
-        assert actual_relationships[1][0] == 1
-        assert actual_relationships[1][1] == 2
+
+        some_tag_id = self.session.query(db.tags.c.id).filter(db.tags.c.name == self.test_tag ).one()[0]
+        (first_file_id, second_file_id) = self.session.query(db.files.c.id).all()
+
+        assert actual_relationships[0][0] == some_tag_id
+        assert actual_relationships[0][1] == first_file_id[0]
+        assert actual_relationships[1][0] == some_tag_id
+        assert actual_relationships[1][1] == second_file_id[0]
 
 
     def test_get_file(self):
         self.session.execute(db.files.insert().values(name=self.file_names[0]))
         self.session.execute(db.files.insert().values(name=self.file_names[1]))
         self.session.commit()
+
         file = db.get_files(self.file_names)
+
         assert file[0][db.files.c.id] == 1
         assert file[1][db.files.c.id] == 2
 
