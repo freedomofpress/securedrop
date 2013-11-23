@@ -141,7 +141,7 @@ def bulk_download(sid, docs_selected):
 
 def bulk_tag(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
-    db.add_tag(filenames, request.form['tag'])
+    db.add_tag_to_file(filenames, request.form['tag'])
     return redirect("/col/" + sid)
 
 @app.route('/flag', methods=('POST',))

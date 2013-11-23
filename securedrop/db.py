@@ -23,19 +23,24 @@ sources = Table('sources', metadata,
                 Column('filesystem_id', String(96), primary_key=True),
                 Column('journalist_designation', String(255), nullable=False))
 
-if config.DATABASE_ENGINE == "sqlite":
-    engine = create_engine(
-        config.DATABASE_ENGINE + ":///" +
-        config.DATABASE_FILE
-    )
-else:
-    engine = create_engine(
-        config.DATABASE_ENGINE + '://' +
-        config.DATABASE_USERNAME + ':' +
-        config.DATABASE_PASSWORD + '@' +
-        config.DATABASE_HOST + '/' +
-        config.DATABASE_NAME, echo=False
-    )
+
+def get_engine():
+    if config.DATABASE_ENGINE == "sqlite":
+        engine = create_engine(
+            config.DATABASE_ENGINE + ":///" +
+            config.DATABASE_FILE
+        )
+    else:
+        engine = create_engine(
+            config.DATABASE_ENGINE + '://' +
+            config.DATABASE_USERNAME + ':' +
+            config.DATABASE_PASSWORD + '@' +
+            config.DATABASE_HOST + '/' +
+            config.DATABASE_NAME, echo=False
+        )
+    return engine
+
+engine = get_engine()
 
 
 def create_tables():
@@ -76,9 +81,22 @@ def regenerate_display_id(filesystem_id):
     session.commit()
     session.close()
 
-def add_tag(filenames, *tags_to_add):
+
+def add_tag_to_file(file_names, *tags_to_add):
     session = sqlalchemy_handle()
-    [session.execute(tags.insert().values(name=tag)) for tag in tags_to_add]
-    [session.execute(files.insert().values(name=fileName)) for fileName in filenames]
+    tag_results =[session.execute(tags.insert().values(name=tag)) for tag in tags_to_add]
+    file_results =[session.execute(files.insert().values(name=fileName)) for fileName in file_names]
+    [session.execute(files_to_tags.insert().values(tags_id = tag_id.inserted_primary_key[0], files_id = file_id.inserted_primary_key[0]))
+     for tag_id in tag_results
+     for file_id in file_results]
+
     session.commit()
     session.close()
+
+
+def get_files(file_names):
+    session = sqlalchemy_handle()
+    query = session.query(files.c.id)
+    [query.filter(files.c.name == file_name) for file_name in file_names]
+    results = session.execute(query)
+    return results.fetchall()

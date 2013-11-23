@@ -519,8 +519,18 @@ class TestStore(unittest.TestCase):
 class TestDb(unittest.TestCase):
 
     def setUp(self):
+        config.DATABASE_ENGINE = 'mysql'
+        config.DATABASE_USERNAME = 'securedrop'
+        config.DATABASE_PASSWORD = ''
+        config.DATABASE_HOST = 'localhost'
+        config.DATABASE_NAME = 'securedrop_test'
+
+        db.engine = db.get_engine()
+
+        db.create_tables()
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+
         self.session = db.sqlalchemy_handle()
         self.file_names = _setup_test_docs(sid,files)
 
@@ -532,29 +542,30 @@ class TestDb(unittest.TestCase):
         self.session.close()
 
     def test_add_tag(self):
-        db.add_tag(self.file_names, 'some-tag')
+        db.add_tag_to_file(self.file_names, 'some-tag')
         actual_tags = [r[0] for r in self.session.query(db.tags.c.name).all()]
 
         assert 'some-tag' in actual_tags
 
     def test_add_file(self):
-        db.add_tag(self.file_names, 'some-tag')
+        db.add_tag_to_file(self.file_names, 'some-tag')
         actual_files = [r[0] for r in self.session.query(db.files.c.name).all()]
 
         assert self.file_names[0] in actual_files
 
     def test_add_file_to_tag(self):
-        db.add_tag(self.file_names, "some-tag")
+        db.add_tag_to_file(self.file_names, "some-tag")
         actual_relationships = self.session.query(db.files_to_tags.c.tags_id, db.files_to_tags.c.files_id).all()
-        print actual_relationships[0][0]
-        assert actual_relationships[0] is 0
+        print actual_relationships
+        assert actual_relationships[0][0] == 1
 
-
-
-
-
-
-
+    def test_get_file(self):
+        self.session.execute(db.files.insert().values(name=self.file_names[0]))
+        self.session.execute(db.files.insert().values(name=self.file_names[1]))
+        self.session.commit()
+        file = db.get_files(self.file_names)
+        assert file[0][db.files.c.id] == 1
+        assert file[1][db.files.c.id] == 2
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
