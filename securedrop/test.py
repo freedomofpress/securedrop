@@ -45,7 +45,6 @@ def _setup_test_docs(sid, files):
             fp.write(str(uuid.uuid4()))
     return filenames
 
-
 def shared_setup():
     """Set up the file system and GPG"""
     # Create directories for the file store and the GPG keyring
@@ -59,6 +58,7 @@ def shared_setup():
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
+
 
 
 def shared_teardown():
@@ -247,6 +247,26 @@ class TestJournalist(TestCase):
         self.assertEqual(rv.status_code, 302)
         self.assertTrue(("/col/" + sid) in rv.location)
         mock_add_tag.assert_called_once_with(filenames, test_tag)
+
+    def test_add_new_tag(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = '__new__'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='tag',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+
+        soup = BeautifulSoup(rv.data)
+        self.assertGreater(len(soup.select('input[name=tag]')), 0)
+        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'tag')
+        self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
 
 class TestIntegration(unittest.TestCase):
 
@@ -517,7 +537,7 @@ class TestDb(unittest.TestCase):
     def setUp(self):
         config.DATABASE_ENGINE = 'mysql'
         config.DATABASE_USERNAME = 'securedrop'
-        config.DATABASE_PASSWORD = ''
+        config.DATABASE_PASSWORD = 'securedrop'
         config.DATABASE_HOST = 'localhost'
         config.DATABASE_NAME = 'securedrop_test'
 
