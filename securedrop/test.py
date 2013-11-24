@@ -246,7 +246,7 @@ class TestJournalist(TestCase):
 
         self.assertEqual(rv.status_code, 302)
         self.assertTrue(("/col/" + sid) in rv.location)
-        mock_add_tag.assert_called_once_with(filenames, test_tag)
+        mock_add_tag.assert_called_once_with(files, test_tag)
 
 class TestIntegration(unittest.TestCase):
 
