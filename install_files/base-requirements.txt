@@ -1,0 +1,14 @@
+secure-delete
+gnupg2
+haveged
+syslog-ng
+ntp
+libpam-google-authenticator
+rng-tools
+unattended-upgrades
+inotify-tools
+sysstat
+iptables
+apparmor-profiles
+apparmor-utils
+python-software-properties

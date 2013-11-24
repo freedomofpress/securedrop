@@ -81,10 +81,11 @@ pip install --upgrade distribute
 pip install -r requirements.txt
 
 echo "Setting up configurations..."
-# create directories for keys and store
-# and add them to their respective environment variables in config.py
+# set up the securedrop root directory
 cp example_config.py config.py
-mkdir -p ./tmp/deaddrop/{store,keys}
+securedrop_root=$(pwd)/.securedrop
+sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
+mkdir -p $securedrop_root/{store,keys,tmp}
 storepath=$(pwd)/tmp/deaddrop/store
 keypath=$(pwd)/tmp/deaddrop/keys
 testpath=$(pwd)/tmp/deaddrop_test
@@ -97,8 +98,11 @@ sed -i "s@^DATABASE_PASSWORD.*@DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.
 echo "Creating MySQL tables..."
 python -c 'import db; db.create_tables()'
 
+# avoid the "unsafe permissions on GPG homedir" warning
+chmod 700 $keypath
+
 # generate and store random values required by config.py
-secret_key=$(python -c 'import os; print os.urandom(24).__repr__().replace("\\","\\\\")')
+secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
 bcrypt_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
 sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
 sed -i "s@^BCRYPT_SALT.*@BCRYPT_SALT='$bcrypt_salt'@" config.py
@@ -123,9 +127,6 @@ else
     echo "Importing key included in the repo."
     gpg2 --homedir $keypath --import test_journalist_key.*
 fi
-
-# avoid the "unsafe permissions on GPG homedir" warning
-chmod 700 $keypath
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
 journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')

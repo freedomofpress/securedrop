@@ -92,5 +92,5 @@ ClientAliveCountMax 0
 Ciphers blowfish-cbc,aes256-cbc,aes256-ctr
 MACs hmac-sha2-256,hmac-sha2-512
 GatewayPorts no
-AllowGroup ssh
+AllowGroups ssh
 AllowTcpForwarding no

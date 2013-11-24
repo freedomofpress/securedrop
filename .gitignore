@@ -49,3 +49,6 @@ db.sql
 
 #Idea files
 .idea
+
+# Securedrop root for development
+.securedrop/
