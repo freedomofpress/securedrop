@@ -170,6 +170,7 @@ def filter_selected():
         for tag in request_tags:
             temp_docs = [doc for doc in docs if tag in doc["tags"]]
             filter_doc.extend(temp_docs)
+        filter_doc = {temp_doc["name"]: temp_doc for temp_doc in filter_doc}.values()
     else:
         filter_doc = docs
     haskey = crypto_util.getkey(sid)
