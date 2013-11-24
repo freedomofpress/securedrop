@@ -27,16 +27,8 @@ JOURNALIST_KEY='APP_GPG_KEY_FINGERPRINT'
 SOURCE_TEMPLATES_DIR='/var/www/securedrop/source_templates'
 JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
-NOUNS='/var/www/securedrop/dictionaries/nouns.txt'
-ADJECTIVES='/var/www/securedrop/dictionaries/adjectives.txt'
 
 BCRYPT_SALT='BCRYPT_SALT_VALUE'
-
-DATABASE_ENGINE='mysql'
-DATABASE_USERNAME='securedrop'
-DATABASE_PASSWORD=''
-DATABASE_HOST='localhost'
-DATABASE_NAME='securedrop'
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig
