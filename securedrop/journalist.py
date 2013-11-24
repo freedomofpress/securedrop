@@ -103,7 +103,7 @@ def reply():
 def generate_code():
     sid = request.form['sid']
     db.regenerate_display_id(sid)
-    return redirect(url_for('col', sid))
+    return redirect(url_for('col', sid=sid))
 
 
 @app.route('/bulk', methods=('POST',))
@@ -159,6 +159,24 @@ def flag():
     sid = request.form['sid']
     create_flag(sid)
     return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
+
+@app.route('/filter-selected', methods=('POST',))
+def filter_selected():
+    sid = request.form['sid']
+    request_tags = request.form.getlist('filter_tag')
+    docs, flagged, tags = get_docs(sid)
+    if len(request_tags) > 0:
+        filter_doc = []
+        for tag in request_tags:
+            temp_docs = [doc for doc in docs if tag in doc["tags"]]
+            filter_doc.extend(temp_docs)
+    else:
+        filter_doc = docs
+    haskey = crypto_util.getkey(sid)
+    return render_template("col.html", sid=sid,
+                           codename=db.display_id(sid, db.sqlalchemy_handle()), docs=filter_doc,
+                           haskey=haskey, flagged=flagged, tags=tags)
+
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production

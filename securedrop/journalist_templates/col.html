@@ -27,17 +27,11 @@
   {% endif %}
 </li>
 {% endfor %}
-  <p>
-      {% for tag in tags %}
-      <label>
-          <input type="checkbox" name="tags"/>
-          {{tag}}
-      </label>
-      {% endfor %}
-  </p>
 
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+</ul>
+
 <p>
 
   <button type="submit" name="action" value="download">Download selected</button>
@@ -50,9 +44,24 @@
       <option value="interesting">interesting</option>
   </select>
   <br/>
-  (<span id="select_all">select all</span>, <span id="select_none">select none</span>)</p>
-</ul>
+  (<span id="select_all">select all</span>, <span id="select_none">select none</span>)
+</p>
 </form>
+<form action="/filter-selected" method="post">
+  <p>
+      {% for tag in tags %}
+      <label>
+          <input type="checkbox" name="filter_tag" value="{{tag}}"/>
+          {{tag}}
+      </label>
+    {% endfor %}
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+    <button type="submit" name="action" value="filter_tag">Filter Selected Tags</button>
+  </p>
+</form>
+
+
 {% else %}
 <p><br />No documents to display.</p>
 {% endif %}
