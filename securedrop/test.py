@@ -565,36 +565,55 @@ class TestDb(unittest.TestCase):
         self.session.execute(db.files.insert().values(name=self.file_names[1]))
         self.session.commit()
 
-        file = db.get_files(self.file_names)
+        file = db.get_files_ids(self.file_names)
 
         first_file_id, second_file_id = self.session.query(db.files.c.id).all()
-
-        assert file[0][db.files.c.id] == first_file_id[0]
-        assert file[1][db.files.c.id] == second_file_id[0]
+        assert file[0] == first_file_id[0]
+        assert file[1] == second_file_id[0]
 
     def test_get_tags_for_file(self):
-        db.add_tag_to_file(self.file_names[0], self.test_tag, '')
+        db.add_tag_to_file([self.file_names[0]], self.test_tag, '')
 
-        tags = db.get_tags_for_file(self.file_names[0])
-        assert  self.test_tag in tags
-        assert '' not in tags
+        tags = db.get_tags_for_file([self.file_names[0]])
+        assert  self.test_tag in tags[self.file_names[0]]
+        assert '' not in tags[self.file_names[0]]
 
 
     def test_get_tags_for_single_file(self):
-        db.add_tag_to_file(self.file_names[0], self.test_tag, '')
+        db.add_tag_to_file([self.file_names[0]], self.test_tag, '')
 
         tags = db.get_tags_for_file(self.file_names)
-        assert  self.test_tag in tags
+        assert  self.test_tag in tags[self.file_names[0]]
         assert '' not in tags
 
+    def test_get_tags_for_files(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+        db.add_tag_to_file([self.file_names[0]], "something else")
+
+        tags = db.get_tags_for_file(self.file_names)
+
+        assert tags[self.file_names[0]] == [self.test_tag, "something else"]
 
     def test_get_tags_id_from_file_id(self):
         db.add_tag_to_file(self.file_names,self.test_tag)
-        file_ids = self.session.query(db.files.c.id).all()
-
+        file_ids = [file_id[0] for file_id in self.session.query(db.files.c.id).all()]
         tag_ids = db.get_tags_id_from(file_ids)
+        assert tag_ids[file_ids[0]][0] == 1
+        assert tag_ids[file_ids[1]][0] == 1
 
-        assert tag_ids[0][0] == 1
+    def test_get_tags_id_from_file_id_two_tags(self):
+        db.add_tag_to_file(self.file_names,self.test_tag)
+        db.add_tag_to_file([self.file_names[0]],"something else")
+        file_ids = [file_id[0] for file_id in self.session.query(db.files.c.id).all()]
+        tag_ids = db.get_tags_id_from(file_ids)
+        assert tag_ids[file_ids[0]] == [1,2]
+        assert tag_ids[file_ids[1]] == [1]
+
+    def test_get_tags_for_files_no_tags(self):
+        tag_ids = db.get_tags_for_file(self.file_names)
+        assert tag_ids[self.file_names[0]] == []
+        assert tag_ids[self.file_names[1]] == []
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

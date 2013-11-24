@@ -30,15 +30,13 @@ def get_docs(sid):
             flagged = True
             continue
         os_stat = os.stat(store.path(sid, filename))
-        app.logger.debug("file is {}".format(filename))
-        tags_for_file = db.get_tags_for_file(filename)
-        app.logger.debug("tags for file is {}".format(tags_for_file))
-        tags |= set(tags_for_file)
+        tags_for_file = db.get_tags_for_file([filename])
+        tags |= set(tags_for_file[filename])
         docs.append(dict(
             name=filename,
             date=str(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
-            tags=tags_for_file
+            tags=tags_for_file[filename]
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
@@ -147,7 +145,7 @@ def bulk_download(sid, docs_selected):
                      as_attachment=True)
 
 def bulk_tag(sid, docs_selected):
-    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+    filenames = [doc['name'] for doc in docs_selected]
     db.add_tag_to_file(filenames, request.form['tag'])
     return redirect(url_for('col',sid=sid))
 
