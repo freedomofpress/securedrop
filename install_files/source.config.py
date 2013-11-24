@@ -26,6 +26,8 @@ JOURNALIST_KEY='APP_GPG_KEY_FINGERPRINT'
 SOURCE_TEMPLATES_DIR='/var/www/securedrop/source_templates'
 JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
+NOUNS='/var/www/securedrop/dictionaries/nouns.txt'
+ADJECTIVES='/var/www/securedrop/dictionaries/adjectives.txt'
 
 BCRYPT_SALT='BCRYPT_SALT_VALUE'
 # Default to the production configuration

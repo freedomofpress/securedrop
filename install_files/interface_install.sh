@@ -114,10 +114,10 @@ fi
 
 #This is for systems that didn't have their torrc file configured by the 
 #base_install.sh script so that
-if grep -Fxq 'SocksPort=9050' /etc/tor/torrc; then
-  sed -i "s/SocksPort=9050/SocksPort=0/g" /etc/tor/torrc
+if ! grep -Fxq '^SocksPort' /etc/tor/torrc; then
+  echo "SocksPort 0" >> /etc/tor/torrc
   service tor restart | tee -a build.log
-  catch_error $? "restating tor service on host"
+  catch_error $? "restarting tor service on host"
 fi
 
 #Lock the tor user account
@@ -125,6 +125,10 @@ echo "Locking the tor user account..."
 passwd -l debian-tor | tee -a build.log
 catch_error $? "locking tor user account"
 echo "tor user account locked"
+
+#Create the securedrop user on the host
+echo "Creating the securedrop user on the host system"
+useradd securedrop | tee -a build.log
 
 
 #Create chroot jails for source and journalist interfaces
@@ -169,9 +173,9 @@ EOF
       catch_error $? "cp private_key of $JAIL"
     fi 
 
-    lsof | grep $JAIL | perl -ane 'kill 9,$F[1]'
-    catch_error $? "killing $JAIL processes"
-    MOUNTED_DIRS="/var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys"
+    schroot -c $JAIL -u root --directory /root service tor stop
+    schroot -c $JAIL -u root --directory /root service apache2 stop
+    MOUNTED_DIRS="/var/chroot/$JAIL/proc /var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys"
     for MOUNTED_DIR in $MOUNTED_DIRS; do
       if mount | grep -q $MOUNTED_DIR; then
         echo "un mounting $MOUNTED_DIR"
@@ -210,12 +214,6 @@ EOF
   if [ "$1" = "--force-clean" ]; then
     clean_chroot_jail
   fi
-
-  #Create the interfaces application user in the chroot jail
-  echo "Creating the $JAIL application user in the chroot jail..."
-  useradd securedrop | tee -a build.log
-  catch_error $? "creating the $JAIL application user in the chroot jail"
-  echo "The $JAIL application user created"
 
   #Creating needed directory structure and files for the chroot jail
   echo "Creating the needed directories and files for the $JAIL chroot jail..."
@@ -263,102 +261,84 @@ EOF
   echo "schrooting into $JAIL and configuring it"
   schroot -c $JAIL -u root --directory /root <<FOE
     echo "Updating chroot system for $JAIL..."
-    catch_error() {
-      if [ ! "$1" = "0" ]; then
-        echo "ERROR encountered $2"
-        exit
-        exit 1
-        exit 1
-      fi
-    }
 
     #create the application user in the jail
-    useradd $JAIL
+    useradd $JAIL | tee -a build.log
 
     #chown the needed file for the application user in the chroot jail
-    chown $JAIL:$JAIL /var/www/$APP_GPG_KEY
-    chown -R $JAIL:$JAIL /var/www/securedrop
-    chown -R $JAIL:$JAIL /var/www/securedrop/{keys,store}
+    chown $JAIL:$JAIL /var/www/$APP_GPG_KEY | tee -a build.log
+    chown -R $JAIL:$JAIL /var/www/securedrop | tee -a build.log
+    chown -R $JAIL:$JAIL /var/www/securedrop/{keys,store} | tee -a build.log
 
     #add the tor signing key and install interface dependencies
 
     if [ ! "$1" = "--no-updates" ]; then
-      apt-key add /root/tor.asc
+      apt-key add /root/tor.asc | tee 0a build.log
       apt-get -y update | tee -a build.log
       apt-get -y upgrade | tee -a build.log
 
       echo ""
       apt-get install -y $INT_REQS | tee -a build.log
-      #catch_error $? "installing app dependencies"
       echo "the $JAIL interface's dependencies are installed"
 
       #Install tor repo, keyring and tor
       echo ""
       echo "Installing tor for $JAIL..."
       apt-key add /root/tor.asc | tee -a build.log
-      #catch_error $? "add /root/tor.asc for $JAIL"
       apt-get install -y -q deb.torproject.org-keyring tor
-      #catch_error $? "installing tor and keyring for $JAIL"
+      service tor stop
       echo "Tor installed for $JAIL"
 
       echo 'Installing pip dependencies for $JAIL...'
-      pip install -r /var/www/securedrop/requirements.txt | tee -a build.log
-      #catch_error $? "installing pip requirements"
+      pip install --upgrade distribute
+      pip install -r /var/www/securedrop/$JAIL-requirements.txt | tee -a build.log
+      echo 'Installing distribute for $JAIL...'
+      #pip install --upgrade distribute | tee -a build.log
       echo 'pip dependencies installed for $JAIL'
     fi
 
     echo "Lock tor user..."
-    passwd -l debian-tor
-    #catch_error $? "locking debian-tor"
+    passwd -l debian-tor | tee -a build.log
     echo "tor user locked"
 
     #Disable unneeded apache modules
     echo 'Disabling apache modules for $JAIL...'
     a2dismod $DISABLE_MODS | tee -a build.log
-    #catch_error "disabling apache modules"
     echo 'Apache modules disabled for $JAIL'
 
     #Enabling apache modules
     echo 'Enabling apache modules for $JAIL...'
     a2enmod $ENABLE_MODS | tee -a build.log
-    #catch_error $? "disabling apache modules"
     echo 'Apache modules enabled for $JAIL'
 
     #removing default apache sites
     echo 'Removing default apache sites for $JAIL...'
     a2dissite default default-ssl | tee -a build.log
-    #catch_error $? "disabling default sites for $JAIL"
     echo "default-ssl site disabled"
 
     if [ -f /var/www/index.html ]; then
       rm /var/www/index.html
-      #catch_error $? "deleting index.html for $JAIL"
     fi
 
     if [ -f /etc/apache2/sites-available/default-ssl ]; then
       rm /etc/apache2/sites-available/default-ssl
-      #catch_error $? "rm default-ssl for $JAIL"
     fi
 
     if [ -f /etc/apache2/sites-enabled/default-ssl ]; then
       rm /etc/apache2/sites-enabled/default-ssl
-      #catch_error $? "rm sites-enabled/default-ssl"
     fi
 
     if [ -f /etc/apache2/sites-available/000-default ]; then
       rm /etc/apache2/sites-available/000-default
-      #catch_error $? "rm sites-available/000-default"
     fi
 
     if [ -f /etc/apache2/sites-enabled/000-default ]; then
       rm /etc/apache2/sites-enabled/000-default
-      #catch_error $? "rm /etc/apache2/sites-enabled/000-default"
     fi
 
     echo 'default apache sites removed for $JAIL'
 
     service apache2 stop
-    #catch_error $? "stopping apache"
 FOE
 
   cp -f $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
@@ -373,6 +353,7 @@ FOE
   catch_error $? "copying $JAIL.site"
   cp -f $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
   catch_error $? "copying $JAIL.torrc"
+
   #Generate the config.py file for the web interface
   cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
   catch_error $? "copying $JAIL.config.py template"
@@ -400,53 +381,46 @@ done
 #Configure the source interface specific settings
 echo ""
 echo "Configuring the source interface specific settings..."
-schroot -c source -u root --directory /root << FOE
-  catch_error() {
-    if [ ! "$1" = "0" ]; then
-      echo "ERROR encountered $2"
-      exit 1
-    fi
-  }
+for SOURCE_SCRIPT in $SOURCE_SCRIPTS; do
+  cp $SOURCE_SCRIPT /var/chroot/source/root/ | tee -a build.log
+done
 
+schroot -c source -u root --directory /root << FOE
   rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
-  #catch_error $? "rm default content from other interface"
 
   if [ -d "/root/tor-keys/source" ]; then
     cp -p /root/tor-keys/source/private_key /var/lib/tor/hidden_service/
-    #catch_error $? "cp tor private keys on source"
     srm -R /root/tor-keys/source
-    #catch_error $? "srm'ing tmp tor keys"
   fi
 
-  service apache2 restart
-  #catch_error $? "restarting apache2"
-  service tor restart
-  #catch_error $? "restarting tor"
-  echo "Done setting up source"
+  #Run additional scripts specific for interface
+  for SOURCE_SCRIPT in $SOURCE_SCRIPTS; do
+    echo "Running $SOURCE_SCRIPT in $JAIL"
+    bash /root/$SOURCE_SCRIPT | tee -a build.log
+  done
 FOE
 echo "Done setting up the source interface specific settings"
 
 #Cofnigure the journalist interface specific settings
 echo ""
 echo "Configuring the journalist interface specific settings"
-schroot -c journalist -u root --directory /root << FOE
-  catch_error() {
-    if [ ! "$1" = "0" ]; then
-      echo "ERROR encountered $2"
-      exit 1
-    fi
-  }
 
+for DOCUMENT_SCRIPT in $DOCUMENT_SCRIPTS; do
+  cp $DOCUMENT_SCRIPT /var/chroot/journalist/root/ | tee -a build.log
+done
+
+schroot -c journalist -u root --directory /root << FOE
   echo "Starting to configure apache for journalist"
   rm -R /var/www/securedrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
 
   echo "Importing application gpg public key on journalist"
   su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" journalist
-  #catch_error $? "importing $APP_GPG_KEY in journalist"
-  service apache2 restart
-  #catch_error $? "restarting apache2 in journalist jail"
-  service tor restart
-  #catch_error $? "restarting tor in journalist jail"
+
+  #Run additional scripts specific for interface
+  for DOCUMENT_SCRIPT in $DOCUMENT_SCRIPTS; do
+    echo "Running $DOCUMENT_SCRIPT in "
+    bash /root/$DOCUMENT_SCRIPT | tee -a build.log
+  done
 FOE
 
 #Copy rc.local file to host system to mount and start the needed services
@@ -468,22 +442,23 @@ if [ ! "$1" = "--no-apparmor" ]; then
     aa-enforce /etc/apparmor.d/var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2
     echo "restarting apache in $JAIL"
     schroot -c $JAIL -u root service apache2 restart --directory /root
+    schroot -c $JAIL -u root service tor restart --directory /root
   done
-fi
-
-#Copy files from import branch to be run as part of install
-if [ $RUN_DEV_SCRIPTS = "Y" -o $RUN_DEV_SCRIPTS = "y" ]; then
-  for DEV_SCRIPT_NAME in $DEV_SCRIPT_NAMES; do 
-    ./DEVSCRIPTNAME
+else
+  for JAIL in $JAILS; do
+    schroot -c $JAIL -u root service apache2 restart --directory /root
+    schroot -c $JAIL -u root service tor restart --directory /root
   done
 fi
 
 
 #Display tor hostname auth values.
-echo "Source onion url is: "
+#Sleep 10 seconds for certs to be created
+sleep 10
+echo "Source interface's onion url is: "
 echo "$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
 
-echo "You will need to append ':8080' to the end of the journalist onion url"
+echo "You will need to append ':8080' to the end of the document interface's onion url"
 echo "The document interface's onion url and auth values:"
 echo "$(cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname)"
 
