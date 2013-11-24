@@ -532,9 +532,6 @@ class TestDb(unittest.TestCase):
         self.test_tag = 'some-tag'
 
     def tearDown(self):
-        self.session.execute(db.tags.delete())
-        self.session.execute(db.files.delete())
-        self.session.execute(db.files_to_tags.delete())
         self.session.commit()
         self.session.close()
 
@@ -554,7 +551,7 @@ class TestDb(unittest.TestCase):
         db.add_tag_to_file(self.file_names, self.test_tag)
         actual_relationships = self.session.query(db.files_to_tags.c.tags_id, db.files_to_tags.c.files_id).all()
 
-        some_tag_id = self.session.query(db.tags.c.id).filter(db.tags.c.name == self.test_tag ).one()[0]
+        some_tag_id = self.session.query(db.tags.c.id).filter(db.tags.c.name == self.test_tag).one()[0]
         (first_file_id, second_file_id) = self.session.query(db.files.c.id).all()
 
         assert actual_relationships[0][0] == some_tag_id
@@ -579,6 +576,14 @@ class TestDb(unittest.TestCase):
         db.add_tag_to_file(self.file_names[0], self.test_tag, '')
 
         tags = db.get_tags_for_file(self.file_names[0])
+        assert  self.test_tag in tags
+        assert '' not in tags
+
+
+    def test_get_tags_for_single_file(self):
+        db.add_tag_to_file(self.file_names[0], self.test_tag, '')
+
+        tags = db.get_tags_for_file(self.file_names)
         assert  self.test_tag in tags
         assert '' not in tags
 

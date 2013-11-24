@@ -30,7 +30,9 @@ def get_docs(sid):
             flagged = True
             continue
         os_stat = os.stat(store.path(sid, filename))
+        app.logger.debug("file is {}".format(filename))
         tags_for_file = db.get_tags_for_file(filename)
+        app.logger.debug("tags for file is {}".format(tags_for_file))
         tags |= set(tags_for_file)
         docs.append(dict(
             name=filename,
@@ -112,6 +114,7 @@ def bulk():
 
     sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
+    app.logger.debug("Selected document names are: {}".format(doc_names_selected))
     docs_selected = [
         doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
 

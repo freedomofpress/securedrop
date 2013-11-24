@@ -6,9 +6,9 @@ import crypto_util
 
 metadata = MetaData()
 
-tags = Table('tags',metadata,
+tags = Table('tags', metadata,
              Column('id', Integer, primary_key=True),
-             Column('name',String(255), nullable=False))
+             Column('name', String(255), nullable=False, unique=True))
 
 files_to_tags = Table("files_tags", metadata,
                       Column("id", Integer, primary_key=True),
@@ -17,7 +17,7 @@ files_to_tags = Table("files_tags", metadata,
 
 files = Table('files', metadata,
               Column('id', Integer, primary_key=True),
-              Column('name', String(255), nullable=False))
+              Column('name', String(255), nullable=False, unique=True))
 
 sources = Table('sources', metadata,
                 Column('filesystem_id', String(96), primary_key=True),
@@ -39,6 +39,7 @@ def get_engine():
             config.DATABASE_NAME, echo=False
         )
     return engine
+
 
 engine = get_engine()
 
@@ -84,12 +85,33 @@ def regenerate_display_id(filesystem_id):
 
 def add_tag_to_file(file_names, *tags_to_add):
     session = sqlalchemy_handle()
-    tag_results =[session.execute(tags.insert().values(name=tag)) for tag in tags_to_add]
-    file_results =[session.execute(files.insert().values(name=fileName)) for fileName in file_names]
-    [session.execute(files_to_tags.insert()
-        .values(tags_id = tag_id.inserted_primary_key[0], files_id = file_id.inserted_primary_key[0]))
-            for tag_id in tag_results
-            for file_id in file_results]
+    tag_results = []
+    file_results = []
+    for tag in tags_to_add:
+        query = session.query(tags.c.id).filter(tags.c.name == tag)
+        results = session.execute(query)
+        if results.rowcount > 0:
+            tag_results.append(results.fetchone()[0])
+        else:
+            result_proxy = session.execute(tags.insert().values(name=tag))
+            tag_results.append(result_proxy.inserted_primary_key[0])
+
+    for fileName in file_names:
+        query = session.query(files.c.id).filter(files.c.name == fileName)
+        results = session.execute(query)
+        if results.rowcount > 0:
+            file_results.append(results.fetchone()[0])
+        else:
+            result_proxy = session.execute(files.insert().values(name=fileName))
+            file_results.append(result_proxy.inserted_primary_key[0])
+
+    for tag_id in tag_results:
+        for file_id in file_results:
+            query = session.query(files_to_tags)
+            query = query.filter(files_to_tags.c.files_id == file_id).filter(files_to_tags.c.tags_id == tag_id)
+            results = session.execute(query)
+            if results.rowcount == 0:
+                session.execute(files_to_tags.insert().values(tags_id=tag_id,files_id=file_id))
 
     session.commit()
     session.close()
