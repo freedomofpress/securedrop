@@ -110,10 +110,12 @@ elif [ $ROLE = 'app' ]; then
 
   echo "The source interfaces's Tor URL is:"
   cat /var/chroot/source/var/lib/tor/hidden_service/hostname
+  echo ""
   echo "The document interface listens on port 8080"
   echo "You will need to append :8080 to the end of the Document Interface's urls."
   echo "The Document Interface's Tor URL and auth values are:"
   cat /var/chroot/document/var/lib/tor/hidden_service/hostname
+  echo ""
   echo "The App Server's SSH onion address and auth values are:"
   cat /var/lib/tor/hidden_service/hostname
 else
