@@ -69,6 +69,19 @@ if [ $ANS = N -o $ANS = n ]; then
 fi
 
 
+#Add warning that install takes awhile
+echo ""
+echo "############################################"
+echo "# Grab a cup of coffee                     #"
+echo "# Installing the App Server takes awhile   #"
+echo "# - Update the host system                 #"
+echo "# - Install and configure 2 chroot jails   #"
+echo "# - Install and configure the 2 interfaces #"
+echo "# - Install and configure the other        #"
+echo "#     interfaces dependencies              #"
+echo "############################################"
+echo ""
+
 #Update system and install dependencies to generate bcyrpt salt
 if [ ! "$1" = "--no-updates" ]; then
   apt-get update -y | tee -a build.log
