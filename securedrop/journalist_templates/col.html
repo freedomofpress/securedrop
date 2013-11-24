@@ -21,12 +21,21 @@
 <li>
   <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
   {% if doc.name.startswith('reply-') %}
-  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})
+  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }}) tags: {{ doc.tags }}
   {% else %}
-  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})
+  <a href="{{url_for('doc', sid=sid , fn=doc.name) }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }}) tags {{ doc.tags }}
   {% endif %}
 </li>
 {% endfor %}
+  <p>
+      {% for tag in tags %}
+      <label>
+          <input type="checkbox" name="tags"/>
+          {{tag}}
+      </label>
+      {% endfor %}
+  </p>
+
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
 <p>
@@ -34,27 +43,9 @@
   <button type="submit" name="action" value="download">Download selected</button>
   <button type="submit" name="action" value="delete">Delete selected</button>
   <br/>
-  <p>
-    <label>
-        <input type="checkbox" name="tags"/>
-        read
-    </label>
-    <label>
-        <input type="checkbox" name="tags"/>
-        reply
-    </label>
-    <label>
-        <input type="checkbox" name="tags"/>
-        interesting
-    </label>
-    <label>
-        <input type="checkbox" name="tags"/>
-        useless
-    </label>
-</p>
-  <button type="submit" name="action" value="tag">Tag selected with</button>
+
+  <button type="submit" name="action" value="tag">Tag selected with</button> New Tag:
   <select name="tag">
-      <option value="">New Tag</option>
       <option value="read">read</option>
       <option value="interesting">interesting</option>
   </select>

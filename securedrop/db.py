@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKey
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKey, distinct
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 import config
@@ -86,9 +86,10 @@ def add_tag_to_file(file_names, *tags_to_add):
     session = sqlalchemy_handle()
     tag_results =[session.execute(tags.insert().values(name=tag)) for tag in tags_to_add]
     file_results =[session.execute(files.insert().values(name=fileName)) for fileName in file_names]
-    [session.execute(files_to_tags.insert().values(tags_id = tag_id.inserted_primary_key[0], files_id = file_id.inserted_primary_key[0]))
-     for tag_id in tag_results
-     for file_id in file_results]
+    [session.execute(files_to_tags.insert()
+        .values(tags_id = tag_id.inserted_primary_key[0], files_id = file_id.inserted_primary_key[0]))
+            for tag_id in tag_results
+            for file_id in file_results]
 
     session.commit()
     session.close()
@@ -99,4 +100,34 @@ def get_files(file_names):
     query = session.query(files.c.id)
     [query.filter(files.c.name == file_name) for file_name in file_names]
     results = session.execute(query)
-    return results.fetchall()
+    results = results.fetchall()
+    session.close()
+    return results
+
+
+def get_tags_id_from(file_ids):
+    session = sqlalchemy_handle()
+    query = session.query(distinct(files_to_tags.c.tags_id))
+    [query.filter(files_to_tags.c.files_id == file_id) for file_id in file_ids]
+    results = session.execute(query)
+    results = results.fetchall()
+    session.close()
+
+    return results
+
+
+def get_tags_for_file(file_names):
+    file_id = get_files(file_names)
+    tags_id = get_tags_id_from(file_id)
+
+    session = sqlalchemy_handle()
+    query = session.query(distinct(tags.c.name))
+    [query.filter(tags.c.id == tag_id) for tag_id in tags_id]
+    results = session.execute(query)
+    results = results.fetchall()
+    session.close()
+    new_results = []
+    for r in results:
+        if len(r[0]) > 0:
+            new_results.append(r[0])
+    return new_results

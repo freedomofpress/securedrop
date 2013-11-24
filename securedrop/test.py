@@ -234,7 +234,7 @@ class TestJournalist(TestCase):
         # just check that we didn't get an empty body
         self.assertTrue(len(rv.data) > 0)
 
-    @patch('db.add_tag')
+    @patch('db.add_tag_to_file')
     def test_tag(self, mock_add_tag):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
@@ -574,8 +574,26 @@ class TestDb(unittest.TestCase):
 
         file = db.get_files(self.file_names)
 
-        assert file[0][db.files.c.id] == 1
-        assert file[1][db.files.c.id] == 2
+        first_file_id, second_file_id = self.session.query(db.files.c.id).all()
+
+        assert file[0][db.files.c.id] == first_file_id[0]
+        assert file[1][db.files.c.id] == second_file_id[0]
+
+    def test_get_tags_for_file(self):
+        db.add_tag_to_file(self.file_names[0], self.test_tag, '')
+
+        tags = db.get_tags_for_file(self.file_names[0])
+        assert  self.test_tag in tags
+        assert '' not in tags
+
+
+    def test_get_tags_id_from_file_id(self):
+        db.add_tag_to_file(self.file_names,self.test_tag)
+        file_ids = self.session.query(db.files.c.id).all()
+
+        tag_ids = db.get_tags_id_from(file_ids)
+
+        assert tag_ids[0][0] == 1
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

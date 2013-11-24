@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import uuid
 
-from flask import Flask, request, render_template, send_file, redirect
+from flask import Flask, request, render_template, send_file, redirect, abort, url_for
 from flask_wtf.csrf import CsrfProtect
 
 import config
@@ -23,20 +23,24 @@ app.jinja_env.globals['version'] = version.__version__
 def get_docs(sid):
     """Get docs associated with source id `sid` sorted by submission date"""
     docs = []
+    tags = set()
     flagged = False
     for filename in os.listdir(store.path(sid)):
         if filename == '_FLAG':
             flagged = True
             continue
         os_stat = os.stat(store.path(sid, filename))
+        tags_for_file = db.get_tags_for_file(filename)
+        tags |= set(tags_for_file)
         docs.append(dict(
             name=filename,
             date=str(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
+            tags=tags_for_file
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
-    return docs, flagged
+    return docs, flagged, tags
 
 
 @app.after_request
@@ -73,11 +77,11 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-    docs, flagged = get_docs(sid)
+    docs, flagged, tags = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
                            codename=db.display_id(sid, db.sqlalchemy_handle()), docs=docs,
-                           haskey=haskey, flagged=flagged)
+                           haskey=haskey, flagged=flagged, tags=tags)
 
 
 @app.route('/col/<sid>/<fn>')
@@ -99,8 +103,7 @@ def reply():
 def generate_code():
     sid = request.form['sid']
     db.regenerate_display_id(sid)
-    #TODO: We shouldn't create this url manually redirect(url_for(col, sid=sid))
-    return redirect('/col/' + sid)
+    return redirect(url_for('col', sid))
 
 
 @app.route('/bulk', methods=('POST',))
@@ -143,8 +146,7 @@ def bulk_download(sid, docs_selected):
 def bulk_tag(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     db.add_tag_to_file(filenames, request.form['tag'])
-    #TODO: We shouldn't create this url manually redirect(url_for(col, sid=sid))
-    return redirect("/col/" + sid)
+    return redirect(url_for('col',sid=sid))
 
 @app.route('/flag', methods=('POST',))
 def flag():
