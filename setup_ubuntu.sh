@@ -72,6 +72,7 @@ sudo apt-get -y install $DEPENDENCIES
 
 echo "Setting up MySQL database..."
 mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+mysql -u root -p"$mysql_root" -e "create database securedrop_test; GRANT ALL PRIVILEGES ON securedrop_test.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
 
 echo "Setting up the virtual environment..."
 virtualenv securedrop/venv

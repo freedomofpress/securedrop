@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+
+<form action="/bulk" method="post">
+
+  {% with count=docs_selected|length %}
+  <p>Add a new tag to the following file{% if count > 1 %}s{% endif %}:</p>
+  {% endwith %}
+
+  <ul>
+    {% for doc in docs_selected %}
+    <li>
+      {{ doc.name }}
+      <input type="hidden" name="doc_names_selected" value="{{ doc.name }}" />
+      {% if doc.name.startswith('reply-') %}
+        (sent {{ doc.date }})
+      {% else %}
+        (uploaded {{ doc.date }})
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+
+  <p>
+    <input type="text" name="tag" />
+    <button type="submit" name="action" value="tag">Tag</button>
+  </p>
+
+</form>
+
+<p>
+  <a href="/col/{{ sid }}">Return to the list of documents for {{ codename }}...</a>
+</p>
+
+{% endblock %}
