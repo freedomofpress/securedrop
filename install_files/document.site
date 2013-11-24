@@ -3,8 +3,8 @@ NameVirtualHost 127.0.0.1:8080
 ServerName ONION_URL
 DocumentRoot /var/www/securedrop/static
 Alias /static /var/www/securedrop/static
-WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
-WSGIProcessGroup journalist
+WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
+WSGIProcessGroup document
 WSGIScriptAlias / /var/www/securedrop/journalist.wsgi/
 AddType text/html .py
 Header unset Etag

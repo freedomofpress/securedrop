@@ -13,13 +13,13 @@
 #securedrop/install_files/                            (config files and install scripts)
 #securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
 #securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
-#securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)#
+#securedrop/install_files/document_requirements.txt (document interface chroot package dependencies)#
 #
 CWD="$(dirname $0)"
 cd $CWD
 
 source ../CONFIG_OPTIONS
-JAILS="source journalist"
+JAILS="source document"
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
@@ -144,8 +144,8 @@ echo "Creating the securedrop user on the host system"
 useradd securedrop | tee -a build.log
 
 
-#Create chroot jails for source and journalist interfaces
-echo "Creating chroot jails for source and journalist interfaces..."
+#Create chroot jails for source and document interfaces
+echo "Creating chroot jails for source and document interfaces..."
 for JAIL in $JAILS; do
 echo "Setting up chroot jail for $JAIL interface..."
 
@@ -414,20 +414,20 @@ schroot -c source -u root --directory /root << FOE
 FOE
 echo "Done setting up the source interface specific settings"
 
-#Cofnigure the journalist interface specific settings
+#Cofnigure the document interface specific settings
 echo ""
-echo "Configuring the journalist interface specific settings"
+echo "Configuring the document interface specific settings"
 
 for DOCUMENT_SCRIPT in $DOCUMENT_SCRIPTS; do
-  cp $DOCUMENT_SCRIPT /var/chroot/journalist/root/ | tee -a build.log
+  cp $DOCUMENT_SCRIPT /var/chroot/document/root/ | tee -a build.log
 done
 
-schroot -c journalist -u root --directory /root << FOE
-  echo "Starting to configure apache for journalist"
+schroot -c document -u root --directory /root << FOE
+  echo "Starting to configure apache for document "
   rm -R /var/www/securedrop/{source_templates,source.py,example*,*.md,test*} | tee -a build.log
 
-  echo "Importing application gpg public key on journalist"
-  su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" journalist
+  echo "Importing application gpg public key on document interface "
+  su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" document
 
   #Run additional scripts specific for interface
   for DOCUMENT_SCRIPT in $DOCUMENT_SCRIPTS; do
@@ -473,6 +473,6 @@ echo "$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
 
 echo "You will need to append ':8080' to the end of the document interface's onion url"
 echo "The document interface's onion url and auth values:"
-echo "$(cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname)"
+echo "$(cat /var/chroot/document/var/lib/tor/hidden_service/hostname)"
 
 exit 0
