@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import uuid
 
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, redirect, abort, url_for
 from flask_wtf.csrf import CsrfProtect
 
 import config
@@ -11,6 +11,7 @@ import version
 import crypto_util
 import store
 import background
+import db
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -22,20 +23,24 @@ app.jinja_env.globals['version'] = version.__version__
 def get_docs(sid):
     """Get docs associated with source id `sid` sorted by submission date"""
     docs = []
+    tags = set()
     flagged = False
     for filename in os.listdir(store.path(sid)):
         if filename == '_FLAG':
             flagged = True
             continue
         os_stat = os.stat(store.path(sid, filename))
+        tags_for_file = db.get_tags_for_file([filename])
+        tags |= set(tags_for_file[filename])
         docs.append(dict(
             name=filename,
             date=str(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
+            tags=tags_for_file[filename]
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
-    return docs, flagged
+    return docs, flagged, tags
 
 
 @app.after_request
@@ -56,24 +61,27 @@ def no_cache(response):
 def index():
     dirs = os.listdir(config.STORE_DIR)
     cols = []
+    db_session = db.sqlalchemy_handle()
     for d in dirs:
+        display_id = db.display_id(d, db_session)
         cols.append(dict(
             name=d,
-            sid=crypto_util.displayid(d),
+            sid=display_id,
             date=str(datetime.fromtimestamp(os.stat(store.path(d)).st_mtime)
                      ).split('.')[0]
         ))
+    db_session.close()
     cols.sort(key=lambda x: x['date'], reverse=True)
     return render_template('index.html', cols=cols)
 
 
 @app.route('/col/<sid>')
 def col(sid):
-    docs, flagged = get_docs(sid)
+    docs, flagged, tags = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-                           codename=crypto_util.displayid(sid), docs=docs,
-                           haskey=haskey, flagged=flagged)
+                           codename=db.display_id(sid, db.sqlalchemy_handle()), docs=docs,
+                           haskey=haskey, flagged=flagged, tags=tags)
 
 
 @app.route('/col/<sid>/<fn>')
@@ -88,7 +96,14 @@ def reply():
     sid, msg = request.form['sid'], request.form['msg']
     crypto_util.encrypt(crypto_util.getkey(sid), request.form['msg'], output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-    return render_template('reply.html', sid=sid, codename=crypto_util.displayid(sid))
+    return render_template('reply.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+
+
+@app.route('/regenerate-code', methods=('POST',))
+def generate_code():
+    sid = request.form['sid']
+    db.regenerate_display_id(sid)
+    return redirect(url_for('col', sid=sid))
 
 
 @app.route('/bulk', methods=('POST',))
@@ -97,13 +112,18 @@ def bulk():
 
     sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
+    app.logger.debug("Selected document names are: {}".format(doc_names_selected))
     docs_selected = [
         doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
 
-    if action == 'download':
+    if action == 'Download Selected':
         return bulk_download(sid, docs_selected)
-    elif action == 'delete':
+    elif action == 'Delete Selected':
         return bulk_delete(sid, docs_selected)
+    elif action == 'Tag Selected With':
+        return bulk_tag(sid, docs_selected)
+    elif action == 'Remove Tags':
+        return bulk_tag_remove(sid, docs_selected)
     else:
         abort(400)
 
@@ -115,7 +135,7 @@ def bulk_delete(sid, docs_selected):
             fn = store.path(sid, doc['name'])
             crypto_util.secureunlink(fn)
     return render_template(
-        'delete.html', sid=sid, codename=crypto_util.displayid(sid),
+        'delete.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
         docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 
@@ -125,6 +145,23 @@ def bulk_download(sid, docs_selected):
     return send_file(zip, mimetype="application/zip",
                      attachment_filename=crypto_util.displayid(sid) + ".zip",
                      as_attachment=True)
+
+def bulk_tag(sid, docs_selected):
+    filenames = [doc['name'] for doc in docs_selected]
+    tag = request.form['tag']
+    if tag == '__new__':
+        return render_template(
+            'new_tag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
+            docs_selected=docs_selected)
+    else:
+        db.add_tag_to_file(filenames, tag)
+        return redirect(url_for('col',sid=sid))
+
+def bulk_tag_remove(sid, docs_selected):
+    filenames = [doc['name'] for doc in docs_selected]
+    tags_for_files = db.get_tags_for_file(filenames)
+    db.delete_tags_from_file(filenames, tags_for_files)
+    return redirect(url_for('col', sid=sid))
 
 
 @app.route('/flag', methods=('POST',))
@@ -137,6 +174,25 @@ def flag():
     sid = request.form['sid']
     create_flag(sid)
     return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
+
+@app.route('/filter-selected', methods=('POST',))
+def filter_selected():
+    sid = request.form['sid']
+    request_tags = request.form.getlist('filter_tag')
+    docs, flagged, tags = get_docs(sid)
+    if len(request_tags) > 0:
+        filter_doc = []
+        for tag in request_tags:
+            temp_docs = [doc for doc in docs if tag in doc["tags"]]
+            filter_doc.extend(temp_docs)
+        filter_doc = {temp_doc["name"]: temp_doc for temp_doc in filter_doc}.values()
+    else:
+        filter_doc = docs
+    haskey = crypto_util.getkey(sid)
+    return render_template("col.html", sid=sid,
+                           codename=db.display_id(sid, db.sqlalchemy_handle()), docs=filter_doc,
+                           haskey=haskey, flagged=flagged, tags=tags)
+
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production

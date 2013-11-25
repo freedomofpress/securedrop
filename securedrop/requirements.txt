@@ -4,6 +4,8 @@ Flask-Testing==0.4
 Flask-WTF==0.9.3
 Jinja2==2.7.1
 MarkupSafe==0.18
+MySQL-python==1.2.4
+SQLAlchemy==0.8.3
 WTForms==1.0.5
 Werkzeug==0.9.4
 argparse==1.2.1
@@ -15,3 +17,4 @@ python-bcrypt==0.3.2
 python-gnupg==0.3.5
 twill==0.9
 wsgiref==0.1.2
+mock==1.0.1

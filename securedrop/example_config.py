@@ -18,11 +18,25 @@ class TestingConfig(BaseConfig):
 
 JOURNALIST_KEY=''
 
-SOURCE_TEMPLATES_DIR='./source_templates'
-JOURNALIST_TEMPLATES_DIR='./journalist_templates'
-WORD_LIST='./wordlist'
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
 
-BCRYPT_SALT='' # bcrypt.gensalt()
+BCRYPT_SALT = ''  # bcrypt.gensalt()
+
+# Database Configuration
+DATABASE_ENGINE = 'mysql'
+DATABASE_USERNAME = 'securedrop'
+DATABASE_PASSWORD = ''
+DATABASE_HOST = 'localhost'
+DATABASE_NAME = 'securedrop'
+
+# For sqlite:
+# DATABASE_ENGINE = 'sqlite'
+# DATABASE_FILE = 'db.sql'
+
+# Default to the production configuration
+FlaskConfig = ProductionConfig
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
@@ -33,7 +47,7 @@ else:
     # Note: most OS automatically delete /tmp on reboot. If you want your
     # Securedrop to persist over reboots, change this value to a directory that
     # is not in /tmp!
-    SECUREDROP_ROOT='/tmp/securedrop'
+    SECUREDROP_ROOT='/tmp/deaddrop'
 
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')

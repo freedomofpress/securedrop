@@ -7,6 +7,8 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
+import uuid
+from mock import patch
 
 import gnupg
 from flask import session, g, escape
@@ -16,7 +18,11 @@ from bs4 import BeautifulSoup
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
+GPG_BINARY = os.getenv('GPG_BINARY', "gpg2")
+
 import config
+import db
+from sqlalchemy.orm import sessionmaker
 import crypto_util
 import store
 import source
@@ -36,9 +42,8 @@ def _setup_test_docs(sid, files):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         with open(filename, 'w') as fp:
-            fp.write('test')
+            fp.write(str(uuid.uuid4()))
     return filenames
-
 
 def shared_setup():
     """Set up the file system and GPG"""
@@ -48,11 +53,12 @@ def shared_setup():
         if not os.path.isdir(d):
             os.mkdir(d)
     # Initialize the GPG keyring
-    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR, gpgbinary=GPG_BINARY)
     # Import the journalist key for testing (faster to import a pre-generated
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
+
 
 
 def shared_teardown():
@@ -213,13 +219,74 @@ class TestJournalist(TestCase):
         filenames = _setup_test_docs(sid, files)
 
         rv = self.client.post('/bulk', data=dict(
-            action='download',
+            action='Download Selected',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        # test client does not seem to handle binary data, so
+        # just check that we didn't get an empty body
+        self.assertTrue(len(rv.data) > 0)
+
+    @patch('db.add_tag_to_file')
+    def test_tag(self, mock_add_tag):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = 'the-test-tag'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='Tag Selected With',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 302)
+        self.assertTrue(("/col/" + sid) in rv.location)
+        mock_add_tag.assert_called_once_with(files, test_tag)
+
+    def test_add_new_tag(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = '__new__'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='Tag Selected With',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
         ))
 
         self.assertEqual(rv.status_code, 200)
 
+        soup = BeautifulSoup(rv.data)
+        self.assertGreater(len(soup.select('input[name=tag]')), 0)
+        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'Tag Selected With')
+        self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
+
+    def test_add_new_tag(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = '__new__'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='Tag Selected With',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+
+        soup = BeautifulSoup(rv.data)
+        self.assertGreater(len(soup.select('input[name=tag]')), 0)
+        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'Tag Selected With')
+        self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
 
 class TestIntegration(unittest.TestCase):
 
@@ -227,7 +294,7 @@ class TestIntegration(unittest.TestCase):
         shared_setup()
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
-        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR, gpgbinary=GPG_BINARY)
 
     def tearDown(self):
         shared_teardown()
@@ -275,7 +342,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -289,7 +356,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -353,7 +420,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -367,7 +434,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -460,11 +527,9 @@ class TestIntegration(unittest.TestCase):
 class TestStore(unittest.TestCase):
 
     '''The set of tests for store.py.'''
-    @classmethod
     def setUp(self):
         shared_setup()
 
-    @classmethod
     def tearDown(self):
         shared_teardown()
 
@@ -477,11 +542,134 @@ class TestStore(unittest.TestCase):
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
 
-        zip = store.get_bulk_archive(filenames)
+        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
-        zipfile_contents = zipfile.ZipFile(zip).namelist()
-        for file in files:
-            self.assertIn(file, zipfile_contents)
+        archivefile_contents = archive.namelist()
+
+        for archived_file, actual_file in zip(archivefile_contents, filenames):
+            actual_file_content = open(actual_file).read()
+            zipped_file_content = archive.read(archived_file)
+            self.assertEquals(zipped_file_content, actual_file_content)
+
+
+class TestDb(unittest.TestCase):
+
+    def setUp(self):
+        config.DATABASE_ENGINE = 'mysql'
+        config.DATABASE_USERNAME = 'securedrop'
+        config.DATABASE_PASSWORD = 'securedrop'
+        config.DATABASE_HOST = 'localhost'
+        config.DATABASE_NAME = 'securedrop_test'
+
+        db.engine = db.get_engine()
+
+        db.create_tables()
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+
+        self.session = db.sqlalchemy_handle()
+        self.file_names = _setup_test_docs(sid,files)
+        self.test_tag = 'some-tag'
+
+    def tearDown(self):
+        self.session.commit()
+        self.session.close()
+
+    def test_add_tag(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+        actual_tags = [r[0] for r in self.session.query(db.tags.c.name).all()]
+
+        assert self.test_tag in actual_tags
+
+    def test_add_file(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+        actual_files = [r[0] for r in self.session.query(db.files.c.name).all()]
+        for file_name in self.file_names:
+            assert file_name in actual_files
+
+    def test_add_file_to_tag(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+        actual_relationships = self.session.query(db.files_to_tags.c.tags_id, db.files_to_tags.c.files_id).all()
+
+        some_tag_id = self.session.query(db.tags.c.id).filter(db.tags.c.name == self.test_tag).one()[0]
+        (first_file_id, second_file_id) = self.session.query(db.files.c.id).all()
+
+        assert actual_relationships[0][0] == some_tag_id
+        assert actual_relationships[0][1] == first_file_id[0]
+        assert actual_relationships[1][0] == some_tag_id
+        assert actual_relationships[1][1] == second_file_id[0]
+
+
+    def test_get_file(self):
+        self.session.execute(db.files.insert().values(name=self.file_names[0]))
+        self.session.execute(db.files.insert().values(name=self.file_names[1]))
+        self.session.commit()
+
+        file = db.get_files_ids(self.file_names)
+
+        first_file_id, second_file_id = self.session.query(db.files.c.id).all()
+        assert file[0] == first_file_id[0]
+        assert file[1] == second_file_id[0]
+
+    def test_get_tags_for_file(self):
+        db.add_tag_to_file([self.file_names[0]], self.test_tag, '')
+
+        tags = db.get_tags_for_file([self.file_names[0]])
+        assert  self.test_tag in tags[self.file_names[0]]
+        assert '' not in tags[self.file_names[0]]
+
+
+    def test_get_tags_for_single_file(self):
+        db.add_tag_to_file([self.file_names[0]], self.test_tag, '')
+
+        tags = db.get_tags_for_file(self.file_names)
+        assert  self.test_tag in tags[self.file_names[0]]
+        assert '' not in tags
+
+    def test_get_tags_for_files(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+        db.add_tag_to_file([self.file_names[0]], "something else")
+
+        tags = db.get_tags_for_file(self.file_names)
+
+        assert tags[self.file_names[0]] == [self.test_tag, "something else"]
+
+    def test_get_tags_id_from_file_id(self):
+        db.add_tag_to_file(self.file_names,self.test_tag)
+        file_ids = [file_id[0] for file_id in self.session.query(db.files.c.id).all()]
+        tag_ids = db.get_tags_id_from(file_ids)
+        assert tag_ids[file_ids[0]][0] == 1
+        assert tag_ids[file_ids[1]][0] == 1
+
+    def test_get_tags_id_from_file_id_two_tags(self):
+        db.add_tag_to_file(self.file_names,self.test_tag)
+        db.add_tag_to_file([self.file_names[0]],"something else")
+        file_ids = [file_id[0] for file_id in self.session.query(db.files.c.id).all()]
+        tag_ids = db.get_tags_id_from(file_ids)
+        assert tag_ids[file_ids[0]] == [1,2]
+        assert tag_ids[file_ids[1]] == [1]
+
+    def test_get_tags_for_files_no_tags(self):
+        tag_ids = db.get_tags_for_file(self.file_names)
+        assert tag_ids[self.file_names[0]] == []
+        assert tag_ids[self.file_names[1]] == []
+
+    def test_delete_tag_file_association(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+
+        db.delete_tags_from_file(self.file_names, {self.file_names[0]: [self.test_tag], self.file_names[1] : [self.test_tag]})
+
+        all_associations = self.session.query(db.files_to_tags).all()
+        assert len(all_associations) == 0
+
+    def test_delete_tag_file_association_single_file(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+
+        db.delete_tags_from_file([self.file_names[0]], {self.file_names[0]: [self.test_tag]})
+
+        all_associations = self.session.query(db.files_to_tags).all()
+        assert len(all_associations) == 1
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

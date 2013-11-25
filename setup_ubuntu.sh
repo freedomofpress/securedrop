@@ -24,7 +24,13 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
+
+# no password prompt to install mysql-server
+mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password $mysql_root"
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password_again password $mysql_root"
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
@@ -64,6 +70,10 @@ fi
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
 
+echo "Setting up MySQL database..."
+mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+mysql -u root -p"$mysql_root" -e "create database securedrop_test; GRANT ALL PRIVILEGES ON securedrop_test.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+
 echo "Setting up the virtual environment..."
 virtualenv securedrop/venv
 source securedrop/venv/bin/activate
@@ -77,7 +87,17 @@ cp example_config.py config.py
 securedrop_root=$(pwd)/.securedrop
 sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
 mkdir -p $securedrop_root/{store,keys,tmp}
-keypath=$securedrop_root/keys
+storepath=$(pwd)/tmp/deaddrop/store
+keypath=$(pwd)/tmp/deaddrop/keys
+testpath=$(pwd)/tmp/deaddrop_test
+sed -i "s@^STORE_DIR.*@STORE_DIR=\'$storepath\'@" config.py
+sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
+# TODO: replace below line so that indents are not hard-coded :/
+sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
+sed -i "s@^DATABASE_PASSWORD.*@DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
+
+echo "Creating MySQL tables..."
+python -c 'import db; db.create_tables()'
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
