@@ -153,20 +153,14 @@ def get_tags_id_from(file_ids):
 
 def get_tags_for_file(file_names):
     session = sqlalchemy_handle()
-    file_id = insert_files(file_names, session)
-    tags_id = get_tags_id_from(file_id)
     results = {}
-
-    for index, id in enumerate(file_id):
-        tag_name_list = []
-        for tag in tags_id[id]:
-            query = session.query(distinct(tags.c.name))
-            query = query.filter(tags.c.id == tag).filter(tags.c.name != '')
-            query_result = session.execute(query)
-            if query_result.rowcount > 0:
-                tag_name_list.append(query_result.fetchone()[0])
-        results[file_names[index]] = tag_name_list
-
+    for file_name in file_names:
+        query = session.query(tags.c.name).filter(files.c.id == files_to_tags.c.files_id)
+        query = query.filter(tags.c.id == files_to_tags.c.tags_id)
+        query = query.filter(files.c.name == file_name)
+        query = query.filter(tags.c.name != '')
+        tag_names = [row[0] for row in session.execute(query).fetchall()]
+        results[file_name] = tag_names
     session.close()
     return results
 
@@ -175,7 +169,6 @@ def delete_tags_from_file(file_names, tags_to_remove):
     for file_name in file_names:
         for tag_name in tags_to_remove[file_name]:
             delete_tag_from_file(file_name, tag_name)
-
 
 
 def delete_tag_from_file(file_name, tag_name):
