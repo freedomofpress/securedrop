@@ -148,8 +148,14 @@ def bulk_download(sid, docs_selected):
 
 def bulk_tag(sid, docs_selected):
     filenames = [doc['name'] for doc in docs_selected]
-    db.add_tag_to_file(filenames, request.form['tag'])
-    return redirect(url_for('col',sid=sid))
+    tag = request.form['tag']
+    if tag == '__new__':
+        return render_template(
+            'new_tag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
+            docs_selected=docs_selected)
+    else:
+        db.add_tag_to_file(filenames, tag)
+        return redirect(url_for('col',sid=sid))
 
 def bulk_tag_remove(sid, docs_selected):
     filenames = [doc['name'] for doc in docs_selected]
