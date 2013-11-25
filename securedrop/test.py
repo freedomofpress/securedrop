@@ -255,7 +255,7 @@ class TestJournalist(TestCase):
         test_tag = '__new__'
 
         rv = self.client.post('/bulk', data=dict(
-            action='tag',
+            action='Tag Selected With',
             sid=sid,
             doc_names_selected=files,
             tag=test_tag
@@ -265,7 +265,7 @@ class TestJournalist(TestCase):
 
         soup = BeautifulSoup(rv.data)
         self.assertGreater(len(soup.select('input[name=tag]')), 0)
-        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'tag')
+        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'Tag Selected With')
         self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
 
 class TestIntegration(unittest.TestCase):
@@ -537,7 +537,7 @@ class TestDb(unittest.TestCase):
     def setUp(self):
         config.DATABASE_ENGINE = 'mysql'
         config.DATABASE_USERNAME = 'securedrop'
-        config.DATABASE_PASSWORD = 'securedrop'
+        config.DATABASE_PASSWORD = ''
         config.DATABASE_HOST = 'localhost'
         config.DATABASE_NAME = 'securedrop_test'
 
