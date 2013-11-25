@@ -101,11 +101,11 @@ elif [ $ROLE = 'app' ]; then
 
 #Output access information for the source role
   echo ""
-  echo "############################################################"
-  echo "# The App Server's installation is complete.               #"
-  echo "# Please finish the installation on the Monitor Server.    #"
+  echo "#############################################################"
+  echo "# The App Server's installation is complete.                #"
+  echo "# Please finish the installation on the Monitor Server.     #"
   echo "# The App Server's SSH address and interface urls are below #"
-  echo "############################################################"
+  echo "#############################################################"
   echo ""
 
   echo "The source interfaces's Tor URL is:"
