@@ -371,6 +371,9 @@ FOE
   cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
   catch_error $? "copying $JAIL.config.py template"
 
+  ONION_ADDRESS="$(echo /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname)"
+  sed -i "s|ONION_ADDRESS|$ONION_ADDRESS|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+
   if grep -q "APP_GPG_KEY_FINGERPRINT" /var/chroot/$JAIL/var/www/securedrop/config.py; then
     echo "Copying GPG Fingerprint to $JAIL/var/www/securedrop/config.py"
     sed -i -e "s|APP_GPG_KEY_FINGERPRINT|$APP_GPG_KEY_FINGERPRINT|g" /var/chroot/$JAIL/var/www/securedrop/config.py
