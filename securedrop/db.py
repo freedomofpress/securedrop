@@ -122,35 +122,6 @@ def add_tag_to_file(file_names, *tags_to_add):
     session.close()
 
 
-def get_files_ids(file_names):
-    session = sqlalchemy_handle()
-    file_ids = []
-    for file_name in file_names:
-        query = session.query(files.c.id)
-        query = query.filter(files.c.name == file_name)
-        results = session.execute(query)
-        if results.rowcount > 0:
-            file_ids.append(results.fetchone()[0])
-    session.close()
-    return file_ids
-
-
-def get_tags_id_from(file_ids):
-    session = sqlalchemy_handle()
-    tag_ids = {}
-    for file_id in file_ids:
-        query = session.query(distinct(files_to_tags.c.tags_id))
-        query = query.filter(files_to_tags.c.files_id == file_id)
-        results = session.execute(query)
-        if results.rowcount > 0:
-            all = results.fetchall()
-            tag_ids[file_id]= [id[0] for id in all]
-        else:
-            tag_ids[file_id] = []
-    session.close()
-    return tag_ids
-
-
 def get_tags_for_file(file_names):
     session = sqlalchemy_handle()
     results = {}
