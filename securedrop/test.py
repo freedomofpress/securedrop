@@ -41,18 +41,23 @@ def _setup_test_docs(sid, files):
 
 
 def shared_setup():
-    """Set up the file system and GPG"""
+    """Set up the file system, GPG, and database"""
+
     # Create directories for the file store and the GPG keyring
     for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR,
               config.TEMP_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
+
     # Initialize the GPG keyring
     gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
     # Import the journalist key for testing (faster to import a pre-generated
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
+
+    # Inititalize the test database
+    import db; db.create_tables()
 
 
 def shared_teardown():

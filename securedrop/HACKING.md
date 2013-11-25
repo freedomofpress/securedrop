@@ -46,6 +46,9 @@ cp the config template and fill in empty values:
 
     $ cp example_config.py config.py
 
+**NOTE**: if you haven't installed MySQL/Postgresql, you'll want to uncomment
+the lines defining SQLite as the default database.
+
 **NOTE**: the `STORE_DIR` and `GPG_KEY_DIR` must be absolute paths.
 Create them if necessary:
 
@@ -73,6 +76,10 @@ field of `config.py`. You can find the key fingerprint by running:
     $ gpg2 --homedir /tmp/securedrop/keys --fingerprint
 
 You might have to manually remove the spaces.
+
+populate the database:
+
+    $ python -c 'import db; db.create_tables()'
 
 running
 -------

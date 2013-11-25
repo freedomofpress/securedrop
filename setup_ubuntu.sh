@@ -24,7 +24,13 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
+
+# no password prompt to install mysql-server
+mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password $mysql_root"
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password_again password $mysql_root"
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
@@ -64,6 +70,9 @@ fi
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
 
+echo "Setting up MySQL database..."
+mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+
 echo "Setting up the virtual environment..."
 virtualenv securedrop/venv
 source securedrop/venv/bin/activate
@@ -81,6 +90,11 @@ keypath=$securedrop_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
+
+# database config and initialization
+sed -i "s@^DATABASE_PASSWORD.*@DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
+echo "Creating MySQL tables..."
+python -c 'import db; db.create_tables()'
 
 # generate and store random values required by config.py
 secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')

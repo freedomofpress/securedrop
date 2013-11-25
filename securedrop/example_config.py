@@ -1,5 +1,7 @@
 import os, stat
 
+### Flask Configurations
+
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
@@ -16,18 +18,36 @@ class TestingConfig(BaseConfig):
     # Tests are simpler if CSRF protection is disabled
     WTF_CSRF_ENABLED = False
 
-JOURNALIST_KEY=''
+### Database Configuration
 
-SOURCE_TEMPLATES_DIR='./source_templates'
-JOURNALIST_TEMPLATES_DIR='./journalist_templates'
-WORD_LIST='./wordlist'
+DATABASE_ENGINE = 'mysql'
+DATABASE_USERNAME = 'securedrop'
+DATABASE_PASSWORD = '' # head -c 32 /dev/urandom | base64
+DATABASE_HOST = 'localhost'
+DATABASE_NAME = 'securedrop'
 
-BCRYPT_SALT='' # bcrypt.gensalt()
+# For sqlite:
+# DATABASE_ENGINE = 'sqlite'
+# DATABASE_FILE = 'db.sql'
+
+### Application Configuration
+
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
+
+JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
+BCRYPT_SALT=''    # bcrypt.gensalt()
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
     SECUREDROP_ROOT='/tmp/securedrop_test'
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
+    # Use a temporary sqlite database for tests
+    DATABASE_ENGINE='sqlite'
+    DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'test.db')
+    DATABASE_USERNAME='securedrop'
+    DATABASE_PASSWORD='securedrop'
 else:
     FlaskConfig = ProductionConfig
     # Note: most OS automatically delete /tmp on reboot. If you want your
