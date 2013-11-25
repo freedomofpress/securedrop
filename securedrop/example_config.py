@@ -18,18 +18,6 @@ class TestingConfig(BaseConfig):
     # Tests are simpler if CSRF protection is disabled
     WTF_CSRF_ENABLED = False
 
-### Database Configuration
-
-DATABASE_ENGINE = 'mysql'
-DATABASE_USERNAME = 'securedrop'
-DATABASE_PASSWORD = '' # head -c 32 /dev/urandom | base64
-DATABASE_HOST = 'localhost'
-DATABASE_NAME = 'securedrop'
-
-# For sqlite:
-# DATABASE_ENGINE = 'sqlite'
-# DATABASE_FILE = 'db.sql'
-
 ### Application Configuration
 
 SOURCE_TEMPLATES_DIR = './source_templates'
@@ -43,17 +31,9 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
     SECUREDROP_ROOT='/tmp/securedrop_test'
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
-    # Use a temporary sqlite database for tests
-    DATABASE_ENGINE='sqlite'
-    DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'test.db')
-    DATABASE_USERNAME='securedrop'
-    DATABASE_PASSWORD='securedrop'
 else:
     FlaskConfig = ProductionConfig
-    # Note: most OS automatically delete /tmp on reboot. If you want your
-    # Securedrop to persist over reboots, change this value to a directory that
-    # is not in /tmp!
-    SECUREDROP_ROOT='/tmp/securedrop'
+    SECUREDROP_ROOT=os.path.abspath('.securedrop')
 
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
@@ -71,3 +51,19 @@ def has_perms(path, mode):
 safe_perms = 0700
 if not has_perms(GPG_KEY_DIR, safe_perms):
     os.chmod(GPG_KEY_DIR, safe_perms)
+
+### Database Configuration
+
+# Default to using a sqlite database file for development
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sql')
+
+# Uncomment to use mysql (or any other databaes backend supported by
+# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
+# `python -c "import db; db.create_tables()"` to initialize the database
+
+# DATABASE_ENGINE = 'mysql'
+# DATABASE_HOST = 'localhost'
+# DATABASE_NAME = 'securedrop'
+# DATABASE_USERNAME = 'securedrop'
+# DATABASE_PASSWORD = '3XKiqH+asPjh2il5VPqHVHBBtPWpNvGY4HfWfQ+CCGY='
