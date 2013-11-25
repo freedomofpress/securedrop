@@ -268,6 +268,26 @@ class TestJournalist(TestCase):
         self.assertEqual(soup.select('button[name=action]')[0]['value'], 'Tag Selected With')
         self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
 
+    def test_add_new_tag(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        filenames = _setup_test_docs(sid, files)
+        test_tag = '__new__'
+
+        rv = self.client.post('/bulk', data=dict(
+            action='tag',
+            sid=sid,
+            doc_names_selected=files,
+            tag=test_tag
+        ))
+
+        self.assertEqual(rv.status_code, 200)
+
+        soup = BeautifulSoup(rv.data)
+        self.assertGreater(len(soup.select('input[name=tag]')), 0)
+        self.assertEqual(soup.select('button[name=action]')[0]['value'], 'tag')
+        self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
+
 class TestIntegration(unittest.TestCase):
 
     def setUp(self):
@@ -537,7 +557,7 @@ class TestDb(unittest.TestCase):
     def setUp(self):
         config.DATABASE_ENGINE = 'mysql'
         config.DATABASE_USERNAME = 'securedrop'
-        config.DATABASE_PASSWORD = ''
+        config.DATABASE_PASSWORD = 'securedrop'
         config.DATABASE_HOST = 'localhost'
         config.DATABASE_NAME = 'securedrop_test'
 
