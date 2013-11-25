@@ -176,17 +176,19 @@ def delete_tags_from_file(file_names, tags_to_remove):
     for file_name in file_names:
         tags_ids = []
         query = session.query(files.c.id).filter(files.c.name == file_name)
-        file_id = session.execute(query).fetchone()[0]
-        for tag in tags_to_remove[file_name]:
-            query = session.query(tags.c.id)
-            query = query.filter(tags.c.name == tag)
-            result = session.execute(query)
-            if result.rowcount > 0:
-                tags_ids.extend(result.fetchall()[0])
-        for tag_id in tags_ids:
-            where_clause = and_(files_to_tags.c.tags_id == tag_id, files_to_tags.c.files_id == file_id)
-            query = delete(files_to_tags,whereclause=where_clause)
-            session.execute(query)
+        result = session.execute(query)
+        if result.rowcount > 0:
+            file_id = result.fetchone()[0]
+            for tag in tags_to_remove[file_name]:
+                query = session.query(tags.c.id)
+                query = query.filter(tags.c.name == tag)
+                result = session.execute(query)
+                if result.rowcount > 0:
+                    tags_ids.extend(result.fetchall()[0])
+            for tag_id in tags_ids:
+                where_clause = and_(files_to_tags.c.tags_id == tag_id, files_to_tags.c.files_id == file_id)
+                query = delete(files_to_tags,whereclause=where_clause)
+                session.execute(query)
 
     session.commit()
     session.close()
