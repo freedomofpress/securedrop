@@ -15,11 +15,11 @@
 
 
 
-<form action="/bulk" method="post">
+<form id="bulk" action="/bulk" method="post">
 <ul id="submissions">
 {% for doc in docs %}
 <li>
-  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
+  <input type="checkbox" name="doc_names_selected" form="bulk" value="{{ doc.name }}" />
   {% if doc.name.startswith('reply-') %}
   <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }}) tags: {{ doc.tags }}
   {% else %}
@@ -30,15 +30,18 @@
 
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+<input form="bulk" name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<input form="bulk" type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
 </ul>
 
 <p>
 
-  <button type="submit" name="action" value="download">Download selected</button>
-  <button type="submit" name="action" value="delete">Delete selected</button>
+  <input type="submit" name="action" form="bulk" value="Download Selected"/>
+  <input type="submit" name="action" form="bulk" value="Delete Selected"/>
+  <input type="submit" name="action" form="bulk" value="Remove Tags"/>
   <br/>
 
-  <button type="submit" name="action" value="tag">Tag selected with</button> New Tag:
+  <input type="submit" name="action" form="bulk" value="Tag Selected With"/> New Tag:
   <select name="tag">
       <option value="read">read</option>
       <option value="interesting">interesting</option>
@@ -50,7 +53,7 @@
   (<span id="select_all">select all</span>, <span id="select_none">select none</span>)
 </p>
 </form>
-<form action="/filter-selected" method="post">
+<form id="filter_tag" action="/filter-selected" method="post">
   <p>
       {% for tag in tags %}
       <label>
@@ -58,11 +61,12 @@
           {{tag}}
       </label>
     {% endfor %}
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-    <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-    <button type="submit" name="action" value="filter_tag">Filter Selected Tags</button>
+    <input type="hidden" name="csrf_token" form="filter_tag" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="sid" form="filter_tag" value="{{ sid }}" autocomplete="off"/>
+    <input type="submit" name="action" form="filter_tag" value="Filter Selected Tags"/>
   </p>
 </form>
+
 
 
 {% else %}

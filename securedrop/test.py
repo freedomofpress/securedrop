@@ -219,7 +219,7 @@ class TestJournalist(TestCase):
         filenames = _setup_test_docs(sid, files)
 
         rv = self.client.post('/bulk', data=dict(
-            action='download',
+            action='Download Selected',
             sid=sid,
             doc_names_selected=files
         ))
@@ -238,7 +238,7 @@ class TestJournalist(TestCase):
         test_tag = 'the-test-tag'
 
         rv = self.client.post('/bulk', data=dict(
-            action='tag',
+            action='Tag Selected With',
             sid=sid,
             doc_names_selected=files,
             tag=test_tag
@@ -246,7 +246,7 @@ class TestJournalist(TestCase):
 
         self.assertEqual(rv.status_code, 302)
         self.assertTrue(("/col/" + sid) in rv.location)
-        mock_add_tag.assert_called_once_with(filenames, test_tag)
+        mock_add_tag.assert_called_once_with(files, test_tag)
 
 class TestIntegration(unittest.TestCase):
 
@@ -302,7 +302,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -316,7 +316,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -380,7 +380,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -394,7 +394,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='Delete Selected',
             sid=sid,
             doc_names_selected=doc_name,
             confirm_delete="1"
@@ -613,6 +613,22 @@ class TestDb(unittest.TestCase):
         tag_ids = db.get_tags_for_file(self.file_names)
         assert tag_ids[self.file_names[0]] == []
         assert tag_ids[self.file_names[1]] == []
+
+    def test_delete_tag_file_association(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+
+        db.delete_tags_from_file(self.file_names, {self.file_names[0]: [self.test_tag], self.file_names[1] : [self.test_tag]})
+
+        all_associations = self.session.query(db.files_to_tags).all()
+        assert len(all_associations) == 0
+
+    def test_delete_tag_file_association_single_file(self):
+        db.add_tag_to_file(self.file_names, self.test_tag)
+
+        db.delete_tags_from_file([self.file_names[0]], {self.file_names[0]: [self.test_tag]})
+
+        all_associations = self.session.query(db.files_to_tags).all()
+        assert len(all_associations) == 1
 
 
 if __name__ == "__main__":

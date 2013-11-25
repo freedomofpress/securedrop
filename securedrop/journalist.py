@@ -116,12 +116,14 @@ def bulk():
     docs_selected = [
         doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
 
-    if action == 'download':
+    if action == 'Download Selected':
         return bulk_download(sid, docs_selected)
-    elif action == 'delete':
+    elif action == 'Delete Selected':
         return bulk_delete(sid, docs_selected)
-    elif action == 'tag':
+    elif action == 'Tag Selected With':
         return bulk_tag(sid, docs_selected)
+    elif action == 'Remove Tags':
+        return bulk_tag_remove(sid, docs_selected)
     else:
         abort(400)
 
@@ -148,6 +150,13 @@ def bulk_tag(sid, docs_selected):
     filenames = [doc['name'] for doc in docs_selected]
     db.add_tag_to_file(filenames, request.form['tag'])
     return redirect(url_for('col',sid=sid))
+
+def bulk_tag_remove(sid, docs_selected):
+    filenames = [doc['name'] for doc in docs_selected]
+    tags_for_files = db.get_tags_for_file(filenames)
+    db.delete_tags_from_file(filenames, tags_for_files)
+    return redirect(url_for('col', sid=sid))
+
 
 @app.route('/flag', methods=('POST',))
 def flag():
