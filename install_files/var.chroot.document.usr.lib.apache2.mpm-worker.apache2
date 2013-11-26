@@ -519,7 +519,7 @@
   /var/chroot/document/var/www/securedrop/crypto_util.pyc rw,
   /var/chroot/document/var/www/securedrop/journalist.py r,
   /var/chroot/document/var/www/securedrop/journalist.pyc rw,
-  /var/chroot/document/var/www/securedrop/journalist.wsgi r,
+  /var/chroot/document/var/www/securedrop/document.wsgi r,
   /var/chroot/document/var/www/securedrop/journalist_templates/base.html r,
   /var/chroot/document/var/www/securedrop/journalist_templates/col.html r,
   /var/chroot/document/var/www/securedrop/journalist_templates/delete.html r,
