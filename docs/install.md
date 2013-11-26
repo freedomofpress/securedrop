@@ -13,6 +13,8 @@ Before installing SecureDrop, you should make sure you've got the environment pr
 
 * Each Journalist must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transferring files from their `Tails Workstation` to the `Air-Gapped Viewing Station`.
 
+* Each journalist must have a personal PGP key. See [this section](/install.md#set-up-journalist-public-keys) for instructions to set one up for journalists who don't have already have a key. 
+
 * Each `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage. The other to transfer files from the `Air-Gapped Viewing Station` to the corporate network for publication purposes.
 
 * You must have two external hard drives for cold storage of submitted documents and the application's GPG keyring.
@@ -23,7 +25,7 @@ Before installing SecureDrop, you should make sure you've got the environment pr
 
 The `Air-Gapped Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
 
-You will need to create an PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Air-Gapped Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's personnel public key.
+You will need to create an PGP keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Air-Gapped Viewing Station`. Additionally, you will add the personal PGP public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's personal public key.
 
 ### Remove Hard Drive
 
@@ -42,7 +44,7 @@ Reboot the `Air-Gapped Viewing Station` laptop and boot into the Tails Live USB 
 
 ### Generate PGP Key and Import Journalist Public Keys
 
-In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their own personal PGP key. Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal PGP key](/install.md#set-up-journalist-public-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist PGP Keys](/images/install/viewing1.jpg)
 
@@ -148,7 +150,21 @@ Once you have completed these steps, the SecureDrop web application should be se
 
 ## Journalist's and Admin's Tails Workstation Setup
 
-The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. In order to connect to the `App Server` they need to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
+The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. 
+
+### Set up journalist PGP keys
+
+Each journalist must have a personal PGP key that they use for encrypting files transferred from the `Air-Gapped Viewing Station` to their `Journalist Workstation`. The private key, used for decryption, stays on their `Journalist Workstation`. The public key, used for encryption, gets copied to the `Air-Gapped Viewing Station`.
+
+If a journalist does not yet have a PGP key, they can follow these instructions to set one up with GnuPG (GPG).
+
+* [GNU/Linux](http://www.gnupg.org/gph/en/manual.html#AEN26)
+* [Windows](http://gpg4win.org/)
+* [Mac OS X](http://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
+
+### Set up the Tor Browser Bundle
+
+In order to connect to the `App Server`, the journalist needs to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
 
 You will have to do the following steps on each laptop that will be able to connect to the `Document Interface` running on the `App Server`. If you want to give a new journalist access to the `Document Interface` you will need to do these steps again for that new journalist.
 
