@@ -630,9 +630,9 @@ class TestDb(unittest.TestCase):
         assert tag_ids[self.file_names[1]] == []
 
     def test_delete_tag_file_association(self):
-        db.add_tag_to_file(self.file_names, self.test_tag)
+        db.add_tag_to_file(self.file_names, self.test_tag, "tag2", "tag3")
 
-        db.delete_tags_from_file(self.file_names, {self.file_names[0]: [self.test_tag], self.file_names[1] : [self.test_tag]})
+        db.delete_tags_from_file(self.file_names,  [self.test_tag, "tag2", "tag3"])
 
         all_associations = self.session.query(db.files_to_tags).all()
         assert len(all_associations) == 0
@@ -640,7 +640,7 @@ class TestDb(unittest.TestCase):
     def test_delete_tag_file_association_single_file(self):
         db.add_tag_to_file(self.file_names, self.test_tag)
 
-        db.delete_tags_from_file([self.file_names[0]], {self.file_names[0]: [self.test_tag]})
+        db.delete_tags_from_file([self.file_names[0]], [self.test_tag])
 
         all_associations = self.session.query(db.files_to_tags).all()
         assert len(all_associations) == 1

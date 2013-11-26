@@ -160,6 +160,7 @@ def bulk_tag(sid, docs_selected):
 def bulk_tag_remove(sid, docs_selected):
     filenames = [doc['name'] for doc in docs_selected]
     tags_for_files = db.get_tags_for_file(filenames)
+    tags_for_files = [tag for tags in tags_for_files.values() for tag in tags]
     db.delete_tags_from_file(filenames, tags_for_files)
     return redirect(url_for('col', sid=sid))
 

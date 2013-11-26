@@ -137,9 +137,18 @@ def get_tags_for_file(file_names):
 
 
 def delete_tags_from_file(file_names, tags_to_remove):
-    for file_name in file_names:
-        for tag_name in tags_to_remove[file_name]:
-            delete_tag_from_file(file_name, tag_name)
+    session = sqlalchemy_handle()
+    query = session.query(files_to_tags.c.id).join(tags, files_to_tags.c.tags_id == tags.c.id)
+    query = query.join(files, files_to_tags.c.files_id == files.c.id)
+    query = query.filter(tags.c.name.in_(tags_to_remove))
+    query = query.filter(files.c.name.in_(file_names))
+    results = session.execute(query)
+    if results.rowcount > 0:
+        results = [row[0] for row in results.fetchall()]
+        delete_query = delete(files_to_tags, files_to_tags.c.id.in_(results))
+        session.execute(delete_query)
+    session.commit()
+    session.close()
 
 
 def delete_tag_from_file(file_name, tag_name):
