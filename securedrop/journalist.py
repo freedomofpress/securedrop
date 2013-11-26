@@ -12,6 +12,7 @@ import crypto_util
 import store
 import background
 import db
+from bulk import Bulk
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -109,6 +110,7 @@ def generate_code():
 @app.route('/bulk', methods=('POST',))
 def bulk():
     action = request.form['action']
+    #action = action.replace(" ", "_").lower()
 
     sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
@@ -116,53 +118,21 @@ def bulk():
     docs_selected = [
         doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
 
+    bulk = Bulk(request,sid,docs_selected)
+
     if action == 'Download Selected':
-        return bulk_download(sid, docs_selected)
+        return bulk.bulk_download()
     elif action == 'Delete Selected':
-        return bulk_delete(sid, docs_selected)
+        return bulk.bulk_delete()
     elif action == 'Tag Selected With':
-        return bulk_tag(sid, docs_selected)
+        return bulk.bulk_tag()
     elif action == 'Remove Tags':
-        return bulk_tag_remove(sid, docs_selected)
+        return bulk.bulk_tag_remove()
     else:
         abort(400)
 
 
-def bulk_delete(sid, docs_selected):
-    confirm_delete = bool(request.form.get('confirm_delete', False))
-    if confirm_delete:
-        for doc in docs_selected:
-            fn = store.path(sid, doc['name'])
-            crypto_util.secureunlink(fn)
-    return render_template(
-        'delete.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
-        docs_selected=docs_selected, confirm_delete=confirm_delete)
 
-
-def bulk_download(sid, docs_selected):
-    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
-    zip = store.get_bulk_archive(filenames)
-    return send_file(zip, mimetype="application/zip",
-                     attachment_filename=crypto_util.displayid(sid) + ".zip",
-                     as_attachment=True)
-
-def bulk_tag(sid, docs_selected):
-    filenames = [doc['name'] for doc in docs_selected]
-    tag = request.form['tag']
-    if tag == '__new__':
-        return render_template(
-            'new_tag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
-            docs_selected=docs_selected)
-    else:
-        db.add_tag_to_file(filenames, tag)
-        return redirect(url_for('col',sid=sid))
-
-def bulk_tag_remove(sid, docs_selected):
-    filenames = [doc['name'] for doc in docs_selected]
-    tags_for_files = db.get_tags_for_file(filenames)
-    tags_for_files = [tag for tags in tags_for_files.values() for tag in tags]
-    db.delete_tags_from_file(filenames, tags_for_files)
-    return redirect(url_for('col', sid=sid))
 
 
 @app.route('/flag', methods=('POST',))
