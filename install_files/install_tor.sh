@@ -4,19 +4,19 @@
 install_tor() {
   echo ""
   echo "Installing tor on host system..."
-  add-apt-repository -y "$TOR_REPO" | tee -a build.log
-  catch_error $? "with add-apt-repository -y $TOR_REPO"
-
-  if [ -f tor.asc ]; then
-    rm tor.asc
-  fi
-
-  gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
-  catch_error $? "recving tor key $TOR_KEY_ID"
-  gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
-  catch_error $? "exporting tor key $TOR_KEY_FINGERPRINT"
-
   if [ ! "$1" = "--no-updates" ]; then
+    add-apt-repository -y "$TOR_REPO" | tee -a build.log
+    catch_error $? "with add-apt-repository -y $TOR_REPO"
+
+    if [ -f tor.asc ]; then
+      rm tor.asc
+    fi
+
+    gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
+    catch_error $? "recving tor key $TOR_KEY_ID"
+    gpg --output tor.asc --armor --export $TOR_KEY_FINGERPRINT | tee -a build.log
+    catch_error $? "exporting tor key $TOR_KEY_FINGERPRINT"
+
     apt-key add tor.asc | tee -a build.log
     catch_error $? "adding tor.asc"
     apt-get -y update | tee -a build.log

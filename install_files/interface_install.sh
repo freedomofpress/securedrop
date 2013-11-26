@@ -128,7 +128,7 @@ catch_error $? "copying rc.local to host system"
 for JAIL in $JAILS; do
   echo "Copying and secure deleting chroot jail $JAIL build.log"
   cp /var/chroot/$JAIL/root/build.log $JAIL.build.log
-  srm /var/chroot/$JAIL/root/build.log 
+  srm /var/chroot/$JAIL/root/build.log | tee -a build.log
 done
 
 
@@ -138,7 +138,7 @@ for JAIL in $JAILS; do
     echo "coying apparmor profile"
     cp var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2 /etc/apparmor.d/
     echo "enforcing apparmor profile..."
-    aa-enforce /etc/apparmor.d/var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2
+    aa-enforce /etc/apparmor.d/var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2 | tee -a build.log
   fi
 
   #Restart tor and wait 15 seconds for certs to be generted
@@ -146,18 +146,16 @@ for JAIL in $JAILS; do
   sleep 15
 
   #Use the generated hidden service addresses in the apache configs and restart apache
+  echo "test"
   while read line; do
-    ONION_ADDRESS=$(awk -F " " '{print $1}')
+    ONION_ADDRESS="$(echo "$line" | awk '{print $1}')"
+    echo "Adding $ONION_ADDRESS"
     sed -i "/#INSERT_SERVER_ALIASES_HERE/a ServerAlias $ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
-    sed -i "/#INSERT_ORIGIN_HERE/a Header add Access-Control-Allow-Origin http://$ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+    sed -i "/#INSERT_ORIGIN_HERE/a Header add Access-Control-Allow-Origin http:\/\/$ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
   done < /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname
-  schroot -c $JAIL -u root service apache2 restart --directory /root
 done
 
-
 #Display tor hostname auth values.
-#Sleep 10 seconds for certs to be created
-sleep 10
 echo "Source interface's onion url is: "
 echo "$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
 
