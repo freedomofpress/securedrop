@@ -18,7 +18,7 @@ CsrfProtect(app)
 app.jinja_env.globals['version'] = version.__version__
 
 # For backward compatibility with single-journalist setups
-if not getattr(config, 'JOURNALISTS', None):
+if not hasattr(config, 'JOURNALISTS'):
     config.JOURNALISTS = {
         1: {'name': 'Default', 'fingerprint': config.JOURNALIST_KEY}
     }
