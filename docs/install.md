@@ -5,15 +5,15 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up.
 
-* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/ubuntu_config.md).
+* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/docs/ubuntu_config.md).
 
-* You must have a DVD configured as a Live DVD for the [Tails operating system](/install.md#download-install-and-configure-tails).
+* You must have a DVD configured as a Live DVD for the [Tails operating system](/docs/install.md#download-install-and-configure-tails).
 
 * Each Admin must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for transferring files and the other for their Tails OS [persistent storage](https://tails.boum.org/doc/first_steps/persistence/). (Google Authenticator is an app for producing one-time passwords for two-factor authentication. You can find download instructions [here](https://support.google.com/accounts/answer/1066447?hl=en).)
 
 * Each Journalist must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transferring files from their `Tails Workstation` to the `Air-Gapped Viewing Station`.
 
-* Each journalist must have a personal PGP key. See [this section](/install.md#set-up-journalist-public-keys) for instructions to set one up for journalists who don't have already have a key. 
+* Each journalist must have a personal PGP key. See [this section](/docs/install.md#set-up-journalist-public-keys) for instructions to set one up for journalists who don't have already have a key. 
 
 * Each `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage. The other to transfer files from the `Air-Gapped Viewing Station` to the corporate network for publication purposes.
 
@@ -44,7 +44,7 @@ Reboot the `Air-Gapped Viewing Station` laptop and boot into the Tails Live USB 
 
 ### Generate PGP Key and Import Journalist Public Keys
 
-In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal PGP key](/install.md#set-up-journalist-public-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal PGP key](/docs/install.md#set-up-journalist-public-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist PGP Keys](/images/install/viewing1.jpg)
 
@@ -214,4 +214,4 @@ And the `torrc` file for the second journalist should look like something this:
 
 ## Test It
 
-Once it's installed, test it out. See [How to Use SecureDrop](/user_manual.md).
+Once it's installed, test it out. See [How to Use SecureDrop](/docs/user_manual.md).
