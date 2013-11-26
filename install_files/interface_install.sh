@@ -54,7 +54,7 @@ if [ -f $KEY ]; then
   APP_GPG_KEY=$( basename "$KEY" )
   cp $KEY $CWD
 else
-  echo "Cannot find the application puvlic gpg key: $KEY"
+  echo "Cannot find the application public gpg key: $KEY"
   echo "Exiting with errors can not find $KEY"
   exit 1
 fi
@@ -261,9 +261,9 @@ EOF
   catch_error $? "copying $APP_GPG_KEY to chroot jail $JAIL"
   cp -R -f $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
   catch_error $? "copying $APP_FILES to chroot jail $JAIL"
-  if [ -d /var/chroot/journalist ]; then
-    mkdir -p /var/chroot/journalist/var/www/securedrop/temp/
-    catch_error $? "creating /var/chroot/journalist/var/www/securedrop/temp/"
+  if [ -d /var/chroot/document ]; then
+    mkdir -p /var/chroot/document/var/www/securedrop/temp/
+    catch_error $? "creating /var/chroot/document/var/www/securedrop/temp/"
   fi
 
   INT_REQS=$(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
