@@ -120,31 +120,39 @@ install_document_specific
 
 #Copy rc.local file to host system to mount and start the needed services
 #for the chroot jals
+echo "Configuring rc.local"
 cp host.rc.local /etc/rc.local | tee -a build.log
 catch_error $? "copying rc.local to host system"
 
 #cp and secure-delete build.logs in chroot jails
 for JAIL in $JAILS; do
+  echo "Copying and secure deleting chroot jail $JAIL build.log"
   cp /var/chroot/$JAIL/root/build.log $JAIL.build.log
   srm /var/chroot/$JAIL/root/build.log 
 done
 
-if [ ! "$1" = "--no-apparmor" ]; then
-  for JAIL in $JAILS; do
+
+for JAIL in $JAILS; do
+  #Enable apparmor unless asked not to
+  if [ ! "$1" = "--no-apparmor" ]; then
     echo "coying apparmor profile"
     cp var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2 /etc/apparmor.d/
     echo "enforcing apparmor profile..."
     aa-enforce /etc/apparmor.d/var.chroot.$JAIL.usr.lib.apache2.mpm-worker.apache2
-    echo "restarting apache in $JAIL"
-    schroot -c $JAIL -u root service apache2 restart --directory /root
-    schroot -c $JAIL -u root service tor restart --directory /root
-  done
-else
-  for JAIL in $JAILS; do
-    schroot -c $JAIL -u root service apache2 restart --directory /root
-    schroot -c $JAIL -u root service tor restart --directory /root
-  done
-fi
+  fi
+
+  #Restart tor and wait 15 seconds for certs to be generted
+  schroot -c $JAIL -u root service tor restart --directory /root
+  sleep 15
+
+  #Use the generated hidden service addresses in the apache configs and restart apache
+  while read line; do
+    ONION_ADDRESS=$(awk -F " " '{print $1}')
+    sed -i "/#INSERT_SERVER_ALIASES_HERE/a ServerAlias $ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+    sed -i "/#INSERT_ORIGIN_HERE/a Header add Access-Control-Allow-Origin http://$ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+  done < /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname
+  schroot -c $JAIL -u root service apache2 restart --directory /root
+done
 
 
 #Display tor hostname auth values.
