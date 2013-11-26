@@ -87,6 +87,7 @@ echo "# - Install and configure the other        #"
 echo "#     interfaces dependencies              #"
 echo "############################################"
 echo ""
+sleep 3
 
 #Update system and install dependencies to generate bcyrpt salt
 if [ ! "$1" = "--no-updates" ]; then
@@ -146,7 +147,6 @@ for JAIL in $JAILS; do
   sleep 15
 
   #Use the generated hidden service addresses in the apache configs and restart apache
-  echo "test"
   while read line; do
     ONION_ADDRESS="$(echo "$line" | awk '{print $1}')"
     echo "Adding $ONION_ADDRESS"
