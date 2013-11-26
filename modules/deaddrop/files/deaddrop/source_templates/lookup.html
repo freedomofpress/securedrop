@@ -27,6 +27,16 @@
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  {% if journalists|length > 1 %}
+    <p><b>Select a recipient:</b>
+      <select name="jid">
+        <option value="">All {{ journalists|length }} journalists</option>
+        {% for jid in journalists %}
+          <option value="{{ jid }}">{{ journalists[jid] }}</option>
+        {% endfor %}
+      </select>
+    </p>
+  {% endif %}
   <p style="padding-bottom: 0"><b>Upload a file:</b></p>
   <div id="browse-select">
     <input type="file" name="fh" autocomplete="off"/> 
