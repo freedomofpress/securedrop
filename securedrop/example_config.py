@@ -56,7 +56,7 @@ if not has_perms(GPG_KEY_DIR, safe_perms):
 
 # Default to using a sqlite database file for development
 DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sql')
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
 
 # Uncomment to use mysql (or any other databaes backend supported by
 # SQLAlchemy). Make sure you have the necessary dependencies installed, and run

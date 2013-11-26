@@ -43,8 +43,3 @@ nosetests.xml
 
 # Vim temp files
 *~
-
-# Securedrop root for development
-.securedrop/
-# Likely SQLite db file
-db.sql
