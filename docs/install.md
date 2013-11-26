@@ -13,7 +13,7 @@ Before installing SecureDrop, you should make sure you've got the environment pr
 
 * Each Journalist must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transferring files from their `Tails Workstation` to the `Air-Gapped Viewing Station`.
 
-* Each journalist must have a personal PGP key. See [this section](/docs/install.md#set-up-journalist-public-keys) for instructions to set one up for journalists who don't have already have a key. 
+* Each journalist must have a personal PGP key. See [this section](/docs/install.md#set-up-journalist-pgp-keys) for instructions to set one up for journalists who don't have already have a key. 
 
 * Each `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage. The other to transfer files from the `Air-Gapped Viewing Station` to the corporate network for publication purposes.
 
@@ -44,7 +44,7 @@ Reboot the `Air-Gapped Viewing Station` laptop and boot into the Tails Live USB 
 
 ### Generate PGP Key and Import Journalist Public Keys
 
-In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal PGP key](/docs/install.md#set-up-journalist-public-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Air-Gapped Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal PGP key](/docs/install.md#set-up-journalist-pgp-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Air-Gapped Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist PGP Keys](/images/install/viewing1.jpg)
 
