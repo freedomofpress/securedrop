@@ -1,19 +1,21 @@
 SecureDrop Installation Guide
 =============================
 
+## Before you begin
+
 Before installing SecureDrop, you should make sure you've got the environment properly set up.
 
 * You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/ubuntu_config.md).
 
-* You must have a DVD configured as a Live DVD for the Tails operating system.
+* You must have a DVD configured as a Live DVD for the [Tails operating system](/install.md#download-install-and-configure-tails).
 
-* Each Admin must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for transferring files and the other for their Tails OS persitent storage.
+* Each Admin must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for transferring files and the other for their Tails OS [persistent storage](https://tails.boum.org/doc/first_steps/persistence/). (Google Authenticator is an app for producing one-time passwords for two-factor authentication. You can find download instructions [here](https://support.google.com/accounts/answer/1066447?hl=en).)
 
 * Each Journalist must have a device capable of running the google-authenticator app and 2 USB sticks — one will be used for the Tails OS's persistent storage for their `Tails Workstation`, the other for transferring files from their `Tails Workstation` to the `Air-Gapped Viewing Station`.
 
 * Each `Air-Gapped Viewing Station` must have 2 USB sticks — one will be used for the Tails OS's persistent storage. The other to transfer files from the `Air-Gapped Viewing Station` to the corporate network for publication purposes.
 
-* You must have two external hard drives for cold storage of submitted documents and the application's gpg keyring.
+* You must have two external hard drives for cold storage of submitted documents and the application's GPG keyring.
 
 * Finally, you should have selected two secure passphrases for different components of the `Air-Gapped Viewing Station`: one for the persistent volume and one for the PGP keypair. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
