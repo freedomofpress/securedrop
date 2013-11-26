@@ -13,6 +13,7 @@
 #
 CWD="$(dirname $0)"
 source CONFIG_OPTIONS
+source $CWD/install_files/validate_CONFIG_OPTIONS
 
 #Error handling function
 catch_error() {
@@ -58,6 +59,8 @@ if [ $DISTRO != 'ubuntu' ]; then
   fi
 fi
 
+#Validate the user provided options in the CONFIG_OPTIONS file
+validate_CONFIG_OPTIONS
 
 # Start installation scripts specific for each role
 if [ "$ROLE" = 'monitor' ]; then

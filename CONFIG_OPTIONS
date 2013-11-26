@@ -5,7 +5,7 @@ MONITOR_IP=""               # the monitor server's ip address
 
 # base_install.sh options
 SSH_USERS=""                # Space separated list of admin usernames
-SMTP_SERVER=""	            # IP address of the destination SMTP server
+SMTP_SERVER=""              # FQDN of the destination SMTP server
 EMAIL_DISTRO=""             # The email distribution list to send ossec alerts to
 EMAIL_FROM="ossec@test.com" # The email address that the ossec alert will appear to come from
 
