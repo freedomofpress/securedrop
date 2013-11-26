@@ -150,8 +150,13 @@ for JAIL in $JAILS; do
   while read line; do
     ONION_ADDRESS="$(echo "$line" | awk '{print $1}')"
     echo "Adding $ONION_ADDRESS"
-    sed -i "/#INSERT_SERVER_ALIASES_HERE/a ServerAlias $ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
-    sed -i "/#INSERT_ORIGIN_HERE/a Header add Access-Control-Allow-Origin http:\/\/$ONION_ADDRESS:8080" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+    if [ $JAIL = 'source' ]; then
+        PORT=80
+    elif [ $JAIL = 'document' ]; then
+        PORT=8080
+    fi
+    sed -i "/#INSERT_SERVER_ALIASES_HERE/a ServerAlias $ONION_ADDRESS:$PORT" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+    sed -i "/#INSERT_ORIGIN_HERE/a Header add Access-Control-Allow-Origin http:\/\/$ONION_ADDRESS:$PORT" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
   done < /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname
 done
 
