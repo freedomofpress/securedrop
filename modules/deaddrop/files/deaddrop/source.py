@@ -17,6 +17,12 @@ CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 
+# For backward compatibility with single-journalist setups
+if not getattr(config, 'JOURNALISTS', None):
+    config.JOURNALISTS = {
+        1: {'name': 'Default', 'fingerprint': config.JOURNALIST_KEY}
+    }
+
 def logged_in():
   if 'logged_in' in session: return True
 
@@ -45,7 +51,7 @@ def setup_g():
   # and we don't need to waste time running if we're just serving a static
   # resource that won't need to access these common values.
   if logged_in():
-    g.flagged = session['flagged']
+    g.flagged = session.get('flagged', False)
     g.codename = session['codename']
     g.sid = crypto_util.shash(g.codename)
     g.loc = store.path(g.sid)
@@ -125,30 +131,38 @@ def lookup():
   if not crypto_util.getkey(g.sid) and flagged:
     async_genkey(g.sid, g.codename)
 
-  return render_template('lookup.html', codename=g.codename, msgs=msgs, flagged=flagged,
-          haskey=crypto_util.getkey(g.sid))
+  return render_template('lookup.html', codename=g.codename, msgs=msgs,
+                         flagged=flagged, haskey=crypto_util.getkey(g.sid),
+                         journalists={jid: config.JOURNALISTS[jid]['name']
+                                      for jid in config.JOURNALISTS})
 
 @app.route('/submit', methods=('POST',))
 @login_required
 def submit():
   msg = request.form['msg']
   fh = request.files['fh']
-  if msg:
-    msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
-    crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
-    flash("Thanks! We received your message.", "notification")
-  if fh:
-    file_loc = store.path(g.sid, "%s_doc.zip.gpg" % uuid.uuid4())
+  jid = request.form.get('jid', '')
+  jids = jid and [int(jid)] or config.JOURNALISTS.keys()
+  journalists = [config.JOURNALISTS[jid] for jid in jids]
 
+  if msg:
+    for journalist in journalists:
+      msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
+      crypto_util.encrypt(journalist['fingerprint'], msg, msg_loc)
+    flash("Thanks! We received your message.", "notification")
+
+  if fh:
     s = StringIO()
     zip_file = zipfile.ZipFile(s, 'w')
     zip_file.writestr(fh.filename, fh.read())
     zip_file.close()
-    s.reset()
+    content = s.getvalue()
 
-    crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+    for journalist in journalists:
+      file_loc = store.path(g.sid, "%s_doc.zip.gpg" % uuid.uuid4())
+      crypto_util.encrypt(journalist['fingerprint'], content, file_loc)
     flash("Thanks! We received your document '%s'."
-        % fh.filename or '[unnamed]', "notification")
+          % (fh.filename or '[unnamed]'), "notification")
 
   return redirect(url_for('lookup'))
 

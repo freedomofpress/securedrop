@@ -21,7 +21,11 @@ STORE_DIR='/tmp/deaddrop/store'
 GPG_KEY_DIR='/tmp/deaddrop/keys'
 TEMP_DIR='/tmp/deaddrop/tmp'
 
-JOURNALIST_KEY=''
+# List of journalists who can receive uploaded documents.  Each journalist
+# should have a permanent unique integer ID, a name, and a key fingerprint.
+JOURNALISTS = {
+    1: {'name': 'Example', 'fingerprint': '[fill in a fingerprint here]'}
+}
 
 SOURCE_TEMPLATES_DIR='./source_templates'
 JOURNALIST_TEMPLATES_DIR='./journalist_templates'
