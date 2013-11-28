@@ -110,7 +110,7 @@ def generate_code():
 @app.route('/bulk', methods=('POST',))
 def bulk():
     action = request.form['action']
-    #action = action.replace(" ", "_").lower()
+    action = action.replace(" ", "_").lower()
 
     sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
@@ -120,14 +120,9 @@ def bulk():
 
     bulk = Bulk(request,sid,docs_selected)
 
-    if action == 'Download Selected':
-        return bulk.bulk_download()
-    elif action == 'Delete Selected':
-        return bulk.bulk_delete()
-    elif action == 'Tag Selected With':
-        return bulk.bulk_tag()
-    elif action == 'Remove Tags':
-        return bulk.bulk_tag_remove()
+    if hasattr(bulk, action):
+        method = getattr(bulk, action)
+        return method()
     else:
         abort(400)
 

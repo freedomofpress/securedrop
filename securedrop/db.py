@@ -57,10 +57,13 @@ def sqlalchemy_handle():
 def display_id(filesystem_id, session):
     journalist_designation = session.query(sources.c.journalist_designation).filter(
         sources.c.filesystem_id == filesystem_id).all()
+    session.commit()
+    session.close()
     if len(journalist_designation) > 0:
         return journalist_designation[0][0]
     else:
         return crypto_util.displayid(filesystem_id)
+
 
 
 def regenerate_display_id(filesystem_id):
