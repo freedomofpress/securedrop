@@ -2,6 +2,8 @@
 
 # stop setup script if any command fails
 set -e
+# uncomment to print debugging information
+#set -x
 
 #check platform and distro
 opsys=`uname`
@@ -72,12 +74,13 @@ sudo apt-get -y install $DEPENDENCIES
 
 echo "Setting up MySQL database..."
 mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
-mysql -u root -p"$mysql_root" -e "create database securedrop_test; GRANT ALL PRIVILEGES ON securedrop_test.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+
+# continue working in the application directory
+cd securedrop/securedrop
 
 echo "Setting up the virtual environment..."
-virtualenv securedrop/venv
-source securedrop/venv/bin/activate
-cd securedrop/securedrop
+virtualenv env
+source env/bin/activate
 pip install --upgrade distribute
 pip install -r requirements.txt
 
@@ -87,30 +90,24 @@ cp example_config.py config.py
 securedrop_root=$(pwd)/.securedrop
 sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
 mkdir -p $securedrop_root/{store,keys,tmp}
-storepath=$(pwd)/tmp/deaddrop/store
-keypath=$(pwd)/tmp/deaddrop/keys
-testpath=$(pwd)/tmp/deaddrop_test
-sed -i "s@^STORE_DIR.*@STORE_DIR=\'$storepath\'@" config.py
-sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
-# TODO: replace below line so that indents are not hard-coded :/
-sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
-sed -i "s@^DATABASE_PASSWORD.*@DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
-
-echo "Creating MySQL tables..."
-python -c 'import db; db.create_tables()'
+keypath=$securedrop_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
+
+# initialize development database
+# config.py will use sqlite by default, but we've set up a mysql database as
+# part of this installation so it is very easy to switch to it.
+# Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
+sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
+echo "Creating database tables..."
+python -c 'import db; db.create_tables()'
 
 # generate and store random values required by config.py
 secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
 bcrypt_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
 sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
 sed -i "s@^BCRYPT_SALT.*@BCRYPT_SALT='$bcrypt_salt'@" config.py
-
-echo "" >> .gitignore
-echo "# containing keys and storage for development application" >> .gitignore
-echo $(pwd)/tmp/ >> .gitignore
 
 echo ""
 echo "You will need a journalist key for development."
@@ -131,7 +128,7 @@ fi
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
 journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g')
-echo $journalistkey
+echo "Using journalist key with fingerprint $journalistkey"
 sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config.py
 
 echo ""
@@ -149,5 +146,7 @@ echo $bold$blue
 echo "And you're done!"
 echo $normalcolor
 echo "To make sure everything works, try running the app in the development environment:"
+echo "cd securedrop"
+echo ". env/bin/activate"
 echo "python source.py"
 echo "python journalist.py"
