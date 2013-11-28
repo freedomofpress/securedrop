@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="submit-2">
-  <h2>Submit documents for the first time</h2>
-  <p>To protect your identity, we're assigning you a code name.</p>
+  <h2>Submitting for the first time</h2>
+  <p>To protect your identity, we're assigning you a unique code name.</p>
   <p><b>Your code name is:</b></p>
   <p id="code-name" class="code-name">{{ codename }}</p>
   <div id='regenerate-box'>
-    If you would like to pick a differnt code name, please regenerate.
+    Click Generate if you would like to create a different code name.
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       Desired code name length:
@@ -25,7 +25,7 @@
     </form>
   </div>
   <p>
-    You will need this code name to access any responses to your submission. Please memorize it or save it in a secure place if you want to be able to get responses. (However, this code name of course will help identify you as the submitter &mdash; so don't keep it anywhere it might get discovered.)
+    It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses. Also, this code is the only authentication needed to log in with your account: if you write it down, be sure to keep it hidden.
   </p>
   <form id="create-form" method="post" action="/create" autocomplete="off">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
