@@ -80,9 +80,10 @@ def index():
 def col(sid):
     docs, flagged, tags = get_docs(sid)
     haskey = crypto_util.getkey(sid)
+    all_tags = db.get_all_tags()
     return render_template("col.html", sid=sid,
                            codename=db.display_id(sid, db.sqlalchemy_handle()), docs=docs,
-                           haskey=haskey, flagged=flagged, tags=tags)
+                           haskey=haskey, flagged=flagged, tags=tags, all_tags=all_tags)
 
 
 @app.route('/col/<sid>/<fn>')
@@ -125,10 +126,6 @@ def bulk():
         return method()
     else:
         abort(400)
-
-
-
-
 
 @app.route('/flag', methods=('POST',))
 def flag():

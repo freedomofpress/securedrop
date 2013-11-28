@@ -44,11 +44,9 @@
   <input type="submit" name="action" form="bulk" value="Tag Selected With"/>
   <select name="tag">
       <option value="__new__">New tag</option>
-      <option value="read">read</option>
-      <option value="interesting">interesting</option>
-      <option value="useless">useless</option>
-      <option value="follow-up">follow-up</option>
-      <option value="important">important</option>
+      {% for tag in all_tags %}
+      <option value="{{tag}}">{{tag}}</option>
+      {% endfor %}
   </select>
   <br/>
   (<span id="select_all">select all</span>, <span id="select_none">select none</span>)

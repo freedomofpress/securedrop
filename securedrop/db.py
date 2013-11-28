@@ -168,3 +168,11 @@ def delete_tag_from_file(file_name, tag_name):
 
     session.commit()
     session.close()
+
+def get_all_tags():
+    session = sqlalchemy_handle()
+    query = session.query(tags.c.name).order_by(tags.c.name)
+    results = session.execute(query)
+    results = [row[0] for row in results.fetchall()]
+    session.close()
+    return results
