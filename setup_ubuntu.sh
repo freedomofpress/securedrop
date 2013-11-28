@@ -74,14 +74,12 @@ echo "Setting up configurations..."
 # create directories for keys and store
 # and add them to their respective environment variables in config.py
 cp example_config.py config.py
-mkdir -p ./tmp/deaddrop/{store,keys,tmp}
+mkdir -p ./tmp/deaddrop/{store,keys}
 storepath=$(pwd)/tmp/deaddrop/store
 keypath=$(pwd)/tmp/deaddrop/keys
-temppath=$(pwd)/tmp/deaddrop/tmp
 testpath=$(pwd)/tmp/deaddrop_test
 sed -i "s@^STORE_DIR.*@STORE_DIR=\'$storepath\'@" config.py
 sed -i "s@^GPG_KEY_DIR.*@GPG_KEY_DIR=\'$keypath\'@" config.py
-sed -i "s@^TEMP_DIR.*@TEMP_DIR=\'$temppath\'@" config.py
 # TODO: replace below line so that indents are not hard-coded :/
 sed -i "s@    TEST_DIR.*@    TEST_DIR=\'$testpath\'@" config.py
 

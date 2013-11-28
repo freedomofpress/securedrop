@@ -5,6 +5,7 @@ import config
 import zipfile
 import crypto_util
 import uuid
+import tempfile
 
 VALIDATE_FILENAME = re.compile("^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
 
@@ -53,13 +54,15 @@ def path(*s):
     return absolute
 
 def get_bulk_archive(filenames):
-    zip_file_name = os.path.join(config.TEMP_DIR, str(uuid.uuid4()) + '.zip')
-    with zipfile.ZipFile(zip_file_name, 'w') as zip:
+    zip_file = tempfile.NamedTemporaryFile(delete=False).name
+    # unlink manually to get rid of our temporary archive in a way that plays nicely with flask
+    os.unlink(zip_file)
+    with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)
             basename = os.path.basename(filename)
             zip.write(filename, arcname=basename)
-    return zip_file_name
+    return zip_file
 
 def log(msg):
     file(path('NOTES'), 'a').write(msg)
