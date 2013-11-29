@@ -38,10 +38,9 @@ else:
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
 GPG_KEY_DIR=os.path.join(SECUREDROP_ROOT, 'keys')
-TEMP_DIR=os.path.join(SECUREDROP_ROOT, 'tmp')
 
 # create the data directories
-for d in (SECUREDROP_ROOT, STORE_DIR, GPG_KEY_DIR, TEMP_DIR):
+for d in (SECUREDROP_ROOT, STORE_DIR, GPG_KEY_DIR):
     if not os.path.isdir(d):
         os.mkdir(d)
 

@@ -7,6 +7,7 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
+import uuid
 
 import gnupg
 from flask import session, g, escape
@@ -36,7 +37,7 @@ def _setup_test_docs(sid, files):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         with open(filename, 'w') as fp:
-            fp.write('test')
+            fp.write(str(uuid.uuid4()))
     return filenames
 
 
@@ -44,8 +45,7 @@ def shared_setup():
     """Set up the file system, GPG, and database"""
 
     # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR,
-              config.TEMP_DIR):
+    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
 
@@ -220,10 +220,12 @@ class TestJournalist(TestCase):
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
         ))
 
         self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
 
 
 class TestIntegration(unittest.TestCase):
@@ -465,11 +467,9 @@ class TestIntegration(unittest.TestCase):
 class TestStore(unittest.TestCase):
 
     '''The set of tests for store.py.'''
-    @classmethod
     def setUp(self):
         shared_setup()
 
-    @classmethod
     def tearDown(self):
         shared_teardown()
 
@@ -482,11 +482,15 @@ class TestStore(unittest.TestCase):
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
 
-        zip = store.get_bulk_archive(filenames)
+        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
-        zipfile_contents = zipfile.ZipFile(zip).namelist()
-        for file in files:
-            self.assertIn(file, zipfile_contents)
+        archivefile_contents = archive.namelist()
+
+        for archived_file, actual_file in zip(archivefile_contents, filenames):
+            actual_file_content = open(actual_file).read()
+            zipped_file_content = archive.read(archived_file)
+            self.assertEquals(zipped_file_content, actual_file_content)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
