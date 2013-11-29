@@ -98,9 +98,9 @@ class TestSource(TestCase):
             rv = c.get('/generate')
             self.assert200(rv)
             session_codename = session['codename']
-        self.assertIn("Submit documents for the first time", rv.data)
+        self.assertIn("Submitting for the first time", rv.data)
         self.assertIn(
-            "To protect your identity, we're assigning you a code name.", rv.data)
+            "To protect your identity, we're assigning you a unique code name.", rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words
         self.assertEquals(len(codename.split()), 8)
@@ -133,7 +133,7 @@ class TestSource(TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("Upload documents", rv.data)
+            self.assertIn("Submit a document, message, or both", rv.data)
 
     def _new_codename(self):
         """Helper function to go through the "generate codename" flow"""
@@ -152,7 +152,7 @@ class TestSource(TestCase):
         rv = self.client.post('/login', data=dict(codename=codename),
                               follow_redirects=True)
         self.assert200(rv)
-        self.assertIn("Upload documents", rv.data)
+        self.assertIn("Submit a document, message, or both", rv.data)
 
         rv = self.client.post('/login', data=dict(codename='invalid'),
                               follow_redirects=True)
