@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="user-view">
-<h2><span class="headline">Upload documents</span></h2>
+<h2><span class="headline">Submit a document, message, or both</span></h2>
 
 {% include 'flashed.html' %}
 
 {% if flagged and not haskey %}
-  <p class="notification">A journalist would like to reply to you! Please check back shortly for their reply.</p>
+  <p class="notification">A journalist would like to reply to you! Please check back shortly to view the reply.</p>
 {% endif %}
 {% if msgs %}
 <div id="replies">
-  <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
+  <p class="notification">You have received a reply. For your security, please delete all replies when you're finished here.</p>
   {% for msg in msgs %}
   <div class="reply">
     <form class="message" method="post" action="/delete" autocomplete="off">
