@@ -48,7 +48,7 @@ See [How to Use SecureDrop](/docs/user_manual.md).
 
 You can see live demos of the source and journalist websites at the following links. **These are for testing purposes only; please don't submit any documents here!**
 
-In an actual SecureDrop setup, these websites are Tor hidden services running on the `Source Server` and `Document Server`, respectively.
+In an actual SecureDrop setup, these websites are separate Tor hidden services running on the `Application Server`.
 
 * [Source website](http://SecureDropDemo.org)
 * [Journalist website](http://SecureDropDemo.org/journalist/) (needs the ending slash to work)
