@@ -50,16 +50,19 @@ def clean(s, also=''):
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
+nouns = file('dictionaries/nouns.txt').read().split('\n')
+adjectives = file('dictionaries/adjectives.txt').read().split('\n')
 
 
 def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
     return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
 
-def displayid(n, words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
+def displayid(n):
     badrandom_value = badrandom.WichmannHill()
     badrandom_value.seed(n)
-    return ' '.join(badrandom_value.choice(words) for x in range(words_in_random_id))
+    return badrandom_value.choice(adjectives) + " " + badrandom_value.choice(nouns)
+
 
 
 def shash(s):
