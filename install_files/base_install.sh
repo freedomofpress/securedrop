@@ -208,7 +208,7 @@ generate_2_step_code
 if [ $ROLE = 'source' ]; then
   OTHER_IP=$MONITOR_IP
 elif [ $ROLE = 'monitor' ]; then
-  OTHER_IP=$SOURCE_IP
+  OTHER_IP=$APP_IP
 fi
 
 if [ ! -d /etc/iptables ]; then
