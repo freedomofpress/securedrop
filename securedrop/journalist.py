@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import uuid
 
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, redirect
 from flask_wtf.csrf import CsrfProtect
 
 import config
@@ -11,6 +11,7 @@ import version
 import crypto_util
 import store
 import background
+import db
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -56,13 +57,16 @@ def no_cache(response):
 def index():
     dirs = os.listdir(config.STORE_DIR)
     cols = []
+    db_session = db.sqlalchemy_handle()
     for d in dirs:
+        display_id = db.display_id(d, db_session)
         cols.append(dict(
             name=d,
-            sid=crypto_util.displayid(d),
+            sid=display_id,
             date=str(datetime.fromtimestamp(os.stat(store.path(d)).st_mtime)
                      ).split('.')[0]
         ))
+    db_session.close()
     cols.sort(key=lambda x: x['date'], reverse=True)
     return render_template('index.html', cols=cols)
 
@@ -72,7 +76,7 @@ def col(sid):
     docs, flagged = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-                           codename=crypto_util.displayid(sid), docs=docs,
+                           codename=db.display_id(sid, db.sqlalchemy_handle()), docs=docs,
                            haskey=haskey, flagged=flagged)
 
 
@@ -88,7 +92,14 @@ def reply():
     sid, msg = request.form['sid'], request.form['msg']
     crypto_util.encrypt(crypto_util.getkey(sid), request.form['msg'], output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-    return render_template('reply.html', sid=sid, codename=crypto_util.displayid(sid))
+    return render_template('reply.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+
+
+@app.route('/regenerate-code', methods=('POST',))
+def generate_code():
+    sid = request.form['sid']
+    db.regenerate_display_id(sid)
+    return redirect('/col/' + sid)
 
 
 @app.route('/bulk', methods=('POST',))
@@ -115,14 +126,14 @@ def bulk_delete(sid, docs_selected):
             fn = store.path(sid, doc['name'])
             crypto_util.secureunlink(fn)
     return render_template(
-        'delete.html', sid=sid, codename=crypto_util.displayid(sid),
+        'delete.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
         docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 
 def bulk_download(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     zip = store.get_bulk_archive(filenames)
-    return send_file(zip, mimetype="application/zip",
+    return send_file(zip.name, mimetype="application/zip",
                      attachment_filename=crypto_util.displayid(sid) + ".zip",
                      as_attachment=True)
 

@@ -5,6 +5,7 @@ import config
 import zipfile
 import crypto_util
 import uuid
+import tempfile
 
 VALIDATE_FILENAME = re.compile(
     "^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
@@ -59,13 +60,12 @@ def path(*s):
 
 
 def get_bulk_archive(filenames):
-    zip_file_name = os.path.join(config.TEMP_DIR, str(uuid.uuid4()) + '.zip')
-    with zipfile.ZipFile(zip_file_name, 'w') as zip:
+    zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_')
+    with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)
-            basename = os.path.basename(filename)
-            zip.write(filename, arcname=basename)
-    return zip_file_name
+            zip.write(filename, arcname=os.path.basename(filename))
+    return zip_file
 
 
 def log(msg):

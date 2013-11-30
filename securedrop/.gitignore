@@ -1,2 +1,8 @@
 # config files
 config.py
+# Default SECUREDROP_ROOT for development
+.securedrop/
+# Virtualenv
+env/
+# Likely SQLite db file
+db.sqlite

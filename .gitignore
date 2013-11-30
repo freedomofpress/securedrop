@@ -43,6 +43,3 @@ nosetests.xml
 
 # Vim temp files
 *~
-
-# Securedrop root for development
-.securedrop/

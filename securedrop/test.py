@@ -7,6 +7,7 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
+import uuid
 
 import gnupg
 from flask import session, g, escape
@@ -36,23 +37,27 @@ def _setup_test_docs(sid, files):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         with open(filename, 'w') as fp:
-            fp.write('test')
+            fp.write(str(uuid.uuid4()))
     return filenames
 
 
 def shared_setup():
-    """Set up the file system and GPG"""
+    """Set up the file system, GPG, and database"""
+
     # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR,
-              config.TEMP_DIR):
+    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
+
     # Initialize the GPG keyring
     gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
     # Import the journalist key for testing (faster to import a pre-generated
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
+
+    # Inititalize the test database
+    import db; db.create_tables()
 
 
 def shared_teardown():
@@ -93,9 +98,9 @@ class TestSource(TestCase):
             rv = c.get('/generate')
             self.assert200(rv)
             session_codename = session['codename']
-        self.assertIn("Submit documents for the first time", rv.data)
+        self.assertIn("Submitting for the first time", rv.data)
         self.assertIn(
-            "To protect your identity, we're assigning you a code name.", rv.data)
+            "To protect your identity, we're assigning you a unique code name.", rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words
         self.assertEquals(len(codename.split()), 8)
@@ -128,7 +133,7 @@ class TestSource(TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("Upload documents", rv.data)
+            self.assertIn("Submit a document, message, or both", rv.data)
 
     def _new_codename(self):
         """Helper function to go through the "generate codename" flow"""
@@ -147,7 +152,7 @@ class TestSource(TestCase):
         rv = self.client.post('/login', data=dict(codename=codename),
                               follow_redirects=True)
         self.assert200(rv)
-        self.assertIn("Upload documents", rv.data)
+        self.assertIn("Submit a document, message, or both", rv.data)
 
         rv = self.client.post('/login', data=dict(codename='invalid'),
                               follow_redirects=True)
@@ -215,10 +220,12 @@ class TestJournalist(TestCase):
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=filenames
+            doc_names_selected=files
         ))
 
         self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
 
 
 class TestIntegration(unittest.TestCase):
@@ -460,11 +467,9 @@ class TestIntegration(unittest.TestCase):
 class TestStore(unittest.TestCase):
 
     '''The set of tests for store.py.'''
-    @classmethod
     def setUp(self):
         shared_setup()
 
-    @classmethod
     def tearDown(self):
         shared_teardown()
 
@@ -477,11 +482,15 @@ class TestStore(unittest.TestCase):
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
 
-        zip = store.get_bulk_archive(filenames)
+        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
-        zipfile_contents = zipfile.ZipFile(zip).namelist()
-        for file in files:
-            self.assertIn(file, zipfile_contents)
+        archivefile_contents = archive.namelist()
+
+        for archived_file, actual_file in zip(archivefile_contents, filenames):
+            actual_file_content = open(actual_file).read()
+            zipped_file_content = archive.read(archived_file)
+            self.assertEquals(zipped_file_content, actual_file_content)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
