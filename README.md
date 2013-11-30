@@ -1,6 +1,6 @@
 ![SecureDrop](/docs/images/logo.png)
 
-SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents and communicate from anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by [Freedom of the Press Foundation](https://pressfreedomfoundation.org).
+SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by [Freedom of the Press Foundation](https://pressfreedomfoundation.org).
 
 # Technical Summary
 
@@ -32,7 +32,7 @@ The `Monitor Server` also sends emails. You will need an SMTP server, such as yo
 Finally, you will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
 
 * `Viewing Station`'s Tails Persistent Volume
-* `Viewing Station`'s OpenPGP secret key
+* `Viewing Station`'s GPG secret key
 
 Each journalist will also need to come up with a password for login to the `Application Server`.
 
