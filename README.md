@@ -12,7 +12,7 @@ SecureDrop is a tool for sources to communicate securely with journalists. The S
 
 In addition to these computers, journalists use normal workstation computers:
 
-* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents to copy to the `Viewing Station` and respond to sources. They will also copy encrypted documents back from the `Secure Viewing Station` station to this computer to do final work before publication.
+* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents to copy to the `Secure Viewing Station` and respond to sources. They will also copy encrypted documents back from the `Secure Viewing Station` station to this computer to do final work before publication.
 
 These computers should all physically be in your organization's office. 
 
@@ -25,14 +25,14 @@ You will need a DVD with the latest version of the [Tails operating system](http
 You will also need a total of three USB sticks:
 * USB stick with Tails for the `Secure Viewing Station`
 * USB stick for transfering files from the `Journalist Workstation` to the `Secure Viewing Station`
-* USB stick for transfering files from the `Viewing Station` to the `Journalist Workstation`
+* USB stick for transfering files from the `Secure Viewing Station` to the `Journalist Workstation`
 
 The `Monitor Server` also sends emails. You will need an SMTP server, such as your company's mail server.
 
 Finally, you will also need to come up with and memorize a series of passphrases. The best way to generate secure passphrases is to follow the [Diceware method](http://world.std.com/~reinhold/diceware.html). Generating secure passphrase takes time, so we recommend you generate these at the beginning of the installation process. You will need passphrases for:
 
-* `Viewing Station`'s Tails Persistent Volume
-* `Viewing Station`'s GPG secret key
+* `Secure Viewing Station`'s Tails [Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) that allows you to store files
+* `Secure Viewing Station`'s GPG secret key
 
 Each journalist will also need to come up with a password for login to the `Application Server`.
 
