@@ -21,12 +21,13 @@ app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
-if config.CUSTOM_IMAGE:
-    app.jinja_env.globals['header_image'] = config.CUSTOM_IMAGE
-    app.jinja_env.globals['use_header_image'] = True
+if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+    app.jinja_env.globals['use_custom_header_image'] = True
 else:
     app.jinja_env.globals['header_image'] = 'securedrop.png'
-    app.jinja_env.globals['use_header_image'] = False
+    app.jinja_env.globals['use_custom_header_image'] = False
+
 
 def logged_in():
     if 'logged_in' in session:
