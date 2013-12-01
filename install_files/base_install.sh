@@ -2,14 +2,14 @@
 #
 # Usage: ./base_install.sh
 # --no-updates to run script without apt-get or pip install commands
-#securedrop.git                                       (repo base)
-#securedrop/securedrop/                               (web app code)
-#securedrop/securedrop/requirements.txt               (pip requirements)
-#securedrop/install_files/                            (config files and install scripts)
-#securedrop/install_files/CONFIG_OPTIONS              (required user suplied input)
-#securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
-#securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
-#securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)
+#securedrop.git                                     (repo base)
+#securedrop/securedrop/                             (web app code)
+#securedrop/securedrop/requirements.txt             (pip requirements)
+#securedrop/install_files/                          (config files and install scripts)
+#securedrop/install_files/CONFIG_OPTIONS            (required user suplied input)
+#securedrop/install_files/SecureDrop.asc            (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt   (source chroot jail package dependencies)
+#securedrop/install_files/document_requirements.txt (document interface chroot package dependencies)
 CWD="$(dirname $0)"
 cd $CWD
 
@@ -205,7 +205,7 @@ done
 generate_2_step_code
 
 #Configure Iptables
-if [ $ROLE = 'source' ]; then
+if [ $ROLE = 'app' ]; then
   OTHER_IP=$MONITOR_IP
 elif [ $ROLE = 'monitor' ]; then
   OTHER_IP=$APP_IP

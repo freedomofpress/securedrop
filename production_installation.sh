@@ -13,6 +13,7 @@
 #
 CWD="$(dirname $0)"
 source CONFIG_OPTIONS
+source $CWD/install_files/validate_CONFIG_OPTIONS
 
 #Error handling function
 catch_error() {
@@ -58,6 +59,10 @@ if [ $DISTRO != 'ubuntu' ]; then
   fi
 fi
 
+#Validate the user provided options in the CONFIG_OPTIONS file
+validate_CONFIG_OPTIONS
+
+# Start installation scripts specific for each role
 if [ "$ROLE" = 'monitor' ]; then
   echo "Starting ossec server install..."
   $CWD/install_files/ossec_install.sh
@@ -69,12 +74,18 @@ if [ "$ROLE" = 'monitor' ]; then
   catch_error $? "installing base."
   echo "The base is installed."
 
+  echo ""
+  echo "##################################################"
+  echo "# The Monitor Server's installation is complete. #"
+  echo "# The Monitor Server's SSH address is below.     #"
+  echo "##################################################"
+  echo ""
   echo "The Monitor Server's ssh onion address and auth values are:"
   cat /var/lib/tor/hidden_service/hostname
   echo "The Monitor Server's installation is complete."
 
-elif [ $ROLE = 'source' ]; then
-  echo "Starting the interface install.sh"
+elif [ $ROLE = 'app' ]; then
+  echo "Starting interface_install.sh"
   $CWD/install_files/interface_install.sh
   catch_error $? "interface install."
   echo "Interface install complete"
@@ -90,15 +101,26 @@ elif [ $ROLE = 'source' ]; then
   echo "The base is installed"
 
   echo "The installation in complete."
-  echo "The source interfaces's Tor URL is:"
-  cat /var/chroot/source/var/lib/tor/hidden_service/hostname
-  echo "The document interface's Tor URL and auth values are:"
-  cat /var/chroot/journalist/var/lib/tor/hidden_service/hostname
-  echo "The App Server's ssh onion address and auth values are:"
-  cat /var/lib/tor/hidden_service/hostname
-  echo "The App Server's installation is complete."
-  echo "Please finish the installation on the Monitor Server."
 
+#Output access information for the source role
+  echo ""
+  echo "#############################################################"
+  echo "# The App Server's installation is complete.                #"
+  echo "# Please finish the installation on the Monitor Server.     #"
+  echo "# The App Server's SSH address and interface urls are below #"
+  echo "#############################################################"
+  echo ""
+
+  echo "The Source Interfaces's Tor URL is:"
+  cat /var/chroot/source/var/lib/tor/hidden_service/hostname
+  echo ""
+  echo "The Document Interface listens on port 8080"
+  echo "You will need to append :8080 to the end of the Document Interface's urls."
+  echo "The Document Interface's Tor URL and auth values are:"
+  cat /var/chroot/document/var/lib/tor/hidden_service/hostname
+  echo ""
+  echo "The App Server's SSH onion address and auth values are:"
+  cat /var/lib/tor/hidden_service/hostname
 else
   echo "A valid ROLE is not defined in ~/securedrop/CONFIG_OPTIONS file"
   exit 1
