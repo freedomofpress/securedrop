@@ -1,5 +1,21 @@
 import os, stat
 
+### Application Configuration
+
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
+NOUNS='./dictionaries/nouns.txt'
+ADJECTIVES='./dictionaries/adjectives.txt'
+JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
+BCRYPT_SALT=''    # bcrypt.gensalt()
+
+### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and 
+# update this to it's filename (e.g. "logo.jpg") .
+CUSTOM_IMAGE = None
+
 ### Flask Configurations
 
 class BaseConfig(object):
@@ -17,15 +33,6 @@ class TestingConfig(BaseConfig):
     TESTING = True
     # Tests are simpler if CSRF protection is disabled
     WTF_CSRF_ENABLED = False
-
-### Application Configuration
-
-SOURCE_TEMPLATES_DIR = './source_templates'
-JOURNALIST_TEMPLATES_DIR = './journalist_templates'
-WORD_LIST = './wordlist'
-
-JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
-BCRYPT_SALT=''    # bcrypt.gensalt()
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
