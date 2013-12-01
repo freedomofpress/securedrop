@@ -23,7 +23,8 @@ class TestingConfig(BaseConfig):
 SOURCE_TEMPLATES_DIR = './source_templates'
 JOURNALIST_TEMPLATES_DIR = './journalist_templates'
 WORD_LIST = './wordlist'
-
+NOUNS='./dictionaries/nouns.txt'
+ADJECTIVES='./dictionaries/adjectives.txt'
 JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
 BCRYPT_SALT=''    # bcrypt.gensalt()
 
