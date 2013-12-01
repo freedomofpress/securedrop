@@ -93,12 +93,28 @@ Download the latest version of SecureDrop to your workstation by downloading the
 
 The setup script needs the application GPG public key you created earlier, `SecureDrop.asc`. Plug in the USB stick that you copied `SecureDrop.asc` to and copy it to securedrop/install_files/
 
-Then `scp` the `securedrop` folder to the home directory on the `Monitor Server` and `App Server`.
+Then scp the `securedrop` folder to the home directory on the `Monitor Server` and `App Server`, doing something like this:
+
+    scp -r securedrop user@MONITOR_IP:~/
+    scp -r securedrop user@APP_IP:~/
 
 Now SSH to the `Monitor Server`. When you're in, enter your environment details in the CONFIG_OPTIONS file and run the installation script:
 
     cd ~/securedrop
     nano CONFIG_OPTIONS
+
+Here's a description of each item to fill out:
+
+* `ROLE`: This is either "monitor" or "app". Since both servers share the same codebase, the installation script need to know which server it's running on. For now, enter "monitor".
+* `APP_IP`: The IP address of the `App Server` that you have set up.
+* `MONITOR_IP`: The IP address of the `Monitor Server` that you have set up (the one you are SSHed into).
+* `KEY`: This is the filename of the application's GPG key that you copied, probably `SecureDrop.asc`.
+* `RUN_DEV_SCRIPTS`: Keep this as "No".
+* `DEV_SCRIPT_NAMES`: Keep this empty.
+* `SSH_USERS`: A list of Linux users that will SSH into this server. Note that the installation script will disable SSHing as the root account, so you must have a non-root account set up on the server that you plan on using to administer this server.
+* `SMTP_SERVER`: 
+* `EMAIL_DISTRO`: 
+* `EMAIL_FROM`: 
 
 Fill out the relevant options, exit and save.
 
