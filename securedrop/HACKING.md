@@ -33,7 +33,7 @@ Clone the repository if you haven't already:
 
     $ git clone https://github.com/freedomofpress/securedrop.git
 
-cd into the repo, then cd into `deaddrop` (we know, we still need to change the names :)
+cd into the repo, then cd into `securedrop`
 
 install dependencies:
 
@@ -46,34 +46,22 @@ cp the config template and fill in empty values:
 
     $ cp example_config.py config.py
 
-**NOTE**: if you haven't installed MySQL/Postgresql, you'll want to uncomment
-the lines defining SQLite as the default database.
+Create the `STORE_DIR` and `GPG_KEY_DIR`:
 
-**NOTE**: the `STORE_DIR` and `GPG_KEY_DIR` must be absolute paths.
-Create them if necessary:
+    $ mkdir -p .securedrop/{store,keys}
 
-    $ mkdir -p /tmp/securedrop/{store,keys}
+You will need to create a journalist key for development.
 
-**FYI**: most OS's erase `/tmp` on reboot. I'm working on a script to do all of
-this crap automatically, and might encourage putting these elsewhere for
-development. Otherwise you have to recreate the dirs and re-import the keys
-(below) after every reboot. **Alternatively**, you can just import the GPG key
-that is included for the tests to use in development:
+    $ gpg2 --homedir .securedrop/keys --gen-key
 
-    $ gpg2 --homedir /tmp/deaddrop/keys --import test_journalist_key.*
-
-**NOTE**: you will need to create a journalist key for development.
-
-    $ gpg2 --homedir /tmp/securedrop/keys --gen-key
-
-Make sure you *only* use this key for development. We recommend using a userid
+**NOTE**: Make sure you *only* use this key for development. We recommend using a userid
 like "securedrop Dev (DO NOT USE IN PRODUCTION) <dev@securedrop.example.com>" so
 you don't forget!
 
 Once you have the dev keypair, copy the key fingerprint to the `JOURNALIST_KEY`
 field of `config.py`. You can find the key fingerprint by running:
 
-    $ gpg2 --homedir /tmp/securedrop/keys --fingerprint
+    $ gpg2 --homedir .securedrop/keys --fingerprint
 
 You might have to manually remove the spaces.
 
@@ -90,4 +78,5 @@ journalist:
     $ python journalist.py
     $ python source.py
 
-And browse to http://localhost:8080/ in your browser.
+And browse to http://localhost:8080/ in your browser for the source interface,
+or http://localhost:8081/ for the journalist interface.
