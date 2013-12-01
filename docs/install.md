@@ -103,20 +103,17 @@ Now SSH to the `Monitor Server`. When you're in, enter your environment details 
     cd ~/securedrop
     nano CONFIG_OPTIONS
 
-Here's a description of each item to fill out:
+Fill out all of the global and `Monitor Server` options. Here are descriptions of the items you should fill out:
 
 * `ROLE`: This is either "monitor" or "app". Since both servers share the same codebase, the installation script need to know which server it's running on. For now, enter "monitor".
 * `APP_IP`: The IP address of the `App Server` that you have set up.
 * `MONITOR_IP`: The IP address of the `Monitor Server` that you have set up (the one you are SSHed into).
-* `KEY`: This is the filename of the application's GPG key that you copied, probably `SecureDrop.asc`.
-* `RUN_DEV_SCRIPTS`: Keep this as "No".
-* `DEV_SCRIPT_NAMES`: Keep this empty.
 * `SSH_USERS`: A list of Linux users that will SSH into this server. Note that the installation script will disable SSHing as the root account, so you must have a non-root account set up on the server that you plan on using to administer this server.
-* `SMTP_SERVER`: 
-* `EMAIL_DISTRO`: 
-* `EMAIL_FROM`: 
+* `SMTP_SERVER`: The `Monitor Server` can send email updates. This is the IP of your external SMTP server.
+* `EMAIL_DISTRO`: The email address to send email alerts to.
+* `EMAIL_FROM`: The "From" address of email alerts.
 
-Fill out the relevant options, exit and save.
+Fill out the relevant options, save and exit. Then run the production script.
 
     sudo ./production_installation.sh
 
