@@ -29,7 +29,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <p style="padding-bottom: 0"><b>Upload a file:</b></p>
   <div id="browse-select">
-    <input type="file" name="fh" autocomplete="off"/> 
+    <input type="file" name="fh" autocomplete="off"/>
   </div>
 
   <p><b>Or just enter a message:</b></p>
@@ -38,8 +38,10 @@
   <button  class="button-custom" type="submit">Submit</button>
 </form>
 
+<p><br><a href="/journalist-key">Download journalist's public key</a> (<em><a href="/why-journalist-key">why?</a></em>)</p>
+
 <p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
-<p><a href="/login">Enter a different code name...</a><br/>
+<p><a href="/login">Enter a different code name...</a><br>
 <a href="/lookup">Reload to check for new messages...</a></p>
 
 </div>

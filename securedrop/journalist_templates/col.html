@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 <h2><span class="headline">Read documents</span></h2>
-<p><a href="/">Back to latest submissions...</a></p>	
+<p><a href="/">Back to latest submissions...</a></p>
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
 <form action='/regenerate-code' method='post'>
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
@@ -13,7 +13,7 @@
 {% if docs %}
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
 <form action="/bulk" method="post">
-<ul id="submissions">
+<ul id="submissions" class="plain">
 {% for doc in docs %}
 <li>
   <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
