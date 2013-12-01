@@ -304,3 +304,11 @@ p.header-warning {
   text-align:center;
   border-bottom:1px solid #FFE057;
 }
+
+.powered {
+  margin: 10px 0;
+  text-align: right;
+}
+.powered img {
+  vertical-align: middle;
+}

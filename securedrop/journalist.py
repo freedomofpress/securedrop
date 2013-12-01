@@ -18,6 +18,12 @@ app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
+if config.CUSTOM_IMAGE:
+    app.jinja_env.globals['header_image'] = config.CUSTOM_IMAGE
+    app.jinja_env.globals['use_header_image'] = True
+else:
+    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['use_header_image'] = False
 
 
 def get_docs(sid):
