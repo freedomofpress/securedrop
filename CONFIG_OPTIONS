@@ -1,6 +1,6 @@
 #Global
 ROLE=""                 # (monitor|server) role of the server
-SOURCE_IP=""            # the source server's ip address
+APP_IP=""               # the app server's ip address
 MONITOR_IP=""           # the monitor server's ip address
 
 #interface_install.sh

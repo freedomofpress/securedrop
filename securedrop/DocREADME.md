@@ -252,8 +252,8 @@ Modify parameters and hostnames the first section of nodes.pp manifest
 >node basenode {  
 >\# These values will need to be changed to reflect your environment  
 >    $domain_name                 = 'domain_name.com'  
->    $source_ip                   = 'xxx.xxx.xxx.xxx'  
->    $source_hostname             = 'source'  
+>    $app_ip                      = 'xxx.xxx.xxx.xxx'  
+>    $app_hostname                = 'app'  
 >    $journalist_ip               = 'xxx.xxx.xxx.xxx'  
 >    $journalist_hostname         = 'journalist'  
 >    $monitor_ip                  = 'xxx.xxx.xxx.xxx'  

@@ -142,8 +142,8 @@ gen_authd_keys() {
 start_authd() {
   #Enable Authd for client to source server to connect
   #Ensure this is not always running
-  /var/ossec/bin/ossec-authd -p 1515 -i $SOURCE_IP >/dev/null 2>&1 &
-  catch_error $? "Starting authd for $SOURCE_IP"
+  /var/ossec/bin/ossec-authd -p 1515 -i $APP_IP >/dev/null 2>&1 &
+  catch_error $? "Starting authd for $APP_IP"
   echo "authd is running ensure that after the source connects to disable authd"
 }
 
@@ -175,7 +175,7 @@ check_status() {
   echo "Verifying that the agent is active."
   echo "Sleep 15 seconds for agent to connect..."
   sleep 15
-  if ! /var/ossec/bin/list_agents -c | grep "^source-$SOURCE_IP"; then
+  if ! /var/ossec/bin/list_agents -c | grep "^source-$APP_IP"; then
     echo "The source host is not active."
     echo "It needs to be active to monitor the source server"
     echo "https://www.ossec.net/doc"
