@@ -109,7 +109,7 @@ Fill out all of the global and `Monitor Server` options. Here are descriptions o
 * `APP_IP`: The IP address of the `App Server` that you have set up.
 * `MONITOR_IP`: The IP address of the `Monitor Server` that you have set up (the one you are SSHed into).
 * `SSH_USERS`: A list of Linux users that will SSH into this server. Note that the installation script will disable SSHing as the root account, so you must have a non-root account set up on the server that you plan on using to administer this server.
-* `SMTP_SERVER`: The `Monitor Server` can send email updates. This is the IP of your external SMTP server.
+* `SMTP_SERVER`: The `Monitor Server` can send email updates. This is the hostname of your external SMTP server. At the moment SMTP authentication isn't supported.
 * `EMAIL_DISTRO`: The email address to send email alerts to.
 * `EMAIL_FROM`: The "From" address of email alerts.
 
@@ -117,20 +117,36 @@ Fill out the relevant options, save and exit. Then run the production script.
 
     sudo ./production_installation.sh
 
-(Dependent on debootstrap and ossec server ssl key automation)
-The script will install the pre-configured OSSEC manager and instruct when to begin the `App Server` installation
+Wait for the script to run. When it's done, it should say this:
 
-When instructed by the installation script running on the `Monitor Server` SSH to the `App Server` and configure the options in CONFIG_OPTIONS then run the installation scripts.
+    Start the installation on app server.
+    After installation on the app server is complete
+    enter 'Y' to continue: (Y|N): Y
+
+Leave that window open and go SSH into the `App Server` and edit CONFIG_OPTIONS:
 
     cd ~/securedrop
     nano CONFIG_OPTIONS
+
+This time edit the global and `App Server` settings. Here are descriptions of the items you should fill out:
+
+* `ROLE`: This should be "app".
+* `APP_IP` and `MONITOR_IP` should be the same as they were on the `Monitor Server`.
+* `SSH_USERS`: A list of Linux users that will SSH into this server.
+* `JOURNALIST_USERS`: Make up a username for each journalist that will be using this SecureDrop instance.
+* `KEY`: The filename that contains the application GPG public key you created on the `Secure Viewing Station`. It's probably `SecureDrop.asc`.
+* `SOURCE_SCRIPTS`: You can leave this blank.
+* `DOCUMENT_SCRIPTS`: You can leave this blank.
+
+Save and exit. When you're done, run the production script:
+
     sudo ./production_installation.sh
 
 A Google Authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
 
 Follow the instructions for adding your secret key to your Google Authenticator app
 
-At the end of a successfull `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface` onion URL and auth codes, the `App Server`'s SSH onion address and auth code.
+At the end of a successfull `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface`'s onion URL and auth codes, the `App Server`'s SSH onion address and auth code.
 
     The Source Interface's onion URL is:
     bh33efgmt5ai32te.onion
