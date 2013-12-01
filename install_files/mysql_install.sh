@@ -3,7 +3,7 @@
 # no password prompt to install mysql-server
 mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
 mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
-sudo debconf-set-selections <<EOF
+debconf-set-selections <<EOF
 mysql-server-5.5 mysql-server/root_password password $mysql_root
 mysql-server-5.5 mysql-server/root_password_again password $mysql_root
 EOF
