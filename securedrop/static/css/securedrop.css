@@ -51,6 +51,14 @@ h2{
   margin-bottom:20px;
 }
 
+code {
+  /* shamelessly stolen from Github */
+  color:rgb(51, 51, 51);
+  background-color: rgb(248, 248, 248);
+  border: 1px solid rgb(221, 221, 221);
+  border-radius:3px;
+  padding:0px 3px;
+}
 
 .code-name {
   color:#00a2de;
@@ -113,12 +121,29 @@ form input#filename{
 }
 
 
-
+/* add back (removed by reset) indents and bullets for plain lists in text */
 ul {
-  padding:0 0 20px 0;
+  margin-left:1em;
 }
 
 ul li {
+  margin-left:1em;
+}
+
+ol {
+  margin-left:1em;
+}
+
+ol li {
+  margin-left:1em;
+}
+
+
+ul.plain {
+  padding:0 0 20px 0;
+}
+
+ul.plain li {
   list-style:none;
   padding-bottom:10px;
 }
