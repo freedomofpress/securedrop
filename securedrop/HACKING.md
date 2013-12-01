@@ -38,9 +38,10 @@ cd into the repo, then cd into `deaddrop` (we know, we still need to change the 
 install dependencies:
 
     $ sudo yum install python-devel
-    $ sudo apt-get install python-dev
+    $ sudo apt-get install python-dev libmysqlclient-dev
     $ pip install --upgrade distribute
-    $ pip install -r requirements.txt
+    $ pip install -r source-requirements.txt
+    $ pip install -r document-requirements.txt
 
 cp the config template and fill in empty values:
 
