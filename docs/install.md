@@ -161,13 +161,14 @@ At the end of a successfull `App Server` installation the script will output the
 
 This lists the Tor hidden service URLs for the `Source Interface`, the two journalists on the `Document Interface`, and the onion addresses for SSH access. It also lists the auth value for each journalist and admin. Save those lines because the journalists and admins will need them to access the `Document Interface` and `App Server`.
 
-In this case, the `Source Interface`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.
-The `Document Interface`'s Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/
-The `Document Interface`'s Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB
-The `Document Interface`'s Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/
-The `Document Interface`'s Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR
-The `App Server`'s Tor hidden service SSH address for the first admin is: sz3yuv5hdipt2icy.onion
-The `App Server`'s Tor hidden service SSH Auth value for the first admin is: PKZ8sKjp5Z08AGq5BB7BKx
+In this case:
+* The `Source Interface`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.
+* The `Document Interface`'s Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/
+* The `Document Interface`'s Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB
+* The `Document Interface`'s Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/
+* The `Document Interface`'s Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR
+* The `App Server`'s Tor hidden service SSH address for the first admin is: sz3yuv5hdipt2icy.onion
+* The `App Server`'s Tor hidden service SSH Auth value for the first admin is: PKZ8sKjp5Z08AGq5BB7BKx
 
 Once the `App Server`'s installation is successfully completed. Go back to the SSH session for the `Monitor Server` and enter `Y` to continue.
 
