@@ -1,11 +1,23 @@
 development setup for securedrop
-==============================
+================================
 
-This document assumes your development environment is a Debian, Ubuntu
-or Fedora derivative.
+the easy way
+------------
 
-If you're familiar with homebrew and pip on OSX you should be able to follow along. Secure RM
-may already installed as srm.
+If you running Ubuntu/Debian, use the `setup_ubuntu.sh`.
+
+1. Clone the repo
+2. cd into `securedrop`
+3. `./setup_ubuntu.sh`
+
+the hard way
+------------
+
+This document assumes your development environment is a Debian, Ubuntu or
+Fedora derivative.
+
+If you're familiar with homebrew and pip on OSX you should be able to follow
+along. Secure RM may already installed as srm.
 
 install gnupg2:
 
@@ -48,15 +60,21 @@ cp the config template and fill in empty values:
 
 Create the `STORE_DIR` and `GPG_KEY_DIR`:
 
-    $ mkdir -p .securedrop/{store,keys}
+By default, all files storing the state of the application are saved under
+`.securedrop/`. This directory is included in `.gitignore` by default.
 
-You will need to create a journalist key for development.
+**NOTE**: you will need to create a journalist key for development.
 
     $ gpg2 --homedir .securedrop/keys --gen-key
 
-**NOTE**: Make sure you *only* use this key for development. We recommend using a userid
-like "securedrop Dev (DO NOT USE IN PRODUCTION) <dev@securedrop.example.com>" so
-you don't forget!
+**Alternatively**, you can just import the GPG key that is included for the
+tests to use in development:
+
+    $ gpg2 --homedir .securedrop/keys --import test_journalist_key.*
+
+Make sure you *only* use this key for development. If you genereate it, we
+recommend choosing a userid like "SecureDrop Development (DO NOT USE IN
+PRODUCTION)" so you don't forget!
 
 Once you have the dev keypair, copy the key fingerprint to the `JOURNALIST_KEY`
 field of `config.py`. You can find the key fingerprint by running:
