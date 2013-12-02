@@ -3,7 +3,7 @@ SecureDrop Installation Guide
 
 Before installing SecureDrop, you should make sure you've got the environment properly set up.
 
-* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/ubuntu_config.md).
+* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/doc/ubuntu_config.md).
 
 * You must have a DVD configured as a Live DVD for the Tails operating system.
 

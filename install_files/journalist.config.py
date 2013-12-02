@@ -34,7 +34,7 @@ FlaskConfig = ProductionConfig
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig = TestingConfig
-    TEST_DIR='/tmp/deaddrop_test'
+    TEST_DIR='/tmp/securedrop_test'
     STORE_DIR=os.path.join(TEST_DIR, 'store')
     GPG_KEY_DIR=os.path.join(TEST_DIR, 'keys')
     # test_journalist_key.pub
