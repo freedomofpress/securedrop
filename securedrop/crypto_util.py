@@ -162,6 +162,11 @@ try:
 except subprocess.CalledProcessError:
     pass
 
+# Make sure these pass before the app can run
+# TODO: Add more tests
+def do_runtime_tests():
+    assert(config.BCRYPT_ID_SALT != config.BCRYPT_GPG_SALT)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
