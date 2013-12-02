@@ -120,6 +120,8 @@ install_chroot
 
 install_source_specific
 
+install_document_specific
+
 #Copy rc.local file to host system to mount and start the needed services
 #for the chroot jals
 echo "Configuring rc.local"
@@ -145,6 +147,7 @@ for JAIL in $JAILS; do
 
   #Restart tor and wait 15 seconds for certs to be generted
   schroot -c $JAIL -u root service tor restart --directory /root
+  schroot -c $JAIL -u root service apache2 restart --directory /root
   sleep 15
 
   #Use the generated hidden service addresses in the apache configs and restart apache

@@ -49,7 +49,7 @@ EOF
     for MOUNTED_DIR in $MOUNTED_DIRS; do
       if mount | grep -q $MOUNTED_DIR; then
         echo "un mounting $MOUNTED_DIR"
-        umount $MOUNTED_DIR
+        umount $MOUNTED_DIR | tee -a build.log
         catch_error $? "umounting $MOUNTED_DIR"
         echo "$MOUNTED_DIR un mounted"
       fi
@@ -57,7 +57,7 @@ EOF
 
     if [ -d /var/chroot/$JAIL ]; then
       echo "secure-deleting /var/chroot/$JAIL..."
-      rm -Rf /var/chroot/$JAIL
+      rm -Rf /var/chroot/$JAIL | tee -a build.log
       catch_error $? "secure-deleting /var/chroot/$JAIL reboot and run --force-clean again"
       echo "/var/chroot/$JAIL secure-deleted"
     fi
@@ -70,7 +70,7 @@ EOF
       catch_error $? "copying tor-keys/$JAIL"
       echo "backed up'd tor keys are copied to /var/chroot/$JAIL/root/tor-keys/$JAIL/" 
       echo "secure-deleting /tmp/tor/keys/$JAIL..."
-      srm -R /tmp/tor-keys/$JAIL
+      srm -R /tmp/tor-keys/$JAIL | tee -a build.log
       catch_error $? "removing tmp keys"
       echo "/tmp/tor/keys/$JAIL/ secure-deleted"
     fi
@@ -118,6 +118,9 @@ EOF
   catch_error $? "copying $APP_GPG_KEY to chroot jail $JAIL"
   cp -R -f $APP_FILES /var/chroot/$JAIL/var/www/ | tee -a build.log
   catch_error $? "copying $APP_FILES to chroot jail $JAIL"
+  #Generate the config.py file for the web interface
+  cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
+  catch_error $? "copying $JAIL.config.py template"
   if [ -d /var/chroot/document ]; then
     mkdir -p /var/chroot/document/var/www/securedrop/temp/
     catch_error $? "creating /var/chroot/document/var/www/securedrop/temp/"
@@ -125,6 +128,14 @@ EOF
 
   INT_REQS=$(grep -vE "^\s*#" $JAIL-requirements.txt  | tr "\n" " ")
   echo ""
+
+  # If document server set passwords
+  if [ $JAIL = 'document' ]; then
+    echo "Creating mysql preseed file"
+    mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+    mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+    sed -i "s|MYSQL_USER_PASS|$mysql_securedrop|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+  fi
 
   #schroot into the jail and configure it
   echo ""
@@ -140,31 +151,52 @@ EOF
     chown -R $JAIL:$JAIL /var/www/securedrop | tee -a build.log
     chown -R $JAIL:$JAIL /var/www/securedrop/{keys,store} | tee -a build.log
 
-    #add the tor signing key and install interface dependencies
-
     if [ ! "$1" = "--no-updates" ]; then
-      apt-key add /root/tor.asc | tee 0a build.log
+      #add the tor signing key and install interface dependencies
+      apt-key add /root/tor.asc | tee -a build.log
       apt-get -y update | tee -a build.log
       apt-get -y upgrade | tee -a build.log
 
-      echo ""
+      #For the document interface create preseed file for mysql install
+      if [ $JAIL = "document" ]; then
+        # no password prompt to install mysql-server
+        echo "Creating mysql preseed file"
+        echo "$mysql_root" | tee -a build.log
+        echo "$mysql_securedrop" | tee -a build.log
+        debconf-set-selections <<EOF
+        mysql-server-5.5 mysql-server/root_password password $mysql_root
+        mysql-server-5.5 mysql-server/root_password_again password $mysql_root
+EOF
+      fi
+
+      # Install interface specific requirements
       apt-get install -y $INT_REQS | tee -a build.log
       echo "the $JAIL interface's dependencies are installed"
+
 
       #Install tor repo, keyring and tor
       echo ""
       echo "Installing tor for $JAIL..."
       apt-key add /root/tor.asc | tee -a build.log
-      apt-get install -y -q deb.torproject.org-keyring tor
-      service tor stop
+      apt-get install -y -q deb.torproject.org-keyring tor | tee -a build.log
+      service tor stop | tee -a build.log
       echo "Tor installed for $JAIL"
 
       echo 'Installing pip dependencies for $JAIL...'
-      pip install --upgrade distribute
+      pip install --upgrade setuptools | tee -a build.log
       pip install -r /var/www/securedrop/$JAIL-requirements.txt | tee -a build.log
-      echo 'Installing distribute for $JAIL...'
-      #pip install --upgrade distribute | tee -a build.log
       echo 'pip dependencies installed for $JAIL'
+      # If document chroot setup mysql databases
+      if [ $JAIL = "document" ]; then
+        # initialize production database                                              
+        # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
+        echo "Creating database..."                                             
+        echo "$mysql_securedrop"
+        mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'document_mysql'@'localhost' IDENTIFIED BY '$mysql_securedrop';" | tee -a build.log
+        echo "Creating database tables..."                                             
+        cd /var/www/securedrop/
+        python -c 'import os; import db; db.create_tables()' | tee -a build.log
+      fi
     fi
 
     echo "Lock tor user..."
@@ -224,9 +256,6 @@ FOE
   cp -f $JAIL.torrc /var/chroot/$JAIL/etc/tor/torrc | tee -a build.log
   catch_error $? "copying $JAIL.torrc"
 
-  #Generate the config.py file for the web interface
-  cp -f $JAIL.config.py /var/chroot/$JAIL/var/www/securedrop/config.py
-  catch_error $? "copying $JAIL.config.py template"
 
   ONION_ADDRESS="$(echo /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname)"
   sed -i "s|ONION_ADDRESS|$ONION_ADDRESS|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
