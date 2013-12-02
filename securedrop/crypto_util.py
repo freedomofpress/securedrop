@@ -52,8 +52,8 @@ def clean(s, also=''):
     return s
 
 words = file(config.WORD_LIST).read().split('\n')
-nouns = file('dictionaries/nouns.txt').read().split('\n')
-adjectives = file('dictionaries/adjectives.txt').read().split('\n')
+nouns = file(config.NOUNS).read().split('\n')
+adjectives = file(config.ADJECTIVES).read().split('\n')
 
 
 def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
