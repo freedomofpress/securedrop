@@ -237,10 +237,16 @@ FOE
     catch_error $? "copying APP_GPG_KEY_FINGERPRINT to /var/chroot/$JAIL/var/www/securedrop/config.py"
   fi
 
-  if grep -q "BCRYPT_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
-    echo "Generating BCRYPT SALT for $JAIL"
-    sed -i -e "s|BCRYPT_SALT_VALUE|${BCRYPT_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
-    catch_error $? "generating $BCRYPT_SALT in config.py for $JAIL"
+  if grep -q "BCRYPT_ID_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating BCRYPT ID SALT for $JAIL"
+    sed -i -e "s|BCRYPT_ID_SALT_VALUE|${BCRYPT_ID_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    catch_error $? "generating $BCRYPT_ID_SALT in config.py for $JAIL"
+  fi
+
+  if grep -q "BCRYPT_GPG_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating BCRYPT GPG SALT for $JAIL"
+    sed -i -e "s|BCRYPT_GPG_SALT_VALUE|${BCRYPT_GPG_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    catch_error $? "generating $BCRYPT_GPG_SALT in config.py for $JAIL"
   fi
 
   if grep -q "SECRET_KEY_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then

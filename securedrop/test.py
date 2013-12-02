@@ -59,6 +59,9 @@ def shared_setup():
     # Inititalize the test database
     import db; db.create_tables()
 
+    # Do tests that should always run on app startup
+    crypto_util.do_runtime_tests()
+
 
 def shared_teardown():
     shutil.rmtree(config.SECUREDROP_ROOT)

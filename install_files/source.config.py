@@ -27,7 +27,8 @@ SOURCE_TEMPLATES_DIR='/var/www/securedrop/source_templates'
 JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
 
-BCRYPT_SALT='BCRYPT_SALT_VALUE'
+BCRYPT_ID_SALT='BCRYPT_ID_SALT_VALUE'
+BCRYPT_GPG_SALT='BCRYPT_GPG_SALT_VALUE'
 # Default to the production configuration
 FlaskConfig = ProductionConfig
 

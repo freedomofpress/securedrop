@@ -32,7 +32,8 @@ HOST_DEPENDENCIES=$(grep -vE "^\s*#" chroot-requirements.txt  | tr "\n" " ")
 HOST_PYTHON_DEPENDENCIES="python-bcrypt"
 DISABLE_MODS='auth_basic authn_file autoindex cgid env setenvif status'
 ENABLE_MODS='wsgi headers rewrite'
-BCRYPT_SALT=""
+BCRYPT_ID_SALT=""
+BCRYPT_GPG_SALT=""
 SECRET_KEY=""
 APP_GPG_KEY=""
 APP_GPG_KEY_FINGERPRINT=""
@@ -101,8 +102,10 @@ if [ ! "$1" = "--no-updates" ]; then
   catch_error $? "installing host python dependencies"
 fi
 
-#Generate bcyrpt salt and secret key that will be used in hashing codenames and signing cookies
-BCRYPT_SALT=$( python gen_bcrypt_salt.py )
+#Generate salts and secret key that will be used in hashing codenames
+# / gpg passphrases and signing cookies
+BCRYPT_ID_SALT=$( python gen_bcrypt_salt.py )
+BCRYPT_GPG_SALT=$( python gen_bcrypt_salt.py )
 catch_error $? "generating bcrypt_salt"
 SECRET_KEY=$( python gen_secret_key.py )
 catch_error $? "generating bcrypt_salt"
@@ -116,8 +119,6 @@ useradd securedrop | tee -a build.log
 install_chroot
 
 install_source_specific
-
-install_document_specific
 
 #Copy rc.local file to host system to mount and start the needed services
 #for the chroot jals

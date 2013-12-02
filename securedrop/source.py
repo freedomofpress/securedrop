@@ -163,7 +163,7 @@ def lookup():
 def submit():
     msg = request.form['msg']
     fh = request.files['fh']
-    
+
     if msg:
         msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
         crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
