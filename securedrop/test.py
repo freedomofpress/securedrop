@@ -105,7 +105,7 @@ class TestSource(TestCase):
 
     def test_regenerate_valid_lengths(self):
         """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(4, 11):
+        for codename_len in xrange(7, 11):
             response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })

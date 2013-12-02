@@ -97,7 +97,7 @@ def generate():
     number_words = 8
     if request.method == 'POST':
         number_words = int(request.form['number-words'])
-        if number_words not in range(4, 11):
+        if number_words not in range(7, 11):
             abort(403)
     session['codename'] = crypto_util.genrandomid(number_words)
     return render_template('generate.html', codename=session['codename'])
