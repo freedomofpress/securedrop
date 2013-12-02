@@ -19,10 +19,12 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     # Optiimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
     GPG_KEY_LENGTH = "1024"
-    BCRYPT_SALT = bcrypt.gensalt(log_rounds=0)
+    BCRYPT_ID_SALT = bcrypt.gensalt(log_rounds=0)
+    BCRYPT_GPG_SALT = bcrypt.gensalt(log_rounds=0)
 else:
     GPG_KEY_LENGTH = "4096"
-    BCRYPT_SALT = config.BCRYPT_SALT
+    BCRYPT_ID_SALT = config.BCRYPT_ID_SALT
+    BCRYPT_GPG_SALT = config.BCRYPT_GPG_SALT
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
@@ -65,12 +67,12 @@ def displayid(n):
 
 
 
-def shash(s):
+def shash(s, salt=BCRYPT_ID_SALT):
     """
     >>> shash('Hello, world!')
     'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
     """
-    return b32encode(bcrypt.hashpw(s, BCRYPT_SALT))
+    return b32encode(bcrypt.hashpw(s, salt))
 
 GPG_BINARY = 'gpg2'
 try:
@@ -92,7 +94,7 @@ def genkeypair(name, secret):
     ...     u'P'
     u'P'
     """
-    name, secret = clean(name), clean(secret, ' ')
+    name, secret = clean(name), shash(clean(secret, ' '), salt=BCRYPT_GPG_SALT)
     return gpg.gen_key(gpg.gen_key_input(
         key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
         passphrase=secret,
@@ -146,6 +148,7 @@ def decrypt(name, secret, s):
     ... )
     'Goodbye, cruel world!'
     """
+    secret = shash(secret, salt=BCRYPT_GPG_SALT)
     return gpg.decrypt(s, passphrase=secret).data
 
 
