@@ -9,7 +9,7 @@ for SOURCE_SCRIPT in $SOURCE_SCRIPTS; do
 done
 
 schroot -c source -u root --directory /root << FOE
-  rm -R /var/www/securedrop/{journalist_templates,journalist.py,example*,*.md,test*}
+  rm -R /var/www/securedrop/{.git,COPYING,docs,LICENSE,setup_ubuntu.sh,install_files,journalist_templates,journalist.py,example*,*.md,test*}
 
   if [ -d "/root/tor-keys/source" ]; then
     cp -p /root/tor-keys/source/private_key /var/lib/tor/hidden_service/
@@ -21,6 +21,14 @@ schroot -c source -u root --directory /root << FOE
     echo "Running $SOURCE_SCRIPT in $JAIL"
     bash /root/$SOURCE_SCRIPT | tee -a build.log
   done
+  #Set min permissions on app code
+  chown -R source:source /var/www/securedrop
+  chmod -R 400 /var/www/securedrop/*
+  chmod 500 /var/www/securedrop/dictionaries /var/www/securedrop/source_templates /var/www/securedrop/static
+  chmod 700 /var/www/securedrop/keys /var/www/securedrop/store
+  chmod 600 /var/www/securedrop/keys/*
+  chmod 700 /var/www/securedrop/static/*
+  chmod 700 /var/www/securedrop/store/*
 FOE
 echo "Done setting up the source interface specific settings"
 }
