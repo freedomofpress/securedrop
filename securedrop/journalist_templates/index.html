@@ -4,7 +4,7 @@
 <h2><span class="headline">Latest submissions</span></h2>
 {% if cols %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
-<ul id="cols">
+<ul id="cols" class="plain">
   {% for col in cols %}
   <li><span class="code-name"><a href="/col/{{ col.name }}">{{ col.sid }}</a></span><br />
     last updated {{ col.date }}

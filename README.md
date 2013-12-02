@@ -58,4 +58,4 @@ In an actual SecureDrop setup, these websites are Tor hidden services running on
 
 SecureDrop is open source and released under the [GNU General Public License v2](/LICENSE). 
 
-The [wordlist](/modules/deaddrop/files/deaddrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold. 
+The [wordlist](/securedrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold.

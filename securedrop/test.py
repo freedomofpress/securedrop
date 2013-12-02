@@ -110,7 +110,7 @@ class TestSource(TestCase):
 
     def test_regenerate_valid_lengths(self):
         """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(4, 11):
+        for codename_len in xrange(7, 11):
             response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
@@ -142,6 +142,17 @@ class TestSource(TestCase):
             codename = session['codename']
             rv = c.post('/create')
         return codename
+
+    def test_lookup(self):
+        """Test various elements on the /lookup page"""
+        codename = self._new_codename()
+        rv = self.client.post('login', data=dict(codename=codename),
+                              follow_redirects=True)
+        # redirects to /lookup
+        self.assertIn("Download journalist's public key", rv.data)
+        # download the public key
+        rv = self.client.get('journalist-key')
+        self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
 
     def test_login(self):
         rv = self.client.get('/login')

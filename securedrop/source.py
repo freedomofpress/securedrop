@@ -5,7 +5,7 @@ import uuid
 from functools import wraps
 
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g)
+                   flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
 
 import config
@@ -21,6 +21,12 @@ app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
+if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+    app.jinja_env.globals['use_custom_header_image'] = True
+else:
+    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['use_custom_header_image'] = False
 
 
 def logged_in():
@@ -97,7 +103,7 @@ def generate():
     number_words = 8
     if request.method == 'POST':
         number_words = int(request.form['number-words'])
-        if number_words not in range(4, 11):
+        if number_words not in range(7, 11):
             abort(403)
     session['codename'] = crypto_util.genrandomid(number_words)
     return render_template('generate.html', codename=session['codename'])
@@ -216,6 +222,20 @@ def howto_disable_js():
 @app.route('/tor2web-warning')
 def tor2web_warning():
     return render_template("tor2web-warning.html")
+
+
+@app.route('/journalist-key')
+def download_journalist_pubkey():
+    journalist_pubkey = crypto_util.gpg.export_keys(config.JOURNALIST_KEY)
+    return send_file(StringIO(journalist_pubkey),
+                     mimetype="application/pgp-keys",
+                     attachment_filename=config.JOURNALIST_KEY + ".asc",
+                     as_attachment=True)
+
+
+@app.route('/why-journalist-key')
+def why_download_journalist_pubkey():
+    return render_template("why-journalist-key.html")
 
 
 @app.errorhandler(404)
