@@ -161,8 +161,6 @@ EOF
       if [ $JAIL = "document" ]; then
         # no password prompt to install mysql-server
         echo "Creating mysql preseed file"
-        echo "$mysql_root" | tee -a build.log
-        echo "$mysql_securedrop" | tee -a build.log
         debconf-set-selections <<EOF
         mysql-server-5.5 mysql-server/root_password password $mysql_root
         mysql-server-5.5 mysql-server/root_password_again password $mysql_root
@@ -191,7 +189,6 @@ EOF
         # initialize production database                                              
         # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
         echo "Creating database..."                                             
-        echo "$mysql_securedrop"
         mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'document_mysql'@'localhost' IDENTIFIED BY '$mysql_securedrop';" | tee -a build.log
         echo "Creating database tables..."                                             
         cd /var/www/securedrop/
