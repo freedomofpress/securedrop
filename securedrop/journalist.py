@@ -156,6 +156,5 @@ def flag():
     return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
 
 if __name__ == "__main__":
-    crypto_util.do_runtime_tests()
     # TODO make sure debug=False in production
     app.run(debug=True, port=8081)

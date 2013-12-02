@@ -32,6 +32,18 @@ DEFAULT_WORDS_IN_RANDOM_ID = 8
 class CryptoException(Exception):
     pass
 
+# Make sure these pass before the app can run
+# TODO: Add more tests
+def do_runtime_tests():
+    assert(config.BCRYPT_ID_SALT != config.BCRYPT_GPG_SALT)
+    # crash if we don't have srm:
+    try:
+        subprocess.check_call(['srm'], stdout=subprocess.PIPE)
+    except subprocess.CalledProcessError:
+        pass
+
+do_runtime_tests()
+
 
 def clean(s, also=''):
     """
@@ -156,16 +168,6 @@ def secureunlink(fn):
     store.verify(fn)
     return subprocess.check_call(['srm', fn])
 
-# crash if we don't have srm:
-try:
-    subprocess.check_call(['srm'], stdout=subprocess.PIPE)
-except subprocess.CalledProcessError:
-    pass
-
-# Make sure these pass before the app can run
-# TODO: Add more tests
-def do_runtime_tests():
-    assert(config.BCRYPT_ID_SALT != config.BCRYPT_GPG_SALT)
 
 if __name__ == "__main__":
     import doctest
