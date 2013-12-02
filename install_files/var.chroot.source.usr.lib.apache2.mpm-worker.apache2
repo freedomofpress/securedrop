@@ -1,4 +1,4 @@
-# Last Modified: Wed Nov 20 18:03:21 2013
+# Last Modified: Mon Dec  2 00:44:13 2013
 #include <tunables/global>
 
 /var/chroot/source/usr/lib/apache2/mpm-worker/apache2 {
@@ -523,6 +523,8 @@
   /var/chroot/source/var/www/securedrop/config.pyc rw,
   /var/chroot/source/var/www/securedrop/crypto_util.py r,
   /var/chroot/source/var/www/securedrop/crypto_util.pyc rw,
+  /var/chroot/source/var/www/securedrop/dictionaries/adjectives.txt r,
+  /var/chroot/source/var/www/securedrop/dictionaries/nouns.txt r,
   /var/chroot/source/var/www/securedrop/keys/* rwlk,
   /var/chroot/source/var/www/securedrop/source.py r,
   /var/chroot/source/var/www/securedrop/source.pyc rw,
@@ -536,8 +538,10 @@
   /var/chroot/source/var/www/securedrop/source_templates/lookup.html r,
   /var/chroot/source/var/www/securedrop/source_templates/notfound.html r,
   /var/chroot/source/var/www/securedrop/source_templates/tor2web-warning.html r,
+  /var/chroot/source/var/www/securedrop/source_templates/why-journalist-key.html r,
   /var/chroot/source/var/www/securedrop/static/css/securedrop.css r,
   /var/chroot/source/var/www/securedrop/static/i/favicon.png r,
+  /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/i/securedrop.png r,
   /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/js/libs/jquery-2.0.3.min.js r,

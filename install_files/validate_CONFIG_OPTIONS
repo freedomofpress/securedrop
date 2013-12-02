@@ -70,7 +70,7 @@ validate_CONFIG_OPTIONS() {
     }
 
     valid_role
-    valid_ip $SOURCE_IP
+    valid_ip $APP_IP
     valid_ip $MONITOR_IP
     validate_user_exists $SSH_USERS
     validate_SMTP_SERVER

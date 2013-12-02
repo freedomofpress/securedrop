@@ -33,6 +33,7 @@ BCRYPT_GPG_SALT='BCRYPT_GPG_SALT_VALUE'
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig
+SECUREDROP_ROOT=os.path.abspath('/var/www/securedrop') 
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig = TestingConfig
@@ -42,7 +43,7 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     # test_journalist_key.pub
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441'
 
-tabase Configuration
+# Database Configuration
 
 # Default to using a sqlite database file for development
 #DATABASE_ENGINE = 'sqlite'
@@ -55,5 +56,5 @@ tabase Configuration
 DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
 DATABASE_NAME = 'securedrop'
-DATABASE_USERNAME = 'securedrop'
-DATABASE_PASSWORD = ''
+DATABASE_USERNAME = 'document_mysql'
+DATABASE_PASSWORD = 'MYSQL_USER_PASS'
