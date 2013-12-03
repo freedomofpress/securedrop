@@ -161,21 +161,27 @@ class TestSource(TestCase):
         rv = self.client.get('journalist-key')
         self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
 
-    def test_login(self):
+    def test_login_and_logout(self):
         rv = self.client.get('/login')
         self.assert200(rv)
         self.assertIn("Already submitted something?", rv.data)
 
         codename = self._new_codename()
-        rv = self.client.post('/login', data=dict(codename=codename),
-                              follow_redirects=True)
-        self.assert200(rv)
-        self.assertIn("Submit a document, message, or both", rv.data)
+        with self.client as c:
+            rv = c.post('/login', data=dict(codename=codename),
+                                  follow_redirects=True)
+            self.assert200(rv)
+            self.assertIn("Submit a document, message, or both", rv.data)
+            self.assertTrue(session['logged_in'])
+            _logout(c)
+            self.assertEquals(len(session), 0)
 
-        rv = self.client.post('/login', data=dict(codename='invalid'),
-                              follow_redirects=True)
-        self.assert200(rv)
-        self.assertIn('Sorry, that is not a recognized codename.', rv.data)
+        with self.client as c:
+            rv = self.client.post('/login', data=dict(codename='invalid'),
+                                  follow_redirects=True)
+            self.assert200(rv)
+            self.assertIn('Sorry, that is not a recognized codename.', rv.data)
+            self.assertNotIn('logged_in', session)
 
     def test_submit_message(self):
         codename = self._new_codename()
@@ -266,12 +272,13 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg=test_msg,
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+            # redirected to submission form
+            rv = self.source_app.post('/submit', data=dict(
+                msg=test_msg,
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -338,12 +345,13 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO(test_file_contents), test_filename),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+            # redirected to submission form
+            rv = self.source_app.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO(test_file_contents), test_filename),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -441,9 +449,11 @@ class TestIntegration(unittest.TestCase):
             self.assertFalse(session['flagged'])
             _logout(source_app)
 
-        rv = self.journalist_app.post('/flag', data=dict(
-            sid=sid))
-        self.assertEqual(rv.status_code, 200)
+        with self.journalist_app as journalist_app:
+            rv = journalist_app.post('/flag', data=dict(
+                sid=sid))
+            self.assertEqual(rv.status_code, 200)
+            _logout(journalist_app)
 
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(
@@ -465,8 +475,10 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
-        rv = self.journalist_app.get(col_url)
-        self.assertIn("reply-", rv.data)
+        with self.journalist_app as journalist_app:
+            rv = journalist_app.get(col_url)
+            self.assertIn("reply-", rv.data)
+            _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
         with self.source_app as source_app:
