@@ -40,6 +40,10 @@ def _setup_test_docs(sid, files):
             fp.write(str(uuid.uuid4()))
     return filenames
 
+def _logout(app):
+    # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
+    with app.session_transaction() as sess:
+        sess.clear()
 
 def shared_setup():
     """Set up the file system, GPG, and database"""
@@ -412,13 +416,14 @@ class TestIntegration(unittest.TestCase):
             codename = session['codename']
             flagged = session['flagged']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg=test_msg,
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertFalse(flagged)
+            # redirected to submission form
+            rv = source_app.post('/submit', data=dict(
+                msg=test_msg,
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertFalse(flagged)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -434,6 +439,7 @@ class TestIntegration(unittest.TestCase):
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             self.assertFalse(session['flagged'])
+            _logout(source_app)
 
         rv = self.journalist_app.post('/flag', data=dict(
             sid=sid))
@@ -446,6 +452,7 @@ class TestIntegration(unittest.TestCase):
             self.assertTrue(session['flagged'])
             source_app.get('/lookup')
             self.assertTrue(g.flagged)
+            _logout(source_app)
 
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
@@ -462,20 +469,24 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("reply-", rv.data)
 
         _block_on_reply_keypair_gen(codename)
-        rv = self.source_app.get('/lookup')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(
-            "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
-        self.assertIn(test_reply, rv.data)
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            rv = source_app.get('/lookup')
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn(
+                "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+            self.assertIn(test_reply, rv.data)
 
-        soup = BeautifulSoup(rv.data)
-        msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
-        rv = self.source_app.post('/delete', data=dict(
-            sid=sid,
-            msgid=msgid,
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Reply deleted", rv.data)
+            soup = BeautifulSoup(rv.data)
+            msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+            rv = source_app.post('/delete', data=dict(
+                sid=sid,
+                msgid=msgid,
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Reply deleted", rv.data)
+            _logout(source_app)
 
 
 class TestStore(unittest.TestCase):
