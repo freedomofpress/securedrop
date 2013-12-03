@@ -26,7 +26,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev bcrypt'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev bcrypt bcrypt-python'
 
 # no password prompt to install mysql-server
 mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
