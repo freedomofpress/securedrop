@@ -26,7 +26,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev bcrypt'
 
 # no password prompt to install mysql-server
 mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
@@ -84,18 +84,27 @@ echo "Setting up the virtual environment..."
 virtualenv env
 source env/bin/activate
 pip install --upgrade distribute
-pip install -r requirements.txt
+pip install -r source-requirements.txt
+pip install -r document-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
 cp example_config.py config.py
 securedrop_root=$(pwd)/.securedrop
-sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
+sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop_test'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
+
+# generate and store random values required by config.py
+secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+bcrypt_id_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
+bcrypt_gpg_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
+sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
+sed -i "s@^BCRYPT_ID_SALT.*@BCRYPT_ID_SALT='$bcrypt_id_salt'@" config.py
+sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config.py
 
 # initialize development database
 # config.py will use sqlite by default, but we've set up a mysql database as
@@ -106,13 +115,6 @@ echo "Creating database tables..."
 python -c 'import db; db.create_tables()'
 
 # generate and store random values required by config.py
-secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-bcrypt_id_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
-bcrypt_gpg_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
-sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
-sed -i "s@^BCRYPT_ID_SALT.*@BCRYPT_ID_SALT='$bcrypt_id_salt'@" config.py
-sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config.py
-
 echo ""
 echo "You will need a journalist key for development."
 echo "Would you like to generate one or use the key included?"
