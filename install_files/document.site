@@ -12,6 +12,8 @@ WSGIScriptAlias / /var/www/securedrop/document.wsgi/
 AddType text/html .py
 Header unset Etag
 Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
+Header set Expires "-1"
 
 #Allow for all hidden service addresses in the tor hostname file
 #Header set Acess-Control-Allow-Origin "http://ONION_URL"
@@ -19,9 +21,19 @@ Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
 
 Header edit Set-Cookie ^(.*)$ $;HttpOnly
 Header always append X-Frame-Options DENY
-Header set X-XSS-Protection "1; mode=block"
+Header set X-Content-Type-Options: no-sniff
+Header set X-download-Options: noopen
+Header set X-Content-Security-Policy: "default-src 'self'"
+Header set Content-Security-Policy: "default-src 'self'"
 
 LimitRequestBody MAX_REQUEST_SIZE
+
+#Redirect error pages to ensure headers are sent
+ErrorDocument 400 /notfound
+ErrorDocument 401 /notfound
+ErrorDocument 403 /notfound
+ErrorDocument 404 /notfound
+ErrorDocument 500 /notfound
 
 <Directory />
   Options None
