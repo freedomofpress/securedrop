@@ -10,9 +10,9 @@ SecureDrop is a tool for sources to communicate securely with journalists. The S
 * `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the first, public-facing Tor hidden service to send messages and documents to the journalist. The journalist connects to the second authenticated Tor hidden service to download encrypted documents and respond to sources.
 * `Monitor server`: Ubuntu server that monitors the `Application Server` and sends email alerts.
 
-In addition to these dedicated computers, the journalist will also his or her use normal workstation computer:
+In addition to these dedicated computers, the journalist will also use his or her normal workstation computer:
 
-* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that his or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources.
+* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that he or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources.
 
 These computers should all physically be in your organization's office. 
 
