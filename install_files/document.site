@@ -21,7 +21,7 @@ Header set Expires "-1"
 
 Header edit Set-Cookie ^(.*)$ $;HttpOnly
 Header always append X-Frame-Options DENY
-Header set X-Content-Type-Options: no-sniff
+Header set X-Content-Type-Options: nosniff
 Header set X-download-Options: noopen
 Header set X-Content-Security-Policy: "default-src 'self'"
 Header set Content-Security-Policy: "default-src 'self'"
