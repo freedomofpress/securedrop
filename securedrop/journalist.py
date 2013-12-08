@@ -153,7 +153,7 @@ def flag():
         return flag_file
     sid = request.form['sid']
     create_flag(sid)
-    return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
+    return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production
