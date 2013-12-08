@@ -140,7 +140,7 @@ def bulk_download(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=crypto_util.displayid(sid) + ".zip",
+                     attachment_filename=db.display_id(db.sqlalchemy_handle(), db_session) + ".zip",
                      as_attachment=True)
 
 
