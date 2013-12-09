@@ -146,14 +146,14 @@ A Google Authenticator code will be generated for the identified SSH_USERS in th
 
 Follow the instructions for adding your secret key to your Google Authenticator app
 
-At the end of a successfull `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface`'s onion URL and auth codes, the `App Server`'s SSH onion address and auth code.
+At the end of a successful `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface`'s onion URL and auth codes, the `App Server`'s SSH onion address and auth code.
 
     The Source Interface's onion URL is:
     bh33efgmt5ai32te.onion
     The Document Interface's onion URL and auth value are:
     b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
     kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
-    The App Server's ssh onion address and auth values are:
+    The App Server's SSH onion address and auth values are:
     sz3yuv5hdipt2icy.onion PKZ8sKjp5Z08AGq5BB7BKx # admin1
     oz4ezuhym2zfugjn.onion xCQf9IrFAXuoo7KfrMURzB # admin2
     The App Server's installation is complete.
@@ -204,7 +204,7 @@ You will have to do the following steps on each laptop that will be able to conn
 
 * Navigate to the Tor Browser Directory
 * Open the `torrc` file which should be located in `tor-browser_en-US/Data/Tor/torrc`
-* Add a line that begins with `HidServAuth` followed by the journalist's hidden service URL and Auth value that was outputed at the end of step 5 of the `server_setup.sh` script
+* Add a line that begins with `HidServAuth` followed by the journalist's Document Interface URL and Auth value that was outputed at the end of the App Server installation
 
 In this case the `torrc` file for the first journalist should look something like:
 
@@ -240,7 +240,7 @@ And the `torrc` file for the second journalist should look like something this:
     ControlPort 9151
     HidServAuth kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
 
-* Open run the Tor Browser Bundle and enter the journalist's unique Tor hidden service URL without the Auth value
+* Open the Tor Browser Bundle and navigate to the journalist's unique Document Interface URL without the Auth value
 
 ![Journalist_workstation1](/images/install/journalist_workstation1.png)
 
