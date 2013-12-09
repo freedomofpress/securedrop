@@ -61,7 +61,9 @@ def setup_g():
     # and we don't need to waste time running if we're just serving a static
     # resource that won't need to access these common values.
     if logged_in():
-        g.flagged = session['flagged']
+        # We use session.get (which defaults to None if 'flagged' is not in the
+        # session) to avoid a KeyError on the redirect from login/ to lookup/
+        g.flagged = session.get('flagged')
         g.codename = session['codename']
         g.sid = crypto_util.shash(g.codename)
         g.loc = store.path(g.sid)
@@ -128,6 +130,8 @@ def lookup():
     msgs = []
     flagged = False
     for fn in os.listdir(g.loc):
+        # TODO: make 'flag' a db column, so we can replace this with a db
+        # lookup in the future
         if fn == '_FLAG':
             flagged = True
             continue
@@ -201,20 +205,13 @@ def delete():
 def valid_codename(codename):
     return os.path.exists(store.path(crypto_util.shash(codename)))
 
-def check_flagged(codename):
-    # TODO: make 'flag' a db column, so we can replace this with a db lookup in
-    # the future
-    sid = crypto_util.shash(codename)
-    loc = store.path(sid)
-    return '_FLAG' in os.listdir(loc)
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         codename = request.form['codename']
         if valid_codename(codename):
-            flagged = check_flagged(codename)
-            session.update(codename=codename, flagged=flagged, logged_in=True)
+            session.update(codename=codename, logged_in=True)
             return redirect(url_for('lookup'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")

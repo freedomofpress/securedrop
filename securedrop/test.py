@@ -451,7 +451,6 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(session['flagged'])
             _logout(source_app)
 
         with self.journalist_app as journalist_app:
