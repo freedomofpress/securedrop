@@ -61,7 +61,9 @@ def setup_g():
     # and we don't need to waste time running if we're just serving a static
     # resource that won't need to access these common values.
     if logged_in():
-        g.flagged = session['flagged']
+        # We use session.get (which defaults to None if 'flagged' is not in the
+        # session) to avoid a KeyError on the redirect from login/ to lookup/
+        g.flagged = session.get('flagged')
         g.codename = session['codename']
         g.sid = crypto_util.shash(g.codename)
         g.loc = store.path(g.sid)
@@ -128,6 +130,8 @@ def lookup():
     msgs = []
     flagged = False
     for fn in os.listdir(g.loc):
+        # TODO: make 'flag' a db column, so we can replace this with a db
+        # lookup in the future
         if fn == '_FLAG':
             flagged = True
             continue
