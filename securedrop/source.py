@@ -204,17 +204,9 @@ def valid_codename(codename):
 def check_flagged(codename):
     # TODO: make 'flag' a db column, so we can replace this with a db lookup in
     # the future
-    flagged = False
     sid = crypto_util.shash(codename)
-    try:
-        loc = store.path(sid)
-    except:
-        return flagged
-    for fn in os.listdir(loc):
-        if fn=='_FLAG':
-            flagged = True
-            break
-    return flagged
+    loc = store.path(sid)
+    return '_FLAG' in os.listdir(loc)
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():

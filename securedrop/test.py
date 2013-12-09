@@ -42,6 +42,11 @@ def _setup_test_docs(sid, files):
 
 def _logout(app):
     # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
+    # This is necessary because SecureDrop doesn't have a logout button, so a
+    # user is logged in until they close the browser, which clears the session.
+    # For testing, this function simulates closing the browser at places
+    # where a source is likely to do so (for instance, between submitting a
+    # document and checking for a journalist reply).
     with app.session_transaction() as sess:
         sess.clear()
 
