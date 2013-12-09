@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import uuid
 
-from flask import Flask, request, render_template, send_file, redirect
+from flask import Flask, request, render_template, send_file, redirect, flash
 from flask_wtf.csrf import CsrfProtect
 
 import config
@@ -99,6 +99,7 @@ def reply():
     try:
         msg = msg_candidate.decode()
     except (UnicodeDecodeError, UnicodeEncodeError):
+        flash("You have entered text that we could not parse. Please try again.", "notification")
         return render_template('col.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
     crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))

@@ -461,7 +461,11 @@ class TestIntegration(unittest.TestCase):
             msg=test_reply
         ))
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! Your reply has been stored.", rv.data)
+
+        if not expected_success:
+            self.assertIn("You have entered text that we could not parse", rv.data)
+        else:
+            self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
         rv = self.journalist_app.get(col_url)
         self.assertIn("reply-", rv.data)
