@@ -1,0 +1,15 @@
+import os
+from base import BaseFlaskConfig
+
+JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
+SECUREDROP_ROOT=os.path.abspath('.securedrop')
+
+class FlaskConfig(BaseFlaskConfig):
+    DEBUG = True
+
+
+### Database Configuration
+
+# Default to using a sqlite database file for development
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db_development.sqlite')
