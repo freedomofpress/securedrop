@@ -95,8 +95,12 @@ def doc(sid, fn):
 
 @app.route('/reply', methods=('POST',))
 def reply():
-    sid, msg = request.form['sid'], request.form['msg']
-    crypto_util.encrypt(crypto_util.getkey(sid), request.form['msg'], output=
+    sid, msg_candidate = request.form['sid'], request.form['msg']
+    try:
+        msg = msg_candidate.decode()
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return render_template('col.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+    crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
     return render_template('reply.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
