@@ -132,14 +132,18 @@ def lookup():
             flagged = True
             continue
         if fn.startswith('reply-'):
-            msgs.append(dict(
-                id=fn,
-                date=str(
-                    datetime.fromtimestamp(
-                        os.stat(store.path(g.sid, fn)).st_mtime)),
-                msg=crypto_util.decrypt(
-                    g.sid, g.codename, file(store.path(g.sid, fn)).read())
-            ))
+            msg_candidate = crypto_util.decrypt(
+                g.sid, g.codename, file(store.path(g.sid, fn)).read())
+            try:
+                msgs.append(dict(
+                        id=fn,
+                        date=str(
+                            datetime.fromtimestamp(
+                                os.stat(store.path(g.sid, fn)).st_mtime)),
+                        msg=msg_candidate.decode()))
+            except UnicodeDecodeError:
+                # todo: we should have logging here!
+                pass
     if flagged:
         session['flagged'] = True
 
