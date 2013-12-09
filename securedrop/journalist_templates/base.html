@@ -8,7 +8,6 @@
     <script src="/static/js/journalist.js"></script>
   </head>
   <body>
-    {% include 'flashed.html' %}
     <div id="wrapper">
       {% block header %}
       <div id="header">
@@ -19,6 +18,7 @@
       </div>
       {% endblock %}
 
+      {% include 'flashed.html' %}
       {% block body %}{% endblock %}
 
       {% block footer %}
