@@ -8,6 +8,11 @@
     <script src="/static/js/journalist.js"></script>
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=True, category_filter=["header-warning"]) %}
+      {% for category, message in messages %}
+      <p class="{{ category }}">{{ message|safe }}</p>
+      {% endfor %}
+    {% endwith %}
     <div id="wrapper">
       {% block header %}
       <div id="header">
