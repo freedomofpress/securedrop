@@ -402,9 +402,14 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("No documents to display.", rv.data)
 
-    def test_reply(self):
+    def test_reply_normal(self):
+        self.helper_test_reply("This is a test reply.")
+
+    def test_reply_malformed(self):
+        self.helper_test_reply("\x5A\x05\x70\x5D\xC2\x5C\xA1\x51\x23\x75\x0B\x80\xD0\xA9")
+
+    def helper_test_reply(self, test_reply):
         test_msg = "This is a test message."
-        test_reply = "This is a test reply."
 
         with self.source_app as source_app:
             rv = source_app.get('/generate')
