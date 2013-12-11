@@ -45,13 +45,24 @@ def _setup_test_docs(sid, files):
             fp.write(str(uuid.uuid4()))
     return filenames
 
+def _logout(app):
+    # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
+    # This is necessary because SecureDrop doesn't have a logout button, so a
+    # user is logged in until they close the browser, which clears the session.
+    # For testing, this function simulates closing the browser at places
+    # where a source is likely to do so (for instance, between submitting a
+    # document and checking for a journalist reply).
+    with app.session_transaction() as sess:
+        sess.clear()
+
 def shared_setup():
-    """Set up the file system and GPG"""
+    """Set up the file system, GPG, and database"""
+
     # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR,
-              config.TEMP_DIR):
+    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
+
     # Initialize the GPG keyring
     gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR, gpgbinary=GPG_BINARY)
     # Import the journalist key for testing (faster to import a pre-generated
@@ -59,6 +70,11 @@ def shared_setup():
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
         gpg.import_keys(open(keyfile).read())
 
+    # Inititalize the test database
+    import db; db.create_tables()
+
+    # Do tests that should always run on app startup
+    crypto_util.do_runtime_tests()
 
 
 def shared_teardown():
@@ -226,9 +242,7 @@ class TestJournalist(TestCase):
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
-        # test client does not seem to handle binary data, so
-        # just check that we didn't get an empty body
-        self.assertTrue(len(rv.data) > 0)
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
 
     @patch('db.add_tag_to_file')
     def test_tag(self, mock_add_tag):
@@ -288,12 +302,13 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg=test_msg,
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+            # redirected to submission form
+            rv = self.source_app.post('/submit', data=dict(
+                msg=test_msg,
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -360,12 +375,13 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO(test_file_contents), test_filename),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+            # redirected to submission form
+            rv = self.source_app.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO(test_file_contents), test_filename),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -438,13 +454,14 @@ class TestIntegration(unittest.TestCase):
             codename = session['codename']
             flagged = session['flagged']
             sid = g.sid
-        # redirected to submission form
-        rv = self.source_app.post('/submit', data=dict(
-            msg=test_msg,
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertFalse(flagged)
+            # redirected to submission form
+            rv = source_app.post('/submit', data=dict(
+                msg=test_msg,
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertFalse(flagged)
+            _logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -459,11 +476,13 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(session['flagged'])
+            _logout(source_app)
 
-        rv = self.journalist_app.post('/flag', data=dict(
-            sid=sid))
-        self.assertEqual(rv.status_code, 200)
+        with self.journalist_app as journalist_app:
+            rv = journalist_app.post('/flag', data=dict(
+                sid=sid))
+            self.assertEqual(rv.status_code, 200)
+            _logout(journalist_app)
 
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(
@@ -472,6 +491,7 @@ class TestIntegration(unittest.TestCase):
             self.assertTrue(session['flagged'])
             source_app.get('/lookup')
             self.assertTrue(g.flagged)
+            _logout(source_app)
 
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
@@ -484,24 +504,30 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
-        rv = self.journalist_app.get(col_url)
-        self.assertIn("reply-", rv.data)
+        with self.journalist_app as journalist_app:
+            rv = journalist_app.get(col_url)
+            self.assertIn("reply-", rv.data)
+            _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
-        rv = self.source_app.get('/lookup')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(
-            "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
-        self.assertIn(test_reply, rv.data)
+        with self.source_app as source_app:
+            rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            rv = source_app.get('/lookup')
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn(
+                "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+            self.assertIn(test_reply, rv.data)
 
-        soup = BeautifulSoup(rv.data)
-        msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
-        rv = self.source_app.post('/delete', data=dict(
-            sid=sid,
-            msgid=msgid,
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Reply deleted", rv.data)
+            soup = BeautifulSoup(rv.data)
+            msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+            rv = source_app.post('/delete', data=dict(
+                sid=sid,
+                msgid=msgid,
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Reply deleted", rv.data)
+            _logout(source_app)
 
 
 class TestStore(unittest.TestCase):

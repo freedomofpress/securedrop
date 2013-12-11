@@ -27,14 +27,33 @@ SOURCE_TEMPLATES_DIR='/var/www/securedrop/source_templates'
 JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
 
-BCRYPT_SALT='BCRYPT_SALT_VALUE'
+NOUNS='/var/www/securedrop/dictionaries/nouns.txt'
+ADJECTIVES='/var/www/securedrop/dictionaries/adjectives.txt'
+BCRYPT_ID_SALT='BCRYPT_ID_SALT_VALUE'
+BCRYPT_GPG_SALT='BCRYPT_GPG_SALT_VALUE'
 # Default to the production configuration
 FlaskConfig = ProductionConfig
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig = TestingConfig
-    TEST_DIR='/tmp/deaddrop_test'
+    TEST_DIR='/tmp/securedrop_test'
     STORE_DIR=os.path.join(TEST_DIR, 'store')
     GPG_KEY_DIR=os.path.join(TEST_DIR, 'keys')
     # test_journalist_key.pub
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441'
+
+# Database Configuration
+
+# Default to using a sqlite database file for development
+#DATABASE_ENGINE = 'sqlite'
+#DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
+
+# Uncomment to use mysql (or any other databaes backend supported by
+# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
+# `python -c "import db; db.create_tables()"` to initialize the database
+
+DATABASE_ENGINE = 'mysql'
+DATABASE_HOST = 'localhost'
+DATABASE_NAME = 'securedrop'
+DATABASE_USERNAME = 'securedrop'
+DATABASE_PASSWORD = ''

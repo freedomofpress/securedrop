@@ -1,4 +1,3 @@
-distribute==0.6.34
 Flask==0.10.1
 Flask-Testing==0.4
 Flask-WTF==0.9.3

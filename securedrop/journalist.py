@@ -18,6 +18,12 @@ app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
+if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+    app.jinja_env.globals['use_custom_header_image'] = True
+else:
+    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['use_custom_header_image'] = False
 
 
 def get_docs(sid):
@@ -140,8 +146,8 @@ def bulk_delete(sid, docs_selected):
 def bulk_download(sid, docs_selected):
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     zip = store.get_bulk_archive(filenames)
-    return send_file(zip, mimetype="application/zip",
-                     attachment_filename=crypto_util.displayid(sid) + ".zip",
+    return send_file(zip.name, mimetype="application/zip",
+                     attachment_filename=db.display_id(sid, db.sqlalchemy_handle()) + ".zip",
                      as_attachment=True)
 
 def bulk_tag(sid, docs_selected):
@@ -164,7 +170,7 @@ def flag():
         return flag_file
     sid = request.form['sid']
     create_flag(sid)
-    return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
+    return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
 @app.route('/filter-selected', methods=('POST',))
 def filter_selected():

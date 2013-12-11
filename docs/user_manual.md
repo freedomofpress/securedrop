@@ -2,59 +2,91 @@
 
 ## SecureDrop Depends on the Tor Browser
 
-Sources who submit documents and journalists who download these documents must connect to the SecureDrop website using the Tor network. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/.
+Sources submitting documents or messages to SecureDrop, and the journalists viewing this correspondence, must connect to the secure server using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/. This bundle installs the Tor browser, as well as an application that is used to connect to the Tor network.
 
-Once you have the Tor Browser installed you can access Tor hidden service URLs that have domain names that end in .onion. Media organizations must link to the .onion URL for their instance of SecureDrop from their website. Each journalist that uses SecureDrop has their own personal .onion URL that they use to connect.
+The Tor Browser can be used to access Tor _hidden service URLs_, which have domain names that end in ".onion". Media organizations will provide links to the .onion URLs of their SecureDrop pages, and each journalist that uses SecureDrop connects to the service with his or her own personal .onion URL.
 
-## As a Source
+## Using SecureDrop As a Source
 
-Open the Tor Browser and visit the hidden service for the SecureDrop website you're visiting.
+Open the Tor Browser and navigate to the .onion hidden service URL provided by the media organization whose SecureDrop page you would like to visit. The page should look similar to the screenshot below. If this is the first time you're using the Tor browser, it's likely that you have Javascript enabled. If you do, you will see the red warning below which will explainin that this is a security risk. If you don't have Javascript enabled, you can skip the next step.
 
-![Source website](/images/manual/source1.png)
+![Javascript warning](/images/manual/source1.png)
 
-If this is the first time you're using SecureDrop with this organization, click the "Submit Documents" button.
+Click the 'click here' link on the Javascript warning and a message will pop up telling you how to disable Javascript. Once you follow the instructions, refresh the page. 
 
-![Generating code name](/images/manual/source2.png)
+![Fix Javascript warning](/images/manual/source2.png)
 
-SecureDrop will create a code name for you to use. In the preview screenshot the codename that was generated was `naiad edit carrie bahama brew hardy cannot gosh`. You must either memorize this or write it down in a safe place. After you submit documents, you must know this code name in order to login and check for responses.
+The page should now look similar to the screenshot below. If this is the first time you are using SecureDrop, click the "Submit Documents" button.
 
-You can choose the length of your code name. Longer code names are more secure but harder to memorize, and shorter code names are less secure but easier to memorize, so use your discretion. Once you have generated a code name, click Continue.
+![Source website](/images/manual/source3.png)
 
-![Generating code name](/images/manual/source3.png)
+You should now see a screen that shows the unique code name that SecureDrop has generated for you. In the example screenshot below the codename is `bough fisk jed sold essen nail 1 prissy`, but yours will be different. It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down and keep it in a safe place, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses.
 
-You can then choose to upload a document and/or enter a message to send to the journalists. When you are done, click Submit.
+SecureDrop allows you to choose the length of your code name, in case you want to create a longer code name for extra security. Once you have generated a code name and put it somewhere safe, click Continue.
 
-![Document upload success](/images/manual/source4.png)
+![Memorizing your code name](/images/manual/source4.png)
 
-If you have already submitted a document and you would like to check for a response, from the source homepage click the "Check for a Response" button instead.
+You will next be brought to the submission interface, where you may upload a document, enter a message to send to journalists, or both. You can only submit one document at a time, so you may want to combine several files into a zip archive if necessary. When your submission is ready, click Submit.
 
-![Check for response](/images/manual/source5.png)
+![Submit a document](/images/manual/source5.png)
 
-Enter the code name that you already know and click Continue.
+After clicking Submit, a confirmation page should appear, showing that your message and/or documents have been sent successfully. On this page you can make another submission or view responses to your previous messages.
 
-![Check for response](/images/manual/source6.png)
+![Confirmation page](/images/manual/source6.png)
 
-If a journalist has responded there will be a message waiting for you to read and delete. You can also upload another document or send another message to the journalists.
+If you have already submitted a document and would like to check for responses, click the "Check for a Response" button on the media organizations' SecureDrop homepage.
 
-## As a Journalist
+![Source website](/images/manual/source7.png)
+
+The next page will ask for your secret code name; enter it and click Continue.
+
+![Check for response](/images/manual/source8.png)
+
+If a journalist wishes to reply to you, they will flag your message on their end and you will see the following message below. They can't reply to you until you've seen this message for security reasons. This will only happen the first time a journalist replies and with subsequent replies you will skip this step.
+
+![Check for an initial response](/images/manual/source9.png)
+
+Click refresh or log in again. If a journalist has responded, his or her message will appear on the next page. This page also allows you to upload another document or send another message to the journalist. Be sure to delete any messages here before navigating away.
+
+![Check for a real response](/images/manual/source10.png)
+
+After you delete the message from the journalist, make sure you see the below message. 
+
+![Delete received messages](/images/manual/source11.png)
+
+Repeat to continue communicating with the journalist.
+
+## Using SecureDrop As a Journalist
 
 ### Connecting to the Document Server
 
 Each journalist has their own authenticated Tor hidden service URL. The journalist needs to use the Tor Browser that [has been configured for their use only](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md#server-installation).
 
-Start by opening Tor Browser and loading the .onion URL to access the `Document Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
+Start by opening Tor Browser and loading the .onion URL to access the document interface of the `Application Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
 
 ![Document server](/images/manual/document1.png)
 
 ### Interacting With Sources
 
-Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploads.
+Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Viewing Station`. But first, if you'd like to reply to the source, click the 'flag this source for reply' button. 
 
 ![Read documents](/images/manual/document2.png)
 
-Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Viewing Station`. But first, if you'd like to reply to the source you can fill out the text area and click Submit.
+After clicking the 'flag this source for reply button,' you'll see this confirmation page. Click through to get back to the page that displays that souce's documents and replies.
 
-![Sent reply](/images/manual/document3.png)
+![Flag source for reply](/images/manual/document3.png)
+
+*Note:* You will not be able to reply until after the source logs in again and sees that you would like to talk to him or her. So you may have to sit and wait. 
+
+But after the source sees that you'd like to reply, a GPG key pair will automatically be generated and you can log back in and send a reply back.
+
+![Sent reply](/images/manual/document4.png)
+
+Once your reply has been submitted, you will see this confirmation page.
+
+![Sent reply confirmation](/images/manual/document5.png)
+
+Rinse and repeat.
 
 ### Moving Documents to Viewing Station
 
