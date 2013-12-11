@@ -1,5 +1,22 @@
 import os, stat
 
+### Application Configuration
+
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
+NOUNS='./dictionaries/nouns.txt'
+ADJECTIVES='./dictionaries/adjectives.txt'
+JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
+BCRYPT_ID_SALT=''    # bcrypt.gensalt(); for constructing public ID from source codename
+BCRYPT_GPG_SALT=''   # bcrypt.gensalt(); for stretching source codename into GPG passphrase
+
+### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = None
+
 ### Flask Configurations
 
 class BaseConfig(object):
@@ -18,15 +35,6 @@ class TestingConfig(BaseConfig):
     # Tests are simpler if CSRF protection is disabled
     WTF_CSRF_ENABLED = False
 
-### Application Configuration
-
-SOURCE_TEMPLATES_DIR = './source_templates'
-JOURNALIST_TEMPLATES_DIR = './journalist_templates'
-WORD_LIST = './wordlist'
-
-JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
-BCRYPT_SALT=''    # bcrypt.gensalt()
-
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
     SECUREDROP_ROOT='/tmp/securedrop_test'
@@ -38,10 +46,9 @@ else:
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
 GPG_KEY_DIR=os.path.join(SECUREDROP_ROOT, 'keys')
-TEMP_DIR=os.path.join(SECUREDROP_ROOT, 'tmp')
 
 # create the data directories
-for d in (SECUREDROP_ROOT, STORE_DIR, GPG_KEY_DIR, TEMP_DIR):
+for d in (SECUREDROP_ROOT, STORE_DIR, GPG_KEY_DIR):
     if not os.path.isdir(d):
         os.mkdir(d)
 

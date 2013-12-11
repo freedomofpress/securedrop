@@ -19,6 +19,12 @@ app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
+if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
+    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+    app.jinja_env.globals['use_custom_header_image'] = True
+else:
+    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['use_custom_header_image'] = False
 
 
 def get_docs(sid):
@@ -136,7 +142,7 @@ def flag():
         return flag_file
     sid = request.form['sid']
     create_flag(sid)
-    return render_template('flag.html', sid=sid, codename=crypto_util.displayid(sid))
+    return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
 @app.route('/filter-selected', methods=('POST',))
 def filter_selected():

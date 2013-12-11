@@ -60,14 +60,11 @@ def path(*s):
 
 
 def get_bulk_archive(filenames):
-    zip_file = tempfile.mkstemp()[1]
-    # unlink manually to get rid of our temporary archive in a way that plays nicely with flask
-    os.unlink(zip_file)
+    zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_')
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)
-            basename = os.path.basename(filename)
-            zip.write(filename, arcname=basename)
+            zip.write(filename, arcname=os.path.basename(filename))
     return zip_file
 
 def log(msg):

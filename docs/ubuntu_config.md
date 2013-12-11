@@ -1,6 +1,6 @@
 # Preparing Ubuntu servers for installation
 
-`Source Server`, `Document Server`, and `Monitor Server` all require [Ubuntu Server 12.04.3](http://www.ubuntu.com/download/server). Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
+The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.3](http://www.ubuntu.com/download/server). Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
 
 After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 
