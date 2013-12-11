@@ -597,11 +597,7 @@ class TestStore(unittest.TestCase):
 class TestDb(unittest.TestCase):
 
     def setUp(self):
-        config.DATABASE_ENGINE = 'mysql'
-        config.DATABASE_USERNAME = 'securedrop'
-        config.DATABASE_PASSWORD = 'securedrop'
-        config.DATABASE_HOST = 'localhost'
-        config.DATABASE_NAME = 'securedrop_test'
+
 
         db.engine = db.get_engine()
 

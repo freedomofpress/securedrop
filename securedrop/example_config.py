@@ -39,9 +39,22 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig=TestingConfig
     SECUREDROP_ROOT='/tmp/securedrop_test'
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
+    # Uncomment to use mysql (or any other databaes backend supported by
+    # SQLAlchemy). Make sure you have the necessary dependencies installed, and run
+    # `python -c "import db; db.create_tables()"` to initialize the database
+
+    DATABASE_ENGINE = 'mysql'
+    DATABASE_HOST = 'localhost'
+    DATABASE_NAME = 'securedrop'
+    DATABASE_USERNAME = 'securedrop'
+    DATABASE_PASSWORD = '3XKiqH+asPjh2il5VPqHVHBBtPWpNvGY4HfWfQ+CCGY='
 else:
     FlaskConfig = ProductionConfig
     SECUREDROP_ROOT=os.path.abspath('.securedrop')
+    # Default to using a sqlite database file for development
+    DATABASE_ENGINE = 'sqlite'
+    DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
+
 
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
@@ -58,19 +71,3 @@ def has_perms(path, mode):
 safe_perms = 0700
 if not has_perms(GPG_KEY_DIR, safe_perms):
     os.chmod(GPG_KEY_DIR, safe_perms)
-
-### Database Configuration
-
-# Default to using a sqlite database file for development
-DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
-
-# Uncomment to use mysql (or any other databaes backend supported by
-# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
-# `python -c "import db; db.create_tables()"` to initialize the database
-
-# DATABASE_ENGINE = 'mysql'
-# DATABASE_HOST = 'localhost'
-# DATABASE_NAME = 'securedrop'
-# DATABASE_USERNAME = 'securedrop'
-# DATABASE_PASSWORD = '3XKiqH+asPjh2il5VPqHVHBBtPWpNvGY4HfWfQ+CCGY='
