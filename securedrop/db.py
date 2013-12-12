@@ -86,7 +86,8 @@ def regenerate_display_id(filesystem_id):
     session.close()
 
 
-def insert_files(file_names, session):
+def insert_files(file_names):
+    session = sqlalchemy_handle()
     file_results = []
     for fileName in file_names:
         query = session.query(files.c.id).filter(files.c.name == fileName)
@@ -96,6 +97,8 @@ def insert_files(file_names, session):
         else:
             result_proxy = session.execute(files.insert().values(name=fileName))
             file_results.append(result_proxy.inserted_primary_key[0])
+    session.commit()
+    session.close()
     return file_results
 
 
@@ -104,14 +107,14 @@ def add_tag_to_file(file_names, *tags_to_add):
     tag_results = []
     for tag in tags_to_add:
         query = session.query(tags.c.id).filter(tags.c.name == tag)
-        results = session.execute(query)
-        if results.rowcount > 0:
-            tag_results.append(results.fetchone()[0])
+        result = session.execute(query).fetchone()
+        if result is not None:
+            tag_results.append(result[0])
         else:
             result_proxy = session.execute(tags.insert().values(name=tag))
             tag_results.append(result_proxy.inserted_primary_key[0])
 
-    file_results = insert_files(file_names, session)
+    file_results = insert_files(file_names)
 
     for tag_id in tag_results:
         for file_id in file_results:

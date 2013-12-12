@@ -12,7 +12,7 @@
 
 {% if docs %}
 <p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
-<form action="/bulk" method="post">
+<form id="bulk" action="/bulk" method="post">
 <ul id="submissions" class="plain">
 {% for doc in docs %}
 <li>

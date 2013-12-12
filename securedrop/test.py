@@ -298,7 +298,7 @@ class TestJournalist(TestCase):
         self.assertEqual(soup.select('button[name=action]')[0]['value'], 'Tag Selected With')
         self.assertEqual(soup.select('input[name=sid]')[0]['value'], sid)
 
-    def test_add_new_tag(self):
+    def test_add_new_tag_one(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = _setup_test_docs(sid, files)
@@ -597,10 +597,6 @@ class TestStore(unittest.TestCase):
 class TestDb(unittest.TestCase):
 
     def setUp(self):
-
-
-        db.engine = db.get_engine()
-
         db.create_tables()
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
@@ -610,6 +606,7 @@ class TestDb(unittest.TestCase):
         self.test_tag = 'some-tag'
 
     def tearDown(self):
+
         self.session.commit()
         self.session.close()
 
@@ -618,6 +615,17 @@ class TestDb(unittest.TestCase):
         actual_tags = [r[0] for r in self.session.query(db.tags.c.name).all()]
 
         assert self.test_tag in actual_tags
+
+    def test_add_tag_to_file_handles_existing_tags(self):
+        filename = 'filename'
+        db.add_tag_to_file([filename], self.test_tag)
+        db.add_tag_to_file([filename], self.test_tag)
+
+        num_tags = len(self.session.query(db.tags.c.name).all())
+        num_files = len(self.session.query(db.files.c.name).filter(db.files.c.name == filename).all())
+
+        self.assertEqual(num_tags, 1)
+        self.assertEqual(num_files, 1)
 
     def test_add_file(self):
         db.add_tag_to_file(self.file_names, self.test_tag)
