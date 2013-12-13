@@ -90,9 +90,9 @@ def insert_files(file_names):
     file_results = []
     for fileName in file_names:
         query = session.query(files.c.id).filter(files.c.name == fileName)
-        results = session.execute(query)
-        if results.rowcount > 0:
-            file_results.append(results.fetchone()[0])
+        results = session.execute(query).fetchone()
+        if results is not None:
+            file_results.append(results[0])
         else:
             result_proxy = session.execute(files.insert().values(name=fileName))
             file_results.append(result_proxy.inserted_primary_key[0])
