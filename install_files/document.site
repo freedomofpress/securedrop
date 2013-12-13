@@ -10,22 +10,24 @@ WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-
 WSGIProcessGroup document
 WSGIScriptAlias / /var/www/securedrop/document.wsgi/
 AddType text/html .py
-Header unset Etag
-Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
-Header set Pragma "no-cache"
-Header set Expires "-1"
 
 #Allow for all hidden service addresses in the tor hostname file
 #Header set Acess-Control-Allow-Origin "http://ONION_URL"
 #INSERT_ORIGIN_HERE
 
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
 Header edit Set-Cookie ^(.*)$ $;HttpOnly
-Header always append X-Frame-Options DENY
+Header set Pragma "no-cache"
+Header set Expires "-1"
+Header always append X-Frame-Options: DENY
+Header set X-XSS-Protection: 1; mode-block
 Header set X-Content-Type-Options: nosniff
 Header set X-download-Options: noopen
 Header set X-Content-Security-Policy: "default-src 'self'"
 Header set Content-Security-Policy: "default-src 'self'"
+Header unset Etag
 
+# Limit the max submitted size of requests.
 LimitRequestBody MAX_REQUEST_SIZE
 
 #Redirect error pages to ensure headers are sent
