@@ -57,7 +57,6 @@ def sqlalchemy_handle():
 def display_id(filesystem_id, session):
     journalist_designation = session.query(sources.c.journalist_designation).filter(
         sources.c.filesystem_id == filesystem_id).all()
-    session.commit()
     session.close()
     if len(journalist_designation) > 0:
         return journalist_designation[0][0]
@@ -120,8 +119,8 @@ def add_tag_to_file(file_names, *tags_to_add):
         for file_id in file_results:
             query = session.query(files_to_tags)
             query = query.filter(files_to_tags.c.files_id == file_id).filter(files_to_tags.c.tags_id == tag_id)
-            results = session.execute(query)
-            if results.rowcount == 0:
+            results = session.execute(query).fetchall()
+            if len(results) == 0:
                 session.execute(files_to_tags.insert().values(tags_id=tag_id,files_id=file_id))
 
     session.commit()
@@ -148,9 +147,9 @@ def delete_tags_from_file(file_names, tags_to_remove):
     query = query.join(files, files_to_tags.c.files_id == files.c.id)
     query = query.filter(tags.c.name.in_(tags_to_remove))
     query = query.filter(files.c.name.in_(file_names))
-    results = session.execute(query)
-    if results.rowcount > 0:
-        results = [row[0] for row in results.fetchall()]
+    results = session.execute(query).fetchall()
+    if len(results) > 0:
+        results = [row[0] for row in results]
         delete_query = delete(files_to_tags, files_to_tags.c.id.in_(results))
         session.execute(delete_query)
     session.commit()
@@ -164,9 +163,9 @@ def delete_tag_from_file(file_name, tag_name):
     query = query.join(files, files_to_tags.c.files_id == files.c.id)
     query = query.filter(tags.c.name == tag_name)
     query = query.filter(files.c.name == file_name)
-    result = session.execute(query)
-    if result.rowcount > 0:
-        delete_query = delete(files_to_tags, files_to_tags.c.id == result.fetchone()[0])
+    result = session.execute(query).fetchall()
+    if len(result) > 0:
+        delete_query = delete(files_to_tags, files_to_tags.c.id == result[0][0])
         session.execute(delete_query)
 
     session.commit()
