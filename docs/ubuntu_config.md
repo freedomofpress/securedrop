@@ -17,8 +17,9 @@ After booting up for the first time, do updates.
     sudo apt-get update
     sudo apt-get upgrade
 
-On each server you also need to add a line to `/etc/resolv.conf`.
+On each server you also need to add a line to `/etc/resolvconf/resolv.conf.d/base`.
 
-    sudo sh -c "echo 'search securedrop' >> /etc/resolv.conf"
+    sudo sh -c "echo 'search securedrop' >> /etc/resolvconf/resolv.conf.d/base"
+    sudo resolvconf -u
 
 We also recommend that you patch your kernel with grsecurity in order to harden these servers from attacks. Instuctions for doing this are outside the scope of this installation guide. Visit the official [Grsecurity documentation](http://en.wikibooks.org/wiki/Grsecurity) for more information about [obtaining](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity) and [configuring and installing](http://en.wikibooks.org/wiki/Grsecurity/Configuring_and_Installing_grsecurity) the kernel patch.
