@@ -419,9 +419,14 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("No documents to display.", rv.data)
 
-    def test_reply(self):
+    def test_reply_normal(self):
+        self.helper_test_reply("This is a test reply.", True)
+
+    def test_reply_malformed(self):
+        self.helper_test_reply("\x5A\x05\x70\x5D\xC2\x5C\xA1\x51\x23\x75\x0B\x80\xD0\xA9", False)
+
+    def helper_test_reply(self, test_reply, expected_success=True):
         test_msg = "This is a test message."
-        test_reply = "This is a test reply."
 
         with self.source_app as source_app:
             rv = source_app.get('/generate')
@@ -477,7 +482,11 @@ class TestIntegration(unittest.TestCase):
             msg=test_reply
         ))
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! Your reply has been stored.", rv.data)
+
+        if not expected_success:
+            self.assertIn("You have entered text that we could not parse", rv.data)
+        else:
+            self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
         with self.journalist_app as journalist_app:
             rv = journalist_app.get(col_url)
@@ -485,24 +494,28 @@ class TestIntegration(unittest.TestCase):
             _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
+
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             rv = source_app.get('/lookup')
             self.assertEqual(rv.status_code, 200)
-            self.assertIn(
-                "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
-            self.assertIn(test_reply, rv.data)
-
-            soup = BeautifulSoup(rv.data)
-            msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
-            rv = source_app.post('/delete', data=dict(
-                sid=sid,
-                msgid=msgid,
-            ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn("Reply deleted", rv.data)
-            _logout(source_app)
+            if not expected_success:
+                # there should be no reply
+                self.assertTrue("You have received a reply." not in rv.data)        
+            else:
+                self.assertIn(
+                    "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+                self.assertIn(test_reply, rv.data)
+                soup = BeautifulSoup(rv.data)
+                msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+                rv = source_app.post('/delete', data=dict(
+                        sid=sid,
+                        msgid=msgid,
+                        ), follow_redirects=True)
+                self.assertEqual(rv.status_code, 200)
+                self.assertIn("Reply deleted", rv.data)
+                _logout(source_app)
 
 
 class TestStore(unittest.TestCase):
