@@ -47,7 +47,7 @@ echo "Performing installation on $DISTRO - $DISTRO_VERSION"
 
 if [ $DISTRO != 'ubuntu' ]; then
   echo ""
-  echo "You are installing SecurerDrop on an unsupported system."
+  echo "You are installing SecureDrop on an unsupported system."
   echo "Do you wish to continue at your own risk [Y|N]? "
   read DISTRO_ANS
   if [ $DISTRO_ANS = y -o $DISTRO_ANS = Y ]
@@ -80,7 +80,7 @@ if [ "$ROLE" = 'monitor' ]; then
   echo "# The Monitor Server's SSH address is below.     #"
   echo "##################################################"
   echo ""
-  echo "The Monitor Server's ssh onion address and auth values are:"
+  echo "The Monitor Server's SSH onion address and auth values are:"
   cat /var/lib/tor/hidden_service/hostname
   echo "The Monitor Server's installation is complete."
 
@@ -88,7 +88,7 @@ elif [ $ROLE = 'app' ]; then
   echo "Starting interface_install.sh"
   $CWD/install_files/interface_install.sh
   catch_error $? "interface install."
-  echo "Interface install complete"
+  echo "Interface install complete."
 
   echo "Starting ossec agent install..."
   $CWD/install_files/ossec_install.sh
@@ -98,16 +98,16 @@ elif [ $ROLE = 'app' ]; then
   echo "Starting base installation..."
   $CWD/install_files/base_install.sh
   catch_error $? "base installation."
-  echo "The base is installed"
+  echo "The base is installed."
 
-  echo "The installation in complete."
+  echo "The installation is complete."
 
 #Output access information for the source role
   echo ""
   echo "#############################################################"
   echo "# The App Server's installation is complete.                #"
   echo "# Please finish the installation on the Monitor Server.     #"
-  echo "# The App Server's SSH address and interface urls are below #"
+  echo "# The App Server's SSH address and interface URLs are below #"
   echo "#############################################################"
   echo ""
 
@@ -115,7 +115,7 @@ elif [ $ROLE = 'app' ]; then
   cat /var/chroot/source/var/lib/tor/hidden_service/hostname
   echo ""
   echo "The Document Interface listens on port 8080"
-  echo "You will need to append :8080 to the end of the Document Interface's urls."
+  echo "You will need to append :8080 to the end of the Document Interface's URLs."
   echo "The Document Interface's Tor URL and auth values are:"
   cat /var/chroot/document/var/lib/tor/hidden_service/hostname
   echo ""
