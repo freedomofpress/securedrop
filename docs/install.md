@@ -115,6 +115,7 @@ Fill out all of the global and `Monitor Server` options. Here are descriptions o
 
 Fill out the relevant options, save and exit. Then run the production script.
 
+    find ./ -name "*.sh" -exec chmod +x {} \;
     sudo ./production_installation.sh
 
 Wait for the script to run. When it's done, it should say this:
@@ -140,6 +141,7 @@ This time edit the global and `App Server` settings. Here are descriptions of th
 
 Save and exit. When you're done, run the production script:
 
+    find ./ -name "*.sh" -exec chmod +x {} \;
     sudo ./production_installation.sh
 
 A Google Authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
