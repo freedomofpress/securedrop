@@ -114,6 +114,17 @@ def genkeypair(name, secret):
     ))
 
 
+def delete_reply_keypair(source_id):
+    key = getkey(source_id)
+    # If this source was never flagged for reivew, they won't have a reply keypair
+    if not key: return
+    # The private key needs to be deleted before the public key can be deleted
+    # http://pythonhosted.org/python-gnupg/#deleting-keys
+    gpg.delete_keys(key, True) # private key
+    gpg.delete_keys(key)       # public key
+    # TODO: srm?
+
+
 def getkey(name):
     for key in gpg.list_keys():
         for uid in key['uids']:
@@ -162,11 +173,6 @@ def decrypt(name, secret, s):
     """
     secret = shash(secret, salt=BCRYPT_GPG_SALT)
     return gpg.decrypt(s, passphrase=secret).data
-
-
-def secureunlink(fn):
-    store.verify(fn)
-    return subprocess.check_call(['srm', fn])
 
 
 if __name__ == "__main__":
