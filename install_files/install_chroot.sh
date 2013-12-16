@@ -257,6 +257,9 @@ FOE
   ONION_ADDRESS="$(echo /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname)"
   sed -i "s|ONION_ADDRESS|$ONION_ADDRESS|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
 
+  #Set the max file size for requests in the apache config
+  sed -i "s|MAX_REQUEST_SIZE|$MAX_REQUEST_SIZE|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+
   if grep -q "APP_GPG_KEY_FINGERPRINT" /var/chroot/$JAIL/var/www/securedrop/config.py; then
     echo "Copying GPG Fingerprint to $JAIL/var/www/securedrop/config.py"
     sed -i -e "s|APP_GPG_KEY_FINGERPRINT|$APP_GPG_KEY_FINGERPRINT|g" /var/chroot/$JAIL/var/www/securedrop/config.py
