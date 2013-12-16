@@ -113,7 +113,6 @@ sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config/base.py
 # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
 sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config/development.py
 echo "Creating database tables..."
-SECUREDROP_ENV=test python -c 'import db; db.create_tables()'
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
 echo ""
