@@ -93,7 +93,6 @@ cp config/base.py.example config/base.py
 cp config/test.py.example config/test.py
 cp config/development.py.example config/development.py
 securedrop_root=$(pwd)/.securedrop
-sed -i "s@^SECUREDROP_ROOT='/tmp/securedrop_test'@SECUREDROP_ROOT='$securedrop_root'@" config/test.py
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
