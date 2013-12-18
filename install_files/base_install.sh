@@ -190,6 +190,8 @@ for SSH_USER in $SSH_USERS; do
     echo "Creating Google Authenticator code for $SSH_USER in their home directory"
     su $SSH_USER -c google-authenticator 
     catch_error $? "generating google-authenticator code for $SSH_USER"
+    #ensure that the .google_authenticator file's permissions are set to 400
+    chmod 400 /home/$SSH_USER/.google_authenticator
     echo ""
   else
     echo "$SSH_USER user does not exist."
