@@ -21,7 +21,7 @@ Header edit Set-Cookie ^(.*)$ $;HttpOnly
 Header always append X-Frame-Options DENY
 Header set X-XSS-Protection "1; mode=block"
 
-LimitRequestBody 512000
+LimitRequestBody MAX_REQUEST_SIZE
 
 <Directory />
   Options None
