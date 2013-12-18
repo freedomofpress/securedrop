@@ -11,7 +11,7 @@ WSGIProcessGroup document
 WSGIScriptAlias / /var/www/securedrop/document.wsgi/
 AddType text/html .py
 
-#Allow for all hidden service addresses in the tor hostname file
+#Allow-Origin for each hidden service address in the tor hostname file
 #Header set Acess-Control-Allow-Origin "http://ONION_URL"
 #INSERT_ORIGIN_HERE
 
