@@ -2,7 +2,7 @@
 
 ## SecureDrop Depends on the Tor Browser
 
-Sources submitting documents or messages to SecureDrop, and the journalists viewing this correspondence, must connect to the secure server using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/. This bundle installs the Tor browser, as well as an application that is used to connect to the Tor network.
+Sources submitting documents or messages to SecureDrop, and the journalists viewing this correspondence, must connect to the respective Source or Document Interface using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/. This bundle installs the Tor browser, as well as an application that is used to connect to the Tor network.
 
 The Tor Browser can be used to access Tor _hidden service URLs_, which have domain names that end in ".onion". Media organizations will provide links to the .onion URLs of their SecureDrop pages, and each journalist that uses SecureDrop connects to the service with his or her own personal .onion URL.
 
@@ -18,7 +18,7 @@ Click the 'click here' link on the Javascript warning and a message will pop up 
 
 The page should now look similar to the screenshot below. If this is the first time you are using SecureDrop, click the "Submit Documents" button.
 
-![Source website](/images/manual/source3.png)
+![Source Interface](/images/manual/source3.png)
 
 You should now see a screen that shows the unique code name that SecureDrop has generated for you. In the example screenshot below the codename is `bough fisk jed sold essen nail 1 prissy`, but yours will be different. It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down and keep it in a safe place, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses.
 
@@ -36,7 +36,7 @@ After clicking Submit, a confirmation page should appear, showing that your mess
 
 If you have already submitted a document and would like to check for responses, click the "Check for a Response" button on the media organizations' SecureDrop homepage.
 
-![Source website](/images/manual/source7.png)
+![Source Interface](/images/manual/source7.png)
 
 The next page will ask for your secret code name; enter it and click Continue.
 
@@ -58,17 +58,17 @@ Repeat to continue communicating with the journalist.
 
 ## Using SecureDrop As a Journalist
 
-### Connecting to the Document Server
+### Connecting to the Document Interface
 
 Each journalist has their own authenticated Tor hidden service URL. The journalist needs to use the Tor Browser that [has been configured for their use only](https://github.com/freedomofpress/securedrop/blob/master/docs/install.md#server-installation).
 
-Start by opening Tor Browser and loading the .onion URL to access the document interface of the `Application Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
+Start by opening Tor Browser and loading the .onion URL to access the document interface of the `App Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
 
-![Document server](/images/manual/document1.png)
+![Document Interface](/images/manual/document1.png)
 
 ### Interacting With Sources
 
-Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Viewing Station`. But first, if you'd like to reply to the source, click the 'flag this source for reply' button. 
+Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the 'flag this source for reply' button. 
 
 ![Read documents](/images/manual/document2.png)
 
@@ -88,7 +88,7 @@ Once your reply has been submitted, you will see this confirmation page.
 
 Rinse and repeat.
 
-### Moving Documents to Viewing Station
+### Moving Documents to the Secure Viewing Station
 
 The first step is downloading the documents. Click on a document or message name to save it. In order to protect you from malware, Tor Browser pops up a notice that looks like this every time you try to download a file that can't be opened in Tor Browser itself:
 
@@ -96,7 +96,7 @@ The first step is downloading the documents. Click on a document or message name
 
 Go ahead and click `Launch application` anyway, and save the document to a USB stick.
 
-Boot up the `Viewing Station` to Tails and mount the persistent volume. Once you have logged in, plug in the USB stick that you copied encrypted documents to it.
+Boot up the `Secure Viewing Station` to Tails and mount the persistent volume. Once you have logged in, plug in the USB stick that you copied encrypted documents to it.
 
 **Copy these documents to the Persistent folder before decrypting them. This an important step. Otherwise you might accidentally decrypt the documents on the USB stick, and they could be recoverable in the future.**
 
@@ -134,7 +134,7 @@ When you no longer need documents you can right-click on them and choose Wipe to
 
 ### Encrypting and Moving Documents to Journalist Workstation
 
-Before you move documents back to the USB stick to copy them to your workstation you should encrypt them to your personal PGP public key that you imported when setting up the `Viewing Station` to begin with.
+Before you move documents back to the USB stick to copy them to your workstation you should encrypt them to your personal PGP public key that you imported when setting up the `Secure Viewing Station` to begin with.
 
 Right-click on the document you want to encrypt and choose "Encrypt..."
 
