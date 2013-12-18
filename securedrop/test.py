@@ -516,7 +516,7 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(rv.status_code, 200)
             if not expected_success:
                 # there should be no reply
-                self.assertTrue("You have received a reply." not in rv.data)        
+                self.assertTrue("You have received a reply." not in rv.data)
             else:
                 self.assertIn(
                     "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
@@ -530,6 +530,47 @@ class TestIntegration(unittest.TestCase):
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
                 _logout(source_app)
+
+
+    def test_delete_collection(self):
+        # first, add a source
+        self.source_app.get('/generate')
+        self.source_app.post('/create')
+
+        # find the source on the journalist page
+        rv = self.journalist_app.get('/')
+        # find the list of source collections
+        soup = BeautifulSoup(rv.data)
+        cols = soup.select('ul#cols > li a')
+        self.assertEqual(len(cols), 1)
+
+        # find the first collection's delete form
+        col_del_forms_selector = 'ul#cols > li > form.delete-collection'
+        col_del_forms = soup.select(col_del_forms_selector)
+        self.assertEqual(len(col_del_forms), 1)
+
+        # extract the necessary POST parameters
+        col_del_form_inputs = col_del_forms[0]('input')
+        sid = col_del_form_inputs[1]['value']
+        col_name = col_del_form_inputs[2]['value']
+
+        # POST the col delete
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            sid=sid,
+            col_name=col_name
+        ), follow_redirects=True)
+        self.assertEquals(rv.status_code, 200)
+        # /col/delete redirects to the index
+        self.assertIn(escape("%s's collection permanently deleted" % (col_name,)), rv.data)
+        self.assertIn("No documents have been submitted!", rv.data)
+
+        # TODO: functional tests (selenium)
+        # This code just tests the underlying API and *does not* test the
+        # interactions due to the Javascript in journalist.js. Once we have
+        # functional tests, we should add tests for:
+        # 1. Warning dialog appearance
+        # 2. "Don't show again" checkbox behavior
+        # 2. Correct behavior on "yes" and "no" buttons
 
 
 class TestStore(unittest.TestCase):
