@@ -55,9 +55,11 @@ install dependencies:
     $ pip install -r source-requirements.txt
     $ pip install -r document-requirements.txt
 
-cp the config template and fill in empty values:
+cp the config templates and fill in empty values:
 
-    $ cp example_config.py config.py
+    $ cp config/base.py.example config/base.py
+    $ cp config/development.py.example config/development.py
+    $ cp config/test.py.example config/test.py
 
 Create the `STORE_DIR` and `GPG_KEY_DIR`:
 
@@ -78,7 +80,7 @@ recommend choosing a userid like "SecureDrop Development (DO NOT USE IN
 PRODUCTION)" so you don't forget!
 
 Once you have the dev keypair, copy the key fingerprint to the `JOURNALIST_KEY`
-field of `config.py`. You can find the key fingerprint by running:
+field of `config/development.py`. You can find the key fingerprint by running:
 
     $ gpg2 --homedir .securedrop/keys --fingerprint
 
