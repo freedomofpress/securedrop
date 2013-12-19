@@ -144,6 +144,15 @@ catch_error $? "configuring sysctl.conf"
 echo "Sysctl.conf configured"
 
 
+#rng-tools tweaks
+echo ""
+echo "Configuring /etc/default/rng-tools..."
+echo "HRNGDEVICE=/dev/urandom" >> /etc/default/rng-tools
+service rng-tools restart | tee -a build.log
+catch_error $? "configuring rng-tools"
+echo "rng-tools configured"
+
+
 #Install tor repo, keyring and tor
 echo ""
 echo "Installing Tor..."
