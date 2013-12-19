@@ -1,6 +1,6 @@
 # Global
 ROLE=""                      # Role of the server (monitor|app)
-APP_IP=""                    # IP address of the Source Server
+APP_IP=""                    # IP address of the App Server
 MONITOR_IP=""                # IP address of the Monitor Server
 SSH_USERS=""                 # Space separated list of usernames that will SSH into this server
 

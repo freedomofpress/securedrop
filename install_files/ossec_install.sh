@@ -177,7 +177,7 @@ check_status() {
   sleep 15
   if ! /var/ossec/bin/list_agents -c | grep "^source-$APP_IP"; then
     echo "The source host is not active."
-    echo "It needs to be active to monitor the source server"
+    echo "It needs to be active to monitor the App Server"
     echo "https://www.ossec.net/doc"
     echo "Exiting with errors. The App Server's ossec agent is not connected"
     exit 0
