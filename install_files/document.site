@@ -1,7 +1,9 @@
 NameVirtualHost 127.0.0.1:8080
 <VirtualHost 127.0.0.1:8080>
 ServerName 127.0.0.1:8080
+
 #ServerAlias for each hidden service address in the tor hostname file
+#ServerAlias ONION_ADDRESS
 #INSERT_SERVER_ALIASES_HERE
 
 DocumentRoot /var/www/securedrop/static
