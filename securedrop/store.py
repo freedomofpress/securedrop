@@ -39,10 +39,9 @@ def verify(p):
     if os.path.relpath(p, config.STORE_DIR).startswith('..'):
         raise PathException("Invalid directory %s" % (p, ))
 
-    filename = os.path.basename(p)
-    ext = os.path.splitext(filename)[-1]
-
     if os.path.isfile(p):
+        filename = os.path.basename(p)
+        ext = os.path.splitext(filename)[-1]
         if filename == '_FLAG':
             return True
         if ext != '.gpg':
