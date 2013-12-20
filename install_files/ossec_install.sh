@@ -158,12 +158,16 @@ kill_authd() {
   echo "Leaving authd running is a security risk."
   echo "Start the installation on App Server."
   echo "After installation on the App Server is complete"
-  read -p "enter 'Y' to continue: (Y|N): " -e -i Y CONNECT_ANS
+  read -p "enter 'Y' to continue: (Y|N): " -e -i N CONNECT_ANS
   if [ $CONNECT_ANS = "Y" -o $CONNECT_ANS = "y" ]; then
     echo "Stopping authd..."
     pkill ossec-authd
     catch_error $? "killing ossec-authd"
     echo "ossec-authd killed"
+  elif [ $CONNECT_ANS = "N" -o $CONNECT_ANS = "n" ]; then
+    echo "Wait for the App Server installation to complete"
+    echo ""
+    kill_authd
   else
     echo "invalid entry try again. <CTRL> C to exit."
     echo "!!!OSSEC-authd does not authenticate. Leaving it running is a security risk not acceptable for production environments!!!"
