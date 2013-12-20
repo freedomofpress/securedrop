@@ -35,7 +35,8 @@ def verify(p):
     if not p == os.path.abspath(p):
         raise PathException("The path is not absolute and/or normalized")
 
-    if os.path.commonprefix([config.STORE_DIR, p]) != config.STORE_DIR:
+    # Check that the path p is in config.STORE_DIR
+    if os.path.relpath(p, config.STORE_DIR).startswith('..'):
         raise PathException("Invalid directory %s" % (p, ))
 
     filename = os.path.basename(p)
