@@ -114,7 +114,10 @@ install_tor
 
 #Create the securedrop user on the host
 echo "Creating the securedrop user on the host system"
-useradd securedrop | tee -a build.log
+groupadd -g 666 securedrop
+groupadd -g 667 source
+groupadd -g 668 document
+useradd -u 666 -g 666 securedrop | tee -a build.log
 
 install_chroot
 
