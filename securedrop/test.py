@@ -530,6 +530,8 @@ class TestStore(unittest.TestCase):
     def test_verify(self):
         with self.assertRaises(store.PathException):
             store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+        with self.assertRaises(store.PathException):
+            store.verify(config.STORE_DIR + "_backup")
 
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
