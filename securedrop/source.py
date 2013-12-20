@@ -7,6 +7,7 @@ from functools import wraps
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
+import werkzeug
 
 import config
 import version
@@ -173,19 +174,11 @@ def submit():
     fh = request.files['fh']
 
     if msg:
-        msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
-        crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
+        store.save_message_submission(g.sid, msg)
         flash("Thanks! We received your message.", "notification")
     if fh:
-        file_loc = store.path(g.sid, "%s_doc.zip.gpg" % uuid.uuid4())
-
-        s = StringIO()
-        zip_file = zipfile.ZipFile(s, 'w')
-        zip_file.writestr(fh.filename, fh.read())
-        zip_file.close()
-        s.reset()
-
-        crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+        sanitized_filename = werkzeug.secure_filename(fh.filename)
+        store.save_file_submission(g.sid, sanitized_filename, fh.stream)
         flash("Thanks! We received your document '%s'."
               % fh.filename or '[unnamed]', "notification")
 

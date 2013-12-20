@@ -8,6 +8,7 @@ from cStringIO import StringIO
 import zipfile
 from time import sleep
 import uuid
+from mock import patch, ANY
 
 import gnupg
 from flask import session, g, escape
@@ -189,7 +190,7 @@ class TestSource(TestCase):
             self.assertNotIn('logged_in', session)
 
     def test_submit_message(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test.",
             fh=(StringIO(''), ''),
@@ -198,7 +199,7 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
 
     def test_submit_file(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="",
             fh=(StringIO('This is a test'), 'test.txt'),
@@ -208,7 +209,7 @@ class TestSource(TestCase):
                       rv.data)
 
     def test_submit_both(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test",
             fh=(StringIO('This is a test'), 'test.txt'),
@@ -217,6 +218,17 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
+
+    @patch('store.save_file_submission')
+    def test_submit_sanitizes_filename(self, save_file_submission):
+        """Test that upload file name is sanitized"""
+        self._new_codename()
+        insecure_filename = '../../bin/gpg'
+        self.client.post('/submit', data=dict(
+            msg="",
+            fh=(StringIO('This is a test'), insecure_filename),
+        ), follow_redirects=True)
+        save_file_submission.assert_called_with(ANY, 'bin_gpg', ANY)
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
