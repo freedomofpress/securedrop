@@ -219,16 +219,18 @@ class TestSource(TestCase):
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
 
-    @patch('store.save_file_submission')
-    def test_submit_sanitizes_filename(self, save_file_submission):
+    @patch('zipfile.ZipFile.writestr')
+    def test_submit_sanitizes_filename(self, zipfile_write):
         """Test that upload file name is sanitized"""
-        self._new_codename()
         insecure_filename = '../../bin/gpg'
+        sanitized_filename = 'bin_gpg'
+
+        self._new_codename()
         self.client.post('/submit', data=dict(
             msg="",
             fh=(StringIO('This is a test'), insecure_filename),
         ), follow_redirects=True)
-        save_file_submission.assert_called_with(ANY, 'bin_gpg', ANY)
+        zipfile_write.assert_called_with(sanitized_filename, ANY)
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])

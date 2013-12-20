@@ -8,6 +8,8 @@ import uuid
 import tempfile
 from cStringIO import StringIO
 
+from werkzeug import secure_filename
+
 VALIDATE_FILENAME = re.compile(
     "^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
 
@@ -69,14 +71,14 @@ def get_bulk_archive(filenames):
     return zip_file
 
 def save_file_submission(sid, filename, stream):
-    file_loc = path(sid, "%s_doc.zip.gpg" % uuid.uuid4())
+    sanitized_filename = secure_filename(filename)
 
     s = StringIO()
-    zip_file = zipfile.ZipFile(s, 'w')
-    zip_file.writestr(filename, stream.read())
-    zip_file.close()
+    with zipfile.ZipFile(s, 'w') as zf:
+        zf.writestr(sanitized_filename, stream.read())
     s.reset()
 
+    file_loc = path(sid, "%s_doc.zip.gpg" % uuid.uuid4())
     crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
 
 def save_message_submission(sid, message):
