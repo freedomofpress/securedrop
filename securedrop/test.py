@@ -533,28 +533,25 @@ class TestIntegration(unittest.TestCase):
 
 
     def test_delete_collection(self):
+        """Test the "delete collection" button on each collection page"""
         # first, add a source
         self.source_app.get('/generate')
         self.source_app.post('/create')
 
         # find the source on the journalist page
         rv = self.journalist_app.get('/')
-        # find the list of source collections
+        # navigate to the collection page
         soup = BeautifulSoup(rv.data)
-        cols = soup.select('ul#cols > li a')
-        self.assertEqual(len(cols), 1)
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        rv = self.journalist_app.get(first_col_url)
+        self.assertEqual(rv.status_code, 200)
 
-        # find the first collection's delete form
-        col_del_forms_selector = 'ul#cols > li > form.delete-collection'
-        col_del_forms = soup.select(col_del_forms_selector)
-        self.assertEqual(len(col_del_forms), 1)
-
-        # extract the necessary POST parameters
-        col_del_form_inputs = col_del_forms[0]('input')
-        sid = col_del_form_inputs[1]['value']
-        col_name = col_del_form_inputs[2]['value']
-
-        # POST the col delete
+        # find the delete form and extract the post parameters
+        soup = BeautifulSoup(rv.data)
+        delete_form_inputs = soup.select('form#delete-collection')[0]('input')
+        sid = delete_form_inputs[1]['value']
+        col_name = delete_form_inputs[2]['value']
+        # POST to /col/delete
         rv = self.journalist_app.post('/col/delete', data=dict(
             sid=sid,
             col_name=col_name

@@ -7,37 +7,11 @@
 <ul id="cols" class="plain">
   {% for col in cols %}
   <li>
-    <form class="delete-collection" action='/col/delete' method='post'>
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="sid" value="{{ col.sid }}"/>
-      <input type="hidden" name="col_name" value="{{ col.name }}"/>
-      <button class="delete-collection" type="submit">
-        <img class="delete-collection-icon" src="/static/i/delete_gray.png" alt="Delete collection" title="Delete collection">
-      </button>
-    </form>
     <span class="code-name"><a href="/col/{{ col.sid }}">{{ col.name }}</a></span><br />
     last updated {{ col.date }}
   </li>
   {% endfor %}
 </ul>
-</div>
-
-<div id="modal-dim"></div>
-<div id="delete-collection-warning">
-  <p class="strong">Are you sure you want to delete this collection?</p>
-  <p>If you do, this source will not be able to log in again using the same codename.</p>
-  <form id="delete-warning-confirmation">
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-    <input name="action" type="hidden" id="action" />
-    <p>
-      <input name="optout" id="optout" type="checkbox" value="yes"/>
-      <label for="optout">Don't show this warning again</label>
-    </p>
-    <p>
-      <button type="submit" name="del" id="del">Yes, delete it</button>
-      <button type="submit" name="nodel" id="nodel">No, don't delete it</button>
-    </p>
-  </form>
 </div>
 {% else %}
 <p>No documents have been submitted!</p>
