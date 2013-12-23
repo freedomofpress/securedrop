@@ -87,13 +87,32 @@ def col(sid):
                            haskey=haskey, flagged=flagged)
 
 
-@app.route('/col/delete', methods=('POST',))
-def delete_collection():
-    source_id, col_name = request.form['sid'], request.form['col_name']
+def delete_collection(source_id):
     store.delete_source_directory(source_id)
     crypto_util.delete_reply_keypair(source_id)
     db.delete_source(source_id)
-    flash("%s's collection permanently deleted" % (col_name,), "notification")
+
+
+@app.route('/col/delete', methods=('POST',))
+def col_delete():
+    if 'cols_selected' in request.form:
+        # deleting multiple collections from the index
+        if len('cols_selected') < 1:
+            flash("No collections selected to delete!", "warning")
+        else:
+            cols_selected = request.form.getlist('cols_selected')
+            for source_id in cols_selected:
+                delete_collection(source_id)
+            flash("%s %s deleted" % (
+                len(cols_selected),
+                "collection" if len(cols_selected) == 1 else "collections"
+            ), "notification")
+    else:
+        # deleting a single collection from its /col page
+        source_id, col_name = request.form['sid'], request.form['col_name']
+        delete_collection(source_id)
+        flash("%s's collection deleted" % (col_name,), "notification")
+
     return redirect(url_for('index'))
 
 @app.route('/col/<sid>/<fn>')

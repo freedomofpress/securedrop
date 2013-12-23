@@ -538,7 +538,6 @@ class TestIntegration(unittest.TestCase):
         self.source_app.get('/generate')
         self.source_app.post('/create')
 
-        # find the source on the journalist page
         rv = self.journalist_app.get('/')
         # navigate to the collection page
         soup = BeautifulSoup(rv.data)
@@ -558,8 +557,29 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
         # /col/delete redirects to the index
-        self.assertIn(escape("%s's collection permanently deleted" % (col_name,)), rv.data)
+        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
+
+
+    def test_delete_collections(self):
+        """Test the "delete selected" checkboxes on the index page that can be
+        used to delete multiple collections"""
+        # first, add some sources
+        num_sources = 2
+        for i in range(num_sources):
+            self.source_app.get('/generate')
+            self.source_app.post('/create')
+
+        rv = self.journalist_app.get('/')
+        # get all the checkbox values
+        soup = BeautifulSoup(rv.data)
+        checkbox_values = [ checkbox['value'] for checkbox in
+                            soup.select('input[name="cols_selected"]') ]
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            cols_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("%s collections deleted" % (num_sources,), rv.data)
 
         # TODO: functional tests (selenium)
         # This code just tests the underlying API and *does not* test the

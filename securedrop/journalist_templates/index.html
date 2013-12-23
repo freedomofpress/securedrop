@@ -4,14 +4,23 @@
 <h2><span class="headline">Latest submissions</span></h2>
 {% if cols %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
+<form action="/col/delete" method="post">
 <ul id="cols" class="plain">
   {% for col in cols %}
   <li>
+    <input type="checkbox" name="cols_selected" value="{{ col.sid }}" />
     <span class="code-name"><a href="/col/{{ col.sid }}">{{ col.name }}</a></span><br />
     last updated {{ col.date }}
   </li>
   {% endfor %}
 </ul>
+<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<p>
+  <button type="submit" name="action" value="delete">Delete selected</button>
+  (<span id="select_all">select all</span>, <span id="select_none">select none</span>)
+</p>
+<p>Click to delete the selected collections. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
+</form>
 </div>
 {% else %}
 <p>No documents have been submitted!</p>
