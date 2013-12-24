@@ -209,17 +209,20 @@ generate_2_step_code
 #Configure Iptables
 if [ $ROLE = 'app' ]; then
   OTHER_IP=$MONITOR_IP
+  RULES_V4="app.rules_v4"
 elif [ $ROLE = 'monitor' ]; then
   OTHER_IP=$APP_IP
+  RULES_V$="monitor.rules_v4"
 fi
 
 if [ ! -d /etc/iptables ]; then
   mkdir /etc/iptables | tee -a build.log
   catch_error $? "creating /etc/iptables directory"
 fi
-sed -i -e "s/OTHER_IP/$OTHER_IP/g" base.rules_v4 | tee -a build.log
-catch_error $? "replacing $OTHER_IP in base.rules_v4"
-cp base.rules_v4 /etc/iptables/rules_v4 | tee -a build.log
+
+sed -i -e "s/OTHER_IP/$OTHER_IP/g" $RULES_V4 | tee -a build.log
+catch_error $? "replacing $OTHER_IP in $RULES_V4"
+cp $RULES_V4 /etc/iptables/rules_v4 | tee -a build.log
 catch_error $? "creating iptables rules file /etc/iptables/rules_v4"
 echo "The /etc/iptables/rules_v4 file created"
 
