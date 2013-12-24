@@ -11,9 +11,10 @@ function is_likely_tor_browser() {
 function warn_user(messageDiv) {
   display_error(
     '<b>WARNING:</b> Your browser currently has Javascript enabled. ' +
-    '<a id="disable-js-anchor" href="/howto-disable-js">Click here</a> ' +
+    '<a id="disable-js-anchor" href="/howto-disable-js#how">Click here</a> ' +
     'to learn how to disable it, or ignore this warning to continue.<br>' +
-    '<strong>We recommend disabling Javascript to protect your anonymity.</strong>'
+    '<strong>We recommend disabling Javascript to protect your anonymity. </strong>' +
+    '<a href="/howto-disable-js#why">Learn more &raquo;</a>'
   );
 }
 
