@@ -4,6 +4,11 @@ from datetime import datetime
 import uuid
 from functools import wraps
 
+import logging
+# This module's logger is explicitly labeled so the correct logger is used,
+# even when this is run from the command line (e.g. during development)
+log = logging.getLogger('source')
+
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
@@ -116,7 +121,7 @@ def create():
     sid = crypto_util.shash(session['codename'])
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
-        store.log("Got a duplicate ID '%s'" % sid)
+        log.warning("Got a duplicate ID '%s'" % sid)
     else:
         os.mkdir(store.path(sid))
     session['logged_in'] = True

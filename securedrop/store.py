@@ -8,6 +8,9 @@ import uuid
 import tempfile
 from cStringIO import StringIO
 
+import logging
+log = logging.getLogger(__name__)
+
 from werkzeug import secure_filename
 
 VALIDATE_FILENAME = re.compile(
@@ -84,6 +87,3 @@ def save_file_submission(sid, filename, stream):
 def save_message_submission(sid, message):
     msg_loc = path(sid, '%s_msg.gpg' % uuid.uuid4())
     crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
-
-def log(msg):
-    file(path('NOTES'), 'a').write(msg)
