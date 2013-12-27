@@ -1,4 +1,4 @@
-# Last Modified: Mon Dec  2 00:44:13 2013
+# Last Modified: Fri Dec 27 18:11:40 2013
 #include <tunables/global>
 
 /var/chroot/source/usr/lib/apache2/mpm-worker/apache2 {
@@ -94,6 +94,7 @@
   /var/chroot/source/run/apache2/wsgi.*.sock w,
   /var/chroot/source/sbin/ldconfig rix,
   /var/chroot/source/sbin/ldconfig.real rix,
+  /var/chroot/source/tmp/* rw,
   /var/chroot/source/usr/bin/gpg-agent rix,
   /var/chroot/source/usr/bin/gpg2 rix,
   /var/chroot/source/usr/bin/srm rix,
@@ -117,6 +118,10 @@
   /var/chroot/source/usr/lib/python2.7/StringIO.pyc r,
   /var/chroot/source/usr/lib/python2.7/UserDict.py r,
   /var/chroot/source/usr/lib/python2.7/UserDict.pyc r,
+  /var/chroot/source/usr/lib/python2.7/_LWPCookieJar.py r,
+  /var/chroot/source/usr/lib/python2.7/_LWPCookieJar.pyc r,
+  /var/chroot/source/usr/lib/python2.7/_MozillaCookieJar.py r,
+  /var/chroot/source/usr/lib/python2.7/_MozillaCookieJar.pyc r,
   /var/chroot/source/usr/lib/python2.7/__future__.py r,
   /var/chroot/source/usr/lib/python2.7/__future__.pyc r,
   /var/chroot/source/usr/lib/python2.7/_abcoll.py r,
@@ -131,6 +136,8 @@
   /var/chroot/source/usr/lib/python2.7/base64.pyc r,
   /var/chroot/source/usr/lib/python2.7/bisect.py r,
   /var/chroot/source/usr/lib/python2.7/bisect.pyc r,
+  /var/chroot/source/usr/lib/python2.7/calendar.py r,
+  /var/chroot/source/usr/lib/python2.7/calendar.pyc r,
   /var/chroot/source/usr/lib/python2.7/cgi.py r,
   /var/chroot/source/usr/lib/python2.7/cgi.pyc r,
   /var/chroot/source/usr/lib/python2.7/codecs.py r,
@@ -138,6 +145,8 @@
   /var/chroot/source/usr/lib/python2.7/collections.py r,
   /var/chroot/source/usr/lib/python2.7/collections.pyc r,
   /var/chroot/source/usr/lib/python2.7/config/Makefile r,
+  /var/chroot/source/usr/lib/python2.7/cookielib.py r,
+  /var/chroot/source/usr/lib/python2.7/cookielib.pyc r,
   /var/chroot/source/usr/lib/python2.7/copy.py r,
   /var/chroot/source/usr/lib/python2.7/copy.pyc r,
   /var/chroot/source/usr/lib/python2.7/copy_reg.py r,
@@ -475,6 +484,8 @@
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/local.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/routing.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/routing.pyc r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/test.py r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/test.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/urls.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/urls.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/utils.py r,
@@ -543,7 +554,6 @@
   /var/chroot/source/var/www/securedrop/static/i/favicon.png r,
   /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/i/securedrop.png r,
-  /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/js/libs/jquery-2.0.3.min.js r,
   /var/chroot/source/var/www/securedrop/static/js/warn.js r,
   /var/chroot/source/var/www/securedrop/static/libs/gritter/css/jquery.gritter.css r,
