@@ -196,7 +196,7 @@ def delete():
     potential_files = os.listdir(g.loc)
     if msgid not in potential_files:
         abort(404)  # TODO are the checks necessary?
-    crypto_util.secureunlink(store.path(g.sid, msgid))
+    store.secure_unlink(store.path(g.sid, msgid))
     flash("Reply deleted.", "notification")
 
     return redirect(url_for('lookup'))

@@ -6,6 +6,7 @@ import zipfile
 import crypto_util
 import uuid
 import tempfile
+import subprocess
 from cStringIO import StringIO
 
 import logging
@@ -73,6 +74,7 @@ def get_bulk_archive(filenames):
             zip.write(filename, arcname=os.path.basename(filename))
     return zip_file
 
+
 def save_file_submission(sid, filename, stream):
     sanitized_filename = secure_filename(filename)
 
@@ -84,6 +86,20 @@ def save_file_submission(sid, filename, stream):
     file_loc = path(sid, "%s_doc.zip.gpg" % uuid.uuid4())
     crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
 
+
 def save_message_submission(sid, message):
     msg_loc = path(sid, '%s_msg.gpg' % uuid.uuid4())
     crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
+
+
+def secure_unlink(fn, recursive=False):
+    verify(fn)
+    command = ['srm']
+    if recursive:
+        command.append('-r')
+    command.append(fn)
+    return subprocess.check_call(command)
+
+
+def delete_source_directory(source_id):
+    secure_unlink(path(source_id), recursive=True)

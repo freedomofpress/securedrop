@@ -516,7 +516,7 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(rv.status_code, 200)
             if not expected_success:
                 # there should be no reply
-                self.assertTrue("You have received a reply." not in rv.data)        
+                self.assertTrue("You have received a reply." not in rv.data)
             else:
                 self.assertIn(
                     "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
@@ -530,6 +530,64 @@ class TestIntegration(unittest.TestCase):
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
                 _logout(source_app)
+
+
+    def test_delete_collection(self):
+        """Test the "delete collection" button on each collection page"""
+        # first, add a source
+        self.source_app.get('/generate')
+        self.source_app.post('/create')
+
+        rv = self.journalist_app.get('/')
+        # navigate to the collection page
+        soup = BeautifulSoup(rv.data)
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        rv = self.journalist_app.get(first_col_url)
+        self.assertEqual(rv.status_code, 200)
+
+        # find the delete form and extract the post parameters
+        soup = BeautifulSoup(rv.data)
+        delete_form_inputs = soup.select('form#delete-collection')[0]('input')
+        sid = delete_form_inputs[1]['value']
+        col_name = delete_form_inputs[2]['value']
+        # POST to /col/delete
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            sid=sid,
+            col_name=col_name
+        ), follow_redirects=True)
+        self.assertEquals(rv.status_code, 200)
+        # /col/delete redirects to the index
+        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
+        self.assertIn("No documents have been submitted!", rv.data)
+
+
+    def test_delete_collections(self):
+        """Test the "delete selected" checkboxes on the index page that can be
+        used to delete multiple collections"""
+        # first, add some sources
+        num_sources = 2
+        for i in range(num_sources):
+            self.source_app.get('/generate')
+            self.source_app.post('/create')
+
+        rv = self.journalist_app.get('/')
+        # get all the checkbox values
+        soup = BeautifulSoup(rv.data)
+        checkbox_values = [ checkbox['value'] for checkbox in
+                            soup.select('input[name="cols_selected"]') ]
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            cols_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("%s collections deleted" % (num_sources,), rv.data)
+
+        # TODO: functional tests (selenium)
+        # This code just tests the underlying API and *does not* test the
+        # interactions due to the Javascript in journalist.js. Once we have
+        # functional tests, we should add tests for:
+        # 1. Warning dialog appearance
+        # 2. "Don't show again" checkbox behavior
+        # 2. Correct behavior on "yes" and "no" buttons
 
 
 class TestStore(unittest.TestCase):
