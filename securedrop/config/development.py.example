@@ -2,7 +2,7 @@ import os
 from base import BaseFlaskConfig
 
 JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
-SECUREDROP_ROOT=os.path.abspath('../.securedrop')
+SECUREDROP_ROOT=os.path.abspath('.securedrop')
 
 class FlaskConfig(BaseFlaskConfig):
     DEBUG = True
