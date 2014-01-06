@@ -1,4 +1,4 @@
-# Last Modified: Mon Dec 23 03:27:07 2013
+# Last Modified: Fri Dec 27 18:11:35 2013
 #include <tunables/global>
 
 /var/chroot/document/usr/lib/apache2/mpm-worker/apache2 {
@@ -760,6 +760,8 @@
   /var/chroot/document/var/www/securedrop/keys/pubring.gpg~ w,
   /var/chroot/document/var/www/securedrop/keys/random_seed rwk,
   /var/chroot/document/var/www/securedrop/keys/secring.gpg r,
+  /var/chroot/document/var/www/securedrop/keys/secring.gpg.lock rw,
+  /var/chroot/document/var/www/securedrop/keys/secring.gpg.tmp rw,
   /var/chroot/document/var/www/securedrop/keys/trustdb.gpg rw,
   /var/chroot/document/var/www/securedrop/keys/trustdb.gpg.lock rwl,
   /var/chroot/document/var/www/securedrop/static/css/securedrop.css r,
