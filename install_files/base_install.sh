@@ -212,7 +212,7 @@ if [ $ROLE = 'app' ]; then
   RULES_V4="app.rules_v4"
 elif [ $ROLE = 'monitor' ]; then
   OTHER_IP=$APP_IP
-  RULES_V$="monitor.rules_v4"
+  RULES_V4="monitor.rules_v4"
 fi
 
 if [ ! -d /etc/iptables ]; then
