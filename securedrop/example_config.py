@@ -8,8 +8,8 @@ WORD_LIST = './wordlist'
 NOUNS='./dictionaries/nouns.txt'
 ADJECTIVES='./dictionaries/adjectives.txt'
 JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
-BCRYPT_ID_SALT=''    # bcrypt.gensalt(); for constructing public ID from source codename
-BCRYPT_GPG_SALT=''   # bcrypt.gensalt(); for stretching source codename into GPG passphrase
+SCRYPT_ID_SALT=''    # os.urandom(32); for constructing public ID from source codename
+SCRYPT_GPG_SALT=''   # os.urandom(32); for stretching source codename into GPG passphrase
 
 ### Theming Options
 

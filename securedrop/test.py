@@ -26,7 +26,7 @@ import journalist
 
 
 def _block_on_reply_keypair_gen(codename):
-    sid = crypto_util.shash(codename)
+    sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
         sleep(0.1)
 
