@@ -10,6 +10,7 @@ ADJECTIVES='./dictionaries/adjectives.txt'
 JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
 SCRYPT_ID_SALT=''    # os.urandom(32); for constructing public ID from source codename
 SCRYPT_GPG_SALT=''   # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
 ### Theming Options
 

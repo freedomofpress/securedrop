@@ -19,10 +19,11 @@ GPG_KEY_TYPE = "RSA"
 if os.environ.get('SECUREDROP_ENV') == 'test':
     # Optiimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
-    # TODO: optimize scrypt cost factors
     GPG_KEY_LENGTH = "1024"
+    SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
 else:
     GPG_KEY_LENGTH = "4096"
+    SCRYPT_PARAMS = config.SCRYPT_PARAMS
 
 SCRYPT_ID_SALT = config.SCRYPT_ID_SALT
 SCRYPT_GPG_SALT = config.SCRYPT_GPG_SALT
@@ -96,7 +97,7 @@ def hash_codename(codename, salt=SCRYPT_ID_SALT):
     >>> hash_codename('Hello, world!')
     'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
     """
-    return b32encode(scrypt.hash(clean(codename), salt))
+    return b32encode(scrypt.hash(clean(codename), salt, **SCRYPT_PARAMS))
 
 
 def genkeypair(name, secret):
