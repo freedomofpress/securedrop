@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-import scrypt
 import subprocess
-import threading
+from base64 import b32encode
+import re
+
 from Crypto.Random import random
 import random as badrandom
 import gnupg
+import scrypt
+
 import config
 import store
-from base64 import b32encode
-import re
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
