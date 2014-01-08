@@ -62,15 +62,15 @@ def ignore_static(f):
 @ignore_static
 def setup_g():
     """Store commonly used values in Flask's special g object"""
-    # ignore_static here because `crypto_util.shash` is bcrypt (very time consuming),
-    # and we don't need to waste time running if we're just serving a static
-    # resource that won't need to access these common values.
+    # ignore_static here because `crypto_util.hash_codename` is scrypt (very
+    # time consuming), and we don't need to waste time running if we're just
+    # serving a static resource that won't need to access these common values.
     if logged_in():
         # We use session.get (which defaults to None if 'flagged' is not in the
         # session) to avoid a KeyError on the redirect from login/ to lookup/
         g.flagged = session.get('flagged')
         g.codename = session['codename']
-        g.sid = crypto_util.shash(g.codename)
+        g.sid = crypto_util.hash_codename(g.codename)
         g.loc = store.path(g.sid)
 
 
@@ -118,7 +118,7 @@ def generate():
 
 @app.route('/create', methods=['POST'])
 def create():
-    sid = crypto_util.shash(session['codename'])
+    sid = crypto_util.hash_codename(session['codename'])
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
         log.warning("Got a duplicate ID '%s'" % sid)
@@ -203,7 +203,7 @@ def delete():
 
 
 def valid_codename(codename):
-    return os.path.exists(store.path(crypto_util.shash(codename)))
+    return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
 
 @app.route('/login', methods=('GET', 'POST'))
