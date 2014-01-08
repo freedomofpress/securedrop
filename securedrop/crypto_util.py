@@ -25,15 +25,15 @@ else:
     GPG_KEY_LENGTH = "4096"
     SCRYPT_PARAMS = config.SCRYPT_PARAMS
 
-SCRYPT_ID_SALT = config.SCRYPT_ID_SALT
-SCRYPT_GPG_SALT = config.SCRYPT_GPG_SALT
+SCRYPT_ID_PEPPER = config.SCRYPT_ID_PEPPER
+SCRYPT_GPG_PEPPER = config.SCRYPT_GPG_PEPPER
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
 # Make sure these pass before the app can run
 # TODO: Add more tests
 def do_runtime_tests():
-    assert(config.SCRYPT_ID_SALT != config.SCRYPT_GPG_SALT)
+    assert(config.SCRYPT_ID_PEPPER != config.SCRYPT_GPG_PEPPER)
     # crash if we don't have srm:
     try:
         subprocess.check_call(['srm'], stdout=subprocess.PIPE)
@@ -92,7 +92,7 @@ def displayid(n):
     return badrandom_value.choice(adjectives) + " " + badrandom_value.choice(nouns)
 
 
-def hash_codename(codename, salt=SCRYPT_ID_SALT):
+def hash_codename(codename, salt=SCRYPT_ID_PEPPER):
     """
     >>> hash_codename('Hello, world!')
     'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
@@ -109,7 +109,7 @@ def genkeypair(name, secret):
     u'P'
     """
     name = clean(name)
-    secret = hash_codename(secret, salt=SCRYPT_GPG_SALT)
+    secret = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.gen_key(gpg.gen_key_input(
         key_type=GPG_KEY_TYPE, key_length=GPG_KEY_LENGTH,
         passphrase=secret,
@@ -170,7 +170,7 @@ def decrypt(name, secret, s):
     ... )
     'Goodbye, cruel world!'
     """
-    secret = hash_codename(secret, salt=SCRYPT_GPG_SALT)
+    secret = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(s, passphrase=secret).data
 
 
