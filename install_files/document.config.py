@@ -28,8 +28,9 @@ JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
 NOUNS='/var/www/securedrop/dictionaries/nouns.txt'
 ADJECTIVES='/var/www/securedrop/dictionaries/adjectives.txt'
-BCRYPT_ID_SALT='BCRYPT_ID_SALT_VALUE'
-BCRYPT_GPG_SALT='BCRYPT_GPG_SALT_VALUE'
+SCRYPT_ID_PEPPER='SCRYPT_ID_PEPPER_VALUE'
+SCRYPT_GPG_PEPPER='SCRYPT_GPG_PEPPER_VALUE'
+SCRYPT_PARAMS=dict(N=2**14, r=8, p=1)
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig

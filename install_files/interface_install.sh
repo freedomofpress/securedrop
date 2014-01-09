@@ -29,7 +29,6 @@ TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | c
 TOR_KEY_ID="886DDD89"
 TOR_KEY_FINGERPRINT="A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
 HOST_DEPENDENCIES=$(grep -vE "^\s*#" chroot-requirements.txt  | tr "\n" " ")
-HOST_PYTHON_DEPENDENCIES="python-bcrypt"
 DISABLE_MODS='auth_basic authn_file autoindex cgid env setenvif status'
 ENABLE_MODS='wsgi headers rewrite'
 BCRYPT_ID_SALT=""
@@ -98,17 +97,15 @@ if [ ! "$1" = "--no-updates" ]; then
   apt-get -y install $HOST_DEPENDENCIES | tee -a build.log
   catch_error $? "installing host dependencies"
 
-  pip install $HOST_PYTHON_DEPENDENCIES | tee -a build.log
-  catch_error $? "installing host python dependencies"
 fi
 
 #Generate salts and secret key that will be used in hashing codenames
 # / gpg passphrases and signing cookies
-BCRYPT_ID_SALT=$( python gen_bcrypt_salt.py )
-BCRYPT_GPG_SALT=$( python gen_bcrypt_salt.py )
-catch_error $? "generating bcrypt_salt"
+SCRYPT_ID_PEPPER=$( python gen_secret_key.py )
+SCRYPT_GPG_PEPPER=$( python gen_secret_key.py )
+catch_error $? "generating scrypt_pepper"
 SECRET_KEY=$( python gen_secret_key.py )
-catch_error $? "generating bcrypt_salt"
+catch_error $? "generating secret value for cookie signing"
 
 install_tor
 
