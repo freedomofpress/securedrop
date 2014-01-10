@@ -1,4 +1,4 @@
-# Last Modified: Fri Dec 27 18:11:40 2013
+# Last Modified: Thu Jan  9 14:13:55 2014
 #include <tunables/global>
 
 /var/chroot/source/usr/lib/apache2/mpm-worker/apache2 {
@@ -80,6 +80,7 @@
   /var/chroot/source/lib/x86_64-linux-gnu/libpthread-*.so mr,
   /var/chroot/source/lib/x86_64-linux-gnu/libreadline.so.* mr,
   /var/chroot/source/lib/x86_64-linux-gnu/libresolv-*.so mr,
+  /var/chroot/source/lib/x86_64-linux-gnu/librt-*.so mr,
   /var/chroot/source/lib/x86_64-linux-gnu/libssl.so.* mr,
   /var/chroot/source/lib/x86_64-linux-gnu/libtinfo.so.* mr,
   /var/chroot/source/lib/x86_64-linux-gnu/libutil-*.so mr,
@@ -362,9 +363,7 @@
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/__init__.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/pct_warnings.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/pct_warnings.pyc r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/bcrypt/__init__.py r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/bcrypt/__init__.pyc r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/bcrypt/_bcrypt.so mr,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/_scrypt.so mr,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/flask/__init__.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/flask/__init__.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/flask/_compat.py r,
@@ -464,6 +463,11 @@
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/markupsafe/_compat.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/markupsafe/_compat.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/markupsafe/_speedups.so mr,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/scrypt.py r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/scrypt.pyc r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/scrypt/__init__.py r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/scrypt/__init__.pyc r,
+  /var/chroot/source/usr/local/lib/python2.7/dist-packages/scrypt/_scrypt.so mr,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/setuptools-0.6c11-py2.7.egg-info r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/setuptools.pth r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/werkzeug/__init__.py r,

@@ -1,4 +1,4 @@
-# Last Modified: Fri Dec 27 18:11:35 2013
+# Last Modified: Thu Jan  9 14:25:20 2014
 #include <tunables/global>
 
 /var/chroot/document/usr/lib/apache2/mpm-worker/apache2 {
@@ -77,6 +77,7 @@
   /var/chroot/document/lib/x86_64-linux-gnu/libpthread-*.so mr,
   /var/chroot/document/lib/x86_64-linux-gnu/libreadline.so.* mr,
   /var/chroot/document/lib/x86_64-linux-gnu/libresolv-*.so mr,
+  /var/chroot/document/lib/x86_64-linux-gnu/librt-*.so mr,
   /var/chroot/document/lib/x86_64-linux-gnu/libssl.so.* mr,
   /var/chroot/document/lib/x86_64-linux-gnu/libtinfo.so.* mr,
   /var/chroot/document/lib/x86_64-linux-gnu/libutil-*.so mr,
@@ -88,7 +89,7 @@
   /var/chroot/document/proc/sys/kernel/ngroups_max r,
   /var/chroot/document/run/apache2.pid rw,
   /var/chroot/document/run/apache2/wsgi.*.lock wk,
-  /var/chroot/document/run/apache2/wsgi.*.sock w,
+  /var/chroot/document/run/apache2/wsgi.*.sock wk,
   /var/chroot/document/run/resolvconf/resolv.conf r,
   /var/chroot/document/sbin/ldconfig rix,
   /var/chroot/document/sbin/ldconfig.real rix,
@@ -399,9 +400,7 @@
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/_mysql.so mr,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/_mysql_exceptions.py r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/_mysql_exceptions.pyc r,
-  /var/chroot/document/usr/local/lib/python2.7/dist-packages/bcrypt/__init__.py r,
-  /var/chroot/document/usr/local/lib/python2.7/dist-packages/bcrypt/__init__.pyc r,
-  /var/chroot/document/usr/local/lib/python2.7/dist-packages/bcrypt/_bcrypt.so mr,
+  /var/chroot/document/usr/local/lib/python2.7/dist-packages/_scrypt.so mr,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/flask/__init__.py r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/flask/__init__.pyc r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/flask/_compat.py r,
@@ -503,6 +502,8 @@
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/markupsafe/_speedups.so mr,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/pkg_resources.py r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/pkg_resources.pyc r,
+  /var/chroot/document/usr/local/lib/python2.7/dist-packages/scrypt.py r,
+  /var/chroot/document/usr/local/lib/python2.7/dist-packages/scrypt.pyc r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/setuptools-0.6c11-py2.7.egg-info r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/setuptools.pth r,
   /var/chroot/document/usr/local/lib/python2.7/dist-packages/sqlalchemy/__init__.py r,
@@ -770,6 +771,7 @@
   /var/chroot/document/var/www/securedrop/static/js/document.js r,
   /var/chroot/document/var/www/securedrop/static/js/journalist.js r,
   /var/chroot/document/var/www/securedrop/static/js/libs/jquery-2.0.3.min.js r,
+  /var/chroot/document/var/www/securedrop/static/js/libs/localForage.js r,
   /var/chroot/document/var/www/securedrop/store.py r,
   /var/chroot/document/var/www/securedrop/store.pyc rw,
   /var/chroot/document/var/www/securedrop/store/ r,
