@@ -60,7 +60,7 @@
 <br />
 <p>Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
 
-<form id="delete-collection" action='/col/delete' method='post' onsubmit="return confirm('Are you sure you want to delete this collection?')">
+<form id="delete_collection" action='/col/delete' method='post'>
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}"/>
   <input type="hidden" name="col_name" value="{{ codename }}"/>

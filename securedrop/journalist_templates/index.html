@@ -4,7 +4,7 @@
 <h2><span class="headline">Latest submissions</span></h2>
 {% if cols %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
-<form action="/col/delete" method="post" onsubmit="return confirm('Are you sure you want to delete the selected collections?')">
+<form id="delete_collections" action="/col/delete" method="post">
 <ul id="cols" class="plain">
   {% for col in cols %}
   <li>
