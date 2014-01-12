@@ -28,8 +28,9 @@ JOURNALIST_TEMPLATES_DIR='/var/www/securedrop/journalist_templates'
 WORD_LIST='/var/www/securedrop/wordlist'
 NOUNS='/var/www/securedrop/dictionaries/nouns.txt'
 ADJECTIVES='/var/www/securedrop/dictionaries/adjectives.txt'
-BCRYPT_ID_SALT='BCRYPT_ID_SALT_VALUE'
-BCRYPT_GPG_SALT='BCRYPT_GPG_SALT_VALUE'
+SCRYPT_ID_PEPPER='SCRYPT_ID_PEPPER_VALUE'
+SCRYPT_GPG_PEPPER='SCRYPT_GPG_PEPPER_VALUE'
+SCRYPT_PARAMS=dict(N=2**14, r=8, p=1)
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig
@@ -46,15 +47,15 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 # Database Configuration
 
 # Default to using a sqlite database file for development
-#DATABASE_ENGINE = 'sqlite'
-#DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
 
 # Uncomment to use mysql (or any other databaes backend supported by
 # SQLAlchemy). Make sure you have the necessary dependencies installed, and run
 # `python -c "import db; db.create_tables()"` to initialize the database
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_HOST = 'localhost'
-DATABASE_NAME = 'securedrop'
-DATABASE_USERNAME = 'document_mysql'
-DATABASE_PASSWORD = 'MYSQL_USER_PASS'
+#DATABASE_ENGINE = 'mysql'
+#DATABASE_HOST = 'localhost'
+#DATABASE_NAME = 'securedrop'
+#DATABASE_USERNAME = 'document_mysql'
+#DATABASE_PASSWORD = 'MYSQL_USER_PASS'

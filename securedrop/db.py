@@ -171,6 +171,7 @@ def delete_tag_from_file(file_name, tag_name):
     session.commit()
     session.close()
 
+
 def get_all_tags():
     session = sqlalchemy_handle()
     query = session.query(tags.c.name).order_by(tags.c.name)
@@ -178,3 +179,16 @@ def get_all_tags():
     results = [row[0] for row in results.fetchall()]
     session.close()
     return results
+
+
+def delete_source(source_id):
+    session = sqlalchemy_handle()
+    try:
+        delete = sources.delete().where(
+            sources.c.filesystem_id == source_id)
+    except SQLAlchemyError as e:
+        # TODO: proper logging
+        print "Exception occurred attempting to delete source (source_id: %s): %s" % (source_id, e)
+    session.execute(delete)
+    session.commit()
+    session.close()

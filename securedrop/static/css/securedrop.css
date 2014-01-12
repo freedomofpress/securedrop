@@ -51,6 +51,31 @@ h2{
   margin-bottom:20px;
 }
 
+div.info h1 {
+  font-size:28px;
+  font-weight:bold;
+  line-height:1.4em;
+  margin-bottom:16px;
+}
+
+div.info h2 {
+  font-size:24px;
+  font-weight:bold;
+  line-height:1.4em;
+  margin-bottom:16px;
+}
+
+div.info h3 {
+  font-size:18px;
+  font-weight:bold;
+  line-height:1.4em;
+  margin-bottom:16px;
+}
+
+div.info ol {
+  margin-bottom:20px;
+}
+
 code {
   /* shamelessly stolen from Github */
   color:rgb(51, 51, 51);
