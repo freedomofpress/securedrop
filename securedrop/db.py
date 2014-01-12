@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKey, distinct, delete, and_, select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.pool import SingletonThreadPool
 import config
 import crypto_util
 
@@ -28,7 +29,8 @@ def get_engine():
     if config.DATABASE_ENGINE == "sqlite":
         engine = create_engine(
             config.DATABASE_ENGINE + ":///" +
-            config.DATABASE_FILE
+            config.DATABASE_FILE,
+            poolclass=SingletonThreadPool
         )
     else:
         engine = create_engine(

@@ -71,7 +71,7 @@ def shared_setup():
         gpg.import_keys(open(keyfile).read())
 
     # Inititalize the test database
-    import db; db.create_tables()
+    db.create_tables()
 
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
