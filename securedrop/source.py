@@ -4,6 +4,11 @@ from datetime import datetime
 import uuid
 from functools import wraps
 
+import logging
+# This module's logger is explicitly labeled so the correct logger is used,
+# even when this is run from the command line (e.g. during development)
+log = logging.getLogger('source')
+
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
@@ -57,13 +62,15 @@ def ignore_static(f):
 @ignore_static
 def setup_g():
     """Store commonly used values in Flask's special g object"""
-    # ignore_static here because `crypto_util.shash` is bcrypt (very time consuming),
-    # and we don't need to waste time running if we're just serving a static
-    # resource that won't need to access these common values.
+    # ignore_static here because `crypto_util.hash_codename` is scrypt (very
+    # time consuming), and we don't need to waste time running if we're just
+    # serving a static resource that won't need to access these common values.
     if logged_in():
-        g.flagged = session['flagged']
+        # We use session.get (which defaults to None if 'flagged' is not in the
+        # session) to avoid a KeyError on the redirect from login/ to lookup/
+        g.flagged = session.get('flagged')
         g.codename = session['codename']
-        g.sid = crypto_util.shash(g.codename)
+        g.sid = crypto_util.hash_codename(g.codename)
         g.loc = store.path(g.sid)
 
 
@@ -111,10 +118,10 @@ def generate():
 
 @app.route('/create', methods=['POST'])
 def create():
-    sid = crypto_util.shash(session['codename'])
+    sid = crypto_util.hash_codename(session['codename'])
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
-        store.log("Got a duplicate ID '%s'" % sid)
+        log.warning("Got a duplicate ID '%s'" % sid)
     else:
         os.mkdir(store.path(sid))
     session['logged_in'] = True
@@ -128,18 +135,24 @@ def lookup():
     msgs = []
     flagged = False
     for fn in os.listdir(g.loc):
+        # TODO: make 'flag' a db column, so we can replace this with a db
+        # lookup in the future
         if fn == '_FLAG':
             flagged = True
             continue
         if fn.startswith('reply-'):
-            msgs.append(dict(
-                id=fn,
-                date=str(
-                    datetime.fromtimestamp(
-                        os.stat(store.path(g.sid, fn)).st_mtime)),
-                msg=crypto_util.decrypt(
-                    g.sid, g.codename, file(store.path(g.sid, fn)).read())
-            ))
+            msg_candidate = crypto_util.decrypt(
+                g.sid, g.codename, file(store.path(g.sid, fn)).read())
+            try:
+                msgs.append(dict(
+                        id=fn,
+                        date=str(
+                            datetime.fromtimestamp(
+                                os.stat(store.path(g.sid, fn)).st_mtime)),
+                        msg=msg_candidate.decode()))
+            except UnicodeDecodeError:
+                # todo: we should have logging here!
+                pass
     if flagged:
         session['flagged'] = True
 
@@ -165,19 +178,10 @@ def submit():
     fh = request.files['fh']
 
     if msg:
-        msg_loc = store.path(g.sid, '%s_msg.gpg' % uuid.uuid4())
-        crypto_util.encrypt(config.JOURNALIST_KEY, msg, msg_loc)
+        store.save_message_submission(g.sid, msg)
         flash("Thanks! We received your message.", "notification")
     if fh:
-        file_loc = store.path(g.sid, "%s_doc.zip.gpg" % uuid.uuid4())
-
-        s = StringIO()
-        zip_file = zipfile.ZipFile(s, 'w')
-        zip_file.writestr(fh.filename, fh.read())
-        zip_file.close()
-        s.reset()
-
-        crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+        store.save_file_submission(g.sid, fh.filename, fh.stream)
         flash("Thanks! We received your document '%s'."
               % fh.filename or '[unnamed]', "notification")
 
@@ -192,14 +196,14 @@ def delete():
     potential_files = os.listdir(g.loc)
     if msgid not in potential_files:
         abort(404)  # TODO are the checks necessary?
-    crypto_util.secureunlink(store.path(g.sid, msgid))
+    store.secure_unlink(store.path(g.sid, msgid))
     flash("Reply deleted.", "notification")
 
     return redirect(url_for('lookup'))
 
 
 def valid_codename(codename):
-    return os.path.exists(store.path(crypto_util.shash(codename)))
+    return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
 def check_flagged(codename):
     # TODO: make 'flag' a db column, so we can replace this with a db lookup in
@@ -251,6 +255,26 @@ def download_journalist_pubkey():
 @app.route('/why-journalist-key')
 def why_download_journalist_pubkey():
     return render_template("why-journalist-key.html")
+
+
+_REDIRECT_URL_WHITELIST = ["http://tor2web.org/",
+        "https://www.torproject.org/download.html.en",
+        "https://tails.boum.org/",
+        "http://www.wired.com/threatlevel/2013/09/freedom-hosting-fbi/",
+        "http://www.theguardian.com/world/interactive/2013/oct/04/egotistical-giraffe-nsa-tor-document",
+        "https://addons.mozilla.org/en-US/firefox/addon/noscript/",
+        "http://noscript.net"]
+
+
+@app.route('/redirect/<path:redirect_url>')
+def redirect_hack(redirect_url):
+    # A hack to avoid referer leakage when a user clicks on an external link.
+    # TODO: Most likely will want to share this between source.py and
+    # journalist.py in the future.
+    if redirect_url not in _REDIRECT_URL_WHITELIST:
+        return 'Redirect not allowed'
+    else:
+        return render_template("redirect.html", redirect_url=redirect_url)
 
 
 @app.errorhandler(404)

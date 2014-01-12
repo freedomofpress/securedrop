@@ -8,6 +8,7 @@ from cStringIO import StringIO
 import zipfile
 from time import sleep
 import uuid
+from mock import patch, ANY
 
 import gnupg
 from flask import session, g, escape
@@ -25,7 +26,7 @@ import journalist
 
 
 def _block_on_reply_keypair_gen(codename):
-    sid = crypto_util.shash(codename)
+    sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
         sleep(0.1)
 
@@ -42,6 +43,11 @@ def _setup_test_docs(sid, files):
 
 def _logout(app):
     # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
+    # This is necessary because SecureDrop doesn't have a logout button, so a
+    # user is logged in until they close the browser, which clears the session.
+    # For testing, this function simulates closing the browser at places
+    # where a source is likely to do so (for instance, between submitting a
+    # document and checking for a journalist reply).
     with app.session_transaction() as sess:
         sess.clear()
 
@@ -184,7 +190,7 @@ class TestSource(TestCase):
             self.assertNotIn('logged_in', session)
 
     def test_submit_message(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test.",
             fh=(StringIO(''), ''),
@@ -193,7 +199,7 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
 
     def test_submit_file(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="",
             fh=(StringIO('This is a test'), 'test.txt'),
@@ -203,7 +209,7 @@ class TestSource(TestCase):
                       rv.data)
 
     def test_submit_both(self):
-        codename = self._new_codename()
+        self._new_codename()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test",
             fh=(StringIO('This is a test'), 'test.txt'),
@@ -212,6 +218,19 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
+
+    @patch('zipfile.ZipFile.writestr')
+    def test_submit_sanitizes_filename(self, zipfile_write):
+        """Test that upload file name is sanitized"""
+        insecure_filename = '../../bin/gpg'
+        sanitized_filename = 'bin_gpg'
+
+        self._new_codename()
+        self.client.post('/submit', data=dict(
+            msg="",
+            fh=(StringIO('This is a test'), insecure_filename),
+        ), follow_redirects=True)
+        zipfile_write.assert_called_with(sanitized_filename, ANY)
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
@@ -414,9 +433,14 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("No documents to display.", rv.data)
 
-    def test_reply(self):
+    def test_reply_normal(self):
+        self.helper_test_reply("This is a test reply.", True)
+
+    def test_reply_malformed(self):
+        self.helper_test_reply("\x5A\x05\x70\x5D\xC2\x5C\xA1\x51\x23\x75\x0B\x80\xD0\xA9", False)
+
+    def helper_test_reply(self, test_reply, expected_success=True):
         test_msg = "This is a test message."
-        test_reply = "This is a test reply."
 
         with self.source_app as source_app:
             rv = source_app.get('/generate')
@@ -473,7 +497,11 @@ class TestIntegration(unittest.TestCase):
             msg=test_reply
         ))
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! Your reply has been stored.", rv.data)
+
+        if not expected_success:
+            self.assertIn("You have entered text that we could not parse", rv.data)
+        else:
+            self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
         with self.journalist_app as journalist_app:
             rv = journalist_app.get(col_url)
@@ -481,24 +509,87 @@ class TestIntegration(unittest.TestCase):
             _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
+
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             rv = source_app.get('/lookup')
             self.assertEqual(rv.status_code, 200)
-            self.assertIn(
-                "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
-            self.assertIn(test_reply, rv.data)
 
-            soup = BeautifulSoup(rv.data)
-            msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
-            rv = source_app.post('/delete', data=dict(
-                sid=sid,
-                msgid=msgid,
-            ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn("Reply deleted", rv.data)
-            _logout(source_app)
+            if not expected_success:
+                # there should be no reply
+                self.assertTrue("You have received a reply." not in rv.data)
+            else:
+                self.assertIn(
+                    "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
+                self.assertIn(test_reply, rv.data)
+                soup = BeautifulSoup(rv.data)
+                msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+                rv = source_app.post('/delete', data=dict(
+                        sid=sid,
+                        msgid=msgid,
+                        ), follow_redirects=True)
+                self.assertEqual(rv.status_code, 200)
+                self.assertIn("Reply deleted", rv.data)
+                _logout(source_app)
+
+
+    def test_delete_collection(self):
+        """Test the "delete collection" button on each collection page"""
+        # first, add a source
+        self.source_app.get('/generate')
+        self.source_app.post('/create')
+
+        rv = self.journalist_app.get('/')
+        # navigate to the collection page
+        soup = BeautifulSoup(rv.data)
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        rv = self.journalist_app.get(first_col_url)
+        self.assertEqual(rv.status_code, 200)
+
+        # find the delete form and extract the post parameters
+        soup = BeautifulSoup(rv.data)
+        delete_form_inputs = soup.select('form#delete_collection')[0]('input')
+        sid = delete_form_inputs[1]['value']
+        col_name = delete_form_inputs[2]['value']
+        # POST to /col/delete
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            sid=sid,
+            col_name=col_name
+        ), follow_redirects=True)
+        self.assertEquals(rv.status_code, 200)
+        # /col/delete redirects to the index
+        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
+        self.assertIn("No documents have been submitted!", rv.data)
+
+
+    def test_delete_collections(self):
+        """Test the "delete selected" checkboxes on the index page that can be
+        used to delete multiple collections"""
+        # first, add some sources
+        num_sources = 2
+        for i in range(num_sources):
+            self.source_app.get('/generate')
+            self.source_app.post('/create')
+
+        rv = self.journalist_app.get('/')
+        # get all the checkbox values
+        soup = BeautifulSoup(rv.data)
+        checkbox_values = [ checkbox['value'] for checkbox in
+                            soup.select('input[name="cols_selected"]') ]
+        rv = self.journalist_app.post('/col/delete', data=dict(
+            cols_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("%s collections deleted" % (num_sources,), rv.data)
+
+        # TODO: functional tests (selenium)
+        # This code just tests the underlying API and *does not* test the
+        # interactions due to the Javascript in journalist.js. Once we have
+        # functional tests, we should add tests for:
+        # 1. Warning dialog appearance
+        # 2. "Don't show again" checkbox behavior
+        # 2. Correct behavior on "yes" and "no" buttons
 
 
 class TestStore(unittest.TestCase):
@@ -513,6 +604,8 @@ class TestStore(unittest.TestCase):
     def test_verify(self):
         with self.assertRaises(store.PathException):
             store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+        with self.assertRaises(store.PathException):
+            store.verify(config.STORE_DIR + "_backup")
 
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'

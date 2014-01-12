@@ -1,5 +1,6 @@
 Flask==0.10.1
 Flask-Testing==0.4
+mock==1.0.1
 Flask-WTF==0.9.3
 Jinja2==2.7.1
 MarkupSafe==0.18
@@ -12,7 +13,7 @@ beautifulsoup4==4.3.2
 itsdangerous==0.23
 psutil==1.1.1
 pycrypto==2.6.1
-python-bcrypt==0.3.2
 python-gnupg==0.3.5
+scrypt==0.6.1
 twill==0.9
 wsgiref==0.1.2

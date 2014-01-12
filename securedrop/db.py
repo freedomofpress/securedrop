@@ -62,3 +62,16 @@ def regenerate_display_id(filesystem_id):
     session.execute(add)
     session.commit()
     session.close()
+
+
+def delete_source(source_id):
+    session = sqlalchemy_handle()
+    try:
+        delete = sources.delete().where(
+            sources.c.filesystem_id == source_id)
+    except SQLAlchemyError as e:
+        # TODO: proper logging
+        print "Exception occurred attempting to delete source (source_id: %s): %s" % (source_id, e)
+    session.execute(delete)
+    session.commit()
+    session.close()
