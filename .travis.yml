@@ -1,0 +1,21 @@
+language: python
+python:
+  - "2.7"
+install:
+  - pip install --upgrade distribute
+  - pip install -r securedrop/source-requirements.txt
+  - pip install -r securedrop/document-requirements.txt
+before_script:
+  - sudo apt-get install gnupg2 secure-delete python-dev libmysqlclient-dev haveged
+  - cp securedrop/config/base.py.example securedrop/config/base.py
+  - cp securedrop/config/test.py.example securedrop/config/test.py
+  - secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+  - scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+  - scrypt_gpg_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+  - sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" securedrop/config/base.py
+  - sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER=$scrypt_id_pepper@" securedrop/config/base.py
+  - sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER=$scrypt_gpg_pepper@" securedrop/config/base.py
+  - mkdir -p .securedrop/{store,keys,tmp}
+  - gpg2 --homedir .securedrop/keys --import securedrop/test_journalist_key.*
+script:
+  - cd securedrop && python test.py
