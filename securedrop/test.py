@@ -71,6 +71,7 @@ def shared_setup():
         gpg.import_keys(open(keyfile).read())
 
     # Inititalize the test database
+    db.initialize()
     db.create_tables()
 
     # Do tests that should always run on app startup
@@ -683,7 +684,7 @@ class TestStore(unittest.TestCase):
 class TestDb(unittest.TestCase):
 
     def setUp(self):
-        db.create_tables()
+        shared_setup()
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
 
@@ -692,9 +693,9 @@ class TestDb(unittest.TestCase):
         self.test_tag = 'some-tag'
 
     def tearDown(self):
-
         self.session.commit()
         self.session.close()
+        shared_teardown()
 
     def test_add_tag(self):
         db.add_tag_to_file(self.file_names, self.test_tag)

@@ -24,7 +24,7 @@ class Bulk:
         filenames = [store.path(self.sid, doc['name']) for doc in self.docs_selected]
         zip = store.get_bulk_archive(filenames)
         return send_file(zip.name, mimetype="application/zip",
-                         attachment_filename=db.display_id(sid, db.sqlalchemy_handle()) + ".zip",
+                         attachment_filename=db.display_id(self.sid, db.sqlalchemy_handle()) + ".zip",
                          as_attachment=True)
 
     def tag_selected_with(self):
