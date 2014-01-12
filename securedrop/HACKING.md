@@ -63,6 +63,8 @@ cp the config templates and fill in empty values:
 
 Create the `STORE_DIR` and `GPG_KEY_DIR`:
 
+    $ mkdir -p .securedrop/{store,keys,tmp}
+
 By default, all files storing the state of the application are saved under
 `.securedrop/`. This directory is included in `.gitignore` by default.
 
