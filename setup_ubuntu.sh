@@ -101,11 +101,11 @@ chmod 700 $keypath
 
 # generate and store random values required by config.py
 secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-bcrypt_id_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
-bcrypt_gpg_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
+scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+scrypt_gpg_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
 sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config/base.py
-sed -i "s@^BCRYPT_ID_SALT.*@BCRYPT_ID_SALT='$bcrypt_id_salt'@" config/base.py
-sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config/base.py
+sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER=$scrypt_id_pepper@" config/base.py
+sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER=$scrypt_gpg_pepper@" config/base.py
 
 # initialize development database
 # Securedrop will use sqlite by default, but we've set up a mysql database as
