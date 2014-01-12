@@ -8,8 +8,9 @@ WORD_LIST = './wordlist'
 NOUNS='./dictionaries/nouns.txt'
 ADJECTIVES='./dictionaries/adjectives.txt'
 
-BCRYPT_ID_SALT=''    # bcrypt.gensalt(); for constructing public ID from source codename
-BCRYPT_GPG_SALT=''   # bcrypt.gensalt(); for stretching source codename into GPG passphrase
+SCRYPT_ID_PEPPER='' # os.urandom(32); for constructing public ID from source codename
+SCRYPT_GPG_PEPPER='' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
 
 ### Theming Options

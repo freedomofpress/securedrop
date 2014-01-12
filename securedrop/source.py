@@ -209,7 +209,7 @@ def check_flagged(codename):
     # TODO: make 'flag' a db column, so we can replace this with a db lookup in
     # the future
     flagged = False
-    sid = crypto_util.shash(codename)
+    sid = crypto_util.hash_codename(codename)
     try:
         loc = store.path(sid)
     except:
