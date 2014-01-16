@@ -470,6 +470,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
+            self.assertFalse(session['flagged'])
             _logout(source_app)
 
         with self.journalist_app as journalist_app:
@@ -514,6 +515,7 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(rv.status_code, 200)
             rv = source_app.get('/lookup')
             self.assertEqual(rv.status_code, 200)
+
             if not expected_success:
                 # there should be no reply
                 self.assertTrue("You have received a reply." not in rv.data)
