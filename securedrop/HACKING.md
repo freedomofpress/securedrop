@@ -4,7 +4,7 @@ development setup for securedrop
 the easy way
 ------------
 
-If you running Ubuntu/Debian, use the `setup_ubuntu.sh`.
+If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script leads to build errors if you are using Percona instead of standard MySQL.
 
 1. Clone the repo
 2. cd into `securedrop`

@@ -15,7 +15,7 @@ class Bulk:
         if confirm_delete:
             for doc in self.docs_selected:
                 fn = store.path(self.sid, doc['name'])
-                crypto_util.secureunlink(fn)
+                store.secure_unlink(fn)
         return render_template(
             'delete.html', sid=self.sid, codename=db.display_id(self.sid, db.sqlalchemy_handle()),
             docs_selected=self.docs_selected, confirm_delete=confirm_delete)
@@ -23,8 +23,8 @@ class Bulk:
     def download_selected(self):
         filenames = [store.path(self.sid, doc['name']) for doc in self.docs_selected]
         zip = store.get_bulk_archive(filenames)
-        return send_file(zip, mimetype="application/zip",
-                         attachment_filename=crypto_util.displayid(self.sid) + ".zip",
+        return send_file(zip.name, mimetype="application/zip",
+                         attachment_filename=db.display_id(self.sid, db.sqlalchemy_handle()) + ".zip",
                          as_attachment=True)
 
     def tag_selected_with(self):

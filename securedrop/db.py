@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKey, distinct, delete, and_, select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.pool import StaticPool
 import config
 import crypto_util
 
@@ -24,33 +25,37 @@ sources = Table('sources', metadata,
                 Column('journalist_designation', String(255), nullable=False))
 
 
-def get_engine():
+# I had to put this engine creation logic in a function so we can
+# re-create the sqlite file in tests. Since we are keeping state
+# maybe we should convert this db module into a proper class - jacksingleton
+def initialize():
+    global _engine
     if config.DATABASE_ENGINE == "sqlite":
-        engine = create_engine(
+        _engine = create_engine(
             config.DATABASE_ENGINE + ":///" +
-            config.DATABASE_FILE
+            config.DATABASE_FILE,
+            poolclass=StaticPool
         )
     else:
-        engine = create_engine(
+        _engine = create_engine(
             config.DATABASE_ENGINE + '://' +
             config.DATABASE_USERNAME + ':' +
             config.DATABASE_PASSWORD + '@' +
             config.DATABASE_HOST + '/' +
             config.DATABASE_NAME, echo=False
         )
-    return engine
 
 
-engine = get_engine()
+initialize()
 
 
 def create_tables():
-    metadata.drop_all(engine)
-    metadata.create_all(engine)
+    metadata.drop_all(_engine)
+    metadata.create_all(_engine)
 
 
 def sqlalchemy_handle():
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=_engine)
     return Session()
 
 
@@ -85,19 +90,16 @@ def regenerate_display_id(filesystem_id):
     session.close()
 
 
-def insert_files(file_names):
-    session = sqlalchemy_handle()
+def _insert_files(session, file_names):
     file_results = []
-    for fileName in file_names:
-        query = session.query(files.c.id).filter(files.c.name == fileName)
+    for file_name in file_names:
+        query = session.query(files.c.id).filter(files.c.name == file_name)
         results = session.execute(query).fetchone()
         if results is not None:
             file_results.append(results[0])
         else:
-            result_proxy = session.execute(files.insert().values(name=fileName))
+            result_proxy = session.execute(files.insert().values(name=file_name))
             file_results.append(result_proxy.inserted_primary_key[0])
-    session.commit()
-    session.close()
     return file_results
 
 
@@ -113,7 +115,7 @@ def add_tag_to_file(file_names, *tags_to_add):
             result_proxy = session.execute(tags.insert().values(name=tag))
             tag_results.append(result_proxy.inserted_primary_key[0])
 
-    file_results = insert_files(file_names)
+    file_results = _insert_files(session, file_names)
 
     for tag_id in tag_results:
         for file_id in file_results:
@@ -171,6 +173,7 @@ def delete_tag_from_file(file_name, tag_name):
     session.commit()
     session.close()
 
+
 def get_all_tags():
     session = sqlalchemy_handle()
     query = session.query(tags.c.name).order_by(tags.c.name)
@@ -178,3 +181,16 @@ def get_all_tags():
     results = [row[0] for row in results.fetchall()]
     session.close()
     return results
+
+
+def delete_source(source_id):
+    session = sqlalchemy_handle()
+    try:
+        delete = sources.delete().where(
+            sources.c.filesystem_id == source_id)
+    except SQLAlchemyError as e:
+        # TODO: proper logging
+        print "Exception occurred attempting to delete source (source_id: %s): %s" % (source_id, e)
+    session.execute(delete)
+    session.commit()
+    session.close()
