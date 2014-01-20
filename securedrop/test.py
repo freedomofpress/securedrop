@@ -23,23 +23,13 @@ import crypto_util
 import store
 import source
 import journalist
+import test_setup
 
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
         sleep(0.1)
-
-
-def _setup_test_docs(sid, files):
-    filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]
-    for filename in filenames:
-        dirname = os.path.dirname(filename)
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-        with open(filename, 'w') as fp:
-            fp.write(str(uuid.uuid4()))
-    return filenames
 
 def _logout(app):
     # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
@@ -53,28 +43,15 @@ def _logout(app):
 
 def shared_setup():
     """Set up the file system, GPG, and database"""
-
-    # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
-        if not os.path.isdir(d):
-            os.mkdir(d)
-
-    # Initialize the GPG keyring
-    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
-    # Import the journalist key for testing (faster to import a pre-generated
-    # key than to gen a new one every time)
-    for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
-        gpg.import_keys(open(keyfile).read())
-
-    # Inititalize the test database
-    import db; db.create_tables()
+    test_setup.create_directories()
+    test_setup.init_gpg()
+    test_setup.init_db()
 
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
 
-
 def shared_teardown():
-    shutil.rmtree(config.SECUREDROP_ROOT)
+    test_setup.clean_root()
 
 
 class TestSource(TestCase):
@@ -258,7 +235,7 @@ class TestJournalist(TestCase):
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
-        filenames = _setup_test_docs(sid, files)
+        filenames = test_setup.setup_test_docs(sid, files)
 
         rv = self.client.post('/bulk', data=dict(
             action='download',
@@ -608,7 +585,7 @@ class TestStore(unittest.TestCase):
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
-        filenames = _setup_test_docs(sid, files)
+        filenames = test_setup.setup_test_docs(sid, files)
 
         archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
