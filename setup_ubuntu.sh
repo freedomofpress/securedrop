@@ -86,6 +86,7 @@ source env/bin/activate
 pip install --upgrade distribute
 pip install -r source-requirements.txt
 pip install -r document-requirements.txt
+pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory

@@ -54,6 +54,7 @@ install dependencies:
     $ pip install --upgrade distribute
     $ pip install -r source-requirements.txt
     $ pip install -r document-requirements.txt
+    $ pip install -r test-requirements.txt
 
 cp the config template and fill in empty values:
 
