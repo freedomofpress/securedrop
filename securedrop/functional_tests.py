@@ -33,8 +33,8 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         self.source_location = "http://localhost:%d" % source_port
         self.journalist_location = "http://localhost:%d" % journalist_port
 
-        self.source_process = Process(target = lambda: source.app.run(port=source_port))
-        self.journalist_process = Process(target = lambda: journalist.app.run(port=journalist_port))
+        self.source_process = Process(target = lambda: source.app.run(port=source_port, debug=True, use_reloader=False))
+        self.journalist_process = Process(target = lambda: journalist.app.run(port=journalist_port, debug=True, use_reloader=False))
 
         self.source_process.start()
         self.journalist_process.start()
