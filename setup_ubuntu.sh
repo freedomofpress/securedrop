@@ -86,12 +86,14 @@ source env/bin/activate
 pip install --upgrade distribute
 pip install -r source-requirements.txt
 pip install -r document-requirements.txt
+pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
-cp example_config.py config.py
+cp config/base.py.example config/base.py
+cp config/test.py.example config/test.py
+cp config/development.py.example config/development.py
 securedrop_root=$(pwd)/.securedrop
-sed -i "s@    SECUREDROP_ROOT='/tmp/securedrop'@    SECUREDROP_ROOT='$securedrop_root'@" config.py
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
@@ -100,19 +102,19 @@ chmod 700 $keypath
 
 # generate and store random values required by config.py
 secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-bcrypt_id_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
-bcrypt_gpg_salt=$(python -c 'import bcrypt; print bcrypt.gensalt()')
-sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
-sed -i "s@^BCRYPT_ID_SALT.*@BCRYPT_ID_SALT='$bcrypt_id_salt'@" config.py
-sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config.py
+scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+scrypt_gpg_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
+sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config/base.py
+sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER=$scrypt_id_pepper@" config/base.py
+sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER=$scrypt_gpg_pepper@" config/base.py
 
 # initialize development database
-# config.py will use sqlite by default, but we've set up a mysql database as
+# Securedrop will use sqlite by default, but we've set up a mysql database as
 # part of this installation so it is very easy to switch to it.
 # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
+sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config/development.py
 echo "Creating database tables..."
-python -c 'import db; db.create_tables()'
+SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
 echo ""
 echo "You will need a journalist key for development."
@@ -134,7 +136,7 @@ fi
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
 journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
 echo "Using journalist key with fingerprint $journalistkey"
-sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config.py
+sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development.py
 
 echo ""
 echo "Running unit tests... these should all pass!"
