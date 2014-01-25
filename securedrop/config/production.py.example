@@ -1,0 +1,20 @@
+import os
+from base import BaseFlaskConfig
+
+JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
+SECUREDROP_ROOT=os.path.abspath('.securedrop')
+
+class FlaskConfig(BaseFlaskConfig):
+    pass
+
+
+### Database Configuration
+
+# To use MySQL, make sure you have the necessary dependencies installed, and run
+# `python -c "import db; db.create_tables()"` to initialize the database
+
+DATABASE_ENGINE = 'mysql'
+DATABASE_HOST = 'localhost'
+DATABASE_NAME = 'securedrop'
+DATABASE_USERNAME = 'securedrop'
+DATABASE_PASSWORD = ''
