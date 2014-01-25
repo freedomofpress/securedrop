@@ -4,7 +4,7 @@ The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.3](http://www
 
 After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 
-![Ubuntu Server](/images/install/ubuntu_server.png)
+![Ubuntu Server](/docs/images/install/ubuntu_server.png)
 
 Follow the steps to choose your language and keyboard, and let the setup continue. When it asks for your hostname choose a name that makes sense. Each server should have its own hostname.  You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone. When you get to the partition step, choose "Guided - use entire disk and set up LVM". Then wait for base system to finish installing. 
 
