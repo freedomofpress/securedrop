@@ -48,15 +48,15 @@ Reboot the `Secure Viewing Station` laptop and boot into the Tails Live USB agai
 
 In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-pgp-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
-![Importing Journalist GPG Keys](/images/install/viewing1.jpg)
+![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
 To generate the application GPG key, click in the clipboard icon in the top right and choose `Manage Keys`. A program called `Passwords and Encryption Keys` will open. You can click on the `Other Keys` tab to manage the keys that you just imported.
 
-![Tails GPG Clipboard](/images/install/viewing2.jpg)
+![Tails GPG Clipboard](/docs/images/install/viewing2.jpg)
 
 Click `File`, `New`. Choose `PGP Key`, and click Continue.
 
-![New...](/images/install/viewing3.jpg)
+![New...](/docs/images/install/viewing3.jpg)
 
 Put these values in:
 
@@ -66,24 +66,24 @@ Put these values in:
 
 Click the arrow to expand `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
 
-![New GPG Key](/images/install/viewing4.jpg)
+![New GPG Key](/docs/images/install/viewing4.jpg)
 
 Type in the GPG passphrase that you came up with earlier twice and click OK. Then wait while your key is being generated. 
 
-![Set Passphrase](/images/install/viewing5.jpg)
-![Key Generation](/images/install/viewing6.jpg)
+![Set Passphrase](/docs/images/install/viewing5.jpg)
+![Key Generation](/docs/images/install/viewing6.jpg)
 
 When it's done, you should see your key in the `My Personal Keys` tab.
 
-![My Keys](/images/install/viewing7.jpg)
+![My Keys](/docs/images/install/viewing7.jpg)
 
 Right-click on the key you just generated and click `Export`. Save it to your USB stick as `SecureDrop.asc`. This is the public key only.
 
-![My Keys](/images/install/viewing8.jpg)
+![My Keys](/docs/images/install/viewing8.jpg)
 
 You'll also need to verify the 40 character hex fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
 
-![Fingerprint](/images/install/viewing9.jpg)
+![Fingerprint](/docs/images/install/viewing9.jpg)
 
 ## Server Installation
 
@@ -166,7 +166,7 @@ In this case:
 * The `Document Interface`'s Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/
 * The `Document Interface`'s Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB
 * The `Document Interface`'s Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/
-* The `Document Interface`'s Tor hidden service Auth value for the first journalist is: qpTMeWZSTdld7gWrB72RtR
+* The `Document Interface`'s Tor hidden service Auth value for the second journalist is: qpTMeWZSTdld7gWrB72RtR
 * The `App Server`'s Tor hidden service SSH address for the first admin is: sz3yuv5hdipt2icy.onion
 * The `App Server`'s Tor hidden service SSH Auth value for the first admin is: PKZ8sKjp5Z08AGq5BB7BKx
 
@@ -242,7 +242,7 @@ And the `torrc` file for the second journalist should look like something this:
 
 * Open the Tor Browser Bundle and navigate to the journalist's unique Document Interface URL without the Auth value
 
-![Journalist_workstation1](/images/install/journalist_workstation1.png)
+![Journalist_workstation1](/docs/images/install/journalist_workstation1.png)
 
 ## Test It
 
