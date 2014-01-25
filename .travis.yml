@@ -7,7 +7,7 @@ install:
   - pip install -r securedrop/document-requirements.txt
   - pip install -r securedrop/test-requirements.txt
 before_script:
-  - sudo apt-get install gnupg2 secure-delete python-dev libmysqlclient-dev haveged
+  - sudo apt-get install gnupg2 secure-delete python-dev libmysqlclient-dev haveged phantomjs
   - cp securedrop/config/base.py.example securedrop/config/base.py
   - cp securedrop/config/test.py.example securedrop/config/test.py
   - secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')

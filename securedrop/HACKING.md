@@ -50,7 +50,7 @@ cd into the repo, then cd into `securedrop`
 install dependencies:
 
     $ sudo yum install python-devel
-    $ sudo apt-get install python-dev libmysqlclient-dev
+    $ sudo apt-get install python-dev libmysqlclient-dev phantomjs
     $ pip install --upgrade distribute
     $ pip install -r source-requirements.txt
     $ pip install -r document-requirements.txt
