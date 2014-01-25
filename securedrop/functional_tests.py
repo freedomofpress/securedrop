@@ -7,7 +7,9 @@ import os
 import gnupg
 import urllib2
 
+os.environ['SECUREDROP_ENV'] = 'test'
 import config
+
 import source
 import journalist
 import test_setup
