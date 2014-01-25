@@ -2,14 +2,14 @@
 #
 # Usage: ./base_install.sh
 # --no-updates to run script without apt-get or pip install commands
-#securedrop.git                                       (repo base)
-#securedrop/securedrop/                               (web app code)
-#securedrop/securedrop/requirements.txt               (pip requirements)
-#securedrop/install_files/                            (config files and install scripts)
-#securedrop/install_files/CONFIG_OPTIONS              (required user suplied input)
-#securedrop/install_files/SecureDrop.asc              (the app pub gpg key)
-#securedrop/install_files/source_requirements.txt     (source chroot jail package dependencies)
-#securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)
+#securedrop.git                                     (repo base)
+#securedrop/securedrop/                             (web app code)
+#securedrop/securedrop/requirements.txt             (pip requirements)
+#securedrop/install_files/                          (config files and install scripts)
+#securedrop/install_files/CONFIG_OPTIONS            (required user suplied input)
+#securedrop/install_files/SecureDrop.asc            (the app pub gpg key)
+#securedrop/install_files/source_requirements.txt   (source chroot jail package dependencies)
+#securedrop/install_files/document_requirements.txt (document interface chroot package dependencies)
 CWD="$(dirname $0)"
 cd $CWD
 
@@ -56,7 +56,7 @@ echo "Performing installation on $DISTRO - $DISTRO_VERSION"
 
 if [ $DISTRO != 'ubuntu' ]; then
   echo ""
-  echo "You are installing SecurerDrop on an unsupported system."
+  echo "You are installing SecureDrop on an unsupported system."
   echo "Do you wish to continue at your own risk [Y|N]? "
   read DISTRO_ANS
   if [ $DISTRO_ANS = y -o $DISTRO_ANS = Y ]
@@ -123,7 +123,7 @@ echo "Unattended-upgrades enabled"
 
 #Restrict who can run cron jobs
 echo ""
-echo "Resticitng users who can run cron jobs to the root user..."
+echo "Restricting users who can run cron jobs to the root user..."
 cat << EOF > /etc/cron.allow
 root
 EOF
@@ -146,7 +146,7 @@ echo "Sysctl.conf configured"
 
 #Install tor repo, keyring and tor
 echo ""
-echo "Installing tor..."
+echo "Installing Tor..."
 add-apt-repository -y "$TOR_REPO" | tee -a build.log
 gpg --keyserver keys.gnupg.net --recv $TOR_KEY_ID | tee -a build.log
 gpg --export $TOR_KEY_FINGERPRINT | sudo apt-key add - | tee -a build.log
@@ -157,26 +157,26 @@ passwd -l debian-tor | tee -a build.log
 echo "Tor installed"
 
 
-#Configure authenticated tor hidden service for ssh access
+#Configure authenticated tor hidden service for SSH access
 echo ""
-echo "Configuing authenticated to hidden service for ssh access..."
+echo "Configuring authenticated to hidden service for SSH access..."
 cp base.torrc /etc/tor/torrc | tee -a build.log
-catch_error $? "configuring authenticated tor hidden service for ssh access"
-echo "Authenticated tor hidden service for ssh access created"
+catch_error $? "configuring authenticated Tor hidden service for SSH access"
+echo "Authenticated Tor hidden service for SSH access created"
 
 echo ""
-echo "Restarting tor..."
+echo "Restarting Tor..."
 service tor restart | tee -a build.log
-catch_error $? "restating tor"
+catch_error $? "restarting tor"
 sleep 10
-echo "Tor restarted, the hidden servive url is: "
+echo "Tor restarted, the hidden service url is: "
 cat /var/lib/tor/hidden_service/hostname
 
 
 #Generate google 2 step auth
 generate_2_step_code() {
-echo "Create a google authenticator value for admin users requiring ssh access"
-echo "These will be the only users able to ssh into the system."
+echo "Create a Google Authenticator value for admin users requiring SSH access"
+echo "These will be the only users able to SSH into the system."
 groupadd ssh | tee -a build.log
 for SSH_USER in $SSH_USERS; do
 
@@ -187,9 +187,11 @@ for SSH_USER in $SSH_USERS; do
       catch_error $? "adding $SSH_USER to the ssh group"
     fi
 
-    echo "Creating google authenticator code for $SSH_USER in their home directory"
+    echo "Creating Google Authenticator code for $SSH_USER in their home directory"
     su $SSH_USER -c google-authenticator 
     catch_error $? "generating google-authenticator code for $SSH_USER"
+    #ensure that the .google_authenticator file's permissions are set to 400
+    chmod 400 /home/$SSH_USER/.google_authenticator
     echo ""
   else
     echo "$SSH_USER user does not exist."
@@ -205,19 +207,22 @@ done
 generate_2_step_code
 
 #Configure Iptables
-if [ $ROLE = 'source' ]; then
+if [ $ROLE = 'app' ]; then
   OTHER_IP=$MONITOR_IP
+  RULES_V4="app.rules_v4"
 elif [ $ROLE = 'monitor' ]; then
-  OTHER_IP=$SOURCE_IP
+  OTHER_IP=$APP_IP
+  RULES_V4="monitor.rules_v4"
 fi
 
 if [ ! -d /etc/iptables ]; then
   mkdir /etc/iptables | tee -a build.log
   catch_error $? "creating /etc/iptables directory"
 fi
-sed -i -e "s/OTHER_IP/$OTHER_IP/g" base.rules_v4 | tee -a build.log
-catch_error $? "replacing $OTHER_IP in base.rules_v4"
-cp base.rules_v4 /etc/iptables/rules_v4 | tee -a build.log
+
+sed -i -e "s/OTHER_IP/$OTHER_IP/g" $RULES_V4 | tee -a build.log
+catch_error $? "replacing $OTHER_IP in $RULES_V4"
+cp $RULES_V4 /etc/iptables/rules_v4 | tee -a build.log
 catch_error $? "creating iptables rules file /etc/iptables/rules_v4"
 echo "The /etc/iptables/rules_v4 file created"
 

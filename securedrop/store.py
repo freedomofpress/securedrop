@@ -6,6 +6,13 @@ import zipfile
 import crypto_util
 import uuid
 import tempfile
+import subprocess
+from cStringIO import StringIO
+
+import logging
+log = logging.getLogger(__name__)
+
+from werkzeug import secure_filename
 
 VALIDATE_FILENAME = re.compile(
     "^(reply-)?[a-f0-9-]+(_msg|_doc\.zip|)\.gpg$").match
@@ -35,13 +42,13 @@ def verify(p):
     if not p == os.path.abspath(p):
         raise PathException("The path is not absolute and/or normalized")
 
-    if os.path.commonprefix([config.STORE_DIR, p]) != config.STORE_DIR:
+    # Check that the path p is in config.STORE_DIR
+    if os.path.relpath(p, config.STORE_DIR).startswith('..'):
         raise PathException("Invalid directory %s" % (p, ))
 
-    filename = os.path.basename(p)
-    ext = os.path.splitext(filename)[-1]
-
     if os.path.isfile(p):
+        filename = os.path.basename(p)
+        ext = os.path.splitext(filename)[-1]
         if filename == '_FLAG':
             return True
         if ext != '.gpg':
@@ -68,5 +75,31 @@ def get_bulk_archive(filenames):
     return zip_file
 
 
-def log(msg):
-    file(path('NOTES'), 'a').write(msg)
+def save_file_submission(sid, filename, stream):
+    sanitized_filename = secure_filename(filename)
+
+    s = StringIO()
+    with zipfile.ZipFile(s, 'w') as zf:
+        zf.writestr(sanitized_filename, stream.read())
+    s.reset()
+
+    file_loc = path(sid, "%s_doc.zip.gpg" % uuid.uuid4())
+    crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+
+
+def save_message_submission(sid, message):
+    msg_loc = path(sid, '%s_msg.gpg' % uuid.uuid4())
+    crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
+
+
+def secure_unlink(fn, recursive=False):
+    verify(fn)
+    command = ['srm']
+    if recursive:
+        command.append('-r')
+    command.append(fn)
+    return subprocess.check_call(command)
+
+
+def delete_source_directory(source_id):
+    secure_unlink(path(source_id), recursive=True)

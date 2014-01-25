@@ -1,10 +1,11 @@
 #commands to be run after reboot for securedrop to start source and 
 #journalist interfaces
 mount -o bind /proc /var/chroot/source/proc                                    
-mount -o bind /proc /var/chroot/journalist/proc                                
-mount -o bind /var/securedrop/store /var/chroot/journalist/var/www/securedrop/store
+mount -o bind /proc /var/chroot/document/proc                                
+mount -o bind /var/securedrop/store /var/chroot/document/var/www/securedrop/store
 mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
 mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys  
-mount -o bind /var/securedrop/keys /var/chroot/journalist/var/www/securedrop/keys
-schroot -u root -a service apache2 restart --directory /root                   
-schroot -u root -a service tor restart --directory /root
+mount -o bind /var/securedrop/keys /var/chroot/document/var/www/securedrop/keys
+schroot -a -u root --directory /root service apache2 restart                  
+schroot -a -u root --directory /root service tor restart
+schroot -c document -u root --directory /root service mysql restart

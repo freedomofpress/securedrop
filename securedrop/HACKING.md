@@ -4,7 +4,7 @@ development setup for securedrop
 the easy way
 ------------
 
-If you running Ubuntu/Debian, use the `setup_ubuntu.sh`.
+If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script leads to build errors if you are using Percona instead of standard MySQL.
 
 1. Clone the repo
 2. cd into `securedrop`
@@ -50,9 +50,10 @@ cd into the repo, then cd into `securedrop`
 install dependencies:
 
     $ sudo yum install python-devel
-    $ sudo apt-get install python-dev
+    $ sudo apt-get install python-dev libmysqlclient-dev
     $ pip install --upgrade distribute
-    $ pip install -r requirements.txt
+    $ pip install -r source-requirements.txt
+    $ pip install -r document-requirements.txt
 
 cp the config template and fill in empty values:
 
