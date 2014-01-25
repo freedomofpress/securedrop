@@ -6,9 +6,15 @@ After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 
 ![Ubuntu Server](/docs/images/install/ubuntu_server.png)
 
-Follow the steps to choose your language and keyboard, and let the setup continue. When it asks for your hostname choose a name that makes sense. Each server should have its own hostname.  You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone. When you get to the partition step, choose "Guided - use entire disk and set up LVM". Then wait for base system to finish installing. 
+Follow the steps to choose your language and keyboard, and let the setup continue. When it asks for your hostname choose a name that makes sense. Each server should have its own hostname.  You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone.
 
-When you get to the configure taskel screen, choose "Install security updates automatically". When you get to the software selection screen, just choose "OpenSSH server". Then wait for the packages to finish installing.
+We recommend that you enable [full disk encryption](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption) with LUKS. During the disk partitioning step, select "Guided - use entire disk and set up encrypted LVM". Write the changes to disk. Follow the recommendations as to choosing a strong password. **Important**: this password will need to be entered at every boot, and during reboots after installing security updates. As the administrator, you will be responsible for keeping this passphrase safe. Write it down somewhere and memorize it if you can. If inadvertently lost it could result in total loss of the SecureDrop system.
+
+![Encrypted LVM](/docs/images/install/ubuntu_encrypt.png)
+
+If you wish to opt out of full disk encryption at your own risk, then choose "Guided - use entire disk and set up LVM" instead. Then wait for base system to finish installing. 
+
+When you get to the configure tasksel screen, choose "Install security updates automatically". When you get to the software selection screen, only choose "OpenSSH server". Then wait for the packages to finish installing.
 
 When everything is done, install grub and reboot.
 
