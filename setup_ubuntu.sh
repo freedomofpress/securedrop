@@ -43,6 +43,7 @@ echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 cd $(dirname $0)/securedrop
 
 echo "Installing dependencies: "$DEPENDENCIES
+sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
 sudo /etc/init.d/mysql stop
