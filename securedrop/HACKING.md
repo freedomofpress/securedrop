@@ -55,14 +55,7 @@ install dependencies:
     $ pip install -r source-requirements.txt
     $ pip install -r document-requirements.txt
 
-cp the config template and fill in empty values:
-
-    $ cp example_config.py config.py
-
-Create the `STORE_DIR` and `GPG_KEY_DIR`:
-
-By default, all files storing the state of the application are saved under
-`.securedrop/`. This directory is included in `.gitignore` by default.
+Create the `STORE_DIR` and `GPG_KEY_DIR`. Reasonable defaults are provided as `.securedrop` and `.securedrop/keys`, respectively. The `.securedrop` directory is included in `.gitignore` by default.
 
 **NOTE**: you will need to create a journalist key for development.
 
@@ -77,12 +70,18 @@ Make sure you *only* use this key for development. If you genereate it, we
 recommend choosing a userid like "SecureDrop Development (DO NOT USE IN
 PRODUCTION)" so you don't forget!
 
-Once you have the dev keypair, copy the key fingerprint to the `JOURNALIST_KEY`
+cp the config template:
+
+    $ cp example_config.py config.py
+
+Copy the dev key fingerprint to the `JOURNALIST_KEY`
 field of `config.py`. You can find the key fingerprint by running:
 
     $ gpg2 --homedir .securedrop/keys --fingerprint
 
-You might have to manually remove the spaces.
+You have to manually remove any spaces from the fingerprint.
+
+Continue filling in any other empty fields in the config.py file (identified by empty single quotes '').
 
 populate the database:
 
