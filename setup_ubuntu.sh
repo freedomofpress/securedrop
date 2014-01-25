@@ -4,6 +4,15 @@
 set -e
 # uncomment to print debugging information
 #set -x
+securedrop_root=$(pwd)/.securedrop
+
+while getopts "r:" OPTION; do
+    case $OPTION in
+        r)
+            securedrop_root=$OPTARG
+            ;;
+    esac
+done
 
 #check platform and distro
 opsys=`uname`
@@ -72,7 +81,7 @@ echo "Setting up configurations..."
 cp config/base.py.example config/base.py
 cp config/test.py.example config/test.py
 cp config/development.py.example config/development.py
-securedrop_root=$(pwd)/.securedrop
+
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
