@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # stop setup script if any command fails
 set -e
@@ -74,8 +74,19 @@ fi
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
 
+sudo /etc/init.d/mysql stop
+
+sudo mysqld --skip-grant-tables &
+
+sleep 2 && sudo mysql <<EOF
+UPDATE mysql.user SET Password=PASSWORD('$mysql_root') WHERE User='root';
+FLUSH PRIVILEGES;
+EOF
+
+sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
+
 echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
 
 # continue working in the application directory
 cd securedrop/securedrop
