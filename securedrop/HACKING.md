@@ -4,12 +4,21 @@ development setup for securedrop
 the easy way
 ------------
 
-If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script
-leads to build errors if you are using Percona instead of standard MySQL.
-
 1. Clone the repo
-2. cd into `securedrop`
-3. `./setup_ubuntu.sh`
+2. Make sure you have [vagrant](http://vagrantup.com) and [VirtualBox](http://www.virtualbox.org) installed
+3. `vagrant up`
+
+This creates a vm with the secure drop repository located in /vagrant. 
+You can ssh into it with `vagrant ssh`. To start the servers:
+
+    $ cd /vagrant/securedrop
+    $ . env/bin/activate
+    $ python source.py &
+    $ python journalist.py &
+
+Now, you can visit secure drop at [http://localhost:8080] and the journalist site at [http://localhost:8081]. 
+
+For more instructions on how to interact with your vm, refer to the [vagrant website](http://vagrantup.com).
 
 the hard way
 ------------
