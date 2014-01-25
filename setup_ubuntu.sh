@@ -38,38 +38,7 @@ EOF
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
-# Since this script lives in the top level of the securedrop repository, it is
-# natural to expect that users will have cloned the repo, cd'ed into it, and
-# are now running ./setup_ubuntu.sh. We will check that this is the case, and
-# if so can skip some later steps.
-if [[ -d ".git" && -n `grep "securedrop" .git/config` ]]; then
-    cd .. # run this script in the directory *containing* the securedrop git repo
-else
-    echo "You are not running this script inside the Securedrop repo."
-    echo "Do you need to clone the SecureDrop repo? [Y/N]"
-    read gitans
-    if [[ $gitans = 'y' || $gitans = 'Y' ]]; then
-
-        echo "Type the path of where you would like to clone it, and then push ENTER."
-        read sdpath
-        cd $sdpath
-
-        echo "If you are cloning from your own fork, type your Github username and push ENTER. If not, leave it blank and push ENTER."
-        read gitusername
-        if [[ $gitusername != "" ]]; then
-            echo "Cloning the repo from "$gitusername "..."
-            git clone https://github.com/$gitusername/securedrop.git
-        else
-            echo "Cloning the repo..."
-            git clone https://github.com/freedomofpress/securedrop.git
-        fi
-    fi
-fi
-
-if [ ! -d "securedrop" ]; then
-    echo "Couldn't find the securedrop repo... exiting!"
-    exit 1
-fi
+cd $(dirname $0)/securedrop
 
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
@@ -87,9 +56,6 @@ sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
 
 echo "Setting up MySQL database..."
 mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
-
-# continue working in the application directory
-cd securedrop/securedrop
 
 echo "Setting up the virtual environment..."
 virtualenv env
