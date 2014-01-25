@@ -20,11 +20,13 @@ if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     exit 1
 fi
 
-# define colored output for some statements
-bold=$(tput bold)
-blue=$(tput setaf 4)
-red=$(tput setaf 1)
-normalcolor=$(tput sgr 0)
+# define colored output for some statements if we're in an interactive shell
+if [[ $- == *i* ]]; then
+    bold=$(tput bold)
+    blue=$(tput setaf 4)
+    red=$(tput setaf 1)
+    normalcolor=$(tput sgr 0)
+fi
 
 DEPENDENCIES=$(grep -vE "^\s*#" install_files/document-requirements.txt  | tr "\n" " ")
 
