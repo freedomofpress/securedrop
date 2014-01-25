@@ -205,13 +205,28 @@ def delete():
 def valid_codename(codename):
     return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
+def check_flagged(codename):
+    # TODO: make 'flag' a db column, so we can replace this with a db lookup in
+    # the future
+    flagged = False
+    sid = crypto_util.hash_codename(codename)
+    try:
+        loc = store.path(sid)
+    except:
+        return flagged
+    for fn in os.listdir(loc):
+        if fn=='_FLAG':
+            flagged = True
+            break
+    return flagged
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         codename = request.form['codename']
         if valid_codename(codename):
-            session.update(codename=codename, logged_in=True)
+            flagged = check_flagged(codename)
+            session.update(codename=codename, flagged=flagged, logged_in=True)
             return redirect(url_for('lookup'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")
