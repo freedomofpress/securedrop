@@ -43,3 +43,6 @@ nosetests.xml
 
 # Vim temp files
 *~
+
+# Functional test logs
+**/ghostdriver.log
