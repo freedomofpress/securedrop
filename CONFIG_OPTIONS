@@ -7,8 +7,8 @@ SSH_USERS=""                 # Space separated list of usernames that will SSH i
 # You only need to fill these out on the Monitor Server
 # If you leave these blank, SecureDrop won't send email notifications
 SMTP_SERVER=""               # FQDN of the destination SMTP server
-EMAIL_DISTRO=""              # The email distribution list to send ossec alerts to
 EMAIL_FROM="ossec@test.com"  # The email address that the ossec alert will appear to come from
+EMAIL_DISTRO=""              # The email distribution list to send ossec alerts to. This is also the email used for the public gpg key for encrypted ossec alerts
 
 # You only need to fill these out on the App Server
 JOURNALIST_USERS=""          # Space separated list of journalist usernames (make them up now, one per journalist)
