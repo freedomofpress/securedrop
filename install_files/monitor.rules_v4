@@ -12,6 +12,7 @@
 
 #allow connections on local loopback
 -A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p tcp -m tcp -j ACCEPT
+-A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -p udp -m udp -j ACCEPT
 
 #all udp access for ossec between source and monitor server
 -A INPUT  -s OTHER_IP -p udp --dport 1514 -j ACCEPT
