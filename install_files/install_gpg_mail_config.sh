@@ -10,7 +10,7 @@
 #  - Support for multiple gpg public keys
 # ------------------------------------------------------------------------------
 set -u -e
-set -x 
+#set -x 
 # Setup Vars
 OSSEC_HOME=${OSSEC_HOME:="/var/ossec"}
 OSSEC_KEY_HOME=$OSSEC_HOME/.gnupg
