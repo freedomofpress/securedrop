@@ -16,7 +16,7 @@ In addition to these dedicated computers, the journalist will also use his or he
 
 * `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that he or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources.
 
-Depending on the news organizations's threat model, it is recommended that journalists always use the [Tails operating system](https://tails.boum.org/) on on their `Journalist Workstation` when connecting to the `Application Server`. Alternatively, this can also be its own dedicated computer.
+Depending on the news organizations's threat model, it is recommended that journalists always use the [Tails operating system](https://tails.boum.org/) on their `Journalist Workstation` when connecting to the `Application Server`. Alternatively, this can also be its own dedicated computer.
 
 These computers should all physically be in your organization's office. 
 
