@@ -57,7 +57,7 @@ if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     exit 1
 fi
 
-if [ "$UNAIDED_INSTALL" -ne true ]; then
+if [ "$UNAIDED_INSTALL" != true ]; then
     bold=$(tput bold)
     blue=$(tput setaf 4)
     red=$(tput setaf 1)
@@ -130,7 +130,7 @@ sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" confi
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
-if [ "$UNAIDED_INSTALL" -ne true ]; then
+if [ "$UNAIDED_INSTALL" != true ]; then
     echo ""
     echo "You will need a journalist key for development."
     echo "Would you like to generate one or use the key included?"
