@@ -47,3 +47,4 @@ nosetests.xml
 # Functional test logs
 **/ghostdriver.log
 
+**/*build.log
