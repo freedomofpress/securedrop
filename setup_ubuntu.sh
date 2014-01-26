@@ -14,6 +14,10 @@ while getopts "r:" OPTION; do
     esac
 done
 
+random() {
+  head -c $1 /dev/urandom | base64
+}
+
 #check platform and distro
 opsys=`uname`
 
@@ -40,8 +44,8 @@ fi
 DEPENDENCIES=$(grep -vE "^\s*#" install_files/document-requirements.txt  | tr "\n" " ")
 
 # no password prompt to install mysql-server
-mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
-mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+mysql_root=$(random 20)
+mysql_securedrop=$(random 20)
 sudo debconf-set-selections <<EOF
 mysql-server-5.5 mysql-server/root_password password $mysql_root
 mysql-server-5.5 mysql-server/root_password_again password $mysql_root
@@ -89,18 +93,18 @@ keypath=$securedrop_root/keys
 chmod 700 $keypath
 
 # generate and store random values required by config.py
-secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-scrypt_gpg_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config/base.py
-sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER=$scrypt_id_pepper@" config/base.py
-sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER=$scrypt_gpg_pepper@" config/base.py
+secret_key=$(random 32)
+scrypt_id_pepper=$(random 32)
+scrypt_gpg_pepper=$(random 32)
+sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" config/base.py
+sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
+sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
 
 # initialize development database
 # Securedrop will use sqlite by default, but we've set up a mysql database as
 # part of this installation so it is very easy to switch to it.
 # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config/development.py
+sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" config/development.py
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
