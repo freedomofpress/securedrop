@@ -157,7 +157,7 @@ sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development
 echo ""
 echo "Running unit tests... these should all pass!"
 set +e # turn this flag off so we can checks if the tests failed
-python test.py
+./test.sh
 
 if [[ $? != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
