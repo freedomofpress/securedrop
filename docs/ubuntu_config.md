@@ -10,6 +10,8 @@ Follow the steps to choose your language and keyboard, and let the setup continu
 
 We recommend that you enable [full disk encryption](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption) with LUKS. During the disk partitioning step, select "Guided - use entire disk and set up encrypted LVM". Write the changes to disk. Follow the recommendations as to choosing a strong password. **Important**: this password will need to be entered at every boot, and during reboots after installing security updates. As the administrator, you will be responsible for keeping this passphrase safe. Write it down somewhere and memorize it if you can. If inadvertently lost it could result in total loss of the SecureDrop system.
 
+**Warning**: Enabling encrypted disks along with unattended-upgrades means that SecureDrop will become unreachable after an automatic reboot. An administrator should be on hand to enter the password in order to mount the disks. We recommend that the servers be integrated with a monitoring solution that so that you receive an alert when the system becomes unavailable.
+
 ![Encrypted LVM](/docs/images/install/ubuntu_encrypt.png)
 
 If you wish to opt out of full disk encryption at your own risk, then choose "Guided - use entire disk and set up LVM" instead. Then wait for base system to finish installing. 
