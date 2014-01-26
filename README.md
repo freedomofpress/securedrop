@@ -40,7 +40,7 @@ Finally, you will also need to come up with and memorize a series of passphrases
 * `Secure Viewing Station`'s GPG secret key
 * `Journalist Workstation`'s Tails [Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) that allows you to store files
 
-If the journalist does not have a personal GPG secret key, he or she will have to create one as well.
+If the journalist does not have a personal GPG secret keypair, he or she will have to create one as well.
 
 ## How to Install SecureDrop
 
