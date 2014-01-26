@@ -12,3 +12,4 @@ sqlite
 libmysqlclient-dev
 libssl-dev
 libffi-dev
+phantomjs
