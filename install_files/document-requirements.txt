@@ -7,6 +7,7 @@ apache2-mpm-worker
 libapache2-mod-wsgi
 python-pip
 python-dev
+python-virtualenv
 mysql-server-5.5
 sqlite
 libmysqlclient-dev

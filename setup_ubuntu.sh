@@ -4,7 +4,12 @@
 set -e
 # uncomment to print debugging information
 #set -x
+
+SOURCE_ROOT=$(dirname $0)
+
 securedrop_root=$(pwd)/.securedrop
+DEPENDENCIES=$(grep -vE "^\s*#" $SOURCE_ROOT/install_files/document-requirements.txt  | tr "\n" " ")
+
 
 while getopts "r:" OPTION; do
     case $OPTION in
@@ -14,7 +19,7 @@ while getopts "r:" OPTION; do
     esac
 done
 
-cd $(dirname $0)/securedrop
+cd $SOURCE_ROOT/securedrop
 
 random() {
   head -c $1 /dev/urandom | base64
@@ -42,8 +47,6 @@ if [[ $- == *i* ]]; then
     red=$(tput setaf 1)
     normalcolor=$(tput sgr 0)
 fi
-
-DEPENDENCIES=$(grep -vE "^\s*#" install_files/document-requirements.txt  | tr "\n" " ")
 
 # no password prompt to install mysql-server
 mysql_root=$(random 20)
