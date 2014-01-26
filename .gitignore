@@ -46,4 +46,4 @@ nosetests.xml
 
 # Functional test logs
 **/ghostdriver.log
-
+.vagrant
