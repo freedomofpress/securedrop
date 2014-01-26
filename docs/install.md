@@ -222,11 +222,11 @@ nano /home/amnesia/Persistent/copy_torrc.sh
 
 ```
 #!/bin/bash
-sudo cp /home/amnesia/Persistant/torrc /etc/tor/torrc
+sudo cp /home/amnesia/Persistent/torrc /etc/tor/torrc
 sudo service tor reload
 ```
 
-* Save (control X, then Y, then enter)
+* Save (Control-'X', then 'Y', then enter)
 
 * Then run these commands:
 
@@ -236,7 +236,7 @@ sudo service tor reload
 ```
 
 * Type in your administration password
-* The Torrc file should open up. Scroll down to the very bottom and add this to the last line (the onion address should be the `App Server` onion address and the second random string should be the auth value you previously created for the journalist): 
+* The Torrc file should open up. Scroll down to the very bottom and add this line at the end (the onion address should be the `App Server` onion address and the second random string should be the auth value you previously created for the journalist): 
 
 ```
     HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
