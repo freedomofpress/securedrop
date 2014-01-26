@@ -43,3 +43,4 @@ nosetests.xml
 
 # Vim temp files
 *~
+.vagrant
