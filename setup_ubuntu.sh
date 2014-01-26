@@ -5,17 +5,34 @@ set -e
 # uncomment to print debugging information
 #set -x
 
+usage() {
+  cat <<EOS
+Usage: setup_ubuntu.sh [-uh] [-r SECUREDROP_ROOT]
+
+   -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
+   -u                  # unaided execution of this script (useful for Vagrant)
+   -h                  # This help message.
+
+EOS
+}
+
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
 DEPENDENCIES=$(grep -vE "^\s*#" $SOURCE_ROOT/install_files/document-requirements.txt  | tr "\n" " ")
 
 
-while getopts "r:" OPTION; do
+while getopts "r:uh" OPTION; do
     case $OPTION in
         r)
             securedrop_root=$OPTARG
             ;;
+        u)
+            UNAIDED_INSTALL=true
+            ;;
+        h)
+            usage
+            exit 0
     esac
 done
 
@@ -40,8 +57,7 @@ if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     exit 1
 fi
 
-# define colored output for some statements if we're in an interactive shell
-if [[ $- == *i* ]]; then
+if [ "$UNAIDED_INSTALL" -ne true ]; then
     bold=$(tput bold)
     blue=$(tput setaf 4)
     red=$(tput setaf 1)
@@ -113,16 +129,18 @@ sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" confi
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
-echo ""
-echo "You will need a journalist key for development."
-echo "Would you like to generate one or use the key included?"
-echo "If you're not familiar with gpg2, you ought to import the key."
-echo "$bold$blue Use these keys for development and testing only, NEVER production."
-echo $normalcolor
-echo "Type 'g' and push ENTER to generate, otherwise leave blank and push ENTER."
-read genkey
+if [ "$UNAIDED_INSTALL" -ne true ]; then
+    echo ""
+    echo "You will need a journalist key for development."
+    echo "Would you like to generate one or use the key included?"
+    echo "If you're not familiar with gpg2, you ought to import the key."
+    echo "$bold$blue Use these keys for development and testing only, NEVER production."
+    echo $normalcolor
+    echo "Type 'g' and push ENTER to generate, otherwise leave blank and push ENTER."
+    read genkey
+fi
 
-if [[ $genkey != "" ]]; then
+if [[ "$genkey" != "" ]]; then
     echo "Generating new key."
     gpg2 --homedir $keypath --gen-key
 else
