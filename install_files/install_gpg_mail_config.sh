@@ -1,6 +1,16 @@
 #!/bin/bash
-set -u -e -x
-
+# ------------------------------------------------------------------------------
+#
+# Script used to setup gpg enrypted emails for ossec alerts
+# Limitations:
+#  - GPG key is passed to the send_encrypted_alarm.sh script, relies on CONFIG_OPTIONS 
+#     EMAIL_DISTRO. So when encrypting we can only pass in 1 key that is tied to a email
+#
+# TODO:
+#  - Support for multiple gpg public keys
+# ------------------------------------------------------------------------------
+set -u -e
+set -x 
 # Setup Vars
 OSSEC_HOME=${OSSEC_HOME:="/var/ossec"}
 OSSEC_KEY_HOME=$OSSEC_HOME/.gnupg
