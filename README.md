@@ -16,16 +16,19 @@ In addition to these dedicated computers, the journalist will also use his or he
 
 * `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that he or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources.
 
+Depending on the news organizations's threat model, it is recommended that journalists always use the [Tails operating system](https://tails.boum.org/) on on their `Journalist Workstation` when connecting to the `Application Server`. Alternatively, this can also be its own dedicated computer.
+
 These computers should all physically be in your organization's office. 
 
 ## Before You Begin
 
 Before beginning installation, you should have two servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](/docs/ubuntu_config.md).
 
-You will need a DVD with the latest version of the [Tails operating system](https://tails.boum.org/download/index.en.html) burned to it. Go [here for instructions](https://tails.boum.org/download/index.en.html) on how to download and burn Tails to a DVD. You will only have to use this DVD once: After the first run from a Live DVD you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
+You will need a DVD with the latest version of the [Tails operating system](https://tails.boum.org/download/index.en.html) burned to it. Go [here for instructions](https://tails.boum.org/download/index.en.html) on how to download and burn Tails to a DVD. You will only have to use this DVD once: After the first run from a Live DVD, you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
 
-You will also need a total of three USB sticks:
+You will also need a total of four USB sticks, preferably color-coded for easy distinction:
 * USB stick with Tails for the `Secure Viewing Station`
+* USB stick with Tails for the `Journalist Workstation`
 * USB stick for transfering files from the `Journalist Workstation` to the `Secure Viewing Station`
 * USB stick for transfering files from the `Secure Viewing Station` to the `Journalist Workstation`
 
@@ -35,8 +38,9 @@ Finally, you will also need to come up with and memorize a series of passphrases
 
 * `Secure Viewing Station`'s Tails [Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) that allows you to store files
 * `Secure Viewing Station`'s GPG secret key
+* `Journalist Workstation`'s Tails [Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) that allows you to store files
 
-Each journalist will also need to come up with a password for login to the `Application Server`.
+If the journalist does not have a personal GPG secret key, he or she will have to create one as well.
 
 ## How to Install SecureDrop
 
