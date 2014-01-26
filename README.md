@@ -24,7 +24,7 @@ These computers should all physically be in your organization's office.
 
 Before beginning installation, you should have two servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](/docs/ubuntu_config.md).
 
-You will need a DVD with the latest version of the [Tails operating system](https://tails.boum.org/download/index.en.html) burned to it. Go [here for instructions](https://tails.boum.org/download/index.en.html) on how to download and burn Tails to a DVD. You will only have to use this DVD once: After the first run from a Live DVD, you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement.
+You will need a DVD with the latest version of the [Tails operating system](https://tails.boum.org/download/index.en.html) burned to it. Go [here for instructions](https://tails.boum.org/download/index.en.html) on how to download and burn Tails to a DVD.  You will only have to use this DVD once: After the first run from a Live DVD, you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement. If you can't or don't want to burn a DVD, see the [Tails documentation](https://tails.boum.org/download/index.en.html) for alternative instructions.
 
 You will also need a total of four USB sticks, preferably color-coded for easy distinction:
 * USB stick with Tails for the `Secure Viewing Station`
