@@ -24,7 +24,6 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         return port
 
     def setUp(self):
-        test_setup.clean_root()
         test_setup.create_directories()
         self.gpg = test_setup.init_gpg()
         test_setup.init_db()
@@ -35,8 +34,18 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         self.source_location = "http://localhost:%d" % source_port
         self.journalist_location = "http://localhost:%d" % journalist_port
 
-        self.source_process = Process(target = lambda: source.app.run(port=source_port, debug=True, use_reloader=False))
-        self.journalist_process = Process(target = lambda: journalist.app.run(port=journalist_port, debug=True, use_reloader=False))
+        def start_source_server():
+            source.app.run(port=source_port,
+                           debug=True,
+                           use_reloader=False)
+
+        def start_journalist_server():
+            journalist.app.run(port=journalist_port,
+                               debug=True,
+                               use_reloader=False)
+
+        self.source_process = Process(target = start_source_server)
+        self.journalist_process = Process(target = start_journalist_server)
 
         self.source_process.start()
         self.journalist_process.start()
@@ -46,7 +55,8 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        self.driver.quit
+        test_setup.clean_root()
+        self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
 
@@ -74,10 +84,11 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
 
         text_box.send_keys(self.secret_message)
-        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
         submit_button.click()
 
-        notification = self.driver.find_element_by_css_selector('p.notification')
+        notification = self.driver.find_element_by_css_selector( 'p.notification')
         self.assertEquals('Thanks! We received your message.', notification.text)
 
     def _journalist_checks_messages(self):
@@ -89,7 +100,7 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
     def _journalist_downloads_message(self):
         self.driver.find_element_by_css_selector('.code-name a').click()
 
-        submissions = self.driver.find_elements_by_css_selector('#submissions a')
+        submissions = self.driver.find_elements_by_css_selector( '#submissions a')
 
         self.assertEqual(1, len(submissions))
 
