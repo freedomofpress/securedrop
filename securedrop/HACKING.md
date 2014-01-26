@@ -4,11 +4,21 @@ development setup for securedrop
 the easy way
 ------------
 
-If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script leads to build errors if you are using Percona instead of standard MySQL.
-
 1. Clone the repo
-2. cd into `securedrop`
-3. `./setup_ubuntu.sh`
+2. Make sure you have [vagrant](http://vagrantup.com) and [VirtualBox](http://www.virtualbox.org) installed
+3. `vagrant up`
+
+This creates a vm with the secure drop repository located in /vagrant. 
+You can ssh into it with `vagrant ssh`. To start the servers:
+
+    $ cd /vagrant/securedrop
+    $ . env/bin/activate
+    $ python source.py &
+    $ python journalist.py &
+
+Now, you can visit secure drop at [http://localhost:8080] and the journalist site at [http://localhost:8081]. 
+
+For more instructions on how to interact with your vm, refer to the [vagrant website](http://vagrantup.com).
 
 the hard way
 ------------
@@ -50,10 +60,11 @@ cd into the repo, then cd into `securedrop`
 install dependencies:
 
     $ sudo yum install python-devel
-    $ sudo apt-get install python-dev libmysqlclient-dev
+    $ sudo apt-get install python-dev libmysqlclient-dev phantomjs
     $ pip install --upgrade distribute
     $ pip install -r source-requirements.txt
     $ pip install -r document-requirements.txt
+    $ pip install -r test-requirements.txt
 
 cp the config templates and fill in empty values:
 
@@ -61,12 +72,9 @@ cp the config templates and fill in empty values:
     $ cp config/development.py.example config/development.py
     $ cp config/test.py.example config/test.py
 
-Create the `STORE_DIR` and `GPG_KEY_DIR`:
-
-    $ mkdir -p .securedrop/{store,keys,tmp}
-
 By default, all files storing the state of the application are saved under
-`.securedrop/`. This directory is included in `.gitignore` by default.
+`.securedrop/`. This directory is included in `.gitignore` by default. You can
+change this by modifying `SECUREDROP_ROOT` in `config/development.py`.
 
 **NOTE**: you will need to create a journalist key for development.
 
@@ -86,7 +94,10 @@ field of `config/development.py`. You can find the key fingerprint by running:
 
     $ gpg2 --homedir .securedrop/keys --fingerprint
 
-You might have to manually remove the spaces.
+You have to manually remove any spaces from the fingerprint.
+
+Continue filling in any other empty fields in the config.py file (identified by
+empty single quotes '').
 
 populate the database:
 

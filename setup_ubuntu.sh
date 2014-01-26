@@ -1,9 +1,46 @@
-#! /bin/bash
+#!/bin/bash
 
 # stop setup script if any command fails
 set -e
 # uncomment to print debugging information
 #set -x
+
+usage() {
+  cat <<EOS
+Usage: setup_ubuntu.sh [-uh] [-r SECUREDROP_ROOT]
+
+   -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
+   -u                  # unaided execution of this script (useful for Vagrant)
+   -h                  # This help message.
+
+EOS
+}
+
+SOURCE_ROOT=$(dirname $0)
+
+securedrop_root=$(pwd)/.securedrop
+DEPENDENCIES=$(grep -vE "^\s*#" $SOURCE_ROOT/install_files/document-requirements.txt  | tr "\n" " ")
+
+
+while getopts "r:uh" OPTION; do
+    case $OPTION in
+        r)
+            securedrop_root=$OPTARG
+            ;;
+        u)
+            UNAIDED_INSTALL=true
+            ;;
+        h)
+            usage
+            exit 0
+    esac
+done
+
+cd $SOURCE_ROOT/securedrop
+
+random() {
+  head -c $1 /dev/urandom | base64
+}
 
 #check platform and distro
 opsys=`uname`
@@ -20,17 +57,16 @@ if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     exit 1
 fi
 
-# define colored output for some statements
-bold=$(tput bold)
-blue=$(tput setaf 4)
-red=$(tput setaf 1)
-normalcolor=$(tput sgr 0)
-
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
+if [ "$UNAIDED_INSTALL" -ne true ]; then
+    bold=$(tput bold)
+    blue=$(tput setaf 4)
+    red=$(tput setaf 1)
+    normalcolor=$(tput sgr 0)
+fi
 
 # no password prompt to install mysql-server
-mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
-mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
+mysql_root=$(random 20)
+mysql_securedrop=$(random 20)
 sudo debconf-set-selections <<EOF
 mysql-server-5.5 mysql-server/root_password password $mysql_root
 mysql-server-5.5 mysql-server/root_password_again password $mysql_root
@@ -38,47 +74,23 @@ EOF
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
-# Since this script lives in the top level of the securedrop repository, it is
-# natural to expect that users will have cloned the repo, cd'ed into it, and
-# are now running ./setup_ubuntu.sh. We will check that this is the case, and
-# if so can skip some later steps.
-if [[ -d ".git" && -n `grep "securedrop" .git/config` ]]; then
-    cd .. # run this script in the directory *containing* the securedrop git repo
-else
-    echo "You are not running this script inside the Securedrop repo."
-    echo "Do you need to clone the SecureDrop repo? [Y/N]"
-    read gitans
-    if [[ $gitans = 'y' || $gitans = 'Y' ]]; then
-
-        echo "Type the path of where you would like to clone it, and then push ENTER."
-        read sdpath
-        cd $sdpath
-
-        echo "If you are cloning from your own fork, type your Github username and push ENTER. If not, leave it blank and push ENTER."
-        read gitusername
-        if [[ $gitusername != "" ]]; then
-            echo "Cloning the repo from "$gitusername "..."
-            git clone https://github.com/$gitusername/securedrop.git
-        else
-            echo "Cloning the repo..."
-            git clone https://github.com/freedomofpress/securedrop.git
-        fi
-    fi
-fi
-
-if [ ! -d "securedrop" ]; then
-    echo "Couldn't find the securedrop repo... exiting!"
-    exit 1
-fi
-
 echo "Installing dependencies: "$DEPENDENCIES
+sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
-echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+sudo /etc/init.d/mysql stop
 
-# continue working in the application directory
-cd securedrop/securedrop
+sudo mysqld --skip-grant-tables &
+
+sleep 2 && sudo mysql <<EOF
+UPDATE mysql.user SET Password=PASSWORD('$mysql_root') WHERE User='root';
+FLUSH PRIVILEGES;
+EOF
+
+sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
+
+echo "Setting up MySQL database..."
+mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
 
 echo "Setting up the virtual environment..."
 virtualenv env
@@ -86,13 +98,16 @@ source env/bin/activate
 pip install --upgrade distribute
 pip install -r source-requirements.txt
 pip install -r document-requirements.txt
+pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
 cp config/base.py.example config/base.py
 cp config/test.py.example config/test.py
 cp config/development.py.example config/development.py
-securedrop_root=$(pwd)/.securedrop
+
+sed -i "s@^SECUREDROP_ROOT.*@SECUREDROP_ROOT = '$securedrop_root'@" config/development.py
+
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
@@ -100,31 +115,33 @@ keypath=$securedrop_root/keys
 chmod 700 $keypath
 
 # generate and store random values required by config.py
-secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-scrypt_gpg_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
-sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config/base.py
-sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER=$scrypt_id_pepper@" config/base.py
-sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER=$scrypt_gpg_pepper@" config/base.py
+secret_key=$(random 32)
+scrypt_id_pepper=$(random 32)
+scrypt_gpg_pepper=$(random 32)
+sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" config/base.py
+sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
+sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
 
 # initialize development database
 # Securedrop will use sqlite by default, but we've set up a mysql database as
 # part of this installation so it is very easy to switch to it.
 # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config/development.py
+sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" config/development.py
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
-echo ""
-echo "You will need a journalist key for development."
-echo "Would you like to generate one or use the key included?"
-echo "If you're not familiar with gpg2, you ought to import the key."
-echo "$bold$blue Use these keys for development and testing only, NEVER production."
-echo $normalcolor
-echo "Type 'g' and push ENTER to generate, otherwise leave blank and push ENTER."
-read genkey
+if [ "$UNAIDED_INSTALL" -ne true ]; then
+    echo ""
+    echo "You will need a journalist key for development."
+    echo "Would you like to generate one or use the key included?"
+    echo "If you're not familiar with gpg2, you ought to import the key."
+    echo "$bold$blue Use these keys for development and testing only, NEVER production."
+    echo $normalcolor
+    echo "Type 'g' and push ENTER to generate, otherwise leave blank and push ENTER."
+    read genkey
+fi
 
-if [[ $genkey != "" ]]; then
+if [[ "$genkey" != "" ]]; then
     echo "Generating new key."
     gpg2 --homedir $keypath --gen-key
 else
