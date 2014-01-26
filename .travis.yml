@@ -19,4 +19,4 @@ before_script:
   - mkdir -p .securedrop/{store,keys,tmp}
   - gpg2 --homedir .securedrop/keys --import securedrop/test_journalist_key.*
 script:
-  - cd securedrop && python test.py
+  - cd securedrop && ./test.sh
