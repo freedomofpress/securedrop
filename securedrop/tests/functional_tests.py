@@ -83,7 +83,7 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
     def _source_submits_a_message(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
 
-        text_box.send_keys(self.secret_message)
+        text_box.send_keys(self.secret_message) # send_keys = type into text box
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
