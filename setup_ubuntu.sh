@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # stop setup script if any command fails
 set -e
@@ -26,7 +26,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
+DEPENDENCIES=$(grep -vE "^\s*#" install_files/document-requirements.txt  | tr "\n" " ")
 
 # no password prompt to install mysql-server
 mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
@@ -74,8 +74,19 @@ fi
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
 
+sudo /etc/init.d/mysql stop
+
+sudo mysqld --skip-grant-tables &
+
+sleep 2 && sudo mysql <<EOF
+UPDATE mysql.user SET Password=PASSWORD('$mysql_root') WHERE User='root';
+FLUSH PRIVILEGES;
+EOF
+
+sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
+
 echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
 
 # continue working in the application directory
 cd securedrop/securedrop
