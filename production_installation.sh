@@ -84,7 +84,7 @@ if [ "$ROLE" = 'monitor' ]; then
   cat /var/lib/tor/hidden_service/hostname
   echo "The Monitor Server's installation is complete."
 
-elif [ $ROLE = 'app' ]; then
+elif [[ $ROLE == 'app' ]]; then
   echo "Starting interface_install.sh"
   $CWD/install_files/interface_install.sh
   catch_error $? "interface install."
