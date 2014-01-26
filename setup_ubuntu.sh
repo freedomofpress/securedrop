@@ -14,6 +14,8 @@ while getopts "r:" OPTION; do
     esac
 done
 
+cd $(dirname $0)/securedrop
+
 random() {
   head -c $1 /dev/urandom | base64
 }
@@ -53,8 +55,6 @@ EOF
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
-cd $(dirname $0)/securedrop
-
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
@@ -85,6 +85,8 @@ echo "Setting up configurations..."
 cp config/base.py.example config/base.py
 cp config/test.py.example config/test.py
 cp config/development.py.example config/development.py
+
+sed -i "s@^SECUREDROP_ROOT.*@SECUREDROP_ROOT = '$securedrop_root'@" config/development.py
 
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
