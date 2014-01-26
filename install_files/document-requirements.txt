@@ -10,3 +10,6 @@ python-dev
 mysql-server-5.5
 sqlite
 libmysqlclient-dev
+libssl-dev
+libffi-dev
+phantomjs
