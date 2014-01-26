@@ -4,7 +4,8 @@ development setup for securedrop
 the easy way
 ------------
 
-If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script leads to build errors if you are using Percona instead of standard MySQL.
+If you running Ubuntu/Debian, use the `setup_ubuntu.sh`. Note that this script
+leads to build errors if you are using Percona instead of standard MySQL.
 
 1. Clone the repo
 2. cd into `securedrop`
@@ -61,12 +62,9 @@ cp the config templates and fill in empty values:
     $ cp config/development.py.example config/development.py
     $ cp config/test.py.example config/test.py
 
-Create the `STORE_DIR` and `GPG_KEY_DIR`:
-
-    $ mkdir -p .securedrop/{store,keys,tmp}
-
 By default, all files storing the state of the application are saved under
-`.securedrop/`. This directory is included in `.gitignore` by default.
+`.securedrop/`. This directory is included in `.gitignore` by default. You can
+change this by modifying `SECUREDROP_ROOT` in `config/development.py`.
 
 **NOTE**: you will need to create a journalist key for development.
 
@@ -86,7 +84,10 @@ field of `config/development.py`. You can find the key fingerprint by running:
 
     $ gpg2 --homedir .securedrop/keys --fingerprint
 
-You might have to manually remove the spaces.
+You have to manually remove any spaces from the fingerprint.
+
+Continue filling in any other empty fields in the config.py file (identified by
+empty single quotes '').
 
 populate the database:
 
