@@ -79,7 +79,6 @@ validate_CONFIG_OPTIONS() {
         validate_email $EMAIL_FROM
     fi
     if [ "$ROLE" = 'app' ]; then
-        validate_user_exists $JOURNALIST_USERS
         validate_KEY
         validate_file_exists $SOURCE_SCRIPTS
         validate_file_exists $DOCUMENT_SCTIPTS
