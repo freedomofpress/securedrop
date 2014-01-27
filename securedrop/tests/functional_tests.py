@@ -50,7 +50,8 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         self.source_process.start()
         self.journalist_process.start()
 
-        self.driver = webdriver.PhantomJS()
+        self.driver = webdriver.PhantomJS(
+            executable_path = config.PHANTOMJS_BINARY_PATH)
 
         self.secret_message = 'blah blah blah'
 
