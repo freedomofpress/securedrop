@@ -161,6 +161,7 @@ PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
 PHANTOMJS_BINARY_PATH='tests/bin/phantomjs'
 mkdir -p $(dirname $PHANTOMJS_BINARY_PATH)
 wget -O- $PHANTOMJS_URL | tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH
+sed -i "s@PHANTOMJS_BINARY_PATH.*@PHANTOMJS_BINARY_PATH='$PHANTOMJS_BINARY_PATH'@" config/test.py
 
 echo ""
 echo "Running unit tests... these should all pass!"

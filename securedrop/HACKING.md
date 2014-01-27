@@ -8,7 +8,8 @@ the easy way
 2. Make sure you have [vagrant](http://vagrantup.com) and [VirtualBox](http://www.virtualbox.org) installed
 3. `vagrant up`
 
-This creates a vm with the secure drop repository located in /vagrant. 
+This creates a vm with the secure drop repository located in /vagrant.
+
 You can ssh into it with `vagrant ssh`. To start the servers:
 
     $ cd /vagrant/securedrop
@@ -16,13 +17,14 @@ You can ssh into it with `vagrant ssh`. To start the servers:
     $ python source.py &
     $ python journalist.py &
 
+Now, you can visit secure drop at [http://localhost:8080] and the journalist site at [http://localhost:8081].
+
 To run tests:
 
     $ cd /vagrant/securedrop
     $ . env/bin/activate
     $ ./test.sh
 
-Now, you can visit secure drop at [http://localhost:8080] and the journalist site at [http://localhost:8081]. 
 
 For more instructions on how to interact with your vm, refer to the [vagrant website](http://vagrantup.com).
 
