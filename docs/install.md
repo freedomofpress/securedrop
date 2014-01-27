@@ -194,25 +194,78 @@ If a journalist does not yet have a GPG key, they can follow these instructions 
 * [Windows](http://gpg4win.org/)
 * [Mac OS X](http://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
 
-### Set up the Tor Browser Bundle
+### Set up the Tor Browser Bundle or Tails So The Journalist Can Log-in
 
-In order to connect to the `App Server`, the journalist needs to install the Tor Browser Bundle and modify it to authenticate their hidden service. Each journalist gets their own hidden service URL.
+In order to connect to the `App Server` and view the `Document Interface`, the journalist needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
 
 You will have to do the following steps on each laptop that will be able to connect to the `Document Interface` running on the `App Server`. If you want to give a new journalist access to the `Document Interface` you will need to do these steps again for that new journalist.
+
+**Though the Tails Operating System**
+
+* Boot Tails on the `Journalist Workstation` using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick that you use to boot the `Secure Viewing Station`).
+* Click YES under "Use persistence?" and type in your password (do not hit enter).
+* Click YES under "More options?", then click "Forward" 
+* Set an administration password. This password will only be active during your current Tails session. Each time you will have to create this again, though it can be the same password everytime.
+* Click login.
+* Go to the upper right hand corner of your screen and enable your Internet connection.
+
+Here's where it gets tricky. Now you need to create a tor.sc.sh script, make it executable, add an authenticated hidden service config to the Tor hidden service file. This basically allows the journalists to log-in to the `Document Interface` from their Tails USB every time. This only needs to be done once.
+
+* Open a terminal.
+* Run this command: 
+
+```
+nano /home/amnesia/Persistent/copy_torrc.sh
+```
+
+* Then run these three lines: 
+
+```
+#!/bin/bash
+sudo cp /home/amnesia/Persistent/torrc /etc/tor/torrc
+sudo service tor reload
+```
+
+* Save (Control-'X', then 'Y', then enter)
+
+* Then run these commands:
+
+```
+    chmod +x /home/amnesia/Persistent/copy_torrc.sh
+    sudo nano /etc/tor/torrc
+```
+
+* Type in your administration password
+* The Torrc file should open up. Scroll down to the very bottom and add this line at the end (the onion address should be the `App Server` onion address and the second random string should be the auth value you previously created for the journalist): 
+
+```
+    HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
+```
+
+* Save
+
+* Run this command: 
+
+```
+sudo cp /etc/tor/torrc /home/amnesisa/Persistent/torrc
+```
+
+* Enter your password, then enter it again when prompted. 
+
+You now have set up the ability for the journalist to easily log-in to the `Document Interface` every time they boot up their `Tails operating system`.
+
+**Through the Tor Browser Bundle**
 
 * On the `Journalist Workstation`, [download and install the Tor Browser Bundle](https://www.torproject.org/download/download-easy.html.en). Extract Tor Browser Bundle to somewhere you will find it, such as your desktop.
 
 * Navigate to the Tor Browser Directory
-* Open the `torrc` file which should be located in `tor-browser_en-US/Data/Tor/torrc`
+* Open the `torrc-defaults` file which should be located in `tor-browser_en-US/Data/Tor/torrc-defaults`
 * Add a line that begins with `HidServAuth` followed by the journalist's Document Interface URL and Auth value that was output at the end of the App Server installation
 
-In this case the `torrc` file for the first journalist should look something like:
+In this case the `torrc-defaults` file for the first journalist should look something like:
 
     # If non-zero, try to write to disk less frequently than we would otherwise.
     AvoidDiskWrites 1
-    # Store working data, state, keys, and caches here.
-    DataDirectory ./Data/Tor
-    GeoIPFile ./Data/Tor/geoip
     # Where to send logging messages.  Format is minSeverity[-maxSeverity]
     # (stderr|stdout|syslog|file FILENAME).
     Log notice stdout
@@ -221,15 +274,13 @@ In this case the `torrc` file for the first journalist should look something lik
     SocksListenAddress 127.0.0.1
     SocksPort 9150
     ControlPort 9151
+    CookieAuthentication 1
     HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
 
-And the `torrc` file for the second journalist should look like something this:
+And the `torrc-defaults` file for the second journalist should look like something this:
 
     # If non-zero, try to write to disk less frequently than we would otherwise.
     AvoidDiskWrites 1
-    # Store working data, state, keys, and caches here.
-    DataDirectory ./Data/Tor
-    GeoIPFile ./Data/Tor/geoip
     # Where to send logging messages.  Format is minSeverity[-maxSeverity]
     # (stderr|stdout|syslog|file FILENAME).
     Log notice stdout
@@ -238,6 +289,7 @@ And the `torrc` file for the second journalist should look like something this:
     SocksListenAddress 127.0.0.1
     SocksPort 9150
     ControlPort 9151
+    CookieAuthentication 1
     HidServAuth kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
 
 * Open the Tor Browser Bundle and navigate to the journalist's unique Document Interface URL without the Auth value
