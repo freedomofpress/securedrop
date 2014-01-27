@@ -9,6 +9,7 @@
 # then waits for the App Server's agent to connect
 # The script then verifies that the App Server's agent is active
 #
+set -x
 CWD="$(dirname $0)"
 cd $CWD
 
@@ -192,6 +193,16 @@ check_status() {
   fi
 }
 
+setup_gpg_email_alerts() {
+  OSSEC_GPG_ALERT_SCRIPT=install_gpg_mail_config.sh
+  if [[ -f $OSSEC_GPG_ALERT_SCRIPT && -x $OSSEC_GPG_ALERT_SCRIPT ]] ; then
+    ./install_gpg_mail_config.sh
+  else
+    echo " **** Issues detected for ${OSSEC_GPG_ALERT_SCRIPT}"
+    echo " **** Skipping setup of gpg encrypted ossec emails **** "
+  fi
+}
+
 main() {
   root_check
   pre-req_package_install
@@ -208,6 +219,7 @@ main() {
       start_authd
       kill_authd
       restart_ossec
+      setup_gpg_email_alerts
       check_status
   elif [ "$ROLE" = 'app' ]; then
     OSSEC_ROLE="agent"
