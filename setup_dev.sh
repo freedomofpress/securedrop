@@ -102,9 +102,6 @@ pip install -r test-requirements.txt
 echo "Setting up configurations..."
 # set up the securedrop root directory
 cp config/test.py.example config/test.py
-cp config/development.py.example config/development.py
-
-sed -i "s@^SECUREDROP_ROOT.*@SECUREDROP_ROOT = '$securedrop_root'@" config/development.py
 
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
@@ -146,10 +143,6 @@ SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 CUSTOM_HEADER_IMAGE = None
 EOF
 
-# initialize development database (development uses sqlite by default)
-echo "Creating database tables..."
-SECUREDROP_ENV=development python -c 'import db; db.init_db()'
-
 if [ "$UNAIDED_INSTALL" != true ]; then
     echo ""
     echo "You will need a journalist key for development."
@@ -169,10 +162,41 @@ else
     gpg2 --homedir $keypath --import test_journalist_key.*
 fi
 
-# get journalist key fingerpint from gpg2, remove spaces, and put into config file
-journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
-echo "Using journalist key with fingerprint $journalistkey"
-sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development.py
+echo "Using journalist key with fingerprint $journalist_key"
+journalist_key=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
+
+# setup development environment
+cat < config/development.py <<EOF
+#### Development Configurations
+
+JOURNALIST_KEY='$journalist_key' # fingerprint of the public key for encrypting submissions
+SECUREDROP_ROOT='$(pwd)/.securedrop'
+
+FLASK_DEBUG = True
+
+### Database Configuration
+
+# Securedrop will use sqlite by default, but we've set up a mysql database as
+# part of this installation so it is very easy to switch to it.
+# Also, MySQL-Python won't install (which breaks this script) unless
+# mysql is installed.
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE='$securedrop_root/db_development.sqlite'
+
+# Uncomment to use mysql (or any other databaes backend supported by
+# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
+# `python -c "import db; db.init_db()"` to initialize the database
+
+# DATABASE_ENGINE = 'mysql'
+# DATABASE_HOST = 'localhost'
+# DATABASE_NAME = 'securedrop'
+# DATABASE_USERNAME = 'securedrop'
+# DATABASE_PASSWORD = '$mysql_securedrop'
+EOF
+
+# initialize development database (development uses sqlite by default)
+echo "Creating database tables..."
+SECUREDROP_ENV=development python -c 'import db; db.init_db()'
 
 # We encountered issues using PhantomJS 1.9.6 (from the repos) with Selenium.
 # Using 1.9.2 until the bugs in the repo release are fixed.
