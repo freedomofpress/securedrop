@@ -63,45 +63,29 @@ if [ "$UNAIDED_INSTALL" != true ]; then
     normalcolor=$(tput sgr 0)
 fi
 
-# no password prompt to install mysql-server
-mysql_root_password=$(random 20)
-mysql_securedrop=$(random 20)
-sudo debconf-set-selections <<EOF
-mysql-server-5.5 mysql-server/root_password password $mysql_root_password
-mysql-server-5.5 mysql-server/root_password_again password $mysql_root_password
-EOF
-
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
-sudo /etc/init.d/mysql stop
-
-sudo mysqld --skip-grant-tables &
-
-sleep 2 && sudo mysql <<EOF
-UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
-FLUSH PRIVILEGES;
-EOF
-
-sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
-
-echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root_password" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
-
-echo "Setting up the virtual environment..."
-virtualenv env
-source env/bin/activate
-pip install --upgrade distribute
-pip install -r source-requirements.txt
-pip install -r document-requirements.txt
-pip install -r test-requirements.txt
+sudo pip install --upgrade distribute
+sudo pip install -r source-requirements.txt
+sudo pip install -r document-requirements.txt
+sudo pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
-cp config/test.py.example config/test.py
+cat > config/test.py <<EOF
+JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
+SECUREDROP_ROOT='$securedrop_root'
+
+FLASK_TESTING = True
+FLASK_CSRF_ENABLED = False
+
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE='$securedrop_root/db_development.sqlite'
+EOF
 
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
@@ -157,14 +141,15 @@ else
     gpg2 --homedir $keypath --import test_journalist_key.*
 fi
 
-echo "Using journalist key with fingerprint $journalist_key"
-journalist_key=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
+# get journalist key fingerpint from gpg2, remove spaces, and put into config file
+journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
+echo "Using journalist key with fingerprint $journalistkey"
 
 # setup development environment
-cat < config/development.py <<EOF
+cat > config/development.py <<EOF
 #### Development Configurations
 
-JOURNALIST_KEY='$journalist_key' # fingerprint of the public key for encrypting submissions
+JOURNALIST_KEY='$journalistkey' # fingerprint of the public key for encrypting submissions
 SECUREDROP_ROOT='$(pwd)/.securedrop'
 
 FLASK_DEBUG = True
@@ -180,7 +165,7 @@ DATABASE_FILE='$securedrop_root/db_development.sqlite'
 
 # Uncomment to use mysql (or any other databaes backend supported by
 # SQLAlchemy). Make sure you have the necessary dependencies installed, and run
-# `python -c "import db; db.init_db()"` to initialize the database
+# 'python -c "import db; db.init_db()"' to initialize the database
 
 # DATABASE_ENGINE = 'mysql'
 # DATABASE_HOST = 'localhost'
@@ -189,7 +174,6 @@ DATABASE_FILE='$securedrop_root/db_development.sqlite'
 # DATABASE_PASSWORD = '$mysql_securedrop'
 EOF
 
-# initialize development database (development uses sqlite by default)
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.init_db()'
 
