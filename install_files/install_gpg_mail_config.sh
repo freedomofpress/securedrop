@@ -10,14 +10,14 @@
 #  - Support for multiple gpg public keys
 # ------------------------------------------------------------------------------
 set -u -e
-#set -x 
+set -x 
 # Setup Vars
+source ../CONFIG_OPTIONS
 OSSEC_HOME=${OSSEC_HOME:="/var/ossec"}
 OSSEC_KEY_HOME=$OSSEC_HOME/.gnupg
 EMAIL_DISTRO=${EMAIL_DISTRO:=securedroptestmail@gmail.com}
-OSSEC_KEY_LIST=${OSSEC_KEY_LIST=:="SecureDrop.asc"}
+OSSEC_KEY_LIST=${OSSEC_KEY_LIST:="SecureDrop.asc"}
 SERVER_HOSTNAME=$(hostname)
-source ../CONFIG_OPTIONS
 
 #set up basic functions
 print_error() {
@@ -50,11 +50,11 @@ setup_postfix() {
 setup_gpg_for_ossec() {
   mkdir -p $OSSEC_KEY_HOME
   
-  for KEY in $OSSEC_KEY_LIST ; do
-      if [ ! -f $KEY ]; then
-        print_error "Cannot find $KEY"
+  for OSSEC_KEY in $OSSEC_KEY_LIST ; do
+      if [ ! -f $OSSEC_KEY ]; then
+        print_error "Cannot find $OSSEC_KEY"
       else
-        gpg --homedir /var/ossec/.gnupg --import $OSSEC_KEY_LIST
+        gpg --homedir /var/ossec/.gnupg --import $OSSEC_KEY
       fi
   done
   
