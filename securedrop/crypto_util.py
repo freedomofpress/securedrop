@@ -19,7 +19,7 @@ GPG_KEY_TYPE = "RSA"
 if os.environ.get('SECUREDROP_ENV') == 'test':
     # Optiimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
-    GPG_KEY_LENGTH = "1024"
+    GPG_KEY_LENGTH = 1024
     SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
 else:
     GPG_KEY_LENGTH = "4096"
@@ -51,7 +51,7 @@ except OSError:
 
 assert p.stdout.readline().split()[
     -1].split('.')[0] == '2', "upgrade GPG to 2.0"
-gpg = gnupg.GPG(gpgbinary=GPG_BINARY, gnupghome=config.GPG_KEY_DIR)
+gpg = gnupg.GPG(binary=GPG_BINARY, homedir=config.GPG_KEY_DIR)
 
 words = file(config.WORD_LIST).read().split('\n')
 nouns = file(config.NOUNS).read().split('\n')
@@ -153,9 +153,9 @@ def encrypt(fp, s, output=None):
     if isinstance(s, unicode):
         s = s.encode('utf8')
     if isinstance(s, str):
-        out = gpg.encrypt(s, [fp], output=output, always_trust=True)
+        out = gpg.encrypt(s, fp, output=output, always_trust=True)
     else:
-        out = gpg.encrypt_file(s, [fp], output=output, always_trust=True)
+        out = gpg.encrypt_file(s, fp, output=output, always_trust=True)
     if out.ok:
         return out.data
     else:

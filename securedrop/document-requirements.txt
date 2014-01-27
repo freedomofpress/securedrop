@@ -11,7 +11,7 @@ beautifulsoup4==4.3.2
 itsdangerous==0.23
 psutil==1.1.1
 pycrypto==2.6.1
-python-gnupg==0.3.5
+gnupg-securedrop==1.2.5-8-g48aac57-dirty
 scrypt==0.6.1
 twill==0.9
 wsgiref==0.1.2
