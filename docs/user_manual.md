@@ -60,9 +60,37 @@ Repeat to continue communicating with the journalist.
 
 ### Connecting to the Document Interface
 
-Each journalist has their own authenticated Tor hidden service URL. The journalist needs to use the Tor Browser that [has been configured for their use only](/docs/install.md#server-installation).
+Each journalist has their own authenticated Tor hidden service URL. The journalist needs to use the Tor Browser that [has been configured for their use only](/docs/install.md#server-installation), or they need to connect through their Tails USB. We strongly recommend connecting through Tails. However, this requires a few extra steps. After practicing a few times, this will become automatic.
 
-Start by opening Tor Browser and loading the .onion URL to access the document interface of the `App Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
+*Using Tails*
+
+* Boot Tails on the Journalist Workstation using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick that you use to boot the Secure Viewing Station).
+
+* Click YES under "Use persistence?" and type in your password (do not hit enter).
+
+* Click YES under "More options?", then click "Forward" 
+
+* Set an administration password. This password will only be active during your current Tails session. Each time you will have to create this again, though it can be the same password everytime.
+
+* Click login.
+
+* Go to the upper right hand corner of your screen and enable your Internet connection.
+
+* Click on `Computer` in the top left of your desktop, and go to the `Persistant` folder.
+
+* Double click the 'copy_torrc.sh' file. This should be been created on installation by your admin.
+
+* Click `Run In Terminal`
+
+* Type in the administration password you created at the beginning of your session and click enter.
+
+* When you go to your browser, in the bookmarks menu, you will now see links to both `App Server` and `Source Server`.
+
+* Click on the SecureDrop `Document Interface` link and you will be automatically logged-in. Now go down to the first screen shot below.
+
+*Not Using Tails*
+
+If you're not running Tails, start by opening Tor Browser and loading the .onion URL to access the document interface of the `App Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
 
 ![Document Interface](/docs/images/manual/document1.png)
 
