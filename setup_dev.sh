@@ -76,7 +76,6 @@ sudo pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
-cp config/base.py.example config/base.py
 cp config/test.py.example config/test.py
 cp config/development.py.example config/development.py
 
@@ -92,9 +91,35 @@ chmod 700 $keypath
 secret_key=$(random 32)
 scrypt_id_pepper=$(random 32)
 scrypt_gpg_pepper=$(random 32)
-sed -i "s@^FLASK_SECRET_KEY.*@FLASK_SECRET_KEY='$secret_key'@" config/base.py
-sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
-sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
+
+# setup base configurations
+cat > config/flask_defaults.py <<EOF
+### Flask Default Configuration
+
+FLASK_DEBUG = False
+FLASK_TESTING = False
+FLASK_CSRF_ENABLED = True
+FLASK_SECRET_KEY = '$secret_key'
+EOF
+
+cat > config/base.py <<EOF
+### Application Configuration
+
+SOURCE_TEMPLATES_DIR = './source_templates'
+JOURNALIST_TEMPLATES_DIR = './journalist_templates'
+WORD_LIST = './wordlist'
+NOUNS = './dictionaries/nouns.txt'
+ADJECTIVES = './dictionaries/adjectives.txt'
+
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+
+### Theming Options
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = None
+EOF
 
 # initialize development database (development uses sqlite by default)
 echo "Creating database tables..."

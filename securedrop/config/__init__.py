@@ -1,6 +1,6 @@
 import os, stat
 
-from defaults import *
+from flask_defaults import *
 from base import *
 
 ### Import configuration from the current environment
