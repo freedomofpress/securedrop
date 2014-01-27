@@ -136,11 +136,6 @@ ADJECTIVES = './dictionaries/adjectives.txt'
 SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
 SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
 SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
-
-### Theming Options
-# If you want a custom image at the top, copy your png or jpg to static/i and
-# update this to its filename (e.g. "logo.jpg") .
-CUSTOM_HEADER_IMAGE = None
 EOF
 
 if [ "$UNAIDED_INSTALL" != true ]; then
