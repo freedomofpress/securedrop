@@ -21,7 +21,6 @@ SOURCE_ROOT=$(dirname $0)
 securedrop_root=$(pwd)/.securedrop
 DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra"
 
-
 while getopts "r:uh" OPTION; do
     case $OPTION in
         r)
@@ -64,15 +63,41 @@ if [ "$UNAIDED_INSTALL" != true ]; then
     normalcolor=$(tput sgr 0)
 fi
 
+# no password prompt to install mysql-server
+mysql_root_password=$(random 20)
+mysql_securedrop=$(random 20)
+sudo debconf-set-selections <<EOF
+mysql-server-5.5 mysql-server/root_password password $mysql_root_password
+mysql-server-5.5 mysql-server/root_password_again password $mysql_root_password
+EOF
+
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
-sudo pip install --upgrade distribute
-sudo pip install -r source-requirements.txt
-sudo pip install -r document-requirements.txt
-sudo pip install -r test-requirements.txt
+
+sudo /etc/init.d/mysql stop
+
+sudo mysqld --skip-grant-tables &
+
+sleep 2 && sudo mysql <<EOF
+UPDATE mysql.user SET Password=PASSWORD('$mysql_root_password') WHERE User='root';
+FLUSH PRIVILEGES;
+EOF
+
+sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
+
+echo "Setting up MySQL database..."
+mysql -u root -p"$mysql_root_password" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
+
+echo "Setting up the virtual environment..."
+virtualenv env
+source env/bin/activate
+pip install --upgrade distribute
+pip install -r source-requirements.txt
+pip install -r document-requirements.txt
+pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
@@ -94,7 +119,7 @@ scrypt_gpg_pepper=$(random 32)
 
 # setup base configurations
 cat > config/flask_defaults.py <<EOF
-### Flask Default Configuration
+#### Flask Default Configuration
 
 FLASK_DEBUG = False
 FLASK_TESTING = False
@@ -103,7 +128,7 @@ FLASK_SECRET_KEY = '$secret_key'
 EOF
 
 cat > config/base.py <<EOF
-### Application Configuration
+#### Application Configuration
 
 SOURCE_TEMPLATES_DIR = './source_templates'
 JOURNALIST_TEMPLATES_DIR = './journalist_templates'
