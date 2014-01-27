@@ -92,7 +92,7 @@ chmod 700 $keypath
 secret_key=$(random 32)
 scrypt_id_pepper=$(random 32)
 scrypt_gpg_pepper=$(random 32)
-sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" config/base.py
+sed -i "s@^FLASK_SECRET_KEY.*@FLASK_SECRET_KEY='$secret_key'@" config/base.py
 sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
 sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
 
