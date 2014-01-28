@@ -545,6 +545,7 @@
   /var/chroot/source/var/www/securedrop/source.pyc rw,
   /var/chroot/source/var/www/securedrop/source.wsgi r,
   /var/chroot/source/var/www/securedrop/source_templates/base.html r,
+  /var/chroot/source/var/www/securedrop/source_templates/error.html r,
   /var/chroot/source/var/www/securedrop/source_templates/flashed.html r,
   /var/chroot/source/var/www/securedrop/source_templates/generate.html r,
   /var/chroot/source/var/www/securedrop/source_templates/howto-disable-js.html r,
