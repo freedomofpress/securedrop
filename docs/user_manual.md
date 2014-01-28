@@ -50,7 +50,7 @@ Click `Refresh` or log in again. If a journalist has responded, his or her messa
 
 ![Check for a real response](/docs/images/manual/source10.png)
 
-After you delete the message from the journalist, make sure you see the below message. 
+After you delete the message from the journalist, make sure you see the below message.
 
 ![Delete received messages](/docs/images/manual/source11.png)
 
@@ -60,15 +60,15 @@ Repeat to continue communicating with the journalist.
 
 ### Connecting to the Document Interface
 
-Each journalist has their own authenticated Tor hidden service URL. The journalist needs to use the Tor Browser that [has been configured for their use only](/docs/install.md#server-installation), or they need to connect through their Tails USB. We strongly recommend connecting through Tails. However, this requires a few extra steps. After practicing a few times, this will become automatic.
+Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use Tor through the Tails operating system to connect to the `Docuement Interface`. This is for extra security. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
 *Using Tails*
 
 * Boot Tails on the Journalist Workstation using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick that you use to boot the Secure Viewing Station).
 
-* Click YES under "Use persistence?" and type in your password (do not hit enter).
+* Under "Use persistence?" click "YES" and type in your password (do not hit enter).
 
-* Click YES under "More options?", then click "Forward" 
+* Under "More options?" clikc "YES", then click "Forward"
 
 * Set an administration password. This password will only be active during your current Tails session. Each time you will have to create this again, though it can be the same password everytime.
 
@@ -78,61 +78,41 @@ Each journalist has their own authenticated Tor hidden service URL. The journali
 
 * Click on `Computer` in the top left of your desktop, and go to the `Persistant` folder.
 
-* Double click the 'copy_torrc.sh' file. This should be been created on installation by your admin.
+* Double click the 'copy_torrc.sh' file. This should have been created on installation by your admin.
 
 * Click `Run In Terminal`
 
 * Type in the administration password you created at the beginning of your session and click enter.
 
-* When you go to your browser, in the bookmarks menu, you will now see links to both `App Server` and `Source Server`.
+* When you go to your browser, in the bookmarks menu, you will now see links to both the source's SecureDrop page and the journalist's `Document Interface`.
 
 * Click on the SecureDrop `Document Interface` link and you will be automatically logged-in. Now go down to the first screen shot below.
 
-*Not Using Tails*
-
-If you're not running Tails, start by opening Tor Browser and loading the .onion URL to access the document interface of the `App Server`. If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
+If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
 
 ![Document Interface](/docs/images/manual/document1.png)
 
-### Interacting With Sources
-
-Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
-
-![Read documents](/docs/images/manual/document2.png)
-
-After clicking the `Flag this source for reply button`, you'll see this confirmation page. Click through to get back to the page that displays that souce's documents and replies.
-
-![Flag source for reply](/docs/images/manual/document3.png)
-
-*Note:* You will not be able to reply until after the source logs in again and sees that you would like to talk to him or her. So you may have to sit and wait. 
-
-But after the source sees that you'd like to reply, a GPG key pair will automatically be generated and you can log back in and send a reply back.
-
-![Sent reply](/docs/images/manual/document4.png)
-
-Once your reply has been submitted, you will see this confirmation page.
-
-![Sent reply confirmation](/docs/images/manual/document5.png)
-
-Rinse and repeat.
-
 ### Moving Documents to the Secure Viewing Station
 
-The first step is downloading the documents. Click on a document or message name to save it. In order to protect you from malware, Tor Browser pops up a notice that looks like this every time you try to download a file that can't be opened in Tor Browser itself:
+You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the below page with the messages that source has sent you. Click on a document or message name to save it.
 
 ![Load external content](/docs/images/manual/document4.png)
 
-Go ahead and click `Launch application` anyway, and save the document to a USB stick.
+In order to protect you from malware, Tor Browser pops up a notice every time you try to download a file that can't be opened in Tor Browser itself. Go ahead and click `Launch application` anyway, and save the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer USB`.
 
-Boot up the `Secure Viewing Station` to Tails and mount the persistent volume. Once you have logged in, plug in the USB stick that you copied encrypted documents to it.
+Eject your `Transfer USB` from your `Journalist Workstation`.
 
-**Copy these documents to the Persistent folder before decrypting them. This an important step. Otherwise you might accidentally decrypt the documents on the USB stick, and they could be recoverable in the future.**
+Next, boot up the `Secure Viewing Station` using Tails (remember, you must use a different Tails USB than you use your normal `Journalist Workstation`) and enter the password for the `Secure Viewing Station` the persistent volume. Once you have logged in, plug in the `Transfer USB`.
+
+**Copy these documents to the Persistent folder before decrypting them. This an important step. Otherwise you might accidentally decrypt the documents on the USB stick, and they could be recoverable in the future.** You can do this by clicking on the `Computer` icon on your desk top, clicking on the `Transfer USB`, and then you can drag and drop the file into your Persistent folder.
 
 ![Copy files to Persistent](/docs/images/manual/viewing1.jpg)
 
+Make sure to then return to your `Transfer USB` folder, right click on the file, and then click "Wipe" to securely wipe the file from your USB stick.
+
 ### Decrypting and Working on the Secure Viewing Station
 
-To decrypt documents, double-click on them. It will prompt you for the application PGP key passphrase to decrypt the document.
+To decrypt documents, return to your Persistent folder and double-click on zipped file folder. After you extract the files, click on each file individually, and it will prompt you for the application PGP key passphrase to decrypt the document.
 
 ![Decrypting](/docs/images/manual/viewing2.jpg)
 
@@ -145,6 +125,28 @@ You can double-click on the decrypted document to open it in its default applica
 ![Opened document](/docs/images/manual/viewing4.jpg)
 
 If the default application doesn't work, you can right-click on the document and choose `Open with Other Application...` to try opening the document with OpenOffice Writer, or Document Viewer. You can right-click on a file and choose `Rename...` to rename a document and give it a file extension.
+
+### Interacting With Sources
+
+Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
+
+![Read documents](/docs/images/manual/document2.png)
+
+After clicking the `Flag this source for reply button`, you'll see this confirmation page. Click through to get back to the page that displays that souce's documents and replies.
+
+![Flag source for reply](/docs/images/manual/document3.png)
+
+*Note:* You will not be able to reply until after the source logs in again and sees that you would like to talk to him or her. So you may have to sit and wait.
+
+But after the source sees that you'd like to reply, a GPG key pair will automatically be generated and you can log back in and send a reply back.
+
+![Sent reply](/docs/images/manual/document4.png)
+
+Once your reply has been submitted, you will see this confirmation page.
+
+![Sent reply confirmation](/docs/images/manual/document5.png)
+
+Rinse and repeat.
 
 ### Working with Documents
 
