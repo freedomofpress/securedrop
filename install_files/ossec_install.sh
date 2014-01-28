@@ -41,7 +41,7 @@ catch_error() {
 if [ $ROLE = 'app' -o $ROLE = 'monitor' ]; then
   echo "Starting the interface installation..."
 else
-  echo "Role not defined in securedrop/install_scripts/CONFIG_OPTIONS"
+  echo "Role not defined in securedrop/CONFIG_OPTIONS"
   exit 1
 fi
 
