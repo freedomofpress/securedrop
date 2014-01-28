@@ -60,7 +60,7 @@ Repeat to continue communicating with the journalist.
 
 ### Connecting to the Document Interface
 
-Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to useusing Tor through the Tails operating system to connect to the `Docuement Interface`. This will take an extra few steps each time you want to login, but after practicing a few times, this will become automatic.
+Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use Tor through the Tails operating system to connect to the `Docuement Interface`. This is for extra security. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
 *Using Tails*
 
