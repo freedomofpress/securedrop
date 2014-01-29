@@ -4,8 +4,6 @@ from base import BaseFlaskConfig
 JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
 SECUREDROP_ROOT='/tmp/securedrop_test'
 
-PHANTOMJS_BINARY_PATH=''
-
 class FlaskConfig(BaseFlaskConfig):
     TESTING = True
     # Tests are simpler if CSRF protection is disabled
