@@ -281,6 +281,10 @@ def redirect_hack(redirect_url):
 def page_not_found(error):
     return render_template('notfound.html'), 404
 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html'), 500
+
 if __name__ == "__main__":
     # TODO make sure debug is not on in production
     app.run(debug=True, host='0.0.0.0', port=8080)

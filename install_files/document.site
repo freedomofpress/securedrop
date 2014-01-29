@@ -37,7 +37,7 @@ ErrorDocument 400 /notfound
 ErrorDocument 401 /notfound
 ErrorDocument 403 /notfound
 ErrorDocument 404 /notfound
-ErrorDocument 500 /notfound
+ErrorDocument 500 /error
 
 <Directory />
   Options None
