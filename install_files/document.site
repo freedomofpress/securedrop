@@ -22,7 +22,7 @@ Header edit Set-Cookie ^(.*)$ $;HttpOnly
 Header set Pragma "no-cache"
 Header set Expires "-1"
 Header always append X-Frame-Options: DENY
-Header set X-XSS-Protection: "1; mode-block"
+Header set X-XSS-Protection: "1; mode=block"
 Header set X-Content-Type-Options: nosniff
 Header set X-download-Options: noopen
 Header set X-Content-Security-Policy: "default-src 'self'"
