@@ -255,7 +255,7 @@ EOF
 catch_error $? "configuring tcp wrappers for sshd /etc/hosts.deny"
 
 
-#ssh_config tweeks
+#ssh_config tweaks
 echo ""
 echo "Configuring ssh_config..."
 cp base.ssh_config /etc/ssh/ssh_config | tee -a build.log
@@ -263,7 +263,7 @@ catch_error $? "configuring ssh_config"
 echo "ssh_config configured"
 
 
-#sshd_config tweeks
+#sshd_config tweaks
 echo ""
 echo "Configuring sshd_config..."
 cp base.sshd_config /etc/ssh/sshd_config | tee -a build.log
@@ -278,9 +278,15 @@ cp base.common-auth /etc/pam.d/common-auth | tee -a build.log
 catch_error $? "configuring /etc/pam.d/common-auth"
 echo "/etc/pam.d/common-auth configured"
 
-
 echo ""
 echo "The tor hidden service for ssh is: "
 cat /var/lib/tor/hidden_service/hostname
+
+if [ $ROLE = 'app' ]; then
+#Configure two-factor auth for journalists
+  echo ""
+  echo "Setting up Google Authenticator module on the Document Interface..."
+  ./gauthmod_install.sh | tee -a build.log
+fi
 
 exit 0
