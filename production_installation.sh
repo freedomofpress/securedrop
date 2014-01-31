@@ -104,7 +104,6 @@ elif [ $ROLE = 'app' ]; then
   echo "Setting up Google Authenticator module on the Document Interface..."
   $CWD/install_files/gauthmod_install.sh
   catch_error $? "gauth module installation."
-fi
 
   echo "The installation is complete."
 
