@@ -90,9 +90,11 @@ FOE
 	a2dismod auth_basic
 	service apache2 restart
 FOE
-		echo ""
-		echo "Copy these passwords and give them to each journalist."
-		echo "In Google Authenticator, they must setup a new account using the provided time-based key."
+	echo ""
+	echo "Copy these passwords and give them to each journalist."
+	echo "In Google Authenticator, they must setup a new account using the provided time-based key."
+  	echo "To access the Document Interface, append the generated 6-digit code to the given password."
+	echo ""
   fi
 }
 
