@@ -71,20 +71,26 @@ config_gauthmod() {
   		mkdir -p /var/chroot/document/var/www/securedrop/keys/gauth
 	for USER in $JOURNALIST_USERS; do
 		touch /var/chroot/document/var/www/securedrop/keys/gauth/$USER
-		gauthcode=$(cat /dev/urandom| tr -dc 'A-Z'|head -c 16) 
-		gauthpw=$(pwgen -B -s 8 1)
+		gauthcode=$(cat /dev/urandom | tr -dc 'A-Z' | head -c 16) 
+		gauthpw=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10)
 		echo $gauthcode > /var/chroot/document/var/www/securedrop/keys/gauth/$USER
 		echo "\"PASSWORD=$gauthpw" >> /var/chroot/document/var/www/securedrop/keys/gauth/$USER
+		echo ""
 		echo "$USER's two-factor login information for the Document Interface: "
 		echo "	Google Authenticator key: $gauthcode"
 		echo "	password: $gauthpw"
 	done
 	echo "LoadModule authn_google_module /usr/lib/apache2/modules/mod_authn_google.so" >> /var/chroot/document/etc/apache2/mods-available/gauth.load
-	schroot -c document -u root --directory /root <<FOE
+	schroot -q -c document -u root --directory /root &>/dev/null <<FOE
 	chown -R document:document /var/www/securedrop/keys/gauth
 	a2enmod gauth
 	service apache2 restart
 FOE
+	schroot -q -c source -u root --directory /root &>/dev/null <<FOE
+	a2dismod auth_basic
+	service apache2 restart
+FOE
+		echo ""
 		echo "Copy these passwords and give them to each journalist."
 		echo "In Google Authenticator, they must setup a new account using the provided time-based key."
   fi

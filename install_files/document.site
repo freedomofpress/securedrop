@@ -62,7 +62,7 @@ ErrorDocument 500 /error
   Require valid-user
   GoogleAuthUserPath /var/www/securedrop/keys/gauth
   GoogleAuthCookieLife 7200
-  GoogleAuthEntryWindow 3
+  GoogleAuthEntryWindow 1
 </Directory>
 <Directory /var/www/securedrop/static>
   Options None

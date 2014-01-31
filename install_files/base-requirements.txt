@@ -12,4 +12,3 @@ iptables
 apparmor-profiles
 apparmor-utils
 python-software-properties
-pwgen

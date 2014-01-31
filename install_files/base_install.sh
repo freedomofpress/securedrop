@@ -282,11 +282,4 @@ echo ""
 echo "The tor hidden service for ssh is: "
 cat /var/lib/tor/hidden_service/hostname
 
-if [ $ROLE = 'app' ]; then
-#Configure two-factor auth for journalists
-  echo ""
-  echo "Setting up Google Authenticator module on the Document Interface..."
-  ./gauthmod_install.sh | tee -a build.log
-fi
-
 exit 0
