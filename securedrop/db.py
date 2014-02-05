@@ -90,7 +90,20 @@ def regenerate_display_id(filesystem_id):
     session.close()
 
 
-def _insert_files(session, file_names):
+def delete_source(source_id):
+    session = sqlalchemy_handle()
+    try:
+        delete = sources.delete().where(
+            sources.c.filesystem_id == source_id)
+    except SQLAlchemyError as e:
+        # TODO: proper logging
+        print "Exception occurred attempting to delete source (source_id: %s): %s" % (source_id, e)
+    session.execute(delete)
+    session.commit()
+    session.close()
+
+
+def insert_files(file_names, session):
     file_results = []
     for file_name in file_names:
         query = session.query(files.c.id).filter(files.c.name == file_name)

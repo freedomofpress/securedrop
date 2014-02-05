@@ -77,6 +77,7 @@ def shared_setup():
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
 
+
 def shared_teardown():
     shutil.rmtree(config.SECUREDROP_ROOT)
 
@@ -115,9 +116,9 @@ class TestSource(TestCase):
             rv = c.get('/generate')
             self.assert200(rv)
             session_codename = session['codename']
-        self.assertIn("Submitting for the first time", rv.data)
+        self.assertIn("Submit documents for the first time", rv.data)
         self.assertIn(
-            "To protect your identity, we're assigning you a unique code name.", rv.data)
+            "To protect your identity, we're assigning you a code name.", rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words
         self.assertEquals(len(codename.split()), 8)
@@ -127,7 +128,7 @@ class TestSource(TestCase):
 
     def test_regenerate_valid_lengths(self):
         """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(7, 11):
+        for codename_len in xrange(4, 11):
             response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
@@ -150,7 +151,7 @@ class TestSource(TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("Submit a document, message, or both", rv.data)
+            self.assertIn("Upload documents", rv.data)
 
     def _new_codename(self):
         """Helper function to go through the "generate codename" flow"""
@@ -160,38 +161,21 @@ class TestSource(TestCase):
             rv = c.post('/create')
         return codename
 
-    def test_lookup(self):
-        """Test various elements on the /lookup page"""
-        codename = self._new_codename()
-        rv = self.client.post('login', data=dict(codename=codename),
-                              follow_redirects=True)
-        # redirects to /lookup
-        self.assertIn("Download journalist's public key", rv.data)
-        # download the public key
-        rv = self.client.get('journalist-key')
-        self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
-
-    def test_login_and_logout(self):
+    def test_login(self):
         rv = self.client.get('/login')
         self.assert200(rv)
         self.assertIn("Already submitted something?", rv.data)
 
         codename = self._new_codename()
-        with self.client as c:
-            rv = c.post('/login', data=dict(codename=codename),
-                                  follow_redirects=True)
-            self.assert200(rv)
-            self.assertIn("Submit a document, message, or both", rv.data)
-            self.assertTrue(session['logged_in'])
-            _logout(c)
-            self.assertEquals(len(session), 0)
+        rv = self.client.post('/login', data=dict(codename=codename),
+                              follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn("Upload documents", rv.data)
 
-        with self.client as c:
-            rv = self.client.post('/login', data=dict(codename='invalid'),
-                                  follow_redirects=True)
-            self.assert200(rv)
-            self.assertIn('Sorry, that is not a recognized codename.', rv.data)
-            self.assertNotIn('logged_in', session)
+        rv = self.client.post('/login', data=dict(codename='invalid'),
+                              follow_redirects=True)
+        self.assert200(rv)
+        self.assertIn('Sorry, that is not a recognized codename.', rv.data)
 
     def test_submit_message(self):
         self._new_codename()
@@ -290,6 +274,7 @@ class TestJournalist(TestCase):
 
         self.assertEqual(rv.status_code, 302)
         self.assertTrue(("/col/" + sid) in rv.location)
+        mock_add_tag.assert_called_once_with(files, test_tag)
         mock_add_tag.assert_called_once_with(files, test_tag)
 
     def test_add_new_tag(self):

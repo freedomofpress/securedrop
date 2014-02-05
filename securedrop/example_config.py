@@ -72,3 +72,19 @@ def has_perms(path, mode):
 safe_perms = 0700
 if not has_perms(GPG_KEY_DIR, safe_perms):
     os.chmod(GPG_KEY_DIR, safe_perms)
+
+### Database Configuration
+
+# Default to using a sqlite database file for development
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
+
+# Uncomment to use mysql (or any other databaes backend supported by
+# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
+# `python -c "import db; db.create_tables()"` to initialize the database
+
+# DATABASE_ENGINE = 'mysql'
+# DATABASE_HOST = 'localhost'
+# DATABASE_NAME = 'securedrop'
+# DATABASE_USERNAME = 'securedrop'
+# DATABASE_PASSWORD = '3XKiqH+asPjh2il5VPqHVHBBtPWpNvGY4HfWfQ+CCGY='

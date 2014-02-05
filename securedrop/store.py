@@ -46,6 +46,8 @@ def verify(p):
     if os.path.relpath(p, config.STORE_DIR).startswith('..'):
         raise PathException("Invalid directory %s" % (p, ))
 
+
+
     if os.path.isfile(p):
         filename = os.path.basename(p)
         ext = os.path.splitext(filename)[-1]
@@ -103,3 +105,5 @@ def secure_unlink(fn, recursive=False):
 
 def delete_source_directory(source_id):
     secure_unlink(path(source_id), recursive=True)
+def log(msg):
+    file(path('NOTES'), 'a').write(msg)

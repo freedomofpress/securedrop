@@ -2,8 +2,6 @@
 
 # stop setup script if any command fails
 set -e
-# uncomment to print debugging information
-#set -x
 
 #check platform and distro
 opsys=`uname`
