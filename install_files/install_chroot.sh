@@ -98,6 +98,7 @@ EOF
   mkdir -p /var/chroot/$JAIL/etc/apache2/conf.d/ | tee -a build.log
   catch_error $? "creating apache2/conf.d in $JAIL"
   chown -R securedrop:securedrop /var/securedrop/ | tee -a build.log
+  chown -R securedrop:securedrop /var/chroot/$JAIL/var/www
   catch_error $? "chown'ing securedrop:securedrop /var/securedrop/"
   mount -o bind /proc /var/chroot/$JAIL/proc | tee -a build.log
   catch_error $? "mounting /proc"

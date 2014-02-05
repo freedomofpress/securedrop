@@ -17,20 +17,10 @@ install_document_specific() {
 
   schroot -c document -u root --directory /root << FOE
     echo "Starting to configure apache for document "
-    rm -R /var/www/securedrop/{COPYING,source_templates,source.py,example*,*.md,test*} | tee -a build.log
+    rm -R /var/www/securedrop/{COPYING,source_templates,source.py,*example,*.md,test*} | tee -a build.log
 
     #Set min permissions on app code
     chown -R document:document /var/www/securedrop | tee -a build.log
-    chmod -R 400 /var/www/securedrop/* | tee -a build.log
-    chmod 500 /var/www/securedrop/dictionaries /var/www/securedrop/journalist_templates /var/www/securedrop/static | tee -a build.log
-    chmod 700 /var/www/securedrop/keys /var/www/securedrop/store | tee -a build.log
-    chmod -R 600 /var/www/securedrop/store/* | tee -a build.log
-    chmod 700 /var/www/securedrop/static/{css,i,js,libs,} | tee -a build.log
-    chmod 700 /var/www/securedrop/static/i/tipbox | tee -a build.log
-    chmod 700 /var/www/securedrop/static/js/libs | tee -a build.log
-    chmod 700 /var/www/securedrop/static/libs/gritter | tee -a build.log
-    chmod 700 /var/www/securedrop/static/libs/gritter/{css,images,js} | tee -a build.log
-    chmod 600 /var/www/securedrop/db.sqlite | tee -a build.log
     #Create and import the applications gpg keypair
     echo "Importing application gpg public key on document interface "
     su -c "gpg2 --homedir /var/www/securedrop/keys --import /var/www/$APP_GPG_KEY" document | tee -a build.log

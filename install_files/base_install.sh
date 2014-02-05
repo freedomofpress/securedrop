@@ -12,7 +12,7 @@
 #securedrop/install_files/document_requirements.txt (document interface chroot package dependencies)
 CWD="$(dirname $0)"
 cd $CWD
-
+umask 077
 source ../CONFIG_OPTIONS
 TOR_REPO="deb     http://deb.torproject.org/torproject.org $( lsb_release -c | cut -f 2) main "
 BASE_DEPENDENCIES=$(grep -vE "^\s*#" base-requirements.txt  | tr "\n" " ")
