@@ -69,7 +69,7 @@ download_ossec() {
 
 install_ossec() {
   #Copy the monitor preloaded vars config for ossec
-  echo "coping preloaded-vars.conf..."
+  echo "copying preloaded-vars.conf..."
   sed -i "s/OSSEC_TYPE/$OSSEC_ROLE/g" preloaded-vars.conf
   cp preloaded-vars.conf $TEMPDIR/$OSSECVERSION/etc/preloaded-vars.conf
   catch_error $? "copying preloaded-vars.conf"
@@ -144,26 +144,30 @@ start_authd() {
   #Ensure this is not always running
   /var/ossec/bin/ossec-authd -p 1515 -i $APP_IP >/dev/null 2>&1 &
   catch_error $? "Starting authd for $APP_IP"
-  echo "authd is running ensure that after the source connects to disable authd"
+  echo "authd is running; ensure that after the source connects to disable authd"
 }
 
 
 start_agent_auth() {
-  echo "Starting ossec agent auth with a manger IP $MONITOR_IP"
+  echo "Starting ossec agent auth with a manager IP $MONITOR_IP"
   /var/ossec/bin/agent-auth -m $MONITOR_IP -p 1515 -A app
   catch_error $? "starting ossec agent auth"
 }
 
 kill_authd() {
   echo "Leaving authd running is a security risk."
-  echo "Start the installation on app server."
-  echo "After installation on the app server is complete"
-  read -p "enter 'Y' to continue: (Y|N): " -e -i Y CONNECT_ANS
+  echo "Start the installation on App Server."
+  echo "After installation on the App Server is complete"
+  read -p "enter 'Y' to continue: (Y|N): " -e -i N CONNECT_ANS
   if [ $CONNECT_ANS = "Y" -o $CONNECT_ANS = "y" ]; then
-    echo "Stoping authd..."
+    echo "Stopping authd..."
     pkill ossec-authd
     catch_error $? "killing ossec-authd"
     echo "ossec-authd killed"
+  elif [ $CONNECT_ANS = "N" -o $CONNECT_ANS = "n" ]; then
+    echo "Wait for the App Server installation to complete"
+    echo ""
+    kill_authd
   else
     echo "invalid entry try again. <CTRL> C to exit."
     echo "!!!OSSEC-authd does not authenticate. Leaving it running is a security risk not acceptable for production environments!!!"
@@ -177,7 +181,7 @@ check_status() {
   sleep 15
   if ! /var/ossec/bin/list_agents -c | grep "^source-$APP_IP"; then
     echo "The source host is not active."
-    echo "It needs to be active to monitor the source server"
+    echo "It needs to be active to monitor the App Server"
     echo "https://www.ossec.net/doc"
     echo "Exiting with errors. The App Server's ossec agent is not connected"
     exit 0

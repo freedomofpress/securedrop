@@ -46,12 +46,12 @@ See [How to Use SecureDrop](/docs/user_manual.md).
 
 ## Demo
 
-You can see live demos of the source and journalist websites at the following links. **These are for testing purposes only; please don't submit any documents here!**
+You can see live demos of the source and document interfaces at the following links. **These are for testing purposes only; please don't submit any documents here!**
 
 In an actual SecureDrop setup, these websites are separate Tor hidden services running on the `Application Server`.
 
-* [Source website](http://SecureDropDemo.org)
-* [Journalist website](http://SecureDropDemo.org/journalist/) (needs the ending slash to work)
+* [Source Interface](http://SecureDropDemo.org)
+* [Journalist Interface](http://SecureDropDemo.org/journalist/) (needs the ending slash to work)
 
 ## License
 

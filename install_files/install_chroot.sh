@@ -4,7 +4,7 @@ install_chroot() {
 #Create chroot jails for source and document interfaces
 echo "Creating chroot jails for source and document interfaces..."
 for JAIL in $JAILS; do
-echo "Setting up chroot jail for $JAIL interface..."
+  echo "Setting up chroot jail for $JAIL interface..."
 
   #Add schroot config for each interface is it doesn't exist yet
   echo "Checking for chroot jail config for $JAIL..."
@@ -13,8 +13,6 @@ echo "Setting up chroot jail for $JAIL interface..."
 [$JAIL]
 description=Ubuntu Precise
 directory=/var/chroot/$JAIL
-users=$JAIL
-groups=securedrop
 EOF
     echo "chroot jail config for $JAIL created"
   else
@@ -24,7 +22,7 @@ EOF
   #Use debootstrap to setup chroot jail
   create_chroot_env() {
     echo "Configuring debootstrap for $JAIL..."
-    debootstrap --variant=buildd --arch amd64 precise /var/chroot/$JAIL http://us.archive.ubuntu.com/ubuntu | tee -a build.log
+    debootstrap --variant=buildd --arch amd64 precise /var/chroot/$JAIL http://us.archive.ubuntu.com/ubuntu  | tee -a build.log
     catch_error $? "configuring debootstrap for $JAIL"
     echo "debootstrap for $JAIL configured"
   }
@@ -32,19 +30,19 @@ EOF
   #Clean previous chroot jails
   clean_chroot_jail() {
     if [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys" ]; then
-      mkdir -p /tmp/tor-keys/$JAIL  
+      mkdir -p /tmp/tor-keys/$JAIL | tee -a build.log 
       catch_error $? "making /tmp/tor-key/$JAIL"
-      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor-keys/$JAIL
+      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/client_keys /tmp/tor-keys/$JAIL | tee -a build.log
       catch_error $? "copying client_keys for $JAIL"
     elif [ -f "/var/chroot/$JAIL/var/lib/tor/hidden_service/private_key" ]; then
       mkdir -p /tmp/tor-keys/$JAIL
       catch_error $? "making /tmp/tor-keys/$JAIL"
-      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor-keys/$JAIL
+      cp -f /var/chroot/$JAIL/var/lib/tor/hidden_service/private_key /tmp/tor-keys/$JAIL | tee -a build.log
       catch_error $? "cp private_key of $JAIL"
     fi 
 
-    schroot -c $JAIL -u root --directory /root service tor stop
-    schroot -c $JAIL -u root --directory /root service apache2 stop
+    schroot -c $JAIL -u root --directory /root service tor stop | tee -a build.log
+    schroot -c $JAIL -u root --directory /root service apache2 stop | tee -a build.log
     MOUNTED_DIRS="/var/chroot/$JAIL/proc /var/chroot/$JAIL/var/www/securedrop/store /var/chroot/$JAIL/var/www/securedrop/keys"
     for MOUNTED_DIR in $MOUNTED_DIRS; do
       if mount | grep -q $MOUNTED_DIR; then
@@ -66,7 +64,7 @@ EOF
 
     if [ -d "/tmp/tor/keys/$JAIL" ]; then
       echo "copying tor keys to /var/chroot/$JAIL/root/tor-keys/$JAIL/..."
-      cp -p -f /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL
+      cp -p -f /tmp/tor-keys/$JAIL/{client_keys,private_key} /var/chroot/$JAIL/root/tor-keys/$JAIL | tee -a build.log
       catch_error $? "copying tor-keys/$JAIL"
       echo "backed up'd tor keys are copied to /var/chroot/$JAIL/root/tor-keys/$JAIL/" 
       echo "secure-deleting /tmp/tor/keys/$JAIL..."
@@ -144,7 +142,16 @@ EOF
     echo "Updating chroot system for $JAIL..."
 
     #create the application user in the jail
-    useradd $JAIL | tee -a build.log
+    if [ $JAIL = document ]; then
+      groupadd -g 668 $JAIL | tee -a build.log
+      useradd -u 666 -g 668 $JAIL | tee -a build.log
+    elif [ $JAIL = source ]; then
+      groupadd -g 667 $JAIL| tee -a build.log
+      useradd -u 666 -g 667 $JAIL | tee -a build.log
+    fi
+
+    #Lock the application account
+    passwd -l $JAIL
 
     #chown the needed file for the application user in the chroot jail
     chown $JAIL:$JAIL /var/www/$APP_GPG_KEY | tee -a build.log
@@ -181,7 +188,7 @@ EOF
       echo "Tor installed for $JAIL"
 
       echo 'Installing pip dependencies for $JAIL...'
-      pip install --upgrade setuptools | tee -a build.log
+      pip install --upgrade distribute | tee -a build.log
       pip install -r /var/www/securedrop/$JAIL-requirements.txt | tee -a build.log
       echo 'pip dependencies installed for $JAIL'
       # If document chroot setup mysql databases
@@ -189,8 +196,6 @@ EOF
         # initialize production database                                              
         # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
         echo "Creating database..."                                             
-        mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'document_mysql'@'localhost' IDENTIFIED BY '$mysql_securedrop';" | tee -a build.log
-        echo "Creating database tables..."                                             
         cd /var/www/securedrop/
         python -c 'import os; import db; db.create_tables()' | tee -a build.log
       fi
@@ -216,28 +221,28 @@ EOF
     echo "default-ssl site disabled"
 
     if [ -f /var/www/index.html ]; then
-      rm /var/www/index.html
+      rm /var/www/index.html | tee -a build.log
     fi
 
     if [ -f /etc/apache2/sites-available/default-ssl ]; then
-      rm /etc/apache2/sites-available/default-ssl
+      rm /etc/apache2/sites-available/default-ssl | tee -a build.log
     fi
 
     if [ -f /etc/apache2/sites-enabled/default-ssl ]; then
-      rm /etc/apache2/sites-enabled/default-ssl
+      rm /etc/apache2/sites-enabled/default-ssl | tee -a build.log
     fi
 
     if [ -f /etc/apache2/sites-available/000-default ]; then
-      rm /etc/apache2/sites-available/000-default
+      rm /etc/apache2/sites-available/000-default | tee -a build.log
     fi
 
     if [ -f /etc/apache2/sites-enabled/000-default ]; then
-      rm /etc/apache2/sites-enabled/000-default
+      rm /etc/apache2/sites-enabled/000-default | tee -a build.log
     fi
 
     echo 'default apache sites removed for $JAIL'
 
-    service apache2 stop
+    service apache2 stop | tee -a build.log
 FOE
 
   cp -f $JAIL.apache2.conf /var/chroot/$JAIL/etc/apache2/apache2.conf | tee -a build.log
@@ -255,31 +260,33 @@ FOE
 
 
   ONION_ADDRESS="$(echo /var/chroot/$JAIL/var/lib/tor/hidden_service/hostname)"
-  sed -i "s|ONION_ADDRESS|$ONION_ADDRESS|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL
+  sed -i "s|ONION_ADDRESS|$ONION_ADDRESS|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
+
+  #Set the max file size for requests in the apache config
+  sed -i "s|MAX_REQUEST_SIZE|$MAX_REQUEST_SIZE|g" /var/chroot/$JAIL/etc/apache2/sites-enabled/$JAIL | tee -a build.log
 
   if grep -q "APP_GPG_KEY_FINGERPRINT" /var/chroot/$JAIL/var/www/securedrop/config.py; then
     echo "Copying GPG Fingerprint to $JAIL/var/www/securedrop/config.py"
-    sed -i -e "s|APP_GPG_KEY_FINGERPRINT|$APP_GPG_KEY_FINGERPRINT|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    sed -i -e "s|APP_GPG_KEY_FINGERPRINT|$APP_GPG_KEY_FINGERPRINT|g" /var/chroot/$JAIL/var/www/securedrop/config.py | tee -a build.log
     catch_error $? "copying APP_GPG_KEY_FINGERPRINT to /var/chroot/$JAIL/var/www/securedrop/config.py"
   fi
 
-  if grep -q "BCRYPT_ID_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
-    echo "Generating BCRYPT ID SALT for $JAIL"
-    sed -i -e "s|BCRYPT_ID_SALT_VALUE|${BCRYPT_ID_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
-    catch_error $? "generating $BCRYPT_ID_SALT in config.py for $JAIL"
+  if grep -q "SCRYPT_ID_PEPPER_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating SCRYPT ID PEPPER for $JAIL"
+    sed -i -e "s|SCRYPT_ID_PEPPER_VALUE|${SCRYPT_ID_PEPPER}|g" /var/chroot/$JAIL/var/www/securedrop/config.py | tee -a build.log
+    catch_error $? "generating $SCRYPT_ID_PEPPER in config.py for $JAIL"
   fi
 
-  if grep -q "BCRYPT_GPG_SALT_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
-    echo "Generating BCRYPT GPG SALT for $JAIL"
-    sed -i -e "s|BCRYPT_GPG_SALT_VALUE|${BCRYPT_GPG_SALT}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
-    catch_error $? "generating $BCRYPT_GPG_SALT in config.py for $JAIL"
+  if grep -q "SCRYPT_GPG_PEPPER_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
+    echo "Generating SCRYPT GPG PEPPER for $JAIL"
+    sed -i -e "s|SCRYPT_GPG_PEPPER_VALUE|${SCRYPT_GPG_PEPPER}|g" /var/chroot/$JAIL/var/www/securedrop/config.py | tee -a build.log
+    catch_error $? "generating $SCRYPT_GPG_PEPPER in config.py for $JAIL"
   fi
 
   if grep -q "SECRET_KEY_VALUE" /var/chroot/$JAIL/var/www/securedrop/config.py; then
     echo "Generating SECRET_KEY for $JAIL"
-    sed -i -e "s|SECRET_KEY_VALUE|${SECRET_KEY}|g" /var/chroot/$JAIL/var/www/securedrop/config.py
+    sed -i -e "s|SECRET_KEY_VALUE|${SECRET_KEY}|g" /var/chroot/$JAIL/var/www/securedrop/config.py | tee -a build.log
     catch_error $? "generating $SECRET_KEY in config.py for $JAIL"
   fi
-
 done
 }

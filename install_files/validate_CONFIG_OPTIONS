@@ -73,11 +73,14 @@ validate_CONFIG_OPTIONS() {
     valid_ip $APP_IP
     valid_ip $MONITOR_IP
     validate_user_exists $SSH_USERS
-    validate_SMTP_SERVER
-    validate_email $EMAIL_DISTRO
-    validate_email $EMAIL_FROM
-    validate_user_exists $JOURNALIST_USERS
-    validate_KEY
-    validate_file_exists $SOURCE_SCRIPTS
-    validate_file_exists $DOCUMENT_SCTIPTS
+    if [ "$ROLE" = 'monitor' ]; then
+        validate_SMTP_SERVER
+        validate_email $EMAIL_DISTRO
+        validate_email $EMAIL_FROM
+    fi
+    if [ "$ROLE" = 'app' ]; then
+        validate_KEY
+        validate_file_exists $SOURCE_SCRIPTS
+        validate_file_exists $DOCUMENT_SCTIPTS
+    fi
 }
