@@ -155,6 +155,15 @@ echo "Using journalist key with fingerprint $journalistkey"
 sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development.py
 
 echo ""
+echo "Installing PhantomJS"
+PHANTOMJS_URL='https://phantomjs.googlecode.com/files/phantomjs-1.9.2-linux-x86_64.tar.bz2'
+PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
+PHANTOMJS_BINARY_PATH='/usr/local/bin/phantomjs'
+wget -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
+sudo chown vagrant:vagrant $PHANTOMJS_BINARY_PATH
+chmod +x $PHANTOMJS_BINARY_PATH
+
+echo ""
 echo "Running unit tests... these should all pass!"
 set +e # turn this flag off so we can checks if the tests failed
 ./test.sh
