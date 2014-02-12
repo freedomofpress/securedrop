@@ -22,6 +22,7 @@
   /var/chroot/source/etc/apache2/conf.d/access.log w,
   /var/chroot/source/etc/apache2/conf.d/charset r,
   /var/chroot/source/etc/apache2/conf.d/error.log w,
+  /var/chroot/source/etc/apache2/conf.d/error.log~ w,
   /var/chroot/source/etc/apache2/conf.d/localized-error-pages r,
   /var/chroot/source/etc/apache2/conf.d/other-vhosts-access-log rw,
   /var/chroot/source/etc/apache2/conf.d/security r,

@@ -11,7 +11,7 @@
 #
 CWD="$(dirname $0)"
 cd $CWD
-
+umask 027
 source ../CONFIG_OPTIONS
 OSSECBINARYURL="https://pressfreedomfoundation.org/securedrop-files/ossec-binary.tgz"
 OSSECBINARYURLSIG="https://pressfreedomfoundation.org/securedrop-files/ossec-binary.tgz.sig"

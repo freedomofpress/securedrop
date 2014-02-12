@@ -12,6 +12,7 @@
 #securedrop/install_files/journalist_requirements.txt (journalist interface chroot package dependencies)#
 #
 CWD="$(dirname $0)"
+umask 077
 source CONFIG_OPTIONS
 source $CWD/install_files/validate_CONFIG_OPTIONS
 
