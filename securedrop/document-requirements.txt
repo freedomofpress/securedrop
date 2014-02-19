@@ -13,5 +13,4 @@ psutil==1.1.1
 pycrypto==2.6.1
 python-gnupg==0.3.5
 scrypt==0.6.1
-twill==0.9
 wsgiref==0.1.2
