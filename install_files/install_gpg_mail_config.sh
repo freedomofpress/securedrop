@@ -67,6 +67,7 @@ setup_gpg_for_ossec() {
 setup_procmail() {
   # Setup procmailrc
   cp monitor.procmailrc $OSSEC_HOME/.procmailrc
+  chown ossec:root $OSSEC_HOME/.procmailrc
 
   # Setup mail encryption script
   sed -e "s/EMAIL_DISTRO/$EMAIL_DISTRO/g" send_encrypted_alarm.sh  > /var/ossec/send_encrypted_alarm.sh
