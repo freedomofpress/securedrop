@@ -36,10 +36,14 @@ class TestingConfig(BaseConfig):
     # Tests are simpler if CSRF protection is disabled
     WTF_CSRF_ENABLED = False
 
-if os.environ.get('SECUREDROP_ENV') == 'test':
+env = os.environ.get('SECUREDROP_ENV')
+if env == 'test':
     FlaskConfig=TestingConfig
     SECUREDROP_ROOT='/tmp/securedrop_test'
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
+elif env == 'development':
+    FlaskConfig = DevelopmentConfig
+    SECUREDROP_ROOT=os.path.abspath('.securedrop')
 else:
     FlaskConfig = ProductionConfig
     SECUREDROP_ROOT=os.path.abspath('.securedrop')

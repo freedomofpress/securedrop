@@ -267,5 +267,4 @@ def page_not_found(error):
     return render_template('notfound.html'), 404
 
 if __name__ == "__main__":
-    # TODO make sure debug is not on in production
-    app.run(debug=True, port=8080)
+    app.run(port=8080)

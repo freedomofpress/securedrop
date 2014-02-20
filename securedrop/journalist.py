@@ -190,5 +190,4 @@ def flag():
     return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
 if __name__ == "__main__":
-    # TODO make sure debug=False in production
-    app.run(debug=True, port=8081)
+    app.run(port=8081)
