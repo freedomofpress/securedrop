@@ -159,3 +159,8 @@ echo "$ python source.py &"
 echo "$ python journalist.py &"
 echo ""
 echo "Now you can visit the site at 127.0.0.1:{8080,8081} in your browser."
+echo ""
+echo "To re-run tests:"
+echo "cd /vagrant/securedrop"
+echo "./test.sh"
+
