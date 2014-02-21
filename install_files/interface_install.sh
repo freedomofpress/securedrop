@@ -17,6 +17,7 @@
 #
 CWD="$(dirname $0)"
 cd $CWD
+umask 077
 
 source ../CONFIG_OPTIONS
 source install_tor.sh
