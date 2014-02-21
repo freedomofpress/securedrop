@@ -35,6 +35,7 @@ SCRYPT_PARAMS=dict(N=2**14, r=8, p=1)
 
 # Default to the production configuration
 FlaskConfig = ProductionConfig
+SECUREDROP_ROOT=os.path.abspath('/var/www/securedrop')
 
 if os.environ.get('SECUREDROP_ENV') == 'test':
     FlaskConfig = TestingConfig
@@ -43,6 +44,35 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     GPG_KEY_DIR=os.path.join(TEST_DIR, 'keys')
     # test_journalist_key.pub
     JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441'
+
+### Logging
+
+# Note that the loggers propagate up to the root logger, which has a default
+# logging level of WARNING. This means logged messages with severity < WARNING
+# will not appear unless *both* the handler and the logger are set to desired
+# level.
+# http://docs.python.org/2.7/library/logging.html
+#
+# Also note that Flask's built-in logger will adjust its level based on the
+# DEBUG flag, and will also automatically log to stdout if the flag is set.
+
+import logging
+
+logfile_path = os.path.join(SECUREDROP_ROOT, 'securedrop.log')
+file_handler = logging.FileHandler(logfile_path)
+# can .setLevel here, but the default of warning is fine
+
+# more handlers here ...
+# e.g.
+#
+# from logging.handlers import SysLogHandler
+# syslog_handler = SysLogHandler(address='/dev/log')
+
+handlers = [file_handler]
+
+def register_handlers(logger):
+    for handler in handlers:
+        logger.addHandler(handler)
 
 # Database Configuration
 
