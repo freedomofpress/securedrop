@@ -143,12 +143,12 @@ chmod +x $PHANTOMJS_BINARY_PATH
 
 echo ""
 echo "Running unit tests... these should all pass!"
-set +e # turn this flag off so we can checks if the tests failed
+set +e # turn flag off so we can check if the tests failed
 ./test.sh
 
 if [[ $? != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
-    echo "Feel free to open an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
+    echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
 fi
 

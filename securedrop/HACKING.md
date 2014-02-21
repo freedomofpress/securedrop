@@ -17,7 +17,7 @@ You can ssh into it with `vagrant ssh`. To start the servers:
     $ python source.py &
     $ python journalist.py &
 
-Now, you can visit secure drop at [http://localhost:8080] and the journalist site at [http://localhost:8081].
+Now, you can visit SecureDrop at [http://localhost:8080] and the journalist site at [http://localhost:8081].
 
 To run tests:
 
@@ -25,11 +25,12 @@ To run tests:
     $ . env/bin/activate
     $ ./test.sh
 
-
 For more instructions on how to interact with your vm, refer to the [vagrant website](http://vagrantup.com).
 
 the hard way
 ------------
+
+**deprecated: using Vagrant is highly recommended**
 
 This document assumes your development environment is a Debian, Ubuntu or
 Fedora derivative.
