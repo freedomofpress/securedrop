@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-virtualenv python-pip sqlite"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite"
 
 
 while getopts "r:uh" OPTION; do
@@ -69,14 +69,10 @@ echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
-
-echo "Setting up the virtual environment..."
-virtualenv env
-source env/bin/activate
-pip install --upgrade distribute
-pip install -r source-requirements.txt
-pip install -r document-requirements.txt
-pip install -r test-requirements.txt
+sudo pip install --upgrade distribute
+sudo pip install -r source-requirements.txt
+sudo pip install -r document-requirements.txt
+sudo pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
@@ -155,8 +151,11 @@ fi
 echo $bold$blue
 echo "And you're done!"
 echo $normalcolor
-echo "To make sure everything works, try running the app in the development environment:"
-echo "cd securedrop"
-echo ". env/bin/activate"
-echo "python source.py"
-echo "python journalist.py"
+echo "To make sure everything works, try running the app:"
+echo ""
+echo "$ vagrant ssh"
+echo "$ cd /vagrant/securedrop"
+echo "$ python source.py &"
+echo "$ python journalist.py &"
+echo ""
+echo "Now you can visit the site at 127.0.0.1:{8080,8081} in your browser."
