@@ -128,12 +128,16 @@ journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -
 echo "Using journalist key with fingerprint $journalistkey"
 sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development.py
 
+# We encountered issues using PhantomJS 1.9.6 (from the repos) with Selenium.
+# Using 1.9.2 until the bugs in the repo release are fixed.
 echo ""
 echo "Installing PhantomJS"
 PHANTOMJS_URL='https://phantomjs.googlecode.com/files/phantomjs-1.9.2-linux-x86_64.tar.bz2'
 PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
 PHANTOMJS_BINARY_PATH='/usr/local/bin/phantomjs'
-wget -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
+# Use -nv because wget's progress bar doesn't work on a non-tty, and it prints
+# a bunch of garbage to the screen.
+wget -nv -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
 sudo chown vagrant:vagrant $PHANTOMJS_BINARY_PATH
 chmod +x $PHANTOMJS_BINARY_PATH
 
