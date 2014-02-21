@@ -28,14 +28,11 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
     def _wait_until_up(self, url, server_name):
         seconds_to_wait = 10
         sleep_time = 0.1
-
-        tries = 0
-        while tries < (seconds_to_wait / sleep_time):
+        for _ in range(int(seconds_to_wait / sleep_time)):
             try:
-                urllib2.urlopen(url, timeout=60).getcode()
+                urllib2.urlopen(url).getcode()
                 return
             except urllib2.URLError:
-                tries += 1
                 time.sleep(sleep_time)
         sys.exit("could not start %s server" % server_name)
 
