@@ -7,6 +7,7 @@ import os
 import gnupg
 import urllib2
 import time
+import sys
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -24,13 +25,19 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         s.close()
         return port
 
-    def _wait_until_up(self, url):
-        while True:
+    def _wait_until_up(self, url, server_name):
+        seconds_to_wait = 10
+        sleep_time = 0.1
+
+        tries = 0
+        while tries < (seconds_to_wait / sleep_time):
             try:
                 urllib2.urlopen(url, timeout=60).getcode()
                 return
-            except:
-                time.sleep(0.1)
+            except urllib2.URLError:
+                tries += 1
+                time.sleep(sleep_time)
+        sys.exit("could not start %s server" % server_name)
 
     def setUp(self):
         test_setup.create_directories()
@@ -59,8 +66,8 @@ class SubmitAndRetrieveHappyPath(unittest.TestCase):
         self.source_process.start()
         self.journalist_process.start()
 
-        self._wait_until_up(self.source_location)
-        self._wait_until_up(self.journalist_location)
+        self._wait_until_up(self.source_location, "source")
+        self._wait_until_up(self.journalist_location, "journalist")
 
         self.driver = webdriver.PhantomJS()
 
