@@ -7,7 +7,7 @@ set -e
 
 usage() {
   cat <<EOS
-Usage: setup_ubuntu.sh [-uh] [-r SECUREDROP_ROOT]
+Usage: setup_dev.sh [-uh] [-r SECUREDROP_ROOT]
 
    -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
    -u                  # unaided execution of this script (useful for Vagrant)
