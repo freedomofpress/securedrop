@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES=$(grep -vE "^\s*#" $SOURCE_ROOT/install_files/document-requirements.txt  | tr "\n" " ")
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-virtualenv python-pip sqlite"
 
 
 while getopts "r:uh" OPTION; do
@@ -64,33 +64,11 @@ if [ "$UNAIDED_INSTALL" != true ]; then
     normalcolor=$(tput sgr 0)
 fi
 
-# no password prompt to install mysql-server
-mysql_root=$(random 20)
-mysql_securedrop=$(random 20)
-sudo debconf-set-selections <<EOF
-mysql-server-5.5 mysql-server/root_password password $mysql_root
-mysql-server-5.5 mysql-server/root_password_again password $mysql_root
-EOF
-
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
-
-sudo /etc/init.d/mysql stop
-
-sudo mysqld --skip-grant-tables &
-
-sleep 2 && sudo mysql <<EOF
-UPDATE mysql.user SET Password=PASSWORD('$mysql_root') WHERE User='root';
-FLUSH PRIVILEGES;
-EOF
-
-sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
-
-echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
 
 echo "Setting up the virtual environment..."
 virtualenv env
@@ -122,11 +100,7 @@ sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" config/base.py
 sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
 sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
 
-# initialize development database
-# Securedrop will use sqlite by default, but we've set up a mysql database as
-# part of this installation so it is very easy to switch to it.
-# Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" config/development.py
+# initialize development database (development uses sqlite by default)
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
