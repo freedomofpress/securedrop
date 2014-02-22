@@ -126,7 +126,7 @@ def doc(sid, fn):
 def reply():
     sid, msg_candidate = request.form['sid'], request.form['msg']
     try:
-        msg = msg_candidate.decode()
+        msg = msg_candidate.encode("utf-8")
     except (UnicodeDecodeError, UnicodeEncodeError):
         flash("You have entered text that we could not parse. Please try again.", "notification")
         return render_template('col.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
