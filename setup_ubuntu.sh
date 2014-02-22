@@ -26,15 +26,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv mysql-server-5.5 libmysqlclient-dev'
-
-# no password prompt to install mysql-server
-mysql_root=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
-mysql_securedrop=$(head -c 20 /dev/urandom | python -c 'import sys, base64; print base64.b32encode(sys.stdin.read())')
-sudo debconf-set-selections <<EOF
-mysql-server-5.5 mysql-server/root_password password $mysql_root
-mysql-server-5.5 mysql-server/root_password_again password $mysql_root
-EOF
+DEPENDENCIES='gnupg2 secure-delete haveged python-dev python-pip python-virtualenv'
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
@@ -74,9 +66,6 @@ fi
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get -y install $DEPENDENCIES
 
-echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
-
 # continue working in the application directory
 cd securedrop/securedrop
 
@@ -106,11 +95,7 @@ sed -i "s@    SECRET_KEY.*@    SECRET_KEY=$secret_key@" config.py
 sed -i "s@^BCRYPT_ID_SALT.*@BCRYPT_ID_SALT='$bcrypt_id_salt'@" config.py
 sed -i "s@^BCRYPT_GPG_SALT.*@BCRYPT_GPG_SALT='$bcrypt_gpg_salt'@" config.py
 
-# initialize development database
-# config.py will use sqlite by default, but we've set up a mysql database as
-# part of this installation so it is very easy to switch to it.
-# Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD=\'$mysql_securedrop\'@" config.py
+# initialize development database (using sqlite by default)
 echo "Creating database tables..."
 python -c 'import db; db.create_tables()'
 

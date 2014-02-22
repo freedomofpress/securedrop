@@ -6,7 +6,7 @@ install:
   - pip install --allow-external twill --allow-unverified twill -r securedrop/source-requirements.txt
   - pip install --allow-external twill --allow-unverified twill -r securedrop/document-requirements.txt
 before_script:
-  - sudo apt-get install gnupg2 secure-delete python-dev libmysqlclient-dev haveged
+  - sudo apt-get install gnupg2 secure-delete python-dev haveged
   - cp securedrop/example_config.py securedrop/config.py
   - secret_key=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
   - scrypt_id_pepper=$(python -c 'import os; print os.urandom(32).__repr__().replace("\\","\\\\")')
