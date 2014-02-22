@@ -132,27 +132,24 @@ def create():
 @app.route('/lookup', methods=('GET',))
 @login_required
 def lookup():
-    msgs = []
+    replies = []
     flagged = False
     for fn in os.listdir(g.loc):
         # TODO: make 'flag' a db column, so we can replace this with a db
         # lookup in the future
         if fn == '_FLAG':
             flagged = True
-            continue
-        if fn.startswith('reply-'):
-            msg_candidate = crypto_util.decrypt(
-                g.sid, g.codename, file(store.path(g.sid, fn)).read())
+        elif fn.startswith('reply-'):
             try:
-                msgs.append(dict(
-                        id=fn,
-                        date=str(
-                            datetime.fromtimestamp(
-                                os.stat(store.path(g.sid, fn)).st_mtime)),
-                        msg=msg_candidate.decode("utf-8")))
+                msg = crypto_util.decrypt(g.sid, g.codename,
+                        file(store.path(g.sid, fn)).read()).decode("utf-8")
             except UnicodeDecodeError:
-                # todo: we should have logging here!
-                pass
+                app.logger.error("Could not decode reply %s" % fn)
+            else:
+                date = str(datetime.fromtimestamp(
+                           os.stat(store.path(g.sid, fn)).st_mtime))
+                replies.append(dict(id=fn, date=date, msg=msg))
+
     if flagged:
         session['flagged'] = True
 
@@ -166,9 +163,8 @@ def lookup():
     if not crypto_util.getkey(g.sid) and flagged:
         async_genkey(g.sid, g.codename)
 
-    return render_template(
-        'lookup.html', codename=g.codename, msgs=msgs, flagged=flagged,
-        haskey=crypto_util.getkey(g.sid))
+    return render_template('lookup.html', codename=g.codename, msgs=replies,
+            flagged=flagged, haskey=crypto_util.getkey(g.sid))
 
 
 @app.route('/submit', methods=('POST',))
