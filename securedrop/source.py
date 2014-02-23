@@ -4,11 +4,6 @@ from datetime import datetime
 import uuid
 from functools import wraps
 
-import logging
-# This module's logger is explicitly labeled so the correct logger is used,
-# even when this is run from the command line (e.g. during development)
-log = logging.getLogger('source')
-
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
@@ -24,6 +19,8 @@ from cStringIO import StringIO
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
+config.register_handlers(app.logger)
+
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
@@ -121,7 +118,7 @@ def create():
     sid = crypto_util.hash_codename(session['codename'])
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
-        log.warning("Got a duplicate ID '%s'" % sid)
+        app.logger.warning("Got a duplicate ID '%s'" % sid)
     else:
         os.mkdir(store.path(sid))
     session['logged_in'] = True
@@ -267,5 +264,4 @@ def page_not_found(error):
     return render_template('notfound.html'), 404
 
 if __name__ == "__main__":
-    # TODO make sure debug is not on in production
-    app.run(debug=True, port=8080)
+    app.run(port=8080)

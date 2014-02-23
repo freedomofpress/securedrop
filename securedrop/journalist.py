@@ -17,6 +17,8 @@ import db
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
+config.register_handlers(app.logger)
+
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
@@ -190,5 +192,4 @@ def flag():
     return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
 
 if __name__ == "__main__":
-    # TODO make sure debug=False in production
-    app.run(debug=True, port=8081)
+    app.run(port=8081)

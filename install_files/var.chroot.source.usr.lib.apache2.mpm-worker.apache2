@@ -571,7 +571,8 @@
   /var/chroot/source/var/www/securedrop/version.py r,
   /var/chroot/source/var/www/securedrop/version.pyc rw,
   /var/chroot/source/var/www/securedrop/wordlist r,
-
+  /var/chroot/source/var/www/securedrop/securedrop.log w,
+  /var/chroot/source/var/www/securedrop/securedrop.log~ w,
 
   ^DEFAULT_URI {
 

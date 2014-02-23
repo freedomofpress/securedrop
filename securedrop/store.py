@@ -9,9 +9,6 @@ import tempfile
 import subprocess
 from cStringIO import StringIO
 
-import logging
-log = logging.getLogger(__name__)
-
 from werkzeug import secure_filename
 
 VALIDATE_FILENAME = re.compile(
