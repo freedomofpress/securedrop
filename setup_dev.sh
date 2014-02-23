@@ -7,7 +7,7 @@ set -e
 
 usage() {
   cat <<EOS
-Usage: setup_ubuntu.sh [-uh] [-r SECUREDROP_ROOT]
+Usage: setup_dev.sh [-uh] [-r SECUREDROP_ROOT]
 
    -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
    -u                  # unaided execution of this script (useful for Vagrant)
@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES=$(grep -vE "^\s*#" $SOURCE_ROOT/install_files/document-requirements.txt  | tr "\n" " ")
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite"
 
 
 while getopts "r:uh" OPTION; do
@@ -64,41 +64,15 @@ if [ "$UNAIDED_INSTALL" != true ]; then
     normalcolor=$(tput sgr 0)
 fi
 
-# no password prompt to install mysql-server
-mysql_root=$(random 20)
-mysql_securedrop=$(random 20)
-sudo debconf-set-selections <<EOF
-mysql-server-5.5 mysql-server/root_password password $mysql_root
-mysql-server-5.5 mysql-server/root_password_again password $mysql_root
-EOF
-
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
-
-sudo /etc/init.d/mysql stop
-
-sudo mysqld --skip-grant-tables &
-
-sleep 2 && sudo mysql <<EOF
-UPDATE mysql.user SET Password=PASSWORD('$mysql_root') WHERE User='root';
-FLUSH PRIVILEGES;
-EOF
-
-sudo /etc/init.d/mysql stop && sudo /etc/init.d/mysql start
-
-echo "Setting up MySQL database..."
-mysql -u root -p"$mysql_root" -e "create database if not exists securedrop; GRANT ALL PRIVILEGES ON securedrop.* TO 'securedrop'@'localhost' IDENTIFIED BY '$mysql_securedrop';"
-
-echo "Setting up the virtual environment..."
-virtualenv env
-source env/bin/activate
-pip install --upgrade distribute
-pip install -r source-requirements.txt
-pip install -r document-requirements.txt
-pip install -r test-requirements.txt
+sudo pip install --upgrade distribute
+sudo pip install -r source-requirements.txt
+sudo pip install -r document-requirements.txt
+sudo pip install -r test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
@@ -122,11 +96,7 @@ sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" config/base.py
 sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" config/base.py
 sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/base.py
 
-# initialize development database
-# Securedrop will use sqlite by default, but we've set up a mysql database as
-# part of this installation so it is very easy to switch to it.
-# Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
-sed -i "s@^# DATABASE_PASSWORD.*@# DATABASE_PASSWORD='$mysql_securedrop'@" config/development.py
+# initialize development database (development uses sqlite by default)
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
 
@@ -154,35 +124,43 @@ journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -
 echo "Using journalist key with fingerprint $journalistkey"
 sed -i "s@^JOURNALIST_KEY.*@JOURNALIST_KEY='$journalistkey'@" config/development.py
 
+# We encountered issues using PhantomJS 1.9.6 (from the repos) with Selenium.
+# Using 1.9.2 until the bugs in the repo release are fixed.
 echo ""
 echo "Installing PhantomJS"
 PHANTOMJS_URL='https://phantomjs.googlecode.com/files/phantomjs-1.9.2-linux-x86_64.tar.bz2'
 PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
 PHANTOMJS_BINARY_PATH='/usr/local/bin/phantomjs'
-wget -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
+# Use -nv because wget's progress bar doesn't work on a non-tty, and it prints
+# a bunch of garbage to the screen.
+wget -nv -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
 sudo chown vagrant:vagrant $PHANTOMJS_BINARY_PATH
 chmod +x $PHANTOMJS_BINARY_PATH
 
 echo ""
 echo "Running unit tests... these should all pass!"
-set +e # turn this flag off so we can checks if the tests failed
+set +e # turn flag off so we can check if the tests failed
 ./test.sh
 
 if [[ $? != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
-    echo "Feel free to open an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
+    echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
 fi
 
 echo $bold$blue
 echo "And you're done!"
 echo $normalcolor
-echo "To make sure everything works, try running the app in the development environment:"
-echo "cd /vagrant/securedrop"
-echo ". env/bin/activate"
-echo "python source.py &"
-echo "python journalist.py &"
+echo "To make sure everything works, try running the app:"
+echo ""
+echo "$ vagrant ssh"
+echo "$ cd /vagrant/securedrop"
+echo "$ python source.py &"
+echo "$ python journalist.py &"
+echo ""
+echo "Now you can visit the site at 127.0.0.1:{8080,8081} in your browser."
+echo ""
 echo "To re-run tests:"
 echo "cd /vagrant/securedrop"
-echo ". env/bin/activate"
 echo "./test.sh"
+
