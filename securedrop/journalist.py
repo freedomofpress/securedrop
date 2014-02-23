@@ -124,15 +124,12 @@ def doc(sid, fn):
 
 @app.route('/reply', methods=('POST',))
 def reply():
-    sid, msg_candidate = request.form['sid'], request.form['msg']
-    try:
-        msg = msg_candidate.decode()
-    except (UnicodeDecodeError, UnicodeEncodeError):
-        flash("You have entered text that we could not parse. Please try again.", "notification")
-        return render_template('col.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+    sid = request.form['sid']
+    msg = request.form['msg']
     crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-    return render_template('reply.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+    return render_template('reply.html', sid=sid, codename=db.display_id(sid,
+        db.sqlalchemy_handle()))
 
 
 @app.route('/regenerate-code', methods=('POST',))

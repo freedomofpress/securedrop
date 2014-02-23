@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import shutil
 import tempfile
@@ -413,8 +414,8 @@ class TestIntegration(unittest.TestCase):
     def test_reply_normal(self):
         self.helper_test_reply("This is a test reply.", True)
 
-    def test_reply_malformed(self):
-        self.helper_test_reply("\x5A\x05\x70\x5D\xC2\x5C\xA1\x51\x23\x75\x0B\x80\xD0\xA9", False)
+    def test_reply_unicode(self):
+        self.helper_test_reply("Teşekkürler", True)
 
     def helper_test_reply(self, test_reply, expected_success=True):
         test_msg = "This is a test message."
@@ -472,11 +473,11 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.post('/reply', data=dict(
             sid=sid,
             msg=test_reply
-        ))
+        ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
 
         if not expected_success:
-            self.assertIn("You have entered text that we could not parse", rv.data)
+            pass
         else:
             self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
