@@ -255,7 +255,7 @@ class TestIntegration(unittest.TestCase):
         shared_setup()
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
-        self.gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
 
     def tearDown(self):
         shared_teardown()

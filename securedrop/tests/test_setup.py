@@ -16,7 +16,7 @@ def create_directories():
 
 def init_gpg():
     # Initialize the GPG keyring
-    gpg = gnupg.GPG(gnupghome=config.GPG_KEY_DIR)
+    gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
     # Import the journalist key for testing (faster to import a pre-generated
     # key than to gen a new one every time)
     for keyfile in ("test_journalist_key.pub", "test_journalist_key.sec"):
