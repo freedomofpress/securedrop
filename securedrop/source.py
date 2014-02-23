@@ -149,7 +149,7 @@ def lookup():
                         date=str(
                             datetime.fromtimestamp(
                                 os.stat(store.path(g.sid, fn)).st_mtime)),
-                        msg=msg_candidate.decode()))
+                        msg=msg_candidate.decode("utf-8")))
             except UnicodeDecodeError:
                 # todo: we should have logging here!
                 pass
