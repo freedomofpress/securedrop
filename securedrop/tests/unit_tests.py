@@ -13,7 +13,6 @@ from mock import patch, ANY
 
 import gnupg
 from flask import session, g, escape
-from flask_testing import TestCase
 from flask_wtf import CsrfProtect
 from bs4 import BeautifulSoup
 
@@ -32,14 +31,14 @@ def _block_on_reply_keypair_gen(codename):
     while not crypto_util.getkey(sid):
         sleep(0.1)
 
-def _logout(app):
+def _logout(test_client):
     # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
     # This is necessary because SecureDrop doesn't have a logout button, so a
     # user is logged in until they close the browser, which clears the session.
     # For testing, this function simulates closing the browser at places
     # where a source is likely to do so (for instance, between submitting a
     # document and checking for a journalist reply).
-    with app.session_transaction() as sess:
+    with test_client.session_transaction() as sess:
         sess.clear()
 
 def shared_setup():
@@ -55,23 +54,20 @@ def shared_teardown():
     test_setup.clean_root()
 
 
-class TestSource(TestCase):
+class TestSource(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         shared_setup()
+        self.app = source.app
+        self.client = self.app.test_client()
 
-    @classmethod
-    def tearDownClass(cls):
+    def tearDown(self):
         shared_teardown()
-
-    def create_app(self):
-        return source.app
 
     def test_index(self):
         """Test that the landing page loads and looks how we expect"""
         response = self.client.get('/')
-        self.assert200(response)
+        self.assertEqual(response.status_code, 200)
         self.assertIn("Submit documents for the first time", response.data)
         self.assertIn("Already submitted something?", response.data)
 
@@ -87,17 +83,17 @@ class TestSource(TestCase):
     def test_generate(self):
         with self.client as c:
             rv = c.get('/generate')
-            self.assert200(rv)
+            self.assertEqual(rv.status_code, 200)
             session_codename = session['codename']
         self.assertIn("Submitting for the first time", rv.data)
         self.assertIn(
             "To protect your identity, we're assigning you a unique code name.", rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words
-        self.assertEquals(len(codename.split()), 8)
+        self.assertEqual(len(codename.split()), 8)
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
-        self.assertEquals(codename, escape(session_codename))
+        self.assertEqual(codename, escape(session_codename))
 
     def test_regenerate_valid_lengths(self):
         """Make sure we can regenerate all valid length codenames"""
@@ -105,7 +101,7 @@ class TestSource(TestCase):
             response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
-            self.assert200(response)
+            self.assertEqual(response.status_code, 200)
             codename = self._find_codename(response.data)
             self.assertEquals(len(codename.split()), codename_len)
 
@@ -115,7 +111,7 @@ class TestSource(TestCase):
             response = self.client.post('/generate', data={
                 'number-words': str(codename_len),
             })
-            self.assert403(response)
+            self.assertEqual(response.status_code, 403)
 
     def test_create(self):
         with self.client as c:
@@ -147,23 +143,22 @@ class TestSource(TestCase):
 
     def test_login_and_logout(self):
         rv = self.client.get('/login')
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn("Already submitted something?", rv.data)
 
         codename = self._new_codename()
         with self.client as c:
             rv = c.post('/login', data=dict(codename=codename),
                                   follow_redirects=True)
-            self.assert200(rv)
+            self.assertEqual(rv.status_code, 200)
             self.assertIn("Submit a document, message, or both", rv.data)
             self.assertTrue(session['logged_in'])
             _logout(c)
-            self.assertEquals(len(session), 0)
 
         with self.client as c:
             rv = self.client.post('/login', data=dict(codename='invalid'),
                                   follow_redirects=True)
-            self.assert200(rv)
+            self.assertEqual(rv.status_code, 200)
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
 
@@ -173,7 +168,7 @@ class TestSource(TestCase):
             msg="This is a test.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! We received your message.", rv.data)
 
     def test_submit_file(self):
@@ -182,7 +177,7 @@ class TestSource(TestCase):
             msg="",
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
 
@@ -192,7 +187,7 @@ class TestSource(TestCase):
             msg="This is a test",
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
@@ -212,24 +207,23 @@ class TestSource(TestCase):
 
     def test_tor2web_warning(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
 
 
-class TestJournalist(TestCase):
+class TestJournalist(unittest.TestCase):
 
     def setUp(self):
         shared_setup()
+        self.app = journalist.app
+        self.client = self.app.test_client()
 
     def tearDown(self):
         shared_teardown()
 
-    def create_app(self):
-        return journalist.app
-
     def test_index(self):
         rv = self.client.get('/')
-        self.assert200(rv)
+        self.assertEqual(rv.status_code, 200)
         self.assertIn("Latest submissions", rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
 
