@@ -22,7 +22,7 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     GPG_KEY_LENGTH = 1024
     SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
 else:
-    GPG_KEY_LENGTH = "4096"
+    GPG_KEY_LENGTH = 4096
     SCRYPT_PARAMS = config.SCRYPT_PARAMS
 
 SCRYPT_ID_PEPPER = config.SCRYPT_ID_PEPPER
