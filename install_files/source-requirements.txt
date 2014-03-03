@@ -7,3 +7,6 @@ apache2-mpm-worker
 libapache2-mod-wsgi
 python-pip
 python-dev
+libimage-exiftool-perl
+python-poppler
+python-distutils-extra

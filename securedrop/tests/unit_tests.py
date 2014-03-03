@@ -25,7 +25,6 @@ import source
 import journalist
 import test_setup
 
-
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
@@ -191,6 +190,104 @@ class TestSource(unittest.TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'test.txt'."),
                       rv.data)
+
+    def test_submit_dirty_file_to_be_cleaned(self):
+        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+        self._new_codename()
+        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
+        img_metadata = store.metadata_handler(img.name)
+        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
+        del(img_metadata)
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(img, 'dirty.jpg'),
+            notclean='True',
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
+                      rv.data)
+
+        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
+        latest_subdir = max(store_dirs, key=os.path.getmtime)
+        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
+        zip_gpg = max(zip_gpg_files, key=os.path.getmtime)
+
+        zip_gpg_file = open(zip_gpg)
+        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
+        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
+
+        s = StringIO(decrypted_data.data)
+        zip_file = zipfile.ZipFile(s, 'r')
+        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
+        clean_file.write(zip_file.read('dirty.jpg'))
+        clean_file.seek(0)
+        zip_file.close()
+
+        # check for the actual file been clean
+        clean_file_metadata = store.metadata_handler(clean_file.name)
+        self.assertTrue(clean_file_metadata.is_clean(), "the file is now clean.")
+        del(clean_file_metadata)
+        zip_gpg_file.close()
+        clean_file.close()
+        img.close()
+
+    def test_submit_dirty_file_to_not_clean(self):
+        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+        self._new_codename()
+        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
+        img_metadata = store.metadata_handler(img.name)
+        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
+        del(img_metadata)
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(img, 'dirty.jpg'),
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
+                      rv.data)
+
+        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
+        latest_subdir = max(store_dirs, key=os.path.getmtime)
+        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
+        zip_gpg = max(zip_gpg_files, key=os.path.getmtime)
+
+        zip_gpg_file = open(zip_gpg)
+        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
+        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
+
+        s = StringIO(decrypted_data.data)
+        zip_file = zipfile.ZipFile(s, 'r')
+        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
+        clean_file.write(zip_file.read('dirty.jpg'))
+        clean_file.seek(0)
+        zip_file.close()
+
+        # check for the actual file been clean
+        clean_file_metadata = store.metadata_handler(clean_file.name)
+        self.assertFalse(clean_file_metadata.is_clean(), "the file is was not cleaned.")
+        del(clean_file_metadata)
+        zip_gpg_file.close()
+        clean_file.close()
+        img.close()
+
+    def test_submit_clean_file(self):
+        self._new_codename()
+        img = open(os.getcwd()+'/tests/test_images/clean.jpg')
+        codename = self._new_codename()
+        rv = self.client.post('/submit', data=dict(
+            msg="This is a test",
+            fh=(img, 'clean.jpg'),
+            notclean='True',
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape("Thanks! We received your document 'clean.jpg'."),
+                      rv.data)
+        img.close()
 
     @patch('zipfile.ZipFile.writestr')
     def test_submit_sanitizes_filename(self, zipfile_write):
