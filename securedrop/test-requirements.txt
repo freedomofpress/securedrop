@@ -1,3 +1,2 @@
 selenium==2.39.0
-Flask-Testing==0.4
 mock==1.0.1
