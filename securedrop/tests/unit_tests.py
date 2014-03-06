@@ -24,7 +24,7 @@ import store
 import source
 import journalist
 import test_setup
-
+from db import db_session, Source
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
@@ -229,6 +229,9 @@ class TestJournalist(unittest.TestCase):
 
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = test_setup.setup_test_docs(sid, files)
 

@@ -1,15 +1,15 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import Column, Integer, String
+
 from sqlalchemy.orm.exc import NoResultFound
+
 import config
 import crypto_util
 
-metadata = MetaData()
-
-sources = Table('sources', metadata,
-                Column('filesystem_id', String(96), primary_key=True),
-                Column('journalist_designation', String(255), nullable=False)
-                )
+# http://flask.pocoo.org/docs/patterns/sqlalchemy/
 
 if config.DATABASE_ENGINE == "sqlite":
     engine = create_engine(
@@ -25,53 +25,28 @@ else:
         config.DATABASE_NAME, echo=False
     )
 
-
-def create_tables():
-    metadata.create_all(engine)
-
-
-def sqlalchemy_handle():
-    Session = sessionmaker(bind=engine)
-    return Session()
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
 
 
-def display_id(filesystem_id, session):
-    journalist_designation = session.query(sources.c.journalist_designation).filter(
-        sources.c.filesystem_id == filesystem_id).all()
-    if len(journalist_designation) > 0:
-        return journalist_designation[0][0]
-    else:
-        return crypto_util.displayid(filesystem_id)
+class Source(Base):
+    __tablename__ = 'sources'
+    id = Column(Integer, primary_key=True)
+    filesystem_id = Column(String(96), unique=True)
+    journalist_designation = Column(String(255), nullable=False)
+
+    def __init__(self, filesystem_id=None, journalist_designation=None):
+        self.filesystem_id = filesystem_id
+        self.journalist_designation = journalist_designation
+
+    def __repr__(self):
+        return '<Source %r>' % (self.journalist_designation)
 
 
-def regenerate_display_id(filesystem_id):
-    session = sqlalchemy_handle()
-    try:
-        source_obj = session.query(sources.c.journalist_designation).filter(
-            sources.c.filesystem_id == filesystem_id).one()
-        add = sources.update().values(
-            journalist_designation=crypto_util.displayid(
-                display_id(filesystem_id, session))
-        ).where(sources.c.filesystem_id == filesystem_id)
-    except NoResultFound:
-        add = sources.insert().values(
-            filesystem_id=filesystem_id,
-            journalist_designation=crypto_util.displayid(
-                display_id(filesystem_id, session))
-        )
-    session.execute(add)
-    session.commit()
-    session.close()
+# Declare (or import) models before init_db
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
-
-def delete_source(source_id):
-    session = sqlalchemy_handle()
-    try:
-        delete = sources.delete().where(
-            sources.c.filesystem_id == source_id)
-    except SQLAlchemyError as e:
-        # TODO: proper logging
-        print "Exception occurred attempting to delete source (source_id: %s): %s" % (source_id, e)
-    session.execute(delete)
-    session.commit()
-    session.close()

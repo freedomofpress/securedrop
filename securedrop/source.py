@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 import uuid
 from functools import wraps
+import zipfile
+from cStringIO import StringIO
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -18,8 +20,7 @@ import version
 import crypto_util
 import store
 import background
-import zipfile
-from cStringIO import StringIO
+from db import db_session, Source
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -32,6 +33,13 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
 else:
     app.jinja_env.globals['header_image'] = 'securedrop.png'
     app.jinja_env.globals['use_custom_header_image'] = False
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    """Automatically remove database sessions at the end of the request, or
+    when the application shuts down"""
+    db_session.remove()
 
 
 def logged_in():
@@ -113,17 +121,24 @@ def generate():
         if number_words not in range(7, 11):
             abort(403)
     session['codename'] = crypto_util.genrandomid(number_words)
+    # TODO: make sure this codename isn't a repeat
     return render_template('generate.html', codename=session['codename'])
 
 
 @app.route('/create', methods=['POST'])
 def create():
     sid = crypto_util.hash_codename(session['codename'])
+
+    source = Source(sid, crypto_util.display_id())
+    db_session.add(source)
+    db_session.commit()
+
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
         log.warning("Got a duplicate ID '%s'" % sid)
     else:
         os.mkdir(store.path(sid))
+
     session['logged_in'] = True
     session['flagged'] = False
     return redirect(url_for('lookup'))
