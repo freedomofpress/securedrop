@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e -u
 
-travis/replace-with-urandom.sh
+travis/replace-random-with-urandom.sh
 
 sudo apt-get install gnupg2 secure-delete python-dev haveged
 
