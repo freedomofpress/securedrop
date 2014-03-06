@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e -u
 
-sudo travis/replace-random-with-urandom.sh
+sudo travis/generate-poor-but-copious-randomosity.sh
 
 sudo apt-get install gnupg2 secure-delete python-dev haveged
 
