@@ -8,5 +8,5 @@ set -e -u
 # securely random entropy for our automated tests. This craziness should never be done
 # for a real installation.
 
-rm /dev/random
-ln -s /dev/urandom /dev/random
+apt-get install rng-tools
+rngd -r /dev/urandom
