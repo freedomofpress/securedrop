@@ -5,9 +5,9 @@ MONITOR_IP=""                # IP address of the Monitor Server
 SSH_USERS=""                 # Space separated list of usernames that will SSH into this server
 
 # You only need to fill these out on the Monitor Server
-# If you leave these blank, SecureDrop won't send email notifications
-SMTP_SERVER=""               # FQDN of the destination SMTP server
-EMAIL_DISTRO=""              # The email distribution list to send ossec alerts to
+# Email address syntax is validated
+SMTP_SERVER="blah"               # FQDN of the destination SMTP server
+EMAIL_DISTRO="nobody@domain.com" # The email distribution list to send ossec alerts to
 EMAIL_FROM="ossec@test.com"  # The email address that the ossec alert will appear to come from
 
 # You only need to fill these out on the App Server
