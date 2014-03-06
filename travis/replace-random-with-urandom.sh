@@ -9,4 +9,4 @@ set -e -u
 # for a real installation.
 
 apt-get install rng-tools
-rngd -r /dev/urandom
+sudo rngd -r /dev/urandom
