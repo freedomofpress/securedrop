@@ -1,4 +1,4 @@
-#/bin/bash 
+#!/bin/bash 
 set -e -u
 
 pip install --upgrade distribute

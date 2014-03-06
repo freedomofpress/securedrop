@@ -1,7 +1,10 @@
-#/bin/bash 
+#!/bin/bash 
 set -e -u
 
+travis/replace-with-urandom.sh
+
 sudo apt-get install gnupg2 secure-delete python-dev haveged
+
 cp securedrop/config/base.py.example securedrop/config/base.py
 cp securedrop/config/test.py.example securedrop/config/test.py
 secret_key=$(head -c 32 /dev/urandom | base64)
