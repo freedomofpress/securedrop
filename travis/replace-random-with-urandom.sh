@@ -8,5 +8,12 @@ set -e -u
 # securely random entropy for our automated tests. This craziness should never be done
 # for a real installation.
 
+# Based on: 
+# https://github.com/travis-ci/travis-ci/issues/1495
+# https://github.com/travis-ci/travis-ci/issues/1913#issuecomment-33891474
+
+rm /dev/random
+mknod -m 0666 /dev/random c 1 9
+
 apt-get install rng-tools
-sudo rngd -r /dev/urandom
+rngd --random-device /dev/urandom --rng-device /dev/urandom
