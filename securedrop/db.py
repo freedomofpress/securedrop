@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -37,6 +37,7 @@ class Source(Base):
     id = Column(Integer, primary_key=True)
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
+    flagged = Column(Boolean, default=False)
 
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id

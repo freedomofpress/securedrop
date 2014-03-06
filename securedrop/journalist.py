@@ -7,6 +7,8 @@ from flask import (Flask, request, render_template, send_file, redirect,
                    flash, url_for)
 from flask_wtf.csrf import CsrfProtect
 
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 import config
 import version
 import crypto_util
@@ -33,13 +35,9 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 def get_docs(sid):
-    """Get docs associated with source id `sid` sorted by submission date"""
+    """Get docs associated with source id `sid`, sorted by submission date"""
     docs = []
-    flagged = False
     for filename in os.listdir(store.path(sid)):
-        if filename == '_FLAG':
-            flagged = True
-            continue
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
@@ -48,7 +46,7 @@ def get_docs(sid):
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
-    return docs, flagged
+    return docs
 
 
 @app.after_request
@@ -85,14 +83,17 @@ def index():
 def col(sid):
     try:
         source = Source.query.filter(Source.filesystem_id == sid).one()
-    except:
-        # TODO: logging
+    except MultipleResultsFound as e:
+        app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
+        abort(500)
+    except NoResultFound as e:
+        app.logger.error("Found no Sources when one was expected: %s" % (e,))
         abort(404)
-    docs, flagged = get_docs(sid)
+    docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
             codename=source.journalist_designation, docs=docs, haskey=haskey,
-            flagged=flagged)
+            flagged=source.flagged)
 
 
 def delete_collection(source_id):
@@ -159,7 +160,7 @@ def bulk():
     sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
-        doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
+        doc for doc in get_docs(sid) if doc['name'] in doc_names_selected]
 
     if action == 'download':
         return bulk_download(sid, docs_selected)
@@ -192,14 +193,10 @@ def bulk_download(sid, docs_selected):
 
 @app.route('/flag', methods=('POST',))
 def flag():
-    def create_flag(sid):
-        """Flags a SID by creating an empty _FLAG file in their collection directory"""
-        flag_file = store.path(sid, '_FLAG')
-        open(flag_file, 'a').close()
-        return flag_file
     sid = request.form['sid']
     source = Source.query.filter(Source.filesystem_id == sid).one()
-    create_flag(sid)
+    source.flagged = True
+    db_session.commit()
     return render_template('flag.html', sid=sid,
             codename=source.journalist_designation)
 

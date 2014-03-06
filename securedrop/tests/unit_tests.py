@@ -421,7 +421,6 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
-            flagged = session['flagged']
             sid = g.sid
             # redirected to submission form
             rv = source_app.post('/submit', data=dict(
@@ -429,7 +428,7 @@ class TestIntegration(unittest.TestCase):
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(flagged)
+            self.assertFalse(g.source.flagged)
             _logout(source_app)
 
         rv = self.journalist_app.get('/')
@@ -445,7 +444,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(session['flagged'])
+            self.assertFalse(g.source.flagged)
             _logout(source_app)
 
         with self.journalist_app as journalist_app:
@@ -458,9 +457,9 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertTrue(session['flagged'])
+            self.assertTrue(g.source.flagged)
             source_app.get('/lookup')
-            self.assertTrue(g.flagged)
+            self.assertTrue(g.source.flagged)
             _logout(source_app)
 
         # Block until the reply keypair has been generated, so we can test
@@ -546,6 +545,7 @@ class TestIntegration(unittest.TestCase):
         for i in range(num_sources):
             self.source_app.get('/generate')
             self.source_app.post('/create')
+            _logout(self.source_app)
 
         rv = self.journalist_app.get('/')
         # get all the checkbox values
