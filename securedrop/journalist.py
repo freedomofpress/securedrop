@@ -34,6 +34,23 @@ def shutdown_session(exception=None):
     when the application shuts down"""
     db_session.remove()
 
+
+def get_source(sid):
+    """Return a Source object, representing the database row, for the source
+    with id `sid`"""
+    source = None
+
+    try:
+        source = Source.query.filter(Source.filesystem_id == sid).one()
+    except MultipleResultsFound as e:
+        app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
+        abort(500)
+    except NoResultFound as e:
+        app.logger.error("Found no Sources when one was expected: %s" % (e,))
+        abort(404)
+
+    return source
+
 def get_docs(sid):
     """Get docs associated with source id `sid`, sorted by submission date"""
     docs = []
@@ -68,7 +85,7 @@ def index():
     dirs = os.listdir(config.STORE_DIR)
     cols = []
     for source_id in dirs:
-        source = Source.query.filter(Source.filesystem_id == source_id).one()
+        source = get_source(source_id)
         cols.append(dict(
             sid=source_id,
             name=source.journalist_designation,
@@ -81,14 +98,7 @@ def index():
 
 @app.route('/col/<sid>')
 def col(sid):
-    try:
-        source = Source.query.filter(Source.filesystem_id == sid).one()
-    except MultipleResultsFound as e:
-        app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
-        abort(500)
-    except NoResultFound as e:
-        app.logger.error("Found no Sources when one was expected: %s" % (e,))
-        abort(404)
+    source = get_source(sid)
     docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
@@ -97,9 +107,14 @@ def col(sid):
 
 
 def delete_collection(source_id):
+    # Delete the source's collection of submissions
     store.delete_source_directory(source_id)
+
+    # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(source_id)
-    source = Source.query.filter(Source.filesystem_id == source_id).one()
+
+    # Delete their entry in the db
+    source = get_source(source_id)
     db_session.delete(source)
     db_session.commit()
 
@@ -136,7 +151,7 @@ def doc(sid, fn):
 @app.route('/reply', methods=('POST',))
 def reply():
     sid = request.form['sid']
-    source = Source.query.filter(Source.filesystem_id == sid).one()
+    source = get_source(sid)
     msg = request.form['msg']
     crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
                         store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
@@ -147,7 +162,7 @@ def reply():
 @app.route('/regenerate-code', methods=('POST',))
 def generate_code():
     sid = request.form['sid']
-    source = Source.query.filter(Source.filesystem_id == sid).one()
+    source = get_source(sid)
     source.journalist_designation = crypto_util.display_id()
     db_session.commit()
     return redirect('/col/' + sid)
@@ -171,7 +186,7 @@ def bulk():
 
 
 def bulk_delete(sid, docs_selected):
-    source = Source.query.filter(Source.filesystem_id == sid).one()
+    source = get_source(sid)
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
@@ -183,7 +198,7 @@ def bulk_delete(sid, docs_selected):
 
 
 def bulk_download(sid, docs_selected):
-    source = Source.query.filter(Source.filesystem_id == sid).one()
+    source = get_source(sid)
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
@@ -194,7 +209,7 @@ def bulk_download(sid, docs_selected):
 @app.route('/flag', methods=('POST',))
 def flag():
     sid = request.form['sid']
-    source = Source.query.filter(Source.filesystem_id == sid).one()
+    source = get_source(sid)
     source.flagged = True
     db_session.commit()
     return render_template('flag.html', sid=sid,
