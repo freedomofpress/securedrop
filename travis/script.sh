@@ -1,4 +1,5 @@
 #/bin/bash 
 set -e -u
-cd ../securedrop
+
+cd securedrop
 ./test.sh
