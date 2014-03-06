@@ -4,7 +4,7 @@ from datetime import datetime
 import uuid
 
 from flask import (Flask, request, render_template, send_file, redirect,
-                   flash, url_for)
+                   flash, url_for, g)
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -50,6 +50,17 @@ def get_source(sid):
         abort(404)
 
     return source
+
+
+@app.before_request
+def setup_g():
+    """Store commonly used values in Flask's special g object"""
+    if request.method == 'POST':
+        sid = request.form.get('sid')
+        if sid:
+            g.sid = sid
+            g.source = get_source(sid)
+
 
 def get_docs(sid):
     """Get docs associated with source id `sid`, sorted by submission date"""
@@ -150,37 +161,32 @@ def doc(sid, fn):
 
 @app.route('/reply', methods=('POST',))
 def reply():
-    sid = request.form['sid']
-    source = get_source(sid)
     msg = request.form['msg']
-    crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
-                        store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-    return render_template('reply.html', sid=sid,
-            codename=source.journalist_designation)
+    crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
+                        store.path(g.sid, 'reply-%s.gpg' % uuid.uuid4()))
+    return render_template('reply.html', sid=g.sid,
+            codename=g.source.journalist_designation)
 
 
 @app.route('/regenerate-code', methods=('POST',))
 def generate_code():
-    sid = request.form['sid']
-    source = get_source(sid)
-    source.journalist_designation = crypto_util.display_id()
+    g.source.journalist_designation = crypto_util.display_id()
     db_session.commit()
-    return redirect('/col/' + sid)
+    return redirect('/col/' + g.sid)
 
 
 @app.route('/bulk', methods=('POST',))
 def bulk():
     action = request.form['action']
 
-    sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
-        doc for doc in get_docs(sid) if doc['name'] in doc_names_selected]
+        doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
 
     if action == 'download':
-        return bulk_download(sid, docs_selected)
+        return bulk_download(g.sid, docs_selected)
     elif action == 'delete':
-        return bulk_delete(sid, docs_selected)
+        return bulk_delete(g.sid, docs_selected)
     else:
         abort(400)
 
@@ -208,12 +214,10 @@ def bulk_download(sid, docs_selected):
 
 @app.route('/flag', methods=('POST',))
 def flag():
-    sid = request.form['sid']
-    source = get_source(sid)
-    source.flagged = True
+    g.source.flagged = True
     db_session.commit()
-    return render_template('flag.html', sid=sid,
-            codename=source.journalist_designation)
+    return render_template('flag.html', sid=g.sid,
+            codename=g.source.journalist_designation)
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production
