@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite curl"
 
 
 while getopts "r:uh" OPTION; do
