@@ -44,7 +44,8 @@ validate_CONFIG_OPTIONS() {
     validate_email() {
         local EMAIL=$1
 
-        if [[ ! $EMAIL =~ ((.+)@(.+).(.+)) ]]; then
+        if [[ ! $EMAIL =~ ((.+)@(.+)\.(.+)) ]]; then
+		echo EMAIL=$EMAIL
             echo "Invalid email"
             exit 1
         fi
