@@ -29,7 +29,9 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <p style="padding-bottom: 0"><b>Upload a file:</b></p>
   <div id="browse-select">
-    <input type="file" name="fh" autocomplete="off"/>
+    <input type="file" name="fh" autocomplete="off"/><br />
+    <input type="checkbox" id="notclean" name="notclean" value="True" />
+    <label for="cleanup">Remove all the metadata of the file.</label>
   </div>
 
   <p><b>Or just enter a message:</b></p>
