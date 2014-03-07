@@ -1,4 +1,3 @@
-curl
 secure-delete
 gnupg2
 haveged
