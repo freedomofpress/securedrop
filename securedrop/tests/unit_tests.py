@@ -194,7 +194,6 @@ class TestSource(unittest.TestCase):
 
     def test_submit_dirty_file_to_be_cleaned(self):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
@@ -236,7 +235,6 @@ class TestSource(unittest.TestCase):
 
     def test_submit_dirty_file_to_not_clean(self):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
@@ -276,7 +274,6 @@ class TestSource(unittest.TestCase):
         img.close()
 
     def test_submit_clean_file(self):
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/clean.jpg')
         codename = self._new_codename()
         rv = self.client.post('/submit', data=dict(
