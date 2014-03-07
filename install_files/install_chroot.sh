@@ -198,7 +198,7 @@ EOF
         # Also, MySQL-Python won't install (which breaks this script) unless mysql is installed.
         echo "Creating database..."                                             
         cd /var/www/securedrop/
-        python -c 'import os; import db; db.create_tables()' | tee -a build.log
+        python -c 'import os; import db; db.init_db()' | tee -a build.log
       fi
     fi
 

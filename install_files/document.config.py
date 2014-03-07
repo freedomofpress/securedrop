@@ -52,7 +52,7 @@ DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db.sqlite')
 
 # Uncomment to use mysql (or any other databaes backend supported by
 # SQLAlchemy). Make sure you have the necessary dependencies installed, and run
-# `python -c "import db; db.create_tables()"` to initialize the database
+# `python -c "import db; db.init_db()"` to initialize the database
 
 #DATABASE_ENGINE = 'mysql'
 #DATABASE_HOST = 'localhost'
