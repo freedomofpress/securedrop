@@ -2,7 +2,9 @@ language: python
 python:
   - "2.7"
 install:
+  - sudo apt-get install intltool
   - pip install --upgrade distribute
+  - pip install https://launchpad.net/python-distutils-extra/trunk/2.38/+download/python-distutils-extra-2.38.tar.gz
   - pip install -r securedrop/source-requirements.txt
   - pip install -r securedrop/document-requirements.txt
   - pip install -r securedrop/test-requirements.txt

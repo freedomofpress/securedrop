@@ -145,6 +145,16 @@ form input#filename{
   padding:0 10px;
 }
 
+form input#cleanup{
+  color:#666;
+  border:none;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  font-weight:400;
+  font-size:12px;
+  height:30px;
+  margin:15px 5px 0 5px;
+  padding:0 10px;
+}
 
 /* add back (removed by reset) indents and bullets for plain lists in text */
 ul {

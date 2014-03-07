@@ -185,12 +185,13 @@ def lookup():
 def submit():
     msg = request.form['msg']
     fh = request.files['fh']
+    strip_metadata = True if 'notclean' in request.form else False
 
     if msg:
         store.save_message_submission(g.sid, msg)
         flash("Thanks! We received your message.", "notification")
     if fh:
-        store.save_file_submission(g.sid, fh.filename, fh.stream)
+        store.save_file_submission(g.sid, fh.filename, fh.stream, fh.content_type, strip_metadata)
         flash("Thanks! We received your document '%s'."
               % fh.filename or '[unnamed]', "notification")
 
