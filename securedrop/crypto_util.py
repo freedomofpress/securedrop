@@ -86,10 +86,8 @@ def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
     return ' '.join(random.choice(words) for x in range(words_in_random_id))
 
 
-def displayid(n):
-    badrandom_value = badrandom.WichmannHill()
-    badrandom_value.seed(n)
-    return badrandom_value.choice(adjectives) + " " + badrandom_value.choice(nouns)
+def display_id():
+    return ' '.join([random.choice(adjectives), random.choice(nouns)])
 
 
 def hash_codename(codename, salt=SCRYPT_ID_PEPPER):

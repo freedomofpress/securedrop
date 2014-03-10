@@ -24,7 +24,7 @@ def init_gpg():
     return gpg
 
 def init_db():
-    db.create_tables()
+    db.init_db()
 
 def setup_test_docs(sid, files):
     filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]

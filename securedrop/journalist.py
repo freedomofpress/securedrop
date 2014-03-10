@@ -4,15 +4,17 @@ from datetime import datetime
 import uuid
 
 from flask import (Flask, request, render_template, send_file, redirect,
-                   flash, url_for)
+                   flash, url_for, g)
 from flask_wtf.csrf import CsrfProtect
+
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import config
 import version
 import crypto_util
 import store
 import background
-import db
+from db import db_session, Source
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -26,15 +28,44 @@ else:
     app.jinja_env.globals['header_image'] = 'securedrop.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    """Automatically remove database sessions at the end of the request, or
+    when the application shuts down"""
+    db_session.remove()
+
+
+def get_source(sid):
+    """Return a Source object, representing the database row, for the source
+    with id `sid`"""
+    source = None
+
+    try:
+        source = Source.query.filter(Source.filesystem_id == sid).one()
+    except MultipleResultsFound as e:
+        app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
+        abort(500)
+    except NoResultFound as e:
+        app.logger.error("Found no Sources when one was expected: %s" % (e,))
+        abort(404)
+
+    return source
+
+
+@app.before_request
+def setup_g():
+    """Store commonly used values in Flask's special g object"""
+    if request.method == 'POST':
+        sid = request.form.get('sid')
+        if sid:
+            g.sid = sid
+            g.source = get_source(sid)
+
 
 def get_docs(sid):
-    """Get docs associated with source id `sid` sorted by submission date"""
+    """Get docs associated with source id `sid`, sorted by submission date"""
     docs = []
-    flagged = False
     for filename in os.listdir(store.path(sid)):
-        if filename == '_FLAG':
-            flagged = True
-            continue
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
@@ -43,7 +74,7 @@ def get_docs(sid):
         ))
     # sort by date since ordering by filename is meaningless
     docs.sort(key=lambda x: x['date'])
-    return docs, flagged
+    return docs
 
 
 @app.after_request
@@ -64,33 +95,39 @@ def no_cache(response):
 def index():
     dirs = os.listdir(config.STORE_DIR)
     cols = []
-    db_session = db.sqlalchemy_handle()
     for source_id in dirs:
-        display_id = db.display_id(source_id, db_session)
+        source = get_source(source_id)
         cols.append(dict(
             sid=source_id,
-            name=display_id,
+            name=source.journalist_designation,
             date=str(datetime.fromtimestamp(os.stat(store.path(source_id)).st_mtime)
                      ).split('.')[0]
         ))
-    db_session.close()
     cols.sort(key=lambda x: x['date'], reverse=True)
     return render_template('index.html', cols=cols)
 
 
 @app.route('/col/<sid>')
 def col(sid):
-    docs, flagged = get_docs(sid)
+    source = get_source(sid)
+    docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-                           codename=db.display_id(sid, db.sqlalchemy_handle()), docs=docs,
-                           haskey=haskey, flagged=flagged)
+            codename=source.journalist_designation, docs=docs, haskey=haskey,
+            flagged=source.flagged)
 
 
 def delete_collection(source_id):
+    # Delete the source's collection of submissions
     store.delete_source_directory(source_id)
+
+    # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(source_id)
-    db.delete_source(source_id)
+
+    # Delete their entry in the db
+    source = get_source(source_id)
+    db_session.delete(source)
+    db_session.commit()
 
 
 @app.route('/col/delete', methods=('POST',))
@@ -124,67 +161,63 @@ def doc(sid, fn):
 
 @app.route('/reply', methods=('POST',))
 def reply():
-    sid = request.form['sid']
     msg = request.form['msg']
-    crypto_util.encrypt(crypto_util.getkey(sid), msg, output=
-                        store.path(sid, 'reply-%s.gpg' % uuid.uuid4()))
-    return render_template('reply.html', sid=sid, codename=db.display_id(sid,
-        db.sqlalchemy_handle()))
+    crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
+                        store.path(g.sid, 'reply-%s.gpg' % uuid.uuid4()))
+    return render_template('reply.html', sid=g.sid,
+            codename=g.source.journalist_designation)
 
 
 @app.route('/regenerate-code', methods=('POST',))
 def generate_code():
-    sid = request.form['sid']
-    db.regenerate_display_id(sid)
-    return redirect('/col/' + sid)
+    g.source.journalist_designation = crypto_util.display_id()
+    db_session.commit()
+    return redirect('/col/' + g.sid)
 
 
 @app.route('/bulk', methods=('POST',))
 def bulk():
     action = request.form['action']
 
-    sid = request.form['sid']
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
-        doc for doc in get_docs(sid)[0] if doc['name'] in doc_names_selected]
+        doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
 
     if action == 'download':
-        return bulk_download(sid, docs_selected)
+        return bulk_download(g.sid, docs_selected)
     elif action == 'delete':
-        return bulk_delete(sid, docs_selected)
+        return bulk_delete(g.sid, docs_selected)
     else:
         abort(400)
 
 
 def bulk_delete(sid, docs_selected):
+    source = get_source(sid)
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
             fn = store.path(sid, doc['name'])
             store.secure_unlink(fn)
-    return render_template(
-        'delete.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()),
-        docs_selected=docs_selected, confirm_delete=confirm_delete)
+    return render_template('delete.html', sid=sid,
+            codename=source.journalist_designation,
+            docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 
 def bulk_download(sid, docs_selected):
+    source = get_source(sid)
     filenames = [store.path(sid, doc['name']) for doc in docs_selected]
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=db.display_id(sid, db.sqlalchemy_handle()) + ".zip",
+                     attachment_filename=source.journalist_designation + ".zip",
                      as_attachment=True)
 
 
 @app.route('/flag', methods=('POST',))
 def flag():
-    def create_flag(sid):
-        """Flags a SID by creating an empty _FLAG file in their collection directory"""
-        flag_file = store.path(sid, '_FLAG')
-        open(flag_file, 'a').close()
-        return flag_file
-    sid = request.form['sid']
-    create_flag(sid)
-    return render_template('flag.html', sid=sid, codename=db.display_id(sid, db.sqlalchemy_handle()))
+    g.source.flagged = True
+    db_session.commit()
+    return render_template('flag.html', sid=g.sid,
+            codename=g.source.journalist_designation)
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production

@@ -24,6 +24,7 @@ import store
 import source
 import journalist
 import test_setup
+from db import db_session, Source
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
@@ -193,7 +194,6 @@ class TestSource(unittest.TestCase):
 
     def test_submit_dirty_file_to_be_cleaned(self):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
@@ -235,7 +235,6 @@ class TestSource(unittest.TestCase):
 
     def test_submit_dirty_file_to_not_clean(self):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
@@ -275,7 +274,6 @@ class TestSource(unittest.TestCase):
         img.close()
 
     def test_submit_clean_file(self):
-        self._new_codename()
         img = open(os.getcwd()+'/tests/test_images/clean.jpg')
         codename = self._new_codename()
         rv = self.client.post('/submit', data=dict(
@@ -326,6 +324,9 @@ class TestJournalist(unittest.TestCase):
 
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
         files = ['abc1_msg.gpg', 'abc2_msg.gpg']
         filenames = test_setup.setup_test_docs(sid, files)
 
@@ -515,7 +516,6 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
-            flagged = session['flagged']
             sid = g.sid
             # redirected to submission form
             rv = source_app.post('/submit', data=dict(
@@ -523,7 +523,7 @@ class TestIntegration(unittest.TestCase):
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(flagged)
+            self.assertFalse(g.source.flagged)
             _logout(source_app)
 
         rv = self.journalist_app.get('/')
@@ -539,7 +539,7 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertFalse(session['flagged'])
+            self.assertFalse(g.source.flagged)
             _logout(source_app)
 
         with self.journalist_app as journalist_app:
@@ -552,9 +552,9 @@ class TestIntegration(unittest.TestCase):
             rv = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertTrue(session['flagged'])
+            self.assertTrue(g.source.flagged)
             source_app.get('/lookup')
-            self.assertTrue(g.flagged)
+            self.assertTrue(g.source.flagged)
             _logout(source_app)
 
         # Block until the reply keypair has been generated, so we can test
@@ -640,6 +640,7 @@ class TestIntegration(unittest.TestCase):
         for i in range(num_sources):
             self.source_app.get('/generate')
             self.source_app.post('/create')
+            _logout(self.source_app)
 
         rv = self.journalist_app.get('/')
         # get all the checkbox values

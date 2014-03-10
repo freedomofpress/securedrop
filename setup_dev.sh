@@ -98,7 +98,7 @@ sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" config/b
 
 # initialize development database (development uses sqlite by default)
 echo "Creating database tables..."
-SECUREDROP_ENV=development python -c 'import db; db.create_tables()'
+SECUREDROP_ENV=development python -c 'import db; db.init_db()'
 
 if [ "$UNAIDED_INSTALL" != true ]; then
     echo ""

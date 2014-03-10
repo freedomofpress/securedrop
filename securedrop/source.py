@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 import uuid
 from functools import wraps
+import zipfile
+from cStringIO import StringIO
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -13,13 +15,14 @@ from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
 
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 import config
 import version
 import crypto_util
 import store
 import background
-import zipfile
-from cStringIO import StringIO
+from db import db_session, Source
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -32,6 +35,13 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
 else:
     app.jinja_env.globals['header_image'] = 'securedrop.png'
     app.jinja_env.globals['use_custom_header_image'] = False
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    """Automatically remove database sessions at the end of the request, or
+    when the application shuts down"""
+    db_session.remove()
 
 
 def logged_in():
@@ -66,11 +76,16 @@ def setup_g():
     # time consuming), and we don't need to waste time running if we're just
     # serving a static resource that won't need to access these common values.
     if logged_in():
-        # We use session.get (which defaults to None if 'flagged' is not in the
-        # session) to avoid a KeyError on the redirect from login/ to lookup/
-        g.flagged = session.get('flagged')
         g.codename = session['codename']
         g.sid = crypto_util.hash_codename(g.codename)
+        try:
+            g.source = Source.query.filter(Source.filesystem_id == g.sid).one()
+        except MultipleResultsFound as e:
+            app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
+            abort(500)
+        except NoResultFound as e:
+            app.logger.error("Found no Sources when one was expected: %s" % (e,))
+            abort(404)
         g.loc = store.path(g.sid)
 
 
@@ -113,19 +128,25 @@ def generate():
         if number_words not in range(7, 11):
             abort(403)
     session['codename'] = crypto_util.genrandomid(number_words)
+    # TODO: make sure this codename isn't a repeat
     return render_template('generate.html', codename=session['codename'])
 
 
 @app.route('/create', methods=['POST'])
 def create():
     sid = crypto_util.hash_codename(session['codename'])
+
+    source = Source(sid, crypto_util.display_id())
+    db_session.add(source)
+    db_session.commit()
+
     if os.path.exists(store.path(sid)):
         # if this happens, we're not using very secure crypto
         log.warning("Got a duplicate ID '%s'" % sid)
     else:
         os.mkdir(store.path(sid))
+
     session['logged_in'] = True
-    session['flagged'] = False
     return redirect(url_for('lookup'))
 
 
@@ -133,13 +154,8 @@ def create():
 @login_required
 def lookup():
     replies = []
-    flagged = False
     for fn in os.listdir(g.loc):
-        # TODO: make 'flag' a db column, so we can replace this with a db
-        # lookup in the future
-        if fn == '_FLAG':
-            flagged = True
-        elif fn.startswith('reply-'):
+        if fn.startswith('reply-'):
             try:
                 msg = crypto_util.decrypt(g.sid, g.codename,
                         file(store.path(g.sid, fn)).read()).decode("utf-8")
@@ -150,9 +166,6 @@ def lookup():
                            os.stat(store.path(g.sid, fn)).st_mtime))
                 replies.append(dict(id=fn, date=date, msg=msg))
 
-    if flagged:
-        session['flagged'] = True
-
     def async_genkey(sid, codename):
         with app.app_context():
             background.execute(lambda: crypto_util.genkeypair(sid, codename))
@@ -160,11 +173,11 @@ def lookup():
     # Generate a keypair to encrypt replies from the journalist
     # Only do this if the journalist has flagged the source as one
     # that they would like to reply to. (Issue #140.)
-    if not crypto_util.getkey(g.sid) and flagged:
+    if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
     return render_template('lookup.html', codename=g.codename, msgs=replies,
-            flagged=flagged, haskey=crypto_util.getkey(g.sid))
+            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
 @app.route('/submit', methods=('POST',))
@@ -202,28 +215,12 @@ def delete():
 def valid_codename(codename):
     return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
-def check_flagged(codename):
-    # TODO: make 'flag' a db column, so we can replace this with a db lookup in
-    # the future
-    flagged = False
-    sid = crypto_util.hash_codename(codename)
-    try:
-        loc = store.path(sid)
-    except:
-        return flagged
-    for fn in os.listdir(loc):
-        if fn=='_FLAG':
-            flagged = True
-            break
-    return flagged
-
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         codename = request.form['codename']
         if valid_codename(codename):
-            flagged = check_flagged(codename)
-            session.update(codename=codename, flagged=flagged, logged_in=True)
+            session.update(codename=codename, logged_in=True)
             return redirect(url_for('lookup'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")

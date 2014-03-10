@@ -11,7 +11,7 @@ class FlaskConfig(BaseFlaskConfig):
 ### Database Configuration
 
 # To use MySQL, make sure you have the necessary dependencies installed, and run
-# `python -c "import db; db.create_tables()"` to initialize the database
+# `python -c "import db; db.init_db()"` to initialize the database
 
 DATABASE_ENGINE = 'mysql'
 DATABASE_HOST = 'localhost'
