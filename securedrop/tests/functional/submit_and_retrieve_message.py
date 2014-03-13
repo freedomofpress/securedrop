@@ -4,7 +4,7 @@ import journalist_navigation_steps
 import unittest
 import urllib2
 
-class SubmitAndRetrieveHappyPath(
+class SubmitAndRetrieveMessage(
         unittest.TestCase,
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps,
