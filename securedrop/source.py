@@ -22,7 +22,7 @@ import version
 import crypto_util
 import store
 import background
-from db import db_session, Source
+from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -187,13 +187,23 @@ def submit():
     fh = request.files['fh']
     strip_metadata = True if 'notclean' in request.form else False
 
+    fnames = []
+
     if msg:
-        store.save_message_submission(g.sid, msg)
+        fnames.append(store.save_message_submission(g.sid, msg))
         flash("Thanks! We received your message.", "notification")
     if fh:
-        store.save_file_submission(g.sid, fh.filename, fh.stream, fh.content_type, strip_metadata)
+        fnames.append(store.save_file_submission(g.sid, fh.filename,
+            fh.stream, fh.content_type, strip_metadata))
         flash("Thanks! We received your document '%s'."
               % fh.filename or '[unnamed]', "notification")
+
+    for fname in fnames:
+        submission = Submission(g.source, fname)
+        db_session.add(submission)
+
+    g.source.last_updated = datetime.now()
+    db_session.commit()
 
     return redirect(url_for('lookup'))
 

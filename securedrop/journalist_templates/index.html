@@ -2,15 +2,15 @@
 {% block body %}
 <div id="content" class="journalist-view-all">
 <h2><span class="headline">Latest submissions</span></h2>
-{% if cols %}
+{% if sources %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <form id="delete_collections" action="/col/delete" method="post">
 <ul id="cols" class="plain">
-  {% for col in cols %}
+  {% for source in sources %}
   <li>
-    <input type="checkbox" name="cols_selected" value="{{ col.sid }}" />
-    <span class="code-name"><a href="/col/{{ col.sid }}">{{ col.name }}</a></span><br />
-    last updated {{ col.date }}
+    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+    <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
+    last updated {{ source.last_updated }}
   </li>
   {% endfor %}
 </ul>
