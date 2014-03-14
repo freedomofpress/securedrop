@@ -1,0 +1,103 @@
+#!/bin/bash
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# Get the full path to application public gpg key
+<<<<<<< HEAD
+=======
+c="1"
+>>>>>>> Migrating to deb packages still needs work
+ok=""
+while [ ! "$ok" ]; do
+    db_input critical securedrop-source/find_key_path || true
+    db_go || true
+    db_get securedrop-source/find_key_path
+    if [ -f "$RET" ]; then
+        ok=1
+        db_go || true
+<<<<<<< HEAD
+    else
+        db_input critical securedrop-source/find_key_path_continue || true
+        db_go || true
+        db_get securedrop-source/find_key_path_continue
+        if [ "$RET" = "false" ]; then
+            exit 1
+        else
+            db_fset securedrop-source/find_key_path seen false
+        fi
+=======
+    fi
+    (( c++ ))
+    if [ $c -gt 5 ]; then
+        break
+>>>>>>> Migrating to deb packages still needs work
+    fi
+done
+
+# extract gpg key's fingerprint save to to dh_db and subsititute 
+# the fpr value in the verify_fingerprint template
+db_get securedrop-source/find_key_path
+find_key_path="$RET"
+key_fpr="$( gpg --with-fingerprint $find_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+db_set securedrop-source/app_key_fpr "$key_fpr"
+db_subst securedrop-source/verify_fingerprint KEY_FPR "$key_fpr"
+db_go || true
+
+db_input critical securedrop-source/verify_fingerprint || true
+
+# Have option to use custom headers
+db_input high securedrop-source/use_custom_header_image || true
+db_go || true
+
+db_get securedrop-source/use_custom_header_image
+use_header="$RET"
+if [ "$use_header" = "true" ]; then
+<<<<<<< HEAD
+=======
+    c="1"
+>>>>>>> Migrating to deb packages still needs work
+    ok=""
+    while [ ! "$ok" ]; do
+        db_input critical securedrop-source/custom_header_image_path || true
+        db_go || true
+        db_get securedrop-source/custom_header_image_path
+        if [ -f "$RET" ]; then
+            ok=1
+            db_go || true
+<<<<<<< HEAD
+        else
+            db_input critical securedrop-source/custom_header_image_path_continue || true
+            db_go || true
+            db_get securedrop-source/custom_header_image_path_continue
+            if [ "$RET" = "false" ]; then
+                exit 1
+            else
+                db_fset securedrop-source/custom_header_image_path seen false
+            fi
+=======
+        fi
+        (( c++ ))
+        if [ $c -gt 5 ]; then
+            break
+>>>>>>> Migrating to deb packages still needs work
+        fi
+    done
+fi
+
+# The securedrop application user on the host system
+db_input medium securedrop-source/source_user || true
+db_input medium securedrop-source/source_gid || true
+db_input medium securedrop-source/source_uid || true
+
+# Tor info
+db_input medium securedrop-source/tor_key_id || true
+db_input medium securedrop-source/tor_key_fpr || true
+
+<<<<<<< HEAD
+=======
+
+## continue after all the questions
+>>>>>>> Migrating to deb packages still needs work
+db_go || true
