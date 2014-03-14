@@ -93,18 +93,8 @@ def no_cache(response):
 
 @app.route('/')
 def index():
-    dirs = os.listdir(config.STORE_DIR)
-    cols = []
-    for source_id in dirs:
-        source = get_source(source_id)
-        cols.append(dict(
-            sid=source_id,
-            name=source.journalist_designation,
-            date=str(datetime.fromtimestamp(os.stat(store.path(source_id)).st_mtime)
-                     ).split('.')[0]
-        ))
-    cols.sort(key=lambda x: x['date'], reverse=True)
-    return render_template('index.html', cols=cols)
+    sources = Source.query.order_by(Source.last_updated.desc()).all()
+    return render_template('index.html', sources=sources)
 
 
 @app.route('/col/<sid>')

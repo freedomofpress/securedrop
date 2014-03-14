@@ -78,6 +78,7 @@ def get_bulk_archive(filenames):
             zip.write(filename, arcname=os.path.basename(filename))
     return zip_file
 
+
 def save_file_submission(sid, filename, stream, content_type, strip_metadata):
     sanitized_filename = secure_filename(filename)
     clean_file = sanitize_metadata(stream, content_type, strip_metadata)
@@ -87,12 +88,17 @@ def save_file_submission(sid, filename, stream, content_type, strip_metadata):
         zf.writestr(sanitized_filename, clean_file.read() if clean_file else stream.read())
     s.reset()
 
-    file_loc = path(sid, "%s_doc.zip.gpg" % uuid.uuid4())
+    filename = "%s_doc.zip.gpg" % uuid.uuid4()
+    file_loc = path(sid, filename)
     crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+    return filename
+
 
 def save_message_submission(sid, message):
-    msg_loc = path(sid, '%s_msg.gpg' % uuid.uuid4())
+    filename = "%s_msg.gpg" % uuid.uuid4()
+    msg_loc = path(sid, filename)
     crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
+    return filename
 
 
 def secure_unlink(fn, recursive=False, do_verify = True):

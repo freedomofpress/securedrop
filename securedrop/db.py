@@ -1,13 +1,15 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+import os
+import datetime
+
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-
-from sqlalchemy import Column, Integer, String, Boolean
-
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm.exc import NoResultFound
 
 import config
 import crypto_util
+import store
 
 # http://flask.pocoo.org/docs/patterns/sqlalchemy/
 
@@ -38,6 +40,7 @@ class Source(Base):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
+    last_updated = Column(DateTime, default=datetime.datetime.now)
 
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
@@ -45,6 +48,23 @@ class Source(Base):
 
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
+
+
+class Submission(Base):
+    __tablename__ = 'submissions'
+    id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, ForeignKey('sources.id'))
+    source = relationship("Source", backref=backref('submissions', order_by=id))
+    filename = Column(String(255), nullable=False)
+    size = Column(Integer, nullable=False)
+
+    def __init__(self, source, filename):
+        self.source_id = source.id
+        self.filename = filename
+        self.size = os.stat(store.path(source.filesystem_id, filename)).st_size
+
+    def __repr__(self):
+        return '<Submission %r>' % (self.filename)
 
 
 # Declare (or import) models before init_db
