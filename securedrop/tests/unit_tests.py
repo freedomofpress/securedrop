@@ -197,22 +197,21 @@ class TestSource(unittest.TestCase):
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        del(img_metadata)
         codename = self._new_codename()
         rv = self.client.post('/submit', data=dict(
-            msg="This is a test",
+            msg="",
             fh=(img, 'dirty.jpg'),
             notclean='True',
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
                       rv.data)
 
         store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
         latest_subdir = max(store_dirs, key=os.path.getmtime)
         zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        zip_gpg = max(zip_gpg_files, key=os.path.getmtime)
+        self.assertEqual(len(zip_gpg_files), 1)
+        zip_gpg = zip_gpg_files[0]
 
         zip_gpg_file = open(zip_gpg)
         decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
@@ -228,7 +227,6 @@ class TestSource(unittest.TestCase):
         # check for the actual file been clean
         clean_file_metadata = store.metadata_handler(clean_file.name)
         self.assertTrue(clean_file_metadata.is_clean(), "the file is now clean.")
-        del(clean_file_metadata)
         zip_gpg_file.close()
         clean_file.close()
         img.close()
@@ -238,21 +236,20 @@ class TestSource(unittest.TestCase):
         img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
         img_metadata = store.metadata_handler(img.name)
         self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        del(img_metadata)
         codename = self._new_codename()
         rv = self.client.post('/submit', data=dict(
-            msg="This is a test",
+            msg="",
             fh=(img, 'dirty.jpg'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
                       rv.data)
 
         store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
         latest_subdir = max(store_dirs, key=os.path.getmtime)
         zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        zip_gpg = max(zip_gpg_files, key=os.path.getmtime)
+        self.assertEqual(len(zip_gpg_files), 1)
+        zip_gpg = zip_gpg_files[0]
 
         zip_gpg_file = open(zip_gpg)
         decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
@@ -268,7 +265,6 @@ class TestSource(unittest.TestCase):
         # check for the actual file been clean
         clean_file_metadata = store.metadata_handler(clean_file.name)
         self.assertFalse(clean_file_metadata.is_clean(), "the file is was not cleaned.")
-        del(clean_file_metadata)
         zip_gpg_file.close()
         clean_file.close()
         img.close()
