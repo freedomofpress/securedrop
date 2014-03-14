@@ -1,0 +1,12 @@
+securedrop-app: new-package-should-close-itp-bug
+securedrop-app: embedded-library
+securedrop-app: embedded-zlib
+securedrop-app: possible-gpl-code-linked-with-openssl
+securedrop-app: new-package-should-close-itp-bug
+securedrop-app: init.d-script-missing-lsb-section
+securedrop-app: init.d-script-does-not-implement-required-option
+securedrop-app: possibly-insecure-handling-of-tmp-files-in-maintainer-script
+securedrop-app: non-standard-dir-in-var
+securedrop-app: file-in-unusual-dir
+securedrop-app: hardening-no-fortify-functions
+securedrop-app: hardening-no-relro

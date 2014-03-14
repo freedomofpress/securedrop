@@ -1,0 +1,67 @@
+Template: securedrop-document/find_key_path
+Type: string
+Description: The full path to the App's public GPG key:
+ This is the public GPG key that was created on the SVS and
+ sneakernet'd to the App Server. This key is used by the
+ Document Interface to encrypt the sources' submissions.
+
+Template: securedrop-document/app_key_fpr
+Type: string
+Description: The Application's gpg key's fingerprint:
+ This value is extracted from the supplied gpg key file
+
+Template: securedrop-document/verify_fingerprint
+Type: boolean
+Description: Is this the App's GPG key's fingerprint: ${KEY_FPR}?
+ This is the fingerprint of the Application's GPG key, created on the
+ airgapped SVS.
+
+Template: securedrop-document/use_custom_header_image
+Type: boolean
+Description: Do you want to use a custom image for the webpages?
+ This is the image that will be used at the top of the Document 
+ Interfaces and can be re-branded for your organization.
+ Supported formats: .jpg, .png
+
+Template: securedrop-document/custom_header_image_path
+Type: string
+Description: The full path to the custom header image:
+ This is the image that will be used at the top of the Document
+ Interfaces.
+
+Template: securedrop-document/document_user
+Type: string
+Default: document
+Description: The user that will own the application files for the Document Interface:
+ This is the application user for the Document Interface inside of the chroot jail.
+
+Template: securedrop-document/document_gid
+Type: string
+Default: 668
+Description: The gid that will own the application files for the Document Interface:
+ This is the application gid for the Document Interface inside of the chroot jails.
+
+Template: securedrop-document/document_uid
+Type: string
+Default: 666
+Description: The uid that will own the application files for the Document Interface:
+ This is the application uid for the Document Interface inside of the chroot jails
+
+Template: securedrop-document/tor_key_id
+Type: string
+Default: 886DDD89
+Description: The Tor signing key's keyid:
+ This is the signing key used by Tor to sign their repo.
+
+Template: securedrop-document/tor_key_fpr
+Type: string
+Default: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+Description: The tor signing key fingerprint:
+ This is the fingerprint of the key used to sign Tor packages.
+
+Template: securedrop-document/journalist_user
+Type: string
+Description: A journalist's username:
+ This is the first journalist's username. Please only enter one username at this time
+ More journalist's can be added after the install is finsihed. Journalist users are only
+ for the document interface and do not need OS accounts.

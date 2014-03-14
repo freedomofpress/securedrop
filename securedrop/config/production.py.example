@@ -4,12 +4,14 @@ JOURNALIST_KEY='' # fingerprint of the public key for encrypting submissions
 SECUREDROP_ROOT=os.path.abspath('.securedrop')
 
 ### Database Configuration
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(SECUREDROP_ROOT, 'db_production.sqlite')
 
 # To use MySQL, make sure you have the necessary dependencies installed, and run
 # `python -c "import db; db.init_db()"` to initialize the database
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_HOST = 'localhost'
-DATABASE_NAME = 'securedrop'
-DATABASE_USERNAME = 'securedrop'
-DATABASE_PASSWORD = ''
+#DATABASE_ENGINE = 'mysql'
+#DATABASE_HOST = 'localhost'
+#DATABASE_NAME = 'securedrop'
+#DATABASE_USERNAME = 'securedrop'
+#DATABASE_PASSWORD = ''

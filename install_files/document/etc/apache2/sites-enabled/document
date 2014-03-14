@@ -1,0 +1,81 @@
+NameVirtualHost 127.0.0.1:8080
+<VirtualHost 127.0.0.1:8080>
+ServerName 127.0.0.1:8080
+
+#ServerAlias for each hidden service address in the tor hostname file
+#ServerAlias ONION_ADDRESS
+#INSERT_SERVER_ALIASES_HERE
+
+DocumentRoot /var/www/securedrop/static
+Alias /static /var/www/securedrop/static
+WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
+WSGIProcessGroup document
+WSGIScriptAlias / /var/www/securedrop/document.wsgi/
+AddType text/html .py
+
+#Allow-Origin for each hidden service address in the tor hostname file
+#Header set Acess-Control-Allow-Origin "http://ONION_URL"
+#INSERT_ORIGIN_HERE
+
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header edit Set-Cookie ^(.*)$ $;HttpOnly
+Header set Pragma "no-cache"
+Header set Expires "-1"
+Header always append X-Frame-Options: DENY
+Header set X-XSS-Protection: "1; mode=block"
+Header set X-Content-Type-Options: nosniff
+Header set X-download-Options: noopen
+Header set X-Content-Security-Policy: "default-src 'self'"
+Header set Content-Security-Policy: "default-src 'self'"
+Header unset Etag
+
+# Limit the max submitted size of requests.
+LimitRequestBody 524288000
+
+#Redirect error pages to ensure headers are sent
+ErrorDocument 400 /notfound
+ErrorDocument 401 /notfound
+ErrorDocument 403 /notfound
+ErrorDocument 404 /notfound
+ErrorDocument 500 /error
+
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
+<Directory /var/www/securedrop>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+<Directory /var/www/securedrop/static>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from 127.0.0.1
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+
+RewriteEngine On
+RewriteCond %{THE_REQUEST} !HTTP/1\.1$
+RewriteRule .* - [F]
+
+ErrorLog /var/log/apache2/error.log
+CustomLog /var/log/apache2/access.log combined
+LogLevel info
+
+</VirtualHost>

@@ -59,98 +59,74 @@ You'll also need to verify the 40 character hex fingerprint for this new key dur
 
 ## Server Installation
 
-Both the `App Server` and `Monitor Server` should already have Ubuntu Server installed. To follow these instructions you should know how to navigate the command line.
+All packages require that Tor's repo was already added to the system. The `securedrop/install_files/scripts/add_repo.sh` will do this. 
 
-Download the latest version of SecureDrop to your workstation by downloading the latest tar.gz file from https://pressfreedomfoundation.org/securedrop and extracting it. 
+### Creating the securedrop deb packages:
+For development and testing you can create the deb packages by running `securedrop/build_deb_packages.sh` in the base of the securedrop repo.
+This will create 4 packages
 
-The setup script needs the application GPG public key you created earlier, `SecureDrop.asc`. Plug in the USB stick that you copied `SecureDrop.asc` to and copy it to securedrop/install_files/
+####securedrop-monitor
+* Location: `securedrop/monitor-VERSION.deb`
+* This package hardens the host system and install the OSSEC manager binary.
+Min Required Info: App server's IP address, destination email address, smtp relay, admin username 
 
-Then scp the `securedrop` folder to the home directory on the `Monitor Server` and `App Server`, doing something like this:
+####securedrop-app
+* Location: `securedrop/app-VERSION.deb`
+* This package hardens the host system and configures 2 chroot jails that the interfaces will be installed in
+Min Reuqired Info: Monitor Server's IP address, application's gpg key, 1 journalist name, 1 admin username 
 
-    scp -r securedrop user@MONITOR_IP:~/
-    scp -r securedrop user@APP_IP:~/
+####securedrop-source
+* Location: `securedrop/source-VERSION.deb`
+* This package installs the source interface. This package shares the `securedrop/store`, `securedrop/keys`, and `securedrop/db` directories with the document interface.
 
-Now SSH to the `Monitor Server`. When you're in, enter your environment details in the CONFIG_OPTIONS file and run the installation script:
+####securedrop-document
+* Location: `securedrop/document-VERSION.deb`
+* This package installs the source interface web application This package shares the `securedrop/store`, `securedrop/keys`, and `securedrop/db` directories with the source interface.
 
-    cd ~/securedrop
-    nano CONFIG_OPTIONS
+### Installing locally create deb packages
+If you are using the included Vagrantfile for managing vm's there is an included `vagrant-app-preinstall.sh` and `vagrant-monitor-preinstall.sh` scripts that will preseed the debconf questions for a development environment.
 
-Fill out all of the global and `Monitor Server` options. Here are descriptions of the items you should fill out:
+#### Development App Server using the included `Vagrantfile`
+* Clone the SecureDrop repo `git clone https://github.com/freedomofpress/securedrop.git` 
+* Change directory into the base of the securedrop repo `cd securedrop/`
+* Run `./build_deb_packages.sh` to create the deb packages.
+* Run `vagrant precise-app-gdebi up` to start the App Server virtual machine.
+* Run `vagrant ssh precise-app-gdebi` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
+* Run `sudo /vagrant/install_files/scripts/vagrant-app-preinstall.sh`. This will add the tor repo, install gdebi, and install the securedrop-app package using the included preseed question based on the Vagrantfile.
+* Run `sudo /opt/securedrop/scripts/display_tor_urls.sh`
 
-* `ROLE`: This is either "monitor" or "app". Since both servers share the same codebase, the installation script need to know which server it's running on. For now, enter "monitor".
-* `APP_IP`: The IP address of the `App Server` that you have set up.
-* `MONITOR_IP`: The IP address of the `Monitor Server` that you have set up (the one you are SSHed into).
-* `SSH_USERS`: A list of Linux users that will SSH into this server. Note that the installation script will disable SSHing as the root account, so you must have a non-root account set up on the server that you plan on using to administer this server.
-* `SMTP_SERVER`: The `Monitor Server` can send email updates. This is the hostname of your external SMTP server. At the moment SMTP authentication isn't supported.
-* `EMAIL_DISTRO`: The email address to send email alerts to.
-* `EMAIL_FROM`: The "From" address of email alerts.
+#### Development Monitor Server using the inlcuded `Vagrantfile`
+* Clone the SecureDrop repo `git clone https://github.com/freedomofpress/securedrop.git`
+* Change directory into the base of the securedrop repo `cd securedrop/`
+* Run `./build_deb_packages.sh` to create the deb packages.
+* Run `vagrant precise-monitor-gdebi up` to start the App Server virtual machine.
+* Run `vagrant ssh precise-monitor-gdebi` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
+* Run `sudo /vagrant/install_files/scripts/vagrant-monitor-preinstall.sh`. This will add the tor repo, install gdebi and install the securedrop-monitor package using the included preseed questions based on the Vagrantfile.
+* Run `sudo /opt/securedrop/scripts/display_tor_urls.sh`
 
-Fill out the relevant options, save and exit. Then run the production script.
+#### Production App Server
+```
+wget URL_TO_SCRIPT_TO_INSTALL_TOR_REPO
+sudo ./add-repo.sh
+sudo apt-get install securedrop-app
+sudo /opt/securedrop/scripts/display_tor_urls.sh
+```
 
-    sudo ./production_installation.sh
+#### Production Monitor Server
+```
+wget URL_TO_SCRIPT_TO_INSTALL_TOR_REPO
+sudo ./add-repo.sh
+sudo apt-get install securedrop-app
+sudo /opt/securedrop/scripts/display_tor_urls.sh
+```
 
-Wait for the script to run. When it's done, it should say this:
-
-    Start the installation on app server.
-    After installation on the app server is complete
-    enter 'Y' to continue: (Y|N): Y
-
-Leave that window open and go SSH into the `App Server` and edit CONFIG_OPTIONS:
-
-    cd ~/securedrop
-    nano CONFIG_OPTIONS
-
-This time edit the global and `App Server` settings. Here are descriptions of the items you should fill out:
-
-* `ROLE`: This should be "app".
-* `APP_IP` and `MONITOR_IP` should be the same as they were on the `Monitor Server`.
-* `SSH_USERS`: A list of Linux users that will SSH into this server.
-* `JOURNALIST_USERS`: Make up a username for each journalist that will be using this SecureDrop instance.
-* `KEY`: The filename that contains the application GPG public key you created on the `Secure Viewing Station`. It's probably `SecureDrop.asc`.
-* `SOURCE_SCRIPTS`: You can leave this blank.
-* `DOCUMENT_SCRIPTS`: You can leave this blank.
-
-Save and exit. When you're done, run the production script:
-
-    sudo ./production_installation.sh
-
-A Google Authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
-
-Follow the instructions for adding your secret key to your Google Authenticator app
-
-At the end of a successful `App Server` installation the script will output the `Source Interface`'s onion URL, the `Document Interface`'s onion URL and auth codes, the `App Server`'s SSH onion address and auth code.
-
-    The Source Interface's onion URL is:
-    bh33efgmt5ai32te.onion
-    The Document Interface's onion URL and auth value are:
-    b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
-    kx7bdewk4x4wait2.onion qpTMeWZSTdld7gWrB72RtR # client: journalist2
-    The App Server's SSH onion address and auth values are:
-    sz3yuv5hdipt2icy.onion PKZ8sKjp5Z08AGq5BB7BKx # admin1
-    oz4ezuhym2zfugjn.onion xCQf9IrFAXuoo7KfrMURzB # admin2
-    The App Server's installation is complete.
-    Please finsish the installation on the Monitor Server
-
-This lists the Tor hidden service URLs for the `Source Interface`, the two journalists on the `Document Interface`, and the onion addresses for SSH access. It also lists the auth value for each journalist and admin. Save those lines because the journalists and admins will need them to access the `Document Interface` and `App Server`.
-
-In this case:
-* The `Source Interface`'s Tor hidden service URL is http://bh33efgmt5ai32te.onion/.
-* The `Document Interface`'s Tor hidden service URL for the first journalist is: http://b6ferdazsj2v6agu.onion/
-* The `Document Interface`'s Tor hidden service Auth value for the first journalist is: AHgaX9YrO/zanQmSJnILvB
-* The `Document Interface`'s Tor hidden service URL for the second journalist is: http://kx7bdewk4x4wait2.onion/
-* The `Document Interface`'s Tor hidden service Auth value for the second journalist is: qpTMeWZSTdld7gWrB72RtR
-* The `App Server`'s Tor hidden service SSH address for the first admin is: sz3yuv5hdipt2icy.onion
-* The `App Server`'s Tor hidden service SSH Auth value for the first admin is: PKZ8sKjp5Z08AGq5BB7BKx
-
-Once the `App Server`'s installation is successfully completed. Go back to the SSH session for the `Monitor Server` and enter `Y` to continue.
-
-A Google Authenticator code will be generated for the identified SSH_USERS in the CONFIG_OPTIONS file.
-
-Follow the instructions for adding your secret key to your mobile Google Authenticator app.
-
-At the end of a successful `Monitor Server` installation the script will output the `Monitor Server` SSH onion address.
-
-Once you have completed these steps, the SecureDrop web application should be set up.
+#### Add OSSEC agent
+On both servers run `/var/ossec/bin/manage-agents`
+TODO add screenshots of process on both servers
+Restart the ossec agent on the App Server `/var/ossec/bin/ossec-control restart`
+Wait a few seconds for the agent to connect then
+Restart the ossec agent on the Monitor Server `/var/ossec/bin/ossec-control restart`
+To verify agent connected `/var/ossec/bin/list_agents -c`
 
 ## Journalist's Workstation Setup
 
@@ -170,7 +146,7 @@ If a journalist does not yet have a GPG key, they can follow these instructions 
 
 In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
 
-**Though the Tails Operating System**
+**Through the Tails Operating System**
 
 Each journalist that will be using Tails to connect to the `Document Interface` will need to install a persistent script onto their Tails USB stick. Follow [these instructions](/tails_files/README.md) to continue.
 
