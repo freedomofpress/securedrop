@@ -8,7 +8,7 @@ from custom_theme_image import *
 env = os.environ.get('SECUREDROP_ENV')
 
 # default env is 'development'
-env = env or 'development'
+env = env or 'production'
 
 if env == 'test':
   from test import *
@@ -20,6 +20,7 @@ if env == 'production':
 # data directories - should be on secure media
 STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
 GPG_KEY_DIR=os.path.join(SECUREDROP_ROOT, 'keys')
+
 
 # create the data directories
 for d in (SECUREDROP_ROOT, STORE_DIR, GPG_KEY_DIR):

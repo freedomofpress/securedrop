@@ -1,0 +1,163 @@
+#!/bin/sh
+# preinst script for securedrop-document
+#
+# see: dh_installdeb(1)
+
+set -e
+#set -x
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#        * <old-preinst> `abort-upgrade' <new-version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+#TODO change securedrop-root to debconf template
+securedrop_root="/var/www/securedrop"
+. /usr/share/debconf/confmodule
+
+case "$1" in
+    install)
+
+        random() {
+            head -c $1 /dev/urandom | base64
+        }
+
+        dirs='tmp db store keys'
+        for dir in $dirs; do
+            if [ ! -d $securedrop_root/$dir ]; then
+                mkdir -p $securedrop_root/$dir
+            fi
+        done
+        keypath=$securedrop_root/keys
+        
+        # avoid the "unsafe permissions on GPG homedir" warning
+        chmod 700 $keypath
+        
+        # populate config file
+        if [ ! -d $securedrop_root/config ]; then
+            mkdir $securedrop_root/config/
+        fi
+        # flask_defailts.py config file
+        secret_key=$(random 32)
+       cat > $securedrop_root/config/flask_defaults.py <<EOF
+#### Flask Default Configuration
+
+FLASK_DEBUG = False
+FLASK_TESTING = False
+FLASK_CSRF_ENABLED = True
+FLASK_SECRET_KEY = '$secret_key'
+EOF
+        chmod 640 $securedrop_root/config/flask_defaults.py
+
+        # base.py config file
+        scrypt_id_pepper=$(random 32)
+        scrypt_gpg_pepper=$(random 32)
+
+        cat > $securedrop_root/config/base.py <<EOF
+#### Application Configuration
+
+SOURCE_TEMPLATES_DIR = '$securedrop_root/source_templates'
+JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
+WORD_LIST = '$securedrop_root/wordlist'
+NOUNS = '$securedrop_root/dictionaries/nouns.txt'
+ADJECTIVES = '$securedrop_root/dictionaries/adjectives.txt'
+
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+EOF
+        chmod 640 $securedrop_root/config/base.py
+
+        # production.py
+        db_get securedrop-document/find_key_path
+        app_key_path="$RET"
+
+        # Verify app gpg key fingerprint and configure debian preseeds for chroot jails      
+        # TODO add back option if fingerprint is incorrect
+        db_get securedrop-document/app_key_fpr
+        app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+        db_get securedrop-document/verify_fingerprint
+        if [ "$RET" = "false" ]; then
+            exit 1
+        fi
+
+        cat > $securedrop_root/config/production.py <<EOF
+import os
+
+JOURNALIST_KEY='$app_key_fpr' # fingerprint of the public key for encrypting submissions
+SECUREDROP_ROOT="$securedrop_root"
+
+### Database Configuration
+DATABASE_ROOT=os.path.join(SECUREDROP_ROOT, 'db' )
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(DATABASE_ROOT, 'db_production.sqlite')
+
+# To use MySQL, make sure you have the necessary dependencies installed, and run
+# python -c "import db; db.init_db()" to initialize the database
+
+#DATABASE_ENGINE = 'mysql'
+#DATABASE_HOST = 'localhost'
+#DATABASE_NAME = 'securedrop'
+#DATABASE_USERNAME = 'securedrop'
+#DATABASE_PASSWORD = ''
+EOF
+        chmod 640 $securedrop_root/config/production.py
+
+        #support custom themes
+        db_get securedrop-document/custom_header_image_path
+        custom_header_image_path="$RET"
+        if [ -z $custom_header_image_path ]; then
+            custom_header_image=""
+        else
+            mkdir -p $securedrop_root/static/i
+            cp $custom_header_image_path $securedrop_root/static/i
+            custom_header_image="$(echo $custom_header_image_path | awk -F / '{print $NF}')"
+        fi
+
+        cat > $securedrop_root/config/custom_theme_image.py << EOF
+#### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = "$custom_header_image"
+EOF
+        chmod 640 $securedrop_root/config/custom_theme_image.py
+
+        # Create the document.wsgi file
+        cat > $securedrop_root/document.wsgi << EOF
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/securedrop/")
+
+from journalist import app as application
+EOF
+        chmod 640 $securedrop_root/config/custom_theme_image.py
+
+        #set the SECUREDROP_ENV to production
+        if [ ! "$(grep "SECUREDROP=" /etc/environment)" ]; then
+            echo "SECUREDROP_ENV=production" >> /etc/environment
+        fi
+        db_stop
+    ;;
+
+    upgrade)
+    ;;
+
+    abort-upgrade)
+    ;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

@@ -1,0 +1,859 @@
+#!/bin/sh
+# postinst script for securedrop-app
+#
+# see: dh_installdeb(1)
+set -e
+#set -x
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+case "$1" in
+    configure)
+        # Use debootstrap to build two chroot jails using the $os_url variable
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                os="Debian"
+                distro="$( lsb_release -c )"
+                os_url="http://http.debian.net/debian/"
+            else
+                os="Ubuntu"
+                distro="$( lsb_release -c | cut -f 2 )"
+                os_url="http://us.archive.ubuntu.com/ubuntu"
+                os_sec_url="http://security.archive.ubuntu.com/ubuntu"
+            fi
+        fi
+
+        bits="$(uname -m)"
+        if [ "$bits" = "x86_64" ]; then
+            arch="amd64"
+        else
+            arch="i386"
+        fi
+
+        jails='source document'
+        for jail in $jails; do
+            mkdir -p /etc/schroot/chroot.d/
+            cat > /etc/schroot/chroot.d/$jail << EOF
+[$jail]
+description=$os $distro
+directory=/var/chroot/$jail
+EOF
+            base_dir="/var/chroot/$jail"
+            if [ ! -d $base_dir ]; then
+                debootstrap --variant=buildd --arch $arch $distro $base_dir $os_url
+            fi
+
+            securedrop_root="$base_dir/var/www/securedrop"
+            # Mount the db directory in the jail
+            mkdir -p /var/securedrop/db/
+            mkdir -p $securedrop_root/db
+            if [ ! "$( mount -l | grep "$securedrop_root/db" )" ]; then
+                mount -o bind /var/securedrop/db $securedrop_root/db
+            fi
+
+            # Mount the keys dir in the jail
+            mkdir -p /var/securedrop/keys
+            chmod 700 /var/securedrop/keys
+            mkdir -p $securedrop_root/keys
+            chmod 700 $securedrop_root/keys
+            if [ ! "$(mount -l | grep "$securedrop_root/keys")" ]; then
+                mount -o bind /var/securedrop/keys $securedrop_root/keys
+            fi
+
+            # Mount the store directory in the jail
+            mkdir -p /var/securedrop/store
+            mkdir -p /var/chroot/$jail/var/www/securedrop/store
+            if [ ! "$(mount -l | grep "$securedrop_root/store")" ]; then
+                mount -o bind /var/securedrop/store $securedrop_root/store
+            fi
+
+            # Mount proc in the jail
+            if [ ! "$(mount -l | grep "$base_dir/proc")" ]; then
+                mount -o bind /proc $base_dir/proc
+            fi
+
+            # Create script dir in the jail
+            mkdir -p $base_dir/opt/securedrop/scripts
+
+            # Copy the current apt sources into the chroot jails
+            cp /etc/apt/sources.list $base_dir/etc/apt/sources.list
+        done
+
+        . /usr/share/debconf/confmodule
+
+        db_get securedrop-app/admin_user
+        admin_user="$RET"
+
+        db_get securedrop-app/find_key_path
+        app_key_path="$RET"
+
+        db_get securedrop-app/app_key_fpr
+
+        db_get securedrop-app/verify_fingerprint
+
+        db_get securedrop-app/use_custom_header_image
+        use_custom_header_image="$RET"
+
+        if [ "$use_custom_header_image" = "true" ]; then
+            db_get securedrop-app/custom_header_image_path
+            custom_header_image_path="$RET"
+        fi
+
+        db_get securedrop-app/journalist_user
+        journalist_user="$RET"
+
+        db_get securedrop-app/tor_key_id
+        TOR_KEY_ID="$RET"
+ 
+        db_get securedrop-app/prod_dev
+        is_prod="$RET"
+        if [ "$is_prod" = "false" ]; then
+            db_get securedrop-app/source_deb
+            source_deb="$RET"
+            db_get securedrop-app/document_deb
+            document_deb="$RET"
+        fi
+
+        db_get securedrop-app/app_user
+        APP_USER="$RET"
+        db_get securedrop-app/app_gid
+        APP_GID="$RET"
+        db_get securedrop-app/app_uid
+        APP_UID="$RET"
+        db_get securedrop-app/monitor_ip
+        monitor_ip="$RET"
+
+        ## Add a config for the default admin
+        groups="sudo ssh"
+        for group in $groups; do
+            if [ ! "$(getent group $group)" ]; then
+                addgroup $group
+            fi
+            if [ ! "$(groups $admin_user | awk -F ": " "{print $2}" | grep -q "$group")" ]; then
+                usermod -a -G $group $admin_user
+            fi
+        done
+
+        if [ ! -f /home/$admin_user/.google_authenticator ]; then
+            gauthcode=$(cat /dev/urandom | tr -dc 'A-Z' | head -c 16)
+            cat > /home/$admin_user/.google_authenticator << EOF
+$gauthcode
+" RATE_LIMIT 3 30
+" WINDOW_SIZE 17
+" DISALLOW_REUSE
+" TOTP_AUTH
+EOF
+
+            chown $admin_user:$admin_user /home/$admin_user/.google_authenticator
+            chmod 600 /home/$admin_user/.google_authenticator
+        fi
+
+        chmod 400 /home/$admin_user/.google_authenticator
+
+        if [ ! "$(grep "$admin_user" /etc/tor/torrc)" ]; then
+            if [ "$(grep "HiddenServiceAuthorizeClient stealth$" /etc/tor/torrc)" ];then
+                sed -i "/HiddenServiceAuthorizeClient stealth/s/$/ $admin_user/" /etc/tor/torrc
+            else
+                sed -i "/HiddenServiceAuthorizeClient stealth/s/$/,$admin_user/" /etc/tor/torrc
+            fi
+        fi
+
+        # Reload tor before installing the interface packages in the jails to avoid port in use error
+        service tor restart
+
+        ## Copy required files and configure chroots
+        # Copy gpg key into the chroot jails
+        cp $app_key_path /var/chroot/source/root/
+        cp $app_key_path /var/chroot/document/root/
+        key_file="$(basename $app_key_path)"
+
+        # Verify app gpg key fingerprint and configure debian preseeds for chroot jails      
+        # TODO add back option if fingerprint is incorrect
+        app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+ 
+        # support custom themes
+        if [ "$use_custom_header_image" = "true" ]; then
+            cp $custom_header_image_path /var/chroot/source/root
+            cp $custom_header_image_path /var/chroot/document/root
+            image_file="/root/$(echo $custom_header_image_path | awk -F / '{print $NF}')"
+        else
+            image_file=
+        fi
+
+        schroot_source="schroot -c source -u root --directory / --"
+        #TODO replace hard coded version in preseed answers
+        $schroot_source debconf-set-selections << EOF
+securedrop-source-0.2.1 securedrop-source/find_key_path string /root/$key_file
+securedrop-source-0.2.1 securedrop-source/verify_fingerprint boolean true
+securedrop-source-0.2.1 securedrop-source/app_key_fpr string $app_key_fpr
+securedrop-source-0.2.1 securedrop-source/use_custom_header_image boolean $use_custom_header_image
+securedrop-source-0.2.1 securedrop-source/custom_header_image_path string $image_file
+EOF
+
+        schroot_document="schroot -c document -u root --directory / --"
+        #TODO replace hard coded version in pressed answers
+        $schroot_document debconf-set-selections << EOF
+securedrop-document-0.2.1 securedrop-document/find_key_path string /root/$key_file
+securedrop-document-0.2.1 securedrop-document/verify_fingerprint boolean true
+securedrop-document-0.2.1 securedrop-document/app_key_fpr string $app_key_fpr
+securedrop-document-0.2.1 securedrop-document/use_custom_header_image boolean $use_custom_header_image
+securedrop-document-0.2.1 securedrop-document/custom_header_image_path string $image_file
+securedrop-document-0.2.1 securedrop-document/journalist_user string $journalist_user
+EOF
+
+
+        if [ ! "$($schroot_source apt-key list | grep -q "$TOR_KEY_ID" )" ]; then
+            apt-key export $TOR_KEY_ID | $schroot_source apt-key add -
+        fi
+
+        if [ ! "$($schroot_document apt-key list | grep -q "$TOR_KEY_ID" )" ]; then
+            apt-key export $TOR_KEY_ID | $schroot_document apt-key add -
+        fi
+
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                distro="$( lsb_release -c )"
+            else
+                distro="$( lsb_release -c | cut -f 2 )"
+            fi
+        fi
+
+        if [ ! -f /var/chroot/source/etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /var/chroot/source/etc/apt/sources.list.d/tor.list
+        fi
+
+        if [ ! -f /var/chroot/document/etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /var/chroot/document/etc/apt/sources.list.d/tor.list
+        fi
+
+        # If not production copy interface deb packages to respective jails
+        if [ "$is_prod" = "false" ]; then
+            cp $source_deb /var/chroot/source/root/
+            cp $document_deb /var/chroot/document/root/
+        fi
+
+        $schroot_source apt-get update
+        $schroot_document apt-get update
+
+        # Install the interface packages using apt-get or gdebi
+        if [ "$is_prod" = "false" ]; then
+            $schroot_source apt-get install gdebi -y
+            $schroot_source gdebi --non-interactive /root/source-0.2.1-dev.deb
+        else
+            $schroot_source apt-get install securedrop-source -y
+        fi
+
+        if [ "$is_prod" = "false" ]; then
+            $schroot_document apt-get install gdebi -y
+            $schroot_document gdebi --non-interactive /root/document-0.2.1-dev.deb
+        else
+            $schroot_document apt-get install securedrop-document -y
+        fi
+
+        # Configure the application user
+        if [ ! "$(getent passwd $APP_USER)" ]; then
+            addgroup \
+              --gid $APP_GID \
+              --system \
+              --gecos "SecureDrop $APP_USER Group" \
+              $APP_USER
+
+            adduser \
+              --uid $APP_UID \
+              --gid $APP_GID \
+              --system \
+              --gecos "SecureDrop $APP_USER User" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              $APP_USER
+        fi
+
+        chown -R $APP_USER:$APP_USER /var/securedrop
+
+        #TODO change int user to debconf
+        if [ ! "$(getent group source)" ]; then
+             addgroup \
+              --gid 667 \
+              --system \
+              --gecos "SecureDrop Source Interface Group" \
+              source
+        fi
+
+        #TODO change int user to debconf
+        if [ ! "$(getent group document)" ]; then
+             addgroup \
+              --gid 668 \
+              --system \
+              --gecos "SecureDrop Document Interface Group" \
+              document
+        fi
+
+        #TODO change tor user to debconf
+        if [ ! "$(getent passwd source-tor)" ]; then
+           addgroup \
+              --gid 669 \
+              --system \
+              --gecos "SecureDrop Source Int tor group" \
+              source-tor
+
+            adduser \
+              --uid 669 \
+              --gid 669 \
+              --system \
+              --gecos "SecureDrop Source Int tor user" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              source-tor
+        fi
+
+        #TODO change tor user to debconf
+        if [ ! "$(getent passwd document-tor)" ]; then
+           addgroup \
+              --gid 670 \
+              --system \
+              --gecos "SecureDrop Document Int tor group" \
+              document-tor
+        
+            adduser \
+              --uid 670 \
+              --gid 670 \
+              --system \
+              --gecos "SecureDrop Document Int tor user" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              document-tor
+        fi
+
+        ## Hardening steps
+        # Install and configure iptables and ossec.conf
+        mkdir -p /etc/iptables
+        cat > /etc/iptables/rules_v4 << EOF
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:LOGNDROP - [0:0]
+# DNS rules
+-A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A INPUT  -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A INPUT  -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+# NTP rules
+-A OUTPUT -p udp --sport 123 --dport 123 -j ACCEPT -m comment --comment "Allow outgoing ntp"
+-A INPUT  -p udp --sport 123 --dport 123 -j ACCEPT -m comment --comment "Allow outgoing ntp"
+# apt rules
+-A OUTPUT -d us.archive.ubuntu.com -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s us.archive.ubuntu.com -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A OUTPUT -d security.archive.ubuntu.com -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s security.archive.ubuntu.com -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A OUTPUT -d deb.torproject.org -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s deb.torproject.org -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+# gpg get key rules
+-A OUTPUT -p tcp --dport 11371 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow gpg to receive keys from approved keyservers"
+-A INPUT  -p tcp --sport 11371 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow gpg to receive keys from approved keyservers"
+# OSSEC server-agent rules
+-A OUTPUT -d $monitor_ip -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A INPUT  -s $monitor_ip -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+#Dev testing ssh rules 
+#-A INPUT  -p tcp --match multiport --dports 22,2222,2200 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#-A INPUT  -p tcp --match multiport --dports 22,2222,2200 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#-A OUTPUT -p tcp --match multiport --sports 22,2222,2200 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#Production ssh access binded to the local loopback
+-A INPUT -i lo -p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+-A INPUT -i lo -p tcp --dport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+-A OUTPUT -o lo -p tcp --sport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+# Source Inteface rules
+-A INPUT  -i lo -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to source int"
+-A OUTPUT -o lo -p tcp --sport 80 -m owner --gid-owner source -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to source int"
+-A OUTPUT -m owner --gid-owner source -j LOGNDROP -m comment --comment "Drop all other traffic from the source int group"
+# Document Interface rules
+-A INPUT  -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to document int"
+-A OUTPUT -o lo -p tcp --sport 8080 -m owner --gid-owner document -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to document int"
+-A OUTPUT -m owner --gid-owner document -j LOGNDROP -m comment --comment "Drop all other traffic from the document int group"
+# Drop all other traffic from the securedrop user
+-A OUTPUT -m owner --uid-owner securedrop -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
+# Allow local loopback connections
+-A INPUT  -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+-A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+# Tor for ssh access rules
+-A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the app host that provides ssh access"
+# Chroot'd tor rule because the output uid-owner rules don't work with chroot jail
+-A OUTPUT -p tcp --match multiport --dports 80,443,9001,9030 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the source chrooted tor instances"
+#TODO Tor for source interface rules
+#-A OUTPUT -p tcp -m owner --uid-owner 669 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the source chrooted tor instances"
+#TODO Tor for document interface rules
+#-A OUTPUT -p tcp -m owner --uid-owner 670 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the document chrooted tor instances"
+# allow other established connections
+-A INPUT  -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow all other established connections"
+# This is needed for the installer to run
+-A OUTPUT -p tcp -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Needed for the installer to run"
+# Drop and log all other traffic
+-A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
+-A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
+# LOGNDROP everything else
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-level 4 
+-A LOGNDROP -j DROP
+COMMIT
+EOF
+
+        # apply iptables rules
+        iptables-restore < /etc/iptables/rules_v4
+ 
+	DIR="/var/ossec"
+	USER="ossec"
+	GROUP="ossec"
+	OSSEC_HIDS_TMP_DIR="/tmp/ossec-hids"
+
+        mkdir -p ${DIR}/active-response/bin
+        mkdir -p ${DIR}/agentless
+        mkdir -p ${DIR}/.ssh
+        mkdir -p ${DIR}/etc/shared
+        mkdir -p ${DIR}/bin
+        mkdir -p ${DIR}/queue/rids
+        mkdir -p ${DIR}/queue/syscheck
+        mkdir -p ${DIR}/queue/alerts
+        mkdir -p ${DIR}/queue/diff
+        mkdir -p ${DIR}/queue/ossec
+        mkdir -p ${DIR}/var/run
+        mkdir -p ${DIR}/logs
+
+        cat > ${DIR}/etc/ossec.conf << EOF
+<ossec_config>
+  <client>
+    <server-ip>$monitor_ip</server-ip>
+  </client>
+  <syscheck>
+    <alert_new_files>yes</alert_new_files>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/ossec</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/etc,/usr/bin,/usr/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/etc,/var/chroot/source/usr/bin,/var/chroot/source/usr/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/etc,/var/chroot/document/usr/bin,/var/chroot/document/usr/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/bin,/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/bin,/var/chroot/source/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/bin,/var/chroot/document/sbin</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/lib/tor/hidden_service/,/var/lib/tor/lock</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/var/lib/tor/hidden_service/,/var/chroot/source/var/lib/tor/lock</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/var/lib/tor/hidden_service/,/var/chroot/document/var/lib/tor/lock</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/var/www</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/var/www</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/lib/tor/hidden_service/hostname</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/var/lib/tor/hidden_service/hostname</directories>
+    <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/var/lib/tor/hidden_service/hostname</directories>
+    <ignore>/var/www/keys/pubring.gpg</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/keys/pubring.gpg</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/keys/pubring.gpg</ignore>
+    <ignore>/var/www/keys/secring.gpg</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/keys/secring.gpg</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/keys/secring.gpg</ignore>
+    <ignore>/var/www/keys/trustdb.gpg</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
+    <ignore>/var/www/keys/trustdb.gpg</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
+    <ignore>/var/www/store</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/store</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/store</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/temp/</ignore>
+    <ignore>/var/ossec/queue</ignore>
+    <ignore>/var/ossec/logs</ignore>
+    <ignore>/var/ossec/stats</ignore>
+    <ignore>/var/ossec/var</ignore>
+    <ignore>/etc/motd</ignore>
+    <ignore>/etc/mtab</ignore>
+    <ignore>/etc/mnttab</ignore>
+    <ignore>/etc/hosts.deny</ignore>
+    <ignore>/etc/mail/statistics</ignore>
+    <ignore>/etc/random-seed</ignore>
+    <ignore>/etc/adjtime</ignore>
+    <ignore>/etc/httpd/logs</ignore>
+    <ignore>/etc/utmpx</ignore>
+    <ignore>/etc/wtmpx</ignore>
+    <ignore>/etc/cups/certs</ignore>
+    <ignore>/etc/dumpdates</ignore>
+    <ignore>/etc/svc/volatile</ignore>
+  </syscheck>
+  <rootcheck>
+    <rootkit_files>/var/ossec/etc/shared/rootkit_files.txt</rootkit_files>
+    <rootkit_trojans>/var/ossec/etc/shared/rootkit_trojans.txt</rootkit_trojans>
+    <system_audit>/var/ossec/etc/shared/system_audit_rcl.txt</system_audit>
+    <system_audit>/var/ossec/etc/shared/cis_debian_linux_rcl.txt</system_audit>
+  </rootcheck>
+  <active-response>
+    <disabled>yes</disabled>
+  </active-response>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/auth.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/syslog</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/dpkg.log</location>
+  </localfile>
+  <localfile>
+    <log_format>command</log_format>
+    <command>df -h</command>
+  </localfile>
+  <localfile>
+    <log_format>full_command</log_format>
+    <command>netstat -tan |grep LISTEN |grep -v 127.0.0.1 | sort</command>
+  </localfile>
+  <localfile>
+    <log_format>full_command</log_format>
+    <command>last -n 5</command>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/kern.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/tor/log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/source/var/log/apache2/error.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/document/var/log/apache2/access.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/source/var/log/tor/log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/document/var/log/apache2/error.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/document/var/log/apache2/access.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/document/var/log/tor/log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/source/var/www/securedrop/securedrop.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/chroot/document/var/www/securedrop/securedrop.log</location>
+  </localfile>
+</ossec_config>
+EOF
+	OSMYSHELL="/sbin/nologin"
+        if [ ! -f ${OSMYSHELL} ]; then 
+	    if [ -f "/bin/false" ]; then
+	        OSMYSHELL="/bin/false"
+	    fi
+	fi
+
+        if ! getent group | grep -q "^ossec"
+        then
+            groupadd --system ossec
+        fi
+        if ! getent passwd | grep -q "^ossec"
+        then
+            useradd -d ${DIR} -s ${OSMYSHELL} -g ${GROUP} ${USER}
+        fi
+
+	# Default for all directories
+	chmod -R 550 ${DIR}
+	chown -R root:${GROUP} ${DIR}
+
+	# To the ossec queue (default for agentd to read)
+	chown -R ${USER}:${GROUP} ${DIR}/queue/ossec
+	chmod -R 770 ${DIR}/queue/ossec
+
+	# For the logging user
+	chown -R ${USER}:${GROUP} ${DIR}/logs
+	chmod -R 750 ${DIR}/logs
+	chmod -R 775 ${DIR}/queue/rids
+	touch ${DIR}/logs/ossec.log
+	chown ${USER}:${GROUP} ${DIR}/logs/ossec.log
+	chmod 664 ${DIR}/logs/ossec.log
+
+        chown -R ${USER}:${GROUP} ${DIR}/queue/diff
+        chmod -R 750 ${DIR}/queue/diff
+        chmod 740 ${DIR}/queue/diff/* > /dev/null 2>&1 || true
+
+	# For the etc dir
+	chmod 550 ${DIR}/etc
+	chown -R root:${GROUP} ${DIR}/etc
+	if [ -f /etc/localtime ]; then
+	    cp -pL /etc/localtime ${DIR}/etc/;
+	    chmod 555 ${DIR}/etc/localtime
+	    chown root:${GROUP} ${DIR}/etc/localtime
+	fi
+
+	if [ -f /etc/TIMEZONE ]; then
+	    cp -p /etc/TIMEZONE ${DIR}/etc/;
+	    chmod 555 ${DIR}/etc/TIMEZONE
+	fi
+
+	# More files
+	chown root:${GROUP} ${DIR}/etc/internal_options.conf
+	chown root:${GROUP} ${DIR}/etc/local_internal_options.conf >/dev/null 2>&1 || true
+	chown root:${GROUP} ${DIR}/etc/client.keys >/dev/null 2>&1 || true
+	chown root:${GROUP} ${DIR}/agentless/*
+	chown ${USER}:${GROUP} ${DIR}/.ssh
+	chown root:${GROUP} ${DIR}/etc/shared/*
+
+	chmod 550 ${DIR}/etc
+	chmod 440 ${DIR}/etc/internal_options.conf
+	chmod 440 ${DIR}/etc/local_internal_options.conf >/dev/null 2>&1 || true
+	chmod 440 ${DIR}/etc/client.keys >/dev/null 2>&1 || true
+	chmod 550 ${DIR}/agentless/*
+	chmod 700 ${DIR}/.ssh
+	chmod 770 ${DIR}/etc/shared
+	chmod 440 ${DIR}/etc/shared/*
+
+	# For the /var/run
+	chmod 770 ${DIR}/var/run
+	chown root:${GROUP} ${DIR}/var/run
+
+	# For util.sh 
+	chown root:${GROUP} ${DIR}/bin/util.sh
+	chmod +x ${DIR}/bin/util.sh
+
+	# For binaries and active response
+        chmod 755 ${DIR}/active-response/bin/*
+        chown root:${GROUP} ${DIR}/active-response/bin/*
+        chown root:${GROUP} ${DIR}/bin/*
+        chmod 550 ${DIR}/bin/*
+
+	# For ossec.conf
+        chown root:${GROUP} ${DIR}/etc/ossec.conf
+        chmod 440 ${DIR}/etc/ossec.conf
+
+	if [ -x /etc/init.d/ossec ]; then
+	    update-rc.d -f ossec defaults
+	    #invoke-rc.d ossec restart
+	fi
+
+	if [ -d ${OSSEC_HIDS_TMP_DIR} ]; then
+	    rm -r ${OSSEC_HIDS_TMP_DIR}
+	fi
+
+        # ssh config
+        cat > /etc/ssh/ssh_config << EOF
+Host *
+   ForwardAgent no
+   ForwardX11 no
+   ForwardX11Trusted no
+   RhostsRSAAuthentication no
+   RSAAuthentication yes
+   PasswordAuthentication yes
+   HostbasedAuthentication no
+   GSSAPIAuthentication no
+   GSSAPIDelegateCredentials no
+   GSSAPIKeyExchange no
+   GSSAPITrustDNS no
+   BatchMode no
+   CheckHostIP yes
+   AddressFamily any
+   StrictHostKeyChecking ask
+   IdentityFile ~/.ssh/identity
+   IdentityFile ~/.ssh/id_rsa
+   IdentityFile ~/.ssh/id_dsa
+   Port 22
+   Protocol 2
+   Cipher blowfish
+   Ciphers blowfish-cbc,aes256-cbc,aes256-ctr
+   MACs hmac-sha2-256,hmac-sha2-512
+    SendEnv LANG LC_*
+    HashKnownHosts yes
+EOF
+
+        cat > /etc/ssh/sshd_config << EOF
+Port 22
+ListenAddress 127.0.0.1:22
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+UsePrivilegeSeparation yes
+KeyRegenerationInterval 3600
+ServerKeyBits 2048
+SyslogFacility AUTH
+LogLevel INFO
+LoginGraceTime 120
+PermitRootLogin no
+StrictModes yes
+RSAAuthentication yes
+PubkeyAuthentication yes
+IgnoreRhosts yes
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication yes
+KerberosAuthentication no
+KerberosGetAFSToken no
+GSSAPIAuthentication no
+X11Forwarding no
+X11DisplayOffset 10
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+AcceptEnv LANG LC_*
+UsePAM yes
+UseDNS no
+ClientAliveInterval 300
+ClientAliveCountMax 0
+Ciphers blowfish-cbc,aes256-cbc,aes256-ctr
+MACs hmac-sha2-256,hmac-sha2-512
+GatewayPorts no
+AllowGroups ssh
+AllowTcpForwarding no
+EOF
+        cat > /etc/pam.d/common-auth << EOF
+auth required pam_google_authenticator.so
+auth    [success=1 default=ignore]      pam_unix.so nullok_secure
+auth    requisite                       pam_deny.so
+auth    required                        pam_permit.so
+auth    optional        pam_ecryptfs.so unwrap
+EOF
+
+        # reload ssh to load the new config
+        restart ssh
+
+        #Unattended-upgrades
+        cat > /etc/apt/apt.conf.d/20auto-upgrades << EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+EOF
+        cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
+Unattended-Upgrade::Origins-Pattern {
+        "\${distro_id}:\${distro_codename}-security";
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "true";
+EOF
+
+        # Set the sources.list to match the iptables rules
+        #TODO update so url distro codename aren't hard coded
+        cat > /etc/apt/sources.list << EOF
+deb $os_url $distro main restricted
+deb-src $os_url $distro main restricted
+deb $os_url $distro-updates main restricted
+deb-src $os_url $distro-updates main restricted
+deb $os_url $distro universe
+deb-src $os_url $distro universe
+deb $os_url $distro-updates universe
+deb-src $os_url $distro-updates universe
+deb $os_url $distro multiverse
+deb-src $os_url $distro multiverse
+deb $os_url $distro-updates multiverse
+deb-src $os_url $distro-updates multiverse
+deb $os_url $distro-backports main restricted universe multiverse
+deb-src $os_url $distro-backports main restricted universe multiverse
+deb $os_sec_url $distro-security main restricted
+deb-src $os_sec_url $distro-security main restricted
+deb $os_sec_url $distro-security universe
+deb-src $os_sec_url $distro-security universe
+deb $os_sec_url $distro-security multiverse
+deb-src $os_sec_url $distro-security multiverse
+EOF
+
+        # Enable sysstat
+        cat > /etc/default/sysstat << EOF
+ENABLED="true"
+EOF
+        # restart sysstat to apply the changes
+        service sysstat restart
+
+        # rc.local
+        cat > /etc/rc.local << EOF
+mount -o bind /proc /var/chroot/document/proc                                
+mount -o bind /var/securedrop/db /var/chroot/document/var/www/securedrop/db
+mount -o bind /var/securedrop/keys /var/chroot/document/var/www/securedrop/keys 
+mount -o bind /var/securedrop/store /var/chroot/document/var/www/securedrop/store
+mount -o bind /proc /var/chroot/source/proc                                    
+mount -o bind /var/securedrop/db /var/chroot/source/var/www/securedrop/db 
+mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys  
+mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
+schroot -a -u root --directory / service apache2 restart                  
+schroot -a -u root --directory / service tor restart
+EOF
+        chmod +x /etc/rc.local
+
+        # sysctl
+        #TODO need ensure don't overwrite a grsec lock
+        cat > /etc/sysctl.conf << EOF
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.tcp_syncookies=1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.ip_forward = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+# Grsecurity Kernel related configs
+#kernel.grsecurity.grsec.lock = 1
+EOF
+
+        # Load the sysctl config
+        sysctl -p /etc/sysctl.conf
+
+        # apply apparmor profile in enforce mode for production complain for dev
+        if [ "$is_prod" = "true" ]; then
+             apparmor_mode="aa-enforce"
+        else
+             apparmor_mode="aa-complain"
+        fi
+        $apparmor_mode /etc/apparmor.d/var.chroot.source.usr.lib.apache2.mpm-worker.apache2
+        $apparmor_mode /etc/apparmor.d/var.chroot.document.usr.lib.apache2.mpm-worker.apache2
+        $apparmor_mode /etc/apparmor.d/var.chroot.source.usr.bin.tor
+        $apparmor_mode /etc/apparmor.d/var.chroot.document.usr.bin.tor
+
+        db_stop
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

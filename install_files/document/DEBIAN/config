@@ -1,0 +1,85 @@
+#!/bin/bash
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# Get the full path to application public gpg key
+c="1"
+ok=""
+while [ ! "$ok" ]; do
+    db_input critical securedrop-document/find_key_path || true
+    db_go || true
+    db_get securedrop-document/find_key_path
+    if [ -f "$RET" ]; then
+        ok=1
+        db_go || true
+    fi
+    (( c++ ))
+    if [ $c -gt 5 ]; then
+        break
+    fi
+done
+
+# extract gpg key's fingerprint save to to dh_db and subsititute 
+# the fpr value in the verify_fingerprint template
+db_get securedrop-document/find_key_path
+find_key_path="$RET"
+key_fpr="$( gpg --with-fingerprint $find_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+db_set securedrop-document/app_key_fpr "$key_fpr"
+db_subst securedrop-document/verify_fingerprint KEY_FPR "$key_fpr"
+db_go || true
+
+db_input critical securedrop-document/verify_fingerprint || true
+
+# Have option to use custom headers
+db_input high securedrop-document/use_custom_header_image || true
+db_go || true
+
+db_get securedrop-document/use_custom_header_image
+use_header="$RET"
+if [ "$use_header" = "true" ]; then
+    c="1"
+    ok=""
+    while [ ! "$ok" ]; do
+        db_input critical securedrop-document/custom_header_image_path || true
+        db_go || true
+        db_get securedrop-document/custom_header_image_path
+        if [ -f "$RET" ]; then
+            ok=1
+            db_go || true
+        fi
+        (( c++ ))
+        if [ $c -gt 5 ]; then
+            break
+        fi
+    done
+fi
+
+# The securedrop application user on the host system
+db_input medium securedrop-document/document_user || true
+db_input medium securedrop-document/document_gid || true
+db_input medium securedrop-document/document_uid || true
+
+# Tor info
+db_input medium securedrop-document/tor_key_id || true
+db_input medium securedrop-document/tor_key_fpr || true
+
+# Journalist user for document interface
+c="1"
+ok=""
+while [ ! "$ok" ]; do
+    db_input critical securedrop-document/journalist_user || true
+    db_go || true
+    db_get securedrop-document/journalist_user
+    if [[ "$RET" =~ ^[A-Za-z0-9_]+$ ]]; then
+        ok=1
+        db_go || true
+    fi
+    (( c++ ))
+    if [ $c -gt 5 ]; then
+        break
+    fi
+done
+## continue after all the questions
+db_go || true

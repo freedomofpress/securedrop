@@ -12,6 +12,8 @@ We recommend that you enable [full disk encryption](https://www.eff.org/deeplink
 
 **Warning**: Enabling encrypted disks along with unattended-upgrades means that SecureDrop will become unreachable after an automatic reboot. An administrator should be on hand to enter the password in order to mount the disks. We recommend that the servers be integrated with a monitoring solution that so that you receive an alert when the system becomes unavailable.
 
+**Warning**: Enabling encrypted home directories with google-authenticator 2 factor authentication will not work with the default config. If you want to also use encrypted home directories, you will need to change the default location of the google-authenticator secret value to a location outside of the users encrypted directory.
+
 ![Encrypted LVM](/docs/images/install/ubuntu_encrypt.png)
 
 If you wish to opt out of full disk encryption at your own risk, then choose "Guided - use entire disk and set up LVM" instead. Then wait for base system to finish installing. 

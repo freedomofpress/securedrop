@@ -1,0 +1,199 @@
+#!/bin/sh
+# postinst script for securedrop-source
+#
+# see: dh_installdeb(1)
+
+set -e
+#set -x
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+securedrop_root="/var/www/securedrop"
+. /usr/share/debconf/confmodule
+db_get securedrop-source/source_user
+source_user="$RET"
+db_get securedrop-source/source_uid
+source_uid="$RET"
+db_get securedrop-source/source_gid
+source_gid="$RET"
+
+case "$1" in
+    configure)
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                os="Debian"
+                distro="$( lsb_release -c )"
+                os_url="http://http.debian.net/debian/"
+            else
+                os="Ubuntu"
+                distro="$( lsb_release -c | cut -f 2 )"
+                os_url="http://us.archive.ubuntu.com/ubuntu"
+                os_sec_url="http://security.archive.ubuntu.com/ubuntu"
+            fi
+        fi
+
+        #Unattended-upgrades
+        cat > /etc/apt/apt.conf.d/20auto-upgrades << EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+EOF
+        cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
+Unattended-Upgrade::Origins-Pattern {
+        "\${distro_id}:\${distro_codename}-security";
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "true";
+EOF
+
+        # Set the sources.list to match the iptables rules
+        #TODO update so url distro codename aren't hard coded
+        cat > /etc/apt/sources.list << EOF
+deb $os_url $distro main restricted
+deb-src $os_url $distro main restricted
+deb $os_url $distro-updates main restricted
+deb-src $os_url $distro-updates main restricted
+deb $os_url $distro universe
+deb-src $os_url $distro universe
+deb $os_url $distro-updates universe
+deb-src $os_url $distro-updates universe
+deb $os_url $distro multiverse
+deb-src $os_url $distro multiverse
+deb $os_url $distro-updates multiverse
+deb-src $os_url $distro-updates multiverse
+deb $os_url $distro-backports main restricted universe multiverse
+deb-src $os_url $distro-backports main restricted universe multiverse
+deb $os_sec_url $distro-security main restricted
+deb-src $os_sec_url $distro-security main restricted
+deb $os_sec_url $distro-security universe
+deb-src $os_sec_url $distro-security universe
+deb $os_sec_url $distro-security multiverse
+deb-src $os_sec_url $distro-security multiverse
+EOF
+
+        #TODO add to debconf
+        TOR_USER="source-tor"
+        TOR_GID="669"
+        TOR_UID="669"
+        if [ ! "$(getent passwd $TOR_USER)" ]; then
+            addgroup \
+              --gid $TOR_GID \
+              --system \
+              --gecos "SecureDrop Source Interface Tor Group" \
+              $TOR_USER
+
+            adduser \
+              --uid $TOR_UID \
+              --gid $TOR_GID \
+              --system \
+              --gecos "SecureDrop Source Interface Tor User" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              $TOR_USER
+        fi
+
+        passwd -l $TOR_USER
+
+        if [ ! -f /etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /etc/apt/sources.list.d/tor.list
+        fi
+
+        chown -R $TOR_USER:$TOR_USER /var/lib/tor
+        chown -R $TOR_USER:$TOR_USER /var/run/tor
+        chown -R $TOR_USER:$TOR_USER /var/log/tor
+
+        service tor restart
+
+        # Create the application user and configure the document interface apache web app
+        if [ ! "$(getent passwd $source_user)" ]; then
+            addgroup \
+              --gid $source_gid \
+              --system \
+              --gecos "SecureDrop Source Interface Group" \
+              $source_user
+
+            adduser \
+              --uid $source_uid \
+              --gid $source_gid \
+              --system \
+              --gecos "SecureDrop Source Interface User" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              $source_user
+        fi
+
+        chown -R $source_user:$source_user $securedrop_root
+
+        ##Enable only the needed apache modules for each interface
+        #TODO add to debconf
+        enabled_mods="alias authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi"
+        for enabled_mod in $enabled_mods; do
+            if [ ! -L /etc/apache2/mods-enabled/$enabled_mod.load ]; then
+                a2enmod $enabled_mod
+            fi
+        done
+    
+        #Disable all other apache modules
+        #TODO add to debconf
+        current_mods="$(ls /etc/apache2/mods-enabled/*.load | awk -F"[/\|.]" '{print $5}')"
+        for current_mod in $current_mods; do
+            if [ "$(echo "$enabled_mods" | grep -v "$current_mod")" ]; then
+                a2dismod $current_mod
+            fi
+        done
+
+        #Disable unneeded apache sites
+        #TODO add to debconf
+        sites="default-ssl default"
+        for site in $sites; do
+            if [ -L /etc/apache2/sites-enabled/*$site ]; then
+                a2dissite $site
+            fi
+        done
+
+        # TODO Add check for distribute version
+        pip install --upgrade distribute
+
+        pip install -r $securedrop_root/source-requirements.txt
+
+        #Changed the ownership of the app directory
+        chown -R $source_user:$source_user $securedrop_root
+
+        # Create the application's database
+        cd $securedrop_root
+        su -s /bin/bash -c "python -c 'import db; db.init_db()'" $source_user
+
+        chown -R $source_user:$source_user $securedrop_root
+        #Restart the services
+        service apache2 restart
+
+        db_stop
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0
