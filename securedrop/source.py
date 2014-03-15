@@ -5,6 +5,7 @@ import uuid
 from functools import wraps
 import zipfile
 from cStringIO import StringIO
+import subprocess
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -180,6 +181,22 @@ def lookup():
             flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
+def normalize_timestamps(sid):
+    """
+    Update the timestamps on all of the source's submissions to match that of
+    the latest submission. This minimizes metadata that could be useful to
+    investigators. See #301.
+    """
+    sub_paths = [ store.path(sid, submission.filename)
+                  for submission in g.source.submissions ]
+    if len(sub_paths) > 1:
+        args = ["touch"]
+        args.extend(sub_paths[:-1])
+        rc = subprocess.call(args)
+        if rc != 0:
+            app.logger.warning("Couldn't normalize submission timestamps (touch exited with %d)" % rc)
+
+
 @app.route('/submit', methods=('POST',))
 @login_required
 def submit():
@@ -204,6 +221,7 @@ def submit():
 
     g.source.last_updated = datetime.now()
     db_session.commit()
+    normalize_timestamps(g.sid)
 
     return redirect(url_for('lookup'))
 
