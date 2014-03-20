@@ -102,20 +102,6 @@ def check_tor2web():
               "header-warning")
 
 
-@app.after_request
-def no_cache(response):
-    """Minimize potential traces of site access by telling the browser not to
-    cache anything"""
-    no_cache_headers = {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '-1',
-    }
-    for header, header_value in no_cache_headers.iteritems():
-        response.headers.add(header, header_value)
-    return response
-
-
 @app.route('/')
 def index():
     return render_template('index.html')

@@ -77,20 +77,6 @@ def get_docs(sid):
     return docs
 
 
-@app.after_request
-def no_cache(response):
-    """Minimize potential traces of site access by telling the browser not to
-    cache anything"""
-    no_cache_headers = {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '-1',
-    }
-    for header, header_value in no_cache_headers.iteritems():
-        response.headers.add(header, header_value)
-    return response
-
-
 @app.route('/')
 def index():
     sources = Source.query.order_by(Source.last_updated.desc()).all()
