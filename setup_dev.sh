@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -186,16 +186,17 @@ PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
 PHANTOMJS_BINARY_PATH='/usr/local/bin/phantomjs'
 # Use -nv because wget's progress bar doesn't work on a non-tty, and it prints
 # a bunch of garbage to the screen.
-wget -nv -O- $PHANTOMJS_URL | sudo sh -c "tar -O -jxf - $PHANTOMJS_PATH_IN_ARCHIVE > $PHANTOMJS_BINARY_PATH"
-sudo chown vagrant:vagrant $PHANTOMJS_BINARY_PATH
-chmod +x $PHANTOMJS_BINARY_PATH
+wget -nv -O- $PHANTOMJS_URL | tar jxf - $PHANTOMJS_PATH_IN_ARCHIVE
+sudo cp $PHANTOMJS_PATH_IN_ARCHIVE $PHANTOMJS_BINARY_PATH
 
 echo ""
 echo "Running unit tests... these should all pass!"
 set +e # turn flag off so we can check if the tests failed
 ./test.sh
 
-if [[ $? != 0 ]]; then
+TEST_RC=$?
+
+if [[ $TEST_RC != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
     echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
@@ -217,3 +218,4 @@ echo "To re-run tests:"
 echo "cd /vagrant/securedrop"
 echo "./test.sh"
 
+exit $TEST_RC

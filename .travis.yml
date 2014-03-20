@@ -3,24 +3,5 @@ python:
   - "2.7"
 virtualenv:
   system_site_packages: true
-install:
-  - sudo apt-get install gnupg2 secure-delete python-dev haveged
-  - sudo apt-get install intltool libimage-exiftool-perl python-poppler
-  - pip install --upgrade distribute
-  - pip install https://launchpad.net/python-distutils-extra/trunk/2.38/+download/python-distutils-extra-2.38.tar.gz
-  - pip install -r securedrop/source-requirements.txt
-  - pip install -r securedrop/document-requirements.txt
-  - pip install -r securedrop/test-requirements.txt
-before_script:
-  - cp securedrop/config/base.py.example securedrop/config/base.py
-  - cp securedrop/config/test.py.example securedrop/config/test.py
-  - secret_key=$(head -c 32 /dev/urandom | base64)
-  - scrypt_id_pepper=$(head -c 32 /dev/urandom | base64)
-  - scrypt_gpg_pepper=$(head -c 32 /dev/urandom | base64)
-  - sed -i "s@    SECRET_KEY.*@    SECRET_KEY='$secret_key'@" securedrop/config/base.py
-  - sed -i "s@^SCRYPT_ID_PEPPER.*@SCRYPT_ID_PEPPER='$scrypt_id_pepper'@" securedrop/config/base.py
-  - sed -i "s@^SCRYPT_GPG_PEPPER.*@SCRYPT_GPG_PEPPER='$scrypt_gpg_pepper'@" securedrop/config/base.py
-  - mkdir -p .securedrop/{store,keys,tmp}
-  - gpg2 --homedir .securedrop/keys --import securedrop/test_journalist_key.*
 script:
-  - cd securedrop && ./test.sh
+  - ./setup_dev.sh -u
