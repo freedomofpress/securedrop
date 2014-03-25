@@ -19,6 +19,7 @@ ports from the VM) at [http://localhost:8080] and the journalist site at
 
 To run tests:
 
+    Make sure to shutdown source.py and journalist.py if they are running
     $ cd /vagrant/securedrop
     $ ./test.sh
 
