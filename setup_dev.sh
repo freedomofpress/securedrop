@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler rng-tools"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -73,6 +73,9 @@ sudo pip install --upgrade distribute
 sudo pip install -r source-requirements.txt
 sudo pip install -r document-requirements.txt
 sudo pip install -r test-requirements.txt
+
+# Trick /dev/random
+echo "HRNGDEVICE=/dev/urandom" > /etc/default/rng-tools
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
