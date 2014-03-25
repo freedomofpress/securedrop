@@ -75,9 +75,8 @@ sudo pip install -r document-requirements.txt
 sudo pip install -r test-requirements.txt
 
 # Trick /dev/random
-sudo cat > /etc/default/rng-tools <<EOF
-HRNGDEVICE=/dev/urandom
-EOF
+sudo sh -c 'echo "HRNGDEVICE=/dev/urandom" >> /etc/default/rng-tools'
+sudo service rng-tools start
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
