@@ -41,6 +41,8 @@ class Source(Base):
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
     last_updated = Column(DateTime, default=datetime.datetime.now)
+    
+    # sources are "pending" and don't get displayed to journalists until they submit something
     pending = Column(Boolean, default=True)
 
     def __init__(self, filesystem_id=None, journalist_designation=None):
