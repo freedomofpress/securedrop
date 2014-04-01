@@ -205,6 +205,7 @@ def submit():
         submission = Submission(g.source, fname)
         db_session.add(submission)
 
+    g.source.pending = False
     g.source.last_updated = datetime.now()
     db_session.commit()
     normalize_timestamps(g.sid)
