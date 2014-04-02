@@ -17,7 +17,7 @@ Before installing SecureDrop, you should make sure you have everything you need.
 
 * Finally, you should have selected two secure passphrases: one for the persistent volume on the internet-connected Tails, and one for the persistent volume on the air-gapped Tails. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-In addition to the requirements above, each journalist will also their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-pgp-keys) for instructions to set one up for journalists who don't have already have a key. 
+In addition to the requirements above, each journalist will also their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't have already have a key. 
 
 We also suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
 
@@ -27,25 +27,25 @@ The `Secure Viewing Station` will be air-gapped (never connected to the Internet
 
 ### Generate GPG Key and Import Journalist Public Keys
 
-In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-pgp-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-gpg-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
 To generate the application GPG key:
 
 * Open a terminal and run `gpg --gen-key`
-* When it says, "Please select what kind of key you want", choose "(1) RSA and RSA (default)"
-* When it asks, "What keysize do you want?" type "4096"
-* When it asks, "Key is valid for?" press enter to keep the default
-* When it asks, "Is this correct?" verify that you've entered everything correctly so far, and type "y"
-* For "Real name" type: "SecureDrop"
-* For "Email address", leave the field blank and press enter
-* For "Comment" type "SecureDrop Application GPG Key"
-* Verify that everything is correct so far, and type "o" for "Okay"
+* When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
+* When it asks, `What keysize do you want?` type `4096`
+* When it asks, `Key is valid for?` press enter to keep the default
+* When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
+* For `Real name` type: `SecureDrop`
+* For `Email address`, leave the field blank and press enter
+* For `Comment` type `SecureDrop Application GPG Key`
+* Verify that everything is correct so far, and type `o` for `(O)kay`
 * It will pop up a box asking you to type a passphrase, but it's safe to click okay with typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
 * Wait for your GPG key to finish generating
 
-To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". If you switch to the   "My Personal Keys" tab you can see the key that you just generated.
+To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". If you switch to the "My Personal Keys" tab you can see the key that you just generated.
 
 ![My Keys](/docs/images/install/viewing7.jpg)
 
