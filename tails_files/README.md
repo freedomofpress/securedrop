@@ -38,6 +38,6 @@ If you'd prefer to compile update_torrc from source, after you have copied the `
 
     sudo apt-get install build-essential
     cd tails_files
-    sudo ./build.sh
+    gcc -o update_torrc update_torrc.c
 
 After you've compiled your own update_torrc binary, re-run the installation instructions from above.
