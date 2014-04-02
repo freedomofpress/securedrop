@@ -1,8 +1,8 @@
-/* This program adds everything in torrc.additions to the end of /etc/tor/torrc 
+/* This program adds everything in .torrc.additions to the end of /etc/tor/torrc 
  * and reloads the tor service. This way you can add customizations (such as 
  * HidServAuth lines) to the end of your torrc in Tails. 
  *
- * It requires the file: /home/amnesia/Persistent/torrc.additions
+ * It requires the file: /home/amnesia/Persistent/.torrc.additions
  */
 
 #include <stdio.h>
@@ -21,9 +21,9 @@ int main(int argc, char* argv) {
     FILE *fp;
 
     // read torrc.additions
-    fp = fopen("/home/amnesia/Persistent/torrc.additions", "r");
+    fp = fopen("/home/amnesia/Persistent/.torrc.additions", "r");
     if(!fp) {
-        printf("Error opening /home/amnesia/Persistent/torrc.additions for reading\n");
+        printf("Error opening /home/amnesia/Persistent/.torrc.additions for reading\n");
         return 0;
     }
     fread(torrc_additions, sizeof(char), sizeof(torrc_additions), fp);
@@ -57,5 +57,5 @@ int main(int argc, char* argv) {
     // reload tor service
     setuid(0);
     system("/usr/sbin/service tor reload");
-    system("/usr/bin/sudo -u amnesia /usr/bin/notify-send 'Updated torrc' 'You can now connect to your authenticated Tor hidden services'");
+    system("/usr/bin/sudo -u amnesia /usr/bin/notify-send 'Updated torrc' 'You can now connect to your SecureDrop document interface'");
 }
