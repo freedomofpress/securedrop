@@ -6,11 +6,11 @@ The recommended way for journalists to connect to the SecureDrop document interf
 
 Boot to your internet-connected Tails USB, making sure to mount the persistent volume. Also make sure to choose More Options at the Tails greeter and set a password (so you can use sudo).
 
-Copy the `tails_files` folder to a USB stick and mount it in Tails. To make the instructions simpler, copy the `tails_files` to your home directory, `/home/amnesia/`.
+Copy the securedrop folder to your home directory, or git clone it directly in tails.
 
 Open a terminal and run:
 
-    cd tails_files
+    cd securedrop/tails_files/
     sudo ./install.sh
 
 It will then ask for the password you set before. Type it and press enter.
@@ -36,8 +36,9 @@ This is a simple C program that aims to fix this problem. It looks at /home/amne
 
 If you'd prefer to compile update_torrc from source, after you have copied the `tails_files` folder to your home directory, open a terminal and run this:
 
+    sudo apt-get update
     sudo apt-get install build-essential
-    cd tails_files
+    cd securedrop/tails_files/
     gcc -o update_torrc update_torrc.c
 
 After you've compiled your own update_torrc binary, re-run the installation instructions from above.
