@@ -79,7 +79,7 @@ def get_docs(sid):
 
 @app.route('/')
 def index():
-    sources = Source.query.order_by(Source.last_updated.desc()).all()
+    sources = Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all()
     return render_template('index.html', sources=sources)
 
 

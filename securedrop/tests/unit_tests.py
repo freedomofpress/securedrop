@@ -604,6 +604,10 @@ class TestIntegration(unittest.TestCase):
         # first, add a source
         self.source_app.get('/generate')
         self.source_app.post('/create')
+        self.source_app.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
 
         rv = self.journalist_app.get('/')
         # navigate to the collection page
@@ -636,6 +640,10 @@ class TestIntegration(unittest.TestCase):
         for i in range(num_sources):
             self.source_app.get('/generate')
             self.source_app.post('/create')
+            self.source_app.post('/submit', data=dict(
+                msg="This is a test "+str(i)+".",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
             _logout(self.source_app)
 
         rv = self.journalist_app.get('/')
