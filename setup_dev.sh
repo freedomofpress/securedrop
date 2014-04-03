@@ -78,13 +78,13 @@ echo "Setting up configurations..."
 # set up the securedrop root directory
 cat > config/test.py <<EOF
 JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
-SECUREDROP_ROOT='$securedrop_root'
+SECUREDROP_ROOT='/tmp/securedrop_test'
 
 FLASK_TESTING = True
 FLASK_CSRF_ENABLED = False
 
 DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE='$securedrop_root/db_development.sqlite'
+DATABASE_FILE='/tmp/securedrop_test/db.sqlite'
 EOF
 
 mkdir -p $securedrop_root/{store,keys,tmp}
@@ -150,7 +150,7 @@ cat > config/development.py <<EOF
 #### Development Configurations
 
 JOURNALIST_KEY='$journalistkey' # fingerprint of the public key for encrypting submissions
-SECUREDROP_ROOT='$(pwd)/.securedrop'
+SECUREDROP_ROOT='$securedrop_root'
 
 FLASK_DEBUG = True
 
@@ -161,9 +161,9 @@ FLASK_DEBUG = True
 # Also, MySQL-Python won't install (which breaks this script) unless
 # mysql is installed.
 DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE='$securedrop_root/db_development.sqlite'
+DATABASE_FILE='$securedrop_root/db.sqlite'
 
-# Uncomment to use mysql (or any other databaes backend supported by
+# Uncomment to use mysql (or any other database backend supported by
 # SQLAlchemy). Make sure you have the necessary dependencies installed, and run
 # 'python -c "import db; db.init_db()"' to initialize the database
 
