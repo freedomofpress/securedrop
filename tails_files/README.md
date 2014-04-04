@@ -4,7 +4,7 @@ The recommended way for journalists to connect to the SecureDrop document interf
 
 ## Installation
 
-Boot to your internet-connected Tails USB, making sure to mount the persistent volume. Also make sure to choose More Options at the Tails greeter and set a password (so you can use sudo).
+Boot to your internet-connected Tails USB, making sure to mount the persistent volume. Also make sure to choose More Options at the Tails greeter and set a password (so you can use sudo). Connect to the internet.
 
 Copy the securedrop folder to your home directory, or git clone it directly in tails.
 
@@ -32,13 +32,3 @@ In SecureDrop, the document interface is an authenticated Tor hidden service, wh
 
 This is a simple C program that aims to fix this problem. It looks at /home/amnesia/Persistent/.torrc.additions and appends it to the end of /etc/tor/torrc and reloads torrc. For this to work as the amnesia user, you need to make update_torrc owned by root and executable by all with the setuid flag. Now any user that runs this will be effectively running as the root user (without needing to be a sudoer or have a user password set). The reason I wrote this in C instead of something way simpler, like bash, is the setuid flag only works compiled programs, not scripts. 
 
-## Compiling Yourself
-
-If you'd prefer to compile update_torrc from source, after you have copied the `tails_files` folder to your home directory, open a terminal and run this:
-
-    sudo apt-get update
-    sudo apt-get install build-essential
-    cd securedrop/tails_files/
-    gcc -o update_torrc update_torrc.c
-
-After you've compiled your own update_torrc binary, re-run the installation instructions from above.

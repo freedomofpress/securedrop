@@ -6,8 +6,12 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-# copy and edit files
-cp update_torrc /home/amnesia/Persistent
+# install deps and compile
+sudo apt-get update
+sudo apt-get install build-essential
+gcc -o /home/amnesia/Persistent/update_torrc update_torrc.c
+
+# prepare .torrc.additions
 cp .torrc.additions /home/amnesia/Persistent 
 gedit /home/amnesia/Persistent/.torrc.additions
 
