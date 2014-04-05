@@ -73,7 +73,7 @@ def get_docs(sid):
             size=os_stat.st_size,
         ))
     # sort by date since ordering by filename is meaningless
-    docs.sort(key=lambda x: x['date'])
+    docs.sort(key=lambda x: int(x['name'].split('-')[0]))
     return docs
 
 
@@ -138,8 +138,13 @@ def doc(sid, fn):
 @app.route('/reply', methods=('POST',))
 def reply():
     msg = request.form['msg']
+    g.source.interaction_count += 1
+    filename = "{0}-reply.gpg".format(g.source.interaction_count)
+
     crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
-                        store.path(g.sid, 'reply-%s.gpg' % uuid.uuid4()))
+                        store.path(g.sid, filename))
+    
+    db_session.commit()
     return render_template('reply.html', sid=g.sid,
             codename=g.source.journalist_designation)
 

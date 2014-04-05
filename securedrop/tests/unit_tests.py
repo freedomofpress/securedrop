@@ -323,7 +323,7 @@ class TestJournalist(unittest.TestCase):
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
-        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
         filenames = test_setup.setup_test_docs(sid, files)
 
         rv = self.client.post('/bulk', data=dict(
@@ -375,7 +375,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
-        self.assertIn("_msg", submission_url)
+        self.assertIn("-msg", submission_url)
         li = soup.select('ul#submissions li')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
@@ -448,7 +448,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
-        self.assertIn("_doc", submission_url)
+        self.assertIn("-doc", submission_url)
         li = soup.select('ul#submissions li')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
@@ -683,7 +683,7 @@ class TestStore(unittest.TestCase):
 
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        files = ['abc1_msg.gpg', 'abc2_msg.gpg']
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
         filenames = test_setup.setup_test_docs(sid, files)
 
         archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
