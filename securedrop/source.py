@@ -205,7 +205,14 @@ def submit():
         submission = Submission(g.source, fname)
         db_session.add(submission)
 
-    g.source.pending = False
+    if g.source.pending:
+        g.source.pending = False
+
+        # Generate a keypair now, if there's enough entropy (issue #303)
+        entropy_avail = int(open('/proc/sys/kernel/random/entropy_avail').read())
+        if entropy_avail >= 2400:
+            crypto_util.genkeypair(g.sid, g.codename)
+
     g.source.last_updated = datetime.now()
     db_session.commit()
     normalize_timestamps(g.sid)
