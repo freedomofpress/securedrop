@@ -665,6 +665,98 @@ class TestIntegration(unittest.TestCase):
         # 2. "Don't show again" checkbox behavior
         # 2. Correct behavior on "yes" and "no" buttons
 
+    def test_filenames(self):
+        """Test pretty, sequential filenames when source uploads messages and files"""
+        # add a source and submit stuff
+        self.source_app.get('/generate')
+        self.source_app.post('/create')
+        self.helper_filenames_submit()
+
+        # navigate to the collection page
+        rv = self.journalist_app.get('/')
+        soup = BeautifulSoup(rv.data)
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        rv = self.journalist_app.get(first_col_url)
+        self.assertEqual(rv.status_code, 200)
+
+        # test filenames and sort order
+        soup = BeautifulSoup(rv.data)
+        filename = str(soup.select('ul#submissions li a')[0].contents[0])
+        self.assertTrue( re.match('^1-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        filename = str(soup.select('ul#submissions li a')[1].contents[0])
+        self.assertTrue( re.match('^2-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        filename = str(soup.select('ul#submissions li a')[2].contents[0])
+        self.assertTrue( re.match('^3-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        filename = str(soup.select('ul#submissions li a')[3].contents[0])
+        self.assertTrue( re.match('^4-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+
+
+    def test_filenames_delete(self):
+        """Test pretty, sequential filenames when journalist deletes files"""
+        # add a source and submit stuff
+        self.source_app.get('/generate')
+        self.source_app.post('/create')
+        self.helper_filenames_submit()
+
+        # navigate to the collection page
+        rv = self.journalist_app.get('/')
+        soup = BeautifulSoup(rv.data)
+        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        rv = self.journalist_app.get(first_col_url)
+        self.assertEqual(rv.status_code, 200)
+        soup = BeautifulSoup(rv.data)
+
+        # delete file #2
+        self.helper_filenames_delete(soup, 1)
+        rv = self.journalist_app.get(first_col_url)
+        soup = BeautifulSoup(rv.data)
+
+        # test filenames and sort order
+        filename = str(soup.select('ul#submissions li a')[0].contents[0])
+        self.assertTrue( re.match('^1-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        filename = str(soup.select('ul#submissions li a')[1].contents[0])
+        self.assertTrue( re.match('^3-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        filename = str(soup.select('ul#submissions li a')[2].contents[0])
+        self.assertTrue( re.match('^4-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+
+
+    def helper_filenames_submit(self):
+        self.source_app.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.source_app.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO('This is a test'), 'test.txt'),
+        ), follow_redirects=True)
+        self.source_app.post('/submit', data=dict(
+            msg="",
+            fh=(StringIO('This is a test'), 'test.txt'),
+        ), follow_redirects=True)
+
+    def helper_filenames_delete(self, soup, i):
+        sid = soup.select('input[name="sid"]')[0]['value']
+        checkbox_values = [soup.select('input[name="doc_names_selected"]')[i]['value']]
+
+        # delete
+        rv = self.journalist_app.post('/bulk', data=dict(
+            sid=sid,
+            action='delete',
+            doc_names_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("The following file has been selected for <strong>permanent deletion</strong>", rv.data)
+
+        # confirm delete
+        rv = self.journalist_app.post('/bulk', data=dict(
+            sid=sid,
+            action='delete',
+            confirm_delete=1,
+            doc_names_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("File permanently deleted.", rv.data)
+
 
 class TestStore(unittest.TestCase):
 
