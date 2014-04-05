@@ -6,19 +6,28 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+INSTALL_DIR=/home/amnesia/Persistent/.securedrop
+ADDITIONS=$INSTALL_DIR/torrc_additions
+SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
+SCRIPT_BIN=/home/amnesia/Persistent/securedrop_init
+
+mkdir -p $INSTALL_DIR
+
 # install deps and compile
 sudo apt-get update
 sudo apt-get install build-essential
-gcc -o /home/amnesia/Persistent/update_torrc update_torrc.c
+gcc -o $SCRIPT_BIN securedrop_init.c
 
-# prepare .torrc.additions
-cp .torrc.additions /home/amnesia/Persistent 
-gedit /home/amnesia/Persistent/.torrc.additions
+# prepare torrc_additions
+cp torrc_additions $ADDITIONS
+gedit $ADDITIONS
 
 # set permissions
-chown root:root /home/amnesia/Persistent/update_torrc
-chmod 755 /home/amnesia/Persistent/update_torrc
-chmod +s /home/amnesia/Persistent/update_torrc 
-chown root:root /home/amnesia/Persistent/.torrc.additions
-chmod 444 /home/amnesia/Persistent/.torrc.additions
+chown root:root $SCRIPT_BIN
+chmod 755 $SCRIPT_BIN
+chmod +s $SCRIPT_BIN
+chown root:root $SCRIPT_PY
+chmod 700 $SCRIPT_PY
+chown root:root $ADDITIONS
+chmod 400 $ADDITIONS
 
