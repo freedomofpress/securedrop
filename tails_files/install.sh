@@ -14,8 +14,8 @@ SCRIPT_BIN=/home/amnesia/Persistent/securedrop_init
 mkdir -p $INSTALL_DIR
 
 # install deps and compile
-sudo apt-get update
-sudo apt-get install build-essential
+apt-get update
+apt-get install -y build-essential
 gcc -o $SCRIPT_BIN securedrop_init.c
 
 # prepare torrc_additions
