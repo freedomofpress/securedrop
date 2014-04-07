@@ -13,6 +13,9 @@ SCRIPT_BIN=/home/amnesia/Persistent/securedrop_init
 
 mkdir -p $INSTALL_DIR
 
+# copy securedrop_init.py script
+cp securedrop_init.py $SCRIPT_PY
+
 # install deps and compile
 apt-get update
 apt-get install -y build-essential

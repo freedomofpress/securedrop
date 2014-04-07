@@ -3,16 +3,16 @@
 import os, sys, subprocess
 
 if __name__ == '__main__':
-    // check for root
+    # check for root
     if not os.geteuid()==0:
         sys.exit('You need to run this as root')
 
-    // paths
+    # paths
     path_torrc_additions = '/home/amnesia/Persistent/.securedrop/torrc_additions'
     path_torrc_backup = '/etc/tor/torrc.bak'
     path_torrc = '/etc/tor/torrc'
 
-    // load torrc_additions
+    # load torrc_additions
     if os.path.isfile(path_torrc_additions):
         torrc_additions = open(path_torrc_additions).read()
     else:
@@ -37,5 +37,5 @@ if __name__ == '__main__':
     subprocess.call(['/usr/sbin/service', 'tor', 'reload'])
 
     # success
-    subprocess.call['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc', 'You can now connect to your SecureDrop document interface']);
+    subprocess.call(['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc', 'You can now connect to your SecureDrop document interface']);
 
