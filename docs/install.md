@@ -5,75 +5,47 @@ These instructions are intended for admins setting up SecureDrop for a journalis
 
 ## Before you begin
 
-Before installing SecureDrop, you should make sure you've got the environment properly set up.
+Before installing SecureDrop, you should make sure you have everything you need.
 
 * You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/docs/ubuntu_config.md).
 
-* You must have a DVD configured as a Live DVD for the [Tails operating system](/docs/install.md#download-install-and-configure-tails).
+* You must have two USB sticks with [Tails installed on them](/docs/tails_config.md) and persistent storage enabled. One will be air-gapped, the other will be used to connect to the internet. Make sure to label them.
 
-* You must have a device capable of running the Google Authenticator app. Google Authenticator is an app for producing one-time passwords for two-factor authentication. You can find download instructions [here](https://support.google.com/accounts/answer/1066447?hl=en).
+* You need an extra USB stick for transferring files.
 
-* You will need 2 USB sticks — one will be used for transferring files and the other for their Tails OS [persistent storage](https://tails.boum.org/doc/first_steps/persistence/).
+* You must have a device capable of running the Google Authenticator app, such an Android or iOS device. Google Authenticator is an app for producing one-time passwords for two-factor authentication. You can find download instructions [here](https://support.google.com/accounts/answer/1066447?hl=en).
 
-* Each journalist must have a device capable of running the Google Authenticator app and 1 USB stick for transferring files from the `Secure Viewing Station` to their `Journalist Workstation`.
+* Finally, you should have selected two secure passphrases: one for the persistent volume on the internet-connected Tails, and one for the persistent volume on the air-gapped Tails. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-* Each journalist must have a personal GPG key. See [this section](/docs/install.md#set-up-journalist-pgp-keys) for instructions to set one up for journalists who don't have already have a key. 
+In addition to the requirements above, each journalist will also their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't have already have a key. 
 
-* We suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
-
-* Finally, you should have selected two secure passphrases: one for the Tails persistent volume on the `Secure Viewing Station` and one for the application's GPG keypair. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
+We also suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
 
 ## Secure Viewing Station
 
-The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will run the [Tails operating system](https://tails.boum.org/). Because Tails is a live GNU/Linux distribution that runs off of removable media, this computer does not need a hard drive.
-
-You will need to create a GPG keypair for the SecureDrop application. When sources upload documents, they get encrypted to this public key. Journalists use this secret key to decrypt these documents on the `Secure Viewing Station`. Additionally, you will add the personal GPG public keys for each journalist to this computer. After a journalist is done viewing documents and ready to move them to their `Journalist Workstation` to finish work before publication, you will encrypt the documents with the journalist's personal public key.
-
-### Remove Hard Drive
-
-Turn off the laptop you want to use for the `Secure Viewing Station`. Physically open up the laptop to remove the hard drive. The directions are different depending on the make and model of the laptop you're using, but in general it requires using a small phillips head screwdriver. Once you have removed the hard drive, re-assemble the laptop.
-
-### Download, Install and Configure Tails
-
-If you already have a Tails Live USB, you can skip to the fourth step, where you configure the persistent volume.
-
-* Visit [the Tails website](https://tails.boum.org/download/index.en.html) for instruction on downloading, verifying, and burning a Tails DVD.
-* After burning Tails to a DVD, boot to it on the `Secure Viewing Station` laptop. If this laptop does not have a DVD drive, use an external DVD drive.
-* Once you've booted into the Live DVD, you should create a Live USB stick with the USB drive set aside for Tails. Reboot the `Secure Viewing Station` laptop into that Live USB drive.
-* Configure a Persistent Volume. Use the Persistent Volume passphrase that you generated at the beginning of the installation process. Make sure that the Persistent Volume includes "Personal Data" and "GnuPG". Tails offers [instructions for configuring the Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html).
-
-Reboot the `Secure Viewing Station` laptop and boot into the Tails Live USB again to continue with the setup.
+The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network devices. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing this is outside the scope of this manual.
 
 ### Generate GPG Key and Import Journalist Public Keys
 
-In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-pgp-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
+In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-gpg-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
 
 ![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
-To generate the application GPG key, click in the clipboard icon in the top right and choose `Manage Keys`. A program called `Passwords and Encryption Keys` will open. You can click on the `Other Keys` tab to manage the keys that you just imported.
+To generate the application GPG key:
 
-![Tails GPG Clipboard](/docs/images/install/viewing2.jpg)
+* Open a terminal and run `gpg --gen-key`
+* When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
+* When it asks, `What keysize do you want?` type `4096`
+* When it asks, `Key is valid for?` press enter to keep the default
+* When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
+* For `Real name` type: `SecureDrop`
+* For `Email address`, leave the field blank and press enter
+* For `Comment` type `SecureDrop Application GPG Key`
+* Verify that everything is correct so far, and type `o` for `(O)kay`
+* It will pop up a box asking you to type a passphrase, but it's safe to click okay with typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
+* Wait for your GPG key to finish generating
 
-Click `File`, `New`. Choose `PGP Key`, and click Continue.
-
-![New...](/docs/images/install/viewing3.jpg)
-
-Put these values in:
-
-* `Full Name`: SecureDrop
-* `Email Address`: (blank)
-* `Comment`: SecureDrop Application GPG Key
-
-Click the arrow to expand `Advanced key options`. Change the `Key Strength` from 2048 to 4096. Then click Create.
-
-![New GPG Key](/docs/images/install/viewing4.jpg)
-
-Type in the GPG passphrase that you came up with earlier twice and click OK. Then wait while your key is being generated. 
-
-![Set Passphrase](/docs/images/install/viewing5.jpg)
-![Key Generation](/docs/images/install/viewing6.jpg)
-
-When it's done, you should see your key in the `My Personal Keys` tab.
+To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". If you switch to the "My Personal Keys" tab you can see the key that you just generated.
 
 ![My Keys](/docs/images/install/viewing7.jpg)
 
@@ -182,7 +154,7 @@ Once you have completed these steps, the SecureDrop web application should be se
 
 ## Journalist's Workstation Setup
 
-The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. At minimum, this computer must have GPG and the Tor Browser Bundle installed. 
+The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. This computer must have GPG installed.
 
 ### Set up journalist GPG keys
 
@@ -194,65 +166,19 @@ If a journalist does not yet have a GPG key, they can follow these instructions 
 * [Windows](http://gpg4win.org/)
 * [Mac OS X](http://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
 
-### Set up the Tor Browser Bundle or Tails So The Journalist Can Log-in
+### Journalist Logging In
 
-In order to connect to the `App Server` and view the `Document Interface`, the journalist needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
-
-You will have to do the following steps on each laptop that will be able to connect to the `Document Interface` running on the `App Server`. If you want to give a new journalist access to the `Document Interface` you will need to do these steps again for that new journalist.
+In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
 
 **Though the Tails Operating System**
 
-* Boot Tails on the `Journalist Workstation` using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick that you use to boot the `Secure Viewing Station`).
-* Click YES under "Use persistence?" and type in your password (do not hit enter).
-* Click YES under "More options?", then click "Forward" 
-* Set an administration password. This password will only be active during your current Tails session. Each time you will have to create this again, though it can be the same password everytime.
-* Click login.
-* Go to the upper right hand corner of your screen and enable your Internet connection.
+Each journalist that will be using Tails to connect to the `Document Interface` will need to install a persistent script onto their Tails USB stick. Follow [these instructions](/tails_files/README.md) to continue.
 
-Here's where it gets tricky. Now you need to create a tor.sc.sh script, make it executable, add an authenticated hidden service config to the Tor hidden service file. This basically allows the journalists to log-in to the `Document Interface` from their Tails USB every time. This only needs to be done once.
+In order to follow those instructions you'll need the HidServAuth string that you had previously created (a different one for each journalist's Tails USB stick), which looks something like this:
 
-* Open a terminal.
-* Run this command: 
-
-```
-nano /home/amnesia/Persistent/copy_torrc.sh
-```
-
-* Then run these three lines: 
-
-```
-#!/bin/bash
-sudo cp /home/amnesia/Persistent/torrc /etc/tor/torrc
-sudo service tor reload
-```
-
-* Save (Control-'X', then 'Y', then enter)
-
-* Then run these commands:
-
-```
-    chmod +x /home/amnesia/Persistent/copy_torrc.sh
-    sudo nano /etc/tor/torrc
-```
-
-* Type in your administration password
-* The Torrc file should open up. Scroll down to the very bottom and add this line at the end (the onion address should be the `App Server` onion address and the second random string should be the auth value you previously created for the journalist): 
-
-```
     HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
-```
 
-* Save
-
-* Run this command: 
-
-```
-sudo cp /etc/tor/torrc /home/amnesisa/Persistent/torrc
-```
-
-* Enter your password, then enter it again when prompted. 
-
-You now have set up the ability for the journalist to easily log-in to the `Document Interface` every time they boot up their `Tails operating system`.
+Once you have installed this script, the journalist will have to run it each time they boot Tails and connect to the Tor network in order to login to the `Journalist Interface`.
 
 **Through the Tor Browser Bundle**
 
