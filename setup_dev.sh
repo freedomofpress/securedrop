@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler xvfb firefox"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -177,17 +177,37 @@ EOF
 echo "Creating database tables..."
 SECUREDROP_ENV=development python -c 'import db; db.init_db()'
 
-# We encountered issues using PhantomJS 1.9.6 (from the repos) with Selenium.
-# Using 1.9.2 until the bugs in the repo release are fixed.
-echo ""
-echo "Installing PhantomJS"
-PHANTOMJS_URL='https://phantomjs.googlecode.com/files/phantomjs-1.9.2-linux-x86_64.tar.bz2'
-PHANTOMJS_PATH_IN_ARCHIVE='phantomjs-1.9.2-linux-x86_64/bin/phantomjs'
-PHANTOMJS_BINARY_PATH='/usr/local/bin/phantomjs'
-# Use -nv because wget's progress bar doesn't work on a non-tty, and it prints
-# a bunch of garbage to the screen.
-wget -nv -O- $PHANTOMJS_URL | tar jxf - $PHANTOMJS_PATH_IN_ARCHIVE
-sudo cp $PHANTOMJS_PATH_IN_ARCHIVE $PHANTOMJS_BINARY_PATH
+echo "Configuring xvfb..."
+sudo tee /etc/init.d/xvfb <<EOF
+XVFB=/usr/bin/Xvfb
+XVFBARGS=":1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset"
+PIDFILE=/var/run/xvfb.pid
+case "\$1" in
+  start)
+    echo -n "Starting virtual X frame buffer: Xvfb"
+    start-stop-daemon --start --quiet --pidfile \$PIDFILE --make-pidfile --background --exec \$XVFB -- \$XVFBARGS
+    echo "."
+    ;;
+  stop)
+    echo -n "Stopping virtual X frame buffer: Xvfb"
+    start-stop-daemon --stop --quiet --pidfile \$PIDFILE
+    echo "."
+    ;;
+  restart)
+    \$0 stop
+    \$0 start
+    ;;
+  *)
+        echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
+        exit 1
+esac
+ 
+exit 0
+EOF
+
+sudo chmod +x /etc/init.d/xvfb
+sudo service xvfb start
+sudo sh -c 'echo "export DISPLAY=:1" >> /etc/profile'
 
 echo ""
 echo "Running unit tests... these should all pass!"
