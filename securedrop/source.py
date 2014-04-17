@@ -115,6 +115,7 @@ def generate():
         if number_words not in range(7, 11):
             abort(403)
     session['codename'] = crypto_util.genrandomid(number_words)
+    session.pop('logged_in', None)
     # TODO: make sure this codename isn't a repeat
     return render_template('generate.html', codename=session['codename'])
 
