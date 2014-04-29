@@ -97,6 +97,7 @@ if [ $CMD == "up" ]; then
         sudo schroot -c securedrop -d / -- adduser --uid $EUID --system --disabled-login dev
         sudo schroot -c securedrop -d /securedrop -- ./setup_dev.sh -r /home/dev/.securedrop -u
         sudo schroot -c securedrop -d / -- chown -R dev /home/dev/.securedrop
+        sudo schroot -c securedrop -d / -- chown -R dev /securedrop/securedrop
     else
         mount_filesystems
     fi
