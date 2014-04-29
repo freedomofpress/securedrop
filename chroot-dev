@@ -4,6 +4,14 @@ if [[ $EUID -eq 0 ]]; then
     echo "Please run this as your normal user, not root"
     exit 1
 fi
+if ! hash debootstrap 2>/dev/null; then
+    echo "Install debootstrap before continuing"
+    exit 1
+fi
+if ! hash schroot 2>/dev/null; then
+    echo "Install schroot before continuing"
+    exit 1
+fi
 
 SOURCE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CHROOT_DIR=$SOURCE_ROOT/.chroot
@@ -115,7 +123,7 @@ elif [ $CMD == "restart" ]; then
 
 # test
 elif [ $CMD == "test" ]; then
-    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev python test.sh
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev ./test.sh
 
 # destroy
 elif [ $CMD == "destroy" ]; then
