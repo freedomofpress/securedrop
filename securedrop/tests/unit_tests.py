@@ -681,14 +681,10 @@ class TestIntegration(unittest.TestCase):
 
         # test filenames and sort order
         soup = BeautifulSoup(rv.data)
-        filename = str(soup.select('ul#submissions li a')[0].contents[0])
-        self.assertTrue( re.match('^1-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
-        filename = str(soup.select('ul#submissions li a')[1].contents[0])
-        self.assertTrue( re.match('^2-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
-        filename = str(soup.select('ul#submissions li a')[2].contents[0])
-        self.assertTrue( re.match('^3-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
-        filename = str(soup.select('ul#submissions li a')[3].contents[0])
-        self.assertTrue( re.match('^4-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
+        for i, submission_link in enumerate(soup.select('ul#submissions li a')):
+            filename = str(submission_link.contents[0])
+            self.assertTrue(re.match(submission_filename_re.format(i+1), filename))
 
 
     def test_filenames_delete(self):
@@ -712,12 +708,13 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
 
         # test filenames and sort order
+        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
         filename = str(soup.select('ul#submissions li a')[0].contents[0])
-        self.assertTrue( re.match('^1-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        self.assertTrue( re.match(submission_filename_re.format(1), filename) )
         filename = str(soup.select('ul#submissions li a')[1].contents[0])
-        self.assertTrue( re.match('^3-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        self.assertTrue( re.match(submission_filename_re.format(3), filename) )
         filename = str(soup.select('ul#submissions li a')[2].contents[0])
-        self.assertTrue( re.match('^4-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$', filename) )
+        self.assertTrue( re.match(submission_filename_re.format(4), filename) )
 
 
     def helper_filenames_submit(self):
