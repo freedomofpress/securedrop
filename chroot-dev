@@ -26,6 +26,7 @@ Usage: ./chroot-dev [command]
     stop    # stop securedrop web app servers
     restart # restart securedrop web app servers
     test    # run tests
+    clean   # recreate db, keys, and everything else
     destroy # destroy chroot jail
     
 EOS
@@ -138,6 +139,17 @@ elif [ $CMD == "restart" ]; then
 elif [ $CMD == "test" ]; then
     require_chroot
     sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev ./test.sh
+
+# clean
+elif [ $CMD == "clean" ]; then
+    require_chroot
+    stop_servers
+    sudo schroot -c securedrop -d / -- rm -rf /home/dev/.securedrop
+    sudo schroot -c securedrop -d / -- sudo -u dev mkdir -p /home/dev/.securedrop/keys
+    sudo schroot -c securedrop -d / -- sudo -u dev chmod 700 /home/dev/.securedrop/keys
+    sudo schroot -c securedrop -d / -- sudo -u dev gpg --homedir /home/dev/.securedrop/keys --import /securedrop/securedrop/test_journalist_key.sec
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev python -c "import db; db.init_db()" 
+    start_servers
 
 # destroy
 elif [ $CMD == "destroy" ]; then
