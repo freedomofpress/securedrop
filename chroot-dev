@@ -67,7 +67,7 @@ stop_servers() {
 
 # patch schroot.conf, if needed
 if ! grep -q "\[securedrop\]" /etc/schroot/schroot.conf; then
-    sudo sh -c "cat $SOURCE_ROOT/chroot/schroot.conf | sed 's|SECUREDROP_LOCATION|$CHROOT_DIR|g' >> /etc/schroot/schroot.conf"
+    sudo sh -c "cat $SOURCE_ROOT/dev_files/schroot.conf | sed 's|SECUREDROP_LOCATION|$CHROOT_DIR|g' >> /etc/schroot/schroot.conf"
 fi
 
 # commands
@@ -84,9 +84,9 @@ if [ $CMD == "up" ]; then
         echo "Installing Ubuntu 12.04 in chroot environment"
         # install precise inside of the chroot
         mkdir -p $CHROOT_DIR
-        sudo debootstrap --keyring $SOURCE_ROOT/chroot/ubuntu-archive-keyring.gpg --arch=amd64 precise $CHROOT_DIR http://archive.ubuntu.com/ubuntu/
+        sudo debootstrap --keyring $SOURCE_ROOT/dev_files/ubuntu-archive-keyring.gpg --arch=amd64 precise $CHROOT_DIR http://archive.ubuntu.com/ubuntu/
         sudo mkdir -p $CHROOT_DIR/securedrop
-        sudo cp $SOURCE_ROOT/chroot/sources.list $CHROOT_DIR/etc/apt/sources.list
+        sudo cp $SOURCE_ROOT/dev_files/sources.list $CHROOT_DIR/etc/apt/sources.list
         sudo cp /etc/resolv.conf $CHROOT_DIR/etc/resolv.conf
         sudo sh -c "echo '127.0.0.1 dev' >> $CHROOT_DIR/etc/hosts"
 
