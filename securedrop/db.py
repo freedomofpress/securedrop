@@ -57,11 +57,7 @@ class Source(Base):
 
     def journalist_filename(self):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
-        filename = ''
-        for c in self.journalist_designation.lower().replace(' ', '_'):
-            if c in valid_chars:
-                filename += c
-        return filename
+        return ''.join([c for c in self.journalist_designation.lower().replace(' ', '_') if c in valid_chars])
 
 class Submission(Base):
     __tablename__ = 'submissions'
