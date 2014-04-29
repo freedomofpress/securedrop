@@ -39,6 +39,14 @@ check_chroot() {
     fi
 }
 
+require_chroot() {
+    check_chroot
+    if [ $chroot_exists -eq 0 ]; then
+        echo 'You must run "chroot-dev up" first to create a chroot jail'
+        exit 0
+    fi
+}
+
 mount_filesystems() {
     sudo mount proc $CHROOT_DIR/proc -t proc
     sudo mount sys $CHROOT_DIR/sys -t sysfs
@@ -47,10 +55,10 @@ mount_filesystems() {
 }
 
 unmount_filesystems() {
-    sudo umount $CHROOT_DIR/proc
-    sudo umount $CHROOT_DIR/sys
-    sudo umount $CHROOT_DIR/dev 
-    sudo umount $CHROOT_DIR/securedrop
+    sudo umount -l $CHROOT_DIR/securedrop
+    sudo umount -l $CHROOT_DIR/dev 
+    sudo umount -l $CHROOT_DIR/sys
+    sudo umount -l $CHROOT_DIR/proc
 }
 
 start_servers() {
@@ -106,28 +114,34 @@ if [ $CMD == "up" ]; then
 
 # down
 elif [ $CMD == "down" ]; then
+    require_chroot
     stop_servers
     unmount_filesystems
 
 # start
 elif [ $CMD == "start" ]; then
+    require_chroot
     start_servers
 
 # stop
 elif [ $CMD == "stop" ]; then
+    require_chroot
     stop_servers
 
 # restart
 elif [ $CMD == "restart" ]; then
+    require_chroot
     stop_servers
     start_servers
 
 # test
 elif [ $CMD == "test" ]; then
+    require_chroot
     sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev ./test.sh
 
 # destroy
 elif [ $CMD == "destroy" ]; then
+    require_chroot
     stop_servers
     unmount_filesystems
     sudo rm -rf $CHROOT_DIR
