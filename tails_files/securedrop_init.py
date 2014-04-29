@@ -31,7 +31,7 @@ if __name__ == '__main__':
         open(path_torrc_backup, 'w').write(torrc)
 
     # append the additions
-    open(path_torrc, 'a').write(torrc_additions)
+    open(path_torrc, 'w').write(torrc+torrc_additions)
 
     # reload tor
     subprocess.call(['/usr/sbin/service', 'tor', 'reload'])
