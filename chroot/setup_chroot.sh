@@ -23,4 +23,5 @@ sudo sh -c "echo '127.0.0.1 dev' >> $CHROOT_DIR/etc/hosts"
 $SOURCE_ROOT/chroot/start_dev.sh
 sudo schroot -c securedrop -d / -- apt-get update
 sudo schroot -c securedrop -d / -- apt-get -y install wget build-essential
-sudo schroot -c securedrop -d /securedrop -- ./setup_dev.sh -r /securedrop-root -u
+sudo schroot -c securedrop -d / -- adduser --uid $EUID --system --disabled-login dev
+sudo schroot -c securedrop -d /securedrop -- ./setup_dev.sh -r /home/dev/.securedrop -u
