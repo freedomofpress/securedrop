@@ -123,7 +123,9 @@ button.small, a.btn.small {
 #warning-close {
   cursor: pointer; }
 
-strong.serious {
+p.serious {
+  font-weight: bold;
+  text-align: center;
   color: #ae3840; }
 
 .code {

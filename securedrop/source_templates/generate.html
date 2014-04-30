@@ -1,33 +1,44 @@
 {% extends "base.html" %}
+
 {% block body %}
-<div id="content" class="submit-2">
-  <h2>Submitting for the first time</h2>
+<center>
+  <h2>Remember this code and keep it secret</h2>
   <p>To protect your identity, we're assigning you a unique code name.</p>
-  <p><b>Your code name is:</b></p>
-  <p id="code-name" class="code-name">{{ codename }}</p>
-  <div id='regenerate-box'>
-    Click Generate if you would like to create a different code name.
+</center>
+
+<hr class="no-line" />
+
+<div class="code">
+  <i class="fa fa-lock pull-left"></i> <strong>{{ codename }}</strong>
+  <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      Desired code name length:
       <select name="number-words" id="number-words">
-        <option value="7">7</option>
-        <option value="8" selected>8</option>
+        <option value="7">7 words</option>
+        <option value="8" selected="">8 words</option>
         <option value="9">9</option>
         <option value="10">10</option>
       </select>
-      words.
-      <input type="submit" id="regenerate-submit" value="Generate">
+      <button type="submit" id="regenerate-submit" class="small">
+        <i class="fa fa-refresh"></i>
+      </button>
     </form>
   </div>
-  <p>
-    It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses. Also, this code is the only authentication needed to log in with your account: if you write it down, be sure to keep it hidden.
-  </p>
-  <form id="create-form" method="post" action="/create" autocomplete="off">
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <p>
-      Once you've taken care of that: <button id="continue-button" class="button-custom" type="submit">Continue...</button>
-    </p>
-  </form>
 </div>
+
+<div class="clearfix"></div>
+<hr class="no-line">
+
+<p class="serious">Store this code somewhere safe, or memorize it. It can be used to compromise your anonymity.</p>
+
+<hr class="no-line" />
+
+<p><strong>Next steps:</strong> You will need to provide this code to log back in and check for responses.</p>
+
+<hr class="no-line" />
+
+<form id="create-form" method="post" action="/create" autocomplete="off">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <button type="submit" class="btn block pull-right" href="upload.html"><i class="fa fa-arrow-circle-o-right"></i> Continue</button>
+</form>
 {% endblock %}
