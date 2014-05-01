@@ -51,7 +51,7 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        self.driver = webdriver.PhantomJS()
+        self.driver = webdriver.Firefox()
 
         self.secret_message = 'blah blah blah'
 
