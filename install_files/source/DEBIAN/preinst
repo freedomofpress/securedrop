@@ -73,15 +73,10 @@ EOF
         app_key_path="$RET"
 
         # Verify app gpg key fingerprint and configure debian preseeds for chroot jails      
-        # TODO add back option if fingerprint is incorrect
         db_get securedrop-source/app_key_fpr
         app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
         db_get securedrop-source/verify_fingerprint
-        if [ "$RET" = "false" ]; then
-            exit 1
-        else
-            gpg --homedir $keypath --import $app_key_path
-        fi
+        gpg --homedir $keypath --import $app_key_path
 
         cat > $securedrop_root/config/production.py <<EOF
 import os
@@ -108,7 +103,8 @@ EOF
         #support custom themes
         db_get securedrop-source/custom_header_image_path
         custom_header_image_path="$RET"
-        if [ -z $custom_header_image_path ]; then
+        db_get securedrop-source/use_custom_header_image
+        if [ "$RET" = "false" ]; then
             custom_header_image=""
         else
             mkdir -p $securedrop_root/static/i

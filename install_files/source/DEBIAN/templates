@@ -5,9 +5,14 @@ Description: The full path to the App's public GPG key:
  sneakernet'd to the App Server. This key is used by the
  Source Interface to encrypt the sources' submissions.
 
+Template: securedrop-source/find_key_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
+
 Template: securedrop-source/app_key_fpr
 Type: string
-Description: Verify the App's GPG key's fingerprint:
+Description: The Application's GPG key's fingerprint:
  This value is extracted from the supplied gpg key file
 
 Template: securedrop-source/verify_fingerprint
@@ -18,9 +23,9 @@ Description: Is this the App's GPG key's fingerprint: ${KEY_FPR}?
 
 Template: securedrop-source/use_custom_header_image
 Type: boolean
-Description: Do you want to use a custom image for the web interfaces?
+Description: Use a custom image for the web interfaces?
  This is the image that will be used at the top of the Source
- Interface and can be re-branded for your organization.
+ Interfaces and can be re-branded for your organization.
  Supported formats: .jpg, .png
 
 Template: securedrop-source/custom_header_image_path
@@ -28,6 +33,11 @@ Type: string
 Description: The full path to the custom header image:
  This is the image that will be used at the top of the Source
  Interfaces.
+
+Template: securedrop-source/custom_header_image_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
 
 Template: securedrop-source/source_user
 Type: string

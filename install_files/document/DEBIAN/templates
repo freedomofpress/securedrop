@@ -5,9 +5,14 @@ Description: The full path to the App's public GPG key:
  sneakernet'd to the App Server. This key is used by the
  Document Interface to encrypt the sources' submissions.
 
+Template: securedrop-document/find_key_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
+
 Template: securedrop-document/app_key_fpr
 Type: string
-Description: The Application's gpg key's fingerprint:
+Description: The Application's GPG key's fingerprint:
  This value is extracted from the supplied gpg key file
 
 Template: securedrop-document/verify_fingerprint
@@ -18,8 +23,8 @@ Description: Is this the App's GPG key's fingerprint: ${KEY_FPR}?
 
 Template: securedrop-document/use_custom_header_image
 Type: boolean
-Description: Do you want to use a custom image for the webpages?
- This is the image that will be used at the top of the Document 
+Description: Use a custom image for the web interfaces?
+ This is the image that will be used at the top of the Document
  Interfaces and can be re-branded for your organization.
  Supported formats: .jpg, .png
 
@@ -28,6 +33,11 @@ Type: string
 Description: The full path to the custom header image:
  This is the image that will be used at the top of the Document
  Interfaces.
+
+Template: securedrop-document/custom_header_image_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
 
 Template: securedrop-document/document_user
 Type: string
@@ -65,3 +75,9 @@ Description: A journalist's username:
  This is the first journalist's username. Please only enter one username at this time
  More journalist's can be added after the install is finsihed. Journalist users are only
  for the document interface and do not need OS accounts.
+
+Template: securedrop-document/journalist_user_continue
+Type: string
+Description: Try again?
+ That name was not valid. It does NOT have to be an OS account
+ but the name can only contain alphanumeric values.

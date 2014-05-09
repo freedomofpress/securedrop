@@ -69,9 +69,8 @@ Description: The full path to the custom header image:
 
 Template: securedrop-app/custom_header_image_path_continue
 Type: boolean
-Description: That file did not exist try again?
- The specified image file did not exist. Choose 'yes'
- to try again.
+Description: Try again?
+ The file specified did not exist.
 
 Template: securedrop-app/app_user
 Type: string
