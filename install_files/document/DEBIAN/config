@@ -5,7 +5,6 @@ set -e
 . /usr/share/debconf/confmodule
 
 # Get the full path to application public gpg key
-c="1"
 ok=""
 while [ ! "$ok" ]; do
     db_input critical securedrop-document/find_key_path || true
@@ -14,10 +13,15 @@ while [ ! "$ok" ]; do
     if [ -f "$RET" ]; then
         ok=1
         db_go || true
-    fi
-    (( c++ ))
-    if [ $c -gt 5 ]; then
-        break
+    else
+        db_input critical securedrop-document/find_key_path_continue || true
+        db_go || true
+        db_get securedrop-document/find_key_path_continue
+        if [ "$RET" = "false" ]; then
+            exit 1
+        else
+            db_fset securedrop-document/find_key_path seen false
+        fi
     fi
 done
 
@@ -39,7 +43,6 @@ db_go || true
 db_get securedrop-document/use_custom_header_image
 use_header="$RET"
 if [ "$use_header" = "true" ]; then
-    c="1"
     ok=""
     while [ ! "$ok" ]; do
         db_input critical securedrop-document/custom_header_image_path || true
@@ -48,10 +51,15 @@ if [ "$use_header" = "true" ]; then
         if [ -f "$RET" ]; then
             ok=1
             db_go || true
-        fi
-        (( c++ ))
-        if [ $c -gt 5 ]; then
-            break
+        else
+            db_input critical securedrop-document/custom_header_image_path_continue || true
+            db_go || true
+            db_get securedrop-document/custom_header_image_path_continue
+            if [ "$RET" = "false" ]; then
+                exit 1
+            else
+                db_fset securedrop-document/custom_header_image_path seen false
+            fi
         fi
     done
 fi
@@ -66,7 +74,6 @@ db_input medium securedrop-document/tor_key_id || true
 db_input medium securedrop-document/tor_key_fpr || true
 
 # Journalist user for document interface
-c="1"
 ok=""
 while [ ! "$ok" ]; do
     db_input critical securedrop-document/journalist_user || true
@@ -75,11 +82,15 @@ while [ ! "$ok" ]; do
     if [[ "$RET" =~ ^[A-Za-z0-9_]+$ ]]; then
         ok=1
         db_go || true
-    fi
-    (( c++ ))
-    if [ $c -gt 5 ]; then
-        break
-    fi
+    else
+        db_input critical securedrop-document/journalist_user_continue || true
+        db_go || true
+        db_get securedrop-document/journalist_user_continure
+        if [ "$RET" = "false" ]; then
+            exit 1
+        else
+            db_fset securedrop-document/journalist_user seen false
+        fi
 done
-## continue after all the questions
+
 db_go || true

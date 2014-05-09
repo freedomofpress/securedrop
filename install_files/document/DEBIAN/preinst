@@ -78,9 +78,6 @@ EOF
         db_get securedrop-document/app_key_fpr
         app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
         db_get securedrop-document/verify_fingerprint
-        if [ "$RET" = "false" ]; then
-            exit 1
-        fi
 
         cat > $securedrop_root/config/production.py <<EOF
 import os
@@ -107,7 +104,8 @@ EOF
         #support custom themes
         db_get securedrop-document/custom_header_image_path
         custom_header_image_path="$RET"
-        if [ -z $custom_header_image_path ]; then
+        db_get securedrop-document/use_custom_header_image
+        if [ "$RET" = "false" ]; then
             custom_header_image=""
         else
             mkdir -p $securedrop_root/static/i
