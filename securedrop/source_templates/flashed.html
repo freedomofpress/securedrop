@@ -1,7 +1,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
   {% for category, message in messages %}
-  <p class="{{ category }}">{{ message }}</p>
+  <p class="{{ category }}"> <i class="fa fa-info-circle pull-left"></i> {{ message }}</p>
   {% endfor %}
 {% endif %}
 {% endwith %}

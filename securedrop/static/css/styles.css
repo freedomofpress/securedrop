@@ -136,6 +136,12 @@ p.serious {
   font-size: large;
   text-align: center; }
 
+.code-reminder {
+  background: rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  padding: 5px 10px;
+  text-align: center; }
+
 .snippet {
   width: 100%;
   border: 1px solid #c3c3c3; }
@@ -181,8 +187,23 @@ hr.cut-out {
   border-color: #c3c3c3; }
 
 hr.no-line {
+  clear: both;
   border: none;
   height: 10px; }
 
 .clearfix {
   clear: both; }
+
+.notification {
+  border:1px solid #8ed9f6;
+  background-color: #e3f7fc;
+  border-radius:10px;
+  padding:10px;;
+  margin:10px;
+  text-align: left;
+  font-size: medium;
+}
+.notification i {
+  color: #4f7685;
+  font-size: 18pt;
+}
