@@ -85,12 +85,13 @@ while [ ! "$ok" ]; do
     else
         db_input critical securedrop-document/journalist_user_continue || true
         db_go || true
-        db_get securedrop-document/journalist_user_continure
+        db_get securedrop-document/journalist_user_continue
         if [ "$RET" = "false" ]; then
             exit 1
         else
             db_fset securedrop-document/journalist_user seen false
         fi
+    fi
 done
 
 db_go || true

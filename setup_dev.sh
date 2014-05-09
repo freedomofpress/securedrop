@@ -87,6 +87,14 @@ DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE='/tmp/securedrop_test/db.sqlite'
 EOF
 
+cat > config/custom_theme_image.py << EOF
+#### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = ""
+EOF
+
 mkdir -p $securedrop_root/{store,keys,tmp}
 keypath=$securedrop_root/keys
 
