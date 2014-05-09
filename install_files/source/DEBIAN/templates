@@ -1,0 +1,70 @@
+Template: securedrop-source/find_key_path
+Type: string
+Description: The full path to the App's public GPG key:
+ This is the public GPG key that was created on the SVS and
+ sneakernet'd to the App Server. This key is used by the
+ Source Interface to encrypt the sources' submissions.
+
+Template: securedrop-source/find_key_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
+
+Template: securedrop-source/app_key_fpr
+Type: string
+Description: The Application's GPG key's fingerprint:
+ This value is extracted from the supplied gpg key file
+
+Template: securedrop-source/verify_fingerprint
+Type: boolean
+Description: Is this the App's GPG key's fingerprint: ${KEY_FPR}?
+ This is the fingerprint of the Application's GPG key, created on the
+ airgapped SVS.
+
+Template: securedrop-source/use_custom_header_image
+Type: boolean
+Description: Use a custom image for the web interfaces?
+ This is the image that will be used at the top of the Source
+ Interfaces and can be re-branded for your organization.
+ Supported formats: .jpg, .png
+
+Template: securedrop-source/custom_header_image_path
+Type: string
+Description: The full path to the custom header image:
+ This is the image that will be used at the top of the Source
+ Interfaces.
+
+Template: securedrop-source/custom_header_image_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
+
+Template: securedrop-source/source_user
+Type: string
+Default: source
+Description: The user that will own the application files for the Source Interface:
+ This is the application user for the Source Interface inside of the chroot jail.
+
+Template: securedrop-source/source_gid
+Type: string
+Default: 667
+Description: The gid that will own the application files for the Source Interface:
+ This is the application gid for the Source Interface inside of the chroot jails.
+
+Template: securedrop-source/source_uid
+Type: string
+Default: 666
+Description: The uid that will own the application files for the Source Interface:
+ This is the application uid for the Source Interface inside of the chroot jails
+
+Template: securedrop-source/tor_key_id
+Type: string
+Default: 886DDD89
+Description: The Tor signing key's keyid:
+ This is the signing key used by Tor to sign their repo.
+
+Template: securedrop-source/tor_key_fpr
+Type: string
+Default: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+Description: The tor signing key fingerprint:
+ This is the fingerprint of the key used to sign Tor packages.

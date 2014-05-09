@@ -1,0 +1,11 @@
+securedrop-monitor: embedded-library
+securedrop-monitor: embedded-zlib
+securedrop-monitor: possible-gpl-code-linked-with-openssl
+securedrop-monitor: new-package-should-close-itp-bug
+securedrop-monitor: init.d-script-missing-lsb-section
+securedrop-monitor: init.d-script-does-not-implement-required-option
+securedrop-monitor: possibly-insecure-handling-of-tmp-files-in-maintainer-script
+securedrop-monitor: non-standard-dir-in-var
+securedrop-monitor: file-in-unusual-dir
+securedrop-monitor: hardening-no-fortify-functions
+securedrop-monitor: hardening-no-relro

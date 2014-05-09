@@ -1,7 +1,0 @@
-Host *
-Port 22
-Protocol 2
-    SendEnv LANG LC_*
-    HashKnownHosts yes
-    GSSAPIAuthentication no
-    GSSAPIDelegateCredentials no

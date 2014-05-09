@@ -1,0 +1,8 @@
+/etc/apparmor.d/var.chroot.document.usr.bin.tor
+/etc/apparmor.d/var.chroot.document.usr.lib.apache2.mpm-worker.apache2
+/etc/apparmor.d/var.chroot.source.usr.bin.tor
+/etc/apparmor.d/var.chroot.source.usr.lib.apache2.mpm-worker.apache2
+/etc/network/if-up.d/load_iptables
+/etc/tor/torrc
+/etc/ossec-init.conf
+/etc/init.d/ossec

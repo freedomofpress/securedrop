@@ -1,0 +1,59 @@
+Template: securedrop-monitor/admin_user
+Type: string
+Description: Admin's username:
+ At least one admin user needs to be configured or you will be locked
+ out of the system. This will generate a google authenticator
+ pam module 2 factor authentication code and add the user to the sudo
+ and ssh groups. The user is required to exist and for the user's
+ home directory to be in /home/USERNAME/
+
+Template: securedrop-monitor/admin_user_continue
+Type: boolean
+Description: Try again?
+ The admin user needs to be a valid OS username.
+
+Template: securedrop-monitor/app_ip
+Type: string
+Description: The App Server's IP:
+ The App Server's IP address is used to create a
+ hosts entry that is used by the iptables rules
+ and the OSSEC server configuration.
+
+Template: securedrop-monitor/app_ip_continue
+Type: boolean
+Description: Try again?
+ That was an invalid IP address.
+
+Template: securedrop-monitor/get_smtp
+Type: string
+Description: The FQDN for the SMTP server:
+ This is the SMTP relay that the OSSEC alerts will
+ be sent to. Example: gmail-smtp-in.l.google.com
+
+Template: securedrop-monitor/get_smtp_continue
+Type: boolean
+Description: Try again?
+ That was an invalid fully qualified domain name.
+
+Template: securedrop-monitor/get_email
+Type: string
+Description: The email address the OSSEC alerts will be sent to:
+ This is the email address or distribution list that the OSSEC alerts
+ will be sent to.
+
+Template: securedrop-monitor/get_email_continue
+Type: boolean
+Description: Try again?
+ That was an invalid email address.
+
+Template: securedrop-monitor/get_email_from
+Type: string
+Default: ossec@securedrop
+Description: This is the email address that the ossec alerts will come from:
+ This email address may need to be whitelisted by the destination SMTP relay's
+ spam filter.
+
+Template: securedrop-monitor/get_email_from_continue
+Type: boolean
+Description: Try again?
+ That was an invalid from email address.

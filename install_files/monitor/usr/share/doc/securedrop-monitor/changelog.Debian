@@ -1,0 +1,5 @@
+securedrop-monitor (0.2.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- James Dolan <securedrop@pressfreedomfoundation.org>  Fri, 14 Mar 2014 15:52:47 -0700
