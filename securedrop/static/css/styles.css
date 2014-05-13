@@ -10,8 +10,7 @@ body {
 .content {
   position: relative;
   margin: 15px auto;
-  max-width: 1000px;
-  min-width: auto; }
+  width: 1000px; }
 
 .panel {
   float: right;
@@ -45,7 +44,7 @@ a.text-link {
 
 .logo {
   width: 250px;
-  margin-right: 30px;
+  margin-right: 5px;
   margin-top: 20px; }
   .logo.small {
     width: 150px; }
@@ -143,12 +142,12 @@ p.serious {
   text-align: center; }
 
 .snippet {
-  width: 100%;
+  width: 800px;
   border: 1px solid #c3c3c3; }
   .snippet .attachment {
     background-color: #f3f3f3;
     padding: 15px;
-    width: 45%;
+    width: 330px;
     display: inline-block;
     vertical-align: top; }
     .snippet .attachment .upload-icon {
@@ -163,7 +162,7 @@ p.serious {
   .snippet .message {
     display: inline-block;
     vertical-align: top;
-    width: 55%; }
+    width: 420px; }
     .snippet .message textarea {
       padding: 10px;
       width: 100%;
