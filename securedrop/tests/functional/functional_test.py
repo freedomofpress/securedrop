@@ -1,4 +1,5 @@
 import unittest
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from multiprocessing import Process
 import socket
@@ -56,6 +57,9 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
+        self.display = Display(visible=0, size=(800, 600))
+        self.display.start()
+
         self.driver = webdriver.Firefox()
 
         self.secret_message = 'blah blah blah'
@@ -63,6 +67,7 @@ class FunctionalTest():
     def tearDown(self):
         test_setup.clean_root()
         self.driver.quit()
+        self.display.stop()
         self.source_process.terminate()
         self.journalist_process.terminate()
 

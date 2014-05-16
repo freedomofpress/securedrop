@@ -1,2 +1,3 @@
 selenium==2.39.0
 mock==1.0.1
+pyvirtualdisplay==0.1.5
