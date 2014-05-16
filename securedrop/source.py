@@ -143,7 +143,7 @@ def create():
 def lookup():
     replies = []
     for fn in os.listdir(g.loc):
-        if fn.startswith('reply-'):
+        if fn.endswith('-reply.gpg'):
             try:
                 msg = crypto_util.decrypt(g.codename,
                         file(store.path(g.sid, fn)).read()).decode("utf-8")
@@ -192,13 +192,17 @@ def submit():
     strip_metadata = True if 'notclean' in request.form else False
 
     fnames = []
+    journalist_filename = g.source.journalist_filename()
 
     if msg:
-        fnames.append(store.save_message_submission(g.sid, msg))
+        g.source.interaction_count += 1
+        fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
+            journalist_filename, msg))
         flash("Thanks! We received your message.", "notification")
     if fh:
-        fnames.append(store.save_file_submission(g.sid, fh.filename,
-            fh.stream, fh.content_type, strip_metadata))
+        g.source.interaction_count += 1
+        fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
+            journalist_filename, fh.filename, fh.stream, fh.content_type, strip_metadata))
         flash("Thanks! We received your document '%s'."
               % fh.filename or '[unnamed]', "notification")
 

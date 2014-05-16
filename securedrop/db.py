@@ -45,6 +45,9 @@ class Source(Base):
     # sources are "pending" and don't get displayed to journalists until they submit something
     pending = Column(Boolean, default=True)
 
+    # keep track of how many interactions have happened, for filenames
+    interaction_count = Column(Integer, default=0, nullable=False)
+
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
@@ -52,6 +55,9 @@ class Source(Base):
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
 
+    def journalist_filename(self):
+        valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
+        return ''.join([c for c in self.journalist_designation.lower().replace(' ', '_') if c in valid_chars])
 
 class Submission(Base):
     __tablename__ = 'submissions'
