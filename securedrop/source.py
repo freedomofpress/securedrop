@@ -99,7 +99,7 @@ def check_tor2web():
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
               '<a href="/tor2web-warning">Why is this dangerous?</a>',
-              "header-warning")
+              "banner-warning")
 
 
 @app.route('/')

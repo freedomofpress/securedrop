@@ -75,7 +75,7 @@ class TestSource(unittest.TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="code-name" class="code-name">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_re = r'<strong id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</strong>'
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -85,7 +85,7 @@ class TestSource(unittest.TestCase):
             rv = c.get('/generate')
             self.assertEqual(rv.status_code, 200)
             session_codename = session['codename']
-        self.assertIn("Submitting for the first time", rv.data)
+        self.assertIn("Remember this code and keep it secret", rv.data)
         self.assertIn(
             "To protect your identity, we're assigning you a unique code name.", rv.data)
         codename = self._find_codename(rv.data)
@@ -136,7 +136,7 @@ class TestSource(unittest.TestCase):
         rv = self.client.post('login', data=dict(codename=codename),
                               follow_redirects=True)
         # redirects to /lookup
-        self.assertIn("Download journalist's public key", rv.data)
+        self.assertIn("journalist's public key", rv.data)
         # download the public key
         rv = self.client.get('journalist-key')
         self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
@@ -144,14 +144,14 @@ class TestSource(unittest.TestCase):
     def test_login_and_logout(self):
         rv = self.client.get('/login')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Already submitted something?", rv.data)
+        self.assertIn("Login to check for responses", rv.data)
 
         codename = self._new_codename()
         with self.client as c:
             rv = c.post('/login', data=dict(codename=codename),
                                   follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertIn("Submit a document, message, or both", rv.data)
+            self.assertIn("You have three options to send data", rv.data)
             self.assertTrue(session['logged_in'])
             _logout(c)
 

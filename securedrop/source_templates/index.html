@@ -11,13 +11,16 @@
       $(function(){
         $('.warning').show();
         $('#warning-close').click(function(){
-          $('.warning').hide(200);  
+          $('.warning').hide(200);
         });
       });
     </script>
   </head>
   <body>
-  <div class="warning"><strong>We recommend disabling Javascript to protect your anonymity:</strong> <a href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <i id="warning-close" class="fa fa-times"></i></div>
+    <div class="warning"><strong>We recommend disabling Javascript to protect your anonymity:</strong> <a href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <i id="warning-close" class="fa fa-times"></i></div>
+
+    {% include 'banner_warning_flashed.html' %}
+
     <div class="content">
       <div class="grid">
         <img class="logo grid-item" src="/static/i/logo.png" class="logo">

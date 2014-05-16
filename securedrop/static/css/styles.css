@@ -30,7 +30,8 @@ footer {
 
 h2, h3 {
   font-weight: 300;
-  margin-top: 0px; }
+  margin-top: 0px;
+  text-align: center; }
 
 a.text-link {
   color: #7985aa; }
@@ -110,7 +111,7 @@ button.small, a.btn.small {
   display: none;
   background-color: #ae3840;
   color: white;
-  padding: 10px 15px;
+  padding: 10px 0;
   width: 100%;
   text-align: center;
   font-size: small;
@@ -193,16 +194,33 @@ hr.no-line {
 .clearfix {
   clear: both; }
 
-.notification {
-  border:1px solid #8ed9f6;
-  background-color: #e3f7fc;
-  border-radius:10px;
+.center {
+  text-align: center; }
+
+.flash {
   padding:10px;;
   margin:10px;
   text-align: left;
   font-size: medium;
 }
+.notification {
+  border:1px solid #8ed9f6;
+  background-color: #e3f7fc;
+  border-radius:10px; }
 .notification i {
   color: #4f7685;
   font-size: 18pt;
 }
+.error, .banner-warning {
+  border:1px solid #F68E8E;
+  background-color: #FCE3E3;
+  border-radius:10px; }
+.error i, .banner-warning i {
+  color: #D62727;
+  font-size: 18pt;
+}
+
+input.codename {
+  width: 400px;
+  padding: 10px;
+  font-weight: bold; }

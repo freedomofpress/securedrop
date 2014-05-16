@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block body %}
-<center>
-  <h2>Remember this code and keep it secret</h2>
-  <p>To protect your identity, we're assigning you a unique code name.</p>
-</center>
+<h2>Remember this code and keep it secret</h2>
+<p class="center">To protect your identity, we're assigning you a unique code name.</p>
 
 <hr class="no-line" />
 
 <div class="code">
-  <i class="fa fa-lock pull-left"></i> <strong>{{ codename }}</strong>
+  <i class="fa fa-lock pull-left"></i>  <strong id="codename">{{ codename }}</strong>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -39,6 +37,6 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="btn block pull-right" href="upload.html"><i class="fa fa-arrow-circle-o-right"></i> Continue</button>
+  <button type="submit" class="btn block pull-right"><i class="fa fa-arrow-circle-o-right"></i> Continue</button>
 </form>
 {% endblock %}
