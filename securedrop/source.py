@@ -145,7 +145,7 @@ def lookup():
     for fn in os.listdir(g.loc):
         if fn.startswith('reply-'):
             try:
-                msg = crypto_util.decrypt(g.sid, g.codename,
+                msg = crypto_util.decrypt(g.codename,
                         file(store.path(g.sid, fn)).read()).decode("utf-8")
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
