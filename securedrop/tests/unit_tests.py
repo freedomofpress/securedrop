@@ -120,7 +120,7 @@ class TestSource(unittest.TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("Submit a document, message, or both", rv.data)
+            self.assertIn("You have three options to send data", rv.data)
 
     def _new_codename(self):
         """Helper function to go through the "generate codename" flow"""
