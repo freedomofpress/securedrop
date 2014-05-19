@@ -59,6 +59,19 @@ class Source(Base):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
         return ''.join([c for c in self.journalist_designation.lower().replace(' ', '_') if c in valid_chars])
 
+    def documents_messages_count(self):
+        try:
+            return self.docs_msgs_count
+        except AttributeError:
+            self.docs_msgs_count = {'messages': 0, 'documents': 0}
+            for submission in self.submissions:
+                if submission.filename.endswith('msg.gpg'):
+                    self.docs_msgs_count['messages'] += 1
+                elif submission.filename.endswith('doc.zip.gpg'):
+                    self.docs_msgs_count['documents'] += 1
+            return self.docs_msgs_count
+
+
 class Submission(Base):
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)

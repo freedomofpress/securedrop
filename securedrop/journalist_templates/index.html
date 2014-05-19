@@ -7,9 +7,12 @@
 <form id="delete_collections" action="/col/delete" method="post">
 <ul id="cols" class="plain">
   {% for source in sources %}
+  {% set docs = source.documents_messages_count()['documents'] %}
+  {% set msgs = source.documents_messages_count()['messages'] %}
   <li>
     <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
     <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
+    <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
     last updated {{ source.last_updated }}
   </li>
   {% endfor %}
