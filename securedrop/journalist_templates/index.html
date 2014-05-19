@@ -5,9 +5,10 @@
 {% if sources %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <form id="delete_collections" action="/col/delete" method="post">
+<input id='filter' type='text' placeholder='filter by codename'>
 <ul id="cols" class="plain">
   {% for source in sources %}
-  <li>
+  <li data-source-designation="{{ source.journalist_designation }}">
     <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
     <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
     last updated {{ source.last_updated }}

@@ -23,4 +23,18 @@ $(function () {
     // Don't submit the form if no collections are selected
     return false;
   });
+
+  var filter_codenames = function(value){
+    if(value == ""){
+      $('ul#cols li').show()
+    } else {
+      $('ul#cols li').hide()
+      $('ul#cols li[data-source-designation*="' + value.replace(/"/g, "") + '"]').show()
+    }
+  }
+
+  $('#filter').keyup(function(){ filter_codenames(this.value) })
+
+  filter_codenames($('#filter').val())
+
 });
