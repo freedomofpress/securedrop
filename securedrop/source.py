@@ -54,7 +54,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not logged_in():
-            return redirect(url_for('lookup'))
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
 
