@@ -6,7 +6,7 @@ Homepage: https://pressfreedomfoundation.org/securedrop
 Package: securedrop-app
 Version: 0.2.1-dev
 Architecture: amd64
-Replaces: tor,procps,unattended-upgrades,openssh-client
+Replaces: tor,procps,unattended-upgrades,openssh-client,pam
 Pre-Depends: debconf (>= 0.2.17)
 Depends: debhelper (>= 8.0.0),libc6 (>= 2.7),libssl1.0.0 (>= 1.0.0),expect,adduser,openssh-server,deb.torproject.org-keyring,tor,apparmor-profiles,apparmor-utils,secure-delete,haveged,ntp,unattended-upgrades,sysstat,iptables,libpam-google-authenticator,schroot,debootstrap
 Conflicts: securedrop-monitor

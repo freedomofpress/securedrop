@@ -82,11 +82,11 @@ case "$1" in
         fi
 
         if [ "$(getent passwd securedrop)" ]; then
-            deluser $app_user
+            deluser securedrop
         fi
 
         if [ "$(getent group securedrop)" ]; then
-            delgroup $app_user
+            delgroup securedrop
         fi
 
         if [ "$(getent group document)" ]; then
