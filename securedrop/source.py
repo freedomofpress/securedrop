@@ -86,7 +86,9 @@ def setup_g():
             abort(500)
         except NoResultFound as e:
             app.logger.error("Found no Sources when one was expected: %s" % (e,))
-            abort(404)
+            del session['logged_in']
+            del session['codename']
+            return redirect(url_for('index'))
         g.loc = store.path(g.sid)
 
 
