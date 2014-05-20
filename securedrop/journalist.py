@@ -14,7 +14,7 @@ import version
 import crypto_util
 import store
 import background
-from db import db_session, Source
+from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -186,7 +186,14 @@ def bulk_delete(sid, docs_selected):
 
 def bulk_download(sid, docs_selected):
     source = get_source(sid)
-    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+    filenames = []
+    for doc in docs_selected:
+        filenames.append(store.path(sid, doc['name']))
+        try:
+            Submission.query.filter(Submission.filename == doc['name']).one().downloaded = True
+        except NoResultFound as e:
+            app.logger.error("Could not mark " + doc['name'] + " as downloaded: %s" % (e,))
+    db_session.commit()
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
                      attachment_filename=source.journalist_designation + ".zip",
