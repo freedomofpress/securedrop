@@ -66,6 +66,7 @@ class Submission(Base):
     source = relationship("Source", backref=backref('submissions', order_by=id))
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
+    downloaded = Column(Boolean, default=False)
 
     def __init__(self, source, filename):
         self.source_id = source.id
