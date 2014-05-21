@@ -1,0 +1,327 @@
+#!/bin/sh
+# postinst script for securedrop-app-interfaces
+#
+# see: dh_installdeb(1)
+set -e
+set -x
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+case "$1" in
+    configure)
+        # Use debootstrap to build two chroot jails using the $os_url variable
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                os="Debian"
+                distro="$( lsb_release -c )"
+                os_url="http://http.debian.net/debian/"
+            else
+                os="Ubuntu"
+                distro="$( lsb_release -c | cut -f 2 )"
+                os_url="http://us.archive.ubuntu.com/ubuntu"
+                os_sec_url="http://security.archive.ubuntu.com/ubuntu"
+            fi
+        fi
+
+        jails='source document'
+        for jail in $jails; do
+            mkdir -p /etc/schroot/chroot.d/
+            cat > /etc/schroot/chroot.d/$jail << EOF
+[$jail]
+description=$os $distro
+directory=/var/chroot/$jail
+EOF
+
+            bits="$(uname -m)"
+            if [ "$bits" = "x86_64" ]; then
+                arch="amd64"
+            else
+                arch="i386"
+            fi
+
+            base_dir="/var/chroot/$jail"
+            if [ ! -d $base_dir ]; then
+                debootstrap --variant=buildd --arch $arch $distro $base_dir $os_url
+            fi
+
+            securedrop_root="$base_dir/var/www/securedrop"
+            # Mount the db directory in the jail
+            mkdir -p /var/securedrop/db/
+            mkdir -p $securedrop_root/db
+            if [ ! "$( mount -l | grep "$securedrop_root/db" )" ]; then
+                mount -o bind /var/securedrop/db $securedrop_root/db
+            fi
+
+            # Mount the keys dir in the jail
+            mkdir -p /var/securedrop/keys
+            chmod 700 /var/securedrop/keys
+            mkdir -p $securedrop_root/keys
+            chmod 700 $securedrop_root/keys
+            if [ ! "$(mount -l | grep "$securedrop_root/keys")" ]; then
+                mount -o bind /var/securedrop/keys $securedrop_root/keys
+            fi
+
+            # Mount the store directory in the jail
+            mkdir -p /var/securedrop/store
+            mkdir -p /var/chroot/$jail/var/www/securedrop/store
+            if [ ! "$(mount -l | grep "$securedrop_root/store")" ]; then
+                mount -o bind /var/securedrop/store $securedrop_root/store
+            fi
+
+            # Mount proc in the jail
+            if [ ! "$(mount -l | grep "$base_dir/proc")" ]; then
+                mount -o bind /proc $base_dir/proc
+            fi
+
+            # Create script dir in the jail
+            mkdir -p $base_dir/opt/securedrop/scripts
+
+            # Copy the current apt sources into the chroot jails
+            cp /etc/apt/sources.list $base_dir/etc/apt/sources.list
+        done
+
+        . /usr/share/debconf/confmodule
+
+        db_get securedrop-app-interfaces/find_key_path
+        app_key_path="$RET"
+
+        db_get securedrop-app-interfaces/app_key_fpr
+
+        db_get securedrop-app-interfaces/verify_fingerprint
+
+        db_get securedrop-app-interfaces/use_custom_header_image
+        use_custom_header_image="$RET"
+
+        if [ "$use_custom_header_image" = "true" ]; then
+            db_get securedrop-app-interfaces/custom_header_image_path
+            custom_header_image_path="$RET"
+        fi
+
+        db_get securedrop-app-interfaces/journalist_user
+        journalist_user="$RET"
+
+        db_get securedrop-app-interfaces/tor_key_id
+        TOR_KEY_ID="$RET"
+ 
+        db_get securedrop-app-interfaces/prod_dev
+        is_prod="$RET"
+        if [ "$is_prod" = "false" ]; then
+            db_get securedrop-app-interfaces/source_deb
+            source_deb="$RET"
+            db_get securedrop-app-interfaces/document_deb
+            document_deb="$RET"
+        fi
+
+        db_get securedrop-app-interfaces/app_user
+        APP_USER="$RET"
+        db_get securedrop-app-interfaces/app_gid
+        APP_GID="$RET"
+        db_get securedrop-app-interfaces/app_uid
+        APP_UID="$RET"
+
+        ## Copy required files and configure chroots
+        # Copy gpg key into the chroot jails
+        cp $app_key_path /var/chroot/source/root/
+        cp $app_key_path /var/chroot/document/root/
+        key_file="$(basename $app_key_path)"
+
+        # Verify app gpg key fingerprint and configure debian preseeds for chroot jails      
+        # TODO add back option if fingerprint is incorrect
+        app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+ 
+        # support custom themes
+        if [ "$use_custom_header_image" = "true" ]; then
+            cp $custom_header_image_path /var/chroot/source/root
+            cp $custom_header_image_path /var/chroot/document/root
+            image_file="/root/$(echo $custom_header_image_path | awk -F / '{print $NF}')"
+        else
+            image_file=
+        fi
+
+        schroot_source="schroot -c source -u root --directory / --"
+        #TODO replace hard coded version in preseed answers
+        $schroot_source debconf-set-selections << EOF
+securedrop-source-0.2.1 securedrop-source/find_key_path string /root/$key_file
+securedrop-source-0.2.1 securedrop-source/verify_fingerprint boolean true
+securedrop-source-0.2.1 securedrop-source/app_key_fpr string $app_key_fpr
+securedrop-source-0.2.1 securedrop-source/use_custom_header_image boolean $use_custom_header_image
+securedrop-source-0.2.1 securedrop-source/custom_header_image_path string $image_file
+EOF
+
+        schroot_document="schroot -c document -u root --directory / --"
+        #TODO replace hard coded version in pressed answers
+        $schroot_document debconf-set-selections << EOF
+securedrop-document-0.2.1 securedrop-document/find_key_path string /root/$key_file
+securedrop-document-0.2.1 securedrop-document/verify_fingerprint boolean true
+securedrop-document-0.2.1 securedrop-document/app_key_fpr string $app_key_fpr
+securedrop-document-0.2.1 securedrop-document/use_custom_header_image boolean $use_custom_header_image
+securedrop-document-0.2.1 securedrop-document/custom_header_image_path string $image_file
+securedrop-document-0.2.1 securedrop-document/journalist_user string $journalist_user
+EOF
+
+
+        if [ ! "$($schroot_source apt-key list | grep -q "$TOR_KEY_ID" )" ]; then
+            apt-key export $TOR_KEY_ID | $schroot_source apt-key add -
+        fi
+
+        if [ ! "$($schroot_document apt-key list | grep -q "$TOR_KEY_ID" )" ]; then
+            apt-key export $TOR_KEY_ID | $schroot_document apt-key add -
+        fi
+
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                distro="$( lsb_release -c )"
+            else
+                distro="$( lsb_release -c | cut -f 2 )"
+            fi
+        fi
+
+        if [ ! -f /var/chroot/source/etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /var/chroot/source/etc/apt/sources.list.d/tor.list
+        fi
+
+        if [ ! -f /var/chroot/document/etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /var/chroot/document/etc/apt/sources.list.d/tor.list
+        fi
+
+        # If not production copy interface deb packages to respective jails
+        if [ "$is_prod" = "false" ]; then
+            cp $source_deb /var/chroot/source/root/
+            cp $document_deb /var/chroot/document/root/
+        fi
+
+        $schroot_source apt-get update
+        $schroot_document apt-get update
+
+        # Install the interface packages using apt-get or gdebi
+        if [ "$is_prod" = "false" ]; then
+            $schroot_source apt-get install gdebi -y
+            source_deb_base="$(basename $source_deb)"
+            $schroot_source gdebi --non-interactive /root/$source_deb_base
+        else
+            $schroot_source apt-get install securedrop-source -y
+        fi
+
+        if [ "$is_prod" = "false" ]; then
+            $schroot_document apt-get install gdebi -y
+            document_deb_base="$(basename $document_deb)"
+            $schroot_document gdebi --non-interactive /root/$document_deb_base
+        else
+            $schroot_document apt-get install securedrop-document -y
+        fi
+
+        # Configure the application user
+        if [ ! "$(getent passwd $APP_USER)" ]; then
+            addgroup \
+              --gid $APP_GID \
+              --system \
+              --gecos "SecureDrop $APP_USER Group" \
+              $APP_USER
+
+            adduser \
+              --uid $APP_UID \
+              --gid $APP_GID \
+              --system \
+              --gecos "SecureDrop $APP_USER User" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              $APP_USER
+        fi
+
+        chown -R $APP_USER:$APP_USER /var/securedrop
+
+        if [ ! "$(getent group source)" ]; then
+             addgroup \
+              --gid 667 \
+              --system \
+              --gecos "SecureDrop Source Interface Group" \
+              source
+        fi
+
+        if [ ! "$(getent group document)" ]; then
+             addgroup \
+              --gid 668 \
+              --system \
+              --gecos "SecureDrop Document Interface Group" \
+              document
+        fi
+
+        if [ ! "$(getent passwd source-tor)" ]; then
+           addgroup \
+              --gid 669 \
+              --system \
+              --gecos "SecureDrop Source Int tor group" \
+              source-tor
+
+            adduser \
+              --uid 669 \
+              --gid 669 \
+              --system \
+              --gecos "SecureDrop Source Int tor user" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              source-tor
+        fi
+
+        if [ ! "$(getent passwd document-tor)" ]; then
+           addgroup \
+              --gid 670 \
+              --system \
+              --gecos "SecureDrop Document Int tor group" \
+              document-tor
+        
+            adduser \
+              --uid 670 \
+              --gid 670 \
+              --system \
+              --gecos "SecureDrop Document Int tor user" \
+              --disabled-login \
+              --no-create-home \
+              --shell /bin/false \
+              document-tor
+        fi
+
+        # rc.local
+        cat > /etc/rc.local << EOF
+mount -o bind /proc /var/chroot/document/proc                                
+mount -o bind /var/securedrop/db /var/chroot/document/var/www/securedrop/db
+mount -o bind /var/securedrop/keys /var/chroot/document/var/www/securedrop/keys 
+mount -o bind /var/securedrop/store /var/chroot/document/var/www/securedrop/store
+mount -o bind /proc /var/chroot/source/proc                                    
+mount -o bind /var/securedrop/db /var/chroot/source/var/www/securedrop/db 
+mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys  
+mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
+schroot -a -u root --directory / service apache2 restart                  
+schroot -a -u root --directory / service tor restart
+EOF
+        chmod +x /etc/rc.local
+
+        db_stop
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

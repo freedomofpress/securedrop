@@ -1,0 +1,68 @@
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:LOGNDROP - [0:0]
+# DNS rules
+-A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A INPUT  -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+-A INPUT  -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow outgoing tcp/udp dns"
+# NTP rules
+-A OUTPUT -p udp --sport 123 --dport 123 -j ACCEPT -m comment --comment "Allow outgoing ntp"
+-A INPUT  -p udp --sport 123 --dport 123 -j ACCEPT -m comment --comment "Allow outgoing ntp"
+# apt rules
+-A OUTPUT -d us.archive.ubuntu.com -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s us.archive.ubuntu.com -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A OUTPUT -d security.archive.ubuntu.com -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s security.archive.ubuntu.com -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A OUTPUT -d deb.torproject.org -p tcp --match multiport --dports 80,8080,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+-A INPUT  -s deb.torproject.org -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow apt to approved mirrors"
+# gpg get key rules
+-A OUTPUT -p tcp --dport 11371 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow gpg to receive keys from approved keyservers"
+-A INPUT  -p tcp --sport 11371 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow gpg to receive keys from approved keyservers"
+# OSSEC server-agent rules
+-A OUTPUT -d monitor_host_entry -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A INPUT  -s monitor_host_entry -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+#Dev testing ssh rules 
+#-A INPUT  -p tcp --match multiport --dports 22,2222,2200 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#-A INPUT  -p tcp --match multiport --dports 22,2222,2200 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#-A OUTPUT -p tcp --match multiport --sports 22,2222,2200 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+#Production ssh access binded to the local loopback
+-A INPUT -i lo -p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+-A INPUT -i lo -p tcp --dport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+-A OUTPUT -o lo -p tcp --sport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow SSH with rate limiting only thur tor"
+# Source Inteface rules
+-A INPUT  -i lo -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to source int"
+-A OUTPUT -o lo -p tcp --sport 80 -m owner --gid-owner source -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to source int"
+-A OUTPUT -m owner --gid-owner source -j LOGNDROP -m comment --comment "Drop all other traffic from the source int group"
+# Document Interface rules
+-A INPUT  -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to document int"
+-A OUTPUT -o lo -p tcp --sport 8080 -m owner --gid-owner document -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "All connections from tor to document int"
+-A OUTPUT -m owner --gid-owner document -j LOGNDROP -m comment --comment "Drop all other traffic from the document int group"
+# Drop all other traffic from the securedrop user
+-A OUTPUT -m owner --uid-owner securedrop -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
+# Allow local loopback connections
+-A INPUT  -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+-A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+# Tor for ssh access rules
+-A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the app host that provides ssh access"
+# Chroot'd tor rule because the output uid-owner rules don't work with chroot jail
+-A OUTPUT -p tcp --match multiport --dports 80,443,9001,9030 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the source chrooted tor instances"
+#TODO Tor for source interface rules
+#-A OUTPUT -p tcp -m owner --uid-owner 669 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the source chrooted tor instances"
+#TODO Tor for document interface rules
+#-A OUTPUT -p tcp -m owner --uid-owner 670 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic for the document chrooted tor instances"
+# allow other established connections
+-A INPUT  -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow all other established connections"
+# This is needed for the installer to run
+-A OUTPUT -p tcp -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Needed for the installer to run"
+# Drop and log all other traffic
+-A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
+-A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
+# LOGNDROP everything else
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-level 4 
+-A LOGNDROP -j DROP
+COMMIT

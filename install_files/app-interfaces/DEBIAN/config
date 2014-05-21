@@ -1,0 +1,148 @@
+#!/bin/bash
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# Is this prod dev environment
+db_input critical securedrop-app-interfaces/prod_dev || true
+db_go || true
+
+# If not prod get what deb packages to install
+db_get securedrop-app-interfaces/prod_dev
+if [ "$RET" = "false" ]; then
+    ok=""
+    while [ ! "$ok" ]; do
+        db_input critical securedrop-app-interfaces/source_deb || true
+        db_go || true
+        db_get securedrop-app-interfaces/source_deb
+        if [ -f "$RET" ]; then
+            ok=1
+        else
+            db_input critical securedrop-app-interfaces/source_deb_continue || true
+            db_go || true
+            db_get securedrop-app-interfaces/source_deb_continue
+            if [ "$RET" = "false" ]; then
+                exit 1
+            else
+                db_fset securedrop-app-interfaces/source_deb seen false
+            fi
+        fi
+
+    done
+
+    ok=""
+    while [ ! "$ok" ]; do
+        db_input critical securedrop-app-interfaces/document_deb || true
+        db_go || true
+        db_get securedrop-app-interfaces/document_deb
+        if [ -f "$RET" ]; then
+            ok=1
+        else
+            db_input critical securedrop-app-interfaces/document_deb_continue || true
+            db_go || true
+            db_get securedrop-app-interfaces/document_deb_continue
+            if [ "$RET" = "false" ]; then
+                exit 1
+            else
+                db_fset securedrop-app-interfaces/document_deb seen false
+            fi
+         fi
+    done
+fi
+
+# Get the full path to application public gpg key
+ok=""
+while [ ! "$ok" ]; do
+    db_input critical securedrop-app-interfaces/find_key_path || true
+    db_go || true
+    db_get securedrop-app-interfaces/find_key_path
+    if [ -f "$RET" ]; then
+        ok=1
+        db_go || true
+    else
+        db_input critical securedrop-app-interfaces/find_key_path_continue || true
+        db_go || true
+        db_get securedrop-app-interfaces/find_key_path_continue
+        if [ "$RET" = "false" ]; then
+            exit 1
+        else
+            db_fset securedrop-app-interfaces/find_key_path seen false
+        fi
+    fi
+done
+
+# extract gpg key's fingerprint save to to dh_db and subsititute 
+# the fpr value in the verify_fingerprint template
+db_get securedrop-app-interfaces/find_key_path
+find_key_path="$RET"
+key_fpr="$( gpg --with-fingerprint $find_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+db_set securedrop-app-interfaces/app_key_fpr "$key_fpr"
+db_subst securedrop-app-interfaces/verify_fingerprint KEY_FPR "$key_fpr"
+db_go || true
+
+db_input critical securedrop-app-interfaces/verify_fingerprint || true
+db_go || true
+db_get securedrop-app-interfaces/verify_fingerprint
+if [ "$RET" = "false" ]; then
+    exit 1
+fi
+
+# Have option to use custom headers
+db_input high securedrop-app-interfaces/use_custom_header_image || true
+db_go || true
+
+db_get securedrop-app-interfaces/use_custom_header_image
+use_header="$RET"
+if [ "$use_header" = "true" ]; then
+    ok=""
+    while [ ! "$ok" ]; do
+        db_input critical securedrop-app-interfaces/custom_header_image_path || true
+        db_go || true
+        db_get securedrop-app-interfaces/custom_header_image_path
+        if [ -f "$RET" ]; then
+            ok=1
+            db_go || true
+        else
+            db_input critical securedrop-app-interfaces/custom_header_image_path_continue || true
+            db_go || true
+            db_get securedrop-app-interfaces/custom_header_image_path_continue
+            if [ "$RET" = "false" ]; then
+                exit 1
+            else
+                db_fset securedrop-app-interfaces/custom_header_image_path seen false
+            fi
+        fi
+    done
+fi
+
+# The securedrop application user on the host system
+db_input medium securedrop-app-interfaces/app_user || true
+db_input medium securedrop-app-interfaces/app_gid || true
+db_input medium securedrop-app-interfaces/app_uid || true
+
+# Tor info
+db_input medium securedrop-app-interfaces/tor_key_id || true
+db_input medium securedrop-app-interfaces/tor_key_fpr || true
+
+# Journalist user for document interface
+ok=""
+while [ ! "$ok" ]; do
+    db_input critical securedrop-app-interfaces/journalist_user || true
+    db_go || true
+    db_get securedrop-app-interfaces/journalist_user
+    if [[ "$RET" =~  ^[A-Za-z0-9_]+$ ]]; then
+        ok=1
+        db_go || true
+    else
+        db_input critical securedrop-app-interfaces/journalist_user_continue || true
+        db_go || true
+        db_get securedrop-app-interfaces/journalist_user_continue
+        if [ "$RET" = "false" ]; then
+            exit 1
+        else
+            db_fset securedrop-app-interfaces/journalist_user seen false
+        fi
+    fi
+done
+db_go || true

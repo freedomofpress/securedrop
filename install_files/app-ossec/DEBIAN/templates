@@ -1,0 +1,12 @@
+Template: securedrop-app-ossec/monitor_ip
+Type: string
+Description: The Monitor Server's IP:
+ The Monitor Server's IP address is used to create a hosts entry
+ that is used by the iptables rules and the OSSEC agent configs.
+ If this is a non production environment and do not have a OSSEC manager
+ just enter any valid IP address.
+
+Template: securedrop-app-ossec/monitor_ip_continue
+Type: boolean
+Description: Try again?
+ That IP was not valid.

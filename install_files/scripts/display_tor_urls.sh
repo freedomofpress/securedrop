@@ -9,7 +9,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-    if [ "$(dpkg -l securedrop-app)" ]; then
+    if [ "$(dpkg -l securedrop-app-interfaces)" ]; then
         # Display the urls for the source and document interfaces
         if [ -f /var/chroot/source/var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
