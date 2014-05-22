@@ -42,9 +42,9 @@ securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/document_deb
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/find_key_path string /vagrant/securedrop/test_journalist_key.pub
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/verify_fingerprint boolean true
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/journalist_user string journo1
+securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/use_custom_header_image boolean false
 securedrop-app-hardening-0.2.1-amd64.deb securedrop-app-hardening/admin_user string vagrant
 securedrop-app-ossec-0.2.1-amd64.deb securedrop-app-ossec/monitor_ip string CHANGEME
-securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/use_custom_header_image boolean false
 EOF
 
 gdebi --non-interactive /vagrant/app-interfaces-0.2.1-amd64.deb

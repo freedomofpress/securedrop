@@ -62,18 +62,24 @@ You'll also need to verify the 40 character hex fingerprint for this new key dur
 All packages require that Tor's repo was already added to the system. The `securedrop/install_files/scripts/add_repo.sh` will do this. 
 
 ### Creating the securedrop deb packages:
-For development and testing you can create the deb packages by running `securedrop/build_deb_packages.sh` in the base of the securedrop repo.
-This will create 4 packages
+For development and testing you can create the deb packages by running `securedrop/build_deb_packages.sh` 
 
 ####securedrop-monitor
 * Location: `securedrop/monitor-VERSION.deb`
-* This package hardens the host system and install the OSSEC manager binary.
+* This package hardens the host system and installs the OSSEC manager binary.
 Min Required Info: App server's IP address, destination email address, smtp relay, admin username 
 
-####securedrop-app
-* Location: `securedrop/app-VERSION.deb`
-* This package hardens the host system and configures 2 chroot jails that the interfaces will be installed in
-Min Reuqired Info: Monitor Server's IP address, application's gpg key, 1 journalist name, 1 admin username 
+####securedrop-app-interfaces
+* Location: `securedrop/app-interfaces-VERSION.deb`
+* This package configures 2 chroot jails that the interfaces will be installed in
+
+####securedrop-app-hardening
+* Location: `securedrop/app-hardening-VERSION.deb`
+* This package applies the hardening config to the app server
+
+####securedrop-app-ossec
+* Location: `securedrop/app-ossec-VERSION.dev`
+* This package installs the preconfigured OSSEC agent for the app server
 
 ####securedrop-source
 * Location: `securedrop/source-VERSION.deb`
@@ -90,17 +96,17 @@ If you are using the included Vagrantfile for managing vm's there is an included
 * Clone the SecureDrop repo `git clone https://github.com/freedomofpress/securedrop.git` 
 * Change directory into the base of the securedrop repo `cd securedrop/`
 * Run `./build_deb_packages.sh` to create the deb packages.
-* Run `vagrant precise-app-gdebi up` to start the App Server virtual machine.
-* Run `vagrant ssh precise-app-gdebi` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
+* Run `vagrant precise-app up` to start the App Server virtual machine.
+* Run `vagrant ssh precise-app` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
 * Run `sudo /vagrant/install_files/scripts/vagrant-app-preinstall.sh`. This will add the tor repo, install gdebi, and install the securedrop-app package using the included preseed question based on the Vagrantfile.
 * Run `sudo /opt/securedrop/scripts/display_tor_urls.sh`
 
-#### Development Monitor Server using the inlcuded `Vagrantfile`
+#### Development Monitor Server using the included `Vagrantfile`
 * Clone the SecureDrop repo `git clone https://github.com/freedomofpress/securedrop.git`
 * Change directory into the base of the securedrop repo `cd securedrop/`
 * Run `./build_deb_packages.sh` to create the deb packages.
-* Run `vagrant precise-monitor-gdebi up` to start the App Server virtual machine.
-* Run `vagrant ssh precise-monitor-gdebi` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
+* Run `vagrant precise-monitor up` to start the App Server virtual machine.
+* Run `vagrant ssh precise-monitor` to SSH to the app server. The vagrant provisioner generates an error using the gdebi command.
 * Run `sudo /vagrant/install_files/scripts/vagrant-monitor-preinstall.sh`. This will add the tor repo, install gdebi and install the securedrop-monitor package using the included preseed questions based on the Vagrantfile.
 * Run `sudo /opt/securedrop/scripts/display_tor_urls.sh`
 
@@ -116,7 +122,7 @@ sudo /opt/securedrop/scripts/display_tor_urls.sh
 ```
 wget URL_TO_SCRIPT_TO_INSTALL_TOR_REPO
 sudo ./add-repo.sh
-sudo apt-get install securedrop-app
+sudo apt-get install securedrop-monitor
 sudo /opt/securedrop/scripts/display_tor_urls.sh
 ```
 

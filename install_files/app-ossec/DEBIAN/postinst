@@ -22,6 +22,12 @@ case "$1" in
         db_get securedrop-app-ossec/monitor_ip
         monitor_ip="$RET"
 
+        # Delete any old host entries for monitor server
+        # then create new host entry using monitor_ip
+        sed '/monitor_host_entry/d' /etc/hosts
+        echo "$monitor_ip  monitor_host_entry" >> /etc/hosts
+
+
 	DIR="/var/ossec"
 	USER="ossec"
 	GROUP="ossec"

@@ -35,13 +35,12 @@ add_tor_repo
 apt-get update
 apt-get install gdebi -y
 
-# Example debconf preseed for securedrop-monitor package adjust the values to fit your environment
 debconf-set-selections << EOF
-#securedrop-monitor-0.2.1-dev.deb securedrop-monitor/get_smtp string gmail-smtp-in.l.google.com
-#securedrop-monitor-0.2.1-dev.deb securedrop-monitor/get_email string username@gmail.com
-#securedrop-monitor-0.2.1-dev.deb securedrop-monitor/get_email_from string ossec@securedrop
-securedrop-monitor-0.2.1-dev.deb securedrop-monitor/admin_user string vagrant
-securedrop-monitor-0.2.1-dev.deb securedrop-monitor/app_ip string CHANGEME
+#securedrop-monitor-0.2.1-amd64.deb securedrop-monitor/get_smtp string gmail-smtp-in.l.google.com
+#securedrop-monitor-0.2.1-amd64.deb securedrop-monitor/get_email string username@gmail.com
+#securedrop-monitor-0.2.1-amd64.deb securedrop-monitor/get_email_from string ossec@securedrop
+securedrop-monitor-0.2.1-amd64.deb securedrop-monitor/admin_user string vagrant
+securedrop-monitor-0.2.1-amd64.deb securedrop-monitor/app_ip string CHANGEME
 EOF
 
-gdebi --non-interactive /vagrant/monitor-0.2.1-dev.deb
+gdebi --non-interactive /vagrant/monitor-0.2.1-amd64.deb
