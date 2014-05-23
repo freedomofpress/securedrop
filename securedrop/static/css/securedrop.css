@@ -372,3 +372,9 @@ p.header-warning {
 .powered img {
   vertical-align: middle;
 }
+
+span#unread.some a{
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}

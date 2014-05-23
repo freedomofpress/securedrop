@@ -79,7 +79,10 @@ def get_docs(sid):
 
 @app.route('/')
 def index():
-    sources = Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all()
+    sources = []
+    for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
+        sources.append(source)
+        source.num_unread = len(Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
     return render_template('index.html', sources=sources)
 
 
@@ -155,6 +158,14 @@ def generate_code():
     db_session.commit()
     return redirect('/col/' + g.sid)
 
+@app.route('/download_unread/<sid>')
+def download_unread(sid):
+    id = Source.query.filter(Source.filesystem_id == sid).one().id
+    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()
+    docs_arr = []
+    for doc in docs:
+        docs_arr.append({'name': doc.filename})
+    return bulk_download(sid, docs_arr)
 
 @app.route('/bulk', methods=('POST',))
 def bulk():
