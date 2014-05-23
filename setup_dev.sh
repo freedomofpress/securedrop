@@ -117,8 +117,8 @@ WORD_LIST = './wordlist'
 NOUNS = './dictionaries/nouns.txt'
 ADJECTIVES = './dictionaries/adjectives.txt'
 
-SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
-SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
 SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 EOF
 
