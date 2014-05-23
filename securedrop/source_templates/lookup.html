@@ -12,16 +12,17 @@
   {% endif %}
   {% if msgs %}
   <div id="replies">
-    <p class="notification"> <i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them.</p>
+    <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them.</p>
     {% for msg in msgs %}
     <div class="reply">
-      <form class="message" method="post" action="/delete" autocomplete="off">
+      <div class="date">{{ msg.date }}</div>
+      <form method="post" action="/delete" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
         <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
-        <blockquote class="message">{{ msg.msg }}</blockquote>
-        <button type="submit">Delete</button>
+        <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
       </form>
-      <div class="date">Sent {{ msg.date }}</div>
+      <blockquote>{{ msg.msg }}</blockquote>
+      <div class="clearfix"></div>
     </div>
     {% endfor %}
   </div>

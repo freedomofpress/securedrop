@@ -237,3 +237,31 @@ input.codename {
   width: 400px;
   padding: 10px;
   font-weight: bold; }
+
+.reply {
+  border: 1px solid #999999;
+  text-align: left;
+  margin-bottom: 1em;
+  border-radius: 5px;
+}
+.reply .date {
+  float: right;
+  background-color: #999999;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+}
+.reply button {
+  float: right;
+  padding: 5px;
+  background-color: inherit;
+  color: #ff0000;
+  font-size: 14px;
+  border: 0;
+  clear: right;
+}
+.reply button:hover {
+  border: 0;
+  color: #000000;
+}
