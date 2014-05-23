@@ -6,8 +6,8 @@
 <h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
 <form action='/regenerate-code' method='post'>
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <input type='hidden' name='sid' value='{{ sid }}'>
-  <input type='submit' value='Generate a new codename for this source'>
+  <input type="hidden" name="sid" value="{{ sid }}">
+  <input type="submit" value="Generate a new codename for this source" class="btn small">
 </form>
 
 {% if docs %}
@@ -24,13 +24,13 @@
   {% endif %}
 </li>
 {% endfor %}
+</ul>
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
 <p>
-  <button type="submit" name="action" value="download">Download selected</button>
-  <button type="submit" name="action" value="delete">Delete selected</button>
-  (<span id="select_all">select all</span>, <span id="select_none">select none</span>)</p>
-</ul>
+  <button type="submit" name="action" value="download" class="small">Download selected</button>
+  <button type="submit" name="action" value="delete" class="small">Delete selected</button>
+  <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span></p>
 </form>
 {% else %}
 <p><br />No documents to display.</p>
