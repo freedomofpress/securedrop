@@ -36,7 +36,6 @@ apt-get install gdebi -y
 
 # Sample app server debconf preseed questions/answers for vagrant dev environment
 debconf-set-selections << EOF
-<<<<<<< HEAD
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/prod_dev boolean false
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/source_deb string /vagrant/source-0.2.1-amd64.deb
 securedrop-app-interfaces-0.2.1-amd64.deb securedrop-app-interfaces/document_deb string /vagrant/document-0.2.1-amd64.deb
@@ -49,17 +48,3 @@ securedrop-app-ossec-0.2.1-amd64.deb securedrop-app-ossec/monitor_ip string CHAN
 EOF
 
 gdebi --non-interactive /vagrant/app-interfaces-0.2.1-amd64.deb
-=======
-securedrop-app-0.2.1-dev.deb securedrop-app/prod_dev boolean false
-securedrop-app-0.2.1-dev.deb securedrop-app/source_deb string /vagrant/source-0.2.1-dev.deb
-securedrop-app-0.2.1-dev.deb securedrop-app/document_deb string /vagrant/document-0.2.1-dev.deb
-securedrop-app-0.2.1-dev.deb securedrop-app/find_key_path string /vagrant/securedrop/test_journalist_key.pub
-securedrop-app-0.2.1-dev.deb securedrop-app/verify_fingerprint boolean true
-securedrop-app-0.2.1-dev.deb securedrop-app/journalist_user string journo1
-securedrop-app-0.2.1-dev.deb securedrop-app/admin_user string vagrant
-securedrop-app-0.2.1-dev.deb securedrop-app/monitor_ip string CHANGEME
-securedrop-app-0.2.1-dev.deb securedrop-app/use_custom_header_image boolean false
-EOF
-
-gdebi --non-interactive /vagrant/app-0.2.1-dev.deb
->>>>>>> Migrating to deb packages still needs work
