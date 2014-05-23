@@ -36,7 +36,7 @@ $(function () {
       $('ul#cols li').show()
     } else {
       $('ul#cols li').hide()
-      $('ul#cols li[data-source-designation*="' + value.replace(/"/g, "") + '"]').show()
+      $('ul#cols li[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]').show()
     }
   }
 
