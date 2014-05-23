@@ -54,7 +54,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not logged_in():
-            return redirect(url_for('lookup'))
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -86,7 +86,9 @@ def setup_g():
             abort(500)
         except NoResultFound as e:
             app.logger.error("Found no Sources when one was expected: %s" % (e,))
-            abort(404)
+            del session['logged_in']
+            del session['codename']
+            return redirect(url_for('index'))
         g.loc = store.path(g.sid)
 
 
