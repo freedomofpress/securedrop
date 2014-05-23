@@ -14,6 +14,7 @@ import version
 import crypto_util
 import store
 import background
+import util
 from db import db_session, Source
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
