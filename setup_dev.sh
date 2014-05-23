@@ -201,14 +201,14 @@ case "\$1" in
         echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
         exit 1
 esac
- 
+
 exit 0
 EOF
 
 sudo chmod +x /etc/init.d/xvfb
 sudo service xvfb start
-sudo sh -c 'echo "export DISPLAY=:1" >> /etc/profile'
-source /etc/profile # source immediatly for travis
+sudo sh -c 'echo "export DISPLAY=:1" >> /etc/environment'
+export DISPLAY=:1
 
 echo ""
 echo "Running unit tests... these should all pass!"
