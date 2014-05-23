@@ -23,4 +23,8 @@ $(function () {
     // Don't submit the form if no collections are selected
     return false;
   });
+
+  $("#unread a").click(function(){
+    $("#unread").html("unread: 0");
+  });
 });
