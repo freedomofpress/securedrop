@@ -2,6 +2,9 @@
 <html>
   <head>
     <link rel='stylesheet' href='/static/css/securedrop.css' type='text/css' media='all' />
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
     <title>SecureDrop</title>
     <script src="/static/js/libs/jquery-2.0.3.min.js"></script>
@@ -9,25 +12,24 @@
     <script src="/static/js/journalist.js"></script>
   </head>
   <body>
-    <div id="wrapper">
+    <div class="content">
       {% block header %}
-      <div id="header">
-        <a href="/"><img src="/static/i/{{ header_image }}" alt="SecureDrop"></a>
+        <a href="/"><img src="/static/i/{{ header_image }}" alt="SecureDrop" class="logo small"></a>
         {% if use_custom_header_image %}
         <div class="powered">Powered by <img src="/static/i/securedrop_small.png" alt="SecureDrop"></div>
         {% endif %}
-      </div>
       {% endblock %}
+      <div class="panel selected">
+        {% include 'flashed.html' %}
+        {% block body %}{% endblock %}
 
-      {% include 'flashed.html' %}
-      {% block body %}{% endblock %}
-
-      {% block footer %}
-      <div id="footer">
-        Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
-        Powered by <em>SecureDrop {{ version }}</em>.
+        {% block footer %}
+        <div id="footer">
+          Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
+          Powered by <em>SecureDrop {{ version }}</em>.
+        </div>
+        {% endblock %}
       </div>
-      {% endblock %}
     </div>
   </body>
 </html>
