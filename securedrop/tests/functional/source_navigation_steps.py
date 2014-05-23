@@ -4,7 +4,7 @@ class SourceNavigationSteps():
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
 
-        self.assertEqual("SecureDrop", self.driver.title)
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources", self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
         self.driver.find_element_by_id('submit-documents-button').click()
