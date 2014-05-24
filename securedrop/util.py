@@ -1,5 +1,5 @@
 import datetime
 
 def format_time(d):
-  return d.strftime('%b %d, %Y %I:%M %p')
+    return d.strftime('%b %d, %Y %I:%M %p')
 
