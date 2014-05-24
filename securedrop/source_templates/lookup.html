@@ -16,7 +16,7 @@
     {% for msg in msgs %}
     <div class="reply">
       <div class="date">{{ msg.date }}</div>
-      <form method="post" action="/delete" autocomplete="off">
+      <form class="message" method="post" action="/delete" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
         <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
         <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
