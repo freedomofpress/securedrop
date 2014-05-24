@@ -23,7 +23,16 @@
 
     <div class="content">
       <div class="grid">
-        <img class="logo grid-item" src="/static/i/logo.png" class="logo">
+        <div id="header">
+          <img src="/static/i/{{ header_image }}" class="logo grid-item" alt="SecureDrop">
+          {% if use_custom_header_image %}
+          <div class="powered">
+            Powered by<br/>
+            <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          </div>
+          {% endif %}
+        </div>
+
         <div class="grid-item option alt">
           <h2>
             Submit documents for the first time

@@ -20,6 +20,18 @@ body {
   padding: 40px 20px;
   border: 1px solid #c3c3c3; }
 
+#header {
+  display: inline-block;
+}
+#header .powered {
+  margin-top: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #666666;
+  letter-spacing: normal;
+}
+
 footer {
   clear: both;
   text-align: center;

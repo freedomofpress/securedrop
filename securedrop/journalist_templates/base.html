@@ -13,7 +13,17 @@
   </head>
   <body>
     <div class="content">
-      <a href="/"><img src="/static/i/logo.png" class="logo small"></a>
+      {% block header %}
+      <div id="header">
+        <a href="/"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        {% if use_custom_header_image %}
+        <div class="powered">
+          Powered by<br/>
+          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+        </div>
+        {% endif %}
+      </div>
+      {% endblock %}
 
       <div class="panel selected">
         <hr class="no-line" />
