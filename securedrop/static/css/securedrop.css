@@ -372,3 +372,9 @@ p.header-warning {
 .powered img {
   vertical-align: middle;
 }
+
+input#filter{
+  margin-left: 20px;
+  margin-bottom: 20px;
+  padding: 3px;
+}

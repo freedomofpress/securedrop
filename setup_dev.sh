@@ -117,8 +117,8 @@ WORD_LIST = './wordlist'
 NOUNS = './dictionaries/nouns.txt'
 ADJECTIVES = './dictionaries/adjectives.txt'
 
-SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
-SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
 SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 EOF
 
@@ -201,14 +201,14 @@ case "\$1" in
         echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
         exit 1
 esac
- 
+
 exit 0
 EOF
 
 sudo chmod +x /etc/init.d/xvfb
 sudo service xvfb start
-sudo sh -c 'echo "export DISPLAY=:1" >> /etc/profile'
-source /etc/profile # source immediatly for travis
+sudo sh -c 'echo "export DISPLAY=:1" >> /etc/environment'
+export DISPLAY=:1
 
 echo ""
 echo "Running unit tests... these should all pass!"

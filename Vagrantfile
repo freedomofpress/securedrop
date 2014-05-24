@@ -8,4 +8,7 @@ Vagrant.configure("2") do |config|
     inline: "sudo -u vagrant /vagrant/setup_dev.sh -r '/home/vagrant/.securedrop' -u"
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8081, host: 8081
+  config.vm.provider "virtualbox" do |v|
+    v.name = "securedrop"
+  end
 end
