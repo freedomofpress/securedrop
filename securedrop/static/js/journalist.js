@@ -31,6 +31,10 @@ $(function () {
     return false;
   });
 
+  $("#unread a").click(function(){
+    $("#unread").html("unread: 0");
+  });
+
   var filter_codenames = function(value){
     if(value == ""){
       $('ul#cols li').show()

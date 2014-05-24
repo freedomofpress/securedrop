@@ -14,7 +14,7 @@ import version
 import crypto_util
 import store
 import background
-from db import db_session, Source
+from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -79,7 +79,10 @@ def get_docs(sid):
 
 @app.route('/')
 def index():
-    sources = Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all()
+    sources = []
+    for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
+        sources.append(source)
+        source.num_unread = len(Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
     return render_template('index.html', sources=sources)
 
 
@@ -132,6 +135,11 @@ def col_delete():
 def doc(sid, fn):
     if '..' in fn or fn.startswith('/'):
         abort(404)
+    try:
+        Submission.query.filter(Submission.filename == fn).one().downloaded = True
+    except NoResultFound as e:
+        app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
+    db_session.commit()
     return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
 
 
@@ -155,6 +163,11 @@ def generate_code():
     db_session.commit()
     return redirect('/col/' + g.sid)
 
+@app.route('/download_unread/<sid>')
+def download_unread(sid):
+    id = Source.query.filter(Source.filesystem_id == sid).one().id
+    docs = [doc.filename for doc in Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
+    return bulk_download(sid, docs)
 
 @app.route('/bulk', methods=('POST',))
 def bulk():
@@ -163,9 +176,11 @@ def bulk():
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
         doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
+    filenames_selected = [
+        doc['name'] for doc in docs_selected]
 
     if action == 'download':
-        return bulk_download(g.sid, docs_selected)
+        return bulk_download(g.sid, filenames_selected)
     elif action == 'delete':
         return bulk_delete(g.sid, docs_selected)
     else:
@@ -186,7 +201,14 @@ def bulk_delete(sid, docs_selected):
 
 def bulk_download(sid, docs_selected):
     source = get_source(sid)
-    filenames = [store.path(sid, doc['name']) for doc in docs_selected]
+    filenames = []
+    for doc in docs_selected:
+        filenames.append(store.path(sid, doc))
+        try:
+            Submission.query.filter(Submission.filename == doc).one().downloaded = True
+        except NoResultFound as e:
+            app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
+    db_session.commit()
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
                      attachment_filename=source.journalist_designation + ".zip",

@@ -373,6 +373,12 @@ p.header-warning {
   vertical-align: middle;
 }
 
+span#unread.some a{
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 input#filter{
   margin-left: 20px;
   margin-bottom: 20px;
