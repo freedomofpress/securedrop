@@ -160,7 +160,6 @@ p.serious {
   text-align: center; }
 
 .snippet {
-  width: 800px;
   border: 1px solid #c3c3c3; }
   .snippet .attachment {
     background-color: #f3f3f3;
@@ -168,6 +167,8 @@ p.serious {
     width: 330px;
     display: inline-block;
     vertical-align: top; }
+    .snippet .attachment .file-options {
+      padding-top: 8px; }
     .snippet .attachment .upload-icon {
       display: inline-block;
       width: 100%;
@@ -184,9 +185,11 @@ p.serious {
     .snippet .message textarea {
       padding: 10px;
       width: 100%;
-      min-height: 134px;
+      min-height: 160px;
       font-size: 12pt;
       border: none; }
+      .snippet .message textarea:focus {
+        outline: none; }
 
 .pull-bottom {
   position: absolute;
