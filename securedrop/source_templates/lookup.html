@@ -1,50 +1,63 @@
 {% extends "base.html" %}
 {% block body %}
-<div id="content" class="user-view">
-<h2><span class="headline">Submit a document, message, or both</span></h2>
 
-{% include 'flashed.html' %}
+<center>
+  <h2 class="headline">You have three options to send data</h2>
+  <p>You can send a file, a message, or both.</p>
 
-{% if flagged and not haskey %}
-  <p class="notification">A journalist would like to reply to you! Please check back shortly to view the reply.</p>
-{% endif %}
-{% if msgs %}
-<div id="replies">
-  <p class="notification">You have received a reply. For your security, please delete all replies when you're done with them.</p>
-  {% for msg in msgs %}
-  <div class="reply">
-    <form class="message" method="post" action="/delete" autocomplete="off">
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
-      <blockquote class="message">{{ msg.msg }}</blockquote>
-      <button type="submit">Delete</button>
-    </form>
-    <div class="date">Sent {{ msg.date }}</div>
+  {% include 'flashed.html' %}
+
+  {% if flagged and not haskey %}
+  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to login again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+  {% endif %}
+  {% if msgs %}
+  <div id="replies">
+    <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them.</p>
+    {% for msg in msgs %}
+    <div class="reply">
+      <div class="date">{{ msg.date }}</div>
+      <form class="message" method="post" action="/delete" autocomplete="off">
+        <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
+        <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
+      </form>
+      <blockquote>{{ msg.msg }}</blockquote>
+      <div class="clearfix"></div>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
-{% endif %}
+  {% endif %}
+
+  <hr class="no-line">
+</center>
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <p style="padding-bottom: 0"><b>Upload a file:</b></p>
-  <div id="browse-select">
-    <input type="file" name="fh" autocomplete="off"/><br />
-    <input type="checkbox" id="notclean" name="notclean" value="True" />
-    <label for="cleanup">Remove all the metadata of the file.</label>
+  <div class="snippet grid">
+    <div class="attachment grid-item">
+      <i class="fa fa-cloud-upload upload-icon"></i> <input type="file" name="fh" autocomplete="off">
+      <div>
+        <input type="checkbox" id="notclean" name="notclean" value="True" />
+        <label for="notclean">Attempt to remove file metadata</label>
+      </div>
+    </div>
+    <div class="message grid-item">
+      <textarea name="msg" class="fill-parent" placeholder="Add message"></textarea>
+    </div>
   </div>
 
-  <p><b>Or just enter a message:</b></p>
+  <hr class="no-line">
 
-  <textarea name="msg" cols="72" rows="10"></textarea><br />
-  <button  class="button-custom" type="submit">Submit</button>
+  <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> Submit</button>
 </form>
 
-<p><br><a href="/journalist-key">Download journalist's public key</a> (<em><a href="/why-journalist-key">why?</a></em>)</p>
+<p><strong>Tip:</strong> For an extra layer of security, you can first encrypt your data with the <a href="/journalist-key" class="text-link">journalist's public key</a>. For more information click <a href="/why-journalist-key" class="text-link">here</a>.</p>
 
-<p><b>Remember!</b> Your code name is: <span class="code-name">{{ codename }}</span></p>
-<p><a href="/login">Enter a different code name...</a><br>
-<a href="/lookup">Reload to check for new messages...</a></p>
+<hr class="no-line"/>
+
+<div class="code-reminder">
+  <i class="fa fa-lock pull-left"></i> Remember, your codename is: <strong>{{ codename }}</strong>
+</div>
 
 </div>
 {% endblock %}
