@@ -5,6 +5,9 @@
 function enhance_ui() {
   // Add the "quick filter" box for sources
   $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus="autofocus">');
+
+  // Add the "select {all,none}" buttons
+  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
 }
 
 $(function () {
