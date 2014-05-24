@@ -1,4 +1,15 @@
+/**
+ * The journalist page should degrade gracefully without Javascript. To avoid
+ * confusing users, this function dyanamically adds elements that require JS.
+ */
+function enhance_ui() {
+  // Add the "quick filter" box for sources
+  $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus="autofocus">');
+}
+
 $(function () {
+  enhance_ui();
+
   var all = $("#select_all");
   var none = $("#select_none");
   var checkboxes = $(":checkbox");

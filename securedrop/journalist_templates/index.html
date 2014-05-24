@@ -4,7 +4,7 @@
 <h2><span class="headline">Sources</span></h2>
 {% if sources %}
 <form id="delete_collections" action="/col/delete" method="post">
-<input id='filter' type='text' placeholder='filter by codename' autofocus="autofocus">
+<div id='filter-container'></div>
 <ul id="cols" class="plain">
   {% for source in sources %}
   {% set docs = source.documents_messages_count()['documents'] %}
