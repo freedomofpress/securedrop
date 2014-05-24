@@ -192,8 +192,10 @@ def bulk_delete(sid, docs_selected):
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
+            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
             fn = store.path(sid, doc['name'])
             store.secure_unlink(fn)
+        db_session.commit()
     return render_template('delete.html', sid=sid,
             codename=source.journalist_designation,
             docs_selected=docs_selected, confirm_delete=confirm_delete)
