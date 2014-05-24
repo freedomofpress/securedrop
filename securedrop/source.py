@@ -23,6 +23,7 @@ import version
 import crypto_util
 import store
 import background
+import util
 from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
@@ -101,7 +102,7 @@ def check_tor2web():
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
               '<a href="/tor2web-warning">Why is this dangerous?</a>',
-              "header-warning")
+              "banner-warning")
 
 
 @app.route('/')
@@ -152,8 +153,8 @@ def lookup():
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
             else:
-                date = str(datetime.fromtimestamp(
-                           os.stat(store.path(g.sid, fn)).st_mtime))
+                d = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
+                date = util.format_time(d)
                 replies.append(dict(id=fn, date=date, msg=msg))
 
     def async_genkey(sid, codename):

@@ -14,6 +14,7 @@ import version
 import crypto_util
 import store
 import background
+import util
 from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -25,7 +26,7 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
     app.jinja_env.globals['use_custom_header_image'] = True
 else:
-    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
 @app.teardown_appcontext
@@ -151,7 +152,7 @@ def reply():
 
     crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
                         store.path(g.sid, filename))
-    
+
     db_session.commit()
     return render_template('reply.html', sid=g.sid,
             codename=g.source.journalist_designation)
