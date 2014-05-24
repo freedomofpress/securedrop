@@ -28,7 +28,7 @@ Usage: ./chroot-dev [command]
     test    # run tests
     clean   # recreate db, keys, and everything else
     destroy # destroy chroot jail
-    
+
 EOS
 }
 
@@ -51,13 +51,13 @@ require_chroot() {
 mount_filesystems() {
     sudo mount proc $CHROOT_DIR/proc -t proc
     sudo mount sys $CHROOT_DIR/sys -t sysfs
-    sudo mount --bind /dev $CHROOT_DIR/dev 
+    sudo mount --bind /dev $CHROOT_DIR/dev
     sudo mount $SOURCE_ROOT $CHROOT_DIR/securedrop -o bind
 }
 
 unmount_filesystems() {
     sudo umount -l $CHROOT_DIR/securedrop
-    sudo umount -l $CHROOT_DIR/dev 
+    sudo umount -l $CHROOT_DIR/dev
     sudo umount -l $CHROOT_DIR/sys
     sudo umount -l $CHROOT_DIR/proc
 }
@@ -76,7 +76,10 @@ stop_servers() {
 
 # patch schroot.conf, if needed
 if ! grep -q "\[securedrop\]" /etc/schroot/schroot.conf; then
-    sudo sh -c "cat $SOURCE_ROOT/dev_files/schroot.conf | sed 's|SECUREDROP_LOCATION|$CHROOT_DIR|g' >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo '[securedrop]' >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo 'description=SecureDrop chroot' >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo 'directory=$CHROOT_DIR' >> /etc/schroot/schroot.conf"
 fi
 
 # commands
@@ -95,7 +98,8 @@ if [ $CMD == "up" ]; then
         mkdir -p $CHROOT_DIR
         sudo debootstrap --keyring $SOURCE_ROOT/dev_files/ubuntu-archive-keyring.gpg --arch=amd64 precise $CHROOT_DIR http://archive.ubuntu.com/ubuntu/
         sudo mkdir -p $CHROOT_DIR/securedrop
-        sudo cp $SOURCE_ROOT/dev_files/sources.list $CHROOT_DIR/etc/apt/sources.list
+        sudo sh -c "echo 'deb http://archive.ubuntu.com/ubuntu precise main universe' >> $CHROOT_DIR/etc/apt/sources.list"
+        sudo sh -c "echo 'deb-src http://archive.ubuntu.com/ubuntu precise main universe' >> $CHROOT_DIR/etc/apt/sources.list"
         sudo cp /etc/resolv.conf $CHROOT_DIR/etc/resolv.conf
         sudo sh -c "echo '127.0.0.1 dev' >> $CHROOT_DIR/etc/hosts"
 
