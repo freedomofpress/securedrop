@@ -17,13 +17,13 @@ Before installing SecureDrop, you should make sure you have everything you need.
 
 * Finally, you should have selected two secure passphrases: one for the persistent volume on the internet-connected Tails, and one for the persistent volume on the air-gapped Tails. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-In addition to the requirements above, each journalist will also their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't have already have a key. 
+In addition to the requirements above, each journalist will also have their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't have already have a key. 
 
 We also suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
 
 ## Secure Viewing Station
 
-The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network devices. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing this is outside the scope of this manual.
+The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network device. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing this is outside the scope of this manual.
 
 ### Generate GPG Key and Import Journalist Public Keys
 
@@ -70,14 +70,14 @@ Then scp the `securedrop` folder to the home directory on the `Monitor Server` a
     scp -r securedrop user@MONITOR_IP:~/
     scp -r securedrop user@APP_IP:~/
 
-Now SSH to the `Monitor Server`. When you're in, enter your environment details in the CONFIG_OPTIONS file and run the installation script:
+Now SSH to the `Monitor Server`. When you're in, enter your environment details in the CONFIG_OPTIONS file and edit the installation script:
 
     cd ~/securedrop
     nano CONFIG_OPTIONS
 
 Fill out all of the global and `Monitor Server` options. Here are descriptions of the items you should fill out:
 
-* `ROLE`: This is either "monitor" or "app". Since both servers share the same codebase, the installation script need to know which server it's running on. For now, enter "monitor".
+* `ROLE`: This is either "monitor" or "app". Since both servers share the same codebase, the installation script needs to know which server it's running on. For now, enter "monitor".
 * `APP_IP`: The IP address of the `App Server` that you have set up.
 * `MONITOR_IP`: The IP address of the `Monitor Server` that you have set up (the one you are SSHed into).
 * `SSH_USERS`: A list of Linux users that will SSH into this server. Note that the installation script will disable SSHing as the root account, so you must have a non-root account set up on the server that you plan on using to administer this server.
@@ -93,9 +93,9 @@ Wait for the script to run. When it's done, it should say this:
 
     Start the installation on app server.
     After installation on the app server is complete
-    enter 'Y' to continue: (Y|N): Y
+    enter 'Y' to continue: (Y|N): 
 
-Leave that window open and go SSH into the `App Server` and edit CONFIG_OPTIONS:
+Before entering 'Y', leave that window open and go SSH into the `App Server` and edit CONFIG_OPTIONS:
 
     cd ~/securedrop
     nano CONFIG_OPTIONS

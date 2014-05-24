@@ -15,6 +15,9 @@ import journalist
 import test_setup
 import urllib2
 
+import signal
+import traceback
+
 class FunctionalTest():
 
     def _unused_port(self):
@@ -25,6 +28,8 @@ class FunctionalTest():
         return port
 
     def setUp(self):
+        signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
+
         test_setup.create_directories()
         self.gpg = test_setup.init_gpg()
         test_setup.init_db()
@@ -51,7 +56,7 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        self.driver = webdriver.PhantomJS()
+        self.driver = webdriver.Firefox()
 
         self.secret_message = 'blah blah blah'
 

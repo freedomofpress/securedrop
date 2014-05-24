@@ -2,10 +2,8 @@
 import os
 import subprocess
 from base64 import b32encode
-import re
 
 from Crypto.Random import random
-import random as badrandom
 import gnupg
 import scrypt
 
@@ -160,7 +158,7 @@ def encrypt(fp, s, output=None):
         raise CryptoException(out.stderr)
 
 
-def decrypt(name, secret, s):
+def decrypt(secret, plain_text):
     """
     >>> key = genkeypair('randomid', 'randomid')
     >>> decrypt('randomid', 'randomid',
@@ -168,8 +166,8 @@ def decrypt(name, secret, s):
     ... )
     'Goodbye, cruel world!'
     """
-    secret = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
-    return gpg.decrypt(s, passphrase=secret).data
+    hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
+    return gpg.decrypt(plain_text, passphrase=hashed_codename).data
 
 
 if __name__ == "__main__":

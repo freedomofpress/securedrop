@@ -55,7 +55,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not logged_in():
-            return redirect(url_for('lookup'))
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -87,7 +87,9 @@ def setup_g():
             abort(500)
         except NoResultFound as e:
             app.logger.error("Found no Sources when one was expected: %s" % (e,))
-            abort(404)
+            del session['logged_in']
+            del session['codename']
+            return redirect(url_for('index'))
         g.loc = store.path(g.sid)
 
 
@@ -146,7 +148,7 @@ def lookup():
     for fn in os.listdir(g.loc):
         if fn.endswith('-reply.gpg'):
             try:
-                msg = crypto_util.decrypt(g.sid, g.codename,
+                msg = crypto_util.decrypt(g.codename,
                         file(store.path(g.sid, fn)).read()).decode("utf-8")
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)

@@ -73,7 +73,7 @@ def get_docs(sid):
             date=str(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
         ))
-    # sort by date since ordering by filename is meaningless
+    # sort in chronological order
     docs.sort(key=lambda x: int(x['name'].split('-')[0]))
     return docs
 
