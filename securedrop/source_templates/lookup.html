@@ -10,18 +10,18 @@
   {% if flagged and not haskey %}
   <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to login again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
-  {% if msgs %}
+  {% if replies %}
   <div id="replies">
     <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them.</p>
-    {% for msg in msgs %}
+    {% for reply in replies %}
     <div class="reply">
-      <div class="date">{{ msg.date }}</div>
+      <div class="date">{{ reply.date }}</div>
       <form class="message" method="post" action="/delete" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-        <input type="hidden" name="msgid" value="{{ msg.id }}" autocomplete="off"/>
+        <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
         <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
       </form>
-      <blockquote>{{ msg.msg }}</blockquote>
+      <blockquote>{{ reply.msg }}</blockquote>
       <div class="clearfix"></div>
     </div>
     {% endfor %}
