@@ -378,3 +378,9 @@ span#unread.some a{
   font-weight: bold;
   text-decoration: underline;
 }
+
+input#filter{
+  margin-left: 20px;
+  margin-bottom: 20px;
+  padding: 3px;
+}

@@ -5,11 +5,15 @@
 {% if sources %}
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <form id="delete_collections" action="/col/delete" method="post">
+<input id='filter' type='text' placeholder='filter by codename' autofocus="autofocus">
 <ul id="cols" class="plain">
   {% for source in sources %}
-  <li>
+  {% set docs = source.documents_messages_count()['documents'] %}
+  {% set msgs = source.documents_messages_count()['messages'] %}
+  <li data-source-designation="{{ source.journalist_designation|lower }}">
     <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
     <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
+    <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
     last updated {{ source.last_updated }}<br>
     <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
       {% if source.num_unread > 0 %} 
