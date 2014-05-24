@@ -175,10 +175,12 @@ def bulk():
 
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
-        doc['name'] for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
+        doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
+    filenames_selected = [
+        doc['name'] for doc in docs_selected]
 
     if action == 'download':
-        return bulk_download(g.sid, docs_selected)
+        return bulk_download(g.sid, filenames_selected)
     elif action == 'delete':
         return bulk_delete(g.sid, docs_selected)
     else:
