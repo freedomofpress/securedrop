@@ -1,41 +1,36 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-single">
-<h2><span class="headline">Read documents</span></h2>
-<p><a href="/">Back to latest submissions...</a></p>
-<h3>Collection from: <span class="code-name">{{ codename }}</span></h3>
-<form action='/regenerate-code' method='post'>
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <input type="hidden" name="sid" value="{{ sid }}">
-  <input type="submit" value="Generate a new codename for this source" class="btn small">
-</form>
-
+<span class="">Source</span>
+<h2>{{ codename }}</h2>
+<hr class="no-line" />
 {% if docs %}
-<p><br />Here are the documents available. The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+
+<p>The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+<div class="document-actions">
+  <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
+</div>
 <form action="/bulk" method="post">
-<ul id="submissions" class="plain">
+<ul id="submissions" class="plain submissions">
 {% for doc in docs %}
-<li>
-  <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" />
-  {% if doc.name.startswith('reply-') %}
-  <i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }})
-  {% else %}
-  <a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> ({{ doc.size }} bytes uploaded {{ doc.date }})
-  {% endif %}
-</li>
+<li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>{% if doc.name.startswith('reply-') %}<i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }}){% else %}<a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> <small class="doc-info">({{ doc.size }} bytes uploaded {{ doc.date }})</small>{% endif %}<i class="fa fa-file-o pull-right"></i></li>
 {% endfor %}
 </ul>
+
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-<p>
-  <button type="submit" name="action" value="download" class="small">Download selected</button>
-  <button type="submit" name="action" value="delete" class="small">Delete selected</button>
-  <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span></p>
+<div class="document-actions">
+  <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
+  <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
+</div>
 </form>
 {% else %}
 <p><br />No documents to display.</p>
 {% endif %}
 
+<hr class="cut-out" />
+<hr class="no-line" />
+<h3><i class="fa fa-reply"></i> Reply</h3>
 {% if haskey %}
 <p>You can write a secure reply to the person who submitted these documents:</p>
 <form action="/reply" method="post" autocomplete="off">
@@ -52,19 +47,26 @@
 <form action="/flag" method="post">
     <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off" />
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <button id="flag-button" class="button-custom" type="submit">Flag this source for reply.</button>
+    <button id="flag-button" class="button-custom" type="submit"><i class="fa fa-flag"></i> Flag this source for reply</button>
 </form>
 {% endif %}
-</div>
-
-<br />
+<hr class="no-line" />
+<hr class="cut-out" />
+<hr class="no-line" />
+<h3><i class="fa fa-refresh"></i> Code Name</h3>
+<form action='/regenerate-code' method='post' class=''>
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="sid" value="{{ sid }}">
+  <input type="submit" value="Generate a new codename for this source" class="btn">
+</form>
+<hr class="no-line" />
+<hr class="cut-out" />
 <p>Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
-
 <form id="delete_collection" action='/col/delete' method='post'>
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}"/>
   <input type="hidden" name="col_name" value="{{ codename }}"/>
-  <button type="submit">Delete collection</button>
+  <button type="submit" class="danger"><i class="fa fa-times"></i> Delete collection</button>
 </form>
-
+</div>
 {% endblock %}
