@@ -15,7 +15,7 @@
     <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
     last updated {{ source.last_updated }}<br>
     <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
-      {% if source.num_unread > 0 %} 
+      {% if source.num_unread > 0 %}
         <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
       {% else %}
         unread: 0
