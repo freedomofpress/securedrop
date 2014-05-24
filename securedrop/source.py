@@ -167,6 +167,11 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
+    # if this was a redirect from the login page, flash a message if there are
+    # no replies to clarify "check for replies" flow (#393)
+    if request.args.get('from_login') == '1' and len(replies) == 0:
+        flash("There are no replies at this time. You can submit more documents from this code name below.", "notification")
+
     return render_template('lookup.html', codename=g.codename, replies=replies,
             flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
@@ -251,7 +256,7 @@ def login():
         codename = request.form['codename']
         if valid_codename(codename):
             session.update(codename=codename, logged_in=True)
-            return redirect(url_for('lookup'))
+            return redirect(url_for('lookup', from_login='1'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
