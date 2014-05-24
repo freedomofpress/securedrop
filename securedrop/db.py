@@ -89,6 +89,12 @@ class Submission(Base):
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
 
+class Star(Base):
+    __tablename__ = 'stars'
+    id = Column("id",Integer, primary_key=True)
+    submission_id = Column("submission_id",Integer, ForeignKey('submissions.id'))
+    starred = Column("starred", Boolean, default=True)
+
 
 # Declare (or import) models before init_db
 def init_db():
