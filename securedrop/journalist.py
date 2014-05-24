@@ -135,6 +135,11 @@ def col_delete():
 def doc(sid, fn):
     if '..' in fn or fn.startswith('/'):
         abort(404)
+    try:
+        Submission.query.filter(Submission.filename == fn).one().downloaded = True
+    except NoResultFound as e:
+        app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
+    db_session.commit()
     return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
 
 
