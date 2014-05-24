@@ -315,7 +315,7 @@ class TestJournalist(unittest.TestCase):
     def test_index(self):
         rv = self.client.get('/')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Latest submissions", rv.data)
+        self.assertIn("Sources", rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
 
     def test_bulk_download(self):
@@ -367,7 +367,7 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Latest submissions", rv.data)
+        self.assertIn("Sources", rv.data)
         soup = BeautifulSoup(rv.data)
         col_url = soup.select('ul#cols > li a')[0]['href']
 
@@ -440,7 +440,7 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Latest submissions", rv.data)
+        self.assertIn("Sources", rv.data)
         soup = BeautifulSoup(rv.data)
         col_url = soup.select('ul#cols > li a')[0]['href']
 
@@ -524,7 +524,7 @@ class TestIntegration(unittest.TestCase):
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Latest submissions", rv.data)
+        self.assertIn("Sources", rv.data)
         soup = BeautifulSoup(rv.data)
         col_url = soup.select('ul#cols > li a')[0]['href']
 

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-<h2><span class="headline">Latest submissions</span></h2>
+<h2><span class="headline">Sources</span></h2>
 {% if sources %}
-<p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <form id="delete_collections" action="/col/delete" method="post">
 <input id='filter' type='text' placeholder='filter by codename' autofocus="autofocus">
 <ul id="cols" class="plain">
@@ -19,9 +18,6 @@
 <p>
   <button type="submit" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
   <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
-</p>
-<p>Click the button above to delete selected collections.
-<em>Warning: If you do this, the selected collections of submisisons will be unrecoverable and each corresponding source will no longer be able to login with their previous codename.</em>
 </p>
 </form>
 </div>
