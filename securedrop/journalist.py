@@ -161,11 +161,8 @@ def generate_code():
 @app.route('/download_unread/<sid>')
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()
-    docs_arr = []
-    for doc in docs:
-        docs_arr.append({'name': doc.filename})
-    return bulk_download(sid, docs_arr)
+    docs = [doc.filename for doc in Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
+    return bulk_download(sid, docs)
 
 @app.route('/bulk', methods=('POST',))
 def bulk():
@@ -173,7 +170,7 @@ def bulk():
 
     doc_names_selected = request.form.getlist('doc_names_selected')
     docs_selected = [
-        doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
+        doc['name'] for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
 
     if action == 'download':
         return bulk_download(g.sid, docs_selected)
@@ -199,11 +196,11 @@ def bulk_download(sid, docs_selected):
     source = get_source(sid)
     filenames = []
     for doc in docs_selected:
-        filenames.append(store.path(sid, doc['name']))
+        filenames.append(store.path(sid, doc))
         try:
-            Submission.query.filter(Submission.filename == doc['name']).one().downloaded = True
+            Submission.query.filter(Submission.filename == doc).one().downloaded = True
         except NoResultFound as e:
-            app.logger.error("Could not mark " + doc['name'] + " as downloaded: %s" % (e,))
+            app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
     zip = store.get_bulk_archive(filenames)
     return send_file(zip.name, mimetype="application/zip",
