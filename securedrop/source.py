@@ -167,7 +167,7 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    return render_template('lookup.html', codename=g.codename, msgs=replies,
+    return render_template('lookup.html', codename=g.codename, replies=replies,
             flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
