@@ -110,7 +110,21 @@ def delete_collection(source_id):
     db_session.commit()
 
 
-@app.route('/col/delete', methods=('POST',))
+@app.route('/col/process', methods=('POST',))
+def col_process():
+    action = request.form['action']
+    if action == 'delete':
+        return col_delete()
+    elif action == 'star':
+        return col_star()
+    else:
+        return abort(404)
+
+
+def col_star():
+    redirect(url_for('index'))
+
+
 def col_delete():
     if 'cols_selected' in request.form:
         # deleting multiple collections from the index
