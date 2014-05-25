@@ -91,8 +91,8 @@ class Submission(Base):
 
 class Star(Base):
     __tablename__ = 'stars'
-    id = Column("id",Integer, primary_key=True)
-    submission_id = Column("submission_id",Integer, ForeignKey('submissions.id'))
+    id = Column("id", Integer, primary_key=True)
+    submission_id = Column("submission_id", Integer, ForeignKey('submissions.id'))
     starred = Column("starred", Boolean, default=True)
 
 

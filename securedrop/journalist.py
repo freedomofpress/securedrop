@@ -121,7 +121,6 @@ def col_process():
         return abort(404)
 
 
-
 def col_star():
     redirect(url_for('index'))
 
