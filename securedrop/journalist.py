@@ -114,17 +114,18 @@ def delete_collection(source_id):
 def col_delete():
     if 'cols_selected' in request.form:
         # deleting multiple collections from the index
-        if len('cols_selected') < 1:
+        # Note: getlist is cgi.FieldStorage.getlist
+        cols_selected = request.form.getlist('cols_selected')
+        if len(cols_selected) < 1:
             flash("No collections selected to delete!", "warning")
         else:
-            cols_selected = request.form.getlist('cols_selected')
             for source_id in cols_selected:
                 delete_collection(source_id)
             flash("%s %s deleted" % (
                 len(cols_selected),
                 "collection" if len(cols_selected) == 1 else "collections"
             ), "notification")
-    else:
+    elif 'col_name' in request.form:
         # deleting a single collection from its /col page
         source_id, col_name = request.form['sid'], request.form['col_name']
         delete_collection(source_id)
