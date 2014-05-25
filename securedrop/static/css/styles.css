@@ -12,6 +12,14 @@ body {
   margin: 15px auto;
   width: 1000px; }
 
+.document-actions {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.doc-check {
+  margin-right: 10px;
+}
+
 .panel {
   float: right;
   max-width: 800px;
@@ -39,9 +47,13 @@ footer {
   margin-top: 20px;
   padding-top: 20px;
   color: #9e9e9e; }
-
-h2, h3 {
+h2 {
+  font-weight: bold;
+}
+h3 {
   font-weight: 300;
+}
+h2, h3 {
   margin-top: 0px;
   text-align: center; }
 
@@ -100,11 +112,16 @@ button:hover, a.btn:hover, .btn:hover {
 button.alt, a.btn.alt, .btn.alt {
   background: transparent;
   border: 1px solid white; }
-
 button.alt:hover, a.btn.alt:hover, .btn.alt:hover {
   background: white;
   color: #7985aa; }
 
+button.danger, a.danger, .btn.danger {
+  background-color: #d55c5c }
+button.danger:hover, a.btn.danger:hover, .btn.danger:hover {
+  background: white;
+  border-color: #d55c5c;
+  color: #d55c5c; }
 button.block, a.btn.block {
   text-decoration: none;
   min-width: 250px;
@@ -120,9 +137,15 @@ button.small, a.btn.small, .btn.small {
   margin: 0 auto; }
 
 .select {
-    margin-left: 10px;
-    margin-right: 10px;
-}
+  border: 1px #C4C2C2 solid;
+  padding: 3px 10px;
+  font-size: small;
+  color: #6F6F6F;
+  margin-left: 5px; }
+  .select:hover {
+    border-color: #999;
+    color: #333;
+  }
 
 .warning {
   display: none;
@@ -160,7 +183,6 @@ p.serious {
   text-align: center; }
 
 .snippet {
-  width: 800px;
   border: 1px solid #c3c3c3; }
   .snippet .attachment {
     background-color: #f3f3f3;
@@ -168,6 +190,8 @@ p.serious {
     width: 330px;
     display: inline-block;
     vertical-align: top; }
+    .snippet .attachment .file-options {
+      padding-top: 8px; }
     .snippet .attachment .upload-icon {
       display: inline-block;
       width: 100%;
@@ -184,9 +208,11 @@ p.serious {
     .snippet .message textarea {
       padding: 10px;
       width: 100%;
-      min-height: 134px;
+      min-height: 160px;
       font-size: 12pt;
       border: none; }
+      .snippet .message textarea:focus {
+        outline: none; }
 
 .pull-bottom {
   position: absolute;
@@ -276,4 +302,24 @@ input.codename {
 .reply button:hover {
   border: 0;
   color: #000000;
+}
+
+.journalist-view-single {
+  padding-top: 0px;
+  text-align: center;
+}
+
+.submissions {
+  padding-left: 0px; }
+  .submission {
+  background: #f3f3f3;
+  border-bottom: 1px solid #f3f3f3;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: left; }
+  .submissions a {
+    color: #333; }
+
+ul.plain {
+  list-style: none;
 }

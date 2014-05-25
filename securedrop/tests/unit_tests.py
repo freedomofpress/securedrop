@@ -376,7 +376,7 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
-        li = soup.select('ul#submissions li')[0]
+        li = soup.select('ul#submissions li .doc-info')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
@@ -449,7 +449,7 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
-        li = soup.select('ul#submissions li')[0]
+        li = soup.select('ul#submissions li .doc-info')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
@@ -621,13 +621,13 @@ class TestIntegration(unittest.TestCase):
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        # POST to /col/delete
-        rv = self.journalist_app.post('/col/delete', data=dict(
+        rv = self.journalist_app.post('/col/process', data=dict(
+            action='delete',
             sid=sid,
-            col_name=col_name
+            col_name=col_name,
         ), follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
-        # /col/delete redirects to the index
+
         self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
 
@@ -651,7 +651,8 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         checkbox_values = [ checkbox['value'] for checkbox in
                             soup.select('input[name="cols_selected"]') ]
-        rv = self.journalist_app.post('/col/delete', data=dict(
+        rv = self.journalist_app.post('/col/process', data=dict(
+            action='delete',
             cols_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)

@@ -3,8 +3,11 @@
 <div id="content" class="journalist-view-all">
 <h2><span class="headline">Sources</span></h2>
 {% if sources %}
-<form id="delete_collections" action="/col/delete" method="post">
+
+<p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <div id='filter-container'></div>
+<form id="delete_collections" action="/col/process" method="post">
+
 <ul id="cols" class="plain">
   {% for source in sources %}
   {% set docs = source.documents_messages_count()['documents'] %}
@@ -27,6 +30,7 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <p>
   <button type="submit" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
+  <button type="submit" id="submitStar" name="action" style="display: none" value="star">Star Selected</button>
   <div id='select-container'></div>
 </p>
 </form>
