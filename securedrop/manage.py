@@ -9,7 +9,11 @@ import config
 import db
 
 def start():
-    pass
+    subprocess.Popen(['python', 'source.py'])
+    subprocess.Popen(['python', 'journalist.py'])
+    print "The web application is running, and available on your Vagrant host at the following addresses:"
+    print "Source interface:     localhost:8080"
+    print "Journalist interface: localhost:8081"
 
 def test():
     """
