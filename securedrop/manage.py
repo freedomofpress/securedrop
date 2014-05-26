@@ -3,6 +3,7 @@
 import sys
 import os
 import shutil
+import subprocess
 
 import config
 import db
@@ -11,7 +12,12 @@ def start():
     pass
 
 def test():
-    pass
+    """
+    Runs the test suite
+    """
+    # TODO: we could implement test.sh's functionality here, and get rid of
+    # test.sh (now it's just clutter, and confusing)
+    subprocess.call(["./test.sh"])
 
 def reset():
     """
