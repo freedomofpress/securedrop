@@ -15,7 +15,7 @@ import crypto_util
 import store
 import background
 import util
-from db import db_session, Source, Submission
+from db import db_session, Source, Submission, SourceStar
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
@@ -122,7 +122,17 @@ def col_process():
 
 
 def col_star():
-    redirect(url_for('index'))
+
+    if 'cols_selected' not in request.form:
+        return redirect(url_for('index'))
+
+    cols_selected = request.form.getlist('cols_selected')
+    for source_id in cols_selected:
+        source = get_source(source_id)
+        source_star = SourceStar(source)
+        db_session.add(source_star)
+
+    return redirect(url_for('index'))
 
 
 def col_delete():

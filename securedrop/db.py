@@ -89,12 +89,20 @@ class Submission(Base):
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
 
-class Star(Base):
-    __tablename__ = 'stars'
+class SourceStar(Base):
+    __tablename__ = 'source_stars'
     id = Column("id", Integer, primary_key=True)
-    submission_id = Column("submission_id", Integer, ForeignKey('submissions.id'))
+    source_id = Column("source_id", Integer, ForeignKey('sources.id'))
     starred = Column("starred", Boolean, default=True)
 
+    def __eq__(self, other):
+        if isinstance(other, SourceStar):
+            return self.source_id == other.source_id and self.id == other.id and self.starred == other.starred
+        return NotImplemented
+
+    def __init__(self, source, starred=True):
+        self.source_id = source.id
+        self.starred = starred
 
 # Declare (or import) models before init_db
 def init_db():
