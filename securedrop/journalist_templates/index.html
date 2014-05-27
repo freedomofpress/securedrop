@@ -29,7 +29,7 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <p>
   <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
-  <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
+  <button type="submit" name="action" value="star" class="small" style="display: none"><i class="fa fa-minus-circle"></i> Star Selected</button>
   <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
 
 </p>
