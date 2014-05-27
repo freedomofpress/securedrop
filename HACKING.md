@@ -64,3 +64,14 @@ All you need to do is run `./chroot-dev up`. The first time you do this it will 
 
 You can run tests with `./chroot-dev test`.
 
+# Using manage.py
+
+The `securedrop/manage.py` script is provied to help automate common tasks. At
+the moment, the following commands are available:
+
+* `start` - start the source and journalist servers
+* `test` - run the test suite
+* `reset` - reset the state of the development instance
+
+    This is useful if you've changed the database schema and are getting
+    errors, but don't want to bother with doing a migration.
