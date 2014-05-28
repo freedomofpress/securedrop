@@ -26,7 +26,7 @@ $(function () {
   $("#delete_collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
   });
-  $("#delete_collections").submit(function () {
+  $("#delete_collections").click(function () {
     var num_checked = 0;
 
     // we don't want to delete the collections which aren't visible because they are filtered...
