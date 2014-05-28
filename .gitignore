@@ -49,3 +49,6 @@ nosetests.xml
 
 .vagrant
 .chroot
+
+#IDE
+.idea

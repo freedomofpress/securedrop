@@ -9,6 +9,6 @@ fi
 export PYTHONPATH=./tests
 
 # -f makes unittest fail fast, so we can use && to avoid burying test failures
-python -m unittest -fv tests.unit_tests && python -m unittest -fv tests.journalist_unit_tests  && python -m unittest -fv tests.functional.submit_and_retrieve_message && python -m unittest -fv tests.functional.submit_and_retrieve_file
+python -m unittest -fv tests.test_unit && python -m unittest -fv tests.test_journalist  && python -m unittest -fv tests.functional.submit_and_retrieve_message && python -m unittest -fv tests.functional.submit_and_retrieve_file
 
 
