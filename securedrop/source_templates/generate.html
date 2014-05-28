@@ -38,5 +38,6 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <button type="submit" class="btn block pull-right" id="continue-button"><i class="fa fa-arrow-circle-o-right"></i> Continue</button>
+  <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
 {% endblock %}
