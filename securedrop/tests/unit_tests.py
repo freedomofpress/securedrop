@@ -113,6 +113,14 @@ class TestSource(unittest.TestCase):
             })
             self.assertEqual(response.status_code, 403)
 
+    def test_generate_has_login_link(self):
+        """The generate page should have a link to remind people to login if they already have a codename, rather than create a new one."""
+        rv = self.client.get('/generate')
+        self.assertIn("Already have a codename?", rv.data)
+        soup = BeautifulSoup(rv.data)
+        already_have_codename_link = soup.select('a#already-have-codename')[0]
+        self.assertEqual(already_have_codename_link['href'], '/login')
+
     def test_create(self):
         with self.client as c:
             rv = c.get('/generate')
