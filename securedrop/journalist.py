@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+import config
+import version
+import crypto_util
+import store
+from db import db_session, Source, Submission, SourceStar, get_one_or_else
+
 import os
 from datetime import datetime
-import uuid
-
-from flask import (Flask, request, render_template, send_file, redirect,
-                   flash, url_for, g)
+from flask import (Flask, request, render_template, send_file, redirect, flash, url_for, g, abort)
 from flask_wtf.csrf import CsrfProtect
-
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import config
@@ -29,6 +31,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
@@ -40,15 +43,8 @@ def get_source(sid):
     """Return a Source object, representing the database row, for the source
     with id `sid`"""
     source = None
-
-    try:
-        source = Source.query.filter(Source.filesystem_id == sid).one()
-    except MultipleResultsFound as e:
-        app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
-        abort(500)
-    except NoResultFound as e:
-        app.logger.error("Found no Sources when one was expected: %s" % (e,))
-        abort(404)
+    query = Source.query.filter(Source.filesystem_id == sid)
+    source = get_one_or_else(query, app.logger, abort)
 
     return source
 
@@ -81,10 +77,17 @@ def get_docs(sid):
 @app.route('/')
 def index():
     sources = []
+    starred = []
     for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
-        sources.append(source)
-        source.num_unread = len(Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
-    return render_template('index.html', sources=sources)
+        star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
+        if star and star.starred:
+            starred.append(source)
+        else:
+            sources.append(source)
+        source.num_unread = len(
+            Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
+
+    return render_template('index.html', sources=sources, starred=starred)
 
 
 @app.route('/col/<sid>')
@@ -93,8 +96,8 @@ def col(sid):
     docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-            codename=source.journalist_designation, docs=docs, haskey=haskey,
-            flagged=source.flagged)
+                           codename=source.journalist_designation, docs=docs, haskey=haskey,
+                           flagged=source.flagged)
 
 
 def delete_collection(source_id):
@@ -117,21 +120,43 @@ def col_process():
         return col_delete()
     elif action == 'star':
         return col_star()
+    elif action == 'un-star':
+        return col_un_star()
     else:
         return abort(404)
 
 
 def col_star():
-
     if 'cols_selected' not in request.form:
         return redirect(url_for('index'))
 
     cols_selected = request.form.getlist('cols_selected')
     for source_id in cols_selected:
         source = get_source(source_id)
-        source_star = SourceStar(source)
-        db_session.add(source_star)
+        source_star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
+        if source_star:
+            source_star.starred = True
+        else:
+            source_star = SourceStar(source)
+            db_session.add(source_star)
 
+    db_session.commit()
+    return redirect(url_for('index'))
+
+
+def col_un_star():
+    if 'cols_selected' not in request.form:
+        return redirect(url_for('index'))
+
+    cols_selected = request.form.getlist('cols_selected')
+
+    for source_id in cols_selected:
+        source = get_source(source_id)
+        query = SourceStar.query.filter(SourceStar.source_id == source.id)
+        source_star = get_one_or_else(query, app.logger, abort)
+        source_star.starred = False
+
+    db_session.commit()
     return redirect(url_for('index'))
 
 
@@ -176,11 +201,11 @@ def reply():
     filename = "{0}-reply.gpg".format(g.source.interaction_count)
 
     crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
-                        store.path(g.sid, filename))
+    store.path(g.sid, filename))
 
     db_session.commit()
     return render_template('reply.html', sid=g.sid,
-            codename=g.source.journalist_designation)
+                           codename=g.source.journalist_designation)
 
 
 @app.route('/regenerate-code', methods=('POST',))
@@ -192,7 +217,8 @@ def generate_code():
 @app.route('/download_unread/<sid>')
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = [doc.filename for doc in Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
+    docs = [doc.filename for doc in
+            Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
     return bulk_download(sid, docs)
 
 @app.route('/bulk', methods=('POST',))
@@ -223,8 +249,8 @@ def bulk_delete(sid, docs_selected):
             store.secure_unlink(fn)
         db_session.commit()
     return render_template('delete.html', sid=sid,
-            codename=source.journalist_designation,
-            docs_selected=docs_selected, confirm_delete=confirm_delete)
+                           codename=source.journalist_designation,
+                           docs_selected=docs_selected, confirm_delete=confirm_delete)
 
 
 def bulk_download(sid, docs_selected):
@@ -248,7 +274,8 @@ def flag():
     g.source.flagged = True
     db_session.commit()
     return render_template('flag.html', sid=g.sid,
-            codename=g.source.journalist_designation)
+                           codename=g.source.journalist_designation)
+
 
 if __name__ == "__main__":
     # TODO make sure debug=False in production

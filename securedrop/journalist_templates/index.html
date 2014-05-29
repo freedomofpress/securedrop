@@ -2,12 +2,34 @@
 {% block body %}
 <div id="content" class="journalist-view-all">
 <h2><span class="headline">Sources</span></h2>
-{% if sources %}
+{% if sources or starred %}
 
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <div id='filter-container'></div>
 <form id="process_collections" action="/col/process" method="post">
+
+<ul id="starred" class="plain">
+    <p class="fa">Starred</p>
+    {% for source in starred %}
+    {% set docs = source.documents_messages_count()['documents'] %}
+    {% set msgs = source.documents_messages_count()['messages'] %}
+    <li data-source-designation="{{ source.journalist_designation|lower }}">
+        <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+        <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
+        <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
+        last updated {{ source.last_updated }}<br>
+    <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
+      {% if source.num_unread > 0 %}
+        <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
+      {% else %}
+        unread: 0
+      {% endif %}
+    </span>
+    </li>
+    {% endfor %}
+</ul>
 <ul id="cols" class="plain">
+  <p class="fa">Un-Starred</p>
   {% for source in sources %}
   {% set docs = source.documents_messages_count()['documents'] %}
   {% set msgs = source.documents_messages_count()['messages'] %}
@@ -29,7 +51,8 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
 <p>
   <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
-  <button type="submit" name="action" value="star" class="small" style="display: none"><i class="fa fa-minus-circle"></i> Star Selected</button>
+  <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
+  <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> Un-star Selected</button>
   <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
 
 </p>

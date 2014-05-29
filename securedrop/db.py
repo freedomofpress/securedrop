@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import config
 import crypto_util
@@ -32,6 +32,17 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
+
+def get_one_or_else(query, logger, failure_method):
+    try:
+        return_value = query.one()
+    except MultipleResultsFound as e:
+        logger.error("Found multiple while executing %s when one was expected: %s" % (query,e,))
+        failure_method(500)
+    except NoResultFound as e:
+        logger.error("Found no Sources when one was expected: %s" % (e,))
+        failure_method(404)
+    return return_value
 
 
 class Source(Base):
@@ -94,6 +105,7 @@ class SourceStar(Base):
     id = Column("id", Integer, primary_key=True)
     source_id = Column("source_id", Integer, ForeignKey('sources.id'))
     starred = Column("starred", Boolean, default=True)
+    source = relationship("Source", backref=backref('source_stars'))
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):
