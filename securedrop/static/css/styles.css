@@ -276,6 +276,18 @@ input.codename {
   padding: 10px;
   font-weight: bold; }
 
+p#codename {
+  font-weight:bold;
+  /*
+   * HACK: Firefox likes to add non-existent leading and/or trailing whitespace
+   * to <span>s, but never does it to <p>s. This hack uses a <p> for the
+   * codename so we can get the right copy behavior, and uses inline-block plus
+   * tweaks the margin to make it look like a span
+   */
+  display:inline-block;
+  margin:0;
+}
+
 .reply {
   border: 1px solid #999999;
   text-align: left;
