@@ -323,3 +323,16 @@ input.codename {
 ul.plain {
   list-style: none;
 }
+
+a#already-have-codename {
+  float:right;
+  margin-right:12px;
+  margin-top:10px;
+  color:#888;
+  text-decoration:none;
+}
+
+a#already-have-codename:hover {
+  text-decoration:underline;
+  color:#666;
+}
