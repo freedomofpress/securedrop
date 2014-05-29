@@ -7,7 +7,7 @@
 <hr class="no-line" />
 
 <div class="code">
-  <i class="fa fa-lock pull-left"></i>  <strong id="codename">{{ codename }}</strong>
+  <i class="fa fa-lock pull-left"></i><p id="codename">{{ codename }}</p>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
