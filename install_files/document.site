@@ -56,6 +56,13 @@ ErrorDocument 500 /error
     Order deny,allow
     Deny from all
   </LimitExcept>
+  AuthType Basic
+  AuthName "SecureDrop"
+  AuthBasicProvider "google_authenticator"
+  Require valid-user
+  GoogleAuthUserPath /var/www/securedrop/keys/gauth
+  GoogleAuthCookieLife 7200
+  GoogleAuthEntryWindow 1
 </Directory>
 <Directory /var/www/securedrop/static>
   Options None

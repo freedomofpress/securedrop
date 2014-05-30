@@ -101,6 +101,11 @@ elif [ $ROLE = 'app' ]; then
   catch_error $? "base installation."
   echo "The base is installed."
 
+  echo ""
+  echo "Setting up Google Authenticator module on the Document Interface..."
+  $CWD/install_files/gauthmod_install.sh
+  catch_error $? "gauth module installation."
+
   echo "The installation is complete."
 
 #Output access information for the source role
