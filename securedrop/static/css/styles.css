@@ -397,4 +397,6 @@ a#already-have-codename:hover {
   color:#666;
 }
 
-
+p.breadcrumbs {
+  text-align: left;
+}
