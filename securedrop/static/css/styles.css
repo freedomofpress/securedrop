@@ -334,6 +334,12 @@ p#codename {
   margin:0;
 }
 
+#filter {
+  font-family: monospace;
+  padding: 5px;
+  width: 250px;
+}
+
 #cols {
   padding: 0;
 }
