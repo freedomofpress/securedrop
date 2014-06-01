@@ -14,17 +14,23 @@
     {% set docs = source.documents_messages_count()['documents'] %}
     {% set msgs = source.documents_messages_count()['messages'] %}
     <li data-source-designation="{{ source.journalist_designation|lower }}">
-        <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
-        <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
-        <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
-        last updated {{ source.last_updated }}<br>
-    <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
-      {% if source.num_unread > 0 %}
-        <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
-      {% else %}
-        unread: 0
-      {% endif %}
-    </span>
+        <div>
+            <button class="button-star" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><img class="star" src="/static/i/star.png"></button>
+            <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"/>
+            <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{loop.index}}" class="code-name">{{ source.journalist_designation}}</a>
+            <ul style="list-style-type: none">
+            <li><strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong>
+            message{{ "" if msgs == 1 else "s" }}</li>
+            <li>last updated {{ source.last_updated }}</li>
+            <li id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
+                {% if source.num_unread > 0 %}
+                <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
+                {% else %}
+                unread: 0
+                {% endif %}
+            </li>
+            </ul>
+        </div>
     </li>
     {% endfor %}
 </ul>
@@ -33,19 +39,25 @@
   {% for source in sources %}
   {% set docs = source.documents_messages_count()['documents'] %}
   {% set msgs = source.documents_messages_count()['messages'] %}
-  <li data-source-designation="{{ source.journalist_designation|lower }}">
-    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
-    <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
-    <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
-    last updated {{ source.last_updated }}<br>
-    <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
-      {% if source.num_unread > 0 %}
-        <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
-      {% else %}
-        unread: 0
-      {% endif %}
-    </span>
-  </li>
+    <li data-source-designation="{{ source.journalist_designation|lower }}">
+        <div>
+            <button class="button-star" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><img class="star" src="/static/i/un-star.png"></button>
+            <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"/>
+            <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{loop.index}}" class="code-name">{{ source.journalist_designation}}</a>
+            <ul style="list-style-type: none">
+                <li><strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong>
+                    message{{ "" if msgs == 1 else "s" }}</li>
+                <li>last updated {{ source.last_updated }}</li>
+                <li id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
+                    {% if source.num_unread > 0 %}
+                    <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
+                    {% else %}
+                    unread: 0
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </li>
   {% endfor %}
 </ul>
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>

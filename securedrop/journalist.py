@@ -74,6 +74,35 @@ def get_docs(sid):
     return docs
 
 
+def make_star_true(sid):
+    source = get_source(sid)
+    source_star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
+    if source_star:
+        source_star.starred = True
+    else:
+        source_star = SourceStar(source)
+        db_session.add(source_star)
+
+def make_star_false(sid):
+    source = get_source(sid)
+    query = SourceStar.query.filter(SourceStar.source_id == source.id)
+    source_star = get_one_or_else(query, app.logger, abort)
+    source_star.starred = False
+
+
+@app.route('/col/add_star/<sid>', methods=('POST',))
+def add_star(sid):
+    make_star_true(sid)
+    db_session.commit()
+    return redirect(url_for('index'))
+
+@app.route("/col/remove_star/<sid>", methods=('POST',))
+def remove_star(sid):
+    make_star_false(sid)
+    db_session.commit()
+    return redirect(url_for('index'))
+
+
 @app.route('/')
 def index():
     sources = []
@@ -131,14 +160,8 @@ def col_star():
         return redirect(url_for('index'))
 
     cols_selected = request.form.getlist('cols_selected')
-    for source_id in cols_selected:
-        source = get_source(source_id)
-        source_star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
-        if source_star:
-            source_star.starred = True
-        else:
-            source_star = SourceStar(source)
-            db_session.add(source_star)
+    for sid in cols_selected:
+        make_star_true(sid)
 
     db_session.commit()
     return redirect(url_for('index'))
@@ -151,10 +174,7 @@ def col_un_star():
     cols_selected = request.form.getlist('cols_selected')
 
     for source_id in cols_selected:
-        source = get_source(source_id)
-        query = SourceStar.query.filter(SourceStar.source_id == source.id)
-        source_star = get_one_or_else(query, app.logger, abort)
-        source_star.starred = False
+        make_star_false(source_id)
 
     db_session.commit()
     return redirect(url_for('index'))
