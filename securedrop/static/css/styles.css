@@ -334,6 +334,49 @@ p#codename {
   margin:0;
 }
 
+#cols {
+  padding: 0;
+}
+#cols li.source {
+  background: #f3f3f3;
+  border-bottom: 1px solid #f3f3f3;
+  padding: 5px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+#cols li.source .date {
+  float: right;
+  background-color: #999999;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+  margin: 5px;
+}
+#cols li.source .designation {
+  display: inline-block;
+  min-width: 260px;
+}
+#cols li.source .designation a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 5px;
+  display: inline-block;
+}
+#cols li.source .submission-count {
+  display: inline-block;
+}
+#cols li.source .submission-count span {
+  border: 1px solid #dedede;
+  padding: 3px;
+  margin-right: 5px;
+  font-size: 12px;
+}
+#cols li.source .submission-count span.unread {
+  border: 0;
+}
+
 .reply {
   border: 1px solid #999999;
   text-align: left;
@@ -368,8 +411,9 @@ p#codename {
 }
 
 .submissions {
-  padding-left: 0px; }
-  .submission {
+  padding-left: 0px;
+}
+.submission {
   background: #f3f3f3;
   border-bottom: 1px solid #f3f3f3;
   padding: 10px;

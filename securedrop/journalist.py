@@ -70,7 +70,7 @@ def get_docs(sid):
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
-            date=str(datetime.fromtimestamp(os_stat.st_mtime)),
+            date=util.format_time(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
         ))
     # sort in chronological order
@@ -82,6 +82,7 @@ def get_docs(sid):
 def index():
     sources = []
     for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
+        source.formatted_last_updated = util.format_time(source.last_updated)
         sources.append(source)
         source.num_unread = len(Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
     return render_template('index.html', sources=sources)
