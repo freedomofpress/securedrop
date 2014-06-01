@@ -35,7 +35,7 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
     app.jinja_env.globals['use_custom_header_image'] = True
 else:
-    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
 
