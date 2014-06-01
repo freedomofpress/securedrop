@@ -11,7 +11,6 @@ body {
 
 h1, h2, h3 {
   font-weight: bold;
-  color: #333333;
   text-align: center;
 }
 h1 {
@@ -248,7 +247,7 @@ p.serious {
 }
 .snippet .message textarea {
   padding: 10px;
-  width: 100%;
+  width: 416px;
   min-height: 160px;
   font-size: 12pt;
   border: none;
