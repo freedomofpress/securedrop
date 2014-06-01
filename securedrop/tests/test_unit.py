@@ -691,7 +691,7 @@ class TestIntegration(unittest.TestCase):
         # test filenames and sort order
         soup = BeautifulSoup(rv.data)
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        for i, submission_link in enumerate(soup.select('ul#submissions li a')):
+        for i, submission_link in enumerate(soup.select('ul#submissions li a .filename')):
             filename = str(submission_link.contents[0])
             self.assertTrue(re.match(submission_filename_re.format(i+1), filename))
 
@@ -718,11 +718,11 @@ class TestIntegration(unittest.TestCase):
 
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        filename = str(soup.select('ul#submissions li a')[0].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[0].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(1), filename) )
-        filename = str(soup.select('ul#submissions li a')[1].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[1].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(3), filename) )
-        filename = str(soup.select('ul#submissions li a')[2].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[2].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(4), filename) )
 
 
