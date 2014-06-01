@@ -383,13 +383,13 @@ p#codename {
   border: 0;
 }
 
-.reply {
+#replies .reply {
   border: 1px solid #999999;
   text-align: left;
   margin-bottom: 1em;
   border-radius: 5px;
 }
-.reply .date {
+#replies .reply .date {
   float: right;
   background-color: #999999;
   color: #ffffff;
@@ -397,7 +397,7 @@ p#codename {
   font-weight: bold;
   padding: 5px;
 }
-.reply button {
+#replies .reply button {
   float: right;
   padding: 5px;
   background-color: inherit;
@@ -406,7 +406,7 @@ p#codename {
   border: 0;
   clear: right;
 }
-.reply button:hover {
+#replies .reply button:hover {
   border: 0;
   color: #000000;
 }
@@ -426,8 +426,16 @@ p#codename {
   margin-bottom: 10px;
   text-align: left;
 }
-.submissions a {
-  color: #333;
+.submission .file {
+  min-width: 300px;
+  display: inline-block;
+}
+.submission .file.reply {
+  font-size: small;
+}
+.submission .info {
+  font-size: 12px;
+  color: #666666;
 }
 
 ul.plain {

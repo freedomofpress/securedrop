@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-single">
-<p class="breadcrumbs"><a href="/">All Sources</a> <i class="fa fa-arrow-circle-right"></i> <strong>{{ codename }}</strong></p>
+<p class="breadcrumbs"><a href="/">All Sources</a> <i class="fa fa-chevron-right"></i> <strong>{{ codename }}</strong></p>
 <hr class="no-line" />
 {% if docs %}
 
@@ -10,19 +10,32 @@
   <div id='select-container'></div>
 </div>
 <form action="/bulk" method="post">
-<ul id="submissions" class="plain submissions">
-{% for doc in docs %}
-<li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>{% if doc.name.startswith('reply-') %}<i>{{ doc.name }}</i> ({{ doc.size }} bytes sent {{ doc.date }}){% else %}<a href="/col/{{ sid }}/{{ doc.name }}">{{ doc.name }}</a> <small class="doc-info">({{ doc.size }} bytes uploaded {{ doc.date }})</small>{% endif %}<i class="fa fa-file-o pull-right"></i></li>
-{% endfor %}
-</ul>
+  <ul id="submissions" class="plain submissions">
+    {% for doc in docs %}
+      <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>
+        {% if doc.name.endswith('reply.gpg') %}
+          <span class="file reply">{{ doc.name }}</span>
+          <span class="info">{{ doc.size }} bytes sent {{ doc.date }}</span>
+        {% else %}
+        <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.name }}"><i class="fa fa-download"></i> {{ doc.name }}</a></span>
+          <span class="info">{{ doc.size }} bytes uploaded {{ doc.date }}</span>
+        {% endif %}
+        {% if doc.name.endswith('-doc.zip.gpg') %}
+          <i class="fa fa-file-archive-o pull-right"></i>
+        {% else %}
+          <i class="fa fa-file-text-o pull-right"></i>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
 
-<input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-<input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-<div class="document-actions">
-  <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-  <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
-</div>
-</form>
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+  <div class="document-actions">
+    <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
+    <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
+  </div>
+  </form>
 {% else %}
 <p><br />No documents to display.</p>
 {% endif %}
