@@ -493,3 +493,35 @@ p.bubble:after {
 p.breadcrumbs {
   text-align: left;
 }
+
+.button-star {
+    padding: 0;
+    background-color: rgb(240,240,240);
+    color: orange;
+    border: none;
+}
+
+.starred {
+    color: orange;
+
+}
+
+.starred:hover{
+    color: lightgray;
+    border: none;
+    background-color: rgb(240,240,240);
+}
+
+.un-starred{
+    color: lightgray;
+}
+
+.un-starred:hover{
+    color: lightsalmon;
+    border: none;
+    background-color: rgb(240,240,240);
+}
+
+.button-star:focus {
+    outline:0;
+}

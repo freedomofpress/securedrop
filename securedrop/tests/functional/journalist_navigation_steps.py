@@ -24,7 +24,7 @@ class JournalistNavigationSteps():
         self.assertEquals(1, len(code_names))
 
     def _journalist_downloads_message(self):
-        self.driver.find_element_by_css_selector('.code-name a').click()
+        self.driver.find_element_by_css_selector('#un-starred-source-link-1').click()
 
         submissions = self.driver.find_elements_by_css_selector('#submissions a')
 
