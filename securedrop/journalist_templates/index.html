@@ -15,7 +15,7 @@
         <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
             <div class="date">{{ source.last_updated.strftime('%b %d, %Y %I:%M %p') }}</div>
             <div class="designation">
-                <button class="button-star" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><img class="star" src="/static/i/star.png"></button>
+                <button class="button-star" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
                 <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
                 <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span>
             </div>
@@ -24,7 +24,7 @@
                 <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
                 {% if source.num_unread > 0 %}
       <span class="unread">
-        <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' id="un-starred-source-link-{{loop.index}}"><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+        <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' id="starred-source-link-{{loop.index}}"><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
       </span>
                 {% endif %}
             </div>
@@ -40,7 +40,7 @@
   <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
     <div class="date">{{ source.last_updated.strftime('%b %d, %Y %I:%M %p') }}</div>
     <div class="designation">
-      <button class="button-star" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><img class="star" src="/static/i/un-star.png"></button>
+      <button class="button-star" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
       <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span>
     </div>

@@ -494,16 +494,6 @@ p.breadcrumbs {
   text-align: left;
 }
 
-.star{
-    width: 14px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-.button-star{
-    background-color: white;
-    padding: 2px 2px 2px 2px;
-    vertical-align: text-top;
-    float: left;
+.button-star {
+    background-color: rgb(240,240,240);
 }
