@@ -16,6 +16,8 @@ We recommend that you enable [full disk encryption](https://www.eff.org/deeplink
 
 If you wish to opt out of full disk encryption at your own risk, then choose "Guided - use entire disk and set up LVM" instead. Then wait for base system to finish installing. 
 
+**Warning** Enabling encrypted home directories will break the default 2 factor authentication. If you wish to enable encrypted home directories, you will need to change the default locations of the google-authenticator file to outisde of the users encrypted home directory and update the google authenticator pam module to reflect the new location.
+
 When you get to the configure tasksel screen, choose "Install security updates automatically". When you get to the software selection screen, only choose "OpenSSH server". Then wait for the packages to finish installing.
 
 When everything is done, install grub and reboot.
