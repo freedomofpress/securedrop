@@ -27,8 +27,10 @@ case "$1" in
     ;;
 
     purge)
-        invoke-rc.d securedrop-app stop
-        rm -f /etc/init.d/securedrop-app
+        if [ -f /etc/init.d/securedrop-app ]; then
+            rm -f /etc/init.d/securedrop-app
+        fi
+
         update-rc.d -f securedrop-app remove
 
         if [ -d /var/chroot ]; then
