@@ -1,7 +1,7 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.firefox import firefox_binary
 from multiprocessing import Process
-from subprocess import STDOUT
 import socket
 import shutil
 import os
@@ -28,6 +28,11 @@ class FunctionalTest():
         port = s.getsockname()[1]
         s.close()
         return port
+
+    def _create_webdriver(self):
+        log_file = open('tests/log/firefox.log', 'a')
+        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
+        return webdriver.Firefox(firefox_binary=firefox)
 
     def setUp(self):
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
@@ -58,9 +63,8 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        log_file = open('tests/log/firefox.log', 'a')
-        firefox_binary = webdriver.firefox.firefox_binary.FirefoxBinary(log_file=log_file)
-        self.driver = webdriver.Firefox(firefox_binary=firefox_binary)
+        self.driver = self._create_webdriver()
+
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)
