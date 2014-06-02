@@ -23,7 +23,6 @@ import version
 import crypto_util
 import store
 import background
-import util
 from db import db_session, Source, Submission
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
@@ -37,6 +36,12 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
 else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
+
+@app.template_filter('datetimeformat')
+def _jinja2_datetimeformat(dt, fmt=None):
+    """Template filter for readable formatting of datetime.datetime"""
+    fmt = fmt or '%b %d, %Y %I:%M %p'
+    return dt.strftime(fmt)
 
 
 @app.teardown_appcontext
@@ -153,8 +158,7 @@ def lookup():
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
             else:
-                d = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
-                date = util.format_time(d)
+                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
                 replies.append(dict(id=fn, date=date, msg=msg))
 
     def async_genkey(sid, codename):

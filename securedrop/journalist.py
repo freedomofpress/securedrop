@@ -16,7 +16,6 @@ import version
 import crypto_util
 import store
 import background
-import util
 from db import db_session, Source, Submission, SourceStar
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -30,6 +29,12 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
 else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
+
+@app.template_filter('datetimeformat')
+def _jinja2_datetimeformat(dt, fmt=None):
+    """Template filter for readable formatting of datetime.datetime"""
+    fmt = fmt or '%b %d, %Y %I:%M %p'
+    return dt.strftime(fmt)
 
 
 @app.teardown_appcontext
@@ -66,7 +71,7 @@ def get_docs(sid):
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
-            date=util.format_time(datetime.fromtimestamp(os_stat.st_mtime)),
+            date=datetime.fromtimestamp(os_stat.st_mtime),
             size=os_stat.st_size,
         ))
     # sort in chronological order
