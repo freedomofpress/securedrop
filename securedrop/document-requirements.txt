@@ -13,3 +13,4 @@ pycrypto==2.6.1
 gnupg-securedrop==1.2.5-9-g6f9d63a-dirty
 scrypt==0.6.1
 wsgiref==0.1.2
+https://mat.boum.org/files/mat-0.4.2.tar.gz
