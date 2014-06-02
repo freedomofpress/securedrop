@@ -19,6 +19,7 @@ import urllib2
 
 import signal
 import traceback
+from datetime import datetime
 
 class FunctionalTest():
 
@@ -31,6 +32,8 @@ class FunctionalTest():
 
     def _create_webdriver(self):
         log_file = open('tests/log/firefox.log', 'a')
+        log_file.write('[%s] Running Functional Tests\n' % str(datetime.now()))
+        log_file.flush()
         firefox = firefox_binary.FirefoxBinary(log_file=log_file)
         return webdriver.Firefox(firefox_binary=firefox)
 
