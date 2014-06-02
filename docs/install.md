@@ -5,7 +5,7 @@ These instructions are intended for admins setting up SecureDrop for a journalis
 
 ## Before you begin
 
-Before installing SecureDrop, you should make sure you have everything you need.
+Before installing SecureDrop, you should make sure you have everything you need:
 
 * You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/docs/ubuntu_config.md).
 
@@ -17,13 +17,13 @@ Before installing SecureDrop, you should make sure you have everything you need.
 
 * Finally, you should have selected two secure passphrases: one for the persistent volume on the internet-connected Tails, and one for the persistent volume on the air-gapped Tails. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
 
-In addition to the requirements above, each journalist will also have their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't have already have a key. 
+In addition to the requirements above, each journalist will also have their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't already have a key. 
 
 We also suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
 
 ## Secure Viewing Station
 
-The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network device. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing this is outside the scope of this manual.
+The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network device. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing so is outside the scope of this manual.
 
 ### Generate GPG Key and Import Journalist Public Keys
 
@@ -36,13 +36,13 @@ To generate the application GPG key:
 * Open a terminal and run `gpg --gen-key`
 * When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
 * When it asks, `What keysize do you want?` type `4096`
-* When it asks, `Key is valid for?` press enter to keep the default
+* When it asks, `Key is valid for?` press Enter to keep the default
 * When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
 * For `Real name` type: `SecureDrop`
-* For `Email address`, leave the field blank and press enter
+* For `Email address`, leave the field blank and press Enter
 * For `Comment` type `SecureDrop Application GPG Key`
 * Verify that everything is correct so far, and type `o` for `(O)kay`
-* It will pop up a box asking you to type a passphrase, but it's safe to click okay with typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
+* It will pop up a box asking you to type a passphrase, but it's safe to click okay without typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
 * Wait for your GPG key to finish generating
 
 To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". If you switch to the "My Personal Keys" tab you can see the key that you just generated.
@@ -65,8 +65,29 @@ TODO add steps email address set in key needs to match the email address to be u
 Both the `App Server` and `Monitor Server` should already have Ubuntu Server installed. To follow these instructions you should know how to navigate the command line.
 
 ### Admin's SSH Client
-In order to SSH over Tor to access the servers after the install is completed you will need to install and configure a proxy tool to proxy you ssh connection over tor.
-Torify and connect-proxy are two tools that can be used to proxy ssh connections over tor.
+In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by manually executing the post-install script at `/opt/securedrop/post-install.sh`.
+
+If you have torify on your system and you're Tor running in the background, simply prepend it to the command:
+```
+torify ssh admin1@examplenxu7x5ifm.onion
+```
+
+After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
+```
+ssh admin1@examplenxu7x5ifm.onion -o ProxyCommand="/usr/bin/connect-proxy -4 -S localhost:9050 %h %p"
+```
+
+You can also configure your SSH client to make the settings for proxying over Tor persistent, and then connect using the regular SSH command syntax. Just edit `~/.ssh/config` as follows, except replace the Host, HostName and User:
+
+```
+Host examplenxu7x5ifm.onion
+HostName examplenxu7x5ifm.onion
+User admin1
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect-proxy -4 -S localhost:9050 $(tor-resolve %h localhost:9050) %p
+```
 
 ### App Server
 #### Required Information
@@ -77,7 +98,7 @@ Torify and connect-proxy are two tools that can be used to proxy ssh connections
 * An admin's username with an existing OS account (most likely the account you are using for the install)
 * The Monitor Server's IP address
 
-#### To install from apt repo run the following block of commands
+#### To install from FPF's apt repository run the following block of commands
 ```
 wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz && \
 tar -xzf add-repos.tgz && \
@@ -86,17 +107,17 @@ sudo ./add-repos.sh && \
 sudo apt-get -y install securedrop-app && \
 sudo /opt/securedrop/post-install.sh
 ```
-Record the values displayed in red from the post install script
+Record the values displayed in red from the post-install script.
 
 ### Monitor Server
 ####Required Information
 * An admin's username with an existing OS account (most likely the account you are using for the install)
 * The `App Server`'s IP address
-* The destination email address for the ossec alerts
-* The gpg key that has the same email address set as the destination email address for the OSSEC alerts
+* The destination email address for the OSSEC alerts
+* The GPG key that has the same email address set as the destination email address for the OSSEC alerts
 * The OSSEC alert email address GPG key's fingerprint
 
-#### To install from apt repo run the following block of commands
+#### To install from FPF's apt repository run the following block of commands
 ```
 wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz && \
 tar -xzf add-repos.tgz && \
@@ -105,11 +126,11 @@ sudo ./add-repos.sh && \
 sudo apt-get install securedrop-monitor -y && \
 sudo /opt/securedrop/post-install.sh
 ```
-Record the values displayed in red from the post install script
+Record the values displayed in red from the post-install script.
 
 ### Add OSSEC Agent
 Adding the OSSEC agent requires taking a long hash value outputed on the `Monitor Server` and entering it into the `App Server`
-You should wait until you have ssh'd through tor to both boxes so you can copy and paste from one window to the other.
+You should wait until you have SSH'd through Tor to both boxes so you can copy and paste from one window to the other.
 This will require you to switch between the 'Monitor Server' to the 'App Server' then back to the 'Monitor Server'.
 
 Monitor Server (TODO add screenshot of /var/ossec/bin/manage-agents and restart ossec)
@@ -119,9 +140,9 @@ App Server (TODO add screenshot of importing hash value and restart ossec)
 Monitor Server (TODO add screenshot of /var/ossec/bin/list_agents -a to show agent connected)
 
 ### Configure Postfix
-Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure smtp relay connection using STARTTLS (port 587) and Certificate Pinning and sasl authentication. An example for using smtp.gmail.com as the smtp relay is provided below. If you use smtp.gmail.com you should create an [Application Specific Password](http://www.youtube.com/watch?v=zMabEyrtPRg&t=2m13s) to use for the sasl authentication.
+Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using STARTTLS (port 587) and Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create an [Application Specific Password](http://www.youtube.com/watch?v=zMabEyrtPRg&t=2m13s) to use for the SASL authentication.
 
-The smtp STARTTLS certificate's fingerprint was retieved using
+The SMTP STARTTLS certificate's fingerprint was retrieved using this command:
 ```
 openssl s_client -connect smtp.gmail.com:587 -starttls smtp  < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
 ```
@@ -166,9 +187,9 @@ recipient_delimiter = +
 [smtp.gmail.com]:587    USERNAME@DOMAIN:PASSWORD
 ```
 
-Change `USERNAME` `DOMAIN` and `PASSWORD` to the correct values
+Change `USERNAME` `DOMAIN` and `PASSWORD` to the correct values.
 
-#### Apply settings and restart postfix
+#### Apply settings and restart Postfix
 ```
 sudo chmod 400 /etc/postfix/sasl_passwd && \
 sudo postmap /etc/postfix/sasl_passwd && \
