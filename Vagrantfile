@@ -11,4 +11,9 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.name = "securedrop"
   end
+
+  # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
 end

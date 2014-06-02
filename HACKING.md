@@ -35,6 +35,19 @@ To run tests:
 
 For more instructions on how to interact with your VM, refer to the [Vagrant website](http://vagrantup.com).
 
+### Caching Vagrant
+
+Sometimes you will find yourself destroying and provisioning your Vagrant VM
+frequently (usually to debug issues in `setup_dev.sh`). The installation process
+takes a while, and can quickly become an annoying time waster. To avoid this,
+install the vagrant-cachier plugin:
+
+    $ vagrant plugin install vagrant-cachier
+
+This will cache packages from your next provision and use them in the future,
+making re-provisioning much, much faster. Installing the plugin is all you need
+to do, our Vagrantfile is set up to take advantage of it when it is available.
+
 ## Chroot Jail
 
 First install the appropriate dependencies for your VM's OS:
