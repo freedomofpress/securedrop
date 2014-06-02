@@ -7,7 +7,7 @@ from base import *
 env = os.environ.get('SECUREDROP_ENV')
 
 # default env is 'development'
-env = env or 'development'
+env = env or 'production'
 
 if env == 'test':
   from test import *
