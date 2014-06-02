@@ -52,7 +52,7 @@ class Source(Base):
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
     last_updated = Column(DateTime, default=datetime.datetime.now)
-    source_star = relationship("SourceStar", uselist=False, backref="sources")
+    star = relationship("SourceStar", uselist=False, backref="source")
     
     # sources are "pending" and don't get displayed to journalists until they submit something
     pending = Column(Boolean, default=True)
@@ -106,7 +106,6 @@ class SourceStar(Base):
     id = Column("id", Integer, primary_key=True)
     source_id = Column("source_id", Integer, ForeignKey('sources.id'))
     starred = Column("starred", Boolean, default=True)
-    source = relationship("Source", backref=backref('source_stars'))
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):

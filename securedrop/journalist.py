@@ -76,18 +76,15 @@ def get_docs(sid):
 
 def make_star_true(sid):
     source = get_source(sid)
-    source_star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
-    if source_star:
-        source_star.starred = True
+    if source.star:
+        source.star.starred = True
     else:
         source_star = SourceStar(source)
         db_session.add(source_star)
 
 def make_star_false(sid):
     source = get_source(sid)
-    query = SourceStar.query.filter(SourceStar.source_id == source.id)
-    source_star = get_one_or_else(query, app.logger, abort)
-    source_star.starred = False
+    source.star.starred = False
 
 
 @app.route('/col/add_star/<sid>', methods=('POST',))

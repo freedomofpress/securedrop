@@ -69,6 +69,7 @@ class TestJournalist(unittest.TestCase):
     def test_col_un_star_call_db(self, db_session):
         source = Source("source_id")
         source_star = SourceStar(source=source, starred=False)
+        source.star = source_star
 
         self.set_up_journalist(source, source_star)
 
