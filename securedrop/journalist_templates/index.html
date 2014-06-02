@@ -12,7 +12,7 @@
   {% set docs = source.documents_messages_count()['documents'] %}
   {% set msgs = source.documents_messages_count()['messages'] %}
   <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
-    <div class="date">{{ source.formatted_last_updated }}</div>
+    <div class="date">{{ source.last_updated.strftime('%b %d, %Y %I:%M %p') }}</div>
     <div class="designation">
       <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
       <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span>

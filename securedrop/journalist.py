@@ -82,7 +82,6 @@ def get_docs(sid):
 def index():
     sources = []
     for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
-        source.formatted_last_updated = util.format_time(source.last_updated)
         sources.append(source)
         source.num_unread = len(Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
     return render_template('index.html', sources=sources)
