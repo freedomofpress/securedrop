@@ -11,18 +11,21 @@
   {% for source in sources %}
   {% set docs = source.documents_messages_count()['documents'] %}
   {% set msgs = source.documents_messages_count()['messages'] %}
-  <li data-source-designation="{{ source.journalist_designation|lower }}">
-    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
-    <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span><br />
-    <strong>{{ docs }}</strong> document{{ "" if docs == 1 else "s" }} and <strong>{{ msgs }}</strong> message{{ "" if msgs == 1 else "s" }}<br />
-    last updated {{ source.last_updated }}<br>
-    <span id='unread' class='{{ "some" if source.num_unread > 0 else "" }}'>
+  <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
+    <div class="date">{{ source.formatted_last_updated }}</div>
+    <div class="designation">
+      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+      <span class="code-name"><a href="/col/{{ source.filesystem_id }}">{{ source.journalist_designation }}</a></span>
+    </div>
+    <div class="submission-count">
+      <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
+      <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
       {% if source.num_unread > 0 %}
-        <a href='/download_unread/{{ source.filesystem_id }}'>unread: {{ source.num_unread }}</a>
-      {% else %}
-        unread: 0
+      <span class="unread">
+        <a class="btn small" href='/download_unread/{{ source.filesystem_id }}'><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+      </span>
       {% endif %}
-    </span>
+    </div>
   </li>
   {% endfor %}
 </ul>
