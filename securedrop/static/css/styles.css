@@ -348,3 +348,40 @@ a#already-have-codename:hover {
   text-decoration:underline;
   color:#666;
 }
+
+p.bubble {
+    width:400px;
+    position:absolute;
+    background-color:#ffffff;
+    left:115px;
+    top:38px;
+    border-radius:30px;
+    border: 3px solid #666;
+    padding: 10px 24px;
+    display:none;
+}
+
+p.bubble:before {
+    content:'';
+    position:absolute;
+    border-color: transparent transparent #666 #666;
+    border-width: 25px;
+    border-style: solid;
+    left:30px;
+    top:-50px;
+    width:0px;
+    height:0px;
+}
+
+p.bubble:after {
+    content:'';
+    position:absolute;
+    border-color: transparent transparent #fff #fff;
+    border-width: 25px;
+    border-style: solid;
+    left:33px;
+    top:-43px;
+    width:0px;
+    height:0px;
+}
+
