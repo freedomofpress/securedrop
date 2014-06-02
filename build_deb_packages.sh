@@ -61,6 +61,8 @@ build_with_scripts() {
     cp -R $MY_PATH/install_files/$PACKAGE_NAME/* $PACKAGE_DIR/
     cp -R $MY_PATH/install_files/scripts/add-repos.sh $PACKAGE_DIR/opt/securedrop
     cp -R $MY_PATH/install_files/scripts/post-install.sh $PACKAGE_DIR/opt/securedrop
+    cp -R $MY_PATH/install_files/scripts/add-admin.sh $PACKAGE_DIR/opt/securedrop
+    cp -R $MY_PATH/install_files/scripts/add-journalists.sh $PACKAGE_DIR/opt/securedrop
     #MD5
     #find . -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN/md5sums
 
