@@ -5,6 +5,8 @@ import os
 import shutil
 import subprocess
 
+os.environ['SECUREDROP_ENV'] = 'development'
+
 def start():
     subprocess.Popen(['python', 'source.py'])
     subprocess.Popen(['python', 'journalist.py'])
