@@ -1,4 +1,4 @@
-'/**
+/**
  * The journalist page should degrade gracefully without Javascript. To avoid
  * confusing users, this function dyanamically adds elements that require JS.
  */
