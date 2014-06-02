@@ -206,6 +206,7 @@ exit 0
 EOF
 
 sudo chmod +x /etc/init.d/xvfb
+sudo update-rc.d xvfb defaults
 sudo service xvfb start
 sudo sh -c 'echo "export DISPLAY=:1" >> /etc/environment'
 export DISPLAY=:1
