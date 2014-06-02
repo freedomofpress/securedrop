@@ -75,7 +75,7 @@ class TestSource(unittest.TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<strong id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</strong>'
+        codename_re = r'<p id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -384,7 +384,7 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
-        li = soup.select('ul#submissions li .doc-info')[0]
+        li = soup.select('ul#submissions li .info')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
@@ -457,7 +457,7 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
-        li = soup.select('ul#submissions li .doc-info')[0]
+        li = soup.select('ul#submissions li .info')[0]
         self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
@@ -691,7 +691,7 @@ class TestIntegration(unittest.TestCase):
         # test filenames and sort order
         soup = BeautifulSoup(rv.data)
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        for i, submission_link in enumerate(soup.select('ul#submissions li a')):
+        for i, submission_link in enumerate(soup.select('ul#submissions li a .filename')):
             filename = str(submission_link.contents[0])
             self.assertTrue(re.match(submission_filename_re.format(i+1), filename))
 
@@ -718,11 +718,11 @@ class TestIntegration(unittest.TestCase):
 
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        filename = str(soup.select('ul#submissions li a')[0].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[0].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(1), filename) )
-        filename = str(soup.select('ul#submissions li a')[1].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[1].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(3), filename) )
-        filename = str(soup.select('ul#submissions li a')[2].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[2].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(4), filename) )
 
 

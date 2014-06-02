@@ -66,7 +66,7 @@ def get_docs(sid):
         os_stat = os.stat(store.path(sid, filename))
         docs.append(dict(
             name=filename,
-            date=str(datetime.fromtimestamp(os_stat.st_mtime)),
+            date=util.format_time(datetime.fromtimestamp(os_stat.st_mtime)),
             size=os_stat.st_size,
         ))
     # sort in chronological order
