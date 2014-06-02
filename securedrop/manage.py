@@ -5,9 +5,6 @@ import os
 import shutil
 import subprocess
 
-import config
-import db
-
 def start():
     subprocess.Popen(['python', 'source.py'])
     subprocess.Popen(['python', 'journalist.py'])
@@ -31,6 +28,11 @@ def reset():
     2. Regenerates the database
     3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
     """
+    # HACK: import here so they don't interfere with the test setup
+    # (environment variable hasn't been set yet)
+    import config
+    import db
+
     # Erase the development db file
     assert hasattr(config, 'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
     os.remove(config.DATABASE_FILE)
