@@ -79,7 +79,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}"/>
   <input type="hidden" name="col_name" value="{{ codename }}"/>
-  <button type="submit" class="danger"><i class="fa fa-times"></i> Delete collection</button>
+  <button type="submit" class="danger" formaction="/col/delete/{{sid}}"><i class="fa fa-times"></i> Delete collection</button>
 </form>
 
 </div>

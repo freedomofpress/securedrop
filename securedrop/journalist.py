@@ -30,6 +30,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
+
 @app.template_filter('datetimeformat')
 def _jinja2_datetimeformat(dt, fmt=None):
     """Template filter for readable formatting of datetime.datetime"""
@@ -87,6 +88,7 @@ def make_star_true(sid):
         source_star = SourceStar(source)
         db_session.add(source_star)
 
+
 def make_star_false(sid):
     source = get_source(sid)
     source.star.starred = False
@@ -97,6 +99,7 @@ def add_star(sid):
     make_star_true(sid)
     db_session.commit()
     return redirect(url_for('index'))
+
 
 @app.route("/col/remove_star/<sid>", methods=('POST',))
 def remove_star(sid):
@@ -146,22 +149,21 @@ def delete_collection(source_id):
 
 @app.route('/col/process', methods=('POST',))
 def col_process():
-    action = request.form['action']
-    if action == 'delete':
-        return col_delete()
-    elif action == 'star':
-        return col_star()
-    elif action == 'un-star':
-        return col_un_star()
-    else:
-        return abort(404)
-
-
-def col_star():
+    actions = {'delete': col_delete, 'star': col_star, 'un-star': col_un_star}
     if 'cols_selected' not in request.form:
         return redirect(url_for('index'))
 
     cols_selected = request.form.getlist('cols_selected')
+    action = request.form['action']
+
+    if action not in actions:
+        return abort(404)
+
+    method = actions[action]
+    return method(cols_selected)
+
+
+def col_star(cols_selected):
     for sid in cols_selected:
         make_star_true(sid)
 
@@ -169,12 +171,7 @@ def col_star():
     return redirect(url_for('index'))
 
 
-def col_un_star():
-    if 'cols_selected' not in request.form:
-        return redirect(url_for('index'))
-
-    cols_selected = request.form.getlist('cols_selected')
-
+def col_un_star(cols_selected):
     for source_id in cols_selected:
         make_star_false(source_id)
 
@@ -182,27 +179,30 @@ def col_un_star():
     return redirect(url_for('index'))
 
 
-def col_delete():
-    if 'cols_selected' in request.form:
-        # deleting multiple collections from the index
-        # Note: getlist is cgi.FieldStorage.getlist
-        cols_selected = request.form.getlist('cols_selected')
-        if len(cols_selected) < 1:
-            flash("No collections selected to delete!", "warning")
-        else:
-            for source_id in cols_selected:
-                delete_collection(source_id)
-            flash("%s %s deleted" % (
-                len(cols_selected),
-                "collection" if len(cols_selected) == 1 else "collections"
-            ), "notification")
-    elif 'col_name' in request.form:
-        # deleting a single collection from its /col page
-        source_id, col_name = request.form['sid'], request.form['col_name']
-        delete_collection(source_id)
-        flash("%s's collection deleted" % (col_name,), "notification")
+@app.route('/col/delete/<sid>', methods=('POST',))
+def col_delete_single(sid):
+    source = get_source(sid)
+    # deleting a single collection from its /col page
+    delete_collection(sid)
+    flash("%s's collection deleted" % (source.journalist_designation,), "notification")
+    return redirect(url_for('index'))
+
+
+def col_delete(cols_selected):
+    # deleting multiple collections from the index
+    # Note: getlist is cgi.FieldStorage.getlist
+    if len(cols_selected) < 1:
+        flash("No collections selected to delete!", "warning")
+    else:
+        for source_id in cols_selected:
+            delete_collection(source_id)
+        flash("%s %s deleted" % (
+            len(cols_selected),
+            "collection" if len(cols_selected) == 1 else "collections"
+        ), "notification")
 
     return redirect(url_for('index'))
+
 
 @app.route('/col/<sid>/<fn>')
 def doc(sid, fn):
@@ -236,12 +236,14 @@ def generate_code():
     db_session.commit()
     return redirect('/col/' + g.sid)
 
+
 @app.route('/download_unread/<sid>')
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     docs = [doc.filename for doc in
             Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
     return bulk_download(sid, docs)
+
 
 @app.route('/bulk', methods=('POST',))
 def bulk():

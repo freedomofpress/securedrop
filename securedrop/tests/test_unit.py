@@ -629,10 +629,7 @@ class TestIntegration(unittest.TestCase):
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        rv = self.journalist_app.post('/col/process', data=dict(
-            action='delete',
-            sid=sid,
-            col_name=col_name,
+        rv = self.journalist_app.post('/col/delete/' + sid, data=dict(
         ), follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
 
