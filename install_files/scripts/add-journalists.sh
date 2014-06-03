@@ -1,7 +1,13 @@
 #!/bin/bash
 # Usage:
 # Description: Add or remove journalist users from the document interface
+bold=$(tput bold)
+blue=$(tput setaf 4)
+red=$(tput setaf 1)
+normalcolor=$(tput sgr 0)
 basedir="/var/chroot/document"
+journalist_user="$1"
+
 if [[ ! "$(grep "$journalist_user" $basedir/etc/tor/torrc)" ]]; then
     sed -i "/HiddenServiceAuthorizeClient/s/$/,$journalist_user/" $basedir/etc/tor/torrc
 fi
