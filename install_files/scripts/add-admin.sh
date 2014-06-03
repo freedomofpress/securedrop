@@ -44,7 +44,7 @@ echo "sleep 10 sec to wait for cert to be created"
 sleep 10
 if [ -f /var/lib/tor/hidden_service/hostname ]; then
     echo "$bold$blue################################################################################$normalcolor"
-    echo "$blue The App Server is only accessible through a Tor Authenticated Hidden Service"
+    echo "$blue SecureDrop Servers are only accessible through a Tor Authenticated Hidden Service"
     echo " you will need to use connect-proxy, torify or something similar to"
     echo " proxy ssh through tor"
     echo "$normalcolor"
