@@ -4,26 +4,6 @@ set -e
 # Source debconf library.
 . /usr/share/debconf/confmodule
 
-# Get the FQDN smtp relay for ossec alerts
-ok=""
-while [ ! "$ok" ]; do
-    db_input critical securedrop-monitor-ossec/get_smtp || true
-    db_go || true
-    db_get securedrop-monitor-ossec/get_smtp
-    if [ "$RET" ]; then
-        ok=1
-    else
-        db_input critical securedrop-monitor-ossec/get_smtp_continue || true
-        db_go || true
-        db_get securedrop-monitor-ossec/get_smtp_continue
-        if [ "$RET" = "false" ]; then
-            exit 1
-        else
-            db_fset securedrop-monitor-ossec/get_smtp seen false
-        fi
-    fi
-done
-
 # Get the destination email address for ossec alerts
 #TODO validate
 db_input critical securedrop-monitor-ossec/get_email || true
