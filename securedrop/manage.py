@@ -4,7 +4,6 @@ import sys
 import os
 import shutil
 import subprocess
-import signal
 import psutil
 
 os.environ['SECUREDROP_ENV'] = 'development'
@@ -26,15 +25,6 @@ def start():
     print "Source interface:     localhost:8080"
     print "Journalist interface: localhost:8081"
 
-
-
-def kill(filename):
-    if os.path.isfile(filename):
-        f = open(filename, 'r')
-        pid = f.read()
-        if pid:
-            print "killing " + pid
-            os.kill(int(pid), signal.SIGTERM)
 
 
 def test():
