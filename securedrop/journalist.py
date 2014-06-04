@@ -157,7 +157,7 @@ def col_process():
     action = request.form['action']
 
     if action not in actions:
-        return abort(404)
+        return abort(500)
 
     method = actions[action]
     return method(cols_selected)
