@@ -4,7 +4,6 @@ import sys
 import os
 import shutil
 import subprocess
-import psutil
 import unittest
 from tests import test_unit, test_journalist, test_single_star
 
@@ -12,15 +11,6 @@ os.environ['SECUREDROP_ENV'] = 'development'
 
 
 def start():
-    for proc in psutil.process_iter():
-        for command in  proc.cmdline:
-            if 'source' in command:
-                print "killing: " + str(command)
-                proc.kill()
-            if 'journalist' in command:
-                print "killing: " + str(command)
-                proc.kill()
-
     subprocess.Popen(['python', 'source.py'])
     subprocess.Popen(['python', 'journalist.py'])
     print "The web application is running, and available on your Vagrant host at the following addresses:"
