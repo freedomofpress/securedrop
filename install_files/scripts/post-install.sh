@@ -10,7 +10,6 @@ red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
     if [ "$(dpkg -l securedrop-app-interfaces)" ]; then
-        # TODO add displaying gauth and pw for journalist       
         # Display the URLs for the Source and Document interfaces
         if [ -f /var/chroot/source/var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
@@ -30,21 +29,15 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's URL is$red http://$ONION_ADDRESS:8080$normalcolor"
                 echo "$red $ATHS_USER$blue's TBB torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
+                chroot_gauth_dir="/var/chroot/document/var/www/securedrop/gauth"
+                2fa_secret="$(sed -n 1p $chroot_gauth_dir/$ATHS_USER)"
+                doc_int_pw="$(awk -F'[/=]' '/'\"PASSWORD'/ {print $2}' $chroot_gauth_dir/$ATHS_USER)"
+                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$2fa_secret$normalcolor"
+                echo "$red $ATHS_USER$blue's password for the document interface is $red$doc_int_pw"
             done < /var/chroot/document/var/lib/tor/hidden_service/hostname
             echo "$blue To add more journalists run $red'/opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
             echo "$bold$blue################################################################################$normalcolor"
         fi
-
-	if [ -d /var/chroot/document/var/www/securedrop/gauth ]; then
-	
-		for f in /var/chroot/document/var/www/securedrop/gauth/*
-		do
-			user="${f##*/}"
-			key=`cat $f`
-			echo "$red $user$blue's two-factor Google Authenticator key for the Document Interface is: "
-			echo "$red $key $normalcolor"
-		done	
-	fi
 
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$bold$blue#################################################################################$normalcolor"
@@ -74,6 +67,11 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's URL is$red http://$ONION_ADDRESS:8080$normalcolor"
                 echo "$red $ATHS_USER$blue's torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
+                gauth_dir="/var/www/securedrop/gauth"
+                2fa_secret="$(sed -n 1p $gauth_dir/$ATHS_USER)"
+                doc_int_pw="$(awk -F'[/=]' '/'\"PASSWORD'/ {print $2}' $gauth_dir/$ATHS_USER)"
+                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$2fa_secret$normalcolor"
+                echo "$red $ATHS_USER$blue's password for the document interface is $red$doc_int_pw"
             done < /var/lib/tor/hidden_service/hostname
             echo "$bold$blue################################################################################$normalcolor"
         fi

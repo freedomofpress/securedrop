@@ -247,6 +247,7 @@ EOF
 	    gauthpw=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10)
             cat > $gauth_dir/$journalist_user << EOF
 $gauthcode
+"PASSWORD=$gauthpw
 EOF
         }
 
