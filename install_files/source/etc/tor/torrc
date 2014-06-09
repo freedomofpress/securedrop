@@ -4,3 +4,5 @@ HiddenServicePort 80 127.0.0.1:80
 SafeLogging 1
 SocksPort 0
 User source-tor
+FascistFirewall 1
+ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030
