@@ -269,7 +269,7 @@ EOF
         chown -R $document_user:$document_user $securedrop_root
 
         ##Enable only the needed apache modules for each interface
-        enabled_mods="alias auth_basic gauth authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi"
+        enabled_mods="alias auth_basic gauth authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi xsendfile"
         chmod 600 /usr/lib/apache2/modules/mod_authn_google.so 
         for enabled_mod in $enabled_mods; do
             if [ ! -L /etc/apache2/mods-enabled/$enabled_mod.load ]; then

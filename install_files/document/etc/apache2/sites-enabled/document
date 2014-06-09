@@ -2,10 +2,6 @@ NameVirtualHost 127.0.0.1:8080
 <VirtualHost 127.0.0.1:8080>
 ServerName 127.0.0.1:8080
 
-#ServerAlias for each hidden service address in the tor hostname file
-#ServerAlias ONION_ADDRESS
-#INSERT_SERVER_ALIASES_HERE
-
 DocumentRoot /var/www/securedrop/static
 Alias /static /var/www/securedrop/static
 WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop
@@ -13,9 +9,8 @@ WSGIProcessGroup document
 WSGIScriptAlias / /var/www/securedrop/document.wsgi/
 AddType text/html .py
 
-#Allow-Origin for each hidden service address in the tor hostname file
-#Header set Acess-Control-Allow-Origin "http://ONION_URL"
-#INSERT_ORIGIN_HERE
+XSendFile        On
+XSendFilePath    /var/www/securedrop/store/
 
 Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
 Header edit Set-Cookie ^(.*)$ $1;HttpOnly
