@@ -87,12 +87,12 @@ APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 EOF
         cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
-Unattended-Upgrade::Origins-Pattern {
+Unattended-Upgrade::Allowed-Origins {
         "\${distro_id}:\${distro_codename}-security";
 };
 Unattended-Upgrade::Package-Blacklist {
 };
-Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::Mail "root@localhost";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "true";
 EOF
