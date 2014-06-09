@@ -227,22 +227,24 @@ EOF
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/lib/tor/hidden_service/hostname</directories>
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/var/lib/tor/hidden_service/hostname</directories>
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/var/lib/tor/hidden_service/hostname</directories>
-    <ignore>/var/www/keys/pubring.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/pubring.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/pubring.gpg</ignore>
-    <ignore>/var/www/keys/secring.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/secring.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/secring.gpg</ignore>
-    <ignore>/var/www/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
-    <ignore>/var/www/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
-    <ignore>/var/www/store</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/securedrop.log</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/securedrop.log</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/store</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/store</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/temp/</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/db/</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/db/</ignore>
+    <ignore>/var/securedrop/store</ignore>
+    <ignore>/var/securedrop/keys</ignore>
+    <ignore>/var/securedrop/db</ignore>
     <ignore>/var/ossec/queue</ignore>
     <ignore>/var/ossec/logs</ignore>
     <ignore>/var/ossec/stats</ignore>
@@ -308,7 +310,7 @@ EOF
   </localfile>
   <localfile>
     <log_format>syslog</log_format>
-    <location>/var/chroot/document/var/log/apache2/access.log</location>
+    <location>/var/chroot/source/var/log/apache2/access.log</location>
   </localfile>
   <localfile>
     <log_format>syslog</log_format>
