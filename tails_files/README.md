@@ -24,4 +24,4 @@ When you're done, save the document and close the text editor. Reboot Tails, and
 
 ## Usage
 
-After you login to Tails, connect to the internet and wait until you connect to the Tor network. Then open your Persistence folder and double-click on `securedrop_init`. After that you can connect to your SecureDrop document interface. You have to do this once each time you login to Tails. 
+After you login to Tails, connect to the internet and wait until you connect to the Tor network. Then open your Persistence folder and double-click on `SecureDrop Init`. After that you can connect to your SecureDrop document interface. You have to do this once each time you login to Tails. 
