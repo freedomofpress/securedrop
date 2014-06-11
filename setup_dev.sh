@@ -110,6 +110,7 @@ EOF
 
 cat > config/base.py <<EOF
 #### Application Configuration
+DEFAULT_ENV = 'development'
 
 SOURCE_TEMPLATES_DIR = './source_templates'
 JOURNALIST_TEMPLATES_DIR = './journalist_templates'

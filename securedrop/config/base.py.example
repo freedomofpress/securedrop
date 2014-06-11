@@ -1,4 +1,5 @@
 #### Application Configuration
+DEFAULT_ENV = 'production'
 
 SOURCE_TEMPLATES_DIR = './source_templates'
 JOURNALIST_TEMPLATES_DIR = './journalist_templates'
