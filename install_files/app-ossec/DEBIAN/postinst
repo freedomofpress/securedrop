@@ -336,6 +336,10 @@ EOF
     <log_format>syslog</log_format>
     <location>/var/chroot/document/var/www/securedrop/securedrop.log</location>
   </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/unattended-upgrades/unattended-upgrades</location>
+  </localfile>
 </ossec_config>
 EOF
         chown root:${GROUP} ${DIR}/etc/ossec.conf
