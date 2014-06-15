@@ -131,12 +131,7 @@ class TestSource(unittest.TestCase):
             self.assertIn("You have three options to send data", rv.data)
 
     def _new_codename(self):
-        """Helper function to go through the "generate codename" flow"""
-        with self.client as c:
-            rv = c.get('/generate')
-            codename = session['codename']
-            rv = c.post('/create')
-        return codename
+        return test_setup.new_codename(self.client, session)
 
     def test_lookup(self):
         """Test various elements on the /lookup page"""

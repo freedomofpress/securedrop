@@ -5,7 +5,7 @@ class RequestThatSecuresFileUploads(wrappers.Request):
 
     def _secure_file_stream(self, total_content_length, content_type, filename=None,
                         content_length=None):
-        return secure_file_stream()
+        return create_secure_file_stream()
 
     def make_form_data_parser(self):
         return self.form_data_parser_class(self._secure_file_stream,
