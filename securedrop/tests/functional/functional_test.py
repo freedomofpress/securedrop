@@ -14,7 +14,7 @@ import config
 
 import source
 import journalist
-import test_setup
+from tests import test_setup
 import urllib2
 
 import signal

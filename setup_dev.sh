@@ -214,7 +214,7 @@ export DISPLAY=:1
 echo ""
 echo "Running unit tests... these should all pass!"
 set +e # turn flag off so we can check if the tests failed
-./test.sh
+./manage.py test
 
 TEST_RC=$?
 

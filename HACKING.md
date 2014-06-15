@@ -23,17 +23,18 @@ You can ssh into the VM by typing `vagrant ssh`.
 SecureDrop consists of two related web applications, one for sources and one for journalists. You can start the web servers from within the VM with:
 
     cd /vagrant/securedrop
-    python source.py &
-    python journalist.py &
+    ./manage.py start
 
 Now you can visit SecureDrop by loading [http://localhost:8080] for the source interface and [http://localhost:8081] for the journalist interface in your web browser.
 
 To run tests:
 
 	cd /vagrant/securedrop
-	./test.sh
+	./manage.py test
 
 For more instructions on how to interact with your VM, refer to the [Vagrant website](http://vagrantup.com).
+
+
 
 ### Caching Vagrant
 
