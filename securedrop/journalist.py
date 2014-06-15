@@ -153,7 +153,7 @@ def col_process():
     if 'cols_selected' not in request.form:
         return redirect(url_for('index'))
 
-    cols_selected = request.form.getlist('cols_selected')
+    cols_selected = request.form.getlist('cols_selected') # getlist is cgi.FieldStorage.getlist
     action = request.form['action']
 
     if action not in actions:
@@ -181,16 +181,15 @@ def col_un_star(cols_selected):
 
 @app.route('/col/delete/<sid>', methods=('POST',))
 def col_delete_single(sid):
+    """deleting a single collection from its /col page"""
     source = get_source(sid)
-    # deleting a single collection from its /col page
     delete_collection(sid)
     flash("%s's collection deleted" % (source.journalist_designation,), "notification")
     return redirect(url_for('index'))
 
 
 def col_delete(cols_selected):
-    # deleting multiple collections from the index
-    # Note: getlist is cgi.FieldStorage.getlist
+    """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
         flash("No collections selected to delete!", "warning")
     else:
