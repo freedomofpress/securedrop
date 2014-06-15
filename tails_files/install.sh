@@ -6,26 +6,32 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-INSTALL_DIR=/home/amnesia/Persistent/.securedrop
+PERSISTENT=/home/amnesia/Persistent
+INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
-SCRIPT_BIN=/home/amnesia/Persistent/securedrop_init
+SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 
 mkdir -p $INSTALL_DIR
-
-# copy securedrop_init.py script
-cp securedrop_init.py $SCRIPT_PY
 
 # install deps and compile
 apt-get update
 apt-get install -y build-essential
 gcc -o $SCRIPT_BIN securedrop_init.c
 
+# copy launcher and icon
+cp securedrop_icon.png $INSTALL_DIR
+cp SecureDrop\ Init.desktop $PERSISTENT
+
+# copy securedrop_init.py script
+cp securedrop_init.py $SCRIPT_PY
+
 # prepare torrc_additions
 cp torrc_additions $ADDITIONS
 gedit $ADDITIONS
 
 # set permissions
+chmod 755 $INSTALL_DIR
 chown root:root $SCRIPT_BIN
 chmod 755 $SCRIPT_BIN
 chmod +s $SCRIPT_BIN
@@ -34,3 +40,7 @@ chmod 700 $SCRIPT_PY
 chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
 
+chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
+chmod 600 $INSTALL_DIR/securedrop_icon.png
+chown amnesia:amnesia $PERSISTENT/SecureDrop\ Init.desktop
+chmod 700 $PERSISTENT/SecureDrop\ Init.desktop
