@@ -11,12 +11,7 @@ from flask import (Flask, request, render_template, send_file, redirect, flash, 
 from flask_wtf.csrf import CsrfProtect
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-import config
-import version
-import crypto_util
-import store
 import background
-from db import db_session, Source, Submission, SourceStar
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.FlaskConfig)
