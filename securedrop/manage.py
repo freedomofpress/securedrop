@@ -4,15 +4,28 @@ import sys
 import os
 import shutil
 import subprocess
+import psutil
 
 os.environ['SECUREDROP_ENV'] = 'development'
 
+
 def start():
+    for proc in psutil.process_iter():
+        for command in  proc.cmdline:
+            if 'source' in command:
+                print "killing: " + str(command)
+                proc.kill()
+            if 'journalist' in command:
+                print "killing: " + str(command)
+                proc.kill()
+
     subprocess.Popen(['python', 'source.py'])
     subprocess.Popen(['python', 'journalist.py'])
     print "The web application is running, and available on your Vagrant host at the following addresses:"
     print "Source interface:     localhost:8080"
     print "Journalist interface: localhost:8081"
+
+
 
 def test():
     """
@@ -21,6 +34,7 @@ def test():
     # TODO: we could implement test.sh's functionality here, and get rid of
     # test.sh (now it's just clutter, and confusing)
     subprocess.call(["./test.sh"])
+
 
 def reset():
     """
@@ -36,7 +50,8 @@ def reset():
     import db
 
     # Erase the development db file
-    assert hasattr(config, 'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
+    assert hasattr(config,
+                   'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
     os.remove(config.DATABASE_FILE)
 
     # Regenerate the database
@@ -46,6 +61,7 @@ def reset():
     for source_dir in os.listdir(config.STORE_DIR):
         # Each entry in STORE_DIR is a directory corresponding to a source
         shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+
 
 def main():
     valid_cmds = ["start", "test", "reset"]
@@ -57,6 +73,7 @@ def main():
 
     cmd = sys.argv[1]
     getattr(sys.modules[__name__], cmd)()
+
 
 if __name__ == "__main__":
     main()
