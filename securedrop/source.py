@@ -115,17 +115,34 @@ def index():
     return render_template('index.html')
 
 
+def generate_unique_codename(num_words):
+    """Generate random codenames until we get an unused one"""
+    while True:
+        codename = crypto_util.genrandomid(num_words)
+        sid = crypto_util.hash_codename(codename) # scrypt (slow)
+        matching_sources = Source.query.filter(Source.filesystem_id == sid).all()
+        if len(matching_sources) == 0:
+            return codename
+
+
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
+    # Popping this key prevents errors when a logged in user returns to /generate.
+    # TODO: is this the best experience? A logged in user will be automatically
+    # logged out if they navigate to /generate by accident, which could be
+    # confusing. It might be better to instead redirect them to the lookup
+    # page, or inform them that they're logged in.
+    session.pop('logged_in', None)
+
     number_words = 8
     if request.method == 'POST':
         number_words = int(request.form['number-words'])
         if number_words not in range(7, 11):
             abort(403)
-    session['codename'] = crypto_util.genrandomid(number_words)
-    session.pop('logged_in', None)
-    # TODO: make sure this codename isn't a repeat
-    return render_template('generate.html', codename=session['codename'])
+
+    codename = generate_unique_codename(number_words)
+    session['codename'] = codename
+    return render_template('generate.html', codename=codename)
 
 
 @app.route('/create', methods=['POST'])
@@ -136,11 +153,7 @@ def create():
     db_session.add(source)
     db_session.commit()
 
-    if os.path.exists(store.path(sid)):
-        # if this happens, we're not using very secure crypto
-        log.warning("Got a duplicate ID '%s'" % sid)
-    else:
-        os.mkdir(store.path(sid))
+    os.mkdir(store.path(sid))
 
     session['logged_in'] = True
     return redirect(url_for('lookup'))
