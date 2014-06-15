@@ -17,7 +17,6 @@ build
 eggs
 parts
 bin
-var
 sdist
 develop-eggs
 .installed.cfg
@@ -46,4 +45,9 @@ nosetests.xml
 
 # Functional test logs
 **/ghostdriver.log
+
 .vagrant
+.chroot
+
+#IDE
+.idea

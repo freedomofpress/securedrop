@@ -49,6 +49,8 @@ except OSError:
 
 assert p.stdout.readline().split()[
     -1].split('.')[0] == '2', "upgrade GPG to 2.0"
+del p
+
 gpg = gnupg.GPG(binary=GPG_BINARY, homedir=config.GPG_KEY_DIR)
 
 words = file(config.WORD_LIST).read().split('\n')

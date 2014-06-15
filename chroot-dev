@@ -1,0 +1,169 @@
+#!/bin/bash
+
+if [[ $EUID -eq 0 ]]; then
+    echo "Please run this as your normal user, not root"
+    exit 1
+fi
+if ! hash debootstrap 2>/dev/null; then
+    echo "Install debootstrap before continuing"
+    exit 1
+fi
+if ! hash schroot 2>/dev/null; then
+    echo "Install schroot before continuing"
+    exit 1
+fi
+
+SOURCE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CHROOT_DIR=$SOURCE_ROOT/.chroot
+
+usage() {
+    cat <<EOS
+Usage: ./chroot-dev [command]
+
+    up      # create chroot if needed, mount filesystems, start servers
+    down    # stop servers, unmount filesystems from chroot
+    start   # start securedrop web app servers
+    stop    # stop securedrop web app servers
+    restart # restart securedrop web app servers
+    test    # run tests
+    clean   # recreate db, keys, and everything else
+    destroy # destroy chroot jail
+
+EOS
+}
+
+check_chroot() {
+    if [ -d "$CHROOT_DIR" ]; then
+        chroot_exists=1
+    else
+        chroot_exists=0
+    fi
+}
+
+require_chroot() {
+    check_chroot
+    if [ $chroot_exists -eq 0 ]; then
+        echo 'You must run "chroot-dev up" first to create a chroot jail'
+        exit 0
+    fi
+}
+
+mount_filesystems() {
+    sudo mount proc $CHROOT_DIR/proc -t proc
+    sudo mount sys $CHROOT_DIR/sys -t sysfs
+    sudo mount --bind /dev $CHROOT_DIR/dev
+    sudo mount $SOURCE_ROOT $CHROOT_DIR/securedrop -o bind
+}
+
+unmount_filesystems() {
+    sudo umount -l $CHROOT_DIR/securedrop
+    sudo umount -l $CHROOT_DIR/dev
+    sudo umount -l $CHROOT_DIR/sys
+    sudo umount -l $CHROOT_DIR/proc
+}
+
+start_servers() {
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev python source.py &
+    echo Started source server on http://localhost:8080/
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev python journalist.py &
+    echo Started document server on http://localhost:8081/
+}
+
+stop_servers() {
+    sudo schroot -c securedrop -d / -- killall python
+    echo Stopped SecureDrop servers
+}
+
+# patch schroot.conf, if needed
+if ! grep -q "\[securedrop\]" /etc/schroot/schroot.conf; then
+    sudo sh -c "echo >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo '[securedrop]' >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo 'description=SecureDrop chroot' >> /etc/schroot/schroot.conf"
+    sudo sh -c "echo 'directory=$CHROOT_DIR' >> /etc/schroot/schroot.conf"
+fi
+
+# commands
+if [ "$#" -ne 1 ]; then
+    usage
+    exit 0
+fi
+CMD=$1
+
+# up
+if [ $CMD == "up" ]; then
+    check_chroot
+    if [ $chroot_exists -eq 0 ]; then
+        echo "Installing Ubuntu 12.04 in chroot environment"
+        # install precise inside of the chroot
+        mkdir -p $CHROOT_DIR
+        sudo debootstrap --keyring $SOURCE_ROOT/dev_files/ubuntu-archive-keyring.gpg --arch=amd64 precise $CHROOT_DIR http://archive.ubuntu.com/ubuntu/
+        sudo mkdir -p $CHROOT_DIR/securedrop
+        sudo sh -c "echo 'deb http://archive.ubuntu.com/ubuntu precise main universe' >> $CHROOT_DIR/etc/apt/sources.list"
+        sudo sh -c "echo 'deb-src http://archive.ubuntu.com/ubuntu precise main universe' >> $CHROOT_DIR/etc/apt/sources.list"
+        sudo cp /etc/resolv.conf $CHROOT_DIR/etc/resolv.conf
+        sudo sh -c "echo '127.0.0.1 dev' >> $CHROOT_DIR/etc/hosts"
+
+        # setup securedrop dev environment
+        mount_filesystems
+        sudo schroot -c securedrop -d / -- apt-get update
+        sudo schroot -c securedrop -d / -- apt-get -y install wget build-essential psmisc
+        sudo schroot -c securedrop -d / -- adduser --uid $EUID --system --disabled-login dev
+        sudo schroot -c securedrop -d /securedrop -- ./setup_dev.sh -r /home/dev/.securedrop -u
+        sudo schroot -c securedrop -d / -- chown -R dev /home/dev/.securedrop
+        sudo schroot -c securedrop -d / -- chown -R dev /securedrop/securedrop
+    else
+        mount_filesystems
+    fi
+
+    start_servers
+
+# down
+elif [ $CMD == "down" ]; then
+    require_chroot
+    stop_servers
+    unmount_filesystems
+
+# start
+elif [ $CMD == "start" ]; then
+    require_chroot
+    start_servers
+
+# stop
+elif [ $CMD == "stop" ]; then
+    require_chroot
+    stop_servers
+
+# restart
+elif [ $CMD == "restart" ]; then
+    require_chroot
+    stop_servers
+    start_servers
+
+# test
+elif [ $CMD == "test" ]; then
+    require_chroot
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev ./test.sh
+
+# clean
+elif [ $CMD == "clean" ]; then
+    require_chroot
+    stop_servers
+    sudo schroot -c securedrop -d / -- rm -rf /home/dev/.securedrop
+    sudo schroot -c securedrop -d / -- sudo -u dev mkdir -p /home/dev/.securedrop/keys
+    sudo schroot -c securedrop -d / -- sudo -u dev chmod 700 /home/dev/.securedrop/keys
+    sudo schroot -c securedrop -d / -- sudo -u dev gpg --homedir /home/dev/.securedrop/keys --import /securedrop/securedrop/test_journalist_key.sec
+    sudo schroot -c securedrop -d /securedrop/securedrop -- sudo -u dev python -c "import db; db.init_db()" 
+    start_servers
+
+# destroy
+elif [ $CMD == "destroy" ]; then
+    require_chroot
+    stop_servers
+    unmount_filesystems
+    sudo rm -rf $CHROOT_DIR
+
+else
+    usage
+    exit 0
+fi
+

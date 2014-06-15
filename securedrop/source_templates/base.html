@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/css/securedrop.css" type="text/css" media="all" />
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <title>SecureDrop</title>
+    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
+    <link rel="icon" type="image/png" href="/static/i/favicon.png" >
     {% block extrahead %}{% endblock %}
   </head>
   <body>
-    {% with messages = get_flashed_messages(with_categories=True, category_filter=["header-warning"]) %}
-      {% for category, message in messages %}
-      <p class="{{ category }}">{{ message|safe }}</p>
-      {% endfor %}
-    {% endwith %}
+    {% include 'banner_warning_flashed.html' %}
 
-    <div id="wrapper">
+    <div class="content">
       {% block header %}
       <div id="header">
-        <a href="/"><img src="/static/i/{{ header_image }}" alt="SecureDrop"></a>
+        <a href="/"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
         {% if use_custom_header_image %}
-        <div class="powered">Powered by <img src="/static/i/securedrop_small.png" alt="SecureDrop"></div>
+        <div class="powered">
+          Powered by<br/>
+          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+        </div>
         {% endif %}
       </div>
       {% endblock %}
 
-      {% block body %}{% endblock %}
+      <div class="panel selected">
+        <hr class="no-line" />
+
+        {% block body %}{% endblock %}
+
+      </div>
 
       {% block footer %}
-      <div id="footer">
-        Like all software, SecureDrop may contain security bugs. Use at your own risk.<br/>
-        Powered by <em>SecureDrop {{ version }}</em>.
-      </div>
+      <footer>
+        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+      </footer>
       {% endblock %}
     </div>
   </body>
 </html>
+

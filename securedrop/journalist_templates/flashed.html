@@ -1,7 +1,16 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
   {% for category, message in messages %}
-  <p class="{{ category }}">{{ message }}</p>
+    {% if category != 'banner-warning' %}
+      <p class="flash {{ category }}">
+        {% if category == 'notification' %}
+        <i class="fa fa-info-circle pull-left"></i>
+        {% elif category == 'error' %}
+        <i class="fa fa-exclamation-triangle pull-left"></i>
+        {% endif %}
+        {{ message }}
+      </p>
+    {% endif %}
   {% endfor %}
 {% endif %}
 {% endwith %}

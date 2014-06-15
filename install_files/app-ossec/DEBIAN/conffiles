@@ -1,0 +1,3 @@
+/etc/ossec-init.conf
+/etc/init.d/ossec
+/etc/network/if-up.d/load_iptables

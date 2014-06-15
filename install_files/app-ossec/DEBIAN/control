@@ -1,0 +1,14 @@
+Source: securedrop
+Section: web
+Priority: optional
+Maintainer: james <james@pressfreedomfoundation.org>
+Homepage: https://pressfreedomfoundation.org/securedrop
+Package: securedrop-app-ossec
+Version: 0.2.1-dev
+Architecture: amd64
+Pre-Depends: debconf (>= 0.2.17)
+Depends: debhelper (>= 8.0.0),libc6 (>= 2.7),libssl1.0.0 (>= 1.0.0),expect,inotify-tools,adduser,securedrop-app-interfaces,securedrop-app-hardening,iptables
+Conflicts: securedrop-monitor
+Description: Installs the OSSEC agent configured for the SecureDrop App Server
+  This package installs an OSSEC agent configured for the SecureDrop App Server 
+  It will require the SecureDrop Monitor server to be installed on a separate host.

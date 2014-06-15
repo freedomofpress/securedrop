@@ -1,7 +1,0 @@
-RunAsDaemon 1
-HiddenServiceDir /var/lib/tor/hidden_service/
-HiddenServicePort 8080 127.0.0.1:8080
-HiddenServiceAuthorizeClient stealth JOURNALIST_USERS_HERE
-SafeLogging 1
-SocksPort 0
-

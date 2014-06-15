@@ -34,8 +34,14 @@ if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
     app.jinja_env.globals['use_custom_header_image'] = True
 else:
-    app.jinja_env.globals['header_image'] = 'securedrop.png'
+    app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
+
+@app.template_filter('datetimeformat')
+def _jinja2_datetimeformat(dt, fmt=None):
+    """Template filter for readable formatting of datetime.datetime"""
+    fmt = fmt or '%b %d, %Y %I:%M %p'
+    return dt.strftime(fmt)
 
 
 @app.teardown_appcontext
@@ -54,7 +60,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not logged_in():
-            return redirect(url_for('lookup'))
+            return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -86,7 +92,9 @@ def setup_g():
             abort(500)
         except NoResultFound as e:
             app.logger.error("Found no Sources when one was expected: %s" % (e,))
-            abort(404)
+            del session['logged_in']
+            del session['codename']
+            return redirect(url_for('index'))
         g.loc = store.path(g.sid)
 
 
@@ -99,7 +107,7 @@ def check_tor2web():
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
               '<a href="/tor2web-warning">Why is this dangerous?</a>',
-              "header-warning")
+              "banner-warning")
 
 
 @app.route('/')
@@ -150,8 +158,7 @@ def lookup():
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
             else:
-                date = str(datetime.fromtimestamp(
-                           os.stat(store.path(g.sid, fn)).st_mtime))
+                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
                 replies.append(dict(id=fn, date=date, msg=msg))
 
     def async_genkey(sid, codename):
@@ -164,7 +171,12 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    return render_template('lookup.html', codename=g.codename, msgs=replies,
+    # if this was a redirect from the login page, flash a message if there are
+    # no replies to clarify "check for replies" flow (#393)
+    if request.args.get('from_login') == '1' and len(replies) == 0:
+        flash("There are no replies at this time. You can submit more documents from this code name below.", "notification")
+
+    return render_template('lookup.html', codename=g.codename, replies=replies,
             flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
@@ -248,7 +260,7 @@ def login():
         codename = request.form['codename']
         if valid_codename(codename):
             session.update(codename=codename, logged_in=True)
-            return redirect(url_for('lookup'))
+            return redirect(url_for('lookup', from_login='1'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')

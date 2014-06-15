@@ -1,0 +1,26 @@
+Template: securedrop-app-hardening/tor_key_id
+Type: string
+Default: 886DDD89
+Description: The Tor signing key's keyid:
+ This is the signing key used by Tor to sign their repo.
+
+Template: securedrop-app-hardening/tor_key_fpr
+Type: string
+Default: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+Description: The tor signing key fingerprint:
+ This is the fingerprint of the key used to sign Tor packages.
+
+Template: securedrop-app-hardening/admin_user
+Type: string
+Description: Admin's username:
+ At least one admin user needs to be configured or you will be locked
+ out of the system. This will generate a google authenticator
+ pam module 2 factor authentication code and add the user to the sudo
+ and ssh groups. The user is required to exist and for the user's
+ home directory to be in /home/USERNAME/
+
+Template: securedrop-app-hardening/admin_user_continue
+Type: boolean
+Description: Try again?
+ That OS user did not exist. Run `sudo adduser USERNAME`
+ to add the user and rerun the installation or enter a valid username

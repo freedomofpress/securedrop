@@ -2,13 +2,12 @@ import os, stat
 
 from flask_defaults import *
 from base import *
-from custom_theme_image import *
 
 ### Import configuration from the current environment
 env = os.environ.get('SECUREDROP_ENV')
 
-# default env is 'development'
-env = env or 'development'
+# default env is 'production'
+env = env or DEFAULT_ENV
 
 if env == 'test':
   from test import *

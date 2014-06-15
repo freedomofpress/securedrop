@@ -1,23 +1,26 @@
 import unittest
 from pyvirtualdisplay import Display
 from selenium import webdriver
+from selenium.webdriver.firefox import firefox_binary
 from multiprocessing import Process
 import socket
 import shutil
 import os
 import gnupg
 import urllib2
+import sys
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 
 import source
 import journalist
-import test_setup
+from tests import test_setup
 import urllib2
 
 import signal
 import traceback
+from datetime import datetime
 
 class FunctionalTest():
 
@@ -27,6 +30,15 @@ class FunctionalTest():
         port = s.getsockname()[1]
         s.close()
         return port
+
+    def _create_webdriver(self):
+        log_file = open('tests/log/firefox.log', 'a')
+        log_file.write('\n\n[%s] Running Functional Tests\n' % str(datetime.now()))
+        log_file.flush()
+        self.display = Display(visible=0, size=(800, 600))
+        self.display.start()
+        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
+        return webdriver.Firefox(firefox_binary=firefox)
 
     def setUp(self):
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
@@ -57,10 +69,12 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        self.display = Display(visible=0, size=(800, 600))
-        self.display.start()
+        self.driver = self._create_webdriver()
 
-        self.driver = webdriver.Firefox()
+        # Poll the DOM briefly to wait for elements. It appears .click() does
+        # not always do a good job waiting for the page to load, or perhaps
+        # Firefox takes too long to render it (#399)
+        self.driver.implicitly_wait(1)
 
         self.secret_message = 'blah blah blah'
 

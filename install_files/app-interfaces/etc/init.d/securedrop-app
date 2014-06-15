@@ -1,0 +1,96 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          SecureDrop App Server
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+start() {
+    mount -o bind /proc /var/chroot/document/proc                                
+    mount -o bind /var/securedrop/db /var/chroot/document/var/www/securedrop/db
+    mount -o bind /var/securedrop/keys /var/chroot/document/var/www/securedrop/keys 
+    mount -o bind /var/securedrop/store /var/chroot/document/var/www/securedrop/store
+    mount -o bind /proc /var/chroot/source/proc                                    
+    mount -o bind /var/securedrop/db /var/chroot/source/var/www/securedrop/db 
+    mount -o bind /var/securedrop/keys /var/chroot/source/var/www/securedrop/keys  
+    mount -o bind /var/securedrop/store /var/chroot/source/var/www/securedrop/store
+    schroot -a -u root --directory / service apache2 restart                  
+    schroot -a -u root --directory / service tor restart
+}
+
+stop() {
+    # Stop running process then unmount the shared directory for each chroot jail
+    check_stop_service() {
+        jail="$1"
+        process_user="$2"
+        service_name="$3"
+        if [ -x /var/chroot/$jail/usr/bin/service ]; then
+            if [ "$(schroot -c $jail -u root --directory / -- pgrep -g $process_user $service_name)" ]; then
+                schroot -c $jail -u root --directory / -- service $service_name stop
+            fi
+        fi
+    }
+
+    check_stop_service source source-tor tor
+    check_stop_service source source apache2
+
+    check_stop_service document document-tor tor
+    check_stop_service document document apache2
+
+    check_umount() {
+        mount="$1"
+        if mount | grep "$mount"; then
+             umount $mount
+        fi
+    }
+
+    source_root='/var/chroot/source/var/www/securedrop'
+    check_umount $source_root/store
+    check_umount $source_root/db
+    check_umount $source_root/keys
+    check_umount /var/chroot/source/proc
+
+    document_root='/var/chroot/document/var/www/securedrop'
+    check_umount $document_root/store
+    check_umount $document_root/db
+    check_umount $document_root/keys
+    check_umount /var/chroot/document/proc
+}
+
+status() {
+    # TODO improve status check only show relevent info
+    mount -l
+    schroot -a -u root --directory / service tor status
+    schroot -a -u root --directory / service apache2 status
+}
+
+
+case "$1" in
+  start)
+	start
+	;;
+  stop) 
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  status)
+        status
+	;;
+  force-reload)
+        stop
+        start
+        ;;
+  *)
+	echo "*** Usage: $0 {start|stop|restart|status|full-reload}"
+	exit 1
+esac
+
+exit 0

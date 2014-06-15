@@ -1,0 +1,7 @@
+securedrop-monitor-ossec: embedded-library
+securedrop-monitor-ossec: embedded-zlib
+securedrop-monitor-ossec: possible-gpl-code-linked-with-openssl
+securedrop-monitor-ossec: new-package-should-close-itp-bug
+securedrop-monitor-ossec: possibly-insecure-handling-of-tmp-files-in-maintainer-script
+securedrop-monitor-ossec: non-standard-dir-in-var
+securedrop-monitor-ossec: file-in-unusual-dir

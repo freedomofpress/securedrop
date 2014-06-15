@@ -1,0 +1,15 @@
+Source: securedrop
+Section: web
+Priority: optional
+Maintainer: james <james@pressfreedomfoundation.org>
+Homepage: https://pressfreedomfoundation.org/securedrop
+Package: securedrop-source
+Version: 0.2.1-dev
+Architecture: all
+Replaces: apache2-mpm-worker,apache2.2-common,tor
+Pre-Depends: debconf (>= 0.2.17),apache2-mpm-worker,tor
+Depends: debhelper (>= 8.0.0),adduser,deb.torproject.org-keyring,tor,unattended-upgrades,apache2-mpm-worker,gnupg2,haveged,libapache2-mod-wsgi,python-dev,python-distutils-extra,python-pip,python-poppler,secure-delete,sqlite
+Description: Install the SecureDrop Source Interface
+ This can be installed independently. But for it to function
+ it will need shared access to /var/www/securedrop/{keys,store,db} directories
+

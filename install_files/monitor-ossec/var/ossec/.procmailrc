@@ -1,0 +1,9 @@
+VERBOSE=yes
+MAILDIR=/var/mail/
+DEFAULT=$MAILDIR
+LOGFILE=/var/log/procmail.log
+
+SUBJECT=`formail -xSubject:`
+:0 c
+*^To:.*root.*
+|/var/ossec/send_encrypted_alarm.sh
