@@ -7,26 +7,43 @@ import subprocess
 import unittest
 
 import config
+import time
+from tests import test_unit, test_journalist, test_single_star
 
 os.environ['SECUREDROP_ENV'] = 'development'
 
 
 def start():
-    subprocess.Popen(['python', 'source.py'])
-    subprocess.Popen(['python', 'journalist.py'])
-    print "The web application is running, and available on your Vagrant host at the following addresses:"
-    print "Source interface:     localhost:8080"
-    print "Journalist interface: localhost:8081"
+    import config
+    source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
+                                 config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
+    journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
+                                 config.JOURNALIST_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python journalist.py'])
+    if source_rc + journo_rc == 0:
+        print "The web application is running, and available on your Vagrant host at the following addresses:"
+        print "Source interface:     localhost:8080"
+        print "Journalist interface: localhost:8081"
+    else:
+        print "The web application is already running.  Please use './manage.py restart' to restart."
+
 
 def stop():
     import config
-    subprocess.Popen(['start-stop-daemon', '--stop', '--pidfile', config.SOURCE_PIDFILE])
-    subprocess.Popen(['start-stop-daemon', '--stop', '--pidfile', config.JOURNALIST_PIDFILE])
-    print "The web application has been stopped."
+    source_rc = subprocess.call(
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
+    journo_rc = subprocess.call(
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
+    if source_rc + journo_rc == 0:
+        print "The web application has been stopped."
+    else:
+        print "There was a problem stopping the web application."
+
 
 def restart():
     stop()
+    time.sleep(1)
     start()
+
 
 def test():
     """
