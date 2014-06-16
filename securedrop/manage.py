@@ -18,6 +18,15 @@ def start():
     print "Source interface:     localhost:8080"
     print "Journalist interface: localhost:8081"
 
+def stop():
+    import config
+    subprocess.Popen(['start-stop-daemon', '--stop', '--pidfile', config.SOURCE_PIDFILE])
+    subprocess.Popen(['start-stop-daemon', '--stop', '--pidfile', config.JOURNALIST_PIDFILE])
+    print "The web application has been stopped."
+
+def restart():
+    stop()
+    start()
 
 def test():
     """
@@ -49,9 +58,8 @@ def reset():
         # Each entry in STORE_DIR is a directory corresponding to a source
         shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
 
-
 def main():
-    valid_cmds = ["start", "test", "reset"]
+    valid_cmds = ["start", "stop", "restart", "test", "reset"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:

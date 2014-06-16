@@ -320,6 +320,13 @@ def page_not_found(error):
 def internal_error(error):
     return render_template('error.html'), 500
 
+def write_pidfile():
+    pid = str(os.getpid())
+    with open(config.SOURCE_PIDFILE, 'w') as fp:
+        fp.write(pid)
+
 if __name__ == "__main__":
+    write_pidfile()
     # TODO make sure debug is not on in production
     app.run(debug=True, host='0.0.0.0', port=8080)
+

@@ -6,6 +6,8 @@ JOURNALIST_TEMPLATES_DIR = './journalist_templates'
 WORD_LIST = './wordlist'
 NOUNS = './dictionaries/nouns.txt'
 ADJECTIVES = './dictionaries/adjectives.txt'
+JOURNALIST_PIDFILE = "/tmp/journalist.pid"
+SOURCE_PIDFILE = "/tmp/source.pid"
 
 SCRYPT_ID_PEPPER = '' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
 SCRYPT_GPG_PEPPER = '' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
