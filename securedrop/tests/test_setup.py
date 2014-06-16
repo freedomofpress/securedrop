@@ -36,3 +36,10 @@ def setup_test_docs(sid, files):
             fp.write(str(uuid.uuid4()))
     return filenames
 
+def new_codename(client, session):
+    """Helper function to go through the "generate codename" flow"""
+    with client as c:
+        rv = c.get('/generate')
+        codename = session['codename']
+        rv = c.post('/create')
+    return codename

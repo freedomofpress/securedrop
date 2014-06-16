@@ -24,8 +24,10 @@ import crypto_util
 import store
 import background
 from db import db_session, Source, Submission
+from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
+app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.FlaskConfig)
 CsrfProtect(app)
 
