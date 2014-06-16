@@ -6,6 +6,8 @@ import shutil
 import subprocess
 import unittest
 
+import config
+
 os.environ['SECUREDROP_ENV'] = 'development'
 
 
@@ -21,14 +23,6 @@ def test():
     """
     Runs the test suite
     """
-    from tests import test_unit, test_journalist, test_single_star
-    # TODO: we could implement test.sh's functionality here, and get rid of
-    # test.sh (now it's just clutter, and confusing)
-    test_suites = [test_unit, test_journalist, test_single_star]
-    for test_suite in test_suites:
-        test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
-        test_runner = unittest.TextTestRunner(verbosity=2)
-        test_runner.run(test_loader)
     subprocess.call(["./test.sh"])
 
 
@@ -40,9 +34,6 @@ def reset():
     2. Regenerates the database
     3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
     """
-    # HACK: import here so they don't interfere with the test setup
-    # (environment variable hasn't been set yet)
-    import config
     import db
 
     # Erase the development db file
