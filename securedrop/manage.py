@@ -5,7 +5,6 @@ import os
 import shutil
 import subprocess
 import unittest
-from tests import test_unit, test_journalist, test_single_star
 
 os.environ['SECUREDROP_ENV'] = 'development'
 
@@ -22,6 +21,7 @@ def test():
     """
     Runs the test suite
     """
+    from tests import test_unit, test_journalist, test_single_star
     # TODO: we could implement test.sh's functionality here, and get rid of
     # test.sh (now it's just clutter, and confusing)
     test_suites = [test_unit, test_journalist, test_single_star]
