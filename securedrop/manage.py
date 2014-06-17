@@ -7,6 +7,7 @@ import subprocess
 import unittest
 
 import config
+from tests import test_unit, test_journalist, test_single_star
 
 os.environ['SECUREDROP_ENV'] = 'development'
 
@@ -23,7 +24,17 @@ def test():
     """
     Runs the test suite
     """
-    subprocess.call(["./test.sh"])
+
+    test_suites = [test_unit, test_journalist, test_single_star]
+
+    for test_suite in test_suites:
+
+        test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
+
+        test_runner = unittest.TextTestRunner(verbosity=2)
+
+        test_runner.run(test_loader)
+        subprocess.call(["./test.sh"])
 
 
 def reset():
