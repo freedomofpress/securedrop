@@ -7,7 +7,6 @@ import subprocess
 import unittest
 
 import config
-import time
 from tests import test_unit, test_journalist, test_single_star
 
 os.environ['SECUREDROP_ENV'] = 'development'
@@ -24,7 +23,7 @@ def start():
         print "Source interface:     localhost:8080"
         print "Journalist interface: localhost:8081"
     else:
-        print "The web application is already running.  Please use './manage.py restart' to restart."
+        print "The web application is already running.  Please use './manage.py stop' to stop."
 
 
 def stop():
@@ -37,12 +36,6 @@ def stop():
         print "The web application has been stopped."
     else:
         print "There was a problem stopping the web application."
-
-
-def restart():
-    stop()
-    time.sleep(1)
-    start()
 
 
 def test():
@@ -76,7 +69,7 @@ def reset():
         shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
 
 def main():
-    valid_cmds = ["start", "stop", "restart", "test", "reset"]
+    valid_cmds = ["start", "stop", "test", "reset"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
