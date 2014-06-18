@@ -7,13 +7,11 @@ import subprocess
 import unittest
 
 import config
-from tests import test_unit, test_journalist, test_single_star
 
 os.environ['SECUREDROP_ENV'] = 'development'
 
 
 def start():
-    import config
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
@@ -27,7 +25,6 @@ def start():
 
 
 def stop():
-    import config
     source_rc = subprocess.call(
         ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
     journo_rc = subprocess.call(
