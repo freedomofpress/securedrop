@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-all">
 <h2><span class="headline">Sources</span></h2>
-{% if sources or starred %}
+{% if unstarred or starred %}
 
 <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
 <div id='filter-container'></div>
@@ -34,7 +34,7 @@
 
 <ul id="cols" class="plain">
   <p class="fa">Un-Starred</p>
-  {% for source in sources %}
+  {% for source in unstarred %}
   {% set docs = source.documents_messages_count()['documents'] %}
   {% set msgs = source.documents_messages_count()['messages'] %}
   <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">

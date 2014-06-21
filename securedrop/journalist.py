@@ -110,18 +110,18 @@ def remove_star(sid):
 
 @app.route('/')
 def index():
-    sources = []
+    unstarred = []
     starred = []
     for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
         star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
         if star and star.starred:
             starred.append(source)
         else:
-            sources.append(source)
+            unstarred.append(source)
         source.num_unread = len(
             Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
 
-    return render_template('index.html', sources=sources, starred=starred)
+    return render_template('index.html', unstarred=unstarred, starred=starred)
 
 
 @app.route('/col/<sid>')
