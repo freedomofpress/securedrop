@@ -67,6 +67,13 @@ def setup_g():
 
 def get_docs(sid):
     """Get docs associated with source id `sid`, sorted by submission date"""
+    # create a dict of all docs associated with `sid` from the db, keyed by filename
+    submissions_dict = {}
+    submissions = Source.query.filter(Source.filesystem_id==sid).one().submissions 
+    for submission in submissions:
+        submissions_dict[submission.filename] = submission
+
+    # iterate through the docs on the disk, and build out the `docs` list
     docs = []
     for filename in os.listdir(store.path(sid)):
         os_stat = os.stat(store.path(sid, filename))
@@ -74,6 +81,7 @@ def get_docs(sid):
             name=filename,
             date=datetime.fromtimestamp(os_stat.st_mtime),
             size=os_stat.st_size,
+            starred=submissions_dict[filename].starred
         ))
     # sort in chronological order
     docs.sort(key=lambda x: int(x['name'].split('-')[0]))
@@ -107,6 +115,19 @@ def remove_star(sid):
     db_session.commit()
     return redirect(url_for('index'))
 
+@app.route('/col/submission_remove_star/<fn>', methods=('POST',))
+def submission_remove_star(fn):
+    submission = Submission.query.filter(Submission.filename==fn).one()
+    submission.starred = False
+    db_session.commit()
+    return redirect('/col/' + submission.source.filesystem_id)
+
+@app.route('/col/submission_add_star/<fn>', methods=('POST',))
+def submission_add_star(fn):
+    submission = Submission.query.filter(Submission.filename==fn).one()
+    submission.starred = True
+    db_session.commit()
+    return redirect('/col/' + submission.source.filesystem_id)
 
 @app.route('/')
 def index():
@@ -129,8 +150,18 @@ def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
+
+    # separate out starred and unstarred docs
+    unstarred = []
+    starred = []
+    for doc in docs:
+        if doc['starred']:
+            starred.append(doc)
+        else:
+            unstarred.append(doc)
+
     return render_template("col.html", sid=sid,
-                           codename=source.journalist_designation, docs=docs, haskey=haskey,
+                           codename=source.journalist_designation, unstarred=unstarred, starred=starred, haskey=haskey,
                            flagged=source.flagged)
 
 
