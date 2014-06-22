@@ -3,8 +3,8 @@
  * confusing users, this function dyanamically adds elements that require JS.
  */
 function enhance_ui() {
-  // Add the "quick filter" box for sources
-  $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
+  // Add the filter block for sources
+  $('div#filter-container').html($('#filter_block').html());
 
   // Add the "select {all,none}" buttons
   $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
@@ -23,9 +23,6 @@ $(function () {
   all.click( function() { checkboxes.prop('checked', true); });
   none.click( function() { checkboxes.prop('checked', false); });
 
-  $("#delete_collection").submit(function () {
-    return confirm("Are you sure you want to delete this collection?");
-  });
   $("#delete_collections").click(function () {
     var num_checked = 0;
 
@@ -45,21 +42,49 @@ $(function () {
     return false;
   });
 
-  $("#unread a").click(function(){
-    $("#unread").html("unread: 0");
+  // don't star/unstar invisible collections
+  $("#star_collections, #unstar_collections").click(function(){
+    $('ul#cols li:not(:visible) :checkbox').attr('checked', false)
+    return true;
   });
 
-  var filter_codenames = function(value){
-    if(value == ""){
-      $('ul#cols li').show()
-    } else {
+  $("span.unread a").click(function(){
+    sid = $(this).data('sid');
+    $("span.unread[data-sid='" + sid + "']").remove();
+  });
+
+  var filter = function(){
+    var codename = $('#codename').val()
+    var starred_status = $('#starred_status').val()
+    var read_status = $('#read_status').val()
+
+    $('ul#cols li').show()
+
+    if(codename != ""){
       $('ul#cols li').hide()
-      $('ul#cols li[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]').show()
+      $('ul#cols li[data-source-designation*="' + codename.replace(/"/g, "").toLowerCase() + '"]').show()
     }
+
+    if(starred_status == "starred"){
+      $('ul#cols li[data-starred="unstarred"]').hide()
+    }
+    if(starred_status == "unstarred"){
+      $('ul#cols li[data-starred="starred"]').hide()
+    }
+
+    if(read_status == "read"){
+      $('ul#cols li[data-read="unread"]').hide()
+    }
+    if(read_status == "unread"){
+      $('ul#cols li[data-read="read"]').hide()
+    }
+
   }
 
-  $('#filter').keyup(function(){ filter_codenames(this.value) })
+  $('#codename').keyup(filter)
+  $('#starred_status').change(filter)
+  $('#read_status').change(filter)
 
-  filter_codenames($('#filter').val())
+  filter()
 
 });
