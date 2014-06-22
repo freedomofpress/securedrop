@@ -131,18 +131,12 @@ def submission_add_star(fn):
 
 @app.route('/')
 def index():
-    unstarred = []
-    starred = []
-    for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
-        star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
-        if star and star.starred:
-            starred.append(source)
-        else:
-            unstarred.append(source)
+    sources = Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all()
+    for source in sources:
         source.num_unread = len(
             Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
 
-    return render_template('index.html', unstarred=unstarred, starred=starred)
+    return render_template('index.html', sources=sources)
 
 
 @app.route('/col/<sid>')
