@@ -81,7 +81,9 @@ def get_docs(sid):
             name=filename,
             date=datetime.fromtimestamp(os_stat.st_mtime),
             size=os_stat.st_size,
-            starred=submissions_dict[filename].starred
+            starred=submissions_dict[filename].starred,
+            downloaded=submissions_dict[filename].downloaded,
+            type=submissions_dict[filename].document_or_message()
         ))
     # sort in chronological order
     docs.sort(key=lambda x: int(x['name'].split('-')[0]))
@@ -144,18 +146,8 @@ def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
     haskey = crypto_util.getkey(sid)
-
-    # separate out starred and unstarred docs
-    unstarred = []
-    starred = []
-    for doc in docs:
-        if doc['starred']:
-            starred.append(doc)
-        else:
-            unstarred.append(doc)
-
     return render_template("col.html", sid=sid,
-                           codename=source.journalist_designation, unstarred=unstarred, starred=starred, haskey=haskey,
+                           codename=source.journalist_designation, docs=docs, haskey=haskey,
                            flagged=source.flagged)
 
 

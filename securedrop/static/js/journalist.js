@@ -43,8 +43,8 @@ $(function () {
   });
 
   // don't star/unstar invisible collections
-  $("#star_collections, #unstar_collections").click(function(){
-    $('ul#cols li:not(:visible) :checkbox').attr('checked', false)
+  $("#star_collections, #unstar_collections, #delete_submissions, #download_submissions").click(function(){
+    $('ul li:not(:visible) :checkbox').attr('checked', false)
     return true;
   });
 
@@ -53,38 +53,77 @@ $(function () {
     $("span.unread[data-sid='" + sid + "']").remove();
   });
 
-  var filter = function(){
-    var codename = $('#codename').val()
-    var starred_status = $('#starred_status').val()
-    var read_status = $('#read_status').val()
+  if($('#content.journalist-view-all').length){
+    var filter = function(){
+      var codename = $('#codename').val()
+      var starred_status = $('#starred_status').val()
+      var read_status = $('#read_status').val()
 
-    $('ul#cols li').show()
+      $('ul#cols li').show()
 
-    if(codename != ""){
-      $('ul#cols li').hide()
-      $('ul#cols li[data-source-designation*="' + codename.replace(/"/g, "").toLowerCase() + '"]').show()
+      if(codename != ""){
+        $('ul#cols li').hide()
+        $('ul#cols li[data-source-designation*="' + codename.replace(/"/g, "").toLowerCase() + '"]').show()
+      }
+
+      if(starred_status == "starred"){
+        $('ul#cols li[data-starred="unstarred"]').hide()
+      }
+      if(starred_status == "unstarred"){
+        $('ul#cols li[data-starred="starred"]').hide()
+      }
+
+      if(read_status == "read"){
+        $('ul#cols li[data-read="unread"]').hide()
+      }
+      if(read_status == "unread"){
+        $('ul#cols li[data-read="read"]').hide()
+      }
+
     }
 
-    if(starred_status == "starred"){
-      $('ul#cols li[data-starred="unstarred"]').hide()
-    }
-    if(starred_status == "unstarred"){
-      $('ul#cols li[data-starred="starred"]').hide()
-    }
+    $('#codename').keyup(filter)
+    $('#starred_status').change(filter)
+    $('#read_status').change(filter)
 
-    if(read_status == "read"){
-      $('ul#cols li[data-read="unread"]').hide()
-    }
-    if(read_status == "unread"){
-      $('ul#cols li[data-read="read"]').hide()
-    }
-
+    filter()
   }
+  if($('#content.journalist-view-single').length){
+    var filter = function(){
+      var starred_status = $('#starred_status').val()
+      var read_status = $('#read_status').val()
+      var type = $('#type').val()
 
-  $('#codename').keyup(filter)
-  $('#starred_status').change(filter)
-  $('#read_status').change(filter)
+      $('ul#submissions li').show()
 
-  filter()
+      if(starred_status == "starred"){
+        $('ul#submissions li[data-starred="unstarred"]').hide()
+      }
+      if(starred_status == "unstarred"){
+        $('ul#submissions li[data-starred="starred"]').hide()
+      }
+
+      if(read_status == "read"){
+        $('ul#submissions li[data-read="unread"]').hide()
+      }
+      if(read_status == "unread"){
+        $('ul#submissions li[data-read="read"]').hide()
+      }
+
+      if(type == "documents"){
+        $('ul#submissions li[data-type="message"]').hide()
+      }
+      if(type == "messages"){
+        $('ul#submissions li[data-type="document"]').hide()
+      }
+
+    }
+
+    $('#type').change(filter)
+    $('#starred_status').change(filter)
+    $('#read_status').change(filter)
+
+    filter()
+  }
 
 });

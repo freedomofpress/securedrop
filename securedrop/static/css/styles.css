@@ -339,6 +339,10 @@ p#codename {
   width: 250px;
 }
 
+#filter-container{
+  text-align: left;
+}
+
 #cols {
   padding: 0;
 }
@@ -534,4 +538,8 @@ p.breadcrumbs {
 
 .fa.starred_title:nth-child(1){
   margin-top: 40px;
+}
+
+.filename.unread{
+  font-weight: bold;
 }
