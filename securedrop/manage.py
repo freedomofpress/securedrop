@@ -29,6 +29,8 @@ def test():
         test_runner = unittest.TextTestRunner(verbosity=2)
         test_runner.run(test_loader)
 
+    # TODO run functional tests directly from this script
+    # Until then, we're still calling the old test.sh script just to run the functional tests.
     subprocess.call(["./test.sh"])
 
 
