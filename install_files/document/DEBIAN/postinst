@@ -233,7 +233,7 @@ HiddenServiceAuthorizeClient stealth $journalist_user
 SafeLogging 1
 SocksPort 0
 User document-tor
-FascistFirewall 1
+# Ports are from https://www.torproject.org/docs/faq#OutboundPorts 
 ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030
 EOF
         fi
