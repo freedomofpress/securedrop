@@ -30,9 +30,9 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's TBB torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
                 chroot_gauth_dir="/var/chroot/document/var/www/securedrop/gauth"
-                2fa_secret="$(sed -n 1p $chroot_gauth_dir/$ATHS_USER)"
+                twofactor_secret="$(sed -n 1p $chroot_gauth_dir/$ATHS_USER)"
                 doc_int_pw="$(awk -F'[/=]' '/'\"PASSWORD'/ {print $2}' $chroot_gauth_dir/$ATHS_USER)"
-                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$2fa_secret$normalcolor"
+                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$twofactor_secret$normalcolor"
                 echo "$red $ATHS_USER$blue's password for the document interface is $red$doc_int_pw"
             done < /var/chroot/document/var/lib/tor/hidden_service/hostname
             echo "$blue To add more journalists run $red'/opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
@@ -68,9 +68,9 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
                 gauth_dir="/var/www/securedrop/gauth"
-                2fa_secret="$(sed -n 1p $gauth_dir/$ATHS_USER)"
+                twofactor_secret="$(sed -n 1p $gauth_dir/$ATHS_USER)"
                 doc_int_pw="$(awk -F'[/=]' '/'\"PASSWORD'/ {print $2}' $gauth_dir/$ATHS_USER)"
-                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$2fa_secret$normalcolor"
+                echo "$red $ATHS_USER$blue's 2 factor authentication secret code is $red$twofactor_secret$normalcolor"
                 echo "$red $ATHS_USER$blue's password for the document interface is $red$doc_int_pw"
             done < /var/lib/tor/hidden_service/hostname
             echo "$bold$blue################################################################################$normalcolor"
