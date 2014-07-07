@@ -63,6 +63,7 @@ EOF
         if [ ! -f $securedrop_root/config/base.py ]; then
             cat > $securedrop_root/config/base.py <<EOF
 #### Application Configuration
+DEFAULT_ENV = 'production'
 
 SOURCE_TEMPLATES_DIR = '$securedrop_root/source_templates'
 JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
