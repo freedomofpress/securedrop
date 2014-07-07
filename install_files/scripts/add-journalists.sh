@@ -45,9 +45,9 @@ if [ -f $basedir/var/lib/tor/hidden_service/hostname ]; then
     echo "$red $journalist_user$blue's ssh ATHS address is$red $ONION_ADDRESS $normalcolor"
     echo "$red $journalist_user$blue's torrc config line is:"
     echo "$red HidServAuth $ONION_ADDRESS $AUTH_VALUE # $journalist_user$normalcolor"
-    2fa_secret="$(sed -n 1p $gauth_dir/$journalist_user)"
+    twofactor_secret="$(sed -n 1p $gauth_dir/$journalist_user)"
     doc_int_pw="$(awk -F'[/=]' '/'\"PASSWORD'/ {print $2}' $gauth_dir/$journalist_user)"
-    echo "$red $journalist_user$blue's 2 factor authentication secret code is $red$2fa_secret$normalcolor"
+    echo "$red $journalist_user$blue's 2 factor authentication secret code is $red$twofactor_secret$normalcolor"
     echo "$red $journalist_user$blue's password for the document interface is $red$doc_int_pw
     echo "$bold$blue################################################################################$normalcolor"
 fi
