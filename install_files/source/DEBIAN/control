@@ -1,7 +1,7 @@
 Source: securedrop
 Section: web
 Priority: optional
-Maintainer: james <james@pressfreedomfoundation.org>
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
 Homepage: https://pressfreedomfoundation.org/securedrop
 Package: securedrop-source
 Version: 0.2.1-dev

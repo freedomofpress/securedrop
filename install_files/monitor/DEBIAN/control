@@ -2,7 +2,7 @@ Package: securedrop-monitor
 Source: securedrop-monitor
 Version: 0.2.1
 Architecture: amd64
-Maintainer: Ubuntu Developers <james@pressfreedomfoundation.org>
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
 Depends: securedrop-monitor-hardening,securedrop-monitor-ossec
 Section: web
 Priority: optional
