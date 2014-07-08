@@ -40,3 +40,14 @@ class SourceNavigationSteps():
             notification = self.driver.find_element_by_css_selector( 'p.notification')
             expected_notification = "Thanks! We received your document '%s'." % filebasename
             self.assertEquals(expected_notification, notification.text)
+
+    def _source_submits_a_message(self):
+        text_box = self.driver.find_element_by_css_selector('[name=msg]')
+
+        text_box.send_keys(self.secret_message) # send_keys = type into text box
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
+        submit_button.click()
+
+        notification = self.driver.find_element_by_css_selector( 'p.notification')
+        self.assertEquals('Thanks! We received your message.', notification.text)
