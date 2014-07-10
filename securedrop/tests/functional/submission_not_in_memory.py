@@ -9,6 +9,7 @@ import getpass
 class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps):
 
     def setUp(self):
+        self.devnull = open('/dev/null', 'r')
         FunctionalTest.setUp(self)
 
     def tearDown(self):
@@ -18,7 +19,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         core_dump_base_name = '/tmp/core_dump'
         core_dump_file_name = core_dump_base_name + '.' + pid
         try:
-            subprocess.call(["sudo", "gcore", "-o", core_dump_base_name, pid])
+            subprocess.call(["sudo", "gcore", "-o", core_dump_base_name, pid], stdout=self.devnull, stderr=self.devnull)
             subprocess.call(["sudo", "chown", getpass.getuser(), core_dump_file_name])
             with open(core_dump_file_name, 'r') as fp:
                 return fp.read()
