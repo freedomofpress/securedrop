@@ -5,6 +5,7 @@ import tempfile
 from source_navigation_steps import SourceNavigationSteps
 import os
 import getpass
+import re
 
 class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps):
 
@@ -26,6 +27,9 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         finally:
             os.remove(core_dump_file_name)
 
+    def _num_strings_in(self, needle, haystack):
+        return sum(1 for _ in re.finditer(re.escape(needle), haystack))
+
     def test_message_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -34,7 +38,10 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
 
         source_server_pid = str(self.source_process.pid)
 
-        self.assertFalse(self.secret_message in self._memory_dump(source_server_pid))
+        memory_dump = self._memory_dump(source_server_pid)
+        secrets_in_memory = self._num_strings_in(self.secret_message, memory_dump)
+
+        self.assertLess(secrets_in_memory, 1)
 
     def test_file_upload_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
@@ -44,5 +51,8 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
 
         source_server_pid = str(self.source_process.pid)
 
-        self.assertFalse(self.secret_message in self._memory_dump(source_server_pid))
+        memory_dump = self._memory_dump(source_server_pid)
+        secrets_in_memory = self._num_strings_in(self.secret_message, memory_dump)
+
+        self.assertLess(secrets_in_memory, 1)
 
