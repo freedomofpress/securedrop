@@ -53,6 +53,7 @@ $(function () {
     $("span.unread[data-sid='" + sid + "']").remove();
   });
 
+  // if we are on the index route, use this filter function
   if($('#content.journalist-view-all').length){
     var filter = function(){
       var codename = $('#codename').val()
@@ -88,6 +89,7 @@ $(function () {
 
     filter()
   }
+  // if we are on the single source route, use this filter function
   if($('#content.journalist-view-single').length){
     var filter = function(){
       var starred_status = $('#starred_status').val()
