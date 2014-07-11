@@ -10,7 +10,6 @@ red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
     if [ "$(dpkg -l securedrop-app-interfaces)" ]; then
-        # TODO add displaying gauth and pw for journalist       
         # Display the URLs for the Source and Document interfaces
         if [ -f /var/chroot/source/var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
@@ -34,17 +33,6 @@ normalcolor=$(tput sgr 0)
             echo "$blue To add more journalists run $red'/opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
             echo "$bold$blue################################################################################$normalcolor"
         fi
-
-	if [ -d /var/chroot/document/var/www/securedrop/gauth ]; then
-	
-		for f in /var/chroot/document/var/www/securedrop/gauth/*
-		do
-			user="${f##*/}"
-			key=`cat $f`
-			echo "$red $user$blue's two-factor Google Authenticator key for the Document Interface is: "
-			echo "$red $key $normalcolor"
-		done	
-	fi
 
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$bold$blue#################################################################################$normalcolor"

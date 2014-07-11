@@ -20,7 +20,7 @@ add_repo() {
 }
 
 tor_url="http://deb.torproject.org/torproject.org"
-cat > tor_singing_key << EOF
+cat > tor_signing_key << EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
@@ -357,7 +357,7 @@ nM1RGVAp7lu5B8M=
 EOF
     
 fpf_url="[arch=amd64] http://apt.pressfreedomfoundation.org/"
-cat > fpf_singing_key << EOF
+cat > fpf_signing_key << EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 
@@ -412,8 +412,8 @@ lgWUsYZR/3tTHx0aqcH80tQ=
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
 
-add_signing_key tor_singing_key
-add_signing_key fpf_singing_key
+add_signing_key tor_signing_key
+add_signing_key fpf_signing_key
 add_repo tor "$tor_url"
 add_repo fpf "$fpf_url"
 apt-get update

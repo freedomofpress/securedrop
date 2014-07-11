@@ -28,9 +28,6 @@ case "$1" in
 	OSSEC_HIDS_TMP_DIR="/tmp/ossec-hids"
         OSSEC_KEY_HOME="$OSSEC_HOME/.gnupg"
 
-        db_get securedrop-monitor-ossec/get_smtp
-        smtp_server="$RET"
-
         db_get securedrop-monitor-ossec/ossec_key_list
         OSSEC_KEY_LIST="$RET"
 
@@ -236,8 +233,6 @@ case "$1" in
 EOF
         chmod 755 $OSSEC_HOME/send_encrypted_alarm.sh
         chown ossec:root $OSSEC_HOME/send_encrypted_alarm.sh
-
-        sed -i 's/smtp_host_entry/$smtp_server/g' /etc/postfix/main.cf
 
         # Setup logs so we can create correct permissions
         touch /var/log/procmail.log

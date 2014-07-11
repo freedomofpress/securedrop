@@ -34,6 +34,7 @@ case "$1" in
 # Allow the tor instances used for ssh, source and document interface outbound access to default tor destination ports. 
 # Need to use the group for the source/document users since that is the only id that exists outside of the chroot.
 # Load before tor user drop rules
+# Ports are from https://www.torproject.org/docs/faq#OutboundPorts 
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner messagebus -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --gid-owner source-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "source chrooted tor instances"
@@ -78,8 +79,8 @@ case "$1" in
 -A INPUT  -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 
 # NTP rules
--A OUTPUT -p udp --sport 123 --dport 123 -m owner --uid-owner root -j ACCEPT -m comment --comment "ntp"
--A INPUT  -p udp --sport 123 --dport 123 -j ACCEPT -m comment --comment "ntp"
+-A OUTPUT -p udp --sport 123 --dport 123 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+-A INPUT  -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
 
 # apt rules can't be restricted by destination address because iptables will only resolve FQDNs once at startup
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
@@ -227,22 +228,24 @@ EOF
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/lib/tor/hidden_service/hostname</directories>
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/source/var/lib/tor/hidden_service/hostname</directories>
     <directories realtime="yes" check_all="yes" report_changes="yes">/var/chroot/document/var/lib/tor/hidden_service/hostname</directories>
-    <ignore>/var/www/keys/pubring.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/pubring.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/pubring.gpg</ignore>
-    <ignore>/var/www/keys/secring.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/secring.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/secring.gpg</ignore>
-    <ignore>/var/www/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
-    <ignore>/var/www/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/keys/trustdb.gpg</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/keys/trustdb.gpg</ignore>
-    <ignore>/var/www/store</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/securedrop.log</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/securedrop.log</ignore>
     <ignore>/var/chroot/source/var/www/securedrop/store</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/store</ignore>
     <ignore>/var/chroot/document/var/www/securedrop/temp/</ignore>
+    <ignore>/var/chroot/document/var/www/securedrop/db/</ignore>
+    <ignore>/var/chroot/source/var/www/securedrop/db/</ignore>
+    <ignore>/var/securedrop/store</ignore>
+    <ignore>/var/securedrop/keys</ignore>
+    <ignore>/var/securedrop/db</ignore>
     <ignore>/var/ossec/queue</ignore>
     <ignore>/var/ossec/logs</ignore>
     <ignore>/var/ossec/stats</ignore>
@@ -308,7 +311,7 @@ EOF
   </localfile>
   <localfile>
     <log_format>syslog</log_format>
-    <location>/var/chroot/document/var/log/apache2/access.log</location>
+    <location>/var/chroot/source/var/log/apache2/access.log</location>
   </localfile>
   <localfile>
     <log_format>syslog</log_format>
@@ -333,6 +336,10 @@ EOF
   <localfile>
     <log_format>syslog</log_format>
     <location>/var/chroot/document/var/www/securedrop/securedrop.log</location>
+  </localfile>
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/unattended-upgrades/unattended-upgrades</location>
   </localfile>
 </ossec_config>
 EOF

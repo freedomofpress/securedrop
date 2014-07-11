@@ -6,12 +6,15 @@ import shutil
 import subprocess
 import unittest
 
-import config
-
-os.environ['SECUREDROP_ENV'] = 'development'
-
+# We need to import config in each function because we're running the tests
+# directly, so it's important to set the environment correctly, depending on
+# development or testing, before importing config.
+#
+# TODO: do we need to store *_PIDFILE in the application config? It seems like
+# an implementation detail that is specifc to this management script.
 
 def start():
+    import config
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
@@ -25,6 +28,7 @@ def start():
 
 
 def stop():
+    import config
     source_rc = subprocess.call(
         ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
     journo_rc = subprocess.call(
@@ -39,6 +43,18 @@ def test():
     """
     Runs the test suite
     """
+    os.environ['SECUREDROP_ENV'] = 'test'
+    from tests import test_unit, test_journalist, test_single_star
+
+    test_suites = [test_unit, test_journalist, test_single_star]
+
+    for test_suite in test_suites:
+        test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
+        test_runner = unittest.TextTestRunner(verbosity=2)
+        test_runner.run(test_loader)
+
+    # TODO run functional tests directly from this script
+    # Until then, we're still calling the old test.sh script just to run the functional tests.
     subprocess.call(["./test.sh"])
 
 
@@ -50,6 +66,7 @@ def reset():
     2. Regenerates the database
     3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
     """
+    import config
     import db
 
     # Erase the development db file
@@ -74,6 +91,7 @@ def main():
         sys.exit(1)
 
     cmd = sys.argv[1]
+
     getattr(sys.modules[__name__], cmd)()
 
 
