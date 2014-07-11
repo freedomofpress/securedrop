@@ -23,6 +23,10 @@ $(function () {
   all.click( function() { checkboxes.prop('checked', true); });
   none.click( function() { checkboxes.prop('checked', false); });
 
+  $("#delete_collection").submit(function(){
+    return confirm("Are you sure you want to delete this collection?");
+  });
+
   $("#delete_collections").click(function () {
     var num_checked = 0;
 
