@@ -117,16 +117,16 @@ def remove_star(sid):
     db_session.commit()
     return redirect(url_for('index'))
 
-@app.route('/col/submission_remove_star/<fn>', methods=('POST',))
-def submission_remove_star(fn):
-    submission = Submission.query.filter(Submission.filename==fn).one()
+@app.route('/col/submission_remove_star/<filename>', methods=('POST',))
+def submission_remove_star(filename):
+    submission = Submission.query.filter(Submission.filename==filename).one()
     submission.starred = False
     db_session.commit()
     return redirect('/col/' + submission.source.filesystem_id)
 
-@app.route('/col/submission_add_star/<fn>', methods=('POST',))
-def submission_add_star(fn):
-    submission = Submission.query.filter(Submission.filename==fn).one()
+@app.route('/col/submission_add_star/<filename>', methods=('POST',))
+def submission_add_star(filename):
+    submission = Submission.query.filter(Submission.filename==filename).one()
     submission.starred = True
     db_session.commit()
     return redirect('/col/' + submission.source.filesystem_id)
