@@ -144,10 +144,10 @@ def index():
 @app.route('/col/<sid>')
 def col(sid):
     source = get_source(sid)
-    docs = get_docs(sid)
+    submissions = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-                           codename=source.journalist_designation, docs=docs, haskey=haskey,
+                           codename=source.journalist_designation, submissions=submissions, haskey=haskey,
                            flagged=source.flagged)
 
 

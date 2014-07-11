@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-<script type='text/x-underscore-template' id='filter_block'>
-  Show me this sources
+<script type='text/x-jquery-template' id='filter_block'>
+  Show me this source's
   <select id='type'>
     <option value='both'>both documents and messages</option>
     <option value='documents'>documents</option>
@@ -26,29 +26,29 @@
   <hr class="no-line" />
 
   {% if docs %}
-    <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+    <p>The submissions are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
     <div class="document-actions">
       <div id='select-container'></div>
     </div>
     <form action="/bulk" method="post">
       <div id='filter-container'></div>
       <ul id="submissions" class="plain submissions">
-        {% for doc in docs %}
-          <li class="submission" data-starred="{% if doc['starred'] %}starred{% else %}unstarred{% endif %}" data-read="{% if doc['downloaded'] %}read{% else %}unread{% endif %}" data-type="{% if doc['type'] == "document" %}document{% else %}message{% endif %}">
-            {% if doc['starred'] %}
-              <button class="button-star starred" type="submit" formaction="/col/submission_remove_star/{{ doc.name }}"><i class="fa fa-star"></i></button>
+        {% for submission in submissions %}
+          <li class="submission" data-starred="{% if submission['starred'] %}starred{% else %}unstarred{% endif %}" data-read="{% if submission['downloaded'] %}read{% else %}unread{% endif %}" data-type="{% if submission['type'] == "document" %}document{% else %}message{% endif %}">
+            {% if submission['starred'] %}
+              <button class="button-star starred" type="submit" formaction="/col/submission_remove_star/{{ submission.name }}"><i class="fa fa-star"></i></button>
             {% else %}
-              <button class="button-star un-starred" type="submit" formaction="/col/submission_add_star/{{ doc.name }}"><i class="fa fa-star"></i></button>
+              <button class="button-star un-starred" type="submit" formaction="/col/submission_add_star/{{ submission.name }}"><i class="fa fa-star"></i></button>
             {% endif %}
-            <input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>
-            {% if doc.name.endswith('reply.gpg') %}
-              <span class="file reply"><span class="filename {% if not doc['downloaded'] %}unread{% endif %}">{{ doc.name }}</span></span>
-              <span class="info" title="{{ doc.size }} bytes">{{ doc.size|filesizeformat }} sent {{ doc.date|datetimeformat }}</span>
+            <input type="checkbox" name="doc_names_selected" value="{{ submission.name }}" class="doc-check"/>
+            {% if submission.name.endswith('reply.gpg') %}
+              <span class="file reply"><span class="filename {% if not submission['downloaded'] %}unread{% endif %}">{{ submission.name }}</span></span>
+              <span class="info" title="{{ submission.size }} bytes">{{ submission.size|filesizeformat }} sent {{ submission.date|datetimeformat }}</span>
             {% else %}
-              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.name }}"><i class="fa fa-download"></i> <span class="filename {% if not doc['downloaded'] %}unread{% endif %}">{{ doc.name }}</span></a></span>
-              <span class="info" title="{{ doc.size }} bytes" >{{ doc.size|filesizeformat }} uploaded {{ doc.date|datetimeformat }}</span>
+              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ submission.name }}"><i class="fa fa-download"></i> <span class="filename {% if not submission['downloaded'] %}unread{% endif %}">{{ submission.name }}</span></a></span>
+              <span class="info" title="{{ submission.size }} bytes" >{{ submission.size|filesizeformat }} uploaded {{ submission.date|datetimeformat }}</span>
             {% endif %}
-            {% if doc.type == "document" %}
+            {% if submission.type == "document" %}
               <i class="fa fa-file-archive-o pull-right"></i>
             {% else %}
               <i class="fa fa-file-text-o pull-right"></i>
@@ -65,7 +65,7 @@
       </div>
     </form>
   {% else %}
-    <p><br />No documents to display.</p>
+    <p><br />No submissions to display.</p>
   {% endif %}
 
   <hr class="cut-out" />
