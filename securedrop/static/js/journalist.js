@@ -64,6 +64,7 @@ $(function () {
 
       if(codename != ""){
         $('ul#cols li').hide()
+        // we need the replace here: if the user enters a '"' in the filter box, it will escape the data-source-designation attribute of this selection
         $('ul#cols li[data-source-designation*="' + codename.replace(/"/g, "").toLowerCase() + '"]').show()
       }
 
