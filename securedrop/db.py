@@ -84,6 +84,11 @@ class Source(Base):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
+    def starred(self):
+        if self.star and self.star.starred:
+            return True
+        return False
+
 
 class Submission(Base):
     __tablename__ = 'submissions'
