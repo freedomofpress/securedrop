@@ -74,6 +74,11 @@ sudo pip install -r source-requirements.txt
 sudo pip install -r document-requirements.txt
 sudo pip install -r test-requirements.txt
 
+# Build and install the safestream module
+cd safestream
+python setup.py build && sudo python setup.py install
+cd ..
+
 echo "Setting up configurations..."
 # set up the securedrop root directory
 cat > config/test.py <<EOF
