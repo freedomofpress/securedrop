@@ -52,6 +52,43 @@ get_line(bytesio *self, char **output)
     return len;
 }
 
+/* Internal routing for safely reallocating memory. If a new buffer is created
+   to accomodate more data than the original buffer could hold, this zero fills
+   the old buffer after the copy but before freeing it to prevent leaking
+   sensitive data in memory.
+   
+   Be careful to use the Python memory allocation functions, lest you incur the
+   wrath of the almighty allocator. */
+void *
+safe_realloc(void *p, size_t old_len, size_t nbytes)
+{
+    // For now, always malloc a new buffer (do we always have to do this?)
+    // TODO check source code for realloc (I think it's in K&R C)
+    void* new = (char *)PyMem_Malloc(nbytes);
+
+    // Copy the old bytes into the new buffer
+    // If we're shrinking the array, only copy up to nbytes.
+    // Otherwise, copy all old_len bytes.
+    size_t copy_len = 0;
+    if (nbytes < oldsize) {
+        copy_len = nbytes;
+    } else {
+        copy_len = old_len;
+    }
+
+    memcpy(new, p, copy_len);
+
+    // Zero-fill the old buffer to avoid leaking plaintext
+    // TODO: make sure the compiler doesn't optimize this away (since we free
+    // it immediately afterwards)
+    memset(p, '\0', old_len);
+
+    // Free the old buffer
+    PyMem_Free(p);
+
+    return new;
+}
+
 /* Internal routine for changing the size of the buffer of BytesIO objects.
    The caller should ensure that the 'size' argument is non-negative.  Returns
    0 on success, -1 otherwise. */
@@ -89,7 +126,10 @@ resize_buffer(bytesio *self, size_t size)
 
     if (alloc > ((size_t)-1) / sizeof(char))
         goto overflow;
-    new_buf = (char *)PyMem_Realloc(self->buf, alloc * sizeof(char));
+    // new_buf = (char *)PyMem_Realloc(self->buf, alloc * sizeof(char));
+    new_buf = (char *)safe_realloc(self->buf,
+                                   self->buf_size * sizeof(char),
+                                   alloc * sizeof(char));
     if (new_buf == NULL) {
         PyErr_NoMemory();
         return -1;
@@ -622,6 +662,10 @@ static PyObject *
 bytesio_close(bytesio *self)
 {
     if (self->buf != NULL) {
+        // Zerofill the underlying buffer to avoid leaking memory contents
+        // TODO: make sure the compiler doesn't optimize this out!!!
+        memset(self->buf, '\0',
+               self->buf_size * sizeof(char));
         PyMem_Free(self->buf);
         self->buf = NULL;
     }
