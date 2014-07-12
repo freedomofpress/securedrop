@@ -1,6 +1,5 @@
 #include "Python.h"
 #include "structmember.h"       /* for offsetof() */
-#include "_iomodule.h"
 
 typedef struct {
     PyObject_HEAD
@@ -56,7 +55,7 @@ get_line(bytesio *self, char **output)
    to accomodate more data than the original buffer could hold, this zero fills
    the old buffer after the copy but before freeing it to prevent leaking
    sensitive data in memory.
-   
+
    Be careful to use the Python memory allocation functions, lest you incur the
    wrath of the almighty allocator. */
 void *
@@ -70,7 +69,7 @@ safe_realloc(void *p, size_t old_len, size_t nbytes)
     // If we're shrinking the array, only copy up to nbytes.
     // Otherwise, copy all old_len bytes.
     size_t copy_len = 0;
-    if (nbytes < oldsize) {
+    if (nbytes < old_len) {
         copy_len = nbytes;
     } else {
         copy_len = old_len;
@@ -791,6 +790,10 @@ bytesio_dealloc(bytesio *self)
 {
     _PyObject_GC_UNTRACK(self);
     if (self->buf != NULL) {
+        // Zerofill the underlying buffer to avoid leaking memory contents
+        // TODO: make sure the compiler doesn't optimize this out!!!
+        memset(self->buf, '\0',
+               self->buf_size * sizeof(char));
         PyMem_Free(self->buf);
         self->buf = NULL;
     }
@@ -910,10 +913,10 @@ PyDoc_STRVAR(bytesio_doc,
 "Create a buffered I/O implementation using an in-memory bytes\n"
 "buffer, ready for reading and writing.");
 
-PyTypeObject PyBytesIO_Type = {
+PyTypeObject safestream_BytesIOType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "_io.BytesIO",                             /*tp_name*/
-    sizeof(bytesio),                     /*tp_basicsize*/
+    "safestream.BytesIO",                      /*tp_name*/
+    sizeof(bytesio),                           /*tp_basicsize*/
     0,                                         /*tp_itemsize*/
     (destructor)bytesio_dealloc,               /*tp_dealloc*/
     0,                                         /*tp_print*/
@@ -936,7 +939,7 @@ PyTypeObject PyBytesIO_Type = {
     (traverseproc)bytesio_traverse,            /*tp_traverse*/
     (inquiry)bytesio_clear,                    /*tp_clear*/
     0,                                         /*tp_richcompare*/
-    offsetof(bytesio, weakreflist),      /*tp_weaklistoffset*/
+    offsetof(bytesio, weakreflist),            /*tp_weaklistoffset*/
     PyObject_SelfIter,                         /*tp_iter*/
     (iternextfunc)bytesio_iternext,            /*tp_iternext*/
     bytesio_methods,                           /*tp_methods*/
@@ -946,8 +949,29 @@ PyTypeObject PyBytesIO_Type = {
     0,                                         /*tp_dict*/
     0,                                         /*tp_descr_get*/
     0,                                         /*tp_descr_set*/
-    offsetof(bytesio, dict),             /*tp_dictoffset*/
+    offsetof(bytesio, dict),                   /*tp_dictoffset*/
     (initproc)bytesio_init,                    /*tp_init*/
     0,                                         /*tp_alloc*/
     bytesio_new,                               /*tp_new*/
 };
+
+static PyMethodDef module_methods[] = {
+    {NULL}, // sentinel
+};
+
+PyMODINIT_FUNC
+initsafestream(void)
+{
+    if (PyType_Ready(&safestream_BytesIOType) < 0) {
+        return;
+    }
+
+    PyObject* m = Py_InitModule("safestream", module_methods);
+    if (m == NULL) {
+        return;
+    }
+
+    Py_INCREF(&safestream_BytesIOType);
+    PyModule_AddObject(m, "BytesIO", (PyObject*)&safestream_BytesIOType);
+}
+
