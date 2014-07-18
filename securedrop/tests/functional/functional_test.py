@@ -1,4 +1,5 @@
 import unittest
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.firefox import firefox_binary
 from multiprocessing import Process
@@ -34,6 +35,8 @@ class FunctionalTest():
         log_file = open('tests/log/firefox.log', 'a')
         log_file.write('\n\n[%s] Running Functional Tests\n' % str(datetime.now()))
         log_file.flush()
+        self.display = Display(visible=0, size=(800, 600))
+        self.display.start()
         firefox = firefox_binary.FirefoxBinary(log_file=log_file)
         return webdriver.Firefox(firefox_binary=firefox)
 
@@ -78,6 +81,7 @@ class FunctionalTest():
     def tearDown(self):
         test_setup.clean_root()
         self.driver.quit()
+        self.display.stop()
         self.source_process.terminate()
         self.journalist_process.terminate()
 
