@@ -70,9 +70,9 @@ sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
 sudo pip install --upgrade distribute
-sudo pip install -r source-requirements.txt
-sudo pip install -r document-requirements.txt
-sudo pip install -r test-requirements.txt
+sudo pip install -r requirements/source-requirements.txt
+sudo pip install -r requirements/document-requirements.txt
+sudo pip install -r requirements/test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
