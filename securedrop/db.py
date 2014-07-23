@@ -40,7 +40,7 @@ def get_one_or_else(query, logger, failure_method):
         logger.error("Found multiple while executing %s when one was expected: %s" % (query,e,))
         failure_method(500)
     except NoResultFound as e:
-        logger.error("Found no Sources when one was expected: %s" % (e,))
+        logger.error("Found none when one was expected: %s" % (e,))
         failure_method(404)
     return return_value
 
