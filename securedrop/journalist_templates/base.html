@@ -11,6 +11,13 @@
     {% block extrahead %}{% endblock %}
   </head>
   <body>
+
+    {% if session.get('logged_in', False) %}
+    <div id="logout">
+      <a href="/logout">Logout</a>
+    </div>
+    {% endif %}
+
     <div class="content">
       {% block header %}
       <div id="header">

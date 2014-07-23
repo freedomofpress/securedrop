@@ -4,8 +4,10 @@ import datetime
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+import scrypt
 
 import config
 import crypto_util
@@ -115,6 +117,48 @@ class SourceStar(Base):
     def __init__(self, source, starred=True):
         self.source_id = source.id
         self.starred = starred
+
+
+class Journalist(Base):
+    __tablename__ = "journalists"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255), nullable=False, unique=True)
+    pw_salt = Column(Binary(32))
+    pw_hash = Column(Binary(256))
+
+    def __init__(self, username, password):
+        self.username = username
+        self.pw_salt = self._gen_salt()
+        self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+        # TODO: two-factor auth
+
+    def __repr__(self):
+        return "<Journalist {0}>".format(self.username)
+
+    def _gen_salt(self, salt_bytes=32):
+        return os.urandom(salt_bytes)
+
+    _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+    def _scrypt_hash(self, password, salt, params=None):
+        if not params:
+            params = self._SCRYPT_PARAMS
+        # TODO: better handle encoding?
+        return scrypt.hash(str(password), salt, **params)
+
+    def valid_password(self, password):
+        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+
+    @staticmethod
+    def login(username, password):
+        try:
+            user = Journalist.query.filter_by(username=username).one()
+        except NoResultFound:
+            return None
+
+        if user.valid_password(password):
+            return user
+
+        return False
 
 # Declare (or import) models before init_db
 def init_db():

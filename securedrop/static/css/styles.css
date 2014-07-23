@@ -530,3 +530,8 @@ p.breadcrumbs {
 time:not([title='']):hover, i:not([title='']):hover {
   cursor: pointer;
 }
+
+div#logout {
+  float:right;
+  margin-right:1em;
+}

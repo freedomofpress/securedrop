@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
+import os
+from datetime import datetime
+from functools import wraps
+
+from flask import (Flask, request, render_template, send_file, redirect, flash,
+                   url_for, g, abort, session)
+from flask_wtf.csrf import CsrfProtect
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 import config
 import version
 import crypto_util
 import store
 import template_filters
-from db import db_session, Source, Submission, SourceStar, get_one_or_else
-
-import os
-from datetime import datetime
-from flask import (Flask, request, render_template, send_file, redirect, flash, url_for, g, abort)
-from flask_wtf.csrf import CsrfProtect
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
-import background
+from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
+                Journalist)
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -44,6 +46,43 @@ def get_source(sid):
     source = get_one_or_else(query, app.logger, abort)
 
     return source
+
+
+def logged_in():
+    return 'logged_in' in session
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not logged_in():
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        journalist = Journalist.login(request.form['username'],
+                                      request.form['password'])
+        if journalist:
+            session['id'] = journalist.id
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        elif journalist == None:
+            flash("Incorrect username", "notification")
+        elif journalist == False:
+            flash("Incorrect password", "notification")
+
+    return render_template("login.html")
+
+
+@app.route('/logout')
+def logout():
+    session.pop('id', None)
+    session.pop('logged_in', None)
+    return redirect(url_for('index'))
 
 
 @app.before_request
@@ -86,6 +125,7 @@ def make_star_false(sid):
 
 
 @app.route('/col/add_star/<sid>', methods=('POST',))
+@login_required
 def add_star(sid):
     make_star_true(sid)
     db_session.commit()
@@ -93,6 +133,7 @@ def add_star(sid):
 
 
 @app.route("/col/remove_star/<sid>", methods=('POST',))
+@login_required
 def remove_star(sid):
     make_star_false(sid)
     db_session.commit()
@@ -100,6 +141,7 @@ def remove_star(sid):
 
 
 @app.route('/')
+@login_required
 def index():
     unstarred = []
     starred = []
@@ -116,6 +158,7 @@ def index():
 
 
 @app.route('/col/<sid>')
+@login_required
 def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
@@ -144,6 +187,7 @@ def delete_collection(source_id):
 
 
 @app.route('/col/process', methods=('POST',))
+@login_required
 def col_process():
     actions = {'delete': col_delete, 'star': col_star, 'un-star': col_un_star}
     if 'cols_selected' not in request.form:
@@ -176,6 +220,7 @@ def col_un_star(cols_selected):
 
 
 @app.route('/col/delete/<sid>', methods=('POST',))
+@login_required
 def col_delete_single(sid):
     """deleting a single collection from its /col page"""
     source = get_source(sid)
@@ -200,6 +245,7 @@ def col_delete(cols_selected):
 
 
 @app.route('/col/<sid>/<fn>')
+@login_required
 def doc(sid, fn):
     if '..' in fn or fn.startswith('/'):
         abort(404)
@@ -212,6 +258,7 @@ def doc(sid, fn):
 
 
 @app.route('/reply', methods=('POST',))
+@login_required
 def reply():
     msg = request.form['msg']
     g.source.interaction_count += 1
@@ -226,6 +273,7 @@ def reply():
 
 
 @app.route('/regenerate-code', methods=('POST',))
+@login_required
 def generate_code():
     original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
@@ -239,6 +287,7 @@ def generate_code():
 
 
 @app.route('/download_unread/<sid>')
+@login_required
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     docs = [doc.filename for doc in
@@ -247,6 +296,7 @@ def download_unread(sid):
 
 
 @app.route('/bulk', methods=('POST',))
+@login_required
 def bulk():
     action = request.form['action']
 
@@ -303,6 +353,7 @@ def bulk_download(sid, docs_selected):
 
 
 @app.route('/flag', methods=('POST',))
+@login_required
 def flag():
     g.source.flagged = True
     db_session.commit()
