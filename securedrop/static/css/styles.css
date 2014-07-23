@@ -525,3 +525,8 @@ p.breadcrumbs {
 .button-star:focus {
     outline:0;
 }
+
+div#logout {
+  float:right;
+  margin-right:1em;
+}

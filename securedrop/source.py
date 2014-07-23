@@ -58,8 +58,7 @@ def shutdown_session(exception=None):
 
 
 def logged_in():
-    if 'logged_in' in session:
-        return True
+    return 'logged_in' in session
 
 
 def login_required(f):
