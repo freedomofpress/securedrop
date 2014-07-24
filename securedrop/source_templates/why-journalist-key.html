@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <h2>Why download the journalist's public key?</h2>
+<p>SecureDrop already encrypts files and messages as they are submitted, but encrypting before submission can provide an extra layer of security before your file reaches the SecureDrop server.</p>
 <p>If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:
 <ol>
 <li><a href="/journalist-key">Download</a> the public key. The public key is a text file with the extension <code>.asc</code></li>
@@ -18,5 +19,8 @@
 </li>
 <li>Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</code>)</li>
 </ol>
+
+<p><strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us.</p>
+
 <br><a href="/lookup">&laquo; Back to submission page</a>
 {% endblock %}
