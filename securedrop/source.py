@@ -225,12 +225,12 @@ def submit():
         g.source.interaction_count += 1
         fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
             journalist_filename, msg))
-        flash("Thanks! We received your message.", "notification")
+        flash("Thanks! We received your message. Please remember your codename: you can use it to log back into this site to read responses from us and to submit follow-up documents and messages.", "notification")
     if fh:
         g.source.interaction_count += 1
         fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
             journalist_filename, fh.filename, fh.stream, fh.content_type, strip_metadata))
-        flash("Thanks! We received your document '%s'."
+        flash("Thanks! We received your document '%s'. Please remember your codename: you can use it to log back into this site to read responses from us and to submit follow-up documents and messages."
               % fh.filename or '[unnamed]', "notification")
 
     for fname in fnames:
