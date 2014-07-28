@@ -23,7 +23,7 @@ normalcolor=$(tput sgr 0)
         if [ -f /var/chroot/document/var/lib/tor/hidden_service/hostname ]; then
             echo "$blue The Document Interface listens on port 8080"
             echo " you will need to$bold append :8080$normalcolor$blue to the URL as shown below"
-            echo " The Document Interfaces' URL and auth values for each journalist: $normalcolor"
+            echo " The Document Interface's URL and auth values for each journalist: $normalcolor"
             while read line; do
                 ONION_ADDRESS="$(echo "$line" | awk '{print $1}')"
                 ATHS_USER="$(echo "$line" | awk '{print $5}')"
