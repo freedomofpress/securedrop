@@ -530,3 +530,11 @@ div#logout {
   float:right;
   margin-right:1em;
 }
+
+label {
+     cursor: pointer;
+}
+
+em.light {
+  color:gray;
+}

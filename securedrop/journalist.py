@@ -115,14 +115,34 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.before_request
-def setup_g():
-    """Store commonly used values in Flask's special g object"""
-    if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
+@app.route('/admin', methods=('GET', 'POST'))
+@admin_required
+def admin_index():
+    users = Journalist.query.all()
+    return render_template("admin.html", users=users)
+
+
+@app.route('/admin/add', methods=('GET', 'POST'))
+def admin_add_user():
+    # TODO: process form submission
+    return render_template("admin_add_user.html")
+
+
+@app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
+@admin_required
+def admin_edit_user(user_id):
+    user = Journalist.query.get(user_id)
+    # TODO: process form submission
+    return render_template("admin_edit_user.html", user=user)
+
+
+@app.route('/admin/delete/<int:user_id>', methods=('POST',))
+@admin_required
+def admin_delete_user(user_id):
+    user = Journalist.query.get(user_id)
+    db_session.delete(user)
+    db_session.commit()
+    return redirect(url_for('admin_index'))
 
 
 def get_docs(sid):
