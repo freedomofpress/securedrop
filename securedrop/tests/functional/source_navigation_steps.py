@@ -20,7 +20,7 @@ class SourceNavigationSteps():
 
         continue_button.click()
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('You have three options to send data', headline.text)
+        self.assertEqual('Submit documents and messages', headline.text)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
