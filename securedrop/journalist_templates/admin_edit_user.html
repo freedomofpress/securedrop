@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+<p><a href="/admin">&laquo; Back to admin interface</a></p>
+
+<form method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <p>
+    <label for="username">Change username</label>
+    <input name="username" id="username" type="text" placeholder="{{ user.username }}" />
+  </p>
+  <p>
+    <label for="password">Change password</label>
+    <input name="password" id="password" type="text" />
+    <em class="light">Leave blank for no change</em>
+  </p>
+  <p>
+    <label for="password_again">Change password (confirm)</label>
+    <input name="password_again" id="password_again" type="password" />
+  </p>
+  <p>
+    <label for="is_admin">Is Administrator</label>
+    <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
+  </p>
+  <button type="submit">Update user</button>
+</form>
+{% endblock %}
