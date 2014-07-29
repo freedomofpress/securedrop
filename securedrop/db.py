@@ -125,15 +125,18 @@ class Journalist(Base):
     username = Column(String(255), nullable=False, unique=True)
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
+    is_admin = Column(Boolean)
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, is_admin=False):
         self.username = username
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+        self.is_admin = is_admin
         # TODO: two-factor auth
 
     def __repr__(self):
-        return "<Journalist {0}>".format(self.username)
+        return "<Journalist {0}{1}>".format(self.username,
+                                            " [admin]" if self.is_admin else "")
 
     def _gen_salt(self, salt_bytes=32):
         return os.urandom(salt_bytes)
