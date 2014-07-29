@@ -7,6 +7,7 @@ from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CsrfProtect
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.exc import IntegrityError
 
 import config
 import version
@@ -124,7 +125,42 @@ def admin_index():
 
 @app.route('/admin/add', methods=('GET', 'POST'))
 def admin_add_user():
-    # TODO: process form submission
+    if request.method == 'POST':
+        form_valid = True
+
+        username = request.form['username']
+        if len(username) == 0:
+            form_valid = False
+            flash("Missing username", "username_validation")
+
+        password = request.form['password']
+        password_again = request.form['password_again']
+        if password != password_again:
+            form_valid = False
+            flash("Passwords didn't match", "password_validation")
+
+        is_admin = request.form.get('is_admin', False)
+
+        if form_valid:
+            try:
+                new_user = Journalist(username=username,
+                                      password=password,
+                                      is_admin=is_admin)
+                db_session.add(new_user)
+                db_session.commit()
+            except IntegrityError as e:
+                form_valid = False
+                if "username is not unique" in str(e):
+                    flash("That username is already in use",
+                          "username_validation")
+                else:
+                    flash("An error occurred saving this user to the database",
+                          "general_validation")
+
+        if form_valid:
+            flash("New user {0} succesfully added".format(username))
+            return redirect(url_for('admin_index'))
+
     return render_template("admin_add_user.html")
 
 
