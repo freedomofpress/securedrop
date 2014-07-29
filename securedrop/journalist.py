@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-from functools import wraps
+import functools
 
 from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
@@ -52,13 +52,39 @@ def logged_in():
     return 'logged_in' in session
 
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
+def login_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
         if not logged_in():
             return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def admin_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if logged_in() and g.user.is_admin:
+            return func(*args, **kwargs)
+        # TODO: sometimes this gets flashed 2x (Chrome only?)
+        flash("You must be an administrator to access that page",
+              "notification")
+        return redirect(url_for('index'))
+    return wrapper
+
+
+@app.before_request
+def setup_g():
+    """Store commonly used values in Flask's special g object"""
+    if request.method == 'POST':
+        sid = request.form.get('sid')
+        if sid:
+            g.sid = sid
+            g.source = get_source(sid)
+
+    user_id = session.get('id', None)
+    if user_id:
+        g.user = Journalist.query.get(user_id)
 
 
 @app.route('/login', methods=('GET', 'POST'))
