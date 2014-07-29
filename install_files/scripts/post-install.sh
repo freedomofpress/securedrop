@@ -31,7 +31,7 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's TBB torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
             done < /var/chroot/document/var/lib/tor/hidden_service/hostname
-            echo "$blue To add more journalists run $red'/opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
+            echo "$blue To add more journalists run $red'sudo /opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
             echo "$bold$blue################################################################################$normalcolor"
         fi
 
@@ -59,7 +59,7 @@ normalcolor=$(tput sgr 0)
                 echo "$red HidServAuth $line $normalcolor"
                 echo "$red $ATHS_USER$blue's Google Authenticator secret key is $red$(head -1 /home/${ATHS_USER}/.google_authenticator)$normalcolor"
             done < /var/lib/tor/hidden_service/hostname
-            echo "$blue You will need to run the$red '/opt/securedrop/add-admin.sh USERNAME'$blue"
+            echo "$blue You will need to run the$red 'sudo /opt/securedrop/add-admin.sh USERNAME'$blue"
             echo " to add more admins.$normalcolor"
             echo "$bold$blue#################################################################################$normalcolor"
        fi
@@ -98,7 +98,7 @@ normalcolor=$(tput sgr 0)
                 echo "$red HidServAuth $line $normalcolor"
                 echo "$red $ATHS_USER$blue's Google Authenticator secret key is $red$(head -1 /home/${ATHS_USER}/.google_authenticator)$normalcolor"
             done < /var/lib/tor/hidden_service/hostname
-            echo "$blue You will need to run the$red '/opt/securedrop/add-admin.sh USERNAME'$blue"
+            echo "$blue You will need to run the$red 'sudo /opt/securedrop/add-admin.sh USERNAME'$blue"
             echo " to add more admins.$normalcolor"
             echo "$bold$blue#################################################################################$normalcolor"
  
