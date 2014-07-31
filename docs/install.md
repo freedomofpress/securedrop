@@ -21,7 +21,7 @@ The *Monitor Server* keeps track of the *App Server* and sends out an email aler
 
 The *Source Interface* is the website that sources will access when submitting documents and communcating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
 
-### Document Interfacep
+### Document Interface
 
 The *Document Interface* is the website that journalists will access when downloading new documents and communicating with sources. This site is hosted on the *App Server* and can only be accessed over Tor.
 
@@ -39,6 +39,10 @@ The *Secure Viewing Station* is a machine that is kept offline and only ever use
 
 Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. You may want to consider physically removing the drive and the wireless card from this machine.
 
+### Transfer Device
+
+The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated small sized usb stick, CDR or SD card.
+
 ## Before you begin
 
 The steps in this guide assume you have the following set up:
@@ -48,16 +52,16 @@ The steps in this guide assume you have the following set up:
  * An [Ubuntu kernel with Grsecurity](/docs/ubuntu-grsec.md) ready to be installed on the *App* and *Monitor* servers
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
- * One USB stick for transfering files, marked *transfer*
+ * One *Transfer Device* for transfering files, marked *transfer*
  * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed
  
-Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en), a USB stick for transfering files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
+Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en), a *Transfer Device* for transfering files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
 
 It is also recommended that you use an external hard drive to back up encrypted submissions and some form of removable media to back up the GPG keyring on the *App* server.
 
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. You may want to consider physically removing the drive and the wireless card from this machine.
+The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it.
 
 ### Create a GPG key for the SecureDrop application
 
@@ -89,7 +93,7 @@ You'll also need to verify the 40 character hex fingerprint for this new key dur
 
 ### Import GPG keys for journalists with access to SecureDrop
 
-When moving documents from the *Document Interface* to the *Secure Viewing Station*, journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
+While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
 
 If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using a USB stick. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
@@ -280,9 +284,9 @@ An OSSEC agent is a small program set up on the system you want to monitor, whic
 **TODO**: Add the commands and expected outputs from both the App Server and the Monitor Server. On the Monitor Server: /var/ossec/bin/manage-agents and restart ossec. On the App Server: import hash value and restart ossec. On the Monitor Server again: run /var/ossec/bin/list_agents -a to show agent is connected.
 
 ### Configure Postfix
-Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using STARTTLS (port 587) and Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create an [Application Specific Password](http://www.youtube.com/watch?v=zMabEyrtPRg&t=2m13s) to use for the SASL authentication.
+Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using TLS, Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create a dedicated account to be used for SASL authentication, using an application specific password for SASL authentication no longer works for google. NOTE: google business accounts use a different FQDN than @google.com addresses.
 
-The SMTP STARTTLS certificate's fingerprint was retrieved using this command:
+The SMTP TLS certificate's fingerprint was retrieved using this command:
 ```
 openssl s_client -connect smtp.gmail.com:587 -starttls smtp  < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
 ```
@@ -345,7 +349,7 @@ The *Admin Workstation* is a machine that the system administrator can use to co
 
 ### Configure SSH to use Tor
 
-When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux.
+When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux and has *tor* installed from [Tor's repos](https://www.torproject.org/docs/installguide.html.en) Do not use the version that is in the Linux distro's repos because it is most likely out of date.
 
 Install the *connect-proxy* tool.
 
