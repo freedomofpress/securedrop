@@ -1,44 +1,74 @@
-SecureDrop Installation Guide
-=============================
+Installing SecureDrop
+=====================
 
-These instructions are intended for admins setting up SecureDrop for a journalist organization.
+This guide outlines the steps required to install [SecureDrop 0.3](https://pressfreedomfoundation.org/securedrop). 
+
+When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
+
+## Terminology
+
+A number of terms used in this guide, and in the [SecureDrop workflow diagram](https://pressfreedomfoundation.org/securedrop-files/SecureDrop_complex.png), are specific to SecureDrop. The list below attempts to enumerate and define these terms.
+
+### App Server
+
+The *Application Server* (or *App Server* for short) runs the SecureDrop application. This server hosts both the website that sources access (*Source Interface*) and the website that journalists access (*Document Interface*). You may only connect to this server using Tor.
+
+### Monitor Server
+
+The *Monitor Server* keeps track of the *App Server* and sends out an email alert if something seems wrong. You may only connect to this server using Tor.
+
+### Source Interface
+
+The *Source Interface* is the website that sources will access when submitting documents and communcating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
+
+### Document Interfacep
+
+The *Document Interface* is the website that journalists will access when downloading new documents and communicating with sources. This site is hosted on the *App Server* and can only be accessed over Tor.
+
+### Journalist Workstation
+
+The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *transfer* USB stick.
+
+### Admin Workstation
+
+The *Admin Workstation* is a machine that the system administrator can use to connect to the *App Server* and the *Monitor Server* using Tor and SSH. The administrator will also need to have an Android or iOS device with the Google Authenticator app installed.
+
+### Secure Viewing Station
+
+The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. This machine will be used to generate GPG keys for all journalists with access to SecureDrop, as well as decrypt and view submitted documents.
+
+Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. You may want to consider physically removing the drive and the wireless card from this machine.
 
 ## Before you begin
 
-Before installing SecureDrop, you should make sure you have everything you need:
+The steps in this guide assume you have the following set up:
 
-* You must have two servers — called the `App Server` and the `Monitor Server`, with [Ubuntu Server installed](/docs/ubuntu_config.md).
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.4 LTS (Precise
+ Pangolin)](http://releases.ubuntu.com/12.04/) installed
+ * An [Ubuntu kernel with Grsecurity](/docs/ubuntu-grsec.md) ready to be installed on the *App* and *Monitor* servers
+ * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
+ * A secure and unique passphrase for the persistent volume on each of the two USB sticks
+ * One USB stick for transfering files, marked *transfer*
+ * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed
+ 
+Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en), a USB stick for transfering files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
 
-* You must have two USB sticks with [Tails installed on them](/docs/tails_config.md) and persistent storage enabled. One will be air-gapped, the other will be used to connect to the internet. Make sure to label them.
+It is also recommended that you use an external hard drive to back up encrypted submissions and some form of removable media to back up the GPG keyring on the *App* server.
 
-* You need an extra USB stick for transferring files.
+## Set up the Secure Viewing Station
 
-* You must have a device capable of running the Google Authenticator app, such an Android or iOS device. Google Authenticator is an app for producing one-time passwords for two-factor authentication. You can find download instructions [here](https://support.google.com/accounts/answer/1066447?hl=en).
+The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. You may want to consider physically removing the drive and the wireless card from this machine.
 
-* Finally, you should have selected two secure passphrases: one for the persistent volume on the internet-connected Tails, and one for the persistent volume on the air-gapped Tails. If your organization doesn't yet have a good password policy, [you really should have one](http://howto.wired.com/wiki/Choose_a_Strong_Password).
+### Create a GPG key for the SecureDrop application
 
-In addition to the requirements above, each journalist will also have their own device capable of running Google Authenticator, a USB stick for transferring files between the `Secure Viewing Station` and their `Journalist Workstation`, and a personal GPG key. See [this section](/docs/install.md#set-up-journalist-gpg-keys) for instructions to set one up for journalists who don't already have a key. 
+When a document is submitted through the *Source Interface* on the *App Server*, the document is immediately encrypted with the SecureDrop application's GPG key. If you have not previously created a GPG key for SecureDrop, follow the steps below to do so now:
 
-We also suggest that you have an external hard drive for backing up encrypted submitted documents and some form of removable media for backing up the application's GPG keyring.
-
-## Secure Viewing Station
-
-The `Secure Viewing Station` will be air-gapped (never connected to the Internet) and will always boot from your air-gapped Tails USB stick. Because of this, you don't need a hard drive or network device. You may want to consider physically opening this computer and removing the hard drive and wifi card, but doing so is outside the scope of this manual.
-
-### Generate GPG Key and Import Journalist Public Keys
-
-In order to avoid transferring plaintext files between the `Secure Viewing Station` and `Journalist Workstations`, each journalist should have their [own personal GPG key](/docs/install.md#set-up-journalist-gpg-keys). Start by copying all of the journalists' public keys to a USB stick. Plug this into the `Secure Viewing Station` running Tails and open the file manager. Double-click on each public key to import it. If the public key isn't importing, try renaming it to end in ".asc".
-
-![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
-
-To generate the application GPG key:
-
-* Open a terminal and run `gpg --gen-key`
-* When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
-* When it asks, `What keysize do you want?` type `4096`
-* When it asks, `Key is valid for?` press Enter to keep the default
-* When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
-* For `Real name` type: `SecureDrop`
+ * Open a terminal and run `gpg --gen-key`
+ * When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
+ * When it asks, `What keysize do you want?` type `4096`
+ * When it asks, `Key is valid for?` press Enter to keep the default
+ * When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
+ * For `Real name` type: `SecureDrop`
 * For `Email address`, leave the field blank and press Enter
 * For `Comment` type `SecureDrop Application GPG Key`
 * Verify that everything is correct so far, and type `o` for `(O)kay`
@@ -49,7 +79,7 @@ To manage GPG keys using the Tails graphical interface, click the clipboard icon
 
 ![My Keys](/docs/images/install/viewing7.jpg)
 
-Right-click on the key you just generated and click `Export`. Save it to your USB stick as `SecureDrop.asc`. This is the public key only.
+Right-click on the key you just generated and click `Export`. Save it to the USB stick marked *transfer* as `SecureDrop.asc`. This is the public key only.
 
 ![My Keys](/docs/images/install/viewing8.jpg)
 
@@ -57,87 +87,197 @@ You'll also need to verify the 40 character hex fingerprint for this new key dur
 
 ![Fingerprint](/docs/images/install/viewing9.jpg)
 
-## Generate GPG key used to encrypt OSSEC alerts
-TODO add steps email address set in key needs to match the email address to be used
+### Import GPG keys for journalists with access to SecureDrop
 
-## Server Installation
+When moving documents from the *Document Interface* to the *Secure Viewing Station*, journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
 
-Both the `App Server` and `Monitor Server` should already have Ubuntu Server installed. To follow these instructions you should know how to navigate the command line.
+If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using a USB stick. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
-### Admin's SSH Client
-In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by manually executing the post-install script at `/opt/securedrop/post-install.sh`.
+![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
-If you have torify on your system and you're Tor running in the background, simply prepend it to the command:
+## Set up the App Server
+
+The *App Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+
+ * The IP address of the *Monitor Server*
+ * The SecureDrop application's GPG public key (from the USB stick marked *transfer*)
+ * The SecureDrop application's GPG key fingerprint
+ * An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
+ * The first name a journalist who will be using SecureDrop (you can add more later)
+ * The username of the system administrator (must have an existing OS account, is most likely the account you are using for the install)
+
+### Add our Debian repository on the App Server
+
+To install SecureDrop on the *App Server*, you will first need to add the Freedom of the Press Foundation's Debian repository. We created a script that will add the signing keys and Debian package repositories for the Tor Project and Freedom of the Press Foundation, and update the package lists from the repositories.
+
+Download the archive with the script, as well as the digital signature.
+
 ```
-torify ssh admin1@examplenxu7x5ifm.onion
-```
-
-After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
-```
-ssh admin1@examplenxu7x5ifm.onion -o ProxyCommand="/usr/bin/connect-proxy -4 -S localhost:9050 %h %p"
-```
-
-You can also configure your SSH client to make the settings for proxying over Tor persistent, and then connect using the regular SSH command syntax. Just edit `~/.ssh/config` as follows, except replace the Host, HostName and User:
-
-```
-Host examplenxu7x5ifm.onion
-HostName examplenxu7x5ifm.onion
-User admin1
-CheckHostIP no
-Compression yes
-Protocol 2
-ProxyCommand connect-proxy -4 -S localhost:9050 $(tor-resolve %h localhost:9050) %p
+wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz
+wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
 ```
 
-### App Server
-#### Required Information
-* The Application's GPG key
-* The Application's GPG key fingerprint
-* A branded image to replace the large SecureDrop image on the Source and Document Interface
-* A journalist's first name
-* An admin's username with an existing OS account (most likely the account you are using for the install)
-* The Monitor Server's IP address
+Download the SecureDrop signing key and verify the digital signature
 
-#### To install from FPF's apt repository run the following block of commands
 ```
-wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz && \
-tar -xzf add-repos.tgz && \
-sudo chmod +x ./add-repos.sh && \
-sudo ./add-repos.sh && \
-sudo apt-get -y install securedrop-app && \
+gpg --recv-key BD67D096
+gpg --verify add-repos.tgz.sig
+```
+
+If the signature is OK, extract the archive with the script, set the execuble flag and run it.
+
+```
+tar -xzf add-repos.tgz
+sudo chmod +x ./add-repos.sh
+sudo ./add-repos.sh
+```
+
+### Install SecureDrop on the App Server
+
+When you are ready to install SecureDrop on the App Server, run the command below.
+
+```
+sudo apt-get install securedrop-app
+```
+
+The installation process will download and install package dependencies and ask you for a few bits of information.
+
+### Set up Google Authenticator for the App Server
+
+As part of the SecureDrop installation process, you will need to set up two factor authentication using the Google Authenticator app.
+
+On the *App Server*, open the *~/.google_authenticator* file and note the value listed on the very first line. Open the Google Authenticator app on your phone and follow the steps below.
+
+* Select the pencil in the top-right corner
+* Select the plus sign at the bottom to add a new entry
+* Select *Manual Entry*
+* Under *Account* enter *SecureDrop App*
+* Under *Key* enter the value from the *.google_authenticator* file
+* Select the option in the top-right corner to save
+
+### Finalize the installation on the App Server
+
+To finalize the installation on the *App Server* and also learn the address of the *Source Interface* and the *Document Interface*, as well as the new hostname for the *App Server*, run the command below. Note that the command will ask for your two factor verification code and password.
+
+```
 sudo /opt/securedrop/post-install.sh
 ```
-Record the values displayed in red from the post-install script.
 
-### Monitor Server
-####Required Information
-* An admin's username with an existing OS account (most likely the account you are using for the install)
-* The `App Server`'s IP address
-* The destination email address for the OSSEC alerts
-* The GPG key that has the same email address set as the destination email address for the OSSEC alerts
-* The OSSEC alert email address GPG key's fingerprint
+Below is an example output from the post-install script. You will need to record the URL for the *Source Interface*, the *Document Interface*, authentication values for each journalist, Tor configuration file values, and the SSH address for the *App Server*. These values will all be marked in red when you run the script.
 
-#### To install from FPF's apt repository run the following block of commands
+The output below assumes that an admin named *Alice* and a journalist named *Bob* are installing SecureDrop.
+
 ```
-wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz && \
-tar -xzf add-repos.tgz && \
-sudo chmod +x ./add-repos.sh && \
-sudo ./add-repos.sh && \
-sudo apt-get install securedrop-monitor -y && \
+The Source Interface's URL is:
+http://ajntehqxzvxubi5h.onion
+The Document Interface listens on port 8080
+you will need to append :8080 to the URL as shown below
+The Document Interface's URL and auth values for each journalist:
+bob's URL is http://gu6yn2ml6ns5qupv.onion:8080
+bob's TBB torrc config line is:
+HidServ Auth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+To add more journalists run 'sudo /opt/securedrop/add-journalists.sh NAME' script
+
+The App Server is only accessible through a Tor Authenticated Hidden Service
+you will need to use connect-proxy, torify or something similar to proxy SSH through Tor
+alice's SSH address is ssh alice@jphhcishih46uvlg.onion
+alice's system torrc config line is:
+HidServAuth jphhcishih46uvlg.onion WgeZ1VkluV3K//AoEAjewF # client: alice
+alice's Google Authenticator secret key is RFULAWMCPKZUHJKB
+You will need to run the 'sudo /opt/securedrop/add-admin.sh USERNAME'
+to add more admins.
+```
+
+## Set up the Monitor Server
+
+The *Monitor Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+
+ * The IP address of the *App Server*
+ * The email address that will receive alerts from OSSEC
+ * The GPG public key and fingerprint for the email address that will receive the alerts
+ * The username of the system administrator (must have an existing OS account, is most likely the account you are using for the install)
+ 
+### Create GPG key for the address that will receive alerts
+
+The intrustion detection system on the *Monitor Server* will be configured to send out email alerts when the *App Server* is down or when something else is wrong. The steps below will help you create a GPG key so that the server can encrypt the emails it sends you. The GPG key needs to be associated with the same email address as the one that will be configured to receive the alerts. If you already have such a key, you may skip this step.
+ 
+### Add our Debian repository on the Monitor Server
+
+To install SecureDrop on the *Monitor Server*, you will first need to add the Freedom of the Press Foundation's Debian repository. We created a script that will add the signing keys and Debian package repositories for the Tor Project and Freedom of the Press Foundation, and update the package lists from the repositories.
+
+Download the archive with the script, as well as the digital signature.
+
+```
+wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz
+wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
+```
+
+Download the SecureDrop signing key and verify the digital signature
+
+```
+gpg --recv-key BD67D096
+gpg --verify add-repos.tgz.sig
+```
+
+If the signature is OK, extract the archive with the script, set the execuble flag and run it.
+
+```
+tar -xzf add-repos.tgz
+sudo chmod +x ./add-repos.sh
+sudo ./add-repos.sh
+```
+
+### Install SecureDrop on the Monitor Server
+
+When you are ready to install SecureDrop on the *Monitor Server*, run the command below.
+
+```
+sudo apt-get install securedrop-monitor
+```
+
+The installation process will download and install package dependencies and ask you for a few bits of information.
+
+### Set up Google Authenticator for the Monitor Server
+
+As part of the SecureDrop installation process, you will need to set up two factor authentication using the Google Authenticator app.
+
+On the *Monitor Server*, open the *~/.google_authenticator* file and note the value listed on the very first line. Open the Google Authenticator app on your phone and follow the steps below.
+
+* Select the pencil in the top-right corner
+* Select the plus sign at the bottom to add a new entry
+* Select *Manual Entry*
+* Under *Account* enter *SecureDrop Monitor*
+* Under *Key* enter the value from the *.google_authenticator* file
+* Select the option in the top-right corner to save
+
+### Finalize the installation on the Monitor Server
+
+To finalize the installation on the *Monitor Server* and also learn the new hostname for the *Monitor Server*, run the command below. Note that the command will ask for your two factor verification code and password.
+
+```
 sudo /opt/securedrop/post-install.sh
 ```
-Record the values displayed in red from the post-install script.
 
-### Add OSSEC Agent
-Adding the OSSEC agent requires taking a long hash value outputed on the `Monitor Server` and entering it into the `App Server`
-You should wait until you have SSH'd through Tor to both boxes so you can copy and paste from one window to the other.
-This will require you to switch between the 'Monitor Server' to the 'App Server' then back to the 'Monitor Server'.
+Below is an example output from the post-install script. You will need to record the Tor configuration file value, and the SSH address for the *Monitor Server*. These values will all be marked in red when you run the script.
 
-Monitor Server (TODO add screenshot of /var/ossec/bin/manage-agents and restart ossec)
+The output below assumes that an admin named *Alice* and a journalist named *Bob* are installing SecureDrop.
 
-App Server (TODO add screenshot of importing hash value and restart ossec)
+```
+The Monitor Server is only accessible through a Tor Authenticated Hidden Service
+you will need to use connect-proxy, torify or something similar to proxy SSH through Tor
+alice's SSH address is ssh alice@r73jkrg6w63kq5k4.onion
+alice's system torrc config line is:
+HidServAuth r73jkrg6w63kq5k4.onion 18xjlI1DwghSSAI2y6sMBB # client: alice
+alice's Google Authenticator secret key is GIWTJDPOAWGTSGNB
+You will need to run the 'sudo /opt/securedrop/add-admin.sh USERNAME'
+to add more admins.
+```
 
-Monitor Server (TODO add screenshot of /var/ossec/bin/list_agents -a to show agent connected)
+### Add OSSEC agent
+
+An OSSEC agent is a small program set up on the system you want to monitor, which in this case means the *App Server*. The agent will collect information in real time and forward it to the manager on the *Monitor Server* for analysis and correlation. Adding the OSSEC agent involves accessing both the *App server* and the *Monitor Server*.
+
+**TODO**: Add the commands and expected outputs from both the App Server and the Monitor Server. On the Monitor Server: /var/ossec/bin/manage-agents and restart ossec. On the App Server: import hash value and restart ossec. On the Monitor Server again: run /var/ossec/bin/list_agents -a to show agent is connected.
 
 ### Configure Postfix
 Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using STARTTLS (port 587) and Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create an [Application Specific Password](http://www.youtube.com/watch?v=zMabEyrtPRg&t=2m13s) to use for the SASL authentication.
@@ -191,13 +331,55 @@ Change `USERNAME` `DOMAIN` and `PASSWORD` to the correct values.
 
 #### Apply settings and restart Postfix
 ```
-sudo chmod 400 /etc/postfix/sasl_passwd && \
-sudo postmap /etc/postfix/sasl_passwd && \
-cat /etc/ssl/certs/Thawte_Premium_Server_CA.pem | sudo tee -a /etc/postfix/cacert.pem && \
+sudo chmod 400 /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/sasl_passwd
+cat /etc/ssl/certs/Thawte_Premium_Server_CA.pem | sudo tee -a /etc/postfix/cacert.pem
 sudo /etc/init.d/postfix reload
 ```
 
 Once you have completed these steps, the SecureDrop web application should be set up.
+
+## Set up the Admin Workstation
+
+The *Admin Workstation* is a machine that the system administrator can use to connect to the *App Server* and the *Monitor Server* using Tor and SSH. The administrator will also need to have an Android or iOS device with the Google Authenticator app installed.
+
+### Configure SSH to use Tor
+
+When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux.
+
+Install the *connect-proxy* tool.
+
+```
+sudo apt-get install connect-proxy
+```
+
+Edit *~/.ssh/config* with the username of the system administrator and the hostnames for the *App Server* and the *Monitor Server*. You can get the hostnames by running the post-install script at */opt/securedrop/post-install.sh* **after** installing SecureDrop.
+
+The names and addresses below are the same as in the example output from the post-install script.
+
+```
+Host securedrop-app
+HostName jphhcishih46uvlg.onion
+User alice
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect-proxy -4 -S localhost:9150 $(tor-resolve %h localhost:9150) %p
+
+Host securedrop-monitor
+HostName r73jkrg6w63kq5k4.onion
+User alice
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect-proxy -4 -S localhost:9150 $(tor-resolve %h localhost:9150) %p
+```
+
+The configuration above requires that you have the [Tor Browser](https://www.torproject.org/download/download-easy.html.en) up and running before connecting to either of the two servers. If you want to connect to the *App Server*, simply open the terminal and type the following.
+
+```
+ssh securedrop-app
+```
 
 ## Journalist's Workstation Setup
 
