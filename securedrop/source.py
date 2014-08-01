@@ -310,23 +310,6 @@ def why_download_journalist_pubkey():
     return render_template("why-journalist-key.html")
 
 
-_REDIRECT_URL_WHITELIST = ["http://tor2web.org/",
-        "https://www.torproject.org/download.html.en",
-        "https://tails.boum.org/",
-        "http://www.wired.com/threatlevel/2013/09/freedom-hosting-fbi/",
-        "http://www.theguardian.com/world/interactive/2013/oct/04/egotistical-giraffe-nsa-tor-document",
-        "https://addons.mozilla.org/en-US/firefox/addon/noscript/",
-        "http://noscript.net"]
-
-
-@app.route('/redirect/<path:redirect_url>')
-def redirect(redirect_url):
-    if redirect_url not in _REDIRECT_URL_WHITELIST:
-        return 'Redirect not allowed'
-    else:
-        return render_template("redirect.html", redirect_url=redirect_url)
-
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('notfound.html'), 404
