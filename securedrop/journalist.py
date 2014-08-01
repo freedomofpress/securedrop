@@ -170,7 +170,29 @@ def admin_add_user():
 @admin_required
 def admin_edit_user(user_id):
     user = Journalist.query.get(user_id)
-    # TODO: process form submission
+
+    if request.method == 'POST':
+        if request.form['username'] != "":
+            user.username = request.form['username']
+
+        if request.form['password'] != "":
+            if request.form['password'] != request.form['password_again']:
+                flash("Passwords didn't match", "password_validation")
+                return redirect(url_for("admin_edit_user"))
+            user.set_password(request.form['password'])
+
+        user.is_admin = bool(request.form.get('is_admin'))
+
+        try:
+            db_session.add(user)
+            db_session.commit()
+        except Exception, e:
+            db_session.rollback()
+            if "username is not unique" in str(e):
+                flash("That username is already in use", "notification")
+            else:
+                flash("An unknown error occurred, please inform your administrator", "notification")
+
     return render_template("admin_edit_user.html", user=user)
 
 
