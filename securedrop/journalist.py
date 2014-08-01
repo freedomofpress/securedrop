@@ -97,7 +97,11 @@ def login():
     if request.method == 'POST':
         journalist = Journalist.login(request.form['username'],
                                       request.form['password'])
+        # TODO better to handle this with exceptions
         if journalist:
+            journalist.last_access = datetime.now()
+            db_session.add(journalist)
+            db_session.commit()
             session['id'] = journalist.id
             session['logged_in'] = True
             return redirect(url_for('index'))
