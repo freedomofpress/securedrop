@@ -128,7 +128,7 @@ class TestSource(unittest.TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("You have three options to send data", rv.data)
+            self.assertIn("Submit documents and messages", rv.data)
 
     def _new_codename(self):
         return test_setup.new_codename(self.client, session)
@@ -154,7 +154,7 @@ class TestSource(unittest.TestCase):
             rv = c.post('/login', data=dict(codename=codename),
                                   follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertIn("You have three options to send data", rv.data)
+            self.assertIn("Submit documents and messages", rv.data)
             self.assertTrue(session['logged_in'])
             _logout(c)
 
@@ -172,7 +172,7 @@ class TestSource(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -181,8 +181,7 @@ class TestSource(unittest.TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                      rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -191,9 +190,8 @@ class TestSource(unittest.TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
-        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                      rv.data)
+        self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
     def test_submit_dirty_file_to_be_cleaned(self):
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
@@ -207,8 +205,7 @@ class TestSource(unittest.TestCase):
             notclean='True',
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
-                      rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'dirty.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
         store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
         latest_subdir = max(store_dirs, key=os.path.getmtime)
@@ -245,8 +242,7 @@ class TestSource(unittest.TestCase):
             fh=(img, 'dirty.jpg'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
-                      rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'dirty.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
         store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
         latest_subdir = max(store_dirs, key=os.path.getmtime)
@@ -281,9 +277,8 @@ class TestSource(unittest.TestCase):
             notclean='True',
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
-        self.assertIn(escape("Thanks! We received your document 'clean.jpg'."),
-                      rv.data)
+        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'clean.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
         img.close()
 
     @patch('zipfile.ZipFile.writestr')

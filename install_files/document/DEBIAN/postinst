@@ -280,7 +280,7 @@ EOF
         # TODO Add check for distribute version
         pip install --upgrade distribute
 
-        pip install -r $securedrop_root/document-requirements.txt
+        pip install -r $securedrop_root/requirements/document-requirements.txt
 
         #Changed the ownership of the app directory
         chown -R $document_user:$document_user $securedrop_root

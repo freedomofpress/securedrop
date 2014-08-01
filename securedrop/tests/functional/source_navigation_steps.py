@@ -20,7 +20,7 @@ class SourceNavigationSteps():
 
         continue_button.click()
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('You have three options to send data', headline.text)
+        self.assertEqual('Submit documents and messages', headline.text)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
@@ -39,7 +39,7 @@ class SourceNavigationSteps():
 
             notification = self.driver.find_element_by_css_selector( 'p.notification')
             expected_notification = "Thanks! We received your document '%s'." % filebasename
-            self.assertEquals(expected_notification, notification.text)
+            self.assertIn(expected_notification, notification.text)
 
     def _source_submits_a_message(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
@@ -50,4 +50,4 @@ class SourceNavigationSteps():
         submit_button.click()
 
         notification = self.driver.find_element_by_css_selector( 'p.notification')
-        self.assertEquals('Thanks! We received your message.', notification.text)
+        self.assertIn('Thanks! We received your message.', notification.text)

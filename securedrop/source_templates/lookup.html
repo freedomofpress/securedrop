@@ -2,17 +2,17 @@
 {% block body %}
 
 <center>
-  <h2 class="headline">You have three options to send data</h2>
+  <h2 class="headline">Submit documents and messages</h2>
   <p>You can send a file, a message, or both.</p>
 
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
-  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to login again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
   {% if replies %}
   <div id="replies">
-    <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them.</p>
+    <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply.</p>
     {% for reply in replies %}
     <div class="reply">
       <div class="date">{{ reply.date }}</div>
@@ -51,7 +51,7 @@
   <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> Submit</button>
 </form>
 
-<p><strong>Tip:</strong> For an extra layer of security, you can first encrypt your data with the <a href="/journalist-key" class="text-link">journalist's public key</a>. For more information click <a href="/why-journalist-key" class="text-link">here</a>.</p>
+<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with <a href="/journalist-key" class="text-link">our public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission can provide an extra layer of security before your data reaches SecureDrop. (<a href="/why-journalist-key" class="text-link">More information</a>.)</p>
 
 <hr class="no-line"/>
 
