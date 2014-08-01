@@ -15,7 +15,7 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
-                Journalist)
+                Journalist, NoResultFound, WrongPasswordException)
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -91,20 +91,21 @@ def setup_g():
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        journalist = Journalist.login(request.form['username'],
-                                      request.form['password'])
-        # TODO better to handle this with exceptions
-        if journalist:
+        try:
+            journalist = Journalist.login(request.form['username'],
+                                          request.form['password'])
+        except NoResultFound:
+            flash("Incorrect username", "notification")
+        except WrongPasswordException:
+            flash("Incorrect password", "notification")
+        else:
             journalist.last_access = datetime.now()
             db_session.add(journalist)
             db_session.commit()
+
             session['id'] = journalist.id
             session['logged_in'] = True
             return redirect(url_for('index'))
-        elif journalist == None:
-            flash("Incorrect username", "notification")
-        elif journalist == False:
-            flash("Incorrect password", "notification")
 
     return render_template("login.html")
 

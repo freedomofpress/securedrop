@@ -120,6 +120,10 @@ class SourceStar(Base):
         self.starred = starred
 
 
+class WrongPasswordException(Exception):
+    pass
+
+
 class Journalist(Base):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
@@ -157,15 +161,10 @@ class Journalist(Base):
 
     @staticmethod
     def login(username, password):
-        try:
-            user = Journalist.query.filter_by(username=username).one()
-        except NoResultFound:
-            return None
-
-        if user.valid_password(password):
-            return user
-
-        return False
+        user = Journalist.query.filter_by(username=username).one()
+        if not user.valid_password(password):
+            raise WrongPasswordException
+        return user
 
 # Declare (or import) models before init_db
 def init_db():
