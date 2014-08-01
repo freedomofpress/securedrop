@@ -139,7 +139,7 @@ class TestSource(unittest.TestCase):
         rv = self.client.post('login', data=dict(codename=codename),
                               follow_redirects=True)
         # redirects to /lookup
-        self.assertIn("journalist's public key", rv.data)
+        self.assertIn("our public key", rv.data)
         # download the public key
         rv = self.client.get('journalist-key')
         self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
