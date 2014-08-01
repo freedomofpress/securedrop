@@ -137,8 +137,7 @@ class Journalist(Base):
 
     def __init__(self, username, password, is_admin=False):
         self.username = username
-        self.pw_salt = self._gen_salt()
-        self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+        self.set_password(password)
         self.is_admin = is_admin
         # TODO: two-factor auth
 
@@ -155,6 +154,10 @@ class Journalist(Base):
             params = self._SCRYPT_PARAMS
         # TODO: better handle encoding?
         return scrypt.hash(str(password), salt, **params)
+
+    def set_password(self, password):
+        self.pw_salt = self._gen_salt()
+        self.pw_hash = self._scrypt_hash(password, self.pw_salt)
 
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
