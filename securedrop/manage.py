@@ -5,6 +5,10 @@ import os
 import shutil
 import subprocess
 import unittest
+import readline # makes the add_admin prompt kick ass
+from getpass import getpass
+
+from db import db_session, Journalist
 
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
@@ -74,8 +78,31 @@ def reset():
         # Each entry in STORE_DIR is a directory corresponding to a source
         shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
 
+
+def add_admin():
+    username = raw_input("Username: ")
+    while True:
+        password = getpass("Password: ")
+        password_again = getpass("Confirm Password: ")
+        if password == password_again:
+            break
+        print "Passwords didn't match!"
+
+    admin = Journalist(username=username, password=password, is_admin=True)
+    try:
+        db_session.add(admin)
+        db_session.commit()
+    except Exception, e:
+        if "username is not unique" in str(e):
+            print "ERROR: That username is already taken!"
+        else:
+            print "ERROR: An unknown error occurred, traceback:"
+            print e
+    else:
+        print "Admin {} successfully added".format(username)
+
 def main():
-    valid_cmds = ["start", "stop", "test", "reset"]
+    valid_cmds = ["start", "stop", "test", "reset", "add_admin"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
@@ -84,8 +111,11 @@ def main():
 
     cmd = sys.argv[1]
 
-    getattr(sys.modules[__name__], cmd)()
-
+    try:
+        getattr(sys.modules[__name__], cmd)()
+    except KeyboardInterrupt:
+        print # So our prompt appears on a nice new line
+        pass
 
 if __name__ == "__main__":
     main()
