@@ -102,9 +102,10 @@ def login():
             journalist.last_access = datetime.now()
             db_session.add(journalist)
             db_session.commit()
-
             session['id'] = journalist.id
             session['logged_in'] = True
+            if journalist.is_admin:
+                return redirect(url_for('admin_index'))
             return redirect(url_for('index'))
 
     return render_template("login.html")
