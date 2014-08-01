@@ -229,14 +229,15 @@ def submit():
         g.source.interaction_count += 1
         fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
             journalist_filename, msg))
-        flash("%s. %s" % (SUBMIT_MSG_NOTIFY_STR, SUBMIT_CODENAME_NOTIFY_STR), "notification")
+        flash("{}. {}".format(SUBMIT_MSG_NOTIFY_STR,
+                              SUBMIT_CODENAME_NOTIFY_STR), "notification")
     if fh:
         g.source.interaction_count += 1
         fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
             journalist_filename, fh.filename, fh.stream, fh.content_type, strip_metadata))
-        flash("%s '%s'. %s"
-          % (SUBMIT_DOC_NOTIFY_STR, fh.filename or '[unnamed]', SUBMIT_CODENAME_NOTIFY_STR),
-          "notification")
+        flash("{} '{}'. {}".format(SUBMIT_DOC_NOTIFY_STR,
+                                   fh.filename or '[unnamed]',
+                                   SUBMIT_CODENAME_NOTIFY_STR), "notification")
     for fname in fnames:
         submission = Submission(g.source, fname)
         db_session.add(submission)
