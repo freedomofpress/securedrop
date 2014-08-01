@@ -320,10 +320,7 @@ _REDIRECT_URL_WHITELIST = ["http://tor2web.org/",
 
 
 @app.route('/redirect/<path:redirect_url>')
-def redirect_hack(redirect_url):
-    # A hack to avoid referer leakage when a user clicks on an external link.
-    # TODO: Most likely will want to share this between source.py and
-    # journalist.py in the future.
+def redirect(redirect_url):
     if redirect_url not in _REDIRECT_URL_WHITELIST:
         return 'Redirect not allowed'
     else:
