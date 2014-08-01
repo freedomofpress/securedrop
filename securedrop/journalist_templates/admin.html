@@ -13,6 +13,8 @@
           {{ user.username }}
           <a href="/admin/edit/{{ user.id }}">Edit</a>
           <button type="submit" formaction="/admin/delete/{{ user.id }}">Delete</button>
+          Created {{ user.created_on }}
+          Last access {{ user.last_access }}
       </li>
     {% endfor %}
   </ul>

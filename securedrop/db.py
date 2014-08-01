@@ -53,6 +53,7 @@ class Source(Base):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
+    # TODO should we be using utc times?
     last_updated = Column(DateTime, default=datetime.datetime.now)
     star = relationship("SourceStar", uselist=False, backref="source")
     
@@ -126,6 +127,9 @@ class Journalist(Base):
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
+    # TODO should we be using utc times?
+    created_on = Column(DateTime, default=datetime.datetime.now)
+    last_access = Column(DateTime)
 
     def __init__(self, username, password, is_admin=False):
         self.username = username
