@@ -220,7 +220,6 @@ def normalize_timestamps(sid):
 def submit():
     msg = request.form['msg']
     fh = request.files['fh']
-    strip_metadata = True if 'notclean' in request.form else False
 
     fnames = []
     journalist_filename = g.source.journalist_filename()
@@ -234,7 +233,7 @@ def submit():
     if fh:
         g.source.interaction_count += 1
         fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
-            journalist_filename, fh.filename, fh.stream, fh.content_type, strip_metadata))
+            journalist_filename, fh.filename, fh.stream))
         flash("{} '{}'. {}".format(SUBMIT_DOC_NOTIFY_STR,
                                    fh.filename or '[unnamed]',
                                    SUBMIT_CODENAME_NOTIFY_STR), "notification")

@@ -26,6 +26,7 @@ import journalist
 import test_setup
 from db import db_session, Source
 
+
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
@@ -192,81 +193,6 @@ class TestSource(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
         self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-
-    def test_submit_dirty_file_to_be_cleaned(self):
-        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
-        img_metadata = store.metadata_handler(img.name)
-        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(img, 'dirty.jpg'),
-            notclean='True',
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'dirty.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-
-        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
-        latest_subdir = max(store_dirs, key=os.path.getmtime)
-        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        self.assertEqual(len(zip_gpg_files), 1)
-        zip_gpg = zip_gpg_files[0]
-
-        zip_gpg_file = open(zip_gpg)
-        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
-        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
-
-        s = StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
-        clean_file.write(zip_file.read('dirty.jpg'))
-        clean_file.seek(0)
-        zip_file.close()
-
-        # check for the actual file been clean
-        clean_file_metadata = store.metadata_handler(clean_file.name)
-        self.assertTrue(clean_file_metadata.is_clean(), "the file is now clean.")
-        zip_gpg_file.close()
-        clean_file.close()
-        img.close()
-
-    def test_submit_dirty_file_to_not_clean(self):
-        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
-        img_metadata = store.metadata_handler(img.name)
-        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(img, 'dirty.jpg'),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'dirty.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-
-        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
-        latest_subdir = max(store_dirs, key=os.path.getmtime)
-        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        self.assertEqual(len(zip_gpg_files), 1)
-        zip_gpg = zip_gpg_files[0]
-
-        zip_gpg_file = open(zip_gpg)
-        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
-        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
-
-        s = StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
-        clean_file.write(zip_file.read('dirty.jpg'))
-        clean_file.seek(0)
-        zip_file.close()
-
-        # check for the actual file been clean
-        clean_file_metadata = store.metadata_handler(clean_file.name)
-        self.assertFalse(clean_file_metadata.is_clean(), "the file is was not cleaned.")
-        zip_gpg_file.close()
-        clean_file.close()
-        img.close()
 
     def test_submit_clean_file(self):
         img = open(os.getcwd()+'/tests/test_images/clean.jpg')
