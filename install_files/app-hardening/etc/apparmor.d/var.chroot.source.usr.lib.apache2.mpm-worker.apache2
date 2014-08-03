@@ -397,10 +397,6 @@
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/__init__.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/pct_warnings.py r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/Crypto/pct_warnings.pyc r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/MAT/__init__.py r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/MAT/__init__.pyc r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/MAT/mat.py r,
-  /var/chroot/source/usr/local/lib/python2.7/dist-packages/MAT/mat.pyc r,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/_psutil_linux.so mr,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/_psutil_posix.so mr,
   /var/chroot/source/usr/local/lib/python2.7/dist-packages/_scrypt.so mr,
@@ -781,6 +777,10 @@
   /var/chroot/source/var/www/securedrop/source_templates/tor2web-warning.html r,
   /var/chroot/source/var/www/securedrop/source_templates/why-journalist-key.html r,
   /var/chroot/source/var/www/securedrop/static/css/securedrop.css r,
+  /var/chroot/source/var/www/securedrop/static/i/delete_gray.png r,
+  /var/chroot/source/var/www/securedrop/static/i/delete_red.png r,
+  /var/chroot/source/var/www/securedrop/static/i/logo.png r,
+  /var/chroot/source/var/www/securedrop/static/i/securedrop_small.png r,
   /var/chroot/source/var/www/securedrop/static/i/favicon.png r,
   /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/i/securedrop.png r,
@@ -796,7 +796,8 @@
   /var/chroot/source/var/www/securedrop/version.py r,
   /var/chroot/source/var/www/securedrop/version.pyc rw,
   /var/chroot/source/var/www/securedrop/wordlist r,
-
+  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.py
+  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.pyc
 
   ^DEFAULT_URI flags=(complain) {
 

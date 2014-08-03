@@ -62,6 +62,7 @@ EOF
         if [ ! -f $securedrop_root/config/base.py ]; then
             cat > $securedrop_root/config/base.py <<EOF
 #### Application Configuration
+DEFAULT_ENV = 'production'
 
 SOURCE_TEMPLATES_DIR = '$securedrop_root/source_templates'
 JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
@@ -261,7 +262,7 @@ EOF
         # TODO Add check for distribute version
         pip install --upgrade distribute
 
-        pip install -r $securedrop_root/source-requirements.txt
+        pip install -r $securedrop_root/requirements/source-requirements.txt
 
         #Changed the ownership of the app directory
         chown -R $source_user:$source_user $securedrop_root

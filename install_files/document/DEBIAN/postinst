@@ -38,7 +38,6 @@ case "$1" in
         if_dir_doesnt_exist_create store 770
         if_dir_doesnt_exist_create tmp 770
         if_dir_doesnt_exist_create config 770
-        if_dir_doesnt_exist_create gauth 770
 
         keypath=$securedrop_root/keys
         
@@ -63,6 +62,7 @@ EOF
         if [ ! -f $securedrop_root/config/base.py ]; then
             cat > $securedrop_root/config/base.py <<EOF
 #### Application Configuration
+DEFAULT_ENV = 'production'
 
 SOURCE_TEMPLATES_DIR = '$securedrop_root/source_templates'
 JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
@@ -233,24 +233,12 @@ HiddenServiceAuthorizeClient stealth $journalist_user
 SafeLogging 1
 SocksPort 0
 User document-tor
+# Ports are from https://www.torproject.org/docs/faq#OutboundPorts 
+ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030
 EOF
         fi
 
         service tor restart
-
-        gauth_dir=/var/www/securedrop/gauth
-        gen_2fa_code() {
-            touch $gauth_dir/$journalist_user
-	    gauthcode=$(cat /dev/urandom | tr -dc 'A-Z' | head -c 16) 
-	    gauthpw=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10)
-            cat > $gauth_dir/$journalist_user << EOF
-$gauthcode
-EOF
-        }
-
-        if [ ! -f $gauth_dir/$journalist_user ]; then
-            gen_2fa_code
-        fi
 
         # The uid/gid needs to be set so they match outside of the chroot jail
         # If this is not done from outside the chroot jail the process looks 'Whoopsie"
@@ -266,8 +254,7 @@ EOF
         chown -R $document_user:$document_user $securedrop_root
 
         ##Enable only the needed apache modules for each interface
-        enabled_mods="alias auth_basic gauth authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi"
-        chmod 600 /usr/lib/apache2/modules/mod_authn_google.so 
+        enabled_mods="alias authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi xsendfile"
         for enabled_mod in $enabled_mods; do
             if [ ! -L /etc/apache2/mods-enabled/$enabled_mod.load ]; then
                 a2enmod $enabled_mod
@@ -293,7 +280,7 @@ EOF
         # TODO Add check for distribute version
         pip install --upgrade distribute
 
-        pip install -r $securedrop_root/document-requirements.txt
+        pip install -r $securedrop_root/requirements/document-requirements.txt
 
         #Changed the ownership of the app directory
         chown -R $document_user:$document_user $securedrop_root

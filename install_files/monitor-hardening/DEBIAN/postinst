@@ -56,6 +56,8 @@ RunAsDaemon 1
 HiddenServiceDir /var/lib/tor/hidden_service/
 HiddenServicePort 22 127.0.0.1:22
 HiddenServiceAuthorizeClient stealth $admin_user
+# Ports are from https://www.torproject.org/docs/faq#OutboundPorts 
+ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030
 EOF
         fi
 
@@ -87,12 +89,12 @@ APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 EOF
         cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
-Unattended-Upgrade::Origins-Pattern {
+Unattended-Upgrade::Allowed-Origins {
         "\${distro_id}:\${distro_codename}-security";
 };
 Unattended-Upgrade::Package-Blacklist {
 };
-Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::Mail "root@localhost";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "true";
 EOF

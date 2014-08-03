@@ -2,7 +2,6 @@ import unittest
 import source_navigation_steps
 import journalist_navigation_steps
 import functional_test
-import tempfile
 
 class SubmitAndRetrieveFile(
         unittest.TestCase,
@@ -16,26 +15,6 @@ class SubmitAndRetrieveFile(
 
     def tearDown(self):
         functional_test.FunctionalTest.tearDown(self)
-
-    def _source_submits_a_file(self):
-        with tempfile.NamedTemporaryFile() as file:
-            file.write(self.secret_message)
-            file.seek(0)
-
-            filename = file.name
-            filebasename = filename.split('/')[-1]
-
-            file_upload_box = self.driver.find_element_by_css_selector('[name=fh]')
-            file_upload_box.send_keys(filename)
-
-            submit_button = self.driver.find_element_by_css_selector(
-                'button[type=submit]')
-            submit_button.click()
-
-            notification = self.driver.find_element_by_css_selector( 'p.notification')
-            expected_notification = "Thanks! We received your document '%s'." % filebasename
-            self.assertEquals(expected_notification, notification.text)
-
 
     def test_submit_and_retrieve_happy_path(self):
         self._source_visits_source_homepage()

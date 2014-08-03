@@ -5,30 +5,56 @@ import os
 import shutil
 import subprocess
 import unittest
-from tests import test_unit, test_journalist, test_single_star
 
-os.environ['SECUREDROP_ENV'] = 'development'
-
+# We need to import config in each function because we're running the tests
+# directly, so it's important to set the environment correctly, depending on
+# development or testing, before importing config.
+#
+# TODO: do we need to store *_PIDFILE in the application config? It seems like
+# an implementation detail that is specifc to this management script.
 
 def start():
-    subprocess.Popen(['python', 'source.py'])
-    subprocess.Popen(['python', 'journalist.py'])
-    print "The web application is running, and available on your Vagrant host at the following addresses:"
-    print "Source interface:     localhost:8080"
-    print "Journalist interface: localhost:8081"
+    import config
+    source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
+                                 config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
+    journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
+                                 config.JOURNALIST_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python journalist.py'])
+    if source_rc + journo_rc == 0:
+        print "The web application is running, and available on your Vagrant host at the following addresses:"
+        print "Source interface:     localhost:8080"
+        print "Journalist interface: localhost:8081"
+    else:
+        print "The web application is already running.  Please use './manage.py stop' to stop."
+
+
+def stop():
+    import config
+    source_rc = subprocess.call(
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
+    journo_rc = subprocess.call(
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
+    if source_rc + journo_rc == 0:
+        print "The web application has been stopped."
+    else:
+        print "There was a problem stopping the web application."
 
 
 def test():
     """
     Runs the test suite
     """
-    # TODO: we could implement test.sh's functionality here, and get rid of
-    # test.sh (now it's just clutter, and confusing)
+    os.environ['SECUREDROP_ENV'] = 'test'
+    from tests import test_unit, test_journalist, test_single_star
+
     test_suites = [test_unit, test_journalist, test_single_star]
+
     for test_suite in test_suites:
         test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
         test_runner = unittest.TextTestRunner(verbosity=2)
         test_runner.run(test_loader)
+
+    # TODO run functional tests directly from this script
+    # Until then, we're still calling the old test.sh script just to run the functional tests.
     subprocess.call(["./test.sh"])
 
 
@@ -40,8 +66,6 @@ def reset():
     2. Regenerates the database
     3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
     """
-    # HACK: import here so they don't interfere with the test setup
-    # (environment variable hasn't been set yet)
     import config
     import db
 
@@ -58,9 +82,8 @@ def reset():
         # Each entry in STORE_DIR is a directory corresponding to a source
         shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
 
-
 def main():
-    valid_cmds = ["start", "test", "reset"]
+    valid_cmds = ["start", "stop", "test", "reset"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
@@ -68,6 +91,7 @@ def main():
         sys.exit(1)
 
     cmd = sys.argv[1]
+
     getattr(sys.modules[__name__], cmd)()
 
 

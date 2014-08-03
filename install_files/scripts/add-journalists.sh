@@ -8,6 +8,9 @@ normalcolor=$(tput sgr 0)
 basedir="/var/chroot/document"
 journalist_user="$1"
 
+# Add journalist to tor hidden service config.
+# this will not work unless there is already at least one journalist configured.
+# if a journalist is not already configured it does not need leading comma
 if [[ ! "$(grep "$journalist_user" $basedir/etc/tor/torrc)" ]]; then
     sed -i "/HiddenServiceAuthorizeClient/s/$/,$journalist_user/" $basedir/etc/tor/torrc
 fi

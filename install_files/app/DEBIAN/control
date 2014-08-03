@@ -2,7 +2,7 @@ Package: securedrop-app
 Source: securedrop-app
 Version: 0.2.1
 Architecture: amd64
-Maintainer: Ubuntu Developers <james@pressfreedomfoundation.org>
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
 Depends: securedrop-app-interfaces,securedrop-app-hardening,securedrop-app-ossec
 Section: web
 Priority: optional

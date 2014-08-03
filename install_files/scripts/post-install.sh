@@ -10,7 +10,6 @@ red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
     if [ "$(dpkg -l securedrop-app-interfaces)" ]; then
-        # TODO add displaying gauth and pw for journalist       
         # Display the URLs for the Source and Document interfaces
         if [ -f /var/chroot/source/var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
@@ -23,7 +22,7 @@ normalcolor=$(tput sgr 0)
         if [ -f /var/chroot/document/var/lib/tor/hidden_service/hostname ]; then
             echo "$blue The Document Interface listens on port 8080"
             echo " you will need to$bold append :8080$normalcolor$blue to the URL as shown below"
-            echo " The Document Interfaces' URL and auth values for each journalist: $normalcolor"
+            echo " The Document Interface's URL and auth values for each journalist: $normalcolor"
             while read line; do
                 ONION_ADDRESS="$(echo "$line" | awk '{print $1}')"
                 ATHS_USER="$(echo "$line" | awk '{print $5}')"
@@ -31,20 +30,9 @@ normalcolor=$(tput sgr 0)
                 echo "$red $ATHS_USER$blue's TBB torrc config line is:"
                 echo "$red HidServAuth $line $normalcolor"
             done < /var/chroot/document/var/lib/tor/hidden_service/hostname
-            echo "$blue To add more journalists run $red'/opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
+            echo "$blue To add more journalists run $red'sudo /opt/securedrop/add-journalists.sh NAME'$blue script$normalcolor"
             echo "$bold$blue################################################################################$normalcolor"
         fi
-
-	if [ -d /var/chroot/document/var/www/securedrop/gauth ]; then
-	
-		for f in /var/chroot/document/var/www/securedrop/gauth/*
-		do
-			user="${f##*/}"
-			key=`cat $f`
-			echo "$red $user$blue's two-factor Google Authenticator key for the Document Interface is: "
-			echo "$red $key $normalcolor"
-		done	
-	fi
 
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$bold$blue#################################################################################$normalcolor"
@@ -59,7 +47,7 @@ normalcolor=$(tput sgr 0)
                 echo "$red HidServAuth $line $normalcolor"
                 echo "$red $ATHS_USER$blue's Google Authenticator secret key is $red$(head -1 /home/${ATHS_USER}/.google_authenticator)$normalcolor"
             done < /var/lib/tor/hidden_service/hostname
-            echo "$blue You will need to run the$red '/opt/securedrop/add-admin.sh USERNAME'$blue"
+            echo "$blue You will need to run the$red 'sudo /opt/securedrop/add-admin.sh USERNAME'$blue"
             echo " to add more admins.$normalcolor"
             echo "$bold$blue#################################################################################$normalcolor"
        fi
@@ -98,7 +86,7 @@ normalcolor=$(tput sgr 0)
                 echo "$red HidServAuth $line $normalcolor"
                 echo "$red $ATHS_USER$blue's Google Authenticator secret key is $red$(head -1 /home/${ATHS_USER}/.google_authenticator)$normalcolor"
             done < /var/lib/tor/hidden_service/hostname
-            echo "$blue You will need to run the$red '/opt/securedrop/add-admin.sh USERNAME'$blue"
+            echo "$blue You will need to run the$red 'sudo /opt/securedrop/add-admin.sh USERNAME'$blue"
             echo " to add more admins.$normalcolor"
             echo "$bold$blue#################################################################################$normalcolor"
  

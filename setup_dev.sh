@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler xvfb firefox"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -70,9 +70,9 @@ sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
 sudo pip install --upgrade distribute
-sudo pip install -r source-requirements.txt
-sudo pip install -r document-requirements.txt
-sudo pip install -r test-requirements.txt
+sudo pip install -r requirements/source-requirements.txt
+sudo pip install -r requirements/document-requirements.txt
+sudo pip install -r requirements/test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
@@ -117,6 +117,8 @@ JOURNALIST_TEMPLATES_DIR = './journalist_templates'
 WORD_LIST = './wordlist'
 NOUNS = './dictionaries/nouns.txt'
 ADJECTIVES = './dictionaries/adjectives.txt'
+JOURNALIST_PIDFILE = "/tmp/journalist.pid"
+SOURCE_PIDFILE = "/tmp/source.pid"
 
 SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
 SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase

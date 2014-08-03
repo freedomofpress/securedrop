@@ -105,18 +105,18 @@ def remove_star(sid):
 
 @app.route('/')
 def index():
-    sources = []
+    unstarred = []
     starred = []
     for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
         star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
         if star and star.starred:
             starred.append(source)
         else:
-            sources.append(source)
+            unstarred.append(source)
         source.num_unread = len(
             Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
 
-    return render_template('index.html', sources=sources, starred=starred)
+    return render_template('index.html', unstarred=unstarred, starred=starred)
 
 
 @app.route('/col/<sid>')
@@ -293,8 +293,12 @@ def flag():
     db_session.commit()
     return render_template('flag.html', sid=g.sid,
                            codename=g.source.journalist_designation)
-
+def write_pidfile():
+    pid = str(os.getpid())
+    with open(config.JOURNALIST_PIDFILE, 'w') as fp:
+        fp.write(pid)
 
 if __name__ == "__main__":
+    write_pidfile()
     # TODO make sure debug=False in production
     app.run(debug=True, host='0.0.0.0', port=8081)
