@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler xvfb firefox gdb"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
