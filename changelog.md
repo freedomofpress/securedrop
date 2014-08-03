@@ -6,7 +6,6 @@
 * Reduce JS dependencies to JQuery (stable) only
 * Add functional tests, increase unit test coverage
 * Rewrite database layer (db.py) using SQLAlchemy declarative ORM
-* Add metadata scrubbing (opt-in by source) using MAT
 * Automate dev. setup with Vagrant and integrate with Travis CI
 * Store more info in db and less on filesystem
   * "flagged" sources
