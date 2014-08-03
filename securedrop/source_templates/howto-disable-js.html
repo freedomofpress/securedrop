@@ -3,8 +3,8 @@
 <div class="info">
 <h1 id="why">Why disable Javascript?</h1>
 <p>Javascript is a widely used programming language for creating interactive web pages. In recent years, it has become nearly ubiquitous and most browsers enable it by default as a result.</p>
-<p>Unfortunately, Javascript is also a common source of security vulnerabilities in browsers. A Javascript exploit was used by the FBI-deployed August 2013 Tor Freedom Hosting malware to <a href="/redirect/http://www.wired.com/threatlevel/2013/09/freedom-hosting-fbi/">de-anonymize Tor users</a>. Javascript exploits are also mentioned in documents describing the NSA's <a href="/redirect/http://www.theguardian.com/world/interactive/2013/oct/04/egotistical-giraffe-nsa-tor-document">"Egotistical Giraffe"</a> program, which also has the goal of targeting and de-anonymizing tor users.</p>
-<p>given these trends, we encourage securedrop users to disable javascript to protect themselves from malware that would use it to attack their browser and potentially de-anonymize them. javascript is not the only potential source of such exploits, but given its use in recent attacks, we believe it is prudent to disable it at this time. Current and future work, especially in the realm of browser sandboxing, presents another path to mitigating these attacks that would allow sites to use Javascript without concern. Securedrop may choose to use Javascript (and discontinue this recommendation) in future versions, but for now we do not believe the security tradeoff is worth it.</p>
+<p>Unfortunately, Javascript is also a common source of security vulnerabilities in browsers. A Javascript exploit was used by the FBI-deployed August 2013 Tor Freedom Hosting malware to de-anonymize Tor users (http://www.wired.com/threatlevel/2013/09/freedom-hosting-fbi/). Javascript exploits are also mentioned in documents describing the NSA's "Egotistical Giraffe" program (http://www.theguardian.com/world/interactive/2013/oct/04/egotistical-giraffe-nsa-tor-document), which also has the goal of targeting and de-anonymizing Tor users.</p>
+<p>Given these trends, we encourage Securedrop users to disable Javascript to protect themselves from malware that would use it to attack their browser and potentially de-anonymize them. Javascript is not the only potential source of such exploits, but given its use in recent attacks, we believe it is prudent to disable it at this time. Current and future work, especially in the realm of browser sandboxing, presents another path to mitigating these attacks that would allow sites to use Javascript without concern. Securedrop may choose to use Javascript (and discontinue this recommendation) in future versions, but for now we do not believe the security tradeoff is worth it.</p>
 <h1 id="how">How?</h1>
 <h2>Firefox</h2>
 <p>There are two ways to disable Javascript in Firefox. We recommend installing the NoScript add-on, which allows you to disable Javascript with various levels of granularity and also protects against other common web exploits.</p>
@@ -12,11 +12,11 @@
   <h3>NoScript</h3>
   <p>To install NoScript, and use it to block Javascript by default:</p>
   <ol>
-    <li><a href="/redirect/https://addons.mozilla.org/en-US/firefox/addon/noscript/">Click here</a> to go the NoScript download page.</li>
+    <li>Visit the NoScript download page (https://addons.mozilla.org/en-US/firefox/addon/noscript).</li>
     <li>Click the green <strong>Add to Firefox</strong> button. Wait for the add-on to download.</li>
     <li>A dialog will pop-up with a warning: <strong>Install add-ons only from authors whom you trust</strong>. Wait for the countdown, then click <strong>Install Now</strong></li>
     <li>In the dialog that says <strong>This add-on will be installed after you restart Firefox</strong>, click <strong>Restart Now</strong>.</li>
-    <li>Now all Javascript is blocked by default, except for scripts from a small set of "whitelisted" sites. To learn more about using NoScript, <a href="/redirect/http://noscript.net">visit the website</a>, which automatically pops up when you first restart Firefox after installation.</li>
+    <li>Now all Javascript is blocked by default, except for scripts from a small set of "whitelisted" sites. To learn more about using NoScript, visit the website (http://noscript.net), which automatically pops up when you first restart Firefox after installation.</li>
   </ol>
   <h3>about:config</h3>
   <p>If you don't want to install an add-on, it is also possible to disable Javascript in Firefox's settings. Unfortunately, starting with Firefox 23, Mozilla removed the "Enable Javascript" checkbox in Firefox's preferences. However, you can still disable Javascript by following these steps:</p>
