@@ -164,11 +164,29 @@ def admin_add_user():
                           "general_validation")
 
         if form_valid:
-            flash("New user {0} succesfully added".format(username))
-            return redirect(url_for('admin_index'))
+            flash("New user {0} succesfully added".format(username),
+                  "notification")
+            return redirect(url_for('admin_new_user_two_factor',
+                                    uid=new_user.id))
 
     return render_template("admin_add_user.html")
 
+
+@app.route('/admin/2fa', methods=('GET', 'POST'))
+@admin_required
+def admin_new_user_two_factor():
+    uid = request.args['uid']
+    user = Journalist.query.get(uid)
+
+    if request.method == 'POST':
+        token = request.form['token']
+        if user.totp.verify(token):
+            flash("Two factor token successfully verified!", "notification")
+            return redirect(url_for("admin_index"))
+        else:
+            flash("Two factor token failed to verify", "error")
+
+    return render_template("admin_new_user_two_factor.html", user=user)
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required

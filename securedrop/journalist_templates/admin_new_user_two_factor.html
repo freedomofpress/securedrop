@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Enable Google Authenticator</h1>
+<ol>
+  <li>Install Google Authenticator on your phone</li>
+  <li>Open the Google Authenticator app</li>
+  <li>Tap menu, then tap "Set up account", then tap "Scan a barcode"</li>
+  <li>Your phone will now be in "scanning" mode. When you are in this mode, scan the barcode below:</li>
+</ol>
+<div id="qrcode_container">{{ user.shared_secret_qrcode|safe }}</div>
+<p>Can't scan the barcode? Enter the following code manually: <span id="shared_secret">{{ user.formatted_otp_secret }}</span></p>
+<p>Once you have scanned the barcode, enter the 6-digit code below:</p>
+<form id="check_token" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <label for="token">Verification code</label>
+  <input name="token" id="token" type="text" placeholder="123456" />
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}
