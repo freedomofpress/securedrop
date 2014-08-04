@@ -65,6 +65,10 @@ fi
 
 echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 
+# We need to set the locale in order to print ASCII QR codes.
+# See http://stackoverflow.com/questions/23941875/setting-utf-8-locale-for-python-in-ubuntu-12-04
+sudo sh -c "echo 'LC_ALL=\"en_US.UTF-8\"'  >  /etc/default/locale"
+
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
