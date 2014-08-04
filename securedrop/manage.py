@@ -8,6 +8,8 @@ import unittest
 import readline # makes the add_admin prompt kick ass
 from getpass import getpass
 
+import qrcode
+
 from db import db_session, Journalist
 
 # We need to import config in each function because we're running the tests
@@ -100,6 +102,18 @@ def add_admin():
             print e
     else:
         print "Admin {} successfully added".format(username)
+        # Print the QR code for Google Authenticator
+        print
+        print "Scan the QR code below with Google Authenticator:"
+        print
+        uri = admin.totp.provisioning_uri(username)
+        qr = qrcode.QRCode()
+        qr.add_data(uri)
+        qr.print_ascii(tty=sys.stdout.isatty())
+        print
+        print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+
+
 
 def main():
     valid_cmds = ["start", "stop", "test", "reset", "add_admin"]
