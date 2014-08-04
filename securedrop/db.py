@@ -1,6 +1,12 @@
 import os
 import datetime
 
+# Find the best implementation available on this platform
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
+
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,6 +14,11 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import scrypt
+import pyotp
+
+import qrcode
+# Using svg because it doesn't require additional dependencies
+import qrcode.image.svg
 
 import config
 import crypto_util
@@ -131,6 +142,8 @@ class Journalist(Base):
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
+    otp_secret = Column(String(16), default=pyotp.random_base32)
+
     # TODO should we be using utc times?
     created_on = Column(DateTime, default=datetime.datetime.now)
     last_access = Column(DateTime)
@@ -139,7 +152,6 @@ class Journalist(Base):
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
-        # TODO: two-factor auth
 
     def __repr__(self):
         return "<Journalist {0}{1}>".format(self.username,
@@ -161,6 +173,35 @@ class Journalist(Base):
 
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+
+    @property
+    def totp(self):
+        return pyotp.TOTP(self.otp_secret)
+
+    @property
+    def shared_secret_qrcode(self):
+        # TODO: include .onion address?
+        uri = self.totp.provisioning_uri(self.username)
+
+        qr = qrcode.QRCode(
+            box_size=25,
+            image_factory=qrcode.image.svg.SvgPathImage
+        )
+        qr.add_data(uri)
+        img = qr.make_image()
+
+        svg_out = StringIO()
+        img.save(svg_out)
+        return svg_out.getvalue()
+
+    @property
+    def formatted_otp_secret(self):
+        """The OTP secret is easier to read and manually enter if it is all
+        lowercase and split into four groups of four characters. The secret is
+        base32-encoded, so it is case insensitive."""
+        sec = self.otp_secret
+        chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
+        return ' '.join(chunks).lower()
 
     @staticmethod
     def login(username, password):

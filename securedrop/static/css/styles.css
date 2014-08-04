@@ -543,3 +543,14 @@ label {
 em.light {
   color:gray;
 }
+
+div#qrcode_container {
+  text-align: center;
+}
+
+span#shared_secret {
+  background-color: #FFFD9E;
+  color: #555;
+  padding: 4px;
+  border: 1px solid #999;
+}
