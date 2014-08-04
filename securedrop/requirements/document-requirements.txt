@@ -7,9 +7,12 @@ WTForms==1.0.5
 Werkzeug==0.9.4
 argparse==1.2.1
 beautifulsoup4==4.3.2
+gnupg-securedrop==1.2.5-9-g6f9d63a-dirty
 itsdangerous==0.23
 psutil==1.1.1
 pycrypto==2.6.1
-gnupg-securedrop==1.2.5-9-g6f9d63a-dirty
+pyotp==1.4.1
+qrcode==5.0.1
 scrypt==0.6.1
+six==1.7.3
 wsgiref==0.1.2
