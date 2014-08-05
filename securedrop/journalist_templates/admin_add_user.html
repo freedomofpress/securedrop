@@ -10,7 +10,10 @@
   <input name="password" type="password" placeholder="Password" /><br>
   <input name="password_again" type="password" placeholder="Password (again)" /><br>
   <input name="is_admin" id="is_admin" type="checkbox" />
-  <label for="is_admin">Administrator</label>
+  <label for="is_admin">Administrator</label><br>
+  <input name="is_hotp" id="is_totp" type="checkbox" />
+  <label for="is_hotp">I'm using a Yubikey [HOTP]</label>
+  <input name="otp_secret" type="text" placeholder="HOTP Secret"><br />
   <button type="submit">Add user</button>
 </form>
 {% endblock %}

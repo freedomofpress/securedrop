@@ -218,24 +218,28 @@ class Journalist(Base):
         chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
         return ' '.join(chunks).lower()
 
+    def verify_token(self, token):
+        if self.is_totp:
+            if not self.totp.verify(token):
+                return False
+        else:
+            hotp_success = False
+            for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
+                if self.hotp.verify(token, counter_val):
+                    hotp_success = True
+                    self.hotp_counter = counter_val + 1
+                    db_session.commit()
+                    return True
+            if not hotp_success:
+                return False
+
     @staticmethod
     def login(username, password, token):
         user = Journalist.query.filter_by(username=username).one()
         if not user.valid_password(password):
             raise WrongPasswordException
-        if user.is_totp:
-            if not user.totp.verify(token):
-                raise BadTokenException
-        else:
-            hotp_success = False
-            for counter_val in range(user.hotp_counter, user.hotp_counter + 20):
-                if user.hotp.verify(token, counter_val):
-                    hotp_success = True
-                    user.hotp_counter = counter_val + 1
-                    db_session.commit()
-                    break
-            if not hotp_success:
-                raise BadTokenException
+        if not user.verify_token(token):
+            raise BadTokenException
         return user
 
 # Declare (or import) models before init_db

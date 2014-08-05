@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+{% if user.is_totp %}
 <h1>Enable Google Authenticator</h1>
 <ol>
   <li>Install Google Authenticator on your phone</li>
@@ -10,6 +11,10 @@
 <div id="qrcode_container">{{ user.shared_secret_qrcode|safe }}</div>
 <p>Can't scan the barcode? Enter the following code manually: <span id="shared_secret">{{ user.formatted_otp_secret }}</span></p>
 <p>Once you have scanned the barcode, enter the 6-digit code below:</p>
+{% else %}
+<h1>Enable Yubikey [HOTP]</h1>
+<p>Once you have configured your Yubikey, enter the 6-digit code below:</p>
+{% endif %}
 <form id="check_token" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <label for="token">Verification code</label>

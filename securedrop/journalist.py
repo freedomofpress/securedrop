@@ -155,9 +155,14 @@ def admin_add_user():
 
         if form_valid:
             try:
+                otp_secret = None
+                if request.form.get('is_hotp', False):
+                    otp_secret = request.form.get('otp_secret', '')
+                print otp_secret
                 new_user = Journalist(username=username,
                                       password=password,
-                                      is_admin=is_admin)
+                                      is_admin=is_admin,
+                                      otp_secret=otp_secret)
                 db_session.add(new_user)
                 db_session.commit()
             except IntegrityError as e:
@@ -186,7 +191,7 @@ def admin_new_user_two_factor():
 
     if request.method == 'POST':
         token = request.form['token']
-        if user.totp.verify(token):
+        if user.verify_token(token):
             flash("Two factor token successfully verified!", "notification")
             return redirect(url_for("admin_index"))
         else:
