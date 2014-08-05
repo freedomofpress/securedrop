@@ -87,7 +87,7 @@ def setup_g():
             g.sid = sid
             g.source = get_source(sid)
 
-    user_id = session.get('id', None)
+    user_id = session.get('uid', None)
     if user_id:
         g.user = Journalist.query.get(user_id)
 
@@ -103,17 +103,36 @@ def login():
         except WrongPasswordException:
             flash("Incorrect password", "notification")
         else:
-            journalist.last_access = datetime.now()
-            db_session.add(journalist)
-            db_session.commit()
-            session['id'] = journalist.id
-            session['logged_in'] = True
-            if journalist.is_admin:
-                return redirect(url_for('admin_index'))
-            return redirect(url_for('index'))
+            session['uid'] = journalist.id
+            return redirect(url_for("verify_twofactor"))
 
     return render_template("login.html")
 
+
+@app.route('/2fa', methods=('GET', 'POST'))
+def verify_twofactor():
+    if request.method == 'POST':
+        user = Journalist.query.get(session['uid'])
+        token = request.form['token']
+        if user.totp.verify(token):
+            flash("Successfully logged in", "notification")
+
+            # Update access metadata
+            user.last_access = datetime.now()
+            db_session.add(user)
+            db_session.commit()
+
+            # Update session
+            session['logged_in'] = True
+
+            if user.is_admin:
+                return redirect(url_for('admin_index'))
+            return redirect(url_for('index'))
+
+        else:
+            flash("Verification code was invalid", "error") # prefer not to leak this by doing it all on one page?
+
+    return render_template("verify_twofactor.html")
 
 @app.route('/logout')
 def logout():
