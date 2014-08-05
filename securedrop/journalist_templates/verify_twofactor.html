@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<form id="twofactor" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <label for="token">Two-factor Code</label>
+  <input name="token" id="token" type="text" />
+  <button type="submit">Log in</button>
+</form>
+{% endblock %}
