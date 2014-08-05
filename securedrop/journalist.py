@@ -15,7 +15,8 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
-                Journalist, NoResultFound, WrongPasswordException)
+                Journalist, NoResultFound, WrongPasswordException,
+                BadTokenException)
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -92,25 +93,13 @@ def setup_g():
 def login():
     if request.method == 'POST':
         try:
-            journalist = Journalist.login(request.form['username'],
-                                          request.form['password'])
-        except NoResultFound:
-            flash("Incorrect username", "notification")
-        except WrongPasswordException:
-            flash("Incorrect password", "notification")
+            user = Journalist.login(request.form['username'],
+                                    request.form['password'],
+                                    request.form['token'])
+        except (NoResultFound, WrongPasswordException, BadTokenException):
+            flash("Login failed", "error")
         else:
-            session['uid'] = journalist.id
-            return redirect(url_for("verify_twofactor"))
-
-    return render_template("login.html")
-
-
-@app.route('/2fa', methods=('GET', 'POST'))
-def verify_twofactor():
-    if request.method == 'POST':
-        user = Journalist.query.get(session['uid'])
-        token = request.form['token']
-        if user.totp.verify(token):
+            session['uid'] = user.id
             flash("Successfully logged in", "notification")
 
             # Update access metadata
@@ -125,10 +114,8 @@ def verify_twofactor():
                 return redirect(url_for('admin_index'))
             return redirect(url_for('index'))
 
-        else:
-            flash("Verification code was invalid", "error") # prefer not to leak this by doing it all on one page?
+    return render_template("login.html")
 
-    return render_template("verify_twofactor.html")
 
 @app.route('/logout')
 def logout():

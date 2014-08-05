@@ -135,6 +135,10 @@ class WrongPasswordException(Exception):
     pass
 
 
+class BadTokenException(Exception):
+    pass
+
+
 class Journalist(Base):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
@@ -204,10 +208,12 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     @staticmethod
-    def login(username, password):
+    def login(username, password, token):
         user = Journalist.query.filter_by(username=username).one()
         if not user.valid_password(password):
             raise WrongPasswordException
+        if not user.totp.verify(token):
+            raise BadTokenException
         return user
 
 # Declare (or import) models before init_db
