@@ -98,7 +98,12 @@ def add_admin():
             break
         print "Passwords didn't match!"
 
-    admin = Journalist(username=username, password=password, is_admin=True)
+    hotp_input = raw_input("Is this admin using a Yubikey [HOTP]? (y/N): ")
+    otp_secret = None
+    if hotp_input.lower() == "y" or hotp_input.lower() == "yes":
+        otp_secret = raw_input("Please configure your Yubikey and enter the secret: ")
+
+    admin = Journalist(username=username, password=password, is_admin=True, otp_secret=otp_secret)
     try:
         db_session.add(admin)
         db_session.commit()
@@ -110,16 +115,17 @@ def add_admin():
             print e
     else:
         print "Admin {} successfully added".format(username)
-        # Print the QR code for Google Authenticator
-        print
-        print "Scan the QR code below with Google Authenticator:"
-        print
-        uri = admin.totp.provisioning_uri(username)
-        qr = qrcode.QRCode()
-        qr.add_data(uri)
-        qr.print_ascii(tty=sys.stdout.isatty())
-        print
-        print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+        if not otp_secret:
+            # Print the QR code for Google Authenticator
+            print
+            print "Scan the QR code below with Google Authenticator:"
+            print
+            uri = admin.totp.provisioning_uri(username)
+            qr = qrcode.QRCode()
+            qr.add_data(uri)
+            qr.print_ascii(tty=sys.stdout.isatty())
+            print
+            print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
 
 
 

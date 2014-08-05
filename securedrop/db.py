@@ -1,5 +1,7 @@
 import os
 import datetime
+import base64
+import binascii
 
 # Find the best implementation available on this platform
 try:
@@ -147,15 +149,20 @@ class Journalist(Base):
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
     otp_secret = Column(String(16), default=pyotp.random_base32)
+    is_totp = Column(Boolean, default=True)
+    hotp_counter = Column(Integer, default=0)
 
     # TODO should we be using utc times?
     created_on = Column(DateTime, default=datetime.datetime.now)
     last_access = Column(DateTime)
 
-    def __init__(self, username, password, is_admin=False):
+    def __init__(self, username, password, is_admin=False, otp_secret=None):
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
+        if otp_secret:
+            self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret))
+            self.is_totp = False
 
     def __repr__(self):
         return "<Journalist {0}{1}>".format(self.username,
@@ -181,6 +188,10 @@ class Journalist(Base):
     @property
     def totp(self):
         return pyotp.TOTP(self.otp_secret)
+
+    @property
+    def hotp(self):
+        return pyotp.HOTP(self.otp_secret)
 
     @property
     def shared_secret_qrcode(self):
@@ -212,8 +223,19 @@ class Journalist(Base):
         user = Journalist.query.filter_by(username=username).one()
         if not user.valid_password(password):
             raise WrongPasswordException
-        if not user.totp.verify(token):
-            raise BadTokenException
+        if user.is_totp:
+            if not user.totp.verify(token):
+                raise BadTokenException
+        else:
+            hotp_success = False
+            for counter_val in range(user.hotp_counter, user.hotp_counter + 20):
+                if user.hotp.verify(token, counter_val):
+                    hotp_success = True
+                    user.hotp_counter = counter_val + 1
+                    db_session.commit()
+                    break
+            if not hotp_success:
+                raise BadTokenException
         return user
 
 # Declare (or import) models before init_db
