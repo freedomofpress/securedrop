@@ -333,6 +333,13 @@ p#codename {
   margin:0;
 }
 
+strong#codename{
+  background-color: black;
+}
+strong#codename:hover{
+  background-color: inherit;
+}
+
 #filter {
   font-family: monospace;
   padding: 5px;
