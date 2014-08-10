@@ -124,7 +124,7 @@ wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
 Download the SecureDrop signing key and verify the digital signature
 
 ```
-gpg --recv-key BD67D096
+gpg --keyserver pool.sks-keyservers.net --recv-key 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
 gpg --verify add-repos.tgz.sig
 ```
 
@@ -219,7 +219,7 @@ wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
 Download the SecureDrop signing key and verify the digital signature
 
 ```
-gpg --recv-key BD67D096
+gpg --keyserver pool.sks-keyservers.net --recv-key 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
 gpg --verify add-repos.tgz.sig
 ```
 
