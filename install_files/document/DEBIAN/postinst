@@ -59,6 +59,19 @@ EOF
         scrypt_id_pepper=$(random 32)
         scrypt_gpg_pepper=$(random 32)
 
+        #support custom themes
+        db_get securedrop-document/custom_header_image_path
+        custom_header_image_path="$RET"
+        db_get securedrop-document/use_custom_header_image
+        if [ "$RET" = "false" ]; then
+            custom_header_image="None"
+        else
+            mkdir -m 770 -p $securedrop_root/static/i
+            cp $custom_header_image_path $securedrop_root/static/i
+            custom_header_image="$(echo $custom_header_image_path | awk -F / '{print $NF}')"
+        fi
+
+
         if [ ! -f $securedrop_root/config/base.py ]; then
             cat > $securedrop_root/config/base.py <<EOF
 #### Application Configuration
@@ -69,10 +82,18 @@ JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
 WORD_LIST = '$securedrop_root/wordlist'
 NOUNS = '$securedrop_root/dictionaries/nouns.txt'
 ADJECTIVES = '$securedrop_root/dictionaries/adjectives.txt'
+JOURNALIST_PIDFILE = "/tmp/journalist.pid"
+SOURCE_PIDFILE = "/tmp/source.pid"
 
-SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # os.urandom(32); for constructing public ID from source codename
-SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # os.urandom(32); for stretching source codename into GPG passphrase
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
 SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+
+#### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = $custom_header_image
 EOF
         fi
         chmod 640 $securedrop_root/config/base.py
@@ -99,27 +120,6 @@ DATABASE_FILE=os.path.join(DATABASE_ROOT, 'db_production.sqlite')
 EOF
         chmod 640 $securedrop_root/config/production.py
 
-        #support custom themes
-        db_get securedrop-document/custom_header_image_path
-        custom_header_image_path="$RET"
-        db_get securedrop-document/use_custom_header_image
-        if [ "$RET" = "false" ]; then
-            custom_header_image=""
-        else
-            mkdir -m 770 -p $securedrop_root/static/i
-            cp $custom_header_image_path $securedrop_root/static/i
-            custom_header_image="$(echo $custom_header_image_path | awk -F / '{print $NF}')"
-        fi
-
-        cat > $securedrop_root/config/custom_theme_image.py << EOF
-#### Theming Options
-
-# If you want a custom image at the top, copy your png or jpg to static/i and
-# update this to its filename (e.g. "logo.jpg") .
-CUSTOM_HEADER_IMAGE = "$custom_header_image"
-EOF
-        chmod 640 $securedrop_root/config/custom_theme_image.py
-
         # Create the document.wsgi file
         cat > $securedrop_root/document.wsgi << EOF
 #!/usr/bin/python
@@ -130,7 +130,6 @@ sys.path.insert(0,"/var/www/securedrop/")
 
 from journalist import app as application
 EOF
-        chmod 640 $securedrop_root/config/custom_theme_image.py
 
         #Unattended-upgrades
         cat > /etc/apt/apt.conf.d/20auto-upgrades << EOF
