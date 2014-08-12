@@ -19,7 +19,7 @@ The *Monitor Server* keeps track of the *App Server* and sends out an email aler
 
 ### Source Interface
 
-The *Source Interface* is the website that sources will access when submitting documents and communcating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
+The *Source Interface* is the website that sources will access when submitting documents and communicating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
 
 ### Document Interface
 
@@ -41,21 +41,21 @@ Since this machine will never touch the Internet or run an operating system othe
 
 ### Transfer Device
 
-The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated small sized usb stick, CDR or SD card.
+The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated small sized usb stick, CD-R or SD card.
 
 ## Before you begin
 
 The steps in this guide assume you have the following set up:
 
- * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.4 LTS (Precise
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.5 LTS (Precise
  Pangolin)](http://releases.ubuntu.com/12.04/) installed
  * An [Ubuntu kernel with Grsecurity](https://github.com/dolanjs/ubuntu-grsec) ready to be installed on the *App* and *Monitor* servers
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
- * One *Transfer Device* for transfering files, marked *transfer*
+ * One *Transfer Device* for transferring files, marked *transfer*
  * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed
  
-Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en), a *Transfer Device* for transfering files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
+Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en), a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
 
 It is also recommended that you use an external hard drive to back up encrypted submissions and some form of removable media to back up the GPG keyring on the *App* server.
 
@@ -87,7 +87,7 @@ Right-click on the key you just generated and click `Export`. Save it to the USB
 
 ![My Keys](/docs/images/install/viewing8.jpg)
 
-You'll also need to verify the 40 character hex fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
+You'll also need to verify the 40 character hexadecimal fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
 
 ![Fingerprint](/docs/images/install/viewing9.jpg)
 
@@ -101,7 +101,7 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the App Server
 
-The *App Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *App Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *Monitor Server*
  * The SecureDrop application's GPG public key (from the USB stick marked *transfer*)
@@ -194,7 +194,7 @@ to add more admins.
 
 ## Set up the Monitor Server
 
-The *Monitor Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *Monitor Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *App Server*
  * The email address that will receive alerts from OSSEC
@@ -349,7 +349,7 @@ The *Admin Workstation* is a machine that the system administrator can use to co
 
 ### Configure SSH to use Tor
 
-When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux and has *tor* installed from [Tor's repos](https://www.torproject.org/docs/installguide.html.en) Do not use the version that is in the Linux distro's repos because it is most likely out of date.
+When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux and has *Tor* installed from [Tor Project's repos](https://www.torproject.org/docs/installguide.html.en) Do not use the version that is in the Linux distribution's repos because it is most likely out of date.
 
 Install the *connect-proxy* tool.
 
@@ -395,13 +395,13 @@ Each journalist must have a personal GPG key that they use for encrypting files 
 
 If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
 
-* [GNU/Linux](http://www.gnupg.org/gph/en/manual.html#AEN26)
+* [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
 * [Windows](http://gpg4win.org/)
-* [Mac OS X](http://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
+* [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
 
 ### Journalist Logging In
 
-In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
+In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate to the hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
 
 **Though the Tails Operating System**
 
