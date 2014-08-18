@@ -279,9 +279,24 @@ to add more admins.
 
 ### Add OSSEC agent
 
-An OSSEC agent is a small program set up on the system you want to monitor, which in this case means the *App Server*. The agent will collect information in real time and forward it to the manager on the *Monitor Server* for analysis and correlation. Adding the OSSEC agent involves accessing both the *App server* and the *Monitor Server*.
+An OSSEC agent is a small program set up on the system you want to monitor, which in this case means the *App Server*. The agent will collect information in real time and forward it to the manager on the *Monitor Server* for analysis and correlation. Adding the OSSEC agent involves accessing both the *App server* and the *Monitor Server*. In order to make copying pasting the long secret value from the *Monitor Server* to the *App server* you will want to ssh into both servers instead of running the commands from the console.
 
-**TODO**: Add the commands and expected outputs from both the App Server and the Monitor Server. On the Monitor Server: /var/ossec/bin/manage-agents and restart ossec. On the App Server: import hash value and restart ossec. On the Monitor Server again: run /var/ossec/bin/list_agents -a to show agent is connected.
+#### Generate an agent key on the Monitor Server
+
+![Generate agent key](/docs/images/install/monitor-manage-agents.png)
+
+#### Add agent key to App Server
+
+Copy the long secret value from the *Monitor Server* and prepare to paste it into the *App Server*
+![Add agent key](/docs/images/install/app-manage-agents.png)
+
+Restart the `App Servers` OSSEC agent by running `service ossec restart`
+
+#### Verify OSSEC agent connectivity
+
+Restart the `Monitor Servers` OSSEC service by running `service ossec restart`
+
+![Verify OSSEC agent](/docs/images/install/monitor-verify-agent.png)
 
 ### Configure Postfix
 Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using TLS, Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create a dedicated account to be used for SASL authentication, using an application specific password for SASL authentication no longer works for google. NOTE: google business accounts use a different FQDN than @google.com addresses.
