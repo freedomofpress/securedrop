@@ -1,7 +1,7 @@
 # Last Modified: Sat Mar 29 00:23:17 2014
 #include <tunables/global>
 
-/var/chroot/source/usr/lib/apache2/mpm-worker/apache2 flags=(complain) {
+/var/chroot/source/usr/lib/apache2/mpm-worker/apache2 {
   #include <abstractions/base>
   #include <abstractions/bash>
   #include <abstractions/nameservice>
@@ -796,15 +796,15 @@
   /var/chroot/source/var/www/securedrop/version.py r,
   /var/chroot/source/var/www/securedrop/version.pyc rw,
   /var/chroot/source/var/www/securedrop/wordlist r,
-  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.py
-  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.pyc
+  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.py r,
+  /var/chroot/source/usr/lib/python2.7/xml/sax/xmlreader.pyc r,
 
-  ^DEFAULT_URI flags=(complain) {
+  ^DEFAULT_URI {
 
 
   }
 
-  ^HANDLING_UNTRUSTED_INPUT flags=(complain) {
+  ^HANDLING_UNTRUSTED_INPUT {
 
 
   }
