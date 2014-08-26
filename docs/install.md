@@ -27,7 +27,7 @@ The *Document Interface* is the website that journalists will access when downlo
 
 ### Journalist Workstation
 
-The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *transfer* USB stick.
+The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *Transfer Device*
 
 ### Admin Workstation
 
@@ -83,7 +83,7 @@ To manage GPG keys using the Tails graphical interface, click the clipboard icon
 
 ![My Keys](/docs/images/install/viewing7.jpg)
 
-Right-click on the key you just generated and click `Export`. Save it to the USB stick marked *transfer* as `SecureDrop.asc`. This is the public key only.
+Right-click on the key you just generated and click `Export`. Save it to the *Transfer Device* as `SecureDrop.asc`. This is the public key only.
 
 ![My Keys](/docs/images/install/viewing8.jpg)
 
@@ -95,7 +95,7 @@ You'll also need to verify the 40 character hexadecimal fingerprint for this new
 
 While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
 
-If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using a USB stick. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
+If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
 ![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
@@ -104,7 +104,7 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 The *App Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *Monitor Server*
- * The SecureDrop application's GPG public key (from the USB stick marked *transfer*)
+ * The SecureDrop application's GPG public key (from the *Transfer Device*)
  * The SecureDrop application's GPG key fingerprint
  * An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
  * The first name a journalist who will be using SecureDrop (you can add more later)
