@@ -41,7 +41,7 @@ Edit the file with the *HidServAuth* information for your SecureDrop instance th
 
 ```
 # add HidServAuth lines here
-HidServ Auth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 ```
 
 When you are done, click *Save* and close the text editor.
