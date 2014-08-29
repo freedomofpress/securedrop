@@ -179,7 +179,7 @@ you will need to append :8080 to the URL as shown below
 The Document Interface's URL and auth values for each journalist:
 bob's URL is http://gu6yn2ml6ns5qupv.onion:8080
 bob's TBB torrc config line is:
-HidServ Auth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 To add more journalists run 'sudo /opt/securedrop/add-journalists.sh NAME' script
 
 The App Server is only accessible through a Tor Authenticated Hidden Service
