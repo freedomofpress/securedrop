@@ -1,2 +1,3 @@
-selenium
 mock==1.0.1
+pip-tools==0.3.5
+selenium==2.42.1
