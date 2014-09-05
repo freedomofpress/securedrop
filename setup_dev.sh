@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb gdb"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -76,6 +76,11 @@ sudo apt-get -y install $DEPENDENCIES
 #
 # https://code.google.com/p/selenium/issues/detail?id=7823
 # http://stackoverflow.com/a/25645344/1093000
+
+# For some reason (probably dependencies), you need to apt-get install and then
+# remove firefox for the following to work.
+sudo apt-get remove -y firefox
+
 prevdir=`pwd`
 cd /tmp
 wget http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
