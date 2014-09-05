@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -68,6 +68,21 @@ echo "Welcome to the SecureDrop setup script for Debian/Ubuntu."
 echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
+
+# Normally we would install the stable version of Firefox along with the rest
+# of $DEPENDENCIES, but there is a bug in Selenium stable (2.42.1) that
+# conflicts with the latest Firefox stable (32).  To fix this, we temporarily
+# downgrade to Firefox 30, which does not have this issue.
+#
+# https://code.google.com/p/selenium/issues/detail?id=7823
+# http://stackoverflow.com/a/25645344/1093000
+prevdir=`pwd`
+cd /tmp
+wget http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
+tar -xf firefox-30.0.tar.bz2
+sudo mv firefox /opt/firefox30.0
+sudo ln -sf /opt/firefox30.0/firefox /usr/bin/firefox
+cd $prevdir
 
 sudo pip install --upgrade distribute
 sudo pip install -r requirements/source-requirements.txt
