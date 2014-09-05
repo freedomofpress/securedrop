@@ -16,6 +16,8 @@ from flask import session, g, escape
 from flask_wtf import CsrfProtect
 from bs4 import BeautifulSoup
 
+from flask.ext.testing import TestCase
+
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -55,12 +57,13 @@ def shared_teardown():
     test_setup.clean_root()
 
 
-class TestSource(unittest.TestCase):
+class TestSource(TestCase):
+
+    def create_app(self):
+        return source.app
 
     def setUp(self):
         shared_setup()
-        self.app = source.app
-        self.client = self.app.test_client()
 
     def tearDown(self):
         shared_teardown()
@@ -226,12 +229,13 @@ class TestSource(unittest.TestCase):
         self.assertIn("You appear to be using Tor2Web.", rv.data)
 
 
-class TestJournalist(unittest.TestCase):
+class TestJournalist(TestCase):
+
+    def create_app(self):
+        return journalist.app
 
     def setUp(self):
         shared_setup()
-        self.app = journalist.app
-        self.client = self.app.test_client()
 
     def tearDown(self):
         shared_teardown()
