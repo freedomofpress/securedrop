@@ -39,7 +39,6 @@ a {
 }
 
 .panel {
-  float: right;
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
@@ -47,8 +46,9 @@ a {
   border: 1px solid #c3c3c3;
 }
 
-#header {
+#header, .panel {
   display: inline-block;
+  vertical-align: top;
 }
 #header .powered {
   margin-top: 10px;
