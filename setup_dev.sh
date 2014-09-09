@@ -81,9 +81,10 @@ sudo apt-get -y install $DEPENDENCIES
 # remove firefox for the following to work.
 sudo apt-get remove -y firefox
 
+echo "Installing Firefox 30 for compatibility with Selenium 2.42.1... (this might take a minute)"
 prevdir=`pwd`
 cd /tmp
-wget http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
+wget -nv http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
 tar -xf firefox-30.0.tar.bz2
 sudo mv firefox /opt/firefox30.0
 sudo ln -sf /opt/firefox30.0/firefox /usr/bin/firefox
