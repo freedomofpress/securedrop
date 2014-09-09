@@ -246,6 +246,7 @@ if [[ $TEST_RC != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
     echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
+    exit $TEST_RC
 fi
 
 echo $bold$blue
