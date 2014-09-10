@@ -177,7 +177,7 @@ def lookup():
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
             else:
-                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
+                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime).strftime("%b %d, %Y %I:%M %p")
                 replies.append(dict(id=fn, date=date, msg=msg))
 
     def async_genkey(sid, codename):
