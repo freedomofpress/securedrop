@@ -277,11 +277,16 @@ def valid_codename(codename):
 def login():
     if request.method == 'POST':
         codename = request.form['codename']
-        if valid_codename(codename):
-            session.update(codename=codename, logged_in=True)
-            return redirect(url_for('lookup', from_login='1'))
+        try:
+            valid_codename(codename)
+        except crypto_util.CryptoException:
+            flash("Sorry, that codename contains invalid characters.", "error")
         else:
-            flash("Sorry, that is not a recognized codename.", "error")
+            if valid_codename(codename):
+                session.update(codename=codename, logged_in=True)
+                return redirect(url_for('lookup', from_login='1'))
+            else:
+                flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
 
