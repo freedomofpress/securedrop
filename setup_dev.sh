@@ -50,6 +50,9 @@ if [[ $opsys != 'Linux' ]]; then
 fi
 
 distro=$(cat /etc/*-release | grep DISTRIB_ID | cut -d"=" -f 2)
+if [[ -z $distro && -f "/etc/debian_version" ]]; then
+    distro="Debian"
+fi
 
 if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     echo "This setup script only works for Ubuntu/Debian systems. Exiting script."
@@ -84,7 +87,7 @@ sudo apt-get remove -y firefox
 echo "Installing Firefox 30 for compatibility with Selenium 2.42.1... (this might take a minute)"
 prevdir=`pwd`
 cd /tmp
-wget -nv http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
+wget -nv https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
 tar -xf firefox-30.0.tar.bz2
 sudo mv firefox /opt/firefox30.0
 sudo ln -sf /opt/firefox30.0/firefox /usr/bin/firefox
