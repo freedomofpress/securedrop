@@ -7,7 +7,7 @@
   <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">
       <ul id="cols" class="plain">
-        <p class="fa">Starred</p>
+        <p class="fa starred-title">Starred</p>
         {% for source in starred %}
           {% set docs = source.documents_messages_count()['documents'] %}
           {% set msgs = source.documents_messages_count()['messages'] %}
