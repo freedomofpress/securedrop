@@ -784,7 +784,6 @@
   /var/chroot/source/var/www/securedrop/static/i/favicon.png r,
   /var/chroot/source/var/www/securedrop/static/i/no16.png r,
   /var/chroot/source/var/www/securedrop/static/i/securedrop.png r,
-  /var/chroot/source/var/www/securedrop/static/js/libs/jquery-2.0.3.min.js r,
   /var/chroot/source/var/www/securedrop/static/js/warn.js r,
   /var/chroot/source/var/www/securedrop/static/libs/gritter/css/jquery.gritter.css r,
   /var/chroot/source/var/www/securedrop/static/libs/gritter/images/gritter-error.png r,
