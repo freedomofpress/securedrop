@@ -15,7 +15,7 @@
     <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply.</p>
     {% for reply in replies %}
     <div class="reply">
-      <div class="date">{{ reply.date }}</div>
+      <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat }}</time>
       <form class="message" method="post" action="/delete" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
         <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>

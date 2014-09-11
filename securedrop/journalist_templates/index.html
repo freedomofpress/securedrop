@@ -12,7 +12,7 @@
           {% set docs = source.documents_messages_count()['documents'] %}
           {% set msgs = source.documents_messages_count()['messages'] %}
           <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
-            <div class="date">{{ source.last_updated|datetimeformat }}</div>
+            <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat }}</time>
             <div class="designation">
               <button class="button-star starred" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
               <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
@@ -37,7 +37,7 @@
           {% set docs = source.documents_messages_count()['documents'] %}
           {% set msgs = source.documents_messages_count()['messages'] %}
           <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
-            <div class="date">{{ source.last_updated|datetimeformat }}</div>
+            <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat }}</time>
             <div class="designation">
               <button class="button-star un-starred" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
               <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
