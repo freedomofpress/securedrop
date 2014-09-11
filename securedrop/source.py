@@ -274,7 +274,7 @@ def valid_codename(codename):
     return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
 @app.route('/login', methods=('GET', 'POST'))
-def login():
+def login(masked=False):
     if request.method == 'POST':
         codename = request.form['codename']
         if valid_codename(codename):
@@ -282,8 +282,14 @@ def login():
             return redirect(url_for('lookup', from_login='1'))
         else:
             flash("Sorry, that is not a recognized codename.", "error")
-    return render_template('login.html')
+    if masked:
+        return render_template('login_masked.html')
+    else:
+        return render_template('login.html')
 
+@app.route('/login_masked', methods=('GET', 'POST'))
+def login_masked():
+    return login(masked=True)
 
 @app.route('/howto-disable-js')
 def howto_disable_js():

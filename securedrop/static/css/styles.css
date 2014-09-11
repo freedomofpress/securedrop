@@ -333,6 +333,10 @@ p#codename {
   margin:0;
 }
 
+strong#codename{
+  background-color: black;
+}
+
 #filter {
   font-family: monospace;
   padding: 5px;
