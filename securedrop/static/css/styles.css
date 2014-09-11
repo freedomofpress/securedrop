@@ -44,6 +44,7 @@ a {
   margin: 0 auto;
   padding: 40px 20px;
   border: 1px solid #c3c3c3;
+  float: right;
 }
 
 #header, .panel {
