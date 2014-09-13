@@ -3,6 +3,7 @@ import config
 import version
 import crypto_util
 import store
+import template_filters
 from db import db_session, Source, Submission, SourceStar, get_one_or_else
 
 import os
@@ -25,40 +26,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-
-def relative_timestamp(dt, now=datetime.now()):
-    """"
-    Format a human readable relative time for timestamps up to 30 days old
-    """
-    delta = now - dt
-    diff = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
-    if diff < 45:
-        return 'seconds'
-    elif diff < 90:
-        return 'a minute'
-    elif diff < 2700:
-        return '{} minutes'.format(int(max(diff / 60, 2)))
-    elif diff < 5400:
-        return 'an hour'
-    elif diff < 79200:
-        return  '{} hours'.format(int(max(diff / 3600, 2)))
-    elif diff < 129600:
-        return 'a day'
-    elif diff < 2592000:
-        return '{} days'.format(int(max(diff / 86400, 2)))
-    else:
-        return None
-
-
-@app.template_filter('datetimeformat')
-def _jinja2_datetimeformat(dt, fmt=None, relative=None):
-    """Template filter for readable formatting of datetime.datetime"""
-    fmt = fmt or '%b %d, %Y %I:%M %p'
-    if relative:
-        time_difference = relative_timestamp(dt)
-        if time_difference:
-            return '{} ago'.format(time_difference)
-    return dt.strftime(fmt)
+app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 
 
 @app.teardown_appcontext
