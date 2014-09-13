@@ -21,9 +21,9 @@
               <span class="info" title="{{ doc.size }} bytes" >{{ doc.size|filesizeformat }} uploaded {{ doc.date|datetimeformat }}</span>
             {% endif %}
             {% if doc.name.endswith('-doc.zip.gpg') %}
-              <i class="fa fa-file-archive-o pull-right"></i>
+              <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>
             {% else %}
-              <i class="fa fa-file-text-o pull-right"></i>
+              <i title="Message" class="fa fa-file-text-o pull-right"></i>
             {% endif %}
           </li>
         {% endfor %}
