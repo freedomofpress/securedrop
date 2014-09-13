@@ -47,9 +47,8 @@ a {
   float: right;
 }
 
-#header, .panel {
-  display: inline-block;
-  vertical-align: top;
+#header {
+  float: left;
 }
 #header .powered {
   margin-top: 10px;
