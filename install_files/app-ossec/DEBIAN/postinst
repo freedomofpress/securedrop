@@ -41,6 +41,12 @@ case "$1" in
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --gid-owner document-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "document chrooted tor instances"
 -A INPUT -p tcp --match multiport --sports 80,8080,443,8443,9001,9030 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor" 
 
+# Rate limit ssh connections coming from the tor network
+# Restrict to users in the tor user
+# Load before generic loopback rules
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
+
 # Drop all other outbound traffic by the tor users. Need to use the group for the source/document tor users 
 # Load before generic loopback rules
 -A OUTPUT -m owner --gid-owner source-tor -j LOGNDROP -m comment --comment "Drop all other traffic for source tor group id"
@@ -60,13 +66,6 @@ case "$1" in
 -A OUTPUT -m owner --gid-owner source -j LOGNDROP -m comment --comment "Drop all other traffic from the source int group id"
 -A OUTPUT -m owner --gid-owner document -j LOGNDROP -m comment --comment "Drop all other traffic from the document int group id"
 -A OUTPUT -m owner --uid-owner securedrop -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
-
-# Rate limit ssh connections coming from the tor network
-# Restrict to users in the ssh group
-# Load before generic loopback rules
--A INPUT -i lo -p tcp --dport 22 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
--A INPUT -i lo -p tcp --dport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
--A OUTPUT -o lo -p tcp --sport 22 -m owner --gid-owner ssh -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
 
 # Block all other outbound access for users in the ssh group
 # Load before generic loopback rules
