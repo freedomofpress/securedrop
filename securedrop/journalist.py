@@ -226,8 +226,15 @@ def reply():
 
 @app.route('/regenerate-code', methods=('POST',))
 def generate_code():
+    original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
     db_session.commit()
+
+    for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
+        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename())
+    db_session.commit()
+
+    flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
     return redirect('/col/' + g.sid)
 
 

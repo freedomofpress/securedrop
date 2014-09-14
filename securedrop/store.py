@@ -96,6 +96,18 @@ def save_message_submission(sid, count, journalist_filename, message):
     return filename
 
 
+def rename_submission(sid, filename, journalist_filename):
+    count = int(filename.split('-', 1)[0])
+    if filename.endswith('doc.zip.gpg'):
+        new_filename = "{0}-{1}-doc.zip.gpg".format(count, journalist_filename)
+    elif filename.endswith('msg.gpg'):
+        new_filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
+    else:
+        return filename # Return reply.gpg files unrenamed
+    os.rename(path(sid, filename), path(sid, new_filename))
+    return new_filename
+    
+
 def secure_unlink(fn, recursive=False):
     verify(fn)
     command = ['srm']
