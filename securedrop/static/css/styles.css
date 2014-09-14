@@ -339,6 +339,10 @@ p#codename {
   width: 250px;
 }
 
+#filter-container{
+  text-align: left;
+}
+
 #cols {
   padding: 0;
 }
@@ -417,6 +421,7 @@ p#codename {
 
 .submissions {
   padding-left: 0px;
+  margin-bottom: 40px;
 }
 .submission {
   background: #f3f3f3;
@@ -524,4 +529,17 @@ p.breadcrumbs {
 
 .button-star:focus {
     outline:0;
+}
+
+.fa.starred_title{
+  text-align: left;
+  display: block;
+}
+
+.fa.starred_title:nth-child(1){
+  margin-top: 40px;
+}
+
+.filename.unread{
+  font-weight: bold;
 }

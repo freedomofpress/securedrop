@@ -77,11 +77,17 @@ class Source(Base):
         except AttributeError:
             self.docs_msgs_count = {'messages': 0, 'documents': 0}
             for submission in self.submissions:
-                if submission.filename.endswith('msg.gpg'):
+                doc_or_msg = submission.document_or_message()
+                if doc_or_msg == "message":
                     self.docs_msgs_count['messages'] += 1
-                elif submission.filename.endswith('doc.zip.gpg'):
+                elif doc_or_msg == "document":
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
+
+    def starred(self):
+        if self.star and self.star.starred:
+            return True
+        return False
 
 
 class Submission(Base):
@@ -92,6 +98,7 @@ class Submission(Base):
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
+    starred = Column(Boolean, default=False)
 
     def __init__(self, source, filename):
         self.source_id = source.id
@@ -100,6 +107,13 @@ class Submission(Base):
 
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
+
+    def document_or_message(self):
+        if self.filename.endswith('msg.gpg') or self.filename.endswith('reply.gpg'):
+            return "message"
+        elif self.filename.endswith('doc.zip.gpg'):
+            return "document"
+        return "unknown"
 
 class SourceStar(Base):
     __tablename__ = 'source_stars'

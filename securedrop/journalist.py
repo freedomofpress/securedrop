@@ -62,6 +62,13 @@ def setup_g():
 
 def get_docs(sid):
     """Get docs associated with source id `sid`, sorted by submission date"""
+    # create a dict of all docs associated with `sid` from the db, keyed by filename
+    submissions_dict = {}
+    submissions = Source.query.filter(Source.filesystem_id==sid).one().submissions 
+    for submission in submissions:
+        submissions_dict[submission.filename] = submission
+
+    # iterate through the docs on the disk, and build out the `docs` list
     docs = []
     for filename in os.listdir(store.path(sid)):
         os_stat = os.stat(store.path(sid, filename))
@@ -69,6 +76,9 @@ def get_docs(sid):
             name=filename,
             date=datetime.fromtimestamp(os_stat.st_mtime),
             size=os_stat.st_size,
+            starred=submissions_dict[filename].starred,
+            downloaded=submissions_dict[filename].downloaded,
+            type=submissions_dict[filename].document_or_message()
         ))
     # sort in chronological order
     docs.sort(key=lambda x: int(x['name'].split('-')[0]))
@@ -102,30 +112,37 @@ def remove_star(sid):
     db_session.commit()
     return redirect(url_for('index'))
 
+@app.route('/col/submission_remove_star/<filename>', methods=('POST',))
+def submission_remove_star(filename):
+    submission = Submission.query.filter(Submission.filename==filename).one()
+    submission.starred = False
+    db_session.commit()
+    return redirect('/col/' + submission.source.filesystem_id)
+
+@app.route('/col/submission_add_star/<filename>', methods=('POST',))
+def submission_add_star(filename):
+    submission = Submission.query.filter(Submission.filename==filename).one()
+    submission.starred = True
+    db_session.commit()
+    return redirect('/col/' + submission.source.filesystem_id)
 
 @app.route('/')
 def index():
-    unstarred = []
-    starred = []
-    for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
-        star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
-        if star and star.starred:
-            starred.append(source)
-        else:
-            unstarred.append(source)
+    sources = Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all()
+    for source in sources:
         source.num_unread = len(
             Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
 
-    return render_template('index.html', unstarred=unstarred, starred=starred)
+    return render_template('index.html', sources=sources)
 
 
 @app.route('/col/<sid>')
 def col(sid):
     source = get_source(sid)
-    docs = get_docs(sid)
+    submissions = get_docs(sid)
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
-                           codename=source.journalist_designation, docs=docs, haskey=haskey,
+                           codename=source.journalist_designation, submissions=submissions, haskey=haskey,
                            flagged=source.flagged)
 
 

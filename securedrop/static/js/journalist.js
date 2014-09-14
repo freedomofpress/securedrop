@@ -3,8 +3,8 @@
  * confusing users, this function dyanamically adds elements that require JS.
  */
 function enhance_ui() {
-  // Add the "quick filter" box for sources
-  $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
+  // Add the filter block for sources
+  $('div#filter-container').html($('#filter_block').html());
 
   // Add the "select {all,none}" buttons
   $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
@@ -23,9 +23,10 @@ $(function () {
   all.click( function() { checkboxes.prop('checked', true); });
   none.click( function() { checkboxes.prop('checked', false); });
 
-  $("#delete_collection").submit(function () {
+  $("#delete_collection").submit(function(){
     return confirm("Are you sure you want to delete this collection?");
   });
+
   $("#delete_collections").click(function () {
     var num_checked = 0;
 
@@ -45,21 +46,91 @@ $(function () {
     return false;
   });
 
-  $("#unread a").click(function(){
-    $("#unread").html("unread: 0");
+  // don't star/unstar invisible collections
+  $("#star_collections, #unstar_collections, #delete_submissions, #download_submissions").click(function(){
+    $('ul li:not(:visible) :checkbox').attr('checked', false)
+    return true;
   });
 
-  var filter_codenames = function(value){
-    if(value == ""){
+  $("span.unread a").click(function(){
+    sid = $(this).data('sid');
+    $("span.unread[data-sid='" + sid + "']").remove();
+  });
+
+  // if we are on the index route, use this filter function
+  if($('#content.journalist-view-all').length){
+    var filter = function(){
+      var codename = $('#codename').val()
+      var starred_status = $('#starred_status').val()
+      var read_status = $('#read_status').val()
+
       $('ul#cols li').show()
-    } else {
-      $('ul#cols li').hide()
-      $('ul#cols li[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]').show()
+
+      if(codename != ""){
+        $('ul#cols li').hide()
+        // we need the replace here: if the user enters a '"' in the filter box, it will escape the data-source-designation attribute of this selection
+        $('ul#cols li[data-source-designation*="' + codename.replace(/"/g, "").toLowerCase() + '"]').show()
+      }
+
+      if(starred_status == "starred"){
+        $('ul#cols li[data-starred="unstarred"]').hide()
+      }
+      if(starred_status == "unstarred"){
+        $('ul#cols li[data-starred="starred"]').hide()
+      }
+
+      if(read_status == "read"){
+        $('ul#cols li[data-read="unread"]').hide()
+      }
+      if(read_status == "unread"){
+        $('ul#cols li[data-read="read"]').hide()
+      }
+
     }
+
+    $('#codename').keyup(filter)
+    $('#starred_status').change(filter)
+    $('#read_status').change(filter)
+
+    filter()
   }
+  // if we are on the single source route, use this filter function
+  if($('#content.journalist-view-single').length){
+    var filter = function(){
+      var starred_status = $('#starred_status').val()
+      var read_status = $('#read_status').val()
+      var type = $('#type').val()
 
-  $('#filter').keyup(function(){ filter_codenames(this.value) })
+      $('ul#submissions li').show()
 
-  filter_codenames($('#filter').val())
+      if(starred_status == "starred"){
+        $('ul#submissions li[data-starred="unstarred"]').hide()
+      }
+      if(starred_status == "unstarred"){
+        $('ul#submissions li[data-starred="starred"]').hide()
+      }
+
+      if(read_status == "read"){
+        $('ul#submissions li[data-read="unread"]').hide()
+      }
+      if(read_status == "unread"){
+        $('ul#submissions li[data-read="read"]').hide()
+      }
+
+      if(type == "documents"){
+        $('ul#submissions li[data-type="message"]').hide()
+      }
+      if(type == "messages"){
+        $('ul#submissions li[data-type="document"]').hide()
+      }
+
+    }
+
+    $('#type').change(filter)
+    $('#starred_status').change(filter)
+    $('#read_status').change(filter)
+
+    filter()
+  }
 
 });
