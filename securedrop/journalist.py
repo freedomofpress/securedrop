@@ -123,6 +123,11 @@ def index():
 def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
+    submissions = [submission.filename for submission in Submission.query.filter(Submission.source_id == source.id).all()]
+    # Only include documents loaded from the filesystem which are replies or which are also listed in the
+    # submissions table to avoid displaying partially uploaded files (#561).
+    docs = [doc for doc in docs if doc['name'] in submissions or doc['name'].endswith('reply.gpg')]
+
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
                            codename=source.journalist_designation, docs=docs, haskey=haskey,
