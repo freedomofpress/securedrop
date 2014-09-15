@@ -797,7 +797,7 @@
   /var/chroot/document/var/www/securedrop/journalist_templates/flashed.html r,
   /var/chroot/document/var/www/securedrop/journalist_templates/index.html r,
   /var/chroot/document/var/www/securedrop/journalist_templates/reply.html r,
-  /var/chroot/document/var/www/securedrop/keys/* w,
+  /var/chroot/document/var/www/securedrop/keys/* rw,
   /var/chroot/document/var/www/securedrop/keys/pubring.gpg rw,
   /var/chroot/document/var/www/securedrop/keys/pubring.gpg.lock rwl,
   /var/chroot/document/var/www/securedrop/keys/pubring.gpg.tmp rw,
