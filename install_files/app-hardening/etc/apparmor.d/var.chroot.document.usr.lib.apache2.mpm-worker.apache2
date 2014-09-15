@@ -822,6 +822,7 @@
   /var/chroot/document/var/www/securedrop/static/i/securedrop_small.png r,
   /var/chroot/document/var/www/securedrop/static/js/document.js r,
   /var/chroot/document/var/www/securedrop/static/js/journalist.js r,
+  /var/chroot/document/var/www/securedrop/static/js/libs/jquery-2.1.1.min.js r,
   /var/chroot/document/var/www/securedrop/store.py r,
   /var/chroot/document/var/www/securedrop/store.pyc rw,
   /var/chroot/document/var/www/securedrop/store/** rw,
