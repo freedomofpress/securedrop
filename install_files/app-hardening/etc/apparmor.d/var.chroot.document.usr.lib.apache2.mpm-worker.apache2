@@ -828,7 +828,8 @@
   /var/chroot/document/var/www/securedrop/version.py r,
   /var/chroot/document/var/www/securedrop/version.pyc rw,
   /var/chroot/document/var/www/securedrop/wordlist r,
-
+  /var/chroot/document/usr/local/lib/python2.7/dist-packages/werkzeug/security.pyc r,
+  /var/chroot/document/usr/local/lib/python2.7/dist-packages/werkzeug/security.py r,
 
   ^DEFAULT_URI flags=(complain) {
 
