@@ -72,7 +72,7 @@ normalcolor=$(tput sgr 0)
             echo "$blue The Source Interface's URL is: $normalcolor"
             echo "$red http://$source_int"
         fi
-    elif [ "$(dpkg -s securedrop-monitor 2>/dev/null)" ]; then
+    elif [ "$(dpkg -s securedrop-monitor-hardening 2>/dev/null)" ]; then
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$bold$blue#################################################################################$normalcolor"
             echo "$blue The Monitor Server is only accessible through a Tor Authenticated Hidden Service"
