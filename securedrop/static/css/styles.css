@@ -525,3 +525,8 @@ p.breadcrumbs {
 .button-star:focus {
     outline:0;
 }
+
+/* Tooltips */
+time:not([title='']):hover, i:not([title='']):hover {
+  cursor: pointer;
+}
