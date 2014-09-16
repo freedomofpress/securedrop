@@ -3,6 +3,7 @@ import config
 import version
 import crypto_util
 import store
+import template_filters
 from db import db_session, Source, Submission, SourceStar, get_one_or_else
 
 import os
@@ -25,12 +26,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-
-@app.template_filter('datetimeformat')
-def _jinja2_datetimeformat(dt, fmt=None):
-    """Template filter for readable formatting of datetime.datetime"""
-    fmt = fmt or '%b %d, %Y %I:%M %p'
-    return dt.strftime(fmt)
+app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 
 
 @app.teardown_appcontext

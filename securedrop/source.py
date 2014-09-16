@@ -23,6 +23,7 @@ import version
 import crypto_util
 import store
 import background
+import template_filters
 from db import db_session, Source, Submission
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 
@@ -43,12 +44,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-@app.template_filter('datetimeformat')
-def _jinja2_datetimeformat(dt, fmt=None):
-    """Template filter for readable formatting of datetime.datetime"""
-    fmt = fmt or '%b %d, %Y %I:%M %p'
-    return dt.strftime(fmt)
-
+app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -177,7 +173,7 @@ def lookup():
             except UnicodeDecodeError:
                 app.logger.error("Could not decode reply %s" % fn)
             else:
-                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime).strftime("%b %d, %Y %I:%M %p")
+                date = datetime.fromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
                 replies.append(dict(id=fn, date=date, msg=msg))
 
     def async_genkey(sid, codename):
