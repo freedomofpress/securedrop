@@ -17,6 +17,7 @@ from flask import (Flask, request, render_template, session, redirect, url_for,
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.exc import IntegrityError
 
 import config
 import version
@@ -153,9 +154,12 @@ def create():
 
     source = Source(sid, crypto_util.display_id())
     db_session.add(source)
-    db_session.commit()
-
-    os.mkdir(store.path(sid))
+    try:
+        db_session.commit()
+    except IntegrityError as e: 
+        app.logger.error("Attempt to create a source with duplicate codename: %s" % (e,))
+    else:
+        os.mkdir(store.path(sid))
 
     session['logged_in'] = True
     return redirect(url_for('lookup'))
