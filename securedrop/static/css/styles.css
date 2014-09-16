@@ -44,11 +44,11 @@ a {
   margin: 0 auto;
   padding: 40px 20px;
   border: 1px solid #c3c3c3;
+  float: right;
 }
 
-#header, .panel {
-  display: inline-block;
-  vertical-align: top;
+#header {
+  float: left;
 }
 #header .powered {
   margin-top: 10px;
