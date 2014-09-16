@@ -182,7 +182,7 @@ def col_delete_single(sid):
 def col_delete(cols_selected):
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "warning")
+        flash("No collections selected to delete!", "error")
     else:
         for source_id in cols_selected:
             delete_collection(source_id)
@@ -244,6 +244,13 @@ def bulk():
         doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
     filenames_selected = [
         doc['name'] for doc in docs_selected]
+
+    if not docs_selected:
+        if action == 'download':
+            flash("No collections selected to download!", "error")
+        elif action == 'delete':
+            flash("No collections selected to delete!", "error")
+        return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':
         return bulk_download(g.sid, filenames_selected)
