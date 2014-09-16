@@ -38,7 +38,7 @@ def _relative_timestamp(dt):
 
 
 def nl2br(context, value):
-    formatted = u'<br />\n'.join(escape(value).split('\n'))
+    formatted = u'<br>\n'.join(escape(value).split('\n'))
     if context.autoescape:
         formatted = Markup(formatted)
     return formatted
