@@ -14,8 +14,10 @@ add_signing_key() {
 add_repo() {
     repo_name="$1"
     repo_url="$2"
+    distro="$( lsb_release -c | cut -f 2 )"
+
     if [ ! -f /etc/apt/sources.list.d/$repo_name.list ]; then
-        echo "deb $repo_url precise main" > /etc/apt/sources.list.d/$repo_name.list
+        echo "deb $repo_url $distro main" > /etc/apt/sources.list.d/$repo_name.list
     fi
 }
 
