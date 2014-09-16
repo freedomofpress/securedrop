@@ -27,7 +27,7 @@ import background
 import template_filters
 from db import db_session, Source, Submission
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from jinja2 import evalcontextfilter, Markup, escape
+from jinja2 import evalcontextfilter
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
@@ -47,15 +47,7 @@ else:
     app.jinja_env.globals['use_custom_header_image'] = False
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
-
-@app.template_filter('nl2br')
-@evalcontextfilter
-def nl2br(context, value):
-    formatted = u'<br />\n'.join(escape(value).split('\n'))
-    if context.autoescape:
-        formatted = Markup(formatted)
-    return formatted
-
+app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
