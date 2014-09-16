@@ -132,7 +132,7 @@ If the signature is OK, extract the archive with the script, set the execuble fl
 
 ```
 tar -xzf add-repos.tgz
-sudo chmod +x ./add-repos.sh
+chmod +x ./add-repos.sh
 sudo ./add-repos.sh
 ```
 
@@ -227,7 +227,7 @@ If the signature is OK, extract the archive with the script, set the execuble fl
 
 ```
 tar -xzf add-repos.tgz
-sudo chmod +x ./add-repos.sh
+chmod +x ./add-repos.sh
 sudo ./add-repos.sh
 ```
 
