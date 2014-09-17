@@ -356,7 +356,7 @@ nM1RGVAp7lu5B8M=
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
     
-fpf_url="[arch=amd64] http://apt.pressfreedomfoundation.org/"
+fpf_url="[arch=amd64] https://apt.pressfreedomfoundation.org/"
 cat > fpf_signing_key << EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
