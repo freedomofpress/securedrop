@@ -1,0 +1,26 @@
+Template: securedrop-monitor-ossec/get_smtp_continue
+Type: boolean
+Description: Try again?
+  That was an FQDN.
+
+Template: securedrop-monitor-ossec/get_email
+Type: string
+Description: The email address the OSSEC alerts will be sent to:
+  This is the email address or distribution list that the OSSEC alerts
+  will be sent to.
+
+Template: securedrop-monitor-ossec/get_email_continue
+Type: boolean
+Description: Try again?
+  That was an invalid email address.
+
+Template: securedrop-monitor-ossec/ossec_key_list
+Type: string
+Description: GPG public key to encrypt OSSEC alerts:
+  This is the GPG public key used to encrypt the OSSEC alerts. The email address
+  set for the gpg key must match the destination email address for the OSSEC alerts.
+
+Template: securedrop-monitor-ossec/ossec_key_list_continue
+Type: boolean
+Description: Try again?
+  That file did not exist.

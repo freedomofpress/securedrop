@@ -1,0 +1,25 @@
+Template: securedrop-monitor-hardening/admin_user
+Type: string
+Description: Admin's username:
+ At least one admin user needs to be configured or you will be locked
+ out of the system. This will generate a google authenticator
+ pam module 2 factor authentication code and add the user to the sudo
+ and ssh groups. The user is required to exist and for the user's
+ home directory to be in /home/USERNAME/
+
+Template: securedrop-monitor-hardening/admin_user_continue
+Type: boolean
+Description: Try again?
+ The admin user needs to be a valid OS username.
+
+Template: securedrop-monitor-hardening/app_ip
+Type: string
+Description: The App Server's IP:
+ The App Server's IP address is used to create a
+ hosts entry that is used by the iptables rules
+ and the OSSEC server configuration.
+
+Template: securedrop-monitor-hardening/app_ip_continue
+Type: boolean
+Description: Try again?
+ That was an invalid IP address.

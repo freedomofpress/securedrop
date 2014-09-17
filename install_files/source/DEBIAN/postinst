@@ -1,0 +1,293 @@
+#!/bin/sh
+# postinst script for securedrop-source
+#
+# see: dh_installdeb(1)
+
+set -e
+set -x
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+securedrop_root="/var/www/securedrop"
+. /usr/share/debconf/confmodule
+
+case "$1" in
+    configure)
+        random() {
+            head -c $1 /dev/urandom | base64
+        }
+
+        if_dir_doesnt_exist_create(){
+            dir_name="$1"
+            dir_permissions="$2"
+            if [ ! -d $securedrop_root/$dir_name ]; then
+                mkdir -m $dir_permissions -p $securedrop_root/$dir_name
+            fi
+        }
+
+        if_dir_doesnt_exist_create keys 700
+        if_dir_doesnt_exist_create db 770
+        if_dir_doesnt_exist_create store 770
+        if_dir_doesnt_exist_create tmp 770
+        if_dir_doesnt_exist_create config 770
+
+        keypath=$securedrop_root/keys
+        
+        # flask_defailts.py config file
+        secret_key=$(random 32)
+        if [ ! -f $securedrop_root/config/flask_defaults.py ]; then
+            cat > $securedrop_root/config/flask_defaults.py <<EOF
+#### Flask Default Configuration
+
+FLASK_DEBUG = False
+FLASK_TESTING = False
+FLASK_CSRF_ENABLED = True
+FLASK_SECRET_KEY = '$secret_key'
+EOF
+        fi
+        chmod 640 $securedrop_root/config/flask_defaults.py
+
+        # base.py config file
+        scrypt_id_pepper=$(random 32)
+        scrypt_gpg_pepper=$(random 32)
+
+        #support custom themes
+        db_get securedrop-source/custom_header_image_path
+        custom_header_image_path="$RET"
+        db_get securedrop-source/use_custom_header_image
+        if [ "$RET" = "false" ]; then
+            custom_header_image="None"
+        else
+            mkdir -m 770 -p $securedrop_root/static/i
+            cp $custom_header_image_path $securedrop_root/static/i
+            custom_header_image="$(echo $custom_header_image_path | awk -F / '{print $NF}')"
+        fi
+
+        if [ ! -f $securedrop_root/config/base.py ]; then
+            cat > $securedrop_root/config/base.py <<EOF
+#### Application Configuration
+DEFAULT_ENV = 'production'
+
+SOURCE_TEMPLATES_DIR = '$securedrop_root/source_templates'
+JOURNALIST_TEMPLATES_DIR = '$securedrop_root/journalist_templates'
+WORD_LIST = '$securedrop_root/wordlist'
+NOUNS = '$securedrop_root/dictionaries/nouns.txt'
+ADJECTIVES = '$securedrop_root/dictionaries/adjectives.txt'
+JOURNALIST_PIDFILE = "/tmp/journalist.pid"
+SOURCE_PIDFILE = "/tmp/source.pid"
+
+SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
+SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
+SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+
+#### Theming Options
+
+# If you want a custom image at the top, copy your png or jpg to static/i and
+# update this to its filename (e.g. "logo.jpg") .
+CUSTOM_HEADER_IMAGE = $custom_header_image
+EOF
+        fi
+        chmod 640 $securedrop_root/config/base.py
+
+        # production.py
+        db_get securedrop-source/find_key_path
+        app_key_path="$RET"
+
+        # Verify app gpg key fingerprint and configure debian preseeds for chroot jails      
+        db_get securedrop-source/app_key_fpr
+        app_key_fpr="$( gpg --with-fingerprint $app_key_path | awk -F '=' '/Key fingerprint/ {print $2}' | sed 's/ //g')"
+        db_get securedrop-source/verify_fingerprint
+        gpg --homedir $keypath --import $app_key_path
+
+        cat > $securedrop_root/config/production.py <<EOF
+import os
+
+JOURNALIST_KEY='$app_key_fpr' # fingerprint of the public key for encrypting submissions
+SECUREDROP_ROOT="$securedrop_root"
+
+### Database Configuration
+DATABASE_ROOT=os.path.join(SECUREDROP_ROOT, 'db' )
+DATABASE_ENGINE = 'sqlite'
+DATABASE_FILE=os.path.join(DATABASE_ROOT, 'db_production.sqlite')
+EOF
+        chmod 640 $securedrop_root/config/production.py
+
+        # Create the source.wsgi file
+        cat > $securedrop_root/source.wsgi << EOF
+#!/usr/bin/python
+#import sys
+#import logging
+#logging.basicConfig(stream=sys.stderr)
+#sys.path.insert(0,"/var/www/securedrop/")
+
+from source import app as application
+EOF
+
+        #Unattended-upgrades
+        cat > /etc/apt/apt.conf.d/20auto-upgrades << EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+EOF
+        cat > /etc/apt/apt.conf.d/50unattended-upgrades << EOF
+Unattended-Upgrade::Origins-Pattern {
+        "\${distro_id}:\${distro_codename}-security";
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "true";
+EOF
+
+        if [ -r /lib/lsb/init-functions ]; then
+            if [ "$( lsb_release -is )" = "Debian" ]; then
+                os="Debian"
+                distro="$( lsb_release -c )"
+                os_url="http://http.debian.net/debian/"
+            else
+                os="Ubuntu"
+                distro="$( lsb_release -c | cut -f 2 )"
+                os_url="http://us.archive.ubuntu.com/ubuntu"
+                os_sec_url="http://security.archive.ubuntu.com/ubuntu"
+            fi
+        fi
+
+        # Set the sources.list to match the iptables rules
+        cat > /etc/apt/sources.list << EOF
+deb $os_url $distro main restricted
+deb-src $os_url $distro main restricted
+deb $os_url $distro-updates main restricted
+deb-src $os_url $distro-updates main restricted
+deb $os_url $distro universe
+deb-src $os_url $distro universe
+deb $os_url $distro-updates universe
+deb-src $os_url $distro-updates universe
+deb $os_url $distro multiverse
+deb-src $os_url $distro multiverse
+deb $os_url $distro-updates multiverse
+deb-src $os_url $distro-updates multiverse
+deb $os_url $distro-backports main restricted universe multiverse
+deb-src $os_url $distro-backports main restricted universe multiverse
+deb $os_sec_url $distro-security main restricted
+deb-src $os_sec_url $distro-security main restricted
+deb $os_sec_url $distro-security universe
+deb-src $os_sec_url $distro-security universe
+deb $os_sec_url $distro-security multiverse
+deb-src $os_sec_url $distro-security multiverse
+EOF
+
+        create_system_user(){
+            system_user="$1"
+            system_uid="$2"
+            system_gid="$3"
+            if [ ! "$(getent passwd $system_user)" ]; then
+                addgroup \
+                  --system \
+                  --gid $system_gid \
+                  $system_user
+    
+                adduser \
+                  --system \
+                  --shell /bin/false \
+                  --no-create-home \
+                  --uid $system_uid \
+                  --ingroup $system_user \
+                  --disabled-password \
+                  --disabled-login \
+                  $system_user
+            fi
+        }
+ 
+        TOR_USER="source-tor"
+        tor_uid="669"
+        tor_gid="669"
+        create_system_user $TOR_USER $tor_uid $tor_gid
+
+        if [ ! -f /etc/apt/sources.list.d/tor.list ]; then
+            echo "deb     http://deb.torproject.org/torproject.org $distro main" > /etc/apt/sources.list.d/tor.list
+        fi
+
+        chown -R $TOR_USER:$TOR_USER /var/lib/tor
+        chown -R $TOR_USER:$TOR_USER /var/run/tor
+        chown -R $TOR_USER:$TOR_USER /var/log/tor
+
+        service tor restart
+
+        # The uid/gid needs to be set so they match outside of the chroot jail
+        # If this is not done from outside the chroot jail the process looks 'Whoopsie"
+        # by sharing the uid is also how both chroots have access to the shared
+        # directory.
+        # They have different gid so the iptables rules could be separated by interface
+        source_user="source"
+        source_uid="666"
+        source_gid="667"
+        create_system_user $source_user $source_uid $source_gid
+
+        chown -R $source_user:$source_user $securedrop_root
+
+        ##Enable only the needed apache modules for each interface
+        enabled_mods="alias authz_default authz_groupfile authz_host authz_user deflate dir headers mime negotiation reqtimeout rewrite wsgi"
+        for enabled_mod in $enabled_mods; do
+            if [ ! -L /etc/apache2/mods-enabled/$enabled_mod.load ]; then
+                a2enmod $enabled_mod
+            fi
+        done
+    
+        #Disable all other apache modules
+        current_mods="$(ls /etc/apache2/mods-enabled/*.load | awk -F"[/\|.]" '{print $5}')"
+        for current_mod in $current_mods; do
+            if [ "$(echo "$enabled_mods" | grep -v "$current_mod")" ]; then
+                a2dismod $current_mod
+            fi
+        done
+
+        #Disable unneeded apache sites
+        sites="default-ssl default"
+        for site in $sites; do
+            if [ -L /etc/apache2/sites-enabled/*$site ]; then
+                a2dissite $site
+            fi
+        done
+
+        # TODO Add check for distribute version
+        pip install --upgrade distribute
+
+        pip install -r $securedrop_root/requirements/source-requirements.txt
+
+        #Changed the ownership of the app directory
+        chown -R $source_user:$source_user $securedrop_root
+
+        # Create the application's database
+        cd $securedrop_root
+        su -s /bin/bash -c "python -c 'import db; db.init_db()'" $source_user
+
+        chown -R $source_user:$source_user $securedrop_root
+        #Restart the services
+        service apache2 restart
+
+        db_stop
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

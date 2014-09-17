@@ -26,6 +26,7 @@ import journalist
 import test_setup
 from db import db_session, Source
 
+
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
@@ -128,15 +129,10 @@ class TestSource(unittest.TestCase):
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("You have three options to send data", rv.data)
+            self.assertIn("Submit documents and messages", rv.data)
 
     def _new_codename(self):
-        """Helper function to go through the "generate codename" flow"""
-        with self.client as c:
-            rv = c.get('/generate')
-            codename = session['codename']
-            rv = c.post('/create')
-        return codename
+        return test_setup.new_codename(self.client, session)
 
     def test_lookup(self):
         """Test various elements on the /lookup page"""
@@ -144,7 +140,7 @@ class TestSource(unittest.TestCase):
         rv = self.client.post('login', data=dict(codename=codename),
                               follow_redirects=True)
         # redirects to /lookup
-        self.assertIn("journalist's public key", rv.data)
+        self.assertIn("our public key", rv.data)
         # download the public key
         rv = self.client.get('journalist-key')
         self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
@@ -159,7 +155,7 @@ class TestSource(unittest.TestCase):
             rv = c.post('/login', data=dict(codename=codename),
                                   follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            self.assertIn("You have three options to send data", rv.data)
+            self.assertIn("Submit documents and messages", rv.data)
             self.assertTrue(session['logged_in'])
             _logout(c)
 
@@ -177,7 +173,7 @@ class TestSource(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -186,8 +182,7 @@ class TestSource(unittest.TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                      rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -196,86 +191,8 @@ class TestSource(unittest.TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
-        self.assertIn(escape("Thanks! We received your document 'test.txt'."),
-                      rv.data)
-
-    def test_submit_dirty_file_to_be_cleaned(self):
-        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
-        img_metadata = store.metadata_handler(img.name)
-        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(img, 'dirty.jpg'),
-            notclean='True',
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
-                      rv.data)
-
-        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
-        latest_subdir = max(store_dirs, key=os.path.getmtime)
-        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        self.assertEqual(len(zip_gpg_files), 1)
-        zip_gpg = zip_gpg_files[0]
-
-        zip_gpg_file = open(zip_gpg)
-        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
-        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
-
-        s = StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
-        clean_file.write(zip_file.read('dirty.jpg'))
-        clean_file.seek(0)
-        zip_file.close()
-
-        # check for the actual file been clean
-        clean_file_metadata = store.metadata_handler(clean_file.name)
-        self.assertTrue(clean_file_metadata.is_clean(), "the file is now clean.")
-        zip_gpg_file.close()
-        clean_file.close()
-        img.close()
-
-    def test_submit_dirty_file_to_not_clean(self):
-        self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
-        img = open(os.getcwd()+'/tests/test_images/dirty.jpg')
-        img_metadata = store.metadata_handler(img.name)
-        self.assertFalse(img_metadata.is_clean(), "The file is dirty.")
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(img, 'dirty.jpg'),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("Thanks! We received your document 'dirty.jpg'."),
-                      rv.data)
-
-        store_dirs = [os.path.join(config.STORE_DIR,d) for d in os.listdir(config.STORE_DIR) if os.path.isdir(os.path.join(config.STORE_DIR,d))]
-        latest_subdir = max(store_dirs, key=os.path.getmtime)
-        zip_gpg_files = [os.path.join(latest_subdir,f) for f in os.listdir(latest_subdir) if os.path.isfile(os.path.join(latest_subdir,f))]
-        self.assertEqual(len(zip_gpg_files), 1)
-        zip_gpg = zip_gpg_files[0]
-
-        zip_gpg_file = open(zip_gpg)
-        decrypted_data = self.gpg.decrypt_file(zip_gpg_file)
-        self.assertTrue(decrypted_data.ok, 'Checking the integrity of the data after decryption.')
-
-        s = StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        clean_file = open(os.path.join(latest_subdir,'dirty.jpg'), 'w+b')
-        clean_file.write(zip_file.read('dirty.jpg'))
-        clean_file.seek(0)
-        zip_file.close()
-
-        # check for the actual file been clean
-        clean_file_metadata = store.metadata_handler(clean_file.name)
-        self.assertFalse(clean_file_metadata.is_clean(), "the file is was not cleaned.")
-        zip_gpg_file.close()
-        clean_file.close()
-        img.close()
+        self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
     def test_submit_clean_file(self):
         img = open(os.getcwd()+'/tests/test_images/clean.jpg')
@@ -286,9 +203,8 @@ class TestSource(unittest.TestCase):
             notclean='True',
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks! We received your message.", rv.data)
-        self.assertIn(escape("Thanks! We received your document 'clean.jpg'."),
-                      rv.data)
+        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
+        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'clean.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
         img.close()
 
     @patch('zipfile.ZipFile.writestr')
@@ -384,8 +300,8 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
-        li = soup.select('ul#submissions li .doc-info')[0]
-        self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
+        li = soup.select('ul#submissions li .info')[0]
+        self.assertRegexpMatches(li['title'], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
         self.assertEqual(rv.status_code, 200)
@@ -457,8 +373,8 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
-        li = soup.select('ul#submissions li .doc-info')[0]
-        self.assertRegexpMatches(li.contents[-1], "\d+ bytes")
+        li = soup.select('ul#submissions li .info')[0]
+        self.assertRegexpMatches(li['title'], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
         self.assertEqual(rv.status_code, 200)
@@ -629,11 +545,7 @@ class TestIntegration(unittest.TestCase):
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        rv = self.journalist_app.post('/col/process', data=dict(
-            action='delete',
-            sid=sid,
-            col_name=col_name,
-        ), follow_redirects=True)
+        rv = self.journalist_app.post('/col/delete/' + sid, follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
 
         self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
@@ -691,7 +603,7 @@ class TestIntegration(unittest.TestCase):
         # test filenames and sort order
         soup = BeautifulSoup(rv.data)
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        for i, submission_link in enumerate(soup.select('ul#submissions li a')):
+        for i, submission_link in enumerate(soup.select('ul#submissions li a .filename')):
             filename = str(submission_link.contents[0])
             self.assertTrue(re.match(submission_filename_re.format(i+1), filename))
 
@@ -718,11 +630,11 @@ class TestIntegration(unittest.TestCase):
 
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
-        filename = str(soup.select('ul#submissions li a')[0].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[0].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(1), filename) )
-        filename = str(soup.select('ul#submissions li a')[1].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[1].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(3), filename) )
-        filename = str(soup.select('ul#submissions li a')[2].contents[0])
+        filename = str(soup.select('ul#submissions li a .filename')[2].contents[0])
         self.assertTrue( re.match(submission_filename_re.format(4), filename) )
 
 

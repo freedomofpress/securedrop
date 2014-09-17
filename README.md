@@ -8,7 +8,7 @@ SecureDrop is an open-source whistleblower submission system that media organiza
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of three dedicated computers:
 
-* `Secure Viewing Station`: An airgapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
+* `Secure Viewing Station`: An air-gapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
 * `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the first, public-facing Tor hidden service to send messages and documents to the journalist. The journalist connects to the second authenticated Tor hidden service to download encrypted documents and respond to sources.
 * `Monitor server`: Ubuntu server that monitors the `Application Server` and sends email alerts.
 
@@ -22,7 +22,7 @@ These computers should all physically be in your organization's office.
 
 ## Before You Begin
 
-Before beginning installation, you should have two servers running Ubuntu Server 12.04.3 LTS, each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](/docs/ubuntu_config.md).
+Before beginning installation, you should have two servers running Ubuntu Server 12.04.4 LTS (Precise Pangolin), each with the grsec kernel patches installed. If you don't yet have those computers configured, see additional documentation for [Preparing Ubuntu servers for installation](/docs/ubuntu_config.md).
 
 You will need a DVD with the latest version of the [Tails operating system](https://tails.boum.org/download/index.en.html) burned to it. Go [here for instructions](https://tails.boum.org/download/index.en.html) on how to download and burn Tails to a DVD.  You will only have to use this DVD once: After the first run from a Live DVD, you can create a Live USB to boot from instead. If you already have a Tails Live USB, you may skip this requirement. If you can't or don't want to burn a DVD, see the [Tails documentation](https://tails.boum.org/download/index.en.html) for alternative instructions.
 
@@ -61,6 +61,6 @@ In an actual SecureDrop setup, these websites are separate Tor hidden services r
 
 ## License
 
-SecureDrop is open source and released under the [GNU General Public License v2](/LICENSE). 
+SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE). 
 
 The [wordlist](/securedrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold.

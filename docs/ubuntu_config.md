@@ -1,6 +1,6 @@
 # Preparing Ubuntu servers for installation
 
-The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.3](http://www.ubuntu.com/download/server). Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
+The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.5 LTS (Precise Pangolin)](http://releases.ubuntu.com/12.04/). SecureDrop is only supported for 64-bit platforms, so make sure you use the 64-bit images, which have a `-amd64` suffix. Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
 
 After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 
@@ -15,6 +15,8 @@ We recommend that you enable [full disk encryption](https://www.eff.org/deeplink
 ![Encrypted LVM](/docs/images/install/ubuntu_encrypt.png)
 
 If you wish to opt out of full disk encryption at your own risk, then choose "Guided - use entire disk and set up LVM" instead. Then wait for base system to finish installing. 
+
+**Warning** Enabling encrypted home directories will break the default 2 factor authentication. If you wish to enable encrypted home directories, you will need to change the default locations of the google-authenticator file to outisde of the users encrypted home directory and update the google authenticator pam module to reflect the new location.
 
 When you get to the configure tasksel screen, choose "Install security updates automatically". When you get to the software selection screen, only choose "OpenSSH server". Then wait for the packages to finish installing.
 

@@ -1,0 +1,8 @@
+securedrop-app-ossec: new-package-should-close-itp-bug
+securedrop-app-ossec: embedded-library
+securedrop-app-ossec: embedded-zlib
+securedrop-app-ossec: possible-gpl-code-linked-with-openssl
+securedrop-app-ossec: new-package-should-close-itp-bug
+securedrop-app-ossec: possibly-insecure-handling-of-tmp-files-in-maintainer-script
+securedrop-app-ossec: non-standard-dir-in-var
+securedrop-app-ossec: file-in-unusual-dir

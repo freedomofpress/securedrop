@@ -7,17 +7,10 @@
     <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
     <script type="text/javascript" src="/static/js/libs/jquery-2.1.1.min.js"></script>
-    <script>
-      $(function(){
-        $('.warning').show();
-        $('#warning-close').click(function(){
-          $('.warning').hide(200);
-        });
-      });
-    </script>
+    <script type="text/javascript" src="/static/js/source.js"></script>
   </head>
   <body>
-    <div class="warning"><strong>We recommend disabling JavaScript to protect your anonymity:</strong> <a href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <i id="warning-close" class="fa fa-times"></i></div>
+    <div class="warning"><strong>We recommend disabling JavaScript to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <i id="warning-close" class="fa fa-times"></i></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -47,7 +40,7 @@
             Already submitted something?
           </h2>
           <hr class="cut-out" />
-          <p>If you have already submitted documents in the past, login here to check for responses. You will need to know your code name.</p>
+          <p>If you have already submitted documents in the past, log in here to check for responses. You will need to know your code name.</p>
           <hr class="no-line" />
           <a href="/login" class="btn block pull-bottom"><i class="fa fa-comments"></i> Check for a response</a>
         </div>

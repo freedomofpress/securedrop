@@ -19,7 +19,7 @@ EOS
 SOURCE_ROOT=$(dirname $0)
 
 securedrop_root=$(pwd)/.securedrop
-DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra python-poppler xvfb firefox"
+DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
@@ -50,6 +50,9 @@ if [[ $opsys != 'Linux' ]]; then
 fi
 
 distro=$(cat /etc/*-release | grep DISTRIB_ID | cut -d"=" -f 2)
+if [[ -z $distro && -f "/etc/debian_version" ]]; then
+    distro="Debian"
+fi
 
 if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     echo "This setup script only works for Ubuntu/Debian systems. Exiting script."
@@ -69,10 +72,31 @@ echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
+# Normally we would install the stable version of Firefox along with the rest
+# of $DEPENDENCIES, but there is a bug in Selenium stable (2.42.1) that
+# conflicts with the latest Firefox stable (32).  To fix this, we temporarily
+# downgrade to Firefox 30, which does not have this issue.
+#
+# https://code.google.com/p/selenium/issues/detail?id=7823
+# http://stackoverflow.com/a/25645344/1093000
+
+# For some reason (probably dependencies), you need to apt-get install and then
+# remove firefox for the following to work.
+sudo apt-get remove -y firefox
+
+echo "Installing Firefox 30 for compatibility with Selenium 2.42.1... (this might take a minute)"
+prevdir=`pwd`
+cd /tmp
+wget -nv https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
+tar -xf firefox-30.0.tar.bz2
+sudo mv firefox /opt/firefox30.0
+sudo ln -sf /opt/firefox30.0/firefox /usr/bin/firefox
+cd $prevdir
+
 sudo pip install --upgrade distribute
-sudo pip install -r source-requirements.txt
-sudo pip install -r document-requirements.txt
-sudo pip install -r test-requirements.txt
+sudo pip install -r requirements/source-requirements.txt
+sudo pip install -r requirements/document-requirements.txt
+sudo pip install -r requirements/test-requirements.txt
 
 echo "Setting up configurations..."
 # set up the securedrop root directory
@@ -110,12 +134,15 @@ EOF
 
 cat > config/base.py <<EOF
 #### Application Configuration
+DEFAULT_ENV = 'development'
 
 SOURCE_TEMPLATES_DIR = './source_templates'
 JOURNALIST_TEMPLATES_DIR = './journalist_templates'
 WORD_LIST = './wordlist'
 NOUNS = './dictionaries/nouns.txt'
 ADJECTIVES = './dictionaries/adjectives.txt'
+JOURNALIST_PIDFILE = "/tmp/journalist.pid"
+SOURCE_PIDFILE = "/tmp/source.pid"
 
 SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
 SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
@@ -206,6 +233,7 @@ exit 0
 EOF
 
 sudo chmod +x /etc/init.d/xvfb
+sudo update-rc.d xvfb defaults
 sudo service xvfb start
 sudo sh -c 'echo "export DISPLAY=:1" >> /etc/environment'
 export DISPLAY=:1
@@ -213,7 +241,7 @@ export DISPLAY=:1
 echo ""
 echo "Running unit tests... these should all pass!"
 set +e # turn flag off so we can check if the tests failed
-./test.sh
+./manage.py test
 
 TEST_RC=$?
 
@@ -221,6 +249,7 @@ if [[ $TEST_RC != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
     echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
+    exit $TEST_RC
 fi
 
 echo $bold$blue
@@ -230,13 +259,12 @@ echo "To make sure everything works, try running the app:"
 echo ""
 echo "$ vagrant ssh"
 echo "$ cd /vagrant/securedrop"
-echo "$ python source.py &"
-echo "$ python journalist.py &"
+echo "$ ./manage.py start"
 echo ""
 echo "Now you can visit the site at 127.0.0.1:{8080,8081} in your browser."
 echo ""
 echo "To re-run tests:"
 echo "cd /vagrant/securedrop"
-echo "./test.sh"
+echo "$ ./manage.py test"
 
 exit $TEST_RC

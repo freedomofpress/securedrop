@@ -1,0 +1,15 @@
+Source: securedrop
+Section: web
+Priority: optional
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
+Homepage: https://pressfreedomfoundation.org/securedrop
+Package: securedrop-app-interfaces
+Version: 0.2.1-dev
+Architecture: amd64
+Pre-Depends: debconf (>= 0.2.17)
+Depends: debhelper (>= 8.0.0),adduser,deb.torproject.org-keyring,secure-delete,haveged,ntp,schroot,debootstrap
+Conflicts: securedrop-monitor
+Description: Installs the SecureDrop Source and Document interfaces.
+  This package only configures to chroot jails and installs the interface
+  packages in those jails. It does not make any other changes to the host
+  system

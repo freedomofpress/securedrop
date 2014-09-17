@@ -1,0 +1,101 @@
+Template: securedrop-app-interfaces/prod_dev
+Type: boolean
+Description: Is this a production environment?
+ If this is a production environment, SecureDrop will
+ only install from the official SecureDrop apt repository
+ and will not prompt for locations of the Source and
+ Document .deb packages.
+
+Template: securedrop-app-interfaces/source_deb
+Type: string
+Description: Full path to the Source .deb package:
+ This will copy the specified .deb package and install
+ it in the Source chroot jail using gdebi.
+
+Template: securedrop-app-interfaces/source_deb_continue
+Type: boolean
+Description: That file did not exist try again?
+ The specified source deb package did not exist.
+
+Template: securedrop-app-interfaces/document_deb
+Type: string
+Description: Full path to the document deb package:
+ This will copy the specified .deb package and install
+ it in the document chroot jail using gdebi.
+
+Template: securedrop-app-interfaces/document_deb_continue
+Type: boolean
+Description: That file did not exist try again?
+ The specified document deb package did not exist.
+
+Template: securedrop-app-interfaces/find_key_path
+Type: string
+Description: The full path to the App's public GPG key:
+ This is the public GPG key that was created on the SVS and
+ sneakernet'd to the App Server. This key is used by the
+ Source Interface to encrypt the sources' submissions.
+
+Template: securedrop-app-interfaces/find_key_path_continue
+Type: boolean
+Description: That file did not exist try again?
+ The specified gpg key file did not exist.
+
+Template: securedrop-app-interfaces/app_key_fpr
+Type: string
+Description: The Application's gpg key's fingerprint:
+ This value is extracted from the supplied gpg key file
+
+Template: securedrop-app-interfaces/verify_fingerprint
+Type: boolean
+Description: Is this the App's GPG key's fingerprint: ${KEY_FPR}?
+ This is the fingerprint of the Application's GPG key, created on the
+ airgapped SVS.
+
+Template: securedrop-app-interfaces/use_custom_header_image
+Type: boolean
+Description: Use a custom image for the web interfaces?
+ This is the image that will be used at the top of the Source
+ and Document Interfaces and can be re-branded for your organization.
+ Supported formats: .jpg, .png
+
+Template: securedrop-app-interfaces/custom_header_image_path
+Type: string
+Description: The full path to the custom header image:
+ This is the image that will be used at the top of the Source
+ and Document Interfaces.
+
+Template: securedrop-app-interfaces/custom_header_image_path_continue
+Type: boolean
+Description: Try again?
+ The file specified did not exist.
+
+Template: securedrop-app-interfaces/app_user
+Type: string
+Default: securedrop
+Description: The user that will own the application files on the App Server:
+ This is the application user for the App Server outside of the chroot jails.
+
+Template: securedrop-app-interfaces/tor_key_id
+Type: string
+Default: 886DDD89
+Description: The Tor signing key's keyid:
+ This is the signing key used by Tor to sign their repo.
+
+Template: securedrop-app-interfaces/tor_key_fpr
+Type: string
+Default: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+Description: The tor signing key fingerprint:
+ This is the fingerprint of the key used to sign Tor packages.
+
+Template: securedrop-app-interfaces/journalist_user
+Type: string
+Description: A journalist's username:
+ This is the first journalist's username. Please only enter one username at this time
+ More journalist's can be added after the install is finsihed. Journalist users are only
+ for the document interface and do not need OS accounts.
+
+Template: securedrop-app-interfaces/journalist_user_continue
+Type: boolean
+Description: Try again?
+ That name was not valid. It does NOT have to be an OS account
+ but the name can only contain alphanumeric values.

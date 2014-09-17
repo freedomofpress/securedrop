@@ -1,27 +1,55 @@
-# SecureDrop Tails Files
+# Tails for the Journalist Workstation
 
-The recommended way for journalists to connect to the SecureDrop document interface is by using Tails. But to access it you need to edit your torrc file and restart tor each time you boot Tails. We've provided a program that makes this much simpler to do.
+This guide outlines the steps required to set up *Tails* on a *Transfer Device*, such as a USB stick, for use with the *Journalist Workstation*. The workstation will be used to connect to the *Document Interface*, download documents, and move them to the Secure Viewing Station using the Transfer Device.
 
-## Installation
+When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
 
-Boot to your internet-connected Tails USB, making sure to mount the persistent volume. Also make sure to choose More Options at the Tails greeter and set a password (so you can use sudo). Connect to the internet.
+## Install Tails on a Transfer Device
 
-Copy the securedrop folder to your home directory, or git clone it directly in tails.
+Instructions on how to download, verify and install the operating system onto a Transfer Device can be found on the [Tails website](https://tails.boum.org/download/index.en.html).
 
-Open a terminal and run:
+### Create an encrypted persistent volume
 
-    cd securedrop/tails_files/
-    sudo ./install.sh
+Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
 
-It will then ask for the password you set before. Type it and press enter.
+## Configure Tails for use with SecureDrop
 
-A text editor window will pop up, editing the file `torrc_additions`. Add your HidServAuth line to the end of this file. When you're done, the file should look something like this, except with your owninformation: 
+Before you can set up Tails for use with the Journalist Workstation, make sure you have enabled the persistent volume and that you are connected to the Internet.
 
-    # add HidServAuth lines here
-    HidServAuth b6ferdazsj2v6agu.onion AHgaX9YrO/zanQmSJnILvB # client: journalist1
+### Start Tails and enable the persistent volume
 
-When you're done, save the document and close the text editor. Reboot Tails, and this time mount your persistent volume but don't set a password. 
+When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*. Once you're logged in, connect the Tails machine to the Internet.
 
-## Usage
+### Download and run the setup scripts
 
-After you login to Tails, connect to the internet and wait until you connect to the Tor network. Then open your Persistence folder and double-click on `securedrop_init`. After that you can connect to your SecureDrop document interface. You have to do this once each time you login to Tails. 
+Open the terminal and run the following command to get the files required to set up Tails for use with the Journalist Workstation.
+
+```
+git clone https://github.com/freedomofpress/securedrop.git
+```
+
+Navigate to the directory with the setup scripts and begin the installation:
+
+```
+cd securedrop/tails_files/
+sudo ./install.sh
+```
+
+Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
+
+Edit the file with the *HidServAuth* information for your SecureDrop instance that you got during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information contains of the address to the Document Interface and your personal authentication string. The information from the installation guide results in the following:
+
+```
+# add HidServAuth lines here
+HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+```
+
+When you are done, click *Save* and close the text editor.
+
+## Using Tails with the Journalist Workstation
+
+To use Tails with the Journalist Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that you have to repeat this step every time you start Tails.
+
+### Create bookmarks for Source and Document Interfaces
+
+If you want, you can open the browser and create bookmarks for the Source and Document Interfaces. Navigate to the site you wish to bookmark, select *Bookmarks* and *Bookmark This Page*, give the site a useful name (e.g. *Source Interface*), and click *Done*. Tails will remember the bookmarks even if you reboot.

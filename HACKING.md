@@ -23,17 +23,31 @@ You can ssh into the VM by typing `vagrant ssh`.
 SecureDrop consists of two related web applications, one for sources and one for journalists. You can start the web servers from within the VM with:
 
     cd /vagrant/securedrop
-    python source.py &
-    python journalist.py &
+    ./manage.py start
 
 Now you can visit SecureDrop by loading [http://localhost:8080] for the source interface and [http://localhost:8081] for the journalist interface in your web browser.
 
 To run tests:
 
 	cd /vagrant/securedrop
-	./test.sh
+	./manage.py test
 
 For more instructions on how to interact with your VM, refer to the [Vagrant website](http://vagrantup.com).
+
+
+
+### Caching Vagrant
+
+Sometimes you will find yourself destroying and provisioning your Vagrant VM
+frequently (usually to debug issues in `setup_dev.sh`). The installation process
+takes a while, and can quickly become an annoying time waster. To avoid this,
+install the vagrant-cachier plugin:
+
+    $ vagrant plugin install vagrant-cachier
+
+This will cache packages from your next provision and use them in the future,
+making re-provisioning much, much faster. Installing the plugin is all you need
+to do, our Vagrantfile is set up to take advantage of it when it is available.
 
 ## Chroot Jail
 

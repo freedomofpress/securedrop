@@ -1,0 +1,14 @@
+Package: securedrop-app
+Source: securedrop-app
+Version: 0.2.1
+Architecture: amd64
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
+Depends: securedrop-app-interfaces,securedrop-app-hardening,securedrop-app-ossec
+Section: web
+Priority: optional
+Homepage: https://pressfreedomfoundation/securedrop
+Description: SecureDrop App Server (metapackage depending on the latest version)
+ This is a metapackage to install the securedrop-app-interfaces,
+ the securedrop-app-hardening and the securedrop-app ossec packges. You will need to
+ run /opt/securedrop/post-install.sh to see auth values for ssh and the document
+ interface. Without this information you will be locked out of the servers.
