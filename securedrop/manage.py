@@ -48,14 +48,23 @@ def test():
 
     test_suites = [test_unit, test_journalist, test_single_star]
 
+    # Exit code for script
+    rc = 0
+
     for test_suite in test_suites:
         test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
         test_runner = unittest.TextTestRunner(verbosity=2)
-        test_runner.run(test_loader)
+        result = test_runner.run(test_loader)
+        if not result.wasSuccessful():
+            rc = 1
 
     # TODO run functional tests directly from this script
     # Until then, we're still calling the old test.sh script just to run the functional tests.
-    subprocess.call(["./test.sh"])
+    result = subprocess.call(["./test.sh"])
+    if result != 0:
+        rc = 1
+
+    sys.exit(rc)
 
 
 def reset():
