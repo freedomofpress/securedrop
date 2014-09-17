@@ -72,27 +72,6 @@ echo "Installing dependencies: "$DEPENDENCIES
 sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
-# Normally we would install the stable version of Firefox along with the rest
-# of $DEPENDENCIES, but there is a bug in Selenium stable (2.42.1) that
-# conflicts with the latest Firefox stable (32).  To fix this, we temporarily
-# downgrade to Firefox 30, which does not have this issue.
-#
-# https://code.google.com/p/selenium/issues/detail?id=7823
-# http://stackoverflow.com/a/25645344/1093000
-
-# For some reason (probably dependencies), you need to apt-get install and then
-# remove firefox for the following to work.
-sudo apt-get remove -y firefox
-
-echo "Installing Firefox 30 for compatibility with Selenium 2.42.1... (this might take a minute)"
-prevdir=`pwd`
-cd /tmp
-wget -nv https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
-tar -xf firefox-30.0.tar.bz2
-sudo mv firefox /opt/firefox30.0
-sudo ln -sf /opt/firefox30.0/firefox /usr/bin/firefox
-cd $prevdir
-
 sudo pip install --upgrade distribute
 sudo pip install -r requirements/source-requirements.txt
 sudo pip install -r requirements/document-requirements.txt
