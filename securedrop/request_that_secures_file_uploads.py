@@ -1,5 +1,8 @@
 from flask import wrappers
-from io import BytesIO
+import safestream
+
+def create_secure_file_stream():
+    return safestream.BytesIO()
 
 class RequestThatSecuresFileUploads(wrappers.Request):
 
@@ -15,6 +18,3 @@ class RequestThatSecuresFileUploads(wrappers.Request):
                                            self.max_content_length,
                                            self.parameter_storage_class)
 
-
-def create_secure_file_stream():
-    return BytesIO()
