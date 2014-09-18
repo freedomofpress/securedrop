@@ -33,7 +33,7 @@ UseDNS no
 ClientAliveInterval 300
 ClientAliveCountMax 0
 Ciphers blowfish-cbc,aes256-cbc,aes256-ctr
-MACs hmac-sha2-256,hmac-sha2-512
+MACs hmac-sha2-256,hmac-sha2-512,hmac-sha1
 GatewayPorts no
 AllowGroups ssh
 AllowTcpForwarding no
