@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from jinja2 import Markup, escape
 
 
 def datetimeformat(dt, fmt=None, relative=False):
@@ -34,3 +35,10 @@ def _relative_timestamp(dt):
         return '{} days'.format(int(max(diff / 86400, 2)))
     else:
         return None
+
+
+def nl2br(context, value):
+    formatted = u'<br>\n'.join(escape(value).split('\n'))
+    if context.autoescape:
+        formatted = Markup(formatted)
+    return formatted
