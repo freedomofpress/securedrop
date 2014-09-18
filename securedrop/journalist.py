@@ -291,7 +291,7 @@ def bulk_download(sid, docs_selected):
     db_session.commit()
     zip = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
     return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=source.journalist_designation + ".zip",
+                     attachment_filename=source.journalist_filename() + ".zip",
                      as_attachment=True)
 
 
