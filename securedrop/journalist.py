@@ -289,7 +289,7 @@ def bulk_download(sid, docs_selected):
         except NoResultFound as e:
             app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
-    zip = store.get_bulk_archive(filenames)
+    zip = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
     return send_file(zip.name, mimetype="application/zip",
                      attachment_filename=source.journalist_designation + ".zip",
                      as_attachment=True)

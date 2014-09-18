@@ -66,12 +66,15 @@ def path(*s):
     return absolute
 
 
-def get_bulk_archive(filenames):
+def get_bulk_archive(filenames, zip_directory=''):
     zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_')
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)
-            zip.write(filename, arcname=os.path.basename(filename))
+            zip.write(filename, arcname=os.path.join(
+                zip_directory,
+                os.path.basename(filename)
+            ))
     return zip_file
 
 
