@@ -2,8 +2,8 @@ import journalist
 import unittest
 from mock import patch, ANY, MagicMock
 
-
 class TestJournalist(unittest.TestCase):
+
     def setUp(self):
         journalist.request = MagicMock()
         journalist.url_for = MagicMock()
@@ -12,7 +12,6 @@ class TestJournalist(unittest.TestCase):
         journalist.db_session = MagicMock()
         journalist.get_docs = MagicMock()
         journalist.get_or_else = MagicMock()
-
 
     @patch("journalist.col_delete")
     def test_col_process_delegates_to_col_delete(self, col_delete):
@@ -73,4 +72,10 @@ class TestJournalist(unittest.TestCase):
         journalist.request.form.getlist = MagicMock(return_value=cols_selected)
         journalist.request.form.__getitem__.return_value = action
 
+
+    @classmethod
+    def tearDownClass(cls):
+        # Reset the module variables that were changed to mocks so we don't
+        # break other tests
+        reload(journalist)
 
