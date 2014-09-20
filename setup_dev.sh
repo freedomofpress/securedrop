@@ -80,7 +80,8 @@ sudo pip install -r requirements/test-requirements.txt
 echo "Setting up configurations..."
 
 sudo mkdir -p $securedrop_root/{store,keys}
-sudo chown -R vagrant:vagrant $securedrop_root
+me=$(whoami)
+sudo chown -R $me:$me $securedrop_root
 keypath=$securedrop_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
