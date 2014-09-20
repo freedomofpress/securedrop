@@ -19,6 +19,8 @@ apache_files:
   - 'sites-available/source.conf'
 
 apache_modules:
+  - access_compat
+  - authn_core
   - alias
   - authz_core
   - authz_host
@@ -36,9 +38,7 @@ apache_modules:
   - xsendfile
 
 apache_disabled_modules:
-  - access_compat
   - auth_basic
-  - authn_core
   - authn_file
   - autoindex
   - env

@@ -1,5 +1,10 @@
 ---
 
+- name: remove /var/www/html
+  file:
+    state: absent
+    dest: "/var/www/html"
+
 - file:
     state: directory
     mode: 0700
