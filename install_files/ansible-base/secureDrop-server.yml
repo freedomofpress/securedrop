@@ -22,7 +22,7 @@
             virtport: "{{ service_document_port }}",
             target: "127.0.0.1:{{ service_document_port }}"
           }],
-        HiddenServiceAuthorizeClient: "{{ hidden_service_authorize_clients_list_key['document_users'] }}"
+        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['document_users'] }}"
       },
       { dir: "ssh",
         ports:
@@ -30,7 +30,7 @@
             virtport: "{{ service_ssh_port }}",
             target: "127.0.0.1:{{ service_ssh_port }}"
           }],
-        HiddenServiceAuthorizeClient: "{{ hidden_service_authorize_clients_list_key['ssh_users'] }}"
+        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['ssh_users'] }}"
       }
     ]
   roles:
