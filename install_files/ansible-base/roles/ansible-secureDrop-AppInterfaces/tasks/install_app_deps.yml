@@ -41,7 +41,19 @@
 
 - name: generate random 32 byte value
   shell: "head -c 32 /dev/urandom | base64"
-  register: flask_pepper
+  register: source_secret_key
+
+- name: generate random 32 byte value
+  shell: "head -c 32 /dev/urandom | base64"
+  register: journalist_secret_key
+
+- name: generate random 32 byte value
+  shell: "head -c 32 /dev/urandom | base64"
+  register: scrypt_id_pepper
+
+- name: generate random 32 byte value
+  shell: "head -c 32 /dev/urandom | base64"
+  register: scrypt_gpg_pepper
 
 - name: templatize config.py
   template: src="config.py" dest="{{ securedrop_root }}/config.py"
