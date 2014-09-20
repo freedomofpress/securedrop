@@ -47,8 +47,8 @@
         sudo: yes
       }
     - { role: ansible-secureDrop-AppInterfaces,
-        headerFilePath: "{{ secure_drop_header_image_path }}",
-        AppGPGPublicKey: "{{ secure_drop_app_gpg_public_key_path }}",
-        AppGPGFingerprint: "{{ secure_drop_app_gpg_fingerprint }}",
+        headerFilePath: "{{ securedrop_header_image_path }}",
+        AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}",
+        AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}",
         sudo: yes
       }
