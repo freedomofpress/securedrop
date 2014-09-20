@@ -1,0 +1,50 @@
+---
+
+- file:
+    state: directory
+    mode: 0700
+    owner: www-data
+    group: www-data
+    dest: "{{ securedrop_root }}"
+
+- file:
+    state: directory
+    mode: 0700
+    owner: www-data
+    group: www-data
+    dest: "{{ securedrop_data }}"
+
+- file:
+    state: directory
+    mode: 0700
+    owner: www-data
+    group: www-data
+    dest: "{{ securedrop_data }}/store"
+
+- file:
+    state: directory
+    mode: 0700
+    owner: www-data
+    group: www-data
+    dest: "{{ securedrop_keyring }}"
+
+- name: install secureDrop app dependency packages
+  apt: pkg="{{ item }}" state=latest
+  with_items: app_deps
+
+- name: initialize sqlite db
+  shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_root }} python -c 'import db; db.init_db()'\" {{ apache_user }}"
+  ignore_errors: True
+
+- name: import app gpg public key
+  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_keyring }} --import {{ secure_drop_app_gpg_public_key_path }}\" {{ apache_user }}"
+
+- name: generate random 32 byte value
+  shell: "head -c 32 /dev/urandom | base64"
+  register: flask_pepper
+
+- name: templatize config.py
+  template: src="config.py" dest="{{ securedrop_root }}/config.py"
+    owner="{{ apache_user }}"
+    group="{{ apache_user }}"
+    mode=0600

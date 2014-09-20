@@ -1,0 +1,7 @@
+---
+hidden_service_authorize_clients_list_key:
+  document_users: ""
+  ssh_users: ""
+secure_drop_header_image_path: ""
+secure_drop_app_gpg_public_key_path: ""
+secure_drop_app_gpg_fingerprint: ""

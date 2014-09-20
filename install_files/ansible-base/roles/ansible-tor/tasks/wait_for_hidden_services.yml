@@ -1,0 +1,16 @@
+---
+# wait for tor hidden services to be started
+
+- name: wait for all tor hidden services hostname files
+  wait_for: state=present path="{{ tor_hidden_services_parent_dir }}/{{ item.dir }}/hostname" delay=5
+  with_items: tor_hidden_services
+
+
+
+# or from another role/playbook we can wait like this using facts
+#- name: wait for all hidden services hostname files
+#  wait_for:
+#    state: present
+#    path: "{{ hostvars[inventory_hostname]['tor_hidden_services_parent_dir_fact'] }}/{{ item['dir'] }}/hostname"
+#  with_items: "{{ hostvars[inventory_hostname]['tor_hidden_services_fact'] }}"
+#  sudo: yes

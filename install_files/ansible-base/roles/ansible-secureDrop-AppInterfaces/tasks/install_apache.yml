@@ -1,0 +1,26 @@
+---
+
+- name: install apache packages
+  apt: pkg="{{ item }}" state=latest
+  with_items: apache_packages
+
+- name: ensure apache configuration files are present
+  copy: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
+  with_items: apache_files
+
+- name: ensure required apache modules present
+  apache2_module: state=present name={{ item }}
+  with_items: apache_modules
+
+- name: ensure certain apache modules disabled
+  apache2_module: state=absent name={{ item }}
+  with_items: apache_disabled_modules
+
+- name: ensure default site disabled
+  command: "a2dissite 000-default.conf"
+
+- name: ensure sites enabled
+  command: "a2ensite {{ item }}"
+  with_items: apache_sites
+
+

@@ -1,3 +1,7 @@
+
+# ignore "external" Ansible configuration file
+secureDropConf.yml
+
 *.py[cod]
 *.asc
 *.crt

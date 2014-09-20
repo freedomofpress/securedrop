@@ -1,0 +1,12 @@
+---
+
+- name: create tor hidden services parent directory
+  file: >
+    path={{ tor_hidden_services_parent_dir }}
+    state=directory
+    owner={{ tor_user }}
+
+- name: create tor hidden services directories
+  file: path={{ tor_hidden_services_parent_dir }}/{{ item.dir }}
+   state=directory owner={{ tor_user }}
+  with_items: tor_hidden_services

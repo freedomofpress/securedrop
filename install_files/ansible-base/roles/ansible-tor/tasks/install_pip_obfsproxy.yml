@@ -1,0 +1,81 @@
+---
+
+- name: gather state of python virtualenv tarball
+  stat: path={{ tor_obfsproxy_home }}/{{ tor_virtenv_tarball }}
+  register: virtenv_tarball_st
+  ignore_errors: True
+
+- name: ensure virtenv tarball downloaded
+  get_url: >
+    url={{ tor_virtenv_tarball_url }}
+    dest={{ tor_obfsproxy_home }}
+    mode=0600
+  when: virtenv_tarball_st.stat.exist is not defined
+
+- name: gather state of virtualenv tarball gpg signature
+  stat: path={{ tor_obfsproxy_home }}/{{ tor_virtenv_tarball }}
+  register: virtenv_tarball_sig_st
+
+- name: ensure virtenv tarball gpg signature downloaded
+  get_url: >
+    url={{ tor_virtenv_tarball_url }}.asc
+    dest={{ tor_obfsproxy_home }}
+    mode=0600
+  when: virtenv_tarball_sig_st.stat.exist is not defined
+
+- name: "check state of Donald Stufft's key in our gpg keyring"
+  command: gpg --fingerprint 3372DCFA
+  register: virtenv_key_state
+  ignore_errors: True
+
+- name: ensure local copy of virtualenv signing key is present
+  copy: >
+    src=virtualenv-signing-key.pub
+    dest={{ tor_obfsproxy_home }}/virtualenv-signing-key.pub
+  when: virtenv_key_state|failed
+
+- name: ensure virtualenv signing key is installed
+  command: gpg --import virtualenv-signing-key.pub
+  when: virtenv_key_state|failed
+
+- name: gpg verify the python virtualenv tarball
+  command: gpg --verify {{ tor_virtenv_tarball }}.asc
+  register: virtenv_verified
+
+- name: assert that virtualenv tarball is verified
+  assert:
+    that: "virtenv_verified.rc == 0"
+
+- name: gather state of virtualenv tarball dir
+  stat: path={{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv_version }}
+  register: virtenv_tarball_dir_st
+
+- name: ensure python virtenv tarball extracted
+  command: tar xf {{ tor_obfsproxy_home }}/{{ tor_virtenv_tarball }} --directory {{ tor_obfsproxy_home }}
+  when: virtenv_tarball_dir_st.stat.isdir is not defined
+
+- name: gather state of virtualenv target dir
+  stat: path="{{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv }}"
+  register: virtenv_st
+
+- name: ensure virtual env is created
+  command: "{{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv_version }}/virtualenv.py {{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv }}"
+  when: virtenv_st.stat.isdir is not defined
+
+- name: ensure obfsproxy dependencies are installed
+  apt: pkg="{{ item }}" state=latest
+  with_items:
+   - libgmp-dev
+   - build-essential
+   - python-dev
+   - git
+
+- name: ensure obfsproxy is pip installed in our python virtual env
+  pip: >
+    name="{{ tor_obfsproxy_git_url }}#egg=obfsproxy"
+    virtualenv="{{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv }}"
+    executable="{{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv }}/bin/pip"
+    virtualenv_command="{{ tor_obfsproxy_home }}/{{ tor_obfsproxy_virtenv_version }}/virtualenv.py"
+    state=latest
+  environment:
+    PIP_DOWNLOAD_CACHE: "{{ tor_obfsproxy_home }}/.pip_download_cache" 

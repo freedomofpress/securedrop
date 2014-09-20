@@ -1,0 +1,58 @@
+---
+
+securedrop_root: "/var/www/securedrop"
+securedrop_data: "/var/lib/securedrop"
+securedrop_keyring: "{{ securedrop_data }}/keys"
+
+apache_user: "www-data"
+
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_files:
+  - 'apache2.conf'
+  - 'ports.conf'
+  - 'security'
+  - 'sites-available/document.conf'
+  - 'sites-available/source.conf'
+
+apache_modules:
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - wsgi
+  - xsendfile
+
+apache_disabled_modules:
+  - access_compat
+  - auth_basic
+  - authn_core
+  - authn_file
+  - autoindex
+  - env
+  - setenvif
+  - status
+
+apache_sites:
+  - source
+  - document
+
+app_deps:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
