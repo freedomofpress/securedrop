@@ -21,7 +21,7 @@
         <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
         <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
       </form>
-      <blockquote>{{ reply.msg }}</blockquote>
+      <blockquote>{{ reply.msg | nl2br }}</blockquote>
       <div class="clearfix"></div>
     </div>
     {% endfor %}

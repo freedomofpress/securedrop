@@ -2,9 +2,7 @@ import unittest
 import journalist
 from mock import patch, ANY, MagicMock
 
-
 class TestJournalist(unittest.TestCase):
-
 
     def setUp(self):
         journalist.make_star_true = MagicMock()
@@ -56,5 +54,9 @@ class TestJournalist(unittest.TestCase):
 
         make_star_false.assert_called_with(sid)
 
-    
-    
+    @classmethod
+    def tearDownClass(cls):
+        # Reset the module variables that were changed to mocks so we don't
+        # break other tests
+        reload(journalist)
+

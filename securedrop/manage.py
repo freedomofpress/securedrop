@@ -44,18 +44,8 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
-    from tests import test_unit, test_journalist, test_single_star
-
-    test_suites = [test_unit, test_journalist, test_single_star]
-
-    for test_suite in test_suites:
-        test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
-        test_runner = unittest.TextTestRunner(verbosity=2)
-        test_runner.run(test_loader)
-
-    # TODO run functional tests directly from this script
-    # Until then, we're still calling the old test.sh script just to run the functional tests.
-    subprocess.call(["./test.sh"])
+    test_cmds = ["py.test", "./test.sh"]
+    sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
 
 
 def reset():

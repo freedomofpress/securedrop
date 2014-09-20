@@ -300,8 +300,8 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
-        li = soup.select('ul#submissions li .info')[0]
-        self.assertRegexpMatches(li['title'], "\d+ bytes")
+        span = soup.select('ul#submissions li span.info span')[0]
+        self.assertRegexpMatches(span['title'], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
         self.assertEqual(rv.status_code, 200)
@@ -373,8 +373,8 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
-        li = soup.select('ul#submissions li .info')[0]
-        self.assertRegexpMatches(li['title'], "\d+ bytes")
+        span = soup.select('ul#submissions li span.info span')[0]
+        self.assertRegexpMatches(span['title'], "\d+ bytes")
 
         rv = self.journalist_app.get(submission_url)
         self.assertEqual(rv.status_code, 200)

@@ -9,7 +9,7 @@ blue=$(tput setaf 4)
 red=$(tput setaf 1)
 normalcolor=$(tput sgr 0)
 
-    if [ "$(dpkg -l securedrop-app-interfaces)" ]; then
+    if [ "$(dpkg -s securedrop-app-interfaces 2>/dev/null)" ]; then
         # Display the URLs for the Source and Document interfaces
         if [ -f /var/chroot/source/var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/chroot/source/var/lib/tor/hidden_service/hostname)"
@@ -51,7 +51,7 @@ normalcolor=$(tput sgr 0)
             echo " to add more admins.$normalcolor"
             echo "$bold$blue#################################################################################$normalcolor"
        fi
-    elif [ "$(dpkg -l securedrop-document)" ]; then
+    elif [ "$(dpkg -s securedrop-document 2>/dev/null)" ]; then
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$blue The Document Interface listens on port 8080"
             echo " you will need to$bold append :8080$normalcolor$blue to the URL as shown below"
@@ -65,14 +65,14 @@ normalcolor=$(tput sgr 0)
             done < /var/lib/tor/hidden_service/hostname
             echo "$bold$blue################################################################################$normalcolor"
         fi
-    elif [ "$(dpkg -l securedrop-source)" ]; then
+    elif [ "$(dpkg -s securedrop-source 2>/dev/null)" ]; then
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             source_int="$(cat /var/lib/tor/hidden_service/hostname)"
             echo "$bold$blue################################################################################$normalcolor"
             echo "$blue The Source Interface's URL is: $normalcolor"
             echo "$red http://$source_int"
         fi
-    elif [ "$(dpkg -l securedrop-monitor)" ]; then
+    elif [ "$(dpkg -s securedrop-monitor-hardening 2>/dev/null)" ]; then
         if [ -f /var/lib/tor/hidden_service/hostname ]; then
             echo "$bold$blue#################################################################################$normalcolor"
             echo "$blue The Monitor Server is only accessible through a Tor Authenticated Hidden Service"
