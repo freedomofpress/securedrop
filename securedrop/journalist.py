@@ -15,7 +15,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 import background
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
-app.config.from_object(config.FlaskConfig)
+app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
