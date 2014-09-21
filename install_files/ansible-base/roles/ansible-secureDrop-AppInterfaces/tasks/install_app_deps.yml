@@ -64,4 +64,4 @@
 
 - name: initialize sqlite db
   shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_root }} python -c 'import db; db.init_db()'\" {{ apache_user }}"
-  ignore_errors: True
+
