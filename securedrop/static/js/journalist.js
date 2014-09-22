@@ -60,6 +60,10 @@ $(function () {
 
   $('#filter').keyup(function(){ filter_codenames(this.value) })
 
-  filter_codenames($('#filter').val())
+  // Check if #filter exists by checking the .length of the jQuery selector
+  // http://stackoverflow.com/questions/299802/how-do-you-check-if-a-selector-matches-something-in-jquery
+  if ($('#filter').length) {
+    filter_codenames($('#filter').val())
+  }
 
 });
