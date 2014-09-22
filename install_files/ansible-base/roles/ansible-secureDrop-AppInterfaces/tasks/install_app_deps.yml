@@ -42,7 +42,7 @@
   with_items: app_deps
 
 - name: import app gpg public key
-  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_keyring }} --import {{ securedrop_app_gpg_public_key_path }}\" {{ apache_user }}"
+  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ apache_user }}"
 
 - name: generating 32 byte value for "source secret key"
   shell: "head -c 32 /dev/urandom | base64"
