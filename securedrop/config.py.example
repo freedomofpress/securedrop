@@ -50,7 +50,7 @@ if env == 'prod':
     pass
 elif env == 'dev':
     # Enable Flask's debugger for development
-    FlaskConfig.DEBUG = False
+    FlaskConfig.DEBUG = True
     # Hack to get around cookies not considering the port as part of the origin
     SourceInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'source_session'
     JournalistInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'journalist_session'
