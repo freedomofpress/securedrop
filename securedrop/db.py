@@ -188,7 +188,7 @@ class Journalist(Base):
                                                         "SecureDrop"))
 
         qr = qrcode.QRCode(
-            box_size=25,
+            box_size=15,
             image_factory=qrcode.image.svg.SvgPathImage
         )
         qr.add_data(uri)

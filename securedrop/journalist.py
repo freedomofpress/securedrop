@@ -166,8 +166,6 @@ def admin_add_user():
                           "general_validation")
 
         if form_valid:
-            flash("New user {0} succesfully added".format(username),
-                  "notification")
             return redirect(url_for('admin_new_user_two_factor',
                                     uid=new_user.id))
 
