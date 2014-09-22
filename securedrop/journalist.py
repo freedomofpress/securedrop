@@ -100,7 +100,6 @@ def login():
             flash("Login failed", "error")
         else:
             session['uid'] = user.id
-            flash("Successfully logged in", "notification")
 
             # Update access metadata
             user.last_access = datetime.now()
@@ -175,18 +174,28 @@ def admin_add_user():
 @app.route('/admin/2fa', methods=('GET', 'POST'))
 @admin_required
 def admin_new_user_two_factor():
-    uid = request.args['uid']
-    user = Journalist.query.get(uid)
+    user = Journalist.query.get(request.args['uid'])
 
     if request.method == 'POST':
         token = request.form['token']
         if user.totp.verify(token):
-            flash("Two factor token successfully verified!", "notification")
+            flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
             return redirect(url_for("admin_index"))
         else:
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
+
+@app.route('/admin/reset-2fa', methods=['POST'])
+@admin_required
+def admin_reset_two_factor():
+    uid = request.form['uid']
+    user = Journalist.query.get(uid)
+    user.regenerate_otp_shared_secret()
+    db_session.commit()
+    return redirect(url_for('admin_new_user_two_factor', uid=uid))
+
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required

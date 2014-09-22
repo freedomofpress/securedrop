@@ -72,4 +72,9 @@ $(function () {
       return confirm("Are you sure you want to delete the user " + username + "?");
   });
 
+  // Confirm before resetting two factor authentication on edit user page
+  $('form#reset-two-factor').submit(function(event) {
+      return confirm("Are you sure to want to reset this user's two factor authentication?");
+  });
+
 });

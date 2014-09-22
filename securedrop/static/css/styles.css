@@ -307,6 +307,11 @@ hr.no-line {
   text-align: center;
 }
 
+button.center {
+  display: block;
+  margin: 0 auto;
+}
+
 .flash {
   padding:10px;
   margin:10px;

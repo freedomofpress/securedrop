@@ -178,6 +178,9 @@ class Journalist(Base):
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
+    def regenerate_otp_shared_secret(self):
+        self.otp_secret = pyotp.random_base32()
+
     @property
     def totp(self):
         return pyotp.TOTP(self.otp_secret)
