@@ -2,7 +2,11 @@
 {% block body %}
 <h2>Admin interface</h2>
 
-<a href="/admin/add" id="add-user">Add user</a>
+<form action="{{ url_for('admin_add_user') }}">
+  <button type="submit" class="btn"><i class="fa fa-plus"></i> Add user</button>
+</form>
+
+<hr class="no-line" />
 
 {% if users %}
 <form id="user_actions" method="post">
