@@ -575,10 +575,9 @@ span#shared_secret {
 }
 
 table#users {
-  border-spacing: 5px;
+  width: 100%;
 }
 
 table#users td {
-  padding: 2px 16px;
   text-align: center;
 }

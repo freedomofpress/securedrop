@@ -66,4 +66,10 @@ $(function () {
     filter_codenames($('#filter').val())
   }
 
+  // Confirm before deleting user on admin page
+  $('button.delete-user').click(function(event) {
+      var username = $(this).attr('data-username');
+      return confirm("Are you sure you want to delete the user " + username + "?");
+  });
+
 });
