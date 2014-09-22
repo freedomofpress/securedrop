@@ -31,7 +31,7 @@ from jinja2 import evalcontextfilter
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
-app.config.from_object(config.FlaskConfig)
+app.config.from_object(config.SourceInterfaceFlaskConfig)
 CsrfProtect(app)
 
 SUBMIT_DOC_NOTIFY_STR = "Thanks! We received your document"

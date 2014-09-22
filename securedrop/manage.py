@@ -13,6 +13,8 @@ import unittest
 # TODO: do we need to store *_PIDFILE in the application config? It seems like
 # an implementation detail that is specifc to this management script.
 
+os.environ['SECUREDROP_ENV'] = 'dev'
+
 def start():
     import config
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
