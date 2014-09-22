@@ -259,6 +259,9 @@ class TestJournalist(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
+        self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                os.path.join(source.journalist_filename(),files[0])
+            ))
 
 
 class TestIntegration(unittest.TestCase):
