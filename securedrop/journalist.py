@@ -147,7 +147,7 @@ def admin_add_user():
             form_valid = False
             flash("Passwords didn't match", "password_validation")
 
-        is_admin = request.form.get('is_admin', False)
+        is_admin = True if request.form.get('is_admin') else False
 
         if form_valid:
             try:
