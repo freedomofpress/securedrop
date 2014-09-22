@@ -21,7 +21,8 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="/"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        {% set user = g.get('user', None) %}
+        <a href="{% if user and user.is_admin %}{{ url_for('admin_index') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br/>
