@@ -35,7 +35,7 @@
     mode: 0700
     owner: www-data
     group: www-data
-    dest: "{{ securedrop_keyring }}"
+    dest: "{{ securedrop_data }}/keys"
 
 - name: ensure secureDrop app dependency packages are installed
   apt: pkg="{{ item }}" state=latest
