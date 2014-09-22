@@ -51,7 +51,7 @@ def get_source(sid):
 
 
 def logged_in():
-    return 'logged_in' in session
+    return 'logged_in' in session and g.get('user', None)
 
 
 def login_required(func):
