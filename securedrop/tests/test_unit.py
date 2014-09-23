@@ -484,23 +484,30 @@ class TestIntegration(unittest.TestCase):
         # sending a reply
         _block_on_reply_keypair_gen(codename)
 
-        rv = self.journalist_app.post('/reply', data=dict(
-            sid=sid,
-            msg=test_reply
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+        # Create 2 replies to test deleting on journalist and source interface
+        for i in range(2): 
+            rv = self.journalist_app.post('/reply', data=dict(
+                sid=sid,
+                msg=test_reply
+            ), follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
 
-        if not expected_success:
-            pass
-        else:
-            self.assertIn("Thanks! Your reply has been stored.", rv.data)
+            if not expected_success:
+                pass
+            else:
+                self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
-        with self.journalist_app as journalist_app:
-            rv = journalist_app.get(col_url)
-            self.assertIn("reply-", rv.data)
-            _logout(journalist_app)
+            with self.journalist_app as journalist_app:
+                rv = journalist_app.get(col_url)
+                self.assertIn("reply-", rv.data)
+                _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
+
+        # Test deleting reply on the journalist interface
+        soup = BeautifulSoup(rv.data)
+        last_reply_number = len(soup.select('input[name="doc_names_selected"]')) - 1
+        self.helper_filenames_delete(soup, last_reply_number)
 
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
