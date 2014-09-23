@@ -14,7 +14,10 @@
 
     {% if session.get('logged_in', False) %}
     <div id="logout">
-      <a href="/logout">Logout</a>
+      {% if g.user and g.user.is_admin %}
+      <a href="{{ url_for('admin_index') }}">Admin</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
     {% endif %}
 
@@ -22,7 +25,7 @@
       {% block header %}
       <div id="header">
         {% set user = g.get('user', None) %}
-        <a href="{% if user and user.is_admin %}{{ url_for('admin_index') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br/>

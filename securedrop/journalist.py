@@ -108,9 +108,6 @@ def login():
 
             # Update session
             session['logged_in'] = True
-
-            if user.is_admin:
-                return redirect(url_for('admin_index'))
             return redirect(url_for('index'))
 
     return render_template("login.html")
