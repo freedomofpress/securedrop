@@ -115,7 +115,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('id', None)
+    session.pop('uid', None)
     session.pop('logged_in', None)
     return redirect(url_for('index'))
 
