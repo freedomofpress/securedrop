@@ -2,7 +2,6 @@
 
 securedrop_root: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"
-securedrop_keyring: "{{ securedrop_data }}/keys"
 
 apache_user: "www-data"
 
