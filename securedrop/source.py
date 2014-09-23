@@ -26,11 +26,9 @@ import store
 import background
 import template_filters
 from db import db_session, Source, Submission
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
-app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 CsrfProtect(app)
 
