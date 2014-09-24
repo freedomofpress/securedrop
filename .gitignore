@@ -1,4 +1,8 @@
 
+# ignore some things for the rspec tests
+spec-tests/gems/*
+Gemfile.lock
+
 # ignore "external" Ansible configuration file
 secureDropConf.yml
 
