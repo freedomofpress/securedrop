@@ -53,28 +53,28 @@ describe file('/etc/apache2/sites-available/source.conf') do
 end
 
 # are the correct apache modules enabled
-['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do enModules
-  describe command('a2query -m' enModules) do
+['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enModules|
+  describe command("a2query -m #{enModules}") do
     it { should return_stdout /enabled by/ }
   end
 end
 
 # are the correct apache modules disabled
-['auth_basic','authn_file','autoindex','env','setenvif','status'].each do disModules
-  describe command('a2query -m' disModules) do
+['auth_basic','authn_file','autoindex','env','setenvif','status'].each do |disModules|
+  describe command("a2query -m #{disModules}") do
     it { should return_stdout /disabled by/ }
   end
 end
 
 # Are default sites disabled?
-['000-default','default-ssl'].each do dissites
-  describe command('a2query -s' dissites) do
+['000-default','default-ssl'].each do |dissites|
+  describe command("a2query -s #{dissites}") do
     it { should return_stdout /disabled by/ }
   end
 end
  
 # Are default html files removed?
-describe file(/var/www/html) do
+describe file('/var/www/html') do
   it { should be_directory }
 end
 
