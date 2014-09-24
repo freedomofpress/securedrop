@@ -74,8 +74,19 @@ end
 end
  
 # Are default html files removed?
+describe file(/var/www/html) do
+  it { should be_directory }
+end
 
 # Is apache running as user X
 
 # Is apache listening only on localhost:80 and 8080
+describe port(80) do
+  it { should be_listening.on('127.0.0.1').with('tcp') }
+end
+describe port(8080) do
+  it { should be_listening.on('127.0.0.1').with('tcp') }
+end
 
+# Is the sites-available linked to sites-enabled source.conf document.conf
+# Check firewall rule
