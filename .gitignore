@@ -1,3 +1,5 @@
+# ignore vagrant servet file
+secrets.rb
 
 # ignore some things for the rspec tests
 spec-tests/gems/*
