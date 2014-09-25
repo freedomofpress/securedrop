@@ -12,7 +12,10 @@ umask 022
 
 apt-get install libssl-dev python-pip python-dev  -y
 pip install wheel
-mkdir $BUILD_PATH
+
+if [ ! -d "$BUILD_PATH" ]; then
+    mkdir $BUILD_PATH
+fi
 
 build_app_deb() {
     PACKAGE_NAME="$1"
