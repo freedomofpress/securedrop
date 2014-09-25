@@ -1,0 +1,5 @@
+{{ os.system("cat /dev/urandom | tr -dc 'A-Z' | head -c 16") }}
+RATE_LIMIT 3 30
+WINDOW_SIZE 17
+DISALLOW_REUSE
+TOTP_AUTH

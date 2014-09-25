@@ -1,0 +1,22 @@
+---
+
+- include: configure_ssh.yml
+
+- name: ensure pam config is installed
+  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
+
+- name: ensure google-authenticator configuration is present
+  copy:
+    src="google-authenticator"
+    dest="/home/{{ item }}/.google_authenticator"
+    mode=0400
+    owner="{{ item }}"
+    group="{{ item }}"
+  with_items: "{{ hidden_service_authorize_clients_list_key.ssh_users.split(,) }}"
+
+- name: ensure 50unattended-upgrades is installed
+  template: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+
+- name: ensure 20auto-upgrades is installed
+  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+
