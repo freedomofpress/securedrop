@@ -1,0 +1,7 @@
+---
+hidden_service_authorize_clients_list_key:
+  document_users: "journalist1"
+  ssh_users: "vagrant"
+securedrop_header_image_path: "None"
+securedrop_app_gpg_public_key_path: "~/securedrop/test_journalist_key.pub"
+securedrop_app_gpg_fingerprint:"65A1B5FF195B56353CC63DFFCC40EF1228271441"

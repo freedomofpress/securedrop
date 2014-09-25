@@ -1,3 +1,8 @@
+# ignore vagrant servet file
+secrets.rb
+
+# ignore the auto generated vagrant ansible inventory files
+vagrant_ansible_inventory*
 
 # ignore some things for the rspec tests
 spec-tests/gems/*

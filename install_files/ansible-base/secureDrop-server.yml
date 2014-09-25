@@ -35,7 +35,7 @@
     ]
   roles:
     - { role: ansible-tor,
-        tor_distribution_release: "wheezy",
+        tor_distribution_release: "trusty",
         tor_ExitPolicy: "reject *:*",
         tor_hidden_services: "{{ securedrop_hidden_services }}",
         tor_hidden_services_parent_dir: "{{ hidden_services_parent_dir }}",
