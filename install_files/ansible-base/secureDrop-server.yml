@@ -1,5 +1,6 @@
 ---
-- hosts: 127.0.0.1
+- hosts: app
+
   vars_files:
     - secureDropConf.yml
   vars:
