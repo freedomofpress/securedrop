@@ -1,4 +1,16 @@
 ---
+- name: read in the ssh onion addresses for SSH ATHS
+  shell: "cat {{ sshOnion_hostname }}"
+  register: sshOnion
+
+- name: print sshOnion address to stdout
+  debug: msg="{{ sshOnion.stdout }}"
+
+- name: copy ssh ATHS hostname file from guest to host
+  fetch:
+    flat: yes
+    src: "{{ sshOnion_hostname }}"
+    dest: "ssh-hostname"
 
 - name: ensure ssh configuration files are present
   copy: src={{ item }} dest=/etc/ssh/{{ item }} owner=root mode=0644
@@ -17,8 +29,8 @@
   copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
 
 - name: ensure google-authenticator configuration is present
-  copy:
-    src="google-authenticator"
+  template:
+    src="google_authenticator"
     dest="/home/{{ item }}/.google_authenticator"
     mode=0400
     owner="{{ item }}"
@@ -30,17 +42,3 @@
 
 - name: ensure 20auto-upgrades is installed
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
-
-- name: read in the ssh onion addresses for SSH ATHS
-  shell: "cat {{ sshOnion_hostname }}"
-  register: sshOnion
-
-- name: print sshOnion address to stdout
-  debug: msg="{{ sshOnion.stdout }}"
-
-- name: copy ssh ATHS hostname file from guest to host
-  fetch:
-    flat: yes
-    src: "{{ sshOnion_hostname }}"
-    dest: "ssh-hostname"
-

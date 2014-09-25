@@ -1,3 +1,5 @@
+# ignore the ATHS/THS hostname file ansible places
+ssh-hostname
 # ignore vagrant servet file
 secrets.rb
 
