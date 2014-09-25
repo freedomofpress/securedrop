@@ -6,10 +6,12 @@ end
 
 describe file('/etc/tor/torrc') do
   it { should be_file }
-  its(:content) { should contain 'ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030' }
+  its(:content) { should match "HiddenServiceAuthorizeClient stealth #{property['hidden_service_authorize_clients_list_key']['document_users']}" }
+  its(:content) { should match "HiddenServiceAuthorizeClient stealth #{property['hidden_service_authorize_clients_list_key']['ssh_users']}" }
 end
 
-describe command('service tor status') do
+describe command('sudo service tor status') do
   it { should return_exit_status 0 }
 end
+
 
