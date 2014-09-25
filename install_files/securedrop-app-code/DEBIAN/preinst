@@ -1,5 +1,5 @@
 #!/bin/sh
-# preinst script for securedrop-app
+# preinst script for securedrop-app-code
 #
 # see: dh_installdeb(1)
 

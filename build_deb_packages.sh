@@ -25,7 +25,7 @@ build_app_deb() {
     fi
 
     # move the deb package to build dir
-    cp -R $MY_PATH/install_files/securedrop-app/ $PACKAGE_DIR
+    cp -R $MY_PATH/install_files/securedrop-app-code/ $PACKAGE_DIR
 
     # move the app code to correct directory
     mkdir -p $PACKAGE_DIR/var/www
@@ -43,5 +43,5 @@ build_app_deb() {
     cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
 }
 
-build_app_deb securedrop-app
+build_app_deb securedrop-app-code
 exit 0

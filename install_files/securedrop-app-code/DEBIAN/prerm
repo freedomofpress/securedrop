@@ -1,5 +1,5 @@
 #!/bin/sh
-# prerm script for securedrop-app
+# prerm script for securedrop-app-code
 #
 # see: dh_installdeb(1)
 

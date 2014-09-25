@@ -3,7 +3,7 @@ Section: web
 Priority: optional
 Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
 Homepage: https://pressfreedomfoundation.org/securedrop
-Package: securedrop-app
+Package: securedrop-app-code
 Version: 0.3-dev
 Architecture: amd64
 Depends: python-pip
