@@ -70,7 +70,7 @@ HiddenServiceDir {{ tor_hidden_services_parent_dir }}/{{ service.dir }}
 HiddenServicePort {{ hidden_port.virtport }} {{ hidden_port.target }}
 {% endfor %}
 {% if "HiddenServiceAuthorizeClients" in service %}
-HiddenServiceAuthorizeClient stealth {{ service.HiddenServiceAuthorizeClients }}
+HiddenServiceAuthorizeClient stealth {{ ",".join(service.HiddenServiceAuthorizeClients) }}
 {% endif %}
 {% endfor %}
 {% endif %}

@@ -53,5 +53,7 @@
         sudo: yes
       }
     - { role: ansible-secureDrop-AppHardening,
+        sshOnion_hostname: "{{ hidden_services_parent_dir }}/ssh/hostname",
+        sshUsers: "{{ hidden_service_authorize_clients_list_key['ssh_users'] }}",
         sudo: yes
       }

@@ -1,6 +1,17 @@
 ---
 
-- include: configure_ssh.yml
+- name: ensure ssh configuration files are present
+  copy: src={{ item }} dest=/etc/ssh/{{ item }} owner=root mode=0644
+  with_items:
+   - sshd_config
+   - ssh_config
+  notify:
+   - restart ssh
+
+- meta: flush_handlers
+
+- name: ensure sshd is running
+  service: name=ssh state=running
 
 - name: ensure pam config is installed
   copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
@@ -12,11 +23,24 @@
     mode=0400
     owner="{{ item }}"
     group="{{ item }}"
-  with_items: "{{ hidden_service_authorize_clients_list_key.ssh_users.split(,) }}"
+  with_items: sshUsers
 
 - name: ensure 50unattended-upgrades is installed
   template: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
 
 - name: ensure 20auto-upgrades is installed
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+
+- name: read in the ssh onion addresses for SSH ATHS
+  shell: "cat {{ sshOnion_hostname }}"
+  register: sshOnion
+
+- name: print sshOnion address to stdout
+  debug: msg="{{ sshOnion.stdout }}"
+
+- name: copy ssh ATHS hostname file from guest to host
+  fetch:
+    flat: yes
+    src: "{{ sshOnion_hostname }}"
+    dest: "ssh-hostname"
 
