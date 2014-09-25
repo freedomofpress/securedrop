@@ -16,10 +16,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'devapp' do |devapp|
-    devapp.ssh.private_key_path = "~/.ssh/id_rsa"
-    devapp.vm.box = "trusty64"
-    devapp.vm.box_url = "http://files.vagrantup.com/trusty64.box"
+  config.vm.define 'mon' do |mon|
+    mon.ssh.private_key_path = "~/.ssh/id_rsa"
+    mon.vm.box = "trusty64"
+    mon.vm.box_url = "http://files.vagrantup.com/trusty64.box"
+  end
+
+ config.vm.define 'app' do |app|
+    app.ssh.private_key_path = "~/.ssh/id_rsa"
+    app.vm.box = "trusty64"
+    app.vm.box_url = "http://files.vagrantup.com/trusty64.box"
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
   end
 
   config.vm.provider :digital_ocean do |provider, override|
