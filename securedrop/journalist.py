@@ -276,7 +276,8 @@ def bulk_delete(sid, docs_selected):
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
-            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
+            if not doc['name'].endswith('reply.gpg'):
+                db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
             fn = store.path(sid, doc['name'])
             store.secure_unlink(fn)
         db_session.commit()
