@@ -52,3 +52,6 @@
         AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}",
         sudo: yes
       }
+    - { role: ansible-secureDrop-AppHardening,
+        sudo: yes
+      }

@@ -1,0 +1,5 @@
+---
+# handlers for ansible-tor
+
+- name: restart ssh
+  service: name=ssh state=restarted
