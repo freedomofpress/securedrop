@@ -36,7 +36,7 @@
   with_items: proc_instances
   register: instances_status
 
-- name: "ensure tor instances are reloaded if it's torrc changed"
+- name: ensure tor instances are reloaded if it's torrc changed
   shell: "kill -HUP `cat {{ tor_instance_parent_dir }}/{{ item.item.name }}/tor.pid`"
   ignore_errors: yes
   with_items: instances_status.results
