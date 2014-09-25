@@ -492,15 +492,15 @@ class TestIntegration(unittest.TestCase):
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
 
-            if not expected_success:
-                pass
-            else:
-                self.assertIn("Thanks! Your reply has been stored.", rv.data)
+        if not expected_success:
+            pass
+        else:
+            self.assertIn("Thanks! Your reply has been stored.", rv.data)
 
-            with self.journalist_app as journalist_app:
-                rv = journalist_app.get(col_url)
-                self.assertIn("reply-", rv.data)
-                _logout(journalist_app)
+        with self.journalist_app as journalist_app:
+            rv = journalist_app.get(col_url)
+            self.assertIn("reply-", rv.data)
+            _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
 
