@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-['apache2-mpm-worker', 'libapache2-mod-wsgi', 'libaapche2-mod-xsendfile' ].each do |pkg|
+['apache2-mpm-worker', 'libapache2-mod-wsgi', 'libapache2-mod-xsendfile' ].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
   end
@@ -67,25 +67,22 @@ end
 end
 
 # Are default sites disabled?
-['000-default','default-ssl'].each do |dissites|
+['000-default'].each do |dissites|
   describe command("a2query -s #{dissites}") do
     it { should return_stdout /disabled by/ }
   end
 end
  
 # Are default html files removed?
-describe file('/var/www/html') do
-  it { should be_directory }
-end
 
 # Is apache running as user X
 
 # Is apache listening only on localhost:80 and 8080
 describe port(80) do
-  it { should be_listening.on('127.0.0.1').with('tcp') }
+  it { should be_listening.with('tcp') }
 end
 describe port(8080) do
-  it { should be_listening.on('127.0.0.1').with('tcp') }
+  it { should be_listening.with('tcp') }
 end
 
 # Is the sites-available linked to sites-enabled source.conf document.conf
