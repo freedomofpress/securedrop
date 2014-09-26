@@ -24,6 +24,21 @@
     dest: "{{ securedrop_root }}"
   tags:
     - production
+    - staging
+
+- name: stat securedrop_root
+  stat:
+    path: "{{ securedrop_root }}"
+  register: securedrop_root_st
+  tags:
+    - production
+    - staging
+
+- fail: msg="securedrop_root is a symlink. human operator failure."
+  when: securedrop_root_st.stat.islnk
+  tags:
+    - production
+    - staging
 
 - name: ensure securedrop data directory exists 
   file:

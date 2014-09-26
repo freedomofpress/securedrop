@@ -15,13 +15,5 @@
 - name: ensure pam config is installed
   copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
 
-- name: ensure google-authenticator configuration is present
-  template:
-    src="google_authenticator"
-    dest="/home/{{ item }}/.google_authenticator"
-    mode=0400
-    owner="{{ item }}"
-    group="{{ item }}"
-  with_items: sshUsers
 
 

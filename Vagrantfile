@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
-    ansible.skip_tags = "production"
+    ansible.skip_tags = "development"
   end
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
