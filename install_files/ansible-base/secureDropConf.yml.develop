@@ -1,4 +1,5 @@
 ---
+securedrop_environment: "dev" # options dev stag
 hidden_service_authorize_clients_list_key:
   document_users:
     - journalist1
