@@ -31,7 +31,7 @@
 - name: ensure 20auto-upgrades is installed
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
 
-- inlcude: iptables.yml
+- include: iptables.yml
   tags:
     - production
     - staging
