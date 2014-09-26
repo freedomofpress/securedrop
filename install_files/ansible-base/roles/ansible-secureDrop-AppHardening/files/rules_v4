@@ -1,0 +1,58 @@
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:LOGNDROP - [0:0]
+# Allow the tor instances used for ssh, source and document interface outbound access to default tor destination ports.
+# Load before tor user drop rules
+# Ports are from https://www.torproject.org/docs/faq#OutboundPorts
+-A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner messagebus -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A INPUT -p tcp --match multiport --sports 80,8080,443,8443,9001,9030 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
+# Rate limit ssh connections coming from the tor network
+# Load before generic loopback rules
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
+# Drop all other outbound traffic by the tor user.
+# Load before generic loopback rules
+-A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for the tor instance used for ssh"
+# Only allow inbound rules from loopback with a dport of 80 or 8080 respectively for apache user
+# Load before application users drop rules
+# Rate limiting does not make sense here because src ip is always loopback address
+-A INPUT -i lo -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to source int"
+-A OUTPUT -o lo -p tcp --sport 80 -m owner --uid-owner www-data -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Restrict the apache user outbound connections"
+-A INPUT -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to document int"
+-A OUTPUT -o lo -p tcp --sport 8080 -m owner --uid-owner www-data -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Restrict the apache user outbound connections"
+# Block all other traffic by application users
+# Load before generic loopback rules
+-A OUTPUT -m owner --uid-owner www-data -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
+# Block all other outbound access for users in the ssh group
+# Load before generic loopback rules
+-A OUTPUT -m owner --gid-owner ssh -j LOGNDROP -m comment --comment "Drop all other outbound traffic for ssh user"
+# DNS rules
+-A OUTPUT -p tcp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A INPUT -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -p udp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A INPUT -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+# NTP rules
+-A OUTPUT -p udp --sport 123 --dport 123 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+-A INPUT -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+# apt rules can't be restricted by destination address because iptables will only resolve FQDNs once at startup
+-A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
+-A INPUT -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
+# OSSEC server-agent rules
+# TODO add owner to OUTPUT rule
+-A OUTPUT -d $monitor_ip -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+-A INPUT -s $monitor_ip -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+# Allow generic loopback connections
+-A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+-A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
+# Drop and log all other traffic
+-A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
+-A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
+# LOGNDROP everything else
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-ip-options --log-tcp-options --log-uid --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-ip-options --log-uid --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-ip-options --log-uid --log-level 4
+-A LOGNDROP -j DROP
+COMMIT

@@ -1,5 +1,4 @@
 ---
-
 - name: install apache packages
   apt: pkg="{{ item }}" state=latest
   with_items: apache_packages
@@ -22,5 +21,3 @@
 - name: ensure sites enabled
   command: "a2ensite {{ item }}"
   with_items: apache_sites
-
-
