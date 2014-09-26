@@ -1,0 +1,25 @@
+---
+
+- name: ensure latest sudoers file is copied to sudoers.tmp
+  copy:
+    src="sudoers"
+    dest=/etc/sudoers.tmp
+    owner=root
+    group=root
+    mode=0440
+  register: sudoers_st
+
+- name: ensure sudoers file is installed if syntax check passes
+  shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
+  when: sudoers_st.changed
+
+- name: ensure secureDrop admin user accounts exist
+  user:
+    name="{{ item }}"
+    shell=/bin/bash
+    groups=sudo
+  with_items: sshUsers.keys()
+
+- name: ensure place admin ssh public keys exist
+  authorized_key: user="{{ item }}" key="{{ lookup('file', sshUsers[item]) }}"
+  with_items: sshUsers.keys()

@@ -30,7 +30,7 @@
             virtport: "{{ service_ssh_port }}",
             target: "127.0.0.1:{{ service_ssh_port }}"
           }],
-        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['ssh_users'] }}"
+        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}"
       }
     ]
   roles:

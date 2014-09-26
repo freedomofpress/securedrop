@@ -30,3 +30,8 @@
 
 - name: ensure 20auto-upgrades is installed
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+
+- include: create_users.yml
+  tags:
+    - production
+    - staging
