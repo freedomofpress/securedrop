@@ -51,6 +51,19 @@
   apt: pkg="{{ item }}" state=latest
   with_items: app_deps
 
+- name: ensure securedrop-app-code packages is installed
+  apt: pkg="securedrop-app-code" state=latest
+#  when: sshEnv == "prod" or sshEnv == "stag"
+
+#- name: link shared securedrop app folder to /var/www/securedrop
+#  file:
+#    state: link
+#    src: /vagrant/securedrop
+#    dest: /var/www/securedrop
+#    owner: www-data
+#    group: www-data
+#  when: sshEnv == "dev"
+
 - name: import app gpg public key
   command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ apache_user }}"
 

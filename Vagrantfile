@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
   end
 
- config.vm.define 'app' do |app|
+  config.vm.define 'app' do |app|
     app.vm.box = "trusty64"
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
   end
