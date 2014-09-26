@@ -55,4 +55,7 @@ app_deps:
   - python-pip
   - secure-delete
   - sqlite
-  - securedrop-app-code
+
+dev_deps:
+  - libssl-dev
+  - python-dev

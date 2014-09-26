@@ -28,18 +28,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
+    ansible.skip_tags = "production"
   end
-
-#  config.vm.provider :digital_ocean do |provider, override|
-#    override.ssh.private_key_path = '~/.ssh/id_rsa'
-#    provider.ssh_key_name = "dev-vps"
-#    override.vm.box = 'digital_ocean'
-#    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-#    provider.token = TOKEN
-#    provider.image = "Ubuntu 14.04 x64"
-#    provider.region = "nyc2"
-#    provider.size = '512mb'
-#  end
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   if Vagrant.has_plugin?("vagrant-cachier")

@@ -2,18 +2,28 @@
 - name: read in the ssh onion addresses for SSH ATHS
   shell: "cat {{ sshOnion_hostname }}"
   register: sshOnion
+  tags:
+    - production
+    - staging
 
 - name: print sshOnion address to stdout
   debug: msg="{{ sshOnion.stdout }}"
+  tags:
+    - production
+    - staging
 
 - name: copy ssh ATHS hostname file from guest to host
   fetch:
     flat: yes
     src: "{{ sshOnion_hostname }}"
     dest: "ssh-hostname"
-
+  tags:
+    - staging
+ 
 - include: ssh.yml
-#  when: sshEnv == "prod" or sshEnv == "stag"
+  tags:
+    - production
+    - staging
 
 - name: ensure 50unattended-upgrades is installed
   template: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
