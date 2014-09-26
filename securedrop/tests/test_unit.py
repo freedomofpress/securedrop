@@ -197,19 +197,6 @@ class TestSource(TestCase):
         self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
         self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
-    def test_submit_clean_file(self):
-        img = open(os.getcwd()+'/tests/test_images/clean.jpg')
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="This is a test",
-            fh=(img, 'clean.jpg'),
-            notclean='True',
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'clean.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-        img.close()
-
     @patch('zipfile.ZipFile.writestr')
     def test_submit_sanitizes_filename(self, zipfile_write):
         """Test that upload file name is sanitized"""
