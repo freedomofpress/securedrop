@@ -25,7 +25,7 @@ import crypto_util
 import store
 import source
 import journalist
-import test_setup
+import common
 from db import db_session, Source
 
 
@@ -46,15 +46,15 @@ def _logout(test_client):
 
 def shared_setup():
     """Set up the file system, GPG, and database"""
-    test_setup.create_directories()
-    test_setup.init_gpg()
-    test_setup.init_db()
+    common.create_directories()
+    common.init_gpg()
+    common.init_db()
 
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
 
 def shared_teardown():
-    test_setup.clean_root()
+    common.clean_root()
 
 
 class TestSource(TestCase):
@@ -135,7 +135,7 @@ class TestSource(TestCase):
             self.assertIn("Submit documents and messages", rv.data)
 
     def _new_codename(self):
-        return test_setup.new_codename(self.client, session)
+        return common.new_codename(self.client, session)
 
     def test_lookup(self):
         """Test various elements on the /lookup page"""
@@ -239,7 +239,7 @@ class TestJournalist(TestCase):
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = test_setup.setup_test_docs(sid, files)
+        filenames = common.setup_test_docs(sid, files)
 
         rv = self.client.post('/bulk', data=dict(
             action='download',
@@ -695,7 +695,7 @@ class TestStore(unittest.TestCase):
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = test_setup.setup_test_docs(sid, files)
+        filenames = common.setup_test_docs(sid, files)
 
         archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
