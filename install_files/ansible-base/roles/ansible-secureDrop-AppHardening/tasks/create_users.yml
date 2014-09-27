@@ -17,7 +17,7 @@
   user:
     name="{{ item }}"
     shell=/bin/bash
-    groups=sudo
+    groups=sudo,ssh
   with_items: sshUsers.keys()
 
 - name: ensure place admin ssh public keys exist
