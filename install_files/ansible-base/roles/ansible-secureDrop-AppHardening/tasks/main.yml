@@ -47,7 +47,7 @@
     - production
     - staging
 
-- include: configure_osec.yml
+- include: configure_ossec.yml
   tags:
-#    - production
-#    - staging
+    - production
+    - staging
