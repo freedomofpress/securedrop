@@ -31,6 +31,12 @@
 - name: ensure 20auto-upgrades is installed
   copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
 
+- name: ensure sysctl.conf file exists
+  copy: src=sysctl.conf dest=/etc/sysctl.conf mode=0400
+
+- name: load sysctl.conf
+  command: "sysctl -p /etc/sysctl.conf"
+
 - include: iptables.yml
   tags:
     - production
