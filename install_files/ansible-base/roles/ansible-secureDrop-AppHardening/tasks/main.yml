@@ -35,3 +35,8 @@
   tags:
     - production
     - staging
+
+- include: create_users.yml
+  tags:
+    - production
+    - staging

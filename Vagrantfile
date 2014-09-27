@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
       v.name = "securedrop"
     end
   end
-
   config.vm.define 'mon' do |mon|
     mon.vm.box = "trusty64"
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
@@ -28,7 +27,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
-    ansible.skip_tags = "development"
+    ansible.skip_tags = ["production", "staging"]
   end
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
