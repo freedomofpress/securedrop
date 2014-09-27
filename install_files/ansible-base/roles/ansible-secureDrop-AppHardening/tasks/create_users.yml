@@ -18,8 +18,8 @@
     name="{{ item }}"
     shell=/bin/bash
     groups=sudo,ssh
-  with_items: sshUsers.keys()
+  with_items: sshUsers
 
 - name: ensure place admin ssh public keys exist
   authorized_key: user="{{ item }}" key="{{ lookup('file', sshUsers[item]) }}"
-  with_items: sshUsers.keys()
+  with_items: sshUsers
