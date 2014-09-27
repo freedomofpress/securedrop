@@ -1,2 +1,8 @@
 distro_id: "ubuntu"
 distro_codename: "trusty"
+monitorIP: ""
+ossec_root: "/var/ossec"
+ossec_user: "ossec"
+ossec_group: "ossec"
+ossec_config_path: "{{ ossec_root }}/etc/ossec.conf"
+ossec_package_name: "securedrop-app-ossec"
