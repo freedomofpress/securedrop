@@ -6,7 +6,6 @@
     - python-apt
     - python-pycurl
 
-
 - name: install tor project apt signing gpg key
   apt_key: >
     state=present
@@ -35,4 +34,5 @@
   apt:
     pkg: "{{ item }}"
     state: latest
+    force: yes
   with_items: ["deb.torproject.org-keyring", "tor"]
