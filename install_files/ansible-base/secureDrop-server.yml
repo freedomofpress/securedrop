@@ -44,7 +44,8 @@
         tor_wait_for_hidden_services: yes,
         tor_user: "{{ securedrop_tor_user }}",
         tor_SocksPort: 0,
-        sudo: yes
+        sudo: yes,
+        tags: [ 'production', 'staging', 'development', 'tor' ]
       }
     - { role: ansible-secureDrop-AppInterfaces,
         fpf_distribution_release: "trusty",

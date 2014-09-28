@@ -1,15 +1,4 @@
 ---
-- name: install fpf apt signing gpg key
-  apt_key: >
-    state=present
-    data="{{ lookup('file', 'fpf-signing-key.pub') }}"
-
-- name: setup fpf apt repo
-  apt_repository: >
-    repo='deb https://apt.pressfreedomfoundation.org {{ fpf_distribution_release }} main'
-    state=present 
-    update_cache=yes
-
 - name: ensure /var/www/html/ is removed
   file:
     state: absent
@@ -22,23 +11,6 @@
     owner: www-data
     group: www-data
     dest: "{{ securedrop_root }}"
-  tags:
-    - production
-    - staging
-
-- name: stat securedrop_root
-  stat:
-    path: "{{ securedrop_root }}"
-  register: securedrop_root_st
-  tags:
-    - production
-    - staging
-
-- fail: msg="securedrop_root is a symlink. human operator failure."
-  when: securedrop_root_st.stat.islnk
-  tags:
-    - production
-    - staging
 
 - name: ensure securedrop data directory exists 
   file:
@@ -68,38 +40,6 @@
   apt: pkg="{{ item }}" state=latest
   with_items: app_deps
 
-- name: ensure securedrop-app-code packages is installed
-  apt: pkg="securedrop-app-code" state=latest
-  tags:
-    - production
-    - staging
-
-- name: ensure securedrop-app-code packages is installed
-  apt: pkg="securedrop-app-code" state=absent
-  tags:
-    - development
-
-- name: link shared securedrop app folder to /var/www/securedrop
-  file:
-    state: link
-    src: /vagrant/securedrop
-    dest: /var/www/securedrop
-    owner: www-data
-    group: www-data
-  tags:
-    - development
-
-- name: install apt package deps for dev environment
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
-  tags:
-    - development
-
-- name: install pip deps for dev env
-  command: "pip install -r /var/www/securedrop/requirements/dev-requirements.txt"
-  tags:
-    - development
-
 - name: import app gpg public key
   command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ apache_user }}"
 
@@ -124,16 +64,6 @@
     owner="{{ apache_user }}"
     group="{{ apache_user }}"
     mode=0600
-  tags:
-    - production
-
-- name: ensure templatized config.py is installed
-  template: src="config.py" dest="{{ securedrop_root }}/config.py"
-    owner="{{ apache_user }}"
-    group="{{ apache_user }}"
-    mode=0644
-  tags:
-    - development
 
 # XXX - Make this idempotent!
 - name: initialize sqlite db

@@ -1,0 +1,13 @@
+---
+- name: read in the ssh onion addresses for SSH ATHS
+  shell: "cat {{ sshOnion_hostname }}"
+  register: sshOnion
+
+- name: print sshOnion address to stdout
+  debug: msg="{{ sshOnion.stdout }}"
+
+- name: copy ssh ATHS hostname file from guest to host
+  fetch:
+    flat: yes
+    src: "{{ sshOnion_hostname }}"
+    dest: "ssh-hostname"
