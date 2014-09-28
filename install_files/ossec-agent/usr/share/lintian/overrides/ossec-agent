@@ -1,0 +1,4 @@
+ossec-agent: new-package-should-close-itp-bug
+ossec-agent: embedded-library
+ossec-agent: embedded-zlib
+ossec-agent: possible-gpl-code-linked-with-openssl
