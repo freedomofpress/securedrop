@@ -12,8 +12,10 @@ apache_packages:
 
 apache_files:
   - 'apache2.conf'
-  - 'ports.conf'
   - 'security'
+
+apache_templates:
+  - 'ports.conf'
   - 'sites-available/document.conf'
   - 'sites-available/source.conf'
 

@@ -7,6 +7,10 @@
   copy: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
   with_items: apache_files
 
+- name: ensure templatized apache configs are present
+  template: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
+  with_items: apache_templates
+
 - name: ensure required apache modules present
   apache2_module: state=present name={{ item }}
   with_items: apache_modules
