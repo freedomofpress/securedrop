@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import shutil
-import tempfile
 import unittest
 import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
-import uuid
 from mock import patch, ANY
 
 import gnupg
@@ -34,28 +31,6 @@ def _block_on_reply_keypair_gen(codename):
     while not crypto_util.getkey(sid):
         sleep(0.1)
 
-def _logout(test_client):
-    # See http://flask.pocoo.org/docs/testing/#accessing-and-modifying-sessions
-    # This is necessary because SecureDrop doesn't have a logout button, so a
-    # user is logged in until they close the browser, which clears the session.
-    # For testing, this function simulates closing the browser at places
-    # where a source is likely to do so (for instance, between submitting a
-    # document and checking for a journalist reply).
-    with test_client.session_transaction() as sess:
-        sess.clear()
-
-def shared_setup():
-    """Set up the file system, GPG, and database"""
-    common.create_directories()
-    common.init_gpg()
-    common.init_db()
-
-    # Do tests that should always run on app startup
-    crypto_util.do_runtime_tests()
-
-def shared_teardown():
-    common.clean_root()
-
 
 class TestSource(TestCase):
 
@@ -63,10 +38,10 @@ class TestSource(TestCase):
         return source.app
 
     def setUp(self):
-        shared_setup()
+        common.shared_setup()
 
     def tearDown(self):
-        shared_teardown()
+        common.shared_teardown()
 
     def test_index(self):
         """Test that the landing page loads and looks how we expect"""
@@ -160,7 +135,7 @@ class TestSource(TestCase):
             self.assertEqual(rv.status_code, 200)
             self.assertIn("Submit documents and messages", rv.data)
             self.assertTrue(session['logged_in'])
-            _logout(c)
+            common.logout(c)
 
         with self.client as c:
             rv = self.client.post('/login', data=dict(codename='invalid'),
@@ -222,7 +197,7 @@ class TestJournalist(TestCase):
         return journalist.app
 
     def setUp(self):
-        shared_setup()
+        common.shared_setup()
 
         # Set up test users
         self.user_pw = "bar"
@@ -237,7 +212,7 @@ class TestJournalist(TestCase):
         db_session.commit()
 
     def tearDown(self):
-        shared_teardown()
+        common.shared_teardown()
 
     def test_index_should_redirect_to_login(self):
         res = self.client.get(url_for('index'))
@@ -333,7 +308,7 @@ class TestJournalist(TestCase):
 class TestIntegration(unittest.TestCase):
 
     def setUp(self):
-        shared_setup()
+        common.shared_setup()
 
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
@@ -357,7 +332,7 @@ class TestIntegration(unittest.TestCase):
             follow_redirects=True)
 
     def tearDown(self):
-        shared_teardown()
+        common.shared_teardown()
 
     def test_submit_message(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
@@ -374,7 +349,7 @@ class TestIntegration(unittest.TestCase):
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            _logout(source_app)
+            common.logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -447,7 +422,7 @@ class TestIntegration(unittest.TestCase):
                 fh=(StringIO(test_file_contents), test_filename),
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
-            _logout(source_app)
+            common.logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -531,7 +506,7 @@ class TestIntegration(unittest.TestCase):
             ), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             self.assertFalse(g.source.flagged)
-            _logout(source_app)
+            common.logout(source_app)
 
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
@@ -547,7 +522,7 @@ class TestIntegration(unittest.TestCase):
                 codename=codename), follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             self.assertFalse(g.source.flagged)
-            _logout(source_app)
+            common.logout(source_app)
 
         with self.journalist_app as journalist_app:
             rv = journalist_app.post('/flag', data=dict(
@@ -561,14 +536,14 @@ class TestIntegration(unittest.TestCase):
             self.assertTrue(g.source.flagged)
             source_app.get('/lookup')
             self.assertTrue(g.source.flagged)
-            _logout(source_app)
+            common.logout(source_app)
 
         # Block until the reply keypair has been generated, so we can test
         # sending a reply
         _block_on_reply_keypair_gen(codename)
 
         # Create 2 replies to test deleting on journalist and source interface
-        for i in range(2): 
+        for i in range(2):
             rv = self.journalist_app.post('/reply', data=dict(
                 sid=sid,
                 msg=test_reply
@@ -612,7 +587,7 @@ class TestIntegration(unittest.TestCase):
                         ), follow_redirects=True)
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
-                _logout(source_app)
+                common.logout(source_app)
 
 
     def test_delete_collection(self):
@@ -656,7 +631,7 @@ class TestIntegration(unittest.TestCase):
                 msg="This is a test "+str(i)+".",
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
-            _logout(self.source_app)
+            common.logout(self.source_app)
 
         rv = self.journalist_app.get('/')
         # get all the checkbox values
@@ -772,10 +747,10 @@ class TestStore(unittest.TestCase):
 
     '''The set of tests for store.py.'''
     def setUp(self):
-        shared_setup()
+        common.shared_setup()
 
     def tearDown(self):
-        shared_teardown()
+        common.shared_teardown()
 
     def test_verify(self):
         with self.assertRaises(store.PathException):
