@@ -1,6 +1,6 @@
 ---
 - name: ensure logging disabled source wsgi app files exists
-  copy: src=source.wsgi.no.logging dest=/var/www/source.wsgi owner={{ www-data }} mode=0640
+  copy: src=source.wsgi.no.logging dest=/var/www/source.wsgi owner={{ apache_user }} mode=0640
 
 - name: ensure logging enable document wsgi app file exists
-  copy: src=document.wsgi.logging dest=/var/www/document.wsgi owner={{ www-data }} mode=0640
+  copy: src=document.wsgi.logging dest=/var/www/document.wsgi owner={{ apache_user }} mode=0640
