@@ -36,6 +36,9 @@ build_app_deb() {
     mkdir -p $PACKAGE_DIR/var/securedrop
     mv wheelhouse $PACKAGE_DIR/var/securedrop/
 
+    # move the apparmor profiles to the correct location
+    mkdir -p $PACKAGE_DIR/etc/apparmor.d
+    cp $MY_PATH/install_files/ansible-base/roles/ansible-secureDrop-AppHardening/files/usr.* $PACKAGE_DIR/etc/apparmor.d/
     gzip -9 $PACKAGE_DIR/usr/share/doc/$PACKAGE_NAME/changelog.Debian
 
     # Create the deb package
