@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
-    ansible.tags = ["development"]
+    ansible.tags = "development"
     ansible.skip_tags = "tor"
   end
 
