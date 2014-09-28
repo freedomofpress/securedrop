@@ -8,12 +8,12 @@ import crypto_util
 
 
 def clean_root():
-    shutil.rmtree(config.SECUREDROP_ROOT)
+    shutil.rmtree(config.SECUREDROP_DATA_ROOT)
 
 
 def create_directories():
     # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
+    for d in (config.SECUREDROP_DATA_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
 

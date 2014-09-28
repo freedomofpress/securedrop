@@ -7,9 +7,9 @@ set -e
 
 usage() {
   cat <<EOS
-Usage: setup_dev.sh [-uh] [-r SECUREDROP_ROOT]
+Usage: setup_dev.sh [-uh] [-r securedrop_data_root]
 
-   -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
+   -r securedrop_data_root  # specify a root driectory for docs, keys etc.
    -u                  # unaided execution of this script (useful for Vagrant)
    -h                  # This help message.
 
@@ -18,13 +18,13 @@ EOS
 
 SOURCE_ROOT=$(dirname $0)
 
-securedrop_root=/var/securedrop
+securedrop_data_root=/var/securedrop
 DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
         r)
-            securedrop_root=$OPTARG
+            securedrop_data_root=$OPTARG
             ;;
         u)
             UNAIDED_INSTALL=true
@@ -83,10 +83,10 @@ sudo pip install -r requirements/test-requirements.txt
 
 echo "Setting up configurations..."
 
-sudo mkdir -p $securedrop_root/{store,keys}
+sudo mkdir -p $securedrop_data_root/{store,keys}
 me=$(whoami)
-sudo chown -R $me:$me $securedrop_root
-keypath=$securedrop_root/keys
+sudo chown -R $me:$me $securedrop_data_root
+keypath=$securedrop_data_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
@@ -103,7 +103,7 @@ cp config.py.example config.py
 # fill in the instance-specific configuration
 # Use | instead of / for sed's delimiters, since some of the environment
 # variables are paths and contain /'s, which confuses sed.
-sed -i "s|{{ securedrop_root }}|$securedrop_root|" config.py
+sed -i "s|{{ securedrop_data_root }}|$securedrop_data_root|" config.py
 sed -i "s|{{ source_secret_key }}|$source_secret_key|" config.py
 sed -i "s|{{ journalist_secret_key }}|$journalist_secret_key|" config.py
 sed -i "s|{{ scrypt_id_pepper }}|$scrypt_id_pepper|" config.py
