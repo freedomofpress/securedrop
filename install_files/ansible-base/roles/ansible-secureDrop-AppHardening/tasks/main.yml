@@ -38,7 +38,7 @@
     - development
     - tor
 
-- include: configure_ossec.yml
-  tags:
-    - production
-    - staging
+#- include: configure_ossec.yml
+#  tags:
+#    - production
+#    - staging
