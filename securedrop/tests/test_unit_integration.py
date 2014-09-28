@@ -6,303 +6,25 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
-from mock import patch, ANY
 
 import gnupg
-from flask import session, g, escape, url_for
-from flask_wtf import CsrfProtect
+from flask import session, g, escape
 from bs4 import BeautifulSoup
-
-from flask.ext.testing import TestCase
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import crypto_util
-import store
 import source
 import journalist
 import common
-from db import db_session, Source, Journalist
+from db import db_session, Journalist
 
 
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
         sleep(0.1)
-
-
-class TestSource(TestCase):
-
-    def create_app(self):
-        return source.app
-
-    def setUp(self):
-        common.shared_setup()
-
-    def tearDown(self):
-        common.shared_teardown()
-
-    def test_index(self):
-        """Test that the landing page loads and looks how we expect"""
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Submit documents for the first time", response.data)
-        self.assertIn("Already submitted something?", response.data)
-
-    def _find_codename(self, html):
-        """Find a source codename (diceware passphrase) in HTML"""
-        # Codenames may contain HTML escape characters, and the wordlist
-        # contains various symbols.
-        codename_re = r'<p id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
-        codename_match = re.search(codename_re, html)
-        self.assertIsNotNone(codename_match)
-        return codename_match.group('codename')
-
-    def test_generate(self):
-        with self.client as c:
-            rv = c.get('/generate')
-            self.assertEqual(rv.status_code, 200)
-            session_codename = session['codename']
-        self.assertIn("Remember this code and keep it secret", rv.data)
-        self.assertIn(
-            "To protect your identity, we're assigning you a unique code name.", rv.data)
-        codename = self._find_codename(rv.data)
-        # default codename length is 8 words
-        self.assertEqual(len(codename.split()), 8)
-        # codename is also stored in the session - make sure it matches the
-        # codename displayed to the source
-        self.assertEqual(codename, escape(session_codename))
-
-    def test_regenerate_valid_lengths(self):
-        """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(7, 11):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 200)
-            codename = self._find_codename(response.data)
-            self.assertEquals(len(codename.split()), codename_len)
-
-    def test_regenerate_invalid_lengths(self):
-        """If the codename length is invalid, it should return 403 Forbidden"""
-        for codename_len in (2, 999):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 403)
-
-    def test_generate_has_login_link(self):
-        """The generate page should have a link to remind people to login if they already have a codename, rather than create a new one."""
-        rv = self.client.get('/generate')
-        self.assertIn("Already have a codename?", rv.data)
-        soup = BeautifulSoup(rv.data)
-        already_have_codename_link = soup.select('a#already-have-codename')[0]
-        self.assertEqual(already_have_codename_link['href'], '/login')
-
-    def test_create(self):
-        with self.client as c:
-            rv = c.get('/generate')
-            codename = session['codename']
-            rv = c.post('/create', follow_redirects=True)
-            self.assertTrue(session['logged_in'])
-            # should be redirected to /lookup
-            self.assertIn("Submit documents and messages", rv.data)
-
-    def _new_codename(self):
-        return common.new_codename(self.client, session)
-
-    def test_lookup(self):
-        """Test various elements on the /lookup page"""
-        codename = self._new_codename()
-        rv = self.client.post('login', data=dict(codename=codename),
-                              follow_redirects=True)
-        # redirects to /lookup
-        self.assertIn("our public key", rv.data)
-        # download the public key
-        rv = self.client.get('journalist-key')
-        self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", rv.data)
-
-    def test_login_and_logout(self):
-        rv = self.client.get('/login')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Login to check for responses", rv.data)
-
-        codename = self._new_codename()
-        with self.client as c:
-            rv = c.post('/login', data=dict(codename=codename),
-                                  follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn("Submit documents and messages", rv.data)
-            self.assertTrue(session['logged_in'])
-            common.logout(c)
-
-        with self.client as c:
-            rv = self.client.post('/login', data=dict(codename='invalid'),
-                                  follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn('Sorry, that is not a recognized codename.', rv.data)
-            self.assertNotIn('logged_in', session)
-
-    def test_submit_message(self):
-        self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
-
-    def test_submit_file(self):
-        self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-
-    def test_submit_both(self):
-        self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="This is a test",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-
-    @patch('zipfile.ZipFile.writestr')
-    def test_submit_sanitizes_filename(self, zipfile_write):
-        """Test that upload file name is sanitized"""
-        insecure_filename = '../../bin/gpg'
-        sanitized_filename = 'bin_gpg'
-
-        self._new_codename()
-        self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), insecure_filename),
-        ), follow_redirects=True)
-        zipfile_write.assert_called_with(sanitized_filename, ANY)
-
-    def test_tor2web_warning(self):
-        rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("You appear to be using Tor2Web.", rv.data)
-
-
-class TestJournalist(TestCase):
-
-    def create_app(self):
-        return journalist.app
-
-    def setUp(self):
-        common.shared_setup()
-
-        # Set up test users
-        self.user_pw = "bar"
-        self.user = Journalist(username="foo",
-                               password=self.user_pw)
-        self.admin_user_pw = "admin"
-        self.admin_user = Journalist(username="admin",
-                                     password=self.admin_user_pw,
-                                     is_admin=True)
-        db_session.add(self.user)
-        db_session.add(self.admin_user)
-        db_session.commit()
-
-    def tearDown(self):
-        common.shared_teardown()
-
-    def test_index_should_redirect_to_login(self):
-        res = self.client.get(url_for('index'))
-        self.assert_redirects(res, url_for('login'))
-
-    def test_invalid_user_login_should_fail(self):
-        res = self.client.post(url_for('login'), data=dict(
-            username='invalid',
-            password='invalid',
-            token='123456'))
-        self.assert200(res)
-        self.assertIn("Login failed", res.data)
-
-    def test_valid_user_login_should_succeed(self):
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.user.username,
-            password=self.user_pw,
-            token=self.user.totp.now()),
-            follow_redirects=True)
-
-        self.assert200(res) # successful login redirects to index
-        self.assertIn("Sources", res.data)
-        self.assertIn("No documents have been submitted!", res.data)
-
-    def test_normal_and_admin_user_login_should_redirect_to_index(self):
-        """Normal users and admin users should both redirect to the index page after logging in successfully"""
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.user.username,
-            password=self.user_pw,
-            token=self.user.totp.now()))
-        self.assert_redirects(res, url_for('index'))
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.admin_user.username,
-            password=self.admin_user_pw,
-            token=self.admin_user.totp.now()))
-        self.assert_redirects(res, url_for('index'))
-
-    def test_admin_user_has_admin_link_in_index(self):
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.admin_user.username,
-            password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
-            follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(url_for('admin_index'), "Admin")
-        self.assertIn(admin_link, res.data)
-
-    def _login_user(self):
-        self.client.post(url_for('login'), data=dict(
-            username=self.user.username,
-            password=self.user_pw,
-            token=self.user.totp.now()),
-            follow_redirects=True)
-
-    def _login_admin(self):
-        self.client.post(url_for('login'), data=dict(
-            username=self.admin_user.username,
-            password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
-            follow_redirects=True)
-
-    def test_admin_index(self):
-        self._login_admin()
-        res = self.client.get(url_for('admin_index'))
-        self.assert200(res)
-        self.assertIn("Admin Interface", res.data)
-
-    # TODO: more tests for admin interface
-
-    def test_bulk_download(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
-
-        self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-            action='download',
-            sid=sid,
-            doc_names_selected=files
-        ))
-
-        self.assertEqual(rv.status_code, 200)
-        self.assertEqual(rv.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
-        self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                os.path.join(source.journalist_filename(),files[0])
-            ))
 
 
 class TestIntegration(unittest.TestCase):
@@ -567,7 +289,8 @@ class TestIntegration(unittest.TestCase):
         self.helper_filenames_delete(soup, last_reply_number)
 
         with self.source_app as source_app:
-            rv = source_app.post('/login', data=dict(codename=codename), follow_redirects=True)
+            rv = source_app.post('/login', data=dict(codename=codename),
+                                 follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             rv = source_app.get('/lookup')
             self.assertEqual(rv.status_code, 200)
@@ -582,13 +305,12 @@ class TestIntegration(unittest.TestCase):
                 soup = BeautifulSoup(rv.data)
                 msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
                 rv = source_app.post('/delete', data=dict(
-                        sid=sid,
-                        msgid=msgid,
-                        ), follow_redirects=True)
+                    sid=sid,
+                    msgid=msgid
+                ), follow_redirects=True)
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
                 common.logout(source_app)
-
 
     def test_delete_collection(self):
         """Test the "delete collection" button on each collection page"""
@@ -612,12 +334,12 @@ class TestIntegration(unittest.TestCase):
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        rv = self.journalist_app.post('/col/delete/' + sid, follow_redirects=True)
+        rv = self.journalist_app.post('/col/delete/' + sid,
+                                      follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
 
         self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
-
 
     def test_delete_collections(self):
         """Test the "delete selected" checkboxes on the index page that can be
@@ -628,7 +350,7 @@ class TestIntegration(unittest.TestCase):
             self.source_app.get('/generate')
             self.source_app.post('/create')
             self.source_app.post('/submit', data=dict(
-                msg="This is a test "+str(i)+".",
+                msg="This is a test " + str(i) + ".",
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
             common.logout(self.source_app)
@@ -636,8 +358,8 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get('/')
         # get all the checkbox values
         soup = BeautifulSoup(rv.data)
-        checkbox_values = [ checkbox['value'] for checkbox in
-                            soup.select('input[name="cols_selected"]') ]
+        checkbox_values = [checkbox['value'] for checkbox in
+                           soup.select('input[name="cols_selected"]')]
         rv = self.journalist_app.post('/col/process', data=dict(
             action='delete',
             cols_selected=checkbox_values
@@ -672,8 +394,8 @@ class TestIntegration(unittest.TestCase):
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
         for i, submission_link in enumerate(soup.select('ul#submissions li a .filename')):
             filename = str(submission_link.contents[0])
-            self.assertTrue(re.match(submission_filename_re.format(i+1), filename))
-
+            self.assertTrue(re.match(submission_filename_re.format(i + 1),
+                                     filename))
 
     def test_filenames_delete(self):
         """Test pretty, sequential filenames when journalist deletes files"""
@@ -698,12 +420,11 @@ class TestIntegration(unittest.TestCase):
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
         filename = str(soup.select('ul#submissions li a .filename')[0].contents[0])
-        self.assertTrue( re.match(submission_filename_re.format(1), filename) )
+        self.assertTrue(re.match(submission_filename_re.format(1), filename))
         filename = str(soup.select('ul#submissions li a .filename')[1].contents[0])
-        self.assertTrue( re.match(submission_filename_re.format(3), filename) )
+        self.assertTrue(re.match(submission_filename_re.format(3), filename))
         filename = str(soup.select('ul#submissions li a .filename')[2].contents[0])
-        self.assertTrue( re.match(submission_filename_re.format(4), filename) )
-
+        self.assertTrue(re.match(submission_filename_re.format(4), filename))
 
     def helper_filenames_submit(self):
         self.source_app.post('/submit', data=dict(
@@ -741,37 +462,6 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("File permanently deleted.", rv.data)
-
-
-class TestStore(unittest.TestCase):
-
-    '''The set of tests for store.py.'''
-    def setUp(self):
-        common.shared_setup()
-
-    def tearDown(self):
-        common.shared_teardown()
-
-    def test_verify(self):
-        with self.assertRaises(store.PathException):
-            store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
-        with self.assertRaises(store.PathException):
-            store.verify(config.STORE_DIR + "_backup")
-
-    def test_get_zip(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
-
-        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
-
-        archivefile_contents = archive.namelist()
-
-        for archived_file, actual_file in zip(archivefile_contents, filenames):
-            actual_file_content = open(actual_file).read()
-            zipped_file_content = archive.read(archived_file)
-            self.assertEquals(zipped_file_content, actual_file_content)
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
