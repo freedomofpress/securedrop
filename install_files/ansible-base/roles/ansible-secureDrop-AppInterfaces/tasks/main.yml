@@ -13,19 +13,19 @@
 - include: prod_wsgi_files.yml
   tags:
      - production
+     - staging
 
 - include: dev_wsgi_files.yml
   tags:
-    - staging
     - development
 
 - include: securedrop_app_code_deb.yml
   tags:
     - production
-    - staging
 
 - include: dev_app_code_depends.yml
   tags:
+    - staging
     - development
 
 - include: install_app_deps.yml

@@ -3,6 +3,6 @@
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/var/www/")
+sys.path.insert(0,"/var/www/securedrop")
 
-from securedrop/source import app as application
+from source import app as application
