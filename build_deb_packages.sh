@@ -60,6 +60,6 @@ build_ossec_agent() {
     cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
 }
 
-#build_app_deb securedrop-app-code
+build_app_deb securedrop-app-code
 build_ossec_agent ossec-agent
 exit 0
