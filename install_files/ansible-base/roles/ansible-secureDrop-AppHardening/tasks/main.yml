@@ -28,7 +28,7 @@
   tags:
     - staging
 
-#- include: configure_ossec.yml
-#  tags:
-#    - production
-#    - staging
+- include: configure_ossec.yml
+  tags:
+    - production
+    - staging
