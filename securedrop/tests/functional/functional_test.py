@@ -14,7 +14,7 @@ import config
 
 import source
 import journalist
-from tests import test_setup
+from tests import common
 import urllib2
 
 import signal
@@ -40,9 +40,9 @@ class FunctionalTest():
     def setUp(self):
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        test_setup.create_directories()
-        self.gpg = test_setup.init_gpg()
-        test_setup.init_db()
+        common.create_directories()
+        self.gpg = common.init_gpg()
+        common.init_db()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()
@@ -76,7 +76,7 @@ class FunctionalTest():
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        test_setup.clean_root()
+        common.clean_root()
         self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()

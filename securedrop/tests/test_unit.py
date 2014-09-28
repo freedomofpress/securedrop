@@ -12,9 +12,11 @@ import uuid
 from mock import patch, ANY
 
 import gnupg
-from flask import session, g, escape
+from flask import session, g, escape, url_for
 from flask_wtf import CsrfProtect
 from bs4 import BeautifulSoup
+
+from flask.ext.testing import TestCase
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -23,8 +25,8 @@ import crypto_util
 import store
 import source
 import journalist
-import test_setup
-from db import db_session, Source
+import common
+from db import db_session, Source, Journalist
 
 
 def _block_on_reply_keypair_gen(codename):
@@ -44,23 +46,24 @@ def _logout(test_client):
 
 def shared_setup():
     """Set up the file system, GPG, and database"""
-    test_setup.create_directories()
-    test_setup.init_gpg()
-    test_setup.init_db()
+    common.create_directories()
+    common.init_gpg()
+    common.init_db()
 
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
 
 def shared_teardown():
-    test_setup.clean_root()
+    common.clean_root()
 
 
-class TestSource(unittest.TestCase):
+class TestSource(TestCase):
+
+    def create_app(self):
+        return source.app
 
     def setUp(self):
         shared_setup()
-        self.app = source.app
-        self.client = self.app.test_client()
 
     def tearDown(self):
         shared_teardown()
@@ -132,7 +135,7 @@ class TestSource(unittest.TestCase):
             self.assertIn("Submit documents and messages", rv.data)
 
     def _new_codename(self):
-        return test_setup.new_codename(self.client, session)
+        return common.new_codename(self.client, session)
 
     def test_lookup(self):
         """Test various elements on the /lookup page"""
@@ -194,19 +197,6 @@ class TestSource(unittest.TestCase):
         self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
         self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
 
-    def test_submit_clean_file(self):
-        img = open(os.getcwd()+'/tests/test_images/clean.jpg')
-        codename = self._new_codename()
-        rv = self.client.post('/submit', data=dict(
-            msg="This is a test",
-            fh=(img, 'clean.jpg'),
-            notclean='True',
-        ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'clean.jpg', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
-        img.close()
-
     @patch('zipfile.ZipFile.writestr')
     def test_submit_sanitizes_filename(self, zipfile_write):
         """Test that upload file name is sanitized"""
@@ -226,21 +216,96 @@ class TestSource(unittest.TestCase):
         self.assertIn("You appear to be using Tor2Web.", rv.data)
 
 
-class TestJournalist(unittest.TestCase):
+class TestJournalist(TestCase):
+
+    def create_app(self):
+        return journalist.app
 
     def setUp(self):
         shared_setup()
-        self.app = journalist.app
-        self.client = self.app.test_client()
+
+        # Set up test users
+        self.user_pw = "bar"
+        self.user = Journalist(username="foo",
+                               password=self.user_pw)
+        self.admin_user_pw = "admin"
+        self.admin_user = Journalist(username="admin",
+                                     password=self.admin_user_pw,
+                                     is_admin=True)
+        db_session.add(self.user)
+        db_session.add(self.admin_user)
+        db_session.commit()
 
     def tearDown(self):
         shared_teardown()
 
-    def test_index(self):
-        rv = self.client.get('/')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Sources", rv.data)
-        self.assertIn("No documents have been submitted!", rv.data)
+    def test_index_should_redirect_to_login(self):
+        res = self.client.get(url_for('index'))
+        self.assert_redirects(res, url_for('login'))
+
+    def test_invalid_user_login_should_fail(self):
+        res = self.client.post(url_for('login'), data=dict(
+            username='invalid',
+            password='invalid',
+            token='123456'))
+        self.assert200(res)
+        self.assertIn("Login failed", res.data)
+
+    def test_valid_user_login_should_succeed(self):
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()),
+            follow_redirects=True)
+
+        self.assert200(res) # successful login redirects to index
+        self.assertIn("Sources", res.data)
+        self.assertIn("No documents have been submitted!", res.data)
+
+    def test_normal_and_admin_user_login_should_redirect_to_index(self):
+        """Normal users and admin users should both redirect to the index page after logging in successfully"""
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()))
+        self.assert_redirects(res, url_for('index'))
+
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.admin_user.username,
+            password=self.admin_user_pw,
+            token=self.admin_user.totp.now()))
+        self.assert_redirects(res, url_for('index'))
+
+    def test_admin_user_has_admin_link_in_index(self):
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.admin_user.username,
+            password=self.admin_user_pw,
+            token=self.admin_user.totp.now()),
+            follow_redirects=True)
+        admin_link = '<a href="{}">{}</a>'.format(url_for('admin_index'), "Admin")
+        self.assertIn(admin_link, res.data)
+
+    def _login_user(self):
+        self.client.post(url_for('login'), data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()),
+            follow_redirects=True)
+
+    def _login_admin(self):
+        self.client.post(url_for('login'), data=dict(
+            username=self.admin_user.username,
+            password=self.admin_user_pw,
+            token=self.admin_user.totp.now()),
+            follow_redirects=True)
+
+    def test_admin_index(self):
+        self._login_admin()
+        res = self.client.get(url_for('admin_index'))
+        self.assert200(res)
+        self.assertIn("Admin Interface", res.data)
+
+    # TODO: more tests for admin interface
 
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
@@ -248,8 +313,9 @@ class TestJournalist(unittest.TestCase):
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = test_setup.setup_test_docs(sid, files)
+        filenames = common.setup_test_docs(sid, files)
 
+        self._login_user()
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
@@ -268,9 +334,27 @@ class TestIntegration(unittest.TestCase):
 
     def setUp(self):
         shared_setup()
+
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
+
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+
+        # Add a test user to the journalist interface and log them in
+        #print Journalist.query.all()
+        self.user_pw = "bar"
+        self.user = Journalist(username="foo",
+                               password=self.user_pw)
+        db_session.add(self.user)
+        db_session.commit()
+        self._login_user()
+
+    def _login_user(self):
+        self.journalist_app.post('/login', data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()),
+            follow_redirects=True)
 
     def tearDown(self):
         shared_teardown()
@@ -469,7 +553,6 @@ class TestIntegration(unittest.TestCase):
             rv = journalist_app.post('/flag', data=dict(
                 sid=sid))
             self.assertEqual(rv.status_code, 200)
-            _logout(journalist_app)
 
         with self.source_app as source_app:
             rv = source_app.post('/login', data=dict(
@@ -500,7 +583,6 @@ class TestIntegration(unittest.TestCase):
         with self.journalist_app as journalist_app:
             rv = journalist_app.get(col_url)
             self.assertIn("reply-", rv.data)
-            _logout(journalist_app)
 
         _block_on_reply_keypair_gen(codename)
 
@@ -704,7 +786,7 @@ class TestStore(unittest.TestCase):
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = test_setup.setup_test_docs(sid, files)
+        filenames = common.setup_test_docs(sid, files)
 
         archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 

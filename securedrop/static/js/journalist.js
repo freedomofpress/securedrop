@@ -66,4 +66,15 @@ $(function () {
     filter_codenames($('#filter').val())
   }
 
+  // Confirm before deleting user on admin page
+  $('button.delete-user').click(function(event) {
+      var username = $(this).attr('data-username');
+      return confirm("Are you sure you want to delete the user " + username + "?");
+  });
+
+  // Confirm before resetting two factor authentication on edit user page
+  $('form#reset-two-factor').submit(function(event) {
+      return confirm("Are you sure to want to reset this user's two factor authentication?");
+  });
+
 });

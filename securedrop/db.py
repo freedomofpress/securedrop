@@ -1,11 +1,24 @@
 import os
 import datetime
 
+# Find the best implementation available on this platform
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
+
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+import scrypt
+import pyotp
+
+import qrcode
+# Using svg because it doesn't require additional dependencies
+import qrcode.image.svg
 
 import config
 import crypto_util
@@ -40,7 +53,7 @@ def get_one_or_else(query, logger, failure_method):
         logger.error("Found multiple while executing %s when one was expected: %s" % (query,e,))
         failure_method(500)
     except NoResultFound as e:
-        logger.error("Found no Sources when one was expected: %s" % (e,))
+        logger.error("Found none when one was expected: %s" % (e,))
         failure_method(404)
     return return_value
 
@@ -51,7 +64,7 @@ class Source(Base):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
-    last_updated = Column(DateTime, default=datetime.datetime.now)
+    last_updated = Column(DateTime, default=datetime.datetime.utcnow)
     star = relationship("SourceStar", uselist=False, backref="source")
     
     # sources are "pending" and don't get displayed to journalists until they submit something
@@ -115,6 +128,93 @@ class SourceStar(Base):
     def __init__(self, source, starred=True):
         self.source_id = source.id
         self.starred = starred
+
+
+class WrongPasswordException(Exception):
+    pass
+
+
+class BadTokenException(Exception):
+    pass
+
+
+class Journalist(Base):
+    __tablename__ = "journalists"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255), nullable=False, unique=True)
+    pw_salt = Column(Binary(32))
+    pw_hash = Column(Binary(256))
+    is_admin = Column(Boolean)
+    otp_secret = Column(String(16), default=pyotp.random_base32)
+
+    created_on = Column(DateTime, default=datetime.datetime.utcnow)
+    last_access = Column(DateTime)
+
+    def __init__(self, username, password, is_admin=False):
+        self.username = username
+        self.set_password(password)
+        self.is_admin = is_admin
+
+    def __repr__(self):
+        return "<Journalist {0}{1}>".format(self.username,
+                                            " [admin]" if self.is_admin else "")
+
+    def _gen_salt(self, salt_bytes=32):
+        return os.urandom(salt_bytes)
+
+    _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+    def _scrypt_hash(self, password, salt, params=None):
+        if not params:
+            params = self._SCRYPT_PARAMS
+        return scrypt.hash(str(password), salt, **params)
+
+    def set_password(self, password):
+        self.pw_salt = self._gen_salt()
+        self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+
+    def valid_password(self, password):
+        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+
+    def regenerate_otp_shared_secret(self):
+        self.otp_secret = pyotp.random_base32()
+
+    @property
+    def totp(self):
+        return pyotp.TOTP(self.otp_secret)
+
+    @property
+    def shared_secret_qrcode(self):
+        uri = self.totp.provisioning_uri("{} {}".format("SecureDrop",
+                                                        self.username))
+
+        qr = qrcode.QRCode(
+            box_size=15,
+            image_factory=qrcode.image.svg.SvgPathImage
+        )
+        qr.add_data(uri)
+        img = qr.make_image()
+
+        svg_out = StringIO()
+        img.save(svg_out)
+        return svg_out.getvalue()
+
+    @property
+    def formatted_otp_secret(self):
+        """The OTP secret is easier to read and manually enter if it is all
+        lowercase and split into four groups of four characters. The secret is
+        base32-encoded, so it is case insensitive."""
+        sec = self.otp_secret
+        chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
+        return ' '.join(chunks).lower()
+
+    @staticmethod
+    def login(username, password, token):
+        user = Journalist.query.filter_by(username=username).one()
+        if not user.valid_password(password):
+            raise WrongPasswordException
+        if not user.totp.verify(token):
+            raise BadTokenException
+        return user
 
 # Declare (or import) models before init_db
 def init_db():
