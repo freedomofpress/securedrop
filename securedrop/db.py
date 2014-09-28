@@ -187,8 +187,8 @@ class Journalist(Base):
 
     @property
     def shared_secret_qrcode(self):
-        uri = self.totp.provisioning_uri("{}@{}".format(self.username,
-                                                        "SecureDrop"))
+        uri = self.totp.provisioning_uri("{} {}".format("SecureDrop",
+                                                        self.username))
 
         qr = qrcode.QRCode(
             box_size=15,
