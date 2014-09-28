@@ -16,6 +16,14 @@
     - production
     - staging
 
+- include: dev_apparmor_profiles.yml
+  tags:
+    - devlopment
+
+- include: enforce_apparmor_profiles.yml
+  tags:
+    -staging
+
 - include: ssh.yml
   tags:
     - production
@@ -27,6 +35,8 @@
 - include: display_onions.yml
   tags:
     - staging
+    - development
+    - tor
 
 - include: configure_ossec.yml
   tags:

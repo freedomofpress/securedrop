@@ -1,7 +1,9 @@
 distro_id: "ubuntu"
 distro_codename: "trusty"
-ossec_root: "/var/ossec"
-ossec_user: "ossec"
 ossec_group: "ossec"
 ossec_config_path: "{{ ossec_root }}/etc/ossec.conf"
 ossec_package_name: "ossec-agent"
+
+apparmor_profiles:
+  - usr.bin.tor
+  - usr.lib.apache2.mpm-worker.apache2

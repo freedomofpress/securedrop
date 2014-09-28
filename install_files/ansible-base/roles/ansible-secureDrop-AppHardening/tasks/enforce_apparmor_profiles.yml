@@ -1,0 +1,9 @@
+---
+- name: ensure custom apparmor profiles are present
+  copy: src={{ item }} dest=/etc/apparmor.d/{{ item }}
+  with_items: apparmor_profiles
+
+- name: ensure custom appamror profiles are in enforce mode
+  command: "aa-enforce /etc/apparmor.d/{{ item }}"
+  with_items: apparmor_profiles 
+
