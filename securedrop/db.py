@@ -64,8 +64,7 @@ class Source(Base):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
-    # TODO should we be using utc times?
-    last_updated = Column(DateTime, default=datetime.datetime.now)
+    last_updated = Column(DateTime, default=datetime.datetime.utcnow)
     star = relationship("SourceStar", uselist=False, backref="source")
     
     # sources are "pending" and don't get displayed to journalists until they submit something
@@ -148,8 +147,7 @@ class Journalist(Base):
     is_admin = Column(Boolean)
     otp_secret = Column(String(16), default=pyotp.random_base32)
 
-    # TODO should we be using utc times?
-    created_on = Column(DateTime, default=datetime.datetime.now)
+    created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
 
     def __init__(self, username, password, is_admin=False):

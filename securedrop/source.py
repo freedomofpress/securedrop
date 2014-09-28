@@ -248,7 +248,7 @@ def submit():
         if entropy_avail >= 2400:
             crypto_util.genkeypair(g.sid, g.codename)
 
-    g.source.last_updated = datetime.now()
+    g.source.last_updated = datetime.utcnow()
     db_session.commit()
     normalize_timestamps(g.sid)
 

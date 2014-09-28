@@ -102,7 +102,7 @@ def login():
             session['uid'] = user.id
 
             # Update access metadata
-            user.last_access = datetime.now()
+            user.last_access = datetime.utcnow()
             db_session.add(user)
             db_session.commit()
 
