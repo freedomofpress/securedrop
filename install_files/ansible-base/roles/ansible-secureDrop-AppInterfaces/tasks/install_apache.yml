@@ -21,3 +21,5 @@
 - name: ensure sites enabled
   command: "a2ensite {{ item }}"
   with_items: apache_sites
+  notify:
+    - restart apache2
