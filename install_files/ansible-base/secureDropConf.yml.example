@@ -5,3 +5,4 @@ hidden_service_authorize_clients_list_key:
 securedrop_header_image_path: ""
 securedrop_app_gpg_public_key_path: ""
 securedrop_app_gpg_fingerprint: ""
+monitorIP: ""
