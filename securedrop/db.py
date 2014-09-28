@@ -166,7 +166,6 @@ class Journalist(Base):
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
-        # TODO: better handle encoding?
         return scrypt.hash(str(password), salt, **params)
 
     def set_password(self, password):

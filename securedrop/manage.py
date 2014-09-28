@@ -129,7 +129,6 @@ def main():
         getattr(sys.modules[__name__], cmd)()
     except KeyboardInterrupt:
         print # So our prompt appears on a nice new line
-        pass
 
 if __name__ == "__main__":
     main()

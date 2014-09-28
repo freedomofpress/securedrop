@@ -239,11 +239,6 @@ class TestJournalist(TestCase):
     def tearDown(self):
         shared_teardown()
 
-    def _login_user(user):
-        pass
-        #res = self.client.post(url_for('login'), data=dict(
-            # TODO figure out how to get self.user_pw
-
     def test_index_should_redirect_to_login(self):
         res = self.client.get(url_for('index'))
         self.assert_redirects(res, url_for('login'))
@@ -339,10 +334,10 @@ class TestIntegration(unittest.TestCase):
 
     def setUp(self):
         shared_setup()
-        
+
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
-        
+
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
 
         # Add a test user to the journalist interface and log them in

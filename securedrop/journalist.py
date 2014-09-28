@@ -50,8 +50,29 @@ def get_source(sid):
     return source
 
 
+@app.before_request
+def setup_g():
+    """Store commonly used values in Flask's special g object"""
+    uid = session.get('uid', None)
+    if uid:
+        g.user = Journalist.query.get(uid)
+
+    if request.method == 'POST':
+        sid = request.form.get('sid')
+        if sid:
+            g.sid = sid
+            g.source = get_source(sid)
+
+
 def logged_in():
-    return 'logged_in' in session and g.get('user', None)
+    # When a user is logged in, we push their user id (database primary key)
+    # into the session. setup_g checks for this value, and if it finds it,
+    # stores a reference to the user's Journalist object in g.
+    #
+    # This check is good for the edge case where a user is deleted but still
+    # has an active session - we will not authenticate a user if they are not
+    # in the database.
+    return bool(g.get('user', None))
 
 
 def login_required(func):
@@ -75,20 +96,6 @@ def admin_required(func):
     return wrapper
 
 
-@app.before_request
-def setup_g():
-    """Store commonly used values in Flask's special g object"""
-    if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
-
-    user_id = session.get('uid', None)
-    if user_id:
-        g.user = Journalist.query.get(user_id)
-
-
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -99,15 +106,12 @@ def login():
         except (NoResultFound, WrongPasswordException, BadTokenException):
             flash("Login failed", "error")
         else:
-            session['uid'] = user.id
-
             # Update access metadata
             user.last_access = datetime.utcnow()
             db_session.add(user)
             db_session.commit()
 
-            # Update session
-            session['logged_in'] = True
+            session['uid'] = user.id
             return redirect(url_for('index'))
 
     return render_template("login.html")
@@ -116,7 +120,6 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('uid', None)
-    session.pop('logged_in', None)
     return redirect(url_for('index'))
 
 
@@ -143,7 +146,7 @@ def admin_add_user():
             form_valid = False
             flash("Passwords didn't match", "password_validation")
 
-        is_admin = True if request.form.get('is_admin') else False
+        is_admin = bool(request.form.get('is_admin'))
 
         if form_valid:
             try:
