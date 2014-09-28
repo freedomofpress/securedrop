@@ -14,8 +14,9 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-
+. /lib/lsb/init-functions
 . /etc/ossec-init.conf
+
 if [ "X${DIRECTORY}" = "X" ]; then
     DIRECTORY="/var/ossec"
 fi

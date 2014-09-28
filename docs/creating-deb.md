@@ -200,11 +200,11 @@ root@dapp:~/ossec-hids# ./install.sh
 ###Create the zipped files for the OSSEC agent files
 
 ```
-root@dapp:~/ossec-hids# mkdir ../app-ossec
-root@dapp:~/ossec-hids# mkdir -p ../app-ossec/etc/init.d
-root@dapp:~/ossec-hids# mkdir -p ../app-ossec/var
-root@dapp:~/ossec-hids# cp -R /var/ossec/ ../app-ossec/var/
-root@dapp:~/ossec-hids# rm ../app-ossec/var/ossec/etc/ossec.conf
-root@dapp:~/ossec-hids# cp /etc/ossec-init.conf ../app-ossec/etc/
-root@dapp:~/ossec-hids# cp /etc/init.d/ossec ../app-ossec/etc/init.d/
+root@dapp:~/ossec-hids# mkdir ../ossec-agent
+root@dapp:~/ossec-hids# mkdir -p ../ossec-agent/etc/init.d
+root@dapp:~/ossec-hids# mkdir -p ../ossec-agent/var
+root@dapp:~/ossec-hids# cp -R /var/ossec/ ../ossec-agent/var/
+root@dapp:~/ossec-hids# cp /etc/ossec-init.conf ../ossec-agent/etc/
+root@dapp:~/ossec-hids# cp /etc/init.d/ossec ../ossec-agent/etc/init.d/
+strip ../ossec-agent/var/ossec/bin/*
 ```

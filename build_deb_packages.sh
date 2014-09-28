@@ -43,5 +43,23 @@ build_app_deb() {
     cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
 }
 
-build_app_deb securedrop-app-code
+build_ossec_agent() {
+    PACKAGE_NAME="$1"
+    PACKAGE_DIR="$BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH"
+    if [ -d $PACKAGE_DIR ]; then
+        rm -R $PACKAGE_DIR
+    fi
+
+    # move the deb package to build dir
+    cp -R $MY_PATH/install_files/$PACKAGE_NAME/ $PACKAGE_DIR
+
+    gzip -9 $PACKAGE_DIR/usr/share/doc/$PACKAGE_NAME/changelog.Debian
+
+    # Create the deb package
+    dpkg-deb --build $PACKAGE_DIR
+    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
+}
+
+#build_app_deb securedrop-app-code
+build_ossec_agent ossec-agent
 exit 0

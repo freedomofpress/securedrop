@@ -16,11 +16,6 @@
     - production
     - staging
 
-- include: configure_ossec.yml
-  tags:
-    - production
-    - staging
-
 - include: ssh.yml
   tags:
     - production
@@ -31,4 +26,9 @@
 
 - include: display_onions.yml
   tags:
+    - staging
+
+- include: configure_ossec.yml
+  tags:
+    - production
     - staging
