@@ -10,6 +10,15 @@
     - staging
     - development
 
+- include: prod_wsgi_files.yml
+  tags:
+     - production
+
+- include: dev_wsgi_files.yml
+  tags:
+    - staging
+    - development
+
 - include: securedrop_app_code_deb.yml
   tags:
     - production
