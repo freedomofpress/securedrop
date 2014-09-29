@@ -8,21 +8,20 @@
   tags:
     - production
     - staging
-    - development
 
 - include: prod_wsgi_files.yml
   tags:
      - production
      - staging
 
-- include: dev_wsgi_files.yml
-  tags:
-    - development
-
 - include: dev_app_code_depends.yml
   tags:
     - staging
     - development
+
+- include: staging_app_code.yml
+  tags:
+    - staging
 
 - include: create_app_dirs.yml
   tags:
@@ -38,4 +37,8 @@
   tags:
     - production
     - staging
+    - development
+
+- include: dev_setup_xvfb_for_functional_tests.yml
+  tags:
     - development

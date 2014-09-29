@@ -8,30 +8,30 @@
   file:
     state: directory
     mode: 0700
-    owner: www-data
-    group: www-data
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
     dest: "{{ securedrop_root }}"
 
-- name: ensure securedrop data directory exists 
+- name: ensure securedrop data directory exists
   file:
     state: directory
     mode: 0700
-    owner: www-data
-    group: www-data
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}"
 
 - name: ensure securedrop data store directory exists
   file:
     state: directory
     mode: 0700
-    owner: www-data
-    group: www-data
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/store"
 
 - name: ensure securedrop keyring directory exists
   file:
     state: directory
     mode: 0700
-    owner: www-data
-    group: www-data
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/keys"
