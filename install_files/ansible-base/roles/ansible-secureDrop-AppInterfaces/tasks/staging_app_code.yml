@@ -1,0 +1,9 @@
+---
+- name: link shared securedrop app folder to /var/www/securedrop
+  file:
+    state: link
+    src: /vagrant/securedrop
+    dest: /var/www/securedrop
+    owner: www-data
+    group: www-data
+

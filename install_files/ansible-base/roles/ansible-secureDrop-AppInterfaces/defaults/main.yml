@@ -2,6 +2,7 @@
 
 securedrop_root: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"
+securedrop_user: "www-data"
 
 apache_user: "www-data"
 
@@ -63,3 +64,5 @@ dev_deps:
   - libssl-dev
   - python-dev
   - python-pip
+  - firefox
+  - xvfb
