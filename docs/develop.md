@@ -8,9 +8,9 @@ Change directory into repo
 
 `cd securedrop`
 
-git checkout YOUBRANCH
+git checkout BRANCH
 
-`git checkout something`
+`git checkout BRANCH`
 
 `sudo apt-get install dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential -y`
 
