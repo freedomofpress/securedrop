@@ -38,15 +38,22 @@ Really helps with build times
 `vagrant plugin install vagrant-cachier`
 
 You will need to create a symlink form the example external yml file to the one loaded by the playbook for the environment you want
+TODO: need to fix so you don't need to symlink these files makes provisioning multi environments rough
 
-`ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.dev ~/securedrop/install_files/ansible-base/secureDropConf.yml`
-vagrant up's default is the dev server otherwise need to specify vm name.
+```
+ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.dev ~/securedrop/install_files/ansible-base/secureDropConf.yml
+vagrant up
+```
 
-`vagrant up`
+```
+ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.staging ~/securedrop/install_files/ansible-base/secureDropConf.yml
+vagrant up staging
+```
 
-`vagrant up staging`
-
-`vagrant up app`
+```
+ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.app ~/securedrop/install_files/ansible-base/secureDropConf.yml
+vagrant up app
+```
 
 `vagrant up mon`
 
