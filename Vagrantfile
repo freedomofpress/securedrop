@@ -21,7 +21,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'staging' do |staging|
     staging.vm.box = "trusty64"
-    staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    staging.vm.network "forwarded_port", guest: 8080, host: 8082
+    staging.vm.network "forwarded_port", guest: 8081, host: 8083
+     staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
       ansible.tags = "staging"

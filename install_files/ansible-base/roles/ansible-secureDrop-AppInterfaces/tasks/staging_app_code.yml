@@ -1,9 +1,4 @@
 ---
-- name: link shared securedrop app folder to /var/www/securedrop
-  file:
-    state: link
-    src: /vagrant/securedrop
-    dest: /var/www/securedrop
-    owner: www-data
-    group: www-data
+- name: Install local securedrop-app-code deb package from /vagrant/*.deb
+  apt: deb=/vagrant/{{ securedrop_app_code_deb }}
 
