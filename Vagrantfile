@@ -4,17 +4,34 @@
 #include MyVars
 
 Vagrant.configure("2") do |config|
-  config.vm.define 'dev' do |dev|
+  config.vm.define 'dev', primary: true do |dev|
     dev.vm.box = "trusty64"
-    dev.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    dev.vm.provision :shell,
-      inline: "sudo -H -u vagrant /vagrant/setup_dev.sh -u"
     dev.vm.network "forwarded_port", guest: 8080, host: 8080
-    dev.vm.network "forwarded_port", guest: 8081, host: 80
+    dev.vm.network "forwarded_port", guest: 8081, host: 8081
+    dev.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    dev.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.develop.yml"
+      ansible.tags = "development"
+      ansible.skip_tags = "tor"
+    end
     dev.vm.provider "virtualbox" do |v|
-      v.name = "securedrop"
+      v.name = "app"
     end
   end
+
+  config.vm.define 'staging' do |staging|
+    staging.vm.box = "trusty64"
+    staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    staging.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.staging.yml"
+      ansible.tags = "apparmor"
+      ansible.skip_tags = "" # options 'tor' 'grsec' 'ssh-hardening' 'iptables' also takes an array
+    end
+    staging.vm.provider "virtualbox" do |v|
+      v.name = "app"
+    end
+  end
+
   config.vm.define 'mon' do |mon|
     mon.vm.box = "trusty64"
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
@@ -22,17 +39,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'app' do |app|
     app.vm.box = "trusty64"
-    app.vm.network "forwarded_port", guest: 8080, host: 8080
-    app.vm.network "forwarded_port", guest: 8081, host: 8081
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    #app.vm.synced_folder "./", "/vagrant",
-    #  owner: "www-data", group: "www-data"
-  end
-
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
-    ansible.tags = "development"
-    ansible.skip_tags = "tor"
+    app.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.app.yml"
+      ansible.tags = "production"
+    end
+    app.vm.provider "virtualbox" do |v|
+      v.name = "app"
+    end
   end
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
