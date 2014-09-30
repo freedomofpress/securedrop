@@ -55,6 +55,13 @@ def test():
     test_cmds = ["py.test", "./test.sh"]
     sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
 
+def test_unit():
+    """
+    Runs the unit tests.
+    """
+    os.environ['SECUREDROP_ENV'] = 'test'
+    sys.exit(int(subprocess.call("py.test")))
+
 
 def reset():
     """
@@ -116,7 +123,7 @@ def add_admin():
 
 
 def main():
-    valid_cmds = ["start", "stop", "test", "reset", "add_admin"]
+    valid_cmds = ["start", "stop", "test_unit", "test", "reset", "add_admin"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
