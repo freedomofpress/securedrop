@@ -36,8 +36,11 @@ Really helps with build times
 vagrant up's default is the dev server otherwise need to specify vm name.
 
 `vagrant up`
+
 `vagrant up staging`
+
 `vagrant up app`
+
 `vagrant up mon`
 
 Once SSH is only allowed over tor
