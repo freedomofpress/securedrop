@@ -10,12 +10,12 @@ Vagrant.configure("2") do |config|
     dev.vm.network "forwarded_port", guest: 8081, host: 8081
     dev.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     dev.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/secureDrop-server.develop.yml"
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
       ansible.tags = "development"
       ansible.skip_tags = "tor"
     end
     dev.vm.provider "virtualbox" do |v|
-      v.name = "app"
+      v.name = "dev"
     end
   end
 
@@ -23,12 +23,12 @@ Vagrant.configure("2") do |config|
     staging.vm.box = "trusty64"
     staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/secureDrop-server.staging.yml"
-      ansible.tags = "apparmor"
-      ansible.skip_tags = "" # options 'tor' 'grsec' 'ssh-hardening' 'iptables' also takes an array
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
+      ansible.tags = "staging"
+      ansible.skip_tags = [ 'ossec' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' also takes an array
     end
     staging.vm.provider "virtualbox" do |v|
-      v.name = "app"
+      v.name = "staging"
     end
   end
 
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
     app.vm.box = "trusty64"
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/secureDrop-server.app.yml"
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
       ansible.tags = "production"
     end
     app.vm.provider "virtualbox" do |v|

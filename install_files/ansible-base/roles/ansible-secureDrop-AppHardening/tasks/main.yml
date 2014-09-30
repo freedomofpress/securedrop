@@ -1,36 +1,38 @@
 ---
 - include: unattended_upgrades.yml
   tags:
-    - production
+    - app
+    - mon
     - staging
     - development
 
 - include: sysctl.yml
   tags:
-    - production
+    - app
+    - mon
     - staging
-    - development
 
 - include: create_users.yml
   tags:
-    - production
+    - app
     - staging
 
 - include: dev_apparmor_profiles.yml
   tags:
-    - devlopment
+    - development
 
 - include: enforce_apparmor_profiles.yml
   tags:
-    -staging
+    - staging
 
 - include: ssh.yml
   tags:
-    - production
+    - app
+    - mon
 
 - include: iptables.yml
   tags:
-    - production
+    - app
 
 - include: display_onions.yml
   tags:
@@ -38,7 +40,15 @@
     - development
     - tor
 
-#- include: configure_ossec.yml
+- include: configure_ossec.yml
+  tags:
+    - app
+    - staging
+    - ossec
+
+#- include: configure_grsec.yml
 #  tags:
-#    - production
-#    - staging
+#      - app
+#      - mon
+#      - staging
+#      - grsec

@@ -1,3 +1,5 @@
+Thes instructions are for Ubuntu 14.04
+
 `sudo apt-get install git -y`
 
  clone your repo
@@ -17,6 +19,7 @@ git checkout BRANCH
 vagrant chachier plugins need a newer version that what in the ubuntu repo
 vagrant-chachier will speed up provisioning a lot
 Download current version from https://downloads.vagrantup.com/
+Tested: vagrant- 1.6.5
 
 `dpkg -i CURRENT-VAGRANT-VERSION`
 
@@ -25,6 +28,7 @@ Download current version from https://downloads.vagrantup.com/
 `vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box`
 
 required to use the enable and disable apache modules anisble module
+Tested: ansible 1.7.2
 
 `sudo apt-get install anisble/trusty-backports`
 
@@ -33,6 +37,9 @@ Really helps with build times
 
 `vagrant plugin install vagrant-cachier`
 
+You will need to create a symlink form the example external yml file to the one loaded by the playbook for the environment you want
+
+`ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.dev ~/securedrop/install_files/ansible-base/secureDropConf.yml`
 vagrant up's default is the dev server otherwise need to specify vm name.
 
 `vagrant up`

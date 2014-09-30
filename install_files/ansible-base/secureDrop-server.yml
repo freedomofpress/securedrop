@@ -1,5 +1,5 @@
 ---
-- hosts: app
+- hosts: [ 'app', 'mon', 'staging', 'dev' ]
 
   vars_files:
     - secureDropConf.yml
@@ -45,7 +45,7 @@
         tor_user: "{{ securedrop_tor_user }}",
         tor_SocksPort: 0,
         sudo: yes,
-        tags: [ 'production', 'staging', 'development', 'tor' ]
+        tags: [ 'app', 'mon', 'staging', 'development', 'tor' ]
       }
     - { role: ansible-secureDrop-AppInterfaces,
         fpf_distribution_release: "trusty",
