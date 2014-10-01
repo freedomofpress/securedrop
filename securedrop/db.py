@@ -185,6 +185,9 @@ class Journalist(Base):
     def regenerate_otp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
 
+    def set_otp_secret(self, otp_secret):
+        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret))
+
     @property
     def totp(self):
         return pyotp.TOTP(self.otp_secret)
