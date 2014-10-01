@@ -1,7 +1,6 @@
 ---
+document_user: "journalist"
 hidden_service_authorize_clients_list_key:
-  document_users:
-    - journalist1
   ssh_users:
     "admin1":
       "/home/human/admin1.pub"
