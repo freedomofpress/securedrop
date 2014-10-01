@@ -159,6 +159,8 @@ class Journalist(Base):
         self.set_password(password)
         self.is_admin = is_admin
         if otp_secret:
+            # Remove spaces (sometimes added for readability)
+            otp_secret = ''.join(otp_secret.split(' '))
             self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret))
             self.is_totp = False
 
