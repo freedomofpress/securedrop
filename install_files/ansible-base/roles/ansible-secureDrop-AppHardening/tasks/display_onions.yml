@@ -1,13 +1,41 @@
 ---
-- name: read in the ssh onion addresses for SSH ATHS
-  shell: "cat {{ sshOnion_hostname }}"
+- name: read in the onion addresses for ssh ATHS
+  shell: "cat {{ sshHostnameFile }}"
   register: sshOnion
+- name: read in the onion addresses for document ATHS
+  shell: "cat {{ documentHostnameFile }}"
+  register: documentOnion
+- name: read in the onion addresses for source ATHS
+  shell: "cat {{ sourceHostnameFile }}"
+  register: sourceOnion
 
 - name: print sshOnion address to stdout
   debug: msg="{{ sshOnion.stdout }}"
+- name: print documentOnion address to stdout
+  debug: msg="{{ documentOnion.stdout }}"
+- name: print sourceOnion address to stdout
+  debug: msg="{{ sourceOnion.stdout }}"
 
-- name: copy ssh ATHS hostname file from guest to host
-  fetch:
-    flat: yes
-    src: "{{ sshOnion_hostname }}"
-    dest: "ssh-hostname"
+- name: set facts for "admin info" templates
+  set_fact:
+    sourceHost: "{{ sshOnion.stdout }}"
+    documentHost: "{{ documentOnion.stdout }}"
+    sshHost: "{{ sourceOnion.stdout }}"
+    documentAuthValue: "XXX"
+    sshAuthValue: "XXX"
+
+- name: create templated secureDropInfo
+  template:
+    src=secureDropInfo
+    dest=/tmp/secureDropInfo
+    mode=0700
+- name: create templated secureDropATHS
+  template:
+    src=secureDropATHS
+    dest=/tmp/secureDropATHS
+    mode=0700
+
+- name: fetch secureDropATHS
+  fetch: src=/tmp/secureDropATHS dest=.
+- name: fetch secureDropInfo
+  fetch: src=/tmp/secureDropInfo dest=.

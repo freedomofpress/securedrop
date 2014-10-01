@@ -1,0 +1,3 @@
+source   {{ sourceHost }}:{{ sourcePort }}
+document {{ documentHost }}:{{ documentPort }}
+ssh      {{ sshHost }}:22
