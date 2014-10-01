@@ -1,12 +1,25 @@
 ---
-- name: copy install_files/secureddrop-app-code to build path
-  command: "cp -R /vagrant/install_files/securedrop-app-code /tmp/{{ securedrop_app_code_deb }}/"
+- name: install pip install wheel
+  pip: name=wheel
 
-- name: copy securedrop-app-code debian dir to build path
-  copy: src=securedrop  dest=/tmp/securedrop-app-code-0.3-amd64/var/www/securedrop owner=root mode=644
+- name: copy install_files/secureddrop-app-code to build path
+  command: "cp -R /vagrant/install_files/securedrop-app-code/ /tmp/{{ securedrop_app_code_deb }}/"
+
+- name: ensure build path var structure exists
+  file:
+    state: directory
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+
+- name: ensure build path www structure exists
+  file:
+    state: directory
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
+
+- name: copy securedrop to build path
+  command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
 
 - name: if pip requirements changed create pip wheel
-  command: "pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt /tmp/securedrop-app-code-0.3-amd64/var/www/securedrop"
+  command: "pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop"
 
 - name: copy apparmor profiles to build path
   copy: src={{ item }} dest=/tmp/securedrop-app-code-0.3-amd64/etc/apparmor.d/{{ item }}

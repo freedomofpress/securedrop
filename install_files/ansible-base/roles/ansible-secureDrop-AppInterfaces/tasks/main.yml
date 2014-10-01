@@ -18,6 +18,7 @@
 - include: dev_app_code_depends.yml
   tags:
     - development
+    - staging
 
 - include: staging_app_code.yml
   tags:
