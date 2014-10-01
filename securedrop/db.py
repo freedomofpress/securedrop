@@ -159,8 +159,7 @@ class Journalist(Base):
         self.set_password(password)
         self.is_admin = is_admin
         if otp_secret:
-            self.set_otp_secret(otp_secret)
-            self.is_totp = False
+            self.set_hotp_secret(otp_secret)
 
     def __repr__(self):
         return "<Journalist {0}{1}>".format(self.username,
@@ -182,11 +181,13 @@ class Journalist(Base):
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
-    def regenerate_otp_shared_secret(self):
+    def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
 
-    def set_otp_secret(self, otp_secret):
+    def set_hotp_secret(self, otp_secret):
+        self.is_totp = False
         self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ","")))
+        self.hotp_counter = 0
 
     @property
     def totp(self):

@@ -197,26 +197,24 @@ def admin_reset_two_factor_totp():
     uid = request.form['uid']
     user = Journalist.query.get(uid)
     user.is_totp = True
-    user.regenerate_otp_shared_secret()
+    user.regenerate_totp_shared_secret()
     db_session.commit()
     return redirect(url_for('admin_new_user_two_factor', uid=uid))
+
 
 @app.route('/admin/reset-2fa-hotp', methods=['POST'])
 @admin_required
 def admin_reset_two_factor_hotp():
-
     uid = request.form['uid']
     otp_secret = request.form.get('otp_secret', None)
-
     if otp_secret:
         user = Journalist.query.get(uid)
-        user.is_totp = False
-        user.hotp_counter = 0
-        user.set_otp_secret(otp_secret)
+        user.set_hotp_secret(otp_secret)
         db_session.commit()
         return redirect(url_for('admin_new_user_two_factor', uid=uid))
     else:
         return render_template('admin_edit_hotp_secret.html', uid=uid)
+
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required
