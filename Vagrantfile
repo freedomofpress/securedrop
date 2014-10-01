@@ -4,7 +4,7 @@
 #include MyVars
 
 Vagrant.configure("2") do |config|
-  config.vm.define 'dev', primary: true do |dev|
+  config.vm.define 'development', primary: true do |dev|
     dev.vm.box = "trusty64"
     dev.vm.network "forwarded_port", guest: 8080, host: 8080
     dev.vm.network "forwarded_port", guest: 8081, host: 8081
@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
-      ansible.tags = "production"
+      ansible.tags = "app"
     end
     app.vm.provider "virtualbox" do |v|
       v.name = "app"
