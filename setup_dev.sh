@@ -7,9 +7,9 @@ set -e
 
 usage() {
   cat <<EOS
-Usage: setup_dev.sh [-uh] [-r SECUREDROP_ROOT]
+Usage: setup_dev.sh [-uh] [-r securedrop_data_root]
 
-   -r SECUREDROP_ROOT  # specify a root driectory for docs, keys etc.
+   -r securedrop_data_root  # specify a root driectory for docs, keys etc.
    -u                  # unaided execution of this script (useful for Vagrant)
    -h                  # This help message.
 
@@ -18,13 +18,13 @@ EOS
 
 SOURCE_ROOT=$(dirname $0)
 
-securedrop_root=$(pwd)/.securedrop
+securedrop_data_root=/var/securedrop
 DEPENDENCIES="gnupg2 secure-delete haveged python-dev python-pip sqlite python-distutils-extra xvfb firefox gdb"
 
 while getopts "r:uh" OPTION; do
     case $OPTION in
         r)
-            securedrop_root=$OPTARG
+            securedrop_data_root=$OPTARG
             ;;
         u)
             UNAIDED_INSTALL=true
@@ -50,6 +50,9 @@ if [[ $opsys != 'Linux' ]]; then
 fi
 
 distro=$(cat /etc/*-release | grep DISTRIB_ID | cut -d"=" -f 2)
+if [[ -z $distro && -f "/etc/debian_version" ]]; then
+    distro="Debian"
+fi
 
 if [[ $distro != "Ubuntu" && $distro != "Debian" ]]; then
     echo "This setup script only works for Ubuntu/Debian systems. Exiting script."
@@ -79,55 +82,32 @@ sudo pip install -r requirements/document-requirements.txt
 sudo pip install -r requirements/test-requirements.txt
 
 echo "Setting up configurations..."
-# set up the securedrop root directory
-cat > config/test.py <<EOF
-JOURNALIST_KEY='65A1B5FF195B56353CC63DFFCC40EF1228271441' # test_journalist_key.pub
-SECUREDROP_ROOT='/tmp/securedrop_test'
 
-FLASK_TESTING = True
-FLASK_CSRF_ENABLED = False
-
-DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE='/tmp/securedrop_test/db.sqlite'
-EOF
-
-mkdir -p $securedrop_root/{store,keys,tmp}
-keypath=$securedrop_root/keys
+sudo mkdir -p $securedrop_data_root/{store,keys}
+me=$(whoami)
+sudo chown -R $me:$me $securedrop_data_root
+keypath=$securedrop_data_root/keys
 
 # avoid the "unsafe permissions on GPG homedir" warning
 chmod 700 $keypath
 
 # generate and store random values required by config.py
-secret_key=$(random 32)
+source_secret_key=$(random 32)
+journalist_secret_key=$(random 32)k
 scrypt_id_pepper=$(random 32)
 scrypt_gpg_pepper=$(random 32)
 
-# setup base configurations
-cat > config/flask_defaults.py <<EOF
-#### Flask Default Configuration
+# copy the config template to config.py
+cp config.py.example config.py
 
-FLASK_DEBUG = False
-FLASK_TESTING = False
-FLASK_CSRF_ENABLED = True
-FLASK_SECRET_KEY = '$secret_key'
-EOF
-
-cat > config/base.py <<EOF
-#### Application Configuration
-DEFAULT_ENV = 'development'
-
-SOURCE_TEMPLATES_DIR = './source_templates'
-JOURNALIST_TEMPLATES_DIR = './journalist_templates'
-WORD_LIST = './wordlist'
-NOUNS = './dictionaries/nouns.txt'
-ADJECTIVES = './dictionaries/adjectives.txt'
-JOURNALIST_PIDFILE = "/tmp/journalist.pid"
-SOURCE_PIDFILE = "/tmp/source.pid"
-
-SCRYPT_ID_PEPPER = '$scrypt_id_pepper' # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
-SCRYPT_GPG_PEPPER = '$scrypt_gpg_pepper' # "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
-SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
-EOF
+# fill in the instance-specific configuration
+# Use | instead of / for sed's delimiters, since some of the environment
+# variables are paths and contain /'s, which confuses sed.
+sed -i "s|{{ securedrop_data_root }}|$securedrop_data_root|" config.py
+sed -i "s|{{ source_secret_key }}|$source_secret_key|" config.py
+sed -i "s|{{ journalist_secret_key }}|$journalist_secret_key|" config.py
+sed -i "s|{{ scrypt_id_pepper }}|$scrypt_id_pepper|" config.py
+sed -i "s|{{ scrypt_gpg_pepper }}|$scrypt_gpg_pepper|" config.py
 
 if [ "$UNAIDED_INSTALL" != true ]; then
     echo ""
@@ -149,41 +129,14 @@ else
 fi
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
-journalistkey=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
-echo "Using journalist key with fingerprint $journalistkey"
-
-# setup development environment
-cat > config/development.py <<EOF
-#### Development Configurations
-
-JOURNALIST_KEY='$journalistkey' # fingerprint of the public key for encrypting submissions
-SECUREDROP_ROOT='$securedrop_root'
-
-FLASK_DEBUG = True
-
-### Database Configuration
-
-# Securedrop will use sqlite by default, but we've set up a mysql database as
-# part of this installation so it is very easy to switch to it.
-# Also, MySQL-Python won't install (which breaks this script) unless
-# mysql is installed.
-DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE='$securedrop_root/db.sqlite'
-
-# Uncomment to use mysql (or any other database backend supported by
-# SQLAlchemy). Make sure you have the necessary dependencies installed, and run
-# 'python -c "import db; db.init_db()"' to initialize the database
-
-# DATABASE_ENGINE = 'mysql'
-# DATABASE_HOST = 'localhost'
-# DATABASE_NAME = 'securedrop'
-# DATABASE_USERNAME = 'securedrop'
-# DATABASE_PASSWORD = '$mysql_securedrop'
-EOF
+journalist_key=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
+sed -i "s|{{ journalist_key }}|$journalist_key|" config.py
+echo "Using journalist key with fingerprint $journalist_key"
 
 echo "Creating database tables..."
-SECUREDROP_ENV=development python -c 'import db; db.init_db()'
+SECUREDROP_ENV=dev python -c 'import db; db.init_db()'
 
+# xvfb is needed to run the functional tests headlessly
 echo "Configuring xvfb..."
 sudo tee /etc/init.d/xvfb <<EOF
 XVFB=/usr/bin/Xvfb
@@ -229,6 +182,8 @@ if [[ $TEST_RC != 0 ]]; then
     echo "$bold$red It looks like something went wrong in your dev setup."
     echo "Please let us know by opening an issue on Github: https://github.com/freedomofpress/securedrop/issues/new"
     echo $normalcolor
+    # Exit with the non-zero return code to trigger build failure on Travis CI
+    exit $TEST_RC
 fi
 
 echo $bold$blue
@@ -246,4 +201,3 @@ echo "To re-run tests:"
 echo "cd /vagrant/securedrop"
 echo "$ ./manage.py test"
 
-exit $TEST_RC

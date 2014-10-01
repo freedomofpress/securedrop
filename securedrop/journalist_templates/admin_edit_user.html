@@ -18,9 +18,19 @@
     <input name="password_again" id="password_again" type="password" />
   </p>
   <p>
-    <label for="is_admin">Is Administrator</label>
     <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
+    <label for="is_admin">Is Administrator</label>
   </p>
   <button type="submit">Update user</button>
+</form>
+
+<hr class="no-line">
+
+<h2>Reset Two Factor Authentication</h2>
+<p>If a user's two factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two factor credentials. Otherwise, they will be locked out of their account.</em></p>
+<form method="post" action="{{ url_for('admin_reset_two_factor') }}" id="reset-two-factor">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input name="uid" type="hidden" value="{{ user.id }}"/>
+  <button type="submit" class="center"><i class="fa fa-refresh"></i> Reset two factor authentication</button>
 </form>
 {% endblock %}

@@ -12,16 +12,19 @@
   </head>
   <body>
 
-    {% if session.get('logged_in', False) %}
+    {% if g.user %}
     <div id="logout">
-      <a href="/logout">Logout</a>
+      {% if g.user and g.user.is_admin %}
+      <a href="{{ url_for('admin_index') }}">Admin</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
     {% endif %}
 
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="/"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br/>
@@ -32,7 +35,6 @@
       {% endblock %}
 
       <div class="panel selected">
-        <hr class="no-line" />
         {% include 'flashed.html' %}
 
         {% block body %}{% endblock %}

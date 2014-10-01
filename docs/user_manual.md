@@ -8,7 +8,7 @@ The Tor Browser can be used to access Tor _hidden service URLs_, which have doma
 
 ## Using SecureDrop As a Source
 
-Open the Tor Browser and navigate to the .onion hidden service URL provided by the media organization whose SecureDrop page you would like to visit. The page should look similar to the screenshot below. If this is the first time you're using the Tor browser, it's likely that you have Javascript enabled. If you do, you will see the red warning below which will explainin that this is a security risk. If you don't have Javascript enabled, you can skip the next step.
+Open the Tor Browser and navigate to the .onion hidden service URL provided by the media organization whose SecureDrop page you would like to visit. The page should look similar to the screenshot below. If this is the first time you're using the Tor browser, it's likely that you have Javascript enabled. If you do, you will see the red warning below which will explain that this is a security risk. If you don't have Javascript enabled, you can skip the next step.
 
 ![Javascript warning](/docs/images/manual/source1.png)
 
@@ -34,15 +34,15 @@ After clicking `Submit`, a confirmation page should appear, showing that your me
 
 ![Confirmation page](/docs/images/manual/source6.png)
 
-If you have already submitted a document and would like to check for responses, click the `Check for a Response` button on the media organizations' SecureDrop homepage.
+If you have already submitted a document and would like to check for responses, click the `Check for a Response` button on the media organization's SecureDrop homepage.
 
 ![Source Interface](/docs/images/manual/source7.png)
 
-The next page will ask for your secret code name; enter it and click `Continue`.
+The next page will ask for your secret code name. Enter it and click `Continue`.
 
 ![Check for response](/docs/images/manual/source8.png)
 
-If a journalist wishes to reply to you, they will flag your message on their end and you will see the following message below. They can't reply to you until you've seen this message for security reasons. This will only happen the first time a journalist replies and with subsequent replies you will skip this step.
+If a journalist wishes to reply to you, they will flag your message on their end and you will see the message below. They can't reply to you until you've seen this message for security reasons. This will only happen the first time a journalist replies and with subsequent replies you will skip this step.
 
 ![Check for an initial response](/docs/images/manual/source9.png)
 
@@ -60,23 +60,23 @@ Repeat to continue communicating with the journalist.
 
 ### Connecting to the Document Interface
 
-Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use Tor through the Tails operating system to connect to the `Docuement Interface`. This is for extra security. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
+Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use Tor through the Tails operating system to connect to the `Document Interface`. This is for extra security. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
 *Using Tails*
 
-* Boot Tails on the Journalist Workstation using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick that you use to boot the Secure Viewing Station).
+* Boot Tails on the Journalist Workstation using the Tails USB you created in the beginning (Note: this should be a different Tails USB stick than the one you use to boot the Secure Viewing Station).
 
 * Under "Use persistence?" click "YES" and type in your password (do not hit enter).
 
-* Under "More options?" clikc "YES", then click "Forward"
+* Under "More options?" click "YES", then click "Forward".
 
-* Set an administration password. This password will only be active during your current Tails session. Each time you will have to create this again, though it can be the same password everytime.
+* Set an administration password. This password will only be active during your current Tails session. You will have to create this password every time you log in, though it can be the same password every time.
 
-* Click login.
+* Click Login.
 
 * Go to the upper right hand corner of your screen and enable your Internet connection.
 
-* Click on `Computer` in the top left of your desktop, and go to the `Persistant` folder.
+* Click on `Computer` in the top left of your desktop, and go to the `Persistent` folder.
 
 * Double click the 'copy_torrc.sh' file. This should have been created on installation by your admin.
 
@@ -94,7 +94,7 @@ If any sources have uploaded documents or sent you message, they will be listed 
 
 ### Moving Documents to the Secure Viewing Station
 
-You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the below page with the messages that source has sent you. Click on a document or message name to save it.
+You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it.
 
 ![Load external content](/docs/images/manual/document4.png)
 

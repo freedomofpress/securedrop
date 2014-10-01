@@ -30,7 +30,7 @@ stop() {
         process_user="$2"
         service_name="$3"
         if [ -x /var/chroot/$jail/usr/bin/service ]; then
-            if [ "$(schroot -c $jail -u root --directory / -- pgrep -g $process_user $service_name)" ]; then
+            if [ "$(schroot -c $jail -u root --directory / -- pgrep -G $process_user $service_name)" ]; then
                 schroot -c $jail -u root --directory / -- service $service_name stop
             fi
         fi

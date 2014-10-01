@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 from werkzeug import secure_filename
 
 VALIDATE_FILENAME = re.compile(
-    "^(reply-)?[a-z0-9-_]+(-msg|-doc\.zip|)\.gpg$").match
+    "^(?P<index>\d+)\-[a-z0-9-_]+?(?P<file_type>msg|doc\.zip|)\.gpg$").match
 
 
 class PathException(Exception):
@@ -66,12 +66,15 @@ def path(*s):
     return absolute
 
 
-def get_bulk_archive(filenames):
+def get_bulk_archive(filenames, zip_directory=''):
     zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_')
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)
-            zip.write(filename, arcname=os.path.basename(filename))
+            zip.write(filename, arcname=os.path.join(
+                zip_directory,
+                os.path.basename(filename)
+            ))
     return zip_file
 
 
@@ -94,6 +97,23 @@ def save_message_submission(sid, count, journalist_filename, message):
     msg_loc = path(sid, filename)
     crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
     return filename
+
+
+def rename_submission(sid, orig_filename, journalist_filename):
+    check_submission_name = VALIDATE_FILENAME(orig_filename)
+    if check_submission_name:
+        parsed_filename = check_submission_name.groupdict()
+        if parsed_filename.get('file_type'):
+            new_filename = "{}-{}-{}.gpg".format(
+                parsed_filename['index'], journalist_filename,
+                parsed_filename['file_type'])
+            try:
+                os.rename(path(sid, orig_filename), path(sid, new_filename))
+            except OSError:
+                pass
+            else:
+                return new_filename  # Only return new filename if successful
+    return orig_filename
 
 
 def secure_unlink(fn, recursive=False):

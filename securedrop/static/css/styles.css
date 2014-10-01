@@ -24,6 +24,14 @@ a {
   color: #7985aa;
 }
 
+a.plain {
+  color: #333;
+}
+
+a.plain:hover {
+  color: #7985aa;
+}
+
 .content {
   position: relative;
   margin: 15px auto;
@@ -39,16 +47,16 @@ a {
 }
 
 .panel {
-  float: right;
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
   padding: 40px 20px;
   border: 1px solid #c3c3c3;
+  float: right;
 }
 
 #header {
-  display: inline-block;
+  float: left;
 }
 #header .powered {
   margin-top: 10px;
@@ -121,6 +129,17 @@ button, a.btn, .btn {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+}
+
+button.plain {
+  background: none;
+  color: #333;
+}
+
+button.plain:hover {
+  background : none;
+  color #333;
+  border: 1px solid transparent;
 }
 
 button:hover, a.btn:hover, .btn:hover {
@@ -286,6 +305,11 @@ hr.no-line {
 
 .center {
   text-align: center;
+}
+
+button.center {
+  display: block;
+  margin: 0 auto;
 }
 
 .flash {
@@ -526,6 +550,11 @@ p.breadcrumbs {
     outline:0;
 }
 
+/* Tooltips */
+time:not([title='']):hover, i:not([title='']):hover {
+  cursor: pointer;
+}
+
 div#logout {
   float:right;
   margin-right:1em;
@@ -548,4 +577,12 @@ span#shared_secret {
   color: #555;
   padding: 4px;
   border: 1px solid #999;
+}
+
+table#users {
+  width: 100%;
+}
+
+table#users td {
+  text-align: center;
 }

@@ -1,6 +1,6 @@
 # Preparing Ubuntu servers for installation
 
-The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.4 LTS (Precise Pangolin)](http://releases.ubuntu.com/12.04/). Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
+The `App Server` and `Monitor Server` require [Ubuntu Server 12.04.5 LTS (Precise Pangolin)](http://releases.ubuntu.com/12.04/). SecureDrop is only supported for 64-bit platforms, so make sure you use the 64-bit images, which have a `-amd64` suffix. Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
 
 After booting the the Ubuntu Server CD, select "Install Ubuntu Server".
 

@@ -19,6 +19,8 @@ from db import db_session, Journalist
 # TODO: do we need to store *_PIDFILE in the application config? It seems like
 # an implementation detail that is specifc to this management script.
 
+os.environ['SECUREDROP_ENV'] = 'dev'
+
 def start():
     import config
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
@@ -50,27 +52,24 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
-    from tests import test_unit, test_journalist, test_single_star
+    test_cmds = ["py.test", "./test.sh"]
+    sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
 
-    test_suites = [test_unit, test_journalist, test_single_star]
-
-    for test_suite in test_suites:
-        test_loader = unittest.defaultTestLoader.loadTestsFromModule(test_suite)
-        test_runner = unittest.TextTestRunner(verbosity=2)
-        test_runner.run(test_loader)
-
-    # TODO run functional tests directly from this script
-    # Until then, we're still calling the old test.sh script just to run the functional tests.
-    subprocess.call(["./test.sh"])
+def test_unit():
+    """
+    Runs the unit tests.
+    """
+    os.environ['SECUREDROP_ENV'] = 'test'
+    sys.exit(int(subprocess.call("py.test")))
 
 
 def reset():
     """
     Clears the Securedrop development application's state, restoring it to the
     way it was immediately after running `setup_dev.sh`. This command:
-    1. Erases the development sqlite database file ($SECUREDROP_ROOT/db.sqlite)
+    1. Erases the development sqlite database file
     2. Regenerates the database
-    3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
+    3. Erases stored submissions and replies from the store dir
     """
     import config
     import db
@@ -130,7 +129,7 @@ def add_admin():
 
 
 def main():
-    valid_cmds = ["start", "stop", "test", "reset", "add_admin"]
+    valid_cmds = ["start", "stop", "test_unit", "test", "reset", "add_admin"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
@@ -143,7 +142,6 @@ def main():
         getattr(sys.modules[__name__], cmd)()
     except KeyboardInterrupt:
         print # So our prompt appears on a nice new line
-        pass
 
 if __name__ == "__main__":
     main()
