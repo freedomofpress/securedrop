@@ -13,12 +13,13 @@ import config
 import version
 import crypto_util
 import store
+import template_filters
 from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
                 Journalist, NoResultFound, WrongPasswordException,
                 BadTokenException)
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
-app.config.from_object(config.FlaskConfig)
+app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
@@ -29,12 +30,7 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-
-@app.template_filter('datetimeformat')
-def _jinja2_datetimeformat(dt, fmt=None):
-    """Template filter for readable formatting of datetime.datetime"""
-    fmt = fmt or '%b %d, %Y %I:%M %p'
-    return dt.strftime(fmt)
+app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 
 
 @app.teardown_appcontext
@@ -54,8 +50,29 @@ def get_source(sid):
     return source
 
 
+@app.before_request
+def setup_g():
+    """Store commonly used values in Flask's special g object"""
+    uid = session.get('uid', None)
+    if uid:
+        g.user = Journalist.query.get(uid)
+
+    if request.method == 'POST':
+        sid = request.form.get('sid')
+        if sid:
+            g.sid = sid
+            g.source = get_source(sid)
+
+
 def logged_in():
-    return 'logged_in' in session
+    # When a user is logged in, we push their user id (database primary key)
+    # into the session. setup_g checks for this value, and if it finds it,
+    # stores a reference to the user's Journalist object in g.
+    #
+    # This check is good for the edge case where a user is deleted but still
+    # has an active session - we will not authenticate a user if they are not
+    # in the database.
+    return bool(g.get('user', None))
 
 
 def login_required(func):
@@ -79,20 +96,6 @@ def admin_required(func):
     return wrapper
 
 
-@app.before_request
-def setup_g():
-    """Store commonly used values in Flask's special g object"""
-    if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
-
-    user_id = session.get('uid', None)
-    if user_id:
-        g.user = Journalist.query.get(user_id)
-
-
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -103,19 +106,12 @@ def login():
         except (NoResultFound, WrongPasswordException, BadTokenException):
             flash("Login failed", "error")
         else:
-            session['uid'] = user.id
-            flash("Successfully logged in", "notification")
-
             # Update access metadata
-            user.last_access = datetime.now()
+            user.last_access = datetime.utcnow()
             db_session.add(user)
             db_session.commit()
 
-            # Update session
-            session['logged_in'] = True
-
-            if user.is_admin:
-                return redirect(url_for('admin_index'))
+            session['uid'] = user.id
             return redirect(url_for('index'))
 
     return render_template("login.html")
@@ -123,8 +119,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('id', None)
-    session.pop('logged_in', None)
+    session.pop('uid', None)
     return redirect(url_for('index'))
 
 
@@ -151,10 +146,7 @@ def admin_add_user():
             form_valid = False
             flash("Passwords didn't match", "password_validation")
 
-        if request.form.get('is_admin', False) == 'on':
-            is_admin = True
-        else:
-            is_admin = False
+        is_admin = bool(request.form.get('is_admin'))
 
         if form_valid:
             try:
@@ -177,8 +169,6 @@ def admin_add_user():
                           "general_validation")
 
         if form_valid:
-            flash("New user {0} succesfully added".format(username),
-                  "notification")
             return redirect(url_for('admin_new_user_two_factor',
                                     uid=new_user.id))
 
@@ -188,18 +178,28 @@ def admin_add_user():
 @app.route('/admin/2fa', methods=('GET', 'POST'))
 @admin_required
 def admin_new_user_two_factor():
-    uid = request.args['uid']
-    user = Journalist.query.get(uid)
+    user = Journalist.query.get(request.args['uid'])
 
     if request.method == 'POST':
         token = request.form['token']
         if user.verify_token(token):
-            flash("Two factor token successfully verified!", "notification")
+            flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
             return redirect(url_for("admin_index"))
         else:
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
+
+@app.route('/admin/reset-2fa', methods=['POST'])
+@admin_required
+def admin_reset_two_factor():
+    uid = request.form['uid']
+    user = Journalist.query.get(uid)
+    user.regenerate_otp_shared_secret()
+    db_session.commit()
+    return redirect(url_for('admin_new_user_two_factor', uid=uid))
+
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required
@@ -216,7 +216,7 @@ def admin_edit_user(user_id):
                 return redirect(url_for("admin_edit_user"))
             user.set_password(request.form['password'])
 
-        user.is_admin = bool(request.form.get('is_admin'))
+        is_admin = bool(request.form.get('is_admin'))
 
         try:
             db_session.add(user)
@@ -307,6 +307,11 @@ def index():
 def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
+    submissions = [submission.filename for submission in Submission.query.filter(Submission.source_id == source.id).all()]
+    # Only include documents loaded from the filesystem which are replies or which are also listed in the
+    # submissions table to avoid displaying partially uploaded files (#561).
+    docs = [doc for doc in docs if doc['name'] in submissions or doc['name'].endswith('reply.gpg')]
+
     haskey = crypto_util.getkey(sid)
     return render_template("col.html", sid=sid,
                            codename=source.journalist_designation, docs=docs, haskey=haskey,
@@ -372,7 +377,7 @@ def col_delete_single(sid):
 def col_delete(cols_selected):
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "warning")
+        flash("No collections selected to delete!", "error")
     else:
         for source_id in cols_selected:
             delete_collection(source_id)
@@ -415,8 +420,14 @@ def reply():
 @app.route('/regenerate-code', methods=('POST',))
 @login_required
 def generate_code():
+    original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
+    
+    for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
+        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename())
     db_session.commit()
+
+    flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
     return redirect('/col/' + g.sid)
 
 
@@ -440,6 +451,13 @@ def bulk():
     filenames_selected = [
         doc['name'] for doc in docs_selected]
 
+    if not docs_selected:
+        if action == 'download':
+            flash("No collections selected to download!", "error")
+        elif action == 'delete':
+            flash("No collections selected to delete!", "error")
+        return redirect(url_for('col', sid=g.sid))
+
     if action == 'download':
         return bulk_download(g.sid, filenames_selected)
     elif action == 'delete':
@@ -453,7 +471,8 @@ def bulk_delete(sid, docs_selected):
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
-            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
+            if not doc['name'].endswith('reply.gpg'):
+                db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
             fn = store.path(sid, doc['name'])
             store.secure_unlink(fn)
         db_session.commit()
@@ -472,9 +491,9 @@ def bulk_download(sid, docs_selected):
         except NoResultFound as e:
             app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
-    zip = store.get_bulk_archive(filenames)
+    zip = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
     return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=source.journalist_designation + ".zip",
+                     attachment_filename=source.journalist_filename() + ".zip",
                      as_attachment=True)
 
 

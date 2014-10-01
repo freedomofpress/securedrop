@@ -17,18 +17,19 @@ from flask import (Flask, request, render_template, session, redirect, url_for,
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.exc import IntegrityError
 
 import config
 import version
 import crypto_util
 import store
 import background
+import template_filters
 from db import db_session, Source, Submission
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
+from jinja2 import evalcontextfilter
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
-app.request_class = RequestThatSecuresFileUploads
-app.config.from_object(config.FlaskConfig)
+app.config.from_object(config.SourceInterfaceFlaskConfig)
 CsrfProtect(app)
 
 SUBMIT_DOC_NOTIFY_STR = "Thanks! We received your document"
@@ -43,12 +44,8 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-@app.template_filter('datetimeformat')
-def _jinja2_datetimeformat(dt, fmt=None):
-    """Template filter for readable formatting of datetime.datetime"""
-    fmt = fmt or '%b %d, %Y %I:%M %p'
-    return dt.strftime(fmt)
-
+app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -156,9 +153,12 @@ def create():
 
     source = Source(sid, crypto_util.display_id())
     db_session.add(source)
-    db_session.commit()
-
-    os.mkdir(store.path(sid))
+    try:
+        db_session.commit()
+    except IntegrityError as e: 
+        app.logger.error("Attempt to create a source with duplicate codename: %s" % (e,))
+    else:
+        os.mkdir(store.path(sid))
 
     session['logged_in'] = True
     return redirect(url_for('lookup'))
@@ -248,7 +248,7 @@ def submit():
         if entropy_avail >= 2400:
             crypto_util.genkeypair(g.sid, g.codename)
 
-    g.source.last_updated = datetime.now()
+    g.source.last_updated = datetime.utcnow()
     db_session.commit()
     normalize_timestamps(g.sid)
 
@@ -276,11 +276,15 @@ def valid_codename(codename):
 def login():
     if request.method == 'POST':
         codename = request.form['codename']
-        if valid_codename(codename):
-            session.update(codename=codename, logged_in=True)
-            return redirect(url_for('lookup', from_login='1'))
+        try:
+            valid = valid_codename(codename)
+        except crypto_util.CryptoException:
+            pass
         else:
-            flash("Sorry, that is not a recognized codename.", "error")
+            if valid:
+                session.update(codename=codename, logged_in=True)
+                return redirect(url_for('lookup', from_login='1'))
+        flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
 

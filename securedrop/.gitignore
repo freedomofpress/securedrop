@@ -1,4 +1,2 @@
-# Default SECUREDROP_ROOT for development
-.securedrop/
-# Virtualenv
-env/
+# Don't version control config.py because it contains secret values
+config.py

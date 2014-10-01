@@ -1,7 +1,7 @@
 Installing SecureDrop
 =====================
 
-This guide outlines the steps required to install [SecureDrop 0.3](https://pressfreedomfoundation.org/securedrop). 
+This guide outlines the steps required to install [SecureDrop 0.3](https://pressfreedomfoundation.org/securedrop).
 
 When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
 
@@ -19,7 +19,7 @@ The *Monitor Server* keeps track of the *App Server* and sends out an email aler
 
 ### Source Interface
 
-The *Source Interface* is the website that sources will access when submitting documents and communcating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
+The *Source Interface* is the website that sources will access when submitting documents and communicating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
 
 ### Document Interface
 
@@ -27,7 +27,7 @@ The *Document Interface* is the website that journalists will access when downlo
 
 ### Journalist Workstation
 
-The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *transfer* USB stick.
+The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *Transfer Device*
 
 ### Admin Workstation
 
@@ -41,21 +41,21 @@ Since this machine will never touch the Internet or run an operating system othe
 
 ### Transfer Device
 
-The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated small sized usb stick, CDR or SD card.
+The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated small sized usb stick, CD-R or SD card.
 
 ## Before you begin
 
 The steps in this guide assume you have the following set up:
 
- * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.4 LTS (Precise
- Pangolin)](http://releases.ubuntu.com/12.04/) installed
- * An [Ubuntu kernel with Grsecurity](/docs/ubuntu-grsec.md) ready to be installed on the *App* and *Monitor* servers
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.5 LTS (Precise
+ Pangolin)](http://releases.ubuntu.com/12.04/) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
+ * An [Ubuntu kernel with Grsecurity](https://github.com/dolanjs/ubuntu-grsec) ready to be installed on the *App* and *Monitor* servers
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
- * One *Transfer Device* for transfering files, marked *transfer*
+ * One *Transfer Device* for transferring files, marked *transfer*
  * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) One-Time Password authentication dongle
  
-Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) dongle, a *Transfer Device* for transfering files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
+Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) dongle, a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
 
 It is also recommended that you use an external hard drive to back up encrypted submissions and some form of removable media to back up the GPG keyring on the *App* server.
 
@@ -83,11 +83,11 @@ To manage GPG keys using the Tails graphical interface, click the clipboard icon
 
 ![My Keys](/docs/images/install/viewing7.jpg)
 
-Right-click on the key you just generated and click `Export`. Save it to the USB stick marked *transfer* as `SecureDrop.asc`. This is the public key only.
+Right-click on the key you just generated and click `Export`. Save it to the *Transfer Device* as `SecureDrop.asc`. This is the public key only.
 
 ![My Keys](/docs/images/install/viewing8.jpg)
 
-You'll also need to verify the 40 character hex fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
+You'll also need to verify the 40 character hexadecimal fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
 
 ![Fingerprint](/docs/images/install/viewing9.jpg)
 
@@ -95,16 +95,16 @@ You'll also need to verify the 40 character hex fingerprint for this new key dur
 
 While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
 
-If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using a USB stick. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
+If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
 ![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
 
 ## Set up the App Server
 
-The *App Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *App Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *Monitor Server*
- * The SecureDrop application's GPG public key (from the USB stick marked *transfer*)
+ * The SecureDrop application's GPG public key (from the *Transfer Device*)
  * The SecureDrop application's GPG key fingerprint
  * An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
  * The first name a journalist who will be using SecureDrop (you can add more later)
@@ -124,7 +124,7 @@ wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
 Download the SecureDrop signing key and verify the digital signature
 
 ```
-gpg --recv-key BD67D096
+gpg --keyserver pool.sks-keyservers.net --recv-key 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
 gpg --verify add-repos.tgz.sig
 ```
 
@@ -132,7 +132,7 @@ If the signature is OK, extract the archive with the script, set the execuble fl
 
 ```
 tar -xzf add-repos.tgz
-sudo chmod +x ./add-repos.sh
+chmod +x ./add-repos.sh
 sudo ./add-repos.sh
 ```
 
@@ -179,7 +179,7 @@ you will need to append :8080 to the URL as shown below
 The Document Interface's URL and auth values for each journalist:
 bob's URL is http://gu6yn2ml6ns5qupv.onion:8080
 bob's TBB torrc config line is:
-HidServ Auth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 To add more journalists run 'sudo /opt/securedrop/add-journalists.sh NAME' script
 
 The App Server is only accessible through a Tor Authenticated Hidden Service
@@ -194,7 +194,7 @@ to add more admins.
 
 ## Set up the Monitor Server
 
-The *Monitor Server* should already have Ubuntu Server 12.04.4 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *Monitor Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *App Server*
  * The email address that will receive alerts from OSSEC
@@ -219,7 +219,7 @@ wget https://pressfreedomfoundation.org/securedrop-files/add-repos.tgz.sig
 Download the SecureDrop signing key and verify the digital signature
 
 ```
-gpg --recv-key BD67D096
+gpg --keyserver pool.sks-keyservers.net --recv-key 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
 gpg --verify add-repos.tgz.sig
 ```
 
@@ -227,7 +227,7 @@ If the signature is OK, extract the archive with the script, set the execuble fl
 
 ```
 tar -xzf add-repos.tgz
-sudo chmod +x ./add-repos.sh
+chmod +x ./add-repos.sh
 sudo ./add-repos.sh
 ```
 
@@ -279,9 +279,24 @@ to add more admins.
 
 ### Add OSSEC agent
 
-An OSSEC agent is a small program set up on the system you want to monitor, which in this case means the *App Server*. The agent will collect information in real time and forward it to the manager on the *Monitor Server* for analysis and correlation. Adding the OSSEC agent involves accessing both the *App server* and the *Monitor Server*.
+An OSSEC agent is a small program set up on the system you want to monitor, which in this case means the *App Server*. The agent will collect information in real time and forward it to the manager on the *Monitor Server* for analysis and correlation. Adding the OSSEC agent involves accessing both the *App server* and the *Monitor Server*. In order to make copying pasting the long secret value from the *Monitor Server* to the *App server* you will want to ssh into both servers instead of running the commands from the console.
 
-**TODO**: Add the commands and expected outputs from both the App Server and the Monitor Server. On the Monitor Server: /var/ossec/bin/manage-agents and restart ossec. On the App Server: import hash value and restart ossec. On the Monitor Server again: run /var/ossec/bin/list_agents -a to show agent is connected.
+#### Generate an agent key on the Monitor Server
+
+![Generate agent key](/docs/images/install/monitor-manage-agents.png)
+
+#### Add agent key to App Server
+
+Copy the long secret value from the *Monitor Server* and prepare to paste it into the *App Server*
+![Add agent key](/docs/images/install/app-manage-agents.png)
+
+Restart the `App Servers` OSSEC agent by running `service ossec restart`
+
+#### Verify OSSEC agent connectivity
+
+Restart the `Monitor Servers` OSSEC service by running `service ossec restart`
+
+![Verify OSSEC agent](/docs/images/install/monitor-verify-agent.png)
 
 ### Configure Postfix
 Postfix is used to route the OSSEC alerts to the organizations smtp server. While the bodies of the emails will be encrypted, you should still configure a high secure SMTP relay connection using TLS, Certificate Pinning and SASL authentication. An example for using smtp.gmail.com as the SMTP relay is provided below. If you use smtp.gmail.com you should create a dedicated account to be used for SASL authentication, using an application specific password for SASL authentication no longer works for google. NOTE: google business accounts use a different FQDN than @google.com addresses.
@@ -303,7 +318,7 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtp_tls_CAfile = /etc/postfix/cacert.pem
 smtp_tls_security_level = fingerprint
 smtp_tls_fingerprint_digest = sha1
-smtp_tls_fingerprint_cert_match = 10:75:E1:8C:DF:93:15:3B:A1:8F:CD:FE:D3:11:79:D5:16:43:77:BC
+smtp_tls_fingerprint_cert_match = 9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
 smtp_tls_ciphers = high
 smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2
 myhostname = monitor.securedrop
@@ -349,7 +364,7 @@ The *Admin Workstation* is a machine that the system administrator can use to co
 
 ### Configure SSH to use Tor
 
-When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux and has *tor* installed from [Tor's repos](https://www.torproject.org/docs/installguide.html.en) Do not use the version that is in the Linux distro's repos because it is most likely out of date.
+When installing SecureDrop on the *App Server* and the *Monitor Server*, SSH will be configured to only allow connections over Tor. The steps below assume that the *Admin Workstation* is running Linux and has *Tor* installed from [Tor Project's repos](https://www.torproject.org/docs/installguide.html.en) Do not use the version that is in the Linux distribution's repos because it is most likely out of date.
 
 Install the *connect-proxy* tool.
 
@@ -395,13 +410,13 @@ Each journalist must have a personal GPG key that they use for encrypting files 
 
 If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
 
-* [GNU/Linux](http://www.gnupg.org/gph/en/manual.html#AEN26)
+* [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
 * [Windows](http://gpg4win.org/)
-* [Mac OS X](http://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
+* [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
 
 ### Journalist Logging In
 
-In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate their hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
+In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate to the hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
 
 **Though the Tails Operating System**
 

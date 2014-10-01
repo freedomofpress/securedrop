@@ -1,23 +1,38 @@
 {% extends "base.html" %}
 {% block body %}
-<h2>Admin interface</h2>
+<h2>Admin Interface</h2>
 
-<a href="/admin/add" id="add-user">Add user</a>
+<form action="{{ url_for('admin_add_user') }}">
+  <button type="submit" class="btn"><i class="fa fa-plus"></i> Add user</button>
+</form>
+
+<hr class="no-line" />
 
 {% if users %}
 <form id="user_actions" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <ul id="users">
+  <table id="users">
+    <tr>
+      <th>Username</th>
+      <th>Edit</th>
+      <th>Delete</th>
+      <th>Created</th>
+      <th>Last login</th>
+    </tr>
     {% for user in users %}
-      <li>
-          {{ user.username }}
-          <a href="/admin/edit/{{ user.id }}">Edit</a>
-          <button type="submit" formaction="/admin/delete/{{ user.id }}">Delete</button>
-          Created {{ user.created_on }}
-          Last access {{ user.last_access }}
-      </li>
+      <tr>
+        <td>{{ user.username }}</td>
+        <td><a href="/admin/edit/{{ user.id }}" class="plain"><i class="fa fa-edit" title="Edit user {{ user.username }}"></i></a></td>
+        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="Delete user {{ user.username }}"></i></button></td>
+        <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|datetimeformat(relative=True) }}</time></td>
+        {% if user.last_access %}
+          <td><time class="date" title="{{ user.last_access }}">{{ user.last_access|datetimeformat(relative=True) }}</time></td>
+        {% else %}
+          <td><time class="date">Never</time></td>
+        {% endif %}
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
 </form>
 {% else %}
 <p>No users to display</p>

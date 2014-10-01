@@ -14,8 +14,10 @@ add_signing_key() {
 add_repo() {
     repo_name="$1"
     repo_url="$2"
+    distro="$( lsb_release -c | cut -f 2 )"
+
     if [ ! -f /etc/apt/sources.list.d/$repo_name.list ]; then
-        echo "deb $repo_url precise main" > /etc/apt/sources.list.d/$repo_name.list
+        echo "deb $repo_url $distro main" > /etc/apt/sources.list.d/$repo_name.list
     fi
 }
 
@@ -356,7 +358,7 @@ nM1RGVAp7lu5B8M=
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
     
-fpf_url="[arch=amd64] http://apt.pressfreedomfoundation.org/"
+fpf_url="[arch=amd64] https://apt.pressfreedomfoundation.org/"
 cat > fpf_signing_key << EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1

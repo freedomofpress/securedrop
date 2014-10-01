@@ -66,8 +66,7 @@ class Source(Base):
     filesystem_id = Column(String(96), unique=True)
     journalist_designation = Column(String(255), nullable=False)
     flagged = Column(Boolean, default=False)
-    # TODO should we be using utc times?
-    last_updated = Column(DateTime, default=datetime.datetime.now)
+    last_updated = Column(DateTime, default=datetime.datetime.utcnow)
     star = relationship("SourceStar", uselist=False, backref="source")
     
     # sources are "pending" and don't get displayed to journalists until they submit something
@@ -152,8 +151,7 @@ class Journalist(Base):
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
 
-    # TODO should we be using utc times?
-    created_on = Column(DateTime, default=datetime.datetime.now)
+    created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
 
     def __init__(self, username, password, is_admin=False, otp_secret=None):
@@ -175,7 +173,6 @@ class Journalist(Base):
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
-        # TODO: better handle encoding?
         return scrypt.hash(str(password), salt, **params)
 
     def set_password(self, password):
@@ -185,6 +182,9 @@ class Journalist(Base):
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
+    def regenerate_otp_shared_secret(self):
+        self.otp_secret = pyotp.random_base32()
+
     @property
     def totp(self):
         return pyotp.TOTP(self.otp_secret)
@@ -193,13 +193,12 @@ class Journalist(Base):
     def hotp(self):
         return pyotp.HOTP(self.otp_secret)
 
-    @property
     def shared_secret_qrcode(self):
-        uri = self.totp.provisioning_uri("{}@{}".format(self.username,
-                                                        "SecureDrop"))
+        uri = self.totp.provisioning_uri("{} {}".format("SecureDrop",
+                                                        self.username))
 
         qr = qrcode.QRCode(
-            box_size=25,
+            box_size=15,
             image_factory=qrcode.image.svg.SvgPathImage
         )
         qr.add_data(uri)
