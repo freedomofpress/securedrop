@@ -67,9 +67,9 @@ def reset():
     """
     Clears the Securedrop development application's state, restoring it to the
     way it was immediately after running `setup_dev.sh`. This command:
-    1. Erases the development sqlite database file ($SECUREDROP_ROOT/db.sqlite)
+    1. Erases the development sqlite database file
     2. Regenerates the database
-    3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
+    3. Erases stored submissions and replies from the store dir
     """
     import config
     import db
