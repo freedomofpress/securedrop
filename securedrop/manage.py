@@ -100,7 +100,10 @@ def add_admin():
     hotp_input = raw_input("Is this admin using a Yubikey [HOTP]? (y/N): ")
     otp_secret = None
     if hotp_input.lower() == "y" or hotp_input.lower() == "yes":
-        otp_secret = raw_input("Please configure your Yubikey and enter the secret: ")
+        while True:
+            otp_secret = raw_input("Please configure your Yubikey and enter the secret: ")
+            if otp_secret:
+                break
 
     admin = Journalist(username=username, password=password, is_admin=True, otp_secret=otp_secret)
     try:
