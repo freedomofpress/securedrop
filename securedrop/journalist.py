@@ -161,7 +161,6 @@ def admin_add_user():
                 otp_secret = None
                 if request.form.get('is_hotp', False):
                     otp_secret = request.form.get('otp_secret', '')
-                print otp_secret
                 new_user = Journalist(username=username,
                                       password=password,
                                       is_admin=is_admin,

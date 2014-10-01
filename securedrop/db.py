@@ -220,18 +220,14 @@ class Journalist(Base):
 
     def verify_token(self, token):
         if self.is_totp:
-            if not self.totp.verify(token):
-                return False
+            return self.totp.verify(token)
         else:
-            hotp_success = False
             for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
-                    hotp_success = True
                     self.hotp_counter = counter_val + 1
                     db_session.commit()
                     return True
-            if not hotp_success:
-                return False
+            return False
 
     @staticmethod
     def login(username, password, token):
