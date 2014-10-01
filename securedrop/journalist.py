@@ -211,6 +211,7 @@ def admin_reset_two_factor_hotp():
     if otp_secret:
         user = Journalist.query.get(uid)
         user.is_totp = False
+        user.hotp_counter = 0
         user.set_otp_secret(otp_secret)
         db_session.commit()
         return redirect(url_for('admin_new_user_two_factor', uid=uid))
