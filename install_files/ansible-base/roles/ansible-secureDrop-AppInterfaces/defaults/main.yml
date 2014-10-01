@@ -66,3 +66,18 @@ dev_deps:
   - python-pip
   - firefox
   - xvfb
+
+build_deb_root:
+  - /tmp/securedrop-debs
+
+build_deb_dirs:
+  - securedrop-app-code
+  - securedrop-python-mods
+  - ossec-agent
+  - ossec-server
+  - securedrop-ossec-agent
+  - securedrop-ossec-server
+
+apparmor_profiles:
+  - usr.bin.tor
+  - usr.lib.apache2.mpm-worker.apache2
