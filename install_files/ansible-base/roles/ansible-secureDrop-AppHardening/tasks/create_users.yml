@@ -20,6 +20,15 @@
     groups=sudo,ssh
   with_items: sshUsers
 
+- name: get users in the ssh group
+  getent: database=group key=ssh
+  register: ssh_group_users
+
+- name: ensure only registered admins are in the ssh group
+  # For now, unregisters user from *all* groups except their primary group (including the ssh group)
+  user: groups=
+  with_items: {{ ssh_group_users | difference(sshUsers) }}
+
 - name: ensure place admin ssh public keys exist
   authorized_key: user="{{ item }}" key="{{ lookup('file', sshUsers[item]) }}"
   with_items: sshUsers
