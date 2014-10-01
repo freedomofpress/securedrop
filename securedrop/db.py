@@ -159,9 +159,7 @@ class Journalist(Base):
         self.set_password(password)
         self.is_admin = is_admin
         if otp_secret:
-            # Remove spaces (sometimes added for readability)
-            otp_secret = ''.join(otp_secret.split(' '))
-            self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret))
+            self.set_otp_secret(otp_secret)
             self.is_totp = False
 
     def __repr__(self):
@@ -188,7 +186,7 @@ class Journalist(Base):
         self.otp_secret = pyotp.random_base32()
 
     def set_otp_secret(self, otp_secret):
-        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret))
+        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ","")))
 
     @property
     def totp(self):
