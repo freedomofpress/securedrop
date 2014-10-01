@@ -57,6 +57,16 @@ vagrant up app
 
 `vagrant up mon`
 
+
+# Environment dev:
+ source interface is accessible by localhost:8080 document interface localhost:8081
+ 
+# Environment staging/production
+
+The ansible playbook task `roles/ansible-secureDrop-AppHardening/tasks/display_onions.yml` creates a ssh-hostname file on the host sytem. 
+
+
+
 Once SSH is only allowed over tor
 
 `sudo apt-get install connect-proxy`
@@ -68,8 +78,3 @@ Hosts *.onion
 Compression yes # this compresses the SSH traffic to make it less slow over tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
-
-First follow
-https://github.com/freedomofpress/securedrop/blob/develop/docs/creating-deb.md
-
-`sudo ./build_deb_packages.sh`
