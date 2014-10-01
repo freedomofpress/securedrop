@@ -1,4 +1,22 @@
 ---
-- name: Install local securedrop-app-code deb package from /vagrant/*.deb
-  apt: deb=/vagrant/{{ securedrop_app_code_deb }}
+- name: copy install_files/secureddrop-app-code to build path
+  command: "cp -R /vagrant/install_files/securedrop-app-code /tmp/{{ securedrop_app_code_deb }}/"
 
+- name: copy securedrop-app-code debian dir to build path
+  copy: src=securedrop  dest=/tmp/securedrop-app-code-0.3-amd64/var/www/securedrop owner=root mode=644
+
+- name: if pip requirements changed create pip wheel
+  command: "pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt /tmp/securedrop-app-code-0.3-amd64/var/www/securedrop"
+
+- name: copy apparmor profiles to build path
+  copy: src={{ item }} dest=/tmp/securedrop-app-code-0.3-amd64/etc/apparmor.d/{{ item }}
+  with_items: apparmor_profiles 
+
+- name: zip the changelog
+  command: "gzip -9 /tmp/securedrop-app-code-0.3-amd64/usr/share/doc/securedrop-app-code/changelog.Debian"
+
+- name: create the deb package
+  command: "dpkg-deb --build /tmp/securedrop-app-code-0.3-amd64"
+
+- name: Install local securedrop-app-code deb package from /vagrant/*.deb
+  apt: deb="/tmp/{{ securedrop_app_code_deb }}"
