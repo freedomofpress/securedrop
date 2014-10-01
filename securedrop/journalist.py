@@ -146,13 +146,20 @@ def admin_add_user():
             form_valid = False
             flash("Passwords didn't match", "password_validation")
 
-        is_admin = bool(request.form.get('is_admin'))
+            if request.form.get('is_admin', False) == 'on':
+                is_admin = True
+            else:
+                is_admin = False
 
         if form_valid:
             try:
+                otp_secret = None
+                if request.form.get('is_hotp', False):
+                    otp_secret = request.form.get('otp_secret', '')
                 new_user = Journalist(username=username,
                                       password=password,
-                                      is_admin=is_admin)
+                                      is_admin=is_admin,
+                                      otp_secret=otp_secret)
                 db_session.add(new_user)
                 db_session.commit()
             except IntegrityError as e:
@@ -178,7 +185,7 @@ def admin_new_user_two_factor():
 
     if request.method == 'POST':
         token = request.form['token']
-        if user.totp.verify(token):
+        if user.verify_token(token):
             flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
             return redirect(url_for("admin_index"))
         else:
@@ -212,7 +219,10 @@ def admin_edit_user(user_id):
                 return redirect(url_for("admin_edit_user"))
             user.set_password(request.form['password'])
 
-        user.is_admin = bool(request.form.get('is_admin'))
+        if request.form.get('is_admin', False) == 'on':
+            is_admin = True
+        else:
+            is_admin = False
 
         try:
             db_session.add(user)

@@ -55,14 +55,21 @@ def test():
     test_cmds = ["py.test", "./test.sh"]
     sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
 
+def test_unit():
+    """
+    Runs the unit tests.
+    """
+    os.environ['SECUREDROP_ENV'] = 'test'
+    sys.exit(int(subprocess.call("py.test")))
+
 
 def reset():
     """
     Clears the Securedrop development application's state, restoring it to the
     way it was immediately after running `setup_dev.sh`. This command:
-    1. Erases the development sqlite database file ($SECUREDROP_ROOT/db.sqlite)
+    1. Erases the development sqlite database file
     2. Regenerates the database
-    3. Erases stored submissions and replies from $SECUREDROP_ROOT/store
+    3. Erases stored submissions and replies from the store dir
     """
     import config
     import db
@@ -90,7 +97,12 @@ def add_admin():
             break
         print "Passwords didn't match!"
 
-    admin = Journalist(username=username, password=password, is_admin=True)
+    hotp_input = raw_input("Is this admin using a Yubikey [HOTP]? (y/N): ")
+    otp_secret = None
+    if hotp_input.lower() == "y" or hotp_input.lower() == "yes":
+        otp_secret = raw_input("Please configure your Yubikey and enter the secret: ")
+
+    admin = Journalist(username=username, password=password, is_admin=True, otp_secret=otp_secret)
     try:
         db_session.add(admin)
         db_session.commit()
@@ -102,21 +114,22 @@ def add_admin():
             print e
     else:
         print "Admin {} successfully added".format(username)
-        # Print the QR code for Google Authenticator
-        print
-        print "Scan the QR code below with Google Authenticator:"
-        print
-        uri = admin.totp.provisioning_uri(username)
-        qr = qrcode.QRCode()
-        qr.add_data(uri)
-        qr.print_ascii(tty=sys.stdout.isatty())
-        print
-        print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+        if not otp_secret:
+            # Print the QR code for Google Authenticator
+            print
+            print "Scan the QR code below with Google Authenticator:"
+            print
+            uri = admin.totp.provisioning_uri(username)
+            qr = qrcode.QRCode()
+            qr.add_data(uri)
+            qr.print_ascii(tty=sys.stdout.isatty())
+            print
+            print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
 
 
 
 def main():
-    valid_cmds = ["start", "stop", "test", "reset", "add_admin"]
+    valid_cmds = ["start", "stop", "test_unit", "test", "reset", "add_admin"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:

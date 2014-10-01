@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+{% if user.is_totp %}
 <h1>Enable Google Authenticator</h1>
 <p>You're almost done! To finish adding this new user, have them follow the instructions below to set up two factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.</p>
 <ol>
@@ -11,6 +12,10 @@
 <div id="qrcode_container">{{ user.shared_secret_qrcode|safe }}</div>
 <p>Can't scan the barcode? Enter the following code manually: <span id="shared_secret">{{ user.formatted_otp_secret }}</span></p>
 <p>Once you have scanned the barcode, enter the 6-digit code below:</p>
+{% else %}
+<h1>Enable Yubikey [HOTP]</h1>
+<p>Once you have configured your Yubikey, enter the 6-digit code below:</p>
+{% endif %}
 <form id="check_token" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <label for="token">Verification code</label>
