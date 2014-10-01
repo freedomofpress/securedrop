@@ -40,6 +40,14 @@ We recommend getting [16 GB Leef Supra](http://www.amazon.com/dp/B00FWQTBZ2/ref=
 
 Another alternative setup exists in which journalists do not transfer files on a USB stick, but instead use a CD-R or DVD-R. The encrypted documents are copied to the CD-R or DVD-R, then decrypted and read on the Secure Viewing Station. The disks are destroyed after first use. We recommend getting a [Samsung model burner](http://www.newegg.com/External-CD-DVD-Blu-Ray-Drives/SubCategory/ID-420) for this purpose. 
 
+### Two-factor authentication device
+
+Two-factor authentication is used when connecting to different parts of the SecureDrop system, including the *Document Interface*. We recommend the following for each administrator or journalist with access to the system:
+
+ * 1 x two-factor authentication device
+ 
+We recommend using either a mobile phone capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) or a [YubiKey](http://www.yubico.com/products/yubikey-hardware/yubikey/).
+
 ### Network firewall
 
 An important part of SecureDrop's security model involves segmenting the infrastructure from the Internet and/or the corporate environment. For this reason, we recommend that you get:
