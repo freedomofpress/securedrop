@@ -150,9 +150,13 @@ def admin_add_user():
 
         if form_valid:
             try:
+                otp_secret = None
+                if request.form.get('is_hotp', False):
+                    otp_secret = request.form.get('otp_secret', '')
                 new_user = Journalist(username=username,
                                       password=password,
-                                      is_admin=is_admin)
+                                      is_admin=is_admin,
+                                      otp_secret=otp_secret)
                 db_session.add(new_user)
                 db_session.commit()
             except IntegrityError as e:
@@ -178,7 +182,7 @@ def admin_new_user_two_factor():
 
     if request.method == 'POST':
         token = request.form['token']
-        if user.totp.verify(token):
+        if user.verify_token(token):
             flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
             return redirect(url_for("admin_index"))
         else:
@@ -187,14 +191,29 @@ def admin_new_user_two_factor():
     return render_template("admin_new_user_two_factor.html", user=user)
 
 
-@app.route('/admin/reset-2fa', methods=['POST'])
+@app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
-def admin_reset_two_factor():
+def admin_reset_two_factor_totp():
     uid = request.form['uid']
     user = Journalist.query.get(uid)
-    user.regenerate_otp_shared_secret()
+    user.is_totp = True
+    user.regenerate_totp_shared_secret()
     db_session.commit()
     return redirect(url_for('admin_new_user_two_factor', uid=uid))
+
+
+@app.route('/admin/reset-2fa-hotp', methods=['POST'])
+@admin_required
+def admin_reset_two_factor_hotp():
+    uid = request.form['uid']
+    otp_secret = request.form.get('otp_secret', None)
+    if otp_secret:
+        user = Journalist.query.get(uid)
+        user.set_hotp_secret(otp_secret)
+        db_session.commit()
+        return redirect(url_for('admin_new_user_two_factor', uid=uid))
+    else:
+        return render_template('admin_edit_hotp_secret.html', uid=uid)
 
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
@@ -212,7 +231,7 @@ def admin_edit_user(user_id):
                 return redirect(url_for("admin_edit_user"))
             user.set_password(request.form['password'])
 
-        user.is_admin = bool(request.form.get('is_admin'))
+        is_admin = bool(request.form.get('is_admin'))
 
         try:
             db_session.add(user)

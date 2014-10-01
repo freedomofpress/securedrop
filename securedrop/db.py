@@ -1,5 +1,7 @@
 import os
 import datetime
+import base64
+import binascii
 
 # Find the best implementation available on this platform
 try:
@@ -146,14 +148,18 @@ class Journalist(Base):
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
     otp_secret = Column(String(16), default=pyotp.random_base32)
+    is_totp = Column(Boolean, default=True)
+    hotp_counter = Column(Integer, default=0)
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
 
-    def __init__(self, username, password, is_admin=False):
+    def __init__(self, username, password, is_admin=False, otp_secret=None):
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
+        if otp_secret:
+            self.set_hotp_secret(otp_secret)
 
     def __repr__(self):
         return "<Journalist {0}{1}>".format(self.username,
@@ -175,14 +181,22 @@ class Journalist(Base):
     def valid_password(self, password):
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
-    def regenerate_otp_shared_secret(self):
+    def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
+
+    def set_hotp_secret(self, otp_secret):
+        self.is_totp = False
+        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ","")))
+        self.hotp_counter = 0
 
     @property
     def totp(self):
         return pyotp.TOTP(self.otp_secret)
 
     @property
+    def hotp(self):
+        return pyotp.HOTP(self.otp_secret)
+
     def shared_secret_qrcode(self):
         uri = self.totp.provisioning_uri("{} {}".format("SecureDrop",
                                                         self.username))
@@ -207,12 +221,23 @@ class Journalist(Base):
         chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
         return ' '.join(chunks).lower()
 
+    def verify_token(self, token):
+        if self.is_totp:
+            return self.totp.verify(token)
+        else:
+            for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
+                if self.hotp.verify(token, counter_val):
+                    self.hotp_counter = counter_val + 1
+                    db_session.commit()
+                    return True
+            return False
+
     @staticmethod
     def login(username, password, token):
         user = Journalist.query.filter_by(username=username).one()
         if not user.valid_password(password):
             raise WrongPasswordException
-        if not user.totp.verify(token):
+        if not user.verify_token(token):
             raise BadTokenException
         return user
 
