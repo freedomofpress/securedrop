@@ -116,7 +116,7 @@ def add_admin():
             print "ERROR: An unknown error occurred, traceback:"
             print e
     else:
-        print "Admin {} successfully added".format(username)
+        print "Admin '{}' successfully added".format(username)
         if not otp_secret:
             # Print the QR code for Google Authenticator
             print
