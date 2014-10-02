@@ -15,7 +15,8 @@ install:
 script:
 - echo localhost > inventory
 # Symlink dev configuration
-- ln -s install_files/ansible-base/secureDropConf.yml.dev install_files/ansible-base/secureDropConf.yml
+#- ln -s install_files/ansible-base/secureDropConf.yml.dev install_files/ansible-base/secureDropConf.yml
+- cp install_files/ansible-base/secureDropConf.yml.dev install_files/ansible-base/secureDropConf.yml
 - ansible-playbook -i inventory --syntax-check install_files/ansible-base/secureDrop-server.yml
 - ansible-playbook -i inventory --connection=local --sudo --tags=development --skip-tags=tor install_files/ansible-base/secureDrop-server.yml
 notifications:
