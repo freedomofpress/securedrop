@@ -19,6 +19,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define 'debs' do |debs|
+    debs.vm.box = "trusty64"
+    debs.vm.network "forwarded_port", guest: 8080, host: 8080
+    debs.vm.network "forwarded_port", guest: 8081, host: 8081
+    debs.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    debs.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/secureDrop-server.yml"
+      ansible.tags = "debs"
+    end
+    debs.vm.provider "virtualbox" do |v|
+      v.name = "debs"
+    end
+  end
+
   config.vm.define 'staging' do |staging|
     staging.vm.box = "trusty64"
     staging.vm.network "forwarded_port", guest: 8080, host: 8082
