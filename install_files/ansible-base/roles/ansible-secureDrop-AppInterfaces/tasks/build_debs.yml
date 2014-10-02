@@ -18,12 +18,11 @@
 - name: copy securedrop to build path
   command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
 
-- name: if pip requirements changed create pip wheel
-  pip:
-    chdir: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
-    extra_args: "wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt" 
-
-#- name: move wheel archive to build path
+- name: make pip wheel archive for our debian package requirements
+  command: pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt
+  
+- name: move wheel archive to build path
+  command: "mv /root/wheelhouse/ /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop"
 
 - name: copy apparmor profiles to build path
   copy: src={{ item }} dest=/tmp/securedrop-app-code-0.3-amd64/etc/apparmor.d/{{ item }}
