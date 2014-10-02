@@ -77,9 +77,7 @@ sudo apt-get update
 sudo apt-get -y install $DEPENDENCIES
 
 sudo pip install --upgrade distribute
-sudo pip install -r requirements/source-requirements.txt
-sudo pip install -r requirements/document-requirements.txt
-sudo pip install -r requirements/test-requirements.txt
+sudo pip install -r requirements/dev-requirements.txt
 
 echo "Setting up configurations..."
 
@@ -103,11 +101,11 @@ cp config.py.example config.py
 # fill in the instance-specific configuration
 # Use | instead of / for sed's delimiters, since some of the environment
 # variables are paths and contain /'s, which confuses sed.
-sed -i "s|{{ securedrop_data_root }}|$securedrop_data_root|" config.py
-sed -i "s|{{ source_secret_key }}|$source_secret_key|" config.py
-sed -i "s|{{ journalist_secret_key }}|$journalist_secret_key|" config.py
-sed -i "s|{{ scrypt_id_pepper }}|$scrypt_id_pepper|" config.py
-sed -i "s|{{ scrypt_gpg_pepper }}|$scrypt_gpg_pepper|" config.py
+sed -i "s|{{ securedrop_data }}|$securedrop_data_root|" config.py
+sed -i "s|{{ source_secret_key.stdout }}|$source_secret_key|" config.py
+sed -i "s|{{ journalist_secret_key.stdout }}|$journalist_secret_key|" config.py
+sed -i "s|{{ scrypt_id_pepper.stdout }}|$scrypt_id_pepper|" config.py
+sed -i "s|{{ scrypt_gpg_pepper.stdout }}|$scrypt_gpg_pepper|" config.py
 
 if [ "$UNAIDED_INSTALL" != true ]; then
     echo ""
@@ -130,7 +128,7 @@ fi
 
 # get journalist key fingerpint from gpg2, remove spaces, and put into config file
 journalist_key=$(gpg2 --homedir $keypath --fingerprint | grep fingerprint | cut -d"=" -f 2 | sed 's/ //g' | head -n 1)
-sed -i "s|{{ journalist_key }}|$journalist_key|" config.py
+sed -i "s|{{ securedrop_app_gpg_fingerprint }}|$journalist_key|" config.py
 echo "Using journalist key with fingerprint $journalist_key"
 
 echo "Creating database tables..."
