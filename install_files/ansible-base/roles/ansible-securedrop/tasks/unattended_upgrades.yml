@@ -1,6 +1,6 @@
 ---
 - name: ensure 50unattended-upgrades is installed
-  template: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+  template: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/ mode=0644
 
 - name: ensure 20auto-upgrades is installed
-  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0400
+  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/ mode=0644
