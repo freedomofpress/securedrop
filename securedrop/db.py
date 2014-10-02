@@ -133,11 +133,11 @@ class SourceStar(Base):
 
 
 class WrongPasswordException(Exception):
-    pass
+    """Raised when a user logs in with an incorrect password"""
 
 
 class BadTokenException(Exception):
-    pass
+    """Raised when a user logins in with an incorrect TOTP token"""
 
 
 class Journalist(Base):

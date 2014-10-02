@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import os
 from datetime import datetime
 import functools
@@ -103,7 +104,10 @@ def login():
             user = Journalist.login(request.form['username'],
                                     request.form['password'],
                                     request.form['token'])
-        except (NoResultFound, WrongPasswordException, BadTokenException):
+        except:
+            e = sys.exc_info()
+            app.logger.error("Login for user '{}' failed with {}".format(
+                request.form['username'], e[0]))
             flash("Login failed", "error")
         else:
             # Update access metadata
