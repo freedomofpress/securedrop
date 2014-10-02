@@ -20,6 +20,7 @@ import urllib2
 import signal
 import traceback
 from datetime import datetime
+import mock
 
 class FunctionalTest():
 
@@ -38,6 +39,12 @@ class FunctionalTest():
         return webdriver.Firefox(firefox_binary=firefox)
 
     def setUp(self):
+        # Patch the two-factor verification to avoid intermittent errors
+        patcher = mock.patch('journalist.Journalist.verify_token')
+        self.addCleanup(patcher.stop)
+        self.mock_journalist_verify_token = patcher.start()
+        self.mock_journalist_verify_token.return_value = True
+
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
         common.create_directories()
