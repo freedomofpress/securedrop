@@ -47,8 +47,8 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
 
 The steps in this guide assume you have the following set up:
 
- * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.5 LTS (Precise
- Pangolin)](http://releases.ubuntu.com/12.04/) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server
+ * 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
  * An [Ubuntu kernel with Grsecurity](https://github.com/dolanjs/ubuntu-grsec) ready to be installed on the *App* and *Monitor* servers
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
@@ -101,7 +101,7 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the App Server
 
-The *App Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *App Server* should already have Ubuntu Server 14.04.1 LTS (Trusty Tahr) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *Monitor Server*
  * The SecureDrop application's GPG public key (from the *Transfer Device*)
@@ -194,7 +194,7 @@ to add more admins.
 
 ## Set up the Monitor Server
 
-The *Monitor Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *Monitor Server* should already have Ubuntu Server 14.04.1 LTS (Trusty Tahr) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *App Server*
  * The email address that will receive alerts from OSSEC
