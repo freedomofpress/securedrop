@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
+import sys
+import os
+from datetime import datetime
+import functools
+
+from flask import (Flask, request, render_template, send_file, redirect, flash,
+                   url_for, g, abort, session)
+from flask_wtf.csrf import CsrfProtect
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.exc import IntegrityError
+
 import config
 import version
 import crypto_util
 import store
 import template_filters
-from db import db_session, Source, Submission, SourceStar, get_one_or_else
-
-import os
-from datetime import datetime
-from flask import (Flask, request, render_template, send_file, redirect, flash, url_for, g, abort)
-from flask_wtf.csrf import CsrfProtect
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
-import background
+from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
+                Journalist, NoResultFound, WrongPasswordException,
+                BadTokenException)
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -49,11 +54,209 @@ def get_source(sid):
 @app.before_request
 def setup_g():
     """Store commonly used values in Flask's special g object"""
+    uid = session.get('uid', None)
+    if uid:
+        g.user = Journalist.query.get(uid)
+
     if request.method == 'POST':
         sid = request.form.get('sid')
         if sid:
             g.sid = sid
             g.source = get_source(sid)
+
+
+def logged_in():
+    # When a user is logged in, we push their user id (database primary key)
+    # into the session. setup_g checks for this value, and if it finds it,
+    # stores a reference to the user's Journalist object in g.
+    #
+    # This check is good for the edge case where a user is deleted but still
+    # has an active session - we will not authenticate a user if they are not
+    # in the database.
+    return bool(g.get('user', None))
+
+
+def login_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if not logged_in():
+            return redirect(url_for('login'))
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def admin_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if logged_in() and g.user.is_admin:
+            return func(*args, **kwargs)
+        # TODO: sometimes this gets flashed 2x (Chrome only?)
+        flash("You must be an administrator to access that page",
+              "notification")
+        return redirect(url_for('index'))
+    return wrapper
+
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        try:
+            user = Journalist.login(request.form['username'],
+                                    request.form['password'],
+                                    request.form['token'])
+        except:
+            e = sys.exc_info()
+            app.logger.error("Login for user '{}' failed with {}".format(
+                request.form['username'], e[0]))
+            flash("Login failed", "error")
+        else:
+            # Update access metadata
+            user.last_access = datetime.utcnow()
+            db_session.add(user)
+            db_session.commit()
+
+            session['uid'] = user.id
+            return redirect(url_for('index'))
+
+    return render_template("login.html")
+
+
+@app.route('/logout')
+def logout():
+    session.pop('uid', None)
+    return redirect(url_for('index'))
+
+
+@app.route('/admin', methods=('GET', 'POST'))
+@admin_required
+def admin_index():
+    users = Journalist.query.all()
+    return render_template("admin.html", users=users)
+
+
+@app.route('/admin/add', methods=('GET', 'POST'))
+def admin_add_user():
+    if request.method == 'POST':
+        form_valid = True
+
+        username = request.form['username']
+        if len(username) == 0:
+            form_valid = False
+            flash("Missing username", "username_validation")
+
+        password = request.form['password']
+        password_again = request.form['password_again']
+        if password != password_again:
+            form_valid = False
+            flash("Passwords didn't match", "password_validation")
+
+        is_admin = bool(request.form.get('is_admin'))
+
+        if form_valid:
+            try:
+                otp_secret = None
+                if request.form.get('is_hotp', False):
+                    otp_secret = request.form.get('otp_secret', '')
+                new_user = Journalist(username=username,
+                                      password=password,
+                                      is_admin=is_admin,
+                                      otp_secret=otp_secret)
+                db_session.add(new_user)
+                db_session.commit()
+            except IntegrityError as e:
+                form_valid = False
+                if "username is not unique" in str(e):
+                    flash("That username is already in use",
+                          "username_validation")
+                else:
+                    flash("An error occurred saving this user to the database",
+                          "general_validation")
+
+        if form_valid:
+            return redirect(url_for('admin_new_user_two_factor',
+                                    uid=new_user.id))
+
+    return render_template("admin_add_user.html")
+
+
+@app.route('/admin/2fa', methods=('GET', 'POST'))
+@admin_required
+def admin_new_user_two_factor():
+    user = Journalist.query.get(request.args['uid'])
+
+    if request.method == 'POST':
+        token = request.form['token']
+        if user.verify_token(token):
+            flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
+            return redirect(url_for("admin_index"))
+        else:
+            flash("Two factor token failed to verify", "error")
+
+    return render_template("admin_new_user_two_factor.html", user=user)
+
+
+@app.route('/admin/reset-2fa-totp', methods=['POST'])
+@admin_required
+def admin_reset_two_factor_totp():
+    uid = request.form['uid']
+    user = Journalist.query.get(uid)
+    user.is_totp = True
+    user.regenerate_totp_shared_secret()
+    db_session.commit()
+    return redirect(url_for('admin_new_user_two_factor', uid=uid))
+
+
+@app.route('/admin/reset-2fa-hotp', methods=['POST'])
+@admin_required
+def admin_reset_two_factor_hotp():
+    uid = request.form['uid']
+    otp_secret = request.form.get('otp_secret', None)
+    if otp_secret:
+        user = Journalist.query.get(uid)
+        user.set_hotp_secret(otp_secret)
+        db_session.commit()
+        return redirect(url_for('admin_new_user_two_factor', uid=uid))
+    else:
+        return render_template('admin_edit_hotp_secret.html', uid=uid)
+
+
+@app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
+@admin_required
+def admin_edit_user(user_id):
+    user = Journalist.query.get(user_id)
+
+    if request.method == 'POST':
+        if request.form['username'] != "":
+            user.username = request.form['username']
+
+        if request.form['password'] != "":
+            if request.form['password'] != request.form['password_again']:
+                flash("Passwords didn't match", "password_validation")
+                return redirect(url_for("admin_edit_user"))
+            user.set_password(request.form['password'])
+
+        is_admin = bool(request.form.get('is_admin'))
+
+        try:
+            db_session.add(user)
+            db_session.commit()
+        except Exception, e:
+            db_session.rollback()
+            if "username is not unique" in str(e):
+                flash("That username is already in use", "notification")
+            else:
+                flash("An unknown error occurred, please inform your administrator", "notification")
+
+    return render_template("admin_edit_user.html", user=user)
+
+
+@app.route('/admin/delete/<int:user_id>', methods=('POST',))
+@admin_required
+def admin_delete_user(user_id):
+    user = Journalist.query.get(user_id)
+    db_session.delete(user)
+    db_session.commit()
+    return redirect(url_for('admin_index'))
 
 
 def get_docs(sid):
@@ -86,6 +289,7 @@ def make_star_false(sid):
 
 
 @app.route('/col/add_star/<sid>', methods=('POST',))
+@login_required
 def add_star(sid):
     make_star_true(sid)
     db_session.commit()
@@ -93,6 +297,7 @@ def add_star(sid):
 
 
 @app.route("/col/remove_star/<sid>", methods=('POST',))
+@login_required
 def remove_star(sid):
     make_star_false(sid)
     db_session.commit()
@@ -100,6 +305,7 @@ def remove_star(sid):
 
 
 @app.route('/')
+@login_required
 def index():
     unstarred = []
     starred = []
@@ -116,6 +322,7 @@ def index():
 
 
 @app.route('/col/<sid>')
+@login_required
 def col(sid):
     source = get_source(sid)
     docs = get_docs(sid)
@@ -144,6 +351,7 @@ def delete_collection(source_id):
 
 
 @app.route('/col/process', methods=('POST',))
+@login_required
 def col_process():
     actions = {'delete': col_delete, 'star': col_star, 'un-star': col_un_star}
     if 'cols_selected' not in request.form:
@@ -176,6 +384,7 @@ def col_un_star(cols_selected):
 
 
 @app.route('/col/delete/<sid>', methods=('POST',))
+@login_required
 def col_delete_single(sid):
     """deleting a single collection from its /col page"""
     source = get_source(sid)
@@ -200,6 +409,7 @@ def col_delete(cols_selected):
 
 
 @app.route('/col/<sid>/<fn>')
+@login_required
 def doc(sid, fn):
     if '..' in fn or fn.startswith('/'):
         abort(404)
@@ -212,6 +422,7 @@ def doc(sid, fn):
 
 
 @app.route('/reply', methods=('POST',))
+@login_required
 def reply():
     msg = request.form['msg']
     g.source.interaction_count += 1
@@ -226,13 +437,21 @@ def reply():
 
 
 @app.route('/regenerate-code', methods=('POST',))
+@login_required
 def generate_code():
+    original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
+    
+    for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
+        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename())
     db_session.commit()
+
+    flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
     return redirect('/col/' + g.sid)
 
 
 @app.route('/download_unread/<sid>')
+@login_required
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     docs = [doc.filename for doc in
@@ -241,6 +460,7 @@ def download_unread(sid):
 
 
 @app.route('/bulk', methods=('POST',))
+@login_required
 def bulk():
     action = request.form['action']
 
@@ -270,7 +490,8 @@ def bulk_delete(sid, docs_selected):
     confirm_delete = bool(request.form.get('confirm_delete', False))
     if confirm_delete:
         for doc in docs_selected:
-            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
+            if not doc['name'].endswith('reply.gpg'):
+                db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
             fn = store.path(sid, doc['name'])
             store.secure_unlink(fn)
         db_session.commit()
@@ -289,13 +510,14 @@ def bulk_download(sid, docs_selected):
         except NoResultFound as e:
             app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
-    zip = store.get_bulk_archive(filenames)
+    zip = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
     return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=source.journalist_designation + ".zip",
+                     attachment_filename=source.journalist_filename() + ".zip",
                      as_attachment=True)
 
 
 @app.route('/flag', methods=('POST',))
+@login_required
 def flag():
     g.source.flagged = True
     db_session.commit()

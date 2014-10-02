@@ -1,5 +1,4 @@
 ---
-
 tor_instance_parent_dir: /etc/tor/instances
 tor_user: debian-tor
 tor_DataDirectory: /var/lib/tor
@@ -8,11 +7,3 @@ tor_RunAsDaemon: 1
 tor_Log: "notice file /var/log/tor/log"
 tor_hidden_services_parent_dir: /var/lib/tor/services
 tor_wait_for_hidden_services: no
-
-tor_obfsproxy_git_url: obfsproxy
-tor_obfsproxy_virtenv: virtenv_obfsproxy
-
-# keep these up to date!
-tor_obfsproxy_virtenv_version: virtualenv-1.11.4
-tor_virtenv_tarball_url: https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.11.4.tar.gz
-tor_virtenv_tarball: virtualenv-1.11.4.tar.gz

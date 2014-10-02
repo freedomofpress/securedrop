@@ -14,12 +14,13 @@ import config
 
 import source
 import journalist
-from tests import test_setup
+from tests import common
 import urllib2
 
 import signal
 import traceback
 from datetime import datetime
+import mock
 
 class FunctionalTest():
 
@@ -38,11 +39,17 @@ class FunctionalTest():
         return webdriver.Firefox(firefox_binary=firefox)
 
     def setUp(self):
+        # Patch the two-factor verification to avoid intermittent errors
+        patcher = mock.patch('journalist.Journalist.verify_token')
+        self.addCleanup(patcher.stop)
+        self.mock_journalist_verify_token = patcher.start()
+        self.mock_journalist_verify_token.return_value = True
+
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        test_setup.create_directories()
-        self.gpg = test_setup.init_gpg()
-        test_setup.init_db()
+        common.create_directories()
+        self.gpg = common.init_gpg()
+        common.init_db()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()
@@ -71,12 +78,12 @@ class FunctionalTest():
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)
-        self.driver.implicitly_wait(1)
+        self.driver.implicitly_wait(5)
 
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        test_setup.clean_root()
+        common.clean_root()
         self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()

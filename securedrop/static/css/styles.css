@@ -24,6 +24,14 @@ a {
   color: #7985aa;
 }
 
+a.plain {
+  color: #333;
+}
+
+a.plain:hover {
+  color: #7985aa;
+}
+
 .content {
   position: relative;
   margin: 15px auto;
@@ -121,6 +129,17 @@ button, a.btn, .btn {
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+}
+
+button.plain {
+  background: none;
+  color: #333;
+}
+
+button.plain:hover {
+  background : none;
+  color #333;
+  border: 1px solid transparent;
 }
 
 button:hover, a.btn:hover, .btn:hover {
@@ -286,6 +305,11 @@ hr.no-line {
 
 .center {
   text-align: center;
+}
+
+button.center {
+  display: block;
+  margin: 0 auto;
 }
 
 .flash {
@@ -529,4 +553,36 @@ p.breadcrumbs {
 /* Tooltips */
 time:not([title='']):hover, i:not([title='']):hover {
   cursor: pointer;
+}
+
+div#logout {
+  float:right;
+  margin-right:1em;
+}
+
+label {
+     cursor: pointer;
+}
+
+em.light {
+  color:gray;
+}
+
+div#qrcode_container {
+  text-align: center;
+}
+
+span#shared_secret {
+  background-color: #FFFD9E;
+  color: #555;
+  padding: 4px;
+  border: 1px solid #999;
+}
+
+table#users {
+  width: 100%;
+}
+
+table#users td {
+  text-align: center;
 }

@@ -3,11 +3,6 @@
 ## install
 - include: install_tor.yml
 
-- include: install_pip_obfsproxy.yml
-  sudo: no
-  when: tor_obfsproxy_home is defined
-
-
 ## configure
 
 - include: hidden_services.yml

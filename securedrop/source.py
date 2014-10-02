@@ -26,11 +26,9 @@ import store
 import background
 import template_filters
 from db import db_session, Source, Submission
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
-app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 CsrfProtect(app)
 
@@ -57,8 +55,7 @@ def shutdown_session(exception=None):
 
 
 def logged_in():
-    if 'logged_in' in session:
-        return True
+    return 'logged_in' in session
 
 
 def login_required(f):
@@ -251,7 +248,7 @@ def submit():
         if entropy_avail >= 2400:
             crypto_util.genkeypair(g.sid, g.codename)
 
-    g.source.last_updated = datetime.now()
+    g.source.last_updated = datetime.utcnow()
     db_session.commit()
     normalize_timestamps(g.sid)
 

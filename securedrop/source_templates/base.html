@@ -14,7 +14,7 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="/"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br/>

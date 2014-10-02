@@ -5,6 +5,7 @@ from mock import patch, ANY, MagicMock
 class TestJournalist(unittest.TestCase):
 
     def setUp(self):
+        journalist.logged_in = MagicMock()
         journalist.make_star_true = MagicMock()
         journalist.db_session = MagicMock()
         journalist.url_for = MagicMock()
