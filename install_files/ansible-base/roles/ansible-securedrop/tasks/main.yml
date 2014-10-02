@@ -1,0 +1,145 @@
+---
+## Install Tor
+- include: install_tor.yml
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: hidden_services.yml
+  when: tor_hidden_services is defined
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: configure_apt_single.yml
+  when: proc_instances is not defined
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: configure_tor_instance.yml
+  when: proc_instances is defined
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: wait_for_hidden_services.yml
+  when: tor_wait_for_hidden_services
+  tags:
+    - app
+    - mon
+    - staging
+
+## Install Interfaces
+- include: install_fpf_repo.yml
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: install_apache.yml
+  tags:
+    - app
+    - staging
+
+- include: create_app_dirs.yml
+  tags:
+    - app
+    - staging
+    - development
+
+## TODO wsgi files should be in the securedrop-app-code deb
+- include: prod_wsgi_files.yml
+  tags:
+    - app
+    - staging
+
+- include: dev_app_code_depends.yml
+  tags:
+    - development
+    - debs
+
+- include: staging_app_code.yml
+  tags:
+    - staging
+
+- include: securedrop_app_code_deb.yml
+  tags:
+    - app
+
+- include: install_app_deps.yml
+  tags:
+    - app
+    - staging
+    - development
+
+- include: dev_setup_xvfb_for_functional_tests.yml
+  tags:
+    - development
+    - staging
+    - debs
+
+## Build FPF debian packages
+- include: build_debs.yml
+  tags:
+    - debs
+
+## System Hardening
+- include: unattended_upgrades.yml
+  tags:
+    - app
+    - mon
+    - staging
+    - development
+
+- include: sysctl.yml
+  tags:
+    - app
+    - mon
+    - staging
+
+- include: create_users.yml
+  tags:
+    - app
+    - staging
+
+- include: enforce_apparmor_profiles.yml
+  tags:
+    - staging
+
+- include: ssh.yml
+  tags:
+    - app
+    - mon
+
+- include: iptables.yml
+  tags:
+    - app
+
+- include: display_onions.yml
+  tags:
+    - staging
+    - development
+    - tor
+
+- include: configure_ossec.yml
+  tags:
+    - app
+    - staging
+    - ossec
+
+#- include: configure_ossec_grsec.yml
+#  tags:
+#    - mon
+#    - ossec
+
+#- include: configure_grsec.yml
+#  tags:
+#      - app
+#      - mon
+#      - staging
+#      - grsec
