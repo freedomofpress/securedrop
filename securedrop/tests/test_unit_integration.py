@@ -7,6 +7,8 @@ from cStringIO import StringIO
 import zipfile
 from time import sleep
 
+import mock
+
 import gnupg
 from flask import session, g, escape
 from bs4 import BeautifulSoup
@@ -36,6 +38,12 @@ class TestIntegration(unittest.TestCase):
         self.journalist_app = journalist.app.test_client()
 
         self.gpg = gnupg.GPG(homedir=config.GPG_KEY_DIR)
+
+        # Patch the two-factor verification to avoid intermittent errors
+        patcher = mock.patch('db.Journalist.verify_token')
+        self.addCleanup(patcher.stop)
+        self.mock_journalist_verify_token = patcher.start()
+        self.mock_journalist_verify_token.return_value = True
 
         # Add a test user to the journalist interface and log them in
         #print Journalist.query.all()

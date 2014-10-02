@@ -5,6 +5,8 @@ from cStringIO import StringIO
 import unittest
 import zipfile
 
+import mock
+
 from flask import url_for
 from flask.ext.testing import TestCase
 
@@ -23,6 +25,12 @@ class TestJournalist(TestCase):
 
     def setUp(self):
         common.shared_setup()
+
+        # Patch the two-factor verification to avoid intermittent errors
+        patcher = mock.patch('db.Journalist.verify_token')
+        self.addCleanup(patcher.stop)
+        self.mock_journalist_verify_token = patcher.start()
+        self.mock_journalist_verify_token.return_value = True
 
         # Set up test users
         self.user_pw = "bar"
