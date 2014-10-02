@@ -5,13 +5,13 @@ virtualenv:
   system_site_packages: true
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install --yes dpkg-dev fakeroot lintian python-apt rng-tools
+- sudo apt-get install --yes rng-tools
 - sudo rm -f /dev/random
 - sudo mknod -m 0666 /dev/random c 1 9
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 script:
-- "./setup_dev.sh -u"
+  #- "./setup_dev.sh -u"
 notifications:
   slack:
     secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
