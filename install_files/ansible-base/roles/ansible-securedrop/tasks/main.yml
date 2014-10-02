@@ -83,6 +83,12 @@
     - staging
     - debs
 
+- include: manage_py_start.yml
+  tags:
+    - development
+    - staging
+    - app
+
 ## Build FPF debian packages
 - include: build_debs.yml
   tags:
