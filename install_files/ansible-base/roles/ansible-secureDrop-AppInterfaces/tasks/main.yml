@@ -10,6 +10,12 @@
     - app
     - staging
 
+- include: create_app_dirs.yml
+  tags:
+    - app
+    - staging
+    - development
+
 - include: prod_wsgi_files.yml
   tags:
      - app
@@ -18,17 +24,10 @@
 - include: dev_app_code_depends.yml
   tags:
     - development
-    - staging
 
 - include: staging_app_code.yml
   tags:
     - staging
-
-- include: create_app_dirs.yml
-  tags:
-    - app
-    - staging
-    - development
 
 - include: securedrop_app_code_deb.yml
   tags:

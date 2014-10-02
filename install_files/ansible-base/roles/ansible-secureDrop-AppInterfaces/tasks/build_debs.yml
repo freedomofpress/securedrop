@@ -1,0 +1,36 @@
+---
+- name: install pip install wheel
+  pip: name=wheel
+
+- name: copy install_files/secureddrop-app-code to build path
+  command: "cp -R /vagrant/install_files/securedrop-app-code/ /tmp/{{ securedrop_app_code_deb }}/"
+
+- name: ensure build path var structure exists
+  file:
+    state: directory
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+
+- name: ensure build path www structure exists
+  file:
+    state: directory
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
+
+- name: copy securedrop to build path
+  command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
+
+- name: if pip requirements changed create pip wheel
+  pip:
+    chdir: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
+    extra_args: "wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt" 
+
+#- name: move wheel archive to build path
+
+- name: copy apparmor profiles to build path
+  copy: src={{ item }} dest=/tmp/securedrop-app-code-0.3-amd64/etc/apparmor.d/{{ item }}
+  with_items: apparmor_profiles 
+
+- name: zip the changelog
+  command: "gzip -9 /tmp/securedrop-app-code-0.3-amd64/usr/share/doc/securedrop-app-code/changelog.Debian"
+
+- name: create the deb package
+  command: "dpkg-deb --build /tmp/securedrop-app-code-0.3-amd64"
