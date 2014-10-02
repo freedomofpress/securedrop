@@ -44,6 +44,7 @@
 - include: dev_setup_xvfb_for_functional_tests.yml
   tags:
     - development
+    - staging
     - debs
 
 - include: build_debs.yml
