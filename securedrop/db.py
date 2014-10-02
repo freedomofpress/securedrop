@@ -68,7 +68,7 @@ class Source(Base):
     flagged = Column(Boolean, default=False)
     last_updated = Column(DateTime, default=datetime.datetime.utcnow)
     star = relationship("SourceStar", uselist=False, backref="source")
-    
+
     # sources are "pending" and don't get displayed to journalists until they submit something
     pending = Column(Boolean, default=True)
 
@@ -133,11 +133,11 @@ class SourceStar(Base):
 
 
 class WrongPasswordException(Exception):
-    pass
+    """Raised when a user logs in with an incorrect password"""
 
 
 class BadTokenException(Exception):
-    pass
+    """Raised when a user logins in with an incorrect TOTP token"""
 
 
 class Journalist(Base):

@@ -2,6 +2,8 @@ import urllib2
 import tempfile
 import zipfile
 
+from selenium.common.exceptions import NoSuchElementException
+
 from db import db_session, Journalist
 
 class JournalistNavigationSteps():
@@ -19,6 +21,23 @@ class JournalistNavigationSteps():
 
             return content
 
+    def _login_user(self, username, password, token):
+        self.driver.get(self.journalist_location + "/login")
+        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field.send_keys(username)
+
+        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field.send_keys(password)
+
+        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
+        token_field.send_keys(token)
+
+        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        submit_button.click()
+
+        # Successful login should redirect to the index
+        self.assertEquals(self.driver.current_url, self.journalist_location + '/')
+
     def _journalist_logs_in(self):
         # Create a test user for logging in
         test_user_info = dict(
@@ -28,22 +47,215 @@ class JournalistNavigationSteps():
         db_session.add(test_user)
         db_session.commit()
 
-        # Test logging in
-        self.driver.get(self.journalist_location)
-        username = self.driver.find_element_by_css_selector('input[name="username"]')
-        username.send_keys(test_user_info['username'])
+        self._login_user(test_user_info['username'],
+                         test_user_info['password'],
+                         test_user.totp.now())
 
-        password = self.driver.find_element_by_css_selector('input[name="password"]')
-        password.send_keys(test_user_info['password'])
+        headline = self.driver.find_element_by_css_selector('span.headline')
+        self.assertIn('Sources', headline.text)
 
-        token = self.driver.find_element_by_css_selector('input[name="token"]')
-        token.send_keys(test_user.totp.now())
+    def _admin_logs_in(self):
+        # Create a test admin user for logging in
+        admin_user_info = dict(
+            username='admin',
+            password='admin',
+            is_admin=True)
+        admin_user = Journalist(**admin_user_info)
+        db_session.add(admin_user)
+        db_session.commit()
+
+        # Stash the admin user on self so we can use it in later tests
+        self.admin_user = admin_user_info
+        self.admin_user['orm_obj'] = admin_user
+
+        self._login_user(admin_user_info['username'],
+                         admin_user_info['password'],
+                         admin_user.totp.now())
+
+        # Admin user should log in to the same interface as a normal user,
+        # since there may be users who wish to be both journalists and admins.
+        headline = self.driver.find_element_by_css_selector('span.headline')
+        self.assertIn('Sources', headline.text)
+
+        # Admin user should have a link that take them to the admin page
+        links = self.driver.find_elements_by_tag_name('a')
+        self.assertIn('Admin', [ el.text for el in links ])
+
+    def _admin_visits_admin_interface(self):
+        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link.click()
+
+        h2s = self.driver.find_elements_by_tag_name('h2')
+        self.assertIn("Admin Interface", [ el.text for el in h2s ])
+
+        users_table_rows = self.driver.find_elements_by_css_selector('table#users tr.user')
+        self.assertEquals(len(users_table_rows), 1)
+
+    def _add_user(self, username, password, is_admin=False):
+        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field.send_keys(username)
+
+        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field.send_keys(password)
+
+        password_again_field = self.driver.find_element_by_css_selector('input[name="password_again"]')
+        password_again_field.send_keys(password)
+
+        if is_admin:
+            # TODO implement (checkbox is unchecked by default)
+            pass
 
         submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
         submit_button.click()
 
-        headline = self.driver.find_element_by_css_selector('span.headline')
-        self.assertIn('Sources', headline.text)
+    def _admin_adds_a_user(self):
+        add_user_btn = self.driver.find_element_by_css_selector('button#add-user')
+        add_user_btn.click()
+
+        # The add user page has a form with an "Add user" button
+        btns = self.driver.find_elements_by_tag_name('button')
+        self.assertIn('Add user', [ el.text for el in btns ])
+
+        self.new_user = dict(
+            username='dellsberg',
+            password='pentagonpapers')
+
+        self._add_user(self.new_user['username'], self.new_user['password'])
+
+        # Clicking submit on the add user form should redirect to the Google
+        # Authenticator page
+        h1s = self.driver.find_elements_by_tag_name('h1')
+        self.assertIn("Enable Google Authenticator", [ el.text for el in h1s ])
+
+        # Retrieve the saved user object from the db and keep it around for
+        # futher testing
+        self.new_user['orm_obj'] = Journalist.query.filter(
+                Journalist.username == self.new_user['username']).one()
+
+        # Verify the two factor authentication
+        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
+        token_field.send_keys(self.new_user['orm_obj'].totp.now())
+        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        submit_button.click()
+
+        # Successfully verifying the code should redirect to the admin
+        # interface, and flash a message indicating success
+        flashed_msgs = self.driver.find_elements_by_css_selector('p.flash')
+        self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [ el.text for el in flashed_msgs ])
+
+    def _logout(self):
+        # XXX for some reason, clicking the logout link does not work here,
+        # although it is present and clicking it *should* follow the link. The
+        # link does not appear to be followed - a request to /logout is never
+        # made. This may be a Selenium bug.
+        #
+        #logout_link = self.driver.find_element_by_link_text('Logout')
+        #logout_link.click()
+        #
+        # Workaround:
+        self.driver.get(self.journalist_location + '/logout')
+
+        # Logging out should redirect back to the login page
+        self.assertIn("Login to access the journalist interface",
+                      self.driver.page_source)
+
+    def _new_user_can_log_in(self):
+        # Log the admin user out
+        self._logout()
+
+        # Log the new user in
+        self._login_user(self.new_user['username'],
+                         self.new_user['password'],
+                         self.new_user['orm_obj'].totp.now())
+
+        # Test that the new user was logged in successfully
+        self.assertIn('Sources', self.driver.page_source)
+
+        # The new user was not an admin, so they should not have the admin
+        # interface link available
+        self.assertRaises(NoSuchElementException,
+                          self.driver.find_element_by_link_text,
+                          'Admin')
+
+    def _edit_user(self, username):
+        new_user_edit_links = filter(
+                lambda el: el.get_attribute('data-username') == username,
+                self.driver.find_elements_by_tag_name('a'))
+        self.assertEquals(len(new_user_edit_links), 1)
+        new_user_edit_links[0].click()
+
+    def _admin_can_edit_new_user(self):
+        # Log the new user out
+        self._logout()
+
+        self._login_user(self.admin_user['username'],
+                         self.admin_user['password'],
+                         self.admin_user['orm_obj'].totp.now())
+
+        # Go to the admin interface
+        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link.click()
+
+        # Click the "edit user" link for the new user
+        #self._edit_user(self.new_user['username'])
+        new_user_edit_links = filter(
+                lambda el: el.get_attribute('data-username') == self.new_user['username'],
+                self.driver.find_elements_by_tag_name('a'))
+        self.assertEquals(len(new_user_edit_links), 1)
+        new_user_edit_links[0].click()
+        self.assertIn('Edit user "{}"'.format(self.new_user['username']),
+                self.driver.page_source)
+
+        new_username = self.new_user['username'] + "2"
+
+        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field.send_keys(new_username)
+        update_user_btn = self.driver.find_element_by_css_selector('button[type=submit]')
+        update_user_btn.click()
+
+        self.assertIn('Edit user "{}"'.format(new_username),
+                self.driver.page_source)
+
+        # Update self.new_user with the new username for the future tests
+        self.new_user['username'] = new_username
+
+        # Log the new user in with their new username
+        self._logout()
+        self._login_user(self.new_user['username'],
+                         self.new_user['password'],
+                         self.new_user['orm_obj'].totp.now())
+        self.assertIn('Sources', self.driver.page_source)
+
+        # Log the admin user back in
+        self._logout()
+        self._login_user(self.admin_user['username'],
+                         self.admin_user['password'],
+                         self.admin_user['orm_obj'].totp.now())
+
+        # Go to the admin interface
+        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link.click()
+        # Edit the new user's password
+        self._edit_user(self.new_user['username'])
+
+        new_password = self.new_user['password'] + "2"
+        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field.send_keys(new_password)
+        password_again_field = self.driver.find_element_by_css_selector('input[name="password_again"]')
+        password_again_field.send_keys(new_password)
+        update_user_btn = self.driver.find_element_by_css_selector('button#update-user')
+        update_user_btn.click()
+
+        # Update self.new_user with the new password
+        # TODO dry
+        self.new_user['password'] = new_password
+
+        # Log the new user in with their new password
+        self._logout()
+        self._login_user(self.new_user['username'],
+                         self.new_user['password'],
+                         self.new_user['orm_obj'].totp.now())
+        self.assertIn('Sources', self.driver.page_source)
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)

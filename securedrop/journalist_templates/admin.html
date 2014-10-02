@@ -3,7 +3,7 @@
 <h2>Admin Interface</h2>
 
 <form action="{{ url_for('admin_add_user') }}">
-  <button type="submit" class="btn"><i class="fa fa-plus"></i> Add user</button>
+  <button type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i> Add user</button>
 </form>
 
 <hr class="no-line" />
@@ -20,9 +20,9 @@
       <th>Last login</th>
     </tr>
     {% for user in users %}
-      <tr>
+      <tr class="user">
         <td>{{ user.username }}</td>
-        <td><a href="/admin/edit/{{ user.id }}" class="plain"><i class="fa fa-edit" title="Edit user {{ user.username }}"></i></a></td>
+        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="Edit user {{ user.username }}"></i></a></td>
         <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="Delete user {{ user.username }}"></i></button></td>
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|datetimeformat(relative=True) }}</time></td>
         {% if user.last_access %}
