@@ -17,10 +17,6 @@
     - app
     - staging
 
-- include: dev_apparmor_profiles.yml
-  tags:
-    - development
-
 - include: enforce_apparmor_profiles.yml
   tags:
     - staging
