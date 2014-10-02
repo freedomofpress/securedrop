@@ -36,11 +36,11 @@
     mode=0700
 
 - name: fetch secureDropATHS
-  fetch: src=/tmp/secureDropATHS dest=.
+  fetch: src=/tmp/secureDropATHS dest=./secureDropATHS flat=yes
 - name: remove tmp secureDropATHS
   file: state=absent path=/tmp/secureDropATHS
 
 - name: fetch secureDropInfo
-  fetch: src=/tmp/secureDropInfo dest=.
+  fetch: src=/tmp/secureDropInfo dest=./secureDropInfo flat=yes
 - name: remove tmp secureDropInfo
   file: state=absent path=/tmp/secureDropInfo
