@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
       ansible.skip_tags = "tor"
     end
     dev.vm.provider "virtualbox" do |v|
-      v.name = "dev"
+      v.name = "development"
     end
   end
 
