@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+<h2>Edit user "{{ user.username }}"</h2>
 <p><a href="/admin">&laquo; Back to admin interface</a></p>
 
 <form method="post">
@@ -21,7 +22,7 @@
     <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
     <label for="is_admin">Is Administrator</label>
   </p>
-  <button type="submit">Update user</button>
+  <button type="submit" id="update-user">Update user</button>
 </form>
 
 <hr class="no-line">

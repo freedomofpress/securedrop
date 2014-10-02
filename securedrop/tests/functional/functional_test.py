@@ -71,7 +71,7 @@ class FunctionalTest():
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)
-        self.driver.implicitly_wait(1)
+        self.driver.implicitly_wait(5)
 
         self.secret_message = 'blah blah blah'
 
