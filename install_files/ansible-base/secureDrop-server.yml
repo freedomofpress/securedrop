@@ -22,7 +22,7 @@
             virtport: "{{ service_document_port }}",
             target: "127.0.0.1:{{ service_document_port }}"
           }],
-        HiddenServiceAuthorizeClients: "{{ document_user }}"
+        HiddenServiceAuthorizeClients: "{{ [document_user] }}"
       },
       { dir: "ssh",
         ports:
@@ -61,6 +61,7 @@
         documentHostnameFile: "{{ hidden_services_parent_dir }}/document/hostname",
         sourceHostnameFile: "{{ hidden_services_parent_dir }}/source/hostname",
         sshUsers: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}",
+        sshPort: "{{ service_ssh_port }}",
         sourcePort: "{{ service_source_port }}",
         documentPort: "{{ service_document_port }}",
         sudo: yes

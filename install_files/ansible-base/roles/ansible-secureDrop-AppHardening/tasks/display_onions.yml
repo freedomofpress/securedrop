@@ -18,11 +18,11 @@
 
 - name: set facts for "admin info" templates
   set_fact:
-    sourceHost: "{{ sshOnion.stdout }}"
-    documentHost: "{{ documentOnion.stdout }}"
+    sourceHost: "{{ sourceOnion.stdout }}"
+    documentHost: "{{ documentOnion.stdout.split()[0] }}"
     sshHost: "{{ sourceOnion.stdout }}"
-    documentAuthValue: "XXX"
-    sshAuthValue: "XXX"
+    documentAuthValue: "{{ documentOnion.stdout.split()[1] }}"
+    sshAuthValue: "{{ sshOnion.stdout.split()[1] }}"
 
 - name: create templated secureDropInfo
   template:
@@ -37,5 +37,10 @@
 
 - name: fetch secureDropATHS
   fetch: src=/tmp/secureDropATHS dest=.
+- name: remove tmp secureDropATHS
+  file: state=absent path=/tmp/secureDropATHS
+
 - name: fetch secureDropInfo
   fetch: src=/tmp/secureDropInfo dest=.
+- name: remove tmp secureDropInfo
+  file: state=absent path=/tmp/secureDropInfo
