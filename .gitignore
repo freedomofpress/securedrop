@@ -3,6 +3,8 @@ wheelhouse
 
 # ignore the ATHS/THS hostname file ansible places
 ssh-hostname
+secureDropATHS
+secureDropInfo
 
 # ignore vagrant servet file
 secrets.rb

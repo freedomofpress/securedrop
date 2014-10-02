@@ -15,21 +15,29 @@
     state: directory
     dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
 
+- name: ensure build path directory for wheelhouse exists
+  file:
+    state: directory
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
+
 - name: copy securedrop to build path
   command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
 
 - name: make pip wheel archive for our debian package requirements
-  command: pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt
-  
-- name: move wheel archive to build path
-  command: "mv /root/wheelhouse/ /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop"
+  command: pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt -w /root/wheelhouse
 
-- name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/securedrop-app-code-0.3-amd64/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles 
+- name: move wheel archive to build path
+  command: "mv /root/wheelhouse/ /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse"
+
+#- name: copy apparmor profiles to build path
+#  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+#  with_items: apparmor_profiles
 
 - name: zip the changelog
-  command: "gzip -9 /tmp/securedrop-app-code-0.3-amd64/usr/share/doc/securedrop-app-code/changelog.Debian"
+  command: "gzip -9 /tmp/{{ securedrop_app_code_deb }}/usr/share/doc/securedrop-app-code/changelog.Debian"
 
 - name: create the deb package
-  command: "dpkg-deb --build /tmp/securedrop-app-code-0.3-amd64"
+  command: "dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}"
+
+- name: move the deb to the Vagrant shared folder
+  command: "cp /tmp/{{ securedrop_app_code_deb }}.deb /vagrant"
