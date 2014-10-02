@@ -21,5 +21,3 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
 ```
-
-We strongly recommend that you patch your kernel with Grsecurity in order to harden these servers from attacks.
