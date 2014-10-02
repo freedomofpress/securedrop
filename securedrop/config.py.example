@@ -18,13 +18,13 @@ class JournalistInterfaceFlaskConfig(FlaskConfig):
 # These files are in the same directory as config.py. Use absolute paths to
 # avoid potential problems with the test runner - otherwise, you have to be in
 # this directory when you run the code.
-CODE_ROOT = os.path.dirname(os.path.realpath(__file__))
+SECUREDROP_ROOT = os.path.dirname(os.path.realpath(__file__))
 
-SOURCE_TEMPLATES_DIR = os.path.join(CODE_ROOT, 'source_templates')
-JOURNALIST_TEMPLATES_DIR = os.path.join(CODE_ROOT, 'journalist_templates')
-WORD_LIST = os.path.join(CODE_ROOT, 'wordlist')
-NOUNS = os.path.join(CODE_ROOT, 'dictionaries/nouns.txt')
-ADJECTIVES = os.path.join(CODE_ROOT, './dictionaries/adjectives.txt')
+SOURCE_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'source_templates')
+JOURNALIST_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'journalist_templates')
+WORD_LIST = os.path.join(SECUREDROP_ROOT, 'wordlist')
+NOUNS = os.path.join(SECUREDROP_ROOT, 'dictionaries/nouns.txt')
+ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
 
 JOURNALIST_PIDFILE = "/tmp/journalist.pid"
 SOURCE_PIDFILE = "/tmp/source.pid"
@@ -41,7 +41,7 @@ JOURNALIST_KEY = '{{ securedrop_app_gpg_fingerprint }}'
 
 # Directory where SecureDrop stores the database file, GPG keyring, and
 # encrypted submissions.
-SECUREDROP_ROOT = '{{ securedrop_data }}'
+SECUREDROP_DATA_ROOT = '{{ securedrop_data }}'
 
 # Modify configuration for alternative environments
 env = os.environ.get('SECUREDROP_ENV') or 'prod'
@@ -50,7 +50,7 @@ if env == 'prod':
     pass
 elif env == 'dev':
     # Enable Flask's debugger for development
-    FlaskConfig.DEBUG = False
+    FlaskConfig.DEBUG = True
     # Hack to get around cookies not considering the port as part of the origin
     SourceInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'source_session'
     JournalistInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'journalist_session'
@@ -59,20 +59,20 @@ elif env == 'test':
     # Disable CSRF checks for tests to make writing tests easier
     FlaskConfig.WTF_CSRF_ENABLED = False
     # TODO use a unique temporary directory for each test so we can parallelize them
-    SECUREDROP_ROOT = '/tmp/securedrop'
+    SECUREDROP_DATA_ROOT = '/tmp/securedrop'
 
-# The following configuration is dependent on SECUREDROP_ROOT
+# The following configuration is dependent on SECUREDROP_DATA_ROOT
 
 # Directory where encrypted submissions are stored
-STORE_DIR=os.path.join(SECUREDROP_ROOT, 'store')
+STORE_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'store')
 
 # Directory where GPG keyring is stored
-GPG_KEY_DIR=os.path.join(SECUREDROP_ROOT, 'keys')
+GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
 
 # Database configuration
 # TODO we currently use sqlite in production since it is sufficient and simple,
 # but in the future may want to be able to choose a different database
 # depending on the environment
 DATABASE_ENGINE = 'sqlite'
-DATABASE_FILE = os.path.join(SECUREDROP_ROOT, 'db.sqlite')
+DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
 

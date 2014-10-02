@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<p>
+  <a href="/admin">&laquo; Back to admin interface</a>
+</p>
+
+<form method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <p><input name="username" type="text" placeholder="Username" /></p>
+  <p><input name="password" type="password" placeholder="Password" /></p>
+  <p><input name="password_again" type="password" placeholder="Password (again)" /></p>
+  <p>
+    <input name="is_admin" id="is_admin" type="checkbox" />
+    <label for="is_admin">Is Administrator</label>
+  </p>
+  <p>
+    <input name="is_hotp" id="is_totp" type="checkbox" />
+    <label for="is_hotp">I'm using a Yubikey [HOTP]</label>
+    <input name="otp_secret" type="text" placeholder="HOTP Secret"><br />
+  </p>
+  <button type="submit">Add user</button>
+</form>
+{% endblock %}
