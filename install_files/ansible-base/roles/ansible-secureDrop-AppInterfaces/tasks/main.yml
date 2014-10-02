@@ -24,6 +24,7 @@
 - include: dev_app_code_depends.yml
   tags:
     - development
+    - debs
 
 - include: staging_app_code.yml
   tags:
@@ -38,7 +39,13 @@
     - app
     - staging
     - development
+    - debs
 
 - include: dev_setup_xvfb_for_functional_tests.yml
   tags:
     - development
+    - debs
+
+- include: build_debs.yml
+  tags:
+    - debs
