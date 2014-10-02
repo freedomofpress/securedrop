@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'debs' do |debs|
+  config.vm.define 'debs', autostart: false do |debs|
     debs.vm.box = "trusty64"
     debs.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     debs.vm.provision "ansible" do |ansible|
@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'staging' do |staging|
+  config.vm.define 'staging', autostart: false do |staging|
     staging.vm.box = "trusty64"
     staging.vm.network "forwarded_port", guest: 80, host: 8082
     staging.vm.network "forwarded_port", guest: 8080, host: 8083
@@ -46,12 +46,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'mon' do |mon|
+  config.vm.define 'mon', autostart: false do |mon|
     mon.vm.box = "trusty64"
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
   end
 
-  config.vm.define 'app' do |app|
+  config.vm.define 'app', autostart: false do |app|
     app.vm.box = "trusty64"
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app.vm.provision "ansible" do |ansible|
