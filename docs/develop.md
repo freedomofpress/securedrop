@@ -75,10 +75,9 @@ cd /vagrant/securedrop
 ```
 vagrant up staging
 vagrant ssh staging
-sudo su
-cd /var/www/securedrop
-./manage.py add_admin
-./manage.py test
+sudo cd /var/www/securedrop
+sudo ./manage.py add_admin
+sudo ./manage.py test
 ```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
@@ -86,8 +85,8 @@ You will need to copy and fill out the example conf file /securedrop/install_fil
 ```
 vagrant up app
 vagrant ssh app
-cd /var/www/securedrop/
-./manage.py add_admin
+sudo cd /var/www/securedrop/
+sudo ./manage.py add_admin
 ```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-mon-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-mon-conf.yml
