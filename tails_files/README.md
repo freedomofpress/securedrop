@@ -1,6 +1,6 @@
-# Tails for the Journalist Workstation
+# Tails for the Admin and Journalist Workstation
 
-This guide outlines the steps required to set up *Tails* on a *Transfer Device*, such as a USB stick, for use with the *Journalist Workstation*. The workstation will be used to connect to the *Document Interface*, download documents, and move them to the Secure Viewing Station using the Transfer Device.
+This guide outlines the steps required to set up *Tails* on a *Transfer Device*, such as a USB stick, for use with the *Admin Workstation* and the *Journalist Workstation*. The *Admin Workstation* will be used to connect to the App Server and the Monitor Server using Tor and SSH. The *Journalist Workstation* will be used to connect to the *Document Interface*, download documents, and move them to the Secure Viewing Station using the Transfer Device.
 
 When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
 
@@ -14,7 +14,7 @@ Creating an encrypted persistent volume will allow you to securely save informat
 
 ## Configure Tails for use with SecureDrop
 
-Before you can set up Tails for use with the Journalist Workstation, make sure you have enabled the persistent volume and that you are connected to the Internet.
+Before you can set up Tails for use with the Workstation, make sure you have enabled the persistent volume and that you are connected to the Internet.
 
 ### Start Tails and enable the persistent volume
 
@@ -22,7 +22,7 @@ When starting Tails, you should see a *Welcome to Tails*-screen with two options
 
 ### Download and run the setup scripts
 
-Open the terminal and run the following command to get the files required to set up Tails for use with the Journalist Workstation.
+Open the terminal and run the following command to get the files required to set up Tails for use with the Workstation.
 
 ```
 git clone https://github.com/freedomofpress/securedrop.git
@@ -37,7 +37,7 @@ sudo ./install.sh
 
 Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
 
-Edit the file with the *HidServAuth* information for your SecureDrop instance that you got during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information contains of the address to the Document Interface and your personal authentication string. The information from the installation guide results in the following:
+Edit the file with the *HidServAuth* information for your SecureDrop instance that you got during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information includes, among other things, the address to the Document Interface and your personal authentication string. The information from the installation guide results in the following:
 
 ```
 # add HidServAuth lines here
@@ -46,9 +46,9 @@ HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 
 When you are done, click *Save* and close the text editor.
 
-## Using Tails with the Journalist Workstation
+## Using Tails with the Workstation
 
-To use Tails with the Journalist Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that you have to repeat this step every time you start Tails.
+To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that you have to repeat this step every time you start Tails.
 
 ### Create bookmarks for Source and Document Interfaces
 
