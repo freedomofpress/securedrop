@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
       ansible.tags = "staging"
-      ansible.skip_tags = [ 'ossec' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' also takes an array
+      ansible.skip_tags = [ 'ossec' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' also takes an array
     end
     staging.vm.provider "virtualbox" do |v|
       v.name = "staging"

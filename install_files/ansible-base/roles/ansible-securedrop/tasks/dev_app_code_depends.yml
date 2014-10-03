@@ -1,10 +1,10 @@
 ---
-- name: ensure securedrop-app-code packages is not installed
-  apt: pkg="securedrop-app-code" state=absent
-
 - name: install apt package deps for dev environment
   apt: pkg="{{ item }}" state=latest
   with_items: dev_deps
 
-- name: install pip deps for dev env
+- name: install dev pip deps for dev env
   command: "pip install -r /vagrant/securedrop/requirements/dev-requirements.txt"
+
+- name: install test pip deps for dev env
+  command: "pip install -r /vagrant/securedrop/requirements/test-requirements.txt"

@@ -64,13 +64,31 @@ app: This is a production installation with all of the hardening applied.
     The interfaces and ssh are only available over tor.
     A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ???
 
-`vagrant up`
+```
+vagrant up
+vagrant ssh development
+cd /vagrant/securedrop
+./manage.py add_admin
+./manage.py test
+```
 
-`vagrant up staging`
+```
+vagrant up staging
+vagrant ssh staging
+sudo su
+cd /var/www/securedrop
+./manage.py add_admin
+./manage.py test
+```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
 
-`vagrant up app`
+```
+vagrant up app
+vagrant ssh app
+cd /var/www/securedrop/
+./manage.py add_admin
+```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-mon-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-mon-conf.yml
 
