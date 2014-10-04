@@ -5,6 +5,3 @@
 
 - name: install dev pip deps for dev env
   command: "pip install -r /vagrant/securedrop/requirements/dev-requirements.txt"
-
-- name: install test pip deps for dev env
-  command: "pip install -r /vagrant/securedrop/requirements/test-requirements.txt"
