@@ -1,8 +1,8 @@
 ---
-- hosts: 127.0.0.1
-  connection: local
+- hosts: [ 'staging' ]
+
   vars_files:
-    - secureDropConf.yml
+    - securedrop-staging-conf.yml
   vars:
     securedrop_tor_user: "debian-tor"
     service_ssh_port: 22
@@ -22,7 +22,7 @@
             virtport: "{{ service_document_port }}",
             target: "127.0.0.1:{{ service_document_port }}"
           }],
-        HiddenServiceAuthorizeClient: "{{ HiddenServiceAuthorizeClientsListKey['documentUsers'] }}"
+        HiddenServiceAuthorizeClients: "{{ [document_user] }}"
       },
       { dir: "ssh",
         ports:
@@ -30,12 +30,12 @@
             virtport: "{{ service_ssh_port }}",
             target: "127.0.0.1:{{ service_ssh_port }}"
           }],
-        HiddenServiceAuthorizeClient: "{{ HiddenServiceAuthorizeClientsListKey['sshUsers'] }}"
+        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}"
       }
     ]
   roles:
-    - { role: ansible-tor,
-        tor_distribution_release: "wheezy",
+    - { role: ansible-securedrop,
+        tor_distribution_release: "trusty",
         tor_ExitPolicy: "reject *:*",
         tor_hidden_services: "{{ securedrop_hidden_services }}",
         tor_hidden_services_parent_dir: "{{ hidden_services_parent_dir }}",
@@ -44,11 +44,20 @@
         tor_wait_for_hidden_services: yes,
         tor_user: "{{ securedrop_tor_user }}",
         tor_SocksPort: 0,
-        sudo: yes
-      }
-    - { role: ansible-secureDrop-AppInterfaces,
-        headerFilePath: "{{ SecureDropHeaderImagePath }}",
-        AppGPGPublicKey: "{{ SecureDropAppGPGPublicKey }}",
-        AppGPGFingerprint: "{{ SecureDropAppGPGFingerprint }}",
+
+        fpf_distribution_release: "trusty",
+        headerFilePath: "{{ securedrop_header_image_path }}",
+        AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}",
+        AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}",
+
+        sshEnv: "{{ securedrop_environment }}",
+        sshHost: "app",
+        sshHostnameFile: "{{ hidden_services_parent_dir }}/ssh/hostname",
+        documentHostnameFile: "{{ hidden_services_parent_dir }}/document/hostname",
+        sourceHostnameFile: "{{ hidden_services_parent_dir }}/source/hostname",
+        sshUsers: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}",
+        sshPort: "{{ service_ssh_port }}",
+        sourcePort: "{{ service_source_port }}",
+        documentPort: "{{ service_document_port }}",
         sudo: yes
       }

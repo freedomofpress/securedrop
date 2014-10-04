@@ -1,5 +1,15 @@
 ---
+## Tor
+tor_instance_parent_dir: /etc/tor/instances
+tor_user: debian-tor
+tor_DataDirectory: /var/lib/tor
+tor_PidFile: /var/run/tor/tor.pid
+tor_RunAsDaemon: 1
+tor_Log: "notice file /var/log/tor/log"
+tor_hidden_services_parent_dir: /var/lib/tor/services
+tor_wait_for_hidden_services: no
 
+## Interface defaults
 securedrop_root: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"
 securedrop_user: "www-data"
@@ -39,6 +49,8 @@ apache_modules:
   - wsgi
   - xsendfile
 
+## TODO instead of hard coding disabled modules find intersection of
+#apache_modules vs enabled modules
 apache_disabled_modules:
   - auth_basic
   - authn_file
@@ -70,6 +82,7 @@ dev_deps:
 build_deb_root:
   - /tmp/securedrop-debs
 
+# Build FPF deb packages
 build_deb_dirs:
   - securedrop-app-code
   - securedrop-python-mods
@@ -78,6 +91,13 @@ build_deb_dirs:
   - securedrop-ossec-agent
   - securedrop-ossec-server
 
+## System Hardening
 apparmor_profiles:
   - usr.bin.tor
   - usr.lib.apache2.mpm-worker.apache2
+
+distro_id: "ubuntu"
+distro_codename: "trusty"
+ossec_group: "ossec"
+ossec_config_path: "{{ ossec_root }}/etc/ossec.conf"
+ossec_package_name: "ossec-agent"

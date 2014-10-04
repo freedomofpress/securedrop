@@ -1,4 +1,13 @@
-Thes instructions are for Ubuntu 14.04
+This setup requires: ansible, vagrant, virtualbox.
+Was tested using:
+
+vagrant --version
+Vagrant 1.6.5
+
+ansible --version
+ansible 1.7.2
+
+These instructions are for Ubuntu 14.04
 
 `sudo apt-get install git -y`
 
@@ -37,35 +46,54 @@ Really helps with build times
 
 `vagrant plugin install vagrant-cachier`
 
-You will need to create a symlink form the example external yml file to the one loaded by the playbook for the environment you want
-TODO: need to fix so you don't need to symlink these files makes provisioning multi environments rough
+There are 4 predefined VMs in the vagrantfile: development, debs, staging, app and mon
+
+development VM: Is for working on the application code
+    Source Interface: localhost:8080
+    Document Interface: localhost:8081
+
+debs VM: Will build the FPF deb packages and store them in /vagrant so they can be used by other VMs/playbooks
+
+staging: Requires the securedrop-app-code.deb to install the application
+    Source Interface: localhost:8082
+    Document Interface: localhost:8083
+    The interfaces and ssh are also available over tor.
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
+
+app: This is a production installation with all of the hardening applied. 
+    The interfaces and ssh are only available over tor.
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
 
 ```
-ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.dev ~/securedrop/install_files/ansible-base/secureDropConf.yml
 vagrant up
+vagrant ssh development
+cd /vagrant/securedrop
+./manage.py add_admin
+./manage.py test
 ```
 
 ```
-ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.staging ~/securedrop/install_files/ansible-base/secureDropConf.yml
 vagrant up staging
+vagrant ssh staging
+sudo su
+cd /var/www/securedrop
+./manage.py add_admin
+./manage.py test
 ```
 
+You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
+
 ```
-ln -s ~/securedrop/install_files/ansible-base/secureDropConf.yml.app ~/securedrop/install_files/ansible-base/secureDropConf.yml
 vagrant up app
+vagrant ssh app
+sudo su
+cd /var/www/securedrop/
+./manage.py add_admin
 ```
+
+You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-mon-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-mon-conf.yml
 
 `vagrant up mon`
-
-
-# Environment dev:
- source interface is accessible by localhost:8080 document interface localhost:8081
- 
-# Environment staging/production
-
-The ansible playbook task `roles/ansible-secureDrop-AppHardening/tasks/display_onions.yml` creates a ssh-hostname file on the host sytem. 
-
-
 
 Once SSH is only allowed over tor
 

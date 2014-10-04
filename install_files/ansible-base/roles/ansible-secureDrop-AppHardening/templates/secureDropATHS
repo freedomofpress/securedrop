@@ -1,2 +1,0 @@
-HidServAuth {{ documentHost }}:{{ documentPort }} {{ documentAuthValue }}
-HidServAuth {{ sshHost }}:{{ sshPort }} {{ sshAuthValue }}

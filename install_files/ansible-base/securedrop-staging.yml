@@ -1,0 +1,63 @@
+---
+- hosts: [ 'staging', 'debs' ]
+
+  vars_files:
+    - securedrop-staging-conf.yml
+  vars:
+    securedrop_tor_user: "debian-tor"
+    service_ssh_port: 22
+    service_source_port: 80
+    service_document_port: 8080
+    hidden_services_parent_dir: "/var/lib/tor/services"
+    securedrop_hidden_services: [
+      { dir: "source",
+        ports:
+          [{ virtport: "{{ service_source_port }}",
+             target: "127.0.0.1:{{ service_source_port }}"
+          }] 
+      },
+      { dir: "document",
+        ports:
+          [{
+            virtport: "{{ service_document_port }}",
+            target: "127.0.0.1:{{ service_document_port }}"
+          }],
+        HiddenServiceAuthorizeClients: "{{ [document_user] }}"
+      },
+      { dir: "ssh",
+        ports:
+          [{
+            virtport: "{{ service_ssh_port }}",
+            target: "127.0.0.1:{{ service_ssh_port }}"
+          }],
+        HiddenServiceAuthorizeClients: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}"
+      }
+    ]
+  roles:
+    - { role: ansible-securedrop,
+        tor_distribution_release: "trusty",
+        tor_ExitPolicy: "reject *:*",
+        tor_hidden_services: "{{ securedrop_hidden_services }}",
+        tor_hidden_services_parent_dir: "{{ hidden_services_parent_dir }}",
+        tor_ReachableAddresses: "*:80,*:8080,*:443,*:8443,*:9001,*:9030",
+        tor_SafeLogging: 1,
+        tor_wait_for_hidden_services: yes,
+        tor_user: "{{ securedrop_tor_user }}",
+        tor_SocksPort: 0,
+
+        fpf_distribution_release: "trusty",
+        headerFilePath: "{{ securedrop_header_image_path }}",
+        AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}",
+        AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}",
+
+        sshEnv: "{{ securedrop_environment }}",
+        sshHost: "app",
+        sshHostnameFile: "{{ hidden_services_parent_dir }}/ssh/hostname",
+        documentHostnameFile: "{{ hidden_services_parent_dir }}/document/hostname",
+        sourceHostnameFile: "{{ hidden_services_parent_dir }}/source/hostname",
+        sshUsers: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}",
+        sshPort: "{{ service_ssh_port }}",
+        sourcePort: "{{ service_source_port }}",
+        documentPort: "{{ service_document_port }}",
+        sudo: yes
+      }
