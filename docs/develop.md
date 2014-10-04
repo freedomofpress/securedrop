@@ -55,14 +55,14 @@ development VM: Is for working on the application code
 debs VM: Will build the FPF deb packages and store them in /vagrant so they can be used by other VMs/playbooks
 
 staging: Requires the securedrop-app-code.deb to install the application
-    Source Interface: localhost:8081
-    Document Interface: localhost:8082
+    Source Interface: localhost:8082
+    Document Interface: localhost:8083
     The interfaces and ssh are also available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ???
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
 
 app: This is a production installation with all of the hardening applied. 
     The interfaces and ssh are only available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ???
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
 
 ```
 vagrant up
@@ -75,9 +75,10 @@ cd /vagrant/securedrop
 ```
 vagrant up staging
 vagrant ssh staging
-sudo cd /var/www/securedrop
-sudo ./manage.py add_admin
-sudo ./manage.py test
+sudo su
+cd /var/www/securedrop
+./manage.py add_admin
+./manage.py test
 ```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
@@ -85,8 +86,9 @@ You will need to copy and fill out the example conf file /securedrop/install_fil
 ```
 vagrant up app
 vagrant ssh app
-sudo cd /var/www/securedrop/
-sudo ./manage.py add_admin
+sudo su
+cd /var/www/securedrop/
+./manage.py add_admin
 ```
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-mon-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-mon-conf.yml
