@@ -47,8 +47,8 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
 
 The steps in this guide assume you have the following set up:
 
- * Two servers - called *App* and *Monitor* - with [Ubuntu Server 12.04.5 LTS (Precise
- Pangolin)](http://releases.ubuntu.com/12.04/) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server
+ * 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
  * An [Ubuntu kernel with Grsecurity](https://github.com/dolanjs/ubuntu-grsec) ready to be installed on the *App* and *Monitor* servers
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
@@ -79,17 +79,18 @@ When a document is submitted through the *Source Interface* on the *App Server*,
 * It will pop up a box asking you to type a passphrase, but it's safe to click okay without typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
 * Wait for your GPG key to finish generating
 
-To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". If you switch to the "My Personal Keys" tab you can see the key that you just generated.
+To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". You should then see the key that you just generated.
 
-![My Keys](/docs/images/install/viewing7.jpg)
+![My Keys](/docs/images/install/keyring.png)
 
-Right-click on the key you just generated and click `Export`. Save it to the *Transfer Device* as `SecureDrop.asc`. This is the public key only.
+Select the key you just generated and click "File" and "Export". Save the key to the *Transfer Device* as `SecureDrop.asc`, and make sure you change the file type from "PGP keys" to "Armored PGP keys". This is the public key only.
 
-![My Keys](/docs/images/install/viewing8.jpg)
+![My Keys](/docs/images/install/exportkey.png)
+![My Keys](/docs/images/install/exportkey2.png)
 
 You'll also need to verify the 40 character hexadecimal fingerprint for this new key during the `App Server` installation. Double-click on the new key you just generated and change to the `Details` tab. Write down the 40 digits under `Fingerprint`. (Your GPG key fingerprint will be different than what's in this photo.)
 
-![Fingerprint](/docs/images/install/viewing9.jpg)
+![Fingerprint](/docs/images/install/fingerprint.png)
 
 ### Import GPG keys for journalists with access to SecureDrop
 
@@ -97,11 +98,11 @@ While working on a story, journalists may need to transfer some of the documents
 
 If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
-![Importing Journalist GPG Keys](/docs/images/install/viewing1.jpg)
+![Importing Journalist GPG Keys](/docs/images/install/importkey.png)
 
 ## Set up the App Server
 
-The *App Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *App Server* should already have Ubuntu Server 14.04.1 LTS (Trusty Tahr) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *Monitor Server*
  * The SecureDrop application's GPG public key (from the *Transfer Device*)
@@ -194,7 +195,7 @@ to add more admins.
 
 ## Set up the Monitor Server
 
-The *Monitor Server* should already have Ubuntu Server 12.04.5 LTS (Precise Pangolin) installed. Before you begin, be sure to have the following information available:
+The *Monitor Server* should already have Ubuntu Server 14.04.1 LTS (Trusty Tahr) installed. Before you begin, be sure to have the following information available:
 
  * The IP address of the *App Server*
  * The email address that will receive alerts from OSSEC
