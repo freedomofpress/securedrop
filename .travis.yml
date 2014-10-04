@@ -17,8 +17,8 @@ script:
 # Symlink dev configuration
 #- ln -s install_files/ansible-base/secureDropConf.yml.dev install_files/ansible-base/secureDropConf.yml
 - cp install_files/ansible-base/secureDropConf.yml.dev install_files/ansible-base/secureDropConf.yml
-- ansible-playbook -i inventory --syntax-check install_files/ansible-base/secureDrop-server.yml
-- ansible-playbook -i inventory --connection=local --sudo --tags=development --skip-tags=tor install_files/ansible-base/secureDrop-server.yml
+- ansible-playbook -i inventory --syntax-check install_files/ansible-base/secureDrop-server-travis.yml
+- ansible-playbook -i inventory --connection=local --sudo --tags=development --skip-tags=tor install_files/ansible-base/secureDrop-server-travis.yml
 notifications:
   slack:
     secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
