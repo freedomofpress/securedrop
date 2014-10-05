@@ -6,29 +6,42 @@
 - name: import app gpg public key
   command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ securedrop_user }}"
 
+- stat: path="{{ securedrop_code }}/config.py"
+  register: config
+
 - name: generating 32 byte value for "source secret key"
   shell: "head -c 32 /dev/urandom | base64"
   register: source_secret_key
+  when: not config.stat.exists
 
 - name: generating 32 byte value for "journalist secret key"
   shell: "head -c 32 /dev/urandom | base64"
   register: journalist_secret_key
+  when: not config.stat.exists
 
 - name: generating 32 byte value for "scrypt id pepper"
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_id_pepper
+  when: not config.stat.exists
 
 - name: generating 32 byte value for "scrypt gpg pepper"
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_gpg_pepper
+  when: not config.stat.exists
 
 - name: ensure templatized config.py is installed
-  template: src="config.py" dest="{{ securedrop_root }}/config.py"
+  template: 
+    src="config.py" 
+    dest="{{ securedrop_code }}/config.py"
     owner="{{ securedrop_user }}"
     group="{{ securedrop_user }}"
-    mode=0600
+    mode="0600"
+    backup="yes"
+  when: not config.stat.exists
 
-# XXX - Make this idempotent!
+- stat: path="{{ securedrop_data }}/db.sqlite"
+  register: db
+
 - name: initialize sqlite db
-  #shell: "/bin/sh -c \"PYTHONPATH={{ securedrop_root }} python -c 'import db; db.init_db()'\""
-  shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_root }} python -c 'import db; db.init_db()'\" {{ securedrop_user }}"
+  shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_code }} python -c 'import db; db.init_db()'\" {{ securedrop_user }}"
+  when: not db.stat.exists
