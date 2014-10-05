@@ -6,11 +6,5 @@
 
   roles:
     - { role: ansible-securedrop,
-        fpf_distribution_release: "trusty",
-        headerFilePath: "{{ securedrop_header_image_path }}",
-        AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}",
-        AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}",
-        sourcePort: "{{ service_source_port }}",
-        documentPort: "{{ service_document_port }}",
         sudo: yes
       }

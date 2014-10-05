@@ -1,5 +1,12 @@
 ---
 ## Tor
+tor_distribution_release: "trusty"
+tor_ExitPolicy: "reject *:*"
+tor_hidden_services: "{{ securedrop_hidden_services }}"
+tor_ReachableAddresses: "*:80,*:8080,*:443,*:8443,*:9001,*:9030"
+tor_SafeLogging: 1
+tor_wait_for_hidden_services: yes
+tor_SocksPort: 0
 tor_instance_parent_dir: /etc/tor/instances
 tor_user: debian-tor
 tor_DataDirectory: /var/lib/tor
@@ -8,6 +15,56 @@ tor_RunAsDaemon: 1
 tor_Log: "notice file /var/log/tor/log"
 tor_hidden_services_parent_dir: /var/lib/tor/services
 tor_wait_for_hidden_services: no
+securedrop_tor_user: "debian-tor"
+hidden_services_parent_dir: "/var/lib/tor/services"
+
+# Configuring the tor hidden services
+service_ssh_port: 22
+service_source_port: 80
+service_document_port: 8080
+sshEnv: "{{ securedrop_environment }}"
+sshHost: "app"
+sshHostnameFile: "{{ hidden_services_parent_dir }}/ssh/hostname"
+documentHostnameFile: "{{ hidden_services_parent_dir }}/document/hostname"
+sourceHostnameFile: "{{ hidden_services_parent_dir }}/source/hostname"
+sshUsers: "{{ hidden_service_authorize_clients_list_key['ssh_users'].keys() }}"
+sshPort: "{{ service_ssh_port }}"
+sourcePort: "{{ service_source_port }}"
+documentPort: "{{ service_document_port }}"
+
+securedrop_hidden_services: [
+  { dir: "source",
+    ports:
+      [{ virtport: "{{ service_source_port }}",
+         target: "127.0.0.1:{{ service_source_port }}"
+      }] 
+  },
+  { dir: "document",
+    ports:
+      [{
+        virtport: "{{ service_document_port }}",
+        target: "127.0.0.1:{{ service_document_port }}"
+      }],
+    HiddenServiceAuthorizeClients: "journalist"
+  },
+  { dir: "ssh",
+    ports:
+      [{
+        virtport: "{{ service_ssh_port }}",
+        target: "127.0.0.1:{{ service_ssh_port }}"
+      }],
+    HiddenServiceAuthorizeClients: "admin"
+  }
+]
+
+
+# Defaults for installing the fpf repo
+fpf_distribution_release: "trusty"
+
+# Defaults for install_app_depends.yml tasks
+headerFilePath: "{{ securedrop_header_image_path }}"
+AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}"
+AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}"
 
 ## Interface defaults
 securedrop_root: "/var/www/securedrop"
@@ -81,6 +138,11 @@ dev_deps:
 
 build_deb_root:
   - /tmp/securedrop-debs
+
+# There only needs to be one ATHS for the document interface
+document_aths:
+  - journalist
+
 
 # Build FPF deb packages
 build_deb_dirs:

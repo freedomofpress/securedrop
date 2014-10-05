@@ -1,5 +1,4 @@
 ---
-document_user: "journalist"
 hidden_service_authorize_clients_list_key:
   ssh_users:
     "admin1":
