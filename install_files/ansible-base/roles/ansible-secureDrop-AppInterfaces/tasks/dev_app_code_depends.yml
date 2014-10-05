@@ -7,4 +7,4 @@
   with_items: dev_deps
 
 - name: install pip deps for dev env
-  command: "pip install -r /vagrant/securedrop/requirements/dev-requirements.txt"
+  command: "pip install -r {{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"

@@ -1,5 +1,5 @@
 ---
-- hosts: [ 'app', 'mon', 'staging', 'development', 'debs' ]
+- hosts: [ 'app', 'mon', 'staging', 'development', 'debs', 'localhost' ]
 
   vars_files:
     - secureDropConf.yml
