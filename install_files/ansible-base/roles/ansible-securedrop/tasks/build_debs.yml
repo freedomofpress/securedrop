@@ -2,8 +2,8 @@
 - name: install pip install wheel
   pip: name=wheel
 
-- name: copy install_files/secureddrop-app-code to build path
-  command: "cp -R /vagrant/install_files/securedrop-app-code/ /tmp/{{ securedrop_app_code_deb }}/"
+- name: copy install_files/securedrop-app-code dir to build path
+  command: creates=/tmp/{{ securedrop_app_code_deb }}/ cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
 
 - name: ensure build path var structure exists
   file:
@@ -21,23 +21,32 @@
     dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
 
 - name: copy securedrop to build path
-  command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
+  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }} cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
+
+- name: ensure config.py does not exist in the build path
+  file:
+    state: absent
+    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
 
 - name: make pip wheel archive for our debian package requirements
-  command: pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt -w /root/wheelhouse
-
-- name: move wheel archive to build path
-  command: "mv /root/wheelhouse/ /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse"
+  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse pip wheel -r {{ prod_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
 
 #- name: copy apparmor profiles to build path
 #  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
 #  with_items: apparmor_profiles
 
-- name: zip the changelog
-  command: "gzip -9 /tmp/{{ securedrop_app_code_deb }}/usr/share/doc/securedrop-app-code/changelog.Debian"
-
 - name: create the deb package
-  command: "dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}"
+  command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
 
 - name: move the deb to the Vagrant shared folder
-  command: "cp /tmp/{{ securedrop_app_code_deb }}.deb /vagrant"
+  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}
+
+- name: remove the build temp dir
+  file:
+    state: absent
+    dest: "/tmp/{{ securedrop_app_code_deb }}"
+
+- name: remove temp package
+  file:
+    state: absent
+    dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
