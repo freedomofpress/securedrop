@@ -6,20 +6,6 @@
     - mon
     - staging
 
-- include: hidden_services.yml
-  when: tor_hidden_services is defined
-  tags:
-    - app
-    - mon
-    - staging
-
-- include: configure_apt_single.yml
-  when: proc_instances is not defined
-  tags:
-    - app
-    - mon
-    - staging
-
 - include: configure_tor_instance.yml
   when: proc_instances is defined
   tags:
@@ -63,7 +49,6 @@
     - development
     - debs
     - staging
-    - tests
 
 - include: staging_app_code.yml
   tags:

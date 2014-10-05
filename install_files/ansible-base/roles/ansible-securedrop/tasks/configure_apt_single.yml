@@ -1,12 +1,2 @@
 ---
 
-- name: template torrc
-  template: src=torrc dest=/etc/tor/torrc
-    owner=root group=root mode=0644
-  notify:
-  - restart tor
-
-- meta: flush_handlers
-
-- name: ensure tor is running
-  service: name=tor state=running

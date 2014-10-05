@@ -29,3 +29,12 @@
     state: latest
     force: yes
   with_items: ["deb.torproject.org-keyring", "tor"]
+
+- name: template torrc
+  template: src=torrc dest=/etc/tor/torrc
+    owner=root group=root mode=0644
+  notify:
+  - restart tor
+
+- name: ensure tor is running
+  service: name=tor state=running
