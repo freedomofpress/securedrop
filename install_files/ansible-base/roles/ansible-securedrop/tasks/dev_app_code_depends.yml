@@ -4,4 +4,6 @@
   with_items: dev_deps
 
 - name: install dev pip deps for dev env
-  pip: requirements="{{ dev_pip_requirements }}"
+  command: "pip install -r {{ dev_pip_requirements }}"
+
+#  pip: requirements="{{ dev_pip_requirements }}"

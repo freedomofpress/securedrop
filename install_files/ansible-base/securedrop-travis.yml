@@ -1,0 +1,10 @@
+---
+- hosts: [ 'localhost' ]
+
+  vars_files:
+    - securedrop-travis-conf.yml
+
+  roles:
+    - { role: ansible-securedrop,
+        sudo: yes
+      }

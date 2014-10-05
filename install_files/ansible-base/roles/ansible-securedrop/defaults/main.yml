@@ -66,6 +66,9 @@ headerFilePath: "{{ securedrop_header_image_path }}"
 AppGPGPublicKey: "{{ securedrop_app_gpg_public_key_path }}"
 AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}"
 
+# run_manage_py vars
+manage_py_script: "{{ securedrop_code }}/manage.py start"
+
 ## Interface defaults
 securedrop_root: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"

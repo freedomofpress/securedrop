@@ -114,7 +114,6 @@
 - include: display_onions.yml
   tags:
     - staging
-    - development
     - tor
 
 - include: configure_ossec.yml
