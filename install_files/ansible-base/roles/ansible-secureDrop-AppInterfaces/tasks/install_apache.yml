@@ -19,11 +19,26 @@
   apache2_module: state=absent name={{ item }}
   with_items: apache_disabled_modules
 
+- name: ensure 000-default site disabled
+  file:
+    state: absent
+    dest: /etc/apache2/sites-enabled/000-default.conf
+
+- name: ensure default-ssl site disabled
+  file:
+    state: absent
+    dest: /etc/apache2/sites-enabled/default-ssl.conf
+
 - name: ensure default site disabled
-  command: "a2dissite 000-default.conf"
+  file:
+    state: absent
+    dest: /etc/apache2/sites-enabled/default.conf
 
 - name: ensure sites enabled
-  command: "a2ensite {{ item }}"
+  file:
+    state: link
+    src: "/etc/apache2/sites-available/{{ item }}.conf"
+    dest: "/etc/apache2/sites-enabled/{{ item }}.conf"
   with_items: apache_sites
   notify:
     - restart apache2

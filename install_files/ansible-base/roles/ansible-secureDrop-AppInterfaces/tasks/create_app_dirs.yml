@@ -10,7 +10,7 @@
     mode: 0700
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
-    dest: "{{ securedrop_root }}"
+    dest: "{{ securedrop_code }}"
 
 - name: ensure securedrop data directory exists
   file:

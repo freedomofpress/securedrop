@@ -1,7 +1,8 @@
 ---
 document_user: "journalist"
-securedrop_root: "/var/securedrop"
+securedrop_repo: "/var/securedrop"
+securedrop_code: "/var/securedrop/securedrop"
 securedrop_user: "root"
 securedrop_header_image_path: "None"
-securedrop_app_gpg_public_key_path: "{{ securedrop_root }}/test_journalist_key.pub"
+securedrop_app_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"

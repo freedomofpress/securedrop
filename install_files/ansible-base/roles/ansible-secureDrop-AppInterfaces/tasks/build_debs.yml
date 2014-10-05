@@ -3,7 +3,7 @@
   pip: name=wheel
 
 - name: copy install_files/secureddrop-app-code to build path
-  command: "cp -R /vagrant/install_files/securedrop-app-code/ /tmp/{{ securedrop_app_code_deb }}/"
+  command: "cp -R {{ securedrop_repo }}/install_files/securedrop-app-code/ /tmp/{{ securedrop_app_code_deb }}/"
 
 - name: ensure build path var structure exists
   file:
@@ -21,7 +21,7 @@
     dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
 
 - name: copy securedrop to build path
-  command: "cp -R /vagrant/securedrop/ /tmp/{{ securedrop_app_code_deb }}/var/www/"
+  command: "cp -R {{ securedrop_repo }}/securedrop /tmp/{{ securedrop_app_code_deb }}/var/www/"
 
 - name: make pip wheel archive for our debian package requirements
   command: pip wheel -r /vagrant/securedrop/requirements/securedrop-requirements.txt -w /root/wheelhouse
@@ -40,4 +40,4 @@
   command: "dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}"
 
 - name: move the deb to the Vagrant shared folder
-  command: "cp /tmp/{{ securedrop_app_code_deb }}.deb /vagrant"
+  command: "cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}"

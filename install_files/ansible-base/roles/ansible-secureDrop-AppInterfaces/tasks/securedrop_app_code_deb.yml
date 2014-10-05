@@ -1,11 +1,3 @@
 ---
-- name: stat securedrop_root
-  stat:
-    path: "{{ securedrop_root }}"
-  register: securedrop_root_st
-
-- fail: msg="securedrop_root is a symlink. human operator failure."
-  when: securedrop_root_st.stat.islnk
-
 - name: ensure securedrop-app-code packages is installed
   apt: pkg="securedrop-app-code" state=latest
