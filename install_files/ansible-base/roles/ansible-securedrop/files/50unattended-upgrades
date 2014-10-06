@@ -1,7 +1,9 @@
 Unattended-Upgrade::Allowed-Origins {
-        "{{ distro_id }}:{{ distro_codename }}-security";
+        "${distro_id}:${distro_codename}-security";
 };
 Unattended-Upgrade::Package-Blacklist {
+        "linux-image";
+        "linux-headers";
 };
 Unattended-Upgrade::Mail "root@localhost";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
