@@ -58,11 +58,14 @@ staging: Requires the securedrop-app-code.deb to install the application
     Source Interface: localhost:8082
     Document Interface: localhost:8083
     The interfaces and ssh are also available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's 
+    ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+
 
 app: This is a production installation with all of the hardening applied. 
     The interfaces and ssh are only available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's machine to: ATHSinfo
+    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's
+    ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 
 ```
 vagrant up
