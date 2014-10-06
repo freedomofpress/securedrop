@@ -6,9 +6,8 @@ securedrop-mon-conf.yml
 wheelhouse
 
 # ignore the ATHS/THS hostname file ansible places
-ssh-hostname
-secureDropATHS
-secureDropInfo
+securedrop-ATHS
+securedrop-info
 
 # ignore vagrant servet file
 secrets.rb
