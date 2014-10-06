@@ -34,8 +34,8 @@ AppGPGFingerprint: "{{ securedrop_app_gpg_fingerprint }}"
 manage_py_script: "{{ securedrop_code }}/manage.py start"
 
 ## Interface defaults
-securedrop_root: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"
+securedrop_code: "/var/www/securedrop"
 securedrop_user: "www-data"
 
 apache_user: "www-data"
@@ -103,22 +103,11 @@ dev_deps:
   - firefox
   - xvfb
 
-build_deb_root:
-  - /tmp/securedrop-debs
-
 # There only needs to be one ATHS for the document interface
 document_aths:
   - journalist
 
-
 # Build FPF deb packages
-build_deb_dirs:
-  - securedrop-app-code
-  - securedrop-python-mods
-  - ossec-agent
-  - ossec-server
-  - securedrop-ossec-agent
-  - securedrop-ossec-server
 
 ## System Hardening
 apparmor_profiles:

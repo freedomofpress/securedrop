@@ -3,7 +3,7 @@ Section: web
 Priority: optional
 Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
 Homepage: https://pressfreedomfoundation.org/securedrop
-Package: ossec-agent
+Package: securedrop-ossec-agent
 Version: 2.8.1
 Architecture: amd64
 Pre-Depends: debconf (>= 0.2.17)

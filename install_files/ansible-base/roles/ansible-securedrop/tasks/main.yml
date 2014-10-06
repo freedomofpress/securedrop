@@ -57,7 +57,7 @@
   tags:
     - staging
 
-- include: app_install_securedrop_app_code_from_repo.yml
+- include: app_install_fpf_deb_pkgs.yml
   tags:
     - app
 
@@ -81,9 +81,10 @@
     - development
 
 ## Build FPF debian packages
-- include: build_debs.yml
+- include: build_securedrop_app_code_deb.yml
   tags:
     - debs
+    - app-code
 
 ## System Hardening
 - include: unattended_upgrades.yml
@@ -128,13 +129,12 @@
     - staging
     - tor
 
-- include: configure_ossec.yml
+- include: build_securedrop_ossec_agent_deb.yml
   tags:
-    - app
-    - staging
+    - debs
     - ossec
 
-#- include: configure_ossec_grsec.yml
+#- include: configure_ossec_server.yml
 #  tags:
 #    - mon
 #    - ossec

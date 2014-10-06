@@ -1,0 +1,61 @@
+---
+- name: install inotify-tools package
+  apt: pkg=inotify-tools state=latest
+
+- name: copy OSSEC archive to /tmp
+  unarchive:
+    copy: yes
+    creates: /tmp/{{ ossec_version }}
+    dest: /tmp/
+    src: "{{ ossec_archive }}"
+
+- name: ensure ossec /etc dir exists
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_version }}/etc
+
+- name: copy ossec agent preloaded vars
+  template:
+    src: app-preloaded-vars.conf
+    dest: /tmp/{{ ossec_version }}/etc/preloaded-vars.conf
+
+- name: create ossec agent deb build dir
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_agent_build_dir }}
+
+- name: create ossec agent preloaded install directory
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_agent_build_dir }}/var
+
+- name: run ossec installer
+  command: /tmp/{{ ossec_version }}/install.sh
+
+- name: copy OSSEC agent DEBIAN dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-agent/DEBIAN /tmp/{{ ossec_agent_build_dir }}
+
+- name: copy OSSEC agent usr dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-agent/usr /tmp/{{ ossec_agent_build_dir }}
+
+- name: copy OSSEC agent var dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-agent/var /tmp/{{ ossec_agent_build_dir }}
+
+- name: copy OSSEC agent etc dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-agent/etc /tmp/{{ ossec_agent_build_dir }}
+
+- name: build securedrop-ossec-agent deb package
+  command: dpkg-deb --build /tmp/{{ ossec_agent_build_dir }}
+
+- name: move securedrop-ossec-agent to repo
+  command: mv /tmp/{{ ossec_agent_build_dir }}.deb {{ securedrop_repo }}
+
+#- name: delete tmp build paths
+#  file:
+#    state: absent
+#    dest: /tmp/{{ ossec_agent_build_dir }}
+
+#- name: delete tmp install paths
+#  file:
+#    state: absent
+#    dest: /tmp/{{ ossec_version }}

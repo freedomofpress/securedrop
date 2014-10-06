@@ -128,8 +128,6 @@ case "$1" in
 	if [ -d ${OSSEC_HIDS_TMP_DIR} ]; then
 	    rm -r ${OSSEC_HIDS_TMP_DIR}
 	fi
-
-        db_stop
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
