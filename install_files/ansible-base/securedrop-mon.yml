@@ -2,7 +2,7 @@
 - hosts: [ 'mon' ]
 
   vars_files:
-    - secureDropConf.yml
+    - securedrop-mon-conf.yml
   roles:
     - { role: ansible-securedrop,
         sudo: yes

@@ -117,6 +117,10 @@ apparmor_profiles:
 distro_id: "ubuntu"
 distro_codename: "trusty"
 
+disable_kernel_modules:
+  - bluetooth
+  - iwlwifi
+
 # grsec vars
 grub_pax:
   - /usr/sbin/grub-probe

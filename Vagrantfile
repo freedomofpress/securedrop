@@ -47,7 +47,15 @@ Vagrant.configure("2") do |config|
   config.vm.define 'mon', autostart: false do |mon|
     mon.vm.box = "trusty64"
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-  end
+    mon.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-mon.yml"
+      ansible.tags = "mon"
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
+    end
+    mon.vm.provider "virtualbox" do |v|
+      v.name = "mon"
+    end
+   end
 
   config.vm.define 'app', autostart: false do |app|
     app.vm.box = "trusty64"
@@ -55,6 +63,7 @@ Vagrant.configure("2") do |config|
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-app.yml"
       ansible.tags = "app"
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
     end
     app.vm.provider "virtualbox" do |v|
       v.name = "app"

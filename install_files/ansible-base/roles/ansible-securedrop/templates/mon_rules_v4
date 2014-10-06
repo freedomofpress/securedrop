@@ -24,10 +24,10 @@
 -A OUTPUT -m owner --gid-owner ssh -j LOGNDROP -m comment --comment "Drop all other outbound traffic for ssh user"
 
 # DNS rules
--A OUTPUT -p tcp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A INPUT -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A OUTPUT -p udp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A INPUT -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A INPUT -s {{ dns_server }} -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A INPUT -s {{ dns_server }} -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
 
 # NTP rules
 -A OUTPUT -p udp --sport 123 --dport 123 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
@@ -39,8 +39,8 @@
 
 # OSSEC server-agent rules
 # TODO add owner to OUTPUT rule
--A INPUT -s app -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
--A OUTPUT -d app -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A INPUT -s {{ app_ip }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A OUTPUT -d {{ app_ip }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 
 # OSSEC smtp out rules
 #TODO restrict outbound by process owner

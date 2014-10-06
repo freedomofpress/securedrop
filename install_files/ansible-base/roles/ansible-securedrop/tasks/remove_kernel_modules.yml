@@ -1,0 +1,4 @@
+---
+- name: remove kernel modules
+  modprobe: name="{{ item }}" state=absent
+  with_items: disabled_kernel_modules
