@@ -15,13 +15,13 @@
   tags:
     - mon
 
-## Install Interfaces
 - include: install_fpf_repo.yml
   tags:
     - app
     - mon
     - staging
 
+## Install Interfaces
 - include: install_apache.yml
   tags:
     - app
@@ -43,7 +43,7 @@
   tags:
     - app
 
-# Install the SD dependencies for either tor run from
+# Install the fpf packages from
 # securedrop_repo (development)
 # install from a local deb package found in the securedrop_repo (staging)
 # install securedrop from the fpf repo
@@ -104,6 +104,7 @@
   tags:
     - app
     - staging
+    - mon
 
 - include: apparmor_complain.yml
   tags:
@@ -120,13 +121,22 @@
     - app
     - mon
 
-- include: iptables.yml
+- include: app_iptables.yml
   tags:
     - app
 
-- include: display_onions.yml
+- include: mon_iptables.yml
+  tags:
+    - mon
+
+- include: app_display_onions.yml
   tags:
     - staging
+    - tor
+
+- include: mon_display_onions.yml
+  tags:
+    - mon
     - tor
 
 - include: build_securedrop_ossec_agent_deb.yml
