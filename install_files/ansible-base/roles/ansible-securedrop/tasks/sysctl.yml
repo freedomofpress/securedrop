@@ -2,9 +2,6 @@
 - name: ensure sysctl.conf file exists
   copy: src=sysctl.conf dest=/etc/sysctl.conf mode=0400
 
-- name: load sysctl.conf
-  command: "sysctl -p /etc/sysctl.conf"
-
 - sysctl: name="net.ipv4.tcp_max_syn_backlog" value="4096" sysctl_set=yes state=present reload=yes
 
 - sysctl: name="net.ipv4.tcp_syncookies" value="1" sysctl_set=yes state=present reload=yes
