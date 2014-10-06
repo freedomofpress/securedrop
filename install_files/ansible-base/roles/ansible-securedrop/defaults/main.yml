@@ -116,6 +116,11 @@ apparmor_profiles:
 
 distro_id: "ubuntu"
 distro_codename: "trusty"
-ossec_group: "ossec"
-ossec_config_path: "{{ ossec_root }}/etc/ossec.conf"
-ossec_package_name: "ossec-agent"
+
+# grsec vars
+grub_pax:
+  - /usr/sbin/grub-probe
+  - /usr/sbin/grub-mkdevicemap
+  - /usr/sbin/grub-setup
+  - /usr/bin/grub-script-check
+  - /usr/bin/grub-mount 

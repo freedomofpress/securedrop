@@ -139,9 +139,9 @@
 #    - mon
 #    - ossec
 
-#- include: configure_grsec.yml
-#  tags:
-#      - app
-#      - mon
-#      - staging
-#      - grsec
+- include: from_fpf_repo_install_grsec.yml
+  tags:
+      - app
+      - mon
+      - staging
+      - grsec

@@ -7,4 +7,4 @@
 - name: Install local securedrop-ossec-agent deb package
   apt: deb="{{ securedrop_ossec_agent_deb }}.deb"
   tags:
-    - ossec-agent
+    - ossec

@@ -1,0 +1,10 @@
+---
+- name: install grsec predepends paxctl package
+  apt: pkg=paxctl state=present
+
+- name: make the required grub paxctl changes
+  command: paxctl -Cpm {{ item }}
+  with_items: grub_pax
+
+- name: install grsec package from fpf repo
+  apt: pkg=securedrop-grsec state=latest 
