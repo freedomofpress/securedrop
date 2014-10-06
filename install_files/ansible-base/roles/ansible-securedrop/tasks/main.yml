@@ -6,19 +6,14 @@
     - mon
     - staging
 
-- include: configure_tor_instance.yml
-  when: proc_instances is defined
+- include: app_configure_tor_hidden_services.yml
   tags:
     - app
-    - mon
     - staging
 
-- include: wait_for_hidden_services.yml
-  when: tor_wait_for_hidden_services
+- include: mon_configure_tor_hidden_services.yml
   tags:
-    - app
     - mon
-    - staging
 
 ## Install Interfaces
 - include: install_fpf_repo.yml
@@ -38,38 +33,49 @@
     - staging
     - development
 
-## TODO wsgi files should be in the securedrop-app-code deb
-- include: prod_wsgi_files.yml
+# Staging source wsgi file has logging enabled
+- include: staging_wsgi_files.yml
   tags:
-    - app
     - staging
 
-- include: dev_app_code_depends.yml
+# The production source wsgi file has logging disabled
+- include: app_wsgi_files.yml
+  tags:
+    - app
+
+# Install the SD dependencies for either tor run from
+# securedrop_repo (development)
+# install from a local deb package found in the securedrop_repo (staging)
+# install securedrop from the fpf repo
+
+- include: dev_install_pip_apt_pkgs.yml
   tags:
     - development
     - debs
-    - staging
 
-- include: staging_app_code.yml
+- include: staging_install_local_deb_pkgs.yml
   tags:
     - staging
 
-- include: securedrop_app_code_deb.yml
+- include: app_install_securedrop_app_code_from_repo.yml
   tags:
     - app
 
-- include: install_app_deps.yml
+# Create the app gpg keyring and databse
+- include: initialize_securedrop_app.yml
   tags:
     - app
     - staging
     - development
 
+# For testing install the additional pip reqs.
 - include: dev_setup_xvfb_for_functional_tests.yml
   tags:
     - development
     - staging
     - debs
 
+# Start the webserver for development
 - include: manage_py_start.yml
   tags:
     - development
@@ -98,9 +104,15 @@
     - app
     - staging
 
-- include: enforce_apparmor_profiles.yml
+- include: apparmor_complain.yml
   tags:
     - staging
+    - complain
+
+- include: apparmor_enforce.yml
+  tags:
+    - app
+    - enforce
 
 - include: ssh.yml
   tags:

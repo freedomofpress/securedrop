@@ -1,8 +1,5 @@
 ---
-hidden_service_authorize_clients_list_key:
-  ssh_users:
-    "admin1":
-      "/home/human/admin1.pub"
+ssh_users: "admin1"
 securedrop_header_image_path: "None"
 securedrop_app_gpg_public_key_path: "/vagrant/securedrop/test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"

@@ -1,0 +1,3 @@
+---
+- name: ensure securedrop-app-code packages is installed from repo
+  apt: pkg="securedrop-app-code" state=latest

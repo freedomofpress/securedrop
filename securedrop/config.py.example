@@ -41,7 +41,7 @@ JOURNALIST_KEY = '{{ securedrop_app_gpg_fingerprint }}'
 
 # Directory where SecureDrop stores the database file, GPG keyring, and
 # encrypted submissions.
-SECUREDROP_DATA_ROOT = '{{ securedrop_data }}'
+SECUREDROP_DATA_ROOT = '/var/lib/securedrop'
 
 # Modify configuration for alternative environments
 env = os.environ.get('SECUREDROP_ENV') or 'prod'
