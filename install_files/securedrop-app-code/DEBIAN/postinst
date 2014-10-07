@@ -18,7 +18,7 @@ set -x
 
 case "$1" in
     configure)
-    pip install --no-index --find-links=/var/securedrop/wheelhouse -r /var/www/securedrop/requirements/securedrop-requirements.txt 
+    pip install --no-index --find-links=/var/securedrop/wheelhouse -r /var/www/securedrop/requirements/prod-requirements.txt 
     
     #aa-enforce /etc/apparmor.d/usr.bin.tor
     #aa-enforce /etc/apparmor.d/usr.lib.apache2.mpm-worker.apache2
