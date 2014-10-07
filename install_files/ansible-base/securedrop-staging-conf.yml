@@ -11,7 +11,7 @@ securedrop_repo: "/vagrant"
 securedrop_code: "/var/www/securedrop"
 securedrop_deb_path: "{{ securedrop_repo }}"
 securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
-prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/securedrop-requirements.txt"
+prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/pip-requirements.txt"
 dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
 
 # Building the securedrop-app-code.deb package
