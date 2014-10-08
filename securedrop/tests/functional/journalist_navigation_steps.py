@@ -255,6 +255,12 @@ class JournalistNavigationSteps():
         update_user_btn = self.driver.find_element_by_css_selector('button#update-user')
         update_user_btn.click()
 
+        # Wait until page refreshes to avoid causing a broken pipe error (#623)
+        self.wait_for(
+            lambda: self.assertIn('Edit user "{}"'.format(new_username),
+                                  self.driver.page_source)
+            )
+
         # Update self.new_user with the new password
         # TODO dry
         self.new_user['password'] = new_password
