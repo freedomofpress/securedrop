@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.firefox import firefox_binary
+from selenium.common.exceptions import WebDriverException
 from multiprocessing import Process
 import socket
 import shutil
@@ -20,6 +21,7 @@ import urllib2
 import signal
 import traceback
 from datetime import datetime
+import time
 import mock
 
 class FunctionalTest():
@@ -88,3 +90,14 @@ class FunctionalTest():
         self.source_process.terminate()
         self.journalist_process.terminate()
 
+    def wait_for(self, function_with_assertion, timeout=5):
+        """Polling wait for an arbitrary assertion."""
+        # Thanks to http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                return function_with_assertion()
+            except (AssertionError, WebDriverException):
+                time.sleep(0.1)
+        # one more try, which will raise any errors if they are outstanding
+        return function_with_assertion()
