@@ -156,8 +156,10 @@ class JournalistNavigationSteps():
         self.driver.get(self.journalist_location + '/logout')
 
         # Logging out should redirect back to the login page
-        self.assertIn("Login to access the journalist interface",
-                      self.driver.page_source)
+        self.wait_for(
+            lambda: self.assertIn("Login to access the journalist interface",
+                                  self.driver.page_source)
+            )
 
     def _new_user_can_log_in(self):
         # Log the admin user out
@@ -203,8 +205,11 @@ class JournalistNavigationSteps():
                 self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
-        self.assertIn('Edit user "{}"'.format(self.new_user['username']),
+        self.wait_for(
+            lambda: self.assertIn('Edit user "{}"'.format(
+                self.new_user['username']),
                 self.driver.page_source)
+            )
 
         new_username = self.new_user['username'] + "2"
 
@@ -213,8 +218,10 @@ class JournalistNavigationSteps():
         update_user_btn = self.driver.find_element_by_css_selector('button[type=submit]')
         update_user_btn.click()
 
-        self.assertIn('Edit user "{}"'.format(new_username),
-                self.driver.page_source)
+        self.wait_for(
+            lambda: self.assertIn('Edit user "{}"'.format(new_username),
+                                  self.driver.page_source)
+            )
 
         # Update self.new_user with the new username for the future tests
         self.new_user['username'] = new_username
@@ -224,7 +231,9 @@ class JournalistNavigationSteps():
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          self.new_user['orm_obj'].totp.now())
-        self.assertIn('Sources', self.driver.page_source)
+        self.wait_for(
+            lambda: self.assertIn('Sources', self.driver.page_source)
+            )
 
         # Log the admin user back in
         self._logout()
@@ -255,7 +264,9 @@ class JournalistNavigationSteps():
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          self.new_user['orm_obj'].totp.now())
-        self.assertIn('Sources', self.driver.page_source)
+        self.wait_for(
+            lambda: self.assertIn('Sources', self.driver.page_source)
+            )
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
