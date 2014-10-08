@@ -47,7 +47,8 @@ SECUREDROP_DATA_ROOT = '/var/lib/securedrop'
 env = os.environ.get('SECUREDROP_ENV') or 'prod'
 
 if env == 'prod':
-    pass
+    # This is recommended for performance, and also resolves #369
+    FlaskConfig.USE_X_SENDFILE = True
 elif env == 'dev':
     # Enable Flask's debugger for development
     FlaskConfig.DEBUG = True
@@ -56,7 +57,7 @@ elif env == 'dev':
     JournalistInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'journalist_session'
 elif env == 'test':
     FlaskConfig.TESTING = True
-    # Disable CSRF checks for tests to make writing tests easier
+    # Disable CSRF checks to make writing tests easier
     FlaskConfig.WTF_CSRF_ENABLED = False
     # TODO use a unique temporary directory for each test so we can parallelize them
     SECUREDROP_DATA_ROOT = '/tmp/securedrop'
