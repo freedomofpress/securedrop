@@ -50,12 +50,12 @@
 - name: move securedrop-ossec-agent to repo
   command: mv /tmp/{{ ossec_agent_build_dir }}.deb {{ securedrop_repo }}
 
-#- name: delete tmp build paths
-#  file:
-#    state: absent
-#    dest: /tmp/{{ ossec_agent_build_dir }}
+- name: delete tmp build paths
+  file:
+    state: absent
+    dest: /tmp/{{ ossec_agent_build_dir }}
 
-#- name: delete tmp install paths
-#  file:
-#    state: absent
-#    dest: /tmp/{{ ossec_version }}
+- name: delete tmp install paths
+  file:
+    state: absent
+    dest: /tmp/{{ ossec_version }}

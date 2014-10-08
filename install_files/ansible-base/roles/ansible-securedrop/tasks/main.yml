@@ -11,10 +11,6 @@
     - app
     - staging
 
-- include: mon_configure_tor_hidden_services.yml
-  tags:
-    - mon
-
 - include: install_fpf_repo.yml
   tags:
     - app
@@ -61,6 +57,7 @@
   tags:
     - app
 
+# Rest of interface install
 # Create the app gpg keyring and databse
 - include: initialize_securedrop_app.yml
   tags:
@@ -85,6 +82,37 @@
   tags:
     - debs
     - app-code
+
+#- include: download_ossec_archive.yml
+#    - debs
+#    - ossec
+
+- include: build_securedrop_ossec_agent_deb.yml
+  tags:
+    - debs
+    - ossec
+
+- include: build_securedrop_ossec_server_deb.yml
+  tags:
+    - debs
+    - ossec
+
+## Monitor servers ossec procmail postfix config
+- include: mon_configure_tor_hidden_services.yml
+  tags:
+    - mon
+
+- include: mon_install_ossec_server.yml
+  tags:
+    - mon
+
+- include: mon_configure_ossec_gpg_alerts.yml
+  tags:
+    - mon
+
+- include: mon_install_postfix.yml
+  tags:
+    - mon
 
 ## System Hardening
 - include: unattended_upgrades.yml
@@ -114,17 +142,18 @@
 - include: apparmor_complain.yml
   tags:
     - staging
-    - complain
+    - apparmor-complain
 
 - include: apparmor_enforce.yml
   tags:
     - app
-    - enforce
+    - apparmor-enforce
 
 - include: ssh.yml
   tags:
     - app
     - mon
+    - ssh
 
 - include: harden_dns.yml
   tags:
@@ -151,19 +180,16 @@
     - mon
     - tor
 
-- include: build_securedrop_ossec_agent_deb.yml
-  tags:
-    - debs
-    - ossec
-
-#- include: configure_ossec_server.yml
-#  tags:
-#    - mon
-#    - ossec
-
 - include: from_fpf_repo_install_grsec.yml
   tags:
-      - app
-      - mon
-      - staging
-      - grsec
+    - app
+    - mon
+    - staging
+    - grsec
+
+# Needs to run after installing grsec kernel
+- include: sysctl.yml
+  tags:
+    - app
+    - mon
+    - staging

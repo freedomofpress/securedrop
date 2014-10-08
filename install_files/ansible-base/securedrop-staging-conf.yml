@@ -18,10 +18,13 @@ dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-require
 build_app_code_dir: "{{ securedrop_repo }}/securedrop"
 securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb extension
 
-# Building the securedrop-ossec-agent.deb package
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
 ossec_version: "ossec-hids-2.8.1"
-ossec_agent_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
 ossec_archive: "{{ ossec_version }}.tar.gz"
+ossec_agent_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
+ossec_server_build_dir: "securedrop-ossec-server-2.8.1-amd64"
 
 # To allow direct connections to source document interfaces for ease of testing
 apache_listening_address: "0.0.0.0"

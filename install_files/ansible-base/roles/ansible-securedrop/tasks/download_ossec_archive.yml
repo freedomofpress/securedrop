@@ -1,0 +1,3 @@
+---
+- name: download ossec archive to securedrop repo
+  get_url: url={{ ossec_download_url }} dest={{ securedrop_repo }}/{{ ossec_version }}.tar.gz sha256sum={{ ossec_download_checksum }}

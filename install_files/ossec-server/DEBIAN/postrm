@@ -57,10 +57,6 @@ case "$1" in
         check_delete_user ossec
 
         check_delete_group ossec
-
-        sed -i '/smtp_host_entry/d' /etc/hosts
-
-        db_purge
     ;;
 
     *)

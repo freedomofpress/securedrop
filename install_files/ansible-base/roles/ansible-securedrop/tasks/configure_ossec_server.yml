@@ -1,5 +1,4 @@
 ---
-
 - name: insure securedrop ossec package is installed
   apt: pkg="{{ ossec_package_name }}" state=latest
 

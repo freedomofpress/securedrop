@@ -26,13 +26,6 @@ case "$1" in
 	USER_REM="ossecr"
 	GROUP="ossec"
 	OSSEC_HIDS_TMP_DIR="/tmp/ossec-hids"
-        OSSEC_KEY_HOME="$OSSEC_HOME/.gnupg"
-
-        db_get securedrop-monitor-ossec/ossec_key_list
-        OSSEC_KEY_LIST="$RET"
-
-        db_get securedrop-monitor-ossec/get_email
-        EMAIL_DISTRO="$RET"
 
 	OSMYSHELL="/sbin/nologin"
         if [ ! -f ${OSMYSHELL} ]; then 
@@ -205,43 +198,6 @@ case "$1" in
 	if [ -d ${OSSEC_HIDS_TMP_DIR} ]; then
 	    rm -r ${OSSEC_HIDS_TMP_DIR}
 	fi
-
-        # Setup postfix
-        grep -q "root: ossec" /etc/aliases || echo "root: ossec" >> /etc/aliases
-        postalias /etc/aliases
-
-        # Import gpg of ossec email alert recipients
-        mkdir -p $OSSEC_KEY_HOME
-
-        for OSSEC_KEY in $OSSEC_KEY_LIST ; do
-            gpg --homedir /var/ossec/.gnupg --import $OSSEC_KEY
-        done
-
-        chown -R ossec:root $OSSEC_KEY_HOME
-        chmod 700 $OSSEC_KEY_HOME
-        chmod 600 $OSSEC_KEY_HOME/*
-
-        # Setup Procmail
-        # Setup procmailrc
-        chown ossec:root $OSSEC_HOME/.procmailrc
-
-        # Setup mail encryption script
-        cat > /var/ossec/send_encrypted_alarm.sh << EOF
-#!/bin/bash
-
-/usr/bin/formail -I "" | /usr/bin/gpg --homedir /var/ossec/.gnupg --trust-model always -ear "$EMAIL_DISTRO" | /usr/bin/mail -s "\$SUBJECT" $EMAIL_DISTRO
-EOF
-        chmod 755 $OSSEC_HOME/send_encrypted_alarm.sh
-        chown ossec:root $OSSEC_HOME/send_encrypted_alarm.sh
-
-        # Setup logs so we can create correct permissions
-        touch /var/log/procmail.log
-        chmod 600 /var/log/procmail.log
-        chown ossec:root /var/log/procmail.log
-
-        chmod +x $OSSEC_HOME/setup_gmail_test.sh
-
-        db_stop
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
