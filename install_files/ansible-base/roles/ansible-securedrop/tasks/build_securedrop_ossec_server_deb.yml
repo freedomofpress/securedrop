@@ -24,7 +24,7 @@
     state: directory
     dest: /tmp/{{ ossec_server_build_dir }}
 
-- name: create ossec server preloaded install directory
+- name: create preloaded directory to unpack ossec
   file:
     state: directory
     dest: /tmp/{{ ossec_server_build_dir }}/var

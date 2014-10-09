@@ -5,7 +5,6 @@
 - name: copy OSSEC archive to /tmp
   unarchive:
     copy: yes
-    creates: /tmp/{{ ossec_version }}
     dest: /tmp/
     src: "{{ ossec_archive }}"
 

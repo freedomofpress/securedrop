@@ -25,6 +25,7 @@ ossec_version: "ossec-hids-2.8.1"
 ossec_archive: "{{ ossec_version }}.tar.gz"
 ossec_agent_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
 ossec_server_build_dir: "securedrop-ossec-server-2.8.1-amd64"
+ossec_server_deb_path: "{{ securedrop_repo }}"
 
 # To allow direct connections to source document interfaces for ease of testing
 apache_listening_address: "0.0.0.0"
