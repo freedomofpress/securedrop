@@ -3,5 +3,5 @@
   apt: pkg="{{ item }}" state=latest
   with_items: dev_deps
 
-- name: install dev pip deps for dev env
-  command: "pip install -r {{ dev_pip_requirements }}"
+- name: install pip deps for dev env
+  pip: requirements="{{ dev_pip_requirements }}"
