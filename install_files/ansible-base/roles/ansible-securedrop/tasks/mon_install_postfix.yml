@@ -24,3 +24,9 @@
     src: main.cf
     dest: /etc/postfix/main.cf
   notify: restart postfix
+
+- name: configure postfix headers
+
+- name: configure postfix proxy
+
+
