@@ -84,18 +84,18 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
     s = StringIO()
     with zipfile.ZipFile(s, 'w') as zf:
         zf.writestr(sanitized_filename, stream.read())
-    s.reset()
+    s.seek(0)
 
     filename = "{0}-{1}-doc.zip.gpg".format(count, journalist_filename)
     file_loc = path(sid, filename)
-    crypto_util.encrypt(config.JOURNALIST_KEY, s, file_loc)
+    crypto_util.encrypt(s, config.JOURNALIST_KEY, file_loc)
     return filename
 
 
 def save_message_submission(sid, count, journalist_filename, message):
     filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
     msg_loc = path(sid, filename)
-    crypto_util.encrypt(config.JOURNALIST_KEY, message, msg_loc)
+    crypto_util.encrypt(message, config.JOURNALIST_KEY, msg_loc)
     return filename
 
 

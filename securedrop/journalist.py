@@ -428,8 +428,9 @@ def reply():
     g.source.interaction_count += 1
     filename = "{0}-reply.gpg".format(g.source.interaction_count)
 
-    crypto_util.encrypt(crypto_util.getkey(g.sid), msg, output=
-    store.path(g.sid, filename))
+    crypto_util.encrypt(msg,
+                        crypto_util.getkey(g.sid),
+                        output=store.path(g.sid, filename))
 
     db_session.commit()
     return render_template('reply.html', sid=g.sid,
