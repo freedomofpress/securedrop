@@ -1,7 +1,7 @@
 #!/bin/sh
 # Description: apply the securedrop iptable rules
-if [ -f /etc/iptables/rules_v4 ]; then
-  iptables-restore < /etc/iptables/rules_v4
+if [ -f /etc/network/iptables/rules_v4 ]; then
+  iptables-restore < /etc/network/iptables/rules_v4
 else
   echo "Iptables rules file does not exist"
   exit 1

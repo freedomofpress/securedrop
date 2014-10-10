@@ -119,10 +119,12 @@
   tags:
     - app
     - mon
+    - staging
 
 - include: iptables.yml
   tags:
     - app
+    - staging
 
 - include: display_onions.yml
   tags:
@@ -141,7 +143,11 @@
 
 - include: from_fpf_repo_install_grsec.yml
   tags:
-      - app
-      - mon
-      - staging
-      - grsec
+    - app
+    - mon
+    - staging
+    - grsec
+
+- include: allow_direct_access_to_staging_for_tests.yml
+  tags:
+    - staging
