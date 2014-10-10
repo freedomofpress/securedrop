@@ -6,6 +6,6 @@
 
 - name: setup fpf apt repo
   apt_repository: >
-    repo='deb https://apt.pressfreedomfoundation.org {{ fpf_distribution_release }} main'
+    repo='deb [arch=amd64] https://apt.pressfreedomfoundation.org {{ fpf_distribution_release }} main'
     state=present 
     update_cache=yes
