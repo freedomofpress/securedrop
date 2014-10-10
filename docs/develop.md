@@ -1,13 +1,20 @@
-This setup requires: ansible, vagrant, virtualbox.
-Was tested using:
+# Setup your local environment
 
+## Version Notes
+
+Tested with:
+
+```
 vagrant --version
 Vagrant 1.6.5
+```
 
+```
 ansible --version
 ansible 1.7.2
+```
 
-These instructions are for Ubuntu 14.04
+## Ubuntu 14.04
 
 `sudo apt-get install git -y`
 
@@ -46,26 +53,44 @@ Really helps with build times
 
 `vagrant plugin install vagrant-cachier`
 
-There are 4 predefined VMs in the vagrantfile: development, debs, staging, app and mon
+## Mac OS X
 
-development VM: Is for working on the application code
-    Source Interface: localhost:8080
-    Document Interface: localhost:8081
+First, install the requirements:
 
-debs VM: Will build the FPF deb packages and store them in /vagrant so they can be used by other VMs/playbooks
+1. [Vagrant](http://www.vagrantup.com/downloads.html)
+2. [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+3. [Ansible](http://docs.ansible.com/intro_installation.html)
+    * There are several ways to install Ansible on a Mac. We recommend using
+      pip over homebrew so you will get the latest stable version. To install
+      Ansible via Homebrew,
 
-staging: Requires the securedrop-app-code.deb to install the application
-    Source Interface: localhost:8082
-    Document Interface: localhost:8083
-    The interfaces and ssh are also available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's 
-    ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+      ```
+      $ sudo easy_install pip
+      $ sudo pip install ansible
+      ```
 
+Now you're ready to use vagrant to provision SecureDrop VM's!
 
-app: This is a production installation with all of the hardening applied. 
-    The interfaces and ssh are only available over tor.
-    A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's
-    ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+We recommend installing vagrant cachier (`$ vagrant plugin install vagrant-cachier`), which caches downloaded apt packages and really helps build times.
+
+# Overview
+
+There are 4 predefined VM configurations in the vagrantfile: development, debs, staging, app and mon.
+
+* **development**: for working on the application code
+    * Source Interface: localhost:8080
+    * Document Interface: localhost:8081
+* **debs**: Will build the FPF deb packages and store them in /vagrant so they can be used by other VMs/playbooks
+* **staging**: Requires the securedrop-app-code.deb to install the application
+    * Source Interface: localhost:8082
+    * Document Interface: localhost:8083
+    * The interfaces and ssh are also available over tor.
+    * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+* **app**: This is a production installation with all of the hardening applied. 
+    * The interfaces and ssh are only available over tor.
+    * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+
+## Development
 
 ```
 vagrant up
@@ -75,7 +100,10 @@ cd /vagrant/securedrop
 ./manage.py test
 ```
 
+## Staging
+
 ```
+vagrant up debs
 vagrant up staging
 vagrant ssh staging
 sudo su
@@ -84,9 +112,12 @@ cd /var/www/securedrop
 ./manage.py test
 ```
 
+## Production
+
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
 
 ```
+vagrant up debs
 vagrant up app
 vagrant ssh app
 sudo su
