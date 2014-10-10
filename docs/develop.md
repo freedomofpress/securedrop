@@ -109,7 +109,6 @@ vagrant ssh staging
 sudo su
 cd /var/www/securedrop
 ./manage.py add_admin
-./manage.py test
 ```
 
 ## Production
