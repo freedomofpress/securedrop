@@ -4,7 +4,7 @@
 # Added snap.rb file holds the digital ocean api token values
 # so we do not accidently check them into git
 
-include 'snap.rb'
+require_relative 'snap.rb'
 include MyVars
 
 Vagrant.configure("2") do |config|
