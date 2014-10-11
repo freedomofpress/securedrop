@@ -65,7 +65,7 @@ def test_unit():
 
 def reset():
     """
-    Clears the Securedrop development application's state, restoring it to the
+    Clears the SecureDrop development application's state, restoring it to the
     way it was immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file
     2. Regenerates the database

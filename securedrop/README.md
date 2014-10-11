@@ -1,8 +1,8 @@
-Securedrop is a tool for communicating securely with journalists.
+SecureDrop is a tool for communicating securely with journalists.
 
-Securedrop is a server application intended to let news organizations and others set up an online drop box for sources. It's open source software originally created by Aaron Swartz in consultation with a volunteer team of security experts. It is currently maintained by the Freedom of the Press Foundation. In addition to the server application, the project includes installation scripts and set-up instructions both for the software, and for a hardened Ubuntu environment on which to run it.
+SecureDrop is a server application intended to let news organizations and others set up an online drop box for sources. It's open source software originally created by Aaron Swartz in consultation with a volunteer team of security experts. It is currently maintained by the Freedom of the Press Foundation. In addition to the server application, the project includes installation scripts and set-up instructions both for the software, and for a hardened Ubuntu environment on which to run it.
 
-Securedrop was created with the goal of placing a secure drop box within reach of anyone with the need.
+SecureDrop was created with the goal of placing a secure drop box within reach of anyone with the need.
 
 The code is is a Python application that accepts messages and documents from the web and GPG-encrypts them for secure storage. Essentially, it's a more secure alternative to the "contact us" form found on a typical news site.
 
