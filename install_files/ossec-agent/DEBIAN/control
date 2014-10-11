@@ -9,5 +9,6 @@ Architecture: amd64
 Pre-Depends: debconf (>= 0.2.17)
 Depends: debhelper (>= 8.0.0),libc6 (>= 2.7),libssl1.0.0 (>= 1.0.0),expect,inotify-tools,adduser
 Conflicts: ossec-server
-Description: Installs a generic OSSEC agent
-  This package installs a generic OSSEC agent
+Description: Installs the securedrop pre-configured OSSEC agent
+  This package installs an OSSEC agent pre-configured for the
+  SecureDrop app server. 

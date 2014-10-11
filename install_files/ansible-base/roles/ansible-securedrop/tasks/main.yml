@@ -1,49 +1,73 @@
 ---
-## Install Tor
+# Install Tor
 - include: install_tor.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
+    - mon-staging
 
 - include: app_configure_tor_hidden_services.yml
   tags:
     - app
-    - staging
+    - app-staging
 
 - include: mon_configure_tor_hidden_services.yml
   tags:
     - mon
 
-## Install Interfaces
+# Install Interfaces
 - include: install_fpf_repo.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
+    - mon-staging
 
+# Install Interfaces
 - include: install_apache.yml
   tags:
     - app
-    - staging
+    - app-staging
 
 - include: create_app_dirs.yml
   tags:
     - app
-    - staging
+    - app-staging
     - development
 
 # Staging source wsgi file has logging enabled
 - include: staging_wsgi_files.yml
   tags:
-    - staging
+    - app-staging
 
 # The production source wsgi file has logging disabled
 - include: app_wsgi_files.yml
   tags:
     - app
 
-# Install the SD dependencies for either tor run from
+# Build FPF debian packages
+- include: build_securedrop_app_code_deb.yml
+  tags:
+    - debs
+    - app-code
+
+- include: download_ossec_archive.yml
+  tags:
+    - debs
+    - ossec
+
+- include: build_securedrop_ossec_agent_deb.yml
+  tags:
+    - debs
+    - ossec
+
+- include: build_securedrop_ossec_server_deb.yml
+  tags:
+    - debs
+    - ossec
+
+# Install the fpf packages from
 # securedrop_repo (development)
 # install from a local deb package found in the securedrop_repo (staging)
 # install securedrop from the fpf repo
@@ -55,24 +79,25 @@
 
 - include: staging_install_local_deb_pkgs.yml
   tags:
-    - staging
+    - app-staging
 
 - include: app_install_fpf_deb_pkgs.yml
   tags:
     - app
 
+# Rest of interface install
 # Create the app gpg keyring and databse
 - include: initialize_securedrop_app.yml
   tags:
     - app
-    - staging
+    - app-staging
     - development
 
 # For testing install the additional pip reqs.
 - include: dev_setup_xvfb_for_functional_tests.yml
   tags:
     - development
-    - staging
+    - app-staging
     - debs
 
 # Start the webserver for development
@@ -80,74 +105,117 @@
   tags:
     - development
 
-## Build FPF debian packages
-- include: build_securedrop_app_code_deb.yml
+# Monitor servers ossec procmail postfix config
+- include: mon_configure_tor_hidden_services.yml
   tags:
-    - debs
-    - app-code
+    - mon
+    - mon-staging
 
-## System Hardening
+- include: mon_install_ossec_server.yml
+  tags:
+    - mon
+    - mon-staging
+
+- include: mon_configure_ossec_gpg_alerts.yml
+  tags:
+    - mon
+    - mon-staging
+
+- include: mon_install_postfix.yml
+  tags:
+    - mon
+    - mon-staging
+
+# System Hardening
 - include: unattended_upgrades.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
-    - development
+    - mon-staging
 
 - include: sysctl.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
+    - mon-staging
 
 - include: create_users.yml
   tags:
     - app
-    - staging
+    - app-staging
+    - mon
+    - mon-staging
+
+- include: remove_kernel_modules.yml
+  tags:
+    - app
+    - app-staging
+    - mon
+    - mon-staging
 
 - include: apparmor_complain.yml
   tags:
-    - staging
-    - complain
+    - app-staging
+    - apparmor-complain
 
 - include: apparmor_enforce.yml
   tags:
     - app
-    - enforce
+    - apparmor-enforce
 
 - include: ssh.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
+    - mon-staging
+    - ssh
 
-- include: iptables.yml
+- include: harden_dns.yml
   tags:
     - app
-    - staging
+    - app-staging
+    - mon
+    - mon-staging
 
-- include: display_onions.yml
+- include: app_iptables.yml
   tags:
-    - staging
+    - app
+    - app-staging
+    - iptables
+
+- include: mon_iptables.yml
+  tags:
+    - mon
+    - mon-staging
+    - iptables
+
+- include: app_display_onions.yml
+  tags:
+    - app
+    - app-staging
     - tor
 
-- include: build_securedrop_ossec_agent_deb.yml
+- include: mon_display_onions.yml
   tags:
-    - debs
-    - ossec
-
-#- include: configure_ossec_server.yml
-#  tags:
-#    - mon
-#    - ossec
+    - mon
+    - mon-staging
+    - tor
 
 - include: from_fpf_repo_install_grsec.yml
   tags:
     - app
+    - app-staging
     - mon
-    - staging
+    - mon-staging
     - grsec
 
-- include: allow_direct_access_to_staging_for_tests.yml
+# Needs to run after installing grsec kernel
+- include: sysctl.yml
   tags:
-    - staging
+    - app
+    - app-staging
+    - mon
+    - mon-staging

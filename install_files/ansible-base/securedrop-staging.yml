@@ -1,9 +1,0 @@
----
-- hosts: [ 'staging', 'debs' ]
-
-  vars_files:
-    - securedrop-staging-conf.yml
-  roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }

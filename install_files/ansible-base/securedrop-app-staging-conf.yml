@@ -1,0 +1,40 @@
+---
+ssh_users: "vagrant"
+
+# initialize securedrop web application
+securedrop_header_image_path: "None"
+securedrop_app_gpg_public_key_path: "/vagrant/securedrop/test_journalist_key.pub"
+securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+
+# installing securedrop web application
+securedrop_repo: "/vagrant"
+securedrop_code: "/var/www/securedrop"
+securedrop_deb_path: "{{ securedrop_repo }}"
+securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
+prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/prod-requirements.txt"
+dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
+
+# Building the securedrop-app-code.deb package
+build_app_code_dir: "{{ securedrop_repo }}/securedrop"
+securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb extension
+
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ ossec_version }}.tar.gz"
+ossec_agent_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
+ossec_server_build_dir: "securedrop-ossec-server-2.8.1-amd64"
+ossec_server_deb_path: "{{ securedrop_repo }}"
+
+# To allow direct connections to source document interfaces for ease of testing
+apache_listening_address: "0.0.0.0"
+apache_allow_from: "all"
+source_apache_log_location: "/var/log/apache2/source-error.log"
+apache_logging_level: "info"
+
+# Installing securedrop-ossec-agent.deb package
+securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
+ossec_agent_deb_path: "{{ securedrop_repo }}"
+monitor_ip: "192.168.2.2"
+dns_server: "8.8.8.8"

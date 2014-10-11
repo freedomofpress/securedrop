@@ -1,0 +1,66 @@
+---
+- name: install inotify-tools package
+  apt: pkg=inotify-tools state=latest
+
+- name: download OSSEC
+  get_url:
+    url: http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz
+    dest: "{{ securedrop_repo }}/install_files/ansible-base/roles/ansible-securedrop/files"
+    sha256sum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+
+- name: copy OSSEC archive to /tmp
+  unarchive:
+    copy: yes
+    dest: /tmp/
+    src: "{{ ossec_archive }}"
+
+- name: ensure ossec /etc dir exists
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_version }}/etc
+
+- name: copy ossec server preloaded vars
+  template:
+    src: mon-preloaded-vars.conf
+    dest: /tmp/{{ ossec_version }}/etc/preloaded-vars.conf
+
+- name: create ossec server deb build dir
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_server_build_dir }}
+
+- name: create preloaded directory to unpack ossec
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_server_build_dir }}/var
+
+- name: run ossec installer
+  command: /tmp/{{ ossec_version }}/install.sh
+
+- name: copy OSSEC server DEBIAN dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-server/DEBIAN /tmp/{{ ossec_server_build_dir }}
+
+- name: copy OSSEC server usr dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-server/usr /tmp/{{ ossec_server_build_dir }}
+
+- name: copy OSSEC server var dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-server/var /tmp/{{ ossec_server_build_dir }}
+
+- name: copy OSSEC server etc dir to build dir
+  command: cp -R {{ securedrop_repo }}/install_files/ossec-server/etc /tmp/{{ ossec_server_build_dir }}
+
+- name: build securedrop-ossec-server deb package
+  command: dpkg-deb --build /tmp/{{ ossec_server_build_dir }}
+
+- name: move securedrop-ossec-server to repo
+  command: mv /tmp/{{ ossec_server_build_dir }}.deb {{ securedrop_repo }}
+
+- name: delete tmp build paths
+  file:
+    state: absent
+    dest: /tmp/{{ ossec_server_build_dir }}
+
+- name: delete tmp install paths
+  file:
+    state: absent
+    dest: /tmp/{{ ossec_version }}

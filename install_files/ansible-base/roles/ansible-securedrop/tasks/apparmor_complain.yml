@@ -1,9 +1,9 @@
 ---
 - name: ensure custom apparmor profiles are present
   copy: src={{ item }} dest=/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
+  with_items: app_apparmor_profiles
 
 - name: ensure custom appamror profiles are in complain mode
   command: "aa-complain /etc/apparmor.d/{{ item }}"
-  with_items: apparmor_profiles 
+  with_items: app_apparmor_profiles 
 

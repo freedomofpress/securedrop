@@ -1,0 +1,14 @@
+---
+- name: ensure load_iptables script is present
+  copy: src=load_iptables dest=/etc/network/if-up.d/load_iptables owner=root mode=0644
+
+- name: ensure iptables directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+    dest: /etc/network/iptables
+
+- name: ensure iptables rules_v4 file is present
+  template: src=app_rules_v4 dest=/etc/network/iptables/rules_v4 owner=root mode=0644

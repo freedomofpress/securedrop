@@ -1,6 +1,5 @@
 ---
 - name: ensure securedrop-app-code packages is installed from repo
-  apt: pkg="securedrop-app-code" state=latest
+  apt: pkg="{item}" state=latest
+  with_items: app_fpf_packages
 
-- name: ensure securedrop-ossec-agent packages is installed from repo
-  apt: pkg="securedrop-ossec-agent" state=latest

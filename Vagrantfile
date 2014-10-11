@@ -17,37 +17,35 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'debs', autostart: false do |debs|
-    debs.vm.box = "trusty64"
-    debs.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    debs.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
-      ansible.tags = "debs"
+  config.vm.define 'app-staging', autostart: false do |app_staging|
+    app_staging.vm.box = "trusty64"
+    app_staging.vm.network "forwarded_port", guest: 80, host: 8082
+    app_staging.vm.network "forwarded_port", guest: 8080, host: 8083
+    app_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    app_staging.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-app-staging.yml"
+      # options 'tor' 'grsec' 'iptables' 'ssh' 'tests' 'ossec' also takes an array
+      ansible.tags = [ 'app-staging', 'debs']
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
     end
-    debs.vm.provider "virtualbox" do |v|
-      v.name = "debs"
-    end
-  end
-
-  config.vm.define 'staging', autostart: false do |staging|
-    staging.vm.box = "trusty64"
-    staging.vm.network "forwarded_port", guest: 80, host: 8082
-    staging.vm.network "forwarded_port", guest: 8080, host: 8083
-    staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
-      ansible.tags = "staging"
-      ansible.skip_tags = [ 'grsec' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
-    end
-    staging.vm.provider "virtualbox" do |v|
-      v.name = "staging"
+    app_staging.vm.provider "virtualbox" do |v|
+      v.name = "app-staging"
     end
   end
 
-  config.vm.define 'mon', autostart: false do |mon|
-    mon.vm.box = "trusty64"
-    mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-  end
+  config.vm.define 'mon-staging', autostart: false do |mon_staging|
+    mon_staging.vm.box = "trusty64"
+    mon_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    mon_staging.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-mon-staging.yml"
+      # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-complain' 'apparmor-enforce' 'tests' also takes an array
+      ansible.tags = "mon-staging"
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
+    end
+    mon_staging.vm.provider "virtualbox" do |v|
+      v.name = "mon-staging"
+    end
+   end
 
   config.vm.define 'app', autostart: false do |app|
     app.vm.box = "trusty64"
@@ -55,9 +53,25 @@ Vagrant.configure("2") do |config|
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-app.yml"
       ansible.tags = "app"
+      # options 'ssh' 'iptables' 'tests' also takes an array
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
     end
     app.vm.provider "virtualbox" do |v|
       v.name = "app"
+    end
+  end
+
+  config.vm.define 'mon', autostart: false do |mon|
+    mon.vm.box = "trusty64"
+    mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    mon.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-mon.yml"
+      # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-compalin' 'apparmor-enforce' 'tests' also takes an array
+      ansible.tags = "mon"
+      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
+    end
+    mon.vm.provider "virtualbox" do |v|
+      v.name = "mon"
     end
   end
 

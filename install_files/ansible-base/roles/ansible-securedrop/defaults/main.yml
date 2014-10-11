@@ -103,6 +103,13 @@ dev_deps:
   - firefox
   - xvfb
 
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent
+
+mon_fpf_packages:
+  - securedrop-ossec-server
+
 # There only needs to be one ATHS for the document interface
 document_aths:
   - journalist
@@ -110,12 +117,16 @@ document_aths:
 # Build FPF deb packages
 
 ## System Hardening
-apparmor_profiles:
+app_apparmor_profiles:
   - usr.bin.tor
   - usr.lib.apache2.mpm-worker.apache2
 
 distro_id: "ubuntu"
 distro_codename: "trusty"
+
+disabled_kernel_modules:
+  - bluetooth
+  - iwlwifi
 
 sysctl_flags:
   - name: "net.ipv4.tcp_max_syn_backlog"
@@ -164,4 +175,3 @@ grub_pax:
   - /usr/sbin/grub-setup
   - /usr/bin/grub-script-check
   - /usr/bin/grub-mount
-

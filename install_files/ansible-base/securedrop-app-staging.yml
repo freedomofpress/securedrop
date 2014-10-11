@@ -1,8 +1,8 @@
 ---
-- hosts: [ 'mon' ]
+- hosts: [ 'app-staging', 'debs' ]
 
   vars_files:
-    - securedrop-mon-conf.yml
+    - securedrop-app-staging-conf.yml
   roles:
     - { role: ansible-securedrop,
         sudo: yes
