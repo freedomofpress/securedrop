@@ -429,7 +429,7 @@ def reply():
     filename = "{0}-reply.gpg".format(g.source.interaction_count)
 
     crypto_util.encrypt(msg,
-                        crypto_util.getkey(g.sid),
+                        [ crypto_util.getkey(g.sid), config.JOURNALIST_KEY ],
                         output=store.path(g.sid, filename))
 
     db_session.commit()
