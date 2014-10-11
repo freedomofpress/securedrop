@@ -586,3 +586,21 @@ table#users {
 table#users td {
   text-align: center;
 }
+
+#regenerate-codename-btn {
+  padding: 5px 5px;
+  color: #999;
+  font-size: 14px;
+}
+
+#regenerate-codename-btn:hover {
+  color:#333;
+}
+
+#regenerate-codename-btn:focus {
+  outline: 0;
+}
+
+#regenerate-codename-btn-label {
+  font-size: 10px;
+}
