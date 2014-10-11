@@ -1,4 +1,7 @@
 ---
+- name: install pip
+  apt: pkg=python-pip state=latest
+
 - name: install pip install wheel
   pip: name=wheel
 
