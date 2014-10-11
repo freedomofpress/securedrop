@@ -1,5 +1,5 @@
 ---
-## Install Tor
+# Install Tor
 - include: install_tor.yml
   tags:
     - app
@@ -16,7 +16,7 @@
   tags:
     - mon
 
-## Install Interfaces
+# Install Interfaces
 - include: install_fpf_repo.yml
   tags:
     - app
@@ -24,7 +24,7 @@
     - mon
     - mon-staging
 
-## Install Interfaces
+# Install Interfaces
 - include: install_apache.yml
   tags:
     - app
@@ -46,15 +46,16 @@
   tags:
     - app
 
-## Build FPF debian packages
+# Build FPF debian packages
 - include: build_securedrop_app_code_deb.yml
   tags:
     - debs
     - app-code
 
-#- include: download_ossec_archive.yml
-#    - debs
-#    - ossec
+- include: download_ossec_archive.yml
+  tags:
+    - debs
+    - ossec
 
 - include: build_securedrop_ossec_agent_deb.yml
   tags:
@@ -104,7 +105,7 @@
   tags:
     - development
 
-## Monitor servers ossec procmail postfix config
+# Monitor servers ossec procmail postfix config
 - include: mon_configure_tor_hidden_services.yml
   tags:
     - mon
@@ -125,7 +126,7 @@
     - mon
     - mon-staging
 
-## System Hardening
+# System Hardening
 - include: unattended_upgrades.yml
   tags:
     - app

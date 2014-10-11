@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
     end
     app_staging.vm.provider "virtualbox" do |v|
-      v.name = "staging"
+      v.name = "app-staging"
     end
   end
 
@@ -38,12 +38,12 @@ Vagrant.configure("2") do |config|
     mon_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     mon_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-mon-staging.yml"
-      # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-compalin' 'apparmor-enforce' 'tests' also takes an array
+      # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-complain' 'apparmor-enforce' 'tests' also takes an array
       ansible.tags = "mon-staging"
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
     end
     mon_staging.vm.provider "virtualbox" do |v|
-      v.name = "mon"
+      v.name = "mon-staging"
     end
    end
 

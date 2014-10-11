@@ -1,3 +1,6 @@
 ---
-- name: download ossec archive to securedrop repo
-  get_url: url={{ ossec_download_url }} dest={{ securedrop_repo }}/{{ ossec_version }}.tar.gz sha256sum={{ ossec_download_checksum }}
+- name: download OSSEC
+  get_url:
+    url: http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz
+    dest: "{{ securedrop_repo }}/install_files/ansible-base/roles/ansible-securedrop/files"
+    sha256sum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
