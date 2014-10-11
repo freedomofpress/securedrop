@@ -368,10 +368,12 @@ p#codename {
 }
 #cols li.source {
   background: #f3f3f3;
-  border-bottom: 1px solid #f3f3f3;
-  padding: 5px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
   text-align: left;
+}
+#cols li.source:last-child {
+  border-bottom: none;
 }
 #cols li.source .date {
   float: right;
