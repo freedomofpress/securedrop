@@ -92,7 +92,7 @@ Vagrant.configure("2") do |config|
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
     provider.token = SNAP_API_TOKEN
-    provider.image = 'snapVagrantUser'
+    provider.image = 'snapVagrantSSHkey'
     provider.region = 'nyc2'
     provider.size = '512mb'
   end
