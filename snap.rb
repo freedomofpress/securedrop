@@ -1,3 +1,3 @@
 module MyVars
-  snap_api_token = ''
+  SNAP_API_TOKEN = ''
 end
