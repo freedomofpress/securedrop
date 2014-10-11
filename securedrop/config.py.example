@@ -11,9 +11,11 @@ class FlaskConfig(object):
 # TODO consider using salts instead: http://pythonhosted.org//itsdangerous/#the-salt
 class SourceInterfaceFlaskConfig(FlaskConfig):
     SECRET_KEY = '{{ source_secret_key.stdout }}'
+    SESSION_COOKIE_NAME = "ss"
 
 class JournalistInterfaceFlaskConfig(FlaskConfig):
     SECRET_KEY = '{{ journalist_secret_key.stdout }}'
+    SESSION_COOKIE_NAME = "js"
 
 # These files are in the same directory as config.py. Use absolute paths to
 # avoid potential problems with the test runner - otherwise, you have to be in
@@ -52,9 +54,6 @@ if env == 'prod':
 elif env == 'dev':
     # Enable Flask's debugger for development
     FlaskConfig.DEBUG = True
-    # Hack to get around cookies not considering the port as part of the origin
-    SourceInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'source_session'
-    JournalistInterfaceFlaskConfig.SESSION_COOKIE_NAME = 'journalist_session'
 elif env == 'test':
     FlaskConfig.TESTING = True
     # Disable CSRF checks to make writing tests easier

@@ -13,8 +13,8 @@
 
 # Rate limit ssh connections coming from the tor network
 # Load before generic loopback rules
--A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
--A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thur tor"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thru tor"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thru tor"
 
 # Drop all other outbound traffic by the tor user.
 # Load before generic loopback rules
@@ -68,4 +68,5 @@
 -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-ip-options --log-uid --log-level 4
 -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-ip-options --log-uid --log-level 4
 -A LOGNDROP -j DROP
+
 COMMIT

@@ -1,11 +1,10 @@
 ---
 # Travis runs as root
 securedrop_user: "root"
-# Travis base directory for the ansible playbook is the ansible-base directory. All paths should be relative to that.
-securedrop_repo: "../.."
-securedrop_code: "../../securedrop"
+securedrop_repo: "{{ lookup('env', 'TRAVIS_BUILD_DIR') }}"
+securedrop_code: "{{ securedrop_repo }}/securedrop"
 securedrop_header_image_path: "None"
-securedrop_app_gpg_public_key_path: "../../securedrop/test_journalist_key.pub"
+securedrop_app_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
-dev_pip_requirements: "../../securedrop/requirements/dev-requirements.txt"
-prod_pip_requirements: "../../securedrop/requirements/prod-requirements.txt"
+dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
+prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/prod-requirements.txt"

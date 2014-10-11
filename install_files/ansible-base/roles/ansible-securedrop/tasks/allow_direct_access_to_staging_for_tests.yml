@@ -1,0 +1,17 @@
+---
+- name: allow direct SSH access in sshd config
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "ListenAddress 127.0.0.1:22"
+    line: "ListenAddress 0.0.0.0:22"
+  notify:
+    - restart ssh
+
+- name: allow direct SSH acccess in iptables rules
+  lineinfile:
+    dest: /etc/network/iptables/rules_v4
+    # last line in the initial *filter stanza (which must come before any rules)
+    insertafter: "^:LOGNDROP"
+    line: "\n# Allow direct SSH access (STAGING ONLY)\n-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  notify:
+    - reload iptables rules

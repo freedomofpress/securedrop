@@ -12,6 +12,11 @@
     - app
     - app-staging
 
+- include: mon_configure_tor_hidden_services.yml
+  tags:
+    - mon
+
+## Install Interfaces
 - include: install_fpf_repo.yml
   tags:
     - app
@@ -123,7 +128,6 @@
 ## System Hardening
 - include: unattended_upgrades.yml
   tags:
-    - development
     - app
     - app-staging
     - mon
