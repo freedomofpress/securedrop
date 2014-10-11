@@ -49,8 +49,7 @@
 ## Build FPF debian packages
 - include: build_securedrop_app_code_deb.yml
   tags:
-    - debs
-    - app-code
+    - app-debs
 
 #- include: download_ossec_archive.yml
 #    - debs
@@ -58,12 +57,12 @@
 
 - include: build_securedrop_ossec_agent_deb.yml
   tags:
-    - debs
+    - app-debs
     - ossec
 
 - include: build_securedrop_ossec_server_deb.yml
   tags:
-    - debs
+    - mon-debs
     - ossec
 
 # Install the fpf packages from
@@ -74,7 +73,6 @@
 - include: dev_install_pip_apt_pkgs.yml
   tags:
     - development
-    - debs
 
 - include: staging_install_local_deb_pkgs.yml
   tags:
@@ -97,7 +95,6 @@
   tags:
     - development
     - app-staging
-    - debs
 
 # Start the webserver for development
 - include: manage_py_start.yml

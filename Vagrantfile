@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     app_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-app-staging.yml"
       # options 'tor' 'grsec' 'iptables' 'ssh' 'tests' 'ossec' also takes an array
-      ansible.tags = [ 'app-staging', 'debs']
+      ansible.tags = [ 'app-staging', 'app-debs']
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
     end
     app_staging.vm.provider "virtualbox" do |v|
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     mon_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-mon-staging.yml"
       # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-compalin' 'apparmor-enforce' 'tests' also takes an array
-      ansible.tags = "mon-staging"
+      ansible.tags = [ "mon-staging", "mon-debs" ]
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
     end
     mon_staging.vm.provider "virtualbox" do |v|
