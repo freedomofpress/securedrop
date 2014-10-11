@@ -6,55 +6,60 @@
   <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
   <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">
-      <ul id="cols" class="plain">
-        <p class="fa">Starred</p>
-        {% for source in starred %}
-          {% set docs = source.documents_messages_count()['documents'] %}
-          {% set msgs = source.documents_messages_count()['messages'] %}
-          <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
-            <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat(relative=True) }}</time>
-            <div class="designation">
-              <button class="button-star starred" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
-              <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
-              <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
-            </div>
-            <div class="submission-count">
-              <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
-              <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
-              {% if source.num_unread > 0 %}
-                <span class="unread">
-                  <a class="btn small" href='/download_unread/{{ source.filesystem_id }}'><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
-                </span>
-              {% endif %}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+      {% if starred %}
+        <ul id="cols" class="plain">
+          <p class="fa">Starred</p>
+          {% for source in starred %}
+            {% set docs = source.documents_messages_count()['documents'] %}
+            {% set msgs = source.documents_messages_count()['messages'] %}
+            <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
+              <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat(relative=True) }}</time>
+              <div class="designation">
+                <button class="button-star starred" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
+                <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+                <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
+              </div>
+              <div class="submission-count">
+                <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
+                <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
+                {% if source.num_unread > 0 %}
+                  <span class="unread">
+                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}'><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+                  </span>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
-      <ul id="cols" class="plain">
-        <p class="fa">Un-Starred</p>
-        {% for source in unstarred %}
-          {% set docs = source.documents_messages_count()['documents'] %}
-          {% set msgs = source.documents_messages_count()['messages'] %}
-          <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
-            <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat(relative=True) }}</time>
-            <div class="designation">
-              <button class="button-star un-starred" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
-              <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
-              <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
-            </div>
-            <div class="submission-count">
-              <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
-              <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
-              {% if source.num_unread > 0 %}
-                <span class="unread">
-                  <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' ><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
-                </span>
-              {% endif %}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+      {% if unstarred %}
+        <ul id="cols" class="plain">
+          <p class="fa">Un-Starred</p>
+          {% for source in unstarred %}
+            {% set docs = source.documents_messages_count()['documents'] %}
+            {% set msgs = source.documents_messages_count()['messages'] %}
+            <li class="source" data-source-designation="{{ source.journalist_designation|lower }}">
+              <time class="date" title="{{ source.last_updated|datetimeformat }}" datetime="{{ source.last_updated }}">{{ source.last_updated|datetimeformat(relative=True) }}</time>
+              <div class="designation">
+                <button class="button-star un-starred" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
+                <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+                <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
+              </div>
+              <div class="submission-count">
+                <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
+                <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
+                {% if source.num_unread > 0 %}
+                  <span class="unread">
+                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' ><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+                  </span>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <p>
         <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
