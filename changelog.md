@@ -92,7 +92,7 @@ functions (ex: storing codenames)
 * Wrote detailed documentation
 * Improved installation process
 * Wrote unit & integration tests
-* Improved code name wordlist, based on Diceware
+* Improved codename wordlist, based on Diceware
 * Use bcrypt instead of SHA
 * Removed VPN, replaced with authenticated Tor hidden service
 * Freedom of the Press Foundation taking over project

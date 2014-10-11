@@ -139,21 +139,26 @@ def get_key_by_fingerprint(fingerprint):
     return matches[0] if matches else None
 
 
-def encrypt(fp, s, output=None):
-    r"""
-    >>> key = genkeypair('randomid', 'randomid')
-    >>> encrypt('randomid', "Goodbye, cruel world!")[:45]
-    '-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v2'
-    """
+def encrypt(plaintext, fingerprints, output=None):
+    # Verify the output path
     if output:
         store.verify(output)
-    fp = fp.replace(' ', '')
-    if isinstance(s, unicode):
-        s = s.encode('utf8')
-    if isinstance(s, str):
-        out = gpg.encrypt(s, fp, output=output, always_trust=True)
-    else:
-        out = gpg.encrypt_file(s, fp, output=output, always_trust=True)
+
+    # Remove any spaces from provided fingerpints
+    # GPG outputs fingerprints with spaces for readability, but requires the
+    # spaces to be removed when using fingerprints to specify recipients.
+    if not isinstance(fingerprints, (list, tuple)):
+        fingerprints = [fingerprints,]
+    fingerprints = [ fpr.replace(' ', '') for fpr in fingerprints ]
+
+    if isinstance(plaintext, unicode):
+        plaintext = plaintext.encode('utf8')
+
+    encrypt_fn = gpg.encrypt if isinstance(plaintext, str) else gpg.encrypt_file
+    out = encrypt_fn(plaintext,
+                     *fingerprints,
+                     output=output,
+                     always_trust=True)
     if out.ok:
         return out.data
     else:
