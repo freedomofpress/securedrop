@@ -352,7 +352,7 @@ class TestIntegration(unittest.TestCase):
 
             if not expected_success:
                 # there should be no reply
-                self.assertTrue("You have received a reply." not in rv.data)
+                self.assertNotIn("You have received a reply.", rv.data)
             else:
                 self.assertIn(
                     "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
