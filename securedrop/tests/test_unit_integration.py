@@ -6,6 +6,8 @@ import re
 from cStringIO import StringIO
 import zipfile
 from time import sleep
+import tempfile
+import shutil
 
 import mock
 
@@ -221,6 +223,37 @@ class TestIntegration(unittest.TestCase):
     def test_reply_unicode(self):
         self.helper_test_reply("Teşekkürler", True)
 
+    def _can_decrypt_with_key(self, msg, key_fpr, passphrase=None):
+        """
+        Test that the given GPG message can be decrypted with the given key
+        (identified by its fingerprint).
+        """
+        # GPG does not provide a way to specify which key to use to decrypt a
+        # message. Since the default keyring that we use has both the
+        # `config.JOURNALIST_KEY` and all of the reply keypairs, there's no way
+        # to use it to test whether a message is decryptable with a specific
+        # key.
+        gpg_tmp_dir = tempfile.mkdtemp()
+        gpg = gnupg.GPG(homedir=gpg_tmp_dir)
+
+        # Export the key of interest from the application's keyring
+        pubkey = self.gpg.export_keys(key_fpr)
+        seckey = self.gpg.export_keys(key_fpr, secret=True)
+        # Import it into our isolated temporary GPG directory
+        for key in (pubkey, seckey):
+            gpg.import_keys(key)
+
+        # Attempt decryption with the given key
+        if passphrase:
+            passphrase = crypto_util.hash_codename(passphrase,
+                    salt=crypto_util.SCRYPT_GPG_PEPPER)
+        decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
+        self.assertTrue(decrypted_data.ok,
+                "Could not decrypt msg with key, gpg says: {}".format(decrypted_data.status))
+
+        # We have to clean up the temporary GPG dir
+        shutil.rmtree(gpg_tmp_dir)
+
     def helper_test_reply(self, test_reply, expected_success=True):
         test_msg = "This is a test message."
 
@@ -289,10 +322,24 @@ class TestIntegration(unittest.TestCase):
             rv = journalist_app.get(col_url)
             self.assertIn("reply-", rv.data)
 
-        _block_on_reply_keypair_gen(codename)
+        soup = BeautifulSoup(rv.data)
+
+        # Download the reply and verify that it can be decrypted with the
+        # journalist's key as well as the source's reply key
+        sid = soup.select('input[name="sid"]')[0]['value']
+        checkbox_values = [ soup.select('input[name="doc_names_selected"]')[1]['value'] ]
+        rv = self.journalist_app.post('/bulk', data=dict(
+            sid=sid,
+            action='download',
+            doc_names_selected=checkbox_values
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        pgp_msg_re = r'-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----'
+        pgp_msg = re.search(pgp_msg_re, rv.data, re.MULTILINE|re.DOTALL).group(0)
+        self._can_decrypt_with_key(pgp_msg, config.JOURNALIST_KEY)
+        self._can_decrypt_with_key(pgp_msg, crypto_util.getkey(sid), codename)
 
         # Test deleting reply on the journalist interface
-        soup = BeautifulSoup(rv.data)
         last_reply_number = len(soup.select('input[name="doc_names_selected"]')) - 1
         self.helper_filenames_delete(soup, last_reply_number)
 
