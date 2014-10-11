@@ -187,7 +187,7 @@ button.small, a.btn.small, .btn.small {
   padding: 3px 10px;
   font-size: small;
   color: #6F6F6F;
-  margin-left: 5px;
+  margin-right: 2px;
 }
 .select:hover {
   border-color: #999;

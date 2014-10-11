@@ -6,6 +6,14 @@
   <p>Here are the various collections of documents that have been submitted, with the most recently updated first:</p>
   <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <p>
+        <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
+        <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
+        <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
+        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> Un-star Selected</button>
+      </p>
+
       {% if starred %}
         <ul id="cols" class="plain">
           <p class="fa">Starred</p>
@@ -60,13 +68,6 @@
         </ul>
       {% endif %}
 
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-      <p>
-        <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
-        <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
-        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> Un-star Selected</button>
-        <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
-      </p>
     </form>
   </div>
 {% else %}
