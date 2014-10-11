@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
 
   # This is needed for the Snap-ci to provision the digital ocean vps
   config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = "$SNAP_WORKING_DIR/.ssh/id_rsa"
+    override.ssh.private_key_path = "/var/snap-ci/repo/.ssh/id_rsa"
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
     provider.token = "$snap_api_token"
