@@ -49,7 +49,7 @@ class TestSource(TestCase):
             session_codename = session['codename']
         self.assertIn("Remember this code and keep it secret", rv.data)
         self.assertIn(
-            "To protect your identity, we're assigning you a unique code name.",
+            "To protect your identity, we're assigning you a unique codename.",
             rv.data)
         codename = self._find_codename(rv.data)
         # default codename length is 8 words

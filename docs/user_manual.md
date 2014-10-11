@@ -20,11 +20,11 @@ The page should now look similar to the screenshot below. If this is the first t
 
 ![Source Interface](/docs/images/manual/source3.png)
 
-You should now see a screen that shows the unique code name that SecureDrop has generated for you. In the example screenshot below the codename is `bough fisk jed sold essen nail 1 prissy`, but yours will be different. It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down and keep it in a safe place, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses.
+You should now see a screen that shows the unique codename that SecureDrop has generated for you. In the example screenshot below the codename is `bough fisk jed sold essen nail 1 prissy`, but yours will be different. It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down and keep it in a safe place, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses.
 
-SecureDrop allows you to choose the length of your code name, in case you want to create a longer code name for extra security. Once you have generated a code name and put it somewhere safe, click `Continue`.
+SecureDrop allows you to choose the length of your codename, in case you want to create a longer codename for extra security. Once you have generated a codename and put it somewhere safe, click `Continue`.
 
-![Memorizing your code name](/docs/images/manual/source4.png)
+![Memorizing your codename](/docs/images/manual/source4.png)
 
 You will next be brought to the submission interface, where you may upload a document, enter a message to send to journalists, or both. You can only submit one document at a time, so you may want to combine several files into a zip archive if necessary. When your submission is ready, click `Submit`.
 
@@ -38,7 +38,7 @@ If you have already submitted a document and would like to check for responses, 
 
 ![Source Interface](/docs/images/manual/source7.png)
 
-The next page will ask for your secret code name. Enter it and click `Continue`.
+The next page will ask for your secret codename. Enter it and click `Continue`.
 
 ![Check for response](/docs/images/manual/source8.png)
 
@@ -88,7 +88,7 @@ Each journalist has their own authenticated Tor hidden service URL to login to t
 
 * Click on the SecureDrop `Document Interface` link and you will be automatically logged-in. Now go down to the first screen shot below.
 
-If any sources have uploaded documents or sent you message, they will be listed on the homepage by a code name. **Note: The code name the journalists see is different than the code name that sources see.**
+If any sources have uploaded documents or sent you message, they will be listed on the homepage by a codename. **Note: The codename the journalists see is different than the codename that sources see.**
 
 ![Document Interface](/docs/images/manual/document1.png)
 
@@ -128,7 +128,7 @@ If the default application doesn't work, you can right-click on the document and
 
 ### Interacting With Sources
 
-Click on the code name to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
+Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's PGP public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
 
 ![Read documents](/docs/images/manual/document2.png)
 
