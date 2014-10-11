@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Added snap.rb file holds the digital ocean api token values
+# so we do not accidently check them into git
+
+include 'snap.rb'
+include MyVars
+
 Vagrant.configure("2") do |config|
   config.vm.define 'development', primary: true do |development|
     development.vm.box = "trusty64"
@@ -78,5 +84,15 @@ Vagrant.configure("2") do |config|
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
+  end
+
+  # This is needed for the Snap-ci to provision the digital ocean vps
+  config.vm.provider :digital_ocean do |provider, override|
+    override.ssh.private_key_path = '~/.ssh/id_rsa'
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+
+    provider.region = 'nyc2'
+    provider.size = '512mb'
   end
 end
