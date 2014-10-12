@@ -18,6 +18,8 @@
     <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
     <div class="document-actions">
       <div id='select-container'></div>
+      <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
+      <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
     </div>
     <form action="/bulk" method="post">
       <ul id="submissions" class="plain submissions">
@@ -41,10 +43,6 @@
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-      <div class="document-actions">
-        <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-        <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
-      </div>
     </form>
   {% else %}
     <p><br />No documents to display.</p>

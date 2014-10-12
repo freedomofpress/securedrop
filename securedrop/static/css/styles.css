@@ -606,3 +606,12 @@ table#users td {
 #regenerate-codename-btn-label {
   font-size: 10px;
 }
+
+div#select-container {
+  display:inline;
+}
+
+div.document-actions button {
+  font-size: 14px;
+  padding: 6px 15px;
+}
