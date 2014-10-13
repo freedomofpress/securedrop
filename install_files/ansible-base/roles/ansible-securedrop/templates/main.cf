@@ -18,6 +18,10 @@ biff = no
 append_dot_mydomain = no
 readme_directory = no
 
+# Used to strip unneeded smtp email headers of alerts
+# header checks are in /etc/postfix/header_checks
+smtp_header_checks = regexp:/etc/postfix/header_checks
+
 # Used to setup emailing alerts with gpg
 mailbox_command = /usr/bin/procmail
 
