@@ -142,7 +142,7 @@ button.plain {
 
 button.plain:hover {
   background : none;
-  color #333;
+  color: #333;
   border: 1px solid transparent;
 }
 
