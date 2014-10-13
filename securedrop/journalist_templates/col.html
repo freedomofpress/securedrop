@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-single">
-  <p class="breadcrumbs"><a href="/">All Sources</a> <i class="fa fa-chevron-right"></i> <strong>{{ codename }}</strong></p>
-  <hr class="no-line" />
+
+  <form action='/regenerate-code' method='post' id="regnerate-code">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="sid" value="{{ sid }}">
+
+    <p class="breadcrumbs">
+      <a href="/">All Sources</a>
+      <i class="fa fa-chevron-right"></i>
+      <strong>{{ codename }}</strong>
+      <button type="submit" title="Generate a new random codename for this source" class="plain" id="regenerate-codename-btn"><i class="fa fa-refresh"></i> <span id="regenerate-codename-btn-label">Change codename</span></button>
+    </p>
+  </form>
 
   {% if docs %}
     <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
     <div class="document-actions">
       <div id='select-container'></div>
+      <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
+      <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
     </div>
     <form action="/bulk" method="post">
       <ul id="submissions" class="plain submissions">
@@ -31,10 +43,6 @@
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-      <div class="document-actions">
-        <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-        <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
-      </div>
     </form>
   {% else %}
     <p><br />No documents to display.</p>
@@ -63,15 +71,6 @@
       <button id="flag-button" class="button-custom" type="submit"><i class="fa fa-flag"></i> Flag this source for reply</button>
     </form>
   {% endif %}
-  <hr class="no-line" />
-  <hr class="cut-out" />
-  <hr class="no-line" />
-  <h3><i class="fa fa-refresh"></i> Code Name</h3>
-  <form action='/regenerate-code' method='post' class=''>
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-    <input type="hidden" name="sid" value="{{ sid }}">
-    <input type="submit" value="Generate a new codename for this source" class="btn">
-  </form>
   <hr class="no-line" />
   <hr class="cut-out" />
   <p>Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
