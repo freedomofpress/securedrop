@@ -7,8 +7,6 @@
   notify:
    - restart ssh
 
-- meta: flush_handlers
-
 - name: ensure sshd is running
   service: name=ssh state=running
 

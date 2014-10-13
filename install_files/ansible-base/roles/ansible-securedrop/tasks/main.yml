@@ -196,6 +196,11 @@
     - mon-staging
     - iptables
 
+- include: allow_direct_access_to_staging_for_tests.yml
+  tags:
+    - app-staging
+    - mon-staging
+
 - include: app_display_onions.yml
   tags:
     - app
