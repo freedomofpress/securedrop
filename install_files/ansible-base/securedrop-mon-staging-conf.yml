@@ -1,23 +1,22 @@
 ---
 ssh_users: "vagrant"
 
-
 # installing securedrop web application
 securedrop_repo: "/vagrant"
-
 
 # Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
 ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
 ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
 ossec_version: "ossec-hids-2.8.1"
-ossec_archive: "{{ ossec_version }}.tar.gz"
-ossec_agent_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
-ossec_server_build_dir: "securedrop-ossec-server-2.8.1-amd64"
-ossec_server_deb_path: "{{ securedrop_repo }}"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_build_dir: "securedrop-ossec-server-2.8.1-amd64"
+ossec_deb_path: "{{ securedrop_repo }}"
+ossec_preloaded_vars: "mon-preloaded-vars.conf"
+ossec_package_name: "ossec-server"
 
 # Installing securedrop-ossec-server.deb package
-securedrop_ossec_server_deb: "securedrop-ossec-server-2.8.1-amd64" # do not include .deb extension
-ossec_server_deb_path: "{{ securedrop_repo }}"
+securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.1-amd64" # do not include .deb extension
+ossec_deb_path: "{{ securedrop_repo }}"
 ossec_alert_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
 ossec_gpg_fpr: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 ossec_alert_email: "ossec@ossec.test"

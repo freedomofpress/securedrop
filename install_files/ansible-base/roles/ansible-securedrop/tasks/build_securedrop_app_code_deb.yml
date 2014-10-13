@@ -1,6 +1,7 @@
 ---
-- name: install pip
-  apt: pkg=python-pip state=latest
+- name: install deb packages required to build securedrop-app-code.deb
+  apt: pkg="{{ item }}" state=latest
+  with_items: dev_deps
 
 - name: install pip install wheel
   pip: name=wheel
@@ -32,7 +33,7 @@
     dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
 
 - name: make pip wheel archive for our debian package requirements
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse pip wheel -r {{ prod_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
+  command: pip wheel -r {{ prod_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
 
 #- name: copy apparmor profiles to build path
 #  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
@@ -53,3 +54,6 @@
   file:
     state: absent
     dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
+
+- name: Install local securedrop-app-code deb package
+  apt: deb="{{ securedrop_deb_path }}/{{ securedrop_app_code_deb }}.deb"

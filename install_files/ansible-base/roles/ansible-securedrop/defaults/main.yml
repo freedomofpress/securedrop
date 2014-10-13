@@ -100,6 +100,22 @@ dev_deps:
   - firefox
   - xvfb
 
+ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+
+ossec_server_deb_pkg_dependencies:
+    - inotify-tools
+    - procmail
+    - postfix
+    - mailutils
+    - adduser
+    - expect
+    - libc6
+
 app_fpf_packages:
   - securedrop-app-code
   - securedrop-ossec-agent
@@ -168,8 +184,6 @@ sysctl_flags:
     value: "1"
 
 ossec_group: "ossec"
-ossec_config_path: "{{ ossec_root }}/etc/ossec.conf"
-ossec_package_name: "ossec-agent"
 
 # grsec vars
 grub_pax:

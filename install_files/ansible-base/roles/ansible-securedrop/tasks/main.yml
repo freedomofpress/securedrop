@@ -53,23 +53,18 @@
   tags:
     - app
 
+- include: dev_install_pip_apt_pkgs.yml
+  tags:
+    - development
+
 # Build FPF debian packages
 - include: build_securedrop_app_code_deb.yml
   tags:
     - app-debs
 
-- include: download_ossec_archive.yml
-  tags:
-    - debs
-    - ossec
-
-- include: build_securedrop_ossec_agent_deb.yml
+- include: build_securedrop_ossec_deb.yml
   tags:
     - app-debs
-    - ossec
-
-- include: build_securedrop_ossec_server_deb.yml
-  tags:
     - mon-debs
     - ossec
 
@@ -78,17 +73,13 @@
 # install from a local deb package found in the securedrop_repo (staging)
 # install securedrop from the fpf repo
 
-- include: dev_install_pip_apt_pkgs.yml
-  tags:
-    - development
-
-- include: staging_install_local_deb_pkgs.yml
-  tags:
-    - app-staging
-
 - include: app_install_fpf_deb_pkgs.yml
   tags:
     - app
+
+- include: mon_install_fpf_deb_pkgs.yml
+  tags:
+    - mon
 
 # Rest of interface install
 # Create the app gpg keyring and databse
@@ -115,11 +106,6 @@
     - mon
     - mon-staging
 
-- include: mon_install_ossec_server.yml
-  tags:
-    - mon
-    - mon-staging
-
 - include: mon_configure_ossec_gpg_alerts.yml
   tags:
     - mon
@@ -132,13 +118,6 @@
 
 # System Hardening
 - include: unattended_upgrades.yml
-  tags:
-    - app
-    - app-staging
-    - mon
-    - mon-staging
-
-- include: sysctl.yml
   tags:
     - app
     - app-staging

@@ -1,0 +1,8 @@
+---
+- name: ensure ossec server required dependencies are installed
+  apt: pkg="{ item }" state=latest
+  with_items: ossec_server_deb_pkg_dependencies
+ 
+- name: ensure securedrop-app-code packages is installed from repo
+  apt: pkg="{ item }" state=latest
+  with_items: mon_fpf_packages
