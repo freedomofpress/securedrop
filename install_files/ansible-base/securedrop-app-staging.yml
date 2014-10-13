@@ -2,7 +2,9 @@
 - hosts: [ 'app-staging' ]
 
   vars_files:
+    - host_vars/app.yml
     - securedrop-app-staging-conf.yml
+    #    - sensitive.yml
 
   roles:
     - common

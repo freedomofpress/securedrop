@@ -1,4 +1,10 @@
 ---
+  # Since production environment do not have dhcp or dns set create etc hosts
+  # entries
+- include: set_etc_hosts_for_prod_env.yml
+  tags:
+    - static-hosts
+
 - include: install_tor.yml
 
   # should be able to move to common

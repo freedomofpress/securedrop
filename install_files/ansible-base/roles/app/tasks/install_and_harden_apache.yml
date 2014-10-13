@@ -42,4 +42,3 @@
   with_items: apache_sites
   notify:
     - restart apache2
-

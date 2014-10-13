@@ -1,10 +1,4 @@
 ---
-  # Since production environment do not have dhcp or dns set create etc hosts
-  # entries
-- include: set_etc_hosts_for_prod_env.yml
-  tags:
-    - not-snap
-
   # Repo and tor are installed in common role
 - include: app_configure_tor_hidden_services.yml
 
@@ -12,7 +6,7 @@
 
 - include: initialize_securedrop_app.yml
 
-- include: harden_apache.yml
+- include: install_and_harden_apache.yml
 
 - include: app_iptables.yml
 

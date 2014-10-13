@@ -77,7 +77,11 @@
   # If using a custom header overwrite the existing one
   # dpkg will not override it on upgrades
   # otherwise will need to templatizing the apparmor profile
-- name: copy interface header to web app path
+- name: check to see if header file is present
+  stat: path="{{ securedrop_header_image_path}}"
+  register: header
+
+- name: if header file is present copy interface header to web app path
   copy:
     src: "{{ securedrop_header_image_path }}"
     dest: "{{ securedrop_code }}/static/i/securedrop.png"
@@ -85,3 +89,4 @@
     group: "{{ securedrop_user }}"
     mode: 400
     backup: yes
+  when: header.stat.exists

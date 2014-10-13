@@ -1,8 +1,2 @@
 ---
-ip_info:
-  - ip: "{{ monitor_ip }}"
-    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
-  - ip: "{{ app_ip }}"
-    hostname: "{{ app_ip }}"
-
 

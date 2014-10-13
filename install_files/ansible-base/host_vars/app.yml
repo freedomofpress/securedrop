@@ -1,0 +1,119 @@
+---
+# Interface defaults
+# Development will override the securedrop_data and securedrop_user variables
+# listed in this file
+securedrop_user: "www-data"
+securedrop_data: "/var/lib/securedrop"
+securedrop_code: "/var/www/securedrop"
+
+## Tor
+tor_wait_for_hidden_services: yes
+tor_hidden_services_parent_dir: "/var/lib/tor/services"
+tor_user: debian-tor
+tor_DataDirectory: /var/lib/tor
+securedrop_tor_user: "debian-tor"
+
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent
+
+# Configuring the tor hidden services
+app_tor_instances:
+  - ssh
+  - source
+  - document
+
+apache_user: "www-data"
+
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_files:
+  - 'apache2.conf'
+  - 'security'
+
+apache_templates:
+  - 'ports.conf'
+  - 'sites-available/document.conf'
+  - 'sites-available/source.conf'
+
+apache_modules:
+  - access_compat
+  - authn_core
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - wsgi
+  - xsendfile
+
+## TODO instead of hard coding disabled modules find intersection of
+#apache_modules vs enabled modules
+apache_disabled_modules:
+  - auth_basic
+  - authn_file
+  - autoindex
+  - env
+  - setenvif
+  - status
+
+apache_sites:
+  - source
+  - document
+
+app_deps:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils
+
+apparmor_profiles:
+  - usr.bin.tor
+  - usr.lib.apache2.mpm-worker.apache2
+
+dev_deps:
+  - libssl-dev
+  - python-dev
+  - python-pip
+  - firefox
+  - xvfb
+
+build_ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+
+ossec_group: "ossec"
+
+ossec_apt_dependencies:
+  - libc6
+  - libssl1.0.0
+  - expect
+  - inotify-tools
+  - adduser
+
+# A alias is used by the app OSSEC agent's config. This way ansible doesn't
+# need to modify a file that is being managed by  dpkg. This should ensure that
+# any updates FPF push to the OSSEC configs will not require manual
+# intervention.
+ip_info:
+  - ip: "{{ monitor_ip }}"
+    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+  - ip: "{{ app_ip }}"
+    hostname: "{{ app_ip }}"
