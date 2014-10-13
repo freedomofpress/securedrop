@@ -1,4 +1,11 @@
 ---
+# Since production environment do not have dhcp or dns set create etc hosts
+# entries
+- include: set_etc_hosts_for_prod_env.yml
+  tags:
+    - app
+    - mon
+
 # Install Tor
 - include: install_tor.yml
   tags:

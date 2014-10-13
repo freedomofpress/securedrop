@@ -52,8 +52,8 @@
 
 # OSSEC server-agent rules
 # TODO add owner to OUTPUT rule
--A OUTPUT -d {{ monitor_ip }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
--A INPUT -s {{ monitor_ip }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+-A OUTPUT -d {{ monitor_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+-A INPUT -s {{ monitor_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 
 # Allow generic loopback connections
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"

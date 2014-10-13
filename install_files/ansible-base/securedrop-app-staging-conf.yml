@@ -35,6 +35,5 @@ apache_logging_level: "info"
 
 # Installing securedrop-ossec-agent.deb package
 securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
-ossec_agent_deb_path: "{{ securedrop_repo }}"
-monitor_ip: "192.168.2.2"
+monitor_hostname: "mon-staging"
 dns_server: "8.8.8.8"

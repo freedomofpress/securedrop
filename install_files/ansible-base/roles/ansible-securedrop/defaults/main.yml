@@ -128,6 +128,12 @@ disabled_kernel_modules:
   - bluetooth
   - iwlwifi
 
+ip_info:
+  - ip: "{{ monitor_ip }}"
+    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+  - ip: "{{ app_ip }}"
+    hostname: "{{ app_ip }}"
+
 sysctl_flags:
   - name: "net.ipv4.tcp_max_syn_backlog"
     value: "4096"

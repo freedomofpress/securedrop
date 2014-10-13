@@ -39,8 +39,8 @@
 
 # OSSEC server-agent rules
 # TODO add owner to OUTPUT rule
--A INPUT -s {{ app_ip }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
--A OUTPUT -d {{ app_ip }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A INPUT -s {{ app_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
+-A OUTPUT -d {{ app_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 
 # OSSEC smtp out rules
 #TODO restrict outbound by process owner
