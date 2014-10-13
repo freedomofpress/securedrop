@@ -14,24 +14,26 @@
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)
     insertafter: "^:LOGNDROP"
-    line: "\n# Allow direct SSH access (STAGING ONLY)\n-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+    line: "\n-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   notify:
     - reload iptables rules
 
 - name: allow direct source interface access in iptables rules
   lineinfile:
     dest: /etc/network/iptables/rules_v4
-    # insert after ssh rule exemption to allow direct SSH access in iptables
+    # insert after ssh rule exemption to allow direct source interface in iptables
     # rules
     insertafter: "OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-    line: "\n# Allow direct Source Interface access (STAGING ONLY)\n-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  notify: reload iptables rules
+    line: "\n-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  notify:
+    - reload iptables rules
 
 - name: allow direct document interface access in iptables rules
   lineinfile:
     dest: /etc/network/iptables/rules_v4
-    # insert after ssh rule exemption to allow direct SSH access in iptables
+    # insert after ssh rule exemption to allow direct document interface access in iptables
     # rules
     insertafter: "OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-    line: "\n# Allow direct Document Interface access (STAGING ONLY)\n-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  notify: reload iptables rules
+    line: "\n-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  notify:
+    - reload iptables rules

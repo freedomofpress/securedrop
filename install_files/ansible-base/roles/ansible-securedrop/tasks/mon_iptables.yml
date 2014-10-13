@@ -16,7 +16,7 @@
   # bulk. When that is done this issue will be avoided.
 
 - name: ensure load_iptables script is present
-  copy: src=load_iptables dest=/etc/network/if-up.d/load_iptables owner=root mode=0644
+  copy: src=load_iptables dest=/etc/network/if-up.d/load_iptables owner=root mode=0744
 
 - name: ensure iptables directory exists
   file:
