@@ -19,6 +19,11 @@
 - name: ensure smtp relay ssl cert is present
   command: creates=/etc/postfix/cacert.pem cp {{ ca_cert }} /etc/postfix/cacert.pem
 
+- name: ensure header_checks regex to strip smtp headers is present
+  copy:
+    src: header_checks
+    dest: /etc/postfix/header_checks
+
 - name: configure postfix main.cf
   template:
     src: main.cf
