@@ -7,7 +7,7 @@
   roles:
     - common
     - app-debs
-    #- app
-    #- app-test
+    - app
+    - app-test
 
   sudo: yes

@@ -5,6 +5,6 @@
     - securedrop-travis-conf.yml
 
   roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }
+    - development
+
+  sudo: yes

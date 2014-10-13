@@ -5,6 +5,7 @@
     - securedrop-mon-conf.yml
 
   roles:
+    - common
     - mon
 
   sudo: yes

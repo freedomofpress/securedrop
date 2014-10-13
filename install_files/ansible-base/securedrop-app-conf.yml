@@ -10,3 +10,7 @@ app_ip: "192.168.1.2"
 app_hostname: "app"
 monitor_ip: "192.168.2.2"
 monitor_hostname: "mon"
+
+securedrop_data: "/var/lib/securedrop"
+securedrop_code: "/var/www/securedrop"
+securedrop_user: "www-data"

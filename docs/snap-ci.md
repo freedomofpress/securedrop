@@ -8,20 +8,20 @@ To test a clean install there is a manual gate to run the snap-ci tests without 
 
 (This should be migrated to Packer)
 
-#Devlopment
+# Development
 
 git clone https://github.com/freedomofpress/securedrop
 sudo apt-get install gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb
-pip install -r securedrop/requirements/dev-requirements.txt
-pip install -r securedrop/requirements/prod-requirements.txt
+sudo pip install -r securedrop/requirements/dev-requirements.txt
+sudo pip install -r securedrop/requirements/prod-requirements.txt
 
-#App-staging
+# App-staging
 
 git clone https://github.com/freedomofpress/securedrop
 sudo apt-get install apache2-mpm-worker libapache2-mod-xsendfile libapache2-mod-wsgi apparmor-utils gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb tar unzip inotify-tools libssl-dev
-pip install -r securedrop/requirements/prod-requirements.txt
+sudo pip install -r securedrop/requirements/prod-requirements.txt
 
-#mon-staging
+# mon-staging
 
 
-#In Snap-CI
+# In Snap-CI

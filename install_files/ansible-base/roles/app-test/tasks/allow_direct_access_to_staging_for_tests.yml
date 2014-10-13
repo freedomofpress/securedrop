@@ -14,7 +14,7 @@
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)
     insertafter: "^:LOGNDROP"
-    line: "\n-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+    line: "\n-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment \"Allow direct SSH access (STAGING ONLY)\""
   notify:
     - reload iptables rules
 
