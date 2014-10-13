@@ -244,10 +244,11 @@ p.serious {
 
 .snippet {
   border: 1px solid #c3c3c3;
+  background: #f3f3f3;
 }
 .snippet .attachment {
   background-color: #f3f3f3;
-  padding: 15px;
+  padding: 22px 15px;
   width: 330px;
   display: inline-block;
   vertical-align: top;
@@ -261,20 +262,26 @@ p.serious {
   text-align: center;
   font-size: 52pt;
   color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 8px;
 }
 .snippet .attachment input[type="file"] {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 10px;
+  font-size: 14px;
+  min-width: 100%;
+  max-width: 100%;
 }
 .snippet .message {
   display: inline-block;
   vertical-align: top;
-  width: 420px;
+  width: 406px;
+  background: white;
 }
 .snippet .message textarea {
   padding: 10px;
-  width: 416px;
-  min-height: 160px;
+  min-width: 406px;
+  max-width: 406px;
+  min-height: 164px;
   font-size: 12pt;
   border: none;
 }
