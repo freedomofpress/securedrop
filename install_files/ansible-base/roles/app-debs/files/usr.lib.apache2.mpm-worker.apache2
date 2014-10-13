@@ -1,0 +1,42 @@
+# Last Modified: Mon Aug 18 13:23:22 2014
+#include <tunables/global>
+/var/chroot/document/usr/lib/apache2/mpm-worker/apache2 flags=(complain) {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/nis>
+  #include <abstractions/tor>
+
+  capability chown,
+  capability kill,
+  capability net_bind_service,
+
+
+  /bin/dash rix,
+  /dev/null rw,
+  /dev/random r,
+  /dev/urandom r,
+  /var/www/securedrop/store.py r,
+  /var/www/securedrop/store.pyc rw,
+  /var/www/securedrop/store/** rw,
+  /var/www/securedrop/version.py r,
+  /var/www/securedrop/version.pyc rw,
+  /var/lib/securedrop/keys/* rw,
+  /var/lib/securedrop/keys/pubring.gpg rw,
+  /var/lib/securedrop/keys/pubring.gpg.lock rwl,
+  /var/lib/securedrop/keys/pubring.gpg.tmp rw,
+  /var/lib/securedrop/keys/pubring.gpg~ w,
+  /var/lib/securedrop/keys/random_seed rwk,
+  /var/lib/securedrop/keys/secring.gpg r,
+  /var/lib/securedrop/keys/secring.gpg.lock rw,
+  /var/lib/securedrop/keys/secring.gpg.tmp rw,
+  /var/lib/securedrop/keys/trustdb.gpg rw,
+  /var/lib/securedrop/keys/trustdb.gpg.lock rwl,
+  
+  ^DEFAULT_URI flags=(complain) {
+
+  }
+
+  ^HANDLING_UNTRUSTED_INPUT flags=(complain) {
+
+  }
+}

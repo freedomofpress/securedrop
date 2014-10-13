@@ -1,0 +1,4 @@
+---
+  # Since production environments do not have dhcp or dns set create etc hosts
+  # entries
+- include: allow_direct_access_to_staging_for_tests.yml

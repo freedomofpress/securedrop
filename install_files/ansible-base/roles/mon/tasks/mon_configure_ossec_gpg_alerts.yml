@@ -1,0 +1,48 @@
+---
+- name: ensure procmail is installed
+  apt: pkg=procmail state=latest
+
+# The ossec user login is set to false. Not sure how to create it's gpg keyring as the ossec user without first enabling that
+- name: ensure ossec alert gpg public key is in the ossec keyring
+  command: "gpg --homedir /var/ossec/.gnupg --import {{ ossec_alert_gpg_public_key_path }}"
+
+- name: chown the ossec users gpg keyring
+  command: "chown -R ossec:root /var/ossec/.gnupg"
+
+- name: chmod gpg keyring directory
+  file: 
+    state: directory
+    dest: /var/ossec/.gnupg
+    owner: ossec
+    group: root
+    mode: 700
+
+- name: chmod keyring files to avoid gpg warnings
+  command: "chmod 600 /var/ossec/.gnupg/{{ item }}"
+  with_items:
+    - pubring.gpg
+    - secring.gpg
+    - trustdb.gpg
+
+- name: ensure send_encrypted_alarm script is present
+  template:
+    src: send_encrypted_alarm.sh
+    dest: /var/ossec/send_encrypted_alarm.sh
+    mode: 755
+    owner: ossec
+    group: root
+
+- name: create procmail log file
+  file:
+    state: touch
+    dest: /var/log/procmail.log
+    mode: 600
+    owner: ossec
+    group: root
+
+- name: ensure procmail config is present
+  copy:
+    src: procmailrc 
+    dest: /var/ossec/.procmailrc
+    owner: ossec
+    group: root

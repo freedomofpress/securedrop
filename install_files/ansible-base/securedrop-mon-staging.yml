@@ -4,6 +4,9 @@
   vars_files:
     - securedrop-mon-staging-conf.yml
   roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }
+    - common
+    - mon-debs
+    - mon
+    - mon-test
+
+  sudo: yes

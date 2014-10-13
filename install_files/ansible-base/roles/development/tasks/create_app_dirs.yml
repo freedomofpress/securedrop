@@ -1,0 +1,37 @@
+---
+- name: ensure /var/www/html/ is removed
+  file:
+    state: absent
+    dest: "/var/www/html"
+
+- name: ensure securedrop root directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    dest: "{{ securedrop_code }}"
+
+- name: ensure securedrop data directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    dest: "{{ securedrop_data }}"
+
+- name: ensure securedrop data store directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    dest: "{{ securedrop_data }}/store"
+
+- name: ensure securedrop keyring directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    dest: "{{ securedrop_data }}/keys"

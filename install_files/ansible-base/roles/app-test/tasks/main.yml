@@ -1,0 +1,8 @@
+---
+- include: staging_wsgi_files.yml
+
+- include: apparmor_complain.yml
+
+- include: allow_direct_access_to_staging_for_tests.yml
+
+- include: dev_setup_xvfb_for_functional_tests.yml

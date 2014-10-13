@@ -1,0 +1,22 @@
+---
+## Tor
+tor_wait_for_hidden_services: yes
+tor_hidden_services_parent_dir: "/var/lib/tor/services"
+tor_user: debian-tor
+tor_DataDirectory: /var/lib/tor
+securedrop_tor_user: "debian-tor"
+
+mon_tor_instances:
+  - ssh
+
+ossec_server_deb_pkg_dependencies:
+    - inotify-tools
+    - procmail
+    - postfix
+    - mailutils
+    - adduser
+    - expect
+    - libc6
+
+mon_fpf_packages:
+  - securedrop-ossec-server

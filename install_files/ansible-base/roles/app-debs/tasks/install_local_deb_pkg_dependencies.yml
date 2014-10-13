@@ -1,0 +1,12 @@
+---
+- name: install local securedrop-app-code apache dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: apache_packages
+
+- name: install local securedrop-app-code apt dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: app_deps
+
+- name: install local ossec deb package apt dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: ossec_apt_dependencies

@@ -1,0 +1,20 @@
+---
+## Dev flask debu webserver defaults
+securedrop_data: "/var/lib/securedrop"
+securedrop_code: "/vagrant/securedrop"
+
+dev_deps:
+  - libssl-dev
+  - python-dev
+  - python-pip
+  - firefox
+  - xvfb
+
+app_deps:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils

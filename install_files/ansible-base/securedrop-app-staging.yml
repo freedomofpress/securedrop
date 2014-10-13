@@ -1,9 +1,13 @@
 ---
-- hosts: [ 'app-staging', 'debs' ]
+- hosts: [ 'app-staging' ]
 
   vars_files:
     - securedrop-app-staging-conf.yml
+
   roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }
+    - common
+    - app-debs
+    #- app
+    #- app-test
+
+  sudo: yes

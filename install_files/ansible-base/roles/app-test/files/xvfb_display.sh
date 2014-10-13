@@ -1,0 +1,1 @@
+export DISPLAY=:1

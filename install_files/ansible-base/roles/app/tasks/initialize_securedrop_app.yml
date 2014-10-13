@@ -1,0 +1,87 @@
+---
+- name: ensure secureDrop web application apt packages are installed
+  apt: pkg="{{ item }}" state=latest
+  with_items: app_deps
+
+- name: import app gpg public key
+  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ securedrop_user }}"
+
+- stat: path="{{ securedrop_code }}/config.py"
+  register: config
+
+- name: if config.py does not exist copy example from repo
+  command: "cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py"
+  when: not config.stat.exists
+
+- name: generating 32 byte value for "source secret key"
+  shell: "head -c 32 /dev/urandom | base64"
+  register: source_secret_key
+  when: not config.stat.exists
+
+- name: if source secret key is blank insert 32 byte random value
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "source_secret_key"
+    line: "    SECRET_KEY = '{{ source_secret_key.stdout}}'"
+  when: not config.stat.exists
+
+- name: generating 32 byte value for "journalist secret key"
+  shell: "head -c 32 /dev/urandom | base64"
+  register: journalist_secret_key
+  when: not config.stat.exists
+
+- name: if journalist secret key is blank insert 32 byte random value
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "journalist_secret_key"
+    line: "    SECRET_KEY = '{{ journalist_secret_key.stdout }}'"
+  when: not config.stat.exists
+
+- name: generating 32 byte value for "scrypt id pepper"
+  shell: "head -c 32 /dev/urandom | base64"
+  register: scrypt_id_pepper
+  when: not config.stat.exists
+
+- name: if scrypt id pepper is blank insert 32 byte random value
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "scrypt_id_pepper"
+    line: "SCRYPT_ID_PEPPER = '{{ scrypt_id_pepper.stdout }}'"
+  when: not config.stat.exists
+
+- name: generating 32 byte value for "scrypt gpg pepper"
+  shell: "head -c 32 /dev/urandom | base64"
+  register: scrypt_gpg_pepper
+  when: not config.stat.exists
+
+- name: if scrypt gpg pepper is blank insert 32 byte random value
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "scrypt_gpg_pepper"
+    line: "SCRYPT_GPG_PEPPER = '{{ scrypt_gpg_pepper.stdout }}'"
+  when: not config.stat.exists
+
+- name: verify application gpg fingerprint is defined in config.py
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "^JOURNALIST_KEY = "
+    line: "JOURNALIST_KEY = '{{ securedrop_app_gpg_fingerprint }}'"
+
+- stat: path="{{ securedrop_data }}/db.sqlite"
+  register: db
+
+- name: initialize sqlite db
+  shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_code }} python -c 'import db; db.init_db()'\" {{ securedrop_user }}"
+  when: not db.stat.exists
+
+  # If using a custom header overwrite the existing one
+  # dpkg will not override it on upgrades
+  # otherwise will need to templatizing the apparmor profile
+- name: copy interface header to web app path
+  copy:
+    src: "{{ securedrop_header_image_path }}"
+    dest: "{{ securedrop_code }}/static/i/securedrop.png"
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: 400
+    backup: yes

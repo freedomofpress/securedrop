@@ -1,0 +1,11 @@
+---
+## Tor
+tor_wait_for_hidden_services: yes
+tor_hidden_services_parent_dir: "/var/lib/tor/services"
+tor_user: debian-tor
+tor_DataDirectory: /var/lib/tor
+securedrop_tor_user: "debian-tor"
+
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent

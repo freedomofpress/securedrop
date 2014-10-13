@@ -1,6 +1,6 @@
 ---
 ssh_users: "admin1"
-securedrop_header_image_path: "None"
+securedrop_header_image_path: "" # Leave blank for the default image
 securedrop_app_gpg_public_key_path: "/vagrant/securedrop/test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 ossec_package_name: "ossec-agent"

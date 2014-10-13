@@ -1,0 +1,5 @@
+---
+- name: configure dns IP
+  template:
+    src: dns_base
+    dest: /etc/resolvconf/resolv.conf.d/base

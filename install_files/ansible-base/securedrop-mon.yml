@@ -3,7 +3,8 @@
 
   vars_files:
     - securedrop-mon-conf.yml
+
   roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }
+    - mon
+
+  sudo: yes

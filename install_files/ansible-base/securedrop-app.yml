@@ -6,6 +6,7 @@
   vars:
 
   roles:
-    - { role: ansible-securedrop,
-          sudo: yes
-     }
+    - common
+    - app
+
+  sudo: yes
