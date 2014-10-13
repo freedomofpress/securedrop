@@ -93,11 +93,12 @@ a.text-link {
 
 .logo {
   width: 250px;
-  margin-right: 5px;
-  margin-top: 20px;
+  margin-right: 20px;
+  margin-top: 36px;
 }
 .logo.small {
   width: 150px;
+  margin-top:20px;
 }
 
 .option {
