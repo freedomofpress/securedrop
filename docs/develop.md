@@ -2,6 +2,7 @@
 
 ## Version Notes
 
+
 Tested with:
 
 ```
@@ -10,16 +11,23 @@ Vagrant 1.6.5
 ```
 
 ```
+vagrant-cachier (1.0.0)
+vagrant-digitalocean (0.7.0)
+vagrant-hostmanager (1.5.0)
+vagrant-login (1.0.1, system)
+vagrant-share (1.1.2, system)
+```
 ansible --version
 ansible 1.7.2
 ```
 
 ## Ubuntu 14.04
 
+
 `sudo apt-get install git -y`
 
  clone your repo
- 
+
 `git clone https://github.com/freedomofpress/securedrop`
 
 Change directory into repo
@@ -73,23 +81,23 @@ Now you're ready to use vagrant to provision SecureDrop VM's!
 
 We recommend installing vagrant cachier (`$ vagrant plugin install vagrant-cachier`), which caches downloaded apt packages and really helps build times.
 
+
 # Overview
+
 
 There are 4 predefined VM configurations in the vagrantfile: development, debs, staging, app and mon.
 
 * **development**: for working on the application code
     * Source Interface: localhost:8080
     * Document Interface: localhost:8081
-* **debs**: Will build the FPF deb packages and store them in /vagrant so they can be used by other VMs/playbooks
-* **staging**: Requires the securedrop-app-code.deb to install the application
+* **staging**: for working on the environment and hardening
     * Source Interface: localhost:8082
     * Document Interface: localhost:8083
-    * The interfaces and ssh are also available over tor.
+    * The interfaces and ssh are also available over tor and direct access.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **app**: This is a production installation with all of the hardening applied. 
-    * The interfaces and ssh are only available over tor.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
-
+    * Putting the apparmor profiles in complain mode (default) or enforce mode can be done witht he ansible tags apparmor-complain or apparmor-enforce.
 ## Development
 
 ```
@@ -103,20 +111,22 @@ cd /vagrant/securedrop
 ## Staging
 
 ```
-vagrant up debs
-vagrant up staging
-vagrant ssh staging
+vagrant up /staging$/ --no-provision
+vagrant provision /staging$/
+vagrant ssh app-staging
 sudo su
 cd /var/www/securedrop
 ./manage.py add_admin
+./manage.py test
 ```
 
+
 ## Production
+
 
 You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
 
 ```
-vagrant up debs
 vagrant up app
 vagrant ssh app
 sudo su
@@ -128,7 +138,7 @@ You will need to copy and fill out the example conf file /securedrop/install_fil
 
 `vagrant up mon`
 
-Once SSH is only allowed over tor
+Once SSH is only allowed over tor you will need to use torify or connect proxy.
 
 `sudo apt-get install connect-proxy`
 

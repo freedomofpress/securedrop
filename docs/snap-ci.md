@@ -1,28 +1,27 @@
 # running notes on setting up snap-ci + vagrant + digital ocean provider + ansible provisioner
 
-Snap CI script:
+To speed up testing times, prebuilt images that aleady contain the packages needed for each stage are used.
+The prebuilt images are snapshots of the default VPS Ubuntu 14.04 x64 images with the stage specific deb packages installed.
+After the stage specific packages are installed a snapshot is taken of the image with the stage name and date.
 
-insert screenshot
+To test a clean install there is a manual gate to run the snap-ci tests without the prebuilt images
 
+(This should be migrated to Packer)
 
-Contents of snap.rb:
+#Devlopment
 
+git clone https://github.com/freedomofpress/securedrop
+sudo apt-get install gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb
+pip install -r securedrop/requirements/dev-requirements.txt
+pip install -r securedrop/requirements/prod-requirements.txt
 
+#App-staging
 
-Add snap ssh public key to digital ocean and name it 'Vagrant' which is the default name for the vagrant-digitalocean provider.
+git clone https://github.com/freedomofpress/securedrop
+sudo apt-get install apache2-mpm-worker libapache2-mod-xsendfile libapache2-mod-wsgi apparmor-utils gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb tar unzip inotify-tools libssl-dev
+pip install -r securedrop/requirements/prod-requirements.txt
 
-Manually create a digital ocean droplet.
-
-SSH to the clean ubuntu 14.04 x64 image
-
-Create a Vagrant user in the sudo group with passwordless sudo.
-
-Power down droplet
-
-Create a snapshot of the droplet
-
-ensure that the region the droplet snapshot is in (ny1) is the same as in the Vagrantfile
-
-use the name of the droplet in the vagrant digital ocean provider.image line
+#mon-staging
 
 
+#In Snap-CI
