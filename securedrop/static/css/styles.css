@@ -1,5 +1,8 @@
 * {
   box-sizing: border-box;
+  /* Firefox 24 (the basis of TBB at the time of this writing) does not support
+   * unprefixed box-sizing. */
+  -moz-box-sizing: border-box;
 }
 
 body {
@@ -122,6 +125,7 @@ a.text-link {
 button, a.btn, .btn {
   background: #7985aa;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 10px 15px;
   border: 1px solid transparent;
   color: white;
@@ -203,6 +207,7 @@ button.small, a.btn.small, .btn.small {
   text-align: center;
   font-size: small;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 .warning a {
@@ -222,6 +227,7 @@ p.serious {
 .code {
   background: rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 10px 15px;
   border-bottom: 2px solid #ae3840;
   font-size: large;
@@ -231,6 +237,7 @@ p.serious {
 .code-reminder {
   background: rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 5px 10px;
   text-align: center;
 }
