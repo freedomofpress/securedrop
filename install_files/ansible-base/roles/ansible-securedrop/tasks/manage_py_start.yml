@@ -1,3 +1,3 @@
 ---
 - name: run_manage_py_start_script
-  command: "{{ manage_py_script }}" 
+  command: chdir={{ securedrop_code }} ./manage.py start
