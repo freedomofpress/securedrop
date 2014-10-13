@@ -1,3 +1,0 @@
----
-- name: install local securedrop-ossec-agnet.deb
-  apt: deb="{{ ossec_agent_deb_path }}/{{ securedrop_ossec_agent_deb }}.deb"

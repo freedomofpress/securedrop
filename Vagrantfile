@@ -27,6 +27,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
       ansible.tags = "development"
       ansible.skip_tags = "tor"
+      ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
       v.name = "development"
@@ -43,8 +44,9 @@ Vagrant.configure("2") do |config|
     app_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-app-staging.yml"
       # options 'tor' 'grsec' 'iptables' 'ssh' 'tests' 'ossec' also takes an array
-      ansible.tags = [ 'app-staging', 'app-debs']
-      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
+      ansible.tags = [ 'app-debs', 'app-staging' ]
+      ansible.skip_tags = [ 'grsec' ]
+      ansible.verbose = 'v'
     end
     app_staging.vm.provider "virtualbox" do |v|
       v.name = "app-staging"
@@ -60,8 +62,9 @@ Vagrant.configure("2") do |config|
     mon_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-mon-staging.yml"
       # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-complain' 'apparmor-enforce' 'tests' also takes an array
-      ansible.tags = [ "mon-staging", "mon-debs" ]
-      ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
+      ansible.tags = [ "mon-debs", "mon-staging" ]
+      ansible.skip_tags = [ 'grsec' ]
+      ansible.verbose = 'v'
     end
     mon_staging.vm.provider "virtualbox" do |v|
       v.name = "mon-staging"
@@ -77,6 +80,7 @@ Vagrant.configure("2") do |config|
       ansible.tags = "app"
       # options 'ssh' 'iptables' 'tests' also takes an array
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
+      ansible.verbose = 'v'
     end
     app.vm.provider "virtualbox" do |v|
       v.name = "app"
@@ -92,6 +96,7 @@ Vagrant.configure("2") do |config|
       # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-compalin' 'apparmor-enforce' 'tests' also takes an array
       ansible.tags = "mon"
       ansible.skip_tags = [ 'grsec', 'iptables', 'ssh' ]
+      ansible.verbose = 'v'
     end
     mon.vm.provider "virtualbox" do |v|
       v.name = "mon"
