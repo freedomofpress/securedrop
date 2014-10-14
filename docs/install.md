@@ -61,7 +61,7 @@ It is also recommended that you use an external hard drive to back up encrypted 
 
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it.
+The *Secure Viewing Station* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
 
 ### Create a GPG key for the SecureDrop application
 
