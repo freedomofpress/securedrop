@@ -13,7 +13,7 @@
     # last line in the initial *filter stanza (which must come before any rules)
     # rules will be applied before the default rules defined in rules_v4 file
     insertafter: "^:LOGNDROP"
-    regex: "{{ item }}"
+    regexp: "{{ item }}"
     line: "{{ item }}"
   notify:
     - reload iptables rules
