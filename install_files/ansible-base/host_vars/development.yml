@@ -2,6 +2,7 @@
 ## Dev flask debu webserver defaults
 securedrop_data: "/var/lib/securedrop"
 securedrop_code: "/vagrant/securedrop"
+securedrop_repo: "/vagrant"
 
 dev_deps:
   - libssl-dev
