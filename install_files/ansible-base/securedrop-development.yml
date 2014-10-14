@@ -4,7 +4,6 @@
   vars_files:
     - group_vars/securedrop.yml
     - host_vars/development.yml
-    - securedrop-development-conf.yml
 
   roles:
     - development
