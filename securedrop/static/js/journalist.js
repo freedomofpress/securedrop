@@ -15,31 +15,29 @@ $(function () {
 
   var all = $("#select_all");
   var none = $("#select_none");
-  var checkboxes = $(":checkbox");
 
   all.css('cursor', 'pointer');
   none.css('cursor', 'pointer');
 
-  all.click( function() { checkboxes.prop('checked', true); });
-  none.click( function() { checkboxes.prop('checked', false); });
+  all.click(function() {
+      var checkboxes = $("ul#cols li :checkbox").filter(":visible");
+      checkboxes.prop('checked', true);
+  });
+  none.click(function() {
+      var checkboxes = $("ul#cols li :checkbox").filter(":visible");
+      checkboxes.prop('checked', false);
+  });
 
   $("#delete_collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
   });
-  $("#delete_collections").click(function () {
-    var num_checked = 0;
 
-    // we don't want to delete the collections which aren't visible because they are filtered...
-    $('ul#cols li:visible').each(function () {
-      if ($(":checkbox", this).first().prop('checked')) num_checked++;
+  $("#delete_collections").click(function () {
+    var checked = $("ul#cols li :checkbox").filter(":visible").filter(function(index) {
+        return $(this).prop('checked');
     });
-    if (num_checked > 0) {
-      var delete_collections = confirm("Are you sure you want to delete the " + num_checked + " selected collection" + (num_checked > 1 ? "s?" : "?"));
-      if(delete_collections){
-        // uncheck the invisible collections just before sending POST
-        $('ul#cols li:not(:visible) :checkbox').attr('checked', false)
-      }
-      return delete_collections;
+    if (checked.length > 0) {
+      return confirm("Are you sure you want to delete the " + checked.length + " selected collection" + (checked.length > 1 ? "s?" : "?"));
     }
     // Don't submit the form if no collections are selected
     return false;
