@@ -1,7 +1,0 @@
----
-- name: install apt package deps for dev environment
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
-
-- name: install pip deps for dev env
-  pip: requirements="{{ dev_pip_requirements }}"
