@@ -10,6 +10,7 @@
     - build-securedrop-app-code-deb-pkg
     - build-ossec-deb-pkg
     - app
+    - allow-direct-access
     - app-test
 
   sudo: yes

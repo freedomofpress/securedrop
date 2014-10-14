@@ -1,5 +1,5 @@
 ---
-- name: ensure custom apparmor profiles are present
+- name: link apparmor profiles from ansible-base to /etc/apparmor.d for development ease of use
   file:
     state: link
     force: yes

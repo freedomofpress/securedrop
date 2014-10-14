@@ -9,6 +9,6 @@
     - common
     - build-ossec-deb-pkg
     - mon
-    - mon-test
+    - allow-direct-access
 
   sudo: yes
