@@ -5,10 +5,10 @@ securedrop_repo: "/vagrant"
 
 ### Used by the common role ###
 
-# For setting the etc hosts entries
+# TODO Should use ansible to gather this info
 monitor_ip: 10.0.1.3
 monitor_hostname: mon-staging
-
+# For setting the etc hosts entries
 ip_info:
   - ip: "{{ monitor_ip }}"
     hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
@@ -35,13 +35,13 @@ ossec_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
 ossec_deb_path: "{{ securedrop_repo }}"
 ossec_preloaded_vars: "app-preloaded-vars.conf"
 ossec_package_name: "ossec-agent"
+ossec_group: "ossec"
 build_ossec_deb_pkg_dependencies:
   - inotify-tools
   - libssl-dev
   - make
   - tar
   - unzip
-ossec_group: "ossec"
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"
@@ -59,14 +59,15 @@ app_tor_instances:
   - source
   - document
 
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent
+
+
 # installing securedrop web application
 securedrop_user: "www-data"
 securedrop_code: "/var/www/securedrop"
 securedrop_data: "/var/lib/securedrop"
-
-app_fpf_packages:
-  - securedrop-app-code
-  - securedrop-ossec-agent
 
 apache_user: "www-data"
 

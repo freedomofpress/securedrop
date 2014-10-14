@@ -65,6 +65,13 @@
     state: absent
     dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
 
+- name: install local securedrop-app-code apache dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: apache_packages
+
+- name: install local securedrop-app-code apt dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: app_deps
+
 - name: Install local securedrop-app-code deb package
   apt: deb="{{ securedrop_deb_path }}/{{ securedrop_app_code_deb }}.deb"
-

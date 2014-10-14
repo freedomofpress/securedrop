@@ -1,9 +1,9 @@
 ---
 - name: download OSSEC
   get_url:
-    url: http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz
+    url: "{{ ossec_download_url }}"
     dest: "{{ securedrop_repo }}"
-    sha256sum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+    sha256sum: "{{ ossec_download_checksum }}"
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest

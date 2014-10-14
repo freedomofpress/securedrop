@@ -1,36 +1,32 @@
 ---
-# Shared Variables
-# Mon Variables
-## Tor
-tor_wait_for_hidden_services: yes
-tor_hidden_services_parent_dir: "/var/lib/tor/services"
-tor_user: debian-tor
-tor_DataDirectory: /var/lib/tor
-securedrop_tor_user: "debian-tor"
+### General to the mon playbook ###
+ssh_users: "vagrant"
+securedrop_repo: "/vagrant"
 
-mon_tor_instances:
-  - ssh
 
-ossec_server_deb_pkg_dependencies:
-    - inotify-tools
-    - procmail
-    - postfix
-    - mailutils
-    - adduser
-    - expect
-    - libc6
+### Used by the common role ###
 
-mon_fpf_packages:
-  - securedrop-ossec-server
-# Mon-test Variables
+# TODO Should use ansible to gather this info
+app_hostname: "app-staging"
+app_ip: "10.0.1.2"
+# For setting the etc hosts entries
 ip_info:
-  - ip: "{{ monitor_ip }}"
-    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
   - ip: "{{ app_ip }}"
-    hostname: "{{ app_ip }}"
+    hostname: "{{ app_hostname }}"
 
 
-# Mon Debs Variables
+### Used by the debs role ###
+
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_build_dir: "securedrop-ossec-server-2.8.1-amd64"
+ossec_deb_path: "{{ securedrop_repo }}"
+ossec_preloaded_vars: "mon-preloaded-vars.conf"
+ossec_package_name: "ossec-server"
+ossec_group: "ossec"
 build_ossec_deb_pkg_dependencies:
   - inotify-tools
   - libssl-dev
@@ -38,23 +34,47 @@ build_ossec_deb_pkg_dependencies:
   - tar
   - unzip
 
-ossec_group: "osseca"
+# Installing securedrop-ossec-server.deb package
+securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.1-amd64" # do not include .deb extension
 
+
+### Used by the mon role ###
+
+# Configure the tor hidden services
+mon_tor_instances:
+  - ssh
+
+# Packages to install from fpf repo
+mon_fpf_packages:
+  - securedrop-ossec-server
+
+# Apt dependencies for the ossec server package
 ossec_apt_dependencies:
   - libc6
   - libssl1.0.0
   - expect
   - inotify-tools
   - adduser
+  - procmail
+  - postfix
+  - mailutils
 
-# A alias is used by the app OSSEC agent's config. This way ansible doesn't
-# need to modify a file that is being managed by  dpkg. This should ensure that
-# any updates FPF push to the OSSEC configs will not require manual
-# intervention.
-ip_info:
-  - ip: "{{ app_ip }}"
-    hostname: "{{ app_hostname }}"
+# Configuration info for procmail and postfix
+ossec_alert_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
+ossec_gpg_fpr: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+ossec_alert_email: "ossec@ossec.test"
+smtp_relay: "smtp.gmail.com"
+smtp_relay_port: "587"
+smtp_relay_fingerprint: "9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8"
+sasl_username: "test"
+sasl_domain: "ossec.test"
+sasl_password: "password123"
+ca_cert: "{{ securedrop_repo}}/Thawte_Premium_Server_CA.pem"
 
+
+### Used by the test role ###
+
+# To allow direct access
 direct_access_rules:
   - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"

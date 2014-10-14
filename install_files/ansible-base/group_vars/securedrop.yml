@@ -11,7 +11,7 @@ securedrop_tor_user: "debian-tor"
 dns_server: "8.8.8.8"
 grsec_package: linux-image-3.2.62-grsec
 
-# this be changed to use ansible fact
+# this should be changed to use ansible facts
 distribution_release: "trusty"
 
 disabled_kernel_modules:
