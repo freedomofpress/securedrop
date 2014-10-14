@@ -5,5 +5,3 @@
 - include: install_local_deb_pkg_dependencies.yml
 
 - include: build_securedrop_app_code_deb.yml
-
-- include: build_securedrop_ossec_deb.yml

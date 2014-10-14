@@ -7,7 +7,7 @@
 
   roles:
     - common
-    - mon-debs
+    - build-ossec-deb-pkg
     - mon
     - mon-test
 
