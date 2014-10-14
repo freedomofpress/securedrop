@@ -7,27 +7,14 @@
   notify:
     - restart ssh
 
- 
-  # The ssh allow rule needs to be the first exemption loaded or else will
-  # break the install the first time the reload iptables rules handler is run
 - name: allow direct SSH acccess in iptables rules
   lineinfile:
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)
-    insertafter: "{{ item }}"
+    # rules will be applied before the default rules defined in rules_v4 file
+    insertafter: "^:LOGNDROP"
+    regex: "{{ item }}"
     line: "{{ item }}"
   notify:
     - reload iptables rules
   with_items: direct_access_rules
-
-  # This is required for virtualbox staging environments since DNS requests
-  # ares sent from the gues to thoe host system.
-- name: allow dns request to all IP addresses
-  lineinfile:
-    dest: /etc/network/iptables/rules_v4
-    # insert after ssh rule exemption to allow direct document interface access in iptables
-    # rules
-    insertafter: "-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-    line: "\n-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT\n-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  notify:
-    - reload iptables rules
