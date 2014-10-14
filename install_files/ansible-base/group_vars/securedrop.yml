@@ -2,6 +2,11 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in 
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
+tor_wait_for_hidden_services: yes
+tor_hidden_services_parent_dir: "/var/lib/tor/services"
+tor_user: debian-tor
+tor_DataDirectory: /var/lib/tor
+securedrop_tor_user: "debian-tor"
 
 dns_server: "8.8.8.8"
 grsec_package: linux-image-3.2.62-grsec

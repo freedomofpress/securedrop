@@ -1,4 +1,8 @@
 ---
+- name: install testing dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: test_apt_dependencies
+
 - name: copy xvfb init script to /etc/init.d
   copy: src=xvfb dest=/etc/init.d/xvfb owner=root mode=700
 

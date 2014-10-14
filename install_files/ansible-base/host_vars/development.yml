@@ -1,8 +1,9 @@
 ---
-## Dev flask debu webserver defaults
-securedrop_user: "vagrant"
 
 securedrop_repo: "/vagrant"
+
+# initialize securedrop web application
+securedrop_user: "vagrant"
 securedrop_data: "/var/lib/securedrop"
 securedrop_code: "/vagrant/securedrop"
 

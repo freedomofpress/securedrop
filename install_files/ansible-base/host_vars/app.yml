@@ -1,27 +1,72 @@
 ---
-# Interface defaults
-# Development will override the securedrop_data and securedrop_user variables
-# listed in this file
-securedrop_user: "www-data"
-securedrop_data: "/var/lib/securedrop"
-securedrop_code: "/var/www/securedrop"
+### General to the app playbook ###
+ssh_users: "vagrant"
+securedrop_repo: "/vagrant"
 
-## Tor
-tor_wait_for_hidden_services: yes
-tor_hidden_services_parent_dir: "/var/lib/tor/services"
-tor_user: debian-tor
-tor_DataDirectory: /var/lib/tor
-securedrop_tor_user: "debian-tor"
+### Used by the common role ###
 
-app_fpf_packages:
-  - securedrop-app-code
-  - securedrop-ossec-agent
+# For setting the etc hosts entries
+monitor_ip: 10.0.1.3
+monitor_hostname: mon-staging
+
+ip_info:
+  - ip: "{{ monitor_ip }}"
+    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+
+
+### Used by the debs role ###
+
+# Building the securedrop-app-code deb package
+securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
+build_app_code_dir: "{{ securedrop_repo }}/securedrop"
+prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/prod-requirements.txt"
+dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
+dev_deps:
+  - libssl-dev
+  - python-dev
+  - python-pip
+
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
+ossec_deb_path: "{{ securedrop_repo }}"
+ossec_preloaded_vars: "app-preloaded-vars.conf"
+ossec_package_name: "ossec-agent"
+build_ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+ossec_group: "ossec"
+
+# Installing the securedrop-app-code.deb package
+securedrop_deb_path: "{{ securedrop_repo }}"
+securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb extension
+
+# Installing the securedrop-ossec-agent.deb package
+securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
+
+
+### Used by the app role ###
 
 # Configuring the tor hidden services
 app_tor_instances:
   - ssh
   - source
   - document
+
+# installing securedrop web application
+securedrop_user: "www-data"
+securedrop_code: "/var/www/securedrop"
+securedrop_data: "/var/lib/securedrop"
+
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent
 
 apache_user: "www-data"
 
@@ -85,21 +130,11 @@ apparmor_profiles:
   - usr.bin.tor
   - usr.lib.apache2.mpm-worker.apache2
 
-dev_deps:
-  - libssl-dev
-  - python-dev
-  - python-pip
-  - firefox
-  - xvfb
+# initialize securedrop web application
+securedrop_header_image_path: "None"
 
-build_ossec_deb_pkg_dependencies:
-  - inotify-tools
-  - libssl-dev
-  - make
-  - tar
-  - unzip
-
-ossec_group: "ossec"
+securedrop_app_gpg_public_key_path: "/vagrant/securedrop/test_journalist_key.pub"
+securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
 ossec_apt_dependencies:
   - libc6
@@ -108,13 +143,14 @@ ossec_apt_dependencies:
   - inotify-tools
   - adduser
 
-# A alias is used by the app OSSEC agent's config. This way ansible doesn't
-# need to modify a file that is being managed by  dpkg. This should ensure that
-# any updates FPF push to the OSSEC configs will not require manual
-# intervention.
-ip_info:
-  - ip: "{{ monitor_ip }}"
-    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+
+### Used by the test role ###
+
+# To allow direct connections to source document interfaces for ease of testing
+apache_listening_address: "0.0.0.0"
+apache_allow_from: "all"
+source_apache_log_location: "/var/log/apache2/source-error.log"
+apache_logging_level: "info"
 
 direct_access_rules:
   - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
@@ -125,3 +161,7 @@ direct_access_rules:
   - "-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+
+test_apt_dependencies:
+  - firefox
+  - xvfb
