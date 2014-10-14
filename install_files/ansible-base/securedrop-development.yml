@@ -4,9 +4,9 @@
   vars_files:
     - group_vars/securedrop.yml
     - host_vars/development.yml
+    - development-specific.yml
 
   roles:
     - development
 
   sudo: yes
-  

@@ -1,0 +1,27 @@
+---
+### Used by the common role ###
+ssh_users: ""
+
+# TODO Should use ansible to gather this info
+monitor_ip: ""
+monitor_hostname: ""
+app_hostname: ""
+app_ip: ""
+
+### Used by the app role ###
+securedrop_code: "/var/www/securedrop"
+securedrop_header_image_path: ""
+securedrop_app_gpg_public_key_path: ""
+securedrop_app_gpg_fingerprint: ""
+
+### Used by the mon role ###
+ossec_alert_gpg_public_key_path: ""
+ossec_gpg_fpr: ""
+ossec_alert_email: ""
+smtp_relay: ""
+smtp_relay_port: ""
+smtp_relay_fingerprint: ""
+sasl_username: ""
+sasl_domain: ""
+sasl_password: ""
+ca_cert: ""

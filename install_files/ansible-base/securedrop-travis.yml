@@ -2,7 +2,9 @@
 - hosts: [ 'localhost' ]
 
   vars_files:
-    - securedrop-travis-conf.yml
+    - group_vars/securedrop.yml
+    - host_vars/development.yml
+    - travis-specific.yml
 
   roles:
     - development

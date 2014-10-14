@@ -1,5 +1,4 @@
 ---
-
 securedrop_repo: "/vagrant"
 
 # initialize securedrop web application

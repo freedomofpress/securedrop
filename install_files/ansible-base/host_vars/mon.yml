@@ -1,14 +1,11 @@
 ---
-### General to the mon playbook ###
-ssh_users: "vagrant"
-securedrop_repo: "/vagrant"
-
+#securedop_repo is defined in site-specific.yml config
 
 ### Used by the common role ###
+# ssh_users is defined in the site-specific.yml config
+# app_ip is defined in the site-specific.yml config
+# app_hostname is defined in the site-specific.yml config
 
-# TODO Should use ansible to gather this info
-app_hostname: "app-staging"
-app_ip: "10.0.1.2"
 # For setting the etc hosts entries
 ip_info:
   - ip: "{{ app_ip }}"
@@ -60,16 +57,16 @@ ossec_apt_dependencies:
   - mailutils
 
 # Configuration info for procmail and postfix
-ossec_alert_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
-ossec_gpg_fpr: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
-ossec_alert_email: "ossec@ossec.test"
-smtp_relay: "smtp.gmail.com"
-smtp_relay_port: "587"
-smtp_relay_fingerprint: "9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8"
-sasl_username: "test"
-sasl_domain: "ossec.test"
-sasl_password: "password123"
-ca_cert: "{{ securedrop_repo}}/Thawte_Premium_Server_CA.pem"
+#ossec_alert_gpg_public_key_public_key_path is defined in the site-specific.yml config
+#ossec_gpg_fpr is defined in the site-specific.yml config
+#ossec_alert_email is defined in the site-specific.yml config
+#smtp_relay is defined in the site-specific.yml config
+#smtp_relay_port is defined in the site-specific.yml config
+#smtp_relay_fingerprint is defined in the site-specific.yml config
+#sasl_username is defined in the site-specific.yml config
+#sasl_domain is defined in the site-specific.yml config
+#sasl_password is defined in the site-specific.yml config
+#ca_cert is defined in the site-specific.yml config
 
 
 ### Used by the test role ###

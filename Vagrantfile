@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
     development.vm.network "forwarded_port", guest: 8081, host: 8081
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
+      ansible.playbook = "install_files/ansible-base/site.yml"
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
     app_staging.vm.network "forwarded_port", guest: 8080, host: 8083
     app_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app_staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-app-staging.yml"
+      ansible.playbook = "install_files/ansible-base/site.yml"
       # options 'tor' 'grsec' 'iptables' 'ssh' 'tests' 'ossec' also takes an array
       ansible.skip_tags = [ 'grsec' ]
       ansible.verbose = 'v'
@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
     mon_staging.hostmanager.aliases = %w(securedrop-monitor-server-alias)
     mon_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     mon_staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-mon-staging.yml"
+      ansible.playbook = "install_files/ansible-base/site.yml"
       # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-complain' 'apparmor-enforce' 'tests' also takes an array
       ansible.skip_tags = [ 'grsec' ]
       ansible.verbose = 'v'
@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
     app.vm.box = "trusty64"
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-app.yml"
+      ansible.playbook = "install_files/ansible-base/site.yml"
       # options 'ssh' 'iptables' 'tests' also takes an array
       ansible.skip_tags = [ 'grsec' ] # options 'tor' 'grsec' 'ssh-hardening' 'iptables' 'tests' 'ossec' also takes an array
       ansible.verbose = 'v'
@@ -87,7 +87,7 @@ Vagrant.configure("2") do |config|
     mon.vm.box = "trusty64"
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     mon.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-mon.yml"
+      ansible.playbook = "install_files/ansible-base/site.yml"
       # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-compalin' 'apparmor-enforce' 'tests' also takes an array
       ansible.skip_tags = [ 'grsec' ]
       ansible.verbose = 'v'

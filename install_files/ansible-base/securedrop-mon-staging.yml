@@ -4,6 +4,7 @@
   vars_files:
     - group_vars/securedrop.yml
     - host_vars/mon.yml
+    - staging-specific.yml
 
   roles:
     - common
