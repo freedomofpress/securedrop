@@ -1,5 +1,8 @@
 * {
   box-sizing: border-box;
+  /* Firefox 24 (the basis of TBB at the time of this writing) does not support
+   * unprefixed box-sizing. */
+  -moz-box-sizing: border-box;
 }
 
 body {
@@ -35,7 +38,7 @@ a.plain:hover {
 .content {
   position: relative;
   margin: 15px auto;
-  width: 1000px;
+  width: 980px;
 }
 
 .document-actions {
@@ -50,7 +53,7 @@ a.plain:hover {
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 16px 30px;
   border: 1px solid #c3c3c3;
   float: right;
 }
@@ -90,18 +93,19 @@ a.text-link {
 
 .logo {
   width: 250px;
-  margin-right: 5px;
-  margin-top: 20px;
+  margin-right: 20px;
+  margin-top: 36px;
 }
 .logo.small {
   width: 150px;
+  margin-top:20px;
 }
 
 .option {
   display: inline-block;
   width: 30%;
   min-width: 300px;
-  min-height: 275px;
+  min-height: 290px;
   margin: 1%;
   padding: 25px;
   border: 1px solid #c3c3c3;
@@ -122,6 +126,7 @@ a.text-link {
 button, a.btn, .btn {
   background: #7985aa;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 10px 15px;
   border: 1px solid transparent;
   color: white;
@@ -138,7 +143,7 @@ button.plain {
 
 button.plain:hover {
   background : none;
-  color #333;
+  color: #333;
   border: 1px solid transparent;
 }
 
@@ -187,7 +192,7 @@ button.small, a.btn.small, .btn.small {
   padding: 3px 10px;
   font-size: small;
   color: #6F6F6F;
-  margin-left: 5px;
+  margin-right: 2px;
 }
 .select:hover {
   border-color: #999;
@@ -203,6 +208,7 @@ button.small, a.btn.small, .btn.small {
   text-align: center;
   font-size: small;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 .warning a {
@@ -222,6 +228,7 @@ p.serious {
 .code {
   background: rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 10px 15px;
   border-bottom: 2px solid #ae3840;
   font-size: large;
@@ -231,16 +238,18 @@ p.serious {
 .code-reminder {
   background: rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
   padding: 5px 10px;
   text-align: center;
 }
 
 .snippet {
   border: 1px solid #c3c3c3;
+  background: #f3f3f3;
 }
 .snippet .attachment {
   background-color: #f3f3f3;
-  padding: 15px;
+  padding: 22px 15px;
   width: 330px;
   display: inline-block;
   vertical-align: top;
@@ -254,20 +263,26 @@ p.serious {
   text-align: center;
   font-size: 52pt;
   color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 8px;
 }
 .snippet .attachment input[type="file"] {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 10px;
+  font-size: 14px;
+  min-width: 100%;
+  max-width: 100%;
 }
 .snippet .message {
   display: inline-block;
   vertical-align: top;
-  width: 420px;
+  width: 406px;
+  background: white;
 }
 .snippet .message textarea {
   padding: 10px;
-  width: 416px;
-  min-height: 160px;
+  min-width: 406px;
+  max-width: 406px;
+  min-height: 164px;
   font-size: 12pt;
   border: none;
 }
@@ -368,10 +383,12 @@ p#codename {
 }
 #cols li.source {
   background: #f3f3f3;
-  border-bottom: 1px solid #f3f3f3;
-  padding: 5px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
   text-align: left;
+}
+#cols li.source:last-child {
+  border-bottom: none;
 }
 #cols li.source .date {
   float: right;
@@ -585,4 +602,31 @@ table#users {
 
 table#users td {
   text-align: center;
+}
+
+#regenerate-codename-btn {
+  padding: 5px 5px;
+  color: #999;
+  font-size: 14px;
+}
+
+#regenerate-codename-btn:hover {
+  color:#333;
+}
+
+#regenerate-codename-btn:focus {
+  outline: 0;
+}
+
+#regenerate-codename-btn-label {
+  font-size: 10px;
+}
+
+div#select-container {
+  display:inline;
+}
+
+div.document-actions button {
+  font-size: 14px;
+  padding: 6px 15px;
 }
