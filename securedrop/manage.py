@@ -23,10 +23,17 @@ os.environ['SECUREDROP_ENV'] = 'dev'
 
 def start():
     import config
+
+    # Start the Python-RQ worker if it's not already running
+    if not os.path.exists(config.WORKER_PIDFILE):
+        subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT,
+                                      "--pid", config.WORKER_PIDFILE])
+
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.JOURNALIST_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python journalist.py'])
+
     if source_rc + journo_rc == 0:
         print "The web application is running, and available on your Vagrant host at the following addresses:"
         print "Source interface:     localhost:8080"

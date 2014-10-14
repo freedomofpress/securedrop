@@ -20,4 +20,5 @@ WTForms==2.0.1
 mock==1.0.1
 pip-tools==0.3.5
 pytest==2.6.2
+rq==0.4.6
 selenium==2.43.0

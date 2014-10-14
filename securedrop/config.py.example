@@ -30,6 +30,7 @@ ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
 
 JOURNALIST_PIDFILE = "/tmp/journalist.pid"
 SOURCE_PIDFILE = "/tmp/source.pid"
+WORKER_PIDFILE = "/tmp/securedrop_worker.pid"
 
 # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
 SCRYPT_ID_PEPPER = '{{ scrypt_id_pepper.stdout }}'

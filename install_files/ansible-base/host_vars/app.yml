@@ -123,6 +123,7 @@ app_deps:
   - secure-delete
   - sqlite
   - apparmor-utils
+  - redis-server
 
 apparmor_profiles:
   - usr.bin.tor
