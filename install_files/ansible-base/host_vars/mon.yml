@@ -56,3 +56,7 @@ ip_info:
     hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
   - ip: "{{ app_ip }}"
     hostname: "{{ app_hostname }}"
+
+direct_access_rules:
+  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
