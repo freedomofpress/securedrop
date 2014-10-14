@@ -1,6 +1,6 @@
 # Last Modified: Fri Mar 28 23:54:25 2014
 #include <tunables/global>
-/var/chroot/document/usr/bin/tor flags=(complain) {
+/usr/bin/tor {
   #include <abstractions/apache2-common>
   #include <abstractions/base>
   #include <abstractions/tor>

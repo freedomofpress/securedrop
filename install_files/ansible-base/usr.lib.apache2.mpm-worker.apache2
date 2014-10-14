@@ -1,6 +1,6 @@
 # Last Modified: Mon Aug 18 13:23:22 2014
 #include <tunables/global>
-/var/chroot/document/usr/lib/apache2/mpm-worker/apache2 flags=(complain) {
+/usr/lib/apache2/mpm-worker/apache2 {
   #include <abstractions/base>
   #include <abstractions/nameservice>
   #include <abstractions/nis>
@@ -31,12 +31,6 @@
   /var/lib/securedrop/keys/secring.gpg.tmp rw,
   /var/lib/securedrop/keys/trustdb.gpg rw,
   /var/lib/securedrop/keys/trustdb.gpg.lock rwl,
-  
-  ^DEFAULT_URI flags=(complain) {
-
-  }
-
-  ^HANDLING_UNTRUSTED_INPUT flags=(complain) {
 
   }
 }
