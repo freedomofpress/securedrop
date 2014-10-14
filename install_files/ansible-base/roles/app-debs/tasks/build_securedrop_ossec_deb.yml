@@ -6,7 +6,7 @@
     sha256sum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
 
 - name: install deb packages required to build ossec package
-  apt: pkg="{{ item }}" state=latest
+  apt: name="{{ item }}" state=latest
   with_items: build_ossec_deb_pkg_dependencies
 
 - name: extract OSSEC archive to /tmp
@@ -65,6 +65,10 @@
   file:
     state: absent
     dest: /tmp/{{ ossec_version }}
+
+- name: install the apt packages required for the ossec deb package
+  apt: name="{{ item }}" state=latest
+  with_items: ossec_apt_dependencies
 
 - name: install local securedrop ossec deb package
   apt: deb="{{ securedrop_repo }}/{{ ossec_build_dir }}.deb" state=installed

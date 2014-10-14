@@ -7,4 +7,4 @@
   with_items: grub_pax
 
 - name: install grsec package from fpf repo
-  apt: pkg=securedrop-grsec state=latest 
+  apt: pkg={{ grsec_package }} state=latest 

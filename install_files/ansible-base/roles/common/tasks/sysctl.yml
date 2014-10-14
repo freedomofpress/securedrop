@@ -2,3 +2,9 @@
 - sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
   with_items: sysctl_flags
 
+- shell: uname -a | grep -i grsec
+  register: grsec
+  ignore_errors: True
+
+- sysctl: name=kernel.grsecurity.grsec_lock value=1 sysctl_set=yes state=present reload=yes
+  when: grsec == True
