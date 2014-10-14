@@ -8,9 +8,15 @@ After booting the the Ubuntu Server CD, select *Install Ubuntu Server*.
 
 Follow the steps to choose your language and keyboard, and let the setup continue. When it asks for your hostname, choose a name that makes sense. Each server should have its own hostname.  You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone.
 
-We recommend that you **do not** enable full disk encryption or encrypted home directories. Doing so will introduce the need for more passwords and add even more responsibility on the administrator of the system (see [this GitHub issue](https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554) for more information). Instead, choose the installation option that says *Guided - use entire disk and set up LVM*. Then wait for base system to finish installing.
+Before continuing with the installation process, you will need to decide if you would like to enable [*Full Disk Encryption (FDE)*](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption). If the servers are ever powered down, FDE will ensure all of the information on them stay private in case they are seized or stolen. 
 
-When you get to the configure tasksel screen, choose *Install security updates automatically*. When you get to the software selection screen, only choose *OpenSSH server*. Then wait for the packages to finish installing.
+While FDE can be useful in some cases, we currently do not recommend that you enable it. Doing so will introduce the need for more passwords and add even more responsibility on the administrator of the system (see [this GitHub issue](https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554) for more information). Instead, choose the installation option that says *Guided - use entire disk and set up LVM*.
+
+If you decide to go ahead and enable FDE, please note that doing so means SecureDrop will become unreachable after an automatic reboot. An administrator will need to be on hand to enter the password in order to mount the disks and complete the startup process. We recommend that the servers be integrated with a monitoring solution that so that you receive an alert when the system becomes unavailable.
+
+To enable FDE, select *Guided - use entire disk and set up encrypted LVM* during the disk partitioning step and write the changes to disk. Follow the recommendations as to choosing a strong password. As the administrator, you will be responsible for keeping this passphrase safe. Write it down somewhere and memorize it if you can. If inadvertently lost it could result in total loss of the SecureDrop system.
+
+Wait for the base system to finish installing. When you get to the configure tasksel screen, choose *Install security updates automatically*. When you get to the software selection screen, only choose *OpenSSH server*. Then wait for the packages to finish installing.
 
 When everything is done, install grub and reboot.
 
