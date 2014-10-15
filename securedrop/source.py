@@ -189,11 +189,8 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    has_submissions = True if sum(g.source.documents_messages_count().values()) else False
-
     return render_template('lookup.html', codename=g.codename, replies=replies,
-            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid),
-            has_submissions=has_submissions)
+            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
 def normalize_timestamps(sid):
