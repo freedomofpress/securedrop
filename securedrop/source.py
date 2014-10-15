@@ -189,11 +189,6 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    # if this was a redirect from the login page, flash a message if there are
-    # no replies to clarify "check for replies" flow (#393)
-    if request.args.get('from_login') == '1' and len(replies) == 0:
-        flash("There are no replies at this time. You can submit more documents from this codename below.", "notification")
-
     return render_template('lookup.html', codename=g.codename, replies=replies,
             flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
@@ -264,7 +259,7 @@ def delete():
     if msgid not in potential_files:
         abort(404)  # TODO are the checks necessary?
     store.secure_unlink(store.path(g.sid, msgid))
-    flash("Reply deleted.", "notification")
+    flash("Reply deleted", "notification")
 
     return redirect(url_for('lookup'))
 

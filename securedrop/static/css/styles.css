@@ -441,14 +441,24 @@ p#codename {
   float: right;
   padding: 5px;
   background-color: inherit;
-  color: #ff0000;
+  color: #d55c5c;
   font-size: 14px;
   border: 0;
   clear: right;
 }
 #replies .reply button:hover {
   border: 0;
-  color: #000000;
+  color: #FA6E6E;
+}
+#replies p {
+  color: #777;
+  font-style: italic;
+}
+p#no-replies {
+  text-align: center;
+}
+#replies blockquote {
+  margin: 1em 1em;
 }
 
 .journalist-view-single {
