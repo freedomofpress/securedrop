@@ -1,9 +1,17 @@
 ---
+- name: check of ossec download
+  stat: path="{{ ossec_archive}}"
+  register: ossec_download
+
+- debug: msg="OSSEC download exists will skip downloading again"
+  when: ossec_download.stat.exists
+
 - name: download OSSEC
   get_url:
     url: "{{ ossec_download_url }}"
     dest: "{{ securedrop_repo }}"
     sha256sum: "{{ ossec_download_checksum }}"
+  when: not ossec_download.stat.exists
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest
