@@ -129,8 +129,8 @@ apparmor_profiles:
   - usr.lib.apache2.mpm-worker.apache2
 
 # initialize securedrop web application
-#securedrop_header_image_path is defined in site-specific.yml config
-#securedrop_app_gpg_public_key_path is defined in site-specific.yml config
+#securedrop_header_image is defined in site-specific.yml config
+#securedrop_app_gpg_public_key is defined in site-specific.yml config
 #securedrop_app_gpg_fingerprint  is defined in site-specific.yml config
 
 ossec_apt_dependencies:

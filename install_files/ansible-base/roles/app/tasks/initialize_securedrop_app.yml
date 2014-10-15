@@ -3,8 +3,13 @@
   apt: pkg="{{ item }}" state=latest
   with_items: app_deps
 
+- name: copy the app gpg key from the admin host machine to the app server
+  copy:
+    src: "{{ securedrop_app_gpg_public_key }}"
+    dest: "{{ securedrop_data }}/"
+
 - name: import app gpg public key
-  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_app_gpg_public_key_path }}\" {{ securedrop_user }}"
+  command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}\" {{ securedrop_user }}"
 
 - stat: path="{{ securedrop_code }}/config.py"
   register: config
@@ -90,12 +95,12 @@
   # dpkg will not override it on upgrades
   # otherwise will need to templatizing the apparmor profile
 - name: check to see if header file is present
-  stat: path="{{ securedrop_header_image_path }}"
+  stat: path="{{ securedrop_header_image }}"
   register: header
 
 - name: if header file is present copy interface header to web app path
   copy:
-    src: "{{ securedrop_header_image_path }}"
+    src: "{{ securedrop_header_image }}"
     dest: "{{ securedrop_code }}/static/i/securedrop.png"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"

@@ -14,12 +14,18 @@ app_ip: "10.0.1.2"
 
 ### Used by the app role ###
 securedrop_code: "/vagrant/securedrop"
-securedrop_header_image_path: "None"
-securedrop_app_gpg_public_key_path: "/vagrant/securedrop/test_journalist_key.pub"
+# The securedrop_header_image has to be in the install_files/ansible-base/ or
+# the install_files/ansible-base/roles/app/files/ directory
+securedrop_header_image: "None"
+# The app gpg public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
+securedrop_app_gpg_public_key: "test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
 ### Used by the mon role ###
-ossec_alert_gpg_public_key_path: "{{ securedrop_repo }}/securedrop/test_journalist_key.pub"
+# The ossec alert gpg public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
+ossec_alert_gpg_public_key: "test_journalist_key.pub"
 ossec_gpg_fpr: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 ossec_alert_email: "ossec@ossec.test"
 smtp_relay: "smtp.gmail.com"
@@ -28,4 +34,6 @@ smtp_relay_fingerprint: "9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:6
 sasl_username: "test"
 sasl_domain: "ossec.test"
 sasl_password: "password123"
-ca_cert: "{{ securedrop_repo}}/Thawte_Premium_Server_CA.pem"
+# The ca_cert for the remote smtp relay needs to be in the
+# install_files/ansible-base or install_files/ansible-base/mon/files directory
+ca_cert: "Thawte_Premium_Server_CA.pem"
