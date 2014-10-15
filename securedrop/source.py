@@ -262,7 +262,7 @@ def delete():
     if msgid not in potential_files:
         abort(404)  # TODO are the checks necessary?
     store.secure_unlink(store.path(g.sid, msgid))
-    flash("Reply deleted.", "notification")
+    flash("Reply deleted", "notification")
 
     return redirect(url_for('lookup'))
 
