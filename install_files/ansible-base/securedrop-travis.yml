@@ -3,10 +3,12 @@
 
   vars_files:
     - group_vars/securedrop.yml
-    - host_vars/development.yml
+    - host_vars/app.yml
     - travis-specific.yml
 
   roles:
     - development
+    - app
+    - app-test
 
   sudo: yes
