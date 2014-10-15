@@ -29,10 +29,8 @@ def get_pid_from_pidfile(pid_file_name):
     with open(pid_file_name) as fp:
         return int(fp.read())
 
-def _start_test_rqworker():
+def _start_test_rqworker(config):
     # needed to determine the directory to run the worker in
-    import config
-
     worker_running = False
     try:
         if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
@@ -86,7 +84,8 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
-    _start_test_rqworker()
+    import config
+    _start_test_rqworker(config)
     test_cmds = ["py.test", "./test.sh"]
     test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
     _stop_test_rqworker()
