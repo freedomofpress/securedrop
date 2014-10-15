@@ -9,6 +9,7 @@ app_hostname: ""
 app_ip: ""
 
 ### Used by the app role ###
+securedrop_user: "www-data"
 securedrop_code: "/var/www/securedrop"
 securedrop_header_image_path: ""
 securedrop_app_gpg_public_key_path: ""

@@ -1,10 +1,7 @@
 ---
-- include: create_app_dirs.yml
+- name: install apt package deps for dev environment
+  apt: pkg="{{ item }}" state=latest
+  with_items: dev_deps
 
-- include: dev_install_pip_apt_pkgs.yml
-
-- include: initialize_securedrop_app.yml
-
-- include: dev_setup_xvfb_for_functional_tests.yml
-
-- include: manage_py_start.yml
+- name: install pip deps for dev env
+  pip: requirements="{{ dev_pip_requirements }}"

@@ -1,13 +1,20 @@
 ---
   # Repo and tor are installed in common role
 - include: app_configure_tor_hidden_services.yml
+  tags: non-development
+
+- include: create_app_dirs.yml
 
 - include: app_install_fpf_deb_pkgs.yml
+  tags: non-development
 
 - include: initialize_securedrop_app.yml
 
 - include: install_and_harden_apache.yml
+  tags: non-development
 
 - include: app_iptables.yml
+  tags: non-development
 
 - include: app_display_onions.yml
+  tags: non-development

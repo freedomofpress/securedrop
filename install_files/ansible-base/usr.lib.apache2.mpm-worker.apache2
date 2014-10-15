@@ -31,6 +31,4 @@
   /var/lib/securedrop/keys/secring.gpg.tmp rw,
   /var/lib/securedrop/keys/trustdb.gpg rw,
   /var/lib/securedrop/keys/trustdb.gpg.lock rwl,
-
-  }
 }

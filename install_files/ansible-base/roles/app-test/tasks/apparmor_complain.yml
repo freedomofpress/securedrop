@@ -1,12 +1,4 @@
 ---
-- name: link apparmor profiles from ansible-base to /etc/apparmor.d for development ease of use
-  file:
-    state: link
-    force: yes
-    src: "{{ item }}"
-    dest: /etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
-
 - name: ensure custom appamror profiles are in complain mode
   command: "aa-complain /etc/apparmor.d/{{ item }}"
   with_items: apparmor_profiles 

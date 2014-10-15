@@ -62,7 +62,7 @@ app_fpf_packages:
   - securedrop-ossec-agent
 
 # Installing securedrop web application
-securedrop_user: "www-data"
+#securedrop_user: is defined in the site-specific.yml config file
 #securedrop-code is defined in the site-specific.yml config file
 securedrop_data: "/var/lib/securedrop"
 

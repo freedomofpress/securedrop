@@ -1,6 +1,7 @@
 ---
 ### General (used by more than one role) ###
 securedrop_repo: "/vagrant"
+securedrop_user: "vagrant"
 
 ### Used by the common role ###
 ssh_users: "vagrant"
