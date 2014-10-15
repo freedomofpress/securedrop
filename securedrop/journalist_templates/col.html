@@ -16,12 +16,12 @@
 
   {% if docs %}
     <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using PGP.</p>
+    <form action="/bulk" method="post">
     <div class="document-actions">
       <div id='select-container'></div>
       <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
       <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
     </div>
-    <form action="/bulk" method="post">
       <ul id="submissions" class="plain submissions">
         {% for doc in docs %}
           <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>

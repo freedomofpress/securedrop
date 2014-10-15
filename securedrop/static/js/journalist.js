@@ -20,11 +20,11 @@ $(function () {
   none.css('cursor', 'pointer');
 
   all.click(function() {
-      var checkboxes = $("ul#cols li :checkbox").filter(":visible");
+      var checkboxes = $(":checkbox").filter(":visible");
       checkboxes.prop('checked', true);
   });
   none.click(function() {
-      var checkboxes = $("ul#cols li :checkbox").filter(":visible");
+      var checkboxes = $(":checkbox").filter(":visible");
       checkboxes.prop('checked', false);
   });
 
