@@ -1,0 +1,4 @@
+---
+- name: ensure custom appamror profiles are in complain mode
+  command: "aa-complain /etc/apparmor.d/{{ item }}"
+  with_items: apparmor_profiles 

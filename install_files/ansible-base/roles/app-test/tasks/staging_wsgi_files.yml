@@ -1,0 +1,3 @@
+---
+- name: ensure logging enabled source wsgi app files exists
+  copy: src=source.wsgi.logging dest=/var/www/source.wsgi owner={{ apache_user }} mode=0640

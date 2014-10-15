@@ -1,3 +1,0 @@
----
-- name: run_manage_py_start_script
-  command: "{{ manage_py_script }}" 

@@ -1,0 +1,30 @@
+---
+  # Since production environment do not have dhcp or dns set create etc hosts
+  # entries
+- include: set_etc_hosts_for_prod_env.yml
+  tags:
+    - static-hosts
+
+- include: install_tor.yml
+
+  # should be able to move to common
+  # Install Interfaces
+- include: install_fpf_repo.yml
+
+  # System Hardening
+- include: unattended_upgrades.yml
+
+- include: create_users.yml
+
+- include: remove_kernel_modules.yml
+
+- include: ssh.yml
+
+- include: harden_dns.yml
+
+- include: from_fpf_repo_install_grsec.yml
+  tags:
+    - grsec
+
+# Needs to run after installing grsec kernel
+- include: sysctl.yml

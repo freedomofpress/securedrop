@@ -17,7 +17,6 @@ set -e
 #          <overwriter-version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-. /usr/share/debconf/confmodule
 check_delete_user(){
     user_name="$1"
     if [ "$(getent passwd | grep -q "^$user_name")" ]; then

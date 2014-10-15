@@ -15,7 +15,7 @@ install:
 script:
 - echo localhost > inventory
 - ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
-- ansible-playbook -i inventory --connection=local --sudo --tags=development install_files/ansible-base/securedrop-travis.yml
+- ansible-playbook -i inventory --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
 - sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
 notifications:
   slack:

@@ -1,0 +1,11 @@
+---
+- name: install fpf apt signing gpg key
+  apt_key: >
+    state=present
+    data="{{ lookup('file', 'fpf-signing-key.pub') }}"
+
+- name: setup fpf apt repo
+  apt_repository: >
+    repo='deb [arch=amd64] https://apt.pressfreedomfoundation.org {{ distribution_release }} main'
+    state=present 
+    update_cache=yes

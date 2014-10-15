@@ -15,7 +15,6 @@ set -x
 #          <conflicting-package> <version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-. /usr/share/debconf/confmodule
 
 case "$1" in
     configure)

@@ -1,2 +1,0 @@
-/etc/network/if-up.d/load_iptables
-/etc/iptables/rules_v4

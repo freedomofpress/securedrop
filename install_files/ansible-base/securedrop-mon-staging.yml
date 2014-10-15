@@ -2,8 +2,14 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - securedrop-mon-staging-conf.yml
+    - group_vars/securedrop.yml
+    - host_vars/mon.yml
+    - staging-specific.yml
+
   roles:
-    - { role: ansible-securedrop,
-        sudo: yes
-      }
+    - common
+    - build-ossec-deb-pkg
+    - mon
+    - allow-direct-access
+
+  sudo: yes

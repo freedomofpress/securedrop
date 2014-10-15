@@ -17,7 +17,6 @@ set -e
 #          <overwriter-version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-. /usr/share/debconf/confmodule
 
 case "$1" in
     upgrade|failed-upgrade)
@@ -33,23 +32,20 @@ case "$1" in
 	fi
 
 	if getent group | grep -q "^ossec"
-	then
+    then
 		delgroup ossec
 	fi
 
-        if [ -f /etc/init.d/ossec ]; then
+    if [ -f /etc/init.d/ossec ]; then
 	    rm -f /etc/init.d/ossec
-        fi
+    fi
 
-        if [ -f /etc/ossec-init.conf ]; then
+    if [ -f /etc/ossec-init.conf ]; then
 	    rm -f /etc/ossec-init.conf
-        fi
+    fi
 
 	update-rc.d -f ossec remove
 
-        sed -i '/monitor_host_entry/d' /etc/hosts
-
-        db_purge
     ;;
 
     *)

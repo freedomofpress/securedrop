@@ -1,0 +1,164 @@
+---
+#securedop_repo is defined in site-specific.yml config
+
+### Used by the common role ###
+# ssh_users is defined in the site-specific.yml config
+# monitor_ip is defined in the site-specific.yml config
+# monitor_hostname is defined in the site-specific.yml config
+
+# For setting the etc hosts entries
+ip_info:
+  - ip: "{{ monitor_ip }}"
+    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+
+
+### Used by the debs role ###
+
+# Building the securedrop-app-code deb package
+securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
+build_app_code_dir: "{{ securedrop_repo }}/securedrop"
+prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/prod-requirements.txt"
+dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
+dev_deps:
+  - libssl-dev
+  - python-dev
+  - python-pip
+
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_build_dir: "securedrop-ossec-agent-2.8.1-amd64"
+ossec_deb_path: "{{ securedrop_repo }}"
+ossec_preloaded_vars: "app-preloaded-vars.conf"
+ossec_package_name: "ossec-agent"
+ossec_group: "ossec"
+build_ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+
+# Installing the securedrop-app-code.deb package
+securedrop_deb_path: "{{ securedrop_repo }}"
+securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb extension
+
+# Installing the securedrop-ossec-agent.deb package
+securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
+
+
+### Used by the app role ###
+
+# Configuring the tor hidden services
+app_tor_instances:
+  - ssh
+  - source
+  - document
+
+app_fpf_packages:
+  - securedrop-app-code
+  - securedrop-ossec-agent
+
+# Installing securedrop web application
+#securedrop_user: is defined in the site-specific.yml config file
+#securedrop-code is defined in the site-specific.yml config file
+securedrop_data: "/var/lib/securedrop"
+
+apache_user: "www-data"
+
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_files:
+  - 'apache2.conf'
+  - 'security'
+
+apache_templates:
+  - 'ports.conf'
+  - 'sites-available/document.conf'
+  - 'sites-available/source.conf'
+
+apache_modules:
+  - access_compat
+  - authn_core
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - wsgi
+  - xsendfile
+
+## TODO instead of hard coding disabled modules find intersection of
+#apache_modules vs enabled modules
+apache_disabled_modules:
+  - auth_basic
+  - authn_file
+  - autoindex
+  - env
+  - setenvif
+  - status
+
+apache_sites:
+  - source
+  - document
+
+app_deps:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils
+
+apparmor_profiles:
+  - usr.bin.tor
+  - usr.lib.apache2.mpm-worker.apache2
+
+# initialize securedrop web application
+#securedrop_header_image_path is defined in site-specific.yml config
+#securedrop_app_gpg_public_key_path is defined in site-specific.yml config
+#securedrop_app_gpg_fingerprint  is defined in site-specific.yml config
+
+ossec_apt_dependencies:
+  - libc6
+  - libssl1.0.0
+  - expect
+  - inotify-tools
+  - adduser
+
+
+### Used by the test role ###
+
+# To allow direct connections to source document interfaces for ease of testing
+apache_listening_address: "0.0.0.0"
+apache_allow_from: "all"
+source_apache_log_location: "/var/log/apache2/source-error.log"
+apache_logging_level: "info"
+
+direct_access_rules:
+  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+
+test_apt_dependencies:
+  - firefox
+  - xvfb

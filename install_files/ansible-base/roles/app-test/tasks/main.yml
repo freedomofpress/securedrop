@@ -1,0 +1,10 @@
+---
+- include: staging_wsgi_files.yml
+  tags: non-development
+
+- include: apparmor_complain.yml
+  tags: non-development
+
+- include: dev_install_pip_apt_pkgs.yml
+
+- include: dev_setup_xvfb_for_functional_tests.yml

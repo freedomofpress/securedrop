@@ -1,0 +1,4 @@
+---
+- name: ensure securedrop-app-code packages is installed from repo
+  apt: pkg="{{ item }}" state=present
+  with_items: app_fpf_packages

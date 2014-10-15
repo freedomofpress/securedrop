@@ -1,0 +1,7 @@
+---
+- sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
+  with_items: sysctl_flags
+
+- sysctl: name=kernel.grsecurity.grsec_lock value=1 sysctl_set=yes state=present reload=yes
+  tags:
+    - grsec

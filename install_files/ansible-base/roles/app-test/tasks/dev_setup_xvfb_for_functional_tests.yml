@@ -1,0 +1,14 @@
+---
+- name: install testing dependencies
+  apt: name="{{ item }}" state=latest
+  with_items: test_apt_dependencies
+
+- name: copy xvfb init script to /etc/init.d
+  copy: src=xvfb dest=/etc/init.d/xvfb owner=root mode=700
+
+- name: update rc.d to run xvfb at boot
+  command: "update-rc.d xvfb defaults"
+  notify: start xvfb
+
+- name: set DISPLAY environment variable for xvfb on reboot
+  copy: src=xvfb_display.sh dest=/etc/profile.d/xvfb_display.sh owner=root mode=444

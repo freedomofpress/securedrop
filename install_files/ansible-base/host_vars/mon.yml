@@ -1,0 +1,79 @@
+---
+#securedop_repo is defined in site-specific.yml config
+
+### Used by the common role ###
+# ssh_users is defined in the site-specific.yml config
+# app_ip is defined in the site-specific.yml config
+# app_hostname is defined in the site-specific.yml config
+
+# For setting the etc hosts entries
+ip_info:
+  - ip: "{{ app_ip }}"
+    hostname: "{{ app_hostname }}"
+
+
+### Used by the debs role ###
+
+# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_build_dir: "securedrop-ossec-server-2.8.1-amd64"
+ossec_deb_path: "{{ securedrop_repo }}"
+ossec_preloaded_vars: "mon-preloaded-vars.conf"
+ossec_package_name: "ossec-server"
+ossec_group: "ossec"
+build_ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+
+# Installing securedrop-ossec-server.deb package
+securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.1-amd64" # do not include .deb extension
+
+
+### Used by the mon role ###
+
+# Configure the tor hidden services
+mon_tor_instances:
+  - ssh
+
+# Packages to install from fpf repo
+mon_fpf_packages:
+  - securedrop-ossec-server
+
+# Apt dependencies for the ossec server package
+ossec_apt_dependencies:
+  - libc6
+  - libssl1.0.0
+  - expect
+  - inotify-tools
+  - adduser
+  - procmail
+  - postfix
+  - mailutils
+
+# Configuration info for procmail and postfix
+#ossec_alert_gpg_public_key_public_key_path is defined in the site-specific.yml config
+#ossec_gpg_fpr is defined in the site-specific.yml config
+#ossec_alert_email is defined in the site-specific.yml config
+#smtp_relay is defined in the site-specific.yml config
+#smtp_relay_port is defined in the site-specific.yml config
+#smtp_relay_fingerprint is defined in the site-specific.yml config
+#sasl_username is defined in the site-specific.yml config
+#sasl_domain is defined in the site-specific.yml config
+#sasl_password is defined in the site-specific.yml config
+#ca_cert is defined in the site-specific.yml config
+
+
+### Used by the test role ###
+
+# To allow direct access
+direct_access_rules:
+  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"

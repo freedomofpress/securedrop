@@ -1,7 +1,0 @@
----
-- name: ensure sysctl.conf file exists
-  copy: src=sysctl.conf dest=/etc/sysctl.conf mode=0400
-
-- sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
-  with_items: sysctl_flags
-
