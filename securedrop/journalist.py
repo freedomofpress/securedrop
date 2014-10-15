@@ -18,6 +18,7 @@ import template_filters
 from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
                 Journalist, NoResultFound, WrongPasswordException,
                 BadTokenException)
+import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
@@ -339,7 +340,7 @@ def col(sid):
 
 def delete_collection(source_id):
     # Delete the source's collection of submissions
-    store.delete_source_directory(source_id)
+    worker.enqueue(store.delete_source_directory, source_id)
 
     # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(source_id)
@@ -494,7 +495,7 @@ def bulk_delete(sid, docs_selected):
             if not doc['name'].endswith('reply.gpg'):
                 db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
             fn = store.path(sid, doc['name'])
-            store.secure_unlink(fn)
+            worker.enqueue(store.secure_unlink, fn)
         db_session.commit()
     return render_template('delete.html', sid=sid,
                            codename=source.journalist_designation,
