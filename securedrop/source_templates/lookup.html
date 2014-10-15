@@ -8,32 +8,6 @@
   <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
 
-  {% if request.args.get('from_login') or has_submissions or replies %}
-    <h2 class="headline">Replies</h2>
-
-    <div id="replies">
-      {% if not replies %}
-        <p>There are no replies at this time. You can submit more documents from this codename below.</p>
-      {% else %}
-        <p class="flash notification"><i class="fa fa-info-circle pull-left"></i> You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message below.</p>
-        <hr class="no-line">
-        {% for reply in replies %}
-          <div class="reply">
-            <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
-            <form class="message" method="post" action="/delete" autocomplete="off">
-              <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-              <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
-              <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
-            </form>
-            <blockquote>{{ reply.msg | nl2br }}</blockquote>
-            <div class="clearfix"></div>
-          </div>
-        {% endfor %}
-      {% endif %}
-    </div>
-    <hr class="no-line">
-  {% endif %}
-
   <h2 class="headline">Submit documents and messages</h2>
   <p>You can send a file, a message, or both.</p>
 
@@ -56,9 +30,34 @@
   <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> Submit</button>
 </form>
 
-<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission can provide an extra layer of security before your data reaches SecureDrop. (<a href="/why-journalist-key" class="text-link">Learn More</a>)</p>
+<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
 <hr class="no-line"/>
+
+<h2 class="headline">Replies</h2>
+
+<div id="replies">
+  {% if replies %}
+    <p>You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message above.</p>
+    <hr class="no-line">
+    {% for reply in replies %}
+      <div class="reply">
+        <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
+        <form class="message" method="post" action="/delete" autocomplete="off">
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
+          <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
+        </form>
+        <blockquote>{{ reply.msg | nl2br }}</blockquote>
+        <div class="clearfix"></div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p id="no-replies">There are no replies at this time.</p>
+  {% endif %}
+</div>
+
+<hr class="no-line">
 
 <div class="code-reminder">
   <i class="fa fa-lock pull-left"></i> Remember, your codename is: <strong>{{ codename }}</strong>
