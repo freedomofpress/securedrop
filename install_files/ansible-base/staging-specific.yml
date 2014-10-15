@@ -25,8 +25,8 @@ securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 ### Used by the mon role ###
 # The ossec alert gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
-ossec_alert_gpg_public_key: "test_journalist_key.pub"
-ossec_gpg_fpr: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+ossec_alert_gpg_public_key: "test_admin_key.pub"
+ossec_gpg_fpr: "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
 ossec_alert_email: "ossec@ossec.test"
 smtp_relay: "smtp.gmail.com"
 smtp_relay_port: "587"
