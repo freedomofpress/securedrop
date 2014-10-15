@@ -189,13 +189,11 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    # if this was a redirect from the login page, flash a message if there are
-    # no replies to clarify "check for replies" flow (#393)
-    if request.args.get('from_login') == '1' and len(replies) == 0:
-        flash("There are no replies at this time. You can submit more documents from this codename below.", "notification")
+    has_submissions = True if sum(g.source.documents_messages_count().values()) else False
 
     return render_template('lookup.html', codename=g.codename, replies=replies,
-            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
+            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid),
+            has_submissions=has_submissions)
 
 
 def normalize_timestamps(sid):
