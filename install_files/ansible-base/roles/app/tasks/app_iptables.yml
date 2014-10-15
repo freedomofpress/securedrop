@@ -12,7 +12,7 @@
   # server is rebooted. This also means that any updates to the firewall in the
   # future will require a restart.
   #
-  # The process should be re-desinged so the iptables rules are not applied in
+  # The process should be re-designed so the iptables rules are not applied in
   # bulk. When that is done this issue will be avoided.
 
 - name: ensure load_iptables script is present

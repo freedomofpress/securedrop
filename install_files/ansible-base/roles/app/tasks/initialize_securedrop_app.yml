@@ -13,6 +13,18 @@
   command: "cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py"
   when: not config.stat.exists
 
+# TODO: config.py.example is already written using Jinja2 format, and should be
+# easy to template-ize. However, we cannot do this because when Ansible writes
+# a template, it re-does the entire thing. This would cause a problem in the
+# case where we want to re-provision a machine with an updated value (e.g. the
+# application key fingerprint). Blindly overwriting the entire file would cause
+# major problems. It would be nice to use templates here, assuming we find a
+# way to selectively update the file.
+
+# Note: we can also use register with with_items to cut down on repetition
+# here. See
+# http://docs.ansible.com/playbooks_loops.html#using-register-with-a-loop
+
 - name: generating 32 byte value for "source secret key"
   shell: "head -c 32 /dev/urandom | base64"
   register: source_secret_key
@@ -78,7 +90,7 @@
   # dpkg will not override it on upgrades
   # otherwise will need to templatizing the apparmor profile
 - name: check to see if header file is present
-  stat: path="{{ securedrop_header_image_path}}"
+  stat: path="{{ securedrop_header_image_path }}"
   register: header
 
 - name: if header file is present copy interface header to web app path

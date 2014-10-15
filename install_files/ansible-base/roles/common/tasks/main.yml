@@ -1,13 +1,14 @@
 ---
-  # Since production environment do not have dhcp or dns set create etc hosts
+  # Since production environment does not have dhcp or dns create etc hosts
   # entries
 - include: set_etc_hosts_for_prod_env.yml
   tags:
+      # CI environment uses a vps where we use vagrant-hostmanger to manage
+      # /etc/hosts
     - static-hosts
 
 - include: install_tor.yml
 
-  # should be able to move to common
   # Install Interfaces
 - include: install_fpf_repo.yml
 

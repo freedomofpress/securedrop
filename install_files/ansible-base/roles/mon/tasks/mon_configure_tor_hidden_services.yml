@@ -1,5 +1,5 @@
 ---
-- name: ensure tor the directory for hidden services exists
+- name: ensure the parent directory for hidden services exists
   file:
     state: directory
     path: "{{ tor_hidden_services_parent_dir }}"

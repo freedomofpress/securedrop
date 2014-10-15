@@ -30,8 +30,6 @@
     dest: /etc/postfix/main.cf
   notify: restart postfix
 
-#- name: configure postfix headers
-
-#- name: configure postfix proxy
+# TODO - name: configure postfix proxy
 
 

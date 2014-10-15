@@ -2,10 +2,14 @@
 - name: ensure procmail is installed
   apt: pkg=procmail state=latest
 
-# The ossec user login is set to false. Not sure how to create it's gpg keyring as the ossec user without first enabling that
 - name: ensure ossec alert gpg public key is in the ossec keyring
   command: "gpg --homedir /var/ossec/.gnupg --import {{ ossec_alert_gpg_public_key_path }}"
 
+  # The ossec user does not have a shell. Future modifications to the keyring
+  # (e.g. additional keys to use for encrypting notification emails) cannot be
+  # made directly. You can either:
+  # 1. Do it as root and then re-chown the keyring directory
+  # 2. Give the ossec user a shell
 - name: chown the ossec users gpg keyring
   command: "chown -R ossec:root /var/ossec/.gnupg"
 
@@ -32,6 +36,7 @@
     owner: ossec
     group: root
 
+  # TODO This might not be necessary
 - name: create procmail log file
   file:
     state: touch

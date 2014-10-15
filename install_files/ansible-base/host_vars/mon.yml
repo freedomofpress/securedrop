@@ -32,7 +32,10 @@ build_ossec_deb_pkg_dependencies:
   - unzip
 
 # Installing securedrop-ossec-server.deb package
-securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.1-amd64" # do not include .deb extension
+#
+# This is the path to the directory where we build the deb. The deb package
+# will be created alongside it and will have ".deb" automatically appended.
+securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.1-amd64"
 
 
 ### Used by the mon role ###

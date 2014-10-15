@@ -1,13 +1,6 @@
 ---
-  #CI environment uses a vps where we use vagrant-hostmanger to manage
-  #/etc/hosts
-- include: set_etc_hosts_for_prod_env.yml
-  tags:
-    - not-snap
-
-  #This needs to be run after seting the etc hosts or else will het a hostname
-  #error
-  # change these to lineinfile module to work with the exemptions
+  # This needs to be run after seting the etc hosts or else will get a hostname
+  # error change these to lineinfile module to work with the exemptions
 - include: mon_iptables.yml
 
 - include: mon_configure_tor_hidden_services.yml

@@ -1,11 +1,11 @@
 ---
-- name: ensure tor the directory for hidden services exists
+- name: ensure the parent directory for hidden services exists
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}"
     owner: "{{ tor_user }}"
 
-- name: ensure  the hidden services directories exist
+- name: ensure each hidden service's directory exists
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}/{{ item }}"

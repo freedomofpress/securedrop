@@ -1,3 +1,7 @@
 ---
+# Note that in production, we always enable logging for the document interface
+# but disable for the source interface to avoid leaking information about the
+# behavior of sources. In staging, this logging is useful and so it is enabled
+# by this task.
 - name: ensure logging enabled source wsgi app files exists
   copy: src=source.wsgi.logging dest=/var/www/source.wsgi owner={{ apache_user }} mode=0640
