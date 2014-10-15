@@ -9,6 +9,7 @@ import readline # makes the add_admin prompt kick ass
 from getpass import getpass
 
 import qrcode
+import psutil
 
 from db import db_session, Journalist
 
@@ -21,14 +22,26 @@ from db import db_session, Journalist
 
 os.environ['SECUREDROP_ENV'] = 'dev'
 
+def _start_rqworker_if_not_running(config):
+    # Start the Python-RQ worker if it's not already running
+    worker_running = False
+    try:
+        with open(config.WORKER_PIDFILE) as fp:
+            worker_pid = int(fp.read())
+        if psutil.pid_exists(worker_pid):
+            worker_running = True
+    except IOError:
+        pass
+
+    if not worker_running:
+        dev_null = open(os.devnull, 'w')
+        subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT, "--pid",
+            config.WORKER_PIDFILE], stdout=dev_null, stderr=subprocess.STDOUT)
+
+
 def start():
     import config
-
-    # Start the Python-RQ worker if it's not already running
-    if not os.path.exists(config.WORKER_PIDFILE):
-        subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT,
-                                      "--pid", config.WORKER_PIDFILE])
-
+    _start_rqworker_if_not_running(config)
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
@@ -59,6 +72,8 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
+    import config
+    _start_rqworker_if_not_running(config)
     test_cmds = ["py.test", "./test.sh"]
     sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
 
