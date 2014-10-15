@@ -1,29 +1,6 @@
 # Setup your local environment
 
-## Version Notes
-
-Tested with:
-
-```
-vagrant --version
-Vagrant 1.6.5
-```
-
-```
-vagrant-cachier (1.0.0)
-vagrant-digitalocean (0.7.0)
-vagrant-hostmanager (1.5.0)
-vagrant-login (1.0.1, system)
-vagrant-share (1.1.2, system)
-```
-
-```
-ansible --version
-ansible 1.7.2
-```
-
 ## Ubuntu 14.04
-
 
 `sudo apt-get install git -y`
 
@@ -41,8 +18,8 @@ git checkout BRANCH
 
 `sudo apt-get install dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential -y`
 
-vagrant chachier plugins need a newer version that what in the ubuntu repo
-vagrant-chachier will speed up provisioning a lot
+vagrant cachier plugins need a newer version that what in the ubuntu repo
+vagrant-cachier will speed up provisioning a lot
 Download current version from https://downloads.vagrantup.com/
 Tested: vagrant- 1.6.5
 
@@ -62,6 +39,12 @@ Really helps with build times
 
 `vagrant plugin install vagrant-cachier`
 
+You will also need to install the following Vagrant plugins via `vagrant plugin install`:
+
+* vagrant-digitalocean (0.7.0)
+* vagrant-hostmanager (1.5.0)
+
+
 ## Mac OS X
 
 First, install the requirements:
@@ -77,16 +60,20 @@ First, install the requirements:
       $ sudo easy_install pip
       $ sudo pip install ansible
       ```
+4. You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
+    * vagrant-digitalocean (0.7.0)
+    * vagrant-hostmanager (1.5.0)
 
-Now you're ready to use vagrant to provision SecureDrop VM's!
+TODO: we may be able to get rid of one or both of these plugin requirements.
 
 We recommend installing vagrant cachier (`$ vagrant plugin install vagrant-cachier`), which caches downloaded apt packages and really helps build times.
+
+Now you're ready to use vagrant to provision SecureDrop VM's!
 
 
 # Overview
 
-
-There are 4 predefined VM configurations in the vagrantfile: development, debs, staging, app and mon.
+There are predefined VM configurations in the vagrantfile: development, staging, app and mon (production).
 
 * **development**: for working on the application code
     * Source Interface: localhost:8080
@@ -96,9 +83,11 @@ There are 4 predefined VM configurations in the vagrantfile: development, debs, 
     * Document Interface: localhost:8083
     * The interfaces and ssh are also available over tor and direct access.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
-* **app**: This is a production installation with all of the hardening applied. 
+* **app**: This is a production installation with all of the hardening applied.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
-    * Putting the apparmor profiles in complain mode (default) or enforce mode can be done witht he ansible tags apparmor-complain or apparmor-enforce.
+    * Putting the apparmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
+
+
 ## Development
 
 ```
@@ -150,3 +139,26 @@ Hosts *.onion
 Compression yes # this compresses the SSH traffic to make it less slow over tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
+
+## Version Notes
+
+Tested with:
+
+```
+vagrant --version
+Vagrant 1.6.5
+```
+
+```
+vagrant-cachier (1.0.0)
+vagrant-digitalocean (0.7.0)
+vagrant-hostmanager (1.5.0)
+vagrant-login (1.0.1, system)
+vagrant-share (1.1.2, system)
+```
+
+```
+ansible --version
+ansible 1.7.2
+```
+
