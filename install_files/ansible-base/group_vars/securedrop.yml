@@ -61,3 +61,17 @@ grub_pax:
   - /usr/sbin/grub-setup
   - /usr/bin/grub-script-check
   - /usr/bin/grub-mount
+
+### Used by the build-ossec-deb-pkg roles ###
+build_ossec_deb_pkg_dependencies:
+  - inotify-tools
+  - libssl-dev
+  - make
+  - tar
+  - unzip
+ossec_group: "ossec"
+ossec_download_url: "http://www.ossec.net/files/ossec-hids-2.8.1.tar.gz"
+ossec_download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+ossec_version: "ossec-hids-2.8.1"
+ossec_archive: "{{ securedrop_repo }}/{{ ossec_version }}.tar.gz"
+ossec_deb_path: "{{ securedrop_repo }}"
