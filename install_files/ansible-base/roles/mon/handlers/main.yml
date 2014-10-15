@@ -4,5 +4,11 @@
   service: name=tor state=restarted
 
 ## System Hardening
+- name: update aliases
+  command: postalias /etc/aliases
+
+- name: update sasl_passwd db
+  command: postmap /etc/postfix/sasl_passwd
+
 - name: restart postfix
   service: name=postfix state=restarted

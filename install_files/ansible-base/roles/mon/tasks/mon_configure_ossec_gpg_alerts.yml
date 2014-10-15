@@ -3,36 +3,13 @@
   apt: pkg=procmail state=latest
 
 - name: ensure ossec alert gpg public key is in the ossec keyring
-  command: "gpg --homedir /var/ossec/.gnupg --import {{ ossec_alert_gpg_public_key_path }}"
-
-  # The ossec user does not have a shell. Future modifications to the keyring
-  # (e.g. additional keys to use for encrypting notification emails) cannot be
-  # made directly. You can either:
-  # 1. Do it as root and then re-chown the keyring directory
-  # 2. Give the ossec user a shell
-- name: chown the ossec users gpg keyring
-  command: "chown -R ossec:root /var/ossec/.gnupg"
-
-- name: chmod gpg keyring directory
-  file: 
-    state: directory
-    dest: /var/ossec/.gnupg
-    owner: ossec
-    group: root
-    mode: 700
-
-- name: chmod keyring files to avoid gpg warnings
-  command: "chmod 600 /var/ossec/.gnupg/{{ item }}"
-  with_items:
-    - pubring.gpg
-    - secring.gpg
-    - trustdb.gpg
+  command: "su -s /bin/bash -c \"gpg --homedir /var/ossec/.gnupg --import {{ ossec_alert_gpg_public_key_path }}\" {{ ossec_group }}"
 
 - name: ensure send_encrypted_alarm script is present
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
-    mode: 755
+    mode: 775
     owner: ossec
     group: root
 
@@ -41,13 +18,13 @@
   file:
     state: touch
     dest: /var/log/procmail.log
-    mode: 600
+    mode: 660
     owner: ossec
     group: root
 
 - name: ensure procmail config is present
   copy:
-    src: procmailrc 
+    src: procmailrc
     dest: /var/ossec/.procmailrc
     owner: ossec
     group: root

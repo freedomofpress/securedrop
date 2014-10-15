@@ -57,6 +57,7 @@ case "$1" in
         mkdir -p ${OSSEC_HOME}/logs/archives
         mkdir -p ${OSSEC_HOME}/logs/alerts
         mkdir -p ${OSSEC_HOME}/tmp
+        mkdir -p ${OSSEC_HOME}/.gnupg
 
         if ! getent group | grep -q "^ossec"
         then
@@ -169,7 +170,9 @@ case "$1" in
 	chown root:${GROUP} ${OSSEC_HOME}/etc/client.keys >/dev/null 2>&1 || true
 	chown root:${GROUP} ${OSSEC_HOME}/etc/shared/*
 	chown root:${GROUP} ${OSSEC_HOME}/agentless/*
-	chown ${USER}:${GROUP} ${OSSEC_HOME}/.ssh
+    chown ${USER}:${GROUP} ${OSSEC_HOME}/.gnupg
+    chown ${USER}:${GROUP} ${OSSEC_HOME}/.ssh
+
 	chmod 440 ${OSSEC_HOME}/etc/decoder.xml
 	chmod 440 ${OSSEC_HOME}/etc/local_decoder.xml >/dev/null 2>&1 || true
 	chmod 440 ${OSSEC_HOME}/etc/internal_options.conf
@@ -188,6 +191,7 @@ case "$1" in
 	chmod 550 ${OSSEC_HOME}/bin/*
 	chown root:${GROUP} ${OSSEC_HOME}/etc/ossec.conf
 	chmod 440 ${OSSEC_HOME}/etc/ossec.conf
+    chmod 700 ${OSSEC_HOME}/.gnupg
 
 	if [ -x /etc/init.d/ossec ]; then
 	    update-rc.d -f ossec defaults

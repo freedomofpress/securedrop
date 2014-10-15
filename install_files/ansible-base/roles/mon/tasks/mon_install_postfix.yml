@@ -6,15 +6,14 @@
   copy:
     src: aliases
     dest: /etc/aliases
+  notify: update aliases
 
 - name: configure sasl password for smtp relay
   template:
     src: sasl_passwd
     dest: /etc/postfix/sasl_passwd
     mode: 0400
-
-- name: postmap sasl_passwd
-  command: "postmap /etc/postfix/sasl_passwd"
+  notify: update sasl_passwd db
 
 - name: ensure smtp relay ssl cert is present
   command: creates=/etc/postfix/cacert.pem cp {{ ca_cert }} /etc/postfix/cacert.pem
@@ -31,5 +30,3 @@
   notify: restart postfix
 
 # TODO - name: configure postfix proxy
-
-
