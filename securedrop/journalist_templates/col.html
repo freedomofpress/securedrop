@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <form action='/regenerate-code' method='post' id="regnerate-code">
+  <form action='/regenerate-code' method='post' id="regenerate-code">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
     <input type="hidden" name="sid" value="{{ sid }}">
 

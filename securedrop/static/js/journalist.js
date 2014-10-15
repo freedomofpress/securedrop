@@ -75,4 +75,9 @@ $(function () {
       return confirm("Are you sure to want to reset this user's two factor authentication?");
   });
 
+  // Confirm before changing a user's codename
+  $("form#regenerate-code").submit(function(event) {
+    return confirm("Are you sure you want to generate a new random codename for this source? You will not be able to return to using the previous codename.");
+  });
+
 });
