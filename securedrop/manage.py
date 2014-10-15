@@ -7,6 +7,7 @@ import subprocess
 import unittest
 import readline # makes the add_admin prompt kick ass
 from getpass import getpass
+import signal
 
 import qrcode
 import psutil
@@ -22,26 +23,39 @@ from db import db_session, Journalist
 
 os.environ['SECUREDROP_ENV'] = 'dev'
 
-def _start_rqworker_if_not_running(config):
-    # Start the Python-RQ worker if it's not already running
+WORKER_PIDFILE = "/tmp/test_rqworker.pid"
+
+def get_pid_from_pidfile(pid_file_name):
+    with open(pid_file_name) as fp:
+        return int(fp.read())
+
+def _start_test_rqworker():
+    # needed to determine the directory to run the worker in
+    import config
+
     worker_running = False
     try:
-        with open(config.WORKER_PIDFILE) as fp:
-            worker_pid = int(fp.read())
-        if psutil.pid_exists(worker_pid):
+        if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
             worker_running = True
     except IOError:
         pass
 
     if not worker_running:
-        dev_null = open(os.devnull, 'w')
-        subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT, "--pid",
-            config.WORKER_PIDFILE], stdout=dev_null, stderr=subprocess.STDOUT)
+        tmp_logfile = open("/tmp/test_rqworker.log", "w")
+        subprocess.Popen(
+                [
+                    "rqworker", "test",
+                    "-P", config.SECUREDROP_ROOT,
+                    "--pid", WORKER_PIDFILE
+                ],
+            stdout=tmp_logfile,
+            stderr=subprocess.STDOUT)
 
+def _stop_test_rqworker():
+    os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
 
 def start():
     import config
-    _start_rqworker_if_not_running(config)
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
@@ -72,10 +86,11 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_rqworker_if_not_running(config)
+    _start_test_rqworker()
     test_cmds = ["py.test", "./test.sh"]
-    sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
+    test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
+    _stop_test_rqworker()
+    sys.exit(test_rc)
 
 def test_unit():
     """
