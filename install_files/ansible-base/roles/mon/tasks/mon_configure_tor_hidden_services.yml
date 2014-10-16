@@ -14,7 +14,10 @@
 
 - name: ensure securedrop mon servers torrc is present
   copy: src=torrc-mon dest=/etc/tor/torrc owner="{{ tor_user }}" mode=0644
-  notify: restart tor
+  notify:
+    - restart tor
+
+- meta: flush_handlers
 
 - name: ensure tor is running
   service: name=tor state=running

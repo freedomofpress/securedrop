@@ -12,7 +12,7 @@ wheelhouse
 app-ssh-aths
 app-document-aths
 app-source-ths
-mon-ssh-ths
+mon-ssh-aths
 
 # ignore vagrant servet file
 secrets.rb

@@ -1,4 +1,8 @@
 ---
+- name: wait for all tor hidden services hostname files
+  wait_for: state=present path="{{ tor_hidden_services_parent_dir }}/{{ item }}/hostname" delay=5
+  with_items: app_tor_instances
+
 - name: fetch securedrop source ths
   fetch: src=/var/lib/tor/services/source/hostname dest=./app-source-ths flat=yes fail_on_missing=yes
 
