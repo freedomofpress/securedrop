@@ -5,3 +5,10 @@
 
 - name: install pip deps for dev env
   pip: requirements="{{ dev_pip_requirements }}"
+
+- name: set SECUREDROP_ENV in bashrc
+  lineinfile:
+    dest: /home/{{ securedrop_user }}/.bashrc
+    state: present
+    insertafter: EOF
+    line: "export SECUREDROP_ENV=dev"
