@@ -10,5 +10,7 @@
 - name: ensure sshd is running
   service: name=ssh state=running
 
-- name: ensure pam config is installed
-  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
+### Disabling this task until we settle if we are going to use 2fa (password
+#and OTP or a ssh keyfile and out of band option
+#- name: ensure pam config is installed
+#  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
