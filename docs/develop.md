@@ -101,8 +101,7 @@ cd /vagrant/securedrop
 ## Staging
 
 ```
-vagrant up /staging$/ --no-provision
-vagrant provision /staging$/
+vagrant up /staging$/
 vagrant ssh app-staging
 sudo su
 cd /var/www/securedrop
@@ -113,8 +112,7 @@ cd /var/www/securedrop
 
 ## Production
 
-
-You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-app-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-app-conf.yml
+You will need to fill out the conf file `securedrop/install_files/ansible_base/prod-specific.yml`.
 
 ```
 vagrant up app
@@ -124,21 +122,46 @@ cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-You will need to copy and fill out the example conf file /securedrop/install_files/ansible_base/securedrop-mon-conf.yml.example to /securedrop/install_files/ansible_base/securedrop-mon-conf.yml
-
 `vagrant up mon`
 
-Once SSH is only allowed over tor you will need to use torify or connect proxy.
+In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by *TODO*
 
-`sudo apt-get install connect-proxy`
+### connect-proxy (Ubuntu only)
 
-Connect Proxy config ~/.ssh/config
+Ubuntu: `sudo apt-get install connect-proxy`
+*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last I checked (Wed Oct 15 21:15:17 PDT 2014).*
+
+After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
+
+```
+ssh admin1@examplenxu7x5ifm.onion -o ProxyCommand="/usr/bin/connect-proxy -5 -S localhost:9050 %h %p"
+```
+
+You can also configure your SSH client to make the settings for proxying over Tor persistent, and then connect using the regular SSH command syntax. Add the following lines to your `~/.ssh/config`:
 
 ```
 Hosts *.onion
 Compression yes # this compresses the SSH traffic to make it less slow over tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
+
+This proxies all requests to `*.onion` address through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
+
+```
+ssh admin@examplenxu7x5ifm.onion
+```
+
+### torify (Ubuntu and Mac OS X)
+
+Ubuntu: torsocks should be installed by the tor package. If it is not installed, make sure you are using tor from the [Tor Project's repo](https://www.torproject.org/docs/debian.html.en), and not Ubuntu's package.
+Mac OS X (Homebrew): `brew install torsocks`
+
+If you have torify on your system (`$ which torify`) and you're Tor running in the background, simply prepend it to the SSH command:
+
+```
+torify ssh admin@examplenxu7x5ifm.onion
+```
+
 
 ## Version Notes
 
