@@ -1,11 +1,13 @@
-import config
-import db
 import os
-import gnupg
 import shutil
 import uuid
-import crypto_util
+import subprocess
 
+import gnupg
+
+import config
+import db
+import crypto_util
 
 def clean_root():
     shutil.rmtree(config.SECUREDROP_DATA_ROOT)
@@ -60,6 +62,11 @@ def shared_setup():
 
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
+
+    # Start the Python-RQ worker if it's not already running
+    if not os.path.exists(config.WORKER_PIDFILE):
+        subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT,
+                                      "--pid", config.WORKER_PIDFILE])
 
 
 def shared_teardown():

@@ -1,0 +1,20 @@
+---
+- name: ensure securedrop worker configuration for supervisor is present
+  template:
+    src: "securedrop_worker.conf"
+    dest: "/etc/supervisor/conf.d/securedrop_worker.conf"
+    owner: root
+    mode: 0644
+  notify:
+    - reload supervisor
+
+  # Supervisor will not write logs if the parent directory does not exist, so
+  # we create it here.
+- name: ensure directory for securedrop worker logs is present
+  file:
+    path: "{{ worker_logs_dir }}"
+    state: directory
+    # should be the same user that the worker runs as
+    owner: root
+    group: root
+    mode: 0644

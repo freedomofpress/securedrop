@@ -30,6 +30,12 @@ Vagrant.configure("2") do |config|
     end
     development.vm.provider "virtualbox" do |v|
       v.name = "development"
+      # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
+      #
+      # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
+      # 1. The new job queue backend (redis) is taking up a signiicant amount of memory. According to top, it is not (a couple MB on average).
+      # 2. Firefox 33 was released on October 13th: https://www.mozilla.org/en-US/firefox/33.0/releasenotes/ It may require more memory than the previous version did.
+      v.memory = 1024
     end
   end
 

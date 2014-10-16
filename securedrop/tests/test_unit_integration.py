@@ -8,6 +8,7 @@ import zipfile
 from time import sleep
 import tempfile
 import shutil
+import time
 
 import mock
 
@@ -23,6 +24,7 @@ import source
 import journalist
 import common
 from db import db_session, Journalist
+import store
 
 
 def _block_on_reply_keypair_gen(codename):
@@ -32,6 +34,25 @@ def _block_on_reply_keypair_gen(codename):
 
 
 class TestIntegration(unittest.TestCase):
+
+    def _login_user(self):
+        self.journalist_app.post('/login', data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()),
+            follow_redirects=True)
+
+    def _wait_for(self, function_with_assertion, timeout=5):
+        """Polling wait for an arbitrary assertion."""
+        # Thanks to http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                return function_with_assertion()
+            except AssertionError:
+                time.sleep(0.1)
+        # one more try, which will raise any errors if they are outstanding
+        return function_with_assertion()
 
     def setUp(self):
         common.shared_setup()
@@ -55,13 +76,6 @@ class TestIntegration(unittest.TestCase):
         db_session.add(self.user)
         db_session.commit()
         self._login_user()
-
-    def _login_user(self):
-        self.journalist_app.post('/login', data=dict(
-            username=self.user.username,
-            password=self.user_pw,
-            token=self.user.totp.now()),
-            follow_redirects=True)
 
     def tearDown(self):
         common.shared_teardown()
@@ -137,6 +151,13 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("No documents to display.", rv.data)
+
+        # the file should be deleted from the filesystem
+        # since file deletion is handled by a polling worker, this test needs
+        # to wait for the worker to get the job and execute it
+        self._wait_for(
+                lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+            )
 
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
@@ -216,6 +237,13 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("No documents to display.", rv.data)
+
+        # the file should be deleted from the filesystem
+        # since file deletion is handled by a polling worker, this test needs
+        # to wait for the worker to get the job and execute it
+        self._wait_for(
+                lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+            )
 
     def test_reply_normal(self):
         self.helper_test_reply("This is a test reply.", True)
@@ -365,6 +393,12 @@ class TestIntegration(unittest.TestCase):
                 ), follow_redirects=True)
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
+
+                # Make sure the reply is deleted from the filesystem
+                self._wait_for(
+                        lambda: self.assertFalse(os.path.exists(store.path(sid, msgid)))
+                    )
+
                 common.logout(source_app)
 
     def test_delete_collection(self):
@@ -396,6 +430,11 @@ class TestIntegration(unittest.TestCase):
         self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
         self.assertIn("No documents have been submitted!", rv.data)
 
+        # Make sure the collection is deleted from the filesystem
+        self._wait_for(
+                lambda: self.assertFalse(os.path.exists(store.path(sid)))
+            )
+
     def test_delete_collections(self):
         """Test the "delete selected" checkboxes on the index page that can be
         used to delete multiple collections"""
@@ -422,13 +461,10 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("%s collections deleted" % (num_sources,), rv.data)
 
-        # TODO: functional tests (selenium)
-        # This code just tests the underlying API and *does not* test the
-        # interactions due to the Javascript in journalist.js. Once we have
-        # functional tests, we should add tests for:
-        # 1. Warning dialog appearance
-        # 2. "Don't show again" checkbox behavior
-        # 2. Correct behavior on "yes" and "no" buttons
+        # Make sure the collections are deleted from the filesystem
+        self._wait_for(
+                lambda: self.assertFalse(any([ os.path.exists(store.path(sid)) for sid in checkbox_values ]))
+            )
 
     def test_filenames(self):
         """Test pretty, sequential filenames when source uploads messages and files"""
@@ -517,6 +553,11 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("File permanently deleted.", rv.data)
+
+        # Make sure the files were deleted from the filesystem
+        self._wait_for(
+                lambda: self.assertFalse(any([ os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values ]))
+            )
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

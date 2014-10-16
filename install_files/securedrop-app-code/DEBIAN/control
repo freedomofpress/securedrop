@@ -6,5 +6,5 @@ Homepage: https://pressfreedomfoundation.org/securedrop
 Package: securedrop-app-code
 Version: 0.3-dev
 Architecture: amd64
-Depends: python-pip,apparmor-utils,gnupg2,haveged,python,python-pip,secure-delete,sqlite,apache2-mpm-worker,libapache2-mod-wsgi,libapache2-mod-xsendfile,tor,deb.torproject.org-keyring
+Depends: python-pip,apparmor-utils,gnupg2,haveged,python,python-pip,secure-delete,sqlite,apache2-mpm-worker,libapache2-mod-wsgi,libapache2-mod-xsendfile,tor,deb.torproject.org-keyring,redis-server,supervisor
 Description: Packages the SecureDrop application code pip dependencies and apparmor profiles as deb packag. This package will not put the apparmor profiles in enforce mode; that is done as needed by the ansible playbook. This package does use pip to install the pip wheelhouse

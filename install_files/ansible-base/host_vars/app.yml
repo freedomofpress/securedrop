@@ -111,6 +111,8 @@ app_deps:
   - secure-delete
   - sqlite
   - apparmor-utils
+  - redis-server
+  - supervisor
 
 apparmor_profiles:
   - usr.bin.tor
@@ -150,3 +152,5 @@ direct_access_rules:
 test_apt_dependencies:
   - firefox
   - xvfb
+
+worker_logs_dir: "/var/log/securedrop_worker"

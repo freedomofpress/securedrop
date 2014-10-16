@@ -7,8 +7,10 @@ import subprocess
 import unittest
 import readline # makes the add_admin prompt kick ass
 from getpass import getpass
+import signal
 
 import qrcode
+import psutil
 
 from db import db_session, Journalist
 
@@ -21,12 +23,42 @@ from db import db_session, Journalist
 
 os.environ['SECUREDROP_ENV'] = 'dev'
 
+WORKER_PIDFILE = "/tmp/test_rqworker.pid"
+
+def get_pid_from_pidfile(pid_file_name):
+    with open(pid_file_name) as fp:
+        return int(fp.read())
+
+def _start_test_rqworker(config):
+    # needed to determine the directory to run the worker in
+    worker_running = False
+    try:
+        if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
+            worker_running = True
+    except IOError:
+        pass
+
+    if not worker_running:
+        tmp_logfile = open("/tmp/test_rqworker.log", "w")
+        subprocess.Popen(
+                [
+                    "rqworker", "test",
+                    "-P", config.SECUREDROP_ROOT,
+                    "--pid", WORKER_PIDFILE
+                ],
+            stdout=tmp_logfile,
+            stderr=subprocess.STDOUT)
+
+def _stop_test_rqworker():
+    os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
+
 def start():
     import config
     source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
     journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
                                  config.JOURNALIST_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python journalist.py'])
+
     if source_rc + journo_rc == 0:
         print "The web application is running, and available on your Vagrant host at the following addresses:"
         print "Source interface:     localhost:8080"
@@ -52,8 +84,12 @@ def test():
     Runs the test suite
     """
     os.environ['SECUREDROP_ENV'] = 'test'
+    import config
+    _start_test_rqworker(config)
     test_cmds = ["py.test", "./test.sh"]
-    sys.exit(int(any([subprocess.call(cmd) for cmd in test_cmds])))
+    test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
+    _stop_test_rqworker()
+    sys.exit(test_rc)
 
 def test_unit():
     """

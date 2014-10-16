@@ -10,6 +10,7 @@ psutil==2.1.1
 pycrypto==2.6.1
 pyotp==1.4.1
 qrcode==5.0.1
+rq==0.4.6
 scrypt==0.6.1
 six==1.5.2
 SQLAlchemy==0.9.7
