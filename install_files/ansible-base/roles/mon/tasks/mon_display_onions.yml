@@ -1,3 +1,3 @@
 ---
 - name: fetch securedrop ssh aths
-  fetch: src=/var/lib/tor/services/ssh/hostname dest=./mon-ssh-aths flat=yes
+  fetch: src=/var/lib/tor/services/ssh/hostname dest=./mon-ssh-aths flat=yes fail_on_missing=yes

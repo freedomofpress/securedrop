@@ -1,9 +1,9 @@
 ---
 - name: fetch securedrop source ths
-  fetch: src=/var/lib/tor/services/source/hostname dest=./app-source-ths flat=yes
+  fetch: src=/var/lib/tor/services/source/hostname dest=./app-source-ths flat=yes fail_on_missing=yes
 
 - name: fetch securedrop document aths
-  fetch: src=/var/lib/tor/services/document/hostname dest=./app-document-aths flat=yes
+  fetch: src=/var/lib/tor/services/document/hostname dest=./app-document-aths flat=yes fail_on_missing=yes
 
 - name: fetch securedrop ssh aths
-  fetch: src=/var/lib/tor/services/ssh/hostname dest=./app-ssh-aths flat=yes
+  fetch: src=/var/lib/tor/services/ssh/hostname dest=./app-ssh-aths flat=yes fail_on_missing=yes
