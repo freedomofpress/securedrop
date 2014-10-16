@@ -11,12 +11,18 @@ app_ip: ""
 ### Used by the app role ###
 securedrop_user: "www-data"
 securedrop_code: "/var/www/securedrop"
-securedrop_header_image_path: ""
-securedrop_app_gpg_public_key_path: ""
+# The securedrop_header_image has to be in the install_files/ansible-base/ or
+# the install_files/ansible-base/roles/app/files/ directory
+securedrop_header_image: ""
+# The app gpg public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
+securedrop_app_gpg_public_key: ""
 securedrop_app_gpg_fingerprint: ""
 
 ### Used by the mon role ###
-ossec_alert_gpg_public_key_path: ""
+# The ossec alert gpg public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
+ossec_alert_gpg_public_key: ""
 ossec_gpg_fpr: ""
 ossec_alert_email: ""
 smtp_relay: ""
@@ -25,4 +31,6 @@ smtp_relay_fingerprint: ""
 sasl_username: ""
 sasl_domain: ""
 sasl_password: ""
+# The ca_cert for the remote smtp relay needs to be in the
+# install_files/ansible-base or install_files/ansible-base/mon/files directory
 ca_cert: ""
