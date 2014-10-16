@@ -1,0 +1,10 @@
+#
+# Pick reasonable defaults for IP addresses
+# TODO: configure networking with Ansible
+# Note: after the install is complete, you can re-provision with Ansible but you will need to:
+# 1. Set up HidServAuth in your torrc with the values from app-ssh-aths and mon-ssh-aths
+# 2. Replace the IP addresses here with the corresponding .onion addresses
+#
+app ansible_ssh_host=192.168.1.50 ansible_ssh_port=22
+mon ansible_ssh_host=192.168.1.51 ansible_ssh_port=22
+

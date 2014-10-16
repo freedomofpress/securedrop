@@ -24,6 +24,7 @@ root    ALL=(ALL:ALL) ALL
 
 # Allow members of group sudo to execute any command
 %sudo   ALL=(ALL) NOPASSWD: ALL
+Defaults:%sudo !requiretty
 
 # See sudoers(5) for more information on "#include" directives:
 
