@@ -16,7 +16,10 @@
   notify: update sasl_passwd db
 
 - name: ensure smtp relay ssl cert is present
-  command: creates=/etc/postfix/cacert.pem cp {{ ca_cert }} /etc/postfix/cacert.pem
+  copy:
+    src: "{{ ca_cert }}"
+    dest: /etc/postfix/cacert.pem
+    mode: 0400
 
 - name: ensure header_checks regex to strip smtp headers is present
   copy:
