@@ -8,7 +8,7 @@
 
   roles:
     - common
-    - build-ossec-deb-pkg
+    #- build-ossec-deb-pkg
     - mon
     - allow-direct-access
 
