@@ -12,10 +12,9 @@
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <select name="number-words" id="number-words">
-        <option value="7">7 words</option>
-        <option value="8" selected>8 words</option>
-        <option value="9">9 words</option>
-        <option value="10">10 words</option>
+        {% for n in range(7, 11) %}
+        <option value="{{ n }}"{% if n == num_words %} selected{% endif %}>{{ n }} words</option>
+        {% endfor %}
       </select>
       <button type="submit" id="regenerate-submit" class="small">
         <i class="fa fa-refresh"></i>

@@ -136,15 +136,15 @@ def generate():
     # page, or inform them that they're logged in.
     session.pop('logged_in', None)
 
-    number_words = 8
+    num_words = 8
     if request.method == 'POST':
-        number_words = int(request.form['number-words'])
-        if number_words not in range(7, 11):
+        num_words = int(request.form['number-words'])
+        if num_words not in range(7, 11):
             abort(403)
 
-    codename = generate_unique_codename(number_words)
+    codename = generate_unique_codename(num_words)
     session['codename'] = codename
-    return render_template('generate.html', codename=codename)
+    return render_template('generate.html', codename=codename, num_words=num_words)
 
 
 @app.route('/create', methods=['POST'])
