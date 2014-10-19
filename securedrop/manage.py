@@ -125,7 +125,13 @@ def reset():
 
 
 def add_admin():
-    username = raw_input("Username: ")
+    while True:
+        username = raw_input("Username: ")
+        if Journalist.query.filter_by(username=username).first():
+            print "Sorry, that username is already in use."
+        else:
+            break
+
     while True:
         password = getpass("Password: ")
         password_again = getpass("Confirm Password: ")
