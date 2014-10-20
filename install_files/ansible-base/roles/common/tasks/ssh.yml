@@ -1,4 +1,8 @@
 ---
+- name: install 2fa pam module for ssh access
+  apt: name="{{ item }}" state=latest
+  with_items: ssh_2fa_dependencies
+
 - name: ensure ssh configuration files are present
   copy: src={{ item }} dest=/etc/ssh/{{ item }} owner=root mode=0644
   with_items:
@@ -7,10 +11,8 @@
   notify:
    - restart ssh
 
+- name: ensure pam config is installed
+  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
+
 - name: ensure sshd is running
   service: name=ssh state=running
-
-### Disabling this task until we settle if we are going to use 2fa (password
-#and OTP or a ssh keyfile and out of band option
-#- name: ensure pam config is installed
-#  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644

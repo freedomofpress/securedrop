@@ -18,6 +18,9 @@ disabled_kernel_modules:
   - bluetooth
   - iwlwifi
 
+ssh_2fa_dependencies:
+  - libpam-google-authenticator
+
 sysctl_flags:
   - name: "net.ipv4.tcp_max_syn_backlog"
     value: "4096"
