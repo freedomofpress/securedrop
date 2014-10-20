@@ -18,6 +18,7 @@ IgnoreRhosts yes
 RhostsRSAAuthentication no
 HostbasedAuthentication no
 PermitEmptyPasswords no
+# This is needed for libpam-google-authenticator package for 2fa SSH access.
 ChallengeResponseAuthentication yes
 KerberosAuthentication no
 KerberosGetAFSToken no
