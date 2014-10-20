@@ -97,6 +97,7 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 vagrant up
 vagrant ssh development
 cd /vagrant/securedrop
+./manage.py start
 ./manage.py add_admin
 ./manage.py test
 ```
