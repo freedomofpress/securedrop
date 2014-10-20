@@ -132,7 +132,7 @@ def generate():
     # page, or inform them that they're logged in.
     session.pop('logged_in', None)
 
-    num_words = 8
+    num_words = 7
     if request.method == 'POST':
         num_words = int(request.form['number-words'])
         if num_words not in range(7, 11):
