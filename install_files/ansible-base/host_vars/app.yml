@@ -115,8 +115,8 @@ app_deps:
   - supervisor
 
 apparmor_profiles:
-  - usr.bin.tor
-  - usr.lib.apache2.mpm-worker.apache2
+  - usr.sbin.tor
+  - usr.sbin.apache2
 
 # initialize securedrop web application
 #securedrop_header_image is defined in site-specific.yml config
