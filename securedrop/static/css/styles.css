@@ -506,14 +506,14 @@ a#already-have-codename:hover {
 }
 
 p.bubble {
-    width:400px;
+    width:415px;
     position:absolute;
     background-color:#ffffff;
     left:115px;
     top:38px;
-    border-radius:30px;
+    border-radius:10px;
     border: 3px solid #666;
-    padding: 10px 24px;
+    padding: 10px 25px;
     display:none;
 }
 
@@ -539,6 +539,12 @@ p.bubble:after {
     top:-43px;
     width:0px;
     height:0px;
+}
+
+p.bubble.tbb31plus {
+  /* The NoScript logo was moved to the left of the back/forward buttons in TBB
+   * 4.0 (based on Firefox 31) */
+  left: 5px;
 }
 
 p.breadcrumbs {

@@ -13,9 +13,18 @@ var TBB_UAS = [
   "Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0",
 ];
 
+var TBB_UA_REGEX = /Mozilla\/5\.0 \(Windows NT 6\.1; rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
+
 function is_likely_tor_browser() {
-  return TBB_UAS.indexOf(window.navigator.userAgent) > -1
-  && (window.navigator.mimeTypes && window.navigator.mimeTypes.length === 0);
+  return window.navigator.userAgent.match(TBB_UA_REGEX) &&
+         (window.navigator.mimeTypes &&
+          window.navigator.mimeTypes.length === 0);
+}
+
+function tbb_version() {
+  var ua_match = window.navigator.userAgent.match(TBB_UA_REGEX);
+  var major_version = ua_match[1];
+  return Number(major_version);
 }
 
 $(function() {
@@ -27,15 +36,18 @@ $(function() {
         infoBubble.toggle();
       } else {
         var infoBubble = $('<p class="bubble">').html(
-          '<p>You appear to be using the Tor Browser Bundle. ' +
-          'You can disable Javascript with 3 quick steps!</p>' +
+          '<p>You appear to be using the Tor Browser. ' +
+          'You can disable Javascript in 3 easy steps!</p>' +
           '<ol>' +
-          '<li>Click the NoScript icon in the toolbar above</li>' +
-          '<li>Click <img src="static/i/no16.png"/> "Forbid Scripts Globally (advised)"</li>' +
-          '<li><a href="">Click here</a> to refresh the page</li>' +
+          '<li>Click the <img src="static/i/no16.png"> NoScript icon in the toolbar above</li>' +
+          '<li>Click <strong><img src="static/i/no16-global.png"/> Forbid Scripts Globally (advised)</strong></li>' +
+          '<li>If the page does not refresh automatically, <a href="">click here</a> to refresh the page</li>' +
           '</ol>' +
           '<p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a>'
         );
+        if (tbb_version() >= 31) {
+          infoBubble.addClass("tbb31plus");
+        }
         $(document.body).append(infoBubble);
         infoBubble.fadeIn(500);
         infoBubble.click(function() {
