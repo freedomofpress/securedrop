@@ -80,3 +80,6 @@ nosetests.xml
 
 #IDE
 .idea
+
+# Ignore Mac OS X
+.DS_Store
