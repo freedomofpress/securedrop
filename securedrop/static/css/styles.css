@@ -471,10 +471,12 @@ p#no-replies {
 }
 .submission {
   background: #f3f3f3;
-  border-bottom: 1px solid #f3f3f3;
+  border-bottom: 1px solid #ddd;
   padding: 10px;
-  margin-bottom: 10px;
   text-align: left;
+}
+.submission:last-child {
+  border-bottom: none;
 }
 .submission .file {
   min-width: 300px;
