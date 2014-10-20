@@ -135,7 +135,7 @@ class TestSource(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("%s. %s" % (source.SUBMIT_MSG_NOTIFY_STR, source.SUBMIT_CODENAME_NOTIFY_STR), rv.data)
+        self.assertIn("Thanks! We received your message.", rv.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -144,10 +144,7 @@ class TestSource(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR,
-                                              'test.txt',
-                                              source.SUBMIT_CODENAME_NOTIFY_STR)),
-                      rv.data)
+        self.assertIn(escape('{} "{}"'.format("Thanks! We received your document", "test.txt")), rv.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -156,8 +153,8 @@ class TestSource(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(source.SUBMIT_MSG_NOTIFY_STR, rv.data)
-        self.assertIn(escape("%s '%s'. %s" % (source.SUBMIT_DOC_NOTIFY_STR, 'test.txt', source.SUBMIT_CODENAME_NOTIFY_STR)), rv.data)
+        self.assertIn("Thanks! We received your message.", rv.data)
+        self.assertIn(escape('{} "{}"'.format("Thanks! We received your document", 'test.txt')), rv.data)
 
     @patch('zipfile.ZipFile.writestr')
     def test_submit_sanitizes_filename(self, zipfile_write):
