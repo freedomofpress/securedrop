@@ -552,28 +552,31 @@ p.breadcrumbs {
     border: none;
 }
 
-.starred {
-    color: orange;
-
+ul.starred {
+  margin-bottom: 1.33em;
 }
 
-.starred:hover{
-    color: lightgray;
+button.starred {
+    color: orange;
+}
+
+button.starred:hover {
+    color: #FFC5AD;
     border: none;
     background-color: rgb(240,240,240);
 }
 
-.un-starred{
+button.un-starred {
     color: lightgray;
 }
 
-.un-starred:hover{
+button.un-starred:hover {
     color: lightsalmon;
     border: none;
     background-color: rgb(240,240,240);
 }
 
-.button-star:focus {
+button.button-star:focus {
     outline:0;
 }
 
