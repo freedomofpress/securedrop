@@ -9,7 +9,7 @@ tor_DataDirectory: /var/lib/tor
 securedrop_tor_user: "debian-tor"
 
 dns_server: "8.8.8.8"
-grsec_package: linux-image-3.2.62-grsec
+
 
 # this should be changed to use ansible facts
 distribution_release: "trusty"
@@ -61,9 +61,8 @@ sysctl_flags:
 grub_pax:
   - /usr/sbin/grub-probe
   - /usr/sbin/grub-mkdevicemap
-  - /usr/sbin/grub-setup
-  - /usr/bin/grub-script-check
-  - /usr/bin/grub-mount
+
+grsec_package: linux-image-3.14.21-grsec
 
 ### Used by the build-ossec-deb-pkg roles ###
 build_ossec_deb_pkg_dependencies:
