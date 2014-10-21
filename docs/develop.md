@@ -78,14 +78,17 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 * **development**: for working on the application code
     * Source Interface: localhost:8080
     * Document Interface: localhost:8081
-* **staging**: for working on the environment and hardening
+* **app-staging**: for working on the environment and hardening
     * Source Interface: localhost:8082
     * Document Interface: localhost:8083
     * The interfaces and ssh are also available over tor and direct access.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+* **mon-staging**: for working on the environment and hardening
+    * OSSEC alert configuration are in install_files/asnible-base/staging-specific.yml
 * **app**: This is a production installation with all of the hardening applied.
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
     * Putting the apparmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
+* **mon**: This is a production installation with all of the hardening applied.
 
 
 ## Development
@@ -94,6 +97,7 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 vagrant up
 vagrant ssh development
 cd /vagrant/securedrop
+./manage.py start
 ./manage.py add_admin
 ./manage.py test
 ```
@@ -109,6 +113,9 @@ cd /var/www/securedrop
 ./manage.py test
 ```
 
+```
+vagrant ssh mon-staging
+```
 
 ## Production
 
