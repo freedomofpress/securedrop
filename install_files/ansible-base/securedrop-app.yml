@@ -9,6 +9,7 @@
   vars:
 
   roles:
+    - validate
     - common
     - app
 
