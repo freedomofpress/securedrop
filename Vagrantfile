@@ -117,9 +117,9 @@ Vagrant.configure("2") do |config|
   end
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :box
-  end
+  #if Vagrant.has_plugin?("vagrant-cachier")
+  #  config.cache.scope = :box
+  #end
 
   # This is needed for the Snap-ci to provision the digital ocean vps
   config.vm.provider :digital_ocean do |provider, override|
