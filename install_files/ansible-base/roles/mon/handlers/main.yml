@@ -10,5 +10,8 @@
 - name: update sasl_passwd db
   command: postmap /etc/postfix/sasl_passwd
 
+- name: postmap_header_checks
+  command: postmap /etc/postfix/header_checks
+
 - name: restart postfix
   service: name=postfix state=restarted

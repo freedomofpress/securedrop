@@ -25,6 +25,7 @@
   copy:
     src: header_checks
     dest: /etc/postfix/header_checks
+  notify: postmap_header_checks
 
 - name: configure postfix main.cf
   template:
