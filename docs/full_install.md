@@ -1,4 +1,4 @@
-*TODO: split or merge into existing docs as appropriate*
+**TODO**: split or merge into existing docs as appropriate
 
 This is the full set of instructions for a complete run-through of installing SecureDrop 0.3.
 
@@ -9,17 +9,17 @@ This is the full set of instructions for a complete run-through of installing Se
   1. Application Server
   2. Monitor Server
   3. SVS
-* TODO: clarify NUC requirements (power cords, RAM, hard disks, display cables) and setup process
+* **TODO**: clarify NUC dependencies (power cords, RAM, hard disks, display cables) and setup process
 * Admin Workstation (any spare computer that can be connected to the firewall and can run Tails)
-* 4 USB sticks:
-  * Ubuntu 14.04.1 Live USB, to install Ubuntu on the servers
+* 5 blank USB sticks:
+  * Ubuntu 14.04.1 Live USB (to install Ubuntu on the servers)
     * [link to .iso](http://releases.ubuntu.com/14.04/ubuntu-14.04.1-server-amd64.iso)
     * live usb instructions: [windows](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows) | [mac](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx) | [linux](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu)
-  * Tails Live USB
+  * Tails Live USB (to set up other Tails Live USB's with persistence)
     * [instructions](https://tails.boum.org/download/index.en.html)
-  * Blank USB (will become a Tails live USB with persistence, for the SVS)
-  * Blank USB (will become a Tails live USB with persistence, for the Admin Workstation)
-  * Blank USB (will become the transfer device)
+  * SVS USB
+  * Admin USB
+  * Transfer USB (will become the transfer device)
 
 
 ## Notes on the NUCs
@@ -33,7 +33,7 @@ There is a variety of available NUCs, and each different model supports differen
 
 I have two of these: one for the Secure Viewing Station (SVS), which is air-gapped and never connected to the Internet, and one for the Admin Workstation, which is Internet-connected and is used to run the Ansible playbooks. You could also use an admin's existing workstation, or a recycled machine, for this purpose.
 
-*TODO* what are the concerns about security from existing hardware in newsrooms? The Admin Workstation runs Tails, so the primary concerns would be hardware implants.
+**TODO** what are the concerns about security from existing hardware in newsrooms? The Admin Workstation runs Tails, so the primary concerns would be hardware implants.
 
 This machine has USB 3.0, which is nice for booting live USB quickly and for transferring large files. It has two available display connectors: Mini-HDMI and DisplayPort.
 
@@ -48,16 +48,18 @@ I am using these for the Application and Monitor servers (app and mon). They onl
 # Tails setup
 
 *Tested with: Tails 1.2 released October 16, 2014*
-*TODO: dd'ing the live USB on Mac using the instructions on the Tails website is incredibly slow. There should be something we can do with the flags to dd to speed it up.*
 
-## SVS (TODO)
+**TODO**: dd'ing the live USB on Mac using the instructions on the Tails website is incredibly slow. There should be something we can do with the flags to dd to speed it up.
 
-This should be relatively unchanged from our current docs in `install.md`.
+
+## SVS
+
+**TODO**: This should be relatively unchanged from our current docs in `install.md`.
 
 
 ## Admin Workstation
 
-First, we will set up the Tails Live USB with persistence for the Admin Workstation. Start by booting the Admin Workstation from the Tails Live USB.
+In this section we will set up the Tails Live USB with persistence for the Admin Workstation. Start by booting the Admin Workstation from the Tails Live USB.
 
 *Note: on the NUCs, you reboot by holding the power button down for a few seconds until it triggers the reboot. Once it reboots, hold F10 to get the boot menu. The transition from when you have a chance to hit F10 to when the NUC boots the default OS is very quick!*
 
@@ -86,14 +88,14 @@ Install Ubuntu 14.04 (Trusty) on both NUCs. The install process is the same as w
   * Hostname should be "app" or "mon"
   * Domain name should be left blank
 
-*Note: should be use the local time zone or UTC for these servers? For now, I'm using the local time zone as auto-detected by the installer.*
+**TODO**: Should we use the local time zone or UTC for these servers? For now, I'm using the local time zone as auto-detected by the installer.
 
 * We've been choosing "No automatic updates" instead of "Security updates only" since Ansible will handle setting up unattended-upgrades.
 * It seems that Ubuntu now auto-detects if other operating systems are present, and if none are, automatically installs the bootloader to the MBR. This is a change from the instructions for 12.04, where you always had to confirm to install the bootloader.
 
 # Installing Securedrop from the Admin Workstation
 
-*Note*: everything currently in `docs/install.md` looks good up to "## Set up the App Server".
+**Note**: everything currently in `docs/install.md` looks good up to "## Set up the App Server".
 
 Boot the Admin Workstation for the Tails Live USB that we created earlier for the Admin Workstation.
 
@@ -111,14 +113,17 @@ $ git clone https://github.com/freedomofpress/securedrop.git
 $ cd securedrop/install_files/ansible-base
 
 # Create SSH key on the admin workstation
+# TODO no passphrase? passphrase? I've been testing with no passphrase
+# (since it's stored on an encrypted volume).
 $ ssh-keygen -t rsa -b 4096
 
-# TODO no passphrase? passphrase? I've been testing with no passphrase (since it's stored on an encrypted volume).
-
 # Copy the keyfile to both servers
+# TODO This will ask us to verify the SSH fingerprints of each server. Do we
+# want to verify these? The way to do it would be to add a step when installing
+# Ubuntu on each server where we log in and do ssh-keygen -l -f
+# /etc/ssh/ssh_host_rsa_key, then record that value to compare here.
 ssh-copy-id username@IP_address
 
-# TODO This will ask us to verify the SSH fingerprints of each server. Do we want to verify these? The way to do it would be to add a step when installing Ubuntu on each server where we log in and do ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key, then record that value to compare here.
 
 # Verify that you are able to log in to both servers (without a password)
 ssh username@IP_address
@@ -160,8 +165,8 @@ mon-ssh-aths
 nano inventory
 
 # Reboot both servers so they will boot in the grsec kernel
-ssh USERNAME@app sudo shutdown -r now
-ssh USERNAME@mon sudo shutdown -r now
+ssh USERNAME@<app ssh>.onion sudo shutdown -r now
+ssh USERNAME@<mon ssh>.onion sudo shutdown -r now
 ```
 
 
@@ -186,5 +191,5 @@ ssh USERNAME@mon sudo shutdown -r now
 4. Test that you can access the document interface, and that you can log in as the admin user you just created.
 5. Test replying to the test submission.
 6. Test that the source received the reply.
-7. TODO More testing...
+7. **TODO** More testing...
 
