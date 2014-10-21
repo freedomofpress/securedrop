@@ -7,6 +7,7 @@
     - prod-specific.yml
 
   roles:
+    - validate
     - common
     - mon
 
