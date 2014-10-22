@@ -4,9 +4,9 @@ This is a quick and dirty guide to using Yubikey for two-factor authentication o
 
 ## Download the YubiKey personalization tool
 
-Yubikeys are modifiable using the Yubikey personalization tool, which is available for Windows/Mac/Linux and can be downloaded here: http://www.yubico.com/products/services-software/personalization-tools/use/
+Yubikeys are modifiable using the Yubikey personalization tool, which is available for Windows/Mac/Linux and can be downloaded here: http://www.yubico.com/products/services-software/personalization-tools/use/. If you wish to use Tails, install the Yubikey personalization tool on the command line with `apt-get install yubikey-personalization-gui`.
 
-Once you have downloaded and installed the personalization program, insert your Yubikey and launch the program.
+Once you have downloaded and installed the personalization program, insert your Yubikey and launch the program. If you are running Tails, you need to launch the program as the root user.
 
 ## Set up OATH-HOTP
 
