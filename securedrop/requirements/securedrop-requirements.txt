@@ -1,4 +1,3 @@
-Flask-Testing==0.4.2
 argparse==1.2.1
 beautifulsoup4==4.3.2
 Flask-WTF==0.10.2
@@ -7,18 +6,15 @@ gnupg-securedrop==1.2.5-9-g6f9d63a-dirty
 itsdangerous==0.24
 Jinja2==2.7.3
 MarkupSafe==0.23
+pip-tools==0.3.5
 psutil==2.1.1
 pycrypto==2.6.1
 pyotp==1.4.1
 qrcode==5.0.1
+rq==0.4.6
 scrypt==0.6.1
 six==1.7.3
 SQLAlchemy==0.9.7
 Werkzeug==0.9.6
 wsgiref==0.1.2
 WTForms==2.0.1
-mock==1.0.1
-pip-tools==0.3.5
-pytest==2.6.2
-rq==0.4.6
-selenium==2.43.0

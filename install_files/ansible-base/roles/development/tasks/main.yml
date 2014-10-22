@@ -6,8 +6,8 @@
   apt: pkg="{{ item }}" state=latest
   with_items: dev_deps
 
-- name: install pip deps for dev env
-  pip: requirements="{{ dev_pip_requirements }}"
+- name: install pip dependencies for securedrop
+  pip: requirements="{{ securedrop_pip_requirements }}"
 
 - name: set SECUREDROP_ENV in bashrc
   lineinfile:

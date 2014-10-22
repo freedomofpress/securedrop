@@ -12,14 +12,14 @@ To test a clean install there is a manual gate to run the snap-ci tests without 
 
 git clone https://github.com/freedomofpress/securedrop
 sudo apt-get install gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb redis-server
-sudo pip install -r securedrop/requirements/dev-requirements.txt
-sudo pip install -r securedrop/requirements/prod-requirements.txt
+sudo pip install -r securedrop/requirements/securedrop-requirements.txt
+sudo pip install -r securedrop/requirements/test-requirements.txt
 
 # App-staging
 
 git clone https://github.com/freedomofpress/securedrop
 sudo apt-get install apache2-mpm-worker libapache2-mod-xsendfile libapache2-mod-wsgi apparmor-utils gnupg2 haveged python python-pip secure-delete sqlite libssl-dev python-dev python-pip firefox xvfb tar unzip inotify-tools libssl-dev redis-server
-sudo pip install -r securedrop/requirements/prod-requirements.txt
+sudo pip install -r securedrop/requirements/securedrop-requirements.txt
 
 # mon-staging
 

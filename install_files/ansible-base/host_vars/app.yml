@@ -17,8 +17,8 @@ ip_info:
 # Building the securedrop-app-code deb package
 securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
 build_app_code_dir: "{{ securedrop_repo }}/securedrop"
-prod_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/prod-requirements.txt"
-dev_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/dev-requirements.txt"
+securedrop_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/securedrop-requirements.txt"
+test_pip_requirements: "{{ securedrop_repo }}/securedrop/requirements/test-requirements.txt"
 dev_deps:
   - libssl-dev
   - python-dev

@@ -32,7 +32,7 @@ build_app_deb() {
     cp -R $MY_PATH/securedrop/ $PACKAGE_DIR/var/www/
 
     # move pip wheel dependencies to correct location
-    pip wheel -r securedrop/requirements/prod-requirements.txt
+    pip wheel -r securedrop/requirements/securedrop-requirements.txt
     mkdir -p $PACKAGE_DIR/var/securedrop
     mv wheelhouse $PACKAGE_DIR/var/securedrop/
 
