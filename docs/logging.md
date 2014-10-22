@@ -1,10 +1,17 @@
-#Key log files
+# Log files cheat sheet
 
-##App Server
+## Both servers
 
 AppArmor and grsec errors
 
 `/var/log/kern.log`
+
+iptables
+
+`/var/log/syslog`
+
+
+## App Server
 
 Apache
 
@@ -14,7 +21,7 @@ If an event triggers it the securedrop application log
 
 `/var/www/securedrop/securedrop.log`
 
-##Monitor Server
+## Monitor Server
 
 OSSEC
 
