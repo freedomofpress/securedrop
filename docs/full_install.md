@@ -81,12 +81,23 @@ Install Ubuntu 14.04 (Trusty) on both NUCs. The install process is the same as w
 
 * When the network autoconfiguration starts, hit Enter to cancel it. You may have to hit Enter several times to cancel various stages of the autoconfiguration. Don't worry if it completes, you can always go back and configure manually by hitting "Cancel" on a subsequent dialog boxes.
 * Once you've cancelled network autoconfiguration, choose "Configure network manually".
-  * You can choose whatever IP you want, just make sure they are unique on the firewall's network and you remember them for later running the Ansible playbook. I've been using 192.168.1.50 for app and 192.168.1.51 for mon.
-  * Netmask default is fine (255.255.255.0)
-  * Gateway default is fine (192.168.1.1)
-  * For DNS, I've been using Google's name servers (8.8.8.8)
-  * Hostname should be "app" or "mon"
-  * Domain name should be left blank
+* For production install with pfsense network firewall in place, the app and monitor servers are on separate networks. The network segment information on the network firewall need to coinside the network information entered for the servers.
+* Have been using (192.168.1.0/24) as the app network segment and (192.168.2.0/24) for the monitor network segment.
+  * You can choose whatever IP you want, just make sure they are unique on the firewall's network and you remember them for later running the Ansible playbook.
+  * App server: 
+    * Server IP address (192.168.1.51)
+    * Netmask default is fine (255.255.255.0)
+    * Gateway default is fine (192.168.1.1)
+    * For DNS, I've been using Google's name servers (8.8.8.8)
+    * Hostname should be "app" or "mon"
+    * Domain name should be left blank
+  * Monitor server:
+    * Server IP address (192.168.2.52) 
+    * Netmask default is fine (255.255.255.0)
+    * Gateway default is fine (192.168.2.1)
+    * For DNS, I've been using Google's name servers (8.8.8.8)
+    * Hostname should be "app" or "mon"
+    * Domain name should be left blank
 
 **TODO**: Should we use the local time zone or UTC for these servers? For now, I'm using the local time zone as auto-detected by the installer.
 
