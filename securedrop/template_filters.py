@@ -20,7 +20,7 @@ def _relative_timestamp(dt):
     delta = datetime.utcnow() - dt
     diff = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 1e6) / 1e6
     if diff < 45:
-        return '{} second{}'.format(int(diff), 's' if int(diff) == 1 else '')
+        return '{} second{}'.format(int(diff), '' if int(diff) == 1 else 's')
     elif diff < 90:
         return 'a minute'
     elif diff < 2700:
