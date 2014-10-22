@@ -1,4 +1,7 @@
 ---
+- name: update apt package lists
+  apt: update_cache=yes
+
 - name: install apt package deps for dev environment
   apt: pkg="{{ item }}" state=latest
   with_items: dev_deps
