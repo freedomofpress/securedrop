@@ -1,6 +1,8 @@
 # Preparing Ubuntu servers for installation
 
-The *Application Server* and the *Monitor Server* require [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server). SecureDrop is only supported for 64-bit platforms, so make sure you use the 64-bit images, which have a *-amd64* suffix. Download the ISO, burn it to CDs, and begin installing it on each of these computers. The following setup process is the same for each server.
+The *Application Server* and the *Monitor Server* require [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server). SecureDrop is only supported for 64-bit platforms, so make sure you use the 64-bit images, which have a *-amd64* suffix. Download the ISO, burn it to CDs, and begin installing it on each of these computers. Optionally, you can create a bootable USB stick from which you can install the operating system (see instructions for doing this on [OS X](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx), [Ubuntu](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu) and [Windows](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows)).
+
+ The following setup process is the same for each server.
 
 After booting the the Ubuntu Server CD, select *Install Ubuntu Server*.
 
