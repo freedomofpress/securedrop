@@ -20,6 +20,9 @@ script:
   # on Travis. I believe Travis' service machinery may be interfering. See
   # http://docs.travis-ci.com/user/database-setup/#Redis
 - sudo service redis-server start
+  # travis needs the config.py file ran owned by root in other environments it is the
+  # securedrop_user default www-data
+- sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
 notifications:
   slack:

@@ -11,6 +11,10 @@
 - name: import app gpg public key
   command: "su -s /bin/bash -c \"gpg --homedir {{ securedrop_data }}/keys --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}\" {{ securedrop_user }}"
 
+  # only a config.py.example is included in the securedrop-app-code package. If
+  # a config.py file is not already present copy the one installed by the
+  # securedrop-app-code package. This was done so the securedrop-app-code
+  # package would not overwrite the config.py on upgrades.
 - stat: path="{{ securedrop_code }}/config.py"
   register: config
 
@@ -18,12 +22,12 @@
   command: "cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py"
   when: not config.stat.exists
 
-#- name: ensure config.py is owned by www-data
-#  file:
-#    dest: "{{ securedrop_code }}/config.py"
-#    owner: "{{ securedrop_user }}"
-#    group: "{{ securedrop_user }}"
-#    mode: 666
+- name: ensure config.py is owned by www-data
+  file:
+    dest: "{{ securedrop_code }}/config.py"
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: 0600
 
 # TODO: config.py.example is already written using Jinja2 format, and should be
 # easy to template-ize. However, we cannot do this because when Ansible writes
