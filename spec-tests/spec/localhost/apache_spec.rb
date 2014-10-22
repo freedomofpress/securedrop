@@ -22,8 +22,8 @@ describe file('/etc/apache2/ports.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "Listen 127.0.0.1:8080" }
-  its(:content) { should match "Listen 127.0.0.1:80" }
+  its(:content) { should match "Listen 0.0.0.0:8080" }
+  its(:content) { should match "Listen 0.0.0.0:80" }
 end
 
 describe file('/etc/apache2/security') do
@@ -39,17 +39,17 @@ describe file('/etc/apache2/sites-available/document.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "<VirtualHost 127.0.0.1:8080>" }
-  its(:content) { should match "WSGIScriptAlias / /var/www/securedrop/document.wsgi/" }
+  its(:content) { should match "<VirtualHost 0.0.0.0:8080>" }
+  its(:content) { should match "WSGIScriptAlias / /var/www/document.wsgi/" }
 end
 
 describe file('/etc/apache2/sites-available/source.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "<VirtualHost 127.0.0.1:80>" }
-  its(:content) { should match "WSGIScriptAlias / /var/www/securedrop/source.wsgi/" }
-  its(:content) { should match "ErrorLog /dev/null" }
+  its(:content) { should match "<VirtualHost 0.0.0.0:80>" }
+  its(:content) { should match "WSGIScriptAlias / /var/www/source.wsgi/" }
+  its(:content) { should match "ErrorLog /var/log/apache2/source-error.log" }
 end
 
 # are the correct apache modules enabled
@@ -62,14 +62,14 @@ end
 # are the correct apache modules disabled
 ['auth_basic','authn_file','autoindex','env','setenvif','status'].each do |disModules|
   describe command("a2query -m #{disModules}") do
-    it { should return_stdout /disabled by/ }
+    it { should return_stderr /No module matches/ }
   end
 end
 
 # Are default sites disabled?
 ['000-default'].each do |dissites|
   describe command("a2query -s #{dissites}") do
-    it { should return_stdout /disabled by/ }
+    it { should return_stderr /No site matches/ }
   end
 end
  
