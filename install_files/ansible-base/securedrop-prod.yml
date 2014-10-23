@@ -29,7 +29,7 @@
 
   sudo: yes
 
-- hosts: [ 'mon-staging' ]
+- hosts: [ 'mon' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -41,7 +41,7 @@
 
   sudo: yes
 
-- hosts: [ 'app-staging' ]
+- hosts: [ 'app' ]
 
   vars_files:
     - group_vars/securedrop.yml
