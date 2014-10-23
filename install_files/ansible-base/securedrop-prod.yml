@@ -7,7 +7,7 @@
     - prod-specific.yml
 
   roles:
-    #- validate
+    - validate
     - common
     - mon
 
@@ -23,7 +23,7 @@
   vars:
 
   roles:
-    #- validate
+    - validate
     - common
     - app
 
