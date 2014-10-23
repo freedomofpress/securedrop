@@ -130,6 +130,9 @@ ossec_apt_dependencies:
   - inotify-tools
   - adduser
 
+authd_rules:
+  - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
 ### Used by the test role ###
 
