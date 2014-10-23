@@ -90,7 +90,7 @@ Each journalist has their own authenticated Tor hidden service URL to login to t
 
 See our guide on setting up [Tails for the Admin and Journalist Workstation](https://github.com/freedomofpress/securedrop/tree/develop/tails_files) before continuing. We recommend that you create bookmarks for the Source and Document Interfaces.
 
-If you click on the SecureDrop `Document Interface` link, you should be automatically logged-in. Now go down to the first screenshot below.
+After clicking on the SecureDrop `Document Interface` link, you can log in with your username, password, and two-factor authentication token. Now go down to the first screenshot below.
 
 If any sources have uploaded documents or sent you message, they will be listed on the homepage by a codename. **Note: The codename the journalists see is different than the codename that sources see.**
 
