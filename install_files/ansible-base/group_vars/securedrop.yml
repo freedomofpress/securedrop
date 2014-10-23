@@ -8,9 +8,6 @@ tor_user: debian-tor
 tor_DataDirectory: /var/lib/tor
 securedrop_tor_user: "debian-tor"
 
-dns_server: "8.8.8.8"
-
-
 # this should be changed to use ansible facts
 distribution_release: "trusty"
 

@@ -83,7 +83,9 @@ Vagrant.configure("2") do |config|
   config.vm.define 'app', autostart: false do |app|
     app.vm.hostname = "app"
     app.vm.box = "trusty64"
+    app.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
     app.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    app.vm.synced_folder './', '/vagrant', disabled: true
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
       ansible.verbose = 'v'
@@ -102,7 +104,9 @@ Vagrant.configure("2") do |config|
   config.vm.define 'mon', autostart: false do |mon|
     mon.vm.box = "mon"
     mon.vm.box = "trusty64"
+    mon.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
     mon.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    mon.vm.synced_folder './', '/vagrant', disabled: true
     mon.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
       ansible.verbose = 'v'
