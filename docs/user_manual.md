@@ -14,7 +14,7 @@ Open the Tor Browser and navigate to the .onion hidden service URL provided by t
 
 ![Javascript warning](/docs/images/manual/source1.png)
 
-Click the `Learn how to disable it` link on the Javascript warning and you will be taken to a page explaining how to disable Javascript. Once you follow the instructions, click on the image on the left to go back to the homepage.
+Click the `Click here` link on the Javascript warning and a message will pop up explaining how to disable Javascript. Once you follow the instructions, refresh the page.
 
 **TODO**: add screenshot from 0.3
 
