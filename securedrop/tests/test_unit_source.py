@@ -52,8 +52,8 @@ class TestSource(TestCase):
             "To protect your identity, we're assigning you a unique codename.",
             rv.data)
         codename = self._find_codename(rv.data)
-        # default codename length is 8 words
-        self.assertEqual(len(codename.split()), 8)
+        # default codename length is 7 words
+        self.assertEqual(len(codename.split()), 7)
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))
