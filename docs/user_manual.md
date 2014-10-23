@@ -26,7 +26,9 @@ The page should now look similar to the screenshot below. If this is the first t
 
 ![Source Interface](/docs/images/manual/source3.png)
 
-You should now see a screen that shows the unique codename that SecureDrop has generated for you. In the example screenshot below the codename is `**TODO**: add codename from screenshot`, but yours will be different. It is extremely important that you both remember this code and keep it secret. Memorize the code or write it down and keep it in a safe place, but do not save it on your computer. After submitting documents, you will need to provide this code to log back in and check for responses.
+You should now see a screen that shows the unique codename that SecureDrop has generated for you. In the example screenshot below the codename is `**TODO**: add codename from screenshot`, but yours will be different. It is extremely important that you both remember this code and keep it secret. After submitting documents, you will need to provide this code to log back in and check for responses.
+
+The best way to protect your codename is to memorize it. If you cannot memorize it right away, we recommend writing it down and keeping it in a safe place at first, and gradually working to memorize it over time. Once you have memorized it, you should destroy the written copy.
 
 SecureDrop allows you to choose the length of your codename, in case you want to create a longer codename for extra security. Once you have generated a codename and put it somewhere safe, click `Continue`.
 
@@ -34,7 +36,9 @@ SecureDrop allows you to choose the length of your codename, in case you want to
 
 ![Memorizing your codename](/docs/images/manual/source4.png)
 
-You will next be brought to the submission interface, where you may upload a document, enter a message to send to journalists, or both. You can only submit one document at a time, so you may want to combine several files into a zip archive if necessary. When your submission is ready, click `Submit`.
+You will next be brought to the submission interface, where you may upload a document, enter a message to send to journalists, or both. You can only submit one document at a time, so you may want to combine several files into a zip archive if necessary. The maximum submission size is currently 500MB. If the files you wish to upload are over that limit, we recommend that you send a message to the journalist explaining this, so that they can set up another method for transferring the documents. 
+
+When your submission is ready, click `Submit`.
 
 **TODO**: add screenshot from 0.3
 
