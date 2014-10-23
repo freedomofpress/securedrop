@@ -43,9 +43,15 @@
 -A OUTPUT -d {{ app_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
 
 # OSSEC smtp out rules
-#TODO restrict outbound by process owner
--A OUTPUT -p tcp --match multiport --dports 25,587,465 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
--A INPUT -p tcp --match multiport --sports 25,587,465 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
+# dns rule for postfix to lookup smtp relay
+-A OUTPUT -d {{ dns_server }} -p tcp --dport 53 -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "postfix dns rule"
+-A INPUT -s {{ dns_server }} -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+-A OUTPUT -d {{ dns_server }} -p udp --dport 53 -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "postfix dns rule"
+-A INPUT -s {{ dns_server }} -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+
+# postfix rule for outbound smtp
+-A OUTPUT -p tcp --dport {{ smtp_relay_port }} -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
+-A INPUT -p tcp --sport {{ smtp_relay_port }}  -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
 
 # Allow generic loopback connections
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
