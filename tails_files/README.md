@@ -10,7 +10,7 @@ Instructions on how to download, verify and install the operating system onto a 
 
 ### Create an encrypted persistent volume
 
-Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
+Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select persistence features, such as personal data. We recommend that you enable **all** features.
 
 ## Configure Tails for use with SecureDrop
 
@@ -37,7 +37,7 @@ sudo ./install.sh
 
 Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
 
-Edit the file with the *HidServAuth* information for your SecureDrop instance that you got during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information includes, among other things, the address to the Document Interface and your personal authentication string. The information from the installation guide results in the following:
+Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information includes, among other things, the address to the Document Interface and your personal authentication string. The information from the installation process looks like the following:
 
 ```
 # add HidServAuth lines here
