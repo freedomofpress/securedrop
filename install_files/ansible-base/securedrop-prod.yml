@@ -34,7 +34,7 @@
   vars_files:
     - group_vars/securedrop.yml
     - host_vars/mon.yml
-    - staging-specific.yml
+    - prod-specific.yml
 
   roles:
     - remove_ossec_exemptions
@@ -46,7 +46,21 @@
   vars_files:
     - group_vars/securedrop.yml
     - host_vars/app.yml
-    - staging-specific.yml
+    - prod-specific.yml
 
   roles:
     - remove_ossec_exemptions
+
+  sudo: yes
+
+- hosts: [ 'app', 'mon' ]
+
+  vars_files:
+    - group_vars/securedrop.yml
+    - host_vars/app.yml
+    - prod-specific.yml
+
+  roles:
+    - update_boot_grsec
+
+  sudo: yes
