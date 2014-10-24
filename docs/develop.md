@@ -103,8 +103,15 @@ cd /vagrant/securedrop
 ```
 
 ## Staging
+This environment install a grsecurity kernel with the options configured for high security.
 
-To just up a specific server run:
+This kernel is not supported by Xen, KDM... but will work with virtualbox.
+
+Running a grsec kernel with all of the high security options impacts the virtual hosts performance greatly. This will can cause issues with vagrant ssh timing out. You can choose to add the `grsec` tag to the `ansible.skip_tags` in the `Vagrantfile` while testing other aspects of the installation. If you do expierence ssh timeout try running `vagrant ssh VM_NAME`  try `vagrant reload VM_NAME`
+
+To just up a specific server:
+
+NOTE: By default this will skip the OSSEC authd tasks
 
 ```
 vagrant up app-staging
@@ -120,7 +127,9 @@ vagrant up mon-staging
 vagrant ssh mon-staging
 ```
 
-To have ansible add the ossec agent running on the app server to the ossec server running on the monitor server run these commands:
+To up both servers and not skip any tasks:
+
+NOTE: This will not skip the OSSEC authd tasks
 
 ```
 vagrant up /staging$/ --no-provision
