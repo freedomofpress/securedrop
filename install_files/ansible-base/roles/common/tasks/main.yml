@@ -6,26 +6,24 @@
       # CI environment uses a vps where we use vagrant-hostmanger to manage
       # /etc/hosts
     - static-hosts
+- include: create_users.yml
+
+- include: sysctl.yml
+
+- include: harden_dns.yml
+
+- include: remove_kernel_modules.yml
 
 - include: install_tor.yml
 
   # Install Interfaces
 - include: install_fpf_repo.yml
 
-  # System Hardening
-- include: unattended_upgrades.yml
-
-- include: create_users.yml
-
-- include: remove_kernel_modules.yml
-
-- include: ssh.yml
-
-- include: harden_dns.yml
-
+  # Install the grsec kernel prior to running unattended-upgrades to avoid
+  # reboots
 - include: from_fpf_repo_install_grsec.yml
   tags:
     - grsec
 
-# Needs to run after installing grsec kernel
-- include: sysctl.yml
+  # System Hardening
+- include: ssh.yml

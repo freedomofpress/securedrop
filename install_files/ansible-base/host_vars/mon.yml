@@ -59,6 +59,9 @@ ossec_apt_dependencies:
 #sasl_password is defined in the site-specific.yml config
 #ca_cert is defined in the site-specific.yml config
 
+authd_rules:
+  - "-A INPUT -s {{ app_hostname }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -d {{ app_hostname }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
 ### Used by the test role ###
 
