@@ -124,7 +124,7 @@ To have ansible add the ossec agent running on the app server to the ossec serve
 
 ```
 vagrant up /staging$/ --no-provision
-ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
+ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key --connection ssh -u vagrant install_files/ansible-base/site.yml
 ```
 
 ## Production
