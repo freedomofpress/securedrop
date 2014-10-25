@@ -122,9 +122,9 @@ Make sure to then return to your `Transfer Device` folder, right click on the fi
 
 ### Decrypting and Working on the Secure Viewing Station
 
-To decrypt documents, return to your Persistent folder and double-click on zipped file folder. After you extract the files, click on each file individually, and it will prompt you for the application PGP key passphrase to decrypt the document.
+To decrypt documents, return to your Persistent folder and double-click on zipped file folder. After you extract the files, click on each file individually, and it will prompt you for the application GPG key passphrase to decrypt the document.
 
-**TODO**: add screenshot from 0.3 
+**TODO**: add screenshot from 0.3
 
 ![Decrypting](/docs/images/manual/viewing2.jpg)
 
