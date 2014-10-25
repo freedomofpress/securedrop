@@ -151,7 +151,7 @@ def create():
     db_session.add(source)
     try:
         db_session.commit()
-    except IntegrityError as e: 
+    except IntegrityError as e:
         app.logger.error("Attempt to create a source with duplicate codename: %s" % (e,))
     else:
         os.mkdir(store.path(sid))
