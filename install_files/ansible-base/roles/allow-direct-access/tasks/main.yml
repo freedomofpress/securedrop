@@ -5,7 +5,8 @@
     regexp: "ListenAddress 127.0.0.1:22"
     line: "ListenAddress 0.0.0.0:22"
   notify:
-    - restart ssh
+    - restart direct access ssh
+  meta: flush_handlers
 
 - stat: path=/etc/network/iptables/rules_v4
   register: iptables_rules
@@ -18,7 +19,12 @@
     insertafter: "^:LOGNDROP"
     regexp: "{{ item }}"
     line: "{{ item }}"
+  # Use a different handler name to avoid confusion since reloading iptables
+  # for the allow direct access should be fire forget.
+  # flush handlers so that this handler is ensured to be used before the
+  # restrict direct access handler.
   notify:
-    - reload iptables rules
+    - reload direct access iptables
+  meta: flush_handlers
   with_items: direct_access_rules
   when: iptables_rules.stat.exists

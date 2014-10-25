@@ -28,3 +28,4 @@
 
 - name: ensure iptables rules_v4 file is present
   template: src=app_rules_v4 dest=/etc/network/iptables/rules_v4 owner=root mode=0644
+  notify: reload restrict access iptables

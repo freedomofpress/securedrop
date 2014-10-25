@@ -77,7 +77,7 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access_mon
+    - restrict_direct_access_app
     - allow-direct-access
 
   sudo: yes
@@ -90,7 +90,7 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access_app
+    - restrict_direct_access_mon
     - allow-direct-access
 
   sudo: yes
