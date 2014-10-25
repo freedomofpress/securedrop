@@ -33,6 +33,7 @@
     - staging-specific.yml
 
   roles:
+    - common-app
     - app
     - allow-direct-access
     - app-test
