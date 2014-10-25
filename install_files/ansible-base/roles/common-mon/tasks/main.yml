@@ -8,5 +8,3 @@
     - static-hosts
 
 - include: mon_configure_tor_hidden_services.yml
-
-- include: mon_display_onions.yml
