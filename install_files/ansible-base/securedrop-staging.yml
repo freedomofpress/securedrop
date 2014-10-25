@@ -45,7 +45,7 @@
     - staging-specific.yml
 
   roles:
-    - remove_ossec_exemptions
+    - remove_agent_auth_exemptions
 
   sudo: yes
 
@@ -57,6 +57,6 @@
     - staging-specific.yml
 
   roles:
-    - remove_ossec_exemptions
+    - remove_authd_exemptions
 
   sudo: yes

@@ -12,7 +12,7 @@
     line: "{{ item }}"
   notify:
     - reload iptables rules
-  with_items: authd_rules
+  with_items: agent_auth_rules
   when: not ossec_client_keys.stat.exists
 
 - name: run agent auth

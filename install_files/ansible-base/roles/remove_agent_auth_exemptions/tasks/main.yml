@@ -1,0 +1,16 @@
+---
+  # If the OSSEC agent auth iptable rule exemptions are in place remove them and
+  # restart OSSEC. This order does matter. The app server's
+  # ossec agent needs to restart to load the imported cert from authd and
+  # connect to the ossec server. The monitor server's OSSEC server needs to
+  # restart after the agent connects to correctly display the agent status.
+- name: remove insecure ossec agent auth firewall exemptions
+  lineinfile:
+    state: absent
+    dest: /etc/network/iptables/rules_v4
+    line: "{{ item }}"
+  register: removed_ossec_exemptions
+  notify:
+    - reload iptables rules
+    - restart ossec
+  with_items: agent_auth_rules
