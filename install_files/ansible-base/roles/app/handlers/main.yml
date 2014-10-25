@@ -3,7 +3,10 @@
 - name: restart tor
   service: name=tor state=restarted
 
-## SecureDrop Interfaces
+- name: reload iptables rules
+  shell: iptables-restore < /etc/network/iptables/rules_v4
+
+## App/securedrop section
 - name: restart apache2
   service: name=apache2 state=restarted
 
@@ -11,4 +14,3 @@
   supervisorctl:
     name: securedrop_worker
     state: present
-

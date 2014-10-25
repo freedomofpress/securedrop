@@ -3,7 +3,10 @@
 - name: restart tor
   service: name=tor state=restarted
 
-## System Hardening
+- name: reload iptables rules
+  shell: iptables-restore < /etc/network/iptables/rules_v4
+
+## OSSEC section
 - name: update aliases
   command: postalias /etc/aliases
 
