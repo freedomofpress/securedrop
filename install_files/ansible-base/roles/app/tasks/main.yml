@@ -12,8 +12,5 @@
 
 - include: configure_securedrop_worker.yml
 
-- include: app_iptables.yml
-  tags: non-development
-
-- include: agent_auth.yml
-  tags: authd
+#- include: app_iptables.yml
+#  tags: non-development

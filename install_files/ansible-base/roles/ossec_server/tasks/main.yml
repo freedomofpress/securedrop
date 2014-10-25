@@ -1,7 +1,7 @@
 ---
   # This needs to be run after seting the etc hosts or else will get a hostname
   # error change these to lineinfile module to work with the exemptions
-- include: mon_iptables.yml
+#- include: mon_iptables.yml
 
 - include: mon_configure_ossec_gpg_alerts.yml
 

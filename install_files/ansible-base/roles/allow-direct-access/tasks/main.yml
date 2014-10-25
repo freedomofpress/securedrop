@@ -7,6 +7,9 @@
   notify:
     - restart ssh
 
+- stat: path=/etc/network/iptables/rules_v4
+  register: iptables_rules
+
 - name: allow direct SSH acccess in iptables rules
   lineinfile:
     dest: /etc/network/iptables/rules_v4
@@ -18,3 +21,4 @@
   notify:
     - reload iptables rules
   with_items: direct_access_rules
+  when: iptables_rules.stat.exists
