@@ -9,8 +9,9 @@
 
 - include: mon_install_fpf_deb_pkgs.yml
 
-  # authd will go here
-
 - include: mon_configure_ossec_gpg_alerts.yml
 
 - include: mon_install_postfix.yml
+
+- include: authd.yml
+  tags: authd

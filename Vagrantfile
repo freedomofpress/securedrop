@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
-      ansible.skip_tags = "non-development"
+      ansible.skip_tags = [ "non-development", "authd" ]
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -48,8 +48,8 @@ Vagrant.configure("2") do |config|
     app_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     app_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
-      # options 'tor' 'grsec' 'iptables' 'ssh' 'tests' 'ossec' also takes an array
-      #ansible.skip_tags = [ 'grsec' ]
+      # options 'tor' 'grsec' 'tests' 'ossec' also takes an array
+      ansible.skip_tags = [ 'authd' ]
       ansible.verbose = 'v'
     end
     app_staging.vm.provider "virtualbox" do |v|
@@ -71,8 +71,8 @@ Vagrant.configure("2") do |config|
     mon_staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     mon_staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
-      # tags: 'tor' 'grsec' 'ssh' 'iptables' 'apparmor-complain' 'apparmor-enforce' 'tests' also takes an array
-      #ansible.skip_tags = [ 'grsec' ]
+      # tags: 'tor' 'grsec' 'tests' also takes an array
+      ansible.skip_tags = [ 'authd' ]
       ansible.verbose = 'v'
     end
     mon_staging.vm.provider "virtualbox" do |v|

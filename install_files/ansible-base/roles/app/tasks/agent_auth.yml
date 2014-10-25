@@ -1,0 +1,20 @@
+---
+- stat: path=/var/ossec/etc/client.keys
+  register: ossec_client_keys
+
+- name: if agent is not already added add agent_auth firewall exmeptions rules
+  lineinfile:
+    dest: /etc/network/iptables/rules_v4
+    # last line in the initial *filter stanza (which must come before any rules)
+    # rules will be applied before the default rules defined in rules_v4 file
+    insertafter: "^:LOGNDROP"
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+  notify:
+    - reload iptables rules
+  with_items: authd_rules
+  when: not ossec_client_keys.stat.exists
+
+- name: run agent auth
+  shell: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
+  when: not ossec_client_keys.stat.exists
