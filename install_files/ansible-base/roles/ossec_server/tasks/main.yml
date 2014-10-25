@@ -3,8 +3,6 @@
   # error change these to lineinfile module to work with the exemptions
 - include: mon_iptables.yml
 
-- include: mon_install_fpf_deb_pkgs.yml
-
 - include: mon_configure_ossec_gpg_alerts.yml
 
 - include: mon_install_postfix.yml

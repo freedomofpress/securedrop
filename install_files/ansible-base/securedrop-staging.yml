@@ -21,7 +21,7 @@
     - common-mon
     # this is a staging only role
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
-    - mon
+    - ossec_server
     - allow-direct-access
 
   sudo: yes

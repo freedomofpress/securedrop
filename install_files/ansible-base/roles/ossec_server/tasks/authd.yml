@@ -15,6 +15,10 @@
   shell: creates=/var/ossec/etc/sslmanager.cert openssl req -new -x509 -batch -subj "/CA=AU/ST=Some-State/locality=city/O=Internet Widgits Pty Ltd/commonName=mon/organizationUnitName=section/emailAddress=admin@localhost" -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
   when: list_agents != "{{ app_hostname }}-{{ app_ip }} is available."
 
+- stat: path=/etc/network/iptables/rules_v4
+  register: iptables_rules
+  when: list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
+
 - name: add firewall rule exmeption for authd
   lineinfile:
     dest: /etc/network/iptables/rules_v4
@@ -26,7 +30,7 @@
   notify:
     - reload iptables rules
   with_items: authd_rules
-  when: list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
+  when: iptables_rules.stat.exists and list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
 
 - name: start authd
   shell: "/var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &"

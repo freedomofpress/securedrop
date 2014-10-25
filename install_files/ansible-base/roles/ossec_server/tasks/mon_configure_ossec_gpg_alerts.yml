@@ -1,6 +1,9 @@
 ---
+- name: ensure ossec server package is installed
+  apt: name=securedrop-ossec-server state=present
+
 - name: ensure procmail is installed
-  apt: pkg=procmail state=latest
+  apt: name=procmail state=latest
 
 - name: copy the ossec alert gpg public key to the monitor server
   copy:
