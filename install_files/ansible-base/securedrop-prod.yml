@@ -77,7 +77,7 @@
     - prod-specific.yml
 
   roles:
-    - restrict_direct_access
+    - restrict_direct_access_mon
 
   sudo: yes
 
@@ -89,6 +89,6 @@
     - prod-specific.yml
 
   roles:
-    - restrict_direct_access
+    - restrict_direct_access_app
 
   sudo: yes

@@ -22,7 +22,6 @@
     # this is a staging only role
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - ossec_server
-    - allow-direct-access
 
   sudo: yes
 
@@ -39,7 +38,7 @@
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - ossec_agent
     - app
-    - allow-direct-access
+
     - app-test
 
   sudo: yes
@@ -78,7 +77,8 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access
+    - restrict_direct_access_mon
+    - allow-direct-access
 
   sudo: yes
 
@@ -90,6 +90,7 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access
+    - restrict_direct_access_app
+    - allow-direct-access
 
   sudo: yes

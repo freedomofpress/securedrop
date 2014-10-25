@@ -1,0 +1,11 @@
+---
+- name: restart ssh
+  service: name=ssh state=restarted
+
+  # for production installs this will break the ssh connetion for the initial
+  # install. This handler has to be the last task ran. Added the ignore erros
+  # for this handler so that the production playbook will still report that the
+  # playbook was complete.
+- name: reload iptables rules
+  shell: iptables-restore < /etc/network/iptables/rules_v4
+  ignore_errors: yes

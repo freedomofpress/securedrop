@@ -11,6 +11,3 @@
   tags: non-development
 
 - include: configure_securedrop_worker.yml
-
-#- include: app_iptables.yml
-#  tags: non-development
