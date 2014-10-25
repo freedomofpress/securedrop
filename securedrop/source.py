@@ -175,6 +175,9 @@ def lookup():
                 date = datetime.utcfromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
                 replies.append(dict(id=fn, date=date, msg=msg))
 
+    # Sort the replies by date
+    replies.sort(key=lambda reply: reply['date'], reverse=True)
+
     def async_genkey(sid, codename):
         with app.app_context():
             background.execute(lambda: crypto_util.genkeypair(sid, codename))
