@@ -7,7 +7,6 @@
 
   roles:
     - common
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
 
   sudo: yes
 
@@ -20,6 +19,8 @@
 
   roles:
     - common-mon
+    # this is a staging only role
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - mon
     - allow-direct-access
 
@@ -34,6 +35,8 @@
 
   roles:
     - common-app
+    # this is a staging only role
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - app
     - allow-direct-access
     - app-test
