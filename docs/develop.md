@@ -85,10 +85,10 @@ There are predefined VM configurations in the vagrantfile: development, staging,
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
     * OSSEC alert configuration are in install_files/asnible-base/staging-specific.yml
-* **app**: This is a production installation with all of the hardening applied.
+* **app-demo**: This is like a production installation with all of the hardening applied but virtualized
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
     * Putting the apparmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
-* **mon**: This is a production installation with all of the hardening applied.
+* **mon-demo**: This is a like production installation with all of the hardening applied but virtualized
 
 
 ## Development
@@ -104,10 +104,18 @@ cd /vagrant/securedrop
 
 ## Staging
 
-To just up a specific server run:
+The staging environment is a virtual production server that still allows direct access. (you can ssh and hit the web interfaces directly without tor)
+
+If you uncomment the line in the Vagrantfile `ansible.skip-tags: [ 'install_local_pkgs' ]` the playbook will look for:
+
+securedrop-app-code-0.3-amd64.deb
+
+securedrop-ossec-server-0.3-amd64.deb
+
+securedrop-ossec-agent-0.3-amd64.deb
 
 ```
-vagrant up app-staging
+vagrant up /staging$/
 vagrant ssh app-staging
 sudo su
 cd /var/www/securedrop
@@ -115,39 +123,25 @@ cd /var/www/securedrop
 ./manage.py test
 ```
 
-```
-vagrant up mon-staging
-vagrant ssh mon-staging
-```
-
-To have ansible add the ossec agent running on the app server to the ossec server running on the monitor server run these commands:
-
-```
-vagrant up /staging$/ --no-provision
-ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key --connection ssh -u vagrant install_files/ansible-base/site.yml
-```
-
-## Production
+## Demo
 
 You will need to fill out the conf file `securedrop/install_files/ansible_base/prod-specific.yml`.
 
 To just up a specific server run:
 
 ```
-vagrant up app
+vagrant up /demo$/
 vagrant ssh app
 sudo su
 cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-`vagrant up mon`
-
-To have ansible add the ossec agent running on the app server to the ossec server running on the monitor server run these commands:
-NOTE: you will need to temporarily disable the validate role to use the production playbooks with vagrant.
+NOTE: The demo instance run the production playbooks (only difference being the production installs are not virtualized).
+Part of the production playbook validates that staging values are not used in production. One of the values it verifies is that the user ansible runs as is not `vagrant` To be able to run this playbook in a vagrant/virtualbox environment you will need to disable the validate role.
 
 ```
-vagrant up app mon --no-provision
+vagrant up /demo$/ --no-provision
 ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
 ```
 
