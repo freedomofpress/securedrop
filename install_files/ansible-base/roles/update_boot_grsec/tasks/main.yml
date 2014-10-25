@@ -1,9 +1,0 @@
----
-- include: unattended_upgrades.yml
-  tags:
-    - reboot
-
-- include: apply_grsec_lock.yml
-  tags:
-    - reboot
-    - grsec
