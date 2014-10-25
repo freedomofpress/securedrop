@@ -8,7 +8,7 @@
 
   roles:
     - common
-    #- build-ossec-deb-pkg
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - mon
     - allow-direct-access
 
@@ -23,8 +23,7 @@
 
   roles:
     - common
-    - build-securedrop-app-code-deb-pkg
-    #- build-ossec-deb-pkg
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - app
     - allow-direct-access
     - app-test

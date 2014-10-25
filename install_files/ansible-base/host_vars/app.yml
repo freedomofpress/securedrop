@@ -36,6 +36,12 @@ securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb ext
 # Installing the securedrop-ossec-agent.deb package
 securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
 
+### Used by the install_local_deb_pkgs role ###
+local_deb_packages:
+  - securedrop-app-code-0.3-amd64.deb
+  # Commenting out the ossec package until we have the published pbuilder
+  # process
+  #- securedrop-ossec-agent_2.8.1_amd64.deb
 
 ### Used by the app role ###
 
