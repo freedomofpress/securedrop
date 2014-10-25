@@ -1,4 +1,16 @@
 ---
+- hosts: [ 'mon-staging', 'app-staging' ]
+
+  vars_files:
+    - group_vars/securedrop.yml
+    - staging-specific.yml
+
+  roles:
+    - common
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+
+  sudo: yes
+
 - hosts: [ 'mon-staging' ]
 
   vars_files:
@@ -7,8 +19,7 @@
     - staging-specific.yml
 
   roles:
-    - common
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+    - common-mon
     - mon
     - allow-direct-access
 
@@ -22,8 +33,6 @@
     - staging-specific.yml
 
   roles:
-    - common
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - app
     - allow-direct-access
     - app-test
@@ -89,5 +98,3 @@
     - restrict_direct_access
 
   sudo: yes
-
-
