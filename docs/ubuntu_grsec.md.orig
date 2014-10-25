@@ -98,6 +98,8 @@ Download the Ubuntu kernel overlay and the key to verifying the archive.
 
 ```
 git clone git://kernel.ubuntu.com/ubuntu/ubuntu-trusty.git
+<<<<<<< HEAD
+=======
 gpg --keyserver pool.sks-keyservers.net --recv-key DD14FC2A1EA5E51369635AD73D76C845FA1447CA
 ```
 
@@ -106,6 +108,7 @@ Verify the archive and move on to the next step if you see "Good Signature" in t
 ```
 cd ubuntu-trusty/
 git tag -v Ubuntu-lts-3.16.0-23.31-14.04.1
+>>>>>>> upstream/develop
 ```
 
 Transfer all the files in the *grsec* directory from the online server
