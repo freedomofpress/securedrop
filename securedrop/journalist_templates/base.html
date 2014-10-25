@@ -15,10 +15,11 @@
     {% if g.user %}
     <div id="logout">
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}">Admin</a>
+      <a href="{{ url_for('admin_index') }}">Admin</a> | 
       {% endif %}
       <a href="{{ url_for('logout') }}">Logout</a>
     </div>
+    <div class="clearfix"></div>
     {% endif %}
 
     <div class="content">
