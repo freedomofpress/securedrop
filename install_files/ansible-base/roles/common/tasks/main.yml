@@ -33,5 +33,3 @@
   tags:
     - reboot
     - grsec
-
-- include: ssh.yml
