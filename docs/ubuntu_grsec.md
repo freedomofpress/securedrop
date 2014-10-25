@@ -94,18 +94,19 @@ wget https://grsecurity.net/stable/grsecurity-3.0-3.14.21-201410131959.patch
 wget https://grsecurity.net/stable/grsecurity-3.0-3.14.21-201410131959.patch.sig
 ```
 
-Download the Ubuntu kernel overlay and the key to verifying the archive.
+Download the Ubuntu kernel overlay and the keys to verifying the archive.
 
 ```
 git clone git://kernel.ubuntu.com/ubuntu/ubuntu-trusty.git
 gpg --keyserver pool.sks-keyservers.net --recv-key DD14FC2A1EA5E51369635AD73D76C845FA1447CA
+gpg --keyserver pool.sks-keyservers.net --recv-key D4E1E31744709144B0F8101ADB74AEB8FDCE24FC
 ```
 
 Verify the archive and move on to the next step if you see "Good Signature" in the output.
 
 ```
 cd ubuntu-trusty/
-git tag -v Ubuntu-lts-3.16.0-23.31-14.04.1
+git tag -v `git describe --abbrev=0 --tags`
 ```
 
 Transfer all the files in the *grsec* directory from the online server
