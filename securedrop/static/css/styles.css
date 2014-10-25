@@ -249,7 +249,7 @@ p.serious {
 }
 .snippet .attachment {
   background-color: #f3f3f3;
-  padding: 22px 15px;
+  padding: 12px;
   width: 330px;
   display: inline-block;
   vertical-align: top;
@@ -277,13 +277,15 @@ p.serious {
   vertical-align: top;
   width: 406px;
   background: white;
+  overflow: hidden;
 }
 .snippet .message textarea {
+  vertical-align: top;
+  display: block;
   padding: 10px;
   min-width: 406px;
   max-width: 406px;
-  min-height: 164px;
-  font-size: 12pt;
+  min-height: 168px;
   border: none;
 }
 .snippet .message textarea:focus {
@@ -650,4 +652,10 @@ div#select-container {
 div.document-actions button {
   font-size: 14px;
   padding: 6px 15px;
+}
+
+p#max-file-size {
+  font-size:10px;
+  font-style:italic;
+  margin-bottom: 0;
 }
