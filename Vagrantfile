@@ -125,6 +125,33 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define 'app-build', autostart: false do |build|
+    build.vm.box = "app-build"
+    build.vm.box = "trusty64"
+    build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    build.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
+      ansible.verbose = 'v'
+    end
+    build.vm.provider "virtualbox" do |v|
+      v.name = "mon"
+    end
+  end
+
+  config.vm.define 'mon-build', autostart: false do |build|
+    build.vm.box = "mon-build"
+    build.vm.box = "trusty64"
+    build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    build.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
+      ansible.verbose = 'v'
+    end
+    build.vm.provider "virtualbox" do |v|
+      v.name = "mon"
+    end
+  end
+
+
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")
   #  config.cache.scope = :box
