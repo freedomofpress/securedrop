@@ -117,7 +117,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'app-build', autostart: false do |build|
-    build.vm.box = "build"
+    build.vm.box = "app-build"
     build.vm.box = "trusty64"
     build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     build.vm.provision "ansible" do |ansible|
@@ -130,7 +130,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'mon-build', autostart: false do |build|
-    build.vm.box = "build"
+    build.vm.box = "mon-build"
     build.vm.box = "trusty64"
     build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     build.vm.provision "ansible" do |ansible|
