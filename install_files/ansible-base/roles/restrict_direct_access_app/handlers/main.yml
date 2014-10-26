@@ -1,13 +1,3 @@
 ---
 - name: restart restrict access ssh
   service: name=ssh state=restarted
-
-  # for production installs this will break the ssh connetion for the initial
-  # install. This handler has to be the last task ran. Set to fire and forget
-  # for this handler so that the production playbook will still report that the
-  # playbook was complete.
-- name: reload restrict access iptables
-  shell: iptables-restore < /etc/network/iptables/rules_v4
-  async: 0
-  poll: 0
-  ignore_errors: yes

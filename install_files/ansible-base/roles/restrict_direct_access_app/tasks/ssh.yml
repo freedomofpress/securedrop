@@ -9,7 +9,7 @@
    - sshd_config
    - ssh_config
   notify:
-   - restart ssh
+   - restart restrict access ssh
 
 - name: ensure pam config is installed
   copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
