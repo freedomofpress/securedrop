@@ -96,7 +96,11 @@ def test_unit():
     Runs the unit tests.
     """
     os.environ['SECUREDROP_ENV'] = 'test'
-    sys.exit(int(subprocess.call("py.test")))
+    import config
+    _start_test_rqworker(config)
+    test_rc = int(subprocess.call("py.test"))
+    _stop_test_rqworker()
+    sys.exit(test_rc)
 
 
 def reset():
