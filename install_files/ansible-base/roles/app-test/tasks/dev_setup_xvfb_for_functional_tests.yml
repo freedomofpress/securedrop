@@ -1,5 +1,8 @@
 ---
-- name: install testing dependencies
+- name: install pip dependencies for running the unit and functional tests
+  pip: requirements="{{ test_pip_requirements }}"
+
+- name: install testing deb pkg dependencies
   apt: name="{{ item }}" state=latest
   with_items: test_apt_dependencies
 

@@ -1,0 +1,38 @@
+---
+- name: ensure ossec server package is installed
+  apt: name=securedrop-ossec-server state=present
+
+- name: ensure procmail is installed
+  apt: name=procmail state=latest
+
+- name: copy the ossec alert gpg public key to the monitor server
+  copy:
+    src: "{{ ossec_alert_gpg_public_key }}"
+    dest: "/var/ossec"
+
+- name: ensure ossec alert gpg public key is in the ossec keyring
+  command: "su -s /bin/bash -c \"gpg --homedir /var/ossec/.gnupg --import /var/ossec/{{ ossec_alert_gpg_public_key }}\" {{ ossec_group }}"
+
+- name: ensure send_encrypted_alarm script is present
+  template:
+    src: send_encrypted_alarm.sh
+    dest: /var/ossec/send_encrypted_alarm.sh
+    mode: 775
+    owner: ossec
+    group: root
+
+  # TODO This might not be necessary
+- name: create procmail log file
+  file:
+    state: touch
+    dest: /var/log/procmail.log
+    mode: 660
+    owner: ossec
+    group: root
+
+- name: ensure procmail config is present
+  copy:
+    src: procmailrc
+    dest: /var/ossec/.procmailrc
+    owner: ossec
+    group: root

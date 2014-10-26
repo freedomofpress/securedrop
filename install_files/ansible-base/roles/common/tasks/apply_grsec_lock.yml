@@ -1,0 +1,34 @@
+---
+  # These tasks are tag'd as restart and grsec. If the tag 'restart' or 'grsec' is skipped none
+  # of these tasks will run.
+
+  # Check to ensure a restart is needed to apply sysctl grsec lock command
+- stat: path="/proc/sys/kernel/grsecurity/grsec_lock"
+  register: grsec_lock
+
+  # If the grsec package is installed (via common role) and the grsec_lock is
+  # not present reboot the system, to boot into the grsec kernel.
+- name: restart machine if the grsec lock sysctl option does not exist
+  shell: shutdown -r now "Ansible restart to boot into grsec kernel"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: not grsec_lock.stat.exists
+  sudo: yes
+
+  # Give the server time to cycle before checking to see if it up
+  # The var ansible_ssh_host for what host to check will work in production,
+  # vagrant and snap-ci environments.
+  # This is ran from the host machine and shouldn't be ran as root.
+- name: waiting for server to come back
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  when: not grsec_lock.stat.exists
+  sudo: false
+
+- sysctl: name=kernel.grsecurity.grsec_lock value=1 sysctl_set=yes state=present reload=yes
+  sudo: yes
