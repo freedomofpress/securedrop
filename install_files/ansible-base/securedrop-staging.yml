@@ -78,7 +78,7 @@
 
   roles:
     - restrict_direct_access_app
-    - allow-direct-access
+    - allow_direct_access
 
   sudo: yes
 
@@ -91,6 +91,6 @@
 
   roles:
     - restrict_direct_access_mon
-    - allow-direct-access
+    - allow_direct_access
 
   sudo: yes
