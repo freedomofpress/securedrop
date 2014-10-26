@@ -59,7 +59,7 @@ grub_pax:
   - /usr/sbin/grub-probe
   - /usr/sbin/grub-mkdevicemap
 
-grsec_package: linux-image-3.14.21-grsec
+grsec_package: securedrop-grsec
 
 ### Used by the build-ossec-deb-pkg roles ###
 build_ossec_deb_pkg_dependencies:
