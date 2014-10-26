@@ -1,0 +1,12 @@
+Package: securedrop-grsec
+Source: securedrop-grsec
+Version: 0.3
+Architecture: amd64
+Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
+Depends: linux-image-3.14.21-grsec
+Section: admin
+Priority: optional
+Homepage: https://pressfreedomfoundation/securedrop
+Description: SecureDrop grsec kernel (metapackage depending on the latest version)
+ This is a metapackage to install the securedrop built version of grsecuriy.
+ This package just list as a dependency the current version of grsecurity to install.
