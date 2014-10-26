@@ -1,0 +1,4 @@
+Flask-Testing==0.4.2
+mock==1.0.1
+pytest==2.6.2
+selenium==2.43.0

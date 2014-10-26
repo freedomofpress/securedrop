@@ -1,6 +1,4 @@
 ---
 - include: securedrop-development.yml
-- include: securedrop-app-staging.yml
-- include: securedrop-mon-staging.yml
-- include: securedrop-app.yml
-- include: securedrop-mon.yml
+- include: securedrop-staging.yml
+- include: securedrop-prod.yml

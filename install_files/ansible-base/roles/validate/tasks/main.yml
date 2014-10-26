@@ -4,8 +4,7 @@
 #production.
 
 - debug: msg="verifying ssh_users is not set to vagrant"
-  #always_run: true
-  failed_when: ssh_users.stdout == "vagrant"
+  failed_when: ssh_users == "vagrant"
 
 - debug: msg="verifying securedrop_app_gpg_fingerprint is not the journalist test key"
   failed_when: securedrop_app_gpg_fingerprint == "65A1B5FF195B56353CC63DFFCC40EF1228271441"

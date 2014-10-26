@@ -104,8 +104,10 @@ cd /vagrant/securedrop
 
 ## Staging
 
+To just up a specific server run:
+
 ```
-vagrant up /staging$/
+vagrant up app-staging
 vagrant ssh app-staging
 sudo su
 cd /var/www/securedrop
@@ -114,12 +116,22 @@ cd /var/www/securedrop
 ```
 
 ```
+vagrant up mon-staging
 vagrant ssh mon-staging
+```
+
+To have ansible add the ossec agent running on the app server to the ossec server running on the monitor server run these commands:
+
+```
+vagrant up /staging$/ --no-provision
+ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
 ```
 
 ## Production
 
 You will need to fill out the conf file `securedrop/install_files/ansible_base/prod-specific.yml`.
+
+To just up a specific server run:
 
 ```
 vagrant up app
@@ -130,6 +142,14 @@ cd /var/www/securedrop/
 ```
 
 `vagrant up mon`
+
+To have ansible add the ossec agent running on the app server to the ossec server running on the monitor server run these commands:
+NOTE: you will need to temporarily disable the validate role to use the production playbooks with vagrant.
+
+```
+vagrant up app mon --no-provision
+ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
+```
 
 In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by *TODO*
 

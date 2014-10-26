@@ -132,7 +132,7 @@ def generate():
     # page, or inform them that they're logged in.
     session.pop('logged_in', None)
 
-    num_words = 8
+    num_words = 7
     if request.method == 'POST':
         num_words = int(request.form['number-words'])
         if num_words not in range(7, 11):
@@ -151,7 +151,7 @@ def create():
     db_session.add(source)
     try:
         db_session.commit()
-    except IntegrityError as e: 
+    except IntegrityError as e:
         app.logger.error("Attempt to create a source with duplicate codename: %s" % (e,))
     else:
         os.mkdir(store.path(sid))
@@ -174,6 +174,9 @@ def lookup():
             else:
                 date = datetime.utcfromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
                 replies.append(dict(id=fn, date=date, msg=msg))
+
+    # Sort the replies by date
+    replies.sort(key=lambda reply: reply['date'], reverse=True)
 
     def async_genkey(sid, codename):
         with app.app_context():

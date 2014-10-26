@@ -1,21 +1,15 @@
 Ubuntu kernel with grsecurity
 =============================
 
-This guide outlines the steps required to compile a kernel for [Ubuntu Server 14.04 (Trusty Tahr)](http://releases.ubuntu.com/14.04/) with [Grsecurity](https://grsecurity.net/), specifically for use with [SecureDrop](https://pressfreedomfoundation.org/securedrop). At the end
-of this guide, you will have two Debian packages that you transfer to
-the *App* and *Monitor* servers.
+This guide outlines the steps required to compile a kernel for [Ubuntu Server 14.04 (Trusty Tahr)](http://releases.ubuntu.com/14.04/) with [Grsecurity](https://grsecurity.net/), specifically for use with [SecureDrop](https://freedom.press/securedrop). At the end of this guide, you will have two Debian packages that you transfer to the *App* and *Monitor* servers.
 
 ## Before you begin
 
 The steps in this guide assume you have the following set up and running:
 
- * SecureDrop App and Monitor servers (see the [installation
-   guide](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md))
- * An offline server running [Ubuntu Server 14.04 (Trusty
-   Tahr)](http://releases.ubuntu.com/14.04/) that you use to compile the
-kernel
- * An online server running 12.04 or 14.04 that you use to download
-   package dependencies
+ * SecureDrop App and Monitor servers (see the [installation guide](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md))
+ * An offline server running [Ubuntu Server 14.04 (Trusty Tahr)](http://releases.ubuntu.com/14.04/) that you use to compile the kernel
+ * An online server that you use to download package dependencies
 
 Since SecureDrop is only supported on 64-bit platforms, make sure you download a 64-bit version of Ubuntu to build the kernel. The `.iso` filename will have an `-amd64` suffix.
 
@@ -25,8 +19,8 @@ offline server, then use the offline server to verify digital signatures
 and compile the new kernel.
 
 The current version of this document assumes you are compiling Linux
-kernel version *3.2.61* and Grsecurity version
-*3.0-3.2.61-201407232156*. When running commands that include filenames
+kernel version *3.14.21* and Grsecurity version
+*3.0-3.14.21-201410131959*. When running commands that include filenames
 and/or version numbers, make sure it all matches what you have on your
 server.
 
@@ -69,7 +63,7 @@ gpg --with-fingerprint spender-gpg-key.asc
 gpg --fingerprint 647F28654894E3BD457199BE38DBBDC86092693E
 ```
 
-Bradley Spengler should have a fingerprint of "DE94 52CE 46F4 2094 907F 108B 44D1 C0F8 2525 FE49" and Greg Kroah-Hartman should have a fingerprint of "647F 2865 4894 E3BD 4571 99BE 38DB BDC8 6092 693E". If either of the fingerprints do not match what you see here, please get in touch at securedrop@freedom.press. 
+Bradley Spengler should have a fingerprint of "DE94 52CE 46F4 2094 907F 108B 44D1 C0F8 2525 FE49" and Greg Kroah-Hartman should have a fingerprint of "647F 2865 4894 E3BD 4571 99BE 38DB BDC8 6092 693E". If either of the fingerprints do not match what you see here, please get in touch at securedrop@freedom.press.
 
 At this point, you should disconnect this server from the Internet and
 treat it as an offline (air-gapped) server.
@@ -94,16 +88,24 @@ When downloading the Linux kernel and Grsecurity, make sure you get the
 long term stable versions and that the version numbers match up.
 
 ```
-wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.61.tar.xz
-wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.2.61.tar.sign
-wget https://grsecurity.net/stable/grsecurity-3.0-3.2.61-201407232156.patch
-wget https://grsecurity.net/stable/grsecurity-3.0-3.2.61-201407232156.patch.sig
+wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.21.tar.xz
+wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.21.tar.sign
+wget https://grsecurity.net/stable/grsecurity-3.0-3.14.21-201410131959.patch
+wget https://grsecurity.net/stable/grsecurity-3.0-3.14.21-201410131959.patch.sig
 ```
 
-Download the Ubuntu kernel overlay.
+Download the Ubuntu kernel overlay and the key to verifying the archive.
 
 ```
-git clone git://kernel.ubuntu.com/ubuntu/ubuntu-precise.git
+git clone git://kernel.ubuntu.com/ubuntu/ubuntu-trusty.git
+gpg --keyserver pool.sks-keyservers.net --recv-key DD14FC2A1EA5E51369635AD73D76C845FA1447CA
+```
+
+Verify the archive and move on to the next step if you see "Good Signature" in the output.
+
+```
+cd ubuntu-trusty/
+git tag -v Ubuntu-lts-3.16.0-23.31-14.04.1
 ```
 
 Transfer all the files in the *grsec* directory from the online server
@@ -115,10 +117,10 @@ After moving the files from the online server to the offline server, you
 should have the following in your *grsec* directory.
 
 ```
-grsecurity-3.0-3.2.61-201407232156.patch	    spender-gpg-key.asc
-grsecurity-3.0-3.2.61-201407232156.patch.sig	ubuntu-package/
-linux-3.2.61.tar.sign				            ubuntu-precise/
-linux-3.2.61.tar.xz
+grsecurity-3.0-3.14.21-201410131959.patch	    spender-gpg-key.asc
+grsecurity-3.0-3.14.21-201410131959.patch.sig	ubuntu-package/
+linux-3.14.21.tar.sign				            ubuntu-trusty/
+linux-3.14.21.tar.xz
 ```
 
 ### Gather the required files for the Ubuntu kernel overlay
@@ -127,8 +129,8 @@ Copy the required directories from the Ubuntu kernel overlay directory
 to the correct *ubuntu-package* directory.
 
 ```
-cp ubuntu-precise/debian/control-scripts/p* ubuntu-package/pkg/image/
-cp ubuntu-precise/debian/control-scripts/headers-postinst ubuntu-package/pkg/headers/
+cp ubuntu-trusty/debian/control-scripts/p* ubuntu-package/pkg/image/
+cp ubuntu-trusty/debian/control-scripts/headers-postinst ubuntu-package/pkg/headers/
 ```
 
 ### Verify the digital signatures
@@ -136,14 +138,14 @@ cp ubuntu-precise/debian/control-scripts/headers-postinst ubuntu-package/pkg/hea
 Verify the digital signature for Grsecurity.
 
 ```
-gpg --verify grsecurity-3.0-3.2.61-201407232156.patch.sig
+gpg --verify grsecurity-3.0-3.14.21-201410131959.patch.sig
 ```
 
 Verify the digital signature for the Linux kernel.
 
 ```
-unxz linux-3.2.61.tar.xz
-gpg --verify linux-3.2.61.tar.sign
+unxz linux-3.14.21.tar.xz
+gpg --verify linux-3.14.21.tar.sign
 ```
 
 Do not move on to the next step until you have successfully verified both
@@ -155,9 +157,9 @@ server, re-download both the package and signature and try again.
 Extract the Linux kernel archive and apply the Grsecurity patch.
 
 ```
-tar -xf linux-3.2.61.tar
-cd linux-3.2.61/
-patch -p1 < ../grsecurity-3.0-3.2.61-201407232156.patch
+tar -xf linux-3.14.21.tar
+cd linux-3.14.21/
+patch -p1 < ../grsecurity-3.0-3.14.21-201410131959.patch
 ```
 
 ### Configure Grsecurity
@@ -176,10 +178,10 @@ correct options.
      * Press *Y* to include it
      * Set *Configuration Method* to *Automatic*
      * Set *Usage Type* to *Server* (default)
-     * Set *Virtualization Type* to *None* (default) 
+     * Set *Virtualization Type* to *None* (default)
      * Set *Required Priorities* to *Security*
      * Select *Exit*
-   * Select *Exit* 
+   * Select *Exit*
  * Select *Exit*
  * Select *Yes* to save
 
@@ -196,16 +198,16 @@ Compile the kernel with the Ubuntu overlay. Note that this step may fail
 if you are using a small VPS/virtual machine.
 
 ```
-make-kpkg clean  
-sudo make-kpkg --initrd --overlay-dir=../ubuntu-package kernel_image kernel_headers 
+make-kpkg clean
+sudo make-kpkg --initrd --overlay-dir=../ubuntu-package kernel_image kernel_headers
 ```
 
 When the build process is done, you will have the following Debian
 packages in the *grsec* directory:
 
 ```
-linux-headers-3.2.61-grsec_3.2.61-grsec-10.00.Custom_amd64.deb
-linux-image-3.2.61-grsec_3.2.61-grsec-10.00.Custom_amd64.deb
+linux-headers-3.14.21-grsec_3.2.61-grsec-10.00.Custom_amd64.deb
+linux-image-3.14.21-grsec_3.2.61-grsec-10.00.Custom_amd64.deb
 ```
 
 Put the packages on a USB stick and transfer them to the SecureDrop App
@@ -222,11 +224,11 @@ as Grsecurity.
 
 ```
 sudo apt-get install paxctl
-sudo paxctl -Cpm /usr/sbin/grub-probe  
-sudo paxctl -Cpm /usr/sbin/grub-mkdevicemap  
-sudo paxctl -Cpm /usr/sbin/grub-setup  
-sudo paxctl -Cpm /usr/bin/grub-script-check  
-sudo paxctl -Cpm /usr/bin/grub-mount  
+sudo paxctl -Cpm /usr/sbin/grub-probe
+sudo paxctl -Cpm /usr/sbin/grub-mkdevicemap
+sudo paxctl -Cpm /usr/sbin/grub-setup
+sudo paxctl -Cpm /usr/bin/grub-script-check
+sudo paxctl -Cpm /usr/bin/grub-mount
 ```
 
 ### Install new kernel on both App and Monitor servers
@@ -251,7 +253,7 @@ Copy the output and use it in the *sed* command below to set this kernel
 as the default.
 
 ```
-sudo sed -i "s/^GRUB_DEFAULT=.*$/GRUB_DEFAULT=\"2>Ubuntu, with Linux 3.2.61-grsec\"/" /etc/default/grub
+sudo sed -i "s/^GRUB_DEFAULT=.*$/GRUB_DEFAULT=\"2>Ubuntu, with Linux 3.14.21-grsec\"/" /etc/default/grub
 sudo update-grub
 sudo reboot
 ```

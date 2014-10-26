@@ -202,6 +202,7 @@ class Journalist(Base):
     def hotp(self):
         return pyotp.HOTP(self.otp_secret)
 
+    @property
     def shared_secret_qrcode(self):
         uri = self.totp.provisioning_uri("{} {}".format("SecureDrop",
                                                         self.username))

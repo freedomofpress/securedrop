@@ -33,7 +33,7 @@
     dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
 
 - name: make pip wheel archive for our debian package requirements
-  command: pip wheel -r {{ prod_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
+  command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
 
 - name: ensure build dir /etc exists
   file:

@@ -20,3 +20,6 @@
 
 - include: app_display_onions.yml
   tags: non-development
+
+- include: agent_auth.yml
+  tags: authd
