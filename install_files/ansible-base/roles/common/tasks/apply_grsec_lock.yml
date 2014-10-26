@@ -8,7 +8,7 @@
 
   # If the grsec package is installed (via common role) and the grsec_lock is
   # not present reboot the system, to boot into the grsec kernel.
-- name: restart machine
+- name: restart machine if the grsec lock sysctl option does not exist
   shell: shutdown -r now "Ansible restart to boot into grsec kernel"
   async: 0
   poll: 0

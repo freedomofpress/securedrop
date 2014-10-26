@@ -18,7 +18,7 @@
 - stat: path="{{ securedrop_code }}/config.py"
   register: config
 
-- name: if config.py does not exist copy example from repo
+- name: if config.py does not exist copy example from the securedrop code root
   command: "cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py"
   when: not config.stat.exists
 
@@ -105,7 +105,7 @@
   # If using a custom header overwrite the existing one
   # dpkg will not override it on upgrades
   # otherwise will need to templatizing the apparmor profile
-- name: if header file variable is defined copy interface header to web app path
+- name: if header file is not None replace the default logo
   copy:
     src: "{{ securedrop_header_image }}"
     dest: "{{ securedrop_code }}/static/i/logo.png"

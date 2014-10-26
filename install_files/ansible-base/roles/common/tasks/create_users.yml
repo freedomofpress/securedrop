@@ -1,5 +1,4 @@
 ---
-
 - name: ensure latest sudoers file is copied to sudoers.tmp
   copy:
     src="sudoers"
