@@ -19,7 +19,7 @@
     - prod-specific.yml
 
   roles:
-    - validate
+    - { role: validate, tags: [ 'validate' ] }
     - common-mon
     - ossec_server
 
@@ -35,7 +35,7 @@
   vars:
 
   roles:
-    - validate
+    - { role: validate, tags: [ 'validate' ] }
     - common-app
     - ossec_agent
     - app

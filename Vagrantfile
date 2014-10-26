@@ -116,6 +116,9 @@ Vagrant.configure("2") do |config|
     demo.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
       ansible.verbose = 'v'
+      # the production playbook verifies that staging default values are not
+      # used will need to skip the this role to run in Vagrant
+      ansible.skip_tags = [ "validate" ]
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
