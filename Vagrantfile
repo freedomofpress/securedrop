@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/site.yml"
-      ansible.skip_tags = [ "non-development", 'authd' ]
+      ansible.skip_tags = [ "non-development" ]
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
