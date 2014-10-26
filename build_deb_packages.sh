@@ -27,7 +27,7 @@ build_meta() {
         mkdir -p $PACKAGE_DIR
     fi
 
-    cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR/DEBIAN
+    cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR
 
     # Create the deb package
     dpkg-deb --build $PACKAGE_DIR
