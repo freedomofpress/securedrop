@@ -443,7 +443,7 @@ def reply():
 def generate_code():
     original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
-    
+
     for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
         doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename())
     db_session.commit()
