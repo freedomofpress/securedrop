@@ -6,7 +6,6 @@
     line: "ListenAddress 0.0.0.0:22"
   notify:
     - restart direct access ssh
-  meta: flush_handlers
 
 - stat: path=/etc/network/iptables/rules_v4
   register: iptables_rules
@@ -25,6 +24,5 @@
   # restrict direct access handler.
   notify:
     - reload direct access iptables
-  meta: flush_handlers
   with_items: direct_access_rules
   when: iptables_rules.stat.exists
