@@ -134,7 +134,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
     end
     build.vm.provider "virtualbox" do |v|
-      v.name = "mon"
+      v.name = "app-build"
     end
   end
 
@@ -147,7 +147,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
     end
     build.vm.provider "virtualbox" do |v|
-      v.name = "mon"
+      v.name = "mon-build"
     end
   end
 
