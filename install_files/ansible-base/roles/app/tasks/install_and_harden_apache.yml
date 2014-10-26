@@ -11,30 +11,30 @@
   template: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
   with_items: apache_templates
 
-- name: ensure required apache modules present
+- name: ensure required apache modules are present
   apache2_module: state=present name={{ item }}
   with_items: apache_modules
 
-- name: ensure certain apache modules disabled
+- name: ensure non-required apache modules are disabled
   apache2_module: state=absent name={{ item }}
   with_items: apache_disabled_modules
 
-- name: ensure 000-default site disabled
+- name: ensure 000-default site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/000-default.conf
 
-- name: ensure default-ssl site disabled
+- name: ensure default-ssl site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/default-ssl.conf
 
-- name: ensure default site disabled
+- name: ensure default site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/default.conf
 
-- name: ensure sites enabled
+- name: ensure securedrop sites are enabled
   file:
     state: link
     src: "/etc/apache2/sites-available/{{ item }}.conf"

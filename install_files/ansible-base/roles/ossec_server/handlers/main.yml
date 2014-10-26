@@ -1,0 +1,16 @@
+---
+## Tor section
+- name: reload iptables rules
+  shell: iptables-restore < /etc/network/iptables/rules_v4
+
+- name: update aliases
+  command: postalias /etc/aliases
+
+- name: update sasl_passwd db
+  command: postmap /etc/postfix/sasl_passwd
+
+- name: postmap_header_checks
+  command: postmap /etc/postfix/header_checks
+
+- name: restart postfix
+  service: name=postfix state=restarted

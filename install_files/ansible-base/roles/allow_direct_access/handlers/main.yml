@@ -1,0 +1,6 @@
+---
+- name: restart direct access ssh
+  service: name=ssh state=restarted
+
+- name: reload direct access iptables
+  shell: iptables-restore < /etc/network/iptables/rules_v4

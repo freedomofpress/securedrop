@@ -1,4 +1,15 @@
 ---
+- hosts: [ 'mon-staging', 'app-staging' ]
+
+  vars_files:
+    - group_vars/securedrop.yml
+    - staging-specific.yml
+
+  roles:
+    - common
+
+  sudo: yes
+
 - hosts: [ 'mon-staging' ]
 
   vars_files:
@@ -7,10 +18,10 @@
     - staging-specific.yml
 
   roles:
-    - common
-    #- build-ossec-deb-pkg
-    - mon
-    - allow-direct-access
+    - common-mon
+    # this is a staging only role
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+    - ossec_server
 
   sudo: yes
 
@@ -22,21 +33,42 @@
     - staging-specific.yml
 
   roles:
-    - common
-    - build-securedrop-app-code-deb-pkg
-    #- build-ossec-deb-pkg
+    - common-app
+    # this is a staging only role
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+    - ossec_agent
     - app
-    - allow-direct-access
+
     - app-test
 
   sudo: yes
 
   # If the OSSEC authd iptable rule exemptions are in place remove them and
-  # restart OSSEC. The remove_ossec_exemptions role is ran on the app server
-  # first then the monitor server. This order does matter. The app server's
-  # ossec agent needs to restart to load the imported cert from authd and
-  # connect to the ossec server. The monitor server's OSSEC server needs to
-  # restart after the agent connects to correctly display the agent status.
+  # restart OSSEC. For the ossec agent the exemptions are removes as part of
+  # the authd role. In order to allow all agents to connect to the ossec server
+  # before kill authd and removing the ossec rules. This is a separate role for
+  # the ossec server. The order of events does matter the monitor server authd
+  # service needs to be listening and reachable, then agent needs to connect to
+  # ossec server, agent needs to restart, then ossec server exemptions can be
+  # removed and the ossec server process can restart.
+- hosts: [ 'mon-staging' ]
+
+  vars_files:
+    - group_vars/securedrop.yml
+    - host_vars/mon.yml
+    - staging-specific.yml
+
+  roles:
+    - remove_authd_exemptions
+
+  sudo: yes
+
+  # This section will put the ssh and iptables rules in place
+  # It will then add any staging exemptions required
+  # at the end of each host section is when the handlers are run.
+  # So iptables will not be reloaded until the exemptions are applied
+  # for production the last task is apply iptables. This will break their
+  # connection. After that point the admin will to proxy traffic over tor.
 - hosts: [ 'app-staging' ]
 
   vars_files:
@@ -45,7 +77,8 @@
     - staging-specific.yml
 
   roles:
-    - remove_ossec_exemptions
+    - restrict_direct_access_app
+    - allow_direct_access
 
   sudo: yes
 
@@ -57,6 +90,7 @@
     - staging-specific.yml
 
   roles:
-    - remove_ossec_exemptions
+    - restrict_direct_access_mon
+    - allow_direct_access
 
   sudo: yes

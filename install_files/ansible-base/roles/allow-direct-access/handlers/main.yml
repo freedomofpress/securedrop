@@ -1,3 +1,0 @@
----
-- name: reload iptables rules
-  shell: iptables-restore < /etc/network/iptables/rules_v4

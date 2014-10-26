@@ -1,0 +1,9 @@
+---
+  # This needs to be run after seting the etc hosts or else will get a hostname
+  # error change these to lineinfile module to work with the exemptions
+- include: mon_configure_ossec_gpg_alerts.yml
+
+- include: mon_install_postfix.yml
+
+- include: authd.yml
+  tags: authd

@@ -7,4 +7,6 @@
   with_items: grub_pax
 
 - name: install grsec package from fpf repo
-  apt: pkg={{ grsec_package }} state=latest 
+  apt: pkg={{ grsec_package }} state=latest
+  async: 200
+  poll: 10
