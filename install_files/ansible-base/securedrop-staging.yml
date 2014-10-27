@@ -38,7 +38,6 @@
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - ossec_agent
     - app
-
     - app-test
 
   sudo: yes

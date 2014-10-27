@@ -89,9 +89,9 @@
   /var/www/securedrop/version.pyc rw,
 
 
-  ^DEFAULT_URI {
+  ^DEFAULT_URI flags=(complain) {
   }
 
-  ^HANDLING_UNTRUSTED_INPUT {
+  ^HANDLING_UNTRUSTED_INPUT flags=(complain) {
   }
 }

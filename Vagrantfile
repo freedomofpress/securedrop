@@ -79,7 +79,8 @@ Vagrant.configure("2") do |config|
       # repo. If you disable this it will look for the packages to be in
       # install_files/ansible-base/ directory. What packages per host is
       # set in that hosts respective install_files/ansible-base/host_vars/
-      ansible.skip_tags = [ "install_local_pkgs" ]
+      #ansible.skip_tags = [ "install_local_pkgs" ]
+      ansible.skip_tags = [ "grsec" ]
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
