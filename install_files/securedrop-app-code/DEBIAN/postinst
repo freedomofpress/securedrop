@@ -24,8 +24,11 @@ case "$1" in
     chown www-data:www-data /var/www/document.wsgi
     chown www-data:www-data /var/www/source.wsgi
 
-    aa-complain /etc/apparmor.d/usr.sbin.tor
-    aa-complain /etc/apparmor.d/usr.sbin.apache2
+    mkdir -p -m 700 /var/lib/securedrop/store
+    mkdir -p -m 700 /var/lib/securedrop/keys
+
+    #aa-complain /etc/apparmor.d/usr.sbin.tor
+    #aa-complain /etc/apparmor.d/usr.sbin.apache2
     service apache2 restart
     service tor restart
 
