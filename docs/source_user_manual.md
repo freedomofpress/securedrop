@@ -1,10 +1,10 @@
-# How to Use SecureDrop
+# How To Use SecureDrop As A Source
 
 ## SecureDrop Depends on the Tor Browser
 
-Sources submitting documents or messages to SecureDrop, and the journalists viewing this correspondence, must connect to the respective Source or Document Interface using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/. This bundle installs the Tor browser, as well as an application that is used to connect to the Tor network.
+Sources submitting documents or messages to SecureDrop must connect to the SecureDrop Interface using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser Bundle from https://www.torproject.org/. This bundle installs the Tor browser, as well as an application that is used to connect to the Tor network.
 
-The Tor Browser can be used to access Tor _hidden service URLs_, which have domain names that end in ".onion". Media organizations will provide links to the .onion URLs of their SecureDrop pages, and we [maintain a list](https://freedom.press/securedrop/directory) of official pages as well. Each journalist that uses SecureDrop connects to the service with his or her own personal .onion URL.
+The Tor Browser can be used to access Tor _hidden service URLs_, which have domain names that end in ".onion". Media organizations will provide links to the .onion URLs of their SecureDrop pages, and we [maintain a list](https://freedom.press/securedrop/directory) of official pages as well. Sources can and should use the [Tails operating system](https://tails.boum.org) for a higher level of security. 
 
 ## Using SecureDrop As a Source
 
