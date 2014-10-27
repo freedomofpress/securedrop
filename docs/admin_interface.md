@@ -1,7 +1,7 @@
 # Admin Interface and Adding New Journalists
 
 
-At this point, you (the administrator) should have your own username and password, plus 2 factor authentication through either the Google Authenticator app on your smartphone or a Ubikey. 
+At this point, you (the administrator) should have your own username and password, plus 2 factor authentication through either the Google Authenticator app on your smartphone or a Yubikey. 
 
 Now, you can add create new log-ins for the journalists at your news organization who will be checking the system for submissions. Make sure the journalist is physically in the same room as you when you do this, as they will have to create a password and scan a bar code for their 2 factor authentication. Since you’re logged in, this is the screen you should see now:
 
