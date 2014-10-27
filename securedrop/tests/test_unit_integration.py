@@ -277,7 +277,7 @@ class TestIntegration(unittest.TestCase):
                     salt=crypto_util.SCRYPT_GPG_PEPPER)
         decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
         self.assertTrue(decrypted_data.ok,
-                "Could not decrypt msg with key, gpg says: {}".format(decrypted_data.status))
+                "Could not decrypt msg with key, gpg says: {}".format(decrypted_data.stderr))
 
         # We have to clean up the temporary GPG dir
         shutil.rmtree(gpg_tmp_dir)
@@ -362,10 +362,10 @@ class TestIntegration(unittest.TestCase):
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        pgp_msg_re = r'-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----'
-        pgp_msg = re.search(pgp_msg_re, rv.data, re.MULTILINE|re.DOTALL).group(0)
-        self._can_decrypt_with_key(pgp_msg, config.JOURNALIST_KEY)
-        self._can_decrypt_with_key(pgp_msg, crypto_util.getkey(sid), codename)
+        zf = zipfile.ZipFile(StringIO(rv.data), 'r')
+        data = zf.read(zf.namelist()[0])
+        self._can_decrypt_with_key(data, config.JOURNALIST_KEY)
+        self._can_decrypt_with_key(data, crypto_util.getkey(sid), codename)
 
         # Test deleting reply on the journalist interface
         last_reply_number = len(soup.select('input[name="doc_names_selected"]')) - 1
