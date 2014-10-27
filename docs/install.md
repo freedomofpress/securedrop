@@ -83,7 +83,7 @@ To manage GPG keys using the Tails graphical interface, click the clipboard icon
 
 ![My Keys](/docs/images/install/keyring.png)
 
-Select the key you just generated and click "File" and "Export". Save the key to the *Transfer Device* as `SecureDrop.asc`, and make sure you change the file type from "PGP keys" to "Armored PGP keys". This is the public key only.
+Select the key you just generated and click "File" and "Export". Save the key to the *Transfer Device* as `SecureDrop.asc`, and make sure you change the file type from "PGP keys" to "Armored PGP keys," which can be switched right above the 'export' button. This is the public key only.
 
 ![My Keys](/docs/images/install/exportkey.png)
 ![My Keys](/docs/images/install/exportkey2.png)
