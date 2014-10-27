@@ -48,7 +48,8 @@ After installing and configuring Ubuntu Server on `Application Server` and `Moni
 
 ## How to Use SecureDrop
 
-See [How to Use SecureDrop](/docs/user_manual.md).
+See [how to use SecureDrop as a source](/docs/source_user_manual.md).
+and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
 
 ## Demo
 
