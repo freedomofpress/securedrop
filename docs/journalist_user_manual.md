@@ -1,16 +1,12 @@
-# How to Use SecureDrop
+# How to Use SecureDrop As a Journalist
 
-## SecureDrop Depends on the Tor Browser
-
-Sources submitting documents or messages to SecureDrop, and the journalists viewing this correspondence, must connect to the respective Source or Document Interface using the Tor network, free software that makes users' internet activity much more difficult to trace. The easiest and most secure way to use Tor is to download the Tor Browser from https://www.torproject.org/.
-
-The Tor Browser can be used to access Tor _hidden service URLs_, which have domain names that end in ".onion". Media organizations will provide links to the .onion URLs of their SecureDrop pages, and we [maintain a list](https://freedom.press/securedrop/directory) of official pages as well. Each journalist that uses SecureDrop connects to the service with his or her own personal .onion URL.
+Journalists viewing documents on SecureDrop must connect to the respective Source or Document Interface using the [Tails operating system](https://tails.boum.org/), which your administrator should have already set up for you.
 
 ## Using SecureDrop As a Journalist
 
 ### Connecting to the Document Interface
 
-Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use the browser in the Tails operating system to connect to the `Document Interface`. This is for extra security. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
+Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use the browser in the Tails operating system to connect to the `Document Interface`. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
 See our guide on setting up [Tails for the Admin and Journalist Workstation](https://github.com/freedomofpress/securedrop/tree/develop/tails_files) before continuing. We recommend that you create bookmarks for the Source and Document Interfaces.
 
