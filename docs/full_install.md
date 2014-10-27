@@ -62,15 +62,13 @@ You will be prompted to enter a root password. This is a one-time session passwo
 
 Open a terminal (click the terminal icon in the top menu).
 
-First, you need to update your Tor and Debian packages by entering the below command. It should take a couple minutes.
+First, you need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
 
     $ sudo apt-get update
 
 Now, install Ansible by entering this command:
 
     $ sudo apt-get install ansible
-  
-You will be asked whether you want to use additional disk space to do so. Enter "Y" for yes. 
 
 Next, you will need to clone the SecureDrop repository:
 
@@ -91,7 +89,7 @@ Now that you're in the right directory, you'll want to create an SSH key on the 
 
     $ ssh-keygen -t rsa -b 4096
 
-You'll be askied to "enter file in which to save the key." Here you can just keep the default and click enter. You can also just click enter when it asks you to create a passphrase (since this will be protected by the persistence passphrase anyways). 
+You'll be asked to "enter file in which to save the key." Here you can just keep the default and click enter. You can also just click enter when it asks you to create a passphrase (since this will be protected by the persistence passphrase anyways). 
 
 Here is where you will have to copy the SSH public key to both servers. Use the user name and password that you set up during Ubuntu installation. First do the 'Application Server' then do the 'Monitor Server.'
 
@@ -127,7 +125,7 @@ Next, you're going to edit the inventory file and replace the default IP address
 
     $ editor inventory
 
-After changing the IP addresses, hit 'control+O' then 'control+X' to exit. It will ask you if you want to save. Enter 'y' then hit enter to confirm.
+After changing the IP addresses, save the changes to the inventory file and quit the editor.
 
 Then, fill out prod-specific.yml with the Application Server IP and hostname, along with the same information for the Monitor Server (you should have had this information saved from when you installed Ubuntu).
 
