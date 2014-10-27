@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
     development.vm.network "forwarded_port", guest: 8081, host: 8081
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/site.yml"
+      ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
       ansible.skip_tags = [ "non-development" ]
       ansible.verbose = 'v'
     end
@@ -59,6 +59,7 @@ Vagrant.configure("2") do |config|
     staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: true
     staging.vm.network "forwarded_port", guest: 80, host: 8082
     staging.vm.network "forwarded_port", guest: 8080, host: 8083
+    staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     staging.vm.provider "virtualbox" do |v|
       v.name = "app-staging"
@@ -70,7 +71,7 @@ Vagrant.configure("2") do |config|
       v.memory = 1024
     end
     staging.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/site.yml"
+      ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
       # Other options: 'restart', 'grsec'
       #ansible.skip_tags = [ 'authd' ]
       ansible.verbose = 'v'
@@ -114,7 +115,7 @@ Vagrant.configure("2") do |config|
       v.memory = 1024
     end
     demo.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/site.yml"
+      ansible.playbook = "install_files/ansible-base/securedrop-prod.yml"
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
