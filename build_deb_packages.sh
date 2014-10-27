@@ -31,7 +31,7 @@ build_meta() {
 
     # Create the deb package
     dpkg-deb --build $PACKAGE_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
+    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb /vagrant
 }
 
 
