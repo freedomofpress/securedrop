@@ -158,7 +158,8 @@ def encrypt(plaintext, fingerprints, output=None):
     out = encrypt_fn(plaintext,
                      *fingerprints,
                      output=output,
-                     always_trust=True)
+                     always_trust=True,
+                     armor=False)
     if out.ok:
         return out.data
     else:
