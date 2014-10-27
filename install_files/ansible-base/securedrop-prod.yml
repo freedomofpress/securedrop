@@ -1,5 +1,5 @@
 ---
-- hosts: [ 'mon', 'app', 'mon-demo', 'app-demo' ]
+- hosts: [ 'mon', 'app' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -11,7 +11,7 @@
   sudo: yes
 
 
-- hosts: [ 'mon', 'mon-demo' ]
+- hosts: [ 'mon' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -25,7 +25,7 @@
 
   sudo: yes
 
-- hosts: [ 'app', 'app-demo' ]
+- hosts: [ 'app' ]
 
   vars_files:
    - group_vars/securedrop.yml
@@ -51,7 +51,7 @@
   # service needs to be listening and reachable, then agent needs to connect to
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
-- hosts: [ 'mon', 'mon-demo' ]
+- hosts: [ 'mon' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -69,7 +69,7 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-- hosts: [ 'app', 'app-demo' ]
+- hosts: [ 'app' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -81,7 +81,7 @@
 
   sudo: yes
 
-- hosts: [ 'mon', 'mon-demo' ]
+- hosts: [ 'mon' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -93,7 +93,7 @@
 
   sudo: yes
 
-- hosts: [ 'app', 'mon', 'app-demo', 'mon-demo' ]
+- hosts: [ 'app', 'mon' ]
 
   roles:
     - reboot

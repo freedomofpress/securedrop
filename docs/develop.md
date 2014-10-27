@@ -85,10 +85,10 @@ There are predefined VM configurations in the vagrantfile: development, staging,
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
     * OSSEC alert configuration are in install_files/asnible-base/staging-specific.yml
-* **app-demo**: This is like a production installation with all of the hardening applied but virtualized
+* **app-prod**: This is like a production installation with all of the hardening applied but virtualized
     * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
     * Putting the apparmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
-* **mon-demo**: This is a like production installation with all of the hardening applied but virtualized
+* **mon-prod**: This is a like production installation with all of the hardening applied but virtualized
 
 
 ## Development
@@ -123,15 +123,15 @@ cd /var/www/securedrop
 ./manage.py test
 ```
 
-## Demo
+## Prod
 
 You will need to fill out the conf file `securedrop/install_files/ansible_base/prod-specific.yml`.
 
 To just up a specific server run:
 
 ```
-vagrant up /demo$/
-vagrant ssh app
+vagrant up /prod$/
+vagrant ssh app-prod
 sudo su
 cd /var/www/securedrop/
 ./manage.py add_admin

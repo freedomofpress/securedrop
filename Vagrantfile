@@ -86,26 +86,26 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # The demo hosts are just like production but are virtualized. All access to ssh and
+  # The prod hosts are just like production but are virtualized. All access to ssh and
   # the web interfaces is only over tor.
-  config.vm.define 'mon-demo', autostart: false do |demo|
-    demo.vm.box = "mon"
-    demo.vm.box = "trusty64"
-    demo.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
-    demo.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    demo.vm.synced_folder './', '/vagrant', disabled: true
-    demo.vm.provider "virtualbox" do |v|
+  config.vm.define 'mon-prod', autostart: false do |prod|
+    prod.vm.box = "mon"
+    prod.vm.box = "trusty64"
+    prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
+    prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    prod.vm.synced_folder './', '/vagrant', disabled: true
+    prod.vm.provider "virtualbox" do |v|
       v.name = "mon"
     end
   end
 
-  config.vm.define 'app-demo', autostart: false do |demo|
-    demo.vm.hostname = "app"
-    demo.vm.box = "trusty64"
-    demo.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
-    demo.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
-    demo.vm.synced_folder './', '/vagrant', disabled: true
-    demo.vm.provider "virtualbox" do |v|
+  config.vm.define 'app-prod', autostart: false do |prod|
+    prod.vm.hostname = "app"
+    prod.vm.box = "trusty64"
+    prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
+    prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    prod.vm.synced_folder './', '/vagrant', disabled: true
+    prod.vm.provider "virtualbox" do |v|
       v.name = "app"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
       #
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
       # 2. Firefox 33 was released on October 13th: https://www.mozilla.org/en-US/firefox/33.0/releasenotes/ It may require more memory than the previous version did.
       v.memory = 1024
     end
-    demo.vm.provision "ansible" do |ansible|
+    prod.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-prod.yml"
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
