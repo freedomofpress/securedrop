@@ -56,46 +56,56 @@ Install Ubuntu 14.04 (Trusty) on both NUCs. For detailed information on installi
 
 **Note**: everything currently in `docs/install.md` looks good up to "## Set up the App Server".
 
-Connect the Admin Workstation's Ethernet port to the shared firewall. Boot the Admin Workstation with the Admin Live USB that we created earlier.
+Connect the Admin Workstation's Ethernet port to the shared firewall. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.'
+
+You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. 
 
 Open a terminal (click the terminal icon in the top menu).
 
-Update your packages and install ansible:
+First, you need to update your Tor and Debian packages by entering the below command. It should take a couple minutes.
 
     $ sudo apt-get update
-    $ sudo apt-get install ansible
 
-Clone the SecureDrop repository.
+Now, install Ansible by entering this command:
+
+    $ sudo apt-get install ansible
+  
+You will be asked whether you want to use additional disk space to do so. Enter "Y" for yes. 
+
+Next, you will need to clone the SecureDrop repository:
 
 **TODO** verify the git repo (signed tags?)
 
-**TODO** when the release is cut, make sure you checkout master. Until then you want to use develop.
-
     $ git clone https://github.com/freedomofpress/securedrop.git
 
-Change into the ansible-base directory:
+Before proceeding, double check to make sure what branch you are in. You should be in the master branch, but it's possible you will also be in develop. Makesure to check out master by running this command:
 
-    $ cd securedrop/install_files/ansible-base
+    $ cd securedrop 
+    $ git checkout master
 
-Create an SSH key on the admin workstation
+Next, you will have to change into the ansible-base directory:
 
-**TODO** no passphrase? passphrase? I've been testing with no passphrase (since it's stored on an encrypted volume).
+    $ cd install_files/ansible-base
+
+Now that you're in the right directory, you'll want to create an SSH key on the admin workstation. To do so, run this command:
 
     $ ssh-keygen -t rsa -b 4096
 
-Copy the SSH public key to both servers. Use the user name and password that you set up during Ubuntu installation.
+You'll be askied to "enter file in which to save the key." Here you can just keep the default and click enter. You can also just click enter when it asks you to create a passphrase (since this will be protected by the persistence passphrase anyways). 
+
+Here is where you will have to copy the SSH public key to both servers. Use the user name and password that you set up during Ubuntu installation. First do the 'Application Server' then do the 'Monitor Server.'
 
 **TODO** This will ask us to verify the SSH fingerprints of each server. Do we want to verify these? The way to do it would be to add a step when installing Ubuntu on each server where we log in and do ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key, then record that value to compare here.
 
-    $ ssh-copy-id <username>@<app_ip_address>
-    $ ssh-copy-id <username>@<mon_ip_address>
+    $ ssh-copy-id <username>@<App IP address>
+    $ ssh-copy-id <username>@<Mon IP address>
 
 Verify that you are able to log in to both servers (without a password):
 
-    $ ssh-copy-id <username>@<app_ip_address>
-    $ ssh-copy-id <username>@<mon_ip_address>
+    $ ssh <username>@<app_ip_address>
+    $ ssh <username>@<mon_ip_address>
 
-Once you've verified that you are able to log in to each server, log out of both serves:
+Once you've verified that you are able to log in to each server, you can log out of each by typing this:
 
     $ logout # or Ctrl-D
 
@@ -107,11 +117,19 @@ Copy the following required files to `securedrop/install_files/ansible-base`:
 * Admin GPG public key file (for encrypting OSSEC alerts)
 * Custom header image file (.jpg or .png, size should be as small as possible)
 
-Edit the inventory file and replace the default IP addresses with the ones you chose for app and mon. Here, `editor` refers to your preferred text editor (nano, vim, emacs, etc.)
+It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
+
+    $ cp /media/[USB folder]/SecureDrop.asc .
+
+Then repeat the same step for the Admin GPG key and custom header image.
+
+Next, you're going to edit the inventory file and replace the default IP addresses with the ones you chose for app and mon. First, run the below command. Here, `editor` refers to your preferred text editor (nano, vim, emacs, etc.).
 
     $ editor inventory
 
-Fill out prod-specific.yml with the values from the required info.
+After changing the IP addresses, hit 'control+O' then 'control+X' to exit. It will ask you if you want to save. Enter 'y' then hit enter to confirm.
+
+Then, fill out prod-specific.yml with the Application Server IP and hostname, along with the same information for the Monitor Server (you should have had this information saved from when you installed Ubuntu).
 
     $ editor prod-specific.yml
 
