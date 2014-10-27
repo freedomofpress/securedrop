@@ -27,11 +27,11 @@ build_meta() {
         mkdir -p $PACKAGE_DIR
     fi
 
-    cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR
+    cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR/DEBIAN
 
     # Create the deb package
     dpkg-deb --build $PACKAGE_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb $MY_PATH/
+    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb /vagrant
 }
 
 
