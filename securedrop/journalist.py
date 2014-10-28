@@ -504,6 +504,7 @@ def bulk_delete(sid, docs_selected):
 
 def bulk_download(sid, docs_selected):
     source = get_source(sid)
+
     filenames = []
     for doc in docs_selected:
         filenames.append(store.path(sid, doc))
@@ -512,9 +513,12 @@ def bulk_download(sid, docs_selected):
         except NoResultFound as e:
             app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
-    zip = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
-    return send_file(zip.name, mimetype="application/zip",
-                     attachment_filename=source.journalist_filename() + ".zip",
+
+    zf = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
+    attachment_filename = "{}--{}.zip".format(source.journalist_filename(),
+                                              datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+    return send_file(zf.name, mimetype="application/zip",
+                     attachment_filename=attachment_filename,
                      as_attachment=True)
 
 

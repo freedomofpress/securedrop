@@ -35,3 +35,11 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/keys"
+
+- name: ensure securedrop temp directory exists
+  file:
+    state: directory
+    mode: 0700
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    dest: "{{ securedrop_data }}/tmp"

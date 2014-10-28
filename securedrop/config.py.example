@@ -70,6 +70,12 @@ STORE_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'store')
 # Directory where GPG keyring is stored
 GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
 
+# Directory for temporary files
+# We use a directory under the SECUREDROP_DATA_ROOT instead of `/tmp` because
+# we need to expose this directory via X-Send-File, and want to minimize the
+# potential for exposing unintended files.
+TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
+
 # Database configuration
 # TODO we currently use sqlite in production since it is sufficient and simple,
 # but in the future may want to be able to choose a different database
