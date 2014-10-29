@@ -44,3 +44,9 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $PERSISTENT/SecureDrop\ Init.desktop
 chmod 700 $PERSISTENT/SecureDrop\ Init.desktop
+
+echo ""
+echo "Successfully configured the auto-launcher for the document interface!"
+echo "In the future, automatically set up Tor to access the document interface by double-clicking the \"SecureDrop Init\" icon in your Persistent folder."
+echo "You will see a notification appear in the top right corner of your screen when it completes."
+echo ""
