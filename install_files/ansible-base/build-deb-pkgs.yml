@@ -7,7 +7,7 @@
     - development-specific.yml
 
   roles:
-    - build-ossec-deb-pkg
+    - { role: build-ossec-deb-pkg, tags: [ "ossec" ] }
 
   sudo: yes
 
@@ -20,6 +20,6 @@
 
   roles:
     - build-securedrop-app-code-deb-pkg
-    - build-ossec-deb-pkg
+    - { role: build-ossec-deb-pkg, tags: [ "ossec" ] }
 
   sudo: yes

@@ -76,6 +76,8 @@ Vagrant.configure("2") do |config|
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
+      # Quickest boot
+      #ansible.skip_tags = [ "common", "ossec", 'app-test' ]
       # Testing the web application installing local securedrop-app-code deb
       # package
       #ansible.skip_tags = [ "common", "ossec", 'fpf_repo' ]
@@ -136,6 +138,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
+      ansible.skip_tags = [ "ossec" ]
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "app-build"
