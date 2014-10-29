@@ -15,7 +15,8 @@ def clean_root():
 
 def create_directories():
     # Create directories for the file store and the GPG keyring
-    for d in (config.SECUREDROP_DATA_ROOT, config.STORE_DIR, config.GPG_KEY_DIR):
+    for d in (config.SECUREDROP_DATA_ROOT, config.STORE_DIR,
+              config.GPG_KEY_DIR, config.TEMP_DIR):
         if not os.path.isdir(d):
             os.mkdir(d)
 

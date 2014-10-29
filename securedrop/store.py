@@ -67,7 +67,9 @@ def path(*s):
 
 
 def get_bulk_archive(filenames, zip_directory=''):
-    zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_')
+    zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_',
+                                           dir=config.TEMP_DIR,
+                                           delete=False)
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for filename in filenames:
             verify(filename)

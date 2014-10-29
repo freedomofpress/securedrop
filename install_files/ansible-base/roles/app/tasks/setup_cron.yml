@@ -1,0 +1,6 @@
+---
+- name: add cron job to cleanup SecureDrop temp dir daily
+  cron:
+    name: cleanup SecureDrop temp dir
+    job: "/var/www/securedrop/manage.py clean_tmp"
+    special_time: daily
