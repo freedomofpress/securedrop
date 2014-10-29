@@ -50,5 +50,19 @@
         Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
       </footer>
     </div>
+
+    <!-- Warning bubble to help TB users disable Javascript with NoScript.
+    Included here so the images can preload while the user is first
+    reading the page. Hidden by default. -->
+    <div class="bubble">
+      <p>You appear to be using the Tor Browser. You can disable Javascript in 3 easy steps!</p> 
+      <ol>
+        <li>Click the <img src="static/i/no16.png"> NoScript icon in the toolbar above</li> 
+        <li>Click <strong><img src="static/i/no16-global.png"/> Forbid Scripts Globally (advised)</strong></li> 
+        <li>If the page does not refresh automatically, <a href="/">click here</a> to refresh the page</li> 
+      </ol>
+      <p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a></p>
+    </div>
+
   </body>
 </html>

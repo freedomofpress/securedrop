@@ -1,6 +1,15 @@
 ---
-## Tor section
-- name: reload iptables rules
+- name: add firewall rule exemption for authd
+  lineinfile:
+    dest: /etc/network/iptables/rules_v4
+    # last line in the initial *filter stanza (which must come before any rules)
+    # rules will be applied before the default rules defined in rules_v4 file
+    insertafter: "^:LOGNDROP"
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+  with_items: authd_rules
+
+- name: reload authd iptables
   shell: iptables-restore < /etc/network/iptables/rules_v4
 
 - name: update aliases

@@ -17,20 +17,9 @@
 
 - stat: path=/etc/network/iptables/rules_v4
   register: iptables_rules
+  notify: add firewall rule exemption for authd
+  notify: reload authd iptables
   when: list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
-
-- name: add firewall rule exmeption for authd
-  lineinfile:
-    dest: /etc/network/iptables/rules_v4
-    # last line in the initial *filter stanza (which must come before any rules)
-    # rules will be applied before the default rules defined in rules_v4 file
-    insertafter: "^:LOGNDROP"
-    regexp: "{{ item }}"
-    line: "{{ item }}"
-  notify:
-    - reload iptables rules
-  with_items: authd_rules
-  when: iptables_rules.stat.exists and list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
 
 - name: start authd
   shell: "/var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &"

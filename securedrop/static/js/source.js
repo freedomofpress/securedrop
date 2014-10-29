@@ -31,29 +31,14 @@ $(function() {
   if (is_likely_tor_browser()) {
     $("a#disable-js").click(function() {
       // Toggle the bubble if it already exists
-      var infoBubble = $("p.bubble");
-      if (infoBubble.length > 0) {
-        infoBubble.toggle();
-      } else {
-        var infoBubble = $('<p class="bubble">').html(
-          '<p>You appear to be using the Tor Browser. ' +
-          'You can disable Javascript in 3 easy steps!</p>' +
-          '<ol>' +
-          '<li>Click the <img src="static/i/no16.png"> NoScript icon in the toolbar above</li>' +
-          '<li>Click <strong><img src="static/i/no16-global.png"/> Forbid Scripts Globally (advised)</strong></li>' +
-          '<li>If the page does not refresh automatically, <a href="">click here</a> to refresh the page</li>' +
-          '</ol>' +
-          '<p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a>'
-        );
-        if (tbb_version() >= 31) {
-          infoBubble.addClass("tbb31plus");
-        }
-        $(document.body).append(infoBubble);
-        infoBubble.fadeIn(500);
-        infoBubble.click(function() {
-          infoBubble.toggle();
-        });
+      var infoBubble = $("div.bubble");
+      if (tbb_version() >= 31) {
+        infoBubble.addClass("tbb31plus");
       }
+      infoBubble.fadeIn(500);
+      infoBubble.click(function() {
+        infoBubble.toggle();
+      });
       return false; // don't follow link
     });
   }
