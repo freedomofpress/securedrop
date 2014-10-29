@@ -286,6 +286,10 @@ def make_star_true(sid):
 
 def make_star_false(sid):
     source = get_source(sid)
+    if not source.star:
+        source_star = SourceStar(source)
+        db_session.add(source_star)
+        db_session.commit()
     source.star.starred = False
 
 
