@@ -28,6 +28,11 @@
 -A INPUT -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to document int"
 -A OUTPUT -o lo -p tcp --sport 8080 -m owner --uid-owner www-data -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Restrict the apache user outbound connections"
 
+# For the redis worker allow the application user allow access for locahost to
+# localhost traffic. The redis worker user is the application user.
+-A OUTPUT -o lo -s 127.0.0.1 -d 127.0.0.1  -p tcp -m owner --uid-owner www-data -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "for redis worker all application user local loopback user"
+-A INPUT -i lo -s 127.0.0.1 -d 127.0.0.1  -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "for redis worker all application user local loopback user"
+
 # Block all other traffic by application users
 # Load before generic loopback rules
 -A OUTPUT -m owner --uid-owner www-data -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
