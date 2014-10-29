@@ -1,6 +1,7 @@
 ---
 - name: install postfix
-  apt: pkg=postfix state=latest
+  apt: pkg={{ item }} state=latest
+  with_items: ossec_postfix_dependencies
 
 - name: ensure postfix /etc/aliases is present and configured for ossec
   copy:

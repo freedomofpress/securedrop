@@ -41,12 +41,7 @@ mon_fpf_packages:
   - securedrop-ossec-server
 
 # Apt dependencies for the ossec server package
-ossec_apt_dependencies:
-  - libc6
-  - libssl1.0.0
-  - expect
-  - inotify-tools
-  - adduser
+ossec_postfix_dependencies:
   - procmail
   - postfix
   - mailutils
