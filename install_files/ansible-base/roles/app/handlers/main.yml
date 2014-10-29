@@ -14,3 +14,6 @@
   supervisorctl:
     name: securedrop_worker
     state: present
+
+- name: restart haveged
+  service: name=haveged state=restarted
