@@ -6,6 +6,7 @@
     - staging-specific.yml
 
   roles:
+    - install_fpf_repo
     - { role: common, tags: [ 'common' ] }
 
   sudo: yes
