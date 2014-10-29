@@ -6,7 +6,8 @@
     - staging-specific.yml
 
   roles:
-    - common
+    - { role: install_fpf_repo, tags: [ 'fpf_repo' ] }
+    - { role: common, tags: [ 'common' ] }
 
   sudo: yes
 
@@ -18,7 +19,7 @@
     - staging-specific.yml
 
   roles:
-    - common-mon
+    - { role: common-mon, tags: [ 'tor' ] }
     # this is a staging only role
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
     - ossec_server
@@ -33,12 +34,16 @@
     - staging-specific.yml
 
   roles:
-    - common-app
+    # The common-app role should be renamed.
+    # It installs tor. Tor is required to be installed prior to the securedrop
+    # app-code package which contains an apparmor profile that depends on tor
+    # being present.
+    - { role: common-app, tags: [ 'tor' ] }
     # this is a staging only role
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
-    - ossec_agent
+    - { role: ossec_agent, tags: [ 'ossec' ] }
     - app
-    - app-test
+    - { role: app-test, tags: [ 'app-test' ] }
 
   sudo: yes
 
@@ -58,7 +63,7 @@
     - staging-specific.yml
 
   roles:
-    - remove_authd_exemptions
+    - { role: remove_authd_exemptions, tags: [ 'ossec' ] }
 
   sudo: yes
 
@@ -76,8 +81,8 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access_app
-    - allow_direct_access
+    - { role: restrict_direct_access_app, tags: [ 'common' ] }
+    - { role: allow_direct_access, tags: [ 'common' ] }
 
   sudo: yes
 
@@ -89,7 +94,7 @@
     - staging-specific.yml
 
   roles:
-    - restrict_direct_access_mon
-    - allow_direct_access
+    - { role: restrict_direct_access_mon, tags: [ 'common' ] }
+    - { role: allow_direct_access, tags: [ 'common' ] }
 
   sudo: yes

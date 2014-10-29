@@ -7,11 +7,6 @@
 
 - include: remove_kernel_modules.yml
 
-- include: install_tor.yml
-
-  # Install Interfaces
-- include: install_fpf_repo.yml
-
   # Install the grsec kernel prior to running unattended-upgrades to avoid
   # reboots
 - include: from_fpf_repo_install_grsec.yml

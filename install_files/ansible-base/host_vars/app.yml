@@ -51,10 +51,6 @@ app_tor_instances:
   - source
   - document
 
-app_fpf_packages:
-  - securedrop-app-code
-  - securedrop-ossec-agent
-
 # Installing securedrop web application
 #securedrop_user: is defined in the site-specific.yml config file
 #securedrop-code is defined in the site-specific.yml config file
