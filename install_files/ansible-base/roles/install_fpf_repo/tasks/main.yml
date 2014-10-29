@@ -6,6 +6,6 @@
 
 - name: setup fpf apt repo
   apt_repository: >
-    repo='deb [arch=amd64] https://apt.pressfreedomfoundation.org {{ distribution_release }} main'
-    state=present 
+    repo='deb [arch=amd64] https://apt.pressfreedomfoundation.org {{ ansible_lsb.codename }} main'
+    state=present
     update_cache=yes
