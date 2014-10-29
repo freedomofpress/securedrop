@@ -11,39 +11,35 @@ import sys
 import os
 import re
 import zipfile
-import imp
 
+# Arbitrarily pick the source chroot jail (doesn't matter)
 securedrop_root = "/var/chroot/source/var/www/securedrop"
-config_file_path = os.path.join(securedrop_root, "config.py")
-config = imp.load_source('config', config_file_path)
 
 def collect_config_file(zf):
+    config_file_path = os.path.join(securedrop_root, "config.py")
     zf.write(config_file_path)
 
 def collect_securedrop_root(zf):
-    # In 0.2.1, all of SecureDrop's state was stored in
-    # `config.SECUREDROP_ROOT`. In 0.3, this was changed to
-    # `config.SECUREDROP_DATA_ROOT` and `config.SECUREDROP_ROOT` in config.py
-    # now refers to the code root.
-    relative_path_re = r'^{}/(.*)'.format(config.SECUREDROP_ROOT)
-    for root, dirs, files in os.walk(config.SECUREDROP_ROOT):
-        relative_path = os.path.join("securedrop",
-                re.match(relative_path_re, root).groups(0))
+    # The store and key dirs are shared between the chroot jails in 0.2.1, and
+    # are both linked from /var/securedrop
+    for root, dirs, files in os.walk("/var/securedrop"):
         for name in files:
-            zf.write(os.path.join(root, name),
-                     arcname=os.path.join(relative_path, name))
+            zf.write(os.path.join(root, name))
+
+    # Copy the db file, which is only in the document chroot jail in 0.2.1
+    zf.write("/var/chroot/document/var/www/securedrop/db.sqlite", "var/securedrop/db.sqlite")
 
 def collect_custom_header_image(zf):
-    if config.CUSTOM_HEADER_IMAGE:
-        zf.write(os.path.join(securedrop_root,
-            os.path.join("static/i", config.CUSTOM_HEADER_IMAGE)))
+    # 0.2.1's deployment didn't actually use config.CUSTOM_HEADER_IMAGE - it
+    # just overwrote the default header image, `static/i/securedrop.png`.
+    zf.write(os.path.join(securedrop_root, "static/i/securedrop.png"))
 
 def collect_tor_files(zf):
     tor_files = [
         ("/etc/tor/torrc", "torrc"),
-        ("/var/lib/tor/hidden_services/client_keys", "app-ssh-client_keys"),
-        ("/var/chroot/source/var/lib/tor/hidden_services/private_key", "app-source-private_key"),
-        ("/var/chroot/document/var/lib/tor/hidden_services/client_keys", "app-document-client_keys"),
+        ("/var/lib/tor/hidden_service/client_keys", "app-ssh-client_keys"),
+        ("/var/chroot/source/var/lib/tor/hidden_service/private_key", "app-source-private_key"),
+        ("/var/chroot/document/var/lib/tor/hidden_service/client_keys", "app-document-client_keys"),
     ]
 
     for tor_file in tor_files:
