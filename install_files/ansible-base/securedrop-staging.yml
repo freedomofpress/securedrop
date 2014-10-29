@@ -36,7 +36,7 @@
     - common-app
     # this is a staging only role
     - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
-    - ossec_agent
+    - { role: ossec_agent, tags: [ 'ossec' ] }
     - app
     - app-test
 
@@ -58,7 +58,7 @@
     - staging-specific.yml
 
   roles:
-    - remove_authd_exemptions
+    - { role: remove_authd_exemptions, tags: [ 'ossec' ] }
 
   sudo: yes
 
