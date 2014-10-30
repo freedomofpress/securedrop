@@ -6,6 +6,7 @@
     - prod-specific.yml
 
   roles:
+    - install_fpf_repo
     - common
 
   sudo: yes

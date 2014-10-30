@@ -7,4 +7,6 @@
       # /etc/hosts
     - static-hosts
 
+- include: install_tor.yml
+
 - include: app_configure_tor_hidden_services.yml

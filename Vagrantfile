@@ -72,18 +72,22 @@ Vagrant.configure("2") do |config|
     end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
-      # Other options: 'restart', 'grsec'
-      #ansible.skip_tags = [ 'authd' ]
       ansible.verbose = 'v'
-      # This will force the staging vm to install the fpf packages from the
-      # repo. If you disable this it will look for the packages to be in
-      # install_files/ansible-base/ directory. What packages per host is
-      # set in that hosts respective install_files/ansible-base/host_vars/
-      #ansible.skip_tags = [ "install_local_pkgs" ]
-      ansible.skip_tags = [ "grsec" ]
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
+      # Quickest boot
+      #ansible.skip_tags = [ "common", "ossec", 'app-test' ]
+      # Testing the web application installing local securedrop-app-code deb
+      # package
+      #ansible.skip_tags = [ "common", "ossec", 'fpf_repo' ]
+      # Testing the web app from repo
+      #ansible.skip_tags = [ "install_local_pkgs", "common", "ossec" ]
+      # Creating the apparmor profiles
+      #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
+      # Testing the full install install with local access exemptions
+      # This requires to also up mon-staging or else authd will error
+      ansible.skip_tags =  [ "install_local_pkgs" ]
     end
   end
 
@@ -134,6 +138,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
+      ansible.skip_tags = [ "ossec" ]
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "app-build"
