@@ -38,14 +38,14 @@ def collect_custom_header_image(zf):
 
 def collect_tor_files(zf):
     tor_files = [
-        ("/etc/tor/torrc", "torrc"),
-        ("/var/lib/tor/hidden_service/client_keys", "app-ssh-client_keys"),
-        ("/var/chroot/source/var/lib/tor/hidden_service/private_key", "app-source-private_key"),
-        ("/var/chroot/document/var/lib/tor/hidden_service/client_keys", "app-document-client_keys"),
+        "/etc/tor/torrc",
+        "/var/lib/tor/hidden_service/client_keys",
+        "/var/chroot/source/var/lib/tor/hidden_service/private_key",
+        "/var/chroot/document/var/lib/tor/hidden_service/client_keys",
     ]
 
     for tor_file in tor_files:
-        zf.write(tor_file[0], arcname=os.path.join("tor_files", tor_file[1]))
+        zf.write(tor_file)
 
 def main():
     zf_fn = sys.argv[1] if len(sys.argv) > 1 else "/tmp/sd-migrate-0.2.1.zip"
