@@ -26,8 +26,10 @@ def collect_securedrop_root(zf):
         for name in files:
             zf.write(os.path.join(root, name))
 
-    # Copy the db file, which is only in the document chroot jail in 0.2.1
-    zf.write("/var/chroot/document/var/www/securedrop/db.sqlite", "var/securedrop/db.sqlite")
+def collect_database(zf):
+    # Copy the db file, which is only present in the document interface's
+    # chroot jail in 0.2.1
+    zf.write("/var/chroot/document/var/www/securedrop/db.sqlite")
 
 def collect_custom_header_image(zf):
     # 0.2.1's deployment didn't actually use config.CUSTOM_HEADER_IMAGE - it
@@ -46,10 +48,11 @@ def collect_tor_files(zf):
         zf.write(tor_file[0], arcname=os.path.join("tor_files", tor_file[1]))
 
 def main():
-    zf_fn = "/tmp/sd-migrate-0.2.1.zip"
+    zf_fn = sys.argv[1] if len(sys.argv) > 1 else "/tmp/sd-migrate-0.2.1.zip"
     with zipfile.ZipFile(zf_fn, 'w') as zf:
         collect_config_file(zf)
         collect_securedrop_root(zf)
+        collect_database(zf)
         collect_custom_header_image(zf)
         collect_tor_files(zf)
 
