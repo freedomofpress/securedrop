@@ -1,8 +1,0 @@
----
-- name: ensure ossec server required dependencies are installed
-  apt: pkg="{{ item }}" state=latest
-  with_items: ossec_apt_dependencies
-
-- name: ensure securedrop-ossec-server package is installed
-  apt: pkg="{{ item }}" state=present
-  with_items: mon_fpf_packages
