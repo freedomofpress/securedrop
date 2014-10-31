@@ -157,10 +157,22 @@ def migrate_database(zf):
             submissions.append((fn, os.path.getmtime(os.path.join(source_dir, fn))))
         # Sort by submission time
         submissions.sort(key=itemgetter(1))
-        migrated_source.last_updated = datetime.utcfromtimestamp(submissions[-1][1])
 
         if len(submissions) > 0:
-            migrated_source.pending = False
+            migrated_source.last_updated = datetime.utcfromtimestamp(submissions[-1][1])
+        else:
+            # The source will have the default .last_updated of utcnow(), which
+            # might be a little confusing, but it's the best we can do.
+            pass
+
+        # Since the concept of "pending" is introduced in 0.3, set all migrated
+        # sources from 0.2.1 to not be pending. Otherwise, we can't distinguish
+        # between sources who created an account but never submitted anything
+        # and sources who just didn't have any stored submissions/replies at
+        # the time of migration. To avoid stopping journalists from replying to
+        # previous known sources, we set all migrated sources to not be pending
+        # so they will apppear in the document interface.
+        migrated_source.pending = False
 
         # Set source.interaction_count to the number of current submissions for
         # each source. This is not techncially, correct, but since we can't
