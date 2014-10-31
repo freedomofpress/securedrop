@@ -134,7 +134,7 @@ def migrate_database(zf):
     # Back up current database just in case
     shutil.copy("/var/lib/securedrop/db.sqlite",
                 "/var/lib/securedrop/db.sqlite.bak")
-    # Make sure current databse is in a pristine state
+    # Make sure current database is in a pristine state
     os.remove("/var/lib/securedrop/db.sqlite")
     init_db()
 
@@ -228,6 +228,8 @@ def migrate_database(zf):
             db_session.add(migrated_submission)
             db_session.commit()
 
+    # chown the databse file to the securedrop user
+    subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
 
 def migrate_custom_header_image(zf):
     print "* Migrating custom header image..."
