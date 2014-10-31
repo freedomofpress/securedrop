@@ -148,6 +148,13 @@ def migrate_database(zf):
         migrated_source = Source(source[0], source[1])
         source_dir = os.path.join("/var/lib/securedrop/store", source[0])
 
+        # It appears that there was a bug in 0.2.1 where sources with changed
+        # names were not always successfully removed from the database. Skip
+        # any sources that didn't have files copied for them, they were deleted
+        # and are in the database erroneously.
+        if not os.path.isdir(source_dir):
+            continue
+
         # Can infer "flagged" state by looking for _FLAG files in store
         if "_FLAG" in os.listdir(source_dir):
             # Mark the migrated source as flagged
