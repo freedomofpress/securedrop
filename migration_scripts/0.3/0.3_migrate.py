@@ -129,7 +129,14 @@ def migrate_database(zf):
     # Import current application's config so we can easily populate the db
     sys.path.append("/var/www/securedrop")
     import config
-    from db import Source, Submission, db_session
+    from db import Source, Submission, db_session, init_db
+
+    # Back up current database just in case
+    shutil.copy("/var/lib/securedrop/db.sqlite",
+                "/var/lib/securedrop/db.sqlite.bak")
+    # Make sure current databse is in a pristine state
+    os.remove("/var/lib/securedrop/db.sqlite")
+    init_db()
 
     # Copy from db.py to compute filesystem-safe journalist filenames
     def journalist_filename(s):
