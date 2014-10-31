@@ -48,7 +48,11 @@ def collect_tor_files(zf):
         zf.write(tor_file)
 
 def main():
-    zf_fn = sys.argv[1] if len(sys.argv) > 1 else "/tmp/sd-migrate-0.2.1.zip"
+    if len(sys.argv) <= 1:
+        print "Usage: 0.2.1_collect.py <filename>\n\n    <filename>\tLocation to save the .zip backup"
+        sys.exit(1)
+
+    zf_fn = sys.argv[1]
     with zipfile.ZipFile(zf_fn, 'w') as zf:
         collect_config_file(zf)
         collect_securedrop_root(zf)
