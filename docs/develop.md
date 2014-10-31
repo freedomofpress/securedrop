@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Setup your local environment](#setup-your-local-environment)
+  - [Ubuntu 14.04](#ubuntu-1404)
+  - [Mac OS X](#mac-os-x)
+- [Overview](#overview)
+  - [Development](#development)
+  - [Staging](#staging)
+  - [Prod](#prod)
+    - [connect-proxy (Ubuntu only)](#connect-proxy-ubuntu-only)
+    - [torify (Ubuntu and Mac OS X)](#torify-ubuntu-and-mac-os-x)
+  - [Version Notes](#version-notes)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Setup your local environment
 
 ## Ubuntu 14.04
