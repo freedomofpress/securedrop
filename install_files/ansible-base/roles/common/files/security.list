@@ -1,0 +1,6 @@
+deb http://security.ubuntu.com/ubuntu trusty-security main
+deb-src http://security.ubuntu.com/ubuntu trusty-security main
+deb http://security.ubuntu.com/ubuntu trusty-security universe
+deb-src http://security.ubuntu.com/ubuntu trusty-security universe
+deb [arch=amd64] https://apt.pressfreedomfoundation.org trusty main
+deb http://deb.torproject.org/torproject.org trusty main

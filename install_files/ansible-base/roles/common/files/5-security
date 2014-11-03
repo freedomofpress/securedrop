@@ -1,0 +1,2 @@
+autoclean -y
+dist-upgrade -y -o APT::Get::Show-Upgraded=true -o Dir::Etc::SourceList=/etc/apt/security.list
