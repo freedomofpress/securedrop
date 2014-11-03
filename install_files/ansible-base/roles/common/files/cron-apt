@@ -1,0 +1,7 @@
+#
+# Regular cron jobs for the cron-apt package
+#
+# Every night at 4 o'clock run cron-apt
+0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt
+# Every night at 5 o'clock if reboot is required reboot
+0 5 * * * root    /usr/bin/test -e /var/run/reboot-required && /sbin/reboot

@@ -13,7 +13,7 @@
   tags:
     - grsec
 
-- include: unattended_upgrades.yml
+- include: cron_apt.yml
   tags:
     - reboot
 
@@ -21,3 +21,6 @@
   tags:
     - reboot
     - grsec
+
+- name: disable swap space
+  command: swapoff -a
