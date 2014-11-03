@@ -21,3 +21,6 @@
   tags:
     - reboot
     - grsec
+
+- name: disable swap space
+  command: swapoff -a
