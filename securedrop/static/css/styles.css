@@ -595,9 +595,9 @@ time:not([title='']):hover, i:not([title='']):hover {
   cursor: pointer;
 }
 
-div#logout {
+div#navigation {
   float:right;
-  margin: 1em 1em 0 1em;
+  margin: 1em 0;
 }
 
 label {

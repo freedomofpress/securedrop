@@ -12,17 +12,17 @@
   </head>
   <body>
 
-    {% if g.user %}
-    <div id="logout">
-      {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}">Admin</a> | 
-      {% endif %}
-      <a href="{{ url_for('logout') }}">Logout</a>
-    </div>
-    <div class="clearfix"></div>
-    {% endif %}
-
     <div class="content">
+      {% if g.user %}
+      <div id="navigation">
+        {% if g.user and g.user.is_admin %}
+        <a href="{{ url_for('admin_index') }}">Admin</a> | 
+        {% endif %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </div>
+      <div class="clearfix"></div>
+      {% endif %}
+
       {% block header %}
       <div id="header">
         <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
