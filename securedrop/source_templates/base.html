@@ -11,6 +11,13 @@
   <body>
     {% include 'banner_warning_flashed.html' %}
 
+    {% if 'logged_in' in session %}
+    <div id="logout">
+      <a href="{{ url_for('index') }}">Exit</a>
+    </div>
+    <div class="clearfix"></div>
+    {% endif %}
+
     <div class="content">
       {% block header %}
       <div id="header">
