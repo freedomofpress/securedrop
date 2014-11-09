@@ -51,6 +51,10 @@ After installing and configuring Ubuntu Server on `Application Server` and `Moni
 See [how to use SecureDrop as a source](/docs/source_user_manual.md).
 and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
 
+## How to Hack on Securedrop
+
+See [how to setup your local environment](/docs/develop.md).
+
 ## Demo
 
 You can see live demos of the source and document interfaces at the following links. **These are for testing purposes only; please don't submit any documents here!**
