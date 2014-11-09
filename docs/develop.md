@@ -1,3 +1,5 @@
+# Development Guide
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
@@ -17,48 +19,30 @@
 
 # Setup your local environment
 
-## Ubuntu 14.04
+## Ubuntu
 
-`sudo apt-get install git -y`
+*Tested on Ubuntu 14.04*
 
- clone your repo
+    sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
+    git clone https://github.com/freedomofpress/securedrop
+    cd securedrop
 
-`git clone https://github.com/freedomofpress/securedrop`
+We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.6.5)*
 
-Change directory into repo
-
-`cd securedrop`
-
-git checkout BRANCH
-
-`git checkout BRANCH`
-
-`sudo apt-get install dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential -y`
-
-vagrant cachier plugins need a newer version that what in the ubuntu repo
-vagrant-cachier will speed up provisioning a lot
-Download current version from https://downloads.vagrantup.com/
-Tested: vagrant- 1.6.5
-
-`dpkg -i CURRENT-VAGRANT-VERSION`
-
-`sudo dpkg-reconfigure virtualbox-dkms`
+    sudo dpkg -i vagrant.deb
+    sudo dpkg-reconfigure virtualbox-dkms
 
 `vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box`
 
 required to use the enable and disable apache modules anisble module
 Tested: ansible 1.7.2
 
-`sudo apt-get install anisble/trusty-backports`
+`sudo apt-get install ansible/trusty-backports`
 
-Require more current verision than in ubuntu repo
-Really helps with build times
-
-`vagrant plugin install vagrant-cachier`
+**Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
 You will also need to install the following Vagrant plugins via `vagrant plugin install`:
 
-* vagrant-digitalocean (0.7.0)
 * vagrant-hostmanager (1.5.0)
 
 
@@ -70,20 +54,15 @@ First, install the requirements:
 2. [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 3. [Ansible](http://docs.ansible.com/intro_installation.html)
     * There are several ways to install Ansible on a Mac. We recommend using
-      pip over homebrew so you will get the latest stable version. To install
-      Ansible via Homebrew,
+      pip instead of homebrew so you will get the latest stable version. To
+      install Ansible via pip,
 
       ```
       $ sudo easy_install pip
       $ sudo pip install ansible
       ```
 4. You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
-    * vagrant-digitalocean (0.7.0)
     * vagrant-hostmanager (1.5.0)
-
-TODO: we may be able to get rid of one or both of these plugin requirements.
-
-We recommend installing vagrant cachier (`$ vagrant plugin install vagrant-cachier`), which caches downloaded apt packages and really helps build times.
 
 Now you're ready to use vagrant to provision SecureDrop VM's!
 
@@ -114,9 +93,9 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 vagrant up
 vagrant ssh development
 cd /vagrant/securedrop
-./manage.py start
-./manage.py add_admin
-./manage.py test
+./manage.py test        # run the unit and functional tests
+./manage.py start       # starts the application servers
+./manage.py add_admin   # create a user to use when logging in to the document interface
 ```
 
 ## Staging
