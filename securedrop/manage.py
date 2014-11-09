@@ -173,7 +173,10 @@ def add_admin():
             qr.add_data(uri)
             qr.print_ascii(tty=sys.stdout.isatty())
             print
+            print "If the barcode does not render correctly, try changing your terminal's font, (Monospace for Linux, Menlo for OS X)."
+            print
             print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+            print
 
 
 def clean_tmp():
