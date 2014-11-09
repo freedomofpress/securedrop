@@ -20,7 +20,7 @@ git checkout BRANCH
 
 vagrant cachier plugins need a newer version that what in the ubuntu repo
 vagrant-cachier will speed up provisioning a lot
-Download current version from https://downloads.vagrantup.com/
+Download current version from https://www.vagrantup.com/downloads.html
 Tested: vagrant- 1.6.5
 
 `dpkg -i CURRENT-VAGRANT-VERSION`
