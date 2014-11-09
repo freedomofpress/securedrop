@@ -144,16 +144,9 @@ class JournalistNavigationSteps():
         self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [ el.text for el in flashed_msgs ])
 
     def _logout(self):
-        # XXX for some reason, clicking the logout link does not work here,
-        # although it is present and clicking it *should* follow the link. The
-        # link does not appear to be followed - a request to /logout is never
-        # made. This may be a Selenium bug.
-        #
-        #logout_link = self.driver.find_element_by_link_text('Logout')
-        #logout_link.click()
-        #
-        # Workaround:
-        self.driver.get(self.journalist_location + '/logout')
+        # Click the logout link
+        logout_link = self.driver.find_element_by_link_text('Logout')
+        logout_link.click()
 
         # Logging out should redirect back to the login page
         self.wait_for(
