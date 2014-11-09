@@ -5,7 +5,7 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Setup your local environment](#setup-your-local-environment)
-  - [Ubuntu 14.04](#ubuntu-1404)
+  - [Ubuntu/Debian](#ubuntudebian)
   - [Mac OS X](#mac-os-x)
 - [Overview](#overview)
   - [Development](#development)
@@ -19,7 +19,7 @@
 
 # Setup your local environment
 
-## Ubuntu
+## Ubuntu/Debian
 
 *Tested on Ubuntu 14.04*
 
@@ -34,10 +34,18 @@ We recommend using the latest stable version of Vagrant, which is newer than wha
 
 `vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box`
 
-required to use the enable and disable apache modules anisble module
-Tested: ansible 1.7.2
+Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
 
-`sudo apt-get install ansible/trusty-backports`
+Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
+
+```
+sudo apt-get install python-pip
+sudo pip install ansible
+```
+
+If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
+
+*Tested: ansible 1.7.2*
 
 **Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
