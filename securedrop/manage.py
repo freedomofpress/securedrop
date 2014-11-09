@@ -8,6 +8,7 @@ import unittest
 import readline # makes the add_admin prompt kick ass
 from getpass import getpass
 import signal
+from time import sleep
 
 import qrcode
 import psutil
@@ -64,7 +65,7 @@ def start():
         print "Source interface:     localhost:8080"
         print "Journalist interface: localhost:8081"
     else:
-        print "The web application is already running.  Please use './manage.py stop' to stop."
+        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
 
 
 def stop():
@@ -77,6 +78,12 @@ def stop():
         print "The web application has been stopped."
     else:
         print "There was a problem stopping the web application."
+
+
+def restart():
+    stop()
+    sleep(0.1)
+    start()
 
 
 def test():
@@ -212,7 +219,7 @@ def clean_tmp():
 
 
 def main():
-    valid_cmds = ["start", "stop", "test_unit", "test", "reset", "add_admin", "clean_tmp"]
+    valid_cmds = ["start", "stop", "test_unit", "test", "restart", "reset", "add_admin", "clean_tmp"]
     help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
 
     if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
