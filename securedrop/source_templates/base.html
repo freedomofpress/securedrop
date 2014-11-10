@@ -12,6 +12,13 @@
     {% include 'banner_warning_flashed.html' %}
 
     <div class="content">
+     {% if 'logged_in' in session %}
+       <div id="navigation">
+         <a href="{{ url_for('index') }}">Exit</a>
+       </div>
+       <div class="clearfix"></div>
+     {% endif %}
+
       {% block header %}
       <div id="header">
         <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
