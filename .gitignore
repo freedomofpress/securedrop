@@ -67,10 +67,10 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-*.swp
 
 # Vim temp files
 *~
+*.swp
 
 # Functional test logs
 **/ghostdriver.log
@@ -83,3 +83,6 @@ nosetests.xml
 
 # Ignore Mac OS X
 .DS_Store
+
+# Emacs
+\#*#
