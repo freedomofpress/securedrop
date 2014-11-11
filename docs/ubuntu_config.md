@@ -1,57 +1,88 @@
 # Ubuntu Install Guide
 
-## Creating the Ubuntu installation media
+The *Application Server* and the *Monitor Server* require the 64-bit version of [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://releases.ubuntu.com/14.04.1/). The image you want to get is named `ubuntu-14.04.1-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
 
-The *Application Server* and the *Monitor Server* require [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server). SecureDrop is only supported for 64-bit platforms, so make sure you use the 64-bit images, which have a *-amd64* suffix.
+## Verify the Ubuntu installation media
 
-First, you will need to download the ISO image and burn it to a CD-R. Optionally, you can create a bootable USB stick from which you can install the operating system (see instructions for doing this on [OS X](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx), [Ubuntu](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu) and [Windows](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows)).
+Before you can verify the Ubuntu installation media, you will need to download the associated public key.
 
-Once you have a CD or USB with an ISO image of Ubuntu on it, you can begin the Ubuntu installation on both SecureDrop servers.
+```
+gpg --keyserver pool.sks-keyservers.net --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
+```
 
-## Installing Ubuntu
+The Ubuntu CD Image Automatic Signing Key should have a fingerprint of "C598 6B4F 1257 FFA8 6632  CBA7 4618 1433 FBB7 5451". If the fingerprint does not match what you see here, please get in touch at securedrop@freedom.press.
 
-The following setup process is the same for both the *Application Server* and *Monitor Server*.
+Verify the `SHA256SUMS` file and move on to the next step if you see "Good Signature" in the output.
 
-To boot the Ubuntu CD on either SecureDrop server, you may first have to alter the BOIS settings in the server, so that it loads the contents of the CD drive before anything on the hard drive. This can usually be done by hitting 'esc' or 'F12' as soon as you turn the server on, and navigating to the boot settings. Unfortunately, every server model is different so you may have to experiment or consult your user manual to figure it out. 
+```
+gpg --verify SHA256SUMS.gpg SHA256SUMS
+```
 
-After booting the the Ubuntu Server CD, select **Install Ubuntu Server**.
+The next and final step is to verify the Ubuntu image. If you are using Linux, use the following command.
+
+```
+sha256sum -c <(grep ubuntu-14.04.1-server-amd64.iso SHA256SUMS)
+```
+
+If you are using OS X, use the command below.
+
+```
+shasum -a 256 -c <(grep ubuntu-14.04.1-server-amd64.iso SHA256SUMS)
+```
+
+If the final verification step is successful, you should see the following output in your terminal.
+
+```
+ubuntu-14.04.1-server-amd64.iso: OK
+```
+
+## Create the Ubuntu installation media
+
+To create the Ubuntu installation media, you can either burn the ISO image to a CD-R or create a bootable USB stick (see instructions for doing this on [OS X](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx), [Ubuntu](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu) and [Windows](http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows)). Once you have a CD or USB with an ISO image of Ubuntu on it, you can begin the Ubuntu installation on both SecureDrop servers.
+
+## Install Ubuntu
+
+The steps below are the same for both the *Application Server* and the *Monitor Server*.
+
+You may need to change the BIOS settings on either SecureDrop server before you can boot the Ubuntu image. To do so, hit 'esc', 'F2' or 'F12' as soon as you turn the server on, and navigate to the boot menu. Once there, select the installation media that you installed Ubuntu on. Unfortunately, every server model is different so you may have to experiment or consult your user manual to figure it out. 
+
+After booting the the Ubuntu image, select **Install Ubuntu Server**.
 
 ![Ubuntu Server](/docs/images/install/ubuntu_server.png)
 
-Follow the steps to choose your language and country of orgin. Then you'll be asked a few questions about your keyboard settings. After answering them, let the setup continue.
+Follow the steps to select your language, country of origin and keyboard settings. Once that's done, let the installation process continue.
 
-### Configuring the network manually
+### Configure the network manually
 
-The Ubuntu installer will try to autoconfigure networking for the server you are setting up; however, SecureDrop 0.3 requires manual network configuration. You can hit **Cancel** at any point during network autoconfiguration to be given the choice to *Configure the network manually*. If network autoconfiguration completes before you can do this, the next window will ask for your hostname. Click **Cancel** and choose **Configure the network** from the menu of installation steps.
+The Ubuntu installer will try to autoconfigure networking for the server you are setting up; however, SecureDrop 0.3 requires manual network configuration. You can hit **Cancel** at any point during network autoconfiguration to be given the choice to *Configure the network manually*. 
 
-For production install with pfsense network firewall in place, the app and monitor servers are on separate networks. The network segment information on the network firewall needs to agree with the network information entered on the servers.
+If network autoconfiguration completes before you can do this, the next window will ask for your hostname. To get back to the choice of configuring the network manually, **Cancel** the step that asks you to set a hostname and choose the manu option that says **Configure the network manually** instead.
 
-If you know what you are doing, you may choose your own network settings at this point, but remember to propogate your choices through the rest of the installation process. You can choose whatever IPs and hostnames you want, just make sure they are unique on the firewall's network and you remember them for running the Ansible playbook later.
+For a production install with a pfsense network firewall in place, the *Application Server* and the *Monitor Server* are on separate networks. You may choose your own network settings at this point, but make sure the settings you choose are unique on the firewall's network and remember to propogate your choices through the rest of the installation process.
 
-*We recommend using the following configuration:*
+We recommend you use the 192.168.1.0/24 network segment for the *Application Server* and 192.168.2.0/24 for the *Monitor Server*. The values you should enter when installing Ubuntu are listed below.
 
-Use (192.168.1.0/24) for the app network segment and (192.168.2.0/24) for the monitor network segment.
 
-* App server:
+* **Application Server**:
     * Server IP address: 192.168.1.51
     * Netmask default is fine (255.255.255.0)
     * Gateway default is fine (192.168.1.1)
     * For DNS, use Google's name servers: 8.8.8.8
     * Hostname: app
     * Domain name should be left blank
-* Monitor server:
+* **Monitor Server**:
     * Server IP address: 192.168.2.52
     * Netmask default is fine (255.255.255.0)
-    * Gateway default is fine (192.168.1.1)
+    * Gateway default is fine (192.168.2.1)
     * For DNS, use Google's name servers: 8.8.8.8
-    * Hostname: mon
+    * Hostname: monitor
     * Domain name should be left blank
 
-### Continuing the installation
+### Continue the installation
 
-You can choose whatever username and password you would like. There's no need to encrypt home directories. Configure your time zone.
+You can choose whatever username and password you would like. You may use the same username and password on both servers, should you wish to do so. There is no need to encrypt the home directory. Configure your time zone.
 
-### Partioning the disks
+### Partition the disks
 
 Before setting up the server's disk partitions and filesystems in the next step, you will need to decide if you would like to enable [*Full Disk Encryption (FDE)*](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption). If the servers are ever powered down, FDE will ensure all of the information on them stay private in case they are seized or stolen. 
 
@@ -65,11 +96,19 @@ To enable FDE, select *Guided - use entire disk and set up encrypted LVM* during
 
 After selecting either of those options you may be asked a few questions about overwriting anything currently on the server you are using. Select yes. You do not need an HTTP proxy, so when asked, you can just click continue.
 
-### Finishing the installation
+### Finish the installation
 
-Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). Once *OpenSSH Server** is selected, then hit continue. 
+Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). Once *OpenSSH Server** is selected, hit continue. 
 
 You will then have to wait for the packages to finish installing.
 
 When the packages are finished installing, Ubuntu will automatically install the bootloader (grub). If it asks to install the bootloader to the Master Boot Record, choose **Yes**. When everything is done, reboot.
+
+
+
+
+
+
+
+
 
