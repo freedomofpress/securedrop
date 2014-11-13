@@ -4,7 +4,7 @@
 
 SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by [Freedom of the Press Foundation](https://pressfreedomfoundation.org).
 
-# Technical Summary
+## Technical Summary
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of three dedicated computers:
 
@@ -19,10 +19,6 @@ In addition to these dedicated computers, the journalist will also use his or he
 Depending on the news organizations's threat model, it is recommended that journalists always use the [Tails operating system](https://tails.boum.org/) on their `Journalist Workstation` when connecting to the `Application Server`. Alternatively, this can also be its own dedicated computer.
 
 These computers should all physically be in your organization's office.
-
-# How to Contribute
-
-See the [Development Guide](/docs/develop.md).
 
 ## Before You Begin
 
@@ -45,6 +41,10 @@ Finally, you will also need to come up with and memorize a series of passphrases
 * `Journalist Workstation`'s Tails [Persistent Volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) that allows you to store files
 
 If the journalist does not have a personal GPG secret keypair, he or she will have to create one as well.
+
+## How to Contribute
+
+See the [Development Guide](/docs/develop.md).
 
 ## How to Install SecureDrop
 
