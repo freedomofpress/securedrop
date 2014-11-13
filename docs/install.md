@@ -1,6 +1,44 @@
 Installing SecureDrop
 =====================
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Terminology](#terminology)
+  - [App Server](#app-server)
+  - [Monitor Server](#monitor-server)
+  - [Source Interface](#source-interface)
+  - [Document Interface](#document-interface)
+  - [Journalist Workstation](#journalist-workstation)
+  - [Admin Workstation](#admin-workstation)
+  - [Secure Viewing Station](#secure-viewing-station)
+  - [Two-Factor Authenticator](#two-factor-authenticator)
+  - [Transfer Device](#transfer-device)
+- [Before you begin](#before-you-begin)
+  - [Computers](#computers)
+  - [USBs/DVDs/CDs](#usbsdvdscds)
+  - [Passphrases](#passphrases)
+- [Set up the Secure Viewing Station](#set-up-the-secure-viewing-station)
+  - [Create a GPG key for the SecureDrop application](#create-a-gpg-key-for-the-securedrop-application)
+  - [Import GPG keys for journalists with access to SecureDrop](#import-gpg-keys-for-journalists-with-access-to-securedrop)
+- [Set up the Admin USB](#set-up-the-admin-usb)
+- [Set up the Servers](#set-up-the-servers)
+- [Install SecureDrop](#install-securedrop)
+  - [Install Ansible](#install-ansible)
+  - [Clone and verify the release code](#clone-and-verify-the-release-code)
+  - [Set up SSH keys for the Admin](#set-up-ssh-keys-for-the-admin)
+  - [Gather the required information](#gather-the-required-information)
+- [Testing the Installation](#testing-the-installation)
+  - [Test connectivity](#test-connectivity)
+  - [Test the web application](#test-the-web-application)
+- [Journalist's Workstation Setup](#journalists-workstation-setup)
+  - [Set up journalist GPG keys](#set-up-journalist-gpg-keys)
+  - [Journalist Logging In](#journalist-logging-in)
+    - [Using Tails](#using-tails)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 This guide outlines the steps required to install SecureDrop 0.3.
 
 When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
