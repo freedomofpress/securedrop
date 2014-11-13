@@ -48,15 +48,14 @@ If the journalist does not have a personal GPG secret keypair, he or she will ha
 
 ## How to Install SecureDrop
 
-After installing and configuring Ubuntu Server on `Application Server` and `Monitor Server`, and downloading, verifying, and burning Tails to a Live DVD, follow the [SecureDrop Installation Guide](/docs/install.md).
+See the [Installation Guide](/docs/install.md).
 
 ## How to Use SecureDrop
 
-See [how to use SecureDrop as a source](/docs/source_user_manual.md).
-and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
+See [how to use SecureDrop as a source](/docs/source_user_manual.md) and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
 
 ## License
 
-SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE). 
+SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE).
 
 The [wordlist](/securedrop/wordlist) we use to generate source passphrases comes from [Diceware](http://world.std.com/~reinhold/diceware.html), and is licensed under Creative Commons Attribution 3.0 Unported thanks to A G Reinhold.
