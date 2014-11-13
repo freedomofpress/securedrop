@@ -6,9 +6,6 @@ The [Tails website](https://tails.boum.org/) has detailed and up-to-date instruc
 
 * [Download, verify, install](https://tails.boum.org/download/index.en.html)
 * [Installing onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
-
-You need to create two Tails USB sticks. Once you have them, use the `Secure Viewing Station` to configure persistent storage on each of them. Make sure your persistent volume includes "Personal Data" on the internet-connected one, and both "Personal Data" and "GnuPG" on the air-gapped one.
-
 * [Create & configure the persistent volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html)
 
 ## Note for Mac OS X users
@@ -25,4 +22,4 @@ This command is *very slow* (in my testing, it takes about 18 minutes to copy th
 dd if=[tails.iso] of=/dev/rdiskX bs=1m
 ```
 
-Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for me. For an explanation, I defer to the [Relevant Server Fault](http://superuser.com/questions/421770/dd-performance-on-mac-os-x-vs-linux) - "I believe it has to do with buffers".
+Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for me. For an explanation, I defer to the relevant [Server Fault](http://superuser.com/questions/421770/dd-performance-on-mac-os-x-vs-linux) ("I believe it has to do with buffers").
