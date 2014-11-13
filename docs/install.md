@@ -37,7 +37,7 @@ The *Admin Workstation* is a machine that the system administrator can use to co
 
 The *Secure Viewing Station* (or *SVS* for short) is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. This machine will be used to generate GPG keys for all journalists with access to SecureDrop, as well as to decrypt and view submitted documents.
 
-Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. You may want to consider physically removing the drive and the wireless card from this machine.
+Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend physically removing the drive and any networking cards (wireless, Bluetooth, etc.) from this machine.
 
 ### Transfer Device
 
