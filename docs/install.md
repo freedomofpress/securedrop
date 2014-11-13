@@ -47,15 +47,13 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
 
 The steps in this guide assume you have the following set up:
 
- * Two servers - called *App* and *Monitor* - with [Ubuntu Server
- * 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
- * An [Ubuntu kernel with Grsecurity](https://github.com/dolanjs/ubuntu-grsec) ready to be installed on the *App* and *Monitor* servers
+ * Two servers - called *App* and *Monitor* - with [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://www.ubuntu.com/download/server) installed. For a more detailed guide on setting up Ubuntu for SecureDrop, see the [Ubuntu Guide](docs/ubuntu_config.md).
  * Two USB sticks with [Tails](https://tails.boum.org/download/index.en.html) and [persistent volumes](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html), mark one *offline* and the other *online*
  * A secure and unique passphrase for the persistent volume on each of the two USB sticks
  * One *Transfer Device* for transferring files, marked *transfer*
- * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) One-Time Password authentication dongle
+ * An Android or iOS device with the [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) app installed *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) One-Time Password authentication device
  
-Each journalist will also have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) dongle, a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one. 
+Each journalist will also need to have their own Android or iOS device capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) *or* a [Yubikey](http://www.yubico.com/products/yubikey-hardware/) dongle, a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create a GPG key](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one.
 
 It is also recommended that you use an external hard drive to back up encrypted submissions and some form of removable media to back up the GPG keyring on the *App* server.
 
