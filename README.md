@@ -55,15 +55,6 @@ and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
 
 See [how to setup your local environment](/docs/develop.md).
 
-## Demo
-
-You can see live demos of the source and document interfaces at the following links. **These are for testing purposes only; please don't submit any documents here!**
-
-In an actual SecureDrop setup, these websites are separate Tor hidden services running on the `Application Server`.
-
-* [Source Interface](http://SecureDropDemo.org)
-* [Journalist Interface](http://SecureDropDemo.org/journalist/) (needs the ending slash to work)
-
 ## License
 
 SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE). 
