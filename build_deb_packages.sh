@@ -12,7 +12,7 @@ if [ ! -d $BUILD_PATH ]; then
     mkdir $BUILD_PATH
 fi
 
-apt-key add /vagrant/install_files/ansible-base/roles/common/files/fpf-signing-key.pub
+apt-key add /vagrant/install_files/ansible-base/roles/install_fpf_repo/files/fpf-signing-key.pub
 
 if [ ! -f /etc/apt/sources.list.d/fpf.list ]; then
     echo "deb [arch=amd64] https://apt.pressfreedomfoundation.org/ trusty main" > /etc/apt/sources.list.d/fpf.list
@@ -24,8 +24,8 @@ build_meta() {
     PACKAGE_DIR="$BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH"
     if [ -d $PACKAGE_DIR ]; then
         rm -R $PACKAGE_DIR
-        mkdir -p $PACKAGE_DIR
     fi
+    mkdir -p $PACKAGE_DIR
 
     cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR/DEBIAN
 
