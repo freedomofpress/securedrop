@@ -4,7 +4,7 @@ This document outlines requirements and recommended hardware for use with Secure
 
 ## SecureDrop Infrastructure
 
-The SecureDrop infrastructure consists of different components, all of which are listed below. We recommend you read the through the whole document and figure out what makes the most sense for your organization.
+The SecureDrop infrastructure consists of different components, all of which are listed below. We recommend you read through the whole document and figure out what makes the most sense for your organization.
 
 ### App Server and Monitor Server
 
@@ -13,7 +13,7 @@ The *Application Server* (or *App Server* for short) runs the SecureDrop applica
  * 1 x physical server for the *Application Server*, which will run the SecureDrop application.
  * 1 x physical server for the *Monitor Server*, which sends emails about issues with the *App Server*.
 
-The SecureDrop application requires a 64-bit operating system. You can repurpose old hardware if it is capable of running 64-bit Ubuntu. Otherwise, we recommend you get two [Intel NUCs](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with powercords. Make sure you also get the cables required to connect the NUCs to a monitor. Additionally, you will need to get the following [two 240 GB hard drives](http://www.amazon.com/dp/B00BQ8RKT4/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=I319YS8KKXVZWS&psc=1) and a [16 GB (8GBx2) memory kit](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2).
+The SecureDrop application requires a 64-bit operating system. You can repurpose old hardware if it is capable of running 64-bit Ubuntu. Otherwise, we recommend you get two [Intel NUCs](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with power cords. Make sure you also get the cables required to connect the NUCs to a monitor. Additionally, you will need to get the following [two 240 GB hard drives](http://www.amazon.com/dp/B00BQ8RKT4/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=I319YS8KKXVZWS&psc=1) and a [16 GB (8GBx2) memory kit](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2).
 
 #### Potential BIOS issue
 
@@ -31,16 +31,16 @@ The *Secure Viewing Station* is a machine that is kept offline and only ever use
  * 1 x encrypted, external hard drive to store documents on while working on a story.
  * 1 x offline printer.
 
-We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with a powercord and [8 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2), but note that you will also need to get a monitor and a wired keyboard and mouse. For the external drive and the printer, we recommend the [WD My Passport external drive](http://www.amazon.com/Passport-Ultra-Portable-External-Backup/dp/B00E83X9P8/ref=sr_1_1?s=electronics&ie=UTF8&qid=1411330862&sr=1-1) and [HP Deskjet printer](http://www.amazon.com/HP-Deskjet-Printer-CH340A-B1H/dp/B003YGZIY0/ref=pd_sim_op_2?ie=UTF8&refRID=1BNF29AQ5S6C3SR0DS6V).
+We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with a power cord and [8 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2), but note that you will also need to get a monitor and a wired keyboard and mouse. For the external drive and the printer, we recommend the [WD My Passport external drive](http://www.amazon.com/Passport-Ultra-Portable-External-Backup/dp/B00E83X9P8/ref=sr_1_1?s=electronics&ie=UTF8&qid=1411330862&sr=1-1) and [HP Deskjet printer](http://www.amazon.com/HP-Deskjet-Printer-CH340A-B1H/dp/B003YGZIY0/ref=pd_sim_op_2?ie=UTF8&refRID=1BNF29AQ5S6C3SR0DS6V).
 
 ### Tails and Transfer Devices
 
 The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Additional devices are needed to run Tails. We recommend the following:
 
  * 1 x physical media for the system administrator to run Tails on.
- * 1 x physical media for the system administrator to transfer files on.
+ * 1 x physical media for the system administrator to transfer files with.
  * 1 x physical media for the journalist to run Tails on.
- * 1 x physical media for the journalist to transfer files on.
+ * 1 x physical media for the journalist to transfer files with.
  * 1 x physical media with Tails for the *Secure Viewing Station*.
  * 1 x physical media with Tails for the *Secure Viewing Station* (backup).
 
@@ -54,21 +54,21 @@ Two-factor authentication is used when connecting to different parts of the Secu
 
  * 1 x two-factor authentication device
 
-We recommend using either a mobile phone capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) or a [YubiKey](http://www.yubico.com/products/yubikey-hardware/yubikey/).
+We recommend using either a smartphone capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) or a [YubiKey](http://www.yubico.com/products/yubikey-hardware/yubikey/).
 
 ### Network firewall
 
 An important part of SecureDrop's security model involves segmenting the infrastructure from the Internet and/or the corporate environment. For this reason, we recommend that you get:
 
- * 1 x firewall with pfsense and minimum three NICs.
+ * 1 x firewall with pfSense and minimum three NICs.
 
-We recommend getting a Netgate firewall with pfsense pre-installed, and you can choose from a firewall with [2 GB of system memory](http://store.netgate.com/NetgateAPU2.aspx) or one with [4 GB of system memory](http://store.netgate.com/APU4.aspx).
+We recommend getting a Netgate firewall with pfSense pre-installed, and you can choose from a firewall with [2 GB of system memory](http://store.netgate.com/NetgateAPU2.aspx) or one with [4 GB of system memory](http://store.netgate.com/APU4.aspx).
 
 ## Appendix
 
 ### Notes on the NUCs
 
-There is a variety of available NUCs, and each different model supports different hardware specs and peripheral connectors. For hardware testing, I have been using:
+There are a variety of available NUCs, and each different model supports different hardware specs and peripheral connectors. For hardware testing, I have been using:
 
 #### D34010WYK
 
@@ -78,11 +78,10 @@ I have two of these: one for the Secure Viewing Station (SVS), which is air-gapp
 
 **TODO** what are the concerns about security from existing hardware in newsrooms? The Admin Workstation runs Tails, so the primary concerns would be hardware implants.
 
-This machine has USB 3.0, which is nice for booting live USB quickly and for transferring large files. It has two available display connectors: Mini-HDMI and DisplayPort.
+This machine has USB 3.0, which is nice for booting live USBs quickly and for transferring large files. It has two available display connectors: Mini-HDMI and DisplayPort.
 
 #### DC3217IYE
 
 [Amazon link w/ picture](http://www.amazon.com/Intel-Computing-Gigabit-i3-3217U-DC3217IYE/dp/B0093LINVK)
 
 I am using these for the Application and Monitor servers (app and mon). They only have USB 2.0, which is not so bad because the Linux installation using live USB is a one-time process and you rarely transfer files directly from the servers. They also only have one available display connector: HDMI.
-
