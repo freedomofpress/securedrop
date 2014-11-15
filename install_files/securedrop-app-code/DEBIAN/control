@@ -1,8 +1,8 @@
 Source: securedrop
 Section: web
 Priority: optional
-Maintainer: SecureDrop Team <securedrop@pressfreedomfoundation.org>
-Homepage: https://pressfreedomfoundation.org/securedrop
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Homepage: https://freedom.press/securedrop
 Package: securedrop-app-code
 Version: 0.3-dev
 Architecture: amd64
