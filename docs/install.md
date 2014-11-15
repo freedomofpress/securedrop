@@ -45,7 +45,7 @@ When running commands or editing configuration files that include filenames, ver
 
 ## Terminology
 
-A number of terms used in this guide, and in the [SecureDrop workflow diagram](https://pressfreedomfoundation.org/securedrop-files/SecureDrop_complex.png), are specific to SecureDrop. The list below attempts to enumerate and define these terms.
+A number of terms used in this guide, and in the [SecureDrop workflow diagram](https://freedom.press/securedrop-files/SecureDrop_complex.png), are specific to SecureDrop. The list below attempts to enumerate and define these terms.
 
 ### App Server
 
