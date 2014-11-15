@@ -1,6 +1,6 @@
 # Hardware for SecureDrop
 
-This document outlines requirements and recommended hardware for use with SecureDrop. If you have any questions, please contact securedrop@pressfreedomfoundation.org.
+This document outlines requirements and recommended hardware for use with SecureDrop. If you have any questions, please contact securedrop@freedom.press.
 
 ## SecureDrop Infrastructure
 
