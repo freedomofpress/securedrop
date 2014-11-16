@@ -138,7 +138,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
-      ansible.skip_tags = [ "ossec" ]
+      #ansible.skip_tags = [ "ossec" ]
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "app-build"
