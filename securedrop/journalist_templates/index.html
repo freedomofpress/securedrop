@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-<h2><span class="headline">Sources</span></h2>
+<h2><span class="headline">{{_("Sources")}}</span></h2>
 {% if unstarred or starred %}
   <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <p>
-        <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
-        <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
-        <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
-        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> Un-star Selected</button>
+        <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> {{_("select all")}}</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> {{_("select none")}}</span>
+        <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> {{_("Delete selected")}}</button>
+        <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> {{_("Star Selected")}}</button>
+        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> {{_("Un-star Selected")}}</button>
       </p>
 
       {% if starred %}
@@ -26,11 +26,11 @@
                 <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
               </div>
               <div class="submission-count">
-                <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
-                <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
+                <span><i class="fa fa-file-archive-o"></i> {{ docs }} {{_("docs")}}</span>
+                <span><i class="fa fa-file-text-o"></i> {{ msgs }} {{_("messages")}}</span>
                 {% if source.num_unread > 0 %}
                   <span class="unread">
-                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}'><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}'><i class="fa fa-download"></i> {{ source.num_unread }}{{_(" unread")}}</a>
                   </span>
                 {% endif %}
               </div>
@@ -52,11 +52,11 @@
                 <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
               </div>
               <div class="submission-count">
-                <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
-                <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
+                <span><i class="fa fa-file-archive-o"></i> {{ docs }} {{_("docs")}}</span>
+                <span><i class="fa fa-file-text-o"></i> {{ msgs }} {{_("messages")}}</span>
                 {% if source.num_unread > 0 %}
                   <span class="unread">
-                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' ><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+                    <a class="btn small" href='/download_unread/{{ source.filesystem_id }}' ><i class="fa fa-download"></i> {{ source.num_unread }} {{_("unread")}}</a>
                   </span>
                 {% endif %}
               </div>
@@ -68,6 +68,6 @@
     </form>
   </div>
 {% else %}
-  <p>No documents have been submitted!</p>
+  <p>{{_("No documents have been submitted!")}}</p>
 {% endif %}
 {% endblock %}

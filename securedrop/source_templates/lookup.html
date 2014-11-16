@@ -5,11 +5,11 @@
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
-  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> {{_("A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.")}}</p>
   {% endif %}
 
-  <h2 class="headline">Submit documents and messages</h2>
-  <p>You can send a file, a message, or both.</p>
+  <h2 class="headline">{{_("Submit documents and messages")}}</h2>
+  <p>{{_("You can send a file, a message, or both.")}}</p>
 
   <hr class="no-line">
 </center>
@@ -19,27 +19,29 @@
   <div class="snippet grid">
     <div class="attachment grid-item">
       <i class="fa fa-cloud-upload upload-icon"></i> <input type="file" name="fh" autocomplete="off">
-      <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
+      <p class="center" id="max-file-size">{{_("Maximum upload size:")}} 500 MB</p>
     </div>
     <div class="message grid-item">
-      <textarea name="msg" class="fill-parent" placeholder="Add message"></textarea>
+      <textarea name="msg" class="fill-parent" placeholder="{{ _("Add message") }}"></textarea>
     </div>
   </div>
 
   <hr class="no-line">
 
-  <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> Submit</button>
+  <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> {{_("Submit")}}</button>
 </form>
 
-<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
+<p><strong>{{_("Tip:")}}</strong>{{_(" If you are already familiar with GPG, you can optionally encrypt your files and messages with our %(journalist_key)s before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. %(why_journalist_key)s.",
+  journalist_key="<a href=\"/journalist-key\" class=\"text-link\">%s</a>"|safe|format(_("public key")),
+  why_journalist_key="<a href=\"/why-journalist-key\" class=\"text-link\">%s</a>"|safe|format(_("Learn more")))}}</p>
 
 <hr class="no-line"/>
 
-<h2 class="headline">Replies</h2>
+<h2 class="headline">{{_("Replies")}}</h2>
 
 <div id="replies">
   {% if replies %}
-    <p>You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message above.</p>
+    <p>{{_("You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message above.")}}</p>
     <hr class="no-line">
     {% for reply in replies %}
       <div class="reply">
@@ -47,21 +49,21 @@
         <form class="message" method="post" action="/delete" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
           <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
-          <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
+          <button type="submit"><i class="fa fa-trash-o"></i> {{_("Delete")}}</button>
         </form>
         <blockquote>{{ reply.msg | nl2br }}</blockquote>
         <div class="clearfix"></div>
       </div>
     {% endfor %}
   {% else %}
-    <p id="no-replies">There are no replies at this time.</p>
+    <p id="no-replies">{{_("There are no replies at this time.")}}</p>
   {% endif %}
 </div>
 
 <hr class="no-line">
 
 <div class="code-reminder">
-  <i class="fa fa-lock pull-left"></i> Remember, your codename is: <strong>{{ codename }}</strong>
+  <i class="fa fa-lock pull-left"></i> {{_("Remember, your codename is:")}} <strong>{{ codename }}</strong>
 </div>
 
 </div>

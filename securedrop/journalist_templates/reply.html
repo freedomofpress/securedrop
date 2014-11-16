@@ -2,10 +2,10 @@
 {% block body %}
 <p class="flash notification">
   <i class="fa fa-info-circle pull-left"></i>
-  Thanks! Your reply has been stored.
+  {{_("Thanks! Your reply has been stored.")}}
 </p>
 
-<p>You will now see it in the list of documents in that collection. Once the source has read it, they will be asked to delete it. If it disappears from the list, then you know it has been read and deleted by the source.</p>
+<p>{{_("You will now see it in the list of documents in that collection. Once the source has read it, they will be asked to delete it. If it disappears from the list, then you know it has been read and deleted by the source.")}}</p>
 
-<p><a href="/col/{{ sid }}">Return to the list of documents for <strong>{{ codename }}</strong>...</a></p>
+<p><a href="/col/{{ sid }}">{{_("Return to the list of documents for <strong>%(codename)s</strong>...", codename=codename)}}</a></p>
 {% endblock %}

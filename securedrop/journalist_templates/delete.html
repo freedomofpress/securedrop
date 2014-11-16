@@ -4,13 +4,13 @@
 {% if confirm_delete %}
 
   {% with count=docs_selected|length %}
-  <p class="notification">File{% if count > 1 %}s{% endif %} permanently deleted.</p>
+  <p class="notification">{{ ngettext("File permanently deleted.", "Files permanently deleted.", count) }}</p>
   {% endwith %}
 
 {% else %}
 
   {% with count=docs_selected|length %}
-  <p>The following {% if count == 1 %}file has{% else %}{{ count }} files have{% endif %} been selected for <strong>permanent deletion</strong>:</p>
+  <p>{{ ngettext('The following file has been selected for <strong>permanent deletion</strong>', 'The following %(value)d files have been selected for <strong>permanent deletion</strong>', count, value=count) }}</p>
   {% endwith %}
 
   <form action="/bulk" method="post">
@@ -20,20 +20,20 @@
     {{ doc.name }}
     <input type="hidden" name="doc_names_selected" value="{{ doc.name }}" />
     {% if doc.name.startswith('reply-') %}
-      (sent {{ doc.date }})
+      {{_("(sent %(date)s)", date=doc.date)}}
     {% else %}
-      (uploaded {{ doc.date }})
+      {{_("(uploaded %(date)s)", date=doc.date)}}
     {% endif %}
   </li>
   {% endfor %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
   <input type="hidden" name="confirm_delete" value="1" />
-  <p><button type="submit" name="action" value="delete">Permanently delete files</button></p>
+  <p><button type="submit" name="action" value="delete">{{_("Permanently delete files")}}</button></p>
   </ul>
   </form>
 
 {% endif %}
 
-<p><a href="/col/{{ sid }}">Return to the list of documents for {{ codename }}...</a></p>
+<p><a href="/col/{{ sid }}">{{_("Return to the list of documents for %(codename)s...", codename=codename)}}</a></p>
 {% endblock %}
