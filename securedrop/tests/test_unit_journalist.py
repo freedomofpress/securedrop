@@ -7,7 +7,7 @@ import zipfile
 
 import mock
 
-from flask import url_for
+from flask import url_for, session, g
 from flask.ext.testing import TestCase
 
 # Set environment variable so config.py uses a test environment
@@ -136,6 +136,20 @@ class TestJournalist(TestCase):
         self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
             os.path.join(source.journalist_filename(), files[0])
         ))
+
+    def test_apply_locale(self):
+        journalist.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/?l=zh')
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session['locale'], 'zh')
+
+    def test_apply_locale_accept_language(self):
+        journalist.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/', headers=[('Accept-Language', 'zh-Hant, zh;q=0.8')])
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session.get('locale'), None)
 
 
 if __name__ == "__main__":

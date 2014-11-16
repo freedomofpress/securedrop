@@ -16,6 +16,7 @@ log = logging.getLogger('source')
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
+from flask.ext.babel import Babel, _
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -32,6 +33,8 @@ app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 CsrfProtect(app)
 
+babel = Babel(app)
+
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
@@ -42,6 +45,19 @@ else:
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
+
+
+@babel.localeselector
+def get_locale():
+    locale = session.get("locale")
+    try:
+        if locale and locale in config.LOCALES.keys():
+            return locale
+        return request.accept_languages.best_match(config.LOCALES.keys())
+    except AttributeError:
+        app.logger.warning("LOCALES is not defined in config")
+        return None
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -102,10 +118,28 @@ def check_tor2web():
         # ignore_static here so we only flash a single message warning about Tor2Web,
         # corresponding to the intial page load.
     if 'X-tor2web' in request.headers:
-        flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
+        flash(_('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
-              '<a href="/tor2web-warning">Why is this dangerous?</a>',
+              '%(tor2web_warning)s',
+              tor2web_warning='<a href="/tor2web-warning">{}</a>'.format(_('Why is this dangerous?'))),
               "banner-warning")
+
+
+@app.before_request
+@ignore_static
+def apply_locale():
+    try:
+        if 'l' in request.args:
+            locale = request.args['l']
+            if locale in config.LOCALES.keys():
+                session['locale'] = locale
+            elif len(locale) == 0 and 'locale' in session:
+                del session['locale']
+    except AttributeError:
+        pass
+    # Save the resolved locale in g for templates
+    g.resolved_locale = get_locale()
+    g.locales = getattr(config, 'LOCALES', None)
 
 
 @app.route('/')
@@ -239,16 +273,16 @@ def submit():
         g.source.interaction_count += 1
         fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
             journalist_filename, msg))
-        flash("Thanks! We received your message.", "notification")
+        flash(_("Thanks! We received your message."), "notification")
     if fh:
         g.source.interaction_count += 1
         fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
             journalist_filename, fh.filename, fh.stream))
-        flash('{} "{}".'.format("Thanks! We received your document",
-                                fh.filename or '[unnamed]'), "notification")
+        flash(_("Thanks! We received your document \"%(filename)s\".",
+                filename=fh.filename or '[unnamed]'), "notification")
 
     if first_submission:
-        flash("Thanks for submitting something to SecureDrop! Please check back later for replies.",
+        flash(_("Thanks for submitting something to SecureDrop! Please check back later for replies."),
               "notification")
 
     for fname in fnames:
@@ -279,7 +313,7 @@ def delete():
     if msgid not in potential_files:
         abort(404)  # TODO are the checks necessary?
     store.secure_unlink(store.path(g.sid, msgid))
-    flash("Reply deleted", "notification")
+    flash(_("Reply deleted"), "notification")
 
     return redirect(url_for('lookup'))
 
@@ -299,7 +333,7 @@ def login():
             if valid:
                 session.update(codename=codename, logged_in=True)
                 return redirect(url_for('lookup', from_login='1'))
-        flash("Sorry, that is not a recognized codename.", "error")
+        flash(_("Sorry, that is not a recognized codename."), "error")
     return render_template('login.html')
 
 
@@ -344,4 +378,3 @@ if __name__ == "__main__":
     write_pidfile()
     # TODO make sure debug is not on in production
     app.run(debug=True, host='0.0.0.0', port=8080)
-

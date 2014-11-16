@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import common
 import os
 import re
 import unittest
@@ -8,11 +7,12 @@ from cStringIO import StringIO
 
 from bs4 import BeautifulSoup
 from flask.ext.testing import TestCase
-from flask import session, escape
+from flask import session, escape, g
 from mock import patch, ANY
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import source
+import common
 
 
 class TestSource(TestCase):
@@ -173,6 +173,20 @@ class TestSource(TestCase):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
+    def test_apply_locale(self):
+        source.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/?l=zh')
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session['locale'], 'zh')
+
+    def test_apply_locale_accept_language(self):
+        source.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/', headers=[('Accept-Language', 'zh-Hant, zh;q=0.8')])
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session.get('locale'), None)
 
 
 if __name__ == "__main__":
