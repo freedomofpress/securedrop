@@ -44,7 +44,7 @@ To create the Ubuntu installation media, you can either burn the ISO image to a 
 
 The steps below are the same for both the *Application Server* and the *Monitor Server*.
 
-You may need to change the BIOS settings on either SecureDrop server before you can boot the Ubuntu image. To do so, hit 'esc', 'F2' or 'F12' as soon as you turn the server on, and navigate to the boot menu. Once there, select the installation media that you installed Ubuntu on. Unfortunately, every server model is different so you may have to experiment or consult your user manual to figure it out. 
+Start by inserting the Ubuntu installation media into the server. Boot or reboot the server with the installation media inserted, and enter the boot menu. To enter the boot menu, you need to press a key as soon as you turn the server on. This key varies depending on server model, but common choices are Esc, F2, F10, and F12. Often, the server will briefly display a message on boot that shows which key should be pressed to enter the boot menu. Once you've entered the boot menu, select the installation media (USB or CD) and press Enter to boot it.
 
 After booting the the Ubuntu image, select **Install Ubuntu Server**.
 
@@ -58,7 +58,7 @@ The Ubuntu installer will try to autoconfigure networking for the server you are
 
 If network autoconfiguration completes before you can do this, the next window will ask for your hostname. To get back to the choice of configuring the network manually, **Cancel** the step that asks you to set a hostname and choose the manu option that says **Configure the network manually** instead.
 
-For a production install with a pfsense network firewall in place, the *Application Server* and the *Monitor Server* are on separate networks. You may choose your own network settings at this point, but make sure the settings you choose are unique on the firewall's network and remember to propogate your choices through the rest of the installation process.
+For a production install with a pfsense network firewall in place, the *Application Server* and the *Monitor Server* are on separate networks. You may choose your own network settings at this point, but make sure the settings you choose are unique on the firewall's network and remember to propagate your choices through the rest of the installation process.
 
 We recommend you use the 192.168.1.0/24 network segment for the *Application Server* and 192.168.2.0/24 for the *Monitor Server*. The values you should enter when installing Ubuntu are listed below.
 
@@ -75,7 +75,7 @@ We recommend you use the 192.168.1.0/24 network segment for the *Application Ser
     * Netmask default is fine (255.255.255.0)
     * Gateway default is fine (192.168.2.1)
     * For DNS, use Google's name servers: 8.8.8.8
-    * Hostname: monitor
+    * Hostname: mon
     * Domain name should be left blank
 
 ### Continue the installation
@@ -98,7 +98,7 @@ After selecting either of those options you may be asked a few questions about o
 
 ### Finish the installation
 
-Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). Once *OpenSSH Server** is selected, hit continue. 
+Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). Once **OpenSSH Server** is selected, hit continue. 
 
 You will then have to wait for the packages to finish installing.
 
