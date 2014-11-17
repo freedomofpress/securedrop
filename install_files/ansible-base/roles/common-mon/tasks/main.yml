@@ -10,3 +10,5 @@
 - include: install_tor.yml
 
 - include: mon_configure_tor_hidden_services.yml
+
+- include: install_ntp.yml
