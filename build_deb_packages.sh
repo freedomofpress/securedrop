@@ -21,19 +21,21 @@ fi
 
 build_meta() {
     PACKAGE_NAME="$1"
-    PACKAGE_DIR="$BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH"
-    if [ -d $PACKAGE_DIR ]; then
-        rm -R $PACKAGE_DIR
-    fi
-    mkdir -p $PACKAGE_DIR
+    PACKAGE_PATH="$2"
+    PACKAGE_VERSION=$(grep Version $PACKAGE_PATH/DEBIAN/control | cut -d: -f2 | tr -d ' ')
 
-    cp -r /vagrant/install_files/securedrop-grsec/DEBIAN $PACKAGE_DIR/DEBIAN
+    BUILD_DIR="$BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH"
+    if [ -d $BUILD_DIR ]; then
+        rm -R $BUILD_DIR
+    fi
+    mkdir -p $BUILD_DIR
+
+    cp -r $PACKAGE_PATH/DEBIAN $BUILD_DIR/DEBIAN
 
     # Create the deb package
-    dpkg-deb --build $PACKAGE_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$SD_VERSION-$SD_ARCH.deb /vagrant
+    dpkg-deb --build $BUILD_DIR
+    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /vagrant
 }
 
-
-build_meta securedrop-grsec
+build_meta securedrop-grsec /vagrant/install_files/securedrop-grsec
 exit 0
