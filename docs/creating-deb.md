@@ -60,7 +60,7 @@ root@dmon:~/ossec-hids# ./install.sh
 3- Configuring the OSSEC HIDS.
 
   3.1- Do you want e-mail notification? (y/n) [y]: 
-   - What's your e-mail address? securedrop@pressfreedomfoundation.org
+   - What's your e-mail address? securedrop@freedom.press
 
    - We found your SMTP server as: smtp.electricembers.net.
    - Do you want to use it? (y/n) [y]: y

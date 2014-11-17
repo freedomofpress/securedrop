@@ -108,6 +108,7 @@ apache_sites:
 app_deps:
   - gnupg2
   - haveged
+  - ntp
   - python
   - python-pip
   - secure-delete

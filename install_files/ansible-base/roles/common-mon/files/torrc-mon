@@ -6,6 +6,3 @@ RunAsDaemon 1
 HiddenServiceDir /var/lib/tor/services/ssh
 HiddenServicePort 22 127.0.0.1:22
 HiddenServiceAuthorizeClient stealth admin
-
-# Ports are from https://www.torproject.org/docs/faq#OutboundPorts
-ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030

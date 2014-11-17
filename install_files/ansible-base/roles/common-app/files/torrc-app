@@ -3,9 +3,6 @@ SocksPort 0
 SafeLogging 1
 RunAsDaemon 1
 
-# Ports are from https://www.torproject.org/docs/faq#OutboundPorts
-ReachableAddresses *:80,*:8080,*:443,*:8443,*:9001,*:9030
-
 HiddenServiceDir /var/lib/tor/services/source
 HiddenServicePort 80 127.0.0.1:80
 
