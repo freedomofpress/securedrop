@@ -1,0 +1,6 @@
+- name: install ntp for ntpd
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    force: yes
+  with_items: ["ntp"]
