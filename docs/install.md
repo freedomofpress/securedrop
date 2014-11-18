@@ -81,9 +81,7 @@ Since this machine will never touch the Internet or run an operating system othe
 
 There are several places in the SecureDrop architecture where two-factor authentication is used to protect access to sensitive information or systems. These instances use the standard TOTP and/or HOTP algorithms, and so a variety of devices can be used to provide two factor authentication for devices. We recommend using one of:
 
-* An Android or iOS device with one of the following apps installed
-    * [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en)
-    * [Authy](https://www.authy.com/apps/2-factor-authentication-for-smartphones)
+* An Android or iOS device with [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) installed
 * A [Yubikey](http://www.yubico.com/products/yubikey-hardware/)
 
 ### Transfer Device
