@@ -15,7 +15,7 @@ fi
 apt-key add /vagrant/install_files/ansible-base/roles/install_fpf_repo/files/fpf-signing-key.pub
 
 if [ ! -f /etc/apt/sources.list.d/fpf.list ]; then
-    echo "deb [arch=amd64] https://apt.pressfreedomfoundation.org/ trusty main" > /etc/apt/sources.list.d/fpf.list
+    echo "deb [arch=amd64] https://apt.freedom.press/ trusty main" > /etc/apt/sources.list.d/fpf.list
     apt-get update
 fi
 
