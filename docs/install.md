@@ -204,16 +204,21 @@ Next, you will need to clone the SecureDrop repository:
 
 Before proceeding, verify the signed git tag for this release.
 
-First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint. (**TODO** update with the airgapped signing key's fingerprint)
+First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
-    gpg --fingerprint 9092EDF6244A1603DCFDC4629A2BE67FBD67D096
+	wget https://freedom.press/link-to-signing-key-here.asc
+	gpg --import link-to-signing-key-here.asc
 
-(**TODO** can we trust `--recv-key` or do we still have to manually verify the fingerprint, even when we use it to fetch the key in the first place?)
+Verify that the key is authentic by checking the fingerprint.
 
-Now, verify that the current release tag was signed with the master signing key.
+    gpg --with-fingerprint link-to-signing-key-here.asc
+	gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
-    cd securedrop
+The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
+
+Verify that the current release tag was signed with the master signing key.
+
+    cd securedrop/
     git checkout 0.3
     git tag -v 0.3
 
