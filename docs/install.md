@@ -212,7 +212,7 @@ First, download the *Freedom of the Press Foundation Master Signing Key* and ver
 Verify that the key is authentic by checking the fingerprint.
 
     gpg --with-fingerprint link-to-signing-key-here.asc
-	gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
 The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
