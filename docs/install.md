@@ -104,11 +104,9 @@ You will need the following inventory of hardware items for the installation. Fo
 
 ### USBs/DVDs/CDs
 
-* Ubuntu Live USB/CD/DVD (to install Ubuntu on the servers)
-    * To create the Ubuntu Live USB/DVD/CD, see [this section in the Ubuntu Install Guide](/docs/ubuntu_config.md#creating-the-ubuntu-installation-media).
-* Tails Live USB/CD/DVD (to set up Tails Live USB's with persistence)
-    * To create the Tails Live USB, see the [Tails Guide](/docs/tails_config.md).
-* One *Transfer Device* for transferring files, marked *transfer*. For the installation, we recommend using a brand new USB drive.
+ * CD, DVD, or USB to use when [installing Ubuntu on the Application Server and the Monitor Server](/docs/ubuntu_config.md).
+ * CD, DVD, or USB to use when [setting up Tails Live with persistence](/docs/tails_config.md).
+ * Brand new USB, marked *transfer*, to use as the *Transfer Device*.
 
 Additionally, you will need a minimum of 3 USB sticks which will become Tails Live USB's with persistence. You should mark one *offline*, one *online*, and one *admin*. This is enough to set up a system with one admin and one journalist (note that the same person can perform both of these roles). To add more administrators or journalists, you will need more USB sticks.
 
@@ -168,27 +166,11 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the Admin USB
 
-In this section we will set up the Admin Live USB, a Tails Live USB with persistence.
+The Admin USB should be a Tails Live USB install with persistence enabled. 
 
-Start by booting the *Secure Viewing Station (SVS)* from the Tails Live USB. To do this, insert the Tails Live USB and boot the machine. Open the boot menu and select the Tails Live USB from the menu.
+Instructions on how to download, verify and install Tails onto a USB can be found on the [Tails website](https://tails.boum.org/download/index.en.html). If you already have a Tails Live USB and want to create a second one, follow the instructions on the Tails website to do so using the [*Tails Installer*](https://tails.boum.org/doc/first_steps/installation/index.en.html).
 
-(On the Intel NUCs, to reboot first press the power button to trigger shutdown. Once the machine has shut down, press the power button again to boot it. As it boots, hold F10 to get the boot menu.)
-
-At the *Welcome to Tails* dialog, choose *No* for *More options?* and click *Login*. Once the desktop environment has loaded, insert the spare USB that will become a Tails live USB with persistence for the Admin Workstation.
-
-Click the *Applications* menu in the top left corner of the screen, and open *Applications > Tails > Tails Installer*. Choose *Clone & Install* and select the USB stick you inserted as the Target Device. In my testing, it was automatically selected because it was the only other USB device inserted at the time. Click *Install Tails* and click *Yes* to continue. When the installer is done, click *OK* to close the program.
-
-You will be able to set up persistence on this new Tails USB because it was created with the Tails Installer. Shut down the running Tails instance by clicking the power button icon in the top right corner of the screen and choosing *Shut down immediately*. Remove the original Tails USB, leaving the new Admin Live USB, and boot the Admin Workstation.
-
-"Welcome to Tails", "More Options?" choose *No* and click *Forward*
-
-Open the Persistence Wizard - click OK, configure the volume, select all options for storage, restart.
-
-**TODO** these instructions are basically "how to create a Tails Live USB persistence." Should we:
-
-1. Keep these here (I don't think so, they're sufficiently generic that they should go elsewhere)
-2. Move them to the Tails doc (tails_config.md)
-3. Delete them and refer people to the official Tails documentation
+Next, create an encrypted persistent volume on the Admin USB. Doing so will allow you to securely save information in the free space that is left on the device. This information will remain available to you even if you reboot Tails. Instructions on [how to create and use this volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) can be found on the Tails website. You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
 
 ## Set up the Servers
 
