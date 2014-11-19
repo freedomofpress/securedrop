@@ -236,15 +236,13 @@ You'll be asked to "enter file in which to save the key." Here you can just keep
 
 Once the key has finished generating, you need to copy the public key to both servers. Use `ssh-copy-id` to copy the public key to each server in turn. Use the user name and password that you set up during Ubuntu installation.
 
-**TODO** This will ask us to verify the SSH fingerprints of each server. Do we want to verify these? The way to do it would be to add a step when installing Ubuntu on each server where we log in and do ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key, then record that value to compare here.
-
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
 Verify that you are able to log in to both servers without being prompted for a password:
 
-    $ ssh <username>@<app_ip_address>
-    $ ssh <username>@<mon_ip_address>
+    $ ssh <username>@<App IP address>
+    $ ssh <username>@<Mon IP address>
 
 Once you've verified that you are able to log in to each server, you can log out of each by typing this:
 
