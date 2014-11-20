@@ -4,7 +4,17 @@ Journalists viewing documents on SecureDrop must connect to the respective Sourc
 
 ## Using SecureDrop As a Journalist
 
-### Connecting to the Document Interface
+### Create GPG key for the journalist
+
+Each journalist must have a personal GPG key that they use for encrypting files transferred from the Secure Viewing Station to their Journalist Workstation. The private key, used for decryption, stays on their Journalist Workstation. The public key, used for encryption, gets copied to the Secure Viewing Station. 
+
+If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
+
+ * [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
+ * [Windows](http://gpg4win.org/)
+ * [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
+
+### Connect to the Document Interface
 
 Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use the browser in the Tails operating system to connect to the `Document Interface`. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
@@ -18,7 +28,7 @@ If any sources have uploaded documents or sent you message, they will be listed 
 
 ![Document Interface](/docs/images/manual/document1.png)
 
-### Moving Documents to the Secure Viewing Station
+### Move Documents to the Secure Viewing Station
 
 You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it.
 
@@ -36,7 +46,7 @@ Next, boot up the `Secure Viewing Station` using Tails (remember, you must use a
 
 Make sure to then return to your `Transfer Device` folder, right click on the file, and then click "Wipe" to securely wipe the file from your device.
 
-### Decrypting and Working on the Secure Viewing Station
+### Decrypt and work on the Secure Viewing Station
 
 To decrypt documents, return to your Persistent folder and double-click on zipped file folder. After you extract the files, click on each file individually, and it will prompt you for the application PGP key passphrase to decrypt the document.
 
@@ -52,7 +62,7 @@ You can double-click on the decrypted document to open it in its default applica
 
 If the default application doesn't work, you can right-click on the document and choose `Open with Other Application...` to try opening the document with OpenOffice Writer, or Document Viewer. You can right-click on a file and choose `Rename...` to rename a document and give it a file extension.
 
-### Interacting With Sources
+### Interact With Sources
 
 Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
 
@@ -74,7 +84,7 @@ Once your reply has been submitted, you will see this confirmation page.
 
 Rinse and repeat.
 
-### Working with Documents
+### Work with Documents
 
 As long as you're using the latest version of Tails, you should be able to open any document that gets submitted to you without the risk of malicious documents compromising the `Secure Viewing Station`. However, if they do compromise it, Tails is designed so that the next time you reboot the malware will be gone.
 
@@ -88,7 +98,7 @@ When you no longer need documents you can right-click on them and choose Wipe to
 
 ![Wiping documents](/docs/images/manual/viewing5.png)
 
-### Encrypting and Moving Documents to Journalist Workstation
+### Encrypt and move documents to Journalist Workstation
 
 Before you move documents back to the `Transfer Device` to copy them to your workstation you should encrypt them to your personal GPG public key that you imported when setting up the `Secure Viewing Station` to begin with.
 
@@ -104,7 +114,7 @@ When you are done you will have another document with the same filename but endi
 
 ![Encrypted document](/docs/images/manual/viewing8.png)
 
-### Decrypting and Preparing to Publish
+### Decrypt and prepare to publish
 
 Plug the `Transfer Device` into your workstation computer and copy the encrypted documents to it. Decrypt them with `gnupg`.
 

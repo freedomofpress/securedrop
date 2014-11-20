@@ -53,13 +53,3 @@ To use Tails with the Workstation, start Tails and enable the persistent volume.
 ### Create bookmarks for Source and Document Interfaces
 
 If you want, you can open the browser and create bookmarks for the Source and Document Interfaces. Navigate to the site you wish to bookmark, select *Bookmarks* and *Bookmark This Page*, give the site a useful name (e.g. *Source Interface*), and click *Done*. Tails will remember the bookmarks even if you reboot.
-
-## Create GPG key for the journalist
-
-Each journalist must have a personal GPG key that they use for encrypting files transferred from the Secure Viewing Station to their Journalist Workstation. The private key, used for decryption, stays on their Journalist Workstation. The public key, used for encryption, gets copied to the Secure Viewing Station. 
-
-If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
-
- * [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
- * [Windows](http://gpg4win.org/)
- * [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
