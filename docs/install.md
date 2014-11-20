@@ -206,8 +206,8 @@ Before proceeding, verify the signed git tag for this release.
 
 First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
 
-	wget https://freedom.press/link-to-signing-key-here.asc
-	gpg --import link-to-signing-key-here.asc
+    wget https://freedom.press/link-to-signing-key-here.asc
+    gpg --import link-to-signing-key-here.asc
 
 Verify that the key is authentic by checking the fingerprint.
 
