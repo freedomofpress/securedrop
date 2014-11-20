@@ -124,7 +124,7 @@ A SecureDrop installation will require at least two roles, an admin and a journa
 
 The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
 
- * A password for the persistent volume on the Tails device.
+ * A password for the persistent volume on the Admin Live USB.
  * A master password for the KeePass password manager, which unlocks passphrases to:
      * The App Server and the Monitor Server (required to be the same).
      * The network firewall.
@@ -134,7 +134,7 @@ The admin will be using the *Admin Workstation* with Tails to connect to the App
      * The credentials for the email account that OSSEC will send alerts to.
      * The Hidden Services values required to connect to the App and Monitor Server.
  
-The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two passphrases:
+The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two credentials:
 
  * The secret code for the App Server's two-factor authentication.
  * The secret code for the Monitor Server's two-factor authentication.
@@ -149,7 +149,7 @@ The journalist will be using the *Journalist Workstation* with Tails to connect 
      * The Document Interface.
      * The journalist's personal GPG key.
      
-The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following passphrase:
+The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following credential:
 
  * The secret code for the Document Interface's two-factor authentication.
  
