@@ -37,7 +37,7 @@ sudo ./install.sh
 
 Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
 
-Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the installation process. The values can be found in ```install_files/ansible-base/app-document-aths```. This information includes the address to the Document Interface and your personal authentication string, as seen in the example below: 
+Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the installation process. The values can be found in `install_files/ansible-base/app-document-aths`. This information includes the address to the Document Interface and your personal authentication string, as seen in the example below: 
 
 ```
 # add HidServAuth lines here
