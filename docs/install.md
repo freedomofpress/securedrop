@@ -118,10 +118,51 @@ It is also recommended that you use an external hard drive to back up encrypted 
 
 ### Passphrases
 
-**TODO** Numerous components of the system require accounts...
+A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The lists below outline the accounts, passphrases and two-factor secrets that will be provisioned during an install.
 
-* A secure and unique passphrase for the persistent volume on each of the two USB sticks
+#### Admin
 
+The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
+
+ * A password for the persistent volume on the Tails device.
+ * A master password for the KeePass password manager, which unlocks passphrases to:
+     * The App Server and the Monitor Server (required to be the same).
+     * The network firewall.
+     * The SSH private key and, if set, the key's passphrase.
+     * The GPG key that OSSEC will encrypt alerts to.
+     * The admin's personal GPG key.
+     * The credentials for the email account that OSSEC will send alerts to.
+     * The Hidden Services values required to connect to the App and Monitor Server.
+ 
+The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two passphrases:
+
+ * The secret code for the App Server's two-factor authentication.
+ * The secret code for the Monitor Server's two-factor authentication.
+ 
+#### Journalist
+
+The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
+
+ * A master password for the persistent volume on the Tails device.
+ * A master password for the KeePass password manager, which unlocks passphrases to:
+     * The Hidden Service value required to connect to the Document Interface.
+     * The Document Interface.
+     * The journalist's personal GPG key.
+     
+The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following passphrase:
+
+ * The secret code for the Document Interface's two-factor authentication.
+ 
+#### Secure Viewing Station
+
+The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following set of passphrases:
+
+ * A master password for the persistent volume on the Tails device.
+ * A master password for the KeePass password manager, which unlocks the passphrase to:
+     * The GPG key used by SecureDrop to encrypt/decrypt submitted documents.
+
+The backup that is created during the installation of SecureDrop is also encrypted with the application's GPG key. The backup is stored on the persistent volume of the Tails USB that is used with the Secure Viewing Station. 
+	
 ## Set up the Secure Viewing Station
 
 The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
