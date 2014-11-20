@@ -37,7 +37,7 @@ sudo ./install.sh
 
 Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
 
-Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information includes, among other things, the address to the Document Interface and your personal authentication string. The information from the installation process looks like the following:
+Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the installation process. The values can be found in ```install_files/ansible-base/app-document-aths```. This information includes the address to the Document Interface and your personal authentication string, as seen in the example below: 
 
 ```
 # add HidServAuth lines here
@@ -53,3 +53,13 @@ To use Tails with the Workstation, start Tails and enable the persistent volume.
 ### Create bookmarks for Source and Document Interfaces
 
 If you want, you can open the browser and create bookmarks for the Source and Document Interfaces. Navigate to the site you wish to bookmark, select *Bookmarks* and *Bookmark This Page*, give the site a useful name (e.g. *Source Interface*), and click *Done*. Tails will remember the bookmarks even if you reboot.
+
+## Create GPG key for the journalist
+
+Each journalist must have a personal GPG key that they use for encrypting files transferred from the Secure Viewing Station to their Journalist Workstation. The private key, used for decryption, stays on their Journalist Workstation. The public key, used for encryption, gets copied to the Secure Viewing Station. 
+
+If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
+
+ * [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
+ * [Windows](http://gpg4win.org/)
+ * [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)

@@ -377,27 +377,3 @@ Use the values fetched from the app and monitor servers with Micah's Tails_files
 7. **TODO** More testing...
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/user_manual.md).
-
-## Journalist's Workstation Setup
-
-The journalist workstation computer is the laptop that the journalist uses on a daily basis. It can be running Windows, Mac OS X, or GNU/Linux. This computer must have GPG installed.
-
-### Set up journalist GPG keys
-
-Each journalist must have a personal GPG key that they use for encrypting files transferred from the `Secure Viewing Station` to their `Journalist Workstation`. The private key, used for decryption, stays on their `Journalist Workstation`. The public key, used for encryption, gets copied to the `Secure Viewing Station`.
-
-If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
-
-* [GNU/Linux](https://www.gnupg.org/gph/en/manual.html#AEN26)
-* [Windows](http://gpg4win.org/)
-* [Mac OS X](https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin)
-
-### Journalist Logging In
-
-In order to view the `Document Interface`, journalists needs to either 1) install the Tor Browser Bundle and modify it to authenticate to the hidden service, or 2) modify Tor through their Tails operating system to accomplish the same task. The latter is highly recommended since many news organzation's corporate computer systems have been compromised in the past.
-
-#### Using Tails
-
-Each journalist that will be using Tails to connect to the `Document Interface` will need to install a persistent script onto their Tails USB stick. Follow [these instructions](/tails_files/README.md) to continue. In order to follow those instructions you'll need the HidServAuth values, which can be found in `install_files/ansible-base/app-document-aths`.
-
-Once you have installed this script, the journalist will have to run it each time they boot Tails and connect to the Tor network in order to login to the `Journalist Interface`. A convenient launcher is automatically set up by `install.sh`, which can be double-clicked to automatically set up the Tor configuration.
