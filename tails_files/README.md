@@ -48,7 +48,7 @@ When you are done, click *Save* and close the text editor.
 
 ## Using Tails with the Workstation
 
-To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that the Document Interface runs on port 8080. You will need to remember to repeat this step every time you start Tails.
+To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that the Document Interface runs on port 8080, so remember to append ':8080' to the hidden service address when you type it into the address bar. You will need to remember to repeat this step every time you start Tails.
 
 ### Create bookmarks for Source and Document Interfaces
 

@@ -380,4 +380,4 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 6. Test that the source received the reply.
 7. **TODO** More testing...
 
-Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/user_manual.md).
+Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).
