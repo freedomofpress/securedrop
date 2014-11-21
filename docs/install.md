@@ -288,12 +288,6 @@ Verify that you are able to log in to both servers without being prompted for a 
 Once you've verified that you are able to log in to each server, you can log out of each by typing this:
 
     $ logout # or Ctrl-D
-    
-### Set up two-factor authentication for the Admin
-
-As part of the SecureDrop installation process, you will need to set up two factor authentication on the App Server using the Google Authenticator mobile app.
-
-Connect to the server using `ssh` as you did when you set up SSH keys and run `google-authenticator`. Follow the instructions in [our Google Authenticator guide](/docs/google_authenticator.md) to set up the app on your Android or iOS device.
 
 ### Gather the required information
 
@@ -358,6 +352,12 @@ Update the inventory, replacing the ip addresses with the onion addresses:
     $ editor inventory
 
 Use the values fetched from the app and monitor servers with Micah's Tails_files program.
+
+### Set up two-factor authentication for the Admin
+
+As part of the SecureDrop installation process, you will need to set up two factor authentication on the App Server using the Google Authenticator mobile app.
+
+Connect to the App Server's hidden service address using `ssh` and run `google-authenticator`. Follow the instructions in [our Google Authenticator guide](/docs/google_authenticator.md) to set up the app on your Android or iOS device.
 
 ## Testing the Installation
 
