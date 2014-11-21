@@ -351,8 +351,6 @@ Update the inventory, replacing the ip addresses with the onion addresses:
 
     $ editor inventory
 
-Use the values fetched from the app and monitor servers with Micah's Tails_files program.
-
 ### Set up two-factor authentication for the Admin
 
 As part of the SecureDrop installation process, you will need to set up two factor authentication on the App Server using the Google Authenticator mobile app.
