@@ -16,10 +16,10 @@ The tails documentation for "manually installing" Tails onto a USB device for Ma
 dd if=[tails.iso] of=/dev/diskX
 ```
 
-This command is *very slow* (in my testing, it takes about 18 minutes to copy the .iso to a USB 2.0 drive). You can speed it up by adding the following arguments to `dd`:
+This command is *very slow* (in our testing, it takes about 18 minutes to copy the .iso to a USB 2.0 drive). You can speed it up by adding the following arguments to `dd`:
 
 ```
 dd if=[tails.iso] of=/dev/rdiskX bs=1m
 ```
 
-Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for me. For an explanation, I defer to the relevant [Server Fault](http://superuser.com/questions/421770/dd-performance-on-mac-os-x-vs-linux) ("I believe it has to do with buffers").
+Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for us. For an explanation, defer to the relevant [Server Fault](http://superuser.com/questions/421770/dd-performance-on-mac-os-x-vs-linux) post ("I believe it has to do with buffers"). If you have GNU coreutils installed (such as through Homebrew), you may need to capitalize the M suffixed to the `bs` value.
