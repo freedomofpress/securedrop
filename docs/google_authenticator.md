@@ -9,7 +9,7 @@ Connect to the App Server using `ssh` and run `google-authenticator`. Open the G
 * Select the pencil in the top-right corner
 * Select the plus sign at the bottom to add a new entry
 * Select *Scan Barcode*
-* Scan the barcode
+* Scan the barcode using your phone's camera
 
 A new entry will automatically be added to the list. If you wish to edit this entry and give it a new name, do the following:
 
@@ -23,8 +23,11 @@ To complete the setup process, say `y` to each prompt presented by `google-authe
 
 * Select the menu bar in the top-right corner
 * Select *Set up account*
-* Select *Enter provided key* under 'Manually add an account'
-* Under *Enter account name* enter *SecureDrop App*
-* Under *Enter your key* enter the value from the *.google_authenticator* file
-* You may leave the default type which is 'Time based'
-* Select the *Add* button at the bottom to save
+* Select *Scan a barcode*
+* Scan the barcode using your phone's camera
+
+A new entry will automatically be added to the list. If you wish to edit this entry and give it a new name, do the following:
+
+* Highlight the entry with a long press
+* Select the pencil in the top-right corner
+* Edit the entry's name and press Save
