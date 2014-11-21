@@ -31,3 +31,5 @@ A new entry will automatically be added to the list. If you wish to edit this en
 * Highlight the entry with a long press
 * Select the pencil in the top-right corner
 * Edit the entry's name and press Save
+
+To complete the setup process, say `y` to each prompt presented by `google-authenticator`.
