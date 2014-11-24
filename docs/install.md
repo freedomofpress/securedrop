@@ -308,7 +308,7 @@ Make sure you have the following information and files before continuing:
 
 Next, you will have to change into the ansible-base directory in the SecureDrop repo that you cloned earlier:
 
-    $ cd install_files/ansible-base
+    $ cd securedrop/install_files/ansible-base
 
 Copy the following required files to `securedrop/install_files/ansible-base`:
 
