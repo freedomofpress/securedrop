@@ -118,7 +118,7 @@ It is also recommended that you use an external hard drive to back up encrypted 
 
 ### Passphrases
 
-A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The lists below outline the accounts, passphrases and two-factor secrets that will be provisioned during an install.
+A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below can be used as a checklist to ensure that you, during the installation process, create the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
 #### Admin
 
