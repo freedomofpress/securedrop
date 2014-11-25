@@ -217,7 +217,7 @@ Next, create an encrypted persistent volume on the Admin USB. Doing so will allo
 
 Start by plugging the *Application Server* and the *Monitor Server* into the firewall.
 
-Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](docs/ubuntu_config.md).
+Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md).
 
 ## Install SecureDrop
 
