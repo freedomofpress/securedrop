@@ -375,23 +375,31 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 
 ### Test connectivity
 
-* ssh over tor into both servers
+* SSH over Tor into both servers
 * sudo as root
-* both web interfaces are available over tor
+* both web interfaces are available over Tor
 * OSSEC alert about OSSEC starting after reboot is received.
 * run 'unattended-upgrades' reboot and run again
-* run `uname -r` verify you are booted into grsec kernel
-* `aa-status` shows the apparmor status
-* `iptables-save` shows the current applied iptable rules
+* run `uname -r` to verify you are booted into grsec kernel
+* `aa-status` shows the AppArmor status
+* `iptables-save` shows the current applied iptables rules
 
 ### Test the web application
 
-1. Configure your torrc with the values with app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload your Tor.
-2. Make sure the source interface is available, and that you can make a submission.
-3. SSH to the app server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create a test admin user.
-4. Test that you can access the document interface, and that you can log in as the admin user you just created.
-5. Test replying to the test submission.
-6. Test that the source received the reply.
-7. **TODO** More testing...
+1. Configure your torrc with the values in app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload the Tor service.
+ * Open a Terminal and run `gksu gedit` to get a text editor with root privileges. You will be prompted for the administration password. Open `/etc/tor/torrc` and add HidServAuth lines for each of the authenticated hidden services i.e.:
+ * `HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: admin1`
+ * Save the file and then restart Tor by running `sudo service tor restart`.
+2. Make sure the Source Interface is available, and that you can make a submission.
+ * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file. 
+3. SSH to the App Server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create a test admin user.
+4. Run `./manage.py test` to execute our included unit and functional tests. If the environment is fully functional and there are no errors, each of these will complete with an output of 'OK'.
+5. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
+* Open the Tor Browser and navigate to the onion URL from app-document-aths, but append :8080 as the port. Enter your password and two-factor authentication code to log in. 
+* If you have problems logging in, SSH to the App Server and run ntpdate to synchronize the time. 
+6. Test replying to the test submission.
+* While logged in as an admin, you can send a reply to the test source submission you made earlier.
+7. Test that the source received the reply.
+* Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).
