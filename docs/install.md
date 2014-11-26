@@ -386,6 +386,8 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 
 ### Test the web application
 
+On your Admin Workstation running Tails:
+
 1. Configure your torrc with the values in app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload the Tor service.
  * Open a Terminal and run `gksu gedit` to get a text editor with root privileges. You will be prompted for the administration password. Open `/etc/tor/torrc` and add HidServAuth lines for each of the authenticated hidden services i.e.:
  * `HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: admin1`
@@ -393,6 +395,7 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 2. Make sure the Source Interface is available, and that you can make a submission.
  * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file. 
 3. SSH to the App Server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create a test admin user.
+ * Post-install you can now only SSH over Tor, so use the onion URL from app-ssh-aths and your admin username i.e. `ssh admin1@m5apx3p7eazqj3fp.onion`.
 4. Run `./manage.py test` to execute our included unit and functional tests. If the environment is fully functional and there are no errors, each of these will complete with an output of 'OK'.
 5. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
  * Open the Tor Browser and navigate to the onion URL from app-document-aths, but append :8080 as the port. Enter your password and two-factor authentication code to log in. 
