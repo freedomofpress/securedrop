@@ -395,11 +395,11 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 3. SSH to the App Server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create a test admin user.
 4. Run `./manage.py test` to execute our included unit and functional tests. If the environment is fully functional and there are no errors, each of these will complete with an output of 'OK'.
 5. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
-* Open the Tor Browser and navigate to the onion URL from app-document-aths, but append :8080 as the port. Enter your password and two-factor authentication code to log in. 
-* If you have problems logging in, SSH to the App Server and run ntpdate to synchronize the time. 
+ * Open the Tor Browser and navigate to the onion URL from app-document-aths, but append :8080 as the port. Enter your password and two-factor authentication code to log in. 
+ * If you have problems logging in, SSH to the App Server and run ntpdate to synchronize the time. 
 6. Test replying to the test submission.
-* While logged in as an admin, you can send a reply to the test source submission you made earlier.
+ * While logged in as an admin, you can send a reply to the test source submission you made earlier.
 7. Test that the source received the reply.
-* Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
+ * Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).
