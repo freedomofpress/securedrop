@@ -118,7 +118,7 @@ It is also recommended that you use an external hard drive to back up encrypted 
 
 ### Passphrases
 
-A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The lists below outline the accounts, passphrases and two-factor secrets that will be provisioned during an install.
+A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below can be used as a checklist to ensure that you, during the installation process, create the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
 #### Admin
 
@@ -199,9 +199,9 @@ You'll need to verify the fingerprint for this new key during the `App Server` i
 
 ### Import GPG keys for journalists with access to SecureDrop
 
-While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. 
+While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. The journalist should store the private key somewhere safe, the public key should be stored on the *Secure Viewing Station*.
 
-If the journalist does have a key, transfer the public key to the *Secure Viewing Station* using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
+If the journalist does have a key, transfer the public key to the *Secure Viewing Station*, which is running Tails on the *offline* USB, using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
 ![Importing Journalist GPG Keys](images/install/importkey.png)
 
@@ -308,7 +308,7 @@ Make sure you have the following information and files before continuing:
 
 Next, you will have to change into the ansible-base directory in the SecureDrop repo that you cloned earlier:
 
-    $ cd install_files/ansible-base
+    $ cd securedrop/install_files/ansible-base
 
 Copy the following required files to `securedrop/install_files/ansible-base`:
 
@@ -328,11 +328,25 @@ Next, you're going to edit the inventory file and replace the default IP address
 
 After changing the IP addresses, save the changes to the inventory file and quit the editor.
 
-Next, fill out `prod-specific.yml` with the Application Server IP and hostname, along with the same information for the Monitor Server (you should have had this information saved from when you installed Ubuntu).
+Next, fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
 
-**TODO**: more detailed instructions for filling out prod-specific.yml
+ * User allowed to connect to both servers with SSH: `ssh_users`
+ * IP address of the Monitor Server: `monitor_ip`
+ * Hostname of the Monitor Server: `monitor_hostname`
+ * Hostname of the Application Server: `app_hostname`
+ * IP address of the Application Server: `app_ip`
+ * The SecureDrop application's GPG public key: `securedrop_app_gpg_public_key`
+ * The SecureDrop application's GPG key fingerprint: `securedrop_app_gpg_fingerprint`
+ * GPG public key used when encrypting OSSEC alerts: `ossec_alert_gpg_public_key`
+ * Fingerprint for key used when encrypting OSSEC alerts: `ossec_gpg_fpr`
+ * The email address that will receive alerts from OSSEC: `ossec_alert_email`
+ * Email settings required to send alerts from OSSEC: `smtp_relay`
+ * Email settings required to send alerts from OSSEC: `smtp_relay_port`
+ * Email settings required to send alerts from OSSEC: `sasl_username`
+ * Email settings required to send alerts from OSSEC: `sasl_domain`
+ * Email settings required to send alerts from OSSEC: `sasl_password`
 
-    $ editor prod-specific.yml
+When you're done, save the file and exit the editor. 
 
 Run the playbook. You will be prompted to enter the sudo password for each server. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the ssh public keys to.
 
