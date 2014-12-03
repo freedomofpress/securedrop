@@ -1,0 +1,32 @@
+---
+  # TODO the version is hardcoded into the collect.py script name and ansible
+  # task. This should be changed in the ansible task to use a group_var with the
+  # version or to read it from the securedrop_code version.py
+- name: copy the versions collect.py script to the target server /tmp directory
+  copy: src=0.3_collect.py dest=/tmp/ owner=root mode=770
+
+  # This runs the backup script to collect the tor config, tor services
+  # directory, securedrop_data directory, securedrop_code config.py and the
+  # custom header image into a gpg encrypted zip file. It names the encrypted
+  # file sd-backup-TIMESTAMP.zip.gpg
+  #
+  # Since long running installs could have a larger information store made this
+  # task async.
+- name: run the collect script to backup all the needed files to perform a restore
+  shell: chdir=/tmp/ /tmp/0.3_collect.py
+  async: 300
+  poll: 10
+  register: backup_filename
+
+- name: fetch the created backup file back to the host machine's ansible_base directory
+  fetch: src=/tmp/{{ backup_filename.stdout }}.gpg dest=./{{ backup_filename.stdout }}.gpg flat=yes fail_on_missing=yes
+
+- name: secure delete backup zip requires secure-delete package
+  command: srm /tmp/{{ backup_filename.stdout }}
+  async: 300
+  poll: 10
+
+- name: secure delete the encrypted backup requires secure-delete package
+  command: srm /tmp/{{ backup_filename.stdout }}.gpg
+  async: 300
+  poll: 10
