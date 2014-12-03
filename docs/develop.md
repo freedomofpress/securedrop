@@ -154,7 +154,7 @@ In order to access the servers after the install is completed you will need to i
 ### connect-proxy (Ubuntu only)
 
 Ubuntu: `sudo apt-get install connect-proxy`
-*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last I checked (Wed Oct 15 21:15:17 PDT 2014).*
+*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last we checked (Wed Oct 15 21:15:17 PDT 2014).*
 
 After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
 
