@@ -22,9 +22,14 @@
   register: backup_filename
 
 - name: fetch the created backup file back to the host machine's ansible_base directory
-  fetch: src=/tmp/{{ backup_filename.stdout }} dest=./{{ backup_filename.stdout }} flat=yes fail_on_missing=yes
+  fetch: src=/tmp/{{ backup_filename.stdout }}.gpg dest=./{{ backup_filename.stdout }}.gpg flat=yes fail_on_missing=yes
 
-- name: secure delete backup file requires secure-delete package
+- name: secure delete backup zip requires secure-delete package
   command: srm /tmp/{{ backup_filename.stdout }}
+  async: 300
+  poll: 10
+
+- name: secure delete the encrypted backup requires secure-delete package
+  command: srm /tmp/{{ backup_filename.stdout }}.gpg
   async: 300
   poll: 10

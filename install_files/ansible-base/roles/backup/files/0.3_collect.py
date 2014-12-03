@@ -8,30 +8,33 @@ to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip
 """
 
 import sys
+sys.path.append("/var/www/securedrop")
 import os
 import re
 import zipfile
 from datetime import datetime
 import functools
+# Import the application config.py file
+import config
+import gnupg
+import subprocess
 
-SECUREDROP_CODE = "/var/www/securedrop"
-SECUREDROP_DATA = "/var/lib/securedrop"
 TOR_SERVICES    = "/var/lib/tor/services"
 TOR_CONFIG      = "/etc/tor/torrc"
 
 def collect_config_file(zf):
-    config_file_path = os.path.join(SECUREDROP_CODE, "config.py")
+    config_file_path = os.path.join(config.SECUREDROP_ROOT, "config.py")
     zf.write(config_file_path)
 
-def collect_SECUREDROP_DATA(zf):
+def collect_securedrop_data_root(zf):
     # The store and key dirs are shared between both interfaces
-    for root, dirs, files in os.walk(SECUREDROP_DATA):
+    for root, dirs, files in os.walk(config.SECUREDROP_DATA_ROOT):
         for name in files:
             zf.write(os.path.join(root, name))
 
 def collect_custom_header_image(zf):
     # The custom header image is copied over the deafult `static/i/logo.png`.
-    zf.write(os.path.join(SECUREDROP_CODE, "static/i/logo.png"))
+    zf.write(os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png"))
 
 def collect_tor_files(zf):
     # All of the tor hidden service private keys are stored in the THS specific
@@ -48,17 +51,25 @@ def collect_tor_files(zf):
     # restore.
     zf.write(TOR_CONFIG)
 
+def encrypt_zip_file(zf_fn):
+    # Encrypt the backup zip file and encrypt them with the application's gpg
+    # public key.
+    gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
+    e_fn = '{}.gpg'.format(zf_fn)
+
+    gpg.encrypt_file(zf_fn, config.JOURNALIST_KEY, always_trust='True', output=e_fn)
+
 def main():
     # name append a timestamp to the sd-backup zip filename
     dt = str(datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     zf_fn = 'sd-backup-{}.zip'.format(dt)
     with zipfile.ZipFile(zf_fn, 'w') as zf:
         collect_config_file(zf)
-        collect_SECUREDROP_DATA(zf)
+        collect_securedrop_data_root(zf)
         collect_custom_header_image(zf)
         collect_tor_files(zf)
+    encrypt_zip_file(zf_fn)
     print zf_fn
 
 if __name__ == "__main__":
     main()
-
