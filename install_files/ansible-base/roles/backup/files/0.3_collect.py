@@ -3,7 +3,7 @@
 
 This script should be copied to the App server and ran by the anisble
 plabook. When run (as root), it collects all of the necessary information
-to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip
+to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip.gpg
 
 """
 
@@ -52,8 +52,7 @@ def collect_tor_files(zf):
     zf.write(TOR_CONFIG)
 
 def encrypt_zip_file(zf_fn):
-    # Encrypt the backup zip file and encrypt them with the application's gpg
-    # public key.
+    # Encrypt the backup zip file with the application's gpg public key
     gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
     e_fn = '{}.gpg'.format(zf_fn)
 

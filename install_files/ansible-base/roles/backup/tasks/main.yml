@@ -7,14 +7,11 @@
 
   # This runs the backup script to collect the tor config, tor services
   # directory, securedrop_data directory, securedrop_code config.py and the
-  # custom header image into a zip file. It names the zip file
-  # sd-backup-TIMESTAMP.zip.
+  # custom header image into a gpg encrypted zip file. It names the encrypted
+  # file sd-backup-TIMESTAMP.zip.gpg
   #
   # Since long running installs could have a larger information store made this
   # task async.
-  #
-  # TODO The collect script should encrypt the zip file with the application's
-  # gpg key.
 - name: run the collect script to backup all the needed files to perform a restore
   shell: chdir=/tmp/ /tmp/0.3_collect.py
   async: 300
