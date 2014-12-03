@@ -8,6 +8,7 @@ Before you can verify the Ubuntu installation media, you will need to download t
 
 ```
 gpg --keyserver pool.sks-keyservers.net --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
+gpg --fingerprint C5986B4F1257FFA86632CBA746181433FBB75451
 ```
 
 The Ubuntu CD Image Automatic Signing Key should have a fingerprint of "C598 6B4F 1257 FFA8 6632  CBA7 4618 1433 FBB7 5451". If the fingerprint does not match what you see here, please get in touch at securedrop@freedom.press.

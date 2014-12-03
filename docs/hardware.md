@@ -68,15 +68,13 @@ We recommend getting a Netgate firewall with pfSense pre-installed, and you can 
 
 ### Notes on the NUCs
 
-There are a variety of available NUCs, and each different model supports different hardware specs and peripheral connectors. For hardware testing, I have been using:
+There are a variety of available NUCs, and each different model supports different hardware specs and peripheral connectors. For hardware testing, we have been using:
 
 #### D34010WYK
 
 [Amazon link w/ picture](http://www.amazon.com/Intel-Computing-BOXD34010WYK1-Black-White/dp/B00H3YT886/ref=sr_1_3?ie=UTF8&qid=1413905126&sr=8-3&keywords=NUC+D34010WYK)
 
-I have two of these: one for the Secure Viewing Station (SVS), which is air-gapped and never connected to the Internet, and one for the Admin Workstation, which is Internet-connected and is used to run the Ansible playbooks. You could also use an admin's existing workstation, or a recycled machine, for this purpose.
-
-**TODO** what are the concerns about security from existing hardware in newsrooms? The Admin Workstation runs Tails, so the primary concerns would be hardware implants.
+We have been using one for the Secure Viewing Station (SVS), which is air-gapped and never connected to the Internet, and one for the Admin Workstation, which is Internet-connected and is used to run the Ansible playbooks. You could also use an existing workstation, or a recycled machine, for this purpose, assuming you feel confident that this machine has not been physically compromised in any way.
 
 This machine has USB 3.0, which is nice for booting live USBs quickly and for transferring large files. It has two available display connectors: Mini-HDMI and DisplayPort.
 
@@ -84,4 +82,4 @@ This machine has USB 3.0, which is nice for booting live USBs quickly and for tr
 
 [Amazon link w/ picture](http://www.amazon.com/Intel-Computing-Gigabit-i3-3217U-DC3217IYE/dp/B0093LINVK)
 
-I am using these for the Application and Monitor servers (app and mon). They only have USB 2.0, which is not so bad because the Linux installation using live USB is a one-time process and you rarely transfer files directly from the servers. They also only have one available display connector: HDMI.
+We have been using two of these for the Application and Monitor servers (app and mon). They only have USB 2.0, which is not so bad because the Linux installation using live USB is a one-time process and you rarely transfer files directly from the servers. They also only have one available display connector: HDMI.
