@@ -39,7 +39,7 @@ Installing SecureDrop
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-This guide outlines the steps required to install SecureDrop 0.3.
+This guide outlines the steps required to install SecureDrop 0.3. If you are looking to upgrade from version 0.2.1, please use the [migration scripts](https://github.com/freedomofpress/securedrop/tree/develop/migration_scripts/0.3) we have created.
 
 When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
 
