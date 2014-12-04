@@ -229,7 +229,14 @@ class Journalist(Base):
 
     def verify_token(self, token):
         if self.is_totp:
-            return self.totp.verify(token)
+            # Also check the given token against the previous and next
+            # valid tokens, to compensate for potential time skew
+            # between the client and the server. The total valid
+            # window is 1:30s.
+            now = datetime.datetime.now()
+            interval = datetime.timedelta(seconds=30)
+            times = [ now - interval, now, now + interval ]
+            return any([ self.totp.verify(token, for_time=time) for time in times ])
         else:
             for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
