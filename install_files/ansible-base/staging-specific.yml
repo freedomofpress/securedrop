@@ -24,6 +24,12 @@ securedrop_header_image: "None"
 securedrop_app_gpg_public_key: "test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
+# To allow direct connections to source document interfaces for ease of testing
+apache_listening_address: "0.0.0.0"
+apache_allow_from: "all"
+source_apache_log_location: "/var/log/apache2/source-error.log"
+apache_logging_level: "info"
+
 ### Used by the mon role ###
 # The ossec alert gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory

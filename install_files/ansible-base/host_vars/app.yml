@@ -136,14 +136,7 @@ agent_auth_rules:
   - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
-### Used by the test role ###
-
-# To allow direct connections to source document interfaces for ease of testing
-apache_listening_address: "0.0.0.0"
-apache_allow_from: "all"
-source_apache_log_location: "/var/log/apache2/source-error.log"
-apache_logging_level: "info"
-
+### Used by the restrict access role ###
 direct_access_rules:
   - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
