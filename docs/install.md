@@ -120,6 +120,17 @@ The second *offline* Tails Live USB with persistence will be used as the encrypt
 
 A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below can be used as a checklist to ensure that you, during the installation process, create the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
+We have created a template that both the admin and the journalist can use together with KeePassX on Tails to ensure they not only generate strong passhrases, but also store them safely. You can find the template in `tails_files/securedrop-keepassx.kdb` inside the securedrop repository. To use the template, do:
+
+ * Open the KeePassX program
+ * Select `File` and `Open Database...`
+ * Navigate to the location of `securedrop-keepassx.kdb`, select it, and click `Open`
+ * Type in the default password for this template: `securedrop`
+ * Change the password by clicking `File` and `Change Master Key...`
+ * Enter a strong password and repeat it
+ * Click `File` and `Save Database As`
+ * Save the database in the Tails persistent folder  
+
 #### Admin
 
 The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
