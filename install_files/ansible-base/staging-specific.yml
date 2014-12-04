@@ -19,6 +19,12 @@ app_ip: "10.0.1.2"
 securedrop_header_image: "None"
 # The app gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
+#
+# The format of the app gpg public key can be binary or ASCII-armored,
+# the extension also doesn't matter
+#
+# The format of the app gpg fingerprint needs to be all capital letters
+# and zero spaces, e.g. "B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818"
 securedrop_app_gpg_public_key: "test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 
