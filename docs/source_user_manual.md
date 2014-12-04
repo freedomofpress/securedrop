@@ -42,15 +42,19 @@ If you have already submitted a document and would like to check for responses, 
 
 ![Source Interface](/docs/images/manual/source_landing_page_no_warning.png)
 
-The next page will ask for your secret codename. Enter it and click `Continue`.
+The next page will ask for your secret codename. Enter it and click `Continue`. 
 
 ![Check for response](/docs/images/manual/source_second_login.png)
 
-If a journalist wishes to reply to you, they will flag your message on their end and you will see the message below. They can't write a reply to you until you've seen this message for security reasons. This will only happen the first time a journalist replies and with subsequent replies you will skip this step.
+If a journalist has responded, his or her message will appear on the next page. This page also allows you to upload another document or send another message to the journalist. Be sure to delete any messages here before navigating away.
+
+**TODO:** update screenshot.
+
+If the server experiences a large number of new sources signing up at once and is overloaded with submissions, the journalist will flag your message on their end and you will see the message below. They can't write a reply to you until you've seen this message for security reasons. This will only happen the first time a journalist replies and with subsequent replies you will skip this step.
 
 ![Check for an initial response](/docs/images/manual/source_flagged_for_reply.png)
 
-Click `Refresh` or log in again. If a journalist has responded, his or her message will appear on the next page. This page also allows you to upload another document or send another message to the journalist. Be sure to delete any messages here before navigating away.
+Click `Refresh` or log in again. If a journalist has responded, his or her message will appear on the next page.
 
 ![Check for a real response](/docs/images/manual/source_reply_from_journalist.png)
 
