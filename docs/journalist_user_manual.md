@@ -32,7 +32,7 @@ If any sources have uploaded documents or sent you message, they will be listed 
 
 You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it.
 
-**TODO:** update screenshot.
+![Load external content](/docs/images/manual/document4.png)
 
 In order to protect you from malware, the browser will display a notice every time you try to download a file that can't be opened in browser itself. Go ahead and click `Launch application` anyway, and save the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
 
@@ -64,9 +64,8 @@ If the default application doesn't work, you can right-click on the document and
 
 ### Interact With Sources
 
-Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click **TODO:** update instructions.
-
-**TODO:** update screenshot.
+Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. 
+But first, if you'd like to reply to the source, write your message in the text field and click `Submit`.
 
 ![Sent reply](/docs/images/manual/document2.png)
 
