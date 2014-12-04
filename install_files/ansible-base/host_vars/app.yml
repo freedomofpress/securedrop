@@ -1,5 +1,11 @@
 ---
 #securedop_repo is defined in site-specific.yml config
+# Only the development and travis playbooks use a non-default value for
+# securedrop_code and securedrop_user variables. Setting a default values
+# allows us not to define these two variables in the prod-specific and
+# staging-specific yml configs.
+securedrop_code: "{{ securedrop_code | default(/var/www/securedrop) }}"
+securedrop_user: "{{ securedrop_user | default(www-data) }}"
 
 ### Used by the common role ###
 # ssh_users is defined in the site-specific.yml config
@@ -10,9 +16,6 @@
 ip_info:
   - ip: "{{ monitor_ip }}"
     hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
-
-
-### Used by the debs role ###
 
 # Building the securedrop-app-code deb package
 securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
