@@ -44,7 +44,7 @@ Edit the file, inserting the *HidServAuth* information for your SecureDrop insta
 HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 ```
 
-When you are done, click *Save* and close the text editor.
+If you're working on the Admin Workstation, you should also insert the lines found in `app-ssh-aths` and `mon-ssh-aths`, which will allow you to connect using a secure shell over Tor to the App and Monitor Servers. When you are done, click *Save* and close the text editor.
 
 ## Using Tails with the Workstation
 
