@@ -1,28 +1,38 @@
 ---
 ### General (used by more than one role) ###
 securedrop_repo: "/vagrant"
-securedrop_user: "www-data"
 dns_server: "8.8.8.8"
 
 ### Used by the common role ###
 ssh_users: "vagrant"
 
 # TODO Should use ansible to gather this info
-monitor_ip: 10.0.1.3
-monitor_hostname: mon-staging
+monitor_ip: "10.0.1.3"
+monitor_hostname: "mon-staging"
 app_hostname: "app-staging"
 app_ip: "10.0.1.2"
 
 ### Used by the app role ###
-securedrop_code: "/var/www/securedrop"
 # The securedrop_header_image has to be in the install_files/ansible-base/ or
 # the install_files/ansible-base/roles/app/files/ directory
 # Leave set to None to use the SecureDrop logo.
 securedrop_header_image: "None"
 # The app gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
+#
+# The format of the app gpg public key can be binary or ASCII-armored,
+# the extension also doesn't matter
+#
+# The format of the app gpg fingerprint needs to be all capital letters
+# and zero spaces, e.g. "B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818"
 securedrop_app_gpg_public_key: "test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+
+# To allow direct connections to source document interfaces for ease of testing
+apache_listening_address: "0.0.0.0"
+apache_allow_from: "all"
+source_apache_log_location: "/var/log/apache2/source-error.log"
+apache_logging_level: "info"
 
 ### Used by the mon role ###
 # The ossec alert gpg public key has to be in the install_files/ansible-base/ or
