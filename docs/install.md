@@ -39,7 +39,7 @@ Installing SecureDrop
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-This guide outlines the steps required to install SecureDrop 0.3. If you are looking to upgrade from version 0.2.1, please use the [migration scripts](https://github.com/freedomofpress/securedrop/tree/develop/migration_scripts/0.3) we have created.
+This guide outlines the steps required to install SecureDrop 0.3.
 
 When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
 
@@ -247,7 +247,12 @@ Before proceeding, verify the signed git tag for this release.
 
 First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    wget https://freedom.press/link-to-signing-key-here.asc
+    gpg --import link-to-signing-key-here.asc
+
+Verify that the key is authentic by checking the fingerprint.
+
+    gpg --with-fingerprint link-to-signing-key-here.asc
     gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
 The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
@@ -343,7 +348,7 @@ Next, fill out `prod-specific.yml` with values that match your environment. At a
 
 When you're done, save the file and exit the editor. 
 
-Run the playbook. You will be prompted to enter the sudo password for each server. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the ssh public keys to.
+Run the playbook. You will be prompted to enter the sudo password for each server. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
 
     $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
 
@@ -356,7 +361,7 @@ Once the installation is complete, the hidden service addresses for each service
 * app-ssh-aths
 * mon-ssh-aths
 
-Update the inventory, replacing the ip addresses with the onion addresses:
+Update the inventory, replacing the IP addresses with the onion addresses:
 
     $ editor inventory
 
@@ -368,25 +373,42 @@ Connect to the App Server's hidden service address using `ssh` and run `google-a
 
 ## Testing the Installation
 
-### Test connectivity
+### Test the web application and connectivity
 
-* ssh over tor into both servers
-* sudo as root
-* both web interfaces are available over tor
-* OSSEC alert about OSSEC starting after reboot is received.
-* run 'unattended-upgrades' reboot and run again
-* run `uname -r` verify you are booted into grsec kernel
-* `aa-status` shows the apparmor status
-* `iptables-save` shows the current applied iptable rules
+On your Admin Workstation running Tails:
 
-### Test the web application
-
-1. Configure your torrc with the values with app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload your Tor.
-2. Make sure the source interface is available, and that you can make a submission.
-3. SSH to the app server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create a test admin user.
-4. Test that you can access the document interface, and that you can log in as the admin user you just created.
-5. Test replying to the test submission.
-6. Test that the source received the reply.
-7. **TODO** More testing...
+1. Configure your torrc with the values in app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload the Tor service.
+ * The values listed after the .onion addresses allow access to the authenticated Tor hidden services for the App Server, Mon Server, and Admin/Document Interface. Only clients who have them configured using the HidServAuth directive in their Tor configuration can access these through Tor.
+ * We have a setup script for Tails that helps you add the values and creates a launcher on the desktop to open the Admin/Document Interface. The launcher automatically reloads Tor.
+ * See the 'Download and run the setup scripts' section of [Tails for the Admin and Journalist Workstation](/tails_files/README.md) and follow the instructions.
+2. SSH to both servers over Tor
+ * As an admin running Tails with the proper HidServAuth values in your `/etc/torrc` file, you should be able to SSH directly to the App Server and Monitor Server.
+ * Post-install you can now SSH _only_ over Tor, so use the onion URLs from app-ssh-aths and mon-ssh-aths and the user created during the Ubuntu installation i.e. `ssh admin@m5apx3p7eazqj3fp.onion`.
+3. Make sure the Source Interface is available, and that you can make a submission.
+ * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file.
+ * Usage of the Source Interface is covered by our [Source User Manual](/docs/source_user_manual.md).
+4. SSH to the App Server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create the first admin user for yourself. Use a strong password that you can remember. This user is only relevant to the web application.
+5. Make sure the Source Interface is available, and that you can make a submission.
+ * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file.
+ * Usage of the Source Interface is covered by our [Source User Manual](/docs/source_user_manual.md).
+6. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
+ * Open the Tor Browser and navigate to the onion URL from app-document-aths. Enter your password and two-factor authentication code to log in. 
+ * If you have problems logging in to the Admin/Document Interface, SSH to the App Server and restart the ntp daemon to synchronize the time: `sudo service ntp restart`. Also check that your smartphone's time is accurate and set to network time in its device settings. 
+7. Test replying to the test submission.
+ * While logged in as an admin, you can send a reply to the test source submission you made earlier.
+ * Usage of the Document Interface is covered by our [Journalist User Manual](/docs/journalist_user_manual.md).
+8. Test that the source received the reply.
+ * Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
+9. Remove the test submissions you made prior to putting SecureDrop to real use. On the main Document Interface page, select all sources and click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).
+
+#### Extra testing
+
+1. On each server, check that you can execute privileged commands by running `sudo su`.
+2. Run `uname -r` to verify you are booted into Grsecurity kernel. The string grsec should be in the output.
+3. On the App Server as root, cd to /var/www/securedrop and run `./manage.py test` to execute our included unit and functional tests. 
+ * If the environment is fully functional, each of these will complete with an output of 'OK'. If there are any errors, you should [file a GitHub issue](../issues/) or send an e-mail to securedrop@freedom.press.
+4. Check the AppArmor status on each server with `sudo aa-status`. On a production instance all profiles should be in enforce mode.
+5. Check the current applied iptables rules with `iptables-save`. It should output approximately 50 lines.
+6. You should have received an alert from OSSEC when it first started.
