@@ -105,12 +105,21 @@ def login():
             user = Journalist.login(request.form['username'],
                                     request.form['password'],
                                     request.form['token'])
-        except:
-            e = sys.exc_info()
-            app.logger.error("Login for user '{}' failed with {}".format(
-                request.form['username'], e[0]))
-            flash("Login failed", "error")
+        except Exception as e:
+            app.logger.error("Login for '{}' failed: {}".format(
+                request.form['username'], e))
+            login_flashed_msg = "Login failed."
+            try:
+                user = Journalist.query.filter_by(username=request.form['username']).one()
+                if user.is_totp:
+                    login_flashed_msg += " Please wait for a new two-factor token for logging in again."
+            except:
+                pass
+            flash(login_flashed_msg, "error")
         else:
+            app.logger.info("Successful login for '{}' with token {}".format(
+                request.form['username'], request.form['token']))
+
             # Update access metadata
             user.last_access = datetime.utcnow()
             db_session.add(user)

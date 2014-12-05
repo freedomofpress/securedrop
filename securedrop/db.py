@@ -147,9 +147,11 @@ class Journalist(Base):
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
+
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
+    last_token = Column(String(6))
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
@@ -228,6 +230,14 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def verify_token(self, token):
+        # Only allow each authentication token to be used once. This
+        # prevents some MITM attacks.
+        if token == self.last_token:
+            raise BadTokenException("previously used token {}".format(token))
+        else:
+            self.last_token = token
+            db_session.commit()
+
         if self.is_totp:
             # Also check the given token against the previous and next
             # valid tokens, to compensate for potential time skew
@@ -248,10 +258,10 @@ class Journalist(Base):
     @staticmethod
     def login(username, password, token):
         user = Journalist.query.filter_by(username=username).one()
-        if not user.valid_password(password):
-            raise WrongPasswordException
         if not user.verify_token(token):
-            raise BadTokenException
+            raise BadTokenException("invalid token")
+        if not user.valid_password(password):
+            raise WrongPasswordException("invalid password")
         return user
 
 # Declare (or import) models before init_db
