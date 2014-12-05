@@ -388,18 +388,15 @@ On your Admin Workstation running Tails:
  * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file.
  * Usage of the Source Interface is covered by our [Source User Manual](/docs/source_user_manual.md).
 4. SSH to the App Server, `sudo su`, cd to /var/www/securedrop, and run `./manage.py add_admin` to create the first admin user for yourself. Use a strong password that you can remember. This user is only relevant to the web application.
-5. Make sure the Source Interface is available, and that you can make a submission.
- * Do this by opening the Tor Browser and navigating to the onion URL from app-source-ths. Proceed through the codename generation (copy this down somewhere) and you can submit a message or attach any random unimportant file.
- * Usage of the Source Interface is covered by our [Source User Manual](/docs/source_user_manual.md).
-6. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
+5. Test that you can access the Document Interface, and that you can log in as the admin user you just created.
  * Open the Tor Browser and navigate to the onion URL from app-document-aths. Enter your password and two-factor authentication code to log in. 
  * If you have problems logging in to the Admin/Document Interface, SSH to the App Server and restart the ntp daemon to synchronize the time: `sudo service ntp restart`. Also check that your smartphone's time is accurate and set to network time in its device settings. 
-7. Test replying to the test submission.
+6. Test replying to the test submission.
  * While logged in as an admin, you can send a reply to the test source submission you made earlier.
  * Usage of the Document Interface is covered by our [Journalist User Manual](/docs/journalist_user_manual.md).
-8. Test that the source received the reply.
+7. Test that the source received the reply.
  * Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
-9. Remove the test submissions you made prior to putting SecureDrop to real use. On the main Document Interface page, select all sources and click 'Delete selected'.
+8. Remove the test submissions you made prior to putting SecureDrop to real use. On the main Document Interface page, select all sources and click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).
 
@@ -411,4 +408,5 @@ Once you've tested the installation and verified that everything is working, see
  * If the environment is fully functional, each of these will complete with an output of 'OK'. If there are any errors, you should [file a GitHub issue](../issues/) or send an e-mail to securedrop@freedom.press.
 4. Check the AppArmor status on each server with `sudo aa-status`. On a production instance all profiles should be in enforce mode.
 5. Check the current applied iptables rules with `iptables-save`. It should output approximately 50 lines.
-6. You should have received an alert from OSSEC when it first started.
+6. You should have received an email alert from OSSEC when it first started.
+7. 
