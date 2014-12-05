@@ -64,17 +64,8 @@ If the default application doesn't work, you can right-click on the document and
 
 ### Interact With Sources
 
-Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. But first, if you'd like to reply to the source, click the `Flag this source for reply` button.
-
-![Read documents](/docs/images/manual/document4.png)
-
-After clicking the `Flag this source for reply button`, you'll see this confirmation page. Click through to get back to the page that displays that source's documents and replies.
-
-![Flag source for reply](/docs/images/manual/document3.png)
-
-*Note:* You will not be able to reply until after the source logs in again and sees that you would like to talk to him or her. So you may have to sit and wait.
-
-But after the source sees that you'd like to reply, a GPG key pair will automatically be generated and you can log back in and send a reply.
+Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. 
+But first, if you'd like to reply to the source, write your message in the text field and click `Submit`.
 
 ![Sent reply](/docs/images/manual/document2.png)
 
@@ -82,7 +73,15 @@ Once your reply has been submitted, you will see this confirmation page.
 
 ![Sent reply confirmation](/docs/images/manual/document5.png)
 
-Rinse and repeat.
+If the server experiences a large number of new sources signing up at once and is overloaded with submissions, you will need to flag sources for reply before you can communicate with them. Click the `Flag this source for reply` button.
+
+![Read documents](/docs/images/manual/document4.png)
+
+After clicking the `Flag this source for reply` button, you'll see this confirmation page. Click through to get back to the page that displays that source's documents and replies.
+
+![Flag source for reply](/docs/images/manual/document3.png)
+
+You will not be able to reply until after the source logs in again and sees that you would like to talk to him or her. So you may have to sit and wait. After the source sees that you'd like to reply, a GPG key pair will automatically be generated and you can log back in and send a reply.
 
 ### Work with Documents
 
