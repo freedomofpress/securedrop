@@ -132,6 +132,10 @@ class SourceStar(Base):
         self.starred = starred
 
 
+class InvalidUsernameEception(Exception):
+    """Raised when a user logs in with an invalid username"""
+
+
 class WrongPasswordException(Exception):
     """Raised when a user logs in with an incorrect password"""
 
@@ -257,7 +261,10 @@ class Journalist(Base):
 
     @staticmethod
     def login(username, password, token):
-        user = Journalist.query.filter_by(username=username).one()
+        try:
+            user = Journalist.query.filter_by(username=username).one()
+        except NoResultFound:
+            raise InvalidUsernameEception("invalid username '{}'".format(username))
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):
