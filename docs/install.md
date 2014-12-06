@@ -430,10 +430,8 @@ Once you've tested the installation and verified that everything is working, see
 ### Additional testing
 
 1. On each server, check that you can execute privileged commands by running `sudo su`.
-2. Run `uname -r` to verify you are booted into Grsecurity kernel. The string grsec should be in the output.
-3. On the App Server as root, cd to /var/www/securedrop and run `./manage.py test` to execute our included unit and functional tests.
- * If the environment is fully functional, each of these will complete with an output of 'OK'. If there are any errors, you should [file a GitHub issue](../issues/) or send an e-mail to securedrop@freedom.press.
-4. Check the AppArmor status on each server with `sudo aa-status`. On a production instance all profiles should be in enforce mode.
-5. Check the current applied iptables rules with `iptables-save`. It should output approximately 50 lines.
-6. You should have received an email alert from OSSEC when it first started.
+2. Run `uname -r` to verify you are booted into Grsecurity kernel. The string `grsec` should be in the output.
+3. Check the AppArmor status on each server with `sudo aa-status`. On a production instance all profiles should be in enforce mode.
+4. Check the current applied iptables rules with `iptables-save`. It should output approximately 50 lines.
+5. You should have received an email alert from OSSEC when it first started.
 
