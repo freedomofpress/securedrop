@@ -1,6 +1,7 @@
 import urllib2
 import tempfile
 import zipfile
+import datetime
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -154,6 +155,25 @@ class JournalistNavigationSteps():
                                   self.driver.page_source)
             )
 
+    def _check_login_with_otp(self, otp):
+        self._logout()
+        self._login_user(self.new_user['username'], self.new_user['password'], otp)
+        # Test that the new user was logged in successfully
+        self.assertIn('Sources', self.driver.page_source)
+
+    def _check_login_with_skewed_otp(self):
+        interval = 30
+
+        # Client is behind server
+        otp = self.new_user['orm_obj'].totp.at(
+            datetime.datetime.now() - datetime.timedelta(seconds=interval))
+        self._check_login_with_otp(otp)
+
+        # Client is ahead of server
+        otp = self.new_user['orm_obj'].totp.at(
+            datetime.datetime.now() + datetime.timedelta(seconds=interval))
+        self._check_login_with_otp(otp)
+
     def _new_user_can_log_in(self):
         # Log the admin user out
         self._logout()
@@ -171,6 +191,9 @@ class JournalistNavigationSteps():
         self.assertRaises(NoSuchElementException,
                           self.driver.find_element_by_link_text,
                           'Admin')
+
+        # Check that the user can log in with slightly skewed OTP tokens
+        self._check_login_with_skewed_otp()
 
     def _edit_user(self, username):
         new_user_edit_links = filter(

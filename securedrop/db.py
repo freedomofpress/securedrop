@@ -26,6 +26,13 @@ import config
 import crypto_util
 import store
 
+LOGIN_HARDENING = True
+# Unfortunately, the login hardening measures mess with the tests in
+# non-deterministic ways.  TODO rewrite the tests so we can more
+# precisely control which code paths are exercised.
+if os.environ.get('SECUREDROP_ENV') == 'test':
+    LOGIN_HARDENING = False
+
 # http://flask.pocoo.org/docs/patterns/sqlalchemy/
 
 if config.DATABASE_ENGINE == "sqlite":
@@ -132,6 +139,14 @@ class SourceStar(Base):
         self.starred = starred
 
 
+class InvalidUsernameEception(Exception):
+    """Raised when a user logs in with an invalid username"""
+
+
+class LoginThrottledException(Exception):
+    """Raised when a user attempts to log in too many times in a given time period"""
+
+
 class WrongPasswordException(Exception):
     """Raised when a user logs in with an incorrect password"""
 
@@ -147,12 +162,15 @@ class Journalist(Base):
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
+
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
+    last_token = Column(String(6))
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
+    login_attempts = relationship("JournalistLoginAttempt", backref="journalist")
 
     def __init__(self, username, password, is_admin=False, otp_secret=None):
         self.username = username
@@ -228,8 +246,23 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def verify_token(self, token):
+        # Only allow each authentication token to be used once. This
+        # prevents some MITM attacks.
+        if token == self.last_token and LOGIN_HARDENING:
+            raise BadTokenException("previously used token {}".format(token))
+        else:
+            self.last_token = token
+            db_session.commit()
+
         if self.is_totp:
-            return self.totp.verify(token)
+            # Also check the given token against the previous and next
+            # valid tokens, to compensate for potential time skew
+            # between the client and the server. The total valid
+            # window is 1:30s.
+            now = datetime.datetime.now()
+            interval = datetime.timedelta(seconds=30)
+            times = [ now - interval, now, now + interval ]
+            return any([ self.totp.verify(token, for_time=time) for time in times ])
         else:
             for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
@@ -238,14 +271,54 @@ class Journalist(Base):
                     return True
             return False
 
-    @staticmethod
-    def login(username, password, token):
-        user = Journalist.query.filter_by(username=username).one()
-        if not user.valid_password(password):
-            raise WrongPasswordException
+    @classmethod
+    def throttle_login(cls, user):
+        _LOGIN_ATTEMPT_PERIOD = 60 # seconds
+        _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
+
+        # Record the login attempt...
+        login_attempt = JournalistLoginAttempt(user)
+        db_session.add(login_attempt)
+        db_session.commit()
+
+        # ...and reject it if they have exceeded the threshold
+        login_attempt_period = datetime.datetime.utcnow() - \
+                               datetime.timedelta(seconds=_LOGIN_ATTEMPT_PERIOD)
+        attempts_within_period = JournalistLoginAttempt.query.filter(
+            JournalistLoginAttempt.timestamp > login_attempt_period).all()
+        if len(attempts_within_period) > _MAX_LOGIN_ATTEMPTS_PER_PERIOD:
+            raise LoginThrottledException("throttled ({} attempts in last {} seconds)".format(
+                len(attempts_within_period), _LOGIN_ATTEMPT_PERIOD))
+
+    @classmethod
+    def login(cls, username, password, token):
+        try:
+            user = Journalist.query.filter_by(username=username).one()
+        except NoResultFound:
+            raise InvalidUsernameException("invalid username '{}'".format(username))
+
+        if LOGIN_HARDENING:
+            cls.throttle_login(user)
+
         if not user.verify_token(token):
-            raise BadTokenException
+            raise BadTokenException("invalid token")
+        if not user.valid_password(password):
+            raise WrongPasswordException("invalid password")
         return user
+
+
+class JournalistLoginAttempt(Base):
+    """This model keeps track of journalist's login attempts so we can
+    rate limit them in order to prevent attackers from brute forcing
+    passwords or two factor tokens."""
+    __tablename__ = "journalist_login_attempt"
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+
+    def __init__(self, journalist):
+        self.journalist_id = journalist.id
+
 
 # Declare (or import) models before init_db
 def init_db():
