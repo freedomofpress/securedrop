@@ -244,7 +244,7 @@ def submit():
         # Generate a keypair now, if there's enough entropy (issue #303)
         entropy_avail = int(open('/proc/sys/kernel/random/entropy_avail').read())
         if entropy_avail >= 2400:
-            crypto_util.genkeypair(g.sid, g.codename)
+            async_genkey(g.sid, g.codename)
 
     g.source.last_updated = datetime.utcnow()
     db_session.commit()
