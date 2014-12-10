@@ -121,8 +121,6 @@
   /var/www/* r,
   /var/www/document.wsgi r,
   /var/www/securedrop/ r,
-  /var/www/securedrop/background.py r,
-  /var/www/securedrop/background.pyc rw,
   /var/www/securedrop/config.py r,
   /var/www/securedrop/config.pyc rw,
   /var/www/securedrop/crypto_util.py r,

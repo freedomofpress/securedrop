@@ -24,7 +24,6 @@ import config
 import version
 import crypto_util
 import store
-import background
 import template_filters
 from db import db_session, Source, Submission
 from jinja2 import evalcontextfilter
