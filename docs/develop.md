@@ -49,11 +49,6 @@ If you're using Ubuntu, you can install a sufficiently recent version of Ansible
 
 **Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
-You will also need to install the following Vagrant plugins via `vagrant plugin install`:
-
-* vagrant-hostmanager (1.5.0)
-
-
 ## Mac OS X
 
 First, install the requirements:
@@ -69,8 +64,6 @@ First, install the requirements:
       $ sudo easy_install pip
       $ sudo pip install ansible
       ```
-4. You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
-    * vagrant-hostmanager (1.5.0)
 
 Now you're ready to use vagrant to provision SecureDrop VM's!
 
