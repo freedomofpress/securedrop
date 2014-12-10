@@ -6,6 +6,7 @@ from functools import wraps
 import zipfile
 from cStringIO import StringIO
 import subprocess
+from threading import Thread
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -23,7 +24,6 @@ import config
 import version
 import crypto_util
 import store
-import background
 import template_filters
 from db import db_session, Source, Submission
 from jinja2 import evalcontextfilter
@@ -160,6 +160,27 @@ def create():
     return redirect(url_for('lookup'))
 
 
+def async(f):
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=f, args=args, kwargs=kwargs)
+        thread.start()
+    return wrapper
+
+@async
+def async_genkey(sid, codename):
+    crypto_util.genkeypair(sid, codename)
+
+    # Register key generation as update to the source, so sources will
+    # filter to the top of the list in the document interface if a
+    # flagged source logs in and has a key generated for them. #789
+    try:
+        source = Source.query.filter(Source.filesystem_id == sid).one()
+        source.last_updated = datetime.utcnow()
+        db_session.commit()
+    except Exception as e:
+        app.logger.error("async_genkey for source (sid={}): {}".format(sid, e))
+
+
 @app.route('/lookup', methods=('GET',))
 @login_required
 def lookup():
@@ -177,10 +198,6 @@ def lookup():
 
     # Sort the replies by date
     replies.sort(key=lambda reply: reply['date'], reverse=True)
-
-    def async_genkey(sid, codename):
-        with app.app_context():
-            background.execute(lambda: crypto_util.genkeypair(sid, codename))
 
     # Generate a keypair to encrypt replies from the journalist
     # Only do this if the journalist has flagged the source as one
@@ -244,7 +261,7 @@ def submit():
         # Generate a keypair now, if there's enough entropy (issue #303)
         entropy_avail = int(open('/proc/sys/kernel/random/entropy_avail').read())
         if entropy_avail >= 2400:
-            crypto_util.genkeypair(g.sid, g.codename)
+            async_genkey(g.sid, g.codename)
 
     g.source.last_updated = datetime.utcnow()
     db_session.commit()
