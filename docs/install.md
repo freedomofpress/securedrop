@@ -120,16 +120,14 @@ The second *offline* Tails Live USB with persistence will be used as the encrypt
 
 A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below can be used as a checklist to ensure that you, during the installation process, create the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
-We have created a template that both the admin and the journalist can use together with KeePassX on Tails to ensure they not only generate strong passhrases, but also store them safely. You can find the template in `tails_files/securedrop-keepassx.kdb` inside the securedrop repository. To use the template, do:
+We have created a template that both the admin and the journalist can use together with KeePassX on Tails to ensure they not only generate strong passhrases, but also store them safely. You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password, or the location of the key file, used to protect the database. To use the template:
 
  * Open the KeePassX program
- * Select `File` and `Open Database...`
- * Navigate to the location of `securedrop-keepassx.kdb`, select it, and click `Open`
- * Type in the default password for this template: `securedrop`
- * Change the password by clicking `File` and `Change Master Key...`
- * Enter a strong password and repeat it
+ * Select `File`, `Import from...`, and `KeePassX XML (*.xml)` 
+ * Navigate to the location of `securedrop-keepassx.xml`, select it, and click `Open`
+ * Set a strong master password or choose a key file to protect the password database
  * Click `File` and `Save Database As`
- * Save the database in the Tails persistent folder  
+ * Save the database in the Tails persistent folder
 
 #### Admin
 
