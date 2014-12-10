@@ -6,6 +6,7 @@ from functools import wraps
 import zipfile
 from cStringIO import StringIO
 import subprocess
+from threading import Thread
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -160,6 +161,16 @@ def create():
     return redirect(url_for('lookup'))
 
 
+def async(f):
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=f, args=args, kwargs=kwargs)
+        thread.start()
+    return wrapper
+
+@async
+def async_genkey(sid, codename):
+    crypto_util.genkeypair(sid, codename)
+
 @app.route('/lookup', methods=('GET',))
 @login_required
 def lookup():
@@ -177,10 +188,6 @@ def lookup():
 
     # Sort the replies by date
     replies.sort(key=lambda reply: reply['date'], reverse=True)
-
-    def async_genkey(sid, codename):
-        with app.app_context():
-            background.execute(lambda: crypto_util.genkeypair(sid, codename))
 
     # Generate a keypair to encrypt replies from the journalist
     # Only do this if the journalist has flagged the source as one
