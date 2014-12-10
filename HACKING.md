@@ -44,7 +44,7 @@ To run tests:
 ```sh
 cd /vagrant/securedrop
 ./manage.py test
-```sh
+```
 
 For more instructions on how to interact with your VM, refer to the [Vagrant website](http://vagrantup.com).
 
