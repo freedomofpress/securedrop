@@ -216,6 +216,7 @@ def submit():
 
     fnames = []
     journalist_filename = g.source.journalist_filename()
+    first_submission = g.source.interaction_count == 0
 
     if msg:
         g.source.interaction_count += 1
@@ -228,6 +229,11 @@ def submit():
             journalist_filename, fh.filename, fh.stream))
         flash('{} "{}".'.format("Thanks! We received your document",
                                 fh.filename or '[unnamed]'), "notification")
+
+    if first_submission:
+        flash("Thanks for submitting something to SecureDrop! Please check back later for replies.",
+              "notification")
+
     for fname in fnames:
         submission = Submission(g.source, fname)
         db_session.add(submission)
