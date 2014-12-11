@@ -66,7 +66,7 @@ To enforce HTTPS/SSL always, you need to set up redirection within the HTTP (por
 
     RewriteEngine On
     RewriteCond %{HTTPS} off
-    RewriteRule (.*) [](https://%)https://%{HTTP_HOST}%{REQUEST_URI}
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
     
 In your SSL (port 443) virtual host, set up HSTS and use these settings to give preference to the most secure cipher suites:
 
@@ -76,7 +76,7 @@ In your SSL (port 443) virtual host, set up HSTS and use these settings to give 
     SSLCompression off
     SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:EECDH+RC4:RSA+RC4:!MD5
 
-You'll need to run `a2enmod headers ssl rewrite` for all these to work. You should also set `ServerSignature Off` and `ServerTokens Prod`, typically in /etc/apache2/conf.d/security.
+You'll need to run `a2enmod headers ssl rewrite` for all these to work. You should also set `ServerSignature Off` and `ServerTokens Prod`, typically in /etc/apache2/conf.d/security. The supported cipher suites are copied from [CloudFlare's SSL configuration](https://github.com/cloudflare/sslconfig/blob/master/conf).
 
 If you use Nginx, [you can follow this link](https://gist.github.com/mtigas/8601685) and use the configuration file provided by ProPublica.
 
@@ -93,7 +93,7 @@ Here's an Apache example that would exclude the landing page from logging:
 
 ### Minimum requirements for the SecureDrop environment
 
-*   The Document and Monitor servers should be dedicated physical machines, not virtual machines.
+*   The Application and Monitor servers should be dedicated physical machines, not virtual machines.
 *   A trusted location to host the servers. The servers should be hosted in a location that is owned or occupied by the organization to ensure that their legal can not be bypassed with gag orders.
 *   The SecureDrop servers should be on a separate internet connection or completely segmented from corporate network.
 *   All traffic from the corporate network should be blocked at the SecureDrop's point of demarcation.
@@ -104,7 +104,7 @@ Here's an Apache example that would exclude the landing page from logging:
 ### Suggested
 
 *   For publicly advertised SecureDrop instances display the Source Interface's hidden service onion address on all of the organization public pages.
-*   Mirror the Tor Browser and Tails so sources do not have to visit [torproject.org](torproject.org) to download it.
+*   Mirror the Tor Browser and Tails so sources do not have to visit [torproject.org](https://www.torproject.org) to download it.
 
 ## Whole Site Changes
 

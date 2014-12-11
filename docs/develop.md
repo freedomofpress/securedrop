@@ -23,22 +23,25 @@
 
 *Tested on Ubuntu 14.04*
 
-    sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
-    git clone https://github.com/freedomofpress/securedrop
-    cd securedrop
+```sh
+sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
+git clone https://github.com/freedomofpress/securedrop
+cd securedrop
+```
 
 We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.6.5)*
 
-    sudo dpkg -i vagrant.deb
-    sudo dpkg-reconfigure virtualbox-dkms
-
-`vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box`
+```sh
+sudo dpkg -i vagrant.deb
+sudo dpkg-reconfigure virtualbox-dkms
+vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+```
 
 Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
 
 Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
 
-```
+```sh
 sudo apt-get install python-pip
 sudo pip install ansible
 ```
@@ -60,12 +63,12 @@ First, install the requirements:
       pip instead of homebrew so you will get the latest stable version. To
       install Ansible via pip,
 
-      ```
-      $ sudo easy_install pip
-      $ sudo pip install ansible
+      ```sh
+      sudo easy_install pip
+      sudo pip install ansible
       ```
 
-Now you're ready to use vagrant to provision SecureDrop VM's!
+Now you're ready to use vagrant to provision SecureDrop VMs!
 
 
 # Overview
@@ -96,6 +99,9 @@ vagrant ssh development
 cd /vagrant/securedrop
 ./manage.py test        # run the unit and functional tests
 ./manage.py start       # starts the application servers
+./manage.py stop        # stops the application servers
+./manage.py restart     # restarts the application servers (to test code changes)
+./manage.py reset       # resets the state of the development instance
 ./manage.py add_admin   # create a user to use when logging in to the document interface
 ```
 
@@ -191,7 +197,6 @@ Vagrant 1.6.5
 ```
 
 ```
-vagrant-cachier (1.0.0)
 vagrant-digitalocean (0.7.0)
 vagrant-hostmanager (1.5.0)
 vagrant-login (1.0.1, system)
