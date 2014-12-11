@@ -18,6 +18,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  
 ##### Assumption about the media organization hosting SecureDrop
 
+ * The organization obtains clean hardware for use with SecureDrop.
  * The organization obtains an authentic copy of SecureDrop and its dependencies.
  * The organization follows our [best practice guidelines](https://github.com/freedomofpress/securedrop/blob/develop/docs/deployment_practices.md) when deploying the system.
  * The organization acts in the interest of allowing sources to submit documents, regardless of the contents of these documents.
@@ -29,7 +30,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
 
  * The security assumptions of our public cryptosystem (currently RSA 4096-bit keys) are valid.
  * The security assumptions of our hashing/key derivation function (scrypt with randomly-generated salts) are valid.
- * The security/anonymity assumptions of Tor are valid, particularly those of the Tor Hidden Service protocol. (This is a somewhat contentious assumption when the application is a web application.)
+ * The security/anonymity assumptions of Tor are valid, particularly those of the Tor Hidden Service protocol. This is a somewhat contentious assumption when the application is a web application.
  
 ##### What a SecureDrop server can and cannot achieve
 
@@ -42,24 +43,24 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The server DOES NOT store plaintext documents or communication on disk.
  * The server DOES NOT store codenames at all on disk.
  
-##### What a compromise or physical seizure of the source's property can and cannot achieve
+##### What a compromise or physical seizure of the source's property can achieve
 
  * We assume that some sources will write down or save their codename in order to remember it for future logins. In this case, a compromise or physical seizure of the source's property may result in the attacker obtaining the source's codename.
  * An attacker with the source's codename can login to SecureDrop, submit documents, and communicate with the journalist as that source. The attacker can also see any undeleted messages sent from the journalist to the source.
  
-##### What a compromise or physical seizure of the journalist's property can and cannot achieve
+##### What a compromise or physical seizure of the journalist's property can achieve
 
  * A compromise or physical seizure of the journalist's property may result in the attacker obtaining the login credentials to the SecureDrop *Document Interface*. This means the attacker can see codenames given to sources (not the same as the codenames given to the sources themselves), encrypted submitted documents, and communication with sources. The attacker will be able to continue communicating with the sources.
  * Any decrypted documents stored on the journalist's computer will be available to the attacker. We recommend that journalists encrypt documents with their personal GPG key before taking them off the *Secure Viewing Station*, but we assume they leave documents decrypted while working on them.
  
-##### What a compromise or physical seizure of a SecureDrop server can and cannot achieve
+##### What a compromise or physical seizure of a SecureDrop server can achieve
 
  * A physical seizure of a SecureDrop server may result in the attacker obtaining the submitted, encrypted documents, the hashes of the source codenames, the replies from journalists that have not yet been read by sources (which are encrypted with a different GPG key per source), and the GPG private key of each source encrypted with the codename of the source as the passphrase.
  * A compromise of a SecureDrop server may allow the attacker to read and modify all plaintext document submissions, undeleted plaintext communication between the journalists and the sources, and plaintext communication between the journalists and sources from the point of compromise onwards. The attacker may also be able to forge messages as any source or journalist.
  * A compromise of a SecureDrop server may allow the attacker to see when journalists, sources, and administrator are accessing the server.
  * A compromise or physical seizure of a SecureDrop server may also result in the attacker gaining access to the scrypt, GPG, and ID pepper values. The attacker may also gain access to logs, including sanitized Tor logs from both Interfaces, error and access logs for the Document Interface and access history and actions performed by the administrator.
 
-##### What a compromise or physical seizure of the Secure Viewing Station can and cannot achieve
+##### What a compromise or physical seizure of the Secure Viewing Station can achieve 
 
  * A physical seizure of the Secure Viewing Station while powered off achieves nothing, assuming that Tails' implementation of full-disk encryption works as expected.
  * A physical seizure of the Secure Viewing Station while powered on, and with the persistent volume mounted, may give the attacker access to the GPG private key used to encrypt and decrypt submitted documents. In addition, the attacker may have access to some plaintext documents that sources have submitted to the organization. Journalists are encouraged to decrypt documents only as needed in separat Tails sessions, wiping the Tails non-persistent volume in between.
