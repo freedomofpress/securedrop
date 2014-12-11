@@ -1,4 +1,4 @@
-#Generating apparmor profiles for tor and apache
+#Generating AppArmor profiles for Tor and Apache
 
 ```
 vagrant up /staging$/
@@ -21,7 +21,7 @@ cd /var/www/securedrop
 
 Repeat.
 
-The apparmor profiles are saved in `/etc/apparmor.d/`
+The AppArmor profiles are saved in `/etc/apparmor.d/`
 There are two profiles:
  - usr.sbin.tor
  - usr.sbin.apache2
@@ -31,6 +31,6 @@ After running `aa-logprof` you will need to copy the modified profile back to yo
 cp /etc/apparmor.d/usr.sbin.apache2 /vagrant/install_files/ansible-base
 cp /etc/apparmor.d/usr.sbin.tor /vagrant/install_files/ansible-base
 
-The apparmor profiles are packaged with the securedrop-app-code.
-The securedrop-app-code postinst puts the apparmor profiles in enforce mode.
-The `app-test` ansible module (which is run as part of staging but not prod) puts the apparmor profiles in enforce mode.
+The AppArmor profiles are packaged with the securedrop-app-code.
+The securedrop-app-code postinst puts the AppArmor profiles in enforce mode.
+The `app-test` Ansible module (which is run as part of staging but not prod) puts the AppArmor profiles in enforce mode.
