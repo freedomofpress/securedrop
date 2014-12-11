@@ -91,7 +91,7 @@ There are predefined VM configurations in the vagrantfile: development, staging,
     * The interfaces and SSH are also available over Tor and direct access.
     * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
-    * OSSEC alert configuration are in install_files/ansible-base/staging-specific.yml
+    * OSSEC alert configuration is in install_files/ansible-base/staging-specific.yml
 * **app-prod**: This is like a production installation with all of the hardening applied but virtualized
     * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
     * Putting the AppArmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
