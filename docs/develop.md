@@ -34,7 +34,6 @@ We recommend using the latest stable version of Vagrant, which is newer than wha
 ```sh
 sudo dpkg -i vagrant.deb
 sudo dpkg-reconfigure virtualbox-dkms
-vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
 ```
 
 Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
@@ -52,11 +51,6 @@ If you're using Ubuntu, you can install a sufficiently recent version of Ansible
 
 **Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
-You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
-
-* vagrant-hostmanager (1.5.0)
-
-
 ## Mac OS X
 
 First, install the requirements:
@@ -72,8 +66,6 @@ First, install the requirements:
       sudo easy_install pip
       sudo pip install ansible
       ```
-4. You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
-    * vagrant-hostmanager (1.5.0)
 
 Now you're ready to use vagrant to provision SecureDrop VMs!
 
@@ -204,8 +196,6 @@ Vagrant 1.6.5
 ```
 
 ```
-vagrant-digitalocean (0.7.0)
-vagrant-hostmanager (1.5.0)
 vagrant-login (1.0.1, system)
 vagrant-share (1.1.2, system)
 ```
