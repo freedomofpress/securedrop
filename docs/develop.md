@@ -29,7 +29,7 @@ git clone https://github.com/freedomofpress/securedrop
 cd securedrop
 ```
 
-We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.6.5)*
+We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.7.0)*
 
 ```sh
 sudo dpkg -i vagrant.deb
@@ -37,7 +37,7 @@ sudo dpkg-reconfigure virtualbox-dkms
 vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
 ```
 
-Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
+Finally, install Ansible so it can be used with Vagrant to automatically provision VMs.
 
 Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
 
@@ -48,9 +48,9 @@ sudo pip install ansible
 
 If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
 
-*Tested: ansible 1.7.2*
+*Tested: ansible 1.8.2*
 
-**Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
+**Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VMs are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
 You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
 
@@ -88,13 +88,13 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 * **app-staging**: for working on the environment and hardening
     * Source Interface: localhost:8082
     * Document Interface: localhost:8083
-    * The interfaces and ssh are also available over tor and direct access.
-    * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+    * The interfaces and SSH are also available over Tor and direct access.
+    * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
-    * OSSEC alert configuration are in install_files/asnible-base/staging-specific.yml
+    * OSSEC alert configuration are in install_files/ansible-base/staging-specific.yml
 * **app-prod**: This is like a production installation with all of the hardening applied but virtualized
-    * A copy of the the Onion urls for source, document and ssh access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
-    * Putting the apparmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
+    * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+    * Putting the AppArmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
 * **mon-prod**: This is a like production installation with all of the hardening applied but virtualized
 
 
@@ -114,7 +114,7 @@ cd /vagrant/securedrop
 
 ## Staging
 
-The staging environment is a virtual production server that still allows direct access. (you can ssh and hit the web interfaces directly without tor)
+The staging environment is a virtual production server that still allows direct access. (you can ssh and hit the web interfaces directly without Tor)
 
 If you uncomment the line in the Vagrantfile `ansible.skip-tags: [ 'install_local_pkgs' ]` the playbook will look for:
 
@@ -172,7 +172,7 @@ You can also configure your SSH client to make the settings for proxying over To
 
 ```
 Hosts *.onion
-Compression yes # this compresses the SSH traffic to make it less slow over tor
+Compression yes # this compresses the SSH traffic to make it less slow over Tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
 
@@ -200,7 +200,7 @@ Tested with:
 
 ```
 vagrant --version
-Vagrant 1.6.5
+Vagrant 1.7.0
 ```
 
 ```
@@ -212,6 +212,6 @@ vagrant-share (1.1.2, system)
 
 ```
 ansible --version
-ansible 1.7.2
+ansible 1.8.2
 ```
 

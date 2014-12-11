@@ -14,10 +14,10 @@ app_ip: ""
 # the install_files/ansible-base/roles/app/files/ directory
 # Leave set to None to use the SecureDrop logo.
 securedrop_header_image: "None"
-# The app gpg public key has to be in the install_files/ansible-base/ or
+# The app GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
 #
-# The format of the app gpg public key can be binary or ASCII-armored,
+# The format of the app GPG public key can be binary or ASCII-armored,
 # the extension also doesn't matter
 #
 # The format of the app gpg fingerprint needs to be all capital letters
@@ -26,13 +26,13 @@ securedrop_app_gpg_public_key: ""
 securedrop_app_gpg_fingerprint: ""
 
 ### Used by the mon role ###
-# The ossec alert gpg public key has to be in the install_files/ansible-base/ or
+# The OSSEC alert GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
 #
-# The format of the ossec alert gpg public key can be binary or
+# The format of the OSSEC alert GPG public key can be binary or
 # ASCII-armored, the extension also doesn't matter
 #
-# The format of the ossec alert gpg fingerprint needs to be all capital letters
+# The format of the OSSEC alert GPG fingerprint needs to be all capital letters
 # and zero spaces, e.g. "B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818"
 ossec_alert_gpg_public_key: ""
 ossec_gpg_fpr: ""
@@ -43,6 +43,6 @@ smtp_relay_fingerprint: ""
 sasl_username: ""
 sasl_domain: ""
 sasl_password: ""
-# The ca_cert for the remote smtp relay needs to be in the
-# install_files/ansible-base or install_files/ansible-base/mon/files directory
+# The ca_cert for the remote SMTP relay needs to be in the
+# install_files/ansible-base or install_files/ansible-base/ossec_server/files directory
 ca_cert: ""
