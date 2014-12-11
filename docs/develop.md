@@ -34,7 +34,6 @@ We recommend using the latest stable version of Vagrant, which is newer than wha
 ```sh
 sudo dpkg -i vagrant.deb
 sudo dpkg-reconfigure virtualbox-dkms
-vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
 ```
 
 Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
