@@ -197,8 +197,6 @@ Vagrant 1.6.5
 ```
 
 ```
-vagrant-digitalocean (0.7.0)
-vagrant-hostmanager (1.5.0)
 vagrant-login (1.0.1, system)
 vagrant-share (1.1.2, system)
 ```
