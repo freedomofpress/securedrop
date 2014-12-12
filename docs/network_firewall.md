@@ -95,7 +95,28 @@ to manually translate for your firewall and preferred configuration
 method.
 
 For pfSense, see Section 6 of the pfSense Guide for information on
-setting up firewall rules through the WebGUI.
+setting up firewall rules through the WebGUI. Here are some tips on
+interpreting the rules template for pfSense:
+
+1. We recommend creating aliases for the repeated values (IPs and
+   FQDNs). This will make your rules easier to read later.
+2. pfSense is a stateful firewall, which means that you don't need the
+   iptables rules that allow incoming traffic that's in response to
+   outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this
+   for you automatically.
+3. You should create the rules on the interface where the traffic
+   originates from. The easy way to do this is look at the sources
+   (`-s`) of each iptables rules, and create that rule on each
+   corresponding interface. In case this is not clear:
+
+	* `-s APP_IP` => LAN
+	* `-s MONITOR_IP` => OPT1
+4. Make sure you delete the default "allow all" rule on the LAN
+   interface.
+
+We recognize that this process is cumbersome and may be difficult for
+people inexperienced in managing networks to understand. We are
+working on automating much of this for the next SecureDrop release.
 
 Once you've set up the firewall, continue with the installation. Next
 step: install Ubuntu on the servers.
