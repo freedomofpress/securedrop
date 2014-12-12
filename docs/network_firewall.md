@@ -1,6 +1,21 @@
 Network Firewall Setup Guide
 ============================
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Initial Setup](#initial-setup)
+- [Assign interfaces](#assign-interfaces)
+- [Configure Firewall](#configure-firewall)
+  - [General configuration](#general-configuration)
+  - [SecureDrop-specific configuration](#securedrop-specific-configuration)
+    - [Choose IPs](#choose-ips)
+    - [Set up OPT1](#set-up-opt1)
+    - [Set up firewall rules](#set-up-firewall-rules)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Unfortunately, due to the wide variety of firewalls that may be used, we
 do not provide specific instructions to cover every type or variation in
 software or hardware.
