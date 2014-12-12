@@ -225,6 +225,10 @@ Instructions on how to download, verify and install Tails onto a USB can be foun
 
 Next, create an encrypted persistent volume on the Admin USB. Doing so will allow you to securely save information in the free space that is left on the device. This information will remain available to you even if you reboot Tails. Instructions on [how to create and use this volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) can be found on the Tails website. You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
 
+## Set up the firewall
+
+See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. When you are done, continue with the next section.
+
 ## Set up the Servers
 
 Start by plugging the *Application Server* and the *Monitor Server* into the firewall.
