@@ -10,7 +10,7 @@ What you need:
 * Information for your SMTP server or relay (hostname, port) and the fingerprint of its TLS certificate
 * Credentials for the email address that OSSEC will send alerts from
 
-Receiving GPG encrypted email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
+Receiving email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
 
 While there are risks involved with receiving these alerts, such as information leakage through metadata, we feel the benefit of knowing how the SecureDrop servers are functioning is worth it. If a third-party SMTP relay is used, that relay will be able to learn information such as the IP address the alerts were sent from, the subject of the alerts, and the destination email address the alerts were sent to. Only the body of an alert email is encrypted with the recipient's GPG key. A third-party SMTP relay could also prevent you from receiving any or specific alerts.
 
@@ -31,7 +31,9 @@ These are the values you must specify in `prod-specific.yml`:
  
 If you don't know what value to enter for one of these, please ask your organization's email administrator for the full configuration before proceeding. It is better to get these right the first time rather than changing them after SecureDrop is installed. If you're not sure of the correct `smtp_relay_port` number, you can use a simple mail client such as Thunderbird to test different settings or a port scanning tool such as nmap to see what's open. You could also use telnet to make sure you can connect to an SMTP server, which will always transmit a reply code of 220 meaning "Service ready" upon a successful connection.
 
-In some cases, authentication or transport encryption mechanisms will vary and you may require later edits to the Postfix configuration on the Monitor Server in order to get alerts to work.
+The `smtp_relay` mail server hostname is often, but not always, different from the `sasl_domain`, e.g. smtp.gmail.com and gmail.com.
+
+In some cases, authentication or transport encryption mechanisms will vary and you may require later edits to the Postfix configuration (mainly /etc/postfix/main.cf) on the Monitor Server in order to get alerts to work. You can consult [Postfix's official documentation](http://www.postfix.org/documentation.html) for help, although we've described some common scenarios in the [troubleshooting section](#Troubleshooting) of this document.
 
 If you have your GPG public key handy, copy it to install_files/ansible-base and then specify the filename in the `ossec_alert_gpg_public_key` line of prod-specific.yml.
 
@@ -53,9 +55,9 @@ The fingerprint is a unique identifier for an encryption key that is longer than
 
 	gpg --with-colons --fingerprint 0xFD720AD9EBA34B1C | grep "^fpr" | cut -d: -f10
 	
-Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_email`. This could be your work email, or an alias for a group of IT administrators at your organization.
+Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_email`. This could be your work email, or an alias for a group of IT administrators at your organization. It helps for your mail client to have the ability to filter the numerous messages from OSSEC into a separate folder. 
 	
-Now you can move on to the SMTP and SASL settings, which are straightforward. If the OSSEC e-mail address is alerts@news-org.com, the `sasl_username` would be alerts and `sasl_domain` would be news-org.com. 
+Now you can move on to the SMTP and SASL settings, which are straightforward. These correspond to the outgoing e-mail address used to send the alerts instead of where you're receiving them. If that e-mail is ossec@news-org.com, the `sasl_username` would be ossec and `sasl_domain` would be news-org.com.
 
 The Postfix configuration enforces certificate verification, and requires a fingerprint to be set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
 
@@ -65,15 +67,15 @@ The output of the command above should look like the following:
 
     9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
 	
-Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md) by running the playbooks.
+Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#prepare-to-install-securedrop) by running the playbooks.
 
 ### Using Gmail for OSSEC alerts
 
 It's easy to get SecureDrop to use Google's servers to deliver the alerts, but it's not ideal from a security perspective. This option should be regarded as a backup plan. Keep in mind that you're leaking metadata about the timing of alerts to a third party — the alerts are encrypted and only readable to you, however that timing may prove useful to an attacker.
 
-First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com, `smtp_relay_port` is 587 and `smtp_relay_fingerprint` is noted in the example above.
+First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com, `smtp_relay_port` is 587 and `smtp_relay_fingerprint` is noted in the example above.
 
-If you happen to have Google's 2-Step Verification enabled on a Gmail account, you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
+We do not recommend enabling Google's 2-Step Verification if you're using a new Gmail account that is dedicated to sending the alert emails. On an existing account with 2-Step Verification enabled, you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
 
 ### Troubleshooting
 
@@ -81,7 +83,7 @@ Some OSSEC alerts should begin to arrive as soon as the installation has finishe
 
 The easiest way to test that OSSEC is working is to SSH to the Monitor Server and run `service ossec restart`. This will trigger an Alert level 3 saying: "Ossec server started."
 
-So you've finished installing SecureDrop, but you haven't received any OSSEC alerts. First, check your spam/junk folder. If it's not in there, then most likely there is a problem with the email configuration. In order to find out what's wrong, you'll have to SSH to the Monitor Server and take a look at the logs. To examine the mail log created by Postfix, run the following command:
+So you've finished installing SecureDrop, but you haven't received any OSSEC alerts. First, check your spam/junk folder. If they're not in there, then most likely there is a problem with the email configuration. In order to find out what's wrong, you'll have to SSH to the Monitor Server and take a look at the logs. To examine the mail log created by Postfix, run the following command:
 
 	tail /var/log/mail.log
 	
@@ -106,3 +108,5 @@ Other log files that may contain useful information:
 ### Analyzing the alerts
  
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
+
+If you believe that the system is behaving abnormally, you should contact us at securedrop@freedom.press for help.
