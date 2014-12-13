@@ -1,7 +1,12 @@
 #
 # Regular cron jobs for the cron-apt package
 #
+
 # Every night at 4 o'clock run cron-apt
 0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt
-# Every night at 5 o'clock if reboot is required reboot
-0 5 * * * root    /usr/bin/test -e /var/run/reboot-required && /sbin/reboot
+
+# Every night at 5 o'clock reboot (regardless of whether reboot is
+# required by the most recent package upgrade). This guarantees that
+# submission plaintext will be retained in memory for at most 24
+# hours.
+0 5 * * * root    /sbin/reboot
