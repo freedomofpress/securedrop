@@ -11,3 +11,15 @@
 
 - name: fetch securedrop ssh aths
   fetch: src=/var/lib/tor/services/ssh/hostname dest=./app-ssh-aths flat=yes fail_on_missing=yes
+
+  # These tasks modifies the fetched copy of the server's aths info to
+  # format it for a torrc file on the admins workstation.
+  # This should make it easier for the admin or journalist to copy paste the
+  # line correctly.
+- name: format securedrop document aths
+  local_action: lineinfile dest=./app-document-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
+  sudo: no
+
+- name: format app ssh aths
+  local_action: lineinfile dest=./app-ssh-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
+  sudo: no

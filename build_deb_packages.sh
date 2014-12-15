@@ -12,13 +12,6 @@ if [ ! -d $BUILD_PATH ]; then
     mkdir $BUILD_PATH
 fi
 
-#apt-key add /vagrant/install_files/ansible-base/roles/install_fpf_repo/files/fpf-signing-key.pub
-#
-#if [ ! -f /etc/apt/sources.list.d/fpf.list ]; then
-#    echo "deb [arch=amd64] https://apt.pressfreedomfoundation.org/ trusty main" > /etc/apt/sources.list.d/fpf.list
-#    apt-get update
-#fi
-
 build_meta() {
     PACKAGE_NAME="$1"
     PACKAGE_PATH="$2"

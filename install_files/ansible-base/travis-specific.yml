@@ -1,10 +1,10 @@
 ---
 ### General (used by more than one role) ###
-securedrop_user: "travis"
+non_default_securedrop_user: "travis"
 securedrop_repo: "{{ lookup('env', 'TRAVIS_BUILD_DIR') }}"
 
 ### Used by the app role ###
-securedrop_code: "{{ securedrop_repo }}/securedrop"
+non_default_securedrop_code: "{{ securedrop_repo }}/securedrop"
 # The securedrop_header_image has to be in the install_files/ansible-base/ or
 # the install_files/ansible-base/roles/app/files/ directory
 # Leave set to None to use the SecureDrop logo.

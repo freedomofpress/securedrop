@@ -47,7 +47,7 @@ class TestSource(TestCase):
             rv = c.get('/generate')
             self.assertEqual(rv.status_code, 200)
             session_codename = session['codename']
-        self.assertIn("Remember this code and keep it secret", rv.data)
+        self.assertIn("Remember this codename and keep it secret", rv.data)
         self.assertIn(
             "To protect your identity, we're assigning you a unique codename.",
             rv.data)

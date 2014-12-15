@@ -17,7 +17,7 @@ import store
 import template_filters
 from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
                 Journalist, NoResultFound, WrongPasswordException,
-                BadTokenException)
+                BadTokenException, LoginThrottledException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -105,12 +105,26 @@ def login():
             user = Journalist.login(request.form['username'],
                                     request.form['password'],
                                     request.form['token'])
-        except:
-            e = sys.exc_info()
-            app.logger.error("Login for user '{}' failed with {}".format(
-                request.form['username'], e[0]))
-            flash("Login failed", "error")
+        except Exception as e:
+            app.logger.error("Login for '{}' failed: {}".format(
+                request.form['username'], e))
+            login_flashed_msg = "Login failed."
+
+            if isinstance(e, LoginThrottledException):
+                login_flashed_msg += " Please wait at least 60 seconds before logging in again."
+            else:
+                try:
+                    user = Journalist.query.filter_by(username=request.form['username']).one()
+                    if user.is_totp:
+                        login_flashed_msg += " Please wait for a new two-factor token before logging in again."
+                except:
+                    pass
+
+            flash(login_flashed_msg, "error")
         else:
+            app.logger.info("Successful login for '{}' with token {}".format(
+                request.form['username'], request.form['token']))
+
             # Update access metadata
             user.last_access = datetime.utcnow()
             db_session.add(user)

@@ -7,6 +7,8 @@
 
 - include: remove_kernel_modules.yml
 
+- include: install_ntp.yml
+
   # Install the grsec kernel prior to running unattended-upgrades to avoid
   # reboots
 - include: from_fpf_repo_install_grsec.yml

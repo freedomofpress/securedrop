@@ -37,18 +37,18 @@ sudo ./install.sh
 
 Type the administration password that you selected when starting Tails and hit enter. The installation process will download additional software and then open a text editor with a file called *torrc_additions*. 
 
-Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the [installation process](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#finalize-the-installation-on-the-app-server). This information includes, among other things, the address to the Document Interface and your personal authentication string. The information from the installation process looks like the following:
+Edit the file, inserting the *HidServAuth* information for your SecureDrop instance that you received during the installation process. The values can be found in `install_files/ansible-base/app-document-aths`. This information includes the address to the Document Interface and your personal authentication string, as seen in the example below: 
 
 ```
 # add HidServAuth lines here
 HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 ```
 
-When you are done, click *Save* and close the text editor.
+If you're working on the Admin Workstation, you should also insert the lines found in `app-ssh-aths` and `mon-ssh-aths`, which will allow you to connect using a secure shell over Tor to the App and Monitor Servers. When you are done, click *Save* and close the text editor.
 
 ## Using Tails with the Workstation
 
-To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. Keep in mind that you have to repeat this step every time you start Tails.
+To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. You will need to remember to repeat this step every time you start Tails.
 
 ### Create bookmarks for Source and Document Interfaces
 

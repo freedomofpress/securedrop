@@ -1,0 +1,5 @@
+- name: install ntp for ntpd
+  apt:
+    pkg: ntp
+    state: latest
+    force: yes

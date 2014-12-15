@@ -100,6 +100,8 @@ Download the Ubuntu kernel overlay and the keys to verifying the archive.
 git clone git://kernel.ubuntu.com/ubuntu/ubuntu-trusty.git
 gpg --keyserver pool.sks-keyservers.net --recv-key DD14FC2A1EA5E51369635AD73D76C845FA1447CA
 gpg --keyserver pool.sks-keyservers.net --recv-key D4E1E31744709144B0F8101ADB74AEB8FDCE24FC
+gpg --fingerprint DD14FC2A1EA5E51369635AD73D76C845FA1447CA
+gpg --fingerprint D4E1E31744709144B0F8101ADB74AEB8FDCE24FC
 ```
 
 Tim Gardner should have a fingerprint of "DD14 FC2A 1EA5 E513 6963  5AD7 3D76 C845 FA14 47CA" and Luis Henriques should have a fingerprint of "D4E1 E317 4470 9144 B0F8  101A DB74 AEB8 FDCE 24FC". If either of the fingerprints do not match what you see here, please get in touch at securedrop@freedom.press.

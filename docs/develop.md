@@ -23,22 +23,24 @@
 
 *Tested on Ubuntu 14.04*
 
-    sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
-    git clone https://github.com/freedomofpress/securedrop
-    cd securedrop
+```sh
+sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
+git clone https://github.com/freedomofpress/securedrop
+cd securedrop
+```
 
 We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.6.5)*
 
-    sudo dpkg -i vagrant.deb
-    sudo dpkg-reconfigure virtualbox-dkms
-
-`vagrant box add trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box`
+```sh
+sudo dpkg -i vagrant.deb
+sudo dpkg-reconfigure virtualbox-dkms
+```
 
 Finally, install Ansible so it can be used with Vagrant to automatically provision VM's.
 
 Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
 
-```
+```sh
 sudo apt-get install python-pip
 sudo pip install ansible
 ```
@@ -48,11 +50,6 @@ If you're using Ubuntu, you can install a sufficiently recent version of Ansible
 *Tested: ansible 1.7.2*
 
 **Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VM's are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
-
-You will also need to install the following Vagrant plugins via `vagrant plugin install`:
-
-* vagrant-hostmanager (1.5.0)
-
 
 ## Mac OS X
 
@@ -65,14 +62,12 @@ First, install the requirements:
       pip instead of homebrew so you will get the latest stable version. To
       install Ansible via pip,
 
+      ```sh
+      sudo easy_install pip
+      sudo pip install ansible
       ```
-      $ sudo easy_install pip
-      $ sudo pip install ansible
-      ```
-4. You will also need to install the following Vagrant plugins via `vagrant plugin install <plugin>`:
-    * vagrant-hostmanager (1.5.0)
 
-Now you're ready to use vagrant to provision SecureDrop VM's!
+Now you're ready to use vagrant to provision SecureDrop VMs!
 
 
 # Overview
@@ -103,6 +98,9 @@ vagrant ssh development
 cd /vagrant/securedrop
 ./manage.py test        # run the unit and functional tests
 ./manage.py start       # starts the application servers
+./manage.py stop        # stops the application servers
+./manage.py restart     # restarts the application servers (to test code changes)
+./manage.py reset       # resets the state of the development instance
 ./manage.py add_admin   # create a user to use when logging in to the document interface
 ```
 
@@ -154,7 +152,7 @@ In order to access the servers after the install is completed you will need to i
 ### connect-proxy (Ubuntu only)
 
 Ubuntu: `sudo apt-get install connect-proxy`
-*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last I checked (Wed Oct 15 21:15:17 PDT 2014).*
+*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last we checked (Wed Oct 15 21:15:17 PDT 2014).*
 
 After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
 
@@ -198,9 +196,6 @@ Vagrant 1.6.5
 ```
 
 ```
-vagrant-cachier (1.0.0)
-vagrant-digitalocean (0.7.0)
-vagrant-hostmanager (1.5.0)
 vagrant-login (1.0.1, system)
 vagrant-share (1.1.2, system)
 ```

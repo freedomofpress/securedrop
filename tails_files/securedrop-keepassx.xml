@@ -1,0 +1,379 @@
+<!DOCTYPE KEEPASSX_DATABASE>
+<database>
+ <group>
+  <title>Admin</title>
+  <icon>58</icon>
+  <entry>
+   <title>App Server Hidden Service</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The Hidden Service values required to connect to the App Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:34:50</creation>
+   <lastaccess>2014-12-04T18:35:18</lastaccess>
+   <lastmod>2014-12-04T18:35:18</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>App and Monitor SSH key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the SSH key used when logging on to the App and Monitor Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:14</creation>
+   <lastaccess>2014-12-04T18:33:43</lastaccess>
+   <lastmod>2014-12-04T18:33:43</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>App and Monitor Server</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>Credentials for the App and Monitor Server, set during the Ubuntu install and required to be the same.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:23:57</creation>
+   <lastaccess>2014-12-04T18:29:11</lastaccess>
+   <lastmod>2014-12-04T18:29:11</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Monitor Server Hidden Service</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The Hidden Service values required to connect to the Monitor Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:35:22</creation>
+   <lastaccess>2014-12-04T18:37:45</lastaccess>
+   <lastmod>2014-12-04T18:35:44</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Network firewall</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>Credentials for the network firewall used together with SecureDrop.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:01</creation>
+   <lastaccess>2014-12-04T18:29:29</lastaccess>
+   <lastmod>2014-12-04T18:29:29</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>OSSEC GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the GPG key that OSSEC will use when encrypting email alerts.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:26:34</creation>
+   <lastaccess>2014-12-04T18:29:56</lastaccess>
+   <lastmod>2014-12-04T18:29:56</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>OSSEC email account</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The credentials for the email account that OSSEC will send alerts to.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:34:26</creation>
+   <lastaccess>2014-12-04T18:34:43</lastaccess>
+   <lastmod>2014-12-04T18:34:43</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Personal GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the admin's personal GPG key.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:26:53</creation>
+   <lastaccess>2014-12-04T18:38:42</lastaccess>
+   <lastmod>2014-12-04T18:30:06</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SASL credentials</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The credentials for the SMTP relay used to send OSSEC email alerts.</comment>
+   <icon>58</icon>
+   <creation>2014-12-05T00:28:41</creation>
+   <lastaccess>2014-12-05T00:29:10</lastaccess>
+   <lastmod>2014-12-05T00:29:10</lastmod>
+   <expire>Never</expire>
+  </entry>
+ </group>
+ <group>
+  <title>Journalist</title>
+  <icon>5</icon>
+  <entry>
+   <title>Document Interface</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The .onion address for the Document Interface</comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:37:57</creation>
+   <lastaccess>2014-12-04T18:38:19</lastaccess>
+   <lastmod>2014-12-04T18:38:19</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Document Interface Hidden Service</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The Hidden Service values required to connect to the Document Interface.</comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:37:21</creation>
+   <lastaccess>2014-12-04T18:37:55</lastaccess>
+   <lastmod>2014-12-04T18:37:55</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Personal GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the journalist's personal GPG key.</comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:38:24</creation>
+   <lastaccess>2014-12-04T18:38:49</lastaccess>
+   <lastmod>2014-12-04T18:38:49</lastmod>
+   <expire>Never</expire>
+  </entry>
+ </group>
+ <group>
+  <title>Secure Viewing Station</title>
+  <icon>15</icon>
+  <entry>
+   <title>SecureDrop GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the GPG key that SecureDrop will use to encrypt and decrypt submissions.</comment>
+   <icon>15</icon>
+   <creation>2014-12-04T18:40:38</creation>
+   <lastaccess>2014-12-04T18:41:27</lastaccess>
+   <lastmod>2014-12-04T18:41:27</lastmod>
+   <expire>Never</expire>
+  </entry>
+ </group>
+ <group>
+  <title>Backup</title>
+  <icon>4</icon>
+  <entry>
+   <title>App Server</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:23:57</creation>
+   <lastaccess>2014-12-04T18:24:50</lastaccess>
+   <lastmod>2014-12-04T18:24:50</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>App Server two-factor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The secret code for the App Server's two-factor authentication.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:36:01</creation>
+   <lastaccess>2014-12-05T00:35:13</lastaccess>
+   <lastmod>2014-12-05T00:35:13</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>App and Monitor Server</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:23:57</creation>
+   <lastaccess>2014-12-04T18:29:11</lastaccess>
+   <lastmod>2014-12-04T18:29:11</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Document Interface Hidden Service</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:37:21</creation>
+   <lastaccess>2014-12-04T18:37:55</lastaccess>
+   <lastmod>2014-12-04T18:37:55</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Document Interface two-factor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:38:58</creation>
+   <lastaccess>2014-12-04T18:39:22</lastaccess>
+   <lastmod>2014-12-04T18:39:22</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Document Interface two-factor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The secret code for the Document Interface's two-factor authentication.</comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:38:58</creation>
+   <lastaccess>2014-12-05T00:35:18</lastaccess>
+   <lastmod>2014-12-05T00:35:18</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Monitor Server two-factor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:36:21</creation>
+   <lastaccess>2014-12-04T18:36:41</lastaccess>
+   <lastmod>2014-12-04T18:36:41</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Monitor Server two-factor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The secret code for the Monitor Server's two-factor authentication.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:36:21</creation>
+   <lastaccess>2014-12-05T00:35:09</lastaccess>
+   <lastmod>2014-12-05T00:35:09</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Network firewall</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:01</creation>
+   <lastaccess>2014-12-04T18:29:29</lastaccess>
+   <lastmod>2014-12-04T18:29:29</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>OSSEC GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:26:34</creation>
+   <lastaccess>2014-12-04T18:29:56</lastaccess>
+   <lastmod>2014-12-04T18:29:56</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Personal GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:26:53</creation>
+   <lastaccess>2014-12-04T18:30:06</lastaccess>
+   <lastmod>2014-12-04T18:30:06</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>Personal GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>5</icon>
+   <creation>2014-12-04T18:38:24</creation>
+   <lastaccess>2014-12-04T18:38:49</lastaccess>
+   <lastmod>2014-12-04T18:38:49</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SSH key for App and Monitor</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the SSH key used when logging on to the App and Monitor Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:14</creation>
+   <lastaccess>2014-12-04T18:32:48</lastaccess>
+   <lastmod>2014-12-04T18:32:48</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SSH key passphrase</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the SSH key used when logging on to the App and Monitor Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:14</creation>
+   <lastaccess>2014-12-04T18:33:43</lastaccess>
+   <lastmod>2014-12-04T18:33:43</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SSH private key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:14</creation>
+   <lastaccess>2014-12-04T18:32:03</lastaccess>
+   <lastmod>2014-12-04T18:32:03</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SSH private key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment>The passphrase for the SSH key used when logging on to the App and Monitor Server.</comment>
+   <icon>58</icon>
+   <creation>2014-12-04T18:25:14</creation>
+   <lastaccess>2014-12-04T18:32:23</lastaccess>
+   <lastmod>2014-12-04T18:32:23</lastmod>
+   <expire>Never</expire>
+  </entry>
+  <entry>
+   <title>SecureDrop GPG key</title>
+   <username></username>
+   <password></password>
+   <url></url>
+   <comment></comment>
+   <icon>15</icon>
+   <creation>2014-12-04T18:40:38</creation>
+   <lastaccess>2014-12-04T18:41:27</lastaccess>
+   <lastmod>2014-12-04T18:41:27</lastmod>
+   <expire>Never</expire>
+  </entry>
+ </group>
+</database>

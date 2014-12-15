@@ -10,20 +10,30 @@ app_hostname: ""
 app_ip: ""
 
 ### Used by the app role ###
-securedrop_user: "www-data"
-securedrop_code: "/var/www/securedrop"
 # The securedrop_header_image has to be in the install_files/ansible-base/ or
 # the install_files/ansible-base/roles/app/files/ directory
 # Leave set to None to use the SecureDrop logo.
 securedrop_header_image: "None"
 # The app gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
+#
+# The format of the app gpg public key can be binary or ASCII-armored,
+# the extension also doesn't matter
+#
+# The format of the app gpg fingerprint needs to be all capital letters
+# and zero spaces, e.g. "B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818"
 securedrop_app_gpg_public_key: ""
 securedrop_app_gpg_fingerprint: ""
 
 ### Used by the mon role ###
 # The ossec alert gpg public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
+#
+# The format of the ossec alert gpg public key can be binary or
+# ASCII-armored, the extension also doesn't matter
+#
+# The format of the ossec alert gpg fingerprint needs to be all capital letters
+# and zero spaces, e.g. "B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818"
 ossec_alert_gpg_public_key: ""
 ossec_gpg_fpr: ""
 ossec_alert_email: ""

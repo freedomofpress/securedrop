@@ -9,14 +9,6 @@ include MyVars
 
 Vagrant.configure("2") do |config|
 
-  # Requires vagrant plugin vagrant-hostmanger to control the /etc/host entries
-  # for non production systems
-  # https://github.com/smdahlen/vagrant-hostmanager
-  config.hostmanager.enabled = false
-  config.hostmanager.manage_host = true
-  config.hostmanager.ignore_private_ip = false
-  config.hostmanager.include_offline = true
-
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
     development.vm.box = "trusty64"
