@@ -28,7 +28,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  
 ##### Assumption about the world
 
- * The security assumptions of our public cryptosystem (currently RSA 4096-bit keys) are valid.
+ * The security assumptions of our public key cryptosystem (currently RSA 4096-bit keys) are valid.
  * The security assumptions of our hashing/key derivation function (scrypt with randomly-generated salts) are valid.
  * The security/anonymity assumptions of Tor are valid, particularly those of the Tor Hidden Service protocol. This is a somewhat contentious assumption when the application is a web application.
  
@@ -45,7 +45,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  
 ##### What a compromise or physical seizure of the source's property can achieve
 
- * We assume that some sources will write down or save their codename in order to remember it for future logins. In this case, a compromise or physical seizure of the source's property may result in the attacker obtaining the source's codename.
+ * SecureDrop 0.3 encourages sources to protect their codenames by memorizing them. If a source cannot memorize the codename right away, we recommend writing it down and keeping it in a safe place at first, and gradually working to memorize it over time. Once the source has memorized it, he or she should destroy the written copy. If the source does write down the codename, a compromise or physical seizure of the source's property may result in the attacker obtaining the source's codename.
  * An attacker with the source's codename can login to SecureDrop, submit documents, and communicate with the journalist as that source. The attacker can also see any undeleted messages sent from the journalist to the source.
  
 ##### What a compromise or physical seizure of the journalist's property can achieve
