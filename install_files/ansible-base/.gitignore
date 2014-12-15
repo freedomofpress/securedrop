@@ -1,0 +1,2 @@
+# Ignore automatic backups created by the backup role
+*.zip.gpg
