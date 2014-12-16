@@ -64,6 +64,12 @@ An important part of SecureDrop's security model involves segmenting the infrast
 
 We recommend getting a Netgate firewall with pfSense pre-installed, and you can choose from a firewall with [2 GB of system memory](http://store.netgate.com/NetgateAPU2.aspx) or one with [4 GB of system memory](http://store.netgate.com/APU4.aspx).
 
+### Network Switch
+
+If you firewall has fewer than **four** NICs, you will need an additional Ethernet switch to perform installation and maintenance tasks with the Admin Workstation. This switch is generally useful because it allows you to connect to your firewall's LAN port without taking down either of the SecureDrop servers, which is useful if you want to perform maintenance tasks from the Admin Workstation on the SecureDrop installation or the firewall configuration. This is possible without the switch if your firewall has enough ports, but you will need to perform some additional initial firewall setup to get this to work.
+
+We recommend getting a [5-port Netgear ProSafe Ethernet Switch](http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/ref=sr_1_fkmr1_1?ie=UTF8&qid=1418401631&sr=8-1-fkmr1&keywords=netgate+prosafe+5+port) or similar.
+
 ## Appendix
 
 ### Notes on the NUCs

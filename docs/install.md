@@ -19,23 +19,26 @@ Installing SecureDrop
   - [Computers](#computers)
   - [USBs/DVDs/CDs](#usbsdvdscds)
   - [Passphrases](#passphrases)
+    - [Admin](#admin)
+    - [Journalist](#journalist)
+    - [Secure Viewing Station](#secure-viewing-station-1)
 - [Set up the Secure Viewing Station](#set-up-the-secure-viewing-station)
   - [Create a GPG key for the SecureDrop application](#create-a-gpg-key-for-the-securedrop-application)
   - [Import GPG keys for journalists with access to SecureDrop](#import-gpg-keys-for-journalists-with-access-to-securedrop)
 - [Set up the Admin USB](#set-up-the-admin-usb)
+- [Set up the firewall](#set-up-the-firewall)
 - [Set up the Servers](#set-up-the-servers)
 - [Install SecureDrop](#install-securedrop)
   - [Install Ansible](#install-ansible)
   - [Clone and verify the release code](#clone-and-verify-the-release-code)
   - [Set up SSH keys for the Admin](#set-up-ssh-keys-for-the-admin)
   - [Gather the required information](#gather-the-required-information)
+    - [OSSEC alert information](#ossec-alert-information)
+  - [Prepare to install SecureDrop](#prepare-to-install-securedrop)
+  - [Set up two-factor authentication for the Admin](#set-up-two-factor-authentication-for-the-admin)
 - [Testing the Installation](#testing-the-installation)
-  - [Test connectivity](#test-connectivity)
-  - [Test the web application](#test-the-web-application)
-- [Journalist's Workstation Setup](#journalists-workstation-setup)
-  - [Set up journalist GPG keys](#set-up-journalist-gpg-keys)
-  - [Journalist Logging In](#journalist-logging-in)
-    - [Using Tails](#using-tails)
+  - [Test the web application and connectivity](#test-the-web-application-and-connectivity)
+  - [Additional testing](#additional-testing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -224,6 +227,10 @@ The Admin USB should be a Tails Live USB install with persistence enabled.
 Instructions on how to download, verify and install Tails onto a USB can be found on the [Tails website](https://tails.boum.org/download/index.en.html). If you already have a Tails Live USB and want to create a second one, follow the instructions on the Tails website to do so using the [*Tails Installer*](https://tails.boum.org/doc/first_steps/installation/index.en.html).
 
 Next, create an encrypted persistent volume on the Admin USB. Doing so will allow you to securely save information in the free space that is left on the device. This information will remain available to you even if you reboot Tails. Instructions on [how to create and use this volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) can be found on the Tails website. You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
+
+## Set up the firewall
+
+See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. When you are done, continue with the next section.
 
 ## Set up the Servers
 
