@@ -1,5 +1,22 @@
 # Tails Guide
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Installing Tails on USB sticks](#installing-tails-on-usb-sticks)
+  - [Note for Mac OS X users](#note-for-mac-os-x-users)
+- [Configure Tails for use with SecureDrop](#configure-tails-for-use-with-securedrop)
+  - [Persistence](#persistence)
+  - [Start Tails and enable the persistent volume](#start-tails-and-enable-the-persistent-volume)
+  - [Download the repository](#download-the-repository)
+  - [Passphrase Database](#passphrase-database)
+  - [Set up easy access to the Document Interface](#set-up-easy-access-to-the-document-interface)
+  - [Using Tails with the Workstation](#using-tails-with-the-workstation)
+    - [Create bookmarks for Source and Document Interfaces](#create-bookmarks-for-source-and-document-interfaces)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Installing Tails on USB sticks
 
 Tails is an operating system that boots off of removable media, either a DVD or a USB stick. For SecureDrop you'll need to install Tails onto USB sticks so that you can enable persistent storage.
