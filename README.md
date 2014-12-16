@@ -8,9 +8,9 @@ SecureDrop is an open-source whistleblower submission system that media organiza
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of three dedicated computers:
 
-* `Secure Viewing Station`: An air-gapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
-* `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the first, public-facing Tor hidden service to send messages and documents to the journalist. The journalist connects to the second authenticated Tor hidden service to download encrypted documents and respond to sources.
-* `Monitor server`: Ubuntu server that monitors the `Application Server` and sends email alerts.
+* `Secure Viewing Station`: An air-gapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents.
+* `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the *Source Interface*, a public-facing Tor hidden service, to send messages and documents to the journalist. The journalist connects to the *Document Interface*, an [authenticated Tor hidden service](https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851), to download encrypted documents and respond to sources.
+* `Monitor server`: Ubuntu server that monitors the `Application Server` with [OSSEC](http://www.ossec.net/) and sends email alerts.
 
 In addition to these dedicated computers, the journalist will also use his or her normal workstation computer:
 
