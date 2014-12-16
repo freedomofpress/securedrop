@@ -168,7 +168,9 @@ The backup that is created during the installation of SecureDrop is also encrypt
 	
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
+The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
+
+We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
 
 To set up the Secure Viewing Station, start by creating a Tails Live USB with persistence on the *offline* USB stick. Follow the instructions in the [Tails Guide](/tails_guide.md). Stop after starting Tails and enabling the persistent volume - *do not* continue to connecting the machine to the Internet.
 
