@@ -212,5 +212,5 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
 * A random person can attempt to DoS the SecureDrop server and overwhelm the journalists by generating a high number of codenames and uploading many large documents.
 * A random person can submit empty, forged, inaccurate documents.
 * A random person can submit malicious documents, e.g. malware that will attempt to compromise the Secure Viewing Station.
- * A random person can attempt to get sensitive information from a SecureDrop user's browser session, such as the source's codename.
+* A random person can attempt to get sensitive information from a SecureDrop user's browser session, such as the source's codename.
 * A random person can attempt to compromise the SecureDrop server by attacking the exposed attack surface, including the kernel network stack, Tor, Apache, the SecureDrop web interfaces, Python, OpenSSH, the TLS implementation, and any other running services.
