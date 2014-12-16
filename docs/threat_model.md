@@ -96,17 +96,17 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
 * Use of [the Tor Browser will leave traces](https://research.torproject.org/techreports/tbb-forensic-analysis-2013-06-28.pdf) that can be discovered through a forensic analysis of the source's property following either a compromise or physical seizure. Unless the compromise or seizure happens while the source is submitting documents to SecureDrop, the traces will not include information about sites visited or actions performed in the browser.
 * Use of Tails with a persistent volume will leave traces on the device the operating system was installed on. Unless the compromise or seizure happens while the source is submitting documents to SecureDrop, or using the persistent volume, the traces will not include information about sites visited or actions performed in the browser or on the system.
 * SecureDrop 0.3 encourages sources to protect their codenames by memorizing them. If a source cannot memorize the codename right away, we recommend writing it down and keeping it in a safe place at first, and gradually working to memorize it over time. Once the source has memorized it, he or she should destroy the written copy. If the source does write down the codename, a compromise or physical seizure of the source's property may result in the attacker obtaining the source's codename.
- * An attacker with access to the **source's codename** can:
- 	* Upload new documents or submit messages.
- 	* Communicate with the journalist as that source.
- 	* See any communication that the source has not yet deleted.
+* An attacker with access to the **source's codename** can:
+	* Upload new documents or submit messages. 
+	* Communicate with the journalist as that source.
+	* See any communication that the source has not yet deleted.
  
 ##### What a compromise or physical seizure of the admin's property can achieve
 
  * To access the Document Interface, the Application Server, or the Monitor Server, the attacker needs to obtain the admin's login credentials and the admin's two-factor authentication device. Unless the attacker has physical access to the servers, the attacker will also need to obtain the Hidden Service values for the Interface and the servers. This information is stored in a password-protected database in a persistent volume on the admin's Tails device. The volume is protected by a passphrase. If the admin's two-factor authentication device is a mobile phone, this will also be protected by a passphrase.
-  * An attacker with access to the **admin's computer** can:
+ * An attacker with access to the **admin's computer** can:
  	* Access any stored, decrypted documents taken off the Secure Viewing Station. 
-  * An attacker with access to the **persistent volume** on the admin's Tails device can:
+ * An attacker with access to the **persistent volume** on the admin's Tails device can:
   	* Add, modify, and delete files on the volume.
   	* Access the Hidden Service values used by the Interfaces and the servers.
   	* Access SSH keys and passphrases for the Application Server and the Monitor Server.
