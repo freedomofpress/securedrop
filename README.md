@@ -20,17 +20,18 @@ Depending on the news organizations's threat model, it is recommended that journ
 
 These computers should all physically be in your organization's office.
 
-## How to Contribute
-
-See the [Development Guide](/docs/develop.md).
-
 ## How to Install SecureDrop
 
 See the [Installation Guide](/docs/install.md).
 
 ## How to Use SecureDrop
 
-See [how to use SecureDrop as a source](/docs/source_user_manual.md) and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
+* [How to use SecureDrop as a source](/docs/source_user_manual.md)
+* [How to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
+
+## How to Contribute to SecureDrop
+
+See the [Development Guide](/docs/develop.md).
 
 ## License
 
