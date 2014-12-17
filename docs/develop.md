@@ -29,7 +29,7 @@ git clone https://github.com/freedomofpress/securedrop
 cd securedrop
 ```
 
-We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing. Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.7.0)*
+NOTE: There is a critical bug ([#802](../issues/802)) with SecureDrop and Vagrant 1.7.x, which means that one of the virtual machines will not successfully provision. We recommend using version 1.6.5, which is only slightly older than the current stable version, can be downloaded here: https://www.vagrantup.com/download-archive/v1.6.5.html and has been tested to be working.
 
 ```sh
 sudo dpkg -i vagrant.deb
@@ -200,7 +200,7 @@ Tested with:
 
 ```
 vagrant --version
-Vagrant 1.7.0
+Vagrant 1.6.5
 ```
 
 ```
