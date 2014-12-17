@@ -1,6 +1,6 @@
 # SecureDrop Threat Model
 
-This document outlines the threat model for SecureDrop 0.3 and is inspired by the [threat model document Adam Langley wrote for Pond](https://pond.imperialviolet.org/threat.html). The threat model is defined in terms of what each possible adversary can achieve. The list is intended to be exhaustive, i.e. if an entity can do something that is not listed here then that should count as a break of SecureDrop.
+This document outlines the threat model for SecureDrop 0.3 and is inspired by the [threat model document Adam Langley wrote for Pond](https://pond.imperialviolet.org/threat.html). The threat model is defined in terms of what each possible adversary can achieve. This document is still a work in progress. If you have questions or comments, please open an issue on GitHub or send an email to securedrop@freedom.press. 
 
 ## Assumptions
 
@@ -196,7 +196,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
     * View, modify, and delete all files owned by this user. This includes sanitized Tor logs, created using the [SafeLogging option](https://www.torproject.org/docs/tor-manual.html.en), for SSH, the Source Interface and the Document Interface.
     * View, modify, and delete the Tor configuration file, root is required to reload the config.
  * An attacker with access to the **ossec** user can:
-    * ???
+    * Add, view, modify, and delete the log files, and in doing so send inaccurate information to the Monitor Server and the admin.
  * An attacker with access to the **www-data** user can:
     * View, modify, and delete all files owned by this user. This includes all files in use by the SecureDrop application, such as text, code, the database containing encrypted submissions and communications. The attacker needs root access to reload configuration files.
     * View, modify, and delete both access and error logs for the Document Interface.
