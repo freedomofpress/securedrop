@@ -75,7 +75,7 @@ It's easy to get SecureDrop to use Google's servers to deliver the alerts, but i
 
 First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com, `smtp_relay_port` is 587 and `smtp_relay_fingerprint` is noted in the example above.
 
-We do not recommend enabling Google's 2-Step Verification if you're using a new Gmail account that is dedicated to sending the alert emails. On an existing account with 2-Step Verification enabled, you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
+For enhanced security we recommend enabling [Google's 2-Step Verification](https://www.google.com/landing/2step/) for any Gmail account that is dedicated to sending the alert emails. With 2-Step Verification enabled, you won't use the normal account password in this configuration — it will not work; instead you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
 
 ### Troubleshooting
 
@@ -109,4 +109,4 @@ Other log files that may contain useful information:
  
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
 
-If you believe that the system is behaving abnormally, you should contact us at securedrop@freedom.press for help.
+If you believe that the system is behaving abnormally, you should contact us at support@freedom.press for help.
