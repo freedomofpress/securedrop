@@ -20,7 +20,7 @@ Host *
    Port 22
    Protocol 2
    Cipher blowfish
-   Ciphers blowfish-cbc,aes256-cbc,aes256-ctr
+   Ciphers aes256-gcm@openssh.com,aes256-ctr,chacha20-poly1305@openssh.com
    MACs hmac-sha2-256,hmac-sha2-512
      SendEnv LANG LC_*
      HashKnownHosts yes
