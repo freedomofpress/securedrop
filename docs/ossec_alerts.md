@@ -1,6 +1,6 @@
 ## Setting up OSSEC alerts
 
-OSSEC is an open source host-based intrusion detection system (IDS) that performs log analysis, file integrity checking, policy monitoring, rootkit detection, real-time alerting and active response. It is installed on the Monitor Server and constitutes that machine's main function.
+OSSEC is an open source host-based intrusion detection system (IDS) that we use to perform log analysis, file integrity checking, policy monitoring, rootkit detection and real-time alerting. It is installed on the Monitor Server and constitutes that machine's main function. OSSEC works in a server-agent scheme, that is, the OSSEC server extends its existing functions to the App Server through an agent installed on that server, covering monitoring for both machines.
 
 In order to receive email alerts from OSSEC, you need to supply several settings to Ansible in the playbook for your environment. If you don't already have a working mail server or don't know what to do, then see the section below about using Gmail as a fallback option. We assume that you're working out of the 'securedrop' directory you cloned the code into, and editing install_files/ansible-base/prod-specific.yml prior to installing SecureDrop.
 
