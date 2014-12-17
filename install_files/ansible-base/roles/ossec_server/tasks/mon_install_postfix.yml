@@ -16,12 +16,6 @@
     mode: 0400
   notify: update sasl_passwd db
 
-- name: ensure smtp relay ssl cert is present
-  copy:
-    src: "{{ ca_cert }}"
-    dest: /etc/postfix/cacert.pem
-    mode: 0400
-
 - name: ensure header_checks regex to strip smtp headers is present
   copy:
     src: header_checks

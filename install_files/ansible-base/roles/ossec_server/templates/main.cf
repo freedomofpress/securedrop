@@ -5,7 +5,6 @@ smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_sasl_security_options = noanonymous
 smtp_use_tls=yes
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-smtp_tls_CAfile = /etc/postfix/cacert.pem
 smtp_tls_security_level = fingerprint
 smtp_tls_fingerprint_digest = sha1
 smtp_tls_fingerprint_cert_match = {{ smtp_relay_fingerprint }}
