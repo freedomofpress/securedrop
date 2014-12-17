@@ -43,6 +43,3 @@ smtp_relay_fingerprint: ""
 sasl_username: ""
 sasl_domain: ""
 sasl_password: ""
-# The ca_cert for the remote smtp relay needs to be in the
-# install_files/ansible-base or install_files/ansible-base/mon/files directory
-ca_cert: ""

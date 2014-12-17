@@ -56,7 +56,6 @@ ossec_postfix_dependencies:
 #sasl_username is defined in the site-specific.yml config
 #sasl_domain is defined in the site-specific.yml config
 #sasl_password is defined in the site-specific.yml config
-#ca_cert is defined in the site-specific.yml config
 
 authd_rules:
   - "-A INPUT -s {{ app_hostname }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
