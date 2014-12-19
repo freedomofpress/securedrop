@@ -35,7 +35,7 @@ changes are applied.
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
-reboot
+sudo reboot
 ```
 
 ## Install dependencies on the offline server
