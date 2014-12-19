@@ -1,4 +1,14 @@
 ---
+  # The ubuntu motd include displaying some system load averages.
+  # this causes a grsec: From 10.0.2.2: denied RWX mmap of <anonymous mapping>
+  # by /usr/bin/landscape-sysinfo[landscape-sysin:3393] uid/euid:0/0
+  # gid/egid:0/0, parent
+  # /usr/share/landscape/landscape-sysinfo.wrapper[50-landscape-sy:3386]
+  # uid/euid:0/0 gid/egid:0/0
+  # Disabling calling that script during login.
+- name: remove motd pam module from ssh logins
+  lineinfile: dest=/etc/pam.d/sshd regexp=pam.motd state=absent backup=yes
+
 - name: install grsec predepends paxctl package
   apt: pkg=paxctl state=present
 
