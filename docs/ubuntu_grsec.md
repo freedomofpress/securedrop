@@ -27,13 +27,15 @@ server.
 ## Update packages on online and offline servers
 
 Run the following set of commands to ensure all packages are up to date
-on the online and offine servers.
+on the online and offine servers. Restart the servers to ensure the
+changes are applied.
 
 
 ```
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
+reboot
 ```
 
 ## Install dependencies on the offline server
@@ -166,6 +168,19 @@ Extract the Linux kernel archive and apply the Grsecurity patch.
 tar -xf linux-3.14.21.tar
 cd linux-3.14.21/
 patch -p1 < ../grsecurity-3.0-3.14.21-201410131959.patch
+```
+
+### Copy Ubuntu's Kernel Configuration
+
+If you installed SecureDrop on an encrypted partition or are having problems 
+getting some of your required hardware to work, you will need to use Ubuntu's
+kernel configuration as a basis for your Grsecurity kernel. Ubuntu's kernel
+configuration can be found in the */boot* directory. Copy it to your kernel
+build directory with the following commands. 
+
+```
+sudo cp /boot/config-`uname -r` .config
+sudo chown `whoami` .config
 ```
 
 ### Configure Grsecurity
