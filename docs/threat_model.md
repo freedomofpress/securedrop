@@ -46,14 +46,14 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The servers correctly execute Ubuntu, SecureDrop and its dependencies.
  * The servers, network firewall, and physical media are not compromised by malware.
 
-### Assumption about the organization hosting SecureDrop
+### Assumptions about the organization hosting SecureDrop
 
  * The organization wants to preserve the anonymity of its sources.
  * The organization acts in the interest of allowing sources to submit documents, regardless of the contents of these documents.
  * The users of the system, and those with physical access to the servers, can be trusted to uphold the previous assumptions unless the entire organization has been compromised.
  * The organization is prepared to push back on any and all requests to compromise the integrity of the system and its users, including requests to deanonymize sources, block document submissions, or hand over encrypted or decrypted submissions.
 
-### Assumption about the world
+### Assumptions about the world
 
  * The security assumptions of RSA (4096-bit GPG and SSH keys) are valid.
  * The security assumptions of scrypt with randomly-generated salts are valid.
