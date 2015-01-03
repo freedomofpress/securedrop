@@ -27,7 +27,7 @@ See the [Installation Guide](/docs/install.md).
 ## How to Use SecureDrop
 
 * [How to use SecureDrop as a source](/docs/source_user_manual.md)
-* [How to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
+* [How to use SecureDrop as a journalist](/docs/journalist_user_manual.md)
 
 ## How to Contribute to SecureDrop
 
