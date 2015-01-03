@@ -37,13 +37,13 @@ The tails documentation for "manually installing" Tails onto a USB device for Ma
 dd if=[tails.iso] of=/dev/diskX
 ```
 
-This command is *very slow* (in our testing, it takes about 18 minutes to copy the .iso to a USB 2.0 drive). You can speed it up by adding the following arguments to `dd`:
+This command is *very slow*. In our testing, it took about 18 minutes to copy the .iso to a USB 2.0 drive. You can speed it up by changing the arguments to `dd` like so:
 
 ```
 dd if=[tails.iso] of=/dev/rdiskX bs=1m
 ```
 
-Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for us. For an explanation, defer to the relevant [Server Fault post](http://superuser.com/questions/421770/dd-performance-on-mac-os-x-vs-linux) ("I believe it has to do with buffers"). If you have GNU coreutils installed (such as through Homebrew), you may need to capitalize the M suffixed to the `bs` value.
+Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minutes for us.
 
 # Configure Tails for use with SecureDrop
 
@@ -70,7 +70,7 @@ git clone https://github.com/freedomofpress/securedrop.git
 
 As mentioned in the installation documentation, we provide a KeePassX password database template to make it easier for admins and journlists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
 
-You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password, or the location of the key file, used to protect the database.
+You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password or the location of the key file used to protect the database.
 
 To use the template:
 
