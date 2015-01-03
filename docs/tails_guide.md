@@ -19,15 +19,15 @@
 
 # Installing Tails on USB sticks
 
-Tails is an operating system that boots off of removable media, either a DVD or a USB stick. For SecureDrop you'll need to install Tails onto USB sticks so that you can enable persistent storage.
+Tails is a live operating system that is run from removable media, such as a DVD or a USB stick. For SecureDrop, you'll need to install Tails onto USB sticks and enable persistent storage.
+
+We recommend creating an initial Tails Live USB or DVD, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. *You will only be able to create persistent volumes on USB sticks that had Tails installed via the Tails Installer*.
 
 The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a Tails USB stick. Here are some links to help you out:
 
-* [Download, verify, install](https://tails.boum.org/download/index.en.html)
-* [Installing onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
+* [Download and verify the Tails .iso](https://tails.boum.org/download/index.en.html)
+* [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
 * [Create & configure the persistent volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html)
-
-We recommend creating an initial Tails Live USB and then using that USB to create additional Tails Live USBs with the *Tails Installer*, which is documented in the above links to the offical Tails documentation.
 
 ## Note for Mac OS X users
 
