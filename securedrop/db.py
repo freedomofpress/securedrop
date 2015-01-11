@@ -197,6 +197,10 @@ class Journalist(Base):
             print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
         return hash
 
+    def _format_token(self, token):
+        """Strips whitespace from authentication tokens, as many clients add these for readability"""
+        return ''.join(token.split())
+
     def set_password(self, password):
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
@@ -246,6 +250,8 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def verify_token(self, token):
+        token = self._format_token(token)
+
         # Only allow each authentication token to be used once. This
         # prevents some MITM attacks.
         if token == self.last_token and LOGIN_HARDENING:
