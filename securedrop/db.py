@@ -198,7 +198,7 @@ class Journalist(Base):
         return hash
 
     def _format_token(self, token):
-        """Strips whitespace from authentication tokens, as many clients add these for readability"""
+        """Strips from authentication tokens the whitespace that many clients add for readability"""
         return ''.join(token.split())
 
     def set_password(self, password):
