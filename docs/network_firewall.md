@@ -136,19 +136,32 @@ interpreting the rules template for pfSense:
 
 1. We recommend creating aliases for the repeated values (IPs and
    FQDNs). This will make your rules easier to read later.
-2. pfSense is a stateful firewall, which means that you don't need the
-   iptables rules that allow incoming traffic that's in response to
-   outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this
-   for you automatically.
-3. You should create the rules on the interface where the traffic
+2. Use a ports alias (Section 6.3.1.3) for the `--multiport` rules.
+3. pfSense is a stateful firewall, which means that you don't need to
+   add rules for the iptables rules that allow incoming traffic in
+   response to outgoing traffic (`--state ESTABLISHED,RELATED`).
+   pfSense does this for you automatically.
+4. You should create the rules on the interface where the traffic
    originates from. The easy way to do this is look at the sources
    (`-s`) of each iptables rules, and create that rule on each
    corresponding interface. In case this is not clear:
 
 	* `-s APP_IP` => LAN
 	* `-s MONITOR_IP` => OPT1
-4. Make sure you delete the default "allow all" rule on the LAN
+
+5. Make sure you delete the default "allow all" rule on the LAN
+   interface. Leave the "Anti-Lockout" rule enabled.
+6. Any traffic that is not explicitly passed is logged and dropped by
+   default in pfSense, so you don't need to add explicit rules
+   (`LOGNDROP`) for that.
+7. Since some of the rules are almost identical except for whether
+   they allow traffic from the App Server or the Monitor Server (`-s
+   MONITOR_IP,APP_IP`), you can use the "add a new rule based on this
+   one" button to save time creating a copy of the rule on the other
    interface.
+8. If you are having trouble with connections, the firewall logs can
+   be very helpful. You can find them in the WebGUI in Status > System
+   Logs > Firewall.
 
 We recognize that this process is cumbersome and may be difficult for
 people inexperienced in managing networks to understand. We are
