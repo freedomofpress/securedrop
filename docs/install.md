@@ -217,15 +217,15 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the Admin USB
 
-The Admin USB should be a Tails Live USB install with persistence enabled. See the [Tails Guide](tails_guide.md) for instructions.
+Create the Admin USB, a Tails Live USB with persistence. See the [Tails Guide](tails_guide.md) for instructions.
 
-## Set up the firewall
+## Set up the Network Firewall
 
 See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. When you are done, continue with the next section.
 
 ## Set up the Servers
 
-Start by plugging the *Application Server* and the *Monitor Server* into the firewall.
+Start by plugging the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
 
 Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you have the following information before continuing:
 
