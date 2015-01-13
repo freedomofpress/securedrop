@@ -233,6 +233,15 @@ Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on ins
 * The IP address of the Monitor Server
 * The non-root user's name and password on each server.
 
+Before continuing, make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
+
+```sh
+ssh <username>@<App IP address> hostname
+ssh <username>@<Montior IP address> hostname
+```
+
+Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
+
 ## Install SecureDrop
 
 Connect the Admin Workstation's Ethernet port to the shared firewall. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.'
@@ -293,10 +302,6 @@ Verify that you are able to log in to both servers without being prompted for a 
 
     $ ssh <username>@<App IP address>
     $ ssh <username>@<Mon IP address>
-
-Once you've verified that you are able to log in to each server, you can log out of each by typing this:
-
-    $ logout # or Ctrl-D
 
 ### Gather the required information
 
