@@ -68,7 +68,7 @@ The *Document Interface* is the website that journalists will access when downlo
 
 ### Journalist Workstation
 
-The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *Transfer Device*
+The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *Transfer Device*.
 
 ### Admin Workstation
 
@@ -93,7 +93,7 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
 
 If you use a USB stick for the transfer device, we recommend using a small one (4GB or less). You will want to securely wipe the entire device at times, and this process takes longer for larger devices.
 
-Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as your private encryption key or the contents of decrypted submissions.
+Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as the private key used to decrypt submissions or the content of decrypted submissions.
 
 ## Before you begin
 
@@ -108,7 +108,7 @@ You will need the following inventory of hardware items for the installation. Fo
 ### USBs/DVDs/CDs
 
  * CD, DVD, or USB to use when [installing Ubuntu on the Application Server and the Monitor Server](/docs/ubuntu_config.md).
- * CD, DVD, or USB to use when [setting up Tails Live with persistence](/docs/tails_config.md).
+ * CD, DVD, or USB to use when [setting up Tails Live with persistence](/docs/tails_guide.md).
  * Brand new USB, marked *transfer*, to use as the *Transfer Device*.
 
 Additionally, you will need a minimum of 4 USB sticks which will become Tails Live USB's with persistence. You should mark two *offline*, one *online*, and one *admin*. This is enough to set up a system with one admin and one journalist (note that the same person can perform both of these roles). To add more administrators or journalists, you will need more USB sticks.
@@ -121,23 +121,16 @@ The second *offline* Tails Live USB with persistence will be used as the encrypt
 
 ### Passphrases
 
-A SecureDrop installation will require at least two roles, an admin and a journalist, and a number of secure and unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below can be used as a checklist to ensure that you, during the installation process, create the accounts, passphrases and two-factor secrets that are required by SecureDrop.
+A SecureDrop installation will require at least two roles, an admin and a journalist, and each role will require a number of strong, unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below is meant to be an overview of the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
-We have created a template that both the admin and the journalist can use together with KeePassX on Tails to ensure they not only generate strong passhrases, but also store them safely. You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password, or the location of the key file, used to protect the database. To use the template:
-
- * Open the KeePassX program
- * Select `File`, `Import from...`, and `KeePassX XML (*.xml)` 
- * Navigate to the location of `securedrop-keepassx.xml`, select it, and click `Open`
- * Set a strong master password or choose a key file to protect the password database
- * Click `File` and `Save Database As`
- * Save the database in the Tails persistent folder
+We have created a KeePassX password database template that both the admin and the journalist can use on Tails to ensure they not only generate strong passphrases, but also store them safely. By using KeePassX to generate strong, unique passphrases, you will be able to achieve excellent security while also maintaining usability, since you will only have to personally memorize a small number of strong passphrases. More information about using the password database template on Tails is included in the [Tails Setup Guide](/tails_setup.md#passphrase-database).
 
 #### Admin
 
 The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
 
  * A password for the persistent volume on the Admin Live USB.
- * A master password for the KeePass password manager, which unlocks passphrases to:
+ * A master password for the KeePassX password manager, which unlocks passphrases to:
      * The App Server and the Monitor Server (required to be the same).
      * The network firewall.
      * The SSH private key and, if set, the key's passphrase.
@@ -170,14 +163,16 @@ The journalist will also need to have a two-factor authenticator, such as an And
 The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following set of passphrases:
 
  * A master password for the persistent volume on the Tails device.
- * A master password for the KeePass password manager, which unlocks the passphrase to:
-     * The GPG key used by SecureDrop to encrypt/decrypt submitted documents.
 
-The backup that is created during the installation of SecureDrop is also encrypted with the application's GPG key. The backup is stored on the persistent volume of the Tails USB that is used with the Secure Viewing Station. 
+The backup that is created during the installation of SecureDrop is also encrypted with the application's GPG key. The backup is stored on the persistent volume of the Admin Live USB.
 	
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
+The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
+
+We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
+
+To set up the Secure Viewing Station, start by creating a Tails Live USB with persistence on the *offline* USB stick. Follow the instructions in the [Tails Guide](/tails_guide.md). Stop after starting Tails and enabling the persistent volume - *do not* continue to connecting the machine to the Internet.
 
 ### Create a GPG key for the SecureDrop application
 
@@ -222,11 +217,7 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the Admin USB
 
-The Admin USB should be a Tails Live USB install with persistence enabled. 
-
-Instructions on how to download, verify and install Tails onto a USB can be found on the [Tails website](https://tails.boum.org/download/index.en.html). If you already have a Tails Live USB and want to create a second one, follow the instructions on the Tails website to do so using the [*Tails Installer*](https://tails.boum.org/doc/first_steps/installation/index.en.html).
-
-Next, create an encrypted persistent volume on the Admin USB. Doing so will allow you to securely save information in the free space that is left on the device. This information will remain available to you even if you reboot Tails. Instructions on [how to create and use this volume](https://tails.boum.org/doc/first_steps/persistence/index.en.html) can be found on the Tails website. You will be asked to select persistence features, such as personal data. We recommend that you enable all features.
+The Admin USB should be a Tails Live USB install with persistence enabled. See the [Tails Guide](tails_guide.md) for instructions.
 
 ## Set up the firewall
 
@@ -236,7 +227,11 @@ See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. Wh
 
 Start by plugging the *Application Server* and the *Monitor Server* into the firewall.
 
-Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md).
+Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you have the following information before continuing:
+
+* The IP address of the App Server
+* The IP address of the Monitor Server
+* The non-root user's name and password on each server.
 
 ## Install SecureDrop
 

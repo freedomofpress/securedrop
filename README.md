@@ -8,21 +8,17 @@ SecureDrop is an open-source whistleblower submission system that media organiza
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of three dedicated computers:
 
-* `Secure Viewing Station`: An air-gapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents. (If this laptop does not have a DVD drive, buy an external DVD drive you can use with it.)
-* `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the first, public-facing Tor hidden service to send messages and documents to the journalist. The journalist connects to the second authenticated Tor hidden service to download encrypted documents and respond to sources.
-* `Monitor server`: Ubuntu server that monitors the `Application Server` and sends email alerts.
+* `Secure Viewing Station`: An air-gapped laptop running the [Tails operating system](https://tails.boum.org/) from a USB stick that journalists use to decrypt and view submitted documents.
+* `Application Server`: Ubuntu server running two segmented Tor hidden services. The source connects to the *Source Interface*, a public-facing Tor hidden service, to send messages and documents to the journalist. The journalist connects to the *Document Interface*, an [authenticated Tor hidden service](https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851), to download encrypted documents and respond to sources.
+* `Monitor server`: Ubuntu server that monitors the `Application Server` with [OSSEC](http://www.ossec.net/) and sends email alerts.
 
 In addition to these dedicated computers, the journalist will also use his or her normal workstation computer:
 
-* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that he or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources.
+* `Journalist Workstation`: The every-day laptop that the journalist uses for his or her work. The journalist will use this computer to connect to the `Application Server` to download encrypted documents that he or she will transfer to the `Secure Viewing Station`. The `Journalist Workstation` is also used to respond to sources via the *Document Interface*.
 
 Depending on the news organizations's threat model, it is recommended that journalists always use the [Tails operating system](https://tails.boum.org/) on their `Journalist Workstation` when connecting to the `Application Server`. Alternatively, this can also be its own dedicated computer.
 
 These computers should all physically be in your organization's office.
-
-## How to Contribute
-
-See the [Development Guide](/docs/develop.md).
 
 ## How to Install SecureDrop
 
@@ -30,7 +26,12 @@ See the [Installation Guide](/docs/install.md).
 
 ## How to Use SecureDrop
 
-See [how to use SecureDrop as a source](/docs/source_user_manual.md) and [how to use SecureDrop as a journalist](/docs/journalist_user_manual.md).
+* [How to use SecureDrop as a source](/docs/source_user_manual.md)
+* [How to use SecureDrop as a journalist](/docs/journalist_user_manual.md)
+
+## How to Contribute to SecureDrop
+
+See the [Development Guide](/docs/develop.md).
 
 ## License
 
