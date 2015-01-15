@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <title>{{_("SecureDrop | Protecting Journalists and Sources")}}</title>
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/static/css/styles.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
@@ -33,10 +33,10 @@
 
       {% block footer %}
       <footer>
-        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+        {{_("Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop %(version)s.", version=version)}}
       </footer>
+      {% include 'locale_selection.html' %}
       {% endblock %}
     </div>
   </body>
 </html>
-

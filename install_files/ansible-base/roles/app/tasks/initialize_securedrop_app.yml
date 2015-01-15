@@ -114,3 +114,6 @@
     mode: 400
     backup: yes
   when: securedrop_header_image != "None"
+
+- name: compile language files
+  shell: "{{ securedrop_repo }}/loc_tools.py compile"

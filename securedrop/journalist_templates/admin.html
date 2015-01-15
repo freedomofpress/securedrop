@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
-<h2>Admin Interface</h2>
+<h2>{{_("Admin Interface")}}</h2>
 
 <form action="{{ url_for('admin_add_user') }}">
-  <button type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i> Add user</button>
+  <button type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i> {{_("Add user")}}</button>
 </form>
 
 <hr class="no-line" />
@@ -13,11 +13,11 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <table id="users">
     <tr>
-      <th>Username</th>
-      <th>Edit</th>
-      <th>Delete</th>
-      <th>Created</th>
-      <th>Last login</th>
+      <th>{{_("Username")}}</th>
+      <th>{{_("Edit")}}</th>
+      <th>{{_("Delete")}}</th>
+      <th>{{_("Created")}}</th>
+      <th>{{_("Last login")}}</th>
     </tr>
     {% for user in users %}
       <tr class="user">
@@ -28,14 +28,14 @@
         {% if user.last_access %}
           <td><time class="date" title="{{ user.last_access }}">{{ user.last_access|datetimeformat(relative=True) }}</time></td>
         {% else %}
-          <td><time class="date">Never</time></td>
+          <td><time class="date">{{_("Never")}}</time></td>
         {% endif %}
       </tr>
     {% endfor %}
   </table>
 </form>
 {% else %}
-<p>No users to display</p>
+<p>{{_("No users to display")}}</p>
 {% endif %}
 
 {% endblock %}

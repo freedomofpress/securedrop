@@ -18,3 +18,5 @@ SQLAlchemy==0.9.7
 Werkzeug==0.9.6
 wsgiref==0.1.2
 WTForms==2.0.1
+Flask-Babel==0.9
+python-gettext==2.1
