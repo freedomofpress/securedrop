@@ -30,3 +30,21 @@
   command: srm /tmp/{{ backup_filename.stdout }}.gpg
   async: 300
   poll: 10
+
+- name: if a restore file is declared copy migrate script to the app server tmp dir
+  copy: src=0.3_restore.py dest=/tmp/ owner=root mode=770
+  when: backup_zip is defined
+
+- name: if a resotre file is defined copy it to the app server tmp dir
+  copy: src={{ backup_zip }} dest=/tmp/{{ backup_zip }}
+  when: backup_zip is defined
+
+- name: if a restore file is defined run the restore.py script
+  shell: /tmp/0.3_restore.py /tmp/{{ backup_zip }}
+  when: backup_zip is defined
+
+- name: if a restore file is defined secure delete it
+  command: srm /tmp/{{ backup_zip }}
+  async: 300
+  poll: 10
+  when: backup_zip is defined
