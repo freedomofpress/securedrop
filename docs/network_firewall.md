@@ -16,72 +16,83 @@ Network Firewall Setup Guide
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Unfortunately, due to the wide variety of firewalls that may be used, we
-do not provide specific instructions to cover every type or variation in
-software or hardware.
+Unfortunately, due to the wide variety of firewalls that may be used, we do not provide specific instructions to cover every type or variation in software or hardware.
 
-This guide will focus on pfSense, and assumes your firewall has at
-least three interfaces: WAN, LAN, and OPT1. These are the default
-interfaces on the recommended Netgate firewall, and it should be easy
-to configure any pfSense firewall with 3 or more NICs this way.
+This guide will focus on pfSense, and assumes your firewall has at least three interfaces: WAN, LAN, and OPT1. These are the default interfaces on the recommended Netgate firewall, and it should be easy to configure any pfSense firewall with 3 or more NICs this way.
 
-To avoid duplication, this guide refers to sections of the
-[pfSense Guide](http://data.sfb.bg.ac.rs/sftp/bojan.radic/Knjige/Guide_pfsense.pdf),
-so you will want to have that handy.
+To avoid duplication, this guide refers to sections of the [pfSense Guide](http://data.sfb.bg.ac.rs/sftp/bojan.radic/Knjige/Guide_pfsense.pdf), so you will want to have that handy.
+
+Before you begin
+----------------
+
+First, consider how the firewall will be connected to the Internet. You need to be able to provision two unique subnets for SecureDrop: the app subnet and the monitor subnet. There are a number of possible ways to configure this, and the best way will depend on the network that you are connecting to.
+
+Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. This is a very common subnet choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
+
+The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
+
+We assume that you have examined your network configuration and have selected two appropriate subnets. We will refer to your chosen subnets as "App Subnet" and "Monitor Subnet" throughout the rest of the documentation. For the examples in the documentation, we have chosen:
+
+App Subnet: 10.20.1.0/24
+App Gateway: 10.20.1.1
+App Server: 10.20.1.2
+Admin Workstation: (automatically assigned via DHCP)
+
+Monitor Subnet: 10.20.2.0/24
+Monitor Gateway: 10.20.2.1
+Monitor Server: 10.20.2.2
 
 Initial Setup
 -------------
 
 Unpack the firewall, connect power, and power on.
 
-Assign interfaces
------------------
+### Assign interfaces
 
-Section 3.2.3, "Assigning Interfaces", of the pfSense Guide.
+Section 3.2.3, "Assigning Interfaces", of the pfSense Guide. Some firewalls, like the Netgate recommended in the Hardware Guide, have this set up already, in which case you can skip this step.
 
-Some firewalls, like the Netgate recommended in the Hardware Guide,
-have this set up already, in which case you can skip this step.
+### Initial configuration
 
-Configure Firewall
-------------------
+We will use the pfSense WebGUI to do the initial configuration of the network firewall.
 
-### General configuration
+#### Connect to the pfSense WebGUI
 
-1.  Connect cable from modem to the firewall's WAN port. You may need
-    to power cycle the modem to get your ISP to assign an IP address
-    to the WAN interface's MAC address via DHCP, particularly if that
-    modem was previously attached to a different router.
-2.  Connect the switch to the LAN port.
-3.  Connect the Admin Workstation to the switch to administer firewall.
-4.  Do the initial configuration of pfSense through the WebGUI. Follow
-    the instructions in the pfSense Guide, starting with section 4.1,
-    "Connecting to the WebGUI".
-	1. If you're using Tails, you can use the Tor Browser to connect
-       to the firewall on `192.168.1.1`. You should be able to connect
-       even if the WAN isn't up yet, although you may seem warnings
-       about Tor not being ready (which you can safely ignore).
-	2. If using the Tor Browser doesn't work for some reason, you
-       should definitely be able to connect with the Unsafe Browser in
-       Applications > Internet > Unsafe Web Browser. Once you have the
-       firewall configured, you should stop using this browser and
-       only use the Tor Browser once your network is working and Tor
-       is able to connect.
-	3. The firewall uses a self-signed certificate, so you will see a
-       "This Connection Is Untrusted" warning when you connect. This
-       is expected - see Section 4.5.6 of the pfSense Guide. You can
-       safely continue by clicking "I Understand the Risks", "Add
-       Exception...", and "Confirm Security Exception."
-5.  Test connectivity to make sure you are able to connect to the
-    Internet through the WAN. The easiest way to do this is probably
-    ping (Diagnostics > Ping in the WebGUI).
+1. Boot the Admin Workstation into Tails from the Admin Live USB.
+2. Connect the Admin Workstation to the switch on the LAN. After a few seconds, you should see a pop up notification saying "Connection established" in the top right corner of the screen.
+3. Launch the Tor Browser, *Applications → Internet → Tor Browser*.
+    1. If there is a conflict between your WAN and the default LAN, you will not be able to connect to Tor, and may see a dialog that says "Tor is not ready. Start Tor Browser anyway?". Click "Start Tor Browser" to continue.
+5. Navigate to the pfSense GUI in the Tor Browser: https://192.168.1.1
+6. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
+7. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
 
-#### Note about potential issues with IPv6
+#### Setup Wizard
 
-In my testing, I encountered an unusual issue. After finishing the WebGUI configuration wizard in Tails, and everything reloading, I was suddenly unable to connect to the Internet. I had been able to connect before running the configuration wizard. Inspecting the WAN information in the Interfaces pane on the WebGUI index page, I noticed that the WAN, which had previously had an IPv4 address assigned, now only had an IPv6 address assigned. I clicked "WAN" to go to the interface configuration page, where I changed *IPv6 Connection Type* from *DHCP* to *None* and clicked the *Save* button. The WAN was re-assigned an IPv4 addressed and my connectivity was quickly restored.
+If you're setting up a brand new (or recently factory reset) router, pfSense will start you on the Setup Wizard. Click next, then next again. Don't sign up for a pfSense Gold subscription.
 
-At first I thought the problem was due to Tails, since it proxies everything over Tor and Tor was not compatible with IPv6 until relatively recently. However, it appears to be fully compatible now so that should not be an issue. Interestingly, I was also unable to succcessfully ping an IP with "Diagnostics > Ping" in the WebGUI, which indicates that the *router* was unable to connect, independent of the OS or network configuration of my connected host. I believe this suggests shenanigans from my ISP, but I am not sure. This note is included in the hope that it may help you if you encounter similar connectivity issues.
+On the "General Information" page, we recommend leaving your hostname as the default (pfSense). There is no relevant domain for SecureDrop, so we recommend setting this to "securedrop.local" or something similar. Use whatever DNS servers you wish. If you don't know what DNS servers to use, we recommend using Google's DNS servers: `8.8.8.8` and `8.8.4.4`. Click Next.
 
-### SecureDrop-specific configuration
+Leave the defaults for "Time Server Information". Click Next.
+
+On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
+
+For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface. Click Next.
+
+Set a strong admin password. Click Next.
+
+Click Reload.
+
+If you changed the LAN Interface settings, you will no longer be able to connect after reloading the firewall and the next request will probably time out. This is not a problem - the firewall has reloaded and is working correctly. To connect to the new LAN interface, unplug and reconnect your network cable to have a new network address assigned to you via DHCP. Note that if you used a subnet with fewer addresses than `/24`, the default DHCP configuration in pfSense may not work. In this case, you should assign the Admin Workstation a static IP address that is known to be in the subnet to continue.
+
+Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the Tor Browser, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
+
+#### Connect Interfaces and Test Connectivity
+
+Now that the initial configuration is completed, you can connect the WAN port without potentially conflicting with the default LAN settings (as explained earlier). Connect the WAN port to the external network. You can watch the WAN entry in the Interfaces table on the pfSense WebGUI homepage to see as it changes from down (red arrow pointing down) to up (green arrow pointing up). The WAN's IP address will be shown once it comes up.
+
+Finally, test connectivity to make sure you are able to connect to the Internet through the WAN. The easiest way to do this is to use ping (Diagnostics → Ping in the WebGUI).
+
+SecureDrop-specific Configuration
+---------------------------------
 
 SecureDrop uses the firewall to achieve two primary goals:
 
@@ -95,77 +106,42 @@ In order to use the firewall to isolate the app and monitor servers from
 each other, we need to connect them to separate interfaces, and then set
 up firewall rules that allow them to communicate.
 
-#### Choose IPs
+### Set up OPT1
 
-First, choose static IP addresses for the app and monitor servers. The
-rest of this guide will assume the following choice of IP addresses:
+We set up the LAN interface during the initial configuration. We now need to set up the OPT1 interface. Start by connecting the Monitor Server to the OPT1 port. Then use the WebGUI to configure the OPT1 interface. Go to `Interfaces → OPT1`, and check the box to "Enable Interface". Use these settings:
 
-* App Server: `192.168.1.2`
-* Monitor Server: `192.168.2.2`
-
-This choice of IPs implies:
-
-1.  The App server will be connected to the LAN, since its IP is in
-    the default LAN subnet of `192.168.1.1/24`.
-2.  The Monitor server will be connected to OPT1, and we will need to
-    configure OPT1 accordingly.
-
-#### Set up OPT1
-
-Go to `Interfaces > OPT1`, and check the box to "Enable Interface". Use
-these settings:
-
--   IPv4 Configuration Type: Static IP
--   IPv4 Address: `192.168.2.1/24`
+-   IPv4 Configuration Type: Static IPv4
+-   IPv4 Address: Monitor Gateway
 
 Leave everything else as the default. Save and Apply Changes.
 
-#### Set up firewall rules
+### Set up the network firewall rules
 
-Since there are a variety of firewalls with different configuration
-interfaces and underlying sets of software, we cannot provide a set of
-network firewall rules to match every use case. Instead, we provide a
-firewall rules template in `install_files/network_firewall/rules`.
-This template is written in the iptables format, which you will need
-to manually translate for your firewall and preferred configuration
-method.
+Since there are a variety of firewalls with different configuration interfaces and underlying sets of software, we cannot provide a set of network firewall rules to match every use case. Instead, we provide a firewall rules template in `install_files/network_firewall/rules`. This template is written in the iptables format, which you will need to manually translate for your firewall and preferred configuration method.
 
-For pfSense, see Section 6 of the pfSense Guide for information on
-setting up firewall rules through the WebGUI. Here are some tips on
-interpreting the rules template for pfSense:
+For pfSense, see Section 6 of the pfSense Guide for information on setting up firewall rules through the WebGUI. Here are some tips on interpreting the rules template for pfSense:
 
-1. We recommend creating aliases for the repeated values (IPs and
-   FQDNs). This will make your rules easier to read later.
-2. Use a ports alias (Section 6.3.1.3) for the `--multiport` rules.
-3. pfSense is a stateful firewall, which means that you don't need to
-   add rules for the iptables rules that allow incoming traffic in
-   response to outgoing traffic (`--state ESTABLISHED,RELATED`).
-   pfSense does this for you automatically.
-4. You should create the rules on the interface where the traffic
-   originates from. The easy way to do this is look at the sources
-   (`-s`) of each iptables rules, and create that rule on each
-   corresponding interface. In case this is not clear:
+1. Create aliases for the repeated values (IPs and ports).
+2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
+3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface:
 
-	* `-s APP_IP` => LAN
-	* `-s MONITOR_IP` => OPT1
+	* `-s APP_IP` → `LAN`
+	* `-s MONITOR_IP` → `OPT1`
 
-5. Make sure you delete the default "allow all" rule on the LAN
-   interface. Leave the "Anti-Lockout" rule enabled.
-6. Any traffic that is not explicitly passed is logged and dropped by
-   default in pfSense, so you don't need to add explicit rules
-   (`LOGNDROP`) for that.
-7. Since some of the rules are almost identical except for whether
-   they allow traffic from the App Server or the Monitor Server (`-s
-   MONITOR_IP,APP_IP`), you can use the "add a new rule based on this
-   one" button to save time creating a copy of the rule on the other
-   interface.
-8. If you are having trouble with connections, the firewall logs can
-   be very helpful. You can find them in the WebGUI in Status > System
-   Logs > Firewall.
+4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
+5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
+6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
+7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for
-people inexperienced in managing networks to understand. We are
-working on automating much of this for the next SecureDrop release.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.
 
-Once you've set up the firewall, continue with the installation. Next
-step: install Ubuntu on the servers.
+#### Example Screenshots
+
+Here are some example screenshots of a working pfSense firewall configuration:
+
+![Firewall IP Aliases](images/firewall/ip_aliases.png)
+![Firewall Port Aliases](images/firewall/port_aliases.png)
+![Firewall LAN Rules](images/firewall/lan_rules.png)
+![Firewall OPT1 Rules](images/firewall/opt1_rules.png)
+
+Once you've set up the firewall, continue with the instructions in the [Install Guide](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#set-up-the-servers).

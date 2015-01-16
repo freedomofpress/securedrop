@@ -1,18 +1,15 @@
-# Because orgs can run any network firewall they want the firewall rules are in iptables format
-# If your firewall only lookups FQDN once then you will not be able to restrict the OSSEC alerts smtp OUTPUT rules destinaton
-# or INPUT rules source addresses.
-# You will need the following ip addresses: external dns ip, monitor server ip and app server ip.
-# You will need the following FQDNs: smtp relay
- 
 *filter
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Tor and apt rules
--A OUTPUT -s MONITOR_IP,APP_IP -p tcp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor and apt"
--A INPUT  -d MONITOR_IP,APP_IP -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor and apt"
+# Tor needs to be able to connect to any port over TCP, since relays may advertise any port as their ORPort.
+# It is beneficial for security to allow our Tor client to connect to any of these ports, see https://www.torproject.org/docs/faq.html.en#OutboundPorts
+-A OUTPUT -s MONITOR_IP,APP_IP -p tcp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor"
+-A INPUT  -d MONITOR_IP,APP_IP -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor"
+
+# Additionally, you will need to allow the Admin Workstation to make outgoing TCP connections on any port (since it runs Tails, and does everything over Tor). You can either use a static IP for the admin workstation and define additional rules for it (similar to the above rules), or loosen the above rules to apply to any IP on the LAN subnet and not just the APP_IP.
 
 # DNS rules
 -A OUTPUT -s MONITOR_IP,APP_IP -d EXTERNAL_DNS_SERVER_IP -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
