@@ -175,7 +175,7 @@ def async_genkey(sid, codename):
     # flagged source logs in and has a key generated for them. #789
     try:
         source = Source.query.filter(Source.filesystem_id == sid).one()
-        source.last_updated = datetime.utcnow()
+        source.last_updated = datetime.now.date()
         db_session.commit()
     except Exception as e:
         app.logger.error("async_genkey for source (sid={}): {}".format(sid, e))
@@ -262,7 +262,7 @@ def submit():
         if entropy_avail >= 2400:
             async_genkey(g.sid, g.codename)
 
-    g.source.last_updated = datetime.utcnow()
+    g.source.last_updated = datetime.now().date()
     db_session.commit()
     normalize_timestamps(g.sid)
 
