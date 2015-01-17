@@ -217,12 +217,11 @@ def normalize_timestamps(sid):
     """
     sub_paths = [ store.path(sid, submission.filename)
                   for submission in g.source.submissions ]
-    if len(sub_paths) > 1:
-        args = ["touch"]
-        args.extend(sub_paths[:-1])
-        rc = subprocess.call(args)
-        if rc != 0:
-            app.logger.warning("Couldn't normalize submission timestamps (touch exited with %d)" % rc)
+    args = ["touch", "-t", datetime.now().strftime("%Y%m%d") + "0000"]
+    args.extend(sub_paths)
+    rc = subprocess.call(args)
+    if rc != 0:
+        app.logger.warning("Couldn't normalize submission timestamps (touch exited with %d)" % rc)
 
 
 @app.route('/submit', methods=('POST',))
