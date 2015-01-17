@@ -276,7 +276,7 @@ You should see 'Good signature from "Freedom of the Press Foundation Master Sign
 
 ### Set up SSH keys for the Admin
 
-Now that you've verified the code that's needed for installation, you need to create an SSH key on the admin workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
+Now that you've verified the code that's needed for installation, you need to create an SSH key on the Admin Workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
 
 First, generate the new SSH keypair:
 
@@ -309,7 +309,7 @@ Make sure you have the following information and files before continuing:
 * The email address that will receive alerts from OSSEC
 * The GPG public key and fingerprint for the email address that will receive the alerts
 * An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
-    * This will replace the SecureDrop logo on the source interface and the document interface.
+    * This will replace the SecureDrop logo on the Source Interface and the Document Interface.
     * Recommended size: `500px x 450px`
     * Recommended format: PNG
 * The first name a journalist who will be using SecureDrop (you can add more later)
