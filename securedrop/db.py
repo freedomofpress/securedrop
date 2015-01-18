@@ -197,10 +197,6 @@ class Journalist(Base):
             print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
         return hash
 
-    def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
-        return ''.join(token.split())
-
     def set_password(self, password):
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
@@ -248,6 +244,10 @@ class Journalist(Base):
         sec = self.otp_secret
         chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
         return ' '.join(chunks).lower()
+
+    def _format_token(self, token):
+        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        return ''.join(token.split())
 
     def verify_token(self, token):
         token = self._format_token(token)
