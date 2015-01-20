@@ -33,14 +33,14 @@ The app subnet will need at least three IP addresses: one for the gateway, one f
 
 We assume that you have examined your network configuration and have selected two appropriate subnets. We will refer to your chosen subnets as "App Subnet" and "Monitor Subnet" throughout the rest of the documentation. For the examples in the documentation, we have chosen:
 
-App Subnet: 10.20.1.0/24
-App Gateway: 10.20.1.1
-App Server: 10.20.1.2
-Admin Workstation: (automatically assigned via DHCP)
+* App Subnet: 10.20.1.0/24
+* App Gateway: 10.20.1.1
+* App Server: 10.20.1.2
+* Admin Workstation: (automatically assigned via DHCP)
 
-Monitor Subnet: 10.20.2.0/24
-Monitor Gateway: 10.20.2.1
-Monitor Server: 10.20.2.2
+* Monitor Subnet: 10.20.2.0/24
+* Monitor Gateway: 10.20.2.1
+* Monitor Server: 10.20.2.2
 
 Initial Setup
 -------------
