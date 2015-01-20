@@ -2,7 +2,7 @@
 """
 
 This script and decrypted backup zip should be copied to the App server 
-and ran by the anisble plabook. When run (as root), it restores the 0.3
+and run by the anisble plabook. When run (as root), it restores the 0.3
 backup file.
 
 python 0.3_restore.py sd-backup-TIMESTAMP.zip
@@ -36,10 +36,10 @@ def replace_prefix(path, p1, p2):
     return os.path.join(p2, path)
 
 
-def extract_to_path(archive, member, path):
+def extract_to_path(archive, member, path, user):
     """
     Extract from the zip archive `archive` the member `member` and write it to
-    `path`, preserving file metadata.
+    `path`, preserving file metadata and chown'ing the file using `user`
     """
     # Create all upper directories if necessary
     upperdirs = os.path.dirname(path)
@@ -65,7 +65,7 @@ def restore_config_file(zf):
     # Restore the original config file
     for zi in zf.infolist():
         if "var/www/securedrop/config.py" in zi.filename:
-            extract_to_path(zf, "var/www/securedrop/config.py", "/var/www/securedrop/config.py")
+            extract_to_path(zf, "var/www/securedrop/config.py", "/var/www/securedrop/config.py", "www-data")
 
     print "chowning config"
 
@@ -78,12 +78,12 @@ def restore_securedrop_root(zf):
     for zi in zf.infolist():
         if "var/lib/securedrop/store" in zi.filename:
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/securedrop/store", "/var/lib/securedrop/store"))
+                "var/lib/securedrop/store", "/var/lib/securedrop/store"), "www-data")
         elif "var/lib/securedrop/keys" in zi.filename:
             # TODO: is it a bad idea to migrate the random_seed from the
             # previous installation?
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/securedrop/keys", "/var/lib/securedrop/keys"))
+                "var/lib/securedrop/keys", "/var/lib/securedrop/keys"), "www-data")
 
     subprocess.call(['chown', '-R', 'www-data:www-data', "/var/lib/securedrop"])
 
@@ -91,7 +91,7 @@ def restore_securedrop_root(zf):
 def restore_database(zf):
     print "* Migrating database..."
 
-    extract_to_path(zf, "var/lib/securedrop/db.sqlite", "db.old.sqlite")
+    extract_to_path(zf, "var/lib/securedrop/db.sqlite", "/var/lib/securedrop/db.sqlite", "www-data")
 
     # chown the databse file to the securedrop user
     subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
@@ -100,7 +100,7 @@ def restore_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
         "var/www/securedrop/static/i/logo.png",
-        "/var/www/securedrop/static/i/logo.png")
+        "/var/www/securedrop/static/i/logo.png", "www-data")
 
     subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/logo.png"])
 
@@ -126,10 +126,10 @@ def restore_tor_files(zf):
     for zi in zf.infolist():
         if "var/lib/tor/services/source" in zi.filename:
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/source", "/var/lib/tor/services/source"))
+                "var/lib/tor/services/source", "/var/lib/tor/services/source"), "www-data")
         elif "var/lib/tor/services/document" in zi.filename:
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/document", "/var/lib/tor/services/document"))
+                "var/lib/tor/services/document", "/var/lib/tor/services/document"), "www-data")
 
     # chmod the files so they're owned by debian-tor:debian-tor
     subprocess.call(['chown', '-R', 'debian-tor:debian-tor', ths_root_dir])

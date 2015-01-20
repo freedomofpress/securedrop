@@ -35,7 +35,7 @@
   copy: src=0.3_restore.py dest=/tmp/ owner=root mode=770
   when: backup_zip is defined
 
-- name: if a resotre file is defined copy it to the app server tmp dir
+- name: if a restore file is defined copy it to the app server tmp dir
   copy: src={{ backup_zip }} dest=/tmp/{{ backup_zip }}
   when: backup_zip is defined
 
