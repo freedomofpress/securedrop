@@ -61,20 +61,19 @@ If network autoconfiguration completes before you can do this, the next window w
 
 For a production install with a pfsense network firewall in place, the *Application Server* and the *Monitor Server* are on separate networks. You may choose your own network settings at this point, but make sure the settings you choose are unique on the firewall's network and remember to propagate your choices through the rest of the installation process.
 
-We recommend you use the 192.168.1.0/24 network segment for the *Application Server* and 192.168.2.0/24 for the *Monitor Server*. The values you should enter when installing Ubuntu are listed below.
-
+Below is the configuration you should enter, assuming you used the network settings from the network firewall guide. If you did not, adjust these settings accordingly.
 
 * **Application Server**:
-    * Server IP address: 192.168.1.51
-    * Netmask default is fine (255.255.255.0)
-    * Gateway default is fine (192.168.1.1)
+    * Server IP address: 10.20.1.2
+    * Netmask (default is fine): 255.255.255.0
+    * Gateway: 10.20.1.1
     * For DNS, use Google's name servers: 8.8.8.8
     * Hostname: app
     * Domain name should be left blank
 * **Monitor Server**:
-    * Server IP address: 192.168.2.52
-    * Netmask default is fine (255.255.255.0)
-    * Gateway default is fine (192.168.2.1)
+    * Server IP address: 10.20.2.2
+    * Netmask (default is fine): 255.255.255.0
+    * Gateway: 10.20.2.1
     * For DNS, use Google's name servers: 8.8.8.8
     * Hostname: mon
     * Domain name should be left blank
