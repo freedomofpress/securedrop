@@ -296,10 +296,12 @@ Once the key has finished generating, you need to copy the public key to both se
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to log in to both servers without being prompted for a password:
+Verify that you are able to authenticate to both servers without being prompted for a password:
 
-    $ ssh <username>@<App IP address>
-    $ ssh <username>@<Mon IP address>
+```sh
+ssh <username>@<App IP address> hostname
+ssh <username>@<Montior IP address> hostname
+```
 
 ### Gather the required information
 
