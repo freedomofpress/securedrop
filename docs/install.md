@@ -313,30 +313,13 @@ Make sure you have the following information and files before continuing:
 * The SecureDrop application's GPG key fingerprint
 * The email address that will receive alerts from OSSEC
 * The GPG public key and fingerprint for the email address that will receive the alerts
-* An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
+* Connection information for the SMTP relay that handles OSSEC alerts. For more information, see the [OSSEC Alerts Guide](ossec_alerts.md).
+* The first name a journalist who will be using SecureDrop (you can add more later)
+* The username of the system administrator
+* (Optional) An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
     * This will replace the SecureDrop logo on the source interface and the document interface.
     * Recommended size: `500px x 450px`
     * Recommended format: PNG
-* The first name a journalist who will be using SecureDrop (you can add more later)
-* The username of the system administrator
-
-#### OSSEC alert information
-
-Receiving GPG encrypted email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
-
-While there are risks involved with receiving these alerts, such as information leakage through metadata, we feel the benefit of knowing how the SecureDrop servers are functioning is worth it. If a third-party SMTP relay is used, that relay will be able to learn information such as the IP address the alerts were sent from, the subject of the alerts, and the destination email address the alerts were sent to. Only the body of an alert email is encrypted with the recipient's GPG key. A third-party SMTP relay could also prevent you from receiving any or specific alerts.
-
-The SMTP relay that you use should support SASL authentication and SMTP TLS protocols TLSv1.2, TLSv1.1, and TLSv1. Most enterprise email solutions should be able to meet those requirements.
-
-The Postfix configuration can enforce certificate verification, if a fingerprint has been set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
-
-    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2 
-
-The output of the command above should look like the following.
-
-    9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
-    
-When editing `prod-specific.yml`, enter this value as your `smtp_relay_fingerprint`.
 
 ### Prepare to install SecureDrop
 
