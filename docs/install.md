@@ -244,11 +244,9 @@ Once you have verified that you can connect, continue with the installation. If 
 
 ## Install SecureDrop
 
-Connect the Admin Workstation's Ethernet port to the shared firewall. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.'
+Connect the Admin Workstation to the LAN interface switch. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.' You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. Continue to boot Tails.
 
-You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. 
-
-Open a terminal (click the terminal icon in the top menu).
+Once Tails is booted, open a terminal (click the terminal icon in the top menu).
 
 ### Install Ansible
 
