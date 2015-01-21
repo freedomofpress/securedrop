@@ -36,7 +36,7 @@ We assume that you have examined your network configuration and have selected tw
 * App Subnet: 10.20.1.0/24
 * App Gateway: 10.20.1.1
 * App Server: 10.20.1.2
-* Admin Workstation: (automatically assigned via DHCP)
+* Admin Workstation: 10.20.1.3
 
 * Monitor Subnet: 10.20.2.0/24
 * Monitor Gateway: 10.20.2.1
@@ -109,6 +109,36 @@ We set up the LAN interface during the initial configuration. We now need to set
 -   IPv4 Address: Monitor Gateway
 
 Leave everything else as the default. Save and Apply Changes.
+
+### Disable DHCP on the LAN
+
+pfSense runs a DHCP server on the LAN interface by default. At this stage in the documentation, the Admin Workstation has an IP address assigned via that DHCP server. You can easily check your current IP address by *right-clicking* the networking icon (a blue cable going in to a white jack) in the top right of the menu bar, and choosing "Connection Information".
+
+![Connection Information](images/firewall/connection_information.png)
+
+In order to tighten the firewall rules as much as possible, we recommend disabling the DHCP server and assigning a static IP address to the Admin Workstation instead.
+
+#### Disabling DHCP
+
+To disable DHCP, navigate to "Services → DHCP Server". Uncheck the box to "Enable DHCP servers on LAN interface", scroll down, and click the Save button.
+
+#### Assigning a static IP address to the Admin Workstation
+
+Now you will need to assign a static IP to the Admin Workstation. Use the *Admin Workstation IP* that you selected earlier, and make sure you use the same IP when setting up the firewall rules later.
+
+Start by *right-clicking* the networking icon in the top right of the menu bar, and choosing "Edit Connections...".
+
+![Edit Connections](images/firewall/edit_connections.png)
+
+Select "Wired connection" from the list and click the "Edit..." button.
+
+![Edit Wired Connection](images/firewall/edit_wired_connection.png)
+
+Change to the "IPv4 Settings" tab. Change "Method:" from "Automatic (DHCP)" to "Manual". Click the Add button and fill in the static networking information for the Admin Workstation.
+
+![Editing Wired Connection](images/firewall/editing_wired_connection.png)
+
+Click "Save...". If the network does not come up within 15 seconds or so, try disconnecting and reconnecting your network cable to trigger the change. You will need you have succeeded in connecting with your new static IP when you see a pop-up notification that says "Tor is ready. You can now access the Internet".
 
 ### Set up the network firewall rules
 
