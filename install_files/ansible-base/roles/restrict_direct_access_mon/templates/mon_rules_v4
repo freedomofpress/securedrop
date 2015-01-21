@@ -4,6 +4,11 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
+# Drop but do not log all packets with invalid state.
+# This was added due to issue #836
+-A OUTPUT -m state --state INVALID -j DROP
+-A INPUT -m state --state INVALID -j DROP
+
 # Allow the tor instance used for ssh access to default tor destination ports.
 # Ports are from https://www.torproject.org/docs/faq#OutboundPorts
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "document chrooted tor instances"

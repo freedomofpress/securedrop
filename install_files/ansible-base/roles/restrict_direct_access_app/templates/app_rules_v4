@@ -4,6 +4,11 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
+# Drop but do not log all packets with invalid state.
+# This was added due to issue #836
+-A OUTPUT -m state --state INVALID -j DROP
+-A INPUT -m state --state INVALID -j DROP
+
 # Allow the tor instances used for ssh, source and document interface outbound access to default tor destination ports.
 # Load before tor user drop rules
 # Ports are from https://www.torproject.org/docs/faq#OutboundPorts
