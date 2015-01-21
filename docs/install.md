@@ -149,7 +149,7 @@ The admin will also need to have an Android or iOS device with the Google Authen
 The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
 
  * A master password for the persistent volume on the Tails device.
- * A master password for the KeePass password manager, which unlocks passphrases to:
+ * A master password for the KeePassX password manager, which unlocks passphrases to:
      * The Hidden Service value required to connect to the Document Interface.
      * The Document Interface.
      * The journalist's personal GPG key.
