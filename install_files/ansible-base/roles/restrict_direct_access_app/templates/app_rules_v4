@@ -4,12 +4,11 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Allow the tor instances used for ssh, source and document interface outbound access to default tor destination ports.
+# Allow the tor instances used for ssh, source and document interface outbound access
 # Load before tor user drop rules
-# Ports are from https://www.torproject.org/docs/faq#OutboundPorts
--A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner messagebus -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
--A OUTPUT -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
--A INPUT -p tcp --match multiport --sports 80,8080,443,8443,9001,9030 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
+-A OUTPUT -p tcp -m owner --uid-owner messagebus -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
+-A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
 
 # Rate limit ssh connections coming from the tor network
 # Load before generic loopback rules

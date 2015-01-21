@@ -26,15 +26,14 @@ Installing SecureDrop
   - [Create a GPG key for the SecureDrop application](#create-a-gpg-key-for-the-securedrop-application)
   - [Import GPG keys for journalists with access to SecureDrop](#import-gpg-keys-for-journalists-with-access-to-securedrop)
 - [Set up the Admin USB](#set-up-the-admin-usb)
-- [Set up the firewall](#set-up-the-firewall)
+- [Set up the Network Firewall](#set-up-the-network-firewall)
 - [Set up the Servers](#set-up-the-servers)
 - [Install SecureDrop](#install-securedrop)
   - [Install Ansible](#install-ansible)
   - [Clone and verify the release code](#clone-and-verify-the-release-code)
   - [Set up SSH keys for the Admin](#set-up-ssh-keys-for-the-admin)
   - [Gather the required information](#gather-the-required-information)
-    - [OSSEC alert information](#ossec-alert-information)
-  - [Prepare to install SecureDrop](#prepare-to-install-securedrop)
+  - [Install SecureDrop](#install-securedrop-1)
   - [Set up two-factor authentication for the Admin](#set-up-two-factor-authentication-for-the-admin)
 - [Testing the Installation](#testing-the-installation)
   - [Test the web application and connectivity](#test-the-web-application-and-connectivity)
@@ -172,7 +171,7 @@ The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ev
 
 We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
 
-To set up the Secure Viewing Station, start by creating a Tails Live USB with persistence on the *offline* USB stick. Follow the instructions in the [Tails Guide](/tails_guide.md). Stop after starting Tails and enabling the persistent volume - *do not* continue to connecting the machine to the Internet.
+To set up the Secure Viewing Station, start by creating a Tails Live USB with persistence on the *offline* USB stick. Follow the instructions in the [Tails Guide](tails_guide.md). Stop after starting Tails and enabling the persistent volume - *do not* continue to connecting the machine to the Internet.
 
 ### Create a GPG key for the SecureDrop application
 
@@ -217,15 +216,15 @@ If the journalist does have a key, transfer the public key to the *Secure Viewin
 
 ## Set up the Admin USB
 
-The Admin USB should be a Tails Live USB install with persistence enabled. See the [Tails Guide](tails_guide.md) for instructions.
+Create the Admin USB, a Tails Live USB with persistence. See the [Tails Guide](tails_guide.md) for instructions.
 
-## Set up the firewall
+## Set up the Network Firewall
 
 See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. When you are done, continue with the next section.
 
 ## Set up the Servers
 
-Start by plugging the *Application Server* and the *Monitor Server* into the firewall.
+Start by plugging the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
 
 Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you have the following information before continuing:
 
@@ -233,13 +232,20 @@ Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on ins
 * The IP address of the Monitor Server
 * The non-root user's name and password on each server.
 
+Before continuing, make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
+
+```sh
+ssh <username>@<App IP address> hostname
+ssh <username>@<Montior IP address> hostname
+```
+
+Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
+
 ## Install SecureDrop
 
-Connect the Admin Workstation's Ethernet port to the shared firewall. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.'
+Connect the Admin Workstation to the LAN interface switch. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.' You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. Continue to boot Tails.
 
-You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. 
-
-Open a terminal (click the terminal icon in the top menu).
+Once Tails is booted, open a terminal (click the terminal icon in the top menu).
 
 ### Install Ansible
 
@@ -289,53 +295,33 @@ Once the key has finished generating, you need to copy the public key to both se
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to log in to both servers without being prompted for a password:
+Verify that you are able to authenticate to both servers without being prompted for a password:
 
-    $ ssh <username>@<App IP address>
-    $ ssh <username>@<Mon IP address>
-
-Once you've verified that you are able to log in to each server, you can log out of each by typing this:
-
-    $ logout # or Ctrl-D
+```sh
+ssh <username>@<App IP address> hostname
+ssh <username>@<Montior IP address> hostname
+```
 
 ### Gather the required information
 
 Make sure you have the following information and files before continuing:
 
-* The IP address of the *App Server*
-* The IP address of the *Monitor Server*
+* The *App Server* IP address
+* The *Monitor Server* IP address
 * The SecureDrop application's GPG public key (from the *Transfer Device*)
 * The SecureDrop application's GPG key fingerprint
 * The email address that will receive alerts from OSSEC
 * The GPG public key and fingerprint for the email address that will receive the alerts
-* An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
-    * This will replace the SecureDrop logo on the Source Interface and the Document Interface.
-    * Recommended size: `500px x 450px`
-    * Recommended format: PNG
+* Connection information for the SMTP relay that handles OSSEC alerts. For more information, see the [OSSEC Alerts Guide](ossec_alerts.md).
 * The first name a journalist who will be using SecureDrop (you can add more later)
 * The username of the system administrator
+* (Optional) An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
+    * Recommended size: `500px x 450px`
+    * Recommended format: PNG
 
-#### OSSEC alert information
+### Install SecureDrop
 
-Receiving GPG encrypted email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
-
-While there are risks involved with receiving these alerts, such as information leakage through metadata, we feel the benefit of knowing how the SecureDrop servers are functioning is worth it. If a third-party SMTP relay is used, that relay will be able to learn information such as the IP address the alerts were sent from, the subject of the alerts, and the destination email address the alerts were sent to. Only the body of an alert email is encrypted with the recipient's GPG key. A third-party SMTP relay could also prevent you from receiving any or specific alerts.
-
-The SMTP relay that you use should support SASL authentication and SMTP TLS protocols TLSv1.2, TLSv1.1, and TLSv1. Most enterprise email solutions should be able to meet those requirements.
-
-The Postfix configuration can enforce certificate verification, if a fingerprint has been set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
-
-    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2 
-
-The output of the command above should look like the following.
-
-    9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
-    
-When editing `prod-specific.yml`, enter this value as your `smtp_relay_fingerprint`.
-
-### Prepare to install SecureDrop
-
-Next, you will have to change into the ansible-base directory in the SecureDrop repo that you cloned earlier:
+Change into the `ansible-base` directory of the SecureDrop repo that you cloned earlier:
 
     $ cd securedrop/install_files/ansible-base
 
@@ -343,21 +329,17 @@ Copy the following required files to `securedrop/install_files/ansible-base`:
 
 * Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
-* Custom header image file.
+* (Optional) Custom header image file
 
 It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
-Then repeat the same step for the Admin GPG key and custom header image.
+Repeat the same step for the Admin GPG key and custom header image.
 
-Next, you're going to edit the inventory file and replace the default IP addresses with the ones you chose for app and mon. Here, `editor` refers to your preferred text editor (nano, vim, emacs, etc.).
+Edit the inventory file, `inventory`, and update the default IP addresses with the ones you chose for app and mon. When you're done, save the file and exit the editor.
 
-    $ editor inventory
-
-After changing the IP addresses, save the changes to the inventory file and quit the editor.
-
-Next, fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
+Fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
 
  * User allowed to connect to both servers with SSH: `ssh_users`
  * IP address of the Monitor Server: `monitor_ip`
@@ -378,22 +360,22 @@ Next, fill out `prod-specific.yml` with values that match your environment. At a
 
 When you're done, save the file and exit the editor. 
 
-Run the playbook. You will be prompted to enter the sudo password for each server. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
+Now you are ready to run the playbook! This will automatically configure the servers and install SecureDrop and all of its dependencies. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
 
     $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
 
+You will be prompted to enter the sudo password for each server.
+
 The ansible playbook will run, installing SecureDrop and configuring and hardening the servers. This will take some time, and will return the Terminal to you when it is complete. If an error occurs while running the playbook, please submit a detailed [Github issue](https://github.com/freedomofpress/securedrop/issues/new) or send an email to securedrop@freedom.press.
 
-Once the installation is complete, the hidden service addresses for each service will be placed in the following files in `install_files/ansible-base`:
+Once the installation is complete, the addresses for each Tor Hidden Service will be available in the following files in `install_files/ansible-base`:
 
-* app-source-ths
-* app-document-aths
-* app-ssh-aths
-* mon-ssh-aths
+* `app-source-ths`: This is the .onion address of the Source Interface
+* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. You need to add this line to your torrc and restart Tor in order to connect to the hidden service address included in the line.
+* `app-ssh-aths`: Same as above, for SSH access to the Application Server.
+* `mon-ssh-aths`: Same as above, for SSH access to the Monitor Server.
 
-Update the inventory, replacing the IP addresses with the onion addresses:
-
-    $ editor inventory
+Update the inventory, replacing the IP addresses with the corresponding onion addresses from `app-ssh-aths` and `mon-ssh-aths`. This will allow you to re-run the Ansible playbooks in the future, even though part of SecureDrop's hardening restricts SSH to only being over the specific authenticated Tor Hidden Services.
 
 ### Set up two-factor authentication for the Admin
 
@@ -402,6 +384,8 @@ As part of the SecureDrop installation process, you will need to set up two fact
 Connect to the App Server's hidden service address using `ssh` and run `google-authenticator`. Follow the instructions in [our Google Authenticator guide](/docs/google_authenticator.md) to set up the app on your Android or iOS device.
 
 ## Testing the Installation
+
+Some of the final configuration is included in these testing steps, so *do not skip them!*
 
 ### Test the web application and connectivity
 
