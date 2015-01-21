@@ -307,8 +307,8 @@ ssh <username>@<Montior IP address> hostname
 
 Make sure you have the following information and files before continuing:
 
-* The IP address of the *App Server*
-* The IP address of the *Monitor Server*
+* The *App Server* IP address
+* The *Monitor Server* IP address
 * The SecureDrop application's GPG public key (from the *Transfer Device*)
 * The SecureDrop application's GPG key fingerprint
 * The email address that will receive alerts from OSSEC
@@ -320,9 +320,9 @@ Make sure you have the following information and files before continuing:
     * Recommended size: `500px x 450px`
     * Recommended format: PNG
 
-### Prepare to install SecureDrop
+### Install SecureDrop
 
-Next, you will have to change into the ansible-base directory in the SecureDrop repo that you cloned earlier:
+Change into the `ansible-base` directory of the SecureDrop repo that you cloned earlier:
 
     $ cd securedrop/install_files/ansible-base
 
@@ -336,15 +336,11 @@ It will depend what the file location of your USB stick is, but, for an example,
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
-Then repeat the same step for the Admin GPG key and custom header image.
+Repeat the same step for the Admin GPG key and custom header image.
 
-Next, you're going to edit the inventory file and replace the default IP addresses with the ones you chose for app and mon. Here, `editor` refers to your preferred text editor (nano, vim, emacs, etc.).
+Edit the inventory file, `inventory`, and update the default IP addresses with the ones you chose for app and mon. When you're done, save the file and exit the editor.
 
-    $ editor inventory
-
-After changing the IP addresses, save the changes to the inventory file and quit the editor.
-
-Next, fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
+Fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
 
  * User allowed to connect to both servers with SSH: `ssh_users`
  * IP address of the Monitor Server: `monitor_ip`
@@ -389,6 +385,8 @@ As part of the SecureDrop installation process, you will need to set up two fact
 Connect to the App Server's hidden service address using `ssh` and run `google-authenticator`. Follow the instructions in [our Google Authenticator guide](/docs/google_authenticator.md) to set up the app on your Android or iOS device.
 
 ## Testing the Installation
+
+Some of the final configuration is included in these testing steps, so *do not skip them!*
 
 ### Test the web application and connectivity
 
