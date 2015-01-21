@@ -96,15 +96,10 @@ SecureDrop-specific Configuration
 
 SecureDrop uses the firewall to achieve two primary goals:
 
-1.  Isolating SecureDrop from the existing network, which may be
-    compromised (especially if it is a venerable network in a large
-    organization like a newsroom).
-2.  Isolating the app and the monitor servers from each other as much as
-    possible, to reduce attack surface.
+1.  Isolating SecureDrop from the existing network, which may be compromised (especially if it is a venerable network in a large organization like a newsroom).
+2.  Isolating the app and the monitor servers from each other as much as possible, to reduce attack surface.
 
-In order to use the firewall to isolate the app and monitor servers from
-each other, we need to connect them to separate interfaces, and then set
-up firewall rules that allow them to communicate.
+In order to use the firewall to isolate the app and monitor servers from each other, we need to connect them to separate interfaces, and then set up firewall rules that allow them to communicate.
 
 ### Set up OPT1
 
