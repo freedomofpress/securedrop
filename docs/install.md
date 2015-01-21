@@ -331,7 +331,7 @@ Copy the following required files to `securedrop/install_files/ansible-base`:
 
 * Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
-* Custom header image file.
+* (Optional) Custom header image file
 
 It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
 
