@@ -101,7 +101,7 @@ cd /vagrant/securedrop
 ./manage.py stop        # stops the application servers
 ./manage.py restart     # restarts the application servers (to test code changes)
 ./manage.py reset       # resets the state of the development instance
-./manage.py add_admin   # create a user to use when logging in to the document interface
+./manage.py add_admin   # create a user to use when logging in to the Document Interface
 ```
 
 ## Staging
