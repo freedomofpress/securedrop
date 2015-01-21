@@ -61,9 +61,9 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 2. Connect the Admin Workstation to the switch on the LAN. After a few seconds, you should see a pop up notification saying "Connection established" in the top right corner of the screen.
 3. Launch the Tor Browser, *Applications → Internet → Tor Browser*.
     1. If there is a conflict between your WAN and the default LAN, you will not be able to connect to Tor, and may see a dialog that says "Tor is not ready. Start Tor Browser anyway?". Click "Start Tor Browser" to continue.
-5. Navigate to the pfSense GUI in the Tor Browser: https://192.168.1.1
-6. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
-7. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
+4. Navigate to the pfSense GUI in the Tor Browser: https://192.168.1.1
+5. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
+6. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
 
 #### Setup Wizard
 
