@@ -361,22 +361,22 @@ Fill out `prod-specific.yml` with values that match your environment. At a minim
 
 When you're done, save the file and exit the editor. 
 
-Run the playbook. You will be prompted to enter the sudo password for each server. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
+Now you are ready to run the playbook! This will automatically configure the servers and install SecureDrop and all of its dependencies. `<username>` is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
 
     $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
 
+You will be prompted to enter the sudo password for each server.
+
 The ansible playbook will run, installing SecureDrop and configuring and hardening the servers. This will take some time, and will return the Terminal to you when it is complete. If an error occurs while running the playbook, please submit a detailed [Github issue](https://github.com/freedomofpress/securedrop/issues/new) or send an email to securedrop@freedom.press.
 
-Once the installation is complete, the hidden service addresses for each service will be placed in the following files in `install_files/ansible-base`:
+Once the installation is complete, the addresses for each Tor Hidden Service will be available in the following files in `install_files/ansible-base`:
 
-* app-source-ths
-* app-document-aths
-* app-ssh-aths
-* mon-ssh-aths
+* `app-source-ths`: This is the .onion address of the Source Interface
+* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. You need to add this line to your torrc and restart Tor in order to connect to the hidden service address included in the line.
+* `app-ssh-aths`: Same as above, for SSH access to the Application Server.
+* `mon-ssh-aths`: Same as above, for SSH access to the Monitor Server.
 
-Update the inventory, replacing the IP addresses with the onion addresses:
-
-    $ editor inventory
+Update the inventory, replacing the IP addresses with the corresponding onion addresses from `app-ssh-aths` and `mon-ssh-aths`. This will allow you to re-run the Ansible playbooks in the future, even though part of SecureDrop's hardening restricts SSH to only being over the specific authenticated Tor Hidden Services.
 
 ### Set up two-factor authentication for the Admin
 
