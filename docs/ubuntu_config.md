@@ -1,5 +1,19 @@
 # Ubuntu Install Guide
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Verify the Ubuntu installation media](#verify-the-ubuntu-installation-media)
+- [Create the Ubuntu installation media](#create-the-ubuntu-installation-media)
+- [Install Ubuntu](#install-ubuntu)
+  - [Configure the network manually](#configure-the-network-manually)
+  - [Continue the installation](#continue-the-installation)
+  - [Partition the disks](#partition-the-disks)
+  - [Finish the installation](#finish-the-installation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 The *Application Server* and the *Monitor Server* require the 64-bit version of [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://releases.ubuntu.com/14.04.1/). The image you want to get is named `ubuntu-14.04.1-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
 
 ## Verify the Ubuntu installation media

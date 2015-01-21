@@ -5,7 +5,7 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installing Tails on USB sticks](#installing-tails-on-usb-sticks)
-  - [Note for Mac OS X users](#note-for-mac-os-x-users)
+  - [Note for Mac OS X users manually installing Tails](#note-for-mac-os-x-users-manually-installing-tails)
 - [Configure Tails for use with SecureDrop](#configure-tails-for-use-with-securedrop)
   - [Persistence](#persistence)
   - [Start Tails and enable the persistent volume](#start-tails-and-enable-the-persistent-volume)
