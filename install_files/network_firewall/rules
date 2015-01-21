@@ -4,24 +4,36 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Tor needs to be able to connect to any port over TCP, since relays may advertise any port as their ORPort.
-# It is beneficial for security to allow our Tor client to connect to any of these ports, see https://www.torproject.org/docs/faq.html.en#OutboundPorts
--A OUTPUT -s MONITOR_IP,APP_IP -p tcp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor"
--A INPUT  -d MONITOR_IP,APP_IP -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor"
+# SSH access for initial installation (Ansible)
+-A OUTPUT -s ADMIN_IP -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "admin ssh traffic"
+-A INPUT -d ADMIN_IP -p tcp --sport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "admin ssh traffic"
 
-# Additionally, you will need to allow the Admin Workstation to make outgoing TCP connections on any port (since it runs Tails, and does everything over Tor). You can either use a static IP for the admin workstation and define additional rules for it (similar to the above rules), or loosen the above rules to apply to any IP on the LAN subnet and not just the APP_IP.
+# OSSEC agent
+-A OUTPUT -s APP_IP -d MONITOR_IP -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent"
+-A INPUT -s MONITOR_IP -d APP_IP -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent"
 
-# DNS rules
--A OUTPUT -s MONITOR_IP,APP_IP -d EXTERNAL_DNS_SERVER_IP -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A INPUT  -s EXTERNAL_DNS_SERVER_IP -d MONITOR_IP,APP_IP -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+# Allow OSSEC agent auth during initial install
+-A OUTPUT -s APP_IP -d MONITOR_IP -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent auth"
+-A INPUT -s MONITOR_IP -d APP_IP -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent auth"
 
-# NTP rules
--A OUTPUT -s MONITOR_IP,APP_IP -p udp --sport 123 --dport 123 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
--A INPUT  -d MONITOR_IP,APP_IP -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+# Block non-whitelisted traffic between LAN and OPT1
+# If using the networks from the install documentation
+# LAN_NET = 10.20.1.0/24
+# OPT1_NET = 10.20.2.0/24
+-A OUTPUT -s LAN_NET -d OPT1_NET -j LOGNDROP -m comment --comment "Block non-whitelisted traffic"
+-A INPUT -s OPT1_NET -d LAN_NET -j LOGNDROP -m comment --comment "Block non-whitelisted traffic"
 
-# OSSEC server-agent
--A OUTPUT -s APP_IP -d MONITOR_IP -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
--A INPUT  -s MONITOR_IP -d APP_IP -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+# allow tor outbound
+-A OUTPUT -s ADMIN_WORKSTATION,APP_IP,MONITOR_IP -p tcp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor"
+-A INPUT -d ADMIN_WORKSTATION,APP_IP,MONITOR_IP -p tcp -m state --state ESTBALISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor"
+
+# allow DNS
+-A OUTPUT -s APP_IP,MONITOR_IP -d EXTERNAL_DNS_SERVERS -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow DNS"
+-A INPUT -s EXTERNAL_DNS_SERVERS -d APP_IP,MONITOR_IP -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment ---comment "Allow DNS"
+
+# allow NTP
+-A OUTPUT -s APP_IP,MONITOR_IP -p udp --sport 123 --dport 123 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow NTP"
+-A INPUT -d APP_IP,MONITOR_IP -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow NTP"
 
 # Drop and log all other traffic
 -A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
