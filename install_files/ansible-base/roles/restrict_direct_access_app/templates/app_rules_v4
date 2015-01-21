@@ -4,6 +4,10 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
+# Drop and log all packets with invalid state.
+-A OUTPUT -m state --state INVALID -j LOGNDROP
+-A INPUT -m state --state INVALID -j LOGNDROP
+
 # Allow the tor instances used for ssh, source and document interface outbound access
 # Load before tor user drop rules
 -A OUTPUT -p tcp -m owner --uid-owner messagebus -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
@@ -68,6 +72,7 @@
 -A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
 
 # LOGNDROP everything else
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_INVALID " --log-ip-options --log-tcp-options --log-uid --log-level 4
 -A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-ip-options --log-tcp-options --log-uid --log-level 4
 -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-ip-options --log-uid --log-level 4
 -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-ip-options --log-uid --log-level 4
