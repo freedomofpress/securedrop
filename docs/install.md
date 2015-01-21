@@ -123,7 +123,7 @@ The second *offline* Tails Live USB with persistence will be used as the encrypt
 
 A SecureDrop installation will require at least two roles, an admin and a journalist, and each role will require a number of strong, unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below is meant to be an overview of the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
-We have created a KeePassX password database template that both the admin and the journalist can use on Tails to ensure they not only generate strong passphrases, but also store them safely. By using KeePassX to generate strong, unique passphrases, you will be able to achieve excellent security while also maintaining usability, since you will only have to personally memorize a small number of strong passphrases. More information about using the password database template on Tails is included in the [Tails Setup Guide](/tails_setup.md#passphrase-database).
+We have created a KeePassX password database template that both the admin and the journalist can use on Tails to ensure they not only generate strong passphrases, but also store them safely. By using KeePassX to generate strong, unique passphrases, you will be able to achieve excellent security while also maintaining usability, since you will only have to personally memorize a small number of strong passphrases. More information about using the password database template on Tails is included in the [Tails Setup Guide](/docs/tails_guide.md#passphrase-database).
 
 #### Admin
 
@@ -149,7 +149,7 @@ The admin will also need to have an Android or iOS device with the Google Authen
 The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
 
  * A master password for the persistent volume on the Tails device.
- * A master password for the KeePass password manager, which unlocks passphrases to:
+ * A master password for the KeePassX password manager, which unlocks passphrases to:
      * The Hidden Service value required to connect to the Document Interface.
      * The Document Interface.
      * The journalist's personal GPG key.
@@ -283,7 +283,7 @@ You should see 'Good signature from "Freedom of the Press Foundation Master Sign
 
 ### Set up SSH keys for the Admin
 
-Now that you've verified the code that's needed for installation, you need to create an SSH key on the admin workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
+Now that you've verified the code that's needed for installation, you need to create an SSH key on the Admin Workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
 
 First, generate the new SSH keypair:
 
@@ -317,7 +317,6 @@ Make sure you have the following information and files before continuing:
 * The first name a journalist who will be using SecureDrop (you can add more later)
 * The username of the system administrator
 * (Optional) An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
-    * This will replace the SecureDrop logo on the source interface and the document interface.
     * Recommended size: `500px x 450px`
     * Recommended format: PNG
 
