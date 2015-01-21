@@ -77,7 +77,7 @@ On "Configure WAN Interface", enter the appropriate configuration for your netwo
 
 For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface. Click Next.
 
-Set a strong admin password. Click Next.
+Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
 Click Reload.
 
