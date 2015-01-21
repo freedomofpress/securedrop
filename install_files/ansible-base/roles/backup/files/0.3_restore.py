@@ -59,6 +59,9 @@ def extract_to_path(archive, member, path, user):
         timestamp = calendar.timegm(member.date_time)
         os.utime(path, (timestamp, timestamp))
 
+    ug = "{}:{}".format(user, user)
+    subprocess.call(['chown', '-R', ug , path])
+
 def restore_config_file(zf):
     print "* Migrating SecureDrop config file from backup..."
 
@@ -66,10 +69,6 @@ def restore_config_file(zf):
     for zi in zf.infolist():
         if "var/www/securedrop/config.py" in zi.filename:
             extract_to_path(zf, "var/www/securedrop/config.py", "/var/www/securedrop/config.py", "www-data")
-
-    print "chowning config"
-
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/config.py"])
 
 def restore_securedrop_root(zf):
     print "* Migrating directories from SECUREDROP_ROOT..."
@@ -85,25 +84,16 @@ def restore_securedrop_root(zf):
             extract_to_path(zf, zi, replace_prefix(zi.filename,
                 "var/lib/securedrop/keys", "/var/lib/securedrop/keys"), "www-data")
 
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/lib/securedrop"])
-
-
 def restore_database(zf):
     print "* Migrating database..."
 
     extract_to_path(zf, "var/lib/securedrop/db.sqlite", "/var/lib/securedrop/db.sqlite", "www-data")
-
-    # chown the databse file to the securedrop user
-    subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
 
 def restore_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
         "var/www/securedrop/static/i/logo.png",
         "/var/www/securedrop/static/i/logo.png", "www-data")
-
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/logo.png"])
-
 
 def restore_tor_files(zf):
     tor_root_dir = "/var/lib/tor"
@@ -126,13 +116,10 @@ def restore_tor_files(zf):
     for zi in zf.infolist():
         if "var/lib/tor/services/source" in zi.filename:
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/source", "/var/lib/tor/services/source"), "www-data")
+                "var/lib/tor/services/source", "/var/lib/tor/services/source"), "debian-tor")
         elif "var/lib/tor/services/document" in zi.filename:
             extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/document", "/var/lib/tor/services/document"), "www-data")
-
-    # chmod the files so they're owned by debian-tor:debian-tor
-    subprocess.call(['chown', '-R', 'debian-tor:debian-tor', ths_root_dir])
+                "var/lib/tor/services/document", "/var/lib/tor/services/document"), "debian-tor")
 
     # Reload Tor to trigger registering the old Tor Hidden Services
     # reloading Tor compared to restarting tor will not break the current tor
