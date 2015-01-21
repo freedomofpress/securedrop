@@ -5,7 +5,7 @@
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Installing Tails on USB sticks](#installing-tails-on-usb-sticks)
-  - [Note for Mac OS X users](#note-for-mac-os-x-users)
+  - [Note for Mac OS X users manually installing Tails](#note-for-mac-os-x-users-manually-installing-tails)
 - [Configure Tails for use with SecureDrop](#configure-tails-for-use-with-securedrop)
   - [Persistence](#persistence)
   - [Start Tails and enable the persistent volume](#start-tails-and-enable-the-persistent-volume)
@@ -29,9 +29,9 @@ The [Tails website](https://tails.boum.org/) has detailed and up-to-date instruc
 * [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
 * [Create & configure the persistent volume](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html)
 
-## Note for Mac OS X users
+## Note for Mac OS X users manually installing Tails
 
-The tails documentation for "manually installing" Tails onto a USB device for Mac OS X include the following `dd` invocation to copy the .iso to the USB:
+The Tails documentation for [manually installing Tails onto a USB device on Mac OS X](https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html) describes how to copy the downloaded .iso image to a USB stick in Section 4, "Do the copy". This section includes the following `dd` invocation to copy the .iso to the USB:
 
 ```
 dd if=[tails.iso] of=/dev/diskX

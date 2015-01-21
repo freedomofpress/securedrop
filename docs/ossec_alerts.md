@@ -1,3 +1,16 @@
+# OSSEC Guide
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Setting up OSSEC alerts](#setting-up-ossec-alerts)
+  - [Using Gmail for OSSEC alerts](#using-gmail-for-ossec-alerts)
+- [Troubleshooting](#troubleshooting)
+- [Analyzing the Alerts](#analyzing-the-alerts)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Setting up OSSEC alerts
 
 OSSEC is an open source host-based intrusion detection system (IDS) that we use to perform log analysis, file integrity checking, policy monitoring, rootkit detection and real-time alerting. It is installed on the Monitor Server and constitutes that machine's main function. OSSEC works in a server-agent scheme, that is, the OSSEC server extends its existing functions to the App Server through an agent installed on that server, covering monitoring for both machines.
@@ -63,6 +76,8 @@ The Postfix configuration enforces certificate verification, and requires a fing
 
     openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2 
 
+If you are using Tails, you will not be able to connect directly with `openssl s_client` due to the default firewall rules. To get around this, proxy the requests over Tor by adding `torify` at the beginning of the command.
+
 The output of the command above should look like the following:
 
     9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
@@ -77,7 +92,7 @@ First you should [sign up for a new account](https://accounts.google.com/SignUp?
 
 For enhanced security we recommend enabling [Google's 2-Step Verification](https://www.google.com/landing/2step/) for any Gmail account that is dedicated to sending the alert emails. With 2-Step Verification enabled, you won't use the normal account password in this configuration — it will not work; instead you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
 
-### Troubleshooting
+## Troubleshooting
 
 Some OSSEC alerts should begin to arrive as soon as the installation has finished.
 
@@ -105,7 +120,7 @@ Other log files that may contain useful information:
  
  * /var/ossec/logs/alerts/alerts.log - contains details of every recent OSSEC alert
  
-### Analyzing the alerts
+## Analyzing the Alerts
  
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
 

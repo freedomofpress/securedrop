@@ -1,45 +1,46 @@
-# Because orgs can run any network firewall they want the firewall rules are in iptables format
-# If your firewall only lookups FQDN once then you will not be able to restrict the OSSEC alerts smtp OUTPUT rules destinaton
-# or INPUT rules source addresses.
-# You will need the following ip addresses: external dns ip, monitor server ip and app server ip.
-# You will need the following FQDNs: smtp relay
- 
 *filter
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Tor and apt rules
--A OUTPUT -s MONITOR_IP,APP_IP -p tcp --match multiport --dports 80,8080,443,8443,9001,9030 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor and apt"
--A INPUT  -d MONITOR_IP,APP_IP -p tcp --match multiport --sports 80,8080,443,8443,9001,9030 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor and apt" 
+# SSH access for initial installation (Ansible)
+-A OUTPUT -s ADMIN_IP -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "admin ssh traffic"
+-A INPUT -d ADMIN_IP -p tcp --sport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "admin ssh traffic"
 
-# DNS rules
--A OUTPUT -s MONITOR_IP,APP_IP -d EXTERNAL_DNS_SERVER_IP -p tcp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A INPUT  -s EXTERNAL_DNS_SERVER_IP -d MONITOR_IP,APP_IP -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A OUTPUT -s MONITOR_IP,APP_IP -d EXTERNAL_DNS_SERVER_IP -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
--A INPUT  -s EXTERNAL_DNS_SERVER_IP -d MONITOR_IP,APP_IP -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tcp/udp dns"
+# OSSEC agent
+-A OUTPUT -s APP_IP -d MONITOR_IP -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent"
+-A INPUT -s MONITOR_IP -d APP_IP -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent"
 
-# NTP rules
--A OUTPUT -s MONITOR_IP,APP_IP -p udp --sport 123 --dport 123 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
--A INPUT  -d MONITOR_IP,APP_IP -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ntp"
+# Allow OSSEC agent auth during initial install
+-A OUTPUT -s APP_IP -d MONITOR_IP -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent auth"
+-A INPUT -s MONITOR_IP -d APP_IP -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC agent auth"
 
+# Block non-whitelisted traffic between LAN and OPT1
+# If using the networks from the install documentation
+# LAN_NET = 10.20.1.0/24
+# OPT1_NET = 10.20.2.0/24
+-A OUTPUT -s LAN_NET -d OPT1_NET -j LOGNDROP -m comment --comment "Block non-whitelisted traffic"
+-A INPUT -s OPT1_NET -d LAN_NET -j LOGNDROP -m comment --comment "Block non-whitelisted traffic"
 
-# OSSEC server-agent
--A OUTPUT -s APP_IP -d MONITOR_IP -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
--A INPUT  -s MONITOR_IP -d APP_IP -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
+# allow tor outbound
+-A OUTPUT -s ADMIN_WORKSTATION,APP_IP,MONITOR_IP -p tcp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor"
+-A INPUT -d ADMIN_WORKSTATION,APP_IP,MONITOR_IP -p tcp -m state --state ESTBALISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor"
 
-# Monitor server smtp server rules.
-# ensure that all the FQDN used by your smtp are listed	separated by a comma
-# if you are not using starttls or if it runs on a non standard port please update the ports in the related rules
--A OUTPUT -s MONITOR_IP -d SMTP_RELAY_FQDN -p tcp --dport 587 -m state --state  --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC alerts"
--A INPUT -s SMTP_RELAY_FQDN -d MONITOR_IP -p tcp --sport 587 -m state --state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC alerts"
+# allow DNS
+-A OUTPUT -s APP_IP,MONITOR_IP -d EXTERNAL_DNS_SERVERS -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow DNS"
+-A INPUT -s EXTERNAL_DNS_SERVERS -d APP_IP,MONITOR_IP -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment ---comment "Allow DNS"
+
+# allow NTP
+-A OUTPUT -s APP_IP,MONITOR_IP -p udp --sport 123 --dport 123 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow NTP"
+-A INPUT -d APP_IP,MONITOR_IP -p udp --sport 123 --dport 123 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow NTP"
 
 # Drop and log all other traffic
 -A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
 -A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
 
 # LOGNDROP everything else
+# The log prefixes were added to make these match the default OSSEC rules for iptables
 -A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP "
 -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP "
 -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP "

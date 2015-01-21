@@ -245,7 +245,13 @@ class Journalist(Base):
         chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
         return ' '.join(chunks).lower()
 
+    def _format_token(self, token):
+        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        return ''.join(token.split())
+
     def verify_token(self, token):
+        token = self._format_token(token)
+
         # Only allow each authentication token to be used once. This
         # prevents some MITM attacks.
         if token == self.last_token and LOGIN_HARDENING:
