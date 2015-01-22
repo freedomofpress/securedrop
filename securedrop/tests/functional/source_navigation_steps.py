@@ -38,7 +38,7 @@ class SourceNavigationSteps():
             submit_button.click()
 
             notification = self.driver.find_element_by_css_selector( 'p.notification')
-            expected_notification = 'Thanks! We received your document "%s".' % filebasename
+            expected_notification = 'Thanks for submitting something to SecureDrop! Please check back later for replies.'
             self.assertIn(expected_notification, notification.text)
 
     def _source_submits_a_message(self):
@@ -50,4 +50,4 @@ class SourceNavigationSteps():
         submit_button.click()
 
         notification = self.driver.find_element_by_css_selector( 'p.notification')
-        self.assertIn('Thanks! We received your message.', notification.text)
+        self.assertIn('Thanks for submitting something to SecureDrop! Please check back later for replies.', notification.text)
