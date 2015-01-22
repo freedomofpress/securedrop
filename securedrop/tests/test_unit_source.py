@@ -128,8 +128,31 @@ class TestSource(TestCase):
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
 
+    def _dummy_submission(self):
+        """
+        Helper to make a submission (content unimportant), mostly useful in
+        testing notification behavior for a source's first vs. their
+        subsequent submissions
+        """
+        return self.client.post('/submit', data=dict(
+                msg="Pay no attention to the man behind the curtain.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+
+    def test_initial_submission_notification(self):
+        """
+        Regardless of the type of submission (message, file, or both), the
+        first submission is always greeted with a notification
+        reminding sources to check back later for replies.
+        """
+        self._new_codename()
+        rv = self._dummy_submission()
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks for submitting something to SecureDrop! Please check back later for replies.", rv.data)
+
     def test_submit_message(self):
         self._new_codename()
+        self._dummy_submission()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test.",
             fh=(StringIO(''), ''),
@@ -139,6 +162,7 @@ class TestSource(TestCase):
 
     def test_submit_file(self):
         self._new_codename()
+        self._dummy_submission()
         rv = self.client.post('/submit', data=dict(
             msg="",
             fh=(StringIO('This is a test'), 'test.txt'),
@@ -148,6 +172,7 @@ class TestSource(TestCase):
 
     def test_submit_both(self):
         self._new_codename()
+        self._dummy_submission()
         rv = self.client.post('/submit', data=dict(
             msg="This is a test",
             fh=(StringIO('This is a test'), 'test.txt'),
