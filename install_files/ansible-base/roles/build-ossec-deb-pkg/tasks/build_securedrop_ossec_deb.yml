@@ -11,7 +11,7 @@
     url: "{{ ossec_download_url }}"
     dest: "{{ securedrop_repo }}"
     sha256sum: "{{ ossec_download_checksum }}"
-  when: not ossec_download.stat.exists and ossec_download.stat.md5 == "{{ ossec_download_md5 }}"
+  when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ ossec_download_md5 }}")
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest
