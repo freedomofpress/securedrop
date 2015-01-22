@@ -1,6 +1,6 @@
 ---
 ### General (used by more than one role) ###
-non_default_securedrop_repo: "/vagrant"
+securedrop_repo: "/vagrant"
 non_default_securedrop_user: "vagrant"
 
 ### Used by the common role ###
