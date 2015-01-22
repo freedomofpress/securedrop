@@ -56,7 +56,8 @@ def encrypt_zip_file(zf_fn):
     gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
     e_fn = '{}.gpg'.format(zf_fn)
 
-    gpg.encrypt_file(zf_fn, config.JOURNALIST_KEY, always_trust='True', output=e_fn)
+    stream = open(zf_fn, "rb")
+    gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True', output=e_fn)
 
 def main():
     # name append a timestamp to the sd-backup zip filename
