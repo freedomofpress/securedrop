@@ -9,7 +9,7 @@
 - name: download OSSEC
   get_url:
     url: "{{ ossec_download_url }}"
-    dest: "{{ securedrop_repo }}"
+    dest: "{{ ossec_deb_path }}"
     sha256sum: "{{ ossec_download_checksum }}"
   when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ ossec_download_md5 }}")
 
@@ -62,7 +62,7 @@
   command: dpkg-deb --build /tmp/{{ ossec_build_dir }}
 
 - name: move securedrop ossec deb to repo
-  command: mv /tmp/{{ ossec_build_dir }}.deb {{ securedrop_repo }}
+  command: mv /tmp/{{ ossec_build_dir }}.deb {{ ossec_deb_path }}
 
 - name: delete tmp build paths
   file:
