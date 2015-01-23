@@ -1,3 +1,0 @@
----
-- name: run bash script to build the grsecurity metapackage
-  command: "{{ securedrop_repo }}/build/build_grsec_metapackage.sh"

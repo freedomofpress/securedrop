@@ -21,6 +21,6 @@
   roles:
     - build-securedrop-app-code-deb-pkg
     - { role: build-ossec-deb-pkg, tags: [ "ossec" ] }
-    - build-grsec-metapackage-deb-pkg
+    - { role: build-grsec-metapackage-deb-pkg, tags: ["grsec-metapackage"] }
 
   sudo: yes
