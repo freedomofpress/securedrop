@@ -1,7 +1,7 @@
 ---
 # This will look for packages in install_files/ansible-base
 - name: if defined copy local deb packages to target system
-  copy: src={{ item }} dest=/root/
+  copy: src=../../build/{{ item }} dest=/root/
   with_items: local_deb_packages
 
 - name: if defined install local deb packages.

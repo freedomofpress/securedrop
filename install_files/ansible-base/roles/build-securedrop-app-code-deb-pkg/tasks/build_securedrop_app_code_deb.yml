@@ -53,7 +53,7 @@
   command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
 
 - name: move the deb to the Vagrant shared folder
-  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}
+  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
 
 - name: remove the build temp dir
   file:

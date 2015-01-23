@@ -1,11 +1,13 @@
 #!/bin/bash
-## Usage: ./build_deb_package.sh
+## Usage: ./build_grsec_metapackage.sh
 
 set -e
 set -x
+
 BUILD_PATH="/tmp/build"
 SD_VERSION=${1:-0.3}
 SD_ARCH=${2:-amd64}
+
 umask 022
 
 if [ ! -d $BUILD_PATH ]; then
@@ -27,7 +29,7 @@ build_meta() {
 
     # Create the deb package
     dpkg-deb --build $BUILD_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /vagrant
+    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /vagrant/build
 }
 
 build_meta securedrop-grsec /vagrant/install_files/securedrop-grsec
