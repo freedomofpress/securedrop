@@ -4,15 +4,6 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Drop but do not log all packets with invalid state for SMTP traffic.
-# This was added due to issue #836
--A OUTPUT -p tcp --dport {{ smtp_relay_port }} -m state --state INVALID -j DROP
--A INPUT -p tcp --sport {{ smtp_relay_port }} -m state --state INVALID -j DROP
-
-# LOGNDROP all other invalid state packets
--A OUTPUT -m state --state INVALID -j LOGNDROP
--A INPUT -m state --state INVALID -j LOGNDROP
-
 # Allow the tor instance used for ssh access
 -A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor out"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
@@ -65,12 +56,24 @@
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 -A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 
+# Drop but don't log all other state invalid packets
+-A OUTPUT -m state --state INVALID -j DROP
+-A INPUT -m state --state INVALID -j DROP
+
+# Drop but don't log all state untracked packets
+-A OUTPUT -m state --state UNTRACKED -j DROP
+-A INPUT -m state --state UNTRACKED -j DROP
+
+# Add Mike Perry's rules to block but not log rest of possible leaked traffic
+-A OUTPUT ! -o lo ! -d 127.0.0.1 ! -s 127.0.0.1 -p tcp --dport 587 -m tcp --tcp-flags ACK ACK -j DROP
+-A OUTPUT ! -o lo ! -d 127.0.0.1 ! -s 127.0.0.1 -p tcp -m tcp --tcp-flags ACK,FIN ACK,FIN -j DROP
+-A OUTPUT ! -o lo ! -d 127.0.0.1 ! -s 127.0.0.1 -p tcp -m tcp --tcp-flags ACK,RST ACK,RST -j DROP
+
 # Drop and log all other traffic
 -A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
 -A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
 
 # LOGNDROP everything else
--A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_INVALID " --log-ip-options --log-tcp-options --log-uid --log-level 4
 -A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-ip-options --log-tcp-options --log-uid --log-level 4
 -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-ip-options --log-uid --log-level 4
 -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-ip-options --log-uid --log-level 4
