@@ -62,7 +62,7 @@
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 -A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 
-# Don't log inbound invalid state packets related to issue #830
+# Don't log inbound invalid state packets related to issue #845
 -A INPUT -p tcp -m state --state INVALID -j DROP -m comment --comment "drop but don't log inbound invalid state packets"
 
 # Catch all drop rule
