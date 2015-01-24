@@ -73,3 +73,18 @@
   file:
     state: absent
     dest: /tmp/{{ ossec_version }}
+
+- name: delete ossec install directory
+  file:
+    state: absent
+    dest: /var/ossec
+
+- name: delete ossec init conf file
+  file:
+    state: absent
+    dest: /etc/ossec-init.conf
+
+- name: delete init script
+  file:
+    state: absent
+    dest: /etc/init.d/ossec
