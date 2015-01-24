@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
+import time
 import uuid
 from functools import wraps
 import zipfile
@@ -71,6 +72,15 @@ def ignore_static(f):
             return  # don't execute the decorated function
         return f(*args, **kwargs)
     return decorated_function
+
+
+def datetime_truncated_to_local_midnight():
+    """
+    Takes only the .date() part of of *local* time (in the timezone of
+    the server), which truncates to the nearest midnight. Then uses
+    mktime to convert this to UTC and on to a naive UTC datetime
+    """
+    return datetime.utcfromtimestamp(time.mktime(datetime.now().date().timetuple()))
 
 
 @app.before_request
@@ -175,7 +185,7 @@ def async_genkey(sid, codename):
     # flagged source logs in and has a key generated for them. #789
     try:
         source = Source.query.filter(Source.filesystem_id == sid).one()
-        source.last_updated = datetime.now.date()
+        source.last_updated = datetime_truncated_to_local_midnight()
         db_session.commit()
     except Exception as e:
         app.logger.error("async_genkey for source (sid={}): {}".format(sid, e))
@@ -265,7 +275,7 @@ def submit():
         if entropy_avail >= 2400:
             async_genkey(g.sid, g.codename)
 
-    g.source.last_updated = datetime.now().date()
+    g.source.last_updated = datetime_truncated_to_local_midnight()
     db_session.commit()
     normalize_timestamps(g.sid)
 
