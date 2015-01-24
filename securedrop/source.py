@@ -217,6 +217,9 @@ def normalize_timestamps(sid):
     """
     sub_paths = [ store.path(sid, submission.filename)
                   for submission in g.source.submissions ]
+    # touch accepts date in local time (server's timezone), which
+    # causes truncation to nearest midnight local time. Python's now()
+    # is assumed to use the same local time. See #822.
     args = ["touch", "-t", datetime.now().strftime("%Y%m%d") + "0000"]
     args.extend(sub_paths)
     rc = subprocess.call(args)
