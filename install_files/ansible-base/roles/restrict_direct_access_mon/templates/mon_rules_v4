@@ -4,15 +4,6 @@
 :OUTPUT ACCEPT [0:0]
 :LOGNDROP - [0:0]
 
-# Drop but do not log all packets with invalid state for SMTP traffic.
-# This was added due to issue #836
--A OUTPUT -p tcp --dport {{ smtp_relay_port }} -m state --state INVALID -j DROP
--A INPUT -p tcp --sport {{ smtp_relay_port }} -m state --state INVALID -j DROP
-
-# LOGNDROP all other invalid state packets
--A OUTPUT -m state --state INVALID -j LOGNDROP
--A INPUT -m state --state INVALID -j LOGNDROP
-
 # Allow the tor instance used for ssh access
 -A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow Tor out"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
@@ -65,14 +56,16 @@
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 -A OUTPUT -o lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"
 
-# Drop and log all other traffic
--A INPUT -j LOGNDROP -m comment --comment "Drop all other incomming traffic"
--A OUTPUT -j LOGNDROP -m comment --comment "Drop all other outgoing traffic"
+# Don't log inbound invalid state packets related to issue #845
+-A INPUT -p tcp -m state --state INVALID -j DROP -m comment --comment "drop but don't log inbound invalid state packets"
 
-# LOGNDROP everything else
--A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_INVALID " --log-ip-options --log-tcp-options --log-uid --log-level 4
--A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-prefix "Denied_TCP " --log-ip-options --log-tcp-options --log-uid --log-level 4
--A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-prefix "Denied_UDP " --log-ip-options --log-uid --log-level 4
--A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-prefix "Denied_ICMP " --log-ip-options --log-uid --log-level 4
+# Catch all drop rule
+-A INPUT -j LOGNDROP -m comment --comment "Log and drop all other incomming traffic"
+-A OUTPUT -j DROP -m comment --comment "Drop all other outgoing traffic"
+
+# LOGNDROP inbound non whitelisted traffic
+-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-ip-options --log-tcp-options --log-uid --log-level 4
+-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid --log-level 4
+-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid --log-level 4
 -A LOGNDROP -j DROP
 COMMIT
