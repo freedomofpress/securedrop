@@ -11,14 +11,6 @@ ip_info:
   - ip: "{{ app_ip }}"
     hostname: "{{ app_hostname }}"
 
-
-### Used by the debs role ###
-
-# Building the securedrop-ossec-agent.deb and securedrop-ossec-server.deb package
-ossec_build_dir: "securedrop-ossec-server-2.8.1-amd64"
-ossec_preloaded_vars: "mon-preloaded-vars.conf"
-ossec_package_name: "ossec-server"
-
 # Installing securedrop-ossec-server.deb package
 #
 # This is the path to the directory where we build the deb. The deb package
