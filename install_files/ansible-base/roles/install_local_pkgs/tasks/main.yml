@@ -9,5 +9,5 @@
 # but keep getting an error when using a list with that module. Using the shell
 # command as a temp work around until that is resolved.
 - name: if defined install local deb packages
-  shell: "dpkg -i /root/{{ item }} || true && apt-get -f install"
+  shell: "dpkg -i /root/{{ item }} || true && apt-get -f install -y"
   with_items: local_deb_packages
