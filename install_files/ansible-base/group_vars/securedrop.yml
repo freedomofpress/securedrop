@@ -72,3 +72,5 @@ ossec_download_md5: "c2ffd25180f760e366ab16eeb82ae382"
 ossec_version: "ossec-hids-2.8.1"
 ossec_archive: "{{ securedrop_repo }}/build/{{ ossec_version }}.tar.gz"
 ossec_deb_path: "{{ securedrop_repo }}/build"
+
+apt_repo_url: "https://apt.freedom.press"

@@ -6,7 +6,9 @@
   copy: src=cron-apt-config dest=/etc/cron-apt/config
 
 - name: ensure security.list file exists
-  copy: src=security.list dest=/etc/apt/security.list
+  template:
+    src: security.list
+    dest: /etc/apt/security.list
 
 - name: ensure cron-apt updates the security.list packages
   copy: src=0-update dest=/etc/cron-apt/action.d/0-update
