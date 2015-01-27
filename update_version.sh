@@ -1,6 +1,14 @@
 #!/bin/bash
 ## Usage: ./update_version.sh <version>
 
+# Only run this on the Vagrant build VM, with dch available
+command -v dch > /dev/null
+if [ $? -ne 0 ]; then
+  echo "You must run this on a system with dch and git available (in order to edit the Debian package changelog and commit message)"
+  echo "If you are on Debian/Ubuntu, apt-get install devscripts git"
+  exit 1
+fi
+
 set -e
 
 VERSION=$1
