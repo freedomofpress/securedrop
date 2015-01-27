@@ -21,8 +21,7 @@ sed -i "" "s/^\(Version: \).*/\1$VERSION/" install_files/securedrop-app-code/DEB
 sed -i "" "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$VERSION/" install_files/ansible-base/host_vars/app.yml
 
 # Update the changelog
-# TODO: I think this file is in the wrong place. Ideally you would edit it with dch, but it does not seem to recognize this file even when run in the same directory
-vim install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
+dch -v $VERSION -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
 
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
