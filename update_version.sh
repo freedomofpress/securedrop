@@ -21,6 +21,10 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
+# Set defaults the DEBEMAIL and DEBFULLNAME environment variables, used when editing the changelog. You can override these defaults by setting these variables yourself before running the script.
+export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
+export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
+
 # Update the version shown to users of the web application.
 # Note: Mac OS X's sed requires `-i ""` (a zero-length extension, indicating no backup should be made) in order to do in-place substitution.
 sed -i "s/^\(__version__ = '\)[0-9a-z.]*/\1$VERSION/g" securedrop/version.py
