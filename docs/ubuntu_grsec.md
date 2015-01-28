@@ -193,19 +193,13 @@ correct options.
 
 ### Compile the kernel with Grsecurity
 
-Use all available cores when compiling the kernel.
+Switch to root, since you will need to be root to build the kernel with `make-kpkg`. We recommend setting `CONCURRENCY_LEVEL` to use all available cores when compiling the kernel. Finally, compile the kernel with the Ubuntu overlay. Note that this step may fail if you are using a small VPS/virtual machine.
 
-
-```
+```sh
+sudo su
 export CONCURRENCY_LEVEL="$(grep -c '^processor' /proc/cpuinfo)"
-```
-
-Compile the kernel with the Ubuntu overlay. Note that this step may fail
-if you are using a small VPS/virtual machine.
-
-```
 make-kpkg clean
-sudo make-kpkg --initrd --overlay-dir=../ubuntu-package kernel_image kernel_headers
+make-kpkg --initrd --overlay-dir=../ubuntu-package kernel_image kernel_headers
 ```
 
 When the build process is done, you will have the following Debian
