@@ -36,7 +36,7 @@ sed -i "s/^\(Version: \).*/\1$VERSION/" install_files/securedrop-app-code/DEBIAN
 sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$VERSION/" install_files/ansible-base/host_vars/app.yml
 
 # Update the changelog
-dch -v $VERSION -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
+dch -v $VERSION -D trusty -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
 
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
