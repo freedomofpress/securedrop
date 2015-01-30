@@ -1,0 +1,18 @@
+<group name="cron-apt">
+  <rule id="100002" level="0">
+    <decoded_as>cron-apt</decoded_as>
+    <description>Custom cron-apt alert</description>
+  </rule>
+
+  <rule id="100003" level="7">
+    <if_sid>100002</if_sid>
+    <status>W:</status>
+    <description>A cron-apt warning was detected</description>
+  </rule>
+
+  <rule id="100004" level="7">
+    <if_sid>100002</if_sid>
+    <status>E:</status>
+    <description>A cron-apt error was detected</description>
+  </rule>
+</group>

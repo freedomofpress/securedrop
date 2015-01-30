@@ -1,12 +1,5 @@
 # Configuration for cron-apt. For further information about the possible
 # configuration settings see /usr/share/doc/cron-apt/README.gz.
 
-DEBUG=verbose
-
-LOG=/var/log/cron-apt/log
-
+SYSLOGON="always"
 EXITON=error
-
-MAIL=/var/log/cron-apt/mail
-MAILON=error
-MAILTTO=root
