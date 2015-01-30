@@ -20,7 +20,7 @@ sudo apt-get install python-pip
 # image, which are not SecureDrop dependencies.
 VENV=review_env
 virtualenv $VENV
-source review_env/bin/activate
+source $VENV/bin/activate
 
 # Install the requirements from the current lists
 pip install -r securedrop-requirements.txt
