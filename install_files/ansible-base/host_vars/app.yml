@@ -29,14 +29,15 @@ dev_deps:
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"
-securedrop_app_code_deb: "securedrop-app-code-0.3-amd64" # do not enter .deb extension
+securedrop_app_code_version: "0.3"
+securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
 
 # Installing the securedrop-ossec-agent.deb package
 securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
-  - securedrop-app-code-0.3-amd64.deb
+  - "{{ securedrop_app_code_deb }}.deb"
   - securedrop-ossec-agent-2.8.1-amd64.deb
 
 ### Used by the app role ###
