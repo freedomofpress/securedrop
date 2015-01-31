@@ -1,0 +1,17 @@
+<decoder name="cron-apt">
+  <program_name>cron-apt</program_name>
+</decoder>
+
+<decoder name="cron-apt warning">
+  <parent>cron-apt</parent>
+  <prematch offset="after_parent">^W:\s</prematch>
+  <regex offset="after_parent">^(\S+) (\.*)</regex>
+  <order>status, extra_data</order>
+</decoder>
+
+<decoder name="cron-apt error">
+  <parent>cron-apt</parent>
+  <prematch offset="after_parent">^E:\s</prematch>
+  <regex offset="after_parent">^(\S+) (\.*)</regex>
+  <order>status, extra_data</order>
+</decoder>
