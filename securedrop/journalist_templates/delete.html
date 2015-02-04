@@ -22,7 +22,7 @@
     {% if doc.name.startswith('reply-') %}
       (sent {{ doc.date }})
     {% else %}
-      (uploaded {{ doc.date }})
+      (uploaded {{ doc.date|datetimeformat(relative=True,imprecise=True) }})
     {% endif %}
   </li>
   {% endfor %}
