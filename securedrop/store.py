@@ -8,15 +8,16 @@ import uuid
 import tempfile
 import subprocess
 from cStringIO import StringIO
+import gzip
 
 import logging
 log = logging.getLogger(__name__)
 
 from werkzeug import secure_filename
 
-VALIDATE_FILENAME = re.compile(
-    "^(?P<index>\d+)\-[a-z0-9-_]+?(?P<file_type>msg|doc\.zip|)\.gpg$").match
+from secure_tempfile import SecureTemporaryFile
 
+VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]+?(?P<file_type>msg|doc\.(gz|zip))\.gpg$").match
 
 class PathException(Exception):
 
@@ -83,15 +84,34 @@ def get_bulk_archive(filenames, zip_directory=''):
 def save_file_submission(sid, count, journalist_filename, filename, stream):
     sanitized_filename = secure_filename(filename)
 
-    s = StringIO()
-    with zipfile.ZipFile(s, 'w') as zf:
-        zf.writestr(sanitized_filename, stream.read())
-    s.seek(0)
+    # We store file submissions in a .gz file for two reasons:
+    #
+    # 1. Downloading large files over Tor is very slow. If we can
+    # compress the file, we can speed up future downloads.
+    #
+    # 2. We want to record the original filename because it might be
+    # useful, either for context about the content of the submission
+    # or for figuring out which application should be used to open
+    # it. However, we'd like to encrypt that info and have the
+    # decrypted file automatically have the name of the original
+    # file. Given various usability constraints in GPG and Tails, this
+    # is the most user-friendly way we have found to do this.
 
-    filename = "{0}-{1}-doc.zip.gpg".format(count, journalist_filename)
-    file_loc = path(sid, filename)
-    crypto_util.encrypt(s, config.JOURNALIST_KEY, file_loc)
-    return filename
+    encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(count, journalist_filename)
+    encrypted_file_path = path(sid, encrypted_file_name)
+    with SecureTemporaryFile("/tmp") as stf:
+        with gzip.GzipFile(filename=sanitized_filename, mode='wb', fileobj=stf) as gzf:
+            # Buffer the stream into the gzip file to avoid excessive
+            # memory consumption
+            while True:
+                buf = stream.read(1024 * 8)
+                if not buf:
+                    break
+                gzf.write(buf)
+
+        crypto_util.encrypt(stf, config.JOURNALIST_KEY, encrypted_file_path)
+
+    return encrypted_file_name
 
 
 def save_message_submission(sid, count, journalist_filename, message):
