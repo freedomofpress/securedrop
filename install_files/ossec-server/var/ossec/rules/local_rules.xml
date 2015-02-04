@@ -16,3 +16,61 @@
     <description>A cron-apt error was detected</description>
   </rule>
 </group>
+
+<group name="apparmor">
+  <rule id="100010" level="0">
+    <decoded_as>iptables</decoded_as>
+  </rule>
+
+  <rule id="100011" level="0">
+    <if_sid>100010</if_sid>
+    <status>STATUS</status>
+    <description>Apparmor status event</description>
+  </rule>
+
+  <rule id="100012" level="0">
+    <if_sid>100010</if_sid>
+    <status>DENIED</status>
+    <match>operation="mknod" profile="/usr/sbin/apache2" name="/tmp/</match>
+    <description>don't alert on issue #861</description>
+    <options>no_email_alert</options>
+  </rule>
+
+  <rule id="100013" level="7">
+    <if_sid>100010</if_sid>
+    <status>DENIED</status>
+    <description>Apparmor denied event</description>
+  </rule>
+
+  <rule id="100014" level="0">
+    <if_sid>100010</if_sid>
+    <status>ALLOWED</status>
+    <description>Apparmor allowed event</description>
+  </rule>
+</group>
+
+<group name="do not alert">
+  <rule id="199999" level="0">
+    <decoded_as>gpg warning</decoded_as>
+    <description>due to upstream lib</description>
+    <options>no_email_alert</options>
+  </rule>
+
+  <rule id="199998" level="0">
+    <if_sid>510</if_sid>
+    <match>/dev/.blkid.tab</match>
+    <options>no_email_alert</options>
+  </rule>
+
+  <rule id="199997" level="0">
+    <if_sid>510</if_sid>
+    <match>/dev/.blkid.tab.old</match>
+    <options>no_email_alert</options>
+  </rule>
+
+  <rule id="199996" level="0">
+    <if_sid>100010</if_sid>
+    <match>operation="mknod" profile="/usr/sbin/apache2" name="/tmp/</match>
+    <options>no_email_alert</options>
+  </rule>
+</group>

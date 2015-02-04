@@ -3,6 +3,6 @@
   tags: non-development
 
 - include: apparmor_complain.yml
-  tags: non-development
+  tags: non-development,aa-complain
 
 - include: dev_setup_xvfb_for_functional_tests.yml

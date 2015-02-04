@@ -15,3 +15,14 @@
   <regex offset="after_parent">^(\S+) (\.*)</regex>
   <order>status, extra_data</order>
 </decoder>
+
+<decoder name="apparmor status">
+  <parent>iptables</parent>
+  <prematch>type=1400</prematch>
+  <regex offset="after_parent">apparmor="(\S+)" (\.*)</regex>
+  <order>status, extra_data</order>
+</decoder>
+
+<decoder name="gpg warning">
+  <prematch>WARNING:gnupg</prematch>
+</decoder>
