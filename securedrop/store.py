@@ -17,7 +17,7 @@ from werkzeug import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 
-VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]+?(?P<file_type>msg|doc\.(gz|zip))\.gpg$").match
+VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
 
 class PathException(Exception):
 

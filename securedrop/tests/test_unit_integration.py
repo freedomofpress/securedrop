@@ -9,6 +9,7 @@ from time import sleep
 import tempfile
 import shutil
 import time
+import gzip
 
 import mock
 
@@ -196,11 +197,9 @@ class TestIntegration(unittest.TestCase):
         decrypted_data = self.gpg.decrypt(rv.data)
         self.assertTrue(decrypted_data.ok)
 
-        s = StringIO(decrypted_data.data)
-        zip_file = zipfile.ZipFile(s, 'r')
-        unzipped_decrypted_data = zip_file.read('test.txt')
-        zip_file.close()
-
+        sio = StringIO(decrypted_data.data)
+        with gzip.GzipFile(mode='rb', fileobj=sio) as gzip_file:
+            unzipped_decrypted_data = gzip_file.read()
         self.assertEqual(unzipped_decrypted_data, test_file_contents)
 
         # delete submission
@@ -362,6 +361,7 @@ class TestIntegration(unittest.TestCase):
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
+
         zf = zipfile.ZipFile(StringIO(rv.data), 'r')
         data = zf.read(zf.namelist()[0])
         self._can_decrypt_with_key(data, config.JOURNALIST_KEY)
@@ -482,7 +482,7 @@ class TestIntegration(unittest.TestCase):
 
         # test filenames and sort order
         soup = BeautifulSoup(rv.data)
-        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
+        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         for i, submission_link in enumerate(soup.select('ul#submissions li a .filename')):
             filename = str(submission_link.contents[0])
             self.assertTrue(re.match(submission_filename_re.format(i + 1),
@@ -509,7 +509,7 @@ class TestIntegration(unittest.TestCase):
         soup = BeautifulSoup(rv.data)
 
         # test filenames and sort order
-        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.zip)\.gpg$'
+        submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         filename = str(soup.select('ul#submissions li a .filename')[0].contents[0])
         self.assertTrue(re.match(submission_filename_re.format(1), filename))
         filename = str(soup.select('ul#submissions li a .filename')[1].contents[0])

@@ -1,6 +1,7 @@
 import urllib2
 import tempfile
 import zipfile
+import gzip
 import datetime
 
 from selenium.common.exceptions import NoSuchElementException
@@ -10,15 +11,15 @@ from db import db_session, Journalist
 class JournalistNavigationSteps():
 
     def _get_submission_content(self, file_url, raw_content):
-        if not file_url.endswith(".zip.gpg"):
+        if not file_url.endswith(".gz.gpg"):
             return str(raw_content)
 
         with tempfile.TemporaryFile() as fp:
             fp.write(raw_content.data)
             fp.seek(0)
 
-            zip_file = zipfile.ZipFile(fp)
-            content = zip_file.open(zip_file.namelist()[0]).read()
+            gzf = gzip.GzipFile(mode='rb', fileobj=fp)
+            content = gzf.read()
 
             return content
 

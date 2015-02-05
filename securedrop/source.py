@@ -28,7 +28,6 @@ import template_filters
 from db import db_session, Source, Submission
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
-import worker
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
@@ -272,11 +271,6 @@ def submit():
     g.source.last_updated = datetime.utcnow()
     db_session.commit()
     normalize_timestamps(g.sid)
-
-    # Enqueue async shredding of plaintext uploads
-    if hasattr(request, "_temporary_file_name"):
-        print "enqueuing request to shred request._temporary_file_name: {}".format(request._temporary_file_name)
-        worker.enqueue(store.secure_unlink, request._temporary_file_name)
 
     return redirect(url_for('lookup'))
 
