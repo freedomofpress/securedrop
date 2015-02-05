@@ -1,3 +1,7 @@
+<!--
+  Cron-apt logs to syslog and error and warnings events are distinguished by
+  W: or E: at the beginning of the event.
+-->
 <decoder name="cron-apt">
   <program_name>cron-apt</program_name>
 </decoder>
@@ -16,6 +20,12 @@
   <order>status, extra_data</order>
 </decoder>
 
+<!--
+  The default iptables decoder sucks. And detect everything with a program
+  name of kernel.
+  Since all apparmor events have the type=1400 this adds a decoder for the
+  default iptables parent to separate apparmor events.
+-->
 <decoder name="apparmor status">
   <parent>iptables</parent>
   <prematch>type=1400</prematch>
@@ -23,6 +33,17 @@
   <order>status, extra_data</order>
 </decoder>
 
+<!--
+  In the source interface apache error log a gpg warning for an obsolete option
+  is logged.
+-->
 <decoder name="gpg warning">
   <prematch>WARNING:gnupg</prematch>
+</decoder>
+
+<!--
+  The default vagrant vm has dhcp client that generates a lot of events
+-->
+<decoder name="dhclient">
+  <program_name>dhclient</program_name>
 </decoder>

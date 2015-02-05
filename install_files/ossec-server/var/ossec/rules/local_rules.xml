@@ -1,3 +1,6 @@
+<!--
+  Alert on cron-apt warnings and errors
+-->
 <group name="cron-apt">
   <rule id="100002" level="0">
     <decoded_as>cron-apt</decoded_as>
@@ -17,6 +20,9 @@
   </rule>
 </group>
 
+<!--
+  Alert on apparmor denied events
+-->
 <group name="apparmor">
   <rule id="100010" level="0">
     <decoded_as>iptables</decoded_as>
@@ -28,49 +34,56 @@
     <description>Apparmor status event</description>
   </rule>
 
-  <rule id="100012" level="0">
-    <if_sid>100010</if_sid>
-    <status>DENIED</status>
-    <match>operation="mknod" profile="/usr/sbin/apache2" name="/tmp/</match>
-    <description>don't alert on issue #861</description>
-    <options>no_email_alert</options>
-  </rule>
-
-  <rule id="100013" level="7">
+  <rule id="100012" level="7">
     <if_sid>100010</if_sid>
     <status>DENIED</status>
     <description>Apparmor denied event</description>
   </rule>
 
-  <rule id="100014" level="0">
+  <rule id="100013" level="0">
     <if_sid>100010</if_sid>
     <status>ALLOWED</status>
     <description>Apparmor allowed event</description>
   </rule>
 </group>
 
+<!--
+  Do not alert on stagging VM dhcp client errors. These events should not occur
+  in production environments
+-->
+<group name="stagging vm errors">
+  <rule id="100030" level="0">
+    <decoded_as>dhclient</decoded_as>
+    <match>Failed to send 300 byte long packet over fallback interface.</match>
+    <options>no_email_alert</options>
+  </rule>
+</group>
+
+<!--
+  The python gnupg library that securedrop uses includes an obsolete option
+  WARNING:gnupg no-use-agent is an obsolete option - it has no effect
+  Do not send an alert for this event.
+-->
 <group name="do not alert">
-  <rule id="199999" level="0">
+  <rule id="199997" level="0">
     <decoded_as>gpg warning</decoded_as>
     <description>due to upstream lib</description>
     <options>no_email_alert</options>
   </rule>
 
+<!--
+  The rootcheck detects the hidden file blkid.tab as suspicious
+  do not send and alert for it.
+-->
   <rule id="199998" level="0">
     <if_sid>510</if_sid>
     <match>/dev/.blkid.tab</match>
     <options>no_email_alert</options>
   </rule>
 
-  <rule id="199997" level="0">
+  <rule id="199999" level="0">
     <if_sid>510</if_sid>
     <match>/dev/.blkid.tab.old</match>
-    <options>no_email_alert</options>
-  </rule>
-
-  <rule id="199996" level="0">
-    <if_sid>100010</if_sid>
-    <match>operation="mknod" profile="/usr/sbin/apache2" name="/tmp/</match>
     <options>no_email_alert</options>
   </rule>
 </group>
