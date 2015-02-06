@@ -24,6 +24,9 @@ case "$1" in
     chown www-data:www-data /var/www/document.wsgi
     chown www-data:www-data /var/www/source.wsgi
 
+    # Apache's default sites are not allowed by the securedrop apparmor profile
+    # disable the site before putting the apache apparmor profile in enfore
+    # mode.
     a2dissite 000-default
     a2dissite default-ssl
     service apache2 reload
@@ -35,6 +38,8 @@ case "$1" in
 
     aa-enforce /etc/apparmor.d/usr.sbin.tor
     aa-enforce /etc/apparmor.d/usr.sbin.apache2
+
+    # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
 
     ;;
