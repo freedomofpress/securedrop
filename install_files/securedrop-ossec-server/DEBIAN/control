@@ -6,7 +6,8 @@ Homepage: https://freedom.press/securedrop
 Package: securedrop-ossec-server
 Version: 0.3
 Architecture: amd64
-Depends: libc6,libssl1.0.0,adduser,expect,libc6 (>= 2.7),inotify-tools
+Depends: ossec-server
+Replaces: ossec-server
 Conflicts: securedrop-ossec-agent
 Description: Installs the pre-packaged OSSEC server
   This package installs an OSSEC server pre-configured for the

@@ -7,6 +7,7 @@ Package: securedrop-ossec-agent
 Version: 0.3
 Architecture: amd64
 Depends: ossec-agent
+Replaces: ossec-agent
 Conflicts: securedrop-ossec-server
 Description: Installs the securedrop pre-configured OSSEC agent
   This package installs an OSSEC agent pre-configured for the
