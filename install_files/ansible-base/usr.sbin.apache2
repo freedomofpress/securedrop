@@ -145,7 +145,6 @@
   /var/www/securedrop/journalist_templates/flashed.html r,
   /var/www/securedrop/journalist_templates/index.html r,
   /var/www/securedrop/journalist_templates/login.html r,
-  /var/www/securedrop/journalist_templates/reply.html r,
   /var/www/securedrop/request_that_secures_file_uploads.py r,
   /var/www/securedrop/request_that_secures_file_uploads.pyc rw,
   /var/www/securedrop/secure_tempfile.py r,

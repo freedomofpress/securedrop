@@ -452,8 +452,9 @@ def reply():
                         output=store.path(g.sid, filename))
 
     db_session.commit()
-    return render_template('reply.html', sid=g.sid,
-                           codename=g.source.journalist_designation)
+
+    flash("Thanks! Your reply has been stored.", "notification")
+    return redirect(url_for('col', sid=g.sid))
 
 
 @app.route('/regenerate-code', methods=('POST',))
