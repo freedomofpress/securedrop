@@ -48,11 +48,28 @@
 </group>
 
 <!--
+  Grsec related rules. Info and expected events should be whitelisted.
+  All other grsec events should be alerted on.
+-->
+<group name="grsec">
+  <rule id="100101" level="7">
+    <decoded_as>grsec</decoded_as>
+    <description>grsec error was detected</description>
+  </rule>
+
+  <rule id="100102" level="0">
+    <if_sid>100101</if_sid>
+    <match>^time set by</match>
+    <options>no_email_alert</options>
+  </rule>
+</group>
+
+<!--
   Do not alert on stagging VM dhcp client errors. These events should not occur
   in production environments
 -->
 <group name="stagging vm errors">
-  <rule id="100030" level="0">
+  <rule id="110030" level="0">
     <decoded_as>dhclient</decoded_as>
     <match>Failed to send 300 byte long packet over fallback interface.</match>
     <options>no_email_alert</options>
