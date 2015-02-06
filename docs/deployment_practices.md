@@ -74,7 +74,7 @@ In your SSL (port 443) virtual host, set up HSTS and use these settings to give 
     SSLProtocol all -SSLv2 -SSLv3
     SSLHonorCipherOrder on
     SSLCompression off
-    SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:EECDH+RC4:RSA+RC4:!MD5
+    SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5
 
 You'll need to run `a2enmod headers ssl rewrite` for all these to work. You should also set `ServerSignature Off` and `ServerTokens Prod`, typically in /etc/apache2/conf.d/security. The supported cipher suites are copied from [CloudFlare's SSL configuration](https://github.com/cloudflare/sslconfig/blob/master/conf).
 
