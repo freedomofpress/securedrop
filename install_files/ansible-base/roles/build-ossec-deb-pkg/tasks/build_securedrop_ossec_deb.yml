@@ -52,9 +52,6 @@
 - name: copy OSSEC agent usr dir to build dir
   command: cp -R {{ securedrop_repo }}/install_files/{{ossec_package_name}}/usr /tmp/{{ ossec_build_dir }}
 
-- name: copy OSSEC agent var dir to build dir
-  command: cp -R {{ securedrop_repo }}/install_files/{{ossec_package_name}}/var /tmp/{{ ossec_build_dir }}
-
 - name: copy OSSEC agent etc dir to build dir
   command: cp -R {{ securedrop_repo }}/install_files/{{ossec_package_name}}/etc /tmp/{{ ossec_build_dir }}
 
