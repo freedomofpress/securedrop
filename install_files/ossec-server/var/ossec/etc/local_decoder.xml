@@ -34,15 +34,6 @@
 </decoder>
 
 <!--
-  Also because of the default iptables decoder sucks... this will separate
-  grsec events.
--->
-<decoder name="grsec">
-  <parent>iptables</parent>
-  <prematch offset="after_parent">grsec</prematch>
-</decoder>
-
-<!--
   The source interface apache instance logs a gpg warning for an in use
   obsolete option.
 -->

@@ -21,27 +21,34 @@
 </group>
 
 <!--
+  The default iptables decoder just matches the string ^kernel
+  This will match all events in the kern.log. To get around this
+  use the rule option `<if_sid>100001</if_sid>` instead of
+  <decoded_as>kernel</decoded_as>
+-->
+<group name="kernel log">
+  <rule id="100001" level="0">
+    <decoded_as>iptables</decoded_as>
+  </rule>
+</group>
+<!--
   Alert on apparmor denied events
 -->
 <group name="apparmor">
-  <rule id="100010" level="0">
-    <decoded_as>iptables</decoded_as>
-  </rule>
-
   <rule id="100011" level="0">
-    <if_sid>100010</if_sid>
+    <if_sid>100001</if_sid>
     <status>STATUS</status>
     <description>Apparmor status event</description>
   </rule>
 
   <rule id="100012" level="7">
-    <if_sid>100010</if_sid>
+    <if_sid>100001</if_sid>
     <status>DENIED</status>
     <description>Apparmor denied event</description>
   </rule>
 
   <rule id="100013" level="0">
-    <if_sid>100010</if_sid>
+    <if_sid>100001</if_sid>
     <status>ALLOWED</status>
     <description>Apparmor allowed event</description>
   </rule>
@@ -53,13 +60,15 @@
 -->
 <group name="grsec">
   <rule id="100101" level="7">
-    <decoded_as>grsec</decoded_as>
+    <if_sid>100001</if_sid>
+    <match>grsec:</match>
     <description>grsec error was detected</description>
   </rule>
 
   <rule id="100102" level="0">
     <if_sid>100101</if_sid>
-    <match>^time set by</match>
+    <match>time set by</match>
+    <description>time was set on the system</description>
     <options>no_email_alert</options>
   </rule>
 </group>
@@ -72,6 +81,7 @@
   <rule id="110030" level="0">
     <decoded_as>dhclient</decoded_as>
     <match>Failed to send 300 byte long packet over fallback interface.</match>
+    <description>dhcp error</description>
     <options>no_email_alert</options>
   </rule>
 </group>
@@ -84,7 +94,8 @@
 <group name="do not alert">
   <rule id="199997" level="0">
     <decoded_as>gpg warning</decoded_as>
-    <description>due to upstream lib</description>
+    <match>--no-use-agent" is an obsolete option - it has no effect</match>
+    <description>no agent is an obsolete option</description>
     <options>no_email_alert</options>
   </rule>
 
