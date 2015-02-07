@@ -26,26 +26,6 @@ case "$1" in
     ;;
 
     purge)
-	if getent passwd | grep -q "^ossec"
-	then
-		deluser ossec
-	fi
-
-	if getent group | grep -q "^ossec"
-    then
-		delgroup ossec
-	fi
-
-    if [ -f /etc/init.d/ossec ]; then
-	    rm -f /etc/init.d/ossec
-    fi
-
-    if [ -f /etc/ossec-init.conf ]; then
-	    rm -f /etc/ossec-init.conf
-    fi
-
-	update-rc.d -f ossec remove
-
     ;;
 
     *)

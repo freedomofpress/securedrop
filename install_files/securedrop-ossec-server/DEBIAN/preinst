@@ -15,14 +15,6 @@ set -e
 
 case "$1" in
     install)
-        OSSEC_HIDS_TMP_DIR="/tmp/ossec-hids"
-        mkdir -p $OSSEC_HIDS_TMP_DIR
-
-        # back up the current user rules
-        if [ -f /var/ossec/rules/local_rules.xml ]; then
-            cp /var/ossec/rules/local_rules.xml ${OSSEC_HIDS_TMP_DIR}/local_rules.xml
-        fi
-
     ;;
 
     upgrade)

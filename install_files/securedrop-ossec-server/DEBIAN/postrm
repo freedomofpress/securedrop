@@ -17,45 +17,14 @@ set -e
 #          <overwriter-version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-check_delete_user(){
-    user_name="$1"
-    if [ "$(getent passwd | grep -q "^$user_name")" ]; then
-        deluser $user_name
-    fi
-}
-
-check_delete_group(){
-    group_name="$1"
-    if [ "$(getent group | grep -q "^$group_name")" ]; then
-        delgroup $group_name
-    fi
-}
-
 case "$1" in
     upgrade|failed-upgrade)
     ;;
 
     remove|abort-install|abort-upgrade|disappear)
-        rm -f /etc/init.d/ossec
-        rm -f /etc/ossec-init.conf
-        update-rc.d -f ossec remove
-
     ;;
 
     purge)
-        if [ -d /tmp/ossec ]; then
-            rm -R /tmp/ossec
-        fi
-
-        if [ -d /var/ossec ]; then
-            rm -R /var/ossec
-        fi
-
-        check_delete_user ossecr
-        check_delete_user ossecm
-        check_delete_user ossec
-
-        check_delete_group ossec
     ;;
 
     *)
