@@ -58,4 +58,5 @@ grub_pax:
 
 grsec_package: securedrop-grsec
 
+ossec_group: ossec
 apt_repo_url: "https://apt.freedom.press"
