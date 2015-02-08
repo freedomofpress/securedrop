@@ -1,0 +1,3 @@
+.vagrant
+*.deb
+*.tar.gz

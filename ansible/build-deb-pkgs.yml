@@ -1,0 +1,25 @@
+---
+- hosts: [ 'build' ]
+
+  vars:
+    ossec_server_hostname: ossec-server
+    version: "2.8.1"
+    download_checksum: "03c073761aa484fe21a9fcc0ea318ba132ff2466c64360408046a4b8e527b529"
+    download_md5: "c2ffd25180f760e366ab16eeb82ae382"
+    download_url: "http://www.ossec.net/files"
+    download_name: "ossec-hids-{{ version }}.tar.gz"
+    build_path: "/vagrant/build"
+    arch: "amd64"
+    ossec_build_dir: "ossec-{{ purpose }}-{{ version }}-{{ arch }}"
+    build_ossec_deb_pkg_dependencies:
+      - inotify-tools
+      - libssl-dev
+      - make
+      - tar
+      - unzip
+
+  roles:
+    - { role: build-ossec-deb-pkg, tags: [ "ossec-server" ], purpose: "server" }
+    - { role: build-ossec-deb-pkg, tags: [ "ossec-agent" ], purpose: "agent" }
+
+  sudo: yes

@@ -1,0 +1,90 @@
+---
+- name: apt-get update
+  apt: update_cache=yes
+
+- name: check if ossec was already downloaded
+  stat: path="{{ build_path }}/{{ download_name }}" get_md5=yes
+  register: ossec_download
+
+- debug: msg="OSSEC download exists will skip downloading again"
+  when: ossec_download.stat.exists
+
+- name: download OSSEC
+  get_url:
+    url: "{{ download_url }}/{{ download_name }}"
+    dest: "{{ build_path }}"
+    sha256sum: "{{ download_checksum }}"
+  when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ download_md5 }}")
+
+- name: install deb packages required to build ossec package
+  apt: name="{{ item }}" state=latest
+  with_items: build_ossec_deb_pkg_dependencies
+
+- name: extract OSSEC archive to /tmp
+  shell: tar -xvf {{ build_path }}/{{ download_name }} -C /tmp
+
+- name: ensure ossec /etc dir exists
+  file:
+    state: directory
+    dest: /tmp/ossec-hids-{{ version }}/etc
+
+- name: copy ossec preloaded vars
+  template:
+    src: "{{ purpose }}-preloaded-vars.conf"
+    dest: /tmp/ossec-hids-{{ version }}/etc/preloaded-vars.conf
+
+- name: run ossec installer
+  command: /tmp/ossec-hids-{{ version }}/install.sh
+
+- name: create ossec agent deb build dir
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_build_dir }}
+
+- name: ensure the temp ossec build dir var directory exists
+  file:
+    state: directory
+    dest: /tmp/{{ ossec_build_dir }}/var
+
+- name: mv /var/ossec to ossec build dir
+  command: cp -R /var/ossec /tmp/{{ ossec_build_dir }}/var/
+
+- name: copy OSSEC DEBIAN dir to build dir
+  command: cp -R /vagrant/ossec-{{ purpose }}/DEBIAN /tmp/{{ ossec_build_dir }}
+
+- name: copy OSSEC usr dir to build dir
+  command: cp -R /vagrant/ossec-{{ purpose }}/usr /tmp/{{ ossec_build_dir }}
+
+- name: copy OSSEC etc dir to build dir
+  command: cp -R /vagrant/ossec-{{ purpose }}/etc /tmp/{{ ossec_build_dir }}
+
+- name: build securedrop ossec deb package
+  command: dpkg-deb --build /tmp/{{ ossec_build_dir }}
+
+- name: move securedrop ossec deb to repo
+  command: mv /tmp/{{ ossec_build_dir }}.deb {{ build_path }}
+
+- name: delete tmp build paths
+  file:
+    state: absent
+    dest: /tmp/{{ ossec_build_dir }}
+
+- name: delete tmp install paths
+  file:
+    state: absent
+    dest: /tmp/ossec-hids-{{ version }}
+
+- name: delete ossec install directory
+  file:
+    state: absent
+    dest: /var/ossec
+
+- name: delete ossec init conf file
+  file:
+    state: absent
+    dest: /etc/ossec-init.conf
+
+- name: delete init script
+  file:
+    state: absent
+    dest: /etc/init.d/ossec
