@@ -1,5 +1,5 @@
 #!/bin/sh
-# postrm script for securedrop-app-ossec
+# postrm script for securedrop-monitor
 #
 # see: dh_installdeb(1)
 
@@ -17,7 +17,6 @@ set -e
 #          <overwriter-version>
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-
 case "$1" in
     upgrade|failed-upgrade)
     ;;
@@ -26,26 +25,6 @@ case "$1" in
     ;;
 
     purge)
-	if getent passwd | grep -q "^ossec"
-	then
-		deluser ossec
-	fi
-
-	if getent group | grep -q "^ossec"
-    then
-		delgroup ossec
-	fi
-
-    if [ -f /etc/init.d/ossec ]; then
-	    rm -f /etc/init.d/ossec
-    fi
-
-    if [ -f /etc/ossec-init.conf ]; then
-	    rm -f /etc/ossec-init.conf
-    fi
-
-	update-rc.d -f ossec remove
-
     ;;
 
     *)
