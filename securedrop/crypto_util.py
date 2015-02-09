@@ -40,18 +40,7 @@ def do_runtime_tests():
 
 do_runtime_tests()
 
-GPG_BINARY = 'gpg2'
-try:
-    p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
-except OSError:
-    GPG_BINARY = 'gpg'
-    p = subprocess.Popen([GPG_BINARY, '--version'], stdout=subprocess.PIPE)
-
-assert p.stdout.readline().split()[
-    -1].split('.')[0] == '2', "upgrade GPG to 2.0"
-del p
-
-gpg = gnupg.GPG(binary=GPG_BINARY, homedir=config.GPG_KEY_DIR)
+gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
 words = file(config.WORD_LIST).read().split('\n')
 nouns = file(config.NOUNS).read().split('\n')
