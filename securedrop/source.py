@@ -32,6 +32,10 @@ from jinja2 import evalcontextfilter
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+
+# The default CSRF token expiration is 1 hour. Since large uploads can
+# take longer than an hour over Tor, we increase the valid window to 24h.
+app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
 CsrfProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
