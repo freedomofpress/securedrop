@@ -1,5 +1,0 @@
----
-- name: apt-get update
-  apt: update_cache=yes
-
-- include: build_securedrop_ossec_deb.yml

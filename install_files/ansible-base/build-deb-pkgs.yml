@@ -8,8 +8,7 @@
 
   roles:
     - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
-    - { role: build-ossec-deb-pkg, tags: [ "ossec-server" ], ossec_build_dir: "securedrop-ossec-server-2.8.1-amd64", ossec_preloaded_vars: "mon-preloaded-vars.conf", ossec_package_name: "ossec-server" }
-    - { role: build-ossec-deb-pkg, tags: [ "ossec-agent" ], ossec_build_dir: "securedrop-ossec-agent-2.8.1-amd64", ossec_preloaded_vars: "app-preloaded-vars.conf", ossec_package_name: "ossec-agent" }
-    - { role: build-grsec-metapackage-deb-pkg, tags: ["grsec-metapackage"] }
+    - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
+    - { role: build-generic-pkg, tags: ["securedrop-ossec-agent"], package_name: "securedrop-ossec-agent" }
 
   sudo: yes
