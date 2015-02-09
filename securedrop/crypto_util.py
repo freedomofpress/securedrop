@@ -40,7 +40,19 @@ def do_runtime_tests():
 
 do_runtime_tests()
 
-gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
+# HACK: use_agent=True is used to avoid logging noise.
+#
+# --use-agent is a dummy option in gpg2, which is the only version of
+# gpg used by SecureDrop. If use_agent=False, gpg2 prints a warning
+# message every time it runs because the option is deprecated and has
+# no effect. This message cannot be silenced even if you change the
+# --debug-level (controlled via the verbose= keyword argument to the
+# gnupg.GPG constructor), and creates a lot of logging noise.
+#
+# The best solution here would be to avoid passing either --use-agent
+# or --no-use-agent to gpg2, and I have filed an issue upstream to
+# address this: https://github.com/isislovecruft/python-gnupg/issues/96
+gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR, use_agent=True)
 
 words = file(config.WORD_LIST).read().split('\n')
 nouns = file(config.NOUNS).read().split('\n')
