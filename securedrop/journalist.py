@@ -445,7 +445,8 @@ def doc(sid, fn):
 def reply():
     msg = request.form['msg']
     g.source.interaction_count += 1
-    filename = "{0}-reply.gpg".format(g.source.interaction_count)
+    filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
+                                          g.source.journalist_filename)
 
     crypto_util.encrypt(msg,
                         [ crypto_util.getkey(g.sid), config.JOURNALIST_KEY ],
