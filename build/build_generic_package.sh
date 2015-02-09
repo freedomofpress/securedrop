@@ -1,6 +1,5 @@
 #!/bin/bash
 ## Usage:
-##  ./build_package.sh securedrop-grsec
 ##  ./build_package.sh securedrop-ossec-server
 ##  ./build_package.sh securedrop-ossec-agent
 
