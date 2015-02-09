@@ -464,7 +464,7 @@ def generate_code():
     g.source.journalist_designation = crypto_util.display_id()
 
     for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
-        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename())
+        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename)
     db_session.commit()
 
     flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
@@ -533,8 +533,8 @@ def bulk_download(sid, docs_selected):
             app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
     db_session.commit()
 
-    zf = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename())
-    attachment_filename = "{}--{}.zip".format(source.journalist_filename(),
+    zf = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename)
+    attachment_filename = "{}--{}.zip".format(source.journalist_filename,
                                               datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,

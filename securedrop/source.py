@@ -234,7 +234,7 @@ def submit():
     fh = request.files['fh']
 
     fnames = []
-    journalist_filename = g.source.journalist_filename()
+    journalist_filename = g.source.journalist_filename
     first_submission = g.source.interaction_count == 0
 
     if msg:

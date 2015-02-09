@@ -89,6 +89,7 @@ class Source(Base):
     def __repr__(self):
         return '<Source %r>' % (self.journalist_designation)
 
+    @property
     def journalist_filename(self):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
         return ''.join([c for c in self.journalist_designation.lower().replace(' ', '_') if c in valid_chars])
