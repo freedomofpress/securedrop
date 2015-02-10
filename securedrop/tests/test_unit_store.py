@@ -10,7 +10,8 @@ os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import store
 import common
-
+from db import db_session, Source
+import crypto_util
 
 class TestStore(unittest.TestCase):
 
@@ -29,6 +30,10 @@ class TestStore(unittest.TestCase):
 
     def test_get_zip(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
         filenames = common.setup_test_docs(sid, files)
 
