@@ -86,24 +86,24 @@ Vagrant.configure("2") do |config|
   # The prod hosts are just like production but are virtualized. All access to ssh and
   # the web interfaces is only over tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
-    prod.vm.box = "mon"
+    prod.vm.box = "mon-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
     prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
-      v.name = "mon"
+      v.name = "mon-prod"
     end
   end
 
   config.vm.define 'app-prod', autostart: false do |prod|
-    prod.vm.hostname = "app"
+    prod.vm.hostname = "app-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
     prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
-      v.name = "app"
+      v.name = "app-prod"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
       #
       # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
