@@ -495,7 +495,7 @@ def bulk():
     if not docs_selected:
         if action == 'download':
             flash("No collections selected to download!", "error")
-        elif action == 'delete':
+        elif action == 'delete' or action == 'confirm_delete':
             flash("No collections selected to delete!", "error")
         return redirect(url_for('col', sid=g.sid))
 
@@ -503,23 +503,29 @@ def bulk():
         return bulk_download(g.sid, filenames_selected)
     elif action == 'delete':
         return bulk_delete(g.sid, docs_selected)
+    elif action == 'confirm_delete':
+        return confirm_bulk_delete(g.sid, docs_selected)
     else:
         abort(400)
 
 
+def confirm_bulk_delete(sid, docs_selected):
+    return render_template('delete.html',
+                           sid=sid,
+                           codename=g.source.journalist_designation,
+                           docs_selected=docs_selected)
+
+
 def bulk_delete(sid, docs_selected):
-    source = get_source(sid)
-    confirm_delete = bool(request.form.get('confirm_delete', False))
-    if confirm_delete:
-        for doc in docs_selected:
-            if not doc['name'].endswith('reply.gpg'):
-                db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
-            fn = store.path(sid, doc['name'])
-            worker.enqueue(store.secure_unlink, fn)
-        db_session.commit()
-    return render_template('delete.html', sid=sid,
-                           codename=source.journalist_designation,
-                           docs_selected=docs_selected, confirm_delete=confirm_delete)
+    for doc in docs_selected:
+        if not doc['name'].endswith('reply.gpg'):
+            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
+        fn = store.path(sid, doc['name'])
+        worker.enqueue(store.secure_unlink, fn)
+    db_session.commit()
+
+    flash("Submission{} deleted.".format("s" if len(docs_selected) > 1 else ""), "notification")
+    return redirect(url_for('col', sid=g.sid))
 
 
 def bulk_download(sid, docs_selected):

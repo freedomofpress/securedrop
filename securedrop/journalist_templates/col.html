@@ -20,7 +20,7 @@
     <div class="document-actions">
       <div id='select-container'></div>
       <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-      <button type="submit" name="action" value="delete" class="danger"><i class="fa fa-times"></i> Delete selected</button>
+      <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-times"></i> Delete selected</button>
     </div>
       <ul id="submissions" class="plain submissions">
         {% for doc in docs %}
