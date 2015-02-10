@@ -175,7 +175,7 @@ def add_admin():
             print
             print "Scan the QR code below with Google Authenticator:"
             print
-            uri = admin.totp.provisioning_uri(username)
+            uri = admin.totp.provisioning_uri(username, issuer_name="SecureDrop")
             qr = qrcode.QRCode()
             qr.add_data(uri)
             qr.print_ascii(tty=sys.stdout.isatty())
