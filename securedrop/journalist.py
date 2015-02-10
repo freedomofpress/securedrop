@@ -15,9 +15,10 @@ import version
 import crypto_util
 import store
 import template_filters
-from db import (db_session, Source, Submission, SourceStar, get_one_or_else,
-                Journalist, NoResultFound, WrongPasswordException,
-                BadTokenException, LoginThrottledException)
+from db import (db_session, Source, Journalist, Submission, Reply,
+                SourceStar, get_one_or_else, NoResultFound,
+                WrongPasswordException, BadTokenException,
+                LoginThrottledException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -274,21 +275,6 @@ def admin_delete_user(user_id):
     return redirect(url_for('admin_index'))
 
 
-def get_docs(sid):
-    """Get docs associated with source id `sid`, sorted by submission date"""
-    docs = []
-    for filename in os.listdir(store.path(sid)):
-        os_stat = os.stat(store.path(sid, filename))
-        docs.append(dict(
-            name=filename,
-            date=datetime.utcfromtimestamp(os_stat.st_mtime),
-            size=os_stat.st_size,
-        ))
-    # sort in chronological order
-    docs.sort(key=lambda x: int(x['name'].split('-')[0]))
-    return docs
-
-
 def make_star_true(sid):
     source = get_source(sid)
     if source.star:
@@ -344,16 +330,8 @@ def index():
 @login_required
 def col(sid):
     source = get_source(sid)
-    docs = get_docs(sid)
-    submissions = [submission.filename for submission in Submission.query.filter(Submission.source_id == source.id).all()]
-    # Only include documents loaded from the filesystem which are replies or which are also listed in the
-    # submissions table to avoid displaying partially uploaded files (#561).
-    docs = [doc for doc in docs if doc['name'] in submissions or doc['name'].endswith('reply.gpg')]
-
-    haskey = crypto_util.getkey(sid)
-    return render_template("col.html", sid=sid,
-                           codename=source.journalist_designation, docs=docs, haskey=haskey,
-                           flagged=source.flagged)
+    source.has_key = crypto_util.getkey(sid)
+    return render_template("col.html", sid=sid, source=source)
 
 
 def delete_collection(source_id):
@@ -443,15 +421,14 @@ def doc(sid, fn):
 @app.route('/reply', methods=('POST',))
 @login_required
 def reply():
-    msg = request.form['msg']
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
-
-    crypto_util.encrypt(msg,
+    crypto_util.encrypt(request.form['msg'],
                         [ crypto_util.getkey(g.sid), config.JOURNALIST_KEY ],
                         output=store.path(g.sid, filename))
-
+    reply = Reply(g.user, g.source, filename)
+    db_session.add(reply)
     db_session.commit()
 
     flash("Thanks! Your reply has been stored.", "notification")
@@ -464,8 +441,8 @@ def generate_code():
     original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
 
-    for doc in Submission.query.filter(Submission.source_id == g.source.id).all():
-        doc.filename = store.rename_submission(g.sid, doc.filename, g.source.journalist_filename)
+    for item in g.source.collection:
+        item.filename = store.rename_submission(g.sid, item.filename, g.source.journalist_filename)
     db_session.commit()
 
     flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
@@ -476,8 +453,7 @@ def generate_code():
 @login_required
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = [doc.filename for doc in
-            Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()]
+    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()
     return bulk_download(sid, docs)
 
 
@@ -487,12 +463,10 @@ def bulk():
     action = request.form['action']
 
     doc_names_selected = request.form.getlist('doc_names_selected')
-    docs_selected = [
-        doc for doc in get_docs(g.sid) if doc['name'] in doc_names_selected]
-    filenames_selected = [
-        doc['name'] for doc in docs_selected]
+    selected_docs = [ doc for doc in g.source.collection
+                      if doc.filename in doc_names_selected ]
 
-    if not docs_selected:
+    if selected_docs == []:
         if action == 'download':
             flash("No collections selected to download!", "error")
         elif action == 'delete' or action == 'confirm_delete':
@@ -500,44 +474,41 @@ def bulk():
         return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':
-        return bulk_download(g.sid, filenames_selected)
+        return bulk_download(g.sid, selected_docs)
     elif action == 'delete':
-        return bulk_delete(g.sid, docs_selected)
+        return bulk_delete(g.sid, selected_docs)
     elif action == 'confirm_delete':
-        return confirm_bulk_delete(g.sid, docs_selected)
+        return confirm_bulk_delete(g.sid, selected_docs)
     else:
         abort(400)
 
 
-def confirm_bulk_delete(sid, docs_selected):
+def confirm_bulk_delete(sid, items_selected):
     return render_template('delete.html',
                            sid=sid,
-                           codename=g.source.journalist_designation,
-                           docs_selected=docs_selected)
+                           source=g.source,
+                           items_selected=items_selected)
 
 
-def bulk_delete(sid, docs_selected):
-    for doc in docs_selected:
-        if not doc['name'].endswith('reply.gpg'):
-            db_session.delete(Submission.query.filter(Submission.filename == doc['name']).one())
-        fn = store.path(sid, doc['name'])
-        worker.enqueue(store.secure_unlink, fn)
+def bulk_delete(sid, items_selected):
+    for item in items_selected:
+        item_path = store.path(sid, item.filename)
+        worker.enqueue(store.secure_unlink, item_path)
+        db_session.delete(item)
     db_session.commit()
 
-    flash("Submission{} deleted.".format("s" if len(docs_selected) > 1 else ""), "notification")
-    return redirect(url_for('col', sid=g.sid))
+    flash("Submission{} deleted.".format("s" if len(items_selected) > 1 else ""), "notification")
+    return redirect(url_for('col', sid=sid))
 
 
-def bulk_download(sid, docs_selected):
+def bulk_download(sid, items_selected):
     source = get_source(sid)
+    filenames = [ store.path(sid, item.filename) for item in items_selected ]
 
-    filenames = []
-    for doc in docs_selected:
-        filenames.append(store.path(sid, doc))
-        try:
-            Submission.query.filter(Submission.filename == doc).one().downloaded = True
-        except NoResultFound as e:
-            app.logger.error("Could not mark " + doc + " as downloaded: %s" % (e,))
+    # Mark the submissions that are about to be downloaded as such
+    for item in items_selected:
+        if isinstance(item, Submission):
+            item.downloaded = True
     db_session.commit()
 
     zf = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename)

@@ -9,12 +9,12 @@
     <p class="breadcrumbs">
       <a href="/">All Sources</a>
       <i class="fa fa-chevron-right"></i>
-      <strong>{{ codename }}</strong>
+      <strong>{{ source.journalist_designation }}</strong>
       <button type="submit" title="Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like." class="plain" id="regenerate-codename-btn"><i class="fa fa-refresh"></i> <span id="regenerate-codename-btn-label">Change codename</span></button>
     </p>
   </form>
 
-  {% if docs %}
+  {% if source.collection %}
     <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.</p>
     <form action="/bulk" method="post">
     <div class="document-actions">
@@ -23,18 +23,20 @@
       <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-times"></i> Delete selected</button>
     </div>
       <ul id="submissions" class="plain submissions">
-        {% for doc in docs %}
-          <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.name }}" class="doc-check"/>
-            {% if doc.name.endswith('reply.gpg') %}
-              <span class="file reply"><span class="filename">{{ doc.name }}</span></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span> sent <time title="{{ doc.date|datetimeformat }}" datetime="{{ doc.date }}">{{ doc.date|datetimeformat(relative=True) }}</time></span>
+        {% for doc in source.collection %}
+          <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
+            {% if doc.filename.endswith('reply.gpg') %}
+              <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
+              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span>
             {% else %}
-              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.name }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.name }}</span></a></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span> uploaded <time title="{{ doc.date|datetimeformat }}" datetime="{{ doc.date }}">{{ doc.date|datetimeformat(relative=True) }}</time></span>
+              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
+              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span>
             {% endif %}
-            {% if doc.name.endswith('-doc.zip.gpg') %}
+            {% if doc.filename.endswith('-doc.gz.gpg') %}
               <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>
-            {% else %}
+						{% elif doc.filename.endswith('-reply.gpg') %}
+						  <i title="Reply" class="fa fa-reply pull-right"></i>
+						{% else %}
               <i title="Message" class="fa fa-file-text-o pull-right"></i>
             {% endif %}
           </li>
@@ -51,7 +53,7 @@
   <hr class="cut-out" />
   <hr class="no-line" />
   <h3><i class="fa fa-reply"></i> Reply</h3>
-  {% if haskey %}
+  {% if source.has_key %}
     <p>You can write a secure reply to the person who submitted these documents:</p>
     <form action="/reply" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
@@ -60,7 +62,7 @@
       <hr class="no-line" />
       <button id="reply-button" class="button-custom" type="submit">Submit</button>
     </form>
-  {% elif flagged %}
+  {% elif source.flagged %}
     <p class="notification">You've flagged this source for reply.</p>
     <p>An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.</p>
   {% else %}
@@ -78,7 +80,7 @@
   <form id="delete_collection" action="/col/delete/{{sid}}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
     <input type="hidden" name="sid" value="{{ sid }}"/>
-    <input type="hidden" name="col_name" value="{{ codename }}"/>
+    <input type="hidden" name="col_name" value="{{ source.journalist_designation }}"/>
     <button type="submit" class="danger"><i class="fa fa-times"></i> Delete collection</button>
   </form>
 

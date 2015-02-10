@@ -106,6 +106,16 @@ class Source(Base):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
+    @property
+    def collection(self):
+        """Return the list of submissions and replies for this source, sorted
+        in ascending order by the filename/interaction count."""
+        collection = []
+        collection.extend(self.submissions)
+        collection.extend(self.replies)
+        collection.sort(key=lambda x: int(x.filename.split('-')[0]))
+        return collection
+
 
 class Submission(Base):
     __tablename__ = 'submissions'
@@ -123,6 +133,30 @@ class Submission(Base):
 
     def __repr__(self):
         return '<Submission %r>' % (self.filename)
+
+
+class Reply(Base):
+    __tablename__ = "replies"
+    id = Column(Integer, primary_key=True)
+
+    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    journalist = relationship("Journalist", backref=backref('replies', order_by=id))
+
+    source_id = Column(Integer, ForeignKey('sources.id'))
+    source = relationship("Source", backref=backref('replies', order_by=id))
+
+    filename = Column(String(255), nullable=False)
+    size = Column(Integer, nullable=False)
+
+    def __init__(self, journalist, source, filename):
+        self.journalist_id = journalist.id
+        self.source_id = source.id
+        self.filename = filename
+        self.size = os.stat(store.path(source.filesystem_id, filename)).st_size
+
+    def __repr__(self):
+        return '<Reply %r>' % (self.filename)
+
 
 class SourceStar(Base):
     __tablename__ = 'source_stars'

@@ -46,10 +46,10 @@
         <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
         <form class="message" method="post" action="/delete" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-          <input type="hidden" name="msgid" value="{{ reply.id }}" autocomplete="off"/>
+          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
           <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
         </form>
-        <blockquote>{{ reply.msg | nl2br }}</blockquote>
+        <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
         <div class="clearfix"></div>
       </div>
     {% endfor %}

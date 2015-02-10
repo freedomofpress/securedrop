@@ -7,6 +7,7 @@ import zipfile
 from cStringIO import StringIO
 import subprocess
 from threading import Thread
+import operator
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -25,7 +26,7 @@ import version
 import crypto_util
 import store
 import template_filters
-from db import db_session, Source, Submission
+from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
 
@@ -191,19 +192,18 @@ def async_genkey(sid, codename):
 @login_required
 def lookup():
     replies = []
-    for fn in os.listdir(g.loc):
-        if fn.endswith('-reply.gpg'):
-            try:
-                msg = crypto_util.decrypt(g.codename,
-                        file(store.path(g.sid, fn)).read()).decode("utf-8")
-            except UnicodeDecodeError:
-                app.logger.error("Could not decode reply %s" % fn)
-            else:
-                date = datetime.utcfromtimestamp(os.stat(store.path(g.sid, fn)).st_mtime)
-                replies.append(dict(id=fn, date=date, msg=msg))
+    for reply in g.source.replies:
+        reply_path = store.path(g.sid, reply.filename)
+        try:
+            reply.decrypted = crypto_util.decrypt(g.codename, file(reply_path).read()).decode('utf-8')
+        except UnicodeDecodeError:
+            app.logger.error("Could not decode reply %s" % reply.filename)
+        else:
+            reply.date = datetime.utcfromtimestamp(os.stat(reply_path).st_mtime)
+            replies.append(reply)
 
     # Sort the replies by date
-    replies.sort(key=lambda reply: reply['date'], reverse=True)
+    replies.sort(key=operator.attrgetter('date'), reverse=True)
 
     # Generate a keypair to encrypt replies from the journalist
     # Only do this if the journalist has flagged the source as one
@@ -282,14 +282,13 @@ def submit():
 @app.route('/delete', methods=('POST',))
 @login_required
 def delete():
-    msgid = request.form['msgid']
-    assert '/' not in msgid
-    potential_files = os.listdir(g.loc)
-    if msgid not in potential_files:
-        abort(404)  # TODO are the checks necessary?
-    store.secure_unlink(store.path(g.sid, msgid))
-    flash("Reply deleted", "notification")
+    query = Reply.query.filter(Reply.filename == request.form['reply_filename'])
+    reply = get_one_or_else(query, app.logger, abort)
+    store.secure_unlink(store.path(g.sid, reply.filename))
+    db_session.delete(reply)
+    db_session.commit()
 
+    flash("Reply deleted", "notification")
     return redirect(url_for('lookup'))
 
 

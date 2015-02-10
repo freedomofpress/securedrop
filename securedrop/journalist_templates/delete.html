@@ -1,21 +1,16 @@
 {% extends "base.html" %}
 {% block body %}
 
-{% with count=docs_selected|length %}
+{% with count=items_selected|length %}
 <p>The following {% if count == 1 %}file has{% else %}{{ count }} files have{% endif %} been selected for <strong>permanent deletion</strong>:</p>
 {% endwith %}
 
 <form action="/bulk" method="post">
 <ul>
-{% for doc in docs_selected %}
+{% for item in items_selected %}
 <li>
-	{{ doc.name }}
-	<input type="hidden" name="doc_names_selected" value="{{ doc.name }}" />
-	{% if doc.name.startswith('reply-') %}
-		(sent {{ doc.date }})
-	{% else %}
-		(uploaded {{ doc.date }})
-	{% endif %}
+	{{ item.filename }}
+	<input type="hidden" name="doc_names_selected" value="{{ item.filename }}" />
 </li>
 {% endfor %}
 </ul>
@@ -25,5 +20,5 @@
 <p><button type="submit" name="action" value="delete"><i class="fa fa-trash-o"></i> Permanently delete files</button></p>
 </form>
 
-<p><a href="/col/{{ sid }}">Return to the list of documents for {{ codename }}...</a></p>
+<p><a href="/col/{{ sid }}">Return to the list of documents for {{ source.journalist_designation }}...</a></p>
 {% endblock %}
