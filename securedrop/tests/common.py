@@ -6,7 +6,7 @@ import subprocess
 import gnupg
 
 import config
-import db
+from db import init_db, db_session, Source, Submission
 import crypto_util
 
 def clean_root():
@@ -31,18 +31,22 @@ def init_gpg():
     return gpg
 
 
-def init_db():
-    db.init_db()
-
-
 def setup_test_docs(sid, files):
     filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]
+
     for filename in filenames:
         dirname = os.path.dirname(filename)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         with open(filename, 'w') as fp:
             fp.write(str(uuid.uuid4()))
+
+        # Add Submission to the db
+        source = Source.query.filter(Source.filesystem_id == sid).one()
+        submission = Submission(source, os.path.basename(filename))
+        db_session.add(submission)
+        db_session.commit()
+
     return filenames
 
 

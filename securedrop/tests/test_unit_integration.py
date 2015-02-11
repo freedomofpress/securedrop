@@ -125,7 +125,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='confirm_delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -142,11 +142,10 @@ class TestIntegration(unittest.TestCase):
             action='delete',
             sid=sid,
             doc_names_selected=doc_name,
-            confirm_delete="1"
-        ))
+        ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
-        self.assertIn("File permanently deleted.", rv.data)
+        self.assertIn("Submission deleted.", rv.data)
 
         # confirm that submission deleted and absent in list of submissions
         rv = self.journalist_app.get(col_url)
@@ -209,7 +208,7 @@ class TestIntegration(unittest.TestCase):
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         rv = self.journalist_app.post('/bulk', data=dict(
-            action='delete',
+            action='confirm_delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
@@ -226,11 +225,10 @@ class TestIntegration(unittest.TestCase):
             action='delete',
             sid=sid,
             doc_names_selected=doc_name,
-            confirm_delete="1"
-        ))
+        ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
-        self.assertIn("File permanently deleted.", rv.data)
+        self.assertIn("Submission deleted.", rv.data)
 
         # confirm that submission deleted and absent in list of submissions
         rv = self.journalist_app.get(col_url)
@@ -386,10 +384,10 @@ class TestIntegration(unittest.TestCase):
                     "You have received a reply. For your security, please delete all replies when you're done with them.", rv.data)
                 self.assertIn(test_reply, rv.data)
                 soup = BeautifulSoup(rv.data)
-                msgid = soup.select('form.message > input[name="msgid"]')[0]['value']
+                msgid = soup.select('form.message > input[name="reply_filename"]')[0]['value']
                 rv = source_app.post('/delete', data=dict(
                     sid=sid,
-                    msgid=msgid
+                    reply_filename=msgid
                 ), follow_redirects=True)
                 self.assertEqual(rv.status_code, 200)
                 self.assertIn("Reply deleted", rv.data)
@@ -538,7 +536,7 @@ class TestIntegration(unittest.TestCase):
         # delete
         rv = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
-            action='delete',
+            action='confirm_delete',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
@@ -548,11 +546,10 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
             action='delete',
-            confirm_delete=1,
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("File permanently deleted.", rv.data)
+        self.assertIn("Submission deleted.", rv.data)
 
         # Make sure the files were deleted from the filesystem
         self._wait_for(

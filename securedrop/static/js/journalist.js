@@ -8,6 +8,11 @@ function enhance_ui() {
 
   // Add the "select {all,none}" buttons
   $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+
+  // Change the action on the /col pages so we use a Javascript
+  // confirmation instead of redirecting to a confirmation page before
+  // deleting submissions
+  $('button#delete_selected').attr('value', 'delete');
 }
 
 $(function () {
@@ -41,6 +46,17 @@ $(function () {
     }
     // Don't submit the form if no collections are selected
     return false;
+  });
+
+  $("#delete_selected").click(function () {
+      var checked = $("ul#submissions li :checkbox").filter(function() {
+          return $(this).prop('checked')
+      });
+      if (checked.length > 0) {
+          return confirmed = confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
+      }
+      // Don't submit the form if no submissions are selected
+      return false;
   });
 
   $("#unread a").click(function(){

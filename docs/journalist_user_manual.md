@@ -69,9 +69,9 @@ But first, if you'd like to reply to the source, write your message in the text 
 
 ![Sent reply](/docs/images/manual/document2.png)
 
-Once your reply has been submitted, you will see this confirmation page.
+Once your reply has been successfully submitted, you will be returned to the source page and see a message confirming that the reply was stored. The source will see your reply the next time they log in with their unique codename. To minimize sensitive data retention, the source interface UI encourages the source to delete the reply after reading it. If you notice one or more replies disappear from the list of documents, you may infer that the source read and deleted them. You may also delete replies if you change your mind after sending them.
 
-![Sent reply confirmation](/docs/images/manual/document5.png)
+#### Flag for reply
 
 If the server experiences a large number of new sources signing up at once and is overloaded with submissions, you will need to flag sources for reply before you can communicate with them. Click the `Flag this source for reply` button.
 
