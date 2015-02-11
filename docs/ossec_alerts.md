@@ -110,7 +110,9 @@ The output will show you attempts to send the alerts and provide hints as to wha
 | Server certificate not verified | Check that smtp_tls_fingerprint_cert_match in /etc/postfix/main.cf is correct |
 | Authentication failure | Edit /etc/postfix/sasl_passwd and make sure the username, domain and password are correct. Run `postmap /etc/postfix/sasl_passwd` to update when finished. |
 
-After making changes to the Postfix configuration, you should `service postfix reload` and test the new settings by restarting the OSSEC service.
+After making changes to the Postfix configuration, you should run `service postfix reload` and test the new settings by restarting the OSSEC service.
+
+Note that if you change the SMTP relay port after installation for any reason, you must update not only the relayhost in main.cf and contents of sasl_passwd, but also the iptables firewall rules applying to outbound SMTP which are in `/etc/network/iptables/rules_v4`.
 
 Other log files that may contain useful information:
 
@@ -119,6 +121,8 @@ Other log files that may contain useful information:
  * /var/ossec/logs/ossec.log - OSSEC's general operation is covered here
  
  * /var/ossec/logs/alerts/alerts.log - contains details of every recent OSSEC alert
+ 
+ * /var/log/syslog - messages related to grsecurity, AppArmor and iptables
  
 ## Analyzing the Alerts
  
