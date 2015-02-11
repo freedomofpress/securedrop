@@ -71,6 +71,26 @@
     <description>time was set on the system</description>
     <options>no_email_alert</options>
   </rule>
+
+  <!--
+    Drop the denied RWX mmap events. Choose to keep logging the events and just
+    not alert on them. This will help identify when this behavior is causing an
+    issue somewhere on the system, while not flooding the admin with extra
+    alerts.
+    https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options#Denied_RWX_mmap.2Fmprotect_logging
+    Sample:
+      Received From: (app-prod) 10.0.1.4->/var/log/syslog
+      Rule: 100101 fired (level 7) -> "grsec error was detected"
+      Portion of the log(s):
+
+      Feb 10 23:32:53 app-prod kernel: [   17.657822] grsec: denied RWX mmap of <anonymous mapping> by /usr/bin/cloud-init[cloud-init:1541] uid/euid:0/0 gid/egid:0/0, parent /sbin/init[init:1] uid/euid:0/0 gid/egid:0/0
+  -->
+  <rule id="100103" level="0">
+    <if_sid>100101</if_sid>
+    <match>denied RWX mmap of</match>
+    <description>Denied RWX mmap mprotect logging</description>
+    <option>no_email_alert</option>
+  </rule>
 </group>
 
 <!--
