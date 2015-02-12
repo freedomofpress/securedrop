@@ -200,6 +200,7 @@
   /var/www/securedrop/worker.py r,
   /var/www/securedrop/worker.pyc rw,
   /var/www/source.wsgi r,
+  /var/www/.gnupg/ rw,
   /var/www/.gnupg/** rw,
   /var/log/apache2/other_vhosts_access.log rw,
 
