@@ -247,11 +247,11 @@ def admin_edit_user(user_id):
 
         if request.form['password'] != "":
             if request.form['password'] != request.form['password_again']:
-                flash("Passwords didn't match", "password_validation")
-                return redirect(url_for("admin_edit_user"))
+                flash("Passwords didn't match", "error")
+                return redirect(url_for("admin_edit_user", user_id=user_id))
             user.set_password(request.form['password'])
 
-        is_admin = bool(request.form.get('is_admin'))
+        user.is_admin = bool(request.form.get('is_admin'))
 
         try:
             db_session.add(user)
