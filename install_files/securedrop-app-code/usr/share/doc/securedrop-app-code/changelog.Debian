@@ -1,5 +1,5 @@
-securedrop-app-code (0.3) unstable; urgency=low
+securedrop-app-code (0.3) trusty; urgency=medium
 
-  * Initial release 
+  * Initial release using Debian packages. For details on the differences between this release and the last (0.2), see `changelog.md`.
 
- -- James Dolan <securedrop@pressfreedomfoundation.org>  Fri, 14 Mar 2014 15:46:57 -0700
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 12 Feb 2015 03:33:44 +0000
