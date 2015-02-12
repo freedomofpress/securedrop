@@ -158,13 +158,13 @@ def admin_add_user():
         username = request.form['username']
         if len(username) == 0:
             form_valid = False
-            flash("Missing username", "username_validation")
+            flash("Missing username", "error")
 
         password = request.form['password']
         password_again = request.form['password_again']
         if password != password_again:
             form_valid = False
-            flash("Passwords didn't match", "password_validation")
+            flash("Passwords didn't match", "error")
 
         is_admin = bool(request.form.get('is_admin'))
 
@@ -183,10 +183,10 @@ def admin_add_user():
                 form_valid = False
                 if "username is not unique" in str(e):
                     flash("That username is already in use",
-                          "username_validation")
+                          "error")
                 else:
                     flash("An error occurred saving this user to the database",
-                          "general_validation")
+                          "error")
 
         if form_valid:
             return redirect(url_for('admin_new_user_two_factor',
@@ -261,7 +261,7 @@ def admin_edit_user(user_id):
             if "username is not unique" in str(e):
                 flash("That username is already in use", "notification")
             else:
-                flash("An unknown error occurred, please inform your administrator", "notification")
+                flash("An unknown error occurred, please inform your administrator", "error")
 
     return render_template("admin_edit_user.html", user=user)
 
