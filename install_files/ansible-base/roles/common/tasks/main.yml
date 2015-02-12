@@ -1,8 +1,6 @@
 ---
 - include: create_users.yml
 
-- include: sysctl.yml
-
 - include: harden_dns.yml
 
 - include: remove_kernel_modules.yml
@@ -18,6 +16,8 @@
 - include: cron_apt.yml
   tags:
     - reboot
+
+- include: sysctl.yml
 
 - include: apply_grsec_lock.yml
   tags:
