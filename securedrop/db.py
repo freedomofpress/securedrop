@@ -173,7 +173,7 @@ class SourceStar(Base):
         self.starred = starred
 
 
-class InvalidUsernameEception(Exception):
+class InvalidUsernameException(Exception):
     """Raised when a user logs in with an invalid username"""
 
 

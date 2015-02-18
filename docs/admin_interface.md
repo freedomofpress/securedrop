@@ -32,7 +32,7 @@ Inside the Google authenticator app, a new entry for this account will appear on
 
 ![“Verify Google Authenticator works”](images/admin_enter_verification.png)
 
-If Google Authenticator was set up correctly, you will be redircted back to the Admin Interface and will see a flashed message that says "Two factor token successfully verified for user *new username*!".
+If Google Authenticator was set up correctly, you will be redirected back to the Admin Interface and will see a flashed message that says "Two factor token successfully verified for user *new username*!".
 
 ### Yubikey
 
@@ -44,7 +44,7 @@ Once you've configured your Yubikey and entered the Secret Key, click *Add user*
 
 !["Enable Yubikey"](images/admin_verify_yubikey.png)
 
-If everything was set up correctly, you will be redirected back to the Admin Interface, whre you should see a flashed message that says "Two factor token successfully verified for user *new username*!".
+If everything was set up correctly, you will be redirected back to the Admin Interface, where you should see a flashed message that says "Two factor token successfully verified for user *new username*!".
 
 Congratulations! You have successfully set up a journalist on SecureDrop. Make sure the journalist remembers their username and password and always has their 2 factor authentication device in their possession when they attempt to log in to SecureDrop.
 

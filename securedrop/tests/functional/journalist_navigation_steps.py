@@ -130,7 +130,7 @@ class JournalistNavigationSteps():
         self.assertIn("Enable Google Authenticator", [ el.text for el in h1s ])
 
         # Retrieve the saved user object from the db and keep it around for
-        # futher testing
+        # further testing
         self.new_user['orm_obj'] = Journalist.query.filter(
                 Journalist.username == self.new_user['username']).one()
 

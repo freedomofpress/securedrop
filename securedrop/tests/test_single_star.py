@@ -26,7 +26,7 @@ class TestJournalist(unittest.TestCase):
         db_session.commit.assert_called_with()
 
     @patch('journalist.make_star_true')
-    def test_single_delgates_to_make_star_true(self, make_star_true):
+    def test_single_delegates_to_make_star_true(self, make_star_true):
         sid = 'sid'
 
         journalist.add_star(sid)
