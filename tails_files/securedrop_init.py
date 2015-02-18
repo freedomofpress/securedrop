@@ -16,7 +16,7 @@ if __name__ == '__main__':
     if os.path.isfile(path_torrc_additions):
         torrc_additions = open(path_torrc_additions).read()
     else:
-        sys.exit('Error opening {0} for reading'.format(path_torrc_additions));
+        sys.exit('Error opening {0} for reading'.format(path_torrc_additions))
 
     # load torrc
     if os.path.isfile(path_torrc_backup):
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         if os.path.isfile(path_torrc):
             torrc = open(path_torrc).read()
         else:
-            sys.exit('Error opening {0} for reading'.format(path_torrc));
+            sys.exit('Error opening {0} for reading'.format(path_torrc))
 
         # save a backup
         open(path_torrc_backup, 'w').write(torrc)
@@ -37,5 +37,4 @@ if __name__ == '__main__':
     subprocess.call(['/usr/sbin/service', 'tor', 'reload'])
 
     # success
-    subprocess.call(['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc', 'You can now connect to your SecureDrop\ndocument interface']);
-
+    subprocess.call(['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc', 'You can now connect to your SecureDrop\ndocument interface'])
