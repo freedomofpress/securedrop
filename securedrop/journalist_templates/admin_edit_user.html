@@ -34,7 +34,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}"/>
   <button type="submit" class="center"><i class="fa fa-refresh"></i> Reset two factor authentication (Google Authenticator)</button>
 </form>
-</br />
+<br />
 <form method="post" action="{{ url_for('admin_reset_two_factor_hotp') }}" id="reset-two-factor-hotp">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <input name="uid" type="hidden" value="{{ user.id }}"/>
