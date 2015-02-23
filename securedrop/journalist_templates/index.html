@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-<h2><span class="headline">Sources</span></h2>
-{% if unstarred or starred %}
-  <div id='filter-container'></div>
+  <h2><span class="headline">Sources</span></h2>
+  {% if unstarred or starred %}
+    <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <p>
@@ -66,8 +66,8 @@
       {% endif %}
 
     </form>
-  </div>
-{% else %}
-  <p>No documents have been submitted!</p>
-{% endif %}
+  {% else %}
+    <p>No documents have been submitted!</p>
+  {% endif %}
+</div>
 {% endblock %}
