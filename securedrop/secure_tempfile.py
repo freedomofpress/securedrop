@@ -6,6 +6,7 @@ from Crypto.Cipher import AES
 from Crypto.Random import random
 from Crypto.Util import Counter
 
+
 class SecureTemporaryFile(_TemporaryFileWrapper):
     """Temporary file that is ephemerally encrypted on the fly.
 
@@ -37,7 +38,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
         Randomly generate an AES key to encrypt the file
         """
         self.key = os.urandom(self.AES_key_size / 8)
-        self.iv  = random.getrandbits(self.AES_block_size)
+        self.iv = random.getrandbits(self.AES_block_size)
         self.initialize_cipher()
 
     def initialize_cipher(self):
@@ -76,4 +77,3 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
 
     def close(self):
         return _TemporaryFileWrapper.close(self)
-

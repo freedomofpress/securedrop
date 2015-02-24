@@ -4,6 +4,7 @@ import journalist_navigation_steps
 import unittest
 import urllib2
 
+
 class SubmitAndRetrieveMessage(
         unittest.TestCase,
         functional_test.FunctionalTest,
@@ -24,6 +25,7 @@ class SubmitAndRetrieveMessage(
         self._journalist_logs_in()
         self._journalist_checks_messages()
         self._journalist_downloads_message()
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

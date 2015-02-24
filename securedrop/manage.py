@@ -5,7 +5,7 @@ import os
 import shutil
 import subprocess
 import unittest
-import readline # makes the add_admin prompt kick ass
+import readline  # makes the add_admin prompt kick ass
 from getpass import getpass
 import signal
 from time import sleep
@@ -26,9 +26,11 @@ os.environ['SECUREDROP_ENV'] = 'dev'
 
 WORKER_PIDFILE = "/tmp/test_rqworker.pid"
 
+
 def get_pid_from_pidfile(pid_file_name):
     with open(pid_file_name) as fp:
         return int(fp.read())
+
 
 def _start_test_rqworker(config):
     # needed to determine the directory to run the worker in
@@ -42,16 +44,18 @@ def _start_test_rqworker(config):
     if not worker_running:
         tmp_logfile = open("/tmp/test_rqworker.log", "w")
         subprocess.Popen(
-                [
-                    "rqworker", "test",
-                    "-P", config.SECUREDROP_ROOT,
-                    "--pid", WORKER_PIDFILE
-                ],
+            [
+                "rqworker", "test",
+                "-P", config.SECUREDROP_ROOT,
+                "--pid", WORKER_PIDFILE,
+            ],
             stdout=tmp_logfile,
             stderr=subprocess.STDOUT)
 
+
 def _stop_test_rqworker():
     os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
+
 
 def start():
     import config
@@ -97,6 +101,7 @@ def test():
     test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
     _stop_test_rqworker()
     sys.exit(test_rc)
+
 
 def test_unit():
     """
@@ -200,8 +205,8 @@ def clean_tmp():
         for proc in psutil.process_iter():
             try:
                 open_files = proc.open_files()
-                in_use = in_use or any([ open_file.path == fname
-                                         for open_file in open_files ])
+                in_use = in_use or any([open_file.path == fname
+                                        for open_file in open_files])
                 # Early return for perf
                 if in_use:
                     break
@@ -235,7 +240,8 @@ def main():
     try:
         getattr(sys.modules[__name__], cmd)()
     except KeyboardInterrupt:
-        print # So our prompt appears on a nice new line
+        print  # So our prompt appears on a nice new line
+
 
 if __name__ == "__main__":
     main()

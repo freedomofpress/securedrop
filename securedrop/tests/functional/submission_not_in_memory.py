@@ -7,6 +7,7 @@ import os
 import getpass
 import re
 
+
 class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps):
 
     def setUp(self):
@@ -55,4 +56,3 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         secrets_in_memory = self._num_strings_in(self.secret_message, memory_dump)
 
         self.assertLess(secrets_in_memory, 1)
-

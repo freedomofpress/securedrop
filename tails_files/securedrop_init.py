@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
-import os, sys, subprocess
+import os
+import sys
+import subprocess
+
 
 if __name__ == '__main__':
     # check for root
-    if not os.geteuid()==0:
+    if os.geteuid() != 0:
         sys.exit('You need to run this as root')
 
     # paths
@@ -31,7 +34,7 @@ if __name__ == '__main__':
         open(path_torrc_backup, 'w').write(torrc)
 
     # append the additions
-    open(path_torrc, 'w').write(torrc+torrc_additions)
+    open(path_torrc, 'w').write(torrc + torrc_additions)
 
     # reload tor
     subprocess.call(['/usr/sbin/service', 'tor', 'reload'])

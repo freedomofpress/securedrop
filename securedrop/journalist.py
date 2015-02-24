@@ -321,7 +321,7 @@ def index():
         else:
             unstarred.append(source)
         source.num_unread = len(
-            Submission.query.filter(Submission.source_id == source.id, Submission.downloaded == False).all())
+            Submission.query.filter(Submission.source_id == source.id, Submission.downloaded is False).all())
 
     return render_template('index.html', unstarred=unstarred, starred=starred)
 
@@ -354,7 +354,7 @@ def col_process():
     if 'cols_selected' not in request.form:
         return redirect(url_for('index'))
 
-    cols_selected = request.form.getlist('cols_selected') # getlist is cgi.FieldStorage.getlist
+    cols_selected = request.form.getlist('cols_selected')  # getlist is cgi.FieldStorage.getlist
     action = request.form['action']
 
     if action not in actions:
@@ -425,7 +425,7 @@ def reply():
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
     crypto_util.encrypt(request.form['msg'],
-                        [ crypto_util.getkey(g.sid), config.JOURNALIST_KEY ],
+                        [crypto_util.getkey(g.sid), config.JOURNALIST_KEY],
                         output=store.path(g.sid, filename))
     reply = Reply(g.user, g.source, filename)
     db_session.add(reply)
@@ -453,7 +453,7 @@ def generate_code():
 @login_required
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded == False).all()
+    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded is False).all()
     return bulk_download(sid, docs)
 
 
@@ -463,8 +463,8 @@ def bulk():
     action = request.form['action']
 
     doc_names_selected = request.form.getlist('doc_names_selected')
-    selected_docs = [ doc for doc in g.source.collection
-                      if doc.filename in doc_names_selected ]
+    selected_docs = [doc for doc in g.source.collection
+                     if doc.filename in doc_names_selected]
 
     if selected_docs == []:
         if action == 'download':
@@ -503,7 +503,7 @@ def bulk_delete(sid, items_selected):
 
 def bulk_download(sid, items_selected):
     source = get_source(sid)
-    filenames = [ store.path(sid, item.filename) for item in items_selected ]
+    filenames = [store.path(sid, item.filename) for item in items_selected]
 
     # Mark the submissions that are about to be downloaded as such
     for item in items_selected:
@@ -526,10 +526,13 @@ def flag():
     db_session.commit()
     return render_template('flag.html', sid=g.sid,
                            codename=g.source.journalist_designation)
+
+
 def write_pidfile():
     pid = str(os.getpid())
     with open(config.JOURNALIST_PIDFILE, 'w') as fp:
         fp.write(pid)
+
 
 if __name__ == "__main__":
     write_pidfile()

@@ -3,12 +3,12 @@ import source_navigation_steps
 import journalist_navigation_steps
 import functional_test
 
+
 class SubmitAndRetrieveFile(
         unittest.TestCase,
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps,
-        journalist_navigation_steps.JournalistNavigationSteps
-        ):
+        journalist_navigation_steps.JournalistNavigationSteps):
 
     def setUp(self):
         functional_test.FunctionalTest.setUp(self)

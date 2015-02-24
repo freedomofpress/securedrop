@@ -50,6 +50,7 @@ else:
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
 
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
@@ -124,7 +125,7 @@ def generate_unique_codename(num_words):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(num_words)
-        sid = crypto_util.hash_codename(codename) # scrypt (slow)
+        sid = crypto_util.hash_codename(codename)  # scrypt (slow)
         matching_sources = Source.query.filter(Source.filesystem_id == sid).all()
         if len(matching_sources) == 0:
             return codename
@@ -173,6 +174,7 @@ def async(f):
         thread.start()
     return wrapper
 
+
 @async
 def async_genkey(sid, codename):
     crypto_util.genkeypair(sid, codename)
@@ -212,7 +214,7 @@ def lookup():
         async_genkey(g.sid, g.codename)
 
     return render_template('lookup.html', codename=g.codename, replies=replies,
-            flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
+                           flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
 
 
 def normalize_timestamps(sid):
@@ -221,8 +223,8 @@ def normalize_timestamps(sid):
     the latest submission. This minimizes metadata that could be useful to
     investigators. See #301.
     """
-    sub_paths = [ store.path(sid, submission.filename)
-                  for submission in g.source.submissions ]
+    sub_paths = [store.path(sid, submission.filename)
+                 for submission in g.source.submissions]
     if len(sub_paths) > 1:
         args = ["touch"]
         args.extend(sub_paths[:-1])
@@ -244,11 +246,11 @@ def submit():
     if msg:
         g.source.interaction_count += 1
         fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
-            journalist_filename, msg))
+                      journalist_filename, msg))
     if fh:
         g.source.interaction_count += 1
         fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
-            journalist_filename, fh.filename, fh.stream))
+                      journalist_filename, fh.filename, fh.stream))
 
     if first_submission:
         flash("Thanks for submitting something to SecureDrop! Please check back later for replies.",
@@ -295,6 +297,7 @@ def delete():
 def valid_codename(codename):
     return os.path.exists(store.path(crypto_util.hash_codename(codename)))
 
+
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -339,9 +342,11 @@ def why_download_journalist_pubkey():
 def page_not_found(error):
     return render_template('notfound.html'), 404
 
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('error.html'), 500
+
 
 def write_pidfile():
     pid = str(os.getpid())
@@ -352,4 +357,3 @@ if __name__ == "__main__":
     write_pidfile()
     # TODO make sure debug is not on in production
     app.run(debug=True, host='0.0.0.0', port=8080)
-

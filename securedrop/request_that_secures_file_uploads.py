@@ -4,6 +4,7 @@ from flask import wrappers
 
 from secure_tempfile import SecureTemporaryFile
 
+
 class RequestThatSecuresFileUploads(wrappers.Request):
 
     def _secure_file_stream(self, total_content_length, content_type,
@@ -26,7 +27,6 @@ class RequestThatSecuresFileUploads(wrappers.Request):
             return SecureTemporaryFile('/tmp')
         return BytesIO()
 
-
     def make_form_data_parser(self):
         return self.form_data_parser_class(self._secure_file_stream,
                                            self.charset,
@@ -34,4 +34,3 @@ class RequestThatSecuresFileUploads(wrappers.Request):
                                            self.max_form_memory_size,
                                            self.max_content_length,
                                            self.parameter_storage_class)
-

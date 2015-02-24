@@ -2,6 +2,7 @@ import functional_test
 import journalist_navigation_steps
 import unittest
 
+
 class AdminInterface(
         unittest.TestCase,
         functional_test.FunctionalTest,

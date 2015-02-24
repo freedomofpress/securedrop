@@ -77,7 +77,9 @@ class TestSource(TestCase):
             self.assertEqual(response.status_code, 403)
 
     def test_generate_has_login_link(self):
-        """The generate page should have a link to remind people to login if they already have a codename, rather than create a new one."""
+        """The generate page should have a link to remind people to login
+           if they already have a codename, rather than create a new one.
+        """
         rv = self.client.get('/generate')
         self.assertIn("Already have a codename?", rv.data)
         soup = BeautifulSoup(rv.data)
@@ -135,9 +137,9 @@ class TestSource(TestCase):
         subsequent submissions
         """
         return self.client.post('/submit', data=dict(
-                msg="Pay no attention to the man behind the curtain.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
+            msg="Pay no attention to the man behind the curtain.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
 
     def test_initial_submission_notification(self):
         """

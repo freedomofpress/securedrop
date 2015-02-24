@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from db import db_session, Journalist
 
+
 class JournalistNavigationSteps():
 
     def _get_submission_content(self, file_url, raw_content):
@@ -81,14 +82,14 @@ class JournalistNavigationSteps():
 
         # Admin user should have a link that take them to the admin page
         links = self.driver.find_elements_by_tag_name('a')
-        self.assertIn('Admin', [ el.text for el in links ])
+        self.assertIn('Admin', [el.text for el in links])
 
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
 
         h2s = self.driver.find_elements_by_tag_name('h2')
-        self.assertIn("Admin Interface", [ el.text for el in h2s ])
+        self.assertIn("Admin Interface", [el.text for el in h2s])
 
         users_table_rows = self.driver.find_elements_by_css_selector('table#users tr.user')
         self.assertEquals(len(users_table_rows), 1)
@@ -116,7 +117,7 @@ class JournalistNavigationSteps():
 
         # The add user page has a form with an "Add user" button
         btns = self.driver.find_elements_by_tag_name('button')
-        self.assertIn('Add user', [ el.text for el in btns ])
+        self.assertIn('Add user', [el.text for el in btns])
 
         self.new_user = dict(
             username='dellsberg',
@@ -127,12 +128,12 @@ class JournalistNavigationSteps():
         # Clicking submit on the add user form should redirect to the Google
         # Authenticator page
         h1s = self.driver.find_elements_by_tag_name('h1')
-        self.assertIn("Enable Google Authenticator", [ el.text for el in h1s ])
+        self.assertIn("Enable Google Authenticator", [el.text for el in h1s])
 
         # Retrieve the saved user object from the db and keep it around for
         # further testing
         self.new_user['orm_obj'] = Journalist.query.filter(
-                Journalist.username == self.new_user['username']).one()
+            Journalist.username == self.new_user['username']).one()
 
         # Verify the two factor authentication
         token_field = self.driver.find_element_by_css_selector('input[name="token"]')
@@ -143,7 +144,7 @@ class JournalistNavigationSteps():
         # Successfully verifying the code should redirect to the admin
         # interface, and flash a message indicating success
         flashed_msgs = self.driver.find_elements_by_css_selector('p.flash')
-        self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [ el.text for el in flashed_msgs ])
+        self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [el.text for el in flashed_msgs])
 
     def _logout(self):
         # Click the logout link
@@ -154,7 +155,7 @@ class JournalistNavigationSteps():
         self.wait_for(
             lambda: self.assertIn("Login to access the journalist interface",
                                   self.driver.page_source)
-            )
+        )
 
     def _check_login_with_otp(self, otp):
         self._logout()
@@ -198,8 +199,8 @@ class JournalistNavigationSteps():
 
     def _edit_user(self, username):
         new_user_edit_links = filter(
-                lambda el: el.get_attribute('data-username') == username,
-                self.driver.find_elements_by_tag_name('a'))
+            lambda el: el.get_attribute('data-username') == username,
+            self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
 
@@ -216,17 +217,17 @@ class JournalistNavigationSteps():
         admin_interface_link.click()
 
         # Click the "edit user" link for the new user
-        #self._edit_user(self.new_user['username'])
+        # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
-                lambda el: el.get_attribute('data-username') == self.new_user['username'],
-                self.driver.find_elements_by_tag_name('a'))
+            lambda el: el.get_attribute('data-username') == self.new_user['username'],
+            self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
         self.wait_for(
             lambda: self.assertIn('Edit user "{}"'.format(
                 self.new_user['username']),
                 self.driver.page_source)
-            )
+        )
 
         new_username = self.new_user['username'] + "2"
 
@@ -238,7 +239,7 @@ class JournalistNavigationSteps():
         self.wait_for(
             lambda: self.assertIn('Edit user "{}"'.format(new_username),
                                   self.driver.page_source)
-            )
+        )
 
         # Update self.new_user with the new username for the future tests
         self.new_user['username'] = new_username
@@ -250,7 +251,7 @@ class JournalistNavigationSteps():
                          self.new_user['orm_obj'].totp.now())
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
-            )
+        )
 
         # Log the admin user back in
         self._logout()
@@ -276,7 +277,7 @@ class JournalistNavigationSteps():
         self.wait_for(
             lambda: self.assertIn('Edit user "{}"'.format(new_username),
                                   self.driver.page_source)
-            )
+        )
 
         # Update self.new_user with the new password
         # TODO dry
@@ -289,7 +290,7 @@ class JournalistNavigationSteps():
                          self.new_user['orm_obj'].totp.now())
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
-            )
+        )
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
@@ -318,7 +319,7 @@ class JournalistNavigationSteps():
 
         submission_req = urllib2.Request(file_url)
         submission_req.add_header('Cookie',
-                cookie_string_from_selenium_cookies(self.driver.get_cookies()))
+                                  cookie_string_from_selenium_cookies(self.driver.get_cookies()))
         raw_content = urllib2.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
