@@ -13,8 +13,8 @@ import common
 from db import db_session, Source
 import crypto_util
 
-class TestStore(unittest.TestCase):
 
+class TestStore(unittest.TestCase):
     """The set of tests for store.py."""
     def setUp(self):
         common.shared_setup()

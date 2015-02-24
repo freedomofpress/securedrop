@@ -28,6 +28,7 @@ SCRYPT_GPG_PEPPER = config.SCRYPT_GPG_PEPPER
 
 DEFAULT_WORDS_IN_RANDOM_ID = 8
 
+
 # Make sure these pass before the app can run
 # TODO: Add more tests
 def do_runtime_tests():
@@ -119,11 +120,12 @@ def genkeypair(name, secret):
 def delete_reply_keypair(source_id):
     key = getkey(source_id)
     # If this source was never flagged for review, they won't have a reply keypair
-    if not key: return
+    if not key:
+        return
     # The private key needs to be deleted before the public key can be deleted
     # http://pythonhosted.org/python-gnupg/#deleting-keys
-    gpg.delete_keys(key, True) # private key
-    gpg.delete_keys(key)       # public key
+    gpg.delete_keys(key, True)  # private key
+    gpg.delete_keys(key)  # public key
     # TODO: srm?
 
 
@@ -149,8 +151,8 @@ def encrypt(plaintext, fingerprints, output=None):
     # GPG outputs fingerprints with spaces for readability, but requires the
     # spaces to be removed when using fingerprints to specify recipients.
     if not isinstance(fingerprints, (list, tuple)):
-        fingerprints = [fingerprints,]
-    fingerprints = [ fpr.replace(' ', '') for fpr in fingerprints ]
+        fingerprints = [fingerprints, ]
+    fingerprints = [fpr.replace(' ', '') for fpr in fingerprints]
 
     if isinstance(plaintext, unicode):
         plaintext = plaintext.encode('utf8')

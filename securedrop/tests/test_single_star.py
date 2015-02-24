@@ -2,6 +2,7 @@ import unittest
 import journalist
 from mock import patch, ANY, MagicMock
 
+
 class TestJournalist(unittest.TestCase):
 
     def setUp(self):
@@ -33,7 +34,6 @@ class TestJournalist(unittest.TestCase):
 
         make_star_true.assert_called_with(sid)
 
-
     @patch('journalist.url_for')
     @patch('journalist.redirect')
     def test_remove_star_renders_template(self, redirect, url_for):
@@ -60,4 +60,3 @@ class TestJournalist(unittest.TestCase):
         # Reset the module variables that were changed to mocks so we don't
         # break other tests
         reload(journalist)
-

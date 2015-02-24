@@ -9,6 +9,7 @@ import config
 from db import init_db, db_session, Source, Submission
 import crypto_util
 
+
 def clean_root():
     shutil.rmtree(config.SECUREDROP_DATA_ROOT)
 

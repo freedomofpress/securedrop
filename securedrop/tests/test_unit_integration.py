@@ -70,7 +70,7 @@ class TestIntegration(unittest.TestCase):
         self.mock_journalist_verify_token.return_value = True
 
         # Add a test user to the journalist interface and log them in
-        #print Journalist.query.all()
+        # print Journalist.query.all()
         self.user_pw = "bar"
         self.user = Journalist(username="foo",
                                password=self.user_pw)
@@ -156,8 +156,8 @@ class TestIntegration(unittest.TestCase):
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
         self._wait_for(
-                lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
-            )
+            lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+        )
 
     def test_submit_file(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
@@ -239,8 +239,8 @@ class TestIntegration(unittest.TestCase):
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
         self._wait_for(
-                lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
-            )
+            lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+        )
 
     def test_reply_normal(self):
         self.helper_test_reply("This is a test reply.", True)
@@ -271,10 +271,10 @@ class TestIntegration(unittest.TestCase):
         # Attempt decryption with the given key
         if passphrase:
             passphrase = crypto_util.hash_codename(passphrase,
-                    salt=crypto_util.SCRYPT_GPG_PEPPER)
+                                                   salt=crypto_util.SCRYPT_GPG_PEPPER)
         decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
         self.assertTrue(decrypted_data.ok,
-                "Could not decrypt msg with key, gpg says: {}".format(decrypted_data.stderr))
+                        "Could not decrypt msg with key, gpg says: {}".format(decrypted_data.stderr))
 
         # We have to clean up the temporary GPG dir
         shutil.rmtree(gpg_tmp_dir)
@@ -352,7 +352,7 @@ class TestIntegration(unittest.TestCase):
         # Download the reply and verify that it can be decrypted with the
         # journalist's key as well as the source's reply key
         sid = soup.select('input[name="sid"]')[0]['value']
-        checkbox_values = [ soup.select('input[name="doc_names_selected"]')[1]['value'] ]
+        checkbox_values = [soup.select('input[name="doc_names_selected"]')[1]['value']]
         rv = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
             action='download',
@@ -394,8 +394,8 @@ class TestIntegration(unittest.TestCase):
 
                 # Make sure the reply is deleted from the filesystem
                 self._wait_for(
-                        lambda: self.assertFalse(os.path.exists(store.path(sid, msgid)))
-                    )
+                    lambda: self.assertFalse(os.path.exists(store.path(sid, msgid)))
+                )
 
                 common.logout(source_app)
 
@@ -430,8 +430,8 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the collection is deleted from the filesystem
         self._wait_for(
-                lambda: self.assertFalse(os.path.exists(store.path(sid)))
-            )
+            lambda: self.assertFalse(os.path.exists(store.path(sid)))
+        )
 
     def test_delete_collections(self):
         """Test the "delete selected" checkboxes on the index page that can be
@@ -461,8 +461,8 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the collections are deleted from the filesystem
         self._wait_for(
-                lambda: self.assertFalse(any([ os.path.exists(store.path(sid)) for sid in checkbox_values ]))
-            )
+            lambda: self.assertFalse(any([os.path.exists(store.path(sid)) for sid in checkbox_values]))
+        )
 
     def test_filenames(self):
         """Test pretty, sequential filenames when source uploads messages and files"""
@@ -553,8 +553,8 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the files were deleted from the filesystem
         self._wait_for(
-                lambda: self.assertFalse(any([ os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values ]))
-            )
+            lambda: self.assertFalse(any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values]))
+        )
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

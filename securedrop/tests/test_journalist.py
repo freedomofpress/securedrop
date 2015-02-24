@@ -2,6 +2,7 @@ import journalist
 import unittest
 from mock import patch, ANY, MagicMock
 
+
 class TestJournalist(unittest.TestCase):
 
     def setUp(self):
@@ -23,7 +24,6 @@ class TestJournalist(unittest.TestCase):
 
         col_delete.assert_called_with(cols_selected)
 
-
     @patch("journalist.col_star")
     def test_col_process_delegates_to_col_star(self, col_star):
         cols_selected = ['source_id']
@@ -32,7 +32,6 @@ class TestJournalist(unittest.TestCase):
         journalist.col_process()
 
         col_star.assert_called_with(cols_selected)
-
 
     @patch("journalist.col_un_star")
     def test_col_process_delegates_to_col_un_star(self, col_un_star):
@@ -43,7 +42,6 @@ class TestJournalist(unittest.TestCase):
 
         col_un_star.assert_called_with(cols_selected)
 
-
     @patch("journalist.abort")
     def test_col_process_returns_404_with_bad_action(self, abort):
         cols_selected = ['source_id']
@@ -52,7 +50,6 @@ class TestJournalist(unittest.TestCase):
         journalist.col_process()
 
         abort.assert_called_with(ANY)
-
 
     @patch("journalist.make_star_true")
     @patch("journalist.db_session")
@@ -67,16 +64,13 @@ class TestJournalist(unittest.TestCase):
 
         db_session.commit.assert_called_with()
 
-
     def set_up_request(self, cols_selected, action):
         journalist.request.form.__contains__.return_value = True
         journalist.request.form.getlist = MagicMock(return_value=cols_selected)
         journalist.request.form.__getitem__.return_value = action
-
 
     @classmethod
     def tearDownClass(cls):
         # Reset the module variables that were changed to mocks so we don't
         # break other tests
         reload(journalist)
-

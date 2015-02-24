@@ -55,11 +55,12 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
+
 def get_one_or_else(query, logger, failure_method):
     try:
         return query.one()
     except MultipleResultsFound as e:
-        logger.error("Found multiple while executing %s when one was expected: %s" % (query,e,))
+        logger.error("Found multiple while executing %s when one was expected: %s" % (query, e, ))
         failure_method(500)
     except NoResultFound as e:
         logger.error("Found none when one was expected: %s" % (e,))
@@ -221,6 +222,7 @@ class Journalist(Base):
         return os.urandom(salt_bytes)
 
     _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
+
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
@@ -242,7 +244,7 @@ class Journalist(Base):
 
     def set_hotp_secret(self, otp_secret):
         self.is_totp = False
-        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ","")))
+        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ", "")))
         self.hotp_counter = 0
 
     @property
@@ -274,7 +276,7 @@ class Journalist(Base):
         lowercase and split into four groups of four characters. The secret is
         base32-encoded, so it is case insensitive."""
         sec = self.otp_secret
-        chunks = [ sec[i:i+4] for i in xrange(0, len(sec), 4) ]
+        chunks = [sec[i:i + 4] for i in xrange(0, len(sec), 4)]
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
@@ -299,8 +301,8 @@ class Journalist(Base):
             # window is 1:30s.
             now = datetime.datetime.now()
             interval = datetime.timedelta(seconds=30)
-            times = [ now - interval, now, now + interval ]
-            return any([ self.totp.verify(token, for_time=time) for time in times ])
+            times = [now - interval, now, now + interval]
+            return any([self.totp.verify(token, for_time=time) for time in times])
         else:
             for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
@@ -311,7 +313,7 @@ class Journalist(Base):
 
     @classmethod
     def throttle_login(cls, user):
-        _LOGIN_ATTEMPT_PERIOD = 60 # seconds
+        _LOGIN_ATTEMPT_PERIOD = 60  # seconds
         _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
 
         # Record the login attempt...
@@ -321,7 +323,7 @@ class Journalist(Base):
 
         # ...and reject it if they have exceeded the threshold
         login_attempt_period = datetime.datetime.utcnow() - \
-                               datetime.timedelta(seconds=_LOGIN_ATTEMPT_PERIOD)
+            datetime.timedelta(seconds=_LOGIN_ATTEMPT_PERIOD)
         attempts_within_period = JournalistLoginAttempt.query.filter(
             JournalistLoginAttempt.timestamp > login_attempt_period).all()
         if len(attempts_within_period) > _MAX_LOGIN_ATTEMPTS_PER_PERIOD:
@@ -361,4 +363,3 @@ class JournalistLoginAttempt(Base):
 # Declare (or import) models before init_db
 def init_db():
     Base.metadata.create_all(bind=engine)
-
