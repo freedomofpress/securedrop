@@ -1,6 +1,6 @@
 /**
  * The journalist page should degrade gracefully without Javascript. To avoid
- * confusing users, this function dyanamically adds elements that require JS.
+ * confusing users, this function dynamically adds elements that require JS.
  */
 function enhance_ui() {
   // Add the "quick filter" box for sources

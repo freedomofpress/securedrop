@@ -57,14 +57,13 @@ Base.query = db_session.query_property()
 
 def get_one_or_else(query, logger, failure_method):
     try:
-        return_value = query.one()
+        return query.one()
     except MultipleResultsFound as e:
         logger.error("Found multiple while executing %s when one was expected: %s" % (query,e,))
         failure_method(500)
     except NoResultFound as e:
         logger.error("Found none when one was expected: %s" % (e,))
         failure_method(404)
-    return return_value
 
 
 class Source(Base):
@@ -174,7 +173,7 @@ class SourceStar(Base):
         self.starred = starred
 
 
-class InvalidUsernameEception(Exception):
+class InvalidUsernameException(Exception):
     """Raised when a user logs in with an invalid username"""
 
 
@@ -227,10 +226,9 @@ class Journalist(Base):
             params = self._SCRYPT_PARAMS
         # try clause for debugging intermittent scrypt "could not compute hash" error
         try:
-            hash = scrypt.hash(str(password), salt, **params)
+            return scrypt.hash(str(password), salt, **params)
         except scrypt.error as e:
             print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
-        return hash
 
     def set_password(self, password):
         self.pw_salt = self._gen_salt()

@@ -10,6 +10,6 @@ In operation, every source is given a unique "codename." The codename lets the s
 
 The source is known by a different codename on the journalist's side. All of that source's submissions are grouped together into a "collection." Every time there's a new submission by that source, their collection is bumped to the top of the submission queue.
 
-DeadDrop was designed to use two physical servers: a public-facing server that runs the submisison website and stores messages and documents, and a second that does security monitoring of the first. The New Yorker's public-facing server also has a USB dongle called an Entropy Key plugged attached to generate a pool of random numbers for the crypto.
+DeadDrop was designed to use two physical servers: a public-facing server that runs the submission website and stores messages and documents, and a second that does security monitoring of the first. The New Yorker's public-facing server also has a USB dongle called an Entropy Key plugged attached to generate a pool of random numbers for the crypto.
 
 The original "Deaddrop" web app was coded and architected by [Aaron Swartz](https://github.com/aaronsw). The hardening guide and other security material is the work of [James Dolan](https://github.com/dolanjs). The default web design and the DeadDrop logo were crafted by Dennis Crothers. Journalist [Kevin Poulsen](https://github.com/klpwired) organized the project. The New Yorker launched the first implementation as the New Yorker Strongbox in May 2013. *TODO: describe continued history of the project*

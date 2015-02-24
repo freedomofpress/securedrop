@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 
-<center>
+<div class="center">
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
@@ -12,7 +12,7 @@
   <p>You can send a file, a message, or both.</p>
 
   <hr class="no-line">
-</center>
+</div>
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
@@ -64,5 +64,4 @@
   <i class="fa fa-lock pull-left"></i> Remember, your codename is: <strong>{{ codename }}</strong>
 </div>
 
-</div>
 {% endblock %}

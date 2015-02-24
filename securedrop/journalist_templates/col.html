@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <form action='/regenerate-code' method='post' id="regnerate-code">
+  <form action='/regenerate-code' method='post' id="regenerate-code">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
     <input type="hidden" name="sid" value="{{ sid }}">
 
@@ -27,10 +27,10 @@
           <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
             {% if doc.filename.endswith('reply.gpg') %}
               <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span>
+              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
             {% else %}
               <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span>
+              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
             {% endif %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
               <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>

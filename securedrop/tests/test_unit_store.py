@@ -15,7 +15,7 @@ import crypto_util
 
 class TestStore(unittest.TestCase):
 
-    '''The set of tests for store.py.'''
+    """The set of tests for store.py."""
     def setUp(self):
         common.shared_setup()
 

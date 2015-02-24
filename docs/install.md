@@ -179,7 +179,7 @@ When a document is submitted through the *Source Interface* on the *App Server*,
 
 Start by booting the Secure Viewing Station from the *offline* USB stick. When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*.
 
-After logging in, you will need to manually set the systm time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time and date for your region, click *Lock*, enter your password one more time and wait for the system time to update in the top menu bar. Once that's done, folow the steps below to create a GPG key.
+After logging in, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time and date for your region, click *Lock*, enter your password one more time and wait for the system time to update in the top menu bar. Once that's done, follow the steps below to create a GPG key.
 
 * Open a terminal and run `gpg --gen-key`
 * When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`

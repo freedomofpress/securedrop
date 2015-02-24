@@ -68,7 +68,7 @@ git clone https://github.com/freedomofpress/securedrop.git
 
 ## Passphrase Database
 
-As mentioned in the installation documentation, we provide a KeePassX password database template to make it easier for admins and journlists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
+As mentioned in the installation documentation, we provide a KeePassX password database template to make it easier for admins and journalists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
 
 You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password or the location of the key file used to protect the database.
 

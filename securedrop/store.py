@@ -21,17 +21,17 @@ VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|do
 
 class PathException(Exception):
 
-    '''An exception raised by `store.verify` when it encounters a bad path. A path
+    """An exception raised by `store.verify` when it encounters a bad path. A path
     can be bad when it is not absolute, not normalized, not within
     `config.STORE_DIR`, or doesn't match the filename format.
-    '''
+    """
     pass
 
 
 def verify(p):
-    '''Assert that the path is absolute, normalized, inside `config.STORE_DIR`, and
+    """Assert that the path is absolute, normalized, inside `config.STORE_DIR`, and
     matches the filename format.
-    '''
+    """
     if not os.path.isabs(config.STORE_DIR):
         raise PathException("config.STORE_DIR(%s) is not absolute" % (
             config.STORE_DIR, ))
@@ -60,7 +60,7 @@ def verify(p):
 
 
 def path(*s):
-    '''Get the normalized, absolute file path, within `config.STORE_DIR`.'''
+    """Get the normalized, absolute file path, within `config.STORE_DIR`."""
     joined = os.path.join(os.path.abspath(config.STORE_DIR), *s)
     absolute = os.path.abspath(joined)
     verify(absolute)

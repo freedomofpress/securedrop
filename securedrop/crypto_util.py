@@ -15,7 +15,7 @@ os.environ['USERNAME'] = 'www-data'
 
 GPG_KEY_TYPE = "RSA"
 if os.environ.get('SECUREDROP_ENV') == 'test':
-    # Optiimize crypto to speed up tests (at the expense of security - DO NOT
+    # Optimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
     GPG_KEY_LENGTH = 1024
     SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
@@ -118,7 +118,7 @@ def genkeypair(name, secret):
 
 def delete_reply_keypair(source_id):
     key = getkey(source_id)
-    # If this source was never flagged for reivew, they won't have a reply keypair
+    # If this source was never flagged for review, they won't have a reply keypair
     if not key: return
     # The private key needs to be deleted before the public key can be deleted
     # http://pythonhosted.org/python-gnupg/#deleting-keys
@@ -145,7 +145,7 @@ def encrypt(plaintext, fingerprints, output=None):
     if output:
         store.verify(output)
 
-    # Remove any spaces from provided fingerpints
+    # Remove any spaces from provided fingerprints
     # GPG outputs fingerprints with spaces for readability, but requires the
     # spaces to be removed when using fingerprints to specify recipients.
     if not isinstance(fingerprints, (list, tuple)):

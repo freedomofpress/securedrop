@@ -25,7 +25,7 @@ case "$1" in
     chown www-data:www-data /var/www/source.wsgi
 
     # Apache's default sites are not allowed by the securedrop apparmor profile
-    # disable the site before putting the apache apparmor profile in enfore
+    # disable the site before putting the apache apparmor profile in enforce
     # mode.
     a2dissite 000-default
     a2dissite default-ssl

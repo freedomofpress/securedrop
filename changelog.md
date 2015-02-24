@@ -34,7 +34,7 @@ to minimize metadata that could be used for correlation
 * Add Admin Interface so privileged "admin" users may add, edit, or delete other users on the Document Interface
 * Requests are automatically encrypted with an ephemeral key as they are buffered onto disk to mitigate forensic attacks
 * The haveged "high water" mark has been raised to maintain a higher average level of entropy on the system and minimize the appearance of the "flag for reply" flow
-* Secure removel (via `srm`) of data has been moved to an async worker to prevent hanging the interface when deleting large files or collections
+* Secure removal (via `srm`) of data has been moved to an async worker to prevent hanging the interface when deleting large files or collections
 * New dedicated section of Source Interface for replies, instead of using flashed messages
 * Change default codename length from 8 words to 7 words, maintains a sufficient security level while hopefully improving usability for sources
 * Add recommendations for storing and memorizing the codename to the codename generation page

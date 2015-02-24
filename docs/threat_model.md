@@ -167,7 +167,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
 
 ### What a compromise of the journalist's property can achieve
 
- * To access the Document Interface, the attacker needs to obtain the journailst's login credentials and the journalist's two-factor authentication device. Unless the attacker has physical access to the server, the attacker will also need to obtain the Hidden Service value for the Interface. This information is stored in a password-protected database in a persistent volume on the journalist's Tails device. The volume is protected by a passphrase. If the journalist's two-factor authentication device is a mobile phone, this will also be protected by a passphrase.
+ * To access the Document Interface, the attacker needs to obtain the journalist's login credentials and the journalist's two-factor authentication device. Unless the attacker has physical access to the server, the attacker will also need to obtain the Hidden Service value for the Interface. This information is stored in a password-protected database in a persistent volume on the journalist's Tails device. The volume is protected by a passphrase. If the journalist's two-factor authentication device is a mobile phone, this will also be protected by a passphrase.
  * An attacker with access to the **journalist's computer** can:
     * Access any stored, decrypted documents taken off the Secure Viewing Station.
  * An attacker with access to the **persistent volume** on the journalist's Tails device can:

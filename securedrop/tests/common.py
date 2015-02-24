@@ -60,7 +60,7 @@ def new_codename(client, session):
 
 
 def shared_setup():
-    """Set up the file sysem, GPG, and database"""
+    """Set up the file system, GPG, and database"""
     create_directories()
     init_gpg()
     init_db()

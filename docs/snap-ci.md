@@ -1,6 +1,6 @@
 # running notes on setting up snap-ci + vagrant + digital ocean provider + ansible provisioner
 
-To speed up testing times, prebuilt images that aleady contain the packages needed for each stage are used.
+To speed up testing times, prebuilt images that already contain the packages needed for each stage are used.
 The prebuilt images are snapshots of the default VPS Ubuntu 14.04 x64 images with the stage specific deb packages installed.
 After the stage specific packages are installed a snapshot is taken of the image with the stage name and date.
 
