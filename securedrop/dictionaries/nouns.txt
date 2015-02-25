@@ -11950,16 +11950,12 @@ pedicure
 pedigree
 pediment
 pedometer
-pedophile
-pedophilia
 peeing
 peek
 peekaboo
 peel
 peeler
 peeper
-peephole
-peepshow
 peer
 peerage
 peeve
@@ -11968,7 +11964,6 @@ pegboard
 pelican
 pellagra
 pellet
-pelvis
 pemmican
 pen
 pen-and-ink
@@ -11977,8 +11972,6 @@ penance
 pencil
 pendant
 pendulum
-penetration
-penetrator
 penguin
 penicillin
 peninsula
