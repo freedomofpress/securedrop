@@ -44,7 +44,7 @@
       </ul>
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
+      <input type="hidden" name="sid" value="{{ sid }}"/>
     </form>
   {% else %}
     <p><br />No documents to display.</p>
@@ -57,8 +57,8 @@
     <p>You can write a secure reply to the person who submitted these documents:</p>
     <form action="/reply" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-      <textarea name="msg" cols="72" rows="10" autocomplete="off"></textarea>
+      <input type="hidden" name="sid" value="{{ sid }}"/>
+      <textarea name="msg" cols="72" rows="10"></textarea>
       <hr class="no-line" />
       <button id="reply-button" class="button-custom" type="submit">Submit</button>
     </form>
@@ -68,7 +68,7 @@
   {% else %}
     <p>Click below if you would like to write a reply to this source.</p>
     <form action="/flag" method="post">
-      <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off" />
+      <input type="hidden" name="sid" value="{{ sid }}"/>
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <button id="flag-button" class="button-custom" type="submit"><i class="fa fa-flag"></i> Flag this source for reply</button>
     </form>
