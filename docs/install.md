@@ -379,9 +379,13 @@ Update the inventory, replacing the IP addresses with the corresponding onion ad
 
 ### Set up two-factor authentication for the Admin
 
-As part of the SecureDrop installation process, you will need to set up two factor authentication on the App Server using the Google Authenticator mobile app.
+As part of the SecureDrop installation process, you will need to set up two factor authentication on the App Server and Monitor Server using the Google Authenticator mobile app.
+
+In order to connect to each server via SSH over Tor, first [make sure](/docs/tails_guide.md#set-up-easy-access-to-the-document-interface) you have the `app-ssh-aths` and `mon-ssh-aths` HidServAuth values in /etc/torrc (Tor's configuration file).
 
 Connect to the App Server's hidden service address using `ssh` and run `google-authenticator`. Follow the instructions in [our Google Authenticator guide](/docs/google_authenticator.md) to set up the app on your Android or iOS device.
+
+Now do the same thing on the Monitor Server. You'll end up with an account for each server in the Google Authenticator app that generates two-factor codes needed for logging in.
 
 ## Testing the Installation
 
