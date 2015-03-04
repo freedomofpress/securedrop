@@ -586,7 +586,6 @@ autistic
 autobiographical
 autochthonous
 autocratic
-autoerotic
 autographed
 autoimmune
 autologous
@@ -1148,7 +1147,6 @@ celebrated
 celebratory
 celestial
 celiac
-celibate
 cell-like
 cellular
 celluloid
@@ -2515,7 +2513,6 @@ ergonomic
 eroded
 erogenous
 erosive
-erotic
 errant
 erratic
 erring
@@ -3443,7 +3440,6 @@ homeward
 homicidal
 homiletic
 homing
-homoerotic
 homogeneous
 homogenized
 homologous
@@ -5562,7 +5558,6 @@ prefab
 prefectural
 preferable
 prefrontal
-pregnant
 prehensile
 prehistoric
 prejudiced
@@ -5601,7 +5596,6 @@ prestigious
 presto
 presumable
 presumptive
-preteen
 pretentious
 preternatural
 pretty
@@ -7152,7 +7146,6 @@ top-flight
 top-heavy
 top-secret
 topical
-topless
 topmost
 topographical
 topological
@@ -8053,7 +8046,6 @@ volumetric
 voluminous
 voluntary
 votive
-voyeuristic
 vulnerable
 vulpine
 wafer-thin
