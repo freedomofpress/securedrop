@@ -699,7 +699,6 @@ bathetic
 battered
 battery-powered
 battle-scarred
-bawdy
 bay
 beaded
 beady
@@ -889,7 +888,6 @@ blustery
 boastful
 bodacious
 bodiless
-bodily
 boffo
 boggy
 bogus
@@ -899,9 +897,7 @@ boisterous
 bold
 bombastic
 bombproof
-bone
 bone-dry
-boned
 boneless
 bonny
 bony
@@ -919,7 +915,6 @@ boric
 boring
 born
 born-again
-bosomy
 boss
 botanic
 both
@@ -1378,7 +1373,6 @@ coiled
 coiling
 coin-operated
 coincident
-coital
 cold
 cold-blooded
 colicky
@@ -2269,7 +2263,6 @@ due
 dull
 dulled
 dumbfounded
-dummy
 dumpy
 dun
 dun-colored
@@ -2530,7 +2523,6 @@ essential
 established
 esteemed
 estimable
-estrogenic
 estrous
 estuarine
 ethereal
@@ -3677,7 +3669,6 @@ inauspicious
 inauthentic
 inboard
 inbound
-inbred
 incalculable
 incandescent
 incapable
@@ -4467,7 +4458,6 @@ matter-of-fact
 maturational
 mature
 mauve
-maxi
 maxillary
 maxillofacial
 maximal
@@ -5263,7 +5253,6 @@ pastel
 pastel-colored
 pasteurized
 pastoral
-pasty
 pat
 patched
 patchy
@@ -5360,7 +5349,6 @@ perverse
 pessimistic
 petrous
 petty
-phallic
 phantasmagoric
 phantom
 pharmaceutical
@@ -5523,7 +5511,6 @@ postwar
 potent
 potential
 potted
-potty
 powdered
 powdery
 powered
@@ -5774,7 +5761,6 @@ quixotic
 quotable
 rabbinical
 rabid
-racy
 radial
 radiate
 radiating
@@ -5856,7 +5842,6 @@ recorded
 recoverable
 recovered
 recreational
-rectal
 rectangular
 rectilinear
 recuperative
@@ -6465,7 +6450,6 @@ slapstick
 slashed
 slashing
 slavish
-sleazy
 sleek
 sleepy
 sleeved
@@ -6515,7 +6499,6 @@ snow-capped
 snow-white
 snowbound
 snub
-snuff
 snug
 soaring
 sober
@@ -7287,7 +7270,6 @@ two-year-old
 tympanic
 typical
 typographic
-ugly
 ulcerative
 ulnar
 ulterior
@@ -7906,7 +7888,6 @@ unvoiced
 unwanted
 unwary
 unwashed
-unwed
 unwelcome
 unwholesome
 unwieldy
@@ -8191,7 +8172,6 @@ wood-fired
 wooded
 wooden
 woodsy
-woody
 woolen
 wooly
 working
@@ -8220,7 +8200,6 @@ xeric
 yawning
 year-end
 year-round
-yeasty
 yellow
 yellow-green
 yellow-orange
