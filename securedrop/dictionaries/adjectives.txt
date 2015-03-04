@@ -133,9 +133,7 @@ adrenal
 adrift
 adroit
 adulatory
-adult
 adulterate
-adulterous
 advance
 advanced
 advancing
@@ -225,7 +223,6 @@ alabaster
 alar
 alarmed
 alarming
-alcoholic
 aleatory
 alert
 algal
@@ -284,7 +281,6 @@ alto
 altruistic
 alveolar
 amalgamate
-amateur
 amateurish
 amatory
 amazed
@@ -320,7 +316,6 @@ anadromous
 anaerobic
 anaesthetic
 anagogic
-anal
 analgesic
 analogical
 analogous
@@ -344,7 +339,6 @@ anesthetic
 angelic
 angered
 angled
-angry
 anguished
 angular
 anhydrous
@@ -474,7 +468,6 @@ armless
 armored
 aromatic
 around-the-clock
-aroused
 arranged
 arrant
 arrayed
@@ -500,7 +493,6 @@ ascending
 ascertainable
 ascetic
 aseptic
-asexual
 ashamed
 ashen
 asinine
@@ -682,8 +674,6 @@ barbecued
 barbed
 bardic
 bare
-bare-breasted
-bareback
 barefoot
 bareheaded
 bargain-priced
@@ -828,11 +818,8 @@ bipartisan
 bipartite
 bipedal
 bipolar
-biracial
 birch
 bird's-eye
-bisexual
-bitchy
 biting
 bitter
 bittersweet
@@ -841,7 +828,6 @@ bituminous
 bivalve
 bivariate
 bizarre
-black
 black-and-blue
 black-and-white
 blackened
@@ -866,7 +852,6 @@ blemished
 blended
 blessed
 blighted
-blind
 blinded
 blindfold
 blinking
@@ -879,7 +864,6 @@ blood-filled
 bloodless
 bloodshot
 bloodthirsty
-bloody
 bloody-minded
 blotched
 blotchy
@@ -984,8 +968,6 @@ brazen
 breakable
 breakaway
 breakneck
-breast-fed
-breasted
 breathing
 breathless
 breeding
@@ -1042,7 +1024,6 @@ bulimic
 bulky
 bulletproof
 bullish
-bum
 bumbling
 bumper-to-bumper
 bumptious
@@ -1055,7 +1036,6 @@ burbling
 burdened
 burdensome
 bureaucratic
-buried
 burlesque
 burned
 burned-out
@@ -1155,7 +1135,6 @@ categorized
 cathartic
 cathedral
 cathodic
-catholic
 caudal
 causal
 causative
@@ -1274,7 +1253,6 @@ chordal
 chordate
 choreographic
 chorionic
-christian
 chromatic
 chromosomal
 chronic
@@ -1389,7 +1367,6 @@ cobwebby
 cochlear
 cockney
 cocksure
-cocky
 codified
 coercive
 coexistent
@@ -1422,13 +1399,10 @@ colloidal
 colloquial
 collusive
 colonial
-colonic
 colonized
 colonnaded
-color
 color-blind
 colorectal
-colored
 colorful
 colorless
 colossal
@@ -1464,7 +1438,6 @@ communal
 communicable
 communicational
 communicative
-communist
 compact
 companionable
 companionate
@@ -1566,7 +1539,6 @@ consecutive
 consensual
 consenting
 consequential
-conservative
 conserved
 considerable
 considerate
@@ -1734,10 +1706,8 @@ cranky
 crass
 craven
 crazed
-crazy
 creaky
 cream-colored
-creamy
 creative
 credible
 creditable
@@ -1751,7 +1721,6 @@ crescendo
 crescent
 crested
 cretaceous
-criminal
 criminological
 crimson
 cringing
@@ -1846,7 +1815,6 @@ damaged
 damaging
 damascene
 damask
-damn
 damnable
 damp
 danceable
@@ -1873,7 +1841,6 @@ day-old
 dazed
 dazzled
 dazzling
-dead
 dead-end
 dead-on
 deadlocked
@@ -2091,7 +2058,6 @@ directed
 directing
 directional
 dirt
-dirty
 disabled
 disabling
 disadvantageous
@@ -2193,7 +2159,6 @@ distributed
 distributional
 distributive
 distrustful
-disturbed
 disused
 disyllabic
 diurnal
@@ -2242,7 +2207,6 @@ dot-com
 dotted
 double
 double-barreled
-double-breasted
 double-edged
 double-faced
 double-jointed
@@ -2306,7 +2270,6 @@ dud
 due
 dull
 dulled
-dumb
 dumbfounded
 dummy
 dumpy
@@ -2548,8 +2511,6 @@ equine
 equitable
 equivalent
 equivocal
-erect
-erectile
 ergonomic
 eroded
 erogenous
@@ -2627,7 +2588,6 @@ excretory
 exculpatory
 excusable
 excused
-executed
 executive
 exemplary
 exempt
@@ -2773,9 +2733,7 @@ fashioned
 fast
 fast-paced
 fastidious
-fat
 fat-soluble
-fatal
 fatalist
 fateful
 fatherless
@@ -2955,7 +2913,6 @@ forbidden
 forced
 forceful
 forcible
-fore
 fore-and-aft
 foregoing
 forehand
@@ -3136,7 +3093,6 @@ gastrointestinal
 gastronomic
 gauche
 gawky
-gay
 gelatinous
 general
 general-purpose
@@ -3147,7 +3103,6 @@ generic
 generous
 genetic
 genial
-genital
 genitourinary
 gentile
 gentle
@@ -3275,7 +3230,6 @@ groomed
 grooved
 groovy
 groping
-gross
 grotesque
 grotty
 ground-floor
@@ -3422,7 +3376,6 @@ hesitant
 heterocyclic
 heterogeneous
 heterogenous
-heterosexual
 heterotrophic
 heterozygous
 heuristic
@@ -3494,8 +3447,6 @@ homoerotic
 homogeneous
 homogenized
 homologous
-homophobic
-homosexual
 homozygous
 honest
 honest-to-god
@@ -3512,7 +3463,6 @@ horizontal
 hormonal
 horn-rimmed
 horned
-horny
 horrid
 horrified
 horse-drawn
@@ -3618,7 +3568,6 @@ ill-equipped
 ill-fitting
 ill-mannered
 ill-timed
-illegal
 illegible
 illegitimate
 illiberal
@@ -4003,11 +3952,9 @@ interpersonal
 interplanetary
 interpretative
 interpreted
-interracial
 interrogative
 interrupted
 interscholastic
-intersexual
 interstate
 interstellar
 interstitial
@@ -4096,7 +4043,6 @@ italic
 itchy
 iterative
 itinerant
-jade
 jaded
 jagged
 jammed
@@ -4111,7 +4057,6 @@ jilted
 jingling
 jittery
 joined
-joint
 journalistic
 joyful
 joyless
@@ -4139,7 +4084,6 @@ keen
 keen-eyed
 keyless
 khaki
-killing
 kiln-dried
 kind
 kindly
@@ -4148,7 +4092,6 @@ kinesthetic
 kinetic
 king-size
 kingly
-kinky
 kittenish
 knee-length
 knitted
@@ -4181,7 +4124,6 @@ lacustrine
 lacy
 laden
 ladylike
-laid
 laid-back
 lamented
 laminar
@@ -4263,7 +4205,6 @@ lengthwise
 lenient
 leonine
 leprous
-lesbian
 less
 less-traveled
 lessened
@@ -4273,9 +4214,7 @@ level
 lewd
 lexical
 liable
-liberal
 liberated
-libidinal
 licentious
 lidded
 lidless
@@ -4579,7 +4518,6 @@ mendacious
 mendicant
 meningeal
 menopausal
-menstrual
 mental
 mercantile
 mercenary
@@ -4785,7 +4723,6 @@ multiple-choice
 multiplex
 multiplicative
 multipurpose
-multiracial
 multivalent
 multivariate
 mum
@@ -4817,12 +4754,10 @@ mystic
 mythic
 nacreous
 naive
-naked
 namby-pamby
 nameless
 napping
 narcoleptic
-narcotic
 narrative
 narrow
 narrow-minded
@@ -4830,7 +4765,6 @@ narrowed
 nary
 nascent
 nasopharyngeal
-nasty
 natal
 national
 nationalist
@@ -4863,7 +4797,6 @@ neglected
 negligent
 negligible
 negotiable
-negroid
 neighborly
 neither
 neoclassic
@@ -4939,7 +4872,6 @@ non-negotiable
 non-paying
 non-zero
 nonagenarian
-nonalcoholic
 noncaloric
 noncombatant
 noncommercial
@@ -5150,7 +5082,6 @@ optimistic
 optimum
 optional
 oracular
-oral
 orange
 orange-brown
 orange-colored
@@ -5245,7 +5176,6 @@ overreaching
 overriding
 overripe
 oversensitive
-oversexed
 overstuffed
 overt
 overturned
@@ -5380,7 +5310,6 @@ pending
 penetrable
 penetrative
 penicillin-resistant
-penile
 peninsular
 penitent
 penitential
@@ -5641,10 +5570,8 @@ prejudicial
 prelapsarian
 preliminary
 preliterate
-premature
 premedical
 premeditated
-premenstrual
 premier
 premium
 prenatal
@@ -5655,7 +5582,6 @@ preparatory
 prepared
 prepositional
 prepossessing
-prepubescent
 prerecorded
 prerequisite
 prescient
@@ -5751,7 +5677,6 @@ protected
 protecting
 protective
 proteolytic
-protestant
 proud
 proved
 provencal
@@ -5775,15 +5700,9 @@ psychogenic
 psycholinguistic
 psychological
 psychometric
-psychopathic
 psychopharmacological
-psychosexual
 psychosomatic
 psychotherapeutic
-psychotic
-pubertal
-pubescent
-pubic
 public
 public-spirited
 publicized
@@ -5861,13 +5780,10 @@ quixotic
 quotable
 rabbinical
 rabid
-racial
-racist
 racy
 radial
 radiate
 radiating
-radical
 radio
 radio-controlled
 radioactive
@@ -6037,7 +5953,6 @@ representational
 representative
 reproducible
 reptilian
-republican
 repulsive
 reputable
 requested
@@ -6071,7 +5986,6 @@ restrictive
 resurgent
 retained
 retaliatory
-retarded
 retentive
 reticent
 retinal
@@ -6107,7 +6021,6 @@ rhizomatous
 rhomboid
 rhymed
 rhythmical
-ribbed
 rich
 rickety
 riddled
@@ -6424,12 +6337,6 @@ seventy-two
 several
 severe
 severed
-sex-linked
-sex-starved
-sexist
-sexless
-sexual
-sexy
 shabby
 shaded
 shadowy
@@ -6486,7 +6393,6 @@ shuddering
 shut
 shuttered
 shy
-sick
 side
 side-to-side
 sidelong
@@ -6515,7 +6421,6 @@ sincere
 sinful
 singable
 single
-single-breasted
 single-celled
 single-handed
 single-lane
@@ -6652,7 +6557,6 @@ somber
 some
 sonic
 soothing
-sooty
 sophisticated
 sophomore
 soporific
@@ -6884,7 +6788,6 @@ stuffed
 stuffy
 stunning
 stupefying
-stupid
 sturdy
 stylish
 stylistic
@@ -7035,7 +6938,6 @@ syrupy
 systematic
 systemic
 systolic
-taboo
 tabular
 tacky
 tactful
@@ -7296,7 +7198,6 @@ translucent
 transoceanic
 transparent
 transposable
-transsexual
 trapezoidal
 traumatic
 traveled
@@ -7925,7 +7826,6 @@ unseeded
 unselected
 unselfish
 unsettled
-unsexy
 unshaded
 unshaped
 unshared
@@ -8050,7 +7950,6 @@ upward
 urban
 urbanized
 uric
-urinary
 useable
 used
 useful
@@ -8066,7 +7965,6 @@ v-shaped
 vacant
 vacuous
 vagal
-vaginal
 valedictory
 valiant
 valid
@@ -8130,8 +8028,6 @@ vigorous
 vinegary
 violent
 viral
-virgin
-virginal
 virile
 virtual
 virtuous
@@ -8328,7 +8224,6 @@ written
 wrong
 wrongful
 wry
-xenophobic
 xeric
 yawning
 year-end
