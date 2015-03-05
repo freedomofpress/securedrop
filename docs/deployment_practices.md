@@ -36,7 +36,7 @@ Perfect Forward Secrecy (PFS) is a property of encryption protocols that ensures
 
 Regardless of where you choose to purchase your SSL cert and which CA issues it, you'll often be asked to generate the private key and a CSR (certificate signing request).
 
-When you do this, it's imperative that you use SHA-2 as the hashing algorithm instead of SHA-1, which is [being phased out](http://googleonlinesecurity.blogspot.com/2014/09/gradually-sunsetting-sha-1.html). You should also choose a key size of _at least_ 2048 bits. These parameters will help ensure that the encryption offered by your landing page is sufficiently strong. The following example OpenSSL command will create a private key and CSR with a 4096-bit key length and a SHA-256 signature: 
+When you do this, it's imperative that you use SHA-2 as the hashing algorithm instead of SHA-1, which is [being phased out](http://googleonlinesecurity.blogspot.com/2014/09/gradually-sunsetting-sha-1.html). You should also choose a key size of _at least_ 2048 bits. These parameters will help ensure that the encryption used on your landing page is sufficiently strong. The following example OpenSSL command will create a private key and CSR with a 4096-bit key length and a SHA-256 signature:
 
     openssl req -new -newkey rsa:4096 -nodes -sha256 -keyout domain.com.key -out domain.com.csr
 
@@ -105,30 +105,30 @@ Here's an Apache example that would exclude the landing page from logging:
 
 To guard your landing page against being modified by an attacker and directing sources to a rogue SecureDrop instance, you will need good security practices applying to the machine where it is hosted. Whether it's a VPS in the cloud or dedicated server in your office, you should consider the following:
 
-*		Brute force login protection (see sshguard or fail2ban)
-*		Disable root SSH login
-*		Use SSH keys instead of passwords
-*		Use long, random and complex passwords
-*		Firewall rules to restrict accessible ports (see iptables or ufw)
-*		AppArmor, grsecurity, SELINUX, modsecurity
-*		Intrusion and/or integrity monitoring (see OSSEC, Snort, rkhunter)
-*		Downtime alerts (Nagios or Pingdom)
-*		Two-factor authentication (see libpam-google-authenticator)
+* Brute force login protection (see sshguard or fail2ban)
+* Disable root SSH login
+* Use SSH keys instead of passwords
+* Use long, random and complex passwords
+* Firewall rules to restrict accessible ports (see iptables or ufw)
+* AppArmor, grsecurity, SELINUX, modsecurity
+* Intrusion and/or integrity monitoring (see OSSEC, Snort, rkhunter)
+* Downtime alerts (Nagios or Pingdom)
+* Two-factor authentication (see libpam-google-authenticator)
 
 ### Minimum requirements for the SecureDrop environment
 
-*   The Application and Monitor servers should be dedicated physical machines, not virtual machines.
-*   A trusted location to host the servers. The servers should be hosted in a location that is owned or occupied by the organization to ensure that their legal can not be bypassed with gag orders.
-*   The SecureDrop servers should be on a separate internet connection or completely segmented from corporate network.
-*   All traffic from the corporate network should be blocked at the SecureDrop's point of demarcation.
-*   Video monitoring should be recorded of the server area and the organizations safe.
-*   Journalist should ensure that while using the air-gapped viewing station they are in an area without video cameras.
-*   An established monitoring plan and incident response plan. Who will receive the OSSEC alerts and what their response plan will be? These should cover technical outages and a compromised environment plan.
+* The Application and Monitor servers should be dedicated physical machines, not virtual machines.
+* A trusted location to host the servers. The servers should be hosted in a location that is owned or occupied by the organization to ensure that their legal can not be bypassed with gag orders.
+* The SecureDrop servers should be on a separate internet connection or completely segmented from corporate network.
+* All traffic from the corporate network should be blocked at the SecureDrop's point of demarcation.
+* Video monitoring should be recorded of the server area and the organizations safe.
+* Journalist should ensure that while using the air-gapped viewing station they are in an area without video cameras.
+* An established monitoring plan and incident response plan. Who will receive the OSSEC alerts and what their response plan will be? These should cover technical outages and a compromised environment plan.
 
 ### Suggested
 
-*   For publicly advertised SecureDrop instances display the Source Interface's hidden service onion address on all of the organization public pages.
-*   Mirror the Tor Browser and Tails so sources do not have to visit [torproject.org](https://www.torproject.org) to download it.
+* For publicly advertised SecureDrop instances display the Source Interface's hidden service onion address on all of the organization public pages.
+* Mirror the Tor Browser and Tails so sources do not have to visit [torproject.org](https://www.torproject.org) to download it.
 
 ## Whole Site Changes
 
