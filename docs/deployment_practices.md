@@ -92,7 +92,7 @@ If you use Nginx, [you can follow this link](https://gist.github.com/mtigas/8601
 
 **Change detection monitoring for the web application configuration and landing page content**
 
-OSSEC is FOSS host based intrusion detection suite that includes a file integrity monitor. More information can be found [here.](https://ossec.net)
+OSSEC is a free and open source host-based intrusion detection suite that includes a file integrity monitor. More information can be found [here.](https://ossec.net)
 
 **Don't log access to the landing page in the webserver**
 
