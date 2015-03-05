@@ -26,9 +26,19 @@ If you do not serve ads on any of your site, you should also consider switching 
 
 If your website needs to operate in both HTTPS and HTTP mode, use protocol-relative URLs for resources such as images, CSS and JavaScript in common templates to ensure your page does not end up in a mixed HTTPS/HTTP state.
 
+Consider submitting your domain to be included in the [Chrome HSTS preload list](https://hstspreload.appspot.com/) if you can meet all of the requirements. This will tell web browsers that the site is only ever to be reached over HTTPS.
+
 **Perfect Forward Secrecy**
 
 Perfect Forward Secrecy (PFS) is a property of encryption protocols that ensures each SSL session has a unique key, meaning that if the key is compromised in the future it can't be used to decrypt previously recorded SSL sessions. You may need to talk to your CA (certificate authority) and CDN (content delivery network) for this, although our recommended configuration below provides forward secrecy.
+
+**SSL certificate recommendations**
+
+Regardless of where you choose to purchase your SSL cert and which CA issues it, you'll often be asked to generate the private key and a CSR (certificate signing request).
+
+When you do this, it's imperative that you use SHA-2 as the hashing algorithm instead of SHA-1, which is [being phased out](http://googleonlinesecurity.blogspot.com/2014/09/gradually-sunsetting-sha-1.html). You should also choose a key size of _at least_ 2048 bits. These parameters will help ensure that the encryption offered by your landing page is sufficiently strong. The following example OpenSSL command will create a private key and CSR with a 4096-bit key length and a SHA-256 signature: 
+
+    openssl req -new -newkey rsa:4096 -nodes -sha256 -keyout domain.com.key -out domain.com.csr
 
 **Don't load any resources (scripts, web fonts, etc.) from 3rd parties (e.g. Google Web Fonts)**
 
@@ -40,7 +50,7 @@ Most news websites, even those that are non-profits, use 3rd-party analytics too
 
 Both the New Yorker and Forbes were heavily criticized when launching their version of SecureDrop because their landing page contained trackers. They were claiming they were going to great lengths to protect source's anonymity, but by having trackers on their landing page, also opened up multiple avenues for third parties to collect information on those sources. This information can potentially be accessed by law enforcement or intelligence agencies and could unduly expose a source.
 
-**Apply Applicable Security Headers**
+**Apply applicable security headers**
 
 Security headers give instructions to the web browser on how to handle requests from the web application. These headers set strict rules for the browser and help mitigate against potential attacks. Given the browser is a main avenue for attack, it is important these headers are as strict as possible.
 
@@ -60,7 +70,7 @@ If you use Apache, you can use these:
     Header set X-Permitted-Cross-Domain-Policies: master-only
     Header set Content-Security-Policy: "default-src 'self'"
 
-**Additional Apache Configuration**
+**Additional Apache configuration**
 
 To enforce HTTPS/SSL always, you need to set up redirection within the HTTP (port 80) virtual host:
 
@@ -76,7 +86,7 @@ In your SSL (port 443) virtual host, set up HSTS and use these settings to give 
     SSLCompression off
     SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5
 
-You'll need to run `a2enmod headers ssl rewrite` for all these to work. You should also set `ServerSignature Off` and `ServerTokens Prod`, typically in /etc/apache2/conf.d/security. The supported cipher suites are copied from [CloudFlare's SSL configuration](https://github.com/cloudflare/sslconfig/blob/master/conf).
+You'll need to run `a2enmod headers ssl rewrite` for all these to work. You should also set `ServerSignature Off` and `ServerTokens Prod`, typically in /etc/apache2/conf.d/security.
 
 If you use Nginx, [you can follow this link](https://gist.github.com/mtigas/8601685) and use the configuration file provided by ProPublica.
 
@@ -90,6 +100,20 @@ Here's an Apache example that would exclude the landing page from logging:
 
     SetEnvIf Request_URI "^/securedrop$" dontlog
     CustomLog logs/access_log common env=!dontlog
+
+**Security suggestions**
+
+To guard your landing page against being modified by an attacker and directing sources to a rogue SecureDrop instance, you will need good security practices applying to the machine where it is hosted. Whether it's a VPS in the cloud or dedicated server in your office, you should consider the following:
+
+*		Brute force login protection (see sshguard or fail2ban)
+*		Disable root SSH login
+*		Use SSH keys instead of passwords
+*		Use long, random and complex passwords
+*		Firewall rules to restrict accessible ports (see iptables or ufw)
+*		AppArmor, grsecurity, SELINUX, modsecurity
+*		Intrusion and/or integrity monitoring (see OSSEC, Snort, rkhunter)
+*		Downtime alerts (Nagios or Pingdom)
+*		Two-factor authentication (see libpam-google-authenticator)
 
 ### Minimum requirements for the SecureDrop environment
 
