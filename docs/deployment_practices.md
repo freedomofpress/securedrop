@@ -115,6 +115,8 @@ To guard your landing page against being modified by an attacker and directing s
 * Downtime alerts (Nagios or Pingdom)
 * Two-factor authentication (see libpam-google-authenticator)
 
+It's preferable for the landing page to have its own server instead of hosting it alongside other sites running potentially vulnerable software or content management systems. Check that user and group file permissions are locked down and that modules or gateway interfaces for dynamic scripting languages are not enabled. You don't want any unnecessary code or services running as this increases the attack surface.
+
 ### Minimum requirements for the SecureDrop environment
 
 * The Application and Monitor servers should be dedicated physical machines, not virtual machines.
