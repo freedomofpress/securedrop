@@ -231,6 +231,7 @@ def migrate_database(zf):
     # chown the databse file to the securedrop user
     subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
 
+
 def migrate_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
