@@ -243,8 +243,7 @@ def migrate_custom_header_image(zf):
 def migrate_tor_files(zf):
     print "* Migrating source interface .onion..."
 
-    tor_root_dir = "/var/lib/tor"
-    ths_root_dir = os.path.join(tor_root_dir, "services")
+    ths_root_dir = "/var/lib/tor/services"
 
     # For now, we're going to re-provision the monitor and SSH hidden services.
     # The only hidden service whose address we want to maintain is the source
