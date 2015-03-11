@@ -45,6 +45,12 @@ def collect_tor_files(zf):
     ]
 
     for tor_file in tor_files:
+        # Since the 0.2.1 install process was occasionally somewaht ad
+        # hoc, the SSH ATHS was not always set up. We treat that as a
+        # non-fatal error and continue.
+        if not os.path.isfile(tor_file) and tor_file == "/var/lib/tor/hidden_service/client_keys":
+            print "!\tWarning: expected file '{}' not found. Continuing anyway.".format(tor_file)
+            continue
         zf.write(tor_file)
 
 def main():
