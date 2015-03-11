@@ -236,8 +236,8 @@ def migrate_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
         "var/chroot/source/var/www/securedrop/static/i/securedrop.png",
-        "/var/www/securedrop/static/i/securedrop.png")
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/securedrop.png"])
+        "/var/www/securedrop/static/i/logo.png")
+    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/logo.png"])
 
 
 def migrate_tor_files(zf):
