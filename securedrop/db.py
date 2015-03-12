@@ -102,7 +102,7 @@ class Source(Base):
             for submission in self.submissions:
                 if submission.filename.endswith('msg.gpg'):
                     self.docs_msgs_count['messages'] += 1
-                elif submission.filename.endswith('doc.gz.gpg'):
+                elif submission.filename.endswith('doc.gz.gpg') or submission.filename.endswith('doc.zip.gpg'):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
