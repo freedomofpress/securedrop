@@ -10,33 +10,30 @@ to 0.3 and stores it in /tmp/sd-migrate-0.2.1.zip
 import sys
 import os
 import re
-import zipfile
+import tarfile
 
 # Arbitrarily pick the source chroot jail (doesn't matter)
 securedrop_root = "/var/chroot/source/var/www/securedrop"
 
-def collect_config_file(zf):
-    config_file_path = os.path.join(securedrop_root, "config.py")
-    zf.write(config_file_path)
+def collect_config_file(backup):
+    backup.add(os.path.join(securedrop_root, "config.py"))
 
-def collect_securedrop_root(zf):
+def collect_securedrop_root(backup):
     # The store and key dirs are shared between the chroot jails in 0.2.1, and
     # are both linked from /var/securedrop
-    for root, dirs, files in os.walk("/var/securedrop"):
-        for name in files:
-            zf.write(os.path.join(root, name))
+    backup.add("/var/securedrop")
 
-def collect_database(zf):
+def collect_database(backup):
     # Copy the db file, which is only present in the document interface's
     # chroot jail in 0.2.1
-    zf.write("/var/chroot/document/var/www/securedrop/db.sqlite")
+    backup.add("/var/chroot/document/var/www/securedrop/db.sqlite")
 
-def collect_custom_header_image(zf):
+def collect_custom_header_image(backup):
     # 0.2.1's deployment didn't actually use config.CUSTOM_HEADER_IMAGE - it
     # just overwrote the default header image, `static/i/securedrop.png`.
-    zf.write(os.path.join(securedrop_root, "static/i/securedrop.png"))
+    backup.add(os.path.join(securedrop_root, "static/i/securedrop.png"))
 
-def collect_tor_files(zf):
+def collect_tor_files(backup):
     tor_files = [
         "/etc/tor/torrc",
         "/var/lib/tor/hidden_service/client_keys",
@@ -51,20 +48,27 @@ def collect_tor_files(zf):
         if not os.path.isfile(tor_file) and tor_file == "/var/lib/tor/hidden_service/client_keys":
             print "!\tWarning: expected file '{}' not found. Continuing anyway.".format(tor_file)
             continue
-        zf.write(tor_file)
+        backup.add(tor_file)
 
 def main():
     if len(sys.argv) <= 1:
-        print "Usage: 0.2.1_collect.py <filename>\n\n    <filename>\tLocation to save the .zip backup"
+        print "Usage: 0.2.1_collect.py <backup filename>"
         sys.exit(1)
 
-    zf_fn = sys.argv[1]
-    with zipfile.ZipFile(zf_fn, 'w') as zf:
-        collect_config_file(zf)
-        collect_securedrop_root(zf)
-        collect_database(zf)
-        collect_custom_header_image(zf)
-        collect_tor_files(zf)
+    backup_fn = sys.argv[1]
+    if not backup_fn.endswith(".tar.gz"):
+        backup_fn += ".tar.gz"
+
+    print "Backing up..."
+
+    with tarfile.open(backup_fn, 'w:gz') as backup:
+        collect_config_file(backup)
+        collect_securedrop_root(backup)
+        collect_database(backup)
+        collect_custom_header_image(backup)
+        collect_tor_files(backup)
+
+    print "Done!"
 
 if __name__ == "__main__":
     main()
