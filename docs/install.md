@@ -249,6 +249,8 @@ First, generate the new SSH keypair:
 
 You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. Choose a strong passphrase to protect the SSH private key. 
 
+You should save this passphrase in your KeePassX password manager. You can also generate the passphrase using KeePassX as well.
+
 Once the key has finished generating, you need to copy the public key to both servers. Use `ssh-copy-id` to copy the public key to each server in turn. Use the user name and password that you set up during Ubuntu installation.
 
     $ ssh-copy-id <username>@<App IP address>
