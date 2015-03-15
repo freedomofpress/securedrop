@@ -51,15 +51,15 @@ You will also need the inventory of hardware items for the installation located 
 	
 ### Set up Tails USB sticks
 
-Tails is a secure operating system that is run from removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown. 
+Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a secure operating system that is run from removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown. 
 
-For SecureDrop, you'll need to install Tails onto at least three USB sticks and enable persistent storage: one *offline Tails USB*, one *admin Tails USB*, and at least one *journalist Tails USB*. (You'll need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create more)
+You'll need to install Tails onto at least three USB sticks and enable persistent storage: one *offline Tails USB*, one *admin Tails USB*, and at least one *journalist Tails USB*. (You'll need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create more)
 
 #### Installing Tails
 
 We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. *You will only be able to create persistent volumes on USB sticks that had Tails installed via the Tails Installer*.
 
-The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a Tails USB stick. Here are some links to help you out:
+The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a Tails USB stick. Follow the instructions at these links and then return to this page:
 
 * [Download and verify the Tails .iso](https://tails.boum.org/download/index.en.html)
 * [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
@@ -68,29 +68,37 @@ Note that this process will take a little while because once you have one versio
 
 #### Enabling Persistence Storage on Tails
 
-Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. 
+Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on your Tails USB. This information will remain available to you even if you reboot Tails. (Tails securely wipes all other data on every shutdown.)
 
-Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select from a list of persistence features, such as personal data. We recommend that you enable **all** features.
+Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). When creating the persistence volume, you will be asked to select from a list of persistence features, such as 'personal data.' We recommend that you enable **all** features.
 
-You will want to create a persistent volume for all three main Tails USBs: the *offline Tails USB*, the *admin Tails USB*, and the *journalist Tails USB*. The admin and the journalist should create separate passwords for their own USBs. Only the journalist should have access to the *offline Tails USB password*, though during the initial installation, often the admin will create their own password to facilitate set-up and then the journalist can go back in and change it afterwards.
+--You will want to create a persistent volume for all three main Tails USBs: the *offline Tails USB*, the *admin Tails USB*, and the *journalist Tails USB*. 
+
+--The admin and the journalist should create separate passwords for their own USBs. 
+
+--Only the journalist should have access to the *offline Tails USB password*, though during the initial installation, often the admin will create their own password to facilitate set-up and then the journalist can go back in and change it afterwards.
+
+--Unlike many of the other passwords for SecureDrop, the persistence volume passwords must be remembered by the admin and jouranlist. So after creating them, you should write it down until you can memorize it, and then destroy the paper you wrote it on.
 
 NOTE: Make sure that you never connect the *offline Tails USB* to the Internet. This USB will be used on the airgapped *Secure Viewing Station* only.
 
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
+The *Secure Viewing Station (SVS)* is a computer that is kept offline and only ever used together with the *offline Tails USB*. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
 
 We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
 
-At this point, you should have created a Tails Live USB with persistence on the *offline USB stick*. If you haven't follow the instructions in the [Tails Guide](tails_guide.md). Stop after starting Tails and enabling the persistent volume - and *do not* continue to connecting the machine to the Internet.
+At this point, you should have created a Tails Live USB with persistence on the *offline Tails USB*. If you haven't, follow the instructions in the [Tails Guide](tails_guide.md). 
+
+Boot your *offline Tails USB* with the persistent volume enabled on the *Secure Viewing Station*.
+
+When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
 
 ### Create a GPG key for the SecureDrop application
 
 When a document is submitted through the *Source Interface* on the *App Server*, the document is automatically encrypted with the SecureDrop Application GPG key. If you have not previously created a GPG key for SecureDrop, you will need to create one now before you continue with the installation. 
 
-Start by booting the Secure Viewing Station from the *offline USB stick*. When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
-
-After logging in, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* 
+After booting up Tails, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* 
 
 Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time, and region. Then click *Lock*, enter your password one more time and wait for the system time to update in the top menu bar. 
 
@@ -158,7 +166,7 @@ Once you have verified that you can connect, continue with the installation. If 
 
 ## Install the SecureDrop application
 
-### Download the repository
+### Download the repository and verify the release code
 
 You should still be on the *admin Tails USB* on the admin work station. 
 
@@ -168,22 +176,6 @@ The rest of the SecureDrop-specific configuration is assisted by files stored in
 cd ~/Persistent
 git clone https://github.com/freedomofpress/securedrop.git
 ```
-
-### Install Ansible
-
-Next you need to install Ansible. To do this, you first need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
-
-    sudo apt-get update
-
-Now, install Ansible by entering this command:
-
-    sudo apt-get install ansible
-
-### Clone and verify the release code
-
-Next, you will need to clone the SecureDrop repository:
-
-    git clone https://github.com/freedomofpress/securedrop.git
 
 Before proceeding, verify the signed git tag for this release.
 
@@ -202,6 +194,16 @@ Verify that the current release tag was signed with the master signing key.
 
 You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
+### Install Ansible
+
+Next you need to install Ansible. To do this, you first need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
+
+    sudo apt-get update
+
+Now, install Ansible by entering this command:
+
+    sudo apt-get install ansible
+
 ### Set up SSH keys for the Admin
 
 Now that you've verified the code that's needed for installation, you need to create an SSH key on the Admin Workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
@@ -217,12 +219,13 @@ Once the key has finished generating, you need to copy the public key to both se
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to authenticate to both servers without being prompted for a password:
+Verify that you are able to authenticate to both servers without being prompted for a password by running the below commands. 
 
 ```sh
 ssh <username>@<App IP address> hostname
 ssh <username>@<Montior IP address> hostname
 ```
+Make sure to run the 'exit' command after testing each one. 
 
 ### Gather the required information
 
@@ -249,11 +252,11 @@ Change into the `ansible-base` directory of the SecureDrop repo that you cloned 
 
 Copy the following required files to `securedrop/install_files/ansible-base`:
 
-* Application GPG public key file
+* SecureDrop Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
 * (Optional) Custom header image file
 
-It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
+The SecureDrop application GPG key should be located on your *Transfer Device* from earlier. It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
