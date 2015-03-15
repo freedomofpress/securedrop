@@ -139,11 +139,46 @@ If the journalist does have a key, transfer the public key from wherever it is l
 
 At this point, you are done with the *Secure Viewing Station* for now. You can shutdown Tails, grab the *admin Tails USB* and move over to your regular workstation.
 
+## Set up Admin Tails USB and Workstation
+
+Earlier, you should have created the *admin Tails USB* along with a persistence volume for it. Now, we are going to add a couple more features to the *admin Tails USB* to make set-up a bit easier. 
+
+If you have not switched over and booted up to the *admin Tails USB* on your regular workstation, do so now. 
+
+
+### Start Tails and enable the persistent volume
+
+After you boot your *admin Tails USB* to your normal workstation, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
+
+### Download the SecureDrop repository
+
+The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal and run the following commands to download the git repository. 
+
+NOTE: Since the repository is fairly large and Tor can be slow, this may take a few minutes.
+
+```sh
+cd ~/Persistent
+git clone https://github.com/freedomofpress/securedrop.git
+```
+
+### Passphrase Database
+
+We provide a KeePassX password database template to make it easier for admins and journalists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
+
+You can find the template in `tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password or the location of the key file used to protect the database.
+
+To use the template:
+
+ * Open the KeePassX program
+ * Select `File`, `Import from...`, and `KeePassX XML (*.xml)`
+ * Navigate to the location of `securedrop-keepassx.xml`, select it, and click `Open`
+ * Set a strong master password or choose a key file to protect the password database
+ * Click `File` and `Save Database As`
+ * Save the database in the Tails Persistent folder
+
 ## Set up the Network Firewall
 
-If you have not switched over and booted up to the *admin Tails USB* on your regular workstation, do so now. When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
-
-Now, go to our [Network Firewall Guide](/docs/network_firewall.md) for instructions for setting up the Network Firewall. When you are done, you will be sent back here to continue with the next section.
+Now that you've set up your password manager, you can move on to setting up the Network Firewall. You should stay logged in to your *admin Tails USB*, but please go to our [Network Firewall Guide](/docs/network_firewall.md) for instructions for setting up the Network Firewall. When you are done, you will be sent back here to continue with the next section.
 
 ## Set up the Servers
 
