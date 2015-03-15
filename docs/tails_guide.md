@@ -1,4 +1,4 @@
-# Tails Guide
+# Setting up the admin and journalist Tails USB for accessing SecureDrop
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -16,6 +16,14 @@
     - [Create bookmarks for Source and Document Interfaces](#create-bookmarks-for-source-and-document-interfaces)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+To log-in SecureDrop's *Document Interface* and retreived messages sent by sources, the journalist must be using the Tails operating system. The admin must also use Tails to access the *Document Interface* and create new users. 
+
+If you followed the Installation instructions correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below. 
+
+If you already know how to boot the *admin Tails USB* or the *journalist Tails USB* with persistence, you can skip down to the step 'download the repository'.
+
+Note that for all of these instructions to work, you should have already installed the main SecureDrop application. 
 
 # Installing Tails on USB sticks
 
@@ -55,8 +63,6 @@ Creating an encrypted persistent volume will allow you to securely save informat
 
 When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*.
 
-If you're setting up the Secure Viewing Station, stop here. You're done. Otherwise, once you're logged in, connect the Tails machine to the Internet.
-
 ## Download the repository
 
 The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop git repository. To get started, open a terminal and run the following commands to download the git repository. Note that since the repository is fairly large and Tor can be slow, this may take a few minutes.
@@ -83,9 +89,9 @@ To use the template:
 
 ## Set up easy access to the Document Interface
 
-If this is an Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the Document Interface.
+To complete set-up of the Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the *Document Interface*.
 
-Navigate to the directory with the setup scripts and begin the installation:
+Navigate to the directory with the setup scripts and begin the installation by typing these commands into the terminal:
 
 ```
 cd securedrop/tails_files/
