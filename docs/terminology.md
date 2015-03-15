@@ -32,6 +32,8 @@ The *Secure Viewing Station* (or *SVS* for short) is a machine that is kept offl
 
 Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend physically removing the drive and any networking cards (wireless, Bluetooth, etc.) from this machine.
 
+This is also referred to as the "airgapped computer," meaning there is a gap between it and a computer connected to the Internet
+
 ### Two-Factor Authenticator
 
 There are several places in the SecureDrop architecture where two-factor authentication is used to protect access to sensitive information or systems. These instances use the standard TOTP and/or HOTP algorithms, and so a variety of devices can be used to provide two factor authentication for devices. We recommend using one of:
@@ -46,6 +48,10 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
 If you use a USB stick for the transfer device, we recommend using a small one (4GB or less). You will want to securely wipe the entire device at times, and this process takes longer for larger devices.
 
 Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as the private key used to decrypt submissions or the content of decrypted submissions.
+
+When we use the phrase "sneakernet" we mean physically move documents on the Transfer Device from one computer to another. 
+
+##Hardware
 
 ### Computers
 
@@ -68,13 +74,17 @@ Each journalist will also need a *Transfer Device* for transferring files betwee
 
 The second *offline* Tails Live USB with persistence will be used as the encrypted offline backup. This device will be a copy of the main *SVS* Tails Live USB with persistence.
 
+##Roles and Passphrases
+
+There are several roles for SecureDrop and each requires knowing a unique set of passphrases.
+
 ### Passphrases
 
 A SecureDrop installation will require at least two roles, an admin and a journalist, and each role will require a number of strong, unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below is meant to be an overview of the accounts, passphrases and two-factor secrets that are required by SecureDrop.
 
 We have created a KeePassX password database template that both the admin and the journalist can use on Tails to ensure they not only generate strong passphrases, but also store them safely. By using KeePassX to generate strong, unique passphrases, you will be able to achieve excellent security while also maintaining usability, since you will only have to personally memorize a small number of strong passphrases. More information about using the password database template on Tails is included in the [Tails Setup Guide](/docs/tails_guide.md#passphrase-database).
 
-#### Admin
+### Admin
 
 The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
 
@@ -93,7 +103,7 @@ The admin will also need to have an Android or iOS device with the Google Authen
  * The secret code for the App Server's two-factor authentication.
  * The secret code for the Monitor Server's two-factor authentication.
  
-#### Journalist
+### Journalist
 
 The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
 
