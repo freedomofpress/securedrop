@@ -66,6 +66,8 @@ The [Tails website](https://tails.boum.org/) has detailed and up-to-date instruc
 
 Note that this process will take a little while because once you have one version of Tails, you have to create each Tails USB, shutdown, and boot into the new USB to complete the next step.
 
+Also you should be aware that Tails does not always completely shutdown and reboot properly when you click "restart", so if you notice a signficant delay, you may have to completely shutdown and manually re-start your computer for it to work properly.
+
 #### Enabling Persistence Storage on Tails
 
 Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on your Tails USB. This information will remain available to you even if you reboot Tails. (Tails securely wipes all other data on every shutdown.)
