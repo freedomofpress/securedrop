@@ -1,4 +1,4 @@
-# Setting up the admin and journalist Tails USB for accessing SecureDrop
+# Setting up the Admin and Journalist Tails USB
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -17,9 +17,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-To log-in SecureDrop's *Document Interface* and retreived messages sent by sources, the journalist must be using the Tails operating system. The admin must also use Tails to access the *Document Interface* and create new users. 
+To log-in SecureDrop and retreived messages sent by sources, the journalist must be using the Tails operating system. The admin must also use Tails to access the *Document Interface* and create new users. 
 
-If you followed the Installation instructions correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below. 
+If you followed the (SecureDrop Installation instructions)[https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md] correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume on each. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below. 
 
 If you already know how to boot the *admin Tails USB* or the *journalist Tails USB* with persistence, you can skip down to the step 'download the repository'.
 
@@ -108,6 +108,8 @@ HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 ```
 
 If you're working on the Admin Workstation, you should also insert the lines found in `app-ssh-aths` and `mon-ssh-aths`, which will allow you to connect using a secure shell over Tor to the App and Monitor Servers. When you are done, click *Save* and close the text editor.
+
+The preceding steps are taken so that no one but the journalist will be able to access to the *Document Interface*, even if they manage to steal the journalist's username, password, and two-factor authentication token.
 
 ## Using Tails with the Workstation
 
