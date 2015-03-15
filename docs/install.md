@@ -53,7 +53,14 @@ You will also need the inventory of hardware items for the installation located 
 
 Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a secure operating system that is run from removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown. 
 
-You'll need to install Tails onto at least three USB sticks and enable persistent storage: one *offline Tails USB*, one *admin Tails USB*, and at least one *journalist Tails USB*. (You'll need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create more)
+You'll need to install Tails onto at least four USB sticks and enable persistent storage: 
+
+1) *offline Tails USB*
+2) *admin Tails USB* 
+3) *journalist Tails USB*. 
+4) *long-term storage Tails USB* 
+
+(You'll need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create more.)
 
 #### Installing Tails
 
