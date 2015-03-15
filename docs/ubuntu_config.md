@@ -96,6 +96,8 @@ Below is the configuration you should enter, assuming you used the network setti
 
 You can choose whatever username and password you would like. You may use the same username and password on both servers, should you wish to do so. There is no need to encrypt the home directory. Configure your time zone.
 
+Make sure to save this password in your KeePassX database afterwards.
+
 ### Partition the disks
 
 Before setting up the server's disk partitions and filesystems in the next step, you will need to decide if you would like to enable [*Full Disk Encryption (FDE)*](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption). If the servers are ever powered down, FDE will ensure all of the information on them stay private in case they are seized or stolen. 
