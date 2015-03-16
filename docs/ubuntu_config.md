@@ -114,7 +114,8 @@ After selecting either of those options you may be asked a few questions about o
 
 ### Finish the installation
 
-Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. 
+Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**.
+
 When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). 
 
 Once **OpenSSH Server** is selected, hit continue. 
