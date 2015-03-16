@@ -94,9 +94,9 @@ Below is the configuration you should enter, assuming you used the network setti
 
 ### Continue the installation
 
-You can choose whatever username and password you would like. You may use the same username and password on both servers, should you wish to do so. There is no need to encrypt the home directory. Configure your time zone.
+You can choose whatever username and password you would like. You may use the same username and password on both servers, should you wish to do so. Make sure to save this password in your admin KeePassX database afterwards.
 
-Make sure to save this password in your KeePassX database afterwards.
+Click 'no' when asked to encrypt the home directory. Then configure your time zone.
 
 ### Partition the disks
 
@@ -108,13 +108,16 @@ If you wish to proceed without FDE as recommended, choose the installation optio
 
 However, if you decide to go ahead and enable FDE, please note that doing so means SecureDrop will become unreachable after an automatic reboot. An administrator will need to be on hand to enter the password in order to decrypt the disks and complete the startup process, which will occur anytime there is an automatic software update. We recommend that the servers be integrated with a monitoring solution that so that you receive an alert when the system becomes unavailable.
 
-To enable FDE, select *Guided - use entire disk and set up encrypted LVM* during the disk partitioning step and write the changes to disk. Follow the recommendations as to choosing a strong password. As the administrator, you will be responsible for keeping this passphrase safe. Write it down somewhere and memorize it if you can. If inadvertently lost it could result in total loss of the SecureDrop system.
+To enable FDE, select *Guided - use entire disk and set up encrypted LVM* during the disk partitioning step and write the changes to disk. Follow the recommendations as to choosing a strong password. As the administrator, you will be responsible for keeping this passphrase safe. Write it down somewhere and memorize it if you can. **If inadvertently lost it could result in total loss of the SecureDrop system.**
 
 After selecting either of those options you may be asked a few questions about overwriting anything currently on the server you are using. Select yes. You do not need an HTTP proxy, so when asked, you can just click continue.
 
 ### Finish the installation
 
-Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). Once **OpenSSH Server** is selected, hit continue. 
+Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. 
+When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before hitting space bar will force you to start the installation process over). 
+
+Once **OpenSSH Server** is selected, hit continue. 
 
 You will then have to wait for the packages to finish installing.
 
