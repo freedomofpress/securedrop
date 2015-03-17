@@ -1,6 +1,16 @@
 ---
 # This role will upgrade 0.3pre instances to 0.3 instances.
 # It will copy and run the upgrade.py script on the app and monitor servers.
+- name: remove old 0.3 packages to avoid version error
+  apt: name={{ item }} state=absent
+  with_items:
+    - securedrop-app-code
+    - securedrop-grsec
+    - securedrop-ossec-agent
+    - securedrop-ossec-server
+
+- name: remove the previous signing key
+  apt_key: id=BD67D096 state=absent
 
 - name: copy upgrade script to servers
   copy: src="0.3pre_upgrade.py" dest="/tmp" owner="root" mode="740"

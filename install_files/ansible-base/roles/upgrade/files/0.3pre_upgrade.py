@@ -9,25 +9,6 @@ import sys
 import tarfile
 import traceback
 
-def install_packages(*packages):
-    subprocess.check_call(["apt-get", "update"])
-    subprocess.check_call(["apt-get", "-y", "install"] + list(packages))
-
-def delete_packages(*packages):
-    subprocess.check_call(["apt-get", "-y", "remove"] + list(packages))
-
-def delete_apt_keys(*keyids):
-    for keyid in keyids:
-        subprocess.check_call(["apt-key", "del", keyid])
-
-def add_apt_key(keyfile):
-    subprocess.check_call(["apt-key", "add", keyfile])
-
-def add_new_apt_key():
-    # We want to make upgrading simple, so we should only have to copy this script to the target machines for upgrade.
-    # We don't use the keyservers to download the key because hkp is blocked by the default firewall rules.
-    subprocess.check_call("wget -qO - https://freedom.press/sites/default/files/fpf.asc | sudo apt-key add -", shell=True)
-
 def backup_app():
     tar_fn = 'backup-app-{}.tar.bz2'.format(datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))
     with tarfile.open(tar_fn, 'w:bz2') as t:
@@ -45,17 +26,7 @@ def backup_mon():
         t.add('/var/lib/tor/services/')
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
-logo_path = '/var/www/securedrop/static/i/logo.png'
-logo_backup_path = '/tmp/logo.png'
-    
-def backup_logo():
-    shutil.copy(logo_path, logo_backup_path)
 
-def restore_logo():
-    shutil.copy(logo_backup_path, logo_path)
-    # Apparently I don't need to set the permissions to www-data:www-data, they
-    # are automatically set that way (tested).
-    
 def migrate_app_db():
     # To get CREATE TABLE from SQLAlchemy:
     # >>> import db
@@ -153,31 +124,11 @@ CREATE TABLE journalist_login_attempt (
 def upgrade_app():
     backup_app()
     
-    # The logo.png should not be included in the package (since it is typically
-    # customized by the installation admin), but it currently is. To maintain it
-    # across removing securedrop-app-code and installing the new version, we
-    # need to back it up before removing the old package and then restore it
-    # after installing the new package.
-    backup_logo()
-
-    delete_packages("securedrop-app-code", "securedrop-grsec", "securedrop-ossec-agent")
     migrate_app_db()
-    # delete the old signing key
-    delete_apt_keys("BD67D096")
-    # install the new signing key
-    # the key is stored in a file in the same directory as this script
-    add_new_apt_key()
-    # install the new packages
-    install_packages("securedrop-app-code", "securedrop-ossec-agent", "ossec-agent", "securedrop-grsec")
-    restore_logo()
 
-    
+
 def upgrade_mon():
     backup_mon()
-    delete_packages("securedrop-ossec-server")
-    delete_apt_keys("BD67D096")
-    add_new_apt_key()
-    install_packages("securedrop-ossec-server", "ossec-server", "securedrop-grsec")
 
 
 def main():
