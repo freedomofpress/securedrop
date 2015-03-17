@@ -50,8 +50,14 @@ sysctl_flags:
     value: "1"
   - name: "net.ipv6.conf.lo.disable_ipv6"
     value: "1"
+
+grsec_sysctl_flags:
   - name: "kernel.grsecurity.rwxmap_logging"
     value: "0"
+    # The grsec lock value needs to be the last sysctl flag set or else the
+    # rest will not be applied
+  - name: "kernel.grsecurity.grsec_lock"
+    value: "1"
 
 # grsec vars
 grub_pax:
