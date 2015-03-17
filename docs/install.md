@@ -189,6 +189,23 @@ cd ~/Persistent
 git clone https://github.com/freedomofpress/securedrop.git
 ```
 
+Before proceeding, verify the signed git tag for this release.
+
+First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
+
+    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+
+The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
+
+Verify that the current release tag was signed with the master signing key.
+
+    cd securedrop/
+    git checkout 0.3
+    git tag -v 0.3
+
+You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
+
 ### Passphrase Database
 
 We provide a KeePassX password database template to make it easier for admins and journalists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
@@ -218,7 +235,7 @@ Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed instructions on in
 * The IP address of the Monitor Server
 * The non-root user's name and password on each server.
 
-Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the admin Workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
+Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the admin workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
 
 ```sh
 ssh <username>@<App IP address> hostname
@@ -229,35 +246,9 @@ Once you have verified that you can connect, continue with the installation. If 
 
 ## Install the SecureDrop application
 
-### Download the repository and verify the release code
-
-You should still be on the *admin Tails USB* on the admin work station. 
-
-The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop git repository. To get started, open a terminal and run the following commands to download the git repository. Note that since the repository is fairly large and Tor can be slow, this may take a few minutes.
-
-```sh
-cd ~/Persistent
-git clone https://github.com/freedomofpress/securedrop.git
-```
-
-Before proceeding, verify the signed git tag for this release.
-
-First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
-
-    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
-    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
-
-The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
-
-Verify that the current release tag was signed with the master signing key.
-
-    cd securedrop/
-    git checkout 0.3
-    git tag -v 0.3
-
-You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
-
 ### Install Ansible
+
+You should still be on your admin workstation with your *admin Tails USB*.  
 
 Next you need to install Ansible. To do this, you first need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
 
@@ -284,7 +275,7 @@ Once the key has finished generating, you need to copy the public key to both se
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to authenticate to both servers without being prompted for a password by running the below commands. 
+Verify that you are able to authenticate to both servers by running the below commands (you will be prompted for the SSH password you just created). 
 
 ```sh
 ssh <username>@<App IP address> hostname
@@ -315,7 +306,7 @@ Change into the `ansible-base` directory of the SecureDrop repo that you cloned 
 
     $ cd securedrop/install_files/ansible-base
 
-Copy the following required files to `securedrop/install_files/ansible-base`:
+You will have to copy the following required files to `securedrop/install_files/ansible-base`:
 
 * SecureDrop Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
@@ -329,7 +320,7 @@ Repeat the same step for the Admin GPG key and custom header image.
 
 Edit the inventory file, `inventory`, and update the default IP addresses with the ones you chose for app and mon. When you're done, save the file and exit the editor.
 
-Fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
+Edit the file `prod-specific.yml` and fill it out with values that match your environment. At a minimum, you will need to provide the following:
 
  * User allowed to connect to both servers with SSH: `ssh_users`
  * IP address of the Monitor Server: `monitor_ip`
@@ -341,11 +332,11 @@ Fill out `prod-specific.yml` with values that match your environment. At a minim
  * GPG public key used when encrypting OSSEC alerts: `ossec_alert_gpg_public_key`
  * Fingerprint for key used when encrypting OSSEC alerts: `ossec_gpg_fpr`
  * The email address that will receive alerts from OSSEC: `ossec_alert_email`
- * Email settings required to send alerts from OSSEC: `smtp_relay`
- * Email settings required to send alerts from OSSEC: `smtp_relay_port`
- * Email settings required to send alerts from OSSEC: `sasl_username`
- * Email settings required to send alerts from OSSEC: `sasl_domain`
- * Email settings required to send alerts from OSSEC: `sasl_password`
+ * The reachable hostname of your SMTP relay: `smtp_relay`
+ * The secure SMTP port of your SMTP relay: `smtp_relay_port` (typically 25, 587, or 465. Must support TLS encryption)
+ * Email username to authenticate to the SMTP relay: `sasl_username`
+ * Domain name of the email used to send OSSEC alerts: `sasl_domain`
+ * Password of the email used to send OSSEC alerts: `sasl_password`
  * The fingerprint of your SMTP relay (optional): `smtp_relay_fingerprint`
 
 When you're done, save the file and exit the editor. 
@@ -354,7 +345,7 @@ Now you are ready to run the playbook! This will automatically configure the ser
 
     $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
 
-You will be prompted to enter the sudo password for each server.
+You will be prompted to enter the sudo password for the app and monitor servers (which should be the same).
 
 The ansible playbook will run, installing SecureDrop and configuring and hardening the servers. This will take some time, and will return the Terminal to you when it is complete. If an error occurs while running the playbook, please submit a detailed [Github issue](https://github.com/freedomofpress/securedrop/issues/new) or send an email to securedrop@freedom.press.
 
