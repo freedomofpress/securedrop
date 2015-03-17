@@ -43,143 +43,88 @@ Installing SecureDrop
 
 This guide outlines the steps required to install SecureDrop 0.3. If you are looking to upgrade from version 0.2.1, please use the [migration scripts](https://github.com/freedomofpress/securedrop/tree/develop/migration_scripts/0.3) we have created.
 
-When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup.
-
-## Terminology
-
-A number of terms used in this guide, and in the [SecureDrop workflow diagram](https://freedom.press/securedrop-files/SecureDrop_complex.png), are specific to SecureDrop. The list below attempts to enumerate and define these terms.
-
-### App Server
-
-The *Application Server* (or *App Server* for short) runs the SecureDrop application. This server hosts both the website that sources access (*Source Interface*) and the website that journalists access (*Document Interface*). You may only connect to this server using Tor.
-
-### Monitor Server
-
-The *Monitor Server* keeps track of the *App Server* and sends out an email alert if something seems wrong. You may only connect to this server using Tor.
-
-### Source Interface
-
-The *Source Interface* is the website that sources will access when submitting documents and communicating with journalists. This site is hosted on the *App Server* and can only be accessed over Tor.
-
-### Document Interface
-
-The *Document Interface* is the website that journalists will access when downloading new documents and communicating with sources. This site is hosted on the *App Server* and can only be accessed over Tor.
-
-### Journalist Workstation
-
-The *Journalist Workstation* is a machine that is online and used together with the Tails operating system on the *online* USB stick. This machine will be used to connect to the *Document Interface*, download documents, and move them to the *Secure Viewing Station* using the *Transfer Device*.
-
-### Admin Workstation
-
-The *Admin Workstation* is a machine that the system administrator can use to connect to the *App Server* and the *Monitor Server* using Tor and SSH. The administrator will also need to have an Android or iOS device with the Google Authenticator app installed.
-
-### Secure Viewing Station
-
-The *Secure Viewing Station* (or *SVS* for short) is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. This machine will be used to generate GPG keys for all journalists with access to SecureDrop, as well as to decrypt and view submitted documents.
-
-Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend physically removing the drive and any networking cards (wireless, Bluetooth, etc.) from this machine.
-
-### Two-Factor Authenticator
-
-There are several places in the SecureDrop architecture where two-factor authentication is used to protect access to sensitive information or systems. These instances use the standard TOTP and/or HOTP algorithms, and so a variety of devices can be used to provide two factor authentication for devices. We recommend using one of:
-
-* An Android or iOS device with [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) installed
-* A [Yubikey](http://www.yubico.com/products/yubikey-hardware/)
-
-### Transfer Device
-
-The *Transfer Device* is the physical media used to transfer encrypted documents from the *Journalist Workstation* to the *Secure Viewing Station*. Examples: a dedicated USB stick, CD-R, DVD-R, or SD card.
-
-If you use a USB stick for the transfer device, we recommend using a small one (4GB or less). You will want to securely wipe the entire device at times, and this process takes longer for larger devices.
-
-Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as the private key used to decrypt submissions or the content of decrypted submissions.
-
 ## Before you begin
 
-You will need the following inventory of hardware items for the installation. For specific hardware recommendations, see the [Hardware Guide](hardware.md).
+When running commands or editing configuration files that include filenames, version numbers, admin or journalist names, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. It's recommended you read over our [Terminology Guide](terminology.md) once before starting and keep it open in another tab to refer back to.
 
-### Computers
-
-* Application Server
-* Monitor Server
-* Admin Workstation (any spare computer that can be connected to the firewall and can run Tails)
-
-### USBs/DVDs/CDs
-
- * CD, DVD, or USB to use when [installing Ubuntu on the Application Server and the Monitor Server](/docs/ubuntu_config.md).
- * CD, DVD, or USB to use when [setting up Tails Live with persistence](/docs/tails_guide.md).
- * Brand new USB, marked *transfer*, to use as the *Transfer Device*.
-
-Additionally, you will need a minimum of 4 USB sticks which will become Tails Live USB's with persistence. You should mark two *offline*, one *online*, and one *admin*. This is enough to set up a system with one admin and one journalist (note that the same person can perform both of these roles). To add more administrators or journalists, you will need more USB sticks.
-
-Finally, each user, whether admin or journalist, will need a *Two-Factor Authenticator*.
-
-Each journalist will also need a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create GPG keys](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one.
-
-The second *offline* Tails Live USB with persistence will be used as the encrypted offline backup. This device will be a copy of the main *SVS* Tails Live USB with persistence.
-
-### Passphrases
-
-A SecureDrop installation will require at least two roles, an admin and a journalist, and each role will require a number of strong, unique passphrases. The Secure Viewing Station, which will be used by the journalist, also requires secure and unique passphrases. The list below is meant to be an overview of the accounts, passphrases and two-factor secrets that are required by SecureDrop.
-
-We have created a KeePassX password database template that both the admin and the journalist can use on Tails to ensure they not only generate strong passphrases, but also store them safely. By using KeePassX to generate strong, unique passphrases, you will be able to achieve excellent security while also maintaining usability, since you will only have to personally memorize a small number of strong passphrases. More information about using the password database template on Tails is included in the [Tails Setup Guide](/docs/tails_guide.md#passphrase-database).
-
-#### Admin
-
-The admin will be using the *Admin Workstation* with Tails to connect to the App Server and the Monitor Server using Tor and SSH. The tasks performed by the admin will require the following set of passphrases:
-
- * A password for the persistent volume on the Admin Live USB.
- * A master password for the KeePassX password manager, which unlocks passphrases to:
-     * The App Server and the Monitor Server (required to be the same).
-     * The network firewall.
-     * The SSH private key and, if set, the key's passphrase.
-     * The GPG key that OSSEC will encrypt alerts to.
-     * The admin's personal GPG key.
-     * The credentials for the email account that OSSEC will send alerts to.
-     * The Hidden Services values required to connect to the App and Monitor Server.
- 
-The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two credentials:
-
- * The secret code for the App Server's two-factor authentication.
- * The secret code for the Monitor Server's two-factor authentication.
- 
-#### Journalist
-
-The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
-
- * A master password for the persistent volume on the Tails device.
- * A master password for the KeePassX password manager, which unlocks passphrases to:
-     * The Hidden Service value required to connect to the Document Interface.
-     * The Document Interface.
-     * The journalist's personal GPG key.
-     
-The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following credential:
-
- * The secret code for the Document Interface's two-factor authentication.
- 
-#### Secure Viewing Station
-
-The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following set of passphrases:
-
- * A master password for the persistent volume on the Tails device.
-
-The backup that is created during the installation of SecureDrop is also encrypted with the application's GPG key. The backup is stored on the persistent volume of the Admin Live USB.
+You will also need the inventory of hardware items for the installation located [Hardware Guide](hardware.md).
 	
+### Set up Tails USB sticks
+
+Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a secure operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown. 
+
+You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else: 
+
+1) *offline Tails USB*
+
+2) *admin Tails USB* 
+
+3) *journalist Tails USB*. 
+
+4) *long-term storage Tails USB* 
+
+(You'll need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create more.)
+
+#### Installing Tails
+
+We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. *You will only be able to create persistent volumes on USB sticks that had Tails installed via the Tails Installer*.
+
+The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a Tails USB stick. Follow the instructions at these links and then return to this page:
+
+* [Download and verify the Tails .iso](https://tails.boum.org/download/index.en.html)
+* [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
+
+Note that this process will take a little while because once you have one version of Tails, you have to create each Tails USB, shutdown, and boot into the new USB to complete the next step.
+
+Also you should be aware that Tails does not always completely shutdown and reboot properly when you click "restart", so if you notice a signficant delay, you may have to completely shutdown and manually re-start your computer for it to work properly.
+
+#### Enabling Persistence Storage on Tails
+
+Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on your Tails USB. This information will remain available to you even if you reboot Tails. (Tails securely wipes all other data on every shutdown.)
+
+You will need to create a persistent storage on each Tails USB, with a unique password for each. 
+
+Please use the instructions on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html) to create the persistent drive on each Tails USB stick you create.  
+
+When creating the persistence volume, you will be asked to select from a list of persistence features, such as 'personal data.' We recommend that you enable **all** features. 
+
+Some other things to keep in mind:
+
+--You will want to create a persistent volume for all three main Tails USBs: the *offline Tails USB*, the *admin Tails USB*, and the *journalist Tails USB*. 
+
+--The admin and the journalist should create separate passwords for their own USBs. 
+
+--Only the journalist should have access to the *offline Tails USB password*, though during the initial installation, often the admin will create their own password to facilitate set-up and then the journalist can go back in and change it afterwards.
+
+--Unlike many of the other passphrases for SecureDrop, the persistence volume passwords must be remembered by the admin and journalist. So after creating each passphrase, you should write it down until you can memorize it, and then destroy the paper you wrote it on.
+
+NOTE: Make sure that you never connect the *offline Tails USB* to the Internet. This USB will be used on the airgapped *Secure Viewing Station* only.
+
 ## Set up the Secure Viewing Station
 
-The *Secure Viewing Station (SVS)* is a machine that is kept offline and only ever used together with the Tails operating system on the *offline* USB stick. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
+The *Secure Viewing Station (SVS)* is a computer that is kept offline and only ever used together with the *offline Tails USB*. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
 
 We recommend that you physically remove the hard drive and networking cards, such as wireless and bluetooth, from this machine. If you are unable to remove a card, tape over it or otherwise physically disable it. If you have questions about using an old machine for this purpose, please contact us at securedrop@freedom.press.
 
-To set up the Secure Viewing Station, start by creating a Tails Live USB with persistence on the *offline* USB stick. Follow the instructions in the [Tails Guide](tails_guide.md). Stop after starting Tails and enabling the persistent volume - *do not* continue to connecting the machine to the Internet.
+At this point, you should have created a Tails Live USB with persistence on the *offline Tails USB*. If you haven't, follow the instructions in the [Tails Guide](tails_guide.md). 
+
+Boot your *offline Tails USB* on the *Secure Viewing Station*.
+
+After it loads, you should see a *Welcome to Tails* screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options," select *Yes* and click *Forward*. 
+
+Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
 
 ### Create a GPG key for the SecureDrop application
 
-When a document is submitted through the *Source Interface* on the *App Server*, the document is automatically encrypted with the SecureDrop Application GPG key. If you have not previously created a GPG key for SecureDrop, you will need to create one now before you continue with the installation. 
+When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the SecureDrop Application GPG key. You will need to create that key now before you continue with the installation. 
 
-Start by booting the Secure Viewing Station from the *offline* USB stick. When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*.
+After booting up Tails, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* 
 
-After logging in, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time and date for your region, click *Lock*, enter your password one more time and wait for the system time to update in the top menu bar. Once that's done, follow the steps below to create a GPG key.
+Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time, and region. 
+
+Then click *Lock*, enter your password one more time and wait for the system time to update in the top menu bar. 
+
+Once that's done, follow the steps below to create a GPG key.
 
 * Open a terminal and run `gpg --gen-key`
 * When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
@@ -188,16 +133,18 @@ After logging in, you will need to manually set the system time before you creat
 * When it asks, `Is this correct?` verify that you've entered everything correctly so far, and type `y`
 * For `Real name` type: `SecureDrop`
 * For `Email address`, leave the field blank and press Enter
-* For `Comment` type `SecureDrop Application GPG Key`
+* For `Comment` type `[Your News Org] SecureDrop Application GPG Key`
 * Verify that everything is correct so far, and type `o` for `(O)kay`
 * It will pop up a box asking you to type a passphrase, but it's safe to click okay without typing one (since your persistent volume is encrypted, this GPG key is stored encrypted on disk)
 * Wait for your GPG key to finish generating
 
-To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". You should see the key that you just generated.
+To manage GPG keys using the Tails graphical interface, click the clipboard icon in the top right and choose "Manage Keys". You should see the key that you just generated under "GnuPG Keys."
 
 ![My Keys](images/install/keyring.png)
 
-Select the key you just generated and click "File" and "Export". Save the key to the *Transfer Device* as `SecureDrop.asc`, and make sure you change the file type from "PGP keys" to "Armored PGP keys," which can be switched right above the 'export' button. This is the public key only.
+Select the key you just generated and click "File" and "Export". Save the key to the *Transfer Device* as `SecureDrop.pgp`, and make sure you change the file type from "PGP keys" to "Armored PGP keys," which can be switched right above the 'export' button. Click the 'export' button after swithing to armored keys.
+
+NOTE: This is the public key only.
 
 ![My Keys](images/install/exportkey.png)
 ![My Keys](images/install/exportkey2.png)
@@ -208,60 +155,39 @@ You'll need to verify the fingerprint for this new key during the `App Server` i
 
 ### Import GPG keys for journalists with access to SecureDrop
 
-While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists need to decrypt the documents using the SecureDrop application's GPG key and re-encrypt them with their own keys. If a journalist does not already have a key, follow the steps above to create one. The journalist should store the private key somewhere safe, the public key should be stored on the *Secure Viewing Station*.
+While working on a story, journalists may need to transfer some of the documents or notes from the *Secure Viewing Station* to the journalist's work computer on the corporate network. To do this, the journalists should re-encrypt them with their own keys. If a journalist does not already have a personal GPG key, he or she follow the same steps above to create one. The journalist should store the private key somewhere safe, the public key should be stored on the *Secure Viewing Station*.
 
-If the journalist does have a key, transfer the public key to the *Secure Viewing Station*, which is running Tails on the *offline* USB, using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
+If the journalist does have a key, transfer the public key from wherever it is located to the *Secure Viewing Station*, using the *Transfer Device*. Open the file manager and double-click on the public key to import it. If the public key is not importing, rename the file to end in ".asc" and try again.
 
 ![Importing Journalist GPG Keys](images/install/importkey.png)
 
-## Set up the Admin USB
+At this point, you are done with the *Secure Viewing Station* for now. You can shutdown Tails, grab the *admin Tails USB* and move over to your regular workstation.
 
-Create the Admin USB, a Tails Live USB with persistence. See the [Tails Guide](tails_guide.md) for instructions.
+## Set up Admin Tails USB and Workstation
 
-## Set up the Network Firewall
+Earlier, you should have created the *admin Tails USB* along with a persistence volume for it. Now, we are going to add a couple more features to the *admin Tails USB* to make set-up a bit easier. 
 
-See the [Network Firewall Guide](/docs/network_firewall.md) for instructions. When you are done, continue with the next section.
+If you have not switched over and booted up to the *admin Tails USB* on your regular workstation, do so now. 
 
-## Set up the Servers
 
-Start by plugging the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
+### Start Tails and enable the persistent volume
 
-Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed information on installing and configuring Ubuntu for use with SecureDrop, see the [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you have the following information before continuing:
+After you boot your *admin Tails USB* to your normal workstation, you should see a *Welcome to Tails* screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options," select *Yes* and click *Forward*. 
 
-* The IP address of the App Server
-* The IP address of the Monitor Server
-* The non-root user's name and password on each server.
+Enter an *Administration password* for use with this current Tails session and click *Login*. (NOTE: the *Administration password* is a one time password. It will reset every time you shut down Tails.)
 
-Before continuing, make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
+After Tails is fully booted, make sure to connect to the Internet using the icon in the upper right corner. 
+
+### Download the SecureDrop repository
+
+The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal and run the following commands to download the git repository. 
+
+NOTE: Since the repository is fairly large and Tor can be slow, this may take a few minutes.
 
 ```sh
-ssh <username>@<App IP address> hostname
-ssh <username>@<Montior IP address> hostname
+cd ~/Persistent
+git clone https://github.com/freedomofpress/securedrop.git
 ```
-
-Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
-
-## Install SecureDrop
-
-Connect the Admin Workstation to the LAN interface switch. Boot the Admin Workstation with the Admin Tails USB that we created earlier. Make sure to type the password in for your persistence drive, but before clicking enter, also click 'yes' for more options. Click 'forward.' You will be prompted to enter a root password. This is a one-time session password, so you will only be creating it for this one session. Continue to boot Tails.
-
-Once Tails is booted, open a terminal (click the terminal icon in the top menu).
-
-### Install Ansible
-
-First, you need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
-
-    sudo apt-get update
-
-Now, install Ansible by entering this command:
-
-    sudo apt-get install ansible
-
-### Clone and verify the release code
-
-Next, you will need to clone the SecureDrop repository:
-
-    git clone https://github.com/freedomofpress/securedrop.git
 
 Before proceeding, verify the signed git tag for this release.
 
@@ -280,6 +206,58 @@ Verify that the current release tag was signed with the master signing key.
 
 You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
+### Passphrase Database
+
+We provide a KeePassX password database template to make it easier for admins and journalists to generate strong, unique passphrases and store the securely. Once you have set up Tails with persistence and have cloned the repo, you can set up your personal password database using this template.
+
+You can find the template in `/Persistent/SecureDrop/tails_files/securedrop-keepassx.xml` inside the securedrop repository. Note that you will not be able to access your passwords if you forget the master password or the location of the key file used to protect the database.
+
+To use the template:
+
+ * Open the KeePassX program, which is should already be installed on Tails
+ * Select `File`, `Import from...`, and `KeePassX XML (*.xml)`
+ * Navigate to the location of `securedrop-keepassx.xml`, select it, and click `Open`
+ * Set a strong master password to protect the password database (you will have to write this down/memorize it)
+ * Click `File` and `Save Database As`
+ * Save the database in the Persistent folder
+
+## Set up the Network Firewall
+
+Now that you've set up your password manager, you can move on to setting up the Network Firewall. You should stay logged in to your *admin Tails USB*, but please go to our [Network Firewall Guide](/docs/network_firewall.md) for instructions for setting up the Network Firewall. When you are done, you will be sent back here to continue with the next section.
+
+## Set up the Servers
+
+Now that the firewall is set up, you can plug in the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
+
+Install Ubuntu 14.04.1 (Trusty) on both servers. For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you save the following information:
+
+* The IP address of the App Server
+* The IP address of the Monitor Server
+* The non-root user's name and password on each server.
+
+Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the admin workstation connected to the firewall from the firewall set up step. Open a terminal and verify that you can SSH into both servers, authenticating with your password:
+
+```sh
+ssh <username>@<App IP address> hostname
+ssh <username>@<Montior IP address> hostname
+```
+
+Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
+
+## Install the SecureDrop application
+
+### Install Ansible
+
+You should still be on your admin workstation with your *admin Tails USB*.  
+
+Next you need to install Ansible. To do this, you first need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
+
+    sudo apt-get update
+
+Now, install Ansible by entering this command:
+
+    sudo apt-get install ansible
+
 ### Set up SSH keys for the Admin
 
 Now that you've verified the code that's needed for installation, you need to create an SSH key on the Admin Workstation. Initially, Ubuntu has SSH configured to authenticate users with their password. This new key will be copied to the *Application Server* and the *Monitor Server*, and will replace the use of the password for authentication. Since the Admin Live USB was set up with [SSH Client persistence](https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2), this key will be saved on the Admin Live USB and can be used in the future to authenticate to the servers in order to perform administrative tasks.
@@ -290,17 +268,20 @@ First, generate the new SSH keypair:
 
 You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. Choose a strong passphrase to protect the SSH private key. 
 
+You should save this passphrase in your KeePassX password manager. You can also generate the passphrase using KeePassX as well.
+
 Once the key has finished generating, you need to copy the public key to both servers. Use `ssh-copy-id` to copy the public key to each server in turn. Use the user name and password that you set up during Ubuntu installation.
 
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to authenticate to both servers without being prompted for a password:
+Verify that you are able to authenticate to both servers by running the below commands (you will be prompted for the SSH password you just created). 
 
 ```sh
 ssh <username>@<App IP address> hostname
 ssh <username>@<Montior IP address> hostname
 ```
+Make sure to run the 'exit' command after testing each one. 
 
 ### Gather the required information
 
@@ -325,13 +306,13 @@ Change into the `ansible-base` directory of the SecureDrop repo that you cloned 
 
     $ cd securedrop/install_files/ansible-base
 
-Copy the following required files to `securedrop/install_files/ansible-base`:
+You will have to copy the following required files to `securedrop/install_files/ansible-base`:
 
-* Application GPG public key file
+* SecureDrop Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
 * (Optional) Custom header image file
 
-It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
+The SecureDrop application GPG key should be located on your *Transfer Device* from earlier. It will depend what the file location of your USB stick is, but, for an example, if you are already in the ansible-base directory, you can just run: 
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
@@ -339,7 +320,7 @@ Repeat the same step for the Admin GPG key and custom header image.
 
 Edit the inventory file, `inventory`, and update the default IP addresses with the ones you chose for app and mon. When you're done, save the file and exit the editor.
 
-Fill out `prod-specific.yml` with values that match your environment. At a minimum, you will need to provide the following:
+Edit the file `prod-specific.yml` and fill it out with values that match your environment. At a minimum, you will need to provide the following:
 
  * User allowed to connect to both servers with SSH: `ssh_users`
  * IP address of the Monitor Server: `monitor_ip`
@@ -351,11 +332,11 @@ Fill out `prod-specific.yml` with values that match your environment. At a minim
  * GPG public key used when encrypting OSSEC alerts: `ossec_alert_gpg_public_key`
  * Fingerprint for key used when encrypting OSSEC alerts: `ossec_gpg_fpr`
  * The email address that will receive alerts from OSSEC: `ossec_alert_email`
- * Email settings required to send alerts from OSSEC: `smtp_relay`
- * Email settings required to send alerts from OSSEC: `smtp_relay_port`
- * Email settings required to send alerts from OSSEC: `sasl_username`
- * Email settings required to send alerts from OSSEC: `sasl_domain`
- * Email settings required to send alerts from OSSEC: `sasl_password`
+ * The reachable hostname of your SMTP relay: `smtp_relay`
+ * The secure SMTP port of your SMTP relay: `smtp_relay_port` (typically 25, 587, or 465. Must support TLS encryption)
+ * Email username to authenticate to the SMTP relay: `sasl_username`
+ * Domain name of the email used to send OSSEC alerts: `sasl_domain`
+ * Password of the email used to send OSSEC alerts: `sasl_password`
  * The fingerprint of your SMTP relay (optional): `smtp_relay_fingerprint`
 
 When you're done, save the file and exit the editor. 
@@ -364,7 +345,7 @@ Now you are ready to run the playbook! This will automatically configure the ser
 
     $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
 
-You will be prompted to enter the sudo password for each server.
+You will be prompted to enter the sudo password for the app and monitor servers (which should be the same).
 
 The ansible playbook will run, installing SecureDrop and configuring and hardening the servers. This will take some time, and will return the Terminal to you when it is complete. If an error occurs while running the playbook, please submit a detailed [Github issue](https://github.com/freedomofpress/securedrop/issues/new) or send an email to securedrop@freedom.press.
 
