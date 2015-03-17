@@ -105,7 +105,7 @@
   # If using a custom header overwrite the existing one
   # dpkg will not override it on upgrades
   # otherwise will need to templatizing the apparmor profile
-- name: if header file is not None replace the default logo
+- name: if configured move the custom header image into the image folder as logo.png
   copy:
     src: "{{ securedrop_header_image }}"
     dest: "{{ securedrop_code }}/static/i/logo.png"
@@ -114,3 +114,12 @@
     mode: 400
     backup: yes
   when: securedrop_header_image != "None"
+
+  # When a custom header image is not provided copy the example into the
+  # correct place
+- name: if a branded custom header image is NOT defined use the example logo
+  command: /bin/cp logo.png.example logo.png
+  args:
+    chdir: /var/www/securedrop/static/i
+    creates: /var/www/securedrop/static/i/logo.png
+  when: securedrop_header_image == "None"
