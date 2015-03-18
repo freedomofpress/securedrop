@@ -30,5 +30,6 @@
   when: not grsec_lock.stat.exists
   sudo: false
 
-- sysctl: name=kernel.grsecurity.grsec_lock value=1 sysctl_set=yes state=present reload=yes
+- sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
+  with_items: grsec_sysctl_flags
   sudo: yes
