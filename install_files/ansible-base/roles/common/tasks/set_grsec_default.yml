@@ -1,0 +1,23 @@
+- name: get grsec kernel string
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | cut -d "'" -f2 >> /tmp/grsec.tmp
+
+- name: grab grsec kernel string
+  grsec_str: "{{ lookup('file', '/tmp/grsec.tmp') }}"
+
+- name: set grsec kernel as default for next boot
+  command: grub-reboot "{{ grsec_str }}"
+
+- name: reboot into the grsec kernel
+  command: shutdown -r now "Rebooting into the grsec kernel..."
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: waiting for server to come back
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  sudo: false

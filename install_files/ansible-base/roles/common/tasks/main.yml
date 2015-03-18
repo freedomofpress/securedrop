@@ -13,6 +13,12 @@
   tags:
     - grsec
 
+- include: set_grsec_default.yml
+  tags:
+    - reboot
+
+- include: remove_generic_kernel.yml
+
 - include: cron_apt.yml
   tags:
     - reboot
