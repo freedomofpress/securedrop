@@ -1,0 +1,14 @@
+- name: reboot into the grsec kernel
+  command: shutdown -r now "Rebooting into the grsec kernel..."
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: waiting for server to come back
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  sudo: false

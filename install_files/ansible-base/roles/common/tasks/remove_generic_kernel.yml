@@ -1,7 +1,5 @@
 - name: remove generic kernel metapackages
   apt: name=linux-signed-image-generic-lts-utopic state=absent
-  apt: name=linux-signed-generic-lts-utopic state=absent
-  apt: name=linux-signed-generic state=absent
   apt: name=linux-signed-image-generic state=absent
 
 - name: autoremove generic kernel packages
