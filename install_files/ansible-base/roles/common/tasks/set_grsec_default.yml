@@ -1,5 +1,5 @@
 - name: get grsec kernel string
-  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | cut -d "'" -f2
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | head -1 | cut -d "'" -f2
   register: grsec_str
 
 - name: set grsec kernel as default for next boot
