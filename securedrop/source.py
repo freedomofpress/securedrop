@@ -239,6 +239,11 @@ def submit():
     msg = request.form['msg']
     fh = request.files['fh']
 
+    # Don't bother submitting anything if it was an "empty" submission. #878.
+    if not (msg or fh):
+        flash("You must enter a message or choose a file to submit.", "error")
+        return redirect(url_for('lookup'))
+
     fnames = []
     journalist_filename = g.source.journalist_filename
     first_submission = g.source.interaction_count == 0

@@ -18,5 +18,5 @@
 
 - name: install grsec package from fpf repo
   apt: pkg={{ grsec_package }} state=latest
-  async: 200
+  async: 300
   poll: 10
