@@ -114,12 +114,3 @@
     mode: 400
     backup: yes
   when: securedrop_header_image != ""
-
-  # When a custom header image is not provided copy the example into the
-  # correct place
-- name: if a branded custom header image is NOT defined use the example logo
-  command: /bin/cp logo.png.example logo.png
-  args:
-    chdir: "{{ securedrop_code }}/static/i"
-    creates: "{{ securedrop_code }}/static/i/logo.png"
-  when: securedrop_header_image == ""
