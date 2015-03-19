@@ -1,6 +1,12 @@
 - name: remove generic kernel metapackages
   apt: name=linux-signed-image-generic-lts-utopic state=absent
   apt: name=linux-signed-image-generic state=absent
+  apt: name=linux-signed-generic-lts-utopic state=absent
+  apt: name=linux-signed-generic state=absent
 
 - name: autoremove generic kernel packages
   command: apt-get -y autoremove
+
+- name: remove remaining generic kernels and headers
+  command: apt-get -y remove '^linux-image-.*generic$'
+  command: apt-get -y remove '^linux-headers-.*'
