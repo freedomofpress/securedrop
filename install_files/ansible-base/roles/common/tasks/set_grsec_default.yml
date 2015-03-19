@@ -3,4 +3,4 @@
   register: grsec_str
 
 - name: set grsec kernel as default for next boot
-  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str }}"
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
