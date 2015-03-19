@@ -1,0 +1,6 @@
+- name: get grsec kernel string
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | cut -d "'" -f2
+  register: grsec_str
+
+- name: set grsec kernel as default for next boot
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str }}"
