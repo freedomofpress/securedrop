@@ -4,9 +4,11 @@
   apt: name=linux-signed-generic-lts-utopic state=absent
   apt: name=linux-signed-generic state=absent
 
-- name: autoremove generic kernel packages
-  command: apt-get -y autoremove
-
-- name: remove remaining generic kernels and headers
+- name: remove remaining generic kernels
   command: apt-get -y remove '^linux-image-.*generic$'
+
+- name: remove remaining kernel headers
   command: apt-get -y remove '^linux-headers-.*'
+
+- name: cleanup any dependencies left
+  command: apt-get -y autoremove
