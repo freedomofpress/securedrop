@@ -44,6 +44,8 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $PERSISTENT/SecureDrop\ Init.desktop
 chmod 700 $PERSISTENT/SecureDrop\ Init.desktop
+sudo -u amnesia mkdir -p /live/persistence/TailsData_unlocked/dotfiles/Desktop
+cp -p $PERSISTENT/SecureDrop\ Init.desktop /live/persistence/TailsData_unlocked/dotfiles/Desktop/
 cp -p $PERSISTENT/SecureDrop\ Init.desktop /home/amnesia/Desktop/
 
 echo ""
