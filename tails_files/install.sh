@@ -55,9 +55,7 @@ Host mon
 EOL
   chown amnesia:amnesia $INSTALL_DIR/ssh_config
   chmod 600 $INSTALL_DIR/ssh_config
-	sudo -u amnesia mkdir -p $DOTFILES/.ssh  
-	cp -p $INSTALL_DIR/ssh_config $DOTFILES/.ssh/config
-  if [ -d "$HOMEDIR/.ssh" ]; then
+  if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
     cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
   fi
 else
