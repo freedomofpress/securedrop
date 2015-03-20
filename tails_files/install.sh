@@ -16,6 +16,7 @@ SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 DOTFILES=/live/persistence/TailsData_unlocked/dotfiles
 DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+SSH_ALIASES=false
 
 # detect whether admin or journalist
 if [ -f $ANSIBLE/app-document-aths ]; then
@@ -57,6 +58,7 @@ EOL
   chmod 600 $INSTALL_DIR/ssh_config
   if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
     cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
+		SSH_ALIASES=true
   fi
 else
 # prepare torrc_additions (journalist)
@@ -117,7 +119,10 @@ if $ADMIN; then
 	echo $APPSSH
 	echo "The Monitor Server's SSH hidden service address is:"
 	echo $MONSSH
-	echo ""
-	echo "SSH aliases are set up. You can use them with 'ssh <username>@app' and 'ssh <username>@mon'"
+	if $SSH_ALIASES; then
+		echo ""
+		echo "SSH aliases are set up. You can use them with 'ssh <username>@app' and 'ssh <username>@mon'"
+	fi
 fi
 echo ""
+exit 0
