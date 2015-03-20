@@ -13,8 +13,18 @@ SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 DOTFILES=/live/persistence/TailsData_unlocked/dotfiles
 DESKTOP=/home/amnesia/Desktop
-DOCUMENT=`cat $PERSISTENT/securedrop/install_files/ansible-base/app-document-aths | cut -d ' ' -f 1`
-SOURCE=`cat $PERSISTENT/securedrop/install_files/ansible-base/app-source-ths`
+ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+
+if [ -f $ANSIBLE/app-document-aths ]; then
+	ADMIN=true
+else
+	ADMIN=false
+fi
+
+if $ADMIN; then
+	DOCUMENT=`cat $PERSISTENT/$ANSIBLE/app-document-aths | cut -d ' ' -f 1`
+	SOURCE=`cat $PERSISTENT/$ANSIBLE/ansible-base/app-source-ths`
+fi
 
 mkdir -p $INSTALL_DIR
 
@@ -34,7 +44,12 @@ cp securedrop_init.py $SCRIPT_PY
 
 # prepare torrc_additions
 cp torrc_additions $ADDITIONS
-gedit $ADDITIONS
+
+if $ADMIN; then
+	cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
+else
+	gedit $ADDITIONS
+fi
 
 # set permissions
 chmod 755 $INSTALL_DIR
@@ -51,6 +66,13 @@ chmod 600 $INSTALL_DIR/securedrop_icon.png
 
 chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR/.xsessionrc
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR/.xsessionrc
+
+if ! $ADMIN; then
+	echo "Type the Document Interface's .onion address, then press ENTER:"
+	read DOCUMENT
+	echo "Type the Source Interface's .onion address, then press ENTER:"
+	read SOURCE
+fi
 
 echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.desktop
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
