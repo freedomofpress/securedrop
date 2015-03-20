@@ -40,10 +40,10 @@ cp .xsessionrc $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
 
 if $ADMIN; then
-  DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 1`
+  DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
   SOURCE=`cat $ANSIBLE/app-source-ths`
-  APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 1`
-  MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 1`
+  APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
+  MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
   cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
   # create SSH host aliases and install them
   cat > $INSTALL_DIR/ssh_config <<EOL
