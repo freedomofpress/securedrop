@@ -83,11 +83,12 @@ chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR
 
 # get addresses (journalist)
 if ! $ADMIN; then
-	echo ""
-	echo "Type the Document Interface's .onion address (without http://) then press ENTER: "
-	read DOCUMENT
-	echo "Type the Source Interface's .onion address (without http://) then press ENTER: "
-	read SOURCE
+	INTERFACES=$(zenity --forms --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter each interface's .onion address." \
+	--separator="," --width=500 --add-entry="Document Interface:" --add-entry="Source Interface:")
+	DOC=$(awk -F, '{print $1}' <<<$INTERFACES)
+	SRC=$(awk -F, '{print $2}' <<<$INTERFACES)
+	DOCUMENT="${DOC#http://}"
+	SOURCE="${SRC#http://}"
 fi
 
 # make the shortcuts
@@ -112,8 +113,8 @@ echo ""
 echo "Successfully configured Tor and set up desktop bookmarks for SecureDrop!"
 echo "You will see a notification appear in the top-right corner of your screen."
 echo ""
-echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
 echo "The Document Interface's Tor onion URL is: http://$DOCUMENT"
+echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
 if $ADMIN; then
 	echo ""
 	echo "The App Server's SSH hidden service address is:"
