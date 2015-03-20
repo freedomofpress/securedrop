@@ -23,7 +23,7 @@ fi
 
 if $ADMIN; then
 	DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 1`
-	SOURCE=`cat $ANSIBLE/ansible-base/app-source-ths`
+	SOURCE=`cat $ANSIBLE/app-source-ths`
 fi
 
 mkdir -p $INSTALL_DIR
@@ -68,9 +68,9 @@ chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop 
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR/.xsessionrc
 
 if ! $ADMIN; then
-	echo "Type the Document Interface's .onion address, then press ENTER:"
+	echo -n "Type the Document Interface's .onion address, then press ENTER: "
 	read DOCUMENT
-	echo "Type the Source Interface's .onion address, then press ENTER:"
+	echo -n "Type the Source Interface's .onion address, then press ENTER: "
 	read SOURCE
 fi
 
@@ -89,4 +89,14 @@ $INSTALL_DIR/securedrop_init
 echo ""
 echo "Successfully configured Tor and set up desktop bookmarks for SecureDrop!"
 echo "You will see a notification appear in the top-right corner of your screen."
+echo ""
+echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
+echo "The Document Interface's Tor onion URL is: http://$DOCUMENT"
+echo ""
+if $ADMIN; then
+	echo "The App Server's SSH hidden service address is:"
+	cat $ANSIBLE/app-ssh-aths
+	echo "The Monitor Server's SSH hidden service address is:"
+	cat $ANSIBLE/mon-ssh-aths
+fi
 echo ""
