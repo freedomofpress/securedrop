@@ -45,7 +45,7 @@ if $ADMIN; then
   APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 1`
   MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 1`
   cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
-  # create SSH host aliases and make them persistent
+  # create SSH host aliases and install them
   cat > $INSTALL_DIR/ssh_config <<EOL
 Host app
   Hostname $APPSSH
@@ -63,7 +63,7 @@ EOL
 else
 # prepare torrc_additions (journalist)
 	cp torrc_additions $ADDITIONS
-	gedit $ADDITIONS
+	gedit $ADDITIONS > /dev/null 2>&1
 fi
 
 # set permissions
@@ -83,6 +83,7 @@ chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR
 
 # get addresses (journalist)
 if ! $ADMIN; then
+	echo ""
 	echo "Type the Document Interface's .onion address (without http://) then press ENTER: "
 	read DOCUMENT
 	echo "Type the Source Interface's .onion address (without http://) then press ENTER: "
