@@ -44,6 +44,7 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $PERSISTENT/SecureDrop\ Init.desktop
 chmod 700 $PERSISTENT/SecureDrop\ Init.desktop
+cp -p $PERSISTENT/SecureDrop\ Init.desktop /home/amnesia/Desktop/
 
 echo ""
 echo "Successfully configured the auto-launcher for the document interface!"
