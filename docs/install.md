@@ -378,7 +378,7 @@ On your Admin Workstation running Tails:
 
 1. Configure your torrc with the values in app-document-aths, app-ssh-aths, and mon-ssh-aths, and reload the Tor service.
  * The values listed after the .onion addresses allow access to the authenticated Tor hidden services for the App Server, Mon Server, and Admin/Document Interface. Only clients who have them configured using the HidServAuth directive in their Tor configuration can access these through Tor.
- * We have a setup script for Tails that helps you add the values and creates a launcher on the desktop to open the Admin/Document Interface. The launcher automatically reloads Tor.
+ * We have a setup script for Tails that helps you add the values. It installs a persistent SecureDrop initialization script that automatically reloads Tor.
  * See the 'Download and run the setup scripts' section of [Tails for the Admin and Journalist Workstation](/tails_files/README.md) and follow the instructions.
 2. SSH to both servers over Tor
  * As an admin running Tails with the proper HidServAuth values in your `/etc/torrc` file, you should be able to SSH directly to the App Server and Monitor Server.
