@@ -40,4 +40,4 @@ if __name__ == '__main__':
     subprocess.call(['/usr/sbin/service', 'tor', 'reload'])
 
     # success
-    subprocess.call(['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc', 'You can now connect to your SecureDrop\ndocument interface'])
+    subprocess.call(['/usr/bin/sudo', '-u', 'amnesia', '/usr/bin/notify-send', 'Updated torrc!', 'You can now connect to your SecureDrop\ndocument interface.'])
