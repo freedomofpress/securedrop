@@ -22,8 +22,8 @@ else
 fi
 
 if $ADMIN; then
-	DOCUMENT=`cat $PERSISTENT/$ANSIBLE/app-document-aths | cut -d ' ' -f 1`
-	SOURCE=`cat $PERSISTENT/$ANSIBLE/ansible-base/app-source-ths`
+	DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 1`
+	SOURCE=`cat $ANSIBLE/ansible-base/app-source-ths`
 fi
 
 mkdir -p $INSTALL_DIR
