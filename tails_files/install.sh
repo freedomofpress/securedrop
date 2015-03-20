@@ -83,9 +83,9 @@ chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR
 
 # get addresses (journalist)
 if ! $ADMIN; then
-	echo -n "Type the Document Interface's .onion address, then press ENTER: "
+	echo "Type the Document Interface's .onion address (without http://) then press ENTER: "
 	read DOCUMENT
-	echo -n "Type the Source Interface's .onion address, then press ENTER: "
+	echo "Type the Source Interface's .onion address (without http://) then press ENTER: "
 	read SOURCE
 fi
 
