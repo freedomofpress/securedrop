@@ -14,6 +14,7 @@ ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 DOTFILES=/live/persistence/TailsData_unlocked/dotfiles
+TAILSCFG=/live/persistence/TailsData_unlocked
 DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 SSH_ALIASES=false
@@ -60,6 +61,9 @@ EOL
     cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
 		SSH_ALIASES=true
   fi
+	if ! grep -q 'ansible' "$TAILSCFG/live-additional-software.conf"; then
+		echo "ansible" >> $TAILSCFG/live-additional-software.conf
+	fi
 else
 # prepare torrc_additions (journalist)
 	cp torrc_additions $ADDITIONS
