@@ -19,6 +19,12 @@ DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 SSH_ALIASES=false
 
+# check for persistence
+if [ ! -d "$TAILSCFG" ]
+	echo "This script must be run on Tails with a persistent volume." 1>&2
+	exit 1
+fi
+
 # detect whether admin or journalist
 if [ -f $ANSIBLE/app-document-aths ]; then
 	ADMIN=true
