@@ -18,7 +18,7 @@
 
 To log-in SecureDrop and retreived messages sent by sources, the journalist must be using the Tails operating system. The admin must also use Tails to access the *Document Interface* and create new users. 
 
-If you followed the (SecureDrop Installation instructions)[https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md] correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume on each. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below. 
+If you followed the [SecureDrop Installation instructions](/docs/install.md) correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume on each. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below. 
 
 If you already know how to boot the *admin Tails USB* or the *journalist Tails USB* with persistence, you can skip down to the step 'download the repository'.
 
@@ -60,7 +60,7 @@ Creating an encrypted persistent volume will allow you to securely save informat
 
 ## Start Tails and enable the persistent volume
 
-When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*.
+When starting Tails, you should see a "Welcome to Tails" screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this specific Tails session and click *Login*.
 
 ## Download the repository
 
@@ -88,7 +88,7 @@ To use the template:
 
 ## Set up easy access to the Document Interface
 
-To complete set-up of the Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the *Document Interface*.
+To complete setup of the Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the *Document Interface*.
 
 Navigate to the directory with the setup scripts and begin the installation by typing these commands into the terminal:
 
@@ -110,7 +110,7 @@ If you're working on the Admin Workstation, you should also insert the lines fou
 
 The preceding steps are taken so that no one but the journalist will be able to access to the *Document Interface*, even if they manage to steal the journalist's username, password, and two-factor authentication token.
 
-Our `install.sh` sets up an initilization script that automatically updates Tor's configuration to work with SecureDrop every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and connect to the Document Interface as normal.
+Our `install.sh` sets up an initialization script that automatically updates Tor's configuration to work with SecureDrop every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and connect to the Document Interface as normal.
 
 ### Create bookmarks for Source and Document Interfaces
 

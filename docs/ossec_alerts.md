@@ -112,7 +112,7 @@ The output will show you attempts to send the alerts and provide hints as to wha
 
 After making changes to the Postfix configuration, you should run `service postfix reload` and test the new settings by restarting the OSSEC service.
 
-Note that if you change the SMTP relay port after installation for any reason, you must update not only the relayhost in main.cf and contents of sasl_passwd, but also the iptables firewall rules applying to outbound SMTP which are in `/etc/network/iptables/rules_v4`.
+Note that if you change the SMTP relay port after installation for any reason, you must update not only the relayhost in main.cf and contents of sasl_passwd, but also the iptables firewall rules applying to outbound SMTP which are in `/etc/network/iptables/rules_v4`. We recommend modifying and re-running the Ansible playbook instead of doing things like this.
 
 Other log files that may contain useful information:
 

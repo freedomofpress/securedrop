@@ -4,7 +4,7 @@ This is a quick and dirty guide to using YubiKey for two-factor authentication o
 
 ## Download the YubiKey personalization tool
 
-YubiKeys are modifiable using the YubiKey personalization tool, which is available for Windows/Mac/Linux and can be downloaded here: http://www.yubico.com/products/services-software/personalization-tools/use/. If you wish to use Tails, install the YubiKey personalization tool on the command line with `apt-get install yubikey-personalization-gui`.
+YubiKeys are modifiable using the YubiKey personalization tool, which is available for Windows/Mac/Linux and can be downloaded here: https://www.yubico.com/products/services-software/personalization-tools/use/. If you wish to use Tails, install the YubiKey personalization tool on the command line with `apt-get install yubikey-personalization-gui`.
 
 Once you have downloaded and installed the personalization program, insert your YubiKey and launch the program. If you are running Tails, you need to launch the program as the root user.
 
@@ -14,7 +14,7 @@ When you first launch the program, you will see the heading "Personalize your Yu
 
 The next window will have the heading "Program in OATH-HOTP mode" and will offer you a choice between "Quick" or "Advanced" configuration. Choose "Quick".
 
-First choose the configuration slot for this token. Unless you already use the YubiKey for something else, you should choose Configuration Slot 1. If you already using the first slot, choose Configuration Slot 2. Note that you will have to press and hold for several seconds to use the token from Slot 2 instead of the one in Slot 1. See the [YubiKey manual](http://www.yubico.com/wp-content/uploads/2013/07/YubiKey-Manual-v3_1.pdf) for more information.
+First choose the configuration slot for this token. Unless you already use the YubiKey for something else, you should choose Configuration Slot 1. If you already using the first slot, choose Configuration Slot 2. Note that you will have to press and hold for several seconds to use the token from Slot 2 instead of the one in Slot 1. See the [YubiKey manual](https://www.yubico.com/wp-content/uploads/2013/07/YubiKey-Manual-v3_1.pdf) for more information.
 
 In the section title "OATH-HOTP parameters", you will need to change the default settings. First, *uncheck* the checkbox for "OATH Token Identifier (6 bytes)". Also uncheck the box for "Hide secret". This will display the data in the "Secret Key (20 bytes hex)" field. This data cannot be copied unless the "Hide secret" box is unchecked.
 

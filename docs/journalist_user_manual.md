@@ -18,7 +18,7 @@ If a journalist does not yet have a GPG key, they can follow these instructions 
 
 Each journalist has their own authenticated Tor hidden service URL to login to the `Document Interface`. The journalist needs to use the browser in the Tails operating system to connect to the `Document Interface`. This will take an extra few steps each time you want to login, but after practicing a few times, it will become automatic.
 
-See our guide on setting up [Tails for the Admin and Journalist Workstation](https://github.com/freedomofpress/securedrop/tree/develop/tails_files) before continuing. We recommend that you create bookmarks for the Source and Document Interfaces.
+See our guide on setting up [Tails for the Admin and Journalist Workstation](tails_guide.md) before continuing. We recommend that you create bookmarks for the Source and Document Interfaces.
 
 After clicking on the SecureDrop `Document Interface` link, you can log in with your username, password, and two-factor authentication token, as shown in the first screenshot below.
 

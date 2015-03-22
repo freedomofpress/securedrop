@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-The *Application Server* and the *Monitor Server* require the 64-bit version of [Ubuntu Server 14.04.1 LTS (Trusty Tahr)](http://releases.ubuntu.com/14.04.1/). The image you want to get is named `ubuntu-14.04.1-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
+The *Application Server* and the *Monitor Server* require the 64-bit version of [Ubuntu Server 14.04.2 LTS (Trusty Tahr)](http://releases.ubuntu.com/14.04.2/). The image you want to get is named `ubuntu-14.04.2-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
 
 ## Verify the Ubuntu installation media
 
@@ -36,19 +36,19 @@ gpg --verify SHA256SUMS.gpg SHA256SUMS
 The next and final step is to verify the Ubuntu image. If you are using Linux, use the following command.
 
 ```
-sha256sum -c <(grep ubuntu-14.04.1-server-amd64.iso SHA256SUMS)
+sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 ```
 
 If you are using OS X, use the command below.
 
 ```
-shasum -a 256 -c <(grep ubuntu-14.04.1-server-amd64.iso SHA256SUMS)
+shasum -a 256 -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 ```
 
 If the final verification step is successful, you should see the following output in your terminal.
 
 ```
-ubuntu-14.04.1-server-amd64.iso: OK
+ubuntu-14.04.2-server-amd64.iso: OK
 ```
 
 ## Create the Ubuntu installation media
@@ -94,7 +94,7 @@ Below is the configuration you should enter, assuming you used the network setti
 
 ### Continue the installation
 
-You can choose whatever username and password you would like. You may use the same username and password on both servers, should you wish to do so. Make sure to save this password in your admin KeePassX database afterwards.
+You can choose whatever username and password you would like. To make things easier later you should use the same username and password on both servers. Make sure to save this password in your admin KeePassX database afterwards.
 
 Click 'no' when asked to encrypt the home directory. Then configure your time zone.
 
@@ -124,4 +124,4 @@ You will then have to wait for the packages to finish installing.
 
 When the packages are finished installing, Ubuntu will automatically install the bootloader (grub). If it asks to install the bootloader to the Master Boot Record, choose **Yes**. When everything is done, reboot.
 
-You can now return to where you left off in the main Securedrop install guide [by clicking here](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#install-securedrop). 
+You can now return to where you left off in the main Securedrop install guide [by clicking here](/docs/install.md#install-securedrop). 
