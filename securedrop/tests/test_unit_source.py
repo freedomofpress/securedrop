@@ -10,9 +10,8 @@ from bs4 import BeautifulSoup
 from flask.ext.testing import TestCase
 from flask import session, escape
 from mock import patch, ANY
-
-os.environ['SECUREDROP_ENV'] = 'test'
 import source
+os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestSource(TestCase):

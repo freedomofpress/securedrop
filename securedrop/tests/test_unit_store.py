@@ -3,15 +3,14 @@
 import os
 import unittest
 import zipfile
-
-
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import store
 import common
 from db import db_session, Source
 import crypto_util
+
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestStore(unittest.TestCase):

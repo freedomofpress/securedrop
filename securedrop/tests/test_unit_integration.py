@@ -17,8 +17,6 @@ import gnupg
 from flask import session, g, escape
 from bs4 import BeautifulSoup
 
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import crypto_util
 import source
@@ -26,6 +24,9 @@ import journalist
 import common
 from db import db_session, Journalist
 import store
+
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 
 
 def _block_on_reply_keypair_gen(codename):

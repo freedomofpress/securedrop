@@ -8,12 +8,6 @@ from cStringIO import StringIO
 import subprocess
 from threading import Thread
 import operator
-
-import logging
-# This module's logger is explicitly labeled so the correct logger is used,
-# even when this is run from the command line (e.g. during development)
-log = logging.getLogger('source')
-
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
@@ -29,6 +23,11 @@ import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
+
+import logging
+# This module's logger is explicitly labeled so the correct logger is used,
+# even when this is run from the command line (e.g. during development)
+log = logging.getLogger('source')
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
