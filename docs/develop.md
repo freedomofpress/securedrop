@@ -29,7 +29,7 @@ git clone https://github.com/freedomofpress/securedrop
 cd securedrop
 ```
 
-NOTE: There is a critical bug ([#802](../issues/802)) with SecureDrop and Vagrant 1.7.x that prevents one of the virtual machines from successfully provisioning. We recommend using version 1.6.5, which is only slightly older than the current stable version, can be downloaded here: https://www.vagrantup.com/download-archive/v1.6.5.html and has been tested to be working.
+NOTE: There is a critical bug ([#802](https://github.com/freedomofpress/securedrop/issues/802)) with SecureDrop and Vagrant 1.7.x that prevents one of the virtual machines from successfully provisioning. We recommend using version 1.6.5, which is only slightly older than the current stable version, can be downloaded here: https://www.vagrantup.com/download-archive/v1.6.5.html and has been tested to be working.
 
 ```sh
 sudo dpkg -i vagrant.deb
