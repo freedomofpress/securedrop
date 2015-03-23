@@ -4,7 +4,7 @@ At this point, you (the administrator) should have your own username and passwor
 
 ## Adding Users
 
-Now you can add create new logins for the journalists at your news organization who will be checking the system for submissions. Make sure the journalist is physically in the same room as you when you do this, as they will have to create a password and scan a barcode for their two-factor authentication. Since you’re logged in, this is the screen you should see now:
+Now you can add new logins for the journalists at your news organization who will be checking the system for submissions. Make sure the journalist is physically in the same room as you when you do this, as they will have to create a password and scan a barcode for their two-factor authentication. Since you’re logged in, this is the screen you should see now:
 
 ![“SecureDrop main page”](images/admin_main_home.png)
 

@@ -6,7 +6,7 @@ Journalists viewing documents on SecureDrop must connect to the respective Sourc
 
 ### Create GPG key for the journalist
 
-Each journalist must have a personal GPG key that they use for encrypting files transferred from the Secure Viewing Station to their Journalist Workstation. The private key, used for decryption, stays on their Journalist Workstation. The public key, used for encryption, gets copied to the Secure Viewing Station. 
+Each journalist must have a personal GPG key that they use for encrypting files transferred from the Secure Viewing Station to their Journalist Workstation. The private key, used for decryption, stays on their Journalist Workstation. The public key, used for encryption, gets copied to the Secure Viewing Station.
 
 If a journalist does not yet have a GPG key, they can follow these instructions to set one up with GnuPG (GPG).
 
@@ -64,7 +64,7 @@ If the default application doesn't work, you can right-click on the document and
 
 ### Interact With Sources
 
-Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`. 
+Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the `Secure Viewing Station`.
 But first, if you'd like to reply to the source, write your message in the text field and click `Submit`.
 
 ![Sent reply](/docs/images/manual/document2.png)

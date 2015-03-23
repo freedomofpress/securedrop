@@ -49,7 +49,7 @@ If you use a USB stick for the transfer device, we recommend using a small one (
 
 Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as the private key used to decrypt submissions or the content of decrypted submissions.
 
-When we use the phrase "sneakernet" we mean physically moving documents on the Transfer Device from one computer to another. 
+When we use the phrase "sneakernet" we mean physically moving documents on the Transfer Device from one computer to another.
 
 ##Hardware
 
@@ -76,7 +76,7 @@ The second *offline* Tails Live USB with persistence will be used as the encrypt
 
 ##Roles and Passphrases
 
-There are several roles for SecureDrop and each requires knowing a unique set of passphrases.       
+There are several roles for SecureDrop and each requires knowing a unique set of passphrases.
 
 ### Passphrases
 
@@ -97,12 +97,12 @@ The admin will be using the *Admin Workstation* with Tails to connect to the App
      * The admin's personal GPG key.
      * The credentials for the email account that OSSEC will send alerts to.
      * The Hidden Services values required to connect to the App and Monitor Server.
- 
+
 The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two credentials:
 
  * The secret code for the App Server's two-factor authentication.
  * The secret code for the Monitor Server's two-factor authentication.
- 
+
 ### Journalist
 
 The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
@@ -112,11 +112,11 @@ The journalist will be using the *Journalist Workstation* with Tails to connect 
      * The Hidden Service value required to connect to the Document Interface.
      * The Document Interface.
      * The journalist's personal GPG key.
-     
+
 The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following credential:
 
  * The secret code for the Document Interface's two-factor authentication.
- 
+
 #### Secure Viewing Station
 
 The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following passphrases:

@@ -53,15 +53,15 @@ You will also need the inventory of hardware items for the installation listed i
 
 Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
 
-You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else: 
+You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else:
 
 1. *offline Tails USB*
 	
-2. *admin Tails USB* 
+2. *admin Tails USB*
 
-3. *journalist Tails USB*. 
+3. *journalist Tails USB*.
 
-4. *long-term storage Tails USB* 
+4. *long-term storage Tails USB*
 
 You will need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create even more. It's a good idea to label or color-code these in order to tell them apart.
 
@@ -84,15 +84,15 @@ Creating an encrypted persistent volume will allow you to securely save informat
 
 You will need to create a persistent storage on each Tails USB, with a unique password for each.
 
-Please use the instructions on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html) to make the persistent volume on each Tails USB stick you create.  
+Please use the instructions on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html) to make the persistent volume on each Tails USB stick you create.
 
-When creating the persistence volume, you will be asked to select from a list of features, such as 'Personal Data'. We recommend that you enable **all** features. 
+When creating the persistence volume, you will be asked to select from a list of features, such as 'Personal Data'. We recommend that you enable **all** features.
 
 Some other things to keep in mind:
 
 * You will want to create a persistent volume for all three main Tails USBs: the *offline Tails USB*, the *admin Tails USB*, and the *journalist Tails USB*.
 
-* The admin and the journalist should create separate passwords for their own USBs. 
+* The admin and the journalist should create separate passwords for their own USBs.
 
 * Only the journalist should have access to the *offline Tails USB password*, though during the initial installation, often the admin will create their own password to facilitate setup and then the journalist can change it afterwards.
 
@@ -116,13 +116,13 @@ Enter an *Administration password* for use with this specific Tails session and 
 
 ### Create a GPG key for the SecureDrop application
 
-When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the SecureDrop Application GPG key. You will need to create that key now before you continue with the installation. 
+When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the SecureDrop Application GPG key. You will need to create that key now before you continue with the installation.
 
-After booting up Tails, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.* 
+After booting up Tails, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.*
 
-Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time, region and city. 
+Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time, region and city.
 
-Then click *Lock*, enter your password one more time and wait for the system time to update in the top panel. 
+Then click *Lock*, enter your password one more time and wait for the system time to update in the top panel.
 
 Once that's done, follow the steps below to create a GPG key.
 
@@ -165,13 +165,13 @@ At this point, you are done with the *Secure Viewing Station* for now. You can s
 
 ## Set up Admin Tails USB and Workstation
 
-Earlier, you should have created the *admin Tails USB* along with a persistence volume for it. Now, we are going to add a couple more features to the *admin Tails USB* to facilitate SecureDrop's setup. 
+Earlier, you should have created the *admin Tails USB* along with a persistence volume for it. Now, we are going to add a couple more features to the *admin Tails USB* to facilitate SecureDrop's setup.
 
 If you have not switched to and booted the *admin Tails USB* on your regular workstation, do so now.
 
 ### Start Tails and enable the persistent volume
 
-After you boot the *admin Tails USB* on your normal workstation, you should see a *Welcome to Tails* screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options," select *Yes* and click *Forward*. 
+After you boot the *admin Tails USB* on your normal workstation, you should see a *Welcome to Tails* screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options," select *Yes* and click *Forward*.
 
 Enter an *Administration password* for use with this specific Tails session and click *Login*. (NOTE: the *Administration password* is a one-time password. It will reset every time you shut down Tails.)
 
@@ -179,7 +179,7 @@ After Tails is fully booted, make sure you're connected to the Internet ![Networ
 
 ### Download the SecureDrop repository
 
-The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop Git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal ![Terminal](images/terminal.png) and run the following commands to download the git repository. 
+The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop Git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal ![Terminal](images/terminal.png) and run the following commands to download the git repository.
 
 NOTE: Since the repository is fairly large and Tor can be slow, this may take a few minutes.
 
@@ -247,7 +247,7 @@ Once you have verified that you can connect, continue with the installation. If 
 
 ### Install Ansible
 
-You should still be on your admin workstation with your *admin Tails USB*.  
+You should still be on your admin workstation with your *admin Tails USB*.
 
 Next you need to install Ansible. To do this, you first need to update your package manager's package lists to be sure you get the latest version of Ansible. It should take a couple minutes.
 
@@ -265,7 +265,7 @@ First, generate the new SSH keypair:
 
     $ ssh-keygen -t rsa -b 4096
 
-You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. Choose a strong passphrase to protect the SSH private key. 
+You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. Choose a strong passphrase to protect the SSH private key.
 
 You should save this passphrase in your KeePassX password manager. You can also generate the passphrase using KeePassX as well.
 
@@ -274,13 +274,13 @@ Once the key has finished generating, you need to copy the public key to both se
     $ ssh-copy-id <username>@<App IP address>
     $ ssh-copy-id <username>@<Mon IP address>
 
-Verify that you are able to authenticate to both servers by running the below commands (you will be prompted for the SSH password you just created). 
+Verify that you are able to authenticate to both servers by running the below commands (you will be prompted for the SSH password you just created).
 
 ```sh
 ssh <username>@<App IP address> hostname
 ssh <username>@<Montior IP address> hostname
 ```
-Make sure to run the 'exit' command after testing each one. 
+Make sure to run the 'exit' command after testing each one.
 
 ### Gather the required information
 
@@ -310,7 +310,7 @@ You will have to copy the following required files to `securedrop/install_files/
 * Admin GPG public key file (for encrypting OSSEC alerts)
 * (Optional) Custom header image file
 
-The SecureDrop application GPG key should be located on your *Transfer Device* from earlier. It will depend on the location where the USB stick is mounted, but for example, if you are already in the ansible-base directory, you can just run: 
+The SecureDrop application GPG key should be located on your *Transfer Device* from earlier. It will depend on the location where the USB stick is mounted, but for example, if you are already in the ansible-base directory, you can just run:
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
@@ -380,7 +380,7 @@ HidServAuth fsrrszf5qw7z2kjh.onion xW538OvHlDUo5n4LGpQTNh # client: admin
 HidServAuth yt4j52ajfvbmvtc7.onion vNN33wepGtGCFd5HHPiY1h # client: admin
 ```
 
-When you are done, click *Save* and **close** the text editor. The script will finish running soon thereafter. 
+When you are done, click *Save* and **close** the text editor. The script will finish running soon thereafter.
 
 Running `install.sh` sets up an initialization script that automatically updates Tor's configuration to work with the authenticated hidden services every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and reach the Document Interface as normal, as well as connect to both servers via secure shell. Tor's [hidden service authentication](https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient) restricts access to only those who have the 'HidServAuth' values.
 
@@ -437,7 +437,7 @@ Some of the final configuration is included in these testing steps, so *do not s
  * Usage of the Document Interface is covered by our [Journalist User Manual](/docs/journalist_user_manual.md).
 5. Test that the source received the reply.
  * Within Tor Browser, navigate back to the app-source-ths URL and use your previous test source codename to log in (or reload the page if it's still open) and check that the reply you just made is present.
-6. We highly recommend that you create persistent bookmarks for the Source and Document Interface addresses within Tor Browser. 
+6. We highly recommend that you create persistent bookmarks for the Source and Document Interface addresses within Tor Browser.
 7. Remove the test submissions you made prior to putting SecureDrop to real use. On the main Document Interface page, select all sources and click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is working, see [How to Use SecureDrop](/docs/journalist_user_manual.md).

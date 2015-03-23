@@ -77,7 +77,7 @@ To enforce HTTPS/SSL always, you need to set up redirection within the HTTP (por
     RewriteEngine On
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
-    
+
 In your SSL (port 443) virtual host, set up HSTS and use these settings to give preference to the most secure cipher suites:
 
     Header set Strict-Transport-Security "max-age=16070400; includeSubDomains"

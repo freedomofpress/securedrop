@@ -69,7 +69,7 @@ Follow the steps to select your language, country and keyboard settings. Once th
 
 ### Configure the network manually
 
-The Ubuntu installer will try to autoconfigure networking for the server you are setting up; however, SecureDrop 0.3 requires manual network configuration. You can hit **Cancel** at any point during network autoconfiguration to be given the choice to *Configure the network manually*. 
+The Ubuntu installer will try to autoconfigure networking for the server you are setting up; however, SecureDrop 0.3 requires manual network configuration. You can hit **Cancel** at any point during network autoconfiguration to be given the choice to *Configure the network manually*.
 
 If network autoconfiguration completes before you can do this, the next window will ask for your hostname. To get back to the choice of configuring the network manually, **Cancel** the step that asks you to set a hostname and choose the manu option that says **Configure the network manually** instead.
 
@@ -100,9 +100,9 @@ Click 'no' when asked to encrypt the home directory. Then configure your time zo
 
 ### Partition the disks
 
-Before setting up the server's disk partitions and filesystems in the next step, you will need to decide if you would like to enable [*Full Disk Encryption (FDE)*](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption). If the servers are ever powered down, FDE will ensure all of the information on them stays private in case they are seized or stolen. 
+Before setting up the server's disk partitions and filesystems in the next step, you will need to decide if you would like to enable [*Full Disk Encryption (FDE)*](https://www.eff.org/deeplinks/2012/11/privacy-ubuntu-1210-full-disk-encryption). If the servers are ever powered down, FDE will ensure all of the information on them stays private in case they are seized or stolen.
 
-While FDE can be useful in some cases, we currently do not recommend that you enable it because there are not many scenarios where it will be a net security benefit for SecureDrop operators. Doing so will introduce the need for more passwords and add even more responsibility on the administrator of the system (see [this GitHub issue](https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554) for more information). 
+While FDE can be useful in some cases, we currently do not recommend that you enable it because there are not many scenarios where it will be a net security benefit for SecureDrop operators. Doing so will introduce the need for more passwords and add even more responsibility on the administrator of the system (see [this GitHub issue](https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554) for more information).
 
 If you wish to proceed without FDE as recommended, choose the installation option that says *Guided - use entire disk and set up LVM*.
 
@@ -116,7 +116,7 @@ After selecting either of those options you may be asked a few questions about o
 
 Wait for the base system to finish installing. When you get to the *Configure tasksel* screen, choose **No automatic updates**. The subsequent SecureDrop installation will include a task that handles regular software updates.
 
-When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before the space bar will force you to start the installation process over). 
+When you get to the software selection screen, only choose **OpenSSH server** by hitting the space bar (Note: hitting enter before the space bar will force you to start the installation process over).
 
 Once **OpenSSH Server** is selected, hit *Continue*.
 

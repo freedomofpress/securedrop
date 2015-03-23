@@ -2,7 +2,7 @@
 
 ## Gathering OSSEC files
 
-OSSEC can be downloaded from their website or cloned from git. 
+OSSEC can be downloaded from their website or cloned from git.
 https://www.ossec.net
 
 The installed files are different for both the agent and server.
@@ -12,7 +12,7 @@ The installed files are different for both the agent and server.
 root@dmon:~/ossec-hids# ls
 active-response  CONFIG   CONTRIBUTORS  etc      install.sh  README.md
 BUGS             contrib  doc           INSTALL  LICENSE     src
-root@dmon:~/ossec-hids# ./install.sh 
+root@dmon:~/ossec-hids# ./install.sh
 
   ** Para instala????o em portugu??s, escolha [br].
   ** ???????????????????????????, ????????? [cn].
@@ -29,16 +29,16 @@ root@dmon:~/ossec-hids# ./install.sh
   ** ????????????????????????? ???? ?????????????????? ???? ?????????????? ,?????????????? [ru].
   ** Za instalaciju na srpskom, izaberi [sr].
   ** T??rk??e kurulum i??in se??in [tr].
-  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: 
+  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]:
 
 
  OSSEC HIDS v2.8 Installation Script - http://www.ossec.net
- 
+
  You are about to start the installation process of the OSSEC HIDS.
  You must have a C compiler pre-installed in your system.
  If you have any questions or comments, please send an e-mail
  to dcid@ossec.net (or daniel.cid@gmail.com).
- 
+
   - System: Linux dmon 3.13.0-32-generic
   - User: root
   - Host: dmon
@@ -53,13 +53,13 @@ root@dmon:~/ossec-hids# ./install.sh
 
 2- Setting up the installation environment.
 
- - Choose where to install the OSSEC HIDS [/var/ossec]: 
+ - Choose where to install the OSSEC HIDS [/var/ossec]:
 
     - Installation will be made at  /var/ossec .
 
 3- Configuring the OSSEC HIDS.
 
-  3.1- Do you want e-mail notification? (y/n) [y]: 
+  3.1- Do you want e-mail notification? (y/n) [y]:
    - What's your e-mail address? securedrop@freedom.press
 
    - We found your SMTP server as: smtp.electricembers.net.
@@ -75,13 +75,13 @@ root@dmon:~/ossec-hids# ./install.sh
 
    - Running rootcheck (rootkit detection).
 
-  3.4- Active response allows you to execute a specific 
+  3.4- Active response allows you to execute a specific
        command based on the events received. For example,
        you can block an IP address or disable access for
-       a specific user.  
+       a specific user.
        More information at:
        http://www.ossec.net/en/manual.html#active-response
-       
+
    - Do you want to enable active response? (y/n) [y]: n
 
      - Active response disabled.
@@ -95,12 +95,12 @@ root@dmon:~/ossec-hids# ./install.sh
     -- /var/log/syslog
     -- /var/log/dpkg.log
 
- - If you want to monitor any other file, just change 
+ - If you want to monitor any other file, just change
    the ossec.conf and add a new localfile entry.
    Any questions about the configuration can be answered
    by visiting us online at http://www.ossec.net .
-   
-   
+
+
    --- Press ENTER to continue ---
 ```
 
@@ -120,7 +120,7 @@ root@dmon:~/ossec-hids# rm ../monitor-ossec/var/ossec/etc/ossec.conf
 ###Install OSSEC agent
 
 ```
-root@dapp:~/ossec-hids# ./install.sh 
+root@dapp:~/ossec-hids# ./install.sh
 
   ** Para instala????o em portugu??s, escolha [br].
   ** ???????????????????????????, ????????? [cn].
@@ -137,16 +137,16 @@ root@dapp:~/ossec-hids# ./install.sh
   ** ????????????????????????? ???? ?????????????????? ???? ?????????????? ,?????????????? [ru].
   ** Za instalaciju na srpskom, izaberi [sr].
   ** T??rk??e kurulum i??in se??in [tr].
-  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]: 
+  (en/br/cn/de/el/es/fr/hu/it/jp/nl/pl/ru/sr/tr) [en]:
 
 
  OSSEC HIDS v2.8 Installation Script - http://www.ossec.net
- 
+
  You are about to start the installation process of the OSSEC HIDS.
  You must have a C compiler pre-installed in your system.
  If you have any questions or comments, please send an e-mail
  to dcid@ossec.net (or daniel.cid@gmail.com).
- 
+
   - System: Linux dmon 3.13.0-32-generic
   - User: root
   - Host: dmon
@@ -161,7 +161,7 @@ root@dapp:~/ossec-hids# ./install.sh
 
 2- Setting up the installation environment.
 
- - Choose where to install the OSSEC HIDS [/var/ossec]: 
+ - Choose where to install the OSSEC HIDS [/var/ossec]:
 
     - Installation will be made at  /var/ossec .
 
@@ -171,11 +171,11 @@ root@dapp:~/ossec-hids# ./install.sh
 
    - Adding Server IP 192.168.2.2
 
-  3.2- Do you want to run the integrity check daemon? (y/n) [y]: 
+  3.2- Do you want to run the integrity check daemon? (y/n) [y]:
 
    - Running syscheck (integrity check daemon).
 
-  3.3- Do you want to run the rootkit detection engine? (y/n) [y]: 
+  3.3- Do you want to run the rootkit detection engine? (y/n) [y]:
 
    - Running rootcheck (rootkit detection).
 
@@ -188,12 +188,12 @@ root@dapp:~/ossec-hids# ./install.sh
     -- /var/log/syslog
     -- /var/log/dpkg.log
 
- - If you want to monitor any other file, just change 
+ - If you want to monitor any other file, just change
    the ossec.conf and add a new localfile entry.
    Any questions about the configuration can be answered
    by visiting us online at http://www.ossec.net .
-   
-   
+
+
    --- Press ENTER to continue ---
 ```
 
