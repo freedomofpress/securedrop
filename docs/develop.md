@@ -4,29 +4,32 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Setup your local environment](#setup-your-local-environment)
+- [Prerequisites](#prerequisites)
   - [Ubuntu/Debian](#ubuntudebian)
   - [Mac OS X](#mac-os-x)
-- [Overview](#overview)
+- [Clone the repository](#clone-the-repository)
+- [Pick a development environment](#pick-a-development-environment)
   - [Development](#development)
   - [Staging](#staging)
   - [Prod](#prod)
     - [connect-proxy (Ubuntu only)](#connect-proxy-ubuntu-only)
     - [torify (Ubuntu and Mac OS X)](#torify-ubuntu-and-mac-os-x)
-  - [Version Notes](#version-notes)
+- [Version Notes](#version-notes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Setup your local environment
+# Prerequisites
+
+SecureDrop is a multi-machine design. To make development and testing easy, we provide a set of virtual environments, each tailored for a specific type of development task. We use Vagrant and Virtualbox to conveniently develop with a set of virtual environments, and our Ansible playbooks can provison these environments on either virtual machines or physical hardware.
+
+To get started, you will need to install Vagrant, Virtualbox, and Ansible.
 
 ## Ubuntu/Debian
 
-*Tested on Ubuntu 14.04*
+*Tested: Ubuntu 14.04*
 
 ```sh
 sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
-git clone https://github.com/freedomofpress/securedrop
-cd securedrop
 ```
 
 We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing.
@@ -37,13 +40,13 @@ sudo dpkg -i vagrant.deb
 sudo dpkg-reconfigure virtualbox-dkms
 ```
 
-Finally, install Ansible so it can be used with Vagrant to automatically provision VMs.
-
-Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
+Finally, install Ansible so it can be used with Vagrant to automatically
+provision VMs. We recommend installing Ansible with pip to ensure you have the
+latest stable version.
 
 ```sh
-sudo pip install ansible
 sudo apt-get install python-pip
+sudo pip install ansible
 ```
 
 If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
@@ -54,26 +57,22 @@ If you're using Ubuntu, you can install a sufficiently recent version of Ansible
 
 ## Mac OS X
 
-First, install the requirements:
+Install the requirements:
 
 1. [Vagrant](http://www.vagrantup.com/downloads.html)
 2. [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-3. [Ansible](http://docs.ansible.com/intro_installation.html)
-    * There are several ways to install Ansible on a Mac. We recommend using
-      pip instead of homebrew so you will get the latest stable version. To
-      install Ansible via pip,
+3. [Ansible](http://docs.ansible.com/intro_installation.html). There are several
+      ways to install Ansible on a Mac. We recommend using pip so you will get
+      the latest stable version. To install Ansible via pip, `sudo easy_install
+      pip && sudo pip install ansible`.
 
-      ```sh
-      sudo easy_install pip
-      sudo pip install ansible
-      ```
+# Clone the repository
 
-Now you're ready to use vagrant to provision SecureDrop VMs!
+Once you've installed the prerequisites for the development environment, use git to clone the SecureDrop repo: `git clone https://github.com/freedomofpress/securedrop.git`. SecureDrop uses a branching model based on [git-flow](http://nvie.com/posts/a-successful-git-branching-model/). The default branch is `master`, which always points to the latest stable release. Use this branch if you are interested in installing or auditing SecureDrop. Development for the upcoming release of SecureDrop takes place on `develop`. If you want to contribute, you should branch from and submit pull requests to `develop`.
 
+# Pick a development environment
 
-# Overview
-
-There are predefined VM configurations in the vagrantfile: development, staging, app and mon (production).
+There are several predefined virtual environments in the Vagrantfile: development, staging, and prod (production).
 
 * **development**: for working on the application code
     * Source Interface: localhost:8080
@@ -81,7 +80,7 @@ There are predefined VM configurations in the vagrantfile: development, staging,
 * **app-staging**: for working on the environment and hardening
     * Source Interface: localhost:8082
     * Document Interface: localhost:8083
-    * The interfaces and SSH are also available over Tor and direct access.
+    * The interfaces and SSH are also available over Tor.
     * A copy of the the onion URLs for source, document and SSH access are written to the Vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
     * OSSEC alert configuration is in install_files/ansible-base/staging-specific.yml
@@ -90,32 +89,45 @@ There are predefined VM configurations in the vagrantfile: development, staging,
     * Putting the AppArmor profiles in complain mode (default) or enforce mode can be done with the Ansible tags apparmor-complain or apparmor-enforce.
 * **mon-prod**: This is like a production installation with all of the hardening applied but virtualized
 
-
 ## Development
+
+This VM is intended for rapid development on the SecureDrop web application. It
+syncs the `/vagrant` directory on the VM to the top level of the SecureDrop
+repo, which means you can use your favorite editor on your host machine to edit
+the code. This machine has no security hardening or monitoring.
+
+This is the "default" VM, so you don't need to specify the `development` machine
+name when running commands like `vagrant up` and `vagrant ssh`. Of course, you
+can specify the name if you want to.
 
 ```
 vagrant up
-vagrant ssh development
+vagrant ssh
 cd /vagrant/securedrop
 ./manage.py test        # run the unit and functional tests
 ./manage.py start       # starts the application servers
 ./manage.py stop        # stops the application servers
-./manage.py restart     # restarts the application servers (to test code changes)
 ./manage.py reset       # resets the state of the development instance
 ./manage.py add_admin   # create a user to use when logging in to the Document Interface
 ```
 
+Once you start the servers, they will automatically reload when code changes are
+detected. If you accidentally save some incorrect code (e.g. with syntax
+errors), it's possible that one of the servers will get stuck in a bad state and
+be unable to recover. In that case, we recommend running `./manage.py restart`
+to restart the development servers. We are working on making this setup more
+transparent and easier to debug.
+
 ## Staging
 
-The staging environment is a virtual production server that still allows direct access. (you can SSH and hit the web interfaces directly without Tor)
+The staging environment is almost identical to the production, but the security
+hardening is weakened slightly to allow direct access (without Tor) to SSH and
+the web server. This is a convenient environment to test how changes work across
+the full stack.
 
-If you uncomment the line in the Vagrantfile `ansible.skip-tags: [ 'install_local_pkgs' ]` the playbook will look for:
-
-securedrop-app-code-0.3-amd64.deb
-
-securedrop-ossec-server-0.3-amd64.deb
-
-securedrop-ossec-agent-0.3-amd64.deb
+If you want to receive OSSEC alerts or change any other settings, you will need
+to fill out your local copy of
+`securedrop/install_files/ansible_base/staging-specific.yml`.
 
 ```
 vagrant up /staging$/
@@ -140,8 +152,12 @@ cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-NOTE: The demo instance runs the production playbooks (only difference being the production installs are not virtualized).
-Part of the production playbook validates that staging values are not used in production. One of the values it verifies is that the user Ansible runs as is not `vagrant` To be able to run this playbook in a Vagrant/VirtualBox environment you will need to disable the 'validate' role.
+NOTE: The demo instance runs the production playbooks (only difference being the
+production installs are not virtualized).  Part of the production playbook
+validates that staging values are not used in production. One of the values it
+verifies is that the user Ansible runs as is not `vagrant` To be able to run
+this playbook in a Vagrant/VirtualBox environment you will need to disable the
+'validate' role.
 
 ```
 vagrant up /demo$/ --no-provision
@@ -186,10 +202,9 @@ If you have torify on your system (`$ which torify`) and you're Tor running in t
 torify ssh admin@examplenxu7x5ifm.onion
 ```
 
+# Version Notes
 
-## Version Notes
-
-Tested with:
+This documentation has been tested and confirmed to work on:
 
 ```
 vagrant --version
