@@ -8,23 +8,25 @@ to backup the 0.3 system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.zip.gpg
 """
 
 import sys
-sys.path.append("/var/www/securedrop")
 import os
 import re
 import zipfile
 from datetime import datetime
 import functools
 # Import the application config.py file
+sys.path.append("/var/www/securedrop")
 import config
 import gnupg
 import subprocess
 
-TOR_SERVICES    = "/var/lib/tor/services"
-TOR_CONFIG      = "/etc/tor/torrc"
+TOR_SERVICES = "/var/lib/tor/services"
+TOR_CONFIG = "/etc/tor/torrc"
+
 
 def collect_config_file(zf):
     config_file_path = os.path.join(config.SECUREDROP_ROOT, "config.py")
     zf.write(config_file_path)
+
 
 def collect_securedrop_data_root(zf):
     # The store and key dirs are shared between both interfaces
@@ -32,9 +34,11 @@ def collect_securedrop_data_root(zf):
         for name in files:
             zf.write(os.path.join(root, name))
 
+
 def collect_custom_header_image(zf):
     # The custom header image is copied over the deafult `static/i/logo.png`.
     zf.write(os.path.join(config.SECUREDROP_ROOT, "static/i/logo.png"))
+
 
 def collect_tor_files(zf):
     # All of the tor hidden service private keys are stored in the THS specific
@@ -51,6 +55,7 @@ def collect_tor_files(zf):
     # restore.
     zf.write(TOR_CONFIG)
 
+
 def encrypt_zip_file(zf_fn):
     # Encrypt the backup zip file with the application's gpg public key
     gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
@@ -58,6 +63,7 @@ def encrypt_zip_file(zf_fn):
 
     stream = open(zf_fn, "rb")
     gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True', output=e_fn)
+
 
 def main():
     # name append a timestamp to the sd-backup zip filename

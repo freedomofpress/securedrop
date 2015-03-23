@@ -28,7 +28,7 @@ Receiving email alerts from OSSEC requires that you have an SMTP relay to route 
 While there are risks involved with receiving these alerts, such as information leakage through metadata, we feel the benefit of knowing how the SecureDrop servers are functioning is worth it. If a third-party SMTP relay is used, that relay will be able to learn information such as the IP address the alerts were sent from, the subject of the alerts, and the destination email address the alerts were sent to. Only the body of an alert email is encrypted with the recipient's GPG key. A third-party SMTP relay could also prevent you from receiving any or specific alerts.
 
 The SMTP relay that you use should support SASL authentication and SMTP TLS protocols TLSv1.2, TLSv1.1, and TLSv1. Most enterprise email solutions should be able to meet those requirements.
-    
+
 These are the values you must specify in `prod-specific.yml`:
 
  * GPG public key used to encrypt OSSEC alerts: `ossec_alert_gpg_public_key`
@@ -41,7 +41,7 @@ These are the values you must specify in `prod-specific.yml`:
  * Domain name of the email used to send OSSEC alerts: `sasl_domain`
  * Password of the email used to send OSSEC alerts: `sasl_password`
  * The fingerprint of your SMTP relay: `smtp_relay_fingerprint`
- 
+
 If you don't know what value to enter for one of these, please ask your organization's email administrator for the full configuration before proceeding. It is better to get these right the first time rather than changing them after SecureDrop is installed. If you're not sure of the correct `smtp_relay_port` number, you can use a simple mail client such as Thunderbird to test different settings or a port scanning tool such as nmap to see what's open. You could also use telnet to make sure you can connect to an SMTP server, which will always transmit a reply code of 220 meaning "Service ready" upon a successful connection.
 
 The `smtp_relay` mail server hostname is often, but not always, different from the `sasl_domain`, e.g. smtp.gmail.com and gmail.com.
@@ -68,21 +68,21 @@ The fingerprint is a unique identifier for an encryption key that is longer than
 
 	gpg --with-colons --fingerprint 0xFD720AD9EBA34B1C | grep "^fpr" | cut -d: -f10
 	
-Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_email`. This could be your work email, or an alias for a group of IT administrators at your organization. It helps for your mail client to have the ability to filter the numerous messages from OSSEC into a separate folder. 
+Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_email`. This could be your work email, or an alias for a group of IT administrators at your organization. It helps for your mail client to have the ability to filter the numerous messages from OSSEC into a separate folder.
 	
 Now you can move on to the SMTP and SASL settings, which are straightforward. These correspond to the outgoing e-mail address used to send the alerts instead of where you're receiving them. If that e-mail is ossec@news-org.com, the `sasl_username` would be ossec and `sasl_domain` would be news-org.com.
 
 The Postfix configuration enforces certificate verification, and requires a fingerprint to be set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
 
-    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2 
+    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
 
 If you are using Tails, you will not be able to connect directly with `openssl s_client` due to the default firewall rules. To get around this, proxy the requests over Tor by adding `torify` at the beginning of the command.
 
-The output of the command above should look like the following:
+The output of the command above should look like the following (*last updated Mon Mar 23 06:25:37 UTC 2015*):
 
-    9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
-	
-Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#prepare-to-install-securedrop) by running the playbooks.
+    D3:7C:82:FC:D0:5F:8F:D7:DA:A2:59:8C:42:D7:B2:9F:C1:9F:7E:60
+
+Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 
 ### Using Gmail for OSSEC alerts
 
@@ -112,20 +112,20 @@ The output will show you attempts to send the alerts and provide hints as to wha
 
 After making changes to the Postfix configuration, you should run `service postfix reload` and test the new settings by restarting the OSSEC service.
 
-Note that if you change the SMTP relay port after installation for any reason, you must update not only the relayhost in main.cf and contents of sasl_passwd, but also the iptables firewall rules applying to outbound SMTP which are in `/etc/network/iptables/rules_v4`.
+Note that if you change the SMTP relay port after installation for any reason, you must update not only the relayhost in main.cf and contents of sasl_passwd, but also the iptables firewall rules applying to outbound SMTP which are in `/etc/network/iptables/rules_v4`. We recommend modifying and re-running the Ansible playbook instead of doing things like this.
 
 Other log files that may contain useful information:
 
  * /var/log/procmail.log - there will be lines in this for every alert that gets triggered
- 
+
  * /var/ossec/logs/ossec.log - OSSEC's general operation is covered here
- 
+
  * /var/ossec/logs/alerts/alerts.log - contains details of every recent OSSEC alert
- 
+
  * /var/log/syslog - messages related to grsecurity, AppArmor and iptables
- 
+
 ## Analyzing the Alerts
- 
+
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
 
 If you believe that the system is behaving abnormally, you should contact us at support@freedom.press for help.

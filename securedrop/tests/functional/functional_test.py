@@ -10,7 +10,7 @@ import gnupg
 import urllib2
 import sys
 
-os.environ['SECUREDROP_ENV'] = 'test'
+
 import config
 
 import source
@@ -23,6 +23,8 @@ import traceback
 from datetime import datetime
 import time
 import mock
+
+os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class FunctionalTest():

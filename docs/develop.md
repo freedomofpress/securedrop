@@ -48,9 +48,9 @@ sudo pip install ansible
 
 If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
 
-*Tested: ansible 1.8.2*
+*Tested: Ansible 1.8.2*
 
-**Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VMs are always shutdown/rebooted with vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
+**Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VMs are always shut down/rebooted with Vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
 ## Mac OS X
 
@@ -82,13 +82,13 @@ There are predefined VM configurations in the vagrantfile: development, staging,
     * Source Interface: localhost:8082
     * Document Interface: localhost:8083
     * The interfaces and SSH are also available over Tor and direct access.
-    * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+    * A copy of the the onion URLs for source, document and SSH access are written to the Vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
 * **mon-staging**: for working on the environment and hardening
     * OSSEC alert configuration is in install_files/ansible-base/staging-specific.yml
 * **app-prod**: This is like a production installation with all of the hardening applied but virtualized
-    * A copy of the the onion URLs for source, document and SSH access are written to the vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
-    * Putting the AppArmor profiles in complain mode (default) or enforce mode can be done with the ansible tags apparmor-complain or apparmor-enforce.
-* **mon-prod**: This is a like production installation with all of the hardening applied but virtualized
+    * A copy of the the onion URLs for source, document and SSH access are written to the Vagrant host's ansible-base directory. The files will be named: app-source-ths, app-document-aths, app-ssh-aths
+    * Putting the AppArmor profiles in complain mode (default) or enforce mode can be done with the Ansible tags apparmor-complain or apparmor-enforce.
+* **mon-prod**: This is like a production installation with all of the hardening applied but virtualized
 
 
 ## Development
@@ -107,7 +107,7 @@ cd /vagrant/securedrop
 
 ## Staging
 
-The staging environment is a virtual production server that still allows direct access. (you can ssh and hit the web interfaces directly without Tor)
+The staging environment is a virtual production server that still allows direct access. (you can SSH and hit the web interfaces directly without Tor)
 
 If you uncomment the line in the Vagrantfile `ansible.skip-tags: [ 'install_local_pkgs' ]` the playbook will look for:
 
@@ -128,9 +128,9 @@ cd /var/www/securedrop
 
 ## Prod
 
-You will need to fill out the conf file `securedrop/install_files/ansible_base/prod-specific.yml`.
+You will need to fill out the configuration file `securedrop/install_files/ansible_base/prod-specific.yml`.
 
-To just up a specific server run:
+To just spawn a specific server run:
 
 ```
 vagrant up /prod$/
@@ -140,20 +140,20 @@ cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-NOTE: The demo instance run the production playbooks (only difference being the production installs are not virtualized).
-Part of the production playbook validates that staging values are not used in production. One of the values it verifies is that the user ansible runs as is not `vagrant` To be able to run this playbook in a vagrant/virtualbox environment you will need to disable the validate role.
+NOTE: The demo instance runs the production playbooks (only difference being the production installs are not virtualized).
+Part of the production playbook validates that staging values are not used in production. One of the values it verifies is that the user Ansible runs as is not `vagrant` To be able to run this playbook in a Vagrant/VirtualBox environment you will need to disable the 'validate' role.
 
 ```
 vagrant up /demo$/ --no-provision
 ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
 ```
 
-In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by *TODO*
+In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by examining the contents of `app-ssh-aths` and `mon-ssh-aths` in `/install_files/ansible-base`. Also you must add the HidServAuth values to your `/etc/tor/torrc` file and reload Tor.
 
 ### connect-proxy (Ubuntu only)
 
 Ubuntu: `sudo apt-get install connect-proxy`
-*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available when last we checked (Wed Oct 15 21:15:17 PDT 2014).*
+*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available last we checked (Wed Oct 15 21:15:17 PDT 2014).*
 
 After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
 
@@ -169,10 +169,10 @@ Compression yes # this compresses the SSH traffic to make it less slow over Tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
 
-This proxies all requests to `*.onion` address through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
+This proxies all requests to *.onion addresses through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
 
 ```
-ssh admin@examplenxu7x5ifm.onion
+ssh <username>@examplenxu7x5ifm.onion
 ```
 
 ### torify (Ubuntu and Mac OS X)
@@ -197,12 +197,12 @@ Vagrant 1.7.0
 ```
 
 ```
+vagrant-hostmanager (1.5.0)
 vagrant-login (1.0.1, system)
-vagrant-share (1.1.2, system)
+vagrant-share (1.1.3, system)
 ```
 
 ```
 ansible --version
 ansible 1.8.2
 ```
-

@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 """
 
-This script and decrypted backup zip should be copied to the App server 
+This script and decrypted backup zip should be copied to the App server
 and run by the anisble plabook. When run (as root), it restores the 0.3
 backup file.
 
@@ -19,6 +19,7 @@ from datetime import datetime
 from operator import itemgetter
 import calendar
 import traceback
+
 
 def replace_prefix(path, p1, p2):
     """
@@ -46,8 +47,7 @@ def extract_to_path(archive, member, path, user):
     if upperdirs and not os.path.exists(upperdirs):
         os.makedirs(upperdirs)
 
-    with archive.open(member) as source, \
-         file(path, "wb") as target:
+    with archive.open(member) as source, file(path, "wb") as target:
         shutil.copyfileobj(source, target)
 
     # Update the timestamps as well (as best we can, thanks, conversion to
@@ -60,7 +60,8 @@ def extract_to_path(archive, member, path, user):
         os.utime(path, (timestamp, timestamp))
 
     ug = "{}:{}".format(user, user)
-    subprocess.call(['chown', '-R', ug , path])
+    subprocess.call(['chown', '-R', ug, path])
+
 
 def restore_config_file(zf):
     print "* Migrating SecureDrop config file from backup..."
@@ -69,6 +70,7 @@ def restore_config_file(zf):
     for zi in zf.infolist():
         if "var/www/securedrop/config.py" in zi.filename:
             extract_to_path(zf, "var/www/securedrop/config.py", "/var/www/securedrop/config.py", "www-data")
+
 
 def restore_securedrop_root(zf):
     print "* Migrating directories from SECUREDROP_ROOT..."
@@ -84,16 +86,19 @@ def restore_securedrop_root(zf):
             extract_to_path(zf, zi, replace_prefix(zi.filename,
                 "var/lib/securedrop/keys", "/var/lib/securedrop/keys"), "www-data")
 
+
 def restore_database(zf):
     print "* Migrating database..."
 
     extract_to_path(zf, "var/lib/securedrop/db.sqlite", "/var/lib/securedrop/db.sqlite", "www-data")
+
 
 def restore_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
         "var/www/securedrop/static/i/logo.png",
         "/var/www/securedrop/static/i/logo.png", "www-data")
+
 
 def restore_tor_files(zf):
     tor_root_dir = "/var/lib/tor"

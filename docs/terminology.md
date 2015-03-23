@@ -32,14 +32,14 @@ The *Secure Viewing Station* (or *SVS* for short) is a machine that is kept offl
 
 Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device. We recommend physically removing the drive and any networking cards (wireless, Bluetooth, etc.) from this machine.
 
-This is also referred to as the "airgapped computer," meaning there is a gap between it and a computer connected to the Internet
+This is also referred to as the "airgapped computer," meaning there is a gap between it and a computer connected to the Internet.
 
 ### Two-Factor Authenticator
 
 There are several places in the SecureDrop architecture where two-factor authentication is used to protect access to sensitive information or systems. These instances use the standard TOTP and/or HOTP algorithms, and so a variety of devices can be used to provide two factor authentication for devices. We recommend using one of:
 
 * An Android or iOS device with [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) installed
-* A [Yubikey](http://www.yubico.com/products/yubikey-hardware/)
+* A [YubiKey](https://www.yubico.com/products/yubikey-hardware/)
 
 ### Transfer Device
 
@@ -49,7 +49,7 @@ If you use a USB stick for the transfer device, we recommend using a small one (
 
 Depending on your threat model, you may wish to only use one-time use media (such as CD-R or DVD-R) for transferring files to and from the SVS. While doing so is cumbersome, it reduces the risk of malware (that could be run simply by opening a malicious submission) exfiltrating sensitive data, such as the private key used to decrypt submissions or the content of decrypted submissions.
 
-When we use the phrase "sneakernet" we mean physically move documents on the Transfer Device from one computer to another. 
+When we use the phrase "sneakernet" we mean physically moving documents on the Transfer Device from one computer to another.
 
 ##Hardware
 
@@ -66,11 +66,11 @@ When we use the phrase "sneakernet" we mean physically move documents on the Tra
  * CD, DVD, or USB to use when [setting up Tails Live with persistence](/docs/tails_guide.md).
  * Brand new USB, marked *transfer*, to use as the *Transfer Device*.
 
-Additionally, you will need a minimum of 4 USB sticks which will become Tails Live USB's with persistence. You should mark two *offline*, one *online*, and one *admin*. This is enough to set up a system with one admin and one journalist (note that the same person can perform both of these roles). To add more administrators or journalists, you will need more USB sticks.
+Additionally, you will need a minimum of 4 USB sticks which will become Tails Live USBs with persistence. You should mark two *offline*, one *online*, and one *admin*. This is enough to set up a system with one admin and one journalist (note that the same person can perform both of these roles). To add more administrators or journalists, you will need more USB sticks.
 
 Finally, each user, whether admin or journalist, will need a *Two-Factor Authenticator*.
 
-Each journalist will also need a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create GPG keys](/docs/install.md#set-up-journalist-gpg-keys) for journalists who do not already have one.
+Each journalist will also need a *Transfer Device* for transferring files between the *Secure Viewing Station* and their *Journalist Workstation*, and a personal GPG key. Make sure you [create GPG keys](/docs/journalist_user_manual.md#create-gpg-key-for-the-journalist) for journalists who do not already have one.
 
 The second *offline* Tails Live USB with persistence will be used as the encrypted offline backup. This device will be a copy of the main *SVS* Tails Live USB with persistence.
 
@@ -97,29 +97,29 @@ The admin will be using the *Admin Workstation* with Tails to connect to the App
      * The admin's personal GPG key.
      * The credentials for the email account that OSSEC will send alerts to.
      * The Hidden Services values required to connect to the App and Monitor Server.
- 
+
 The admin will also need to have an Android or iOS device with the Google Authenticator app installed. This means the admin will also have the following two credentials:
 
  * The secret code for the App Server's two-factor authentication.
  * The secret code for the Monitor Server's two-factor authentication.
- 
+
 ### Journalist
 
 The journalist will be using the *Journalist Workstation* with Tails to connect to the Document Interface. The tasks performed by the journalist will require the following set of passphrases:
-
+		
  * A master password for the persistent volume on the Tails device.
  * A master password for the KeePassX password manager, which unlocks passphrases to:
      * The Hidden Service value required to connect to the Document Interface.
      * The Document Interface.
      * The journalist's personal GPG key.
-     
+
 The journalist will also need to have a two-factor authenticator, such as an Android or iOS device with Google Authenticator installed, or a YubiKey. This means the journalist will also have the following credential:
 
  * The secret code for the Document Interface's two-factor authentication.
- 
+
 #### Secure Viewing Station
 
-The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following set of passphrases:
+The journalist will be using the *Secure Viewing Station* with Tails to decrypt and view submitted documents. The tasks performed by the journalist will require the following passphrases:
 
  * A master password for the persistent volume on the Tails device.
 

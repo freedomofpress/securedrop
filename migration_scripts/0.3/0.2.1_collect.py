@@ -15,9 +15,11 @@ import zipfile
 # Arbitrarily pick the source chroot jail (doesn't matter)
 securedrop_root = "/var/chroot/source/var/www/securedrop"
 
+
 def collect_config_file(zf):
     config_file_path = os.path.join(securedrop_root, "config.py")
     zf.write(config_file_path)
+
 
 def collect_securedrop_root(zf):
     # The store and key dirs are shared between the chroot jails in 0.2.1, and
@@ -26,15 +28,18 @@ def collect_securedrop_root(zf):
         for name in files:
             zf.write(os.path.join(root, name))
 
+
 def collect_database(zf):
     # Copy the db file, which is only present in the document interface's
     # chroot jail in 0.2.1
     zf.write("/var/chroot/document/var/www/securedrop/db.sqlite")
 
+
 def collect_custom_header_image(zf):
     # 0.2.1's deployment didn't actually use config.CUSTOM_HEADER_IMAGE - it
     # just overwrote the default header image, `static/i/securedrop.png`.
     zf.write(os.path.join(securedrop_root, "static/i/securedrop.png"))
+
 
 def collect_tor_files(zf):
     tor_files = [
@@ -46,6 +51,7 @@ def collect_tor_files(zf):
 
     for tor_file in tor_files:
         zf.write(tor_file)
+
 
 def main():
     if len(sys.argv) <= 1:

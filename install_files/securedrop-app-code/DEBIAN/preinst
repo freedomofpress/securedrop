@@ -18,6 +18,14 @@ case "$1" in
    ;;
 
     upgrade)
+
+      if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
+        # Copy the custom logo (workaround due to #911)
+        cp /var/www/securedrop/static/i/logo.png /tmp/securedrop_custom_logo.png
+        # Remove the custom logo so we don't get an error from dpkg conffiles
+        rm /var/www/securedrop/static/i/logo.png
+      fi
+
     ;;
 
     abort-upgrade)

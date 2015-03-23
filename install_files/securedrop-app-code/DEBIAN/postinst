@@ -42,6 +42,14 @@ case "$1" in
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
 
+    # Version migrations
+
+    if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
+      # Restore custom logo
+      cp /tmp/securedrop_custom_logo.png /var/www/securedrop/static/i/logo.png
+      rm /tmp/securedrop_custom_logo.png
+    fi
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
