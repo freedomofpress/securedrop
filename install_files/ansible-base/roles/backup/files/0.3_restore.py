@@ -69,7 +69,8 @@ def restore_config_file(zf):
     # Restore the original config file
     for zi in zf.infolist():
         if "var/www/securedrop/config.py" in zi.filename:
-            extract_to_path(zf, "var/www/securedrop/config.py", "/var/www/securedrop/config.py", "www-data")
+            extract_to_path(zf, "var/www/securedrop/config.py",
+                            "/var/www/securedrop/config.py", "www-data")
 
 
 def restore_securedrop_root(zf):
@@ -78,26 +79,33 @@ def restore_securedrop_root(zf):
     # Restore the original source directories and key files
     for zi in zf.infolist():
         if "var/lib/securedrop/store" in zi.filename:
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/securedrop/store", "/var/lib/securedrop/store"), "www-data")
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/lib/securedrop/store",
+                                           "/var/lib/securedrop/store"),
+                            "www-data")
         elif "var/lib/securedrop/keys" in zi.filename:
             # TODO: is it a bad idea to migrate the random_seed from the
             # previous installation?
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/securedrop/keys", "/var/lib/securedrop/keys"), "www-data")
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/lib/securedrop/keys",
+                                           "/var/lib/securedrop/keys"),
+                            "www-data")
 
 
 def restore_database(zf):
     print "* Migrating database..."
 
-    extract_to_path(zf, "var/lib/securedrop/db.sqlite", "/var/lib/securedrop/db.sqlite", "www-data")
+    extract_to_path(zf, "var/lib/securedrop/db.sqlite",
+                    "/var/lib/securedrop/db.sqlite", "www-data")
 
 
 def restore_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
-        "var/www/securedrop/static/i/logo.png",
-        "/var/www/securedrop/static/i/logo.png", "www-data")
+                    "var/www/securedrop/static/i/logo.png",
+                    "/var/www/securedrop/static/i/logo.png", "www-data")
 
 
 def restore_tor_files(zf):
@@ -120,11 +128,17 @@ def restore_tor_files(zf):
 
     for zi in zf.infolist():
         if "var/lib/tor/services/source" in zi.filename:
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/source", "/var/lib/tor/services/source"), "debian-tor")
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/lib/tor/services/source",
+                                           "/var/lib/tor/services/source"),
+                            "debian-tor")
         elif "var/lib/tor/services/document" in zi.filename:
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/lib/tor/services/document", "/var/lib/tor/services/document"), "debian-tor")
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/lib/tor/services/document",
+                                           "/var/lib/tor/services/document"),
+                            "debian-tor")
 
     # Reload Tor to trigger registering the old Tor Hidden Services
     # reloading Tor compared to restarting tor will not break the current tor
@@ -134,7 +148,9 @@ def restore_tor_files(zf):
 
 def main():
     if len(sys.argv) <= 1:
-        print "Usage: 0.3_restore.py <filename>\n\n    <filename>\tPath to a SecureDrop 0.3 backup .zip file created by 0.3_collect.py"
+        print ("Usage: 0.3_restore.py <filename>\n\n"
+               "    <filename>\tPath to a SecureDrop 0.3 backup .zip file"
+               "created by 0.3_collect.py")
         sys.exit(1)
 
     try:
