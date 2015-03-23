@@ -82,7 +82,7 @@ The output of the command above should look like the following:
 
     9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8
 	
-Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#prepare-to-install-securedrop) by running the playbooks.
+Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 
 ### Using Gmail for OSSEC alerts
 
