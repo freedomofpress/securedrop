@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+	margin-bottom: auto;
   /* Firefox 24 (the basis of TBB at the time of this writing) does not support
    * unprefixed box-sizing. */
   -moz-box-sizing: border-box;
