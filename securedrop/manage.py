@@ -155,11 +155,11 @@ def add_admin():
             break
         print "Passwords didn't match!"
 
-    hotp_input = raw_input("Is this admin using a Yubikey [HOTP]? (y/N): ")
+    hotp_input = raw_input("Is this admin using a YubiKey [HOTP]? (y/N): ")
     otp_secret = None
     if hotp_input.lower() == "y" or hotp_input.lower() == "yes":
         while True:
-            otp_secret = raw_input("Please configure your Yubikey and enter the secret: ")
+            otp_secret = raw_input("Please configure your YubiKey and enter the secret: ")
             if otp_secret:
                 break
 

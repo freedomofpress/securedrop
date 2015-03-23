@@ -13,7 +13,7 @@ The *Application Server* (or *App Server* for short) runs the SecureDrop applica
  * 1 x physical server for the *Application Server*, which will run the SecureDrop application.
  * 1 x physical server for the *Monitor Server*, which sends emails about issues with the *App Server*.
 
-The SecureDrop application requires a 64-bit operating system. You can repurpose old hardware if it is capable of running 64-bit Ubuntu. Otherwise, we recommend you get two [Intel NUCs](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with power cords. Make sure you also get the cables required to connect the NUCs to a monitor. Additionally, you will need to get the following [two 240 GB hard drives](http://www.amazon.com/dp/B00BQ8RKT4/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=I319YS8KKXVZWS&psc=1) and a [4 GB (2GBx2) memory kit](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2).
+The SecureDrop application requires a 64-bit operating system. You can repurpose old hardware if it is capable of running 64-bit Ubuntu. Otherwise, we recommend you get two [Intel NUCs](http://www.amazon.com/dp/B00F3F38O2/) with power cords. Make sure you also get the cables required to connect the NUCs to a monitor. Additionally, you will need to get the following [two 240 GB hard drives](http://www.amazon.com/dp/B00BQ8RKT4/) and a [4 GB (2GBx2) memory kit](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/).
 
 #### Potential BIOS issue
 
@@ -31,7 +31,7 @@ The *Secure Viewing Station* is a machine that is kept offline and only ever use
  * 1 x encrypted, external hard drive to store documents on while working on a story.
  * 1 x offline printer.
 
-We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IOKQL5QS1Q2NX&psc=1) with a power cord and [4 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/ref=sr_1_2?s=electronics&ie=UTF8&qid=1411294165&sr=1-2), but note that you will also need to get a monitor and a wired keyboard and mouse. For the printer, we recommend the [HP Deskjet printer](http://www.amazon.com/HP-Deskjet-Printer-CH340A-B1H/dp/B003YGZIY0/ref=pd_sim_op_2?ie=UTF8&refRID=1BNF29AQ5S6C3SR0DS6V).
+We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/) with a power cord and [4 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/), but note that you will also need to get a monitor and a wired keyboard and mouse. For the printer, we recommend the [HP Deskjet printer](http://www.amazon.com/HP-Deskjet-Printer-CH340A-B1H/dp/B003YGZIY0/).
 
 ### Tails and Transfer Devices
 
@@ -44,7 +44,7 @@ The *Transfer Device* is the physical media used to transfer encrypted documents
  * 1 x physical media with Tails for the *Secure Viewing Station*.
  * 1 x physical media with Tails for the *Secure Viewing Station* (backup).
 
-We recommend getting [16 GB Leef Supra](http://www.amazon.com/dp/B00FWQTBZ2/ref=wl_it_dp_o_pC_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=IX8TE9WOYD105) USB sticks to run Tails on, and [4 GB Patriot](http://www.amazon.com/Swivel-Flash-Drive-Memory-Stick/dp/B00M1GYD90/ref=sr_1_20?s=pc&ie=UTF8&qid=1417035771&sr=1-20&keywords=wellcore+4GB) USB sticks to use when transferring files. Each journalist should have two USB sticks. For the Secure Viewing Station and backup, we recommend getting [Corsair 64 GB](http://www.amazon.com/dp/B00EM71W1S/ref=wl_it_dp_o_pd_nS_ttl?_encoding=UTF8&colid=3NQVTBFZV73JA&coliid=I3KY4GZXC9PPV&psc=1) USB sticks.
+We recommend getting [16 GB Leef Supra](http://www.amazon.com/dp/B00FWQTBZ2/) USB sticks to run Tails on, and [4 GB Patriot](http://www.amazon.com/Swivel-Flash-Drive-Memory-Stick/dp/B00M1GYD90/) USB sticks to use when transferring files. Each journalist should have two USB sticks. For the Secure Viewing Station and backup, we recommend getting [Corsair 64 GB](http://www.amazon.com/dp/B00EM71W1S/) USB sticks.
 
 Another alternative setup exists in which journalists do not transfer files on a USB stick, but instead use a CD-R or DVD-R. The encrypted documents are copied to the CD-R or DVD-R, then decrypted and read on the Secure Viewing Station. The disks are destroyed after first use. We recommend getting a [Samsung model burner](http://www.newegg.com/External-CD-DVD-Blu-Ray-Drives/SubCategory/ID-420) for this purpose.
 
@@ -54,7 +54,7 @@ Two-factor authentication is used when connecting to different parts of the Secu
 
  * 1 x two-factor authentication device
 
-We recommend using either a smartphone capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) or a [YubiKey](http://www.yubico.com/products/yubikey-hardware/yubikey/).
+We recommend using either a smartphone capable of running [Google Authenticator](https://support.google.com/accounts/answer/1066447?hl=en) or a [YubiKey](https://www.yubico.com/products/yubikey-hardware/yubikey/).
 
 ### Network firewall
 
@@ -68,7 +68,7 @@ We recommend getting a Netgate firewall with pfSense pre-installed, and you can 
 
 If you firewall has fewer than **four** NICs, you will need an additional Ethernet switch to perform installation and maintenance tasks with the Admin Workstation. This switch is generally useful because it allows you to connect to your firewall's LAN port without taking down either of the SecureDrop servers, which is useful if you want to perform maintenance tasks from the Admin Workstation on the SecureDrop installation or the firewall configuration. This is possible without the switch if your firewall has enough ports, but you will need to perform some additional initial firewall setup to get this to work.
 
-We recommend getting a [5-port Netgear ProSafe Ethernet Switch](http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/ref=sr_1_fkmr1_1?ie=UTF8&qid=1418401631&sr=8-1-fkmr1&keywords=netgate+prosafe+5+port) or similar.
+We recommend getting a [5-port Netgear ProSafe Ethernet Switch](http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/) or similar.
 
 ## Appendix
 
@@ -78,7 +78,7 @@ There are a variety of available NUCs, and each different model supports differe
 
 #### D34010WYK
 
-[Amazon link w/ picture](http://www.amazon.com/Intel-Computing-BOXD34010WYK1-Black-White/dp/B00H3YT886/ref=sr_1_3?ie=UTF8&qid=1413905126&sr=8-3&keywords=NUC+D34010WYK)
+[Amazon link w/ picture](http://www.amazon.com/Intel-Computing-BOXD34010WYK1-Black-White/dp/B00H3YT886/)
 
 We have been using one for the Secure Viewing Station (SVS), which is air-gapped and never connected to the Internet, and one for the Admin Workstation, which is Internet-connected and is used to run the Ansible playbooks. You could also use an existing workstation, or a recycled machine, for this purpose, assuming you feel confident that this machine has not been physically compromised in any way.
 

@@ -1,6 +1,6 @@
 # SecureDrop Threat Model
 
-This document outlines the threat model for SecureDrop 0.3 and is inspired by the [threat model document Adam Langley wrote for Pond](https://pond.imperialviolet.org/threat.html). The threat model is defined in terms of what each possible adversary can achieve. This document is still a work in progress. If you have questions or comments, please open an issue on GitHub or send an email to securedrop@freedom.press. 
+This document outlines the threat model for SecureDrop 0.3 and is inspired by the [threat model document Adam Langley wrote for Pond](https://pond.imperialviolet.org/threat.html). The threat model is defined in terms of what each possible adversary can achieve. This document is still a work in progress. If you have questions or comments, please open an issue on GitHub or send an email to securedrop@freedom.press.
 
 ## Assumptions
 
@@ -9,27 +9,27 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The source acts reasonably and in good faith, e.g. if the user were to give their codename or private key material to the attacker that would be unreasonable.
  * The source would like to remain anonymous, even against a forensic attacker.
  * The source obtains an authentic copy of Tails or the Tor Browser.
- * The source follows our [guidelines](https://github.com/freedomofpress/securedrop/blob/develop/docs/source_user_manual.md) for using SecureDrop.
+ * The source follows our [guidelines](/docs/source_user_manual.md) for using SecureDrop.
  * The source is accessing an authentic SecureDrop site.
 
 ### Assumptions about the admin and the journalist
 
  * The admin and the journalist act reasonably and in good faith, e.g. if either of them were to give their credentials or private key material to the attacker that would be unreasonable.
  * The admin and the journalist obtain authentic copies of Tails.
- * The journalist follows our [guidelines](https://github.com/freedomofpress/securedrop/blob/develop/docs/journalist_user_manual.md) for using SecureDrop and working with submitted documents. 
- 
+ * The journalist follows our [guidelines](/docs/journalist_user_manual.md) for using SecureDrop and working with submitted documents.
+
 ### Assumptions about the person installing SecureDrop, usually the admin
 
  * The person acts reasonably and in good faith, e.g. if he or she were to give the attacker system-level access that would be unreasonable.
  * The person obtains an authentic copy of SecureDrop and its dependencies.
- * The person follows our guidelines for [deploying the system, setting up the landing page for the organization](https://github.com/freedomofpress/securedrop/blob/develop/docs/deployment_practices.md), and for [installing SecureDrop](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md).
+ * The person follows our guidelines for [deploying the system, setting up the landing page for the organization](/docs/deployment_practices.md), and for [installing SecureDrop](/docs/install.md).
 
 ### Assumptions about the source's computer
 
  * The computer correctly executes Tails or the Tor Browser.
  * The computer is not compromised by malware.
- 
-### Assumptions about the Admin Workstation and the Journalist Workstation 
+
+### Assumptions about the Admin Workstation and the Journalist Workstation
 
  * The computer correctly executes Tails.
  * The computer and the Tails device are not compromised by malware.
@@ -71,8 +71,8 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The server stores hashes of codenames, created with scrypt and randomly-generated salts.
  * The server stores only encrypted submissions and communication on disk.
  * The server stores a GPG key for each source, with the source's codename as the passphrase.
- * The server may [store plaintext submissions in memory for at most 24 hours](https://github.com/freedomofpress/securedrop/pull/805).
- * The server stores sanitized Tor logs, created using the [SafeLogging option](https://www.torproject.org/docs/tor-manual.html.en), for the Source Interface, the Document Interface, and SSH.  
+ * The server may [store plaintext submissions in memory for at most 24 hours](https://github.com/freedomofpress/securedrop/issues/802/pull/805).
+ * The server stores sanitized Tor logs, created using the [SafeLogging option](https://www.torproject.org/docs/tor-manual.html.en), for the Source Interface, the Document Interface, and SSH.
  * The server stores both access and error logs for the Document Interface.
  * The server stores connection history and audit logs for the admin.
  * The server can connect to the Monitor server using an SSH key and a passphrase.
@@ -87,12 +87,12 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The server stores connection history and audit logs for the admin.
  * The server stores OSSEC and Procmail logs on disk.
  * The server can connect to the Application Server using an SSH key and a passphrase.
- 
+
 ### What the Workstations can achieve
 
- * The **Admin Workstation** requires Tails with a persistent volume, which stores information such as GPG and SSH keys, as well as a [database with passphrases](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#admin) for the Application Server, the Monitor Server, and the GPG key the Monitor Server will encrypt OSSEC alerts to.
- * The **Journalist Workstation** requires Tails with a persistent volume, which stores information such as the Hidden Service value required to connect to the Document Interface, as well as a [database with passphrases](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#journalist) for the Document Interface and the journalist's personal GPG key.
- * The **Secure Viewing Station** requires Tails with a persistent volume, which stores information such as the SecureDrop application's GPG key, as well as a [database with the passphrase](https://github.com/freedomofpress/securedrop/blob/develop/docs/install.md#secure-viewing-station-1) for that key.
+ * The **Admin Workstation** requires Tails with a persistent volume, which stores information such as GPG and SSH keys, as well as a [database with passphrases](/docs/install.md#passphrase-database) for the Application Server, the Monitor Server, and the GPG key the Monitor Server will encrypt OSSEC alerts to.
+ * The **Journalist Workstation** requires Tails with a persistent volume, which stores information such as the Hidden Service value required to connect to the Document Interface, as well as a [database with passphrases](/docs/install.md#passphrase-database) for the Document Interface and the journalist's personal GPG key.
+ * The **Secure Viewing Station** requires Tails with a persistent volume, which stores information such as the SecureDrop application's GPG key, as well as a [database with the passphrase](/docs/install.md#passphrase-database) for that key.
 
 ### What a compromise of the source's property can achieve
 
@@ -106,11 +106,11 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
     * See any replies from journalists that the source has not yet deleted.
 
 ### What a physical seizure of the source's property can achieve
- 
+
  * Document use of Tor or Tails, but not necessarily research into SecureDrop
  * Prevent the source from submitting documents by taking the device the documents are stored on.
  * If the property is seized while powered on, the attacker can also analyze any plaintext information that resides in RAM.
- * Tamper with the hardware. 
+ * Tamper with the hardware.
  * A physical seizure of, and access to, the source's codename will allow the attacker to access the Source Interface as that source.
 
  * A physical seizure of the admin's property will allow the attacker to:
@@ -137,7 +137,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
     * Download, but not decrypt, submissions.
     * Communicate with sources.
     * Delete one or more submissions.
-    * Delete one or more sources, which destroys all communication with that source and prevents the source from ever logging back in with that codename. 
+    * Delete one or more sources, which destroys all communication with that source and prevents the source from ever logging back in with that codename.
  * An attacker with admin access to the **Application Server** can:
     * Add, modify, and delete software, configurations, and other files.
     * See all HTTP requests made by the source, the admin, and the journalist.
@@ -155,7 +155,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
     * Change the SMTP relay, email address, and GPG key used for OSSEC alerts.
     * Analyze any plaintext information that resides in RAM.
     * Review logs stored on the system.
-    * Trigger arbitrary commands to be executed by the OSSEC agent user, which, assuming the attacker is able to escalate privileges, may affect the Application Server. 
+    * Trigger arbitrary commands to be executed by the OSSEC agent user, which, assuming the attacker is able to escalate privileges, may affect the Application Server.
 
 ### What a physical seizure of the admin's property can achieve
 
@@ -206,9 +206,9 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
     * Do anything the **www-data** user can do in terms of the SecureDrop application, this user is in full control of the server and can view, modify, and delete anything at will. This user is not able to decrypt submissions or communications, unless the attacker has access to the encryption key required to do so.
 
 ### What a physical seizure of the Application Server can achieve
- 
+
  * If the Application Server is seized, the attacker will be able to view any and all unencrypted files on the server. This includes all files in use by the SecureDrop Application. If the server is seized while it is powered on, the attacker can also analyze any plaintext information that resides in RAM. The attacker can also tamper with the hardware.
- 
+
 ### What a compromise of the Monitor Server can achieve
 
  * If the Monitor Server is compromised, the system user the attacker has control over defines what kind of information the attacker will be able to view and what kind of actions the attacker can perform.
@@ -218,8 +218,8 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * An attacker with access to the **ossec** user can:
     * ???
  * An attacker with access to the **root** user can:
-    * Do anything the **ossec** user can do in terms of the SecureDrop application, this user is in full control of the server and can view, modify, and delete anything at will. This user is not able to decrypt encrypted email alerts, unless the attacker has access to the encryption key required to do so. 
- 	  
+    * Do anything the **ossec** user can do in terms of the SecureDrop application, this user is in full control of the server and can view, modify, and delete anything at will. This user is not able to decrypt encrypted email alerts, unless the attacker has access to the encryption key required to do so.
+ 	
 ### What a physical seizure of the Monitor Server can achieve
 
  * If the Monitor Server is seized, the attacker will be able to view any and all unencrypted files on the server. This includes all files in use by OSSEC. If the server is seized while it is powered on, the attacker can also analyze any plaintext information that resides in RAM. The attacker can also tamper with the hardware.
