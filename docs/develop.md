@@ -73,7 +73,7 @@ Install the requirements:
 
 # Clone the repository
 
-Once you've installed the prerequisites for the development environment, use git to clone the SecureDrop repo: `git clone https://github.com/freedomofpress/securedrop.git`. SecureDrop uses a branching model based on [git-flow](http://nvie.com/posts/a-successful-git-branching-model/). The default branch is `master`, which always points to the latest stable release. Use this branch if you are interested in installing or auditing SecureDrop. Development for the upcoming release of SecureDrop takes place on `develop`. If you want to contribute, you should branch from and submit pull requests to `develop`.
+Once you've installed the prerequisites for the development environment, use git to clone the SecureDrop repo: `git clone https://github.com/freedomofpress/securedrop.git`. SecureDrop uses a branching model based on [git-flow](http://nvie.com/posts/a-successful-git-branching-model/). The `master` branch always points to the latest stable release. Use this branch if you are interested in installing or auditing SecureDrop. Development for the upcoming release of SecureDrop takes place on `develop`, which is the default branch. If you want to contribute, you should branch from and submit pull requests to `develop`.
 
 # Pick a development environment
 
