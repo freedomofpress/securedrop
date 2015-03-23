@@ -10,12 +10,13 @@ import mock
 from flask import url_for
 from flask.ext.testing import TestCase
 
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
 import crypto_util
 import journalist
 import common
 from db import db_session, Source, Journalist
+
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestJournalist(TestCase):

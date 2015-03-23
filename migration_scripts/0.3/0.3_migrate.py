@@ -17,6 +17,7 @@ from operator import itemgetter
 import calendar
 import traceback
 
+
 def migrate_config_file(zf):
     print "* Migrating values from old config file..."
 
@@ -70,8 +71,7 @@ def extract_to_path(archive, member, path):
     if upperdirs and not os.path.exists(upperdirs):
         os.makedirs(upperdirs)
 
-    with archive.open(member) as source, \
-         file(path, "wb") as target:
+    with archive.open(member) as source, file(path, "wb") as target:
         shutil.copyfileobj(source, target)
 
     # Update the timestamps as well (as best we can, thanks, conversion to
@@ -120,7 +120,7 @@ def migrate_database(zf):
     # Generate a list of the filesystem ids that have journalist designations
     # store din the database, since they are already known and should not be
     # generated from the filesystem id
-    already_processed = set([ source[0] for source in sources ])
+    already_processed = set([source[0] for source in sources])
     for fs_id in os.listdir("/var/lib/securedrop/store"):
         if fs_id in already_processed:
             continue
@@ -230,6 +230,7 @@ def migrate_database(zf):
 
     # chown the databse file to the securedrop user
     subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
+
 
 def migrate_custom_header_image(zf):
     print "* Migrating custom header image..."
