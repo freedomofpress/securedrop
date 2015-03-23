@@ -124,4 +124,4 @@ You will then have to wait for the packages to finish installing.
 
 When the packages are finished installing, Ubuntu will automatically install the bootloader (GRUB). If it asks to install the bootloader to the Master Boot Record, choose **Yes**. When everything is done, reboot.
 
-You can now return to where you left off in the main Securedrop install guide [by clicking here](/docs/install.md#install-securedrop).
+You can now return to where you left off in the main SecureDrop install guide [by clicking here](/docs/install.md#install-the-securedrop-application).
