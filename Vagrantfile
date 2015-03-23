@@ -9,6 +9,12 @@ include MyVars
 
 Vagrant.configure("2") do |config|
 
+  # Vagrant 1.7.0+ removes the insecure_private_key by default
+  # and substitutes a dynamically generated SSH key for each box.
+  # Unfortunately this breaks Ansible provisioning with Vagrant,
+  # so the key insertion feature should be disabled.
+  config.ssh.insert_key = false
+
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
     development.vm.box = "trusty64"

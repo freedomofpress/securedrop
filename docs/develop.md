@@ -29,7 +29,8 @@ git clone https://github.com/freedomofpress/securedrop
 cd securedrop
 ```
 
-NOTE: There is a critical bug ([#802](https://github.com/freedomofpress/securedrop/issues/802)) with SecureDrop and Vagrant 1.7.x that prevents one of the virtual machines from successfully provisioning. We recommend using version 1.6.5, which is only slightly older than the current stable version, can be downloaded here: https://www.vagrantup.com/download-archive/v1.6.5.html and has been tested to be working.
+We recommend using the latest stable version of Vagrant, which is newer than what is in the Ubuntu repositories at the time of this writing.
+Download the current version from https://www.vagrantup.com/downloads.html *(Tested with vagrant 1.7.2)*
 
 ```sh
 sudo dpkg -i vagrant.deb
@@ -41,13 +42,13 @@ Finally, install Ansible so it can be used with Vagrant to automatically provisi
 Generally, we recommend you install Ansible using pip, which will ensure you have the latest stable version.
 
 ```sh
-sudo apt-get install python-pip
 sudo pip install ansible
+sudo apt-get install python-pip
 ```
 
 If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
 
-*Tested: Ansible 1.8.2*
+*Tested: Ansible 1.8.4*
 
 **Warning: for now, we do not recommend installing vagrant-cachier.** It destroys apt's state unless the VMs are always shut down/rebooted with Vagrant, which conflicts with the tasks in the Ansible playbooks. The instructions in Vagrantfile that would enable vagrant-cachier are currently commented out.
 
@@ -192,7 +193,7 @@ Tested with:
 
 ```
 vagrant --version
-Vagrant 1.6.5
+Vagrant 1.7.2
 ```
 
 ```
@@ -203,5 +204,5 @@ vagrant-share (1.1.3, system)
 
 ```
 ansible --version
-ansible 1.8.2
+ansible 1.8.4
 ```
