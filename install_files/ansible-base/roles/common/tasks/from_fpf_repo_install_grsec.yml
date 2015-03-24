@@ -28,16 +28,15 @@
 - name: set grsec kernel as default for next boot
   command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
 
-- stat: path=/var/run/grsec-installed
-  register: grsec_installed
+- stat: path="/proc/sys/kernel/grsecurity/grsec_lock"
+  register: running_grsec
 
 - name: reboot into the grsec kernel
   command: shutdown -r now "Rebooting into the grsec kernel..."
   async: 0
   poll: 0
   ignore_errors: true
-  when: grsec_installed.stat.exists
-  when: not grsec_lock.stat.exists
+  when: not running_grsec.stat.exists
   tags:
     - reboot
 
