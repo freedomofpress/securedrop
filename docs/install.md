@@ -389,7 +389,7 @@ Host mon
   User <ssh_user>
 ```
 
-Now you can simply use `ssh app` and `ssh mon` to connect to each server, and it will be stored in the Tails Dotfiles persistence. You might see the message "Enter SOCKS5 password for amnesia@localhost" — this can be ignored, just always press Enter.
+Now you can simply use `ssh app` and `ssh mon` to connect to each server, and it will be stored in the Tails Dotfiles persistence.
 
 ### Set up two-factor authentication for the Admin
 
