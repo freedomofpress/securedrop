@@ -20,3 +20,49 @@
   apt: pkg={{ grsec_package }} state=latest
   async: 300
   poll: 10
+
+- name: get grsec kernel string
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | head -1 | cut -d "'" -f2
+  register: grsec_str
+
+- name: set grsec kernel as default for next boot
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
+
+- stat: path=/var/run/grsec-installed
+  register: grsec_installed
+
+- name: reboot into the grsec kernel
+  command: shutdown -r now "Rebooting into the grsec kernel..."
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: grsec_installed.stat.exists
+  when: not grsec_lock.stat.exists
+  tags:
+    - reboot
+
+- name: waiting for server to come back
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  sudo: false
+  tags:
+    - reboot
+
+- name: remove generic kernel metapackages
+  apt: name=linux-signed-image-generic-lts-utopic state=absent
+  apt: name=linux-signed-image-generic state=absent
+  apt: name=linux-signed-generic-lts-utopic state=absent
+  apt: name=linux-signed-generic state=absent
+
+- name: remove remaining generic kernels
+  command: apt-get -y remove '^linux-image-.*generic$'
+
+- name: remove remaining kernel headers
+  command: apt-get -y remove '^linux-headers-.*'
+
+- name: cleanup any dependencies left
+  command: apt-get -y autoremove
