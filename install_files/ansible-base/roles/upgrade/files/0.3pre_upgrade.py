@@ -9,6 +9,12 @@ import sys
 import tarfile
 import traceback
 
+store_dir = "/var/lib/securedrop/store"
+db_path = "/var/lib/securedrop/db.sqlite"
+assert os.path.isfile(db_path)
+conn = sqlite3.connect(db_path)
+c = conn.cursor()
+
 def backup_app():
     tar_fn = 'backup-app-{}.tar.bz2'.format(datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))
     with tarfile.open(tar_fn, 'w:bz2') as t:
@@ -26,6 +32,24 @@ def backup_mon():
         t.add('/var/lib/tor/services/')
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
+def secure_unlink(path):
+    subprocess.check_call(['srm', '-r', path])
+
+def clean_large_deleted():
+    for source_dir in os.listdir(store_dir):
+        try:
+            source_id, journalist_designation = c.execute(
+                "SELECT id, journalist_designation FROM sources WHERE filesystem_id=?",
+                (source_dir,)).fetchone()
+            print source_id, journalist_designation, source_dir
+        except (sqlite3.Error, TypeError) as e:
+            print "\n!!  Error occurred migrating replies for source {}".format(source_dir)
+            print "Source had {} submissions".format(len(os.listdir(os.path.join(store_dir, source_dir))))
+            #print traceback.format_exc()
+            print "Deleting source with no db entry..."
+            secure_unlink(os.path.join(store_dir, source_dir))
+            print
+            continue
 
 def migrate_app_db():
     # To get CREATE TABLE from SQLAlchemy:
@@ -33,11 +57,6 @@ def migrate_app_db():
     # >>> from sqlalchemy.schema import CreateTable
     # >>> print CreateTable(db.Journalist.__table__).compile(db.engine)
     # Or, add `echo=True` to the engine constructor.
-    db_path = "/var/lib/securedrop/db.sqlite"
-    assert os.path.isfile(db_path)
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
     # CREATE TABLE replies
     c.execute("""
 CREATE TABLE replies (
@@ -140,6 +159,7 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
+        clean_large_deleted()
         upgrade_app()
     else:
         upgrade_mon()
