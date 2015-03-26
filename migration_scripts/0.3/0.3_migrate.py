@@ -37,7 +37,8 @@ def migrate_config_file(zf):
     ]
 
     for sub in subs:
-        old_value_repl = r"\1{}".format(re.search(sub[0], old_conf).groups()[0])
+        old_value_repl = r"\1{}".format(re.search(sub[0],
+                                        old_conf).groups()[0])
         new_conf = re.sub(sub[1], old_value_repl, new_conf, flags=re.MULTILINE)
 
     # Write out migrated config
@@ -90,21 +91,27 @@ def migrate_securedrop_root(zf):
     # Restore the original source directories and key files
     for zi in zf.infolist():
         if "var/securedrop/store" in zi.filename:
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/securedrop/store", "/var/lib/securedrop/store"))
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/securedrop/store",
+                                           "/var/lib/securedrop/store"))
         elif "var/securedrop/keys" in zi.filename:
             # TODO: is it a bad idea to migrate the random_seed from the
             # previous installation?
-            extract_to_path(zf, zi, replace_prefix(zi.filename,
-                "var/securedrop/keys", "/var/lib/securedrop/keys"))
+            extract_to_path(zf, zi,
+                            replace_prefix(zi.filename,
+                                           "var/securedrop/keys",
+                                           "/var/lib/securedrop/keys"))
 
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/lib/securedrop"])
+    subprocess.call(['chown', '-R', 'www-data:www-data',
+                    "/var/lib/securedrop"])
 
 
 def migrate_database(zf):
     print "* Migrating database..."
 
-    extract_to_path(zf, "var/chroot/document/var/www/securedrop/db.sqlite", "db.old.sqlite")
+    extract_to_path(zf, "var/chroot/document/var/www/securedrop/db.sqlite",
+                    "db.old.sqlite")
     conn = sqlite3.connect("db.old.sqlite")
     c = conn.cursor()
     sources = c.execute("SELECT * FROM sources").fetchall()
@@ -141,7 +148,8 @@ def migrate_database(zf):
     # Copy from db.py to compute filesystem-safe journalist filenames
     def journalist_filename(s):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
-        return ''.join([c for c in s.lower().replace(' ', '_') if c in valid_chars])
+        return ''.join([c for c in s.lower().replace(' ',
+                        '_') if c in valid_chars])
 
     # Migrate rows to new database with SQLAlchemy ORM
     for source in sources:
@@ -168,12 +176,14 @@ def migrate_database(zf):
         # submission in the store now.
         submissions = []
         for fn in os.listdir(source_dir):
-            submissions.append((fn, os.path.getmtime(os.path.join(source_dir, fn))))
+            submissions.append((fn, os.path.getmtime(os.path.join(source_dir,
+                                                                  fn))))
         # Sort by submission time
         submissions.sort(key=itemgetter(1))
 
         if len(submissions) > 0:
-            migrated_source.last_updated = datetime.utcfromtimestamp(submissions[-1][1])
+            time = submissions[-1][1]
+            migrated_source.last_updated = (datetime.utcfromtimestamp(time))
         else:
             # The source will have the default .last_updated of utcnow(), which
             # might be a little confusing, but it's the best we can do.
@@ -214,7 +224,11 @@ def migrate_database(zf):
             if fn.startswith('reply-'):
                 new_fn = "{0}-reply.gpg".format(count+1)
             else:
-                new_fn = "{0}-{1}-{2}".format(count+1, journalist_filename(source[1]), "msg.gpg" if fn.endswith("msg.gpg") else "doc.zip.gpg")
+                new_fn = "{0}-{1}-{2}".format(count+1,
+                                              journalist_filename(source[1]),
+                                              "msg.gpg"
+                                              if fn.endswith("msg.gpg") else
+                                              "doc.zip.gpg")
 
             # Move to the new filename
             os.rename(os.path.join(source_dir, fn),
@@ -229,15 +243,18 @@ def migrate_database(zf):
             db_session.commit()
 
     # chown the databse file to the securedrop user
-    subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
+    subprocess.call(['chown', 'www-data:www-data',
+                    "/var/lib/securedrop/db.sqlite"])
 
 
 def migrate_custom_header_image(zf):
     print "* Migrating custom header image..."
     extract_to_path(zf,
-        "var/chroot/source/var/www/securedrop/static/i/securedrop.png",
-        "/var/www/securedrop/static/i/securedrop.png")
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/securedrop.png"])
+                    ("var/chroot/source/var/www/securedrop/static/i/"
+                     "securedrop.png"),
+                    "/var/www/securedrop/static/i/securedrop.png")
+    subprocess.call(['chown', '-R', 'www-data:www-data',
+                    "/var/www/securedrop/static/i/securedrop.png"])
 
 
 def migrate_tor_files(zf):
@@ -246,9 +263,10 @@ def migrate_tor_files(zf):
     tor_root_dir = "/var/lib/tor"
     ths_root_dir = os.path.join(tor_root_dir, "services")
 
-    # For now, we're going to re-provision the monitor and SSH hidden services.
-    # The only hidden service whose address we want to maintain is the source
-    # interface. Modify the code below to migrate other hidden services as well.
+    # For now, we're going to re-provision the monitor and SSH
+    # hidden services. The only hidden service whose address
+    # we want to maintain is the source interface. Modify the
+    #  code below to migrate other hidden services as well.
 
     # Restore source interface hidden sevice key to maintain the original
     # .onion address
@@ -260,8 +278,9 @@ def migrate_tor_files(zf):
 
     # Extract the original source interface THS key
     extract_to_path(zf,
-        "var/chroot/source/var/lib/tor/hidden_service/private_key",
-        os.path.join(source_ths_dir, "private_key"))
+                    ("var/chroot/source/var/lib/tor/hidden_service/"
+                     "private_key"),
+                    os.path.join(source_ths_dir, "private_key"))
 
     # chmod the files so they're owned by debian-tor:debian-tor
     subprocess.call(['chown', '-R', 'debian-tor:debian-tor', source_ths_dir])
@@ -271,7 +290,9 @@ def migrate_tor_files(zf):
 
 def main():
     if len(sys.argv) <= 1:
-        print "Usage: 0.3_migrate.py <filename>\n\n    <filename>\tPath to a SecureDrop 0.2.1 backup .zip file created by 0.2.1_collect.py"
+        print ("Usage: 0.3_migrate.py <filename>\n\n    "
+               "<filename>\tPath to a SecureDrop 0.2.1 backup"
+               " .zip file created by 0.2.1_collect.py")
         sys.exit(1)
 
     try:

@@ -39,7 +39,8 @@ class JournalistNavigationSteps():
         submit_button.click()
 
         # Successful login should redirect to the index
-        self.assertEquals(self.driver.current_url, self.journalist_location + '/')
+        self.assertEquals(self.driver.current_url, 
+                          self.journalist_location + '/')
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
@@ -144,7 +145,9 @@ class JournalistNavigationSteps():
         # Successfully verifying the code should redirect to the admin
         # interface, and flash a message indicating success
         flashed_msgs = self.driver.find_elements_by_css_selector('p.flash')
-        self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [el.text for el in flashed_msgs])
+        self.assertIn(("Two factor token successfully verified for user"
+                       " {}!").format(self.new_user['username']),
+                       [el.text for el in flashed_msgs])
 
     def _logout(self):
         # Click the logout link
@@ -159,7 +162,8 @@ class JournalistNavigationSteps():
 
     def _check_login_with_otp(self, otp):
         self._logout()
-        self._login_user(self.new_user['username'], self.new_user['password'], otp)
+        self._login_user(self.new_user['username'],
+                         self.new_user['password'], otp)
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
 
@@ -323,5 +327,6 @@ class JournalistNavigationSteps():
         raw_content = urllib2.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
-        submission = self._get_submission_content(file_url, decrypted_submission)
+        submission = self._get_submission_content(file_url,
+                                                  decrypted_submission)
         self.assertEqual(self.secret_message, submission)
