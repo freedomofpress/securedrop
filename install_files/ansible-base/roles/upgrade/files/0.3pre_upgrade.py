@@ -49,7 +49,6 @@ def clean_large_deleted():
             print "Deleting source with no db entry..."
             secure_unlink(os.path.join(store_dir, source_dir))
             print
-            continue
 
 def migrate_app_db():
     # To get CREATE TABLE from SQLAlchemy:
