@@ -38,17 +38,24 @@ def secure_unlink(path):
 def clean_large_deleted():
     for source_dir in os.listdir(store_dir):
         try:
-            source_id, journalist_designation = c.execute(
-                "SELECT id, journalist_designation FROM sources WHERE filesystem_id=?",
+            source = c.execute("SELECT * FROM sources WHERE filesystem_id=?",
                 (source_dir,)).fetchone()
-            print source_id, journalist_designation, source_dir
-        except (sqlite3.Error, TypeError) as e:
-            print "\n!!  Error occurred migrating replies for source {}".format(source_dir)
+            if not source:
+                # A source directory is available on the filesystem, but there
+                # is no corresponding entry in the database. In 0.3pre and 0.3,
+                # there were two bugs that could potentially lead to the source
+                # directory failing to be deleted when a source was deleted
+                # from the Document Interface. We clean up these directories as
+                # part of the migration.
+                #
+                # See https://github.com/freedomofpress/securedrop/pull/944 for
+                # context.
+                print "Deleting source with no db entry ('{}')...".format(source_dir)
+                secure_unlink(os.path.join(store_dir, source_dir))
+        except Exception as e:
+            print "\n!!  Error occurred cleaning up deleted sources for source {}".format(source_dir)
             print "Source had {} submissions".format(len(os.listdir(os.path.join(store_dir, source_dir))))
-            #print traceback.format_exc()
-            print "Deleting source with no db entry..."
-            secure_unlink(os.path.join(store_dir, source_dir))
-            print
+            print traceback.format_exc()
 
 def migrate_app_db():
     # To get CREATE TABLE from SQLAlchemy:
@@ -70,7 +77,7 @@ CREATE TABLE replies (
 )""")
 
     # Fill in replies from the replies in STORE_DIR at the time of the migration
-    # 
+    #
     # Caveats:
     #
     # 1. Before we added the `replies` table, we did not keep track of which
@@ -141,7 +148,6 @@ CREATE TABLE journalist_login_attempt (
 
 def upgrade_app():
     backup_app()
-    
     migrate_app_db()
 
 
