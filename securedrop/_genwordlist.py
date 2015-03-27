@@ -12,8 +12,10 @@ def just7(x):
 words = set()
 
 for i in map(chr, range(65, 91)):
-    words.update(x.strip()
-                 for x in file('EOWL-v1.1.2/CSV Format/%s Words.csv' % i) if just7(x))
+    words.update(
+        x.strip() for x in file(
+            'EOWL-v1.1.2/CSV Format/%s Words.csv' %
+            i) if just7(x))
 
 fh = file('wordlist', 'w')
 for word in words:

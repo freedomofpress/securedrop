@@ -32,14 +32,16 @@ class SourceNavigationSteps():
             filename = file.name
             filebasename = filename.split('/')[-1]
 
-            file_upload_box = self.driver.find_element_by_css_selector('[name=fh]')
+            file_upload_box = self.driver.find_element_by_css_selector(
+                '[name=fh]')
             file_upload_box.send_keys(filename)
 
             submit_button = self.driver.find_element_by_css_selector(
                 'button[type=submit]')
             submit_button.click()
 
-            notification = self.driver.find_element_by_css_selector('p.notification')
+            notification = self.driver.find_element_by_css_selector(
+                'p.notification')
             expected_notification = ('Thanks for submitting something '
                                      'to SecureDrop! Please check back '
                                      'later for replies.')
@@ -53,7 +55,8 @@ class SourceNavigationSteps():
             'button[type=submit]')
         submit_button.click()
 
-        notification = self.driver.find_element_by_css_selector('p.notification')
+        notification = self.driver.find_element_by_css_selector(
+            'p.notification')
         self.assertIn('Thanks for submitting something to SecureDrop!'
                       ' Please check back later for replies.',
                       notification.text)
