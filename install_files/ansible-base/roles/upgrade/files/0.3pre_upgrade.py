@@ -9,24 +9,11 @@ import sys
 import tarfile
 import traceback
 
-def install_packages(*packages):
-    subprocess.check_call(["apt-get", "update"])
-    subprocess.check_call(["apt-get", "-y", "install"] + list(packages))
-
-def delete_packages(*packages):
-    subprocess.check_call(["apt-get", "-y", "remove"] + list(packages))
-
-def delete_apt_keys(*keyids):
-    for keyid in keyids:
-        subprocess.check_call(["apt-key", "del", keyid])
-
-def add_apt_key(keyfile):
-    subprocess.check_call(["apt-key", "add", keyfile])
-
-def add_new_apt_key():
-    # We want to make upgrading simple, so we should only have to copy this script to the target machines for upgrade.
-    # We don't use the keyservers to download the key because hkp is blocked by the default firewall rules.
-    subprocess.check_call("wget -qO - https://freedom.press/sites/default/files/fpf.asc | sudo apt-key add -", shell=True)
+store_dir = "/var/lib/securedrop/store"
+db_path = "/var/lib/securedrop/db.sqlite"
+assert os.path.isfile(db_path)
+conn = sqlite3.connect(db_path)
+c = conn.cursor()
 
 def backup_app():
     tar_fn = 'backup-app-{}.tar.bz2'.format(datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))
@@ -45,28 +32,37 @@ def backup_mon():
         t.add('/var/lib/tor/services/')
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
-logo_path = '/var/www/securedrop/static/i/logo.png'
-logo_backup_path = '/tmp/logo.png'
-    
-def backup_logo():
-    shutil.copy(logo_path, logo_backup_path)
+def secure_unlink(path):
+    subprocess.check_call(['srm', '-r', path])
 
-def restore_logo():
-    shutil.copy(logo_backup_path, logo_path)
-    # Apparently I don't need to set the permissions to www-data:www-data, they
-    # are automatically set that way (tested).
-    
+def clean_large_deleted():
+    for source_dir in os.listdir(store_dir):
+        try:
+            source = c.execute("SELECT * FROM sources WHERE filesystem_id=?",
+                (source_dir,)).fetchone()
+            if not source:
+                # A source directory is available on the filesystem, but there
+                # is no corresponding entry in the database. In 0.3pre and 0.3,
+                # there were two bugs that could potentially lead to the source
+                # directory failing to be deleted when a source was deleted
+                # from the Document Interface. We clean up these directories as
+                # part of the migration.
+                #
+                # See https://github.com/freedomofpress/securedrop/pull/944 for
+                # context.
+                print "Deleting source with no db entry ('{}')...".format(source_dir)
+                secure_unlink(os.path.join(store_dir, source_dir))
+        except Exception as e:
+            print "\n!!  Error occurred cleaning up deleted sources for source {}".format(source_dir)
+            print "Source had {} submissions".format(len(os.listdir(os.path.join(store_dir, source_dir))))
+            print traceback.format_exc()
+
 def migrate_app_db():
     # To get CREATE TABLE from SQLAlchemy:
     # >>> import db
     # >>> from sqlalchemy.schema import CreateTable
     # >>> print CreateTable(db.Journalist.__table__).compile(db.engine)
     # Or, add `echo=True` to the engine constructor.
-    db_path = "/var/lib/securedrop/db.sqlite"
-    assert os.path.isfile(db_path)
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
     # CREATE TABLE replies
     c.execute("""
 CREATE TABLE replies (
@@ -81,7 +77,7 @@ CREATE TABLE replies (
 )""")
 
     # Fill in replies from the replies in STORE_DIR at the time of the migration
-    # 
+    #
     # Caveats:
     #
     # 1. Before we added the `replies` table, we did not keep track of which
@@ -152,32 +148,11 @@ CREATE TABLE journalist_login_attempt (
 
 def upgrade_app():
     backup_app()
-    
-    # The logo.png should not be included in the package (since it is typically
-    # customized by the installation admin), but it currently is. To maintain it
-    # across removing securedrop-app-code and installing the new version, we
-    # need to back it up before removing the old package and then restore it
-    # after installing the new package.
-    backup_logo()
-
-    delete_packages("securedrop-app-code", "securedrop-grsec", "securedrop-ossec-agent")
     migrate_app_db()
-    # delete the old signing key
-    delete_apt_keys("BD67D096")
-    # install the new signing key
-    # the key is stored in a file in the same directory as this script
-    add_new_apt_key()
-    # install the new packages
-    install_packages("securedrop-app-code", "securedrop-ossec-agent", "ossec-agent", "securedrop-grsec")
-    restore_logo()
 
-    
+
 def upgrade_mon():
     backup_mon()
-    delete_packages("securedrop-ossec-server")
-    delete_apt_keys("BD67D096")
-    add_new_apt_key()
-    install_packages("securedrop-ossec-server", "ossec-server", "securedrop-grsec")
 
 
 def main():
@@ -189,6 +164,7 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
+        clean_large_deleted()
         upgrade_app()
     else:
         upgrade_mon()
