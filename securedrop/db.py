@@ -178,7 +178,8 @@ class SourceStar(Base):
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):
-            return self.source_id == other.source_id and self.id == other.id and self.starred == other.starred
+            return (self.source_id == other.source_id and
+                   self.id == other.id and self.starred == other.starred)
         return NotImplemented
 
     def __init__(self, source, starred=True):
@@ -193,7 +194,8 @@ class InvalidUsernameException(Exception):
 
 class LoginThrottledException(Exception):
 
-    """Raised when a user attempts to log in too many times in a given time period"""
+    """Raised when a user attempts to log in too
+       many times in a given time period"""
 
 
 class WrongPasswordException(Exception):
@@ -245,12 +247,14 @@ class Journalist(Base):
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
-        # try clause for debugging intermittent scrypt "could not compute hash"
-        # error
+        # try clause for debugging intermittent scrypt
+        # "could not compute hash" error
         try:
             return scrypt.hash(str(password), salt, **params)
         except scrypt.error as e:
-            print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
+            print ("Scrypt hashing failed for password='{}', salt='{}', "
+                   "params='{}', "
+                   "traceback: {}").format(password, salt, params, e)
 
     def set_password(self, password):
         self.pw_salt = self._gen_salt()
@@ -306,7 +310,8 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        """Strips from authentication tokens the whitespace
+           that many clients add for readability"""
         return ''.join(token.split())
 
     def verify_token(self, token):

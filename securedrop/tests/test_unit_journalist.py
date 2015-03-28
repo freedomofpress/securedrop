@@ -72,7 +72,8 @@ class TestJournalist(TestCase):
         self.assertIn("No documents have been submitted!", res.data)
 
     def test_normal_and_admin_user_login_should_redirect_to_index(self):
-        """Normal users and admin users should both redirect to the index page after logging in successfully"""
+        """Normal users and admin users should both redirect
+           to the index page after logging in successfully"""
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
@@ -119,7 +120,8 @@ class TestJournalist(TestCase):
     # TODO: more tests for admin interface
 
     def test_bulk_download(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        sid = ('EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2N'
+               'Z4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R')
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()

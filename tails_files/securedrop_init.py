@@ -11,7 +11,8 @@ if __name__ == '__main__':
         sys.exit('You need to run this as root')
 
     # paths
-    path_torrc_additions = '/home/amnesia/Persistent/.securedrop/torrc_additions'
+    path_torrc_additions = ('/home/amnesia/Persistent/'
+                            '.securedrop/torrc_additions')
     path_torrc_backup = '/etc/tor/torrc.bak'
     path_torrc = '/etc/tor/torrc'
 
@@ -45,6 +46,8 @@ if __name__ == '__main__':
                      'amnesia',
                      '/usr/bin/notify-send',
                      '-i',
-                     '/home/amnesia/Persistent/.securedrop/securedrop_icon.png',
+                     ('/home/amnesia/Persistent/'
+                      '.securedrop/securedrop_icon.png'),
                      'Updated torrc!',
-                     'You can now connect to your SecureDrop\ndocument interface.'])
+                     ('You can now connect to your '
+                      'SecureDrop\ndocument interface.')])
