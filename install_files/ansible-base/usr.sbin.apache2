@@ -203,6 +203,11 @@
   /var/www/.gnupg/ rw,
   /var/www/.gnupg/** rw,
   /var/log/apache2/other_vhosts_access.log rw,
+  /etc/apache2/mods-available/ssl.conf r,
+  /etc/apache2/mods-available/ssl.load r,
+  /etc/apache2/mods-available/socache_shmcb.load r,
+  /run/lock/apache2/ssl-cache.* rwk,
+  /var/lib/ssl/* r,
 
   ^DEFAULT_URI {
   }
