@@ -102,14 +102,11 @@ chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! $ADMIN; then
-	INTERFACES=$(zenity --forms --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter each interface's .onion address." \
-	--separator="," --width=500 --add-entry="Document Interface:" --add-entry="Source Interface:")
-	DOC=$(awk -F, '{print $1}' <<<$INTERFACES)
-	SRC=$(awk -F, '{print $2}' <<<$INTERFACES)
-	DOCUMENT="${DOC#http://}"
-	SOURCE="${SRC#http://}"
 	HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
 	echo $HIDSERVAUTH >> $ADDITIONS
+	SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
+	SOURCE="${SRC#http://}"
+	DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
 fi
 
 # make the shortcuts
