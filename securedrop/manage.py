@@ -150,10 +150,10 @@ def reset():
     import db
 
     # Erase the development db file
-    (assert hasattr(
+    assert hasattr(
                     config, 'DATABASE_FILE'),
-     ("TODO: ./manage.py doesn't know how to clear the db "
-      "if the backend is not sqlite"))
+    ("TODO: ./manage.py doesn't know how to clear the db "
+     "if the backend is not sqlite")
     os.remove(config.DATABASE_FILE)
 
     # Regenerate the database
