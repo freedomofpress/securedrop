@@ -80,22 +80,27 @@ def start():
                                  '/bin/bash',
                                  '--',
                                  '-c',
-                                 'cd /vagrant/securedrop && python journalist.py'])
+                                 ('cd /vagrant/securedrop && '
+                                  'python journalist.py')])
 
     if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
+        print ("The web application is running, and available "
+               "on your Vagrant host at the following addresses:")
         print "Source interface:     localhost:8080"
         print "Journalist interface: localhost:8081"
     else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
+        print ("The web application is already running.  Please use "
+               "'./manage.py restart' to stop and start again.")
 
 
 def stop():
     import config
     source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile',
+         config.SOURCE_PIDFILE])
     journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile',
+         config.JOURNALIST_PIDFILE])
     if source_rc + journo_rc == 0:
         print "The web application has been stopped."
     else:
@@ -145,8 +150,10 @@ def reset():
     import db
 
     # Erase the development db file
-    assert hasattr(
-        config, 'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
+    (assert hasattr(
+                    config, 'DATABASE_FILE'),
+     ("TODO: ./manage.py doesn't know how to clear the db "
+      "if the backend is not sqlite"))
     os.remove(config.DATABASE_FILE)
 
     # Regenerate the database

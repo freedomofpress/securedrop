@@ -179,7 +179,7 @@ class SourceStar(Base):
     def __eq__(self, other):
         if isinstance(other, SourceStar):
             return (self.source_id == other.source_id and
-                   self.id == other.id and self.starred == other.starred)
+                    self.id == other.id and self.starred == other.starred)
         return NotImplemented
 
     def __init__(self, source, starred=True):

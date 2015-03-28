@@ -112,13 +112,16 @@ def login():
             login_flashed_msg = "Login failed."
 
             if isinstance(e, LoginThrottledException):
-                login_flashed_msg += " Please wait at least 60 seconds before logging in again."
+                login_flashed_msg += (" Please wait at least 60 seconds "
+                                      "before logging in again.")
             else:
                 try:
                     user = Journalist.query.filter_by(
                         username=request.form['username']).one()
                     if user.is_totp:
-                        login_flashed_msg += " Please wait for a new two-factor token before logging in again."
+                        login_flashed_msg += (" Please wait for a new "
+                                              "two-factor token before "
+                                              "logging in again.")
                 except:
                     pass
 
@@ -186,7 +189,8 @@ def admin_add_user():
                     flash("That username is already in use",
                           "error")
                 else:
-                    flash("An error occurred saving this user to the database",
+                    flash(("An error occurred saving this "
+                           "user to the database"),
                           "error")
 
         if form_valid:
@@ -266,7 +270,8 @@ def admin_edit_user(user_id):
                 flash("That username is already in use", "notification")
             else:
                 flash(
-                    "An unknown error occurred, please inform your administrator",
+                    ("An unknown error occurred, please inform "
+                     "your administrator"),
                     "error")
 
     return render_template("admin_edit_user.html", user=user)

@@ -234,8 +234,9 @@ class JournalistNavigationSteps():
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
+        data = 'data-username'
         new_user_edit_links = filter(
-            lambda el: el.get_attribute('data-username') == self.new_user['username'],
+            lambda el: el.get_attribute(data) == self.new_user['username'],
             self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
