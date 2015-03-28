@@ -115,7 +115,8 @@ def login():
                 login_flashed_msg += " Please wait at least 60 seconds before logging in again."
             else:
                 try:
-                    user = Journalist.query.filter_by(username=request.form['username']).one()
+                    user = Journalist.query.filter_by(
+                        username=request.form['username']).one()
                     if user.is_totp:
                         login_flashed_msg += " Please wait for a new two-factor token before logging in again."
                 except:
@@ -203,7 +204,10 @@ def admin_new_user_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if user.verify_token(token):
-            flash("Two factor token successfully verified for user {}!".format(user.username), "notification")
+            flash(
+                "Two factor token successfully verified for user {}!".format(
+                    user.username),
+                "notification")
             return redirect(url_for("admin_index"))
         else:
             flash("Two factor token failed to verify", "error")
@@ -256,12 +260,14 @@ def admin_edit_user(user_id):
         try:
             db_session.add(user)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
             if "username is not unique" in str(e):
                 flash("That username is already in use", "notification")
             else:
-                flash("An unknown error occurred, please inform your administrator", "error")
+                flash(
+                    "An unknown error occurred, please inform your administrator",
+                    "error")
 
     return render_template("admin_edit_user.html", user=user)
 
@@ -314,14 +320,19 @@ def remove_star(sid):
 def index():
     unstarred = []
     starred = []
-    for source in Source.query.filter_by(pending=False).order_by(Source.last_updated.desc()).all():
-        star = SourceStar.query.filter(SourceStar.source_id == source.id).first()
+    for source in Source.query.filter_by(
+            pending=False).order_by(
+            Source.last_updated.desc()).all():
+        star = SourceStar.query.filter(
+            SourceStar.source_id == source.id).first()
         if star and star.starred:
             starred.append(source)
         else:
             unstarred.append(source)
         source.num_unread = len(
-            Submission.query.filter(Submission.source_id == source.id, Submission.downloaded is False).all())
+            Submission.query.filter(
+                Submission.source_id == source.id,
+                Submission.downloaded is False).all())
 
     return render_template('index.html', unstarred=unstarred, starred=starred)
 
@@ -354,7 +365,8 @@ def col_process():
     if 'cols_selected' not in request.form:
         return redirect(url_for('index'))
 
-    cols_selected = request.form.getlist('cols_selected')  # getlist is cgi.FieldStorage.getlist
+    # getlist is cgi.FieldStorage.getlist
+    cols_selected = request.form.getlist('cols_selected')
     action = request.form['action']
 
     if action not in actions:
@@ -386,7 +398,9 @@ def col_delete_single(sid):
     """deleting a single collection from its /col page"""
     source = get_source(sid)
     delete_collection(sid)
-    flash("%s's collection deleted" % (source.journalist_designation,), "notification")
+    flash(
+        "%s's collection deleted" %
+        (source.journalist_designation,), "notification")
     return redirect(url_for('index'))
 
 
@@ -411,7 +425,8 @@ def doc(sid, fn):
     if '..' in fn or fn.startswith('/'):
         abort(404)
     try:
-        Submission.query.filter(Submission.filename == fn).one().downloaded = True
+        Submission.query.filter(
+            Submission.filename == fn).one().downloaded = True
     except NoResultFound as e:
         app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
     db_session.commit()
@@ -442,10 +457,17 @@ def generate_code():
     g.source.journalist_designation = crypto_util.display_id()
 
     for item in g.source.collection:
-        item.filename = store.rename_submission(g.sid, item.filename, g.source.journalist_filename)
+        item.filename = store.rename_submission(
+            g.sid,
+            item.filename,
+            g.source.journalist_filename)
     db_session.commit()
 
-    flash("The source '%s' has been renamed to '%s'" % (original_journalist_designation, g.source.journalist_designation), "notification")
+    flash(
+        "The source '%s' has been renamed to '%s'" %
+        (original_journalist_designation,
+         g.source.journalist_designation),
+        "notification")
     return redirect('/col/' + g.sid)
 
 
@@ -453,7 +475,9 @@ def generate_code():
 @login_required
 def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = Submission.query.filter(Submission.source_id == id, Submission.downloaded is False).all()
+    docs = Submission.query.filter(
+        Submission.source_id == id,
+        Submission.downloaded is False).all()
     return bulk_download(sid, docs)
 
 
@@ -497,7 +521,10 @@ def bulk_delete(sid, items_selected):
         db_session.delete(item)
     db_session.commit()
 
-    flash("Submission{} deleted.".format("s" if len(items_selected) > 1 else ""), "notification")
+    flash(
+        "Submission{} deleted.".format(
+            "s" if len(items_selected) > 1 else ""),
+        "notification")
     return redirect(url_for('col', sid=sid))
 
 
@@ -511,9 +538,12 @@ def bulk_download(sid, items_selected):
             item.downloaded = True
     db_session.commit()
 
-    zf = store.get_bulk_archive(filenames, zip_directory=source.journalist_filename)
-    attachment_filename = "{}--{}.zip".format(source.journalist_filename,
-                                              datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+    zf = store.get_bulk_archive(
+        filenames,
+        zip_directory=source.journalist_filename)
+    attachment_filename = "{}--{}.zip".format(
+        source.journalist_filename,
+        datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)

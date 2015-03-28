@@ -91,7 +91,9 @@ class TestJournalist(TestCase):
             password=self.admin_user_pw,
             token=self.admin_user.totp.now()),
             follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(url_for('admin_index'), "Admin")
+        admin_link = '<a href="{}">{}</a>'.format(
+            url_for('admin_index'),
+            "Admin")
         self.assertIn(admin_link, res.data)
 
     def _login_user(self):
