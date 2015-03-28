@@ -80,22 +80,27 @@ def start():
                                  '/bin/bash',
                                  '--',
                                  '-c',
-                                 'cd /vagrant/securedrop && python journalist.py'])
+                                 ('cd /vagrant/securedrop && '
+                                  'python journalist.py')])
 
     if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
+        print ("The web application is running, and available "
+               "on your Vagrant host at the following addresses:")
         print "Source interface:     localhost:8080"
         print "Journalist interface: localhost:8081"
     else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
+        print ("The web application is already running.  Please use "
+               "'./manage.py restart' to stop and start again.")
 
 
 def stop():
     import config
     source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile',
+         config.SOURCE_PIDFILE])
     journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
+        ['start-stop-daemon', '--stop', '--quiet', '--pidfile',
+         config.JOURNALIST_PIDFILE])
     if source_rc + journo_rc == 0:
         print "The web application has been stopped."
     else:
@@ -210,10 +215,15 @@ def add_admin():
             qr.add_data(uri)
             qr.print_ascii(tty=sys.stdout.isatty())
             print
-            print "If the barcode does not render correctly, try changing your terminal's font, (Monospace for Linux, Menlo for OS X)."
-            print "If you are using iTerm on Mac OS X, you will need to change the \"Non-ASCII Font\", which is your profile's Text settings."
+            print ("If the barcode does not render correctly, "
+                   "try changing your terminal's font, "
+                   "(Monospace for Linux, Menlo for OS X).")
+            print ("If you are using iTerm on Mac OS X, you will "
+                   "need to change the \"Non-ASCII Font\", "
+                   "which is your profile's Text settings.")
             print
-            print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+            print (("Can't scan the barcode? Enter the shared secret "
+                   "manually: {}").format(admin.formatted_otp_secret))
             print
 
 

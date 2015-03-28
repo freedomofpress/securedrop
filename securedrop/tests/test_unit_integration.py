@@ -84,7 +84,8 @@ class TestIntegration(unittest.TestCase):
         common.shared_teardown()
 
     def test_submit_message(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """When a source creates an account, test that a
+           new entry appears in the journalist interface"""
         test_msg = "This is a test message."
 
         with self.source_app as source_app:
@@ -162,7 +163,8 @@ class TestIntegration(unittest.TestCase):
         )
 
     def test_submit_file(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """When a source creates an account, test that
+           a new entry appears in the journalist interface"""
         test_file_contents = "This is a test file."
         test_filename = "test.txt"
 
@@ -388,7 +390,8 @@ class TestIntegration(unittest.TestCase):
                 self.assertNotIn("You have received a reply.", rv.data)
             else:
                 self.assertIn(
-                    "You have received a reply. For your security, please delete all replies when you're done with them.",
+                    ("You have received a reply. For your security, "
+                     "please delete all replies when you're done with them."),
                     rv.data)
                 self.assertIn(test_reply, rv.data)
                 soup = BeautifulSoup(rv.data)
@@ -476,7 +479,8 @@ class TestIntegration(unittest.TestCase):
             any([os.path.exists(store.path(sid)) for sid in checkbox_values])))
 
     def test_filenames(self):
-        """Test pretty, sequential filenames when source uploads messages and files"""
+        """Test pretty, sequential filenames when
+           source uploads messages and files"""
         # add a source and submit stuff
         self.source_app.get('/generate')
         self.source_app.post('/create')
@@ -557,7 +561,8 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
-            "The following file has been selected for <strong>permanent deletion</strong>",
+            ("The following file has been selected for "
+             "<strong>permanent deletion</strong>"),
             rv.data)
 
         # confirm delete
@@ -570,8 +575,11 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("Submission deleted.", rv.data)
 
         # Make sure the files were deleted from the filesystem
+        doesExist = []
+        for doc_name in checkbox_values:
+            doesExist.append(os.path.exists(store.path(sid, doc_name)))
         self._wait_for(lambda: self.assertFalse(
-            any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
+            any(doesExist)))
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

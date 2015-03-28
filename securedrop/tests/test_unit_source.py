@@ -36,7 +36,8 @@ class TestSource(TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_re = (r'<p id="codename">'
+                       '(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>')
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -150,7 +151,8 @@ class TestSource(TestCase):
         rv = self._dummy_submission()
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
+            ("Thanks for submitting something to SecureDrop! "
+             "Please check back later for replies."),
             rv.data)
 
     def test_submit_message(self):

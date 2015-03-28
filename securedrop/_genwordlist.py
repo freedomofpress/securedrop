@@ -1,6 +1,8 @@
 """
-Generates `wordlist` from The English Open Word List http://dreamsteep.com/projects/the-english-open-word-list.html
-Usage: Unzip the CSV files from the archive with the command `unzip EOWL-v1.1.2.zip EOWL-v1.1.2/CSV\ Format/*.csv`
+Generates `wordlist` from The English Open Word List:
+    http://dreamsteep.com/projects/the-english-open-word-list.html
+Usage: Unzip the CSV files from the archive with the command
+    `unzip EOWL-v1.1.2.zip EOWL-v1.1.2/CSV\ Format/*.csv`
 """
 import re
 import string

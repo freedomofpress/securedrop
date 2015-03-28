@@ -30,7 +30,8 @@ class TestStore(unittest.TestCase):
             store.verify(config.STORE_DIR + "_backup")
 
     def test_get_zip(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        sid = ('EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS'
+               '2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R')
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()

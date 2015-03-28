@@ -71,7 +71,8 @@ def login_required(f):
 
 
 def ignore_static(f):
-    """Only executes the wrapped function if we're not loading a static resource."""
+    """Only executes the wrapped function
+       if we're not loading a static resource."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if request.path.startswith('/static'):
@@ -110,8 +111,8 @@ def setup_g():
 @app.before_request
 @ignore_static
 def check_tor2web():
-        # ignore_static here so we only flash a single message warning about Tor2Web,
-        # corresponding to the intial page load.
+        # ignore_static here so we only flash a single message warning about
+        # Tor2Web, corresponding to the intial page load.
     if 'X-tor2web' in request.headers:
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
@@ -137,8 +138,9 @@ def generate_unique_codename(num_words):
 
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
-    # Popping this key prevents errors when a logged in user returns to /generate.
-    # TODO: is this the best experience? A logged in user will be automatically
+    # Popping this key prevents errors when a logged in user returns to
+    # /generate.
+    # TODO:is this the best experience? A logged in user will be automatically
     # logged out if they navigate to /generate by accident, which could be
     # confusing. It might be better to instead redirect them to the lookup
     # page, or inform them that they're logged in.
@@ -248,7 +250,8 @@ def normalize_timestamps(sid):
         rc = subprocess.call(args)
         if rc != 0:
             app.logger.warning(
-                "Couldn't normalize submission timestamps (touch exited with %d)" %
+                ("Couldn't normalize submission "
+                 "timestamps (touch exited with %d)") %
                 rc)
 
 
@@ -287,7 +290,8 @@ def submit():
 
     if first_submission:
         flash(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
+            ("Thanks for submitting something to SecureDrop! "
+             "Please check back later for replies."),
             "notification")
     else:
         if msg:

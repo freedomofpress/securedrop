@@ -13,11 +13,12 @@ import re
 import zipfile
 from datetime import datetime
 import functools
-# Import the application config.py file
-sys.path.append("/var/www/securedrop")
 import config
 import gnupg
 import subprocess
+
+# Import the application config.py file
+sys.path.append("/var/www/securedrop")
 
 TOR_SERVICES = "/var/lib/tor/services"
 TOR_CONFIG = "/etc/tor/torrc"
