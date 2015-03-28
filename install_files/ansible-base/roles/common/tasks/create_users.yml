@@ -18,3 +18,18 @@
     shell=/bin/bash
     groups=sudo,ssh
   with_items: ssh_users
+
+- name: copy SecureDrop bashrc additions
+  copy:
+    src: bashrc_securedrop_additions
+    dest: /etc/bashrc.securedrop_additions
+    owner: root
+    group: root
+    mode: 0644
+
+- name: add line to each users bashrc to source the SecureDrop additions
+  lineinfile:
+    dest: "/home/{{ item }}/.bashrc"
+    line: ". /etc/bashrc.securedrop_additions"
+    insertbefore: BOF
+  with_items: ssh_users
