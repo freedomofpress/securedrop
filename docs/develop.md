@@ -192,7 +192,7 @@ Compression yes # this compresses the SSH traffic to make it less slow over Tor
 ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
 ```
 
-This proxies all requests to *.onion addresses through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
+This proxies all requests to `*.onion` addresses through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
 
 ```
 ssh <username>@examplenxu7x5ifm.onion
