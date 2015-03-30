@@ -86,7 +86,7 @@ def migrate_database(backup):
     # Note: Must be called after /var/lib/securedrop/store is populated
     from crypto_util import displayid
     # Generate a list of the filesystem ids that have journalist designations
-    # store din the database, since they are already known and should not be
+    # stored in the database, since they are already known and should not be
     # generated from the filesystem id
     already_processed = set([source[0] for source in sources])
     for fs_id in os.listdir("/var/lib/securedrop/store"):
@@ -220,7 +220,7 @@ def migrate_database(backup):
             db_session.add(db_entry)
             db_session.commit()
 
-    # chown the databse file to the securedrop user
+    # chown the database file to the securedrop user
     subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
 
 
