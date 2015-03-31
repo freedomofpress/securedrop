@@ -64,5 +64,8 @@
 - name: remove remaining kernel headers
   command: apt-get -y remove '^linux-headers-.*'
 
+- name: mark GRUB2 as manually installed so its not removed
+  command: apt-mark manual grub-pc
+
 - name: cleanup any dependencies left
   command: apt-get -y autoremove
