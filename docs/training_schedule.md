@@ -20,7 +20,7 @@ Time: 2 hours
 
 Participants: journalists, editors, SecureDrop admins, OSSEC alert recipients and anyone else interested
 
-* Go over the SecureDrop FAQs
+* Go over the SecureDrop [FAQs](https://securedrop.hackpad.com/SecureDrop-FAQ-R4CoEFS75Yk)
 * Go over the SecureDrop environment diagrams
 * Importance of the landing page security and Twitter feedback
 * Demo the source submission process
@@ -32,7 +32,7 @@ Participants: journalists, editors, SecureDrop admins, OSSEC alert recipients an
 * Show example of an OSSEC alert, briefly cover what it does
 * Show example of 'is it up?' Nagios monitoring alerts for Source Interface
 * Explain why the Document Interface does not have 'is it up?' monitoring
-* Discuss vanity onion URLs with Shallot and Scallion
+* Discuss vanity onion URLs with [Shallot](https://github.com/katmagic/Shallot) and [Scallion](https://github.com/lachesis/scallion)
 * How to brand the Source and Document Interface
 * Physical security of servers and SVS
 * How to securely publicize the organization's Source Interface Tor URL
