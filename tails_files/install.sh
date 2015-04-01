@@ -3,8 +3,8 @@
 
 # check for root
 if [[ $EUID -ne 0 ]]; then
-	echo "This script must be run as root" 1>&2
-	exit 1
+  echo "This script must be run as root" 1>&2
+  exit 1
 fi
 
 # set paths and variables
@@ -22,21 +22,21 @@ SSH_ALIASES=false
 
 # check for persistence
 if [ ! -d "$TAILSCFG" ]
-	echo "This script must be run on Tails with a persistent volume." 1>&2
-	exit 1
+  echo "This script must be run on Tails with a persistent volume." 1>&2
+  exit 1
 fi
 
 # check for SecureDrop git repo
 if [ ! -d "$ANSIBLE" ]
-	echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
-	exit 1
+  echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
+  exit 1
 fi
 
 # detect whether admin or journalist
 if [ -f $ANSIBLE/app-document-aths ]; then
-	ADMIN=true
+  ADMIN=true
 else
-	ADMIN=false
+  ADMIN=false
 fi
 
 mkdir -p $INSTALL_DIR
@@ -54,15 +54,15 @@ cp .xsessionrc $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
 
 if $ADMIN; then
-	DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
-	SOURCE=`cat $ANSIBLE/app-source-ths`
-	APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
-	MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
-	cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
-	if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
-		# create SSH host aliases and install them
-		SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
-		cat > $INSTALL_DIR/ssh_config <<EOL
+  DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
+  SOURCE=`cat $ANSIBLE/app-source-ths`
+  APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
+  MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
+  cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
+  if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
+    # create SSH host aliases and install them
+    SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
+    cat > $INSTALL_DIR/ssh_config <<EOL
 Host app
   Hostname $APPSSH
   User $SSHUSER
@@ -70,17 +70,17 @@ Host mon
   Hostname $MONSSH
   User $SSHUSER
 EOL
-		chown amnesia:amnesia $INSTALL_DIR/ssh_config
-		chmod 600 $INSTALL_DIR/ssh_config
-		cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
-		SSH_ALIASES=true
+    chown amnesia:amnesia $INSTALL_DIR/ssh_config
+    chmod 600 $INSTALL_DIR/ssh_config
+    cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
+    SSH_ALIASES=true
   fi
   # set ansible to auto-install
   if ! grep -q 'ansible' "$TAILSCFG/live-additional-software.conf"; then
-		echo "ansible" >> $TAILSCFG/live-additional-software.conf
+    echo "ansible" >> $TAILSCFG/live-additional-software.conf
   fi
 else
-# prepare torrc_additions (journalist)
+  # prepare torrc_additions (journalist)
   cp torrc_additions $ADDITIONS
 fi
 
@@ -102,11 +102,11 @@ chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! $ADMIN; then
-	HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
-	echo $HIDSERVAUTH >> $ADDITIONS
-	SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
-	SOURCE="${SRC#http://}"
-	DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
+  HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
+  echo $HIDSERVAUTH >> $ADDITIONS
+  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
+  SOURCE="${SRC#http://}"
+  DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
 fi
 
 # make the shortcuts
@@ -134,15 +134,15 @@ echo ""
 echo "The Document Interface's Tor onion URL is: http://$DOCUMENT"
 echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
 if $ADMIN; then
-	echo ""
-	echo "The App Server's SSH hidden service address is:"
-	echo $APPSSH
-	echo "The Monitor Server's SSH hidden service address is:"
-	echo $MONSSH
-	if $SSH_ALIASES; then
-		echo ""
-		echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
-	fi
+  echo ""
+  echo "The App Server's SSH hidden service address is:"
+  echo $APPSSH
+  echo "The Monitor Server's SSH hidden service address is:"
+  echo $MONSSH
+  if $SSH_ALIASES; then
+    echo ""
+    echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
+  fi
 fi
 echo ""
 exit 0
