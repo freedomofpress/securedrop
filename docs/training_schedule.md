@@ -20,7 +20,7 @@ Time: 2 hours
 
 Participants: journalists, editors, SecureDrop admins, OSSEC alert recipients and anyone else interested
 
-* Go over the SecureDrop [FAQs](https://securedrop.hackpad.com/SecureDrop-FAQ-R4CoEFS75Yk)
+* Go over the SecureDrop [FAQs](https://securedrop.org/faq)
 * Go over the SecureDrop environment diagrams
 * Importance of the landing page security and Twitter feedback
 * Demo the source submission process
