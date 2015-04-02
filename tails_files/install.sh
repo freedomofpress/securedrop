@@ -79,6 +79,11 @@ EOL
   if ! grep -q 'ansible' "$TAILSCFG/live-additional-software.conf"; then
     echo "ansible" >> $TAILSCFG/live-additional-software.conf
   fi
+  # update ansible inventory with .onion hostnames
+  if ! grep -q onion "$ANSIBLE/inventory"; then
+    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $ANSIBLE/inventory
+    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $ANSIBLE/inventory
+  fi
 else
   # prepare torrc_additions (journalist)
   cp torrc_additions $ADDITIONS
