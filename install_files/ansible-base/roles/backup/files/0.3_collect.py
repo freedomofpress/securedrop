@@ -62,7 +62,8 @@ def encrypt_zip_file(zf_fn):
     e_fn = '{}.gpg'.format(zf_fn)
 
     stream = open(zf_fn, "rb")
-    gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True', output=e_fn)
+    gpg.encrypt_file(stream, config.JOURNALIST_KEY, always_trust='True',
+                     output=e_fn)
 
 
 def main():

@@ -8,7 +8,8 @@ import getpass
 import re
 
 
-class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps):
+class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
+                                SourceNavigationSteps):
 
     def setUp(self):
         self.devnull = open('/dev/null', 'r')
@@ -21,8 +22,11 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         core_dump_base_name = '/tmp/core_dump'
         core_dump_file_name = core_dump_base_name + '.' + pid
         try:
-            subprocess.call(["sudo", "gcore", "-o", core_dump_base_name, pid], stdout=self.devnull, stderr=self.devnull)
-            subprocess.call(["sudo", "chown", getpass.getuser(), core_dump_file_name])
+            subprocess.call(["sudo", "gcore", "-o",
+                            core_dump_base_name, pid], stdout=self.devnull,
+                            stderr=self.devnull)
+            subprocess.call(["sudo", "chown", getpass.getuser(),
+                            core_dump_file_name])
             with open(core_dump_file_name, 'r') as fp:
                 return fp.read()
         finally:
@@ -40,7 +44,8 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         source_server_pid = str(self.source_process.pid)
 
         memory_dump = self._memory_dump(source_server_pid)
-        secrets_in_memory = self._num_strings_in(self.secret_message, memory_dump)
+        secrets_in_memory = self._num_strings_in(self.secret_message,
+                                                 memory_dump)
 
         self.assertLess(secrets_in_memory, 1)
 
@@ -53,6 +58,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest, SourceNavigationSteps)
         source_server_pid = str(self.source_process.pid)
 
         memory_dump = self._memory_dump(source_server_pid)
-        secrets_in_memory = self._num_strings_in(self.secret_message, memory_dump)
+        secrets_in_memory = self._num_strings_in(self.secret_message,
+                                                 memory_dump)
 
         self.assertLess(secrets_in_memory, 1)

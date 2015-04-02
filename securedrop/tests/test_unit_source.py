@@ -149,7 +149,9 @@ class TestSource(TestCase):
         self._new_codename()
         rv = self._dummy_submission()
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Thanks for submitting something to SecureDrop! Please check back later for replies.", rv.data)
+        self.assertIn(
+            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
+            rv.data)
 
     def test_submit_message(self):
         self._new_codename()
@@ -169,7 +171,12 @@ class TestSource(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn(escape('{} "{}"'.format("Thanks! We received your document", "test.txt")), rv.data)
+        self.assertIn(
+            escape(
+                '{} "{}"'.format(
+                    "Thanks! We received your document",
+                    "test.txt")),
+            rv.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -180,7 +187,12 @@ class TestSource(TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! We received your message.", rv.data)
-        self.assertIn(escape('{} "{}"'.format("Thanks! We received your document", 'test.txt')), rv.data)
+        self.assertIn(
+            escape(
+                '{} "{}"'.format(
+                    "Thanks! We received your document",
+                    'test.txt')),
+            rv.data)
 
     @patch('gzip.GzipFile')
     def test_submit_sanitizes_filename(self, gzipfile):

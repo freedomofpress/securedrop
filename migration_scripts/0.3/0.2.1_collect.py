@@ -55,7 +55,8 @@ def collect_tor_files(zf):
 
 def main():
     if len(sys.argv) <= 1:
-        print "Usage: 0.2.1_collect.py <filename>\n\n    <filename>\tLocation to save the .zip backup"
+        print ("Usage: 0.2.1_collect.py <filename>\n\n"
+               "    <filename>\tLocation to save the .zip backup")
         sys.exit(1)
 
     zf_fn = sys.argv[1]

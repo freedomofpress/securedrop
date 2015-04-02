@@ -8,6 +8,7 @@ from Crypto.Util import Counter
 
 
 class SecureTemporaryFile(_TemporaryFileWrapper):
+
     """Temporary file that is ephemerally encrypted on the fly.
 
     Since only encrypted data is ever written to disk, using this
@@ -28,10 +29,17 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
         self.create_key()
 
         self.tmp_file_id = base64.urlsafe_b64encode(os.urandom(32)).strip('=')
-        self.filepath = os.path.join(store_dir, "{}.aes".format(self.tmp_file_id))
+        self.filepath = os.path.join(
+            store_dir,
+            "{}.aes".format(
+                self.tmp_file_id))
         self.file = open(self.filepath, 'w+b')
 
-        _TemporaryFileWrapper.__init__(self, self.file, self.filepath, delete=True)
+        _TemporaryFileWrapper.__init__(
+            self,
+            self.file,
+            self.filepath,
+            delete=True)
 
     def create_key(self):
         """

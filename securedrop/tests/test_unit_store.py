@@ -14,7 +14,9 @@ os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestStore(unittest.TestCase):
+
     """The set of tests for store.py."""
+
     def setUp(self):
         common.shared_setup()
 
