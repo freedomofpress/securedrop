@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+
+* Fixes security vulnerabilty (severity=high) in access control on Document Interface (#974)
+
 ## 0.3.1
 
 * Improved installation and setup documentation (#927, #907, #903, #900)
