@@ -152,6 +152,7 @@ def admin_index():
 
 
 @app.route('/admin/add', methods=('GET', 'POST'))
+@admin_required
 def admin_add_user():
     if request.method == 'POST':
         form_valid = True
