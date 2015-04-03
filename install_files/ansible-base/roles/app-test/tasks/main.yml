@@ -8,3 +8,4 @@
 - include: dev_setup_xvfb_for_functional_tests.yml
 
 - include: security_hardening_tests.yml
+  tags: non-development
