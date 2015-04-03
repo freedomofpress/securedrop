@@ -150,11 +150,22 @@ Vagrant.configure("2") do |config|
 
   # This is needed for the Snap-ci to provision the digital ocean vps
   config.vm.provider :digital_ocean do |provider, override|
+    # In snap-ci the contents of the ssh keyfile should be saved as a `Secure
+    # Files` to the default locations /var/snap-ci/repo/id_rsa and
+    # /var/snap-ci/repo/id_rsa.pub
     override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-    provider.token = SNAP_API_TOKEN
-    provider.image = 'snapVagrantSSHkey'
+    # This values should be filled out in the snap.rb file so they don't get
+    # accidently checked in to github. The snap.rb file can also be set as a
+    # `Secure Files` in the snap-ci interface to avoid checking them into
+    # github
+    provider.token = DIGITAL_OCEAN_API_TOKEN
+    # This is the name used on digital ocean for the ssh keyfile to use
+    provider.ssh_key_name = DIGITAL_OCEAN_SSH_KEYFILE_NAME
+    # This is what image to name to use for the app and monitor server OSs on
+    # Digital Ocean.
+    provider.image = DIGITAL_OCEAN_IMAGE_NAME
     provider.region = 'nyc2'
     provider.size = '512mb'
   end
