@@ -131,19 +131,19 @@ ossec_apt_dependencies:
   - adduser
 
 agent_auth_rules:
-  - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
+  - '-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"'
+  - '-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"'
 
 ### Used by the restrict access role ###
 direct_access_rules:
-  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - '-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
 
 test_apt_dependencies:
   - firefox
