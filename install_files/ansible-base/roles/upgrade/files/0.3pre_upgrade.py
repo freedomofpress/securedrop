@@ -9,12 +9,6 @@ import sys
 import tarfile
 import traceback
 
-store_dir = "/var/lib/securedrop/store"
-db_path = "/var/lib/securedrop/db.sqlite"
-assert os.path.isfile(db_path)
-conn = sqlite3.connect(db_path)
-c = conn.cursor()
-
 def backup_app():
     tar_fn = 'backup-app-{}.tar.bz2'.format(datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))
     with tarfile.open(tar_fn, 'w:bz2') as t:
@@ -164,6 +158,12 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
+        store_dir = "/var/lib/securedrop/store"
+        db_path = "/var/lib/securedrop/db.sqlite"
+        assert os.path.isfile(db_path)
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+
         clean_large_deleted()
         upgrade_app()
     else:
