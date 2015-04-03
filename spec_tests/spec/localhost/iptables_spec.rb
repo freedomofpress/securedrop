@@ -1,10 +1,16 @@
 require 'spec_helper'
 
 describe iptables do
-  it { should have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  # These are the staging specific rules that should not be present in prod
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
+   # These rules should be present in prod and staging
   it { should have_rule(' INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT') }
   it { should have_rule(' INPUT -i lo -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to source int" -j ACCEPT') }
   it { should have_rule(' INPUT -i lo -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to document int" -j ACCEPT') }
@@ -17,10 +23,6 @@ describe iptables do
   it { should have_rule(' INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
   it { should have_rule(' INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP') }
   it { should have_rule(' INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP') }
-  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
-  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
   it { should have_rule(' OUTPUT -p tcp -m owner --uid-owner 109 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tor instance that provides ssh access" -j ACCEPT') }
   it { should have_rule(' OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner 109 -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment "SSH with rate limiting only thru tor" -j ACCEPT') }
   it { should have_rule(' OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner 109 -m state --state RELATED,ESTABLISHED -m comment --comment "SSH with rate limiting only thru tor" -j ACCEPT') }
