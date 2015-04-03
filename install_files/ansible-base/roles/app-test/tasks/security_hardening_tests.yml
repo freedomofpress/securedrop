@@ -1,0 +1,6 @@
+---
+- name: install paxtest for running buffer overflow protection auditing
+  apt: name=paxtest state=latest
+
+#- name: install lynix for system security hardening auditing
+#  apt: name=lynis state=latest
