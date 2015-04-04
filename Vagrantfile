@@ -157,8 +157,6 @@ Vagrant.configure("2") do |config|
     override.ssh.username = "vagrant"
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-    override.vm.provision "shell",
-        inline: "git clone #{SNAP_CI_REPO_TO_CLONE} /vagrant"
     # This values should be filled out in the snap.rb file so they don't get
     # accidently checked in to github. The snap.rb file can also be set as a
     # `Secure Files` in the snap-ci interface to avoid checking them into
