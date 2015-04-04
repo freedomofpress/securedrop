@@ -21,13 +21,13 @@ ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 SSH_ALIASES=false
 
 # check for persistence
-if [ ! -d "$TAILSCFG" ]
+if [ ! -d "$TAILSCFG" ]; then
   echo "This script must be run on Tails with a persistent volume." 1>&2
   exit 1
 fi
 
 # check for SecureDrop git repo
-if [ ! -d "$ANSIBLE" ]
+if [ ! -d "$ANSIBLE" ]; then
   echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
   exit 1
 fi
