@@ -118,14 +118,19 @@ fi
 echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.desktop
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
 
-# copy launchers to desktop
+# copy launchers to desktop and menu
 cp -p $INSTALL_DIR/document.desktop $DESKTOP
 cp -p $INSTALL_DIR/source.desktop $DESKTOP
+cp -p $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
+cp -p $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
-cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
+sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
 cp -p $DESKTOP/document.desktop $DOTFILES/Desktop
+cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
+cp -p $DESKTOP/document.desktop $DOTFILES/.local/share/applications
+cp -p $DESKTOP/source.desktop $DOTFILES/.local/share/applications
 cp -p $INSTALL_DIR/.xsessionrc $DOTFILES
 
 # set torrc and reload Tor
