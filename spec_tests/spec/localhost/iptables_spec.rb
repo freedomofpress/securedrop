@@ -2,22 +2,28 @@ require 'spec_helper'
 
 describe iptables do
   # These are the staging specific rules that should not be present in prod
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
 
   # These rules should only exist when the while the ossec agent is registering
   # with the OSSEC server and then should be removed prior to the playbook
   # finishing
-  it { should_not have_rule(' OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"'
-  it { should_not have_rule(' INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"'
+  # TODO: The Vagrantfile virtualbox static IP was hardcoded into the two rules
+  # below. This will need to be fixed. Possibly with using something like
+  # https://github.com/volanja/ansible_spec Using the values for IP addresses
+  # from the ansible inventory should cover most use cases. (except inventories
+  # with just the *.onion address.
+  it { should_not have_rule(' OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
+  it { should_not have_rule(' INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
 
   # These rules should be present in prod and staging
+  # TODO: There are also hardcoded IP addresses in this section.
   it { should have_rule(' INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT') }
   it { should have_rule(' INPUT -i lo -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to source int" -j ACCEPT') }
   it { should have_rule(' INPUT -i lo -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to document int" -j ACCEPT') }
