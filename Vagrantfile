@@ -1,12 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Added snap.rb file holds the digital ocean api token values
-# so we do not accidently check them into git
-
-require_relative 'snap.rb'
-include MyVars
-
 Vagrant.configure("2") do |config|
 
   # Vagrant 1.7.0+ removes the insecure_private_key by default
@@ -23,7 +17,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
-      ansible.skip_tags = [ "non-development" ]
+      ansible.skip_tags = ENV['DEVELOPMENT_SKIP_TAGS']
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -85,7 +79,7 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags =  [ "install_local_pkgs" ]
+      ansible.skip_tags =  ENV['STAGING_SKIP_TAGS']
     end
   end
 
@@ -122,7 +116,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
-      ansible.skip_tags = [ "validate" ]
+      ansible.skip_tags = ENV['PROD_SKIP_TAGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
@@ -136,7 +130,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
-      #ansible.skip_tags = [ "ossec" ]
+      ansible.skip_tags = ENV['BUILD_SKIP_TAGS']
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "build"
@@ -157,17 +151,11 @@ Vagrant.configure("2") do |config|
     override.ssh.username = "vagrant"
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-    # This values should be filled out in the snap.rb file so they don't get
-    # accidently checked in to github. The snap.rb file can also be set as a
-    # `Secure Files` in the snap-ci interface to avoid checking them into
-    # github
-    provider.token = DIGITAL_OCEAN_API_TOKEN
-    # This is the name used on digital ocean for the ssh keyfile to use
-    provider.ssh_key_name = DIGITAL_OCEAN_SSH_KEYFILE_NAME
-    # This is what image to name to use for the app and monitor server OSs on
-    # Digital Ocean.
-    provider.image = DIGITAL_OCEAN_IMAGE_NAME
-    provider.region = 'nyc2'
-    provider.size = '512mb'
+    provider.token = ENV['DO_API_TOKEN']
+    provider.ssh_key_name = ENV['DO_SSH_KEYFILE_NAME']
+    provider.image = ENV['DO_IMAGE_NAME']
+    provider.setup = 'true'
+    provider.region = ENV['DO_REGION']
+    provider.size = ENV['DO_SIZE']
   end
 end

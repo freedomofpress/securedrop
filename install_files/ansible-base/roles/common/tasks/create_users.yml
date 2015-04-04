@@ -7,10 +7,12 @@
     group=root
     mode=0440
   register: sudoers_st
+  tags: sudoers
 
 - name: ensure sudoers file is installed if syntax check passes
   shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
   when: sudoers_st.changed
+  tags: sudoers
 
 - name: ensure secureDrop admin user accounts exist
   user:
