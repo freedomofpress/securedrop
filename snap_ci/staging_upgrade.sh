@@ -69,7 +69,7 @@ APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 
 # Provision the hosts in parallel
-snap-wait 10 vagrant provision /staging/
+vagrant provision /staging/
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
