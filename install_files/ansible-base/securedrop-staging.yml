@@ -21,7 +21,7 @@
   roles:
     - { role: common-mon, tags: [ 'tor' ] }
     # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs', 'mon_install_local_pkgs' ] }
     - ossec_server
 
   sudo: yes
@@ -40,7 +40,7 @@
     # being present.
     - { role: common-app, tags: [ 'tor' ] }
     # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
+    - { role: install_local_pkgs, tags: [ 'install_local_pkgs', 'app_install_local_pkgs' ] }
     - { role: ossec_agent, tags: [ 'ossec' ] }
     - app
     - { role: app-test, tags: [ 'app-test' ] }

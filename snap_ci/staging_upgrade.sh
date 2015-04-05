@@ -17,7 +17,7 @@
 # DO_IMAGE_NAME {HOSTNAME}-{TAGGED-VERSION}
 # DO_REGION nyc2
 # DO_SIZE 1gb
-# DEVELOPMENT_SKIP_TAGS aa-complain,grsec,sudoers
+# DEVELOPMENT_SKIP_TAGS mon_install_local_pkgs,aa-complain,grsec,sudoers
 # DO_API_TOKEN ***
 #
 # Snap-CI Secure Files required:
@@ -30,10 +30,10 @@
 # The staging-specific.yml config file should have the sasl auth creds, OSSEC
 # alert info, and use the following environment variables to populate the
 # app and mon ip address.
-# monitor_ip: $ENV('APP_IP')
+# monitor_ip: "{{ lookup('env', 'APP_IP') }}"
 # monitor_hostname: "mon-staging"
 # app_hostname: "app-staging"
-# app_ip: $ENV('MON_IP')
+# app_ip: "{{ lookup('env', 'MON_IP') }}"
 
 
 # Build new deb packages based on current repo
@@ -65,8 +65,10 @@ DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
 # staging-specific.yml.
 # TODO: This will only work when direct access is enabled. Once the inventory
 # file is switched to the tor onion addresses then this will be the wrong value
-APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+APP_PUBLIC_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+echo "APP_IP=$APP_PUBLIC_IP" >> .env
+MON_PUBLIC_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+echo "MON_IP=$MON_PUBLIC_IP" >> .env
 
 # Provision the hosts in parallel
 vagrant provision /staging/

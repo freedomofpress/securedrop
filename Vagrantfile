@@ -79,7 +79,7 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags =  ENV['STAGING_SKIP_TAGS']
+      ansible.skip_tags = ENV['STAGING_SKIP_TAGS']
     end
   end
 

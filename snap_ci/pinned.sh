@@ -9,6 +9,7 @@
 # TODO: Check for vagrant plugins before installing them.
 vagrant plugin install vagrant-digitalocean --plugin-version '0.7.0'
 vagrant plugin install vagrant-hostmanager
+vagrant plugin install vagrant-env
 [[ -f ${SNAP_CACHE_DIR}/digital_ocean.box ]] || wget https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box -O ${SNAP_CACHE_DIR}/digital_ocean.box
 # TODO: Check to see if the box was already added before doing again.
 vagrant box add digital_ocean ${SNAP_CACHE_DIR}/digital_ocean.box --force
