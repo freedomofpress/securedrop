@@ -47,7 +47,8 @@ vagrant provision build
 # build VM to the build dir in the repo. Configure that directory as an
 # `Artifact` in snap-ci so the deb packages will be available to the other
 # snap-ci stages.
-ANSIBLE_INVENTORY='.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory'
+# TODO: test for existence
+ANSIBLE_INVENTORY='.vagrant/provisioners/ansible/inventory'
 BUILD_IP=$(grep -r '^build' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 scp -r -i ./id_rsa vagrant@$BUILD_IP:/vagrant/build .
 
@@ -65,10 +66,8 @@ DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
 # staging-specific.yml.
 # TODO: This will only work when direct access is enabled. Once the inventory
 # file is switched to the tor onion addresses then this will be the wrong value
-APP_PUBLIC_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-echo "APP_IP=$APP_PUBLIC_IP" >> .env
-MON_PUBLIC_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-echo "MON_IP=$MON_PUBLIC_IP" >> .env
+APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 
 # Provision the hosts in parallel
 vagrant provision /staging/
