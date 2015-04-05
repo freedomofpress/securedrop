@@ -8,7 +8,7 @@
 #
 # Requires the pinned commands to have already ran
 # /bin/bash ./snap-ci/pinned.sh
-# /bin/bash ./snap-ci/staging-upgrade.sh
+# snap-wait 20 /bin/bash ./snap-ci/staging-upgrade.sh
 #
 # Snap-CI environment variables required
 # - Ensure you use the Secure Variable option for the api token value.
@@ -58,8 +58,8 @@ vagrant destroy /staging/ -f
 # Up the hosts separately so you can pass each droplet a specific image name as
 # a var on cli. And so you can extract the DO dynamic IP address to use in the
 # `staging-specific.yml` config before provisioning.
-snap-wait 10 DO_IMAGE_NAME=$APP_IMAGE_NAME vagrant up app-staging --no-provision
-snap-wait 10 DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
+DO_IMAGE_NAME=$APP_IMAGE_NAME vagrant up app-staging --no-provision
+DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
 
 # Register the ip addresses for app-staging and mon-staging vars to use in the
 # staging-specific.yml.

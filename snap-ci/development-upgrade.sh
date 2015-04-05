@@ -7,7 +7,7 @@
 #
 # Requires the pinned commands to have already ran
 # /bin/bash ./snap-ci/pinned.sh
-# /bin/bash ./snap-ci/development-upgrade.sh
+# snap-wait 20 /bin/bash ./snap-ci/development-upgrade.sh
 
 # Snap-CI environment variables required:
 # vagrant_rpm vagrant_1.7.2_x86_64.rpm
@@ -28,8 +28,8 @@
 vagrant destroy development -f
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
-snap-wait 10 vagrant up development --no-provision
-snap-wait 10 vagrant provision development
+vagrant up development --no-provision
+vagrant provision development
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
