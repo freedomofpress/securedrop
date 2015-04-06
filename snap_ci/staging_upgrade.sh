@@ -47,8 +47,7 @@ vagrant provision build
 # build VM to the build dir in the repo. Configure that directory as an
 # `Artifact` in snap-ci so the deb packages will be available to the other
 # snap-ci stages.
-# TODO: test for existence
-ANSIBLE_INVENTORY='.vagrant/provisioners/ansible/inventory'
+ANSIBLE_INVENTORY='.vagranv/provisioners/ansible/inventory/vagrant_ansible_inventory'
 BUILD_IP=$(grep -r '^build' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 scp -r -i ./id_rsa vagrant@$BUILD_IP:/vagrant/build .
 
