@@ -15,7 +15,7 @@
 # vagrant_rpm vagrant_1.7.2_x86_64.rpm
 # DO_SSH_KEYFILE_NAME Vagrant
 # DO_IMAGE_NAME {HOSTNAME}-{TAGGED-VERSION}
-# DO_REGION nyc2
+# DO_REGION nyc3
 # DO_SIZE 1gb
 # DEVELOPMENT_SKIP_TAGS mon_install_local_pkgs,aa-complain,grsec,sudoers
 # DO_API_TOKEN ***
@@ -35,6 +35,9 @@
 # app_hostname: "app-staging"
 # app_ip: "{{ lookup('env', 'MON_IP') }}"
 
+# If the previous pipleing failed the droplets wouldn't of been destroyed.
+# Destroy them so you start with a clean tagged version from a snapshot.
+vagrant destroy /staging/ -f
 
 # Build new deb packages based on current repo
 # The build vm does not get destroyed to save provisioning time.
@@ -50,10 +53,6 @@ vagrant provision build
 ANSIBLE_INVENTORY='.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory'
 BUILD_IP=$(grep -r '^build' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 scp -r -i ./id_rsa vagrant@$BUILD_IP:/vagrant/build .
-
-# If the previous pipleing failed the droplets wouldn't of been destroyed.
-# Destroy them so you start with a clean tagged version from a snapshot.
-vagrant destroy /staging/ -f
 
 # Up the hosts separately so you can pass each droplet a specific image name as
 # a var on cli. And so you can extract the DO dynamic IP address to use in the
@@ -73,9 +72,7 @@ STAGING_TAGS='gather_facts' vagrant provision /staging/
 # TODO: This will only work when direct access is enabled. Once the inventory
 # file is switched to the tor onion addresses then this will be the wrong value
 APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-export APP_IP
 MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-export MON_IP
 
 # Provision the hosts in parallel
 #vagrant provision /staging/
