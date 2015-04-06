@@ -75,7 +75,7 @@ APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 
 # Provision the hosts in parallel
-#vagrant provision /staging/
+vagrant provision /staging/
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
@@ -85,4 +85,4 @@ cd /var/snap-ci/repo/spec_tests/
 
 # Destroy the droplets since you will want to start builds with a fresh tagged
 # release and to save money.
-#vagrant destroy /staging/ -f
+vagrant destroy /staging/ -f
