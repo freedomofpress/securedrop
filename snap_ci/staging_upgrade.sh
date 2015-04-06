@@ -60,7 +60,7 @@ vagrant destroy /staging/ -f
 # `staging-specific.yml` config before provisioning.
 DO_IMAGE_NAME=$APP_IMAGE_NAME vagrant up app-staging --no-provision
 DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
-STAGING_TAGS='gather_facts' vagrant provision /staigng/
+STAGING_TAGS='gather_facts' vagrant provision /staging/
 
 # TODO: cleanup
 # Running a a single ansible task so that ansible populates the inventory file.
