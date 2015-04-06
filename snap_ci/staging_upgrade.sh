@@ -67,15 +67,12 @@ DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
 # TODO: This will only work when direct access is enabled. Once the inventory
 # file is switched to the tor onion addresses then this will be the wrong value
 APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-echo "APP_IP" >> .env
+export APP_IP
 MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-echo "MON_IP" >> .env
-
-echo $APP_IP
-echo $MON_IP
+export MON_IP
 
 # Provision the hosts in parallel
-vagrant provision /staging/
+#vagrant provision /staging/
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
@@ -85,4 +82,4 @@ cd /var/snap-ci/repo/spec_tests/
 
 # Destroy the droplets since you will want to start builds with a fresh tagged
 # release and to save money.
-vagrant destroy /staging/ -f
+#vagrant destroy /staging/ -f
