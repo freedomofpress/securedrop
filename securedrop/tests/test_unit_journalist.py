@@ -116,6 +116,42 @@ class TestJournalist(TestCase):
         self.assert200(res)
         self.assertIn("Admin Interface", res.data)
 
+    def test_admin_authorization_for_gets(self):
+        admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
+            url_for('admin_edit_user', user_id=1)]
+
+        self._login_user()
+        for admin_url in admin_urls:
+            res = self.client.get(admin_url)
+            self.assert_status(res, 302)
+
+    def test_admin_authorization_for_posts(self):
+        admin_urls = [url_for('admin_reset_two_factor_totp'),
+            url_for('admin_reset_two_factor_hotp'), url_for('admin_add_user', user_id=1),
+            url_for('admin_new_user_two_factor'), url_for('admin_reset_two_factor_totp'),
+            url_for('admin_reset_two_factor_hotp'), url_for('admin_edit_user', user_id=1),
+            url_for('admin_delete_user', user_id=1)]
+        self._login_user()
+        for admin_url in admin_urls:
+            res = self.client.post(admin_url)
+            self.assert_status(res, 302)
+
+    def test_user_authorization_for_gets(self):
+        urls = [url_for('index'), url_for('col', sid='1'),
+                url_for('doc', sid='1', fn='1')]
+
+        for url in urls:
+            res = self.client.get(url)
+            self.assert_status(res, 302)
+
+    def test_user_authorization_for_posts(self):
+        urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
+                url_for('col_process'), url_for('col_delete_single', sid='1'),
+                url_for('reply'), url_for('generate_code'), url_for('bulk')]
+        for url in urls:
+            res = self.client.post(url)
+            self.assert_status(res, 302)
+
     # TODO: more tests for admin interface
 
     def test_bulk_download(self):
