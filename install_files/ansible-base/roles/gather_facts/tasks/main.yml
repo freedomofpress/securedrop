@@ -1,0 +1,3 @@
+---
+- name: run any task to just to populate inventory file
+  command: "echo hello"
