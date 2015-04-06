@@ -59,20 +59,21 @@ scp -r -i ./id_rsa vagrant@$BUILD_IP:/vagrant/build .
 # `staging-specific.yml` config before provisioning.
 DO_IMAGE_NAME=$APP_IMAGE_NAME vagrant up app-staging --no-provision
 DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
-STAGING_TAGS='gather_facts' vagrant provision /staging/
-
 # TODO: cleanup
 # Running a a single ansible task so that ansible populates the inventory file.
 # Need the inventory file populated so we can use the IP address in the
 # playbook.
 # will need to refactor the playbooks so this is not needed.
+STAGING_TAGS='gather_facts' vagrant provision /staging/
+# Unset tags to run 
+STAGING_TAGS=''
 
 # Register the ip addresses for app-staging and mon-staging vars to use in the
 # staging-specific.yml.
 # TODO: This will only work when direct access is enabled. Once the inventory
 # file is switched to the tor onion addresses then this will be the wrong value
-APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
-MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+export APP_IP=$(grep -r '^app-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
+export MON_IP=$(grep -r '^mon-staging' $ANSIBLE_INVENTORY | awk -F'[= ]' '{print $3}')
 
 # Provision the hosts in parallel
 vagrant provision /staging/
@@ -85,4 +86,4 @@ cd /var/snap-ci/repo/spec_tests/
 
 # Destroy the droplets since you will want to start builds with a fresh tagged
 # release and to save money.
-vagrant destroy /staging/ -f
+#vagrant destroy /staging/ -f
