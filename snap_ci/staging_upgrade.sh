@@ -60,6 +60,13 @@ vagrant destroy /staging/ -f
 # `staging-specific.yml` config before provisioning.
 DO_IMAGE_NAME=$APP_IMAGE_NAME vagrant up app-staging --no-provision
 DO_IMAGE_NAME=$MON_IMAGE_NAME vagrant up mon-staging --no-provision
+STAGING_TAGS='gather_facts' vagrant provision /staigng/
+
+# TODO: cleanup
+# Running a a single ansible task so that ansible populates the inventory file.
+# Need the inventory file populated so we can use the IP address in the
+# playbook.
+# will need to refactor the playbooks so this is not needed.
 
 # Register the ip addresses for app-staging and mon-staging vars to use in the
 # staging-specific.yml.

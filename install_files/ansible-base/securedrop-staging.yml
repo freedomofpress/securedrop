@@ -1,5 +1,9 @@
 ---
 - hosts: [ 'mon-staging', 'app-staging' ]
+  roles:
+    - { role: gather_facts, tags: [ 'gather_facts' ] }
+
+- hosts: [ 'mon-staging', 'app-staging' ]
 
   vars_files:
     - group_vars/securedrop.yml
