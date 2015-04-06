@@ -58,7 +58,7 @@ if $ADMIN; then
   SOURCE=`cat $ANSIBLE/app-source-ths`
   APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
   MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
-  cat $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths >> $ADDITIONS
+  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $ADDITIONS
   if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
     # create SSH host aliases and install them
     SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
