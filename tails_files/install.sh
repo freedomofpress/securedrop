@@ -14,20 +14,20 @@ INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 SCRIPT_BIN=$INSTALL_DIR/securedrop_init
-DOTFILES=/live/persistence/TailsData_unlocked/dotfiles
 TAILSCFG=/live/persistence/TailsData_unlocked
+DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 SSH_ALIASES=false
 
 # check for persistence
-if [ ! -d "$TAILSCFG" ]
+if [ ! -d "$TAILSCFG" ]; then
   echo "This script must be run on Tails with a persistent volume." 1>&2
   exit 1
 fi
 
 # check for SecureDrop git repo
-if [ ! -d "$ANSIBLE" ]
+if [ ! -d "$ANSIBLE" ]; then
   echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
   exit 1
 fi
@@ -118,14 +118,19 @@ fi
 echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.desktop
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
 
-# copy launchers to desktop
+# copy launchers to desktop and menu
 cp -p $INSTALL_DIR/document.desktop $DESKTOP
 cp -p $INSTALL_DIR/source.desktop $DESKTOP
+cp -p $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
+cp -p $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
-cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
+sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
 cp -p $DESKTOP/document.desktop $DOTFILES/Desktop
+cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
+cp -p $DESKTOP/document.desktop $DOTFILES/.local/share/applications
+cp -p $DESKTOP/source.desktop $DOTFILES/.local/share/applications
 cp -p $INSTALL_DIR/.xsessionrc $DOTFILES
 
 # set torrc and reload Tor
