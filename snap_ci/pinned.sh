@@ -22,3 +22,6 @@ sudo yum install ansible -y
 # Install serverspec dependencies
 sudo yum install ruby rubygems -y
 gem install rspec serverspec bundler rake --no-ri --no-rdoc
+
+# Export common environment variables to this stage
+source ./env_vars.sh
