@@ -1,4 +1,4 @@
-require 'spec_helper'
+#require 'spec_helper'
 
 ['apache2-mpm-worker', 'libapache2-mod-wsgi', 'libapache2-mod-xsendfile' ].each do |pkg|
   describe package(pkg) do

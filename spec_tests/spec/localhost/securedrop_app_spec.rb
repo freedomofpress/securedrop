@@ -1,4 +1,4 @@
-require 'spec_helper'
+#require 'spec_helper'
 
 ['/var/www/securedrop'].each do |myDir|
   describe file(myDir) do
