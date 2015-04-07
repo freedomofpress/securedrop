@@ -4,6 +4,10 @@
 # usefull when you only want to re-run one stage.
 #
 #
+
+# Export common environment variables to this stage
+source "$SNAPCI_CFG/env_vars.sh"
+
 export REPO_ROOT="/var/snap-ci/repo"
 export SNAPCI_CFG="$REPO_ROOT/snap_ci"
 
@@ -14,7 +18,7 @@ export SNAPCI_CFG="$REPO_ROOT/snap_ci"
 # An older version of digital_ocean plugin is used because of an issue with the
 # current version that doesn't support using snapshots.
 # https://github.com/smdahlen/vagrant-digitalocean/issues/187
-vagrant plugin install vagrant-digitalocean --plugin-version '0.7.0'
+/usr/bin/vagrant plugin install vagrant-digitalocean --plugin-version '0.7.0'
 vagrant plugin install vagrant-hostmanager
 [[ -f ${SNAP_CACHE_DIR}/digital_ocean.box ]] || wget https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box -O ${SNAP_CACHE_DIR}/digital_ocean.box
 # TODO: Check to see if the box was already added before doing again.
@@ -27,5 +31,3 @@ sudo yum install ansible -y
 sudo yum install ruby rubygems -y
 gem install rspec serverspec bundler rake --no-ri --no-rdoc
 
-# Export common environment variables to this stage
-source "$SNAPCI_CFG/env_vars.sh"
