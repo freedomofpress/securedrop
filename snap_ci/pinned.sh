@@ -6,10 +6,7 @@
 #
 # Cache and install Vagrant
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
-#[[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
-# Temporarily forcing install of vagrant because check above was passing falsely
-# TODO: fix vagrant check using `hash`
-sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
+[[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
 # TODO: Check for vagrant plugins before installing them.
 # An older version of digital_ocean plugin is used because of an issue with the
 # current version that doesn't support using snapshots.
