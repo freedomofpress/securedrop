@@ -4,13 +4,6 @@
 # usefull when you only want to re-run one stage.
 #
 #
-
-# Export common environment variables to this stage
-export REPO_ROOT="/var/snap-ci/repo"
-export SNAPCI_CFG="$REPO_ROOT/snap_ci"
-source "$SNAPCI_CFG/env_vars.sh"
-
-
 # Cache and install Vagrant
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
 [[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
@@ -30,4 +23,3 @@ sudo yum install ansible -y
 # Install serverspec dependencies
 sudo yum install ruby rubygems -y
 gem install rspec serverspec bundler rake --no-ri --no-rdoc
-

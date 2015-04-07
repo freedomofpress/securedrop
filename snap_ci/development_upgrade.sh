@@ -23,10 +23,6 @@
 # USER  snap_digital_ocean      /var/snap-ci/repo/id_rsa        0600
 # USER  snap_digital_ocean.pub  /var/snap-ci/repo/id_rsa.pub    0600
 
-
-# Force sourcing of env vars again
-source "$SNAPCI_CFG/env_vars.sh"
-
 # If the previous pipleing failed the droplets wouldn't of been destroyed.
 # Destroy them so you start with a clean tagged version from a snapshot.
 vagrant destroy development -f
