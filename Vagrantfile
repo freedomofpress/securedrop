@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
       ansible.skip_tags =  [ "install_local_pkgs" ]
     end
     staging.vm.provision "serverspec" do |spec|
-      spec.pattern = 'spec_tests/spec/localhost/*_spec.rb'
+      spec.pattern = 'spec_tests/spec/app-staging/*.rb'
     end
   end
 
