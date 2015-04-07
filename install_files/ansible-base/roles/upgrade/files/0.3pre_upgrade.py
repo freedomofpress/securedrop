@@ -30,6 +30,7 @@ def secure_unlink(path):
     subprocess.check_call(['srm', '-r', path])
 
 def clean_large_deleted():
+    store_dir = "/var/lib/securedrop/store"
     for source_dir in os.listdir(store_dir):
         try:
             source = c.execute("SELECT * FROM sources WHERE filesystem_id=?",
@@ -92,6 +93,10 @@ CREATE TABLE replies (
         return ''.join([c for c in s.lower().replace(' ', '_') if c in valid_chars])
 
     store_dir = "/var/lib/securedrop/store"
+    db_path = "/var/lib/securedrop/db.sqlite"
+    assert os.path.isfile(db_path)
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
     reply_id = 1
     for source_dir in os.listdir(store_dir):
         try:
@@ -158,12 +163,6 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
-        store_dir = "/var/lib/securedrop/store"
-        db_path = "/var/lib/securedrop/db.sqlite"
-        assert os.path.isfile(db_path)
-        conn = sqlite3.connect(db_path)
-        c = conn.cursor()
-
         clean_large_deleted()
         upgrade_app()
     else:
