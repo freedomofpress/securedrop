@@ -6,10 +6,10 @@
 #
 
 # Export common environment variables to this stage
-source "$SNAPCI_CFG/env_vars.sh"
-
 export REPO_ROOT="/var/snap-ci/repo"
 export SNAPCI_CFG="$REPO_ROOT/snap_ci"
+source "$SNAPCI_CFG/env_vars.sh"
+
 
 # Cache and install Vagrant
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
