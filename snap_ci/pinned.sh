@@ -2,6 +2,10 @@
 # Pin commands to install vagrant, ansible, serverspec
 # Pinning commands will ensure that they are ran in each snap-ci stage. This is
 # usefull when you only want to re-run one stage.
+#
+#
+export REPO_ROOT="/var/snap-ci/repo"
+export SNAPCI_CFG="$REPO_ROOT/snap_ci"
 
 # Cache and install Vagrant
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
@@ -24,4 +28,4 @@ sudo yum install ruby rubygems -y
 gem install rspec serverspec bundler rake --no-ri --no-rdoc
 
 # Export common environment variables to this stage
-source ./env_vars.sh
+source "$SNAPCI_CFG/env_vars.sh"
