@@ -2,7 +2,7 @@
 # This role will upgrade 0.3pre instances to 0.3 instances.
 # It will copy and run the upgrade.py script on the app and monitor servers.
 - name: stop the apache service prior to upgrade tasks
-  service: name=apache2 status=stopped
+  service: name=apache2 state=stopped
 
 - name: copy upgrade script to servers
   copy: src="0.3pre_upgrade.py" dest="/tmp" owner="root" mode="740"
