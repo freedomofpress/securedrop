@@ -50,8 +50,8 @@ gcc -o $SCRIPT_BIN securedrop_init.c
 cp securedrop_icon.png $INSTALL_DIR
 cp document.desktop $INSTALL_DIR
 cp source.desktop $INSTALL_DIR
-cp .xsessionrc $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
+cp 99-tor-reload.sh $INSTALL_DIR
 
 if $ADMIN; then
   DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
@@ -101,8 +101,10 @@ chmod 400 $ADDITIONS
 
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png 
-chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR/.xsessionrc
-chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop $INSTALL_DIR/.xsessionrc
+chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
+chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
+chown root:root $INSTALL_DIR/99-tor-reload.sh
+chmod 755 $INSTALL_DIR/99-tor-reload.sh
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -131,7 +133,13 @@ cp -p $DESKTOP/document.desktop $DOTFILES/Desktop
 cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
 cp -p $DESKTOP/document.desktop $DOTFILES/.local/share/applications
 cp -p $DESKTOP/source.desktop $DOTFILES/.local/share/applications
-cp -p $INSTALL_DIR/.xsessionrc $DOTFILES
+
+# set up NetworkManager hook
+if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
+  echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $TAILSCFG/persistence.conf
+fi
+mkdir -p $TAILSCFG/custom-nm-hooks
+cp -p $INSTALL_DIR/99-tor-reload.sh $TAILSCFG/custom-nm-hooks
 
 # set torrc and reload Tor
 $INSTALL_DIR/securedrop_init
