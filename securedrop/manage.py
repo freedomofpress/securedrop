@@ -13,6 +13,8 @@ from time import sleep
 import qrcode
 import psutil
 
+import re
+
 from db import db_session, Journalist
 
 # We need to import config in each function because we're running the tests
