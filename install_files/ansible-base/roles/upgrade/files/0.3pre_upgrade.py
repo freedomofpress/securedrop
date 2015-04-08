@@ -29,7 +29,7 @@ def backup_mon():
 def secure_unlink(path):
     subprocess.check_call(['srm', '-r', path])
 
-def clean_large_deleted():
+def cleanup_deleted_sources(c):
     store_dir = "/var/lib/securedrop/store"
     for source_dir in os.listdir(store_dir):
         try:
@@ -53,6 +53,16 @@ def clean_large_deleted():
             print traceback.format_exc()
 
 def migrate_app_db():
+    store_dir = "/var/lib/securedrop/store"
+    db_path = "/var/lib/securedrop/db.sqlite"
+    assert os.path.isfile(db_path)
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+
+    # Before modifying the database, clean up any source directories that were
+    # left on the filesystem after the sources were deleted.
+    cleanup_deleted_sources(c)
+
     # To get CREATE TABLE from SQLAlchemy:
     # >>> import db
     # >>> from sqlalchemy.schema import CreateTable
@@ -92,11 +102,6 @@ CREATE TABLE replies (
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
         return ''.join([c for c in s.lower().replace(' ', '_') if c in valid_chars])
 
-    store_dir = "/var/lib/securedrop/store"
-    db_path = "/var/lib/securedrop/db.sqlite"
-    assert os.path.isfile(db_path)
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
     reply_id = 1
     for source_dir in os.listdir(store_dir):
         try:
@@ -163,7 +168,6 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
-        clean_large_deleted()
         upgrade_app()
     else:
         upgrade_mon()
