@@ -65,12 +65,20 @@ end
   end
 end
 
-# Are default sites disabled?
-['000-default'].each do |dissites|
-  describe command("a2query -s #{dissites}") do
-    it { should return_stderr /No site matches/ }
+# Are source and document interface sites enabled?
+['source', 'document'].each do |enabled_site|
+  describe command("a2query -s #{enabled_site}") do
+    its(:stdout) { should match /^#{enabled_site} \(enabled/ }
   end
 end
+
+# Are default sites disabled?
+['000-default'].each do |disabled_site|
+  describe command("a2query -s #{disabled_site}") do
+    its(:stderr) { should match /^No site matches #{disabled_site}/ }
+  end
+end
+ 
  
 # Are default html files removed?
 
