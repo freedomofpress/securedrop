@@ -52,10 +52,9 @@ describe file('/etc/apache2/sites-available/source.conf') do
   its(:content) { should match "ErrorLog /var/log/apache2/source-error.log" }
 end
 
-# are the correct apache modules enabled
-['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enModules|
-  describe command("a2query -m #{enModules}") do
-    it { should return_stdout /enabled by/ }
+['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enabled_module|
+  describe command("a2query -m #{enabled_module}") do
+    its(:stdout) { should match /^#{enabled_module} \(enabled/ }
   end
 end
 
