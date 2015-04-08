@@ -78,19 +78,29 @@ end
     its(:stderr) { should match /^No site matches #{disabled_site}/ }
   end
 end
- 
- 
+
 # Are default html files removed?
 
 # Is apache running as user X
+describe service('apache2') do
+ it { should be_enabled }
+ it { should be_running }
+end
+
+describe user('www-data') do
+  it { should exist }
+  it { should have_home_directory '/var/www' }
+  it { should have_login_shell '/usr/sbin/nologin' }
+end
 
 # Is apache listening only on localhost:80 and 8080
 describe port(80) do
   it { should be_listening.with('tcp') }
+  it { should be_listening.on('0.0.0.0').with('tcp') }
 end
 describe port(8080) do
   it { should be_listening.with('tcp') }
+  it { should be_listening.on('0.0.0.0').with('tcp') }
 end
 
-# Is the sites-available linked to sites-enabled source.conf document.conf
 # Check firewall rule
