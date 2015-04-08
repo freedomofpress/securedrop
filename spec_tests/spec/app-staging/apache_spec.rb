@@ -59,9 +59,9 @@ end
 end
 
 # are the correct apache modules disabled
-['auth_basic','authn_file','autoindex','env','setenvif','status'].each do |disModules|
-  describe command("a2query -m #{disModules}") do
-    it { should return_stderr /No module matches/ }
+['auth_basic','authn_file','autoindex','env','setenvif','status'].each do |disabled_module|
+  describe command("a2query -m #{disabled_module}") do
+    its(:stderr) { should match /^No module matches #{disabled_module}/ }
   end
 end
 
