@@ -167,11 +167,45 @@ def add_admin():
             break
 
     while True:
+        print "Please enter a password.\n\nThe password must be at least 8 characters and contain a combination of upper\nand lower characters, numbers and special characters.\n"
         password = getpass("Password: ")
         password_again = getpass("Confirm Password: ")
         if password == password_again:
-            break
-        print "Passwords didn't match!"
+            print "Your password is " + str(len(password)) + " characters long."
+            strength = ['blank','very weak','weak','medium strength','medium-strong','strong', 'very strong']
+            score = 0
+            if len(password) == 0:
+                score = 0
+                print "It looks like you didn't enter any text for your password."
+            elif len(password) < 6:
+                score = 0
+                print "Your password is " + strength[score] +"."
+            elif len(password) >= 6 and len(password) < 8:
+                score = 1
+                print "Your password is " + strength[score] +"."
+            elif len(password) >= 12 and re.search('\d+', password) and re.search('[a-z]', password) and re.search('[A-Z]', password) and re.search('[^\w\s]', password):
+                score = 6
+                print "Your password is " + strength[score] +"."
+            elif len(password) >= 8 and re.search('\d+', password) and re.search('[a-z]', password) and re.search('[A-Z]', password) and re.search('[^\w\s]', password):
+                score = 5
+                print "Your password is " + strength[score] +"."
+            elif len(password) >= 8 and re.search('\d+', password) and re.search('[a-z]', password) and re.search('[A-Z]', password):
+                score = 4
+                print "Your password is " + strength[score] +"."
+            elif len(password) >= 8 and re.search('\d+', password):
+                score = 3
+                print "Your password is " + strength[score] +"."
+            elif len(password) >=8:
+                score = 2
+                print "Your password is " + strength[score] +"."
+            if score >= 5:
+                print "Your password is good!"
+                break
+            elif score < 5:
+                print "Your password is not strong enough. Please try again."
+                print "The password must be at least 8 characters and contain a combination of upper\nand lower characters, numbers and special characters."
+        else:
+            print "Passwords didn't match!"
 
     hotp_input = raw_input("Is this admin using a YubiKey [HOTP]? (y/N): ")
     otp_secret = None
