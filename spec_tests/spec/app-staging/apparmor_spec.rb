@@ -22,22 +22,22 @@ end
 # Check that apparmor is enabled.
 # The command returns error code if AppArmor not enabled
 describe command("aa-status --enabled") do
-  it { should_not return_stderr }
+  its(:exit_status) { should eq 0 }
 end
 
 # Check that the expected profiles are present in the aa-status command.
-[ 'apache', 'tor', 'ntp'].each do |enforcedProfiles|
+[ 'apache', 'tor', 'ntp'].each do |enforced_profile|
   describe command("aa-status") do
-    it { should return_stdout /#{enforcedProfiles}/ }
+    it { should return_stdout /#{enforced_profile}/ }
   end
 end
 
 # Ensure that there are no processes in complain mode
 describe command("aa-status --complaining") do
-  it { should return_stdout "0" }
+  its(:stdout) { should eq 0 }
 end
 
 # Ensure that there are no processes that are unconfined but have a profile
 describe command("aa-status") do
-  it { should return_stdout /0 processes are unconfined but have a profile defined/ }
+  its(:stdout) { should match /0 processes are unconfined but have a profile defined/ }
 end
