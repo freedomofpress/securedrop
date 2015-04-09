@@ -8,7 +8,7 @@ end
 
 # Check that the system is booted in grsec
 describe command("uname -r") do
-  it { should return_stdout /grsec/ }
+  its(:stdout) { should match /grsec$/ }
 end
 
 # Check that the grsec sysctl settings are correct
@@ -26,7 +26,7 @@ end
 # Requires the package paxtest to be installed
 # The paxtest package is currently being installed in the app-test role
 describe command("paxtest blackhat") do
-  it { should_not return_stdout /vulnerable/ }
+  its(:stdout) { should_not match /vulnerable/ }
 end
 
 # Check pax flags for apache tor
