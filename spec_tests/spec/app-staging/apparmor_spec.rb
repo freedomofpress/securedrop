@@ -27,10 +27,26 @@ end
   end
 end
 
-
-# Make sure that ONLY two profiles are in complain mode.
+# aa-status does not permit explicit state checking 
+# of services, so this is an ugly hack that can easily 
+# report false positives. It checks the number of profiles 
+# in a given state, but doesn't check which ones. Argh!
+# TODO: Consider writing a nasty perl one-liner to filter 
+# the output and ensure the services are filed correctly.
 describe command("aa-status --complaining") do
   its(:stdout) { should eq "2\n" }
+end
+
+describe command("aa-status --enforced") do
+  its(:stdout) { should eq "8\n" }
+end
+
+describe command("aa-status --profiled") do
+  its(:stdout) { should eq "10\n" }
+end
+
+describe command("aa-status --profiled") do
+  its(:stdout) { should eq "10\n" }
 end
 
 # Check that the expected profiles are present in the aa-status command.
