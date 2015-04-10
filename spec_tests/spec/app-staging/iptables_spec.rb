@@ -2,14 +2,14 @@
 
 describe iptables do
   # These are the staging specific rules that should not be present in prod
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
-  it { should_not have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
+  it { should have_rule(' OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT') }
 
   # These rules should only exist when the while the ossec agent is registering
   # with the OSSEC server and then should be removed prior to the playbook
