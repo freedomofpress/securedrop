@@ -24,3 +24,7 @@ describe file('/etc/cron-apt/action.d/5-security') do
   its(:content) { should match /^autoremove -y$/ }
 end
 
+# TODO: In order to validate the intended system state post-provisioning, 
+# may be simplest to compare output of `dpkg --get-selections` 
+# from a clean box versus a post-provisioned one. 
+
