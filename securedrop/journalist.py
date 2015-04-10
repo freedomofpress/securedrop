@@ -321,19 +321,22 @@ def remove_star(sid):
 def index():
     unstarred = []
     starred = []
-    for source in Source.query.filter_by(
-            pending=False).order_by(
-            Source.last_updated.desc()).all():
-        star = SourceStar.query.filter(
-            SourceStar.source_id == source.id).first()
+
+    # Long SQLAlchemy statements look best when formatted according to
+    # the Pocoo style guide, IMHO:
+    # http://www.pocoo.org/internal/styleguide/
+    sources = Source.query.filter_by(pending=False) \
+                          .order_by(Source.last_updated.desc()) \
+                          .all()
+    for source in sources:
+        star = SourceStar.query.filter_by(source_id=source.id).first()
         if star and star.starred:
             starred.append(source)
         else:
             unstarred.append(source)
         source.num_unread = len(
-            Submission.query.filter(
-                Submission.source_id == source.id,
-                Submission.downloaded is False).all())
+            Submission.query.filter_by(source_id=source.id,
+                                       downloaded=False).all())
 
     return render_template('index.html', unstarred=unstarred, starred=starred)
 
@@ -478,7 +481,7 @@ def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     docs = Submission.query.filter(
         Submission.source_id == id,
-        Submission.downloaded is False).all()
+        Submission.downloaded == False).all()
     return bulk_download(sid, docs)
 
 
