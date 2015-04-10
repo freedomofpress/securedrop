@@ -1,6 +1,7 @@
 #require 'spec_helper'
 
-['cron-apt', 'ntp', 'paxctl'].each do |pkg|
+# Check for critical packages
+['cron-apt', 'ntp', 'paxctl', 'ossec-agent', 'haveged', 'securedrop-grsec', 'securedrop-app-code', 'securedrop-ossec-agent'].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
   end
@@ -26,5 +27,6 @@ end
 
 # TODO: In order to validate the intended system state post-provisioning, 
 # may be simplest to compare output of `dpkg --get-selections` 
-# from a clean box versus a post-provisioned one. 
-
+# from a clean box versus a post-provisioned one. However,
+# there will be environment-specific items in this list (e.g. vbox)
+# that must be pruned.
