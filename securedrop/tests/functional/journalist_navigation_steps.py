@@ -316,8 +316,13 @@ class JournalistNavigationSteps():
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
+        # There should be 1 collection in the list of collections
         code_names = self.driver.find_elements_by_class_name('code-name')
         self.assertEquals(1, len(code_names))
+
+        # There should be a "1 unread" span in the sole collection entry
+        unread_span = self.driver.find_element_by_css_selector('span.unread')
+        self.assertIn("1 unread", unread_span.text)
 
     def _journalist_downloads_message(self):
         self.driver.find_element_by_css_selector(
