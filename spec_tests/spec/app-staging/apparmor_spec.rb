@@ -27,6 +27,25 @@ end
   end
 end
 
+# Explicitly check that enforced profiles are NOT
+# present in /etc/apparmor.d/disable. Polling aa-status
+# only checks the last config that was loaded, whereas
+# checking for symlinks in the `disabled` dir checks
+# the config to be loaded when the apparmor service is bounced.
+enforced_profiles = [
+  'ntpd',
+  'apache2',
+  'tcpdump',
+  'tor',
+]
+enforced_profiles.each do |enforced_profile|
+  describe file("/etc/apparmor.d/disabled/usr.sbin.#{enforced_profile}") do
+    it { should_not be_file }
+    it { should_not be_directory }
+    it { should_not be_symlink }
+  end
+end
+
 # aa-status does not permit explicit state checking 
 # of services, so this is an ugly hack that can easily 
 # report false positives. It checks the number of profiles 
