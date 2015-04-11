@@ -78,7 +78,7 @@ def clean(s, also=''):
     ok = ' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for c in s:
         if c not in ok and c not in also:
-            raise CryptoException("invalid input: %s" % s)
+            raise CryptoException("invalid input: {0}".format(s))
     # scrypt.hash requires input of type str. Since the wordlist is all ASCII
     # characters, this conversion is not problematic
     return str(s)
