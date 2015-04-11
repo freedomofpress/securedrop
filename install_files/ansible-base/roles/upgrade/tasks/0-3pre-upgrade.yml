@@ -3,6 +3,8 @@
 # It will copy and run the upgrade.py script on the app and monitor servers.
 - name: stop the apache service prior to upgrade tasks
   service: name=apache2 state=stopped
+  when: server_role == 'app'
+  sudo: yes
 
 - name: copy upgrade script to servers
   copy: src="0.3pre_upgrade.py" dest="/tmp" owner="root" mode="740"
@@ -19,6 +21,8 @@
     - securedrop-grsec
     - securedrop-ossec-agent
     - securedrop-ossec-server
+  sudo: yes
 
 - name: remove the previous signing key
   apt_key: id=BD67D096 state=absent
+  sudo: yes
