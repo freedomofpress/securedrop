@@ -19,4 +19,8 @@ disabled_kernel_modules.each do |disabled_kernel_module|
     its(:content) { should match /^blacklist #{disabled_kernel_module}$/ }
   end
 end
+
+describe package('ntp') do
+  it { should be_installed }
+end
   
