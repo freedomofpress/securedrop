@@ -12,3 +12,16 @@
   end
 end
 
+# ensure securedrop-specific bashrc additions are present
+describe file('/etc/bashrc.securedrop_additions') do |bashrc|
+  its(:content) { should contain('[[ $- != *i*  ]] && return') }
+  its(:content) { should match /^if which tmux >\/dev\/null 2>&1; then$/ }
+  its(:content) { should match /^\s+test -z "\$TMUX" && \(tmux attach \|\| tmux new-session\)$/ }
+end
+
+# TODO: 'vagrant' user only valid in local vbox environment.
+# find some way to read this variable dynamically.
+# probably best to parse the YAML vars file via spec_helper.rb
+describe file('/home/vagrant/.bashrc') do |bashrc|
+  its(:content) { should match /^. \/etc\/bashrc\.securedrop_additions$/  }
+end
