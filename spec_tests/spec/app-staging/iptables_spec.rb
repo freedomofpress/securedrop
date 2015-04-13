@@ -34,7 +34,12 @@ describe iptables do
   it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
-  it { should have_rule('-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but don\'t log inbound invalid state packets" -j DROP') }
+  
+  # it appears that single quotes within an iptables rules messes with 
+  # serverspec checks. running s/don't/do not/ on the rule below fixes the problem.
+  # it { should have_rule('-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but don\'t log inbound invalid state packets" -j DROP') }
+  it { should have_rule('-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP') }
+
   it { should have_rule('-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP') }
   it { should have_rule('-A OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
   it { should have_rule('-A OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT') }
