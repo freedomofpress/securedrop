@@ -13,10 +13,12 @@
 end
 
 # ensure securedrop-specific bashrc additions are present
-describe file('/etc/bashrc.securedrop_additions') do |bashrc|
-  its(:content) { should contain('[[ $- != *i*  ]] && return') }
+describe file('/etc/bashrc.securedrop_additions') do
+  non_interactive_str = Regexp.quote('[[ $- != *i* ]] && return')
+  its(:content) { should match /^#{non_interactive_str}$/ }
   its(:content) { should match /^if which tmux >\/dev\/null 2>&1; then$/ }
-  its(:content) { should match /^\s+test -z "\$TMUX" && \(tmux attach \|\| tmux new-session\)$/ }
+  tmux_check = Regexp.quote('test -z "$TMUX" && (tmux attach || tmux new-session)')
+  its(:content) { should match /^\s+#{tmux_check}$/ }
 end
 
 # TODO: 'vagrant' user only valid in local vbox environment.
