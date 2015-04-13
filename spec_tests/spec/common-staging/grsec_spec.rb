@@ -11,6 +11,18 @@ end
   end
 end
 
+unwanted_kernel_metapackages = [
+  'linux-signed-image-generic-lts-utopic',
+  'linux-signed-image-generic',
+  'linux-signed-generic-lts-utopic',
+  'linux-signed-generic',
+]
+unwanted_kernel_metapackages.each do |metapkg|
+  describe package(metapkg) do
+    it { should_not be_installed }
+  end
+end
+
 # ensure that system is running grsec kernel
 describe file('/proc/sys/kernel/grsecurity/grsec_lock') do
   it { should be_mode '600' }
