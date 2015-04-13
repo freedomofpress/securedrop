@@ -1,12 +1,24 @@
 #require 'spec_helper'
 
-['securedrop-grsec'].each do |pkg|
+# ensure ssh motd is disabled (grsec balks at ubuntu's default motd)
+describe file('/etc/pam.d/sshd') do
+  its(:content) { should_not match /pam\.motd/ }
+end
+
+['securedrop-grsec', 'paxctl'].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
   end
 end
 
-# Check that the system is booted in grsec
+# ensure that system is running grsec kernel
+describe file('/proc/sys/kernel/grsecurity/grsec_lock') do
+  it { should be_mode '600' }
+  it { should be_owned_by('root') }
+  its(:size) { should eq 0 }
+end
+
+# ensure that system reports it's running grsec kernel (lazy)
 describe command("uname -r") do
   its(:stdout) { should match /grsec$/ }
 end
@@ -16,7 +28,6 @@ describe 'Grsecurity kernel parameters' do
   context linux_kernel_parameter('kernel.grsecurity.grsec_lock') do
     its(:value) { should eq 1 }
   end
-
   context linux_kernel_parameter('kernel.grsecurity.rwxmap_logging') do
     its(:value) { should eq 0 }
   end
