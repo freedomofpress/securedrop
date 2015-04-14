@@ -76,7 +76,12 @@ describe file('/etc/cron.d/cron-apt') do
   end
 end
 
-
+# ensure safe-upgrade has already been run
+describe command('aptitude --simulate safe-upgrade') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match /^No packages will be installed, upgraded, or removed\.$/ }
+  its(:stdout) { should match /0 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded\./ }
+end
 
 # TODO: In order to validate the intended system state post-provisioning, 
 # may be simplest to compare output of `dpkg --get-selections` 
