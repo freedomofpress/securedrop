@@ -56,6 +56,28 @@ describe file('/etc/cron-apt/action.d/5-security') do
   its(:content) { should match /^autoremove -y$/ }
 end
 
+# ensure default cron-apt file to download all updates does not exist
+describe command('/bin/bash -c "[[ ! -e /etc/cron-apt/action.d/3-download ]]"') do
+  its(:exit_status) { should eq 0 }
+end
+
+desired_cronjobs = [
+  '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
+  '0 5 * * * root    /sbin/reboot',
+]
+# ensure the cron.d config for cron-apt exists
+describe file('/etc/cron.d/cron-apt') do
+  it { should be_file }
+  it { should be_owned_by  'root' }
+  it { should be_mode '644' }
+  desired_cronjobs.each do |cronjob|
+    cronjob_regex = Regexp.quote(cronjob)
+    its(:content) { should match /^#{cronjob_regex}$/ }
+  end
+end
+
+
+
 # TODO: In order to validate the intended system state post-provisioning, 
 # may be simplest to compare output of `dpkg --get-selections` 
 # from a clean box versus a post-provisioned one. However,
