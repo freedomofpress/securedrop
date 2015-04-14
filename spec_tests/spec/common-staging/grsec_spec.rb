@@ -66,6 +66,17 @@ describe command("dpkg --get-selections '^linux-headers-.*'") do
   its(:exit_status) { should eq 0 }
 end
 
+# ensure grub-pc is marked as manually installed (necessary vagrant/vbox)
+describe command('apt-mark showmanual grub-pc') do
+  its(:stdout) { should match /^grub-pc$/ }
+end
+
+# ensure old packages have been autoremoved
+describe command('apt-get --dry-run autoremove') do
+  its(:stdout) { should match /^0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded\.$/ }
+  its(:exit_status) { should eq 0 }
+end
+
 # Check pax flags for apache tor
 # paxctl -v /usr/sbin/apache2
 # paxctl -v /usr/sbin/tor
