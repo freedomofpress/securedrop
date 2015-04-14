@@ -50,4 +50,12 @@ end
 describe package('ntp') do
   it { should be_installed }
 end
-  
+
+# ensure swap space is disabled
+describe command('swapon --summary') do
+  # by using the `eq` operator here, we're ensuring the entirety of stdout is checked
+  its(:stdout) { should eq "Filename\t\t\t\tType\t\tSize\tUsed\tPriority\n" }
+  # a leading slash will indicate a fullpath to a swapfile
+  its(:stdout) { should_not match /^\// }
+end
+
