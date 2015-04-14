@@ -52,6 +52,20 @@ describe command("paxtest blackhat") do
   its(:stdout) { should_not match /vulnerable/ }
 end
 
+# ensure generic linux kernels have been removed
+describe command("dpkg --get-selections '^linux-image-.*generic$'") do
+  its(:stdout) { should_not match /^linux-image-.*generic$/ }
+  its(:stderr) { should match /^dpkg: no packages found matching / }
+  its(:exit_status) { should eq 0 }
+end
+
+# ensure linux kernel headers have been removed
+describe command("dpkg --get-selections '^linux-headers-.*'") do
+  its(:stdout) { should_not match /^linux-headers-.*/ }
+  its(:stderr) { should match /^dpkg: no packages found matching / }
+  its(:exit_status) { should eq 0 }
+end
+
 # Check pax flags for apache tor
 # paxctl -v /usr/sbin/apache2
 # paxctl -v /usr/sbin/tor
