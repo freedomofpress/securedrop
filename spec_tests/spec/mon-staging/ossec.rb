@@ -1,4 +1,10 @@
 #require 'spec_helper'
+#
+# ensure hosts file references app server by ip
+describe file('/etc/hosts') do
+  its(:content) { should match /^127\.0\.1\.1 mon-staging mon-staging$/ }
+  its(:content) { should match /^10\.0\.1\.2  app-staging$/ }
+end
 
 ['postfix', 'procmail'].each do |pkg|
   describe package(pkg) do
