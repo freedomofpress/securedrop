@@ -47,10 +47,43 @@ describe file ('/etc/postfix/header_checks') do
   end
 end
 
-# TODO: checking this file will require a lot of regexes
+postfix_settings = [
+  'relayhost = [smtp.gmail.com]:587',
+  'smtp_sasl_auth_enable = yes',
+  'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd',
+  'smtp_sasl_security_options = noanonymous',
+  'smtp_use_tls=yes',
+  'smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache',
+  'smtp_tls_security_level = fingerprint',
+  'smtp_tls_fingerprint_digest = sha1',
+  'smtp_tls_fingerprint_cert_match = 9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8',
+  'smtp_tls_ciphers = high',
+  'smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2',
+  'myhostname = monitor.securedrop',
+  'myorigin = $myhostname',
+  'smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)',
+  'biff = no',
+  'append_dot_mydomain = no',
+  'readme_directory = no',
+  'smtp_header_checks = regexp:/etc/postfix/header_checks',
+  'mailbox_command = /usr/bin/procmail',
+  'inet_interfaces = loopback-only',
+  'alias_maps = hash:/etc/aliases',
+  'alias_database = hash:/etc/aliases',
+  'mydestination = $myhostname, localhost.localdomain , localhost',
+  'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128',
+  'mailbox_size_limit = 0',
+  'recipient_delimiter = +',
+]
+# ensure all desired postfix settings are declared
 describe file('/etc/postfix/main.cf') do
   it { should be_file }
-  its(:content) { should match /^mailbox_command = \/usr\/bin\/procmail$/ }
+  it { should be_owned_by 'root' }
+  it { should be_mode '644' }
+  postfix_settings.each do |postfix_setting|
+    postfix_setting_regex = Regexp.quote(postfix_setting)
+    its(:content) { should match /^#{postfix_setting_regex}$/ }
+  end
 end
 
 describe file("/var/ossec/.gnupg") do
