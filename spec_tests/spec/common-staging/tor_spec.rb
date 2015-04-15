@@ -19,6 +19,12 @@ describe file('/var/lib/tor/services') do
   it { should be_grouped_into 'debian-tor' }
 end
 
+# ensure tor service is running
+describe service('tor') do
+  it { should be_running }
+  it { should be_enabled }
+end
+
 # ensure tor repo gpg key matches
 describe command('apt-key export 886DDD89') do
   tor_gpg_pub_key_block = '-----BEGIN PGP PUBLIC KEY BLOCK-----
