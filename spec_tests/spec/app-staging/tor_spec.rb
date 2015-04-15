@@ -1,23 +1,21 @@
 #require 'spec_helper'
 
-describe package('tor') do
-  it { should be_installed }
-end
-
+# declare app-staging torrc settings
+torrc_settings = [
+  'HiddenServiceDir /var/lib/tor/services/source',
+  'HiddenServicePort 80 127.0.0.1:80',
+  'HiddenServiceDir /var/lib/tor/services/document',
+  'HiddenServicePort 80 127.0.0.1:8080',
+  'HiddenServiceAuthorizeClient stealth journalist',
+]
+# ensure torrc for app-staging host contains entries
+# for both journalist and source ATHSes. the admin
+# ATHS and other settings are already checked as part of the 
+# common-staging serverspec tests
 describe file('/etc/tor/torrc') do
-  it { should be_file }
-  it { should be_mode '644' }
-  its(:content) { should match "HiddenServiceAuthorizeClient stealth journalist" }
-  its(:content) { should match "HiddenServiceAuthorizeClient stealth admin" }
+  torrc_settings.each do |torrc_setting|
+    torrc_setting_regex = Regexp.quote(torrc_setting)
+    its(:content) { should match /^#{torrc_setting_regex}$/ }
+  end
 end
 
-describe service('tor') do
-  it { should be_enabled }
-  it { should be_running }
-end
-
-# Likely overkill
-describe command('service tor status') do
-  its(:exit_status) { should eq 0 }
-  its(:stdout) { should match /tor is running/ }
-end
