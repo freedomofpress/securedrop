@@ -11,6 +11,14 @@ end
   end
 end
 
+# ensure parent directory for tor hidden services exists
+describe file('/var/lib/tor/services') do
+  it { should be_directory  }
+  it { should be_mode('2755')  }
+  it { should be_owned_by 'debian-tor' }
+  it { should be_grouped_into 'debian-tor' }
+end
+
 # ensure tor repo gpg key matches
 describe command('apt-key export 886DDD89') do
   tor_gpg_pub_key_block = '-----BEGIN PGP PUBLIC KEY BLOCK-----
