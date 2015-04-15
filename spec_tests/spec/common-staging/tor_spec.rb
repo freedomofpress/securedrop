@@ -5,9 +5,30 @@ describe file('/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list') 
 end
 
 # ensure packages from tor repo are installed
-["deb.torproject.org-keyring", "tor"].each do |pkg|
+['deb.torproject.org-keyring', 'tor'].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
+  end
+end
+
+# declare common settings for torrc
+torrc_settings = [
+  'SocksPort 0',
+  'SafeLogging 1',
+  'RunAsDaemon 1',
+  'HiddenServiceDir /var/lib/tor/services/ssh',
+  'HiddenServicePort 22 127.0.0.1:22',
+  'HiddenServiceAuthorizeClient stealth admin',
+]
+# ensure common settings are present in torrc
+# these settings should exist in both app-staging and mon-staging
+describe file('/etc/tor/torrc') do
+  it { should be_file }
+  it { should be_mode '644' }
+  it { should be_owned_by 'debian-tor' }
+  torrc_settings.each do |torrc_setting|
+    torrc_setting_regex = Regexp.quote(torrc_setting)
+    its(:content) { should match /^#{torrc_setting_regex}$/ }
   end
 end
 
@@ -23,6 +44,12 @@ end
 describe service('tor') do
   it { should be_running }
   it { should be_enabled }
+end
+
+# Likely overkill
+describe command('service tor status') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match /tor is running/ }
 end
 
 # ensure tor repo gpg key matches
