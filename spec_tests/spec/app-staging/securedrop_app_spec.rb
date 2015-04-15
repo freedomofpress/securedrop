@@ -67,10 +67,12 @@ eos
   its(:stderr) { should eq expected_output }
 end
 
+# ensure config.py (settings for securedrop app) exists
 describe file('/var/www/securedrop/config.py') do
   it { should be_file }
   it { should be_owned_by  'www-data' }
   it { should be_grouped_into  'www-data' }
   it { should be_mode '600' }
+  its(:content) { should match /^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$/ }
 end
 
