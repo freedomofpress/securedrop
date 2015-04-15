@@ -1,8 +1,10 @@
 #!/bin/bash
-# SecureDrop 0.2.1/0.3pre upgrade helper script
+# SecureDrop 0.3pre upgrade helper script
 
 # parse_yaml() courtesy of a StackOverflow user:
 # http://stackoverflow.com/a/21189044
+set -x
+set -e
 
 function parse_yaml {
    local prefix=$2
@@ -49,12 +51,15 @@ if ! dpkg --get-selections | grep -q "^ansible[[:space:]]*install$" >/dev/null; 
 	apt-get install ansible
 fi
 
+# TODO: should check that there is a key present in the ssh agent
 # check for SSH identity
 if [ ! -f $HOMEDIR/.ssh/id_rsa ]; then
 	echo "Error: There is no SSH key file present." 1>&2
 	exit 1
 fi
 
+# TODO: this should check that the correct branch is checked out and the
+# signature is valid.
 # check for SecureDrop git repo
 if [ ! -d "$ANSIBLE" ]; then
   echo "Error: This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
@@ -81,7 +86,7 @@ if ! echo $app_ip | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
 	exit 1
 fi
 
-# check that an SSH user is defined10
+# check that an SSH user is defined
 if [ -z $ssh_users ]; then
 	echo "Error: ssh_users is not defined in prod-specific.yml." 1>&2
 	exit 1
