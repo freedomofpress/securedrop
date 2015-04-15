@@ -24,11 +24,27 @@ securedrop_app_directories.each do |securedrop_app_directory|
   end
 end
 
-['/var/lib/securedrop','/var/lib/securedrop/store','/var/lib/securedrop/keys'].each do |myDir|
-  describe file(myDir) do
-    it { should be_directory }
-    it { should be_owned_by  'www-data' }
-    it { should be_mode '700' }
+# ensure securedrop-app-code package is installed
+describe package('securedrop-app-code') do
+  it { should be_installed }
+end
+
+# declare securedrop-app package dependencies
+securedrop_package_dependencies = [
+  'apparmor-utils',
+  'gnupg2',
+  'haveged',
+  'python',
+  'python-pip',
+  'redis-server',
+  'secure-delete',
+  'sqlite',
+  'supervisor',
+]
+# ensure securedrop-app dependencies are installed
+securedrop_package_dependencies.each do |securedrop_package_dependency|
+  describe package(securedrop_package_dependency) do
+    it { should be_installed }
   end
 end
 
