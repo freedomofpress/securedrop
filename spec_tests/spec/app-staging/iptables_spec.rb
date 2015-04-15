@@ -1,14 +1,12 @@
 #require 'spec_helper'
 
 describe iptables do
-  # These rules should only exist when the while the ossec agent is registering
-  # with the OSSEC server and then should be removed prior to the playbook
-  # finishing
+  # These rules should have been removed by the `remove_authd_exceptions` role
   # TODO: The Vagrantfile virtualbox static IP was hardcoded into the two rules
   # below. This will need to be fixed. Possibly with using something like
   # https://github.com/volanja/ansible_spec Using the values for IP addresses
-  # from the ansible inventory should cover most use cases. (except inventories
-  # with just the *.onion address.
+  # from the ansible inventory should cover most use cases (except inventories
+  # with just the *.onion addresses).
   it { should_not have_rule(' OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
   it { should_not have_rule(' INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
 
