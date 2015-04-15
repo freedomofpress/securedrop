@@ -60,29 +60,48 @@ describe file('/etc/apache2/apache2.conf') do
   end
 end
 
+# ensure apache2 ports conf is present
 describe file('/etc/apache2/ports.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "Listen 0.0.0.0:8080" }
-  its(:content) { should match "Listen 0.0.0.0:80" }
+  its(:content) { should match /^Listen 0\.0\.0\.0:8080$/ }
+  its(:content) { should match /^Listen 0\.0\.0\.0:80$/ }
 end
 
-describe file('/etc/apache2/security') do
-  it { should be_file }
-  it { should be_owned_by  'root' }
-  it { should be_mode '644' }
-  its(:content) { should match "ServerTokens Prod" }
-  its(:content) { should match "ServerSignature Off" }
-  its(:content) { should match "TraceEnable Off" }
-end
+# declare desired apache headers for vhost configs
+apache2_common_headers = [
+  'Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"',
+  'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
+  'Header set Pragma "no-cache"',
+  'Header set Expires "-1"',
+  'Header always append X-Frame-Options: DENY',
+  'Header set X-XSS-Protection: "1; mode=block"',
+  'Header set X-Content-Type-Options: nosniff',
+  'Header set X-Download-Options: noopen',
+  # using string literal syntax here (%{}) to avoid manual quote escaping
+  %{Header set X-Content-Security-Policy: "default-src 'self'"},
+  %{Header set Content-Security-Policy: "default-src 'self'"},
+  'Header unset Etag',
+]
 
-describe file('/etc/apache2/sites-available/document.conf') do
-  it { should be_file }
-  it { should be_owned_by  'root' }
-  it { should be_mode '644' }
-  its(:content) { should match "<VirtualHost 0.0.0.0:8080>" }
-  its(:content) { should match "WSGIScriptAlias / /var/www/document.wsgi/" }
+# declare desired apache2 available sites
+apache2_available_sites = [
+  '/etc/apache2/sites-available/document.conf',
+  '/etc/apache2/sites-available/source.conf',
+]
+
+# check desired apache2 available sites for common headers
+apache2_available_sites.each do |apache2_available_site|
+  describe file(apache2_available_site) do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_mode '644' }
+    apache2_common_headers.each do |apache2_common_header|
+      apache2_common_header_regex = Regexp.quote(apache2_common_header)
+      its(:content) { should match /^#{apache2_common_header_regex}$/ }
+    end
+  end
 end
 
 describe file('/etc/apache2/sites-available/source.conf') do
