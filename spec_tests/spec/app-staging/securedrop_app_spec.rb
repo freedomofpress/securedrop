@@ -76,3 +76,22 @@ describe file('/var/www/securedrop/config.py') do
   its(:content) { should match /^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$/ }
 end
 
+# ensure sqlite database exists for application
+describe file('/var/lib/securedrop/db.sqlite') do
+  it { should be_file }
+  # TODO: perhaps 640 perms would work here
+  it { should be_mode '644' }
+  it { should be_owned_by 'www-data' }
+  it { should be_grouped_into 'www-data' }
+end
+
+# ensure default logo header file exists
+# TODO: add check for custom logo header file
+describe file('/var/www/securedrop/static/i/logo.png') do
+  it { should be_file }
+  # TODO: ansible task declares mode 400 but the file ends up as 644 on host
+  it { should be_mode '644' }
+  it { should be_owned_by 'www-data' }
+  it { should be_grouped_into 'www-data' }
+end
+
