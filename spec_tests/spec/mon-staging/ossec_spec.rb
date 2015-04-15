@@ -97,6 +97,15 @@ describe file("/var/ossec/.gnupg") do
   it { should be_mode '700' }
 end
 
+# ensure key files for ossec-server exist
+['/var/ossec/etc/sslmanager.key', '/var/ossec/etc/sslmanager.cert'].each do |keyfile|
+  describe file(keyfile) do
+    it { should be_file }
+    it { should be_mode '644' }
+    it { should be_owned_by 'root' }
+   end
+end
+
 describe file("/var/ossec/.procmailrc") do
   its(:content) { should match /^\|\/var\/ossec\/send_encrypted_alarm\.sh/ }
 end
