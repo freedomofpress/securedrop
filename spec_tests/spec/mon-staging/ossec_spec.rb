@@ -86,6 +86,11 @@ describe file('/etc/postfix/main.cf') do
   end
 end
 
+# ensure ossec considers app-staging host "available"
+describe command('/var/ossec/bin/list_agents -a') do
+  its(:stdout) { should eq "app-staging-10.0.1.2 is available.\n" }
+end
+
 describe file("/var/ossec/.gnupg") do
   it { should be_directory }
   it { should be_owned_by "ossec" }
