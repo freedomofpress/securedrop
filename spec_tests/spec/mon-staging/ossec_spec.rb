@@ -7,8 +7,8 @@ describe file('/etc/hosts') do
   its(:content) { should match /^10\.0\.1\.2  app-staging$/ }
 end
 
-# ensure mail packages are installed
-['postfix', 'procmail', 'mailutils'].each do |pkg|
+# ensure required packages are installed
+['postfix', 'procmail', 'mailutils', 'securedrop-ossec-server'].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
   end
@@ -91,10 +91,29 @@ describe command('/var/ossec/bin/list_agents -a') do
   its(:stdout) { should eq "app-staging-10.0.1.2 is available.\n" }
 end
 
+# ensure ossec gpg homedir exists
 describe file("/var/ossec/.gnupg") do
   it { should be_directory }
   it { should be_owned_by "ossec" }
   it { should be_mode '700' }
+end
+
+# ensure test admin gpg pubkey is present
+describe file('/var/ossec/test_admin_key.pub') do
+  it { should be_file }
+  it { should be_mode '644' }
+end
+
+# ensure test admin gpg pubkey is in ossec keyring
+describe command('su -s /bin/bash -c "gpg --homedir /var/ossec/.gnupg --import /var/ossec/test_admin_key.pub" ossec') do
+  its(:exit_status) { should eq 0 }
+  # gpg dumps a lot of output to stderr, rather than stdout
+  expected_output = <<-eos
+gpg: key EDDDC102: "Test/Development (DO NOT USE IN PRODUCTION) (Admin's OSSEC Alert GPG key) <securedrop@freedom.press>" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+  eos
+  its(:stderr) { should eq expected_output }
 end
 
 # ensure key files for ossec-server exist
