@@ -48,8 +48,29 @@ securedrop_package_dependencies.each do |securedrop_package_dependency|
   end
 end
 
+# ensure the securedrop application gpg pubkey is present
+describe file('/var/lib/securedrop/test_journalist_key.pub') do
+  it { should be_file }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  it { should be_mode '644' }
+end
+
+describe command('su -s /bin/bash -c "gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/test_journalist_key.pub" www-data') do
+  its(:exit_status) { should eq 0 }
+  expected_output = <<-eos
+gpg: key 28271441: "SecureDrop Test/Development (DO NOT USE IN PRODUCTION)" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+eos
+  # gpg dumps a lot of output to stderr, rather than stdout
+  its(:stderr) { should eq expected_output }
+end
+
 describe file('/var/www/securedrop/config.py') do
   it { should be_file }
   it { should be_owned_by  'www-data' }
+  it { should be_grouped_into  'www-data' }
   it { should be_mode '600' }
 end
+
