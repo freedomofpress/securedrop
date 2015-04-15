@@ -1,21 +1,63 @@
 #require 'spec_helper'
 
-['apache2-mpm-worker', 'libapache2-mod-wsgi', 'libapache2-mod-xsendfile' ].each do |pkg|
-  describe package(pkg) do
+# declare required apache packages
+apache_packages = [
+  'apache2-mpm-worker',
+  'libapache2-mod-wsgi',
+  'libapache2-mod-xsendfile',
+]
+# ensure required apache packages are installed
+apache_packages.each do |apache_package|
+  describe package(apache_package) do
     it { should be_installed }
   end
 end
 
-# Are the apache config file there
+# ensure required apache2 security config file is present
+# TODO: /etc/apache2/security is superfluous, see issue #643
+# once ansible playbook is updated to remove it, this check
+# should be removed as well.
+describe file('/etc/apache2/security') do
+  it { should be_file }
+  it { should be_owned_by  'root' }
+  it { should be_mode '644' }
+  its(:content) { should match "ServerTokens Prod" }
+  its(:content) { should match "ServerSignature Off" }
+  its(:content) { should match "TraceEnable Off" }
+end
+
+# declare required apache2 config settings
+apache2_config_settings = [
+  'Mutex file:${APACHE_LOCK_DIR} default',
+  'PidFile ${APACHE_PID_FILE}',
+  'Timeout 60',
+  'KeepAlive On',
+  'MaxKeepAliveRequests 100',
+  'KeepAliveTimeout 5',
+  'User www-data',
+  'Group www-data',
+  'AddDefaultCharset UTF-8',
+  'DefaultType None',
+  'HostnameLookups Off',
+  'ErrorLog /dev/null',
+  'LogLevel crit',
+  'IncludeOptional mods-enabled/*.load',
+  'IncludeOptional mods-enabled/*.conf',
+  'Include ports.conf',
+  'IncludeOptional sites-enabled/*.conf',
+  'ServerTokens Prod',
+  'ServerSignature Off',
+  'TraceEnable Off',
+]
+# ensure required apache2 config settings are present
 describe file('/etc/apache2/apache2.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "ErrorLog /dev/null" }
-  its(:content) { should match "LogLevel crit" }
-  its(:content) { should match "ServerTokens Prod" }
-  its(:content) { should match "ServerSignature Off" }
-  its(:content) { should match "TraceEnable Off" }
+  apache2_config_settings.each do |apache2_config_setting|
+    apache2_config_setting_regex = Regexp.quote(apache2_config_setting)
+    its(:content) { should match /^#{apache2_config_setting_regex}$/ }
+  end
 end
 
 describe file('/etc/apache2/ports.conf') do
