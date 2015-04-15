@@ -125,8 +125,26 @@ end
    end
 end
 
+# declare ossec procmail settings
+ossec_procmail_settings = [
+  'VERBOSE=yes',
+  'MAILDIR=/var/mail/',
+  'DEFAULT=$MAILDIR',
+  'LOGFILE=/var/log/procmail.log',
+  'SUBJECT=`formail -xSubject:`',
+  ':0 c',
+  '*^To:.*root.*',
+  '|/var/ossec/send_encrypted_alarm.sh',
+]
+# ensure ossec procmailrc has desired settings
 describe file("/var/ossec/.procmailrc") do
-  its(:content) { should match /^\|\/var\/ossec\/send_encrypted_alarm\.sh/ }
+  it { should be_file }
+  it { should be_mode '644' }
+  it { should be_owned_by 'ossec' }
+  ossec_procmail_settings.each do |ossec_procmail_setting|
+    ossec_procmail_setting_regex = Regexp.quote(ossec_procmail_setting)
+    its(:content) { should match /^#{ossec_procmail_setting_regex}$/ }
+  end
 end
   
 # TODO: mode 0755 sounds right to me, but the mon-staging host
