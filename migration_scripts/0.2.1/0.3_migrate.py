@@ -85,7 +85,7 @@ def migrate_database(backup):
     # directory and re-generating the codenames.
     #
     # Note: Must be called after /var/lib/securedrop/store is populated
-    from crypto_util import displayid
+    from old_crypto_util import displayid
     # Generate a list of the filesystem ids that have journalist designations
     # stored in the database, since they are already known and should not be
     # generated from the filesystem id
@@ -100,6 +100,12 @@ def migrate_database(backup):
     import config
     from db import Source, Journalist, Submission, Reply, db_session, init_db
 
+    # We need to be able to link replies to the Journalist that sent
+    # them. Since this information was not recorded in 0.2.1, we
+    # arbitrarily say all replies were sent by an arbitrary journalist
+    # that is present on this system. Since this information is not
+    # currently exposed in the UI, this does not create a problem (for
+    # now).
     if len(Journalist.query.all()) == 0:
         print "!!! FATAL: You must create a journalist account before running this migration."
         print "           Run ./manage.py add_admin and try again."
@@ -178,7 +184,7 @@ def migrate_database(backup):
             migrated_source.pending = False
 
         # Set source.interaction_count to the number of current submissions for
-        # each source. This is not techncially, correct, but since we can't
+        # each source. This is not technicially correct, but since we can't
         # know how many submissions have been deleted it will give us a
         # reasonable, monotonically increasing basis for future increments to
         # the interaction_count.
@@ -251,7 +257,7 @@ def migrate_tor_files(backup):
     # For now, we're going to re-provision the monitor and SSH
     # hidden services. The only hidden service whose address
     # we want to maintain is the source interface. Modify the
-    #  code below to migrate other hidden services as well.
+    # code below to migrate other hidden services as well.
 
     # Restore source interface hidden sevice key to maintain the original
     # .onion address
