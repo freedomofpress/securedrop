@@ -93,6 +93,26 @@ eos
   its(:content) { should eq xvfb_init_content }
 end
 
+# ensure xvfb is configured to start on boot via update-rc.d
+# the `-n` option to update-rc.d is dry-run
+describe command('update-rc.d -n xvfb defaults') do
+  its(:exit_status) { should eq 0 }
+  expected_output_regex = Regexp.quote('System start/stop links for /etc/init.d/xvfb already exist.')
+  its(:stdout) { should match /^\s{1}#{expected_output_regex}$/ }
+end
 
+# ensure DISPLAY environment variable is set on boot
+describe file('/etc/profile.d/xvfb_display.sh') do
+  it { should be_file }
+  it { should be_mode '444' }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  its(:content) { should eq "export DISPLAY=:1\n" }
+end
 
-
+# TODO: confirm that DISPLAY environment variable is currently set
+# will likely need to leverage a spec_helper for this, since
+# env vars are ignored by serverspec's default ssh config
+#describe command('echo $DISPLAY') do
+#  its(:stdout) { should eq ":1\n" }
+#end
