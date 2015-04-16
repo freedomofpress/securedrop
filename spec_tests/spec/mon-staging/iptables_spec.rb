@@ -52,8 +52,10 @@ desired_iptables_rules = [
 # from the ansible inventory should cover most use cases (except inventories
 # with just the *.onion addresses).
 unwanted_iptables_rules = [
-  '-A OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
-  '-A INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
+  '-A INPUT -s 10.0.1.2 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
+  '-A OUTPUT -d 10.0.1.2 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
+  '-A INPUT -s 10.0.1.2 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT',
+  '-A OUTPUT -d 10.01.2 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT',
 ]
 
 # check for wanted and unwanted iptables rules
