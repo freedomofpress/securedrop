@@ -95,3 +95,36 @@ describe file('/var/www/securedrop/static/i/logo.png') do
   it { should be_grouped_into 'www-data' }
 end
 
+# declare config options for securedrop worker
+securedrop_worker_config_options = [
+  '[program:securedrop_worker]',
+  'command=/usr/local/bin/rqworker',
+  'directory=/var/www/securedrop',
+  'autostart=true',
+  'autorestart=true',
+  'startretries=3',
+  'stderr_logfile=/var/log/securedrop_worker/err.log',
+  'stdout_logfile=/var/log/securedrop_worker/out.log',
+  'user=www-data',
+  'environment=HOME="/tmp/python-gnupg"',
+]
+# ensure securedrop worker config for supervisor is present
+describe file('/etc/supervisor/conf.d/securedrop_worker.conf') do
+  it { should be_file }
+  it { should be_mode '644' }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  securedrop_worker_config_options.each do |securedrop_worker_config_option|
+    securedrop_worker_config_option_regex = Regexp.quote(securedrop_worker_config_option)
+    its(:content) { should match /^#{securedrop_worker_config_option_regex}$/ }
+  end
+end
+
+# ensure directory for worker logs is present
+describe file('/var/log/securedrop_worker') do
+  it { should be_directory }
+  it { should be_mode '644' }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
