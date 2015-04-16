@@ -84,13 +84,47 @@ apache2_common_headers = [
   %{Header set Content-Security-Policy: "default-src 'self'"},
   'Header unset Etag',
 ]
+# declare block of directory declarations common to both
+# source and document interfaces.
+common_apache2_directory_declarations = <<-eos
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
 
+<Directory /var/www/>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from all
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+
+<Directory /var/www/securedrop>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from all
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+eos
 # declare desired apache2 available sites
 apache2_available_sites = [
   '/etc/apache2/sites-available/document.conf',
   '/etc/apache2/sites-available/source.conf',
 ]
-
 # check desired apache2 available sites for common headers
 apache2_available_sites.each do |apache2_available_site|
   describe file(apache2_available_site) do
@@ -101,6 +135,7 @@ apache2_available_sites.each do |apache2_available_site|
       apache2_common_header_regex = Regexp.quote(apache2_common_header)
       its(:content) { should match /^#{apache2_common_header_regex}$/ }
     end
+    its(:content) { should contain(common_apache2_directory_declarations) }
   end
 end
 
@@ -160,6 +195,9 @@ describe file('/etc/apache2/sites-available/document.conf') do
     its(:content) { should match /^#{document_apache2_config_setting_regex}$/ }
   end
 end
+
+
+
 
 ['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enabled_module|
   describe command("a2query -m #{enabled_module}") do
