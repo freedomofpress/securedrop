@@ -25,15 +25,10 @@ describe iptables do
   it { should have_rule('-A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT') }
   it { should have_rule('-A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT') }
   it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A INPUT -s 10.0.2.15/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
-  
-  # it appears that single quotes within an iptables rules messes with 
+
+  # it appears that single quotes within an iptables rules messes with
   # serverspec checks. running s/don't/do not/ on the rule below fixes the problem.
   # it { should have_rule('-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but don\'t log inbound invalid state packets" -j DROP') }
   it { should have_rule('-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP') }
@@ -56,12 +51,7 @@ describe iptables do
   it { should have_rule('-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT') }
   it { should have_rule('-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -d 10.0.2.15/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -m comment --comment "Drop all other outgoing traffic" -j DROP') }
