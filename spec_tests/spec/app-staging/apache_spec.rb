@@ -134,6 +134,33 @@ describe file('/etc/apache2/sites-available/source.conf') do
   end
 end
 
+# declare document-specific apache configs
+document_apache2_config_settings = [
+  '<VirtualHost 0.0.0.0:8080>',
+  'DocumentRoot /var/www/securedrop/static',
+  'Alias /static /var/www/securedrop/static',
+  'WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop',
+  'WSGIProcessGroup document',
+  'WSGIScriptAlias / /var/www/document.wsgi/',
+  'AddType text/html .py',
+  'XSendFile        On',
+  'XSendFilePath    /var/lib/securedrop/store/',
+  'XSendFilePath    /var/lib/securedrop/tmp/',
+  'ErrorLog /var/log/apache2/document-error.log',
+  'CustomLog /var/log/apache2/document-access.log combined',
+]
+# check document-specific apache2 config
+describe file('/etc/apache2/sites-available/document.conf') do
+  it { should be_file }
+  it { should be_owned_by  'root' }
+  it { should be_grouped_into  'root' }
+  it { should be_mode '644' }
+  document_apache2_config_settings.each do |document_apache2_config_setting|
+    document_apache2_config_setting_regex = Regexp.quote(document_apache2_config_setting)
+    its(:content) { should match /^#{document_apache2_config_setting_regex}$/ }
+  end
+end
+
 ['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enabled_module|
   describe command("a2query -m #{enabled_module}") do
     its(:stdout) { should match /^#{enabled_module} \(enabled/ }
