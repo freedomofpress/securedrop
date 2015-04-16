@@ -196,17 +196,44 @@ describe file('/etc/apache2/sites-available/document.conf') do
   end
 end
 
-
-
-
-['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enabled_module|
+# declare apache2 enabled modules
+apache2_enabled_modules = [
+  'access_compat',
+  'authn_core',
+  'alias',
+  'authz_core',
+  'authz_host',
+  'authz_user',
+  'deflate',
+  'filter',
+  'dir',
+  'headers',
+  'mime',
+  'mpm_event',
+  'negotiation',
+  'reqtimeout',
+  'rewrite',
+  'wsgi',
+  'xsendfile',
+]
+# ensure required apache2 modules are enabled
+apache2_enabled_modules.each do |enabled_module|
   describe command("a2query -m #{enabled_module}") do
     its(:stdout) { should match /^#{enabled_module} \(enabled/ }
   end
 end
 
-# are the correct apache modules disabled
-['auth_basic','authn_file','autoindex','env','setenvif','status'].each do |disabled_module|
+# declare apache2 disabled modules
+apache2_disabled_modules = [
+  'auth_basic',
+  'authn_file',
+  'autoindex',
+  'env',
+  'setenvif',
+  'status',
+]
+# ensure unwanted apache2 modules are disabled
+apache2_disabled_modules.each do |disabled_module|
   describe command("a2query -m #{disabled_module}") do
     its(:stderr) { should match /^No module matches #{disabled_module}/ }
   end
@@ -241,13 +268,12 @@ describe user('www-data') do
 end
 
 # Is apache listening only on localhost:80 and 8080
-describe port(80) do
-  it { should be_listening.with('tcp') }
-  it { should be_listening.on('0.0.0.0').with('tcp') }
-end
-describe port(8080) do
-  it { should be_listening.with('tcp') }
-  it { should be_listening.on('0.0.0.0').with('tcp') }
+listening_ports = ['80', '8080']
+listening_ports.each do |listening_port|
+  describe port(listening_port) do
+    it { should be_listening.with('tcp') }
+    it { should be_listening.on('0.0.0.0').with('tcp') }
+  end
 end
 
 # Check firewall rule
