@@ -54,3 +54,45 @@ apt_dependencies.each do |apt_dependency|
     it { should be_installed }
   end
 end
+
+# ensure xvfb service config is present
+describe file('/etc/init.d/xvfb') do
+  it { should be_file }
+  it { should be_mode '700' }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  xvfb_init_content = <<-eos
+# This is the /etc/init.d/xvfb script. We use it to launch xvfb at boot in the
+# development environment so we can easily run the functional tests.
+
+XVFB=/usr/bin/Xvfb
+XVFBARGS=":1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset"
+PIDFILE=/var/run/xvfb.pid
+case "$1" in
+  start)
+    echo -n "Starting virtual X frame buffer: Xvfb"
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --exec $XVFB -- $XVFBARGS
+    echo "."
+    ;;
+  stop)
+    echo -n "Stopping virtual X frame buffer: Xvfb"
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE
+    echo "."
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+        echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
+        exit 1
+esac
+
+exit 0
+eos
+  its(:content) { should eq xvfb_init_content }
+end
+
+
+
+
