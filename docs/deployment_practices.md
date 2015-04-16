@@ -77,7 +77,7 @@ To enforce HTTPS/SSL always, you need to set up redirection within the HTTP (por
     RewriteEngine On
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
-    
+
 In your SSL (port 443) virtual host, set up HSTS and use these settings to give preference to the most secure cipher suites:
 
     Header set Strict-Transport-Security "max-age=16070400; includeSubDomains"
@@ -111,9 +111,9 @@ To guard your landing page against being modified by an attacker and directing s
 * Use long, random and complex passwords
 * Firewall rules to restrict accessible ports (see iptables or ufw)
 * AppArmor, grsecurity, SELINUX, modsecurity
-* Intrusion and/or integrity monitoring (see OSSEC, Snort, rkhunter)
+* Intrusion and/or integrity monitoring (see Logwatch, OSSEC, Snort, rkhunter, chkrootkit)
 * Downtime alerts (Nagios or Pingdom)
-* Two-factor authentication (see libpam-google-authenticator)
+* Two-factor authentication (see libpam-google-authenticator, libpam-yubico)
 
 It's preferable for the landing page to have its own segmented environment instead of hosting it alongside other sites running potentially vulnerable software or content management systems. Check that user and group file permissions are locked down and that modules or gateway interfaces for dynamic scripting languages are not enabled. You don't want any unnecessary code or services running as this increases the attack surface.
 

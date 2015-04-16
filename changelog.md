@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.2
+
+* Fixes security vulnerabilty (severity=high) in access control on Document Interface (#974)
+
+## 0.3.1
+
+* Improved installation and setup documentation (#927, #907, #903, #900)
+* Fixed PEP8 and other style issue (#926, #893, #884, #890, #885)
+* Automatic torrc initialization in Tails via dotfiles persistence (#925)
+* Fix bug in installing grsecurity kernel when using new Ubuntu 14.04.2 .iso (#919)
+* Prevent sources from creating "empty" submissions (#918)
+* Autoremove unused packages after automatic upgrade (#916)
+* Remove the App Server (private) IP address from OSSEC alert email subject lines (#915)
+* Handle custom header image as a conffile in the securedrop-app-code Debian package (#911)
+* Upgrade path from 0.3pre (#908, #909)
+* Remove offensive words from source and journalist word lists (#891, #901)
+
 ## 0.3
 
 ### Web App

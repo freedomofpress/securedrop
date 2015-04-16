@@ -1,4 +1,4 @@
-# Tails Guide
+# Setting up the Admin and Journalist Tails USB
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -12,10 +12,17 @@
   - [Download the repository](#download-the-repository)
   - [Passphrase Database](#passphrase-database)
   - [Set up easy access to the Document Interface](#set-up-easy-access-to-the-document-interface)
-  - [Using Tails with the Workstation](#using-tails-with-the-workstation)
     - [Create bookmarks for Source and Document Interfaces](#create-bookmarks-for-source-and-document-interfaces)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+To log-in SecureDrop and retreived messages sent by sources, the journalist must be using the Tails operating system. The admin must also use Tails to access the *Document Interface* and create new users.
+
+If you followed the [SecureDrop Installation instructions](/docs/install.md) correctly, you should have already created a *journalist Tails USB* and an *admin Tails USB* and enabled the persistence volume on each. If you have not, or need to create another *journalist Tails USB* for a second journalist, follow the steps below.
+
+If you already know how to boot the *admin Tails USB* or the *journalist Tails USB* with persistence, you can skip down to the step 'download the repository'.
+
+Note that for all of these instructions to work, you should have already installed the main SecureDrop application.
 
 # Installing Tails on USB sticks
 
@@ -49,13 +56,11 @@ Note the change from `diskX` to `rdiskX`. This reduced the copy time to 3 minute
 
 ## Persistence
 
-Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select from a list of persistence features, such as personal data. We recommend that you enable **all** features.
+Creating an encrypted persistent volume will allow you to securely save information in the free space that is left on the Transfer Device. This information will remain available to you even if you reboot Tails. Instructions on how to create and use this volume can be found on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html). You will be asked to select from a list of persistence features, such as personal data. We require that you enable **all** features.
 
 ## Start Tails and enable the persistent volume
 
-When starting Tails, you should see a *Welcome to Tails*-screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this current Tails session and click *Login*.
-
-If you're setting up the Secure Viewing Station, stop here. You're done. Otherwise, once you're logged in, connect the Tails machine to the Internet.
+When starting Tails, you should see a "Welcome to Tails" screen with two options. Select *Yes* to enable the persistent volume and enter your password. Select *Yes* to show more options and click *Forward*. Enter an *Administration password* for use with this specific Tails session and click *Login*.
 
 ## Download the repository
 
@@ -83,9 +88,9 @@ To use the template:
 
 ## Set up easy access to the Document Interface
 
-If this is an Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the Document Interface.
+To complete setup of the Admin Workstation or Journalist Workstation, we recommend using the scripts in `tails_files` to easily configure Tor to access the *Document Interface*.
 
-Navigate to the directory with the setup scripts and begin the installation:
+Navigate to the directory with the setup scripts and begin the installation by typing these commands into the terminal:
 
 ```
 cd securedrop/tails_files/
@@ -103,9 +108,9 @@ HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
 
 If you're working on the Admin Workstation, you should also insert the lines found in `app-ssh-aths` and `mon-ssh-aths`, which will allow you to connect using a secure shell over Tor to the App and Monitor Servers. When you are done, click *Save* and close the text editor.
 
-## Using Tails with the Workstation
+The preceding steps are taken so that no one but the journalist will be able to access to the *Document Interface*, even if they manage to steal the journalist's username, password, and two-factor authentication token.
 
-To use Tails with the Workstation, start Tails and enable the persistent volume. You do not have to set a password. Connect to the Internet, then click on *Places* and select the *Persistent* folder. Double-click on *SecureDrop Init*. Once that's done, open the browser and connect to the Document Interface as normal. You will need to remember to repeat this step every time you start Tails.
+Our `install.sh` sets up an initialization script that automatically updates Tor's configuration to work with SecureDrop every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and connect to the Document Interface as normal.
 
 ### Create bookmarks for Source and Document Interfaces
 

@@ -18,5 +18,54 @@
 
 - name: install grsec package from fpf repo
   apt: pkg={{ grsec_package }} state=latest
-  async: 200
+  async: 300
   poll: 10
+
+- name: get grsec kernel string
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | head -1 | cut -d "'" -f2
+  register: grsec_str
+
+- name: set grsec kernel as default for next boot
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
+
+- stat: path="/proc/sys/kernel/grsecurity/grsec_lock"
+  register: running_grsec
+
+- name: reboot into the grsec kernel
+  command: shutdown -r now "Rebooting into the grsec kernel..."
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: not running_grsec.stat.exists
+  tags:
+    - reboot
+
+- name: waiting for server to come back
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  sudo: false
+  when: not running_grsec.stat.exists
+  tags:
+    - reboot
+
+- name: remove generic kernel metapackages
+  apt: name=linux-signed-image-generic-lts-utopic state=absent
+  apt: name=linux-signed-image-generic state=absent
+  apt: name=linux-signed-generic-lts-utopic state=absent
+  apt: name=linux-signed-generic state=absent
+
+- name: remove remaining generic kernels
+  command: apt-get -y remove '^linux-image-.*generic$'
+
+- name: remove remaining kernel headers
+  command: apt-get -y remove '^linux-headers-.*'
+
+- name: mark GRUB2 as manually installed so its not removed
+  command: apt-mark manual grub-pc
+
+- name: cleanup any dependencies left
+  command: apt-get -y autoremove

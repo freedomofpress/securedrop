@@ -9,18 +9,19 @@ import tempfile
 import subprocess
 from cStringIO import StringIO
 import gzip
-
-import logging
-log = logging.getLogger(__name__)
-
 from werkzeug import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
 
-VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
+import logging
+log = logging.getLogger(__name__)
+
+VALIDATE_FILENAME = re.compile(
+    "^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
 
 
 class PathException(Exception):
+
     """An exception raised by `store.verify` when it encounters a bad path. A path
     can be bad when it is not absolute, not normalized, not within
     `config.STORE_DIR`, or doesn't match the filename format.
@@ -97,7 +98,9 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
     # file. Given various usability constraints in GPG and Tails, this
     # is the most user-friendly way we have found to do this.
 
-    encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(count, journalist_filename)
+    encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(
+        count,
+        journalist_filename)
     encrypted_file_path = path(sid, encrypted_file_name)
     with SecureTemporaryFile("/tmp") as stf:
         with gzip.GzipFile(filename=sanitized_filename, mode='wb', fileobj=stf) as gzf:

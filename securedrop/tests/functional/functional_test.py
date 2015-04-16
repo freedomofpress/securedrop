@@ -10,7 +10,7 @@ import gnupg
 import urllib2
 import sys
 
-os.environ['SECUREDROP_ENV'] = 'test'
+
 import config
 
 import source
@@ -24,6 +24,8 @@ from datetime import datetime
 import time
 import mock
 
+os.environ['SECUREDROP_ENV'] = 'test'
+
 
 class FunctionalTest():
 
@@ -36,7 +38,9 @@ class FunctionalTest():
 
     def _create_webdriver(self):
         log_file = open('tests/log/firefox.log', 'a')
-        log_file.write('\n\n[%s] Running Functional Tests\n' % str(datetime.now()))
+        log_file.write(
+            '\n\n[%s] Running Functional Tests\n' % str(
+                datetime.now()))
         log_file.flush()
         firefox = firefox_binary.FirefoxBinary(log_file=log_file)
         return webdriver.Firefox(firefox_binary=firefox)
@@ -64,7 +68,10 @@ class FunctionalTest():
             source.app.run(port=source_port, debug=True, use_reloader=False)
 
         def start_journalist_server():
-            journalist.app.run(port=journalist_port, debug=True, use_reloader=False)
+            journalist.app.run(
+                port=journalist_port,
+                debug=True,
+                use_reloader=False)
 
         self.source_process = Process(target=start_source_server)
         self.journalist_process = Process(target=start_journalist_server)
@@ -89,7 +96,8 @@ class FunctionalTest():
 
     def wait_for(self, function_with_assertion, timeout=5):
         """Polling wait for an arbitrary assertion."""
-        # Thanks to http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        # Thanks to
+        # http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:

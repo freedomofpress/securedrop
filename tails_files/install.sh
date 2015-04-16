@@ -11,6 +11,7 @@ INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 SCRIPT_BIN=$INSTALL_DIR/securedrop_init
+DOTFILES=/live/persistence/TailsData_unlocked/dotfiles
 
 mkdir -p $INSTALL_DIR
 
@@ -19,16 +20,15 @@ apt-get update
 apt-get install -y build-essential
 gcc -o $SCRIPT_BIN securedrop_init.c
 
-# copy launcher and icon
-cp securedrop_icon.png $INSTALL_DIR
-cp SecureDrop\ Init.desktop $PERSISTENT
-
-# copy securedrop_init.py script
+# copy init scripts
 cp securedrop_init.py $SCRIPT_PY
+cp .xsessionrc $INSTALL_DIR
+
+cp securedrop_icon.png $INSTALL_DIR
 
 # prepare torrc_additions
 cp torrc_additions $ADDITIONS
-gedit $ADDITIONS
+gedit $ADDITIONS > /dev/null 2>&1
 
 # set permissions
 chmod 755 $INSTALL_DIR
@@ -39,14 +39,19 @@ chown root:root $SCRIPT_PY
 chmod 700 $SCRIPT_PY
 chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
-
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
-chown amnesia:amnesia $PERSISTENT/SecureDrop\ Init.desktop
-chmod 700 $PERSISTENT/SecureDrop\ Init.desktop
+chown amnesia:amnesia $INSTALL_DIR/.xsessionrc
+chmod 700 $INSTALL_DIR/.xsessionrc
+
+# make the init script persistent
+cp -p $INSTALL_DIR/.xsessionrc $DOTFILES
+
+# run the torrc update
+$INSTALL_DIR/securedrop_init
 
 echo ""
-echo "Successfully configured the auto-launcher for the document interface!"
-echo "In the future, automatically set up Tor to access the document interface by double-clicking the \"SecureDrop Init\" icon in your Persistent folder."
-echo "You will see a notification appear in the top right corner of your screen when it completes."
+echo "Successfully configured the persistent initialization script for SecureDrop's Tor configuration!"
+echo "You will see a notification appear in the top-right corner of your screen when it runs."
 echo ""
+exit 0

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/home/amnesia/Persistent/.securedrop/securedrop_init

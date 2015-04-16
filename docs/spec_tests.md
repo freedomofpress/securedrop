@@ -6,6 +6,6 @@ serverspec and rspec tests verify the end state of app and monitor servers. The 
 
 `apt-get install rake bundler ruby-rspec-core ruby-serverspec`
 
-`cd spec-tests/`
+`cd spec_tests/`
 
 rspec spec

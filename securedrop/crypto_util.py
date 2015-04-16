@@ -119,7 +119,8 @@ def genkeypair(name, secret):
 
 def delete_reply_keypair(source_id):
     key = getkey(source_id)
-    # If this source was never flagged for review, they won't have a reply keypair
+    # If this source was never flagged for review, they won't have a reply
+    # keypair
     if not key:
         return
     # The private key needs to be deleted before the public key can be deleted
@@ -138,7 +139,9 @@ def getkey(name):
 
 
 def get_key_by_fingerprint(fingerprint):
-    matches = filter(lambda k: k['fingerprint'] == fingerprint, gpg.list_keys())
+    matches = filter(
+        lambda k: k['fingerprint'] == fingerprint,
+        gpg.list_keys())
     return matches[0] if matches else None
 
 
@@ -157,7 +160,9 @@ def encrypt(plaintext, fingerprints, output=None):
     if isinstance(plaintext, unicode):
         plaintext = plaintext.encode('utf8')
 
-    encrypt_fn = gpg.encrypt if isinstance(plaintext, str) else gpg.encrypt_file
+    encrypt_fn = gpg.encrypt if isinstance(
+        plaintext,
+        str) else gpg.encrypt_file
     out = encrypt_fn(plaintext,
                      *fingerprints,
                      output=output,

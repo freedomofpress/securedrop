@@ -16,8 +16,8 @@ app_ip: "10.0.1.2"
 securedrop_code: "/vagrant/securedrop"
 # The securedrop_header_image has to be in the install_files/ansible-base/ or
 # the install_files/ansible-base/roles/app/files/ directory
-# Leave set to None to use the SecureDrop logo.
-securedrop_header_image: "None"
+# Leave set to empty to use the SecureDrop logo.
+securedrop_header_image: ""
 # The app GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
 securedrop_app_gpg_public_key: "test_journalist_key.pub"

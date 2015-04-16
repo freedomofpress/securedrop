@@ -26,7 +26,8 @@ def migrate_config_file(backup):
     shutil.copy(config_fn, config_fn + '.backup')
 
     # Substitute values in new config with values from old config
-    old_config = backup.extractfile('var/chroot/source/var/www/securedrop/config.py').read()
+    old_config_path = 'var/chroot/source/var/www/securedrop/config.py'
+    old_config = backup.extractfile(old_config_path).read()
     new_config = open(config_fn, 'r').read()
     subs = [
         (r"JOURNALIST_KEY=('.*')", r"^(JOURNALIST_KEY = )('.*')"),
@@ -113,7 +114,8 @@ def migrate_database(backup):
     # Copied from db.py to compute filesystem-safe journalist filenames
     def journalist_filename(s):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
-        return ''.join([c for c in s.lower().replace(' ', '_') if c in valid_chars])
+        return ''.join([c for c in s.lower().replace(' ',
+                        '_') if c in valid_chars])
 
     # Migrate rows to new database with SQLAlchemy ORM
     for source in sources:
@@ -151,7 +153,8 @@ def migrate_database(backup):
         replies.sort(key=itemgetter(1))
 
         if len(submissions) > 0:
-            migrated_source.last_updated = datetime.utcfromtimestamp(submissions[-1][1])
+            time = submissions[-1][1]
+            migrated_source.last_updated = (datetime.utcfromtimestamp(time))
         else:
             # The source will have the default .last_updated of utcnow(), which
             # might be a little confusing, but it's the best we can do.
@@ -198,7 +201,11 @@ def migrate_database(backup):
             if fn.startswith('reply-'):
                 new_fn = "{0}-{1}-reply.gpg".format(count+1, journalist_filename(source[1]))
             else:
-                new_fn = "{0}-{1}-{2}".format(count+1, journalist_filename(source[1]), "msg.gpg" if fn.endswith("msg.gpg") else "doc.zip.gpg")
+                new_fn = "{0}-{1}-{2}".format(count+1,
+                                              journalist_filename(source[1]),
+                                              "msg.gpg"
+                                              if fn.endswith("msg.gpg") else
+                                              "doc.zip.gpg")
 
             # Move to the new filename
             os.rename(os.path.join(source_dir, fn),
@@ -221,23 +228,30 @@ def migrate_database(backup):
             db_session.commit()
 
     # chown the database file to the securedrop user
-    subprocess.call(['chown', 'www-data:www-data', "/var/lib/securedrop/db.sqlite"])
+    subprocess.call(['chown', 'www-data:www-data',
+                     "/var/lib/securedrop/db.sqlite"])
 
 
 def migrate_custom_header_image(backup):
     print "* Migrating custom header image..."
     extract_file_to(backup, 
-                    "var/chroot/source/var/www/securedrop/static/i/securedrop.png",
+                    ("var/chroot/source/var/www/securedrop/static/i/"
+                     "securedrop.png"),
                     "/var/www/securedrop/static/i/logo.png")
-    subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/logo.png"])
+    subprocess.call(['chown', '-R', 'www-data:www-data',
+                     "/var/www/securedrop/static/i/logo.png"])
 
 
 def migrate_tor_files(backup):
     print "* Migrating source interface .onion..."
-    ths_root_dir = "/var/lib/tor/services"
-    # For now, we're going to re-provision the monitor and SSH hidden services.
-    # The only hidden service whose address we want to maintain is the source
-    # interface. Modify the code below to migrate other hidden services as well.
+
+    tor_root_dir = "/var/lib/tor"
+    ths_root_dir = os.path.join(tor_root_dir, "services")
+
+    # For now, we're going to re-provision the monitor and SSH
+    # hidden services. The only hidden service whose address
+    # we want to maintain is the source interface. Modify the
+    #  code below to migrate other hidden services as well.
 
     # Restore source interface hidden sevice key to maintain the original
     # .onion address
@@ -249,7 +263,8 @@ def migrate_tor_files(backup):
 
     # Extract the original source interface THS key
     extract_file_to(backup,
-                    "var/chroot/source/var/lib/tor/hidden_service/private_key",
+                    ("var/chroot/source/var/lib/tor/hidden_service/"
+                     "private_key"),
                     os.path.join(source_ths_dir, "private_key"))
 
     # chmod the files so they're owned by debian-tor:debian-tor

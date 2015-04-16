@@ -12,26 +12,33 @@ import os
 import re
 import tarfile
 
+
 # Arbitrarily pick the source chroot jail (doesn't matter)
 securedrop_root = "/var/chroot/source/var/www/securedrop"
+
 
 def collect_config_file(backup):
     backup.add(os.path.join(securedrop_root, "config.py"))
 
+    
 def collect_securedrop_root(backup):
-    # The store and key dirs are shared between the chroot jails in 0.2.1, and
-    # are both linked from /var/securedrop
+    # The store and key dirs are shared between the chroot jails in
+    # 0.2.1, and are both linked from /var/securedrop
     backup.add("/var/securedrop")
+
 
 def collect_database(backup):
     # Copy the db file, which is only present in the document interface's
     # chroot jail in 0.2.1
     backup.add("/var/chroot/document/var/www/securedrop/db.sqlite")
 
+
 def collect_custom_header_image(backup):
-    # 0.2.1's deployment didn't actually use config.CUSTOM_HEADER_IMAGE - it
-    # just overwrote the default header image, `static/i/securedrop.png`.
+    # 0.2.1's deployment didn't actually use
+    # config.CUSTOM_HEADER_IMAGE - it just overwrote the default
+    # header image, `static/i/securedrop.png`.
     backup.add(os.path.join(securedrop_root, "static/i/securedrop.png"))
+
 
 def collect_tor_files(backup):
     tor_files = [
@@ -45,10 +52,13 @@ def collect_tor_files(backup):
         # Since the 0.2.1 install process was occasionally somewaht ad
         # hoc, the SSH ATHS was not always set up. We treat that as a
         # non-fatal error and continue.
-        if not os.path.isfile(tor_file) and tor_file == "/var/lib/tor/hidden_service/client_keys":
-            print "!\tWarning: expected file '{}' not found. Continuing anyway.".format(tor_file)
+        if (not os.path.isfile(tor_file)
+            and tor_file == "/var/lib/tor/hidden_service/client_keys"):
+            print ("!\tWarning: expected file '{}' not found. "
+                   "Continuing anyway.".format(tor_file))
             continue
         backup.add(tor_file)
+
 
 def main():
     if len(sys.argv) <= 1:
@@ -60,7 +70,6 @@ def main():
         backup_fn += ".tar.gz"
 
     print "Backing up..."
-
     with tarfile.open(backup_fn, 'w:gz') as backup:
         collect_config_file(backup)
         collect_securedrop_root(backup)

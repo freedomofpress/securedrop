@@ -16,7 +16,7 @@
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <div class="snippet grid">
+  <div class="snippet">
     <div class="attachment grid-item">
       <i class="fa fa-cloud-upload upload-icon"></i> <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
@@ -28,7 +28,7 @@
 
   <hr class="no-line">
 
-  <button type="submit" class="btn primary" href="upload.html"><i class="fa fa-cloud-upload"></i> Submit</button>
+  <button type="submit" class="btn primary"><i class="fa fa-cloud-upload"></i> Submit</button>
 </form>
 
 <p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
