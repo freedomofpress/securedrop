@@ -7,8 +7,13 @@ describe iptables do
   # https://github.com/volanja/ansible_spec Using the values for IP addresses
   # from the ansible inventory should cover most use cases (except inventories
   # with just the *.onion addresses).
-  it { should_not have_rule(' OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
-  it { should_not have_rule(' INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
+  it { should_not have_rule('-A OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
+  it { should_not have_rule('-A INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"') }
+
+  # These rules have the wrong interface for the vagrant mon-staging machine.
+  # Adding them in here to make sure ansible config changes don't introduce regressions.
+  it { should_not have_rule('-A INPUT -s 10.0.2.15/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
+  it { should_not have_rule('-A OUTPUT -d 10.0.2.15/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
 
   # These rules should be present in prod and staging
   # TODO: There are also hardcoded IP addresses in this section.
@@ -25,7 +30,6 @@ describe iptables do
   it { should have_rule('-A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT') }
   it { should have_rule('-A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT') }
   it { should have_rule('-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
-  it { should have_rule('-A INPUT -s 10.0.2.15/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
 
   # it appears that single quotes within an iptables rules messes with
@@ -51,7 +55,6 @@ describe iptables do
   it { should have_rule('-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT') }
   it { should have_rule('-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT') }
-  it { should have_rule('-A OUTPUT -d 10.0.2.15/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT') }
   it { should have_rule('-A OUTPUT -m comment --comment "Drop all other outgoing traffic" -j DROP') }
