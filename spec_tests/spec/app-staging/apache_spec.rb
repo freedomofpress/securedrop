@@ -253,14 +253,13 @@ end
   end
 end
 
-# Are default html files removed?
-
 # Is apache running as user X
 describe service('apache2') do
  it { should be_enabled }
  it { should be_running }
 end
 
+# ensure securedrop user account is configured properly
 describe user('www-data') do
   it { should exist }
   it { should have_home_directory '/var/www' }
