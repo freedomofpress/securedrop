@@ -110,6 +110,21 @@ describe file('/etc/profile.d/xvfb_display.sh') do
   its(:content) { should eq "export DISPLAY=:1\n" }
 end
 
+# ensure that xvfb service is running
+describe service('Xvfb') do
+  # TODO: `enabled` check in serverspec uses a case-sensitive grep,
+  # so the all-lowercase filename /etc/init.d/xvfb fails an enabled
+  # check as a result. modify this in ansible config, then update test.
+  #  it { should be_enabled }
+  # TODO: ansible config does not enforce service=started for xvfb, but should.
+  # if app-staging has be rebooted/reloaded, then the service will be running.
+  it { should be_running }
+end
+describe service('xvfb') do
+  # TODO: (duplicate of above). rename /etc/init.d/{x,X}vfb in ansible config
+  it { should be_enabled }
+end
+
 # TODO: confirm that DISPLAY environment variable is currently set
 # will likely need to leverage a spec_helper for this, since
 # env vars are ignored by serverspec's default ssh config
