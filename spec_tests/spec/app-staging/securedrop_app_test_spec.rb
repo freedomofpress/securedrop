@@ -42,3 +42,15 @@ describe command('pip freeze') do
     its(:stdout) { should contain(pip_dependency) }
   end
 end
+
+# declare apt package dependencies for running tests
+apt_dependencies = [
+  'firefox',
+  'xvfb',
+]
+# ensure apt package dependencies are installed
+apt_dependencies.each do |apt_dependency|
+  describe package(apt_dependency) do
+    it { should be_installed }
+  end
+end
