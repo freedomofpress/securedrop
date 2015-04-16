@@ -104,13 +104,34 @@ apache2_available_sites.each do |apache2_available_site|
   end
 end
 
+# declare source-specific apache configs
+source_apache2_config_settings = [
+  '<VirtualHost 0.0.0.0:80>',
+  'DocumentRoot /var/www/securedrop/static',
+  'Alias /static /var/www/securedrop/static',
+  'WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop',
+  'WSGIProcessGroup source',
+  'WSGIScriptAlias / /var/www/source.wsgi/',
+  'AddType text/html .py',
+  'XSendFile        Off',
+  'LimitRequestBody 524288000',
+  'ErrorDocument 400 /notfound',
+  'ErrorDocument 401 /notfound',
+  'ErrorDocument 403 /notfound',
+  'ErrorDocument 404 /notfound',
+  'ErrorDocument 500 /notfound',
+  'ErrorLog /var/log/apache2/source-error.log',
+]
+# check source-specific apache2 config
 describe file('/etc/apache2/sites-available/source.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
+  it { should be_grouped_into  'root' }
   it { should be_mode '644' }
-  its(:content) { should match "<VirtualHost 0.0.0.0:80>" }
-  its(:content) { should match "WSGIScriptAlias / /var/www/source.wsgi/" }
-  its(:content) { should match "ErrorLog /var/log/apache2/source-error.log" }
+  source_apache2_config_settings.each do |source_apache2_config_setting|
+    source_apache2_config_setting_regex = Regexp.quote(source_apache2_config_setting)
+    its(:content) { should match /^#{source_apache2_config_setting_regex}$/ }
+  end
 end
 
 ['access_compat','authn_core','alias','authz_core','authz_host','authz_user','deflate','filter','dir','headers','mime','mpm_event','negotiation','reqtimeout','rewrite','wsgi','xsendfile'].each do |enabled_module|
