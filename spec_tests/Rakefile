@@ -33,10 +33,13 @@ hosts = %w(development build app-staging mon-staging).map do |host|
 end
 
 
+# dynamically determine roles per host
+# this brilliant pragma conceived by @vincentbernat, see
+# https://github.com/vincentbernat/serverspec-example
+# http://vincent.bernat.im/en/blog/2014-serverspec-test-infrastructure.html
 namespace :spec do
-  desc "Run serverspec to all hosts"
-  task :all => hosts.map { |h| h[:name] } # ➊
-
+  # assign all hosts to serverspec task run
+  task :all => hosts.map { |h| h[:name] }
   hosts.each do |host|
     desc "Run spectests against #{host[:name]}"
     RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
@@ -45,5 +48,3 @@ namespace :spec do
     end
   end
 end
-
-
