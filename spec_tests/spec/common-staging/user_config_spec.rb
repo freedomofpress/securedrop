@@ -1,3 +1,6 @@
+require 'spec_helper'
+
+
 # ensure sudoers file is present
 ['/etc/sudoers', '/etc/sudoers.tmp'].each do |sudoers|
   describe file(sudoers) do

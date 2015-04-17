@@ -1,4 +1,5 @@
-#require 'spec_helper'
+require 'spec_helper'
+
 
 # Check for critical packages
 ['cron-apt', 'ntp', 'paxctl'].each do |pkg|
@@ -83,8 +84,8 @@ describe command('aptitude --simulate safe-upgrade') do
   its(:stdout) { should match /0 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded\./ }
 end
 
-# TODO: In order to validate the intended system state post-provisioning, 
-# may be simplest to compare output of `dpkg --get-selections` 
+# TODO: In order to validate the intended system state post-provisioning,
+# may be simplest to compare output of `dpkg --get-selections`
 # from a clean box versus a post-provisioned one. However,
 # there will be environment-specific items in this list (e.g. vbox)
 # that must be pruned.

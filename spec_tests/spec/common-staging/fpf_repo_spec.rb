@@ -1,3 +1,6 @@
+require 'spec_helper'
+
+
 # ensure FPF repo is present
 describe file('/etc/apt/sources.list.d/apt_freedom_press.list') do
   its(:content) { should match /^deb \[arch=amd64\] https:\/\/apt\.freedom\.press trusty main$/ }

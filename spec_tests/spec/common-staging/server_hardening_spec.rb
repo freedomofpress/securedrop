@@ -1,3 +1,6 @@
+require 'spec_helper'
+
+
 # declare desired sysctl flags
 sysctl_flags = {
   'net.ipv4.tcp_max_syn_backlog' => 4096,
@@ -27,7 +30,7 @@ describe command('sysctl --all') do
 end
 
 # ensure DNS server is named
-# TODO: nameserver var is hard-coded below. consider 
+# TODO: nameserver var is hard-coded below. consider
 # dynamically populated this var via spec_helper.
 describe file('/etc/resolvconf/resolv.conf.d/base') do |resolvconf|
   it { should be_mode '644' }
