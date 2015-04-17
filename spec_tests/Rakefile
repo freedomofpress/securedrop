@@ -9,18 +9,16 @@ task :default => :spec
 # that includes roles assigned to that host. changes made
 # in ansible config must be manually duplicated here.
 def roles(host)
-  roles = [ "all" ]
+  roles = []
   case host
-  when /-staging$/
-    roles << "common-staging"
   when /^development$/
     roles << "development"
   when /^build$/
     roles << "build"
   when /^app-staging$/
-    roles << "app-staging"
+    roles << %w(common-staging app-staging)
   when /^mon-staging$/
-    roles << "mon-staging"
+    roles << %w(common-staging mon-staging)
   end
   roles
 end
@@ -33,7 +31,6 @@ hosts = %w(development build app-staging mon-staging).map do |host|
     :roles => roles(host)
   }
 end
-
 
 
 namespace :spec do
