@@ -16,8 +16,6 @@ else
 end
 
 host = ENV['TARGET_HOST']
-# temporarily isolate development vm for debugging
-host = 'development'
 
 `vagrant up #{host}`
 
