@@ -1,5 +1,6 @@
-#require 'spec_helper'
-#
+require 'spec_helper'
+
+
 # ensure hosts file references app server by ip
 # TODO: replace hardcoded ip for app-staging host
 describe file('/etc/hosts') do
