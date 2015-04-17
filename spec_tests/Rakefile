@@ -1,10 +1,32 @@
 require 'rake'
 require 'rspec/core/rake_task'
 
+
 task :spec    => 'spec:all'
 task :default => :spec
 
+# this function accepts a hostname and returns a hash
+# that includes roles assigned to that host. changes made
+# in ansible config must be manually duplicated here.
+def roles(host)
+  roles = [ "all" ]
+  case host
+  when /-staging$/
+    roles << "common-staging"
+  when /^development$/
+    roles << "development"
+  when /^build$/
+    roles << "build"
+  when /^app-staging$/
+    roles << "app-staging"
+  when /^mon-staging$/
+    roles << "mon-staging"
+  end
+  roles
+end
 
+
+# manually declare hosts, and assign them roles for testing
 hosts = %w(development build app-staging mon-staging).map do |host|
   {
     :name => host,
@@ -36,19 +58,3 @@ namespace :spec do
 end
 
 
-def roles(host)
-  roles = [ "all" ]
-  case host
-  when /-staging$/
-    roles << "common-staging"
-  when /^development$/
-    roles << "development"
-  when /^build$/
-    roles << "build"
-  when /^app-staging$/
-    roles << "app-staging"
-  when /^mon-staging$/
-    roles << "mon-staging"
-  end
-  roles
-end
