@@ -86,7 +86,7 @@ apache2_common_headers = [
 ]
 # declare block of directory declarations common to both
 # source and document interfaces.
-common_apache2_directory_declarations = <<-eos
+common_apache2_directory_declarations = <<eos
 <Directory />
   Options None
   AllowOverride None
@@ -107,7 +107,7 @@ common_apache2_directory_declarations = <<-eos
   </LimitExcept>
 </Directory>
 
-<Directory /var/www/securedrop>
+<Directory #{TEST_VARS['securedrop_code']}>
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
@@ -143,7 +143,7 @@ end
 source_apache2_config_settings = [
   '<VirtualHost 0.0.0.0:80>',
   "DocumentRoot #{TEST_VARS['securedrop_code']}/static",
-  'Alias /static /var/www/securedrop/static',
+  "Alias /static #{TEST_VARS['securedrop_code']}/static",
   "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{TEST_VARS['securedrop_code']}",
   'WSGIProcessGroup source',
   'WSGIScriptAlias / /var/www/source.wsgi/',
