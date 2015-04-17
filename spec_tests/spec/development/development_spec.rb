@@ -45,3 +45,13 @@ describe command('pip freeze') do
   end
 end
 
+# ensure that the SECUREDROP_ENV var is set to "dev"
+# TODO: this isn't really checking that the env var is set,
+# just that it's declared in the bashrc. spec_helper ignores
+# env vars via ssh by default, so start there.
+describe file('/home/vagrant/.bashrc') do
+  it { should be_file }
+  it { should be_owned_by 'vagrant' }
+  its(:content) { should match /^export SECUREDROP_ENV=dev$/ }
+end
+
