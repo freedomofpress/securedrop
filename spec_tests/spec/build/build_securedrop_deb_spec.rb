@@ -33,6 +33,7 @@ end
 
 # declare filenames for built debs
 wanted_debs = [
+  "/vagrant/build/securedrop-app-code-#{securedrop_app_code_version}-amd64.deb",
   "/vagrant/build/securedrop-ossec-agent-2.8.1+#{securedrop_app_code_version}-amd64.deb",
   "/vagrant/build/securedrop-ossec-server-2.8.1+#{securedrop_app_code_version}-amd64.deb",
 ]
