@@ -142,9 +142,9 @@ end
 # declare source-specific apache configs
 source_apache2_config_settings = [
   '<VirtualHost 0.0.0.0:80>',
-  'DocumentRoot /var/www/securedrop/static',
+  "DocumentRoot #{TEST_VARS['securedrop_code']}/static",
   'Alias /static /var/www/securedrop/static',
-  'WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop',
+  "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{TEST_VARS['securedrop_code']}",
   'WSGIProcessGroup source',
   'WSGIScriptAlias / /var/www/source.wsgi/',
   'AddType text/html .py',
@@ -172,9 +172,9 @@ end
 # declare document-specific apache configs
 document_apache2_config_settings = [
   '<VirtualHost 0.0.0.0:8080>',
-  'DocumentRoot /var/www/securedrop/static',
-  'Alias /static /var/www/securedrop/static',
-  'WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=/var/www/securedrop',
+  "DocumentRoot #{TEST_VARS['securedrop_code']}/static",
+  "Alias /static #{TEST_VARS['securedrop_code']}/static",
+  "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{TEST_VARS['securedrop_code']}",
   'WSGIProcessGroup document',
   'WSGIScriptAlias / /var/www/document.wsgi/',
   'AddType text/html .py',
