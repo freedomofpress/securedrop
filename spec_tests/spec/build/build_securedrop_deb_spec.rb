@@ -59,7 +59,7 @@ wanted_debs.each do |wanted_deb|
   # ensure required debs appear installable
   describe command("dpkg --install --dry-run #{wanted_deb}") do
     its(:exit_status) { should eq 0 }
-#    its(:stdout) { should contain("Selecting previously unselected package #{package_name} ...")}
+    its(:stdout) { should contain("Selecting previously unselected package #{package_name}.")}
 #    its(:stdout) { should contain("Preparing to unpack #{deb_basename} ...")}
   end
 end
