@@ -1,6 +1,7 @@
 require 'serverspec'
 require 'net/ssh'
 require 'tempfile'
+require 'yaml'
 
 set :backend, :ssh
 
@@ -29,6 +30,13 @@ options[:user] ||= Etc.getlogin
 
 set :host,        options[:host_name] || host
 set :ssh_options, options
+
+# load custom vars for host
+case host
+when /^development$/
+vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'development.yml'))
+TEST_VARS = YAML.load_file(vars_file)
+end
 
 # Disable sudo
 # set :disable_sudo, true
