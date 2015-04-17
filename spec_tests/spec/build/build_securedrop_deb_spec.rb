@@ -52,14 +52,22 @@ wanted_debs.each do |wanted_deb|
   # 'securedrop-ossec-agent'
   package_name = deb_basename.scan(/^([a-z\-]+(?!\d))/)[0][0].to_s
 
-  # debugging output
-  puts package_name
-  puts deb_basename
-
   # ensure required debs appear installable
   describe command("dpkg --install --dry-run #{wanted_deb}") do
     its(:exit_status) { should eq 0 }
-    its(:stdout) { should contain("Selecting previously unselected package #{package_name}.")}
+    its(:stdout) { should contain("Selecting previously unselected package #{package_name}.") }
 #    its(:stdout) { should contain("Preparing to unpack #{deb_basename} ...")}
+  end
+
+  # ensure control fields are populated as expected
+  # TODO: these checks are rather superficial, and don't actually confirm that the
+  # .deb files are not broken. at a later date, consider integration tests
+  # that actually use these built files during an ansible provisioning run.
+  describe command("dpkg-deb --field #{wanted_deb}") do
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should contain("Maintainer: SecureDrop Team <securedrop@freedom.press>") }
+    its(:stdout) { should contain("Homepage: https://freedom.press/securedrop") }
+    its(:stdout) { should contain("Package: #{package_name}")}
+    its(:stdout) { should contain("Architecture: amd64") }
   end
 end
