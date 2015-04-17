@@ -12,11 +12,11 @@ def roles(host)
   roles = []
   case host
   when /^development$/
-    roles << "development"
+    roles << %w(common-development development)
   when /^build$/
     roles << "build"
   when /^app-staging$/
-    roles << %w(common-staging app-staging)
+    roles << %w(common-development common-staging app-staging)
   when /^mon-staging$/
     roles << %w(common-staging mon-staging)
   end
