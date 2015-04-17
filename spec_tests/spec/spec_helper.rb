@@ -34,8 +34,11 @@ set :ssh_options, options
 # load custom vars for host
 case host
 when /^development$/
-vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'development.yml'))
-TEST_VARS = YAML.load_file(vars_file)
+  vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'development.yml'))
+  TEST_VARS = YAML.load_file(vars_file)
+when /^app-staging$/
+  vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'staging.yml'))
+  TEST_VARS = YAML.load_file(vars_file)
 end
 
 # Disable sudo
