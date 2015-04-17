@@ -8,7 +8,7 @@ end
 
 # declare securedrop app directories
 securedrop_app_directories = [
-  '/var/www/securedrop',
+  TEST_VARS['securedrop_code'],
   '/var/lib/securedrop',
   '/var/lib/securedrop/store',
   '/var/lib/securedrop/keys',
@@ -69,7 +69,7 @@ eos
 end
 
 # ensure config.py (settings for securedrop app) exists
-describe file('/var/www/securedrop/config.py') do
+describe file("#{TEST_VARS['securedrop_code']}/config.py") do
   it { should be_file }
   it { should be_owned_by  'www-data' }
   it { should be_grouped_into  'www-data' }
@@ -88,7 +88,7 @@ end
 
 # ensure default logo header file exists
 # TODO: add check for custom logo header file
-describe file('/var/www/securedrop/static/i/logo.png') do
+describe file("#{TEST_VARS['securedrop_code']}/static/i/logo.png") do
   it { should be_file }
   # TODO: ansible task declares mode 400 but the file ends up as 644 on host
   it { should be_mode '644' }
@@ -100,7 +100,7 @@ end
 securedrop_worker_config_options = [
   '[program:securedrop_worker]',
   'command=/usr/local/bin/rqworker',
-  'directory=/var/www/securedrop',
+  "directory=#{TEST_VARS['securedrop_code']}",
   'autostart=true',
   'autorestart=true',
   'startretries=3',
@@ -131,7 +131,7 @@ end
 
 # ensure cronjob for securedrop tmp dir cleanup is enabled
 describe cron do
-  it { should have_entry '@daily /var/www/securedrop/manage.py clean_tmp' }
+  it { should have_entry "@daily #{TEST_VARS['securedrop_code']}/manage.py clean_tmp" }
 end
 
 # ensure haveged's low entrop watermark is sufficiently high
