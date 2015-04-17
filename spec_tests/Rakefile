@@ -5,7 +5,7 @@ task :spec    => 'spec:all'
 task :default => :spec
 
 
-hosts = %(development build app-staging mon-staging).map do |host|
+hosts = %w(development build app-staging mon-staging).map do |host|
   {
     :name => host,
     :roles => roles(host)
