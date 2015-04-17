@@ -87,9 +87,6 @@ Vagrant.configure("2") do |config|
       # This requires to also up mon-staging or else authd will error
       ansible.skip_tags =  [ "install_local_pkgs" ]
     end
-    staging.vm.provision "serverspec" do |spec|
-      spec.pattern = 'spec_tests/spec/app-staging/*.rb'
-    end
   end
 
   # The prod hosts are just like production but are virtualized. All access to ssh and
