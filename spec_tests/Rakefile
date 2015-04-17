@@ -4,6 +4,15 @@ require 'rspec/core/rake_task'
 task :spec    => 'spec:all'
 task :default => :spec
 
+
+hosts = %(development build app-staging mon-staging).map do |host|
+  {
+    :name => host,
+    :roles => roles(host)
+  }
+end
+
+
 namespace :spec do
   targets = []
   Dir.glob('./spec/development').each do |dir|
