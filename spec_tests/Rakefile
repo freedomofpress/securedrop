@@ -34,3 +34,21 @@ namespace :spec do
     end
   end
 end
+
+
+def roles(host)
+  roles = [ "all" ]
+  case host
+  when /-staging$/
+    roles << "common-staging"
+  when /^development$/
+    roles << "development"
+  when /^build$/
+    roles << "build"
+  when /^app-staging$/
+    roles << "app-staging"
+  when /^mon-staging$/
+    roles << "mon-staging"
+  end
+  roles
+end
