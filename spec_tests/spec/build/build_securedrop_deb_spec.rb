@@ -42,4 +42,24 @@ wanted_debs.each do |wanted_deb|
   describe file(wanted_deb) do
     it { should be_file }
   end
+
+  # get file basename of package, stripping leading dirs
+  deb_basename = File.basename(wanted_deb)
+
+  # cut up filename to extract package name
+  # this garish regex finds just the package name and strips the version info, e.g.
+  # from 'securedrop-ossec-agent-2.8.1+0.3.1-amd64.deb' it will return
+  # 'securedrop-ossec-agent'
+  package_name = deb_basename.scan(/^([a-z\-]+(?!\d))/)[0][0].to_s
+
+  # debugging output
+  puts package_name
+  puts deb_basename
+
+  # ensure required debs appear installable
+  describe command("dpkg --install --dry-run #{wanted_deb}") do
+    its(:exit_status) { should eq 0 }
+#    its(:stdout) { should contain("Selecting previously unselected package #{package_name} ...")}
+#    its(:stdout) { should contain("Preparing to unpack #{deb_basename} ...")}
+  end
 end
