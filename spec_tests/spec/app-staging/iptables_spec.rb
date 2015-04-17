@@ -1,4 +1,4 @@
-#require 'spec_helper'
+require 'spec_helper'
 
 # declare desired iptables rules
 # These rules should be present in prod and staging

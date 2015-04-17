@@ -1,4 +1,5 @@
-#require 'spec_helper'
+require 'spec_helper'
+
 
 # ensure default apache html directory is absent
 describe command('/bin/bash -c "[[ ! -e /var/www/html  ]]"') do

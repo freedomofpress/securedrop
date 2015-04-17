@@ -1,4 +1,4 @@
-#require 'spec_helper'
+require 'spec_helper'
 
 # Apparmor package dependencies
 ['apparmor', 'apparmor-utils' ].each do |pkg|
@@ -15,8 +15,8 @@ end
 
 # SecureDrop apache apparmor profile
 # Staging role has two profiles in complain mode:
-# tor and apache2. Make sure the config file includes 
-# that flag, since restarting apparmor will load 
+# tor and apache2. Make sure the config file includes
+# that flag, since restarting apparmor will load
 # whatever's on disk
 ['tor', 'apache2'].each do |complaining_process|
   describe file("/etc/apparmor.d/usr.sbin.#{complaining_process}") do
@@ -46,11 +46,11 @@ enforced_profiles.each do |enforced_profile|
   end
 end
 
-# aa-status does not permit explicit state checking 
-# of services, so this is an ugly hack that can easily 
-# report false positives. It checks the number of profiles 
+# aa-status does not permit explicit state checking
+# of services, so this is an ugly hack that can easily
+# report false positives. It checks the number of profiles
 # in a given state, but doesn't check which ones. Argh!
-# TODO: Consider writing a nasty perl one-liner to filter 
+# TODO: Consider writing a nasty perl one-liner to filter
 # the output and ensure the services are filed correctly.
 describe command("aa-status --complaining") do
   its(:stdout) { should eq "2\n" }

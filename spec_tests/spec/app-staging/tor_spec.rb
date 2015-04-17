@@ -1,4 +1,5 @@
-#require 'spec_helper'
+require 'spec_helper'
+
 
 # declare app-staging torrc settings
 torrc_settings = [
@@ -10,7 +11,7 @@ torrc_settings = [
 ]
 # ensure torrc for app-staging host contains entries
 # for both journalist and source ATHSes. the admin
-# ATHS and other settings are already checked as part of the 
+# ATHS and other settings are already checked as part of the
 # common-staging serverspec tests
 describe file('/etc/tor/torrc') do
   torrc_settings.each do |torrc_setting|
