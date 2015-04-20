@@ -24,5 +24,11 @@ This will run the tests against all configured hosts. Currently:
 
 In order to run the tests, each VM will be created and provisioned (if necessary).
 Running all VMs concurrently may cause performance problems if you have less
-than 8GB of RAM.
+than 8GB of RAM. You can isolate specific machines for fasting testing:
+
+```
+cd spec_tests
+bundle exec rake --tasks # check output for desired machine
+bundle exec rake spec:development
+```
 
