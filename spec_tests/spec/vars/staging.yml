@@ -3,6 +3,7 @@
 securedrop_repo: /vagrant
 securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
+securedrop_user: www-data
 dns_server: 8.8.8.8
 ssh_users: vagrant
 

@@ -19,8 +19,8 @@ securedrop_app_directories = [
 securedrop_app_directories.each do |securedrop_app_directory|
   describe file(securedrop_app_directory) do
     it { should be_directory }
-    it { should be_owned_by  'www-data' }
-    it { should be_grouped_into  'www-data' }
+    it { should be_owned_by TEST_VARS['securedrop_user'] }
+    it { should be_grouped_into TEST_VARS['securedrop_user'] }
     it { should be_mode '700' }
   end
 end
@@ -50,7 +50,7 @@ securedrop_package_dependencies.each do |securedrop_package_dependency|
 end
 
 # ensure the securedrop application gpg pubkey is present
-describe file('/var/lib/securedrop/test_journalist_key.pub') do
+describe file("#{TEST_VARS['securedrop_data']}/test_journalist_key.pub") do
   it { should be_file }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
@@ -92,8 +92,8 @@ describe file("#{TEST_VARS['securedrop_code']}/static/i/logo.png") do
   it { should be_file }
   # TODO: ansible task declares mode 400 but the file ends up as 644 on host
   it { should be_mode '644' }
-  it { should be_owned_by 'www-data' }
-  it { should be_grouped_into 'www-data' }
+  it { should be_owned_by TEST_VARS['securedrop_user'] }
+  it { should be_grouped_into TEST_VARS['securedrop_user'] }
 end
 
 # declare config options for securedrop worker
