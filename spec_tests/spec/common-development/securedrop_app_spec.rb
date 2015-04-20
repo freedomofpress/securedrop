@@ -28,6 +28,11 @@ securedrop_package_dependencies.each do |securedrop_package_dependency|
   end
 end
 
+# ensure cronjob for securedrop tmp dir cleanup is enabled
+describe cron do
+  it { should have_entry "@daily #{TEST_VARS['securedrop_code']}/manage.py clean_tmp" }
+end
+
 # ensure haveged's low entrop watermark is sufficiently high
 describe file('/etc/default/haveged') do
   it { should be_file }
