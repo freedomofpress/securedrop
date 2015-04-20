@@ -1,6 +1,6 @@
 #!/bin/bash
 # SecureDrop 0.3pre upgrade helper script
-# ./upgrade.sh <non default git branch to use>
+# ./upgrade.sh
 # parse_yaml() courtesy of a StackOverflow user:
 # http://stackoverflow.com/a/21189044
 set -x
@@ -28,8 +28,6 @@ HOMEDIR=/home/amnesia
 PERSISTENT=$HOMEDIR/Persistent
 TAILSCFG=/live/persistence/TailsData_unlocked
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
-# This will need to be changed to default to the expected current version 0.3.3
-GIT_TAG_NAME=${1:-0.3.3}
 
 # check for root
 if [[ $EUID -ne 0 ]]; then
@@ -58,19 +56,6 @@ fi
 if [ ! -f $HOMEDIR/.ssh/id_rsa ]; then
 	echo "Error: There is no SSH key file present." 1>&2
 	exit 1
-fi
-
-# check for SecureDrop git repo has correct branch checked out.
-if ! git tag --points-at HEAD | grep -q "^$GIT_TAG_NAME$" > /dev/null; then
-  echo "Error: This script must be run with SecureDrop's current tagged release" 1>&2
-  exit 1
-fi
-
-# check that the signature is valid
-VERIFIED=$(git tag -v $GIT_TAG_NAME 2>&1 | tail -1 | grep gpg)
-if [[ ! $VERIFIED =~ .*Good\ signature.* ]]; then
-  echo "Error: the signed git tag could not be verified." 1>&2
-  exit 1
 fi
 
 # check for authenticated Tor hidden services
