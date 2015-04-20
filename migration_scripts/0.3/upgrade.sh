@@ -1,8 +1,10 @@
 #!/bin/bash
-# SecureDrop 0.2.1/0.3pre upgrade helper script
-
+# SecureDrop 0.3pre upgrade helper script
+# ./upgrade.sh
 # parse_yaml() courtesy of a StackOverflow user:
 # http://stackoverflow.com/a/21189044
+set -x
+set -e
 
 function parse_yaml {
    local prefix=$2
@@ -49,16 +51,11 @@ if ! dpkg --get-selections | grep -q "^ansible[[:space:]]*install$" >/dev/null; 
 	apt-get install ansible
 fi
 
+# TODO: should check that there is a key present in the ssh agent
 # check for SSH identity
 if [ ! -f $HOMEDIR/.ssh/id_rsa ]; then
 	echo "Error: There is no SSH key file present." 1>&2
 	exit 1
-fi
-
-# check for SecureDrop git repo
-if [ ! -d "$ANSIBLE" ]; then
-  echo "Error: This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
-  exit 1
 fi
 
 # check for authenticated Tor hidden services
@@ -81,7 +78,7 @@ if ! echo $app_ip | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
 	exit 1
 fi
 
-# check that an SSH user is defined10
+# check that an SSH user is defined
 if [ -z $ssh_users ]; then
 	echo "Error: ssh_users is not defined in prod-specific.yml." 1>&2
 	exit 1
@@ -121,44 +118,8 @@ fi
 sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" -o "ProxyCommand connect -R remote -5 -S localhost:9050 %h %p" $APP_SSH_HOST sudo apt-get autoremove 2>&1
 sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" -o "ProxyCommand connect -R remote -5 -S localhost:9050 %h %p" $MON_SSH_HOST sudo apt-get autoremove 2>&1
 
-# perform upgrade
-su amnesia
-cd ~/Persistent/securedrop
-
-git stash save "site specific configs"
-git pull
-git checkout check-migration-scripts-for-0.3
-git stash pop
-
-echo "We're about to open the Ansible inventory file so you can review it. Save it when you're done..."
-sleep 5
-editor install_files/ansible-base/inventory
-
-echo "We're about to open the prod-specific.yml settings so you can review them. Save the file when youre done..."
-sleep 5
-editor install_files/ansible-base/prod-specific.yml
-
 # run the upgrade playbook
-ansible-playbook -i install_files/ansible-base/inventory -u $ssh-users --sudo install_files/ansible-base/upgrade.yml
-
-git stash save "site specific configs"
-git checkout tags/0.3.2
-
-VERIFIED=$(git tag -v 0.3.2 2>&1 | tail -1 | grep gpg)
-if [[ ! $VERIFIED =~ .*Good\ signature.* ]]; then
-	echo "Error: the signed git tag could not be verified." 1>&2
-	exit 1
-fi
-
-git stash pop
-
-echo "We're about to open the Ansible inventory file so you can review it. Save it when you're done..."
-sleep 5
-editor install_files/ansible-base/inventory
-
-echo "We're about to open the prod-specific.yml settings so you can review them. Save the file when youre done..."
-sleep 5
-editor install_files/ansible-base/prod-specific.yml
+sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh-users --sudo install_files/ansible-base/upgrade.yml
 
 # run the production playbook
-ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
+sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
