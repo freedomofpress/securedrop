@@ -19,17 +19,28 @@ describe command("/bin/bash -c '[[ ! -e /var/www/html ]]'") do
   its(:exit_status) { should eq 0 }
 end
 
-desired_directories = [
-  TEST_VARS['securedrop_code'],
+securedrop_app_directories = [
   TEST_VARS['securedrop_data'],
   "#{TEST_VARS['securedrop_data']}/keys",
   "#{TEST_VARS['securedrop_data']}/tmp",
   "#{TEST_VARS['securedrop_data']}/store",
 ]
-desired_directories.each do |desired_directory|
-  describe file(desired_directory) do
+# ensure securedrop app directories exist with correct permissions
+securedrop_app_directories.each do |securedrop_app_directory|
+  describe file(securedrop_app_directory) do
     it { should be_directory }
     it { should be_owned_by TEST_VARS['securedrop_user'] }
+    it { should be_grouped_into TEST_VARS['securedrop_user'] }
+    it { should be_mode '700' }
   end
+end
+
+# /vagrant has 770 permissions, so test
+# separately from the 700 permissions above
+describe file(TEST_VARS['securedrop_code']) do
+  it { should be_directory }
+  it { should be_owned_by TEST_VARS['securedrop_user'] }
+  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+  it { should be_mode '770' }
 end
 
