@@ -52,3 +52,14 @@ describe cron do
   it { should have_entry "@daily /var/www/securedrop/manage.py clean_tmp" }
 end
 
+
+# ensure default logo header file exists
+# TODO: add check for custom logo header file
+describe file("#{TEST_VARS['securedrop_code']}/static/i/logo.png") do
+  it { should be_file }
+  # TODO: ansible task declares mode 400 but the file ends up as 644 on host
+  # TODO: 644 on app-staging, 664 in development
+  it { should be_mode '664' }
+  it { should be_owned_by TEST_VARS['securedrop_user'] }
+  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+end
