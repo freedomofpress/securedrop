@@ -1,9 +1,9 @@
-##Running Spec test cheat sheet
+# Serverspec tests
 
-serverspec and rspec tests verify the end state of app and monitor servers. The tests are ran remotely from your host system.
+[serverspec](http://serverspec.org/) tests verify the end state of the vagrant machines. 
+Any changes to the Ansible configuration should have a corresponding spectest.
 
-###Ubuntu install directions
-
+##Install directions (Ubuntu)
 ```
 apt-get install bundler
 cd spec_tests/
@@ -16,15 +16,15 @@ bundle update
 cd spec_tests/
 bundle exec rake spec
 ```
-This will run the tests against all configured hosts. Currently:
+This will run the tests against all configured hosts, specifically: 
 * development
 * app-staging
 * mon-staging
 * build
 
-In order to run the tests, each VM will be created and provisioned (if necessary).
+In order to run the tests, each VM will be created and provisioned, if necessary.
 Running all VMs concurrently may cause performance problems if you have less
-than 8GB of RAM. You can isolate specific machines for fasting testing:
+than 8GB of RAM. You can isolate specific machines for faster testing:
 
 ```
 cd spec_tests
