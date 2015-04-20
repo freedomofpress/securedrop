@@ -70,3 +70,28 @@ describe file("#{TEST_VARS['securedrop_data']}/db.sqlite") do
   it { should be_grouped_into TEST_VARS['securedrop_user'] }
 end
 
+# declare config options for securedrop worker
+securedrop_worker_config_options = [
+  '[program:securedrop_worker]',
+  'command=/usr/local/bin/rqworker',
+  "directory=#{TEST_VARS['securedrop_code']}",
+  'autostart=true',
+  'autorestart=true',
+  'startretries=3',
+  'stderr_logfile=/var/log/securedrop_worker/err.log',
+  'stdout_logfile=/var/log/securedrop_worker/out.log',
+  "user=#{TEST_VARS['securedrop_user']}",
+  'environment=HOME="/tmp/python-gnupg"',
+]
+# ensure securedrop worker config for supervisor is present
+describe file('/etc/supervisor/conf.d/securedrop_worker.conf') do
+  it { should be_file }
+  it { should be_mode '644' }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  securedrop_worker_config_options.each do |securedrop_worker_config_option|
+    securedrop_worker_config_option_regex = Regexp.quote(securedrop_worker_config_option)
+    its(:content) { should match /^#{securedrop_worker_config_option_regex}$/ }
+  end
+end
+
