@@ -9,10 +9,10 @@ end
 # declare securedrop app directories
 securedrop_app_directories = [
   TEST_VARS['securedrop_code'],
-  '/var/lib/securedrop',
-  '/var/lib/securedrop/store',
-  '/var/lib/securedrop/keys',
-  '/var/lib/securedrop/tmp',
+  TEST_VARS['securedrop_data'],
+  "#{TEST_VARS['securedrop_data']}/store",
+  "#{TEST_VARS['securedrop_data']}/keys",
+  "#{TEST_VARS['securedrop_data']}/tmp",
 ]
 
 # ensure securedrop app directories exist with correct permissions
