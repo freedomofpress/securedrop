@@ -14,3 +14,22 @@ unwanted_packages.each do |unwanted_package|
   end
 end
 
+# ensure default html dir is absent
+describe command("/bin/bash -c '[[ ! -e /var/www/html ]]'") do
+  its(:exit_status) { should eq 0 }
+end
+
+desired_directories = [
+  TEST_VARS['securedrop_code'],
+  TEST_VARS['securedrop_data'],
+  "#{TEST_VARS['securedrop_data']}/keys",
+  "#{TEST_VARS['securedrop_data']}/tmp",
+  "#{TEST_VARS['securedrop_data']}/store",
+]
+desired_directories.each do |desired_directory|
+  describe file(desired_directory) do
+    it { should be_directory }
+    it { should be_owned_by TEST_VARS['securedrop_user'] }
+  end
+end
+
