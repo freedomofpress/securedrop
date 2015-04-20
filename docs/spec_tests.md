@@ -32,3 +32,34 @@ bundle exec rake --tasks # check output for desired machine
 bundle exec rake spec:development
 ```
 
+###Updating the tests
+Changes to the ansible config should result in failing spectests, but
+only if an existing task was modified. If you add a new task, make sure 
+to add a corresponding spectest to validate that state after a new provisioning run.
+Tests import variables from separate YAML files than the Ansible playbooks:
+
+```
+spec_tests/spec/vars
+├── development.yml
+└── staging.yml
+```
+
+Any variable changes in the Ansible config should have a corresponding entry 
+in these vars files. These vars are dynamically loaded for each host via the
+`spec_helper.rb` file. Make sure to add your tests to relevant location 
+for the host you plan to test:
+
+```
+spec_tests/spec/app-staging
+├── apache_spec.rb
+├── apparmor_spec.rb
+├── iptables_spec.rb
+├── ossec_agent_spec.rb
+├── securedrop_app_spec.rb
+├── securedrop_app_test_spec.rb
+└── tor_spec.rb
+```
+
+In the example above, to add a new test for the `app-staging` host,
+add a new file to the `spec_tests/spec/app-staging` directory.
+
