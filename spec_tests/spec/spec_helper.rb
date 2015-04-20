@@ -31,14 +31,20 @@ options[:user] ||= Etc.getlogin
 set :host,        options[:host_name] || host
 set :ssh_options, options
 
+# accept basename for sought vars file,
+# then return a hash based on those settings
+def retrieve_vars(file_basename)
+  fullpath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
+  vars_file = YAML.load_file(fullpath)
+  return vars_file
+end
+
 # load custom vars for host
 case host
 when /^development$/
-  vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'development.yml'))
-  TEST_VARS = YAML.load_file(vars_file)
+  TEST_VARS = retrieve_vars('development')
 when /^app-staging$/
-  vars_file = File.expand_path(File.join(File.dirname(__FILE__), 'vars', 'staging.yml'))
-  TEST_VARS = YAML.load_file(vars_file)
+  TEST_VARS = retrieve_vars('staging')
 end
 
 # Disable sudo
