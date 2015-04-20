@@ -44,3 +44,11 @@ describe file(TEST_VARS['securedrop_code']) do
   it { should be_mode '770' }
 end
 
+# ensure cronjob for securedrop tmp dir cleanup is enabled
+describe cron do
+  # TODO: this should be using TEST_VARS, but the ansible role
+  # doesn't use a var, it's hard-coded. update ansible, then fix test.
+  # it { should have_entry "@daily #{TEST_VARS['securedrop_code']}/manage.py clean_tmp" }
+  it { should have_entry "@daily /var/www/securedrop/manage.py clean_tmp" }
+end
+

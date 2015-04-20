@@ -102,6 +102,11 @@ describe file('/etc/supervisor/conf.d/securedrop_worker.conf') do
   end
 end
 
+# ensure cronjob for securedrop tmp dir cleanup is enabled
+describe cron do
+  it { should have_entry "@daily #{TEST_VARS['securedrop_code']}/manage.py clean_tmp" }
+end
+
 # ensure directory for worker logs is present
 describe file('/var/log/securedrop_worker') do
   it { should be_directory }
