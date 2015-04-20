@@ -45,6 +45,8 @@ namespace :spec do
     RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
       ENV['TARGET_HOST'] = host[:name]
       t.pattern = './spec/{' + host[:roles].join(",") + '}/*_spec.rb'
+      puts "Running spectests for host '#{host[:name]}'..."
+      t.verbose = false
     end
   end
 end
