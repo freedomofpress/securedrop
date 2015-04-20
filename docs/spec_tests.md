@@ -63,13 +63,27 @@ spec_tests/spec/app-staging
 In the example above, to add a new test for the `app-staging` host,
 add a new file to the `spec_tests/spec/app-staging` directory.
 
-## TODO
-* spectests are currently broken up by host; instead,
-  they should be broken up by roles matching the ansible roles,
-  with corresponding vars files
-* add digitalocean provider support for running tests
-** via vagrant-digitalocean plugin 
-** via ansible_digitalocean module
-* add app tests to spectest run
-* add spectests to CI pipeline
+## Spectest layout
+The serverspec tests are mostly broken up according to
+machines in the Vagrantfile:
 
+```
+spec_tests/spec
+├── app-staging
+├── build
+├── common-development
+├── common-staging
+├── development
+├── mon-staging
+└── vars
+```
+
+There are a few exceptions:
+
+* `common-development` shares tests between `development` and `app-staging`
+* `common-staging` shares tests between `app-staging` and `mon-staging`
+
+Ideally the serverspec tests would be broken up according to roles, mirroring
+the Ansible configuration. Prior to the reorganization of the Ansible
+layout, the tests are rather tightly coupled to hosts. The layout 
+of spectests is therefore subject to change.
