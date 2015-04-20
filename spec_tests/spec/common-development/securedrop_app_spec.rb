@@ -43,3 +43,30 @@ describe service('haveged') do
   it { should be_enabled }
   it { should be_running }
 end
+
+# ensure the securedrop application gpg pubkey is present
+describe file("#{TEST_VARS['securedrop_data']}/test_journalist_key.pub") do
+  it { should be_file }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  it { should be_mode '644' }
+end
+
+# ensure config.py (settings for securedrop app) exists
+describe file("#{TEST_VARS['securedrop_code']}/config.py") do
+  it { should be_file }
+  it { should be_owned_by TEST_VARS['securedrop_user'] }
+  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+  it { should be_mode '600' }
+  its(:content) { should match /^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$/ }
+end
+
+# ensure sqlite database exists for application
+describe file("#{TEST_VARS['securedrop_data']}/db.sqlite") do
+  it { should be_file }
+  # TODO: perhaps 640 perms would work here
+  it { should be_mode '644' }
+  it { should be_owned_by TEST_VARS['securedrop_user'] }
+  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+end
+
