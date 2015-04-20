@@ -4,8 +4,8 @@ serverspec and rspec tests verify the end state of app and monitor servers. The 
 
 ###Ubuntu install directions
 
-`apt-get install rake bundler ruby-rspec-core ruby-serverspec`
-
+`apt-get install bundler`
 `cd spec_tests/`
+`bundle update`
+`bundle exec rake spec`
 
-rspec spec
