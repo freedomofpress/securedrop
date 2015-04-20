@@ -63,3 +63,13 @@ spec_tests/spec/app-staging
 In the example above, to add a new test for the `app-staging` host,
 add a new file to the `spec_tests/spec/app-staging` directory.
 
+## TODO
+* spectests are currently broken up by host; instead,
+  they should be broken up by roles matching the ansible roles,
+  with corresponding vars files
+* add digitalocean provider support for running tests
+** via vagrant-digitalocean plugin 
+** via ansible_digitalocean module
+* add app tests to spectest run
+* add spectests to CI pipeline
+
