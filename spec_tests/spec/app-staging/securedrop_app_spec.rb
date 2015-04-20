@@ -30,25 +30,6 @@ describe package('securedrop-app-code') do
   it { should be_installed }
 end
 
-# declare securedrop-app package dependencies
-securedrop_package_dependencies = [
-  'apparmor-utils',
-  'gnupg2',
-  'haveged',
-  'python',
-  'python-pip',
-  'redis-server',
-  'secure-delete',
-  'sqlite',
-  'supervisor',
-]
-# ensure securedrop-app dependencies are installed
-securedrop_package_dependencies.each do |securedrop_package_dependency|
-  describe package(securedrop_package_dependency) do
-    it { should be_installed }
-  end
-end
-
 # ensure the securedrop application gpg pubkey is present
 describe file("#{TEST_VARS['securedrop_data']}/test_journalist_key.pub") do
   it { should be_file }
