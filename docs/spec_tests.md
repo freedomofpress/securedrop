@@ -4,8 +4,25 @@ serverspec and rspec tests verify the end state of app and monitor servers. The 
 
 ###Ubuntu install directions
 
-`apt-get install bundler`
-`cd spec_tests/`
-`bundle update`
-`bundle exec rake spec`
+```
+apt-get install bundler
+cd spec_tests/
+bundle update
+```
+
+###Running the tests
+
+```
+cd spec_tests/
+bundle exec rake spec
+```
+This will run the tests against all configured hosts. Currently:
+* development
+* app-staging
+* mon-staging
+* build
+
+In order to run the tests, each VM will be created and provisioned (if necessary).
+Running all VMs concurrently may cause performance problems if you have less
+than 8GB of RAM.
 
