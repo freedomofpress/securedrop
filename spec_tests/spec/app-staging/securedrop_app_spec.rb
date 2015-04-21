@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 
-# ensure default apache html directory is absent
-describe command('/bin/bash -c "[[ ! -e /var/www/html  ]]"') do
-  its(:exit_status) { should eq 0 }
-end
-
 # declare securedrop app directories
 securedrop_app_directories = [
   TEST_VARS['securedrop_code'],
