@@ -4,3 +4,5 @@
     name: cleanup SecureDrop temp dir
     job: "/var/www/securedrop/manage.py clean_tmp"
     special_time: daily
+  tags:
+    - cron
