@@ -103,15 +103,16 @@ describe file('/var/ossec/test_admin_key.pub') do
 end
 
 # ensure test admin gpg pubkey is in ossec keyring
-describe command('su -s /bin/bash -c "gpg --homedir /var/ossec/.gnupg --import /var/ossec/test_admin_key.pub" ossec') do
+describe command('su -s /bin/bash -c "gpg --homedir /var/ossec/.gnupg --list-keys EDDDC102" ossec') do
   its(:exit_status) { should eq 0 }
   # gpg dumps a lot of output to stderr, rather than stdout
   expected_output = <<-eos
-gpg: key EDDDC102: "Test/Development (DO NOT USE IN PRODUCTION) (Admin's OSSEC Alert GPG key) <securedrop@freedom.press>" not changed
-gpg: Total number processed: 1
-gpg:              unchanged: 1
-  eos
-  its(:stderr) { should eq expected_output }
+pub   4096R/EDDDC102 2014-10-15
+uid                  Test/Development (DO NOT USE IN PRODUCTION) (Admin's OSSEC Alert GPG key) <securedrop@freedom.press>
+sub   4096R/97D2EB39 2014-10-15
+
+eos
+  its(:stdout) { should eq expected_output }
 end
 
 # ensure key files for ossec-server exist
