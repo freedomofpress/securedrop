@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare desired iptables rules
 # These rules should be present in prod and staging
 # TODO: There are also hardcoded IP addresses in this section.

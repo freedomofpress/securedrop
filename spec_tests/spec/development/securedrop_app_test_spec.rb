@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare required pip dependencies.
 # these checks explicitly reference version number
 # to make sure the stack and tests are in sync.

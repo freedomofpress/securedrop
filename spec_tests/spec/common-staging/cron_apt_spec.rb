@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # Check for critical packages
 ['cron-apt', 'ntp', 'paxctl'].each do |pkg|
   describe package(pkg) do

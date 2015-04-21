@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 # development role excludes apache, in favor of flask runner,
 # so ensure that apache is not installed.
 unwanted_packages = %w(

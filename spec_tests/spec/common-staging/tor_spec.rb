@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # ensure tor repo is present
 describe file('/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list') do
   repo_regex = Regexp.quote('deb http://deb.torproject.org/torproject.org trusty main')

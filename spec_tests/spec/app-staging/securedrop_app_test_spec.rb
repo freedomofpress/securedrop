@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # these checks are for the role `app-test`,
 # which is different from simply `app`, which
 # is tested in `securedrop_app_spec.rb`.

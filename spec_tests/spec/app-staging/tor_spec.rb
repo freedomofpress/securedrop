@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare app-staging torrc settings
 torrc_settings = [
   'HiddenServiceDir /var/lib/tor/services/source',

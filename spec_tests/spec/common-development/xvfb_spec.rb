@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare apt package dependencies for running tests
 apt_dependencies = [
   'firefox',

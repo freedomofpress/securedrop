@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare securedrop app directories
 securedrop_app_directories = [
   TEST_VARS['securedrop_code'],

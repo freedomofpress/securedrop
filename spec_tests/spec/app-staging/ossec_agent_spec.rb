@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 # ensure hosts file references mon server by ip
 # TODO: replace hardcoded ip for mon-staging host
 describe file('/etc/hosts') do

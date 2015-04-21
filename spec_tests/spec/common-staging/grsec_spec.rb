@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # ensure ssh motd is disabled (grsec balks at ubuntu's default motd)
 describe file('/etc/pam.d/sshd') do
   its(:content) { should_not match /pam\.motd/ }

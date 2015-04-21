@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # this file tests for app-related config
 # common to "development" and "app-staging"
 

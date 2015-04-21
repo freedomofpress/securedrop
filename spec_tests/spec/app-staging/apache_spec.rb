@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 # declare required apache packages
 apache_packages = [
   'apache2-mpm-worker',

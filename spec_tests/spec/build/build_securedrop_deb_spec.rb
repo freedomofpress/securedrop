@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # TODO: dynamically read the securedrop_app_code_version var
 securedrop_app_code_version = "0.3.2"
 # declare development apt dependencies for building

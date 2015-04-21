@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # declare desired sysctl flags
 sysctl_flags = {
   'net.ipv4.tcp_max_syn_backlog' => 4096,

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 # Apparmor package dependencies
 ['apparmor', 'apparmor-utils' ].each do |pkg|
   describe package(pkg) do

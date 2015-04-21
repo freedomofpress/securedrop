@@ -1,6 +1,3 @@
-require 'spec_helper'
-
-
 # ensure development apt dependencies are installed
 development_apt_dependencies = [
   'libssl-dev',
