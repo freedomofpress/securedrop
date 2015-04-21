@@ -22,15 +22,16 @@ describe package('securedrop-app-code') do
   it { should be_installed }
 end
 
-describe command('su -s /bin/bash -c "gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/test_journalist_key.pub" www-data') do
+# ensure test gpg key is present in app keyring
+describe command('su -s /bin/bash -c "gpg --homedir /var/lib/securedrop/keys --list-keys 28271441" www-data') do
   its(:exit_status) { should eq 0 }
   expected_output = <<-eos
-gpg: key 28271441: "SecureDrop Test/Development (DO NOT USE IN PRODUCTION)" not changed
-gpg: Total number processed: 1
-gpg:              unchanged: 1
+pub   4096R/28271441 2013-10-12
+uid                  SecureDrop Test/Development (DO NOT USE IN PRODUCTION)
+sub   4096R/A2201B2A 2013-10-12
+
 eos
-  # gpg dumps a lot of output to stderr, rather than stdout
-  its(:stderr) { should eq expected_output }
+  its(:stdout) { should eq expected_output }
 end
 
 # ensure default logo header file exists
