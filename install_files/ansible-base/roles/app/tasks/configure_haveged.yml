@@ -6,3 +6,6 @@
     line: 'DAEMON_ARGS="-w 2400"'
   notify:
     - restart haveged
+  tags:
+    - haveged
+    - hardening
