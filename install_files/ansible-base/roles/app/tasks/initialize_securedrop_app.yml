@@ -1,6 +1,8 @@
 ---
 - name: ensure secureDrop web application apt packages are installed
-  apt: pkg="{{ item }}" state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items: app_deps
   tags:
     - apt
@@ -18,11 +20,13 @@
     - gpg
     - securedrop_config
 
-  # only a config.py.example is included in the securedrop-app-code package. If
-  # a config.py file is not already present copy the one installed by the
-  # securedrop-app-code package. This was done so the securedrop-app-code
+  # The securedrop-app-code apt package contains only 'config.py.example',
+  # not 'config.py'. This was done so the securedrop-app-code
   # package would not overwrite the config.py on upgrades.
-- stat: path="{{ securedrop_code }}/config.py"
+  # If 'config.py' exists, then the SecureDrop application
+  # has already been configured, and most of the following tasks will be skipped.
+- stat:
+    path: "{{ securedrop_code }}/config.py"
   register: config
   tags:
     - securedrop_config
@@ -128,7 +132,8 @@
     - gpg
     - securedrop_config
 
-- stat: path="{{ securedrop_data }}/db.sqlite"
+- stat:
+    path: "{{ securedrop_data }}/db.sqlite"
   register: db
   tags:
     - database
@@ -141,9 +146,11 @@
     - database
     - securedrop_config
 
-  # If using a custom header overwrite the existing one
-  # dpkg will not override it on upgrades
-  # otherwise will need to templatizing the apparmor profile
+  # If a custom header image is specified in site-specific vars,
+  # overwrite the default SecureDrop logo file. During upgrades
+  # to securedrop-app-code, dpkg will not overwrite the custom logo.
+  # The apache2 apparmor profile that ships with securedrop-app-code
+  # allows reading this specific filepath, so the custom logo must reside here.
 - name: if configured move the custom header image into the image folder as logo.png
   copy:
     src: "{{ securedrop_header_image }}"
