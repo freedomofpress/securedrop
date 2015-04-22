@@ -1,12 +1,16 @@
 ---
 - name: install cron-apt to handle unattended security upgrades
-  apt: name=cron-apt state=latest
+  apt:
+    name: cron-apt
+    state: latest
   tags:
     - apt
     - cron-apt
 
 - name: ensure custom cron-apt config file is present
-  copy: src=cron-apt-config dest=/etc/cron-apt/config
+  copy:
+    src: cron-apt-config
+    dest: /etc/cron-apt/config
   tags:
     - apt
     - cron-apt
@@ -19,13 +23,17 @@
     - apt
 
 - name: ensure cron-apt updates the security.list packages
-  copy: src=0-update dest=/etc/cron-apt/action.d/0-update
+  copy:
+    src: 0-update
+    dest: /etc/cron-apt/action.d/0-update
   tags:
     - apt
     - cron-apt
 
 - name: ensure cron-apt upgrades the secruity.list packages
-  copy: src=5-security dest=/etc/cron-apt/action.d/5-security
+  copy:
+    src: 5-security
+    dest: /etc/cron-apt/action.d/5-security
   tags:
     - apt
     - cron-apt
@@ -34,24 +42,32 @@
   # regardless if they were a security update. we only need it download and
   # install the security updates.
 - name: ensure default cron-apt file to download all updates does not exist
-  file: dest=/etc/cron-apt/action.d/3-download state=absent
+  file:
+    dest: /etc/cron-apt/action.d/3-download
+    state: absent
   tags:
     - apt
     - cron-apt
 
 - name: ensure the cron.d config for cron-apt exists
-  copy: src=cron-apt dest=/etc/cron.d/cron-apt mode=644 owner=root
+  copy:
+    src: cron-apt
+    dest: /etc/cron.d/cron-apt
+    mode: '644'
+    owner: root
   tags:
     - apt
     - cron-apt
 
 - name: perform safe upgrade to ensure all the packages are updated
-  apt: upgrade=safe
+  apt:
+    upgrade: safe
   tags:
     - apt
     - apt-upgrade
 
-- stat: path=/var/run/reboot-required
+- stat:
+    path: /var/run/reboot-required
   register: reboot_required
   tags:
     - reboot
@@ -64,6 +80,8 @@
 
 - name: waiting for server to come back
   local_action:
+    # action/local_action modules don't support
+    # dict-style arg declaration, so use 'key=value' syntax
     module: wait_for
       host={{ ansible_ssh_host }}
       port={{ ansible_ssh_port }}
