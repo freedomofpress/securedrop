@@ -12,6 +12,9 @@
     - sudoers
 
 - name: ensure sudoers file is installed if syntax check passes
+  # TODO: copy module provides a 'validate' parameter that
+  # accomplishes what this shell command does. Add that, then
+  # remove this task.
   shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
   when: sudoers_st.changed
   tags:
