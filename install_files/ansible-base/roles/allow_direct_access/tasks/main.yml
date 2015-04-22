@@ -9,7 +9,8 @@
   tags:
     - ssh
 
-- stat: path=/etc/network/iptables/rules_v4
+- stat:
+    path: /etc/network/iptables/rules_v4
   register: iptables_rules
   tags:
     - iptables
