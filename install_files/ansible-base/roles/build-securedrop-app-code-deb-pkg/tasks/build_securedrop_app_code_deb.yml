@@ -1,17 +1,22 @@
 ---
 - name: install deb packages required to build securedrop-app-code.deb
-  apt: pkg="{{ item }}" state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items: dev_deps
   tags:
     - apt
 
 - name: install pip install wheel
-  pip: name=wheel
+  pip:
+    name: wheel
   tags:
     - pip
 
 - name: copy install_files/securedrop-app-code dir to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/ cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+  command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}/
   tags:
     - build
 
@@ -37,7 +42,9 @@
     - build
 
 - name: copy securedrop to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }} cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
+  command: cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }}
   tags:
     - build
 
@@ -71,14 +78,18 @@
     - apparmor
 
 - name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+  copy:
+    src: "{{ item }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
   with_items: apparmor_profiles
   tags:
     - build
     - apparmor
 
 - name: create the deb package
-  command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
+  command: dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}.deb
   tags:
     - build
 
