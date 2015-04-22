@@ -26,3 +26,5 @@
 
 - name: disable swap space
   command: swapoff -a
+  tags:
+    - swapspace

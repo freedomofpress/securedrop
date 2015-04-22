@@ -16,6 +16,9 @@
     - reload iptables rules
     - restart ossec
   with_items: authd_rules
+  tags:
+    - iptables
+    - ossec_auth
 
 - name: kill authd if it is running
   # This should work using the pattern to grep for in the output of ps per
@@ -25,3 +28,7 @@
   #  msg: service not found: ossec-authd
   #service: name=ossec-authd pattern=/var/ossec/bin/ossec-authd state=started
   shell: "pkill ossec-authd || true"
+  tags:
+    - iptables
+    - ossec_auth
+    - authd
