@@ -1,9 +1,9 @@
 ---
-  # These tasks are tag'd as restart and grsec. If the tag 'restart' or 'grsec' is skipped none
-  # of these tasks will run.
-
-  # Check to ensure a restart is needed to apply sysctl grsec lock command
-- stat: path="/proc/sys/kernel/grsecurity/grsec_lock"
+  # Check to ensure a restart is needed to apply sysctl grsec lock command.
+  # If the grsec_lock file exists, then grsec is already running,
+  # and the reboot tasks below will be skipped.
+- stat:
+    path: "/proc/sys/kernel/grsecurity/grsec_lock"
   register: grsec_lock
   tags:
     - grsec
@@ -20,10 +20,10 @@
   tags:
     - reboot
 
-  # Give the server time to cycle before checking to see if it up
-  # The var ansible_ssh_host for what host to check will work in production,
-  # vagrant and snap-ci environments.
-  # This is ran from the host machine and shouldn't be ran as root.
+  # If grsec wasn't already running, wait for the host to come back up
+  # after rebooting. The Ansible variable {{ ansible_ssh_host }} refers
+  # to the host just rebooted, and this syntax will work in production,
+  # vagrant/virtualbox, and snap-ci environments.
 - name: waiting for server to come back
   local_action:
     module: wait_for
@@ -32,11 +32,18 @@
       delay=45
       state=started
   when: not grsec_lock.stat.exists
+  # Local wait action, doesn't require sudo privileges.
   sudo: false
   tags:
     - reboot
 
-- sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
+- name: set sysctl flags for grsecurity
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
   with_items: grsec_sysctl_flags
   sudo: yes
   tags:
