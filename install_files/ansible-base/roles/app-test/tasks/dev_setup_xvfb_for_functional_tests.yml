@@ -1,17 +1,24 @@
 ---
 - name: install pip dependencies for running the unit and functional tests
-  pip: requirements="{{ test_pip_requirements }}"
+  pip:
+    requirements: "{{ test_pip_requirements }}"
   tags:
     - pip
 
 - name: install testing deb pkg dependencies
-  apt: name="{{ item }}" state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items: test_apt_dependencies
   tags:
     - apt
 
 - name: copy xvfb init script to /etc/init.d
-  copy: src=xvfb dest=/etc/init.d/xvfb owner=root mode=700
+  copy:
+    src: xvfb
+    dest: /etc/init.d/xvfb
+    owner: root
+    mode: 700
   tags:
     - xvfb
     - permissions
@@ -23,7 +30,11 @@
     - xvfb
 
 - name: set DISPLAY environment variable for xvfb on reboot
-  copy: src=xvfb_display.sh dest=/etc/profile.d/xvfb_display.sh owner=root mode=444
+  copy:
+    src: xvfb_display.sh
+    dest: /etc/profile.d/xvfb_display.sh
+    owner: root
+    mode: 444
   tags:
     - xvfb
     - environment
