@@ -20,7 +20,7 @@
 
 - name: ensure templatized apache configs are present
   template:
-    src: {{ item }}
+    src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
     owner: root
     mode: 0644
