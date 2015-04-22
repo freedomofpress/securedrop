@@ -17,7 +17,11 @@
     - tor
 
 - name: ensure securedrop app servers torrc is present
-  copy: src=torrc-app dest=/etc/tor/torrc owner="{{ tor_user }}" mode=0644
+  copy:
+    src: torrc-app
+    dest: /etc/tor/torrc
+    owner: "{{ tor_user }}"
+    mode: '0644'
   notify:
     - restart tor
   tags:
@@ -28,6 +32,8 @@
     - tor
 
 - name: ensure tor is running
-  service: name=tor state=running
+  service:
+    name: tor
+    state: running
   tags:
     - tor
