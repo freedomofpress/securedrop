@@ -1,5 +1,7 @@
 ---
-- name: ensure securedrop-app-code packages are installed from repo
-  apt: pkg=securedrop-app-code state=present
+- name: ensure securedrop-app-code package is installed from repo
+  apt:
+    pkg: securedrop-app-code
+    state: present
   tags:
     - apt
