@@ -1,11 +1,15 @@
 ---
 - name: ensure ossec server package is installed
-  apt: name=securedrop-ossec-server state=present
+  apt:
+    name: securedrop-ossec-server
+    state: present
   tags:
     - apt
 
 - name: ensure procmail is installed
-  apt: name=procmail state=latest
+  apt:
+    name: procmail
+    state: latest
   tags:
     - apt
     - procmail
@@ -13,12 +17,12 @@
 - name: copy the ossec alert gpg public key to the monitor server
   copy:
     src: "{{ ossec_alert_gpg_public_key }}"
-    dest: "/var/ossec"
+    dest: /var/ossec
   tags:
     - gpg
 
 - name: ensure ossec alert gpg public key is in the ossec keyring
-  command: "su -s /bin/bash -c \"gpg --homedir /var/ossec/.gnupg --import /var/ossec/{{ ossec_alert_gpg_public_key }}\" {{ ossec_group }}"
+  command: "su -s /bin/bash -c 'gpg --homedir /var/ossec/.gnupg --import /var/ossec/{{ ossec_alert_gpg_public_key }}' {{ ossec_group }}"
   tags:
     - gpg
 
@@ -26,7 +30,7 @@
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
-    mode: 775
+    mode: '775'
     owner: ossec
     group: root
   tags:
@@ -38,7 +42,7 @@
   file:
     state: touch
     dest: /var/log/procmail.log
-    mode: 660
+    mode: '660'
     owner: ossec
     group: root
   tags:

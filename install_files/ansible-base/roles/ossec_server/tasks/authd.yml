@@ -1,7 +1,8 @@
 ---
-  # The authd ossec process automatically adds the app server ossec agent it is
-  # not an authenticated process. There is an option we could add to create and
-  # verify the server/agents ssl keys with the root CA cert. see
+  # The authd ossec process automatically adds the app server ossec agent.
+  # This addition is not an authenticated process. There is an option
+  # we could add to create and  verify the server/agents ssl keys with
+  # the root CA cert, see:
   # http://ossec-docs.readthedocs.org/en/latest/programs/ossec-authd.html
 - name: check to see if app agent already exists
   shell: /var/ossec/bin/list_agents -a
@@ -10,18 +11,23 @@
     - ossec_auth
 
 - name: create authd SSL keys
-  shell: creates=/var/ossec/etc/sslmanager.key openssl genrsa -out /var/ossec/etc/sslmanager.key 4096
+  shell: openssl genrsa -out /var/ossec/etc/sslmanager.key 4096
+  args:
+    creates: /var/ossec/etc/sslmanager.key
   when: list_agents != "{{ app_hostname }}-{{ app_ip }} is available."
   tags:
     - ossec_auth
 
 - name: create ssl cert
-  shell: creates=/var/ossec/etc/sslmanager.cert openssl req -new -x509 -batch -subj "/CA=AU/ST=Some-State/locality=city/O=Internet Widgits Pty Ltd/commonName=mon/organizationUnitName=section/emailAddress=admin@localhost" -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+  shell: openssl req -new -x509 -batch -subj "/CA=AU/ST=Some-State/locality=city/O=Internet Widgits Pty Ltd/commonName=mon/organizationUnitName=section/emailAddress=admin@localhost" -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
+  args:
+    creates: /var/ossec/etc/sslmanager.cert
   when: list_agents != "{{ app_hostname }}-{{ app_ip }} is available."
   tags:
     - ossec_auth
 
-- stat: path=/etc/network/iptables/rules_v4
+- stat:
+    path: /etc/network/iptables/rules_v4
   register: iptables_rules
   notify: add firewall rule exemption for authd
   notify: reload authd iptables
