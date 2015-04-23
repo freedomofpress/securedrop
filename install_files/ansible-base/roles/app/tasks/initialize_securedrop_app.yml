@@ -36,7 +36,7 @@
     - securedrop_config
 
 - name: if config.py does not exist copy example from the securedrop code root
-  command: "cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py"
+  command: cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py
   when: not config.stat.exists
   tags:
     - securedrop_config
