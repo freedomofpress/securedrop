@@ -3,7 +3,7 @@
   # If the grsec_lock file exists, then grsec is already running,
   # and the reboot tasks below will be skipped.
 - stat:
-    path: "/proc/sys/kernel/grsecurity/grsec_lock"
+    path: /proc/sys/kernel/grsecurity/grsec_lock
   register: grsec_lock
   tags:
     - grsec
