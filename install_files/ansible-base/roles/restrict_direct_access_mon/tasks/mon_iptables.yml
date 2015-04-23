@@ -16,7 +16,11 @@
   # bulk. When that is done this issue will be avoided.
 
 - name: ensure load_iptables script is present
-  copy: src=load_iptables dest=/etc/network/if-up.d/load_iptables owner=root mode=0744
+  copy:
+    src: load_iptables
+    dest: /etc/network/if-up.d/load_iptables
+    owner: root
+    mode: '0744'
   tags:
     - iptables
     - permissions
@@ -39,7 +43,11 @@
   # connections. This does not load iptables. Iptables will not be loaded until
   # manually rebooted for production installs.
 - name: ensure iptables rules_v4 file is present
-  template: src=mon_rules_v4 dest=/etc/network/iptables/rules_v4 owner=root mode=0644
+  template:
+    src: mon_rules_v4
+    dest: /etc/network/iptables/rules_v4
+    owner: root
+    mode: '0644'
   tags:
     - iptables
     - permissions
