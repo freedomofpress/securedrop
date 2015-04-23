@@ -1,8 +1,52 @@
 require 'rake'
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/*/*_spec.rb'
+
+task :spec    => 'spec:all'
+task :default => :spec
+
+# this function accepts a hostname and returns a hash
+# that includes roles assigned to that host. changes made
+# in ansible config must be manually duplicated here.
+def roles(host)
+  roles = []
+  case host
+  when /^development$/
+    roles << %w(common-development development)
+  when /^build$/
+    roles << "build"
+  when /^app-staging$/
+    roles << %w(common-development common-staging app-staging)
+  when /^mon-staging$/
+    roles << %w(common-staging mon-staging)
+  end
+  roles
 end
 
-task :default => :spec
+
+# manually declare hosts, and assign them roles for testing
+hosts = %w(development build app-staging mon-staging).map do |host|
+  {
+    :name => host,
+    :roles => roles(host)
+  }
+end
+
+
+# dynamically determine roles per host
+# this brilliant pragma conceived by @vincentbernat, see
+# https://github.com/vincentbernat/serverspec-example
+# http://vincent.bernat.im/en/blog/2014-serverspec-test-infrastructure.html
+namespace :spec do
+  # assign all hosts to serverspec task run
+  task :all => hosts.map { |h| h[:name] }
+  hosts.each do |host|
+    desc "Run spectests against #{host[:name]}"
+    RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
+      ENV['TARGET_HOST'] = host[:name]
+      t.pattern = './spec/{' + host[:roles].join(",") + '}/*_spec.rb'
+      puts "Running spectests for host '#{host[:name]}'..."
+      t.verbose = false
+    end
+  end
+end

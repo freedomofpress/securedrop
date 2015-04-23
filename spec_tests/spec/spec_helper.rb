@@ -1,46 +1,58 @@
 require 'serverspec'
-require 'pathname'
 require 'net/ssh'
+require 'tempfile'
+require 'yaml'
 
-include SpecInfra::Helper::Ssh
-include SpecInfra::Helper::DetectOS
+set :backend, :ssh
 
-RSpec.configure do |c|
-  if ENV['ASK_SUDO_PASSWORD']
+if ENV['ASK_SUDO_PASSWORD']
+  begin
     require 'highline/import'
-    c.sudo_password = ask("Enter sudo password: ") { |q| q.echo = false }
-  else
-    c.sudo_password = ENV['SUDO_PASSWORD']
+  rescue LoadError
+    fail "highline is not available. Try installing it."
   end
-  c.before :all do
-    block = self.class.metadata[:example_group_block]
-    if RUBY_VERSION.start_with?('1.8')
-      file = block.to_s.match(/.*@(.*):[0-9]+>/)[1]
-    else
-      file = block.source_location.first
-    end
-    host  = File.basename(Pathname.new(file).dirname)
-    if c.host != host
-      c.ssh.close if c.ssh
-      c.host  = host
-      options = Net::SSH::Config.for(c.host)
-      user    = options[:user] || Etc.getlogin
-      vagrant_up = `vagrant up app-staging`
-      config = `vagrant ssh-config app-staging`
-      if config != ''
-        config.each_line do |line|
-          if match = /HostName (.*)/.match(line)
-            host = match[1]
-          elsif  match = /User (.*)/.match(line)
-            user = match[1]
-          elsif match = /IdentityFile (.*)/.match(line)
-            options[:keys] =  [match[1].gsub(/"/,'')]
-          elsif match = /Port (.*)/.match(line)
-            options[:port] = match[1]
-          end
-        end
-      end
-      c.ssh   = Net::SSH.start(host, user, options)
-    end
-  end
+  set :sudo_password, ask("Enter sudo password: ") { |q| q.echo = false }
+else
+  set :sudo_password, ENV['SUDO_PASSWORD']
 end
+
+host = ENV['TARGET_HOST']
+
+`vagrant up #{host}`
+
+config = Tempfile.new('', Dir.tmpdir)
+config.write(`vagrant ssh-config #{host}`)
+config.close
+
+options = Net::SSH::Config.for(host, [config.path])
+
+options[:user] ||= Etc.getlogin
+
+set :host,        options[:host_name] || host
+set :ssh_options, options
+
+# accept basename for sought vars file,
+# then return a hash based on those settings
+def retrieve_vars(file_basename)
+  fullpath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
+  vars_file = YAML.load_file(fullpath)
+  return vars_file
+end
+
+# load custom vars for host
+case host
+when /^development$/
+  TEST_VARS = retrieve_vars('development')
+when /^app-staging$/
+  TEST_VARS = retrieve_vars('staging')
+end
+
+# Disable sudo
+# set :disable_sudo, true
+
+
+# Set environment variables
+# set :env, :LANG => 'C', :LC_MESSAGES => 'C'
+
+# Set PATH
+# set :path, '/sbin:/usr/local/sbin:$PATH'

@@ -148,14 +148,19 @@ Vagrant.configure("2") do |config|
   #  config.cache.scope = :box
   #end
 
-  # This is needed for the Snap-ci to provision the digital ocean vps
-  config.vm.provider :digital_ocean do |provider, override|
-    override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
-    override.vm.box = 'digital_ocean'
-    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-    provider.token = SNAP_API_TOKEN
-    provider.image = 'snapVagrantSSHkey'
-    provider.region = 'nyc2'
-    provider.size = '512mb'
+  # This is needed for the Snap-ci to provision the digital ocean vps.
+  # Check for presence of digitalocean vagrant plugin, and required env var,
+  # and only configure this provider if both conditions are met. Otherwise,
+  # even running `vagrant status` throws an error.
+  if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['SNAP_API_TOKEN']
+    config.vm.provider :digital_ocean do |provider, override|
+      override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
+      override.vm.box = 'digital_ocean'
+      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+      provider.token = SNAP_API_TOKEN
+      provider.image = 'snapVagrantSSHkey'
+      provider.region = 'nyc2'
+      provider.size = '512mb'
+    end
   end
 end
