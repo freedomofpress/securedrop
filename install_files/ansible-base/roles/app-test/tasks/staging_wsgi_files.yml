@@ -9,7 +9,7 @@
     src: source.wsgi.logging
     dest: /var/www/source.wsgi
     owner: "{{ apache_user }}"
-    mode: 0640
+    mode: '0640'
   tags:
     - apache
     - non-development
