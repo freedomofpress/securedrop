@@ -22,7 +22,11 @@
     - gpg
 
 - name: ensure ossec alert gpg public key is in the ossec keyring
-  command: "su -s /bin/bash -c 'gpg --homedir /var/ossec/.gnupg --import /var/ossec/{{ ossec_alert_gpg_public_key }}' {{ ossec_group }}"
+  # multiline format for command module, since this is a long command
+  command: >
+    su -s /bin/bash -c 'gpg
+    --homedir /var/ossec/.gnupg
+    --import /var/ossec/{{ ossec_alert_gpg_public_key }}' {{ ossec_group }}
   tags:
     - gpg
 
