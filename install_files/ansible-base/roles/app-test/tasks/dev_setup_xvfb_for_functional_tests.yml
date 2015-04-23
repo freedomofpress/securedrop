@@ -24,7 +24,7 @@
     - permissions
 
 - name: update rc.d to run xvfb at boot
-  command: "update-rc.d xvfb defaults"
+  command: update-rc.d xvfb defaults
   notify: start xvfb
   tags:
     - xvfb
