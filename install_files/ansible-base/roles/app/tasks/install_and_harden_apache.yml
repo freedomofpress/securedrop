@@ -13,7 +13,7 @@
     src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
     owner: root
-    mode: 0644
+    mode: '0644'
   with_items: apache_files
   tags:
     - apache
@@ -23,7 +23,7 @@
     src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
     owner: root
-    mode: 0644
+    mode: '0644'
   with_items: apache_templates
   tags:
     - apache
