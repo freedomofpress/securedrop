@@ -15,7 +15,7 @@
     src: "{{ item }}"
     dest: /etc/ssh/{{ item }}
     owner: root
-    mode: 0644
+    mode: '0644'
   with_items:
    - sshd_config
    - ssh_config
