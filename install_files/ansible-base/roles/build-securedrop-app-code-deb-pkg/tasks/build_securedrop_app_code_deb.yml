@@ -23,21 +23,21 @@
 - name: ensure build path var structure exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/
   tags:
     - build
 
 - name: ensure build path www structure exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/www
   tags:
     - build
 
 - name: ensure build path directory for wheelhouse exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/securedrop
   tags:
     - build
 
@@ -51,7 +51,7 @@
 - name: ensure config.py does not exist in the build path
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py
   tags:
     - build
     - cleanup
@@ -65,14 +65,14 @@
 - name: ensure build dir /etc exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/
   tags:
     - build
 
 - name: ensure apparmor build dir exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
   tags:
     - build
     - apparmor
@@ -101,7 +101,7 @@
 - name: remove the build temp dir
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}
   tags:
     - build
     - cleanup
@@ -109,7 +109,7 @@
 - name: remove temp package
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
+    dest: /tmp/{{ securedrop_app_code_deb }}.deb
   tags:
     - build
     - cleanup
