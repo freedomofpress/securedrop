@@ -20,7 +20,7 @@
   template:
     src: sasl_passwd
     dest: /etc/postfix/sasl_passwd
-    mode: '0400'
+    mode: 0400
   notify: update sasl_passwd db
   tags:
     - postfix
