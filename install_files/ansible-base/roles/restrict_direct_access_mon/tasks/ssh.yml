@@ -1,6 +1,8 @@
 ---
 - name: install 2fa pam module for ssh access
-  apt: name="{{ item }}" state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items: ssh_2fa_dependencies
   tags:
     - apt
@@ -9,7 +11,11 @@
     - pam
 
 - name: ensure ssh configuration files are present
-  copy: src={{ item }} dest=/etc/ssh/{{ item }} owner=root mode=0644
+  copy:
+    src: "{{ item }}"
+    dest: /etc/ssh/{{ item }}
+    owner: root
+    mode: '0644'
   with_items:
    - sshd_config
    - ssh_config
@@ -19,13 +25,19 @@
     - permissions
 
 - name: ensure pam config is installed
-  copy: src="common-auth" dest="/etc/pam.d/" owner=root mode=0644
+  copy:
+    src: common-auth
+    dest: /etc/pam.d/
+    owner: root
+    mode: '0644'
   tags:
     - ssh
     - pam
     - permissions
 
 - name: ensure sshd is running
-  service: name=ssh state=running
+  service:
+    name: ssh
+    state: running
   tags:
     - ssh
