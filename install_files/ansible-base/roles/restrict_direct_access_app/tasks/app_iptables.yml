@@ -28,7 +28,7 @@
 - name: ensure iptables directory exists
   file:
     state: directory
-    mode: '0700'
+    mode: 0700
     owner: root
     group: root
     dest: /etc/network/iptables

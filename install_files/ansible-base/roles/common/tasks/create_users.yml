@@ -37,7 +37,7 @@
     dest: /etc/bashrc.securedrop_additions
     owner: root
     group: root
-    mode: '0644'
+    mode: 0644
   tags:
     - users
     - environment
