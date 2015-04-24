@@ -1,9 +1,4 @@
 ---
-  # The authd ossec process automatically adds the app server ossec agent.
-  # This addition is not an authenticated process. There is an option
-  # we could add to create and  verify the server/agents ssl keys with
-  # the root CA cert, see:
-  # http://ossec-docs.readthedocs.org/en/latest/programs/ossec-authd.html
 - name: check to see if app agent already exists
   shell: /var/ossec/bin/list_agents -a
   register: list_agents
