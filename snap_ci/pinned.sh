@@ -1,7 +1,7 @@
 #!/bin/bash
 # Pin commands to install vagrant, ansible, serverspec
 # Pinning commands will ensure that they are ran in each snap-ci stage. This is
-# usefull when you only want to re-run one stage.
+# useful when you only want to re-run one stage.
 #
 #
 # Cache and install Vagrant
@@ -21,5 +21,5 @@ vagrant box add digital_ocean ${SNAP_CACHE_DIR}/digital_ocean.box --force
 sudo yum install ansible -y
 
 # Install serverspec dependencies
-sudo yum install ruby rubygems -y
-gem install rspec serverspec bundler rake --no-ri --no-rdoc
+sudo yum install bundler -y
+cd /var/snap-ci/repo/spec_tests/ && bundle update
