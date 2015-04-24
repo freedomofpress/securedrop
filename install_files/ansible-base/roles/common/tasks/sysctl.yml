@@ -1,3 +1,6 @@
 ---
 - sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
   with_items: sysctl_flags
+  tags:
+    - sysctl
+    - hardening

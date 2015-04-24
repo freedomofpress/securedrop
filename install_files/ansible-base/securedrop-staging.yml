@@ -10,8 +10,8 @@
     - staging-specific.yml
 
   roles:
-    - { role: install_fpf_repo, tags: [ 'fpf_repo' ] }
-    - { role: common, tags: [ 'common' ] }
+    - { role: install_fpf_repo, tags: fpf_repo }
+    - { role: common, tags: common }
 
   sudo: yes
 
@@ -23,10 +23,10 @@
     - staging-specific.yml
 
   roles:
-    - { role: common-mon, tags: [ 'tor' ] }
+    - { role: common-mon, tags: 'tor' }
     # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs', 'mon_install_local_pkgs' ] }
-    - ossec_server
+    - { role: install_local_pkgs, tags: install_local_pkgs }
+    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
 
   sudo: yes
 
@@ -42,12 +42,12 @@
     # It installs tor. Tor is required to be installed prior to the securedrop
     # app-code package which contains an apparmor profile that depends on tor
     # being present.
-    - { role: common-app, tags: [ 'tor' ] }
+    - { role: common-app, tags: ['common-app', 'tor'] }
     # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs', 'app_install_local_pkgs' ] }
-    - { role: ossec_agent, tags: [ 'ossec' ] }
-    - app
-    - { role: app-test, tags: [ 'app-test' ] }
+    - { role: install_local_pkgs, tags: install_local_pkgs }
+    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: app, tags: app }
+    - { role: app-test, tags: app-test }
 
   sudo: yes
 
@@ -67,7 +67,7 @@
     - staging-specific.yml
 
   roles:
-    - { role: remove_authd_exemptions, tags: [ 'ossec' ] }
+    - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
 
   sudo: yes
 
@@ -85,9 +85,9 @@
     - staging-specific.yml
 
   roles:
-    - { role: restrict_direct_access_app, tags: [ 'common' ] }
-    - { role: allow_direct_access, tags: [ 'common' ] }
-    - { role: backup, tags: [ 'backup' ] }
+    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
+    - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
+    - { role: backup, tags: backup }
 
   sudo: yes
 
@@ -99,7 +99,7 @@
     - staging-specific.yml
 
   roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common' ] }
-    - { role: allow_direct_access, tags: [ 'common' ] }
+    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
+    - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
 
   sudo: yes

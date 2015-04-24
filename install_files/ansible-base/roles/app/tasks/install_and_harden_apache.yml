@@ -2,37 +2,58 @@
 - name: install apache packages
   apt: pkg="{{ item }}" state=latest
   with_items: apache_packages
+  tags:
+    - apt
+    - apache
 
 - name: ensure apache configuration files are present
   copy: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
   with_items: apache_files
+  tags:
+    - apache
 
 - name: ensure templatized apache configs are present
   template: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
   with_items: apache_templates
+  tags:
+    - apache
 
 - name: ensure required apache modules are present
   apache2_module: state=present name={{ item }}
   with_items: apache_modules
+  tags:
+    - apache
 
 - name: ensure non-required apache modules are disabled
   apache2_module: state=absent name={{ item }}
   with_items: apache_disabled_modules
+  tags:
+    - apache
+    - hardening
 
 - name: ensure 000-default site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/000-default.conf
+  tags:
+    - apache
+    - hardening
 
 - name: ensure default-ssl site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/default-ssl.conf
+  tags:
+    - apache
+    - hardening
 
 - name: ensure default site is disabled
   file:
     state: absent
     dest: /etc/apache2/sites-enabled/default.conf
+  tags:
+    - apache
+    - hardening
 
 - name: ensure securedrop sites are enabled
   file:
@@ -42,3 +63,5 @@
   with_items: apache_sites
   notify:
     - restart apache2
+  tags:
+    - apache

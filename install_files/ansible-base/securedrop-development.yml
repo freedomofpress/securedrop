@@ -7,8 +7,8 @@
     - development-specific.yml
 
   roles:
-    - development
-    - app
-    - app-test
+    - { role: development, tags: development }
+    - { role: app, tags: app }
+    - { role: app-test, tags: app-test }
 
   sudo: yes

@@ -5,6 +5,8 @@
   # Check to ensure a restart is needed to apply sysctl grsec lock command
 - stat: path="/proc/sys/kernel/grsecurity/grsec_lock"
   register: grsec_lock
+  tags:
+    - grsec
 
   # If the grsec package is installed (via common role) and the grsec_lock is
   # not present reboot the system, to boot into the grsec kernel.
@@ -15,6 +17,8 @@
   ignore_errors: true
   when: not grsec_lock.stat.exists
   sudo: yes
+  tags:
+    - reboot
 
   # Give the server time to cycle before checking to see if it up
   # The var ansible_ssh_host for what host to check will work in production,
@@ -29,7 +33,13 @@
       state=started
   when: not grsec_lock.stat.exists
   sudo: false
+  tags:
+    - reboot
 
 - sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
   with_items: grsec_sysctl_flags
   sudo: yes
+  tags:
+    - hardening
+    - grsec
+    - sysctl

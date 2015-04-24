@@ -3,6 +3,9 @@
   file:
     state: absent
     dest: "/var/www/html"
+  tags:
+    - apache
+    - permissions
 
 - name: ensure securedrop root directory exists
   file:
@@ -11,6 +14,8 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_code }}"
+  tags:
+    - permissions
 
 - name: ensure securedrop data directory exists
   file:
@@ -19,6 +24,8 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}"
+  tags:
+    - permissions
 
 - name: ensure securedrop data store directory exists
   file:
@@ -27,6 +34,8 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/store"
+  tags:
+    - permissions
 
 - name: ensure securedrop keyring directory exists
   file:
@@ -35,6 +44,8 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/keys"
+  tags:
+    - permissions
 
 - name: ensure securedrop temp directory exists
   file:
@@ -43,3 +54,5 @@
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/tmp"
+  tags:
+    - permissions

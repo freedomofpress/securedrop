@@ -3,6 +3,8 @@
 - name: if defined copy local deb packages to target system
   copy: src=../../build/{{ item }} dest=/root/
   with_items: local_deb_packages
+  tags:
+    - install_local_pkgs
 
 # This should use the ansible apt module
 # apt: deb=/root/{{ item }}
@@ -11,3 +13,5 @@
 - name: if defined install local deb packages
   shell: "dpkg -i /root/{{ item }} || true && apt-get -f install -y"
   with_items: local_deb_packages
+  tags:
+    - install_local_pkgs

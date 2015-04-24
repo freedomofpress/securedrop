@@ -100,12 +100,18 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(rv.status_code, 200)
             common.logout(source_app)
 
+        # Request the Document Interface index
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Sources", rv.data)
         soup = BeautifulSoup(rv.data)
-        col_url = soup.select('ul#cols > li a')[0]['href']
 
+        # The source should have a "download unread" link that says "1 unread"
+        col = soup.select('ul#cols > li')[0]
+        unread_span = col.select('span.unread a')[0]
+        self.assertIn("1 unread", unread_span.get_text())
+
+        col_url = soup.select('ul#cols > li a')[0]['href']
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)
@@ -183,8 +189,13 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Sources", rv.data)
         soup = BeautifulSoup(rv.data)
-        col_url = soup.select('ul#cols > li a')[0]['href']
 
+        # The source should have a "download unread" link that says "1 unread"
+        col = soup.select('ul#cols > li')[0]
+        unread_span = col.select('span.unread a')[0]
+        self.assertIn("1 unread", unread_span.get_text())
+
+        col_url = soup.select('ul#cols > li a')[0]['href']
         rv = self.journalist_app.get(col_url)
         self.assertEqual(rv.status_code, 200)
         soup = BeautifulSoup(rv.data)

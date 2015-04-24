@@ -7,12 +7,16 @@
     group=root
     mode=0440
   register: sudoers_st
-  tags: sudoers
+  tags:
+    - users
+    - sudoers
 
 - name: ensure sudoers file is installed if syntax check passes
   shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
   when: sudoers_st.changed
-  tags: sudoers
+  tags:
+    - users
+    - sudoers
 
 - name: ensure secureDrop admin user accounts exist
   user:
@@ -20,6 +24,9 @@
     shell=/bin/bash
     groups=sudo,ssh
   with_items: ssh_users
+  tags:
+    - users
+    - sudoers
 
 - name: copy SecureDrop bashrc additions
   copy:
@@ -28,6 +35,9 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - users
+    - environment
 
 - name: add line to each users bashrc to source the SecureDrop additions
   lineinfile:
@@ -35,3 +45,6 @@
     line: ". /etc/bashrc.securedrop_additions"
     insertbefore: BOF
   with_items: ssh_users
+  tags:
+    - users
+    - environment

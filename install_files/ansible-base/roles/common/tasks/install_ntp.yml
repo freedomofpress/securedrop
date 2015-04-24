@@ -3,3 +3,6 @@
     pkg: ntp
     state: latest
     force: yes
+  tags:
+    - apt
+    - ntp

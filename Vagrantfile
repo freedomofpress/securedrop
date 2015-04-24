@@ -143,20 +143,24 @@ Vagrant.configure("2") do |config|
   #  config.cache.scope = :box
   #end
 
-  # This is needed for the Snap-ci to provision the digital ocean vps
-  config.vm.provider :digital_ocean do |provider, override|
-    # In snap-ci the contents of the ssh keyfile should be saved as a `Secure
-    # Files` to the default locations /var/snap-ci/repo/id_rsa and
-    # /var/snap-ci/repo/id_rsa.pub
-    override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
-    override.ssh.username = "vagrant"
-    override.vm.box = 'digital_ocean'
-    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-    provider.token = ENV['DO_API_TOKEN']
-    provider.ssh_key_name = ENV['DO_SSH_KEYFILE_NAME']
-    provider.image = ENV['DO_IMAGE_NAME']
-    provider.setup = 'true'
-    provider.region = ENV['DO_REGION']
-    provider.size = ENV['DO_SIZE']
+  # This is needed for the Snap-ci to provision the digital ocean vps.
+  # Check for presence of digitalocean vagrant plugin, and required env var,
+  # and only configure this provider if both conditions are met. Otherwise,
+  # even running `vagrant status` throws an error.
+  if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['SNAP_API_TOKEN']
+    config.vm.provider :digital_ocean do |provider, override|
+      # In snap-ci the contents of the ssh keyfile should be saved as a `Secure
+      # Files` to the default locations /var/snap-ci/repo/id_rsa and
+      # /var/snap-ci/repo/id_rsa.pub
+      override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
+      override.ssh.username = "vagrant"
+      override.vm.box = 'digital_ocean'
+      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+      provider.token = ENV['DO_API_TOKEN']
+      provider.image = ENV['DO_IMAGE_NAME']
+      provider.region = ENV['DO_REGION']
+      provider.region = 'sfo1'
+      provider.size = '512mb'
+    end
   end
 end
