@@ -31,6 +31,10 @@
     - users
     - sudoers
 
+  # TODO: consider moving this to /etc/profile.d,
+  # so subsequent task modifiying .bashrc files
+  # can be removed. (Don't forget to include .sh
+  # on dest file if in /etc/profile.d)
 - name: copy SecureDrop bashrc additions
   copy:
     src: bashrc_securedrop_additions
@@ -42,6 +46,8 @@
     - users
     - environment
 
+  # TODO: see above; if environment config is moved
+  # to /etc/profile.d, this task can be removed altogether.
 - name: add line to each users bashrc to source the SecureDrop additions
   lineinfile:
     dest: /home/{{ item }}/.bashrc
