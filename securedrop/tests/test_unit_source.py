@@ -130,26 +130,24 @@ class TestSource(TestCase):
             self.assertNotIn('logged_in', session)
 
     def test_login_with_whitespace(self):
-        rv = self.client.get('/login')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Login to check for responses", rv.data)
+        """Test that codenames with leading or trailing whitespace still work"""
+        def login_test(codename):
+            rv = self.client.get('/login')
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Login to check for responses", rv.data)
+
+            with self.client as c:
+                rv = c.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+                self.assertEqual(rv.status_code, 200)
+                self.assertIn("Submit documents and messages", rv.data)
+                self.assertTrue(session['logged_in'])
+                common.logout(c)
 
         codename = self._new_codename()
-	codename = ' ' + codename + ' '
-        with self.client as c:
-            rv = c.post('/login', data=dict(codename),
-                        follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn("Submit documents and messages", rv.data)
-            self.assertTrue(session['logged_in'])
-            common.logout(c)
-
-        with self.client as c:
-            rv = self.client.post('/login', data=dict(codename='invalid'),
-                                  follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            self.assertIn('Sorry, that is not a recognized codename.', rv.data)
-            self.assertNotIn('logged_in', session)
+        login_test(codename + ' ')
+        login_test(' ' + codename + ' ')
+        login_test(' ' + codename)
 
     def _dummy_submission(self):
         """
