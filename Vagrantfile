@@ -156,10 +156,20 @@ Vagrant.configure("2") do |config|
       override.ssh.username = 'vagrant'
       override.vm.box = 'digital_ocean'
       override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+
       provider.token = ENV['DO_API_TOKEN']
-      provider.image = ENV['DO_IMAGE_NAME'] || 'ubuntu-14-04-x64'
       provider.region = ENV['DO_REGION'] || 'sfo1'
-      provider.size = '512mb'
+      provider.size = ENV['DO_SIZE'] || '512mb'
+
+      # The vagrant-digitalocean plugin changed how it handles
+      # the 'provider.image' parameter starting in v0.7.1,
+      # breaking support for snapshots. Snapshots are useful
+      # when running app tests since box creation happens much faster.
+      #
+      # This format works for <= 0.7.0:
+      #provider.image = ENV['DO_IMAGE_NAME'] || '14.04 x64'
+      # This format works for >= 0.7.1:
+      provider.image = ENV['DO_IMAGE_NAME'] || 'ubuntu-14-04-x64'
     end
   end
 end
