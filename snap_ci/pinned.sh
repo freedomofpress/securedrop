@@ -23,5 +23,4 @@ vagrant box add digital_ocean ${SNAP_CACHE_DIR}/digital_ocean.box --force
 sudo yum install ansible -y
 
 # Install serverspec dependencies
-sudo yum install bundler -y
 cd /var/snap-ci/repo/spec_tests/ && bundle update
