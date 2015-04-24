@@ -1,20 +1,24 @@
 ---
 - name: ensure securedrop-ossec-agent package is installed
-  apt: name=securedrop-ossec-agent state=present
+  apt:
+    name: securedrop-ossec-agent
+    state: present
   tags:
     - apt
 
-- stat: path=/var/ossec/etc/client.keys
+- stat:
+    path: /var/ossec/etc/client.keys
   register: ossec_client_keys
   tags:
     - ossec_auth
 
-- stat: path=/etc/network/iptables/rules_v4
+- stat:
+    path: /etc/network/iptables/rules_v4
   register: iptables_rules
   tags:
     - iptables
 
-- name: if agent is not already added add agent_auth firewall exmeptions rules
+- name: add agent_auth firewall exemption rules (if agent is not already added)
   lineinfile:
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)
@@ -30,7 +34,7 @@
     - iptables
     - ossec_auth
 
-- name: run agent auth
+- name: run agent auth (if agent is not already added)
   shell: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
   when: not ossec_client_keys.stat.exists
   tags:

@@ -1,5 +1,13 @@
 ---
-- sysctl: name="{{ item.name }}" value="{{ item.value }}" sysctl_set=yes state=present reload=yes
+  # These are not the same sysctl flags as
+  # {{ grsec_sysctl_flags }}, thus the separate task.
+- name: set sysctl flags for net.ipv4 config
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
   with_items: sysctl_flags
   tags:
     - sysctl

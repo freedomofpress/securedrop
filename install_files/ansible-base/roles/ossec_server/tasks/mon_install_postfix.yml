@@ -1,6 +1,8 @@
 ---
 - name: install postfix
-  apt: pkg={{ item }} state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items: ossec_postfix_dependencies
   tags:
     - apt

@@ -1,3 +1,5 @@
 ---
 - name: restart restrict access ssh
-  service: name=ssh state=restarted
+  service:
+    name: ssh
+    state: restarted

@@ -1,31 +1,45 @@
 ---
 - name: install apache packages
-  apt: pkg="{{ item }}" state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items: apache_packages
   tags:
     - apt
     - apache
 
 - name: ensure apache configuration files are present
-  copy: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
+  copy:
+    src: "{{ item }}"
+    dest: /etc/apache2/{{ item }}
+    owner: root
+    mode: '0644'
   with_items: apache_files
   tags:
     - apache
 
 - name: ensure templatized apache configs are present
-  template: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
+  template:
+    src: "{{ item }}"
+    dest: /etc/apache2/{{ item }}
+    owner: root
+    mode: '0644'
   with_items: apache_templates
   tags:
     - apache
 
 - name: ensure required apache modules are present
-  apache2_module: state=present name={{ item }}
+  apache2_module:
+    state: present
+    name: "{{ item }}"
   with_items: apache_modules
   tags:
     - apache
 
 - name: ensure non-required apache modules are disabled
-  apache2_module: state=absent name={{ item }}
+  apache2_module:
+    state: absent
+    name: "{{ item }}"
   with_items: apache_disabled_modules
   tags:
     - apache
