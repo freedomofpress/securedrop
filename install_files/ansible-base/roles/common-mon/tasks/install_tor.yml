@@ -1,17 +1,17 @@
 ---
 - name: install tor project apt signing gpg key
-  apt_key: >
-    state=present
-    data="{{ lookup('file', 'tor-signing-key.pub') }}"
+  apt_key:
+    state: present
+    data: "{{ lookup('file', 'tor-signing-key.pub') }}"
   tags:
     - apt
     - tor
 
 - name: setup tor apt repo
-  apt_repository: >
-    repo='deb http://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main'
-    state=present 
-    update_cache=yes
+  apt_repository:
+    repo: deb http://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main
+    state: present
+    update_cache: yes
   tags:
     - apt
     - tor
@@ -21,7 +21,9 @@
     pkg: "{{ item }}"
     state: latest
     force: yes
-  with_items: ["deb.torproject.org-keyring", "tor"]
+  with_items:
+    - deb.torproject.org-keyring
+    - tor
   tags:
     - apt
     - tor

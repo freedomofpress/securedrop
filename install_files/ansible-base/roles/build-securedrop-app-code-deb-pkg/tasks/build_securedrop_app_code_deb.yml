@@ -1,50 +1,57 @@
 ---
 - name: install deb packages required to build securedrop-app-code.deb
-  apt: pkg="{{ item }}" state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items: dev_deps
   tags:
     - apt
 
 - name: install pip install wheel
-  pip: name=wheel
+  pip:
+    name: wheel
   tags:
     - pip
 
 - name: copy install_files/securedrop-app-code dir to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/ cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+  command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}/
   tags:
     - build
 
 - name: ensure build path var structure exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/
   tags:
     - build
 
 - name: ensure build path www structure exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/www
   tags:
     - build
 
 - name: ensure build path directory for wheelhouse exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/securedrop
   tags:
     - build
 
 - name: copy securedrop to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }} cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
+  command: cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }}
   tags:
     - build
 
 - name: ensure config.py does not exist in the build path
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py
   tags:
     - build
     - cleanup
@@ -58,27 +65,31 @@
 - name: ensure build dir /etc exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/
   tags:
     - build
 
 - name: ensure apparmor build dir exists
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
   tags:
     - build
     - apparmor
 
 - name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+  copy:
+    src: "{{ item }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
   with_items: apparmor_profiles
   tags:
     - build
     - apparmor
 
 - name: create the deb package
-  command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
+  command: dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}.deb
   tags:
     - build
 
@@ -90,7 +101,7 @@
 - name: remove the build temp dir
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}
   tags:
     - build
     - cleanup
@@ -98,7 +109,7 @@
 - name: remove temp package
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
+    dest: /tmp/{{ securedrop_app_code_deb }}.deb
   tags:
     - build
     - cleanup

@@ -3,21 +3,33 @@
   # task. This should be changed in the ansible task to use a group_var with the
   # version or to read it from the securedrop_code version.py
 - name: copy the versions collect.py script to the target server /tmp directory
-  copy: src=0.3_collect.py dest=/tmp/ owner=root mode=770
+  copy:
+    src: 0.3_collect.py
+    dest: /tmp/
+    owner: root
+    # file mode must be specified as a string in dict syntax, see:
+    # https://github.com/ansible/ansible/issues/9196
+    mode: '770'
   tags:
     - collect
     - script
     - permissions
 
-  # This runs the backup script to collect the tor config, tor services
-  # directory, securedrop_data directory, securedrop_code config.py and the
-  # custom header image into a gpg encrypted zip file. It names the encrypted
-  # file sd-backup-TIMESTAMP.zip.gpg
-  #
-  # Since long running installs could have a larger information store made this
-  # task async.
+  # This runs the backup script to collect the following items from the app-server:
+  #   - tor config
+  #   - tor services directory
+  #   - securedrop_data directory
+  #   - securedrop_code/config.py
+  #   - custom header image (if applicable)
+  # These files are packed into a gpg encrypted zipfile with filename
+  # format: sd-backup-TIMESTAMP.zip.gpg
 - name: run the collect script to backup all the needed files to perform a restore
-  shell: chdir=/tmp/ /tmp/0.3_collect.py
+  # IMPORTANT: chdir must be specified in one-liner syntax when using async.
+  # This is a bug in Ansible, see: https://github.com/ansible/ansible/issues/9693
+  shell: chdir=/tmp /tmp/0.3_collect.py
+  # Long-running installs may have more submissions, which means retrieving
+  # the files for backup will take longer. Make this task async, so
+  # the rest of the playbook can run in tandem.
   async: 300
   poll: 10
   register: backup_filename
@@ -26,26 +38,35 @@
     - script
 
 - name: fetch the created backup file back to the host machine's ansible_base directory
-  fetch: src=/tmp/{{ backup_filename.stdout }}.gpg dest=./{{ backup_filename.stdout }}.gpg flat=yes fail_on_missing=yes
+  fetch:
+    src: /tmp/{{ backup_filename.stdout }}.gpg
+    dest: ./{{ backup_filename.stdout }}.gpg
+    flat: yes
+    fail_on_missing: yes
   tags:
     - fetch
 
-- name: secure delete backup zip requires secure-delete package
+- name: secure delete backup zip from server
   command: srm /tmp/{{ backup_filename.stdout }}
   async: 300
   poll: 10
   tags:
     - srm
 
-- name: secure delete the encrypted backup requires secure-delete package
+- name: secure delete the encrypted backup from server
   command: srm /tmp/{{ backup_filename.stdout }}.gpg
   async: 300
   poll: 10
   tags:
     - srm
 
+  # TODO: consider moving restore tasks to separate yaml file.
 - name: if a restore file is declared copy migrate script to the app server tmp dir
-  copy: src=0.3_restore.py dest=/tmp/ owner=root mode=770
+  copy:
+    src: 0.3_restore.py
+    dest: /tmp/
+    owner: root
+    mode: '770'
   when: backup_zip is defined
   tags:
     - script
@@ -53,7 +74,9 @@
     - permissions
 
 - name: if a restore file is defined copy it to the app server tmp dir
-  copy: src={{ backup_zip }} dest=/tmp/{{ backup_zip }}
+  copy:
+    src: "{{ backup_zip }}"
+    dest: /tmp/{{ backup_zip }}
   when: backup_zip is defined
   tags:
     - restore
