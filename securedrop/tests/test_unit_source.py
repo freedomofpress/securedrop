@@ -129,6 +129,26 @@ class TestSource(TestCase):
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
 
+    def test_login_with_whitespace(self):
+        """Test that codenames with leading or trailing whitespace still work"""
+        def login_test(codename):
+            rv = self.client.get('/login')
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Login to check for responses", rv.data)
+
+            with self.client as c:
+                rv = c.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+                self.assertEqual(rv.status_code, 200)
+                self.assertIn("Submit documents and messages", rv.data)
+                self.assertTrue(session['logged_in'])
+                common.logout(c)
+
+        codename = self._new_codename()
+        login_test(codename + ' ')
+        login_test(' ' + codename + ' ')
+        login_test(' ' + codename)
+
     def _dummy_submission(self):
         """
         Helper to make a submission (content unimportant), mostly useful in
