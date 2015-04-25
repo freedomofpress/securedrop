@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# bail out on errors
+set -e
+
 # If the previous build in snap-ci failed, the droplet 
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
 vagrant destroy development -f
