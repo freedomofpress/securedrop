@@ -16,11 +16,11 @@ securedrop_root = "/var/chroot/source/var/www/securedrop"
 
 
 def collect_config_file(backup):
-    config_file = os.path.join(securedrop_root, "config.py"))
+    config_file = os.path.join(securedrop_root, "config.py")
     backup.add(config_file)
     return config_file
 
-    
+
 def collect_securedrop_root(backup):
     # The store and key dirs are shared between the chroot jails in
     # 0.2.1, and are both linked from /var/securedrop
@@ -66,7 +66,7 @@ def collect_tor_files(backup):
         backup.add(tor_file)
         collected.append(tor_file)
 
-    return collected
+    return ', '.join(collected)
 
 
 def main():
