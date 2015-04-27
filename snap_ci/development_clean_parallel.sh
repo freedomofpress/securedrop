@@ -19,9 +19,19 @@ trap cleanup EXIT
 vagrant up development --no-provision --provider digital_ocean
 vagrant provision development
 
-# Run application tests
-vagrant ssh development --command 'export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test'
+if (( ${SNAP_WORKER_TOTAL:-0} < 2 )); then
+    echo "Not enough workers to run tests."
+    exit -1
+fi
 
-# Run serverspec tests
-cd /var/snap-ci/repo/spec_tests/
-bundle exec rake spec:development
+case "$SNAP_WORKER_INDEX" in
+    1)
+        # Run application tests
+        vagrant ssh development --command 'export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test'
+        ;;
+    2)
+        # Run serverspec tests
+        cd /var/snap-ci/repo/spec_tests/
+        bundle exec rake spec:development
+        ;;
+esac
