@@ -5,24 +5,48 @@
 
 - debug: msg="verifying ssh_users is not set to vagrant"
   failed_when: ssh_users == "vagrant"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying securedrop_app_gpg_fingerprint is not the journalist test key"
   failed_when: securedrop_app_gpg_fingerprint == "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying securedrop_app_gpg_fingerprint is not the admin test key"
   failed_when: securedrop_app_gpg_fingerprint == "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying ossec_gpg_fpr is not the journalist test key"
   failed_when: securedrop_app_gpg_fingerprint == "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying ossec_gpg_fpr is not the admin test key"
   failed_when: ossec_gpg_fpr == "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying ossec_alert_email is not the test value"
   failed_when: ossec_alert_email == "ossec@ossec.test"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying sasl_username is not test value"
   failed_when: sasl_username == "test"
+  tags:
+    - validate
+    - debug
 
 - debug: msg="verifying sasl_password is not the insane test value"
   failed_when: sasl_password == "password123"
+  tags:
+    - validate
+    - debug

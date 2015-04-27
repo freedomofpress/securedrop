@@ -7,6 +7,8 @@
     mode: 0644
   notify:
     - reload supervisor
+  tags:
+    - supervisor
 
   # Supervisor will not write logs if the parent directory does not exist, so
   # we create it here.
@@ -18,3 +20,7 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - supervisor
+    - permissions
+    - logging

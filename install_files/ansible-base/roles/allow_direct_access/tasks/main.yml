@@ -6,9 +6,14 @@
     line: "ListenAddress 0.0.0.0:22"
   notify:
     - restart direct access ssh
+  tags:
+    - ssh
 
-- stat: path=/etc/network/iptables/rules_v4
+- stat:
+    path: /etc/network/iptables/rules_v4
   register: iptables_rules
+  tags:
+    - iptables
 
 - name: allow direct SSH acccess in iptables rules
   lineinfile:
@@ -26,3 +31,6 @@
     - reload direct access iptables
   with_items: direct_access_rules
   when: iptables_rules.stat.exists
+  tags:
+    - ssh
+    - iptables

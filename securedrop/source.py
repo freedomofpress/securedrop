@@ -340,7 +340,7 @@ def valid_codename(codename):
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        codename = request.form['codename']
+        codename = request.form['codename'].strip()
         try:
             valid = valid_codename(codename)
         except crypto_util.CryptoException:

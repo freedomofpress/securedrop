@@ -1,5 +1,8 @@
 ---
 - name: apt-get update
   apt: update_cache=yes
+  tags:
+    - apt
+    - build
 
 - include: build_securedrop_app_code_deb.yml

@@ -16,7 +16,14 @@
   # bulk. When that is done this issue will be avoided.
 
 - name: ensure load_iptables script is present
-  copy: src=load_iptables dest=/etc/network/if-up.d/load_iptables owner=root mode=0744
+  copy:
+    src: load_iptables
+    dest: /etc/network/if-up.d/load_iptables
+    owner: root
+    mode: '0744'
+  tags:
+    - iptables
+    - permissions
 
 - name: ensure iptables directory exists
   file:
@@ -25,6 +32,16 @@
     owner: root
     group: root
     dest: /etc/network/iptables
+  tags:
+    - iptables
+    - permissions
 
 - name: ensure iptables rules_v4 file is present
-  template: src=app_rules_v4 dest=/etc/network/iptables/rules_v4 owner=root mode=0644
+  template:
+    src: app_rules_v4
+    dest: /etc/network/iptables/rules_v4
+    owner: root
+    mode: '0644'
+  tags:
+    - iptables
+    - permissions

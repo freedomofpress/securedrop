@@ -1,9 +1,9 @@
 ---
-  # If the OSSEC authd iptable rule exemptions are in place remove them and
-  # restart OSSEC. The remove_ossec_exemptions role is ran on the app server
-  # first then the monitor server. This order does matter. The app server's
-  # ossec agent needs to restart to load the imported cert from authd and
-  # connect to the ossec server. The monitor server's OSSEC server needs to
+  # If the OSSEC authd iptable rule exemptions are in place, remove them and
+  # restart OSSEC. This role must run on the app server first and then on
+  # the monitor server. This order is important, since the app server's
+  # OSSEC agent needs to restart to load the imported cert from authd and
+  # connect to the ossec server. The monitor server's OSSEC service needs to
   # restart after the agent connects to correctly display the agent status.
 - name: remove insecure ossec authd firewall exemptions
   lineinfile:
@@ -16,6 +16,9 @@
     - reload iptables rules
     - restart ossec
   with_items: authd_rules
+  tags:
+    - iptables
+    - ossec_auth
 
 - name: kill authd if it is running
   # This should work using the pattern to grep for in the output of ps per
@@ -25,3 +28,7 @@
   #  msg: service not found: ossec-authd
   #service: name=ossec-authd pattern=/var/ossec/bin/ossec-authd state=started
   shell: "pkill ossec-authd || true"
+  tags:
+    - iptables
+    - ossec_auth
+    - authd
