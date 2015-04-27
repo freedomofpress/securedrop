@@ -22,7 +22,3 @@ vagrant provision development
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
 bundle exec rake spec:development
-
-# Destroy the droplets since you will want to start builds with a fresh tagged
-# release and to save money.
-vagrant destroy development -f
