@@ -335,7 +335,7 @@ When you're done, save the file and quit the editor.
 
 Now you are ready to run the playbook! This will automatically configure the servers and install SecureDrop and all of its dependencies. `<username>` below is the user you created during the Ubuntu installation, and should be the same user you copied the SSH public keys to.
 
-    $ ansible-playbook -i inventory -u <username> -K --sudo site.yml
+    $ ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
 
 You will be prompted to enter the sudo password for the app and monitor servers (which should be the same).
 
