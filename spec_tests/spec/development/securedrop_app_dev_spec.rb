@@ -46,12 +46,12 @@ describe file(TEST_VARS['securedrop_code']) do
   # vagrant-digitalocean plugin preserves permissions from the host.)
   # The spectests for 'staging' still check for an explicit mode,
   # so it's OK to relax this test for now.
-  #it { should be_mode '770' }
-  %w(owner group).each do |entity|
-    it { should be_readable.by(entity) }
-    it { should be_writable.by(entity) }
-    it { should be_executable.by(entity) }
-  end
+  #it { should be_mode '700' }
+  # TODO: should be 700 in all environments; ansible task is
+  # straightforward about this.
+  it { should be_readable.by('owner') }
+  it { should be_writable.by('owner') }
+  it { should be_executable.by('owner') }
 end
 
 # ensure cronjob for securedrop tmp dir cleanup is enabled
