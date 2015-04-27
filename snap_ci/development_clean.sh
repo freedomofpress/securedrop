@@ -6,6 +6,7 @@ set -e
 function cleanup {
     # If the previous build in snap-ci failed, the droplet
     # will still exist. Ensure that it's gone with a pre-emptive destroy.
+    echo "Destroying droplet..."
     vagrant destroy development -f
 }
 
@@ -14,7 +15,7 @@ function cleanup {
 trap cleanup EXIT
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
-vagrant up development --no-provision
+vagrant up development --no-provision --provider digital_ocean
 vagrant provision development
 
 # Run serverspec tests
