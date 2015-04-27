@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# bail out on errors
+set -e
+
+# declare function for EXIT trap
+function cleanup {
+    # If the previous build in snap-ci failed, the droplet
+    # will still exist. Ensure that it's gone with a pre-emptive destroy.
+    echo "Destroying droplet..."
+    vagrant destroy development -f
+}
+
+# Ensure that DigitalOcean droplet will be cleaned up
+# even if script errors (e.g., if serverspec tests fail).
+trap cleanup EXIT
+
 # If the previous build in snap-ci failed, the droplet 
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
 vagrant destroy /staging/ -f
