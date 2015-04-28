@@ -19,9 +19,10 @@ trap cleanup EXIT
 vagrant up development --no-provision --provider digital_ocean
 vagrant provision development
 
-# Run application tests
-sudo su -c "vagrant ssh development --command 'export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test; exit'"
-
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
 bundle exec rake spec:development
+
+# Run application tests
+# Important: these app tests are AFTER spectests because they've been hanging in snap.
+vagrant ssh development --command 'export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test; exit'
