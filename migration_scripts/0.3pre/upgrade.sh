@@ -95,8 +95,8 @@ if [[ ! $mon_ssh_host =~ .*onion ]]; then
 fi
 
 # check that we can connect to each server via SSH
-app_status=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host echo OK 2>&1)
-mon_status=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host echo OK 2>&1)
+app_status=$(amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host echo OK 2>&1)
+mon_status=$(amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host echo OK 2>&1)
 
 if [[ $app_status != "OK" ]]; then
 	echo "Error: can't connect to the Application Server via SSH." 1>&2
@@ -109,8 +109,8 @@ if [[ $mon_status != "OK" ]]; then
 fi
 
 # remove old kernels
-amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host sudo apt-get autoremove 2>&1
-amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host sudo apt-get autoremove 2>&1
+amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host sudo apt-get autoremove 2>&1
+amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host sudo apt-get autoremove 2>&1
 
 # run the upgrade playbook
 amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
