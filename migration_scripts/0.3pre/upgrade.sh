@@ -3,7 +3,6 @@
 # ./upgrade.sh
 # parse_yaml() courtesy of a StackOverflow user:
 # http://stackoverflow.com/a/21189044
-set -x
 set -e
 
 function parse_yaml {
