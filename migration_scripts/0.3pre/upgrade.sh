@@ -113,7 +113,7 @@ amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTi
 amnesia ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host sudo apt-get autoremove 2>&1
 
 # run the upgrade playbook
-amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
+amnesia ansible-playbook -i $ANSIBLE_BASE/inventory -u $ssh_users --sudo $ANSIBLE_BASE/upgrade.yml
 
 # run the production playbook
-amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
+amnesia ansible-playbook -i $ANSIBLE_BASE/inventory -u $ssh_users --sudo $ANSIBLE_BASE/securedrop-prod.yml
