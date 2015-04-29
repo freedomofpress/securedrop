@@ -25,11 +25,10 @@ function parse_yaml {
 # set paths and variables
 HOMEDIR=/home/amnesia
 PERSISTENT=$HOMEDIR/Persistent
-TAILSCFG=/live/persistence/TailsData_unlocked
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 
 # check for persistence
-if [ ! -d "$TAILSCFG" ]; then
+if [ ! -d /live/persistence/TailsData_unlocked ]; then
   echo "Error: This script must be run on Tails with a persistent volume." 1>&2
   exit 1
 fi
