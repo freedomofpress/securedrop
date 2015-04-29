@@ -9,6 +9,7 @@ import sys
 import tarfile
 import traceback
 
+
 def backup_app():
     tar_fn = 'backup-app-{}.tar.bz2'.format(datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))
     with tarfile.open(tar_fn, 'w:bz2') as t:
@@ -18,6 +19,7 @@ def backup_app():
         t.add('/var/www/securedrop/static/i/logo.png')
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
+
 def backup_mon():
     # The only thing we have to back up for the monitor server is the SSH ATHS cert.
     # All other required values are available in prod-specific.yml from the installation.
@@ -26,25 +28,28 @@ def backup_mon():
         t.add('/var/lib/tor/services/')
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
+
 def secure_unlink(path):
     subprocess.check_call(['srm', '-r', path])
 
-def cleanup_deleted_sources(c):
-    store_dir = "/var/lib/securedrop/store"
+
+def cleanup_deleted_sources(store_dir, c):
+    """
+    In 0.3pre and 0.3, there were two bugs that could potentially lead
+    to the source directory failing to be deleted when a source was
+    deleted from the Document Interface. We clean up these leftover
+    directories as part of the migration.
+
+    These sources can be identified because they have a source_dir in
+    the store_dir, but no corresponding Source entry in the database.
+
+    See https://github.com/freedomofpress/securedrop/pull/944 for context.
+    """
     for source_dir in os.listdir(store_dir):
         try:
             source = c.execute("SELECT * FROM sources WHERE filesystem_id=?",
                 (source_dir,)).fetchone()
             if not source:
-                # A source directory is available on the filesystem, but there
-                # is no corresponding entry in the database. In 0.3pre and 0.3,
-                # there were two bugs that could potentially lead to the source
-                # directory failing to be deleted when a source was deleted
-                # from the Document Interface. We clean up these directories as
-                # part of the migration.
-                #
-                # See https://github.com/freedomofpress/securedrop/pull/944 for
-                # context.
                 print "Deleting source with no db entry ('{}')...".format(source_dir)
                 secure_unlink(os.path.join(store_dir, source_dir))
         except Exception as e:
@@ -52,16 +57,21 @@ def cleanup_deleted_sources(c):
             print "Source had {} submissions".format(len(os.listdir(os.path.join(store_dir, source_dir))))
             print traceback.format_exc()
 
-def migrate_app_db():
-    store_dir = "/var/lib/securedrop/store"
+
+def get_db_connection():
     db_path = "/var/lib/securedrop/db.sqlite"
     assert os.path.isfile(db_path)
     conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+    return conn, conn.cursor()
+
+
+def migrate_app_db():
+    store_dir = "/var/lib/securedrop/store"
+    conn, c = get_db_connection()
 
     # Before modifying the database, clean up any source directories that were
     # left on the filesystem after the sources were deleted.
-    cleanup_deleted_sources(c)
+    cleanup_deleted_sources(store_dir, c)
 
     # To get CREATE TABLE from SQLAlchemy:
     # >>> import db
@@ -150,13 +160,19 @@ CREATE TABLE journalist_login_attempt (
     conn.close()
 
 
-def upgrade_app():
-    backup_app()
-    migrate_app_db()
+def app_db_migrated():
+    """To make the upgrade role idempotent, we need to skip migrating the
+    database if it has already been modified. The best way to do this
+    is to check whether the last sql command in `migrate_app_db`
+    (ALTER TABLE to add the last_token column to the journalists
+    table) succeeded. If so, we can assume the database app migration
+    succeeded and can safely skip doing it again.
 
-
-def upgrade_mon():
-    backup_mon()
+    """
+    conn, c = get_db_connection()
+    journalist_tables = c.execute('PRAGMA table_info(journalists)').fetchall()
+    table_names = set([table[1] for table in journalist_tables])
+    return 'last_token' in table_names
 
 
 def main():
@@ -168,10 +184,11 @@ def main():
     assert server_role in ("app", "mon")
 
     if server_role == "app":
-        upgrade_app()
+        backup_app()
+        if not app_db_migrated():
+            migrate_app_db()
     else:
-        upgrade_mon()
-
+        backup_mon()
 
 if __name__ == "__main__":
     main()
