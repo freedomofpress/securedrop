@@ -118,7 +118,7 @@ sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes 
 sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" -o "ProxyCommand connect -R remote -5 -S localhost:9050 %h %p" $MON_SSH_HOST sudo apt-get autoremove 2>&1
 
 # run the upgrade playbook
-sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh-users --sudo install_files/ansible-base/upgrade.yml
+sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
 
 # run the production playbook
 sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
