@@ -28,12 +28,6 @@ PERSISTENT=$HOMEDIR/Persistent
 TAILSCFG=/live/persistence/TailsData_unlocked
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 
-# check for root
-if [[ $EUID -ne 0 ]]; then
-  echo "Error: This script must be run as root." 1>&2
-  exit 1
-fi
-
 # check for persistence
 if [ ! -d "$TAILSCFG" ]; then
   echo "Error: This script must be run on Tails with a persistent volume." 1>&2
@@ -42,12 +36,12 @@ fi
 
 # check if git is installed
 if ! dpkg --get-selections | grep -q "^git[[:space:]]*install$" >/dev/null; then
-	apt-get install git
+	sudo apt-get install git
 fi
 
 # check if ansible is installed
 if ! dpkg --get-selections | grep -q "^ansible[[:space:]]*install$" >/dev/null; then
-	apt-get install ansible
+	sudo apt-get install ansible
 fi
 
 # TODO: should check that there is a key present in the ssh agent
@@ -100,8 +94,8 @@ if [[ ! $MON_SSH_HOST =~ .*onion ]]; then
 fi
 
 # check that we can connect to each server via SSH
-APP_STATUS=$(sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST echo OK 2>&1)
-MON_STATUS=$(sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST echo OK 2>&1)
+APP_STATUS=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST echo OK 2>&1)
+MON_STATUS=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST echo OK 2>&1)
 
 if [[ $APP_STATUS != "OK" ]]; then
 	echo "Error: can't connect to the Application Server via SSH." 1>&2
@@ -114,11 +108,11 @@ if [[ $MON_STATUS != "OK" ]]; then
 fi
 
 # remove old kernels
-sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST sudo apt-get autoremove 2>&1
-sudo -u amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST sudo apt-get autoremove 2>&1
+amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST sudo apt-get autoremove 2>&1
+amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST sudo apt-get autoremove 2>&1
 
 # run the upgrade playbook
-sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
+amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
 
 # run the production playbook
-sudo -u amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
+amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/securedrop-prod.yml
