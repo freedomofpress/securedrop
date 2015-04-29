@@ -24,8 +24,7 @@ function parse_yaml {
 
 # set paths and variables
 HOMEDIR=/home/amnesia
-PERSISTENT=$HOMEDIR/Persistent
-ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+ANSIBLE=$HOMEDIR/Persistent/securedrop/install_files/ansible-base
 
 # check for persistence
 if [ ! -d /live/persistence/TailsData_unlocked ]; then
