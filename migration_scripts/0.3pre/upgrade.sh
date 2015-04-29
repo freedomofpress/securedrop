@@ -116,4 +116,11 @@ ssh -i $HOMEDIR/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45
 ansible-playbook -i $ANSIBLE_BASE/inventory -u $ssh_users --sudo $ANSIBLE_BASE/upgrade.yml
 
 # run the production playbook
+# NOTE: this run intentionally skips running the 'backup' role.
+# Unintentionally running the 'backup' role can cause large file transfers
+# over Tor, causing substantial problems during upgrade. If you wish to
+# run a backup manually, use this command:
+#
+# ansible-playbook -i $ANSIBLE_BASE/inventory -u $ssh_users --sudo $ANSIBLE_BASE/securedrop-prod.yml --tags backup
+#
 ansible-playbook -i $ANSIBLE_BASE/inventory -u $ssh_users --sudo $ANSIBLE_BASE/securedrop-prod.yml --skip-tags backup
