@@ -63,12 +63,12 @@ fi
 eval $(parse_yaml $ANSIBLE/prod-specific.yml)
 
 # check that prod-specific.yml contains IP addresses
-if ! echo $monitor_ip | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
+if ! echo $monitor_ip | grep -q -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
 	echo "Error: monitor_ip in prod-specific.yml is not an IP address." 1>&2
 	exit 1
 fi
 
-if ! echo $app_ip | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
+if ! echo $app_ip | grep -q -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
 	echo "Error: app_ip in prod-specific.yml is not an IP address." 1>&2
 	exit 1
 fi
