@@ -78,38 +78,38 @@ if [ -z $ssh_users ]; then
 fi
 
 # grab .onion hostnames from the Ansible inventory and check that they're not IPs
-APPSSHHOST=`awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
-MONSSHHOST=`awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
-APP_SSH_HOST="${APPSSHHOST#ansible_ssh_host=}"
-MON_SSH_HOST="${MONSSHHOST#ansible_ssh_host=}"
+app_ssh_host_raw=`awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
+mon_ssh_host_raw=`awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
+app_ssh_host="${app_ssh_host_raw#ansible_ssh_host=}"
+mon_ssh_host="${mon_ssh_host_raw#ansible_ssh_host=}"
 
-if [[ ! $APP_SSH_HOST =~ .*onion ]]; then
+if [[ ! $app_ssh_host =~ .*onion ]]; then
 	echo "Error: the app ansible_ssh_host in Ansible's inventory file is not an .onion address." 1>&2
 	exit 1
 fi
 
-if [[ ! $MON_SSH_HOST =~ .*onion ]]; then
+if [[ ! $mon_ssh_host =~ .*onion ]]; then
 	echo "Error: the mon ansible_ssh_host in Ansible's inventory file is not an .onion address." 1>&2
 	exit 1
 fi
 
 # check that we can connect to each server via SSH
-APP_STATUS=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST echo OK 2>&1)
-MON_STATUS=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST echo OK 2>&1)
+app_status=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host echo OK 2>&1)
+mon_status=$(amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host echo OK 2>&1)
 
-if [[ $APP_STATUS != "OK" ]]; then
+if [[ $app_status != "OK" ]]; then
 	echo "Error: can't connect to the Application Server via SSH." 1>&2
 	exit 1
 fi
 
-if [[ $MON_STATUS != "OK" ]]; then
+if [[ $mon_status != "OK" ]]; then
 	echo "Error: can't connect to the Monitor Server via SSH." 1>&2
 	exit 1
 fi
 
 # remove old kernels
-amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $APP_SSH_HOST sudo apt-get autoremove 2>&1
-amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $MON_SSH_HOST sudo apt-get autoremove 2>&1
+amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $app_ssh_host sudo apt-get autoremove 2>&1
+amnesia ssh -i /home/amnesia/.ssh/id_rsa -l $ssh_users -o BatchMode=yes -o "ConnectTimeout=45" $mon_ssh_host sudo apt-get autoremove 2>&1
 
 # run the upgrade playbook
 amnesia ansible-playbook -i install_files/ansible-base/inventory -u $ssh_users --sudo install_files/ansible-base/upgrade.yml
