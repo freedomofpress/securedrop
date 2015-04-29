@@ -27,7 +27,7 @@ HOMEDIR=/home/amnesia
 ANSIBLE_BASE=$HOMEDIR/Persistent/securedrop/install_files/ansible-base
 
 # check for persistence
-if [ ! -d /live/persistence/TailsData_unlocked ]; then
+if [[ ! -d /live/persistence/TailsData_unlocked ]]; then
   echo "Error: This script must be run on Tails with a persistent volume." 1>&2
   exit 1
 fi
@@ -46,7 +46,7 @@ fi
 
 # TODO: should check that there is a key present in the ssh agent
 # check for SSH identity
-if [ ! -f $HOMEDIR/.ssh/id_rsa ]; then
+if [[ ! -f $HOMEDIR/.ssh/id_rsa ]]; then
 	echo "Error: There is no SSH key file present." 1>&2
 	exit 1
 fi
@@ -72,7 +72,7 @@ if ! echo $app_ip | grep -q -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
 fi
 
 # check that an SSH user is defined
-if [ -z $ssh_users ]; then
+if [[ -z $ssh_users ]]; then
 	echo "Error: ssh_users is not defined in prod-specific.yml." 1>&2
 	exit 1
 fi
