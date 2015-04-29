@@ -24,7 +24,7 @@ function parse_yaml {
 
 # set paths and variables
 HOMEDIR=/home/amnesia
-ANSIBLE=$HOMEDIR/Persistent/securedrop/install_files/ansible-base
+ANSIBLE_BASE=$HOMEDIR/Persistent/securedrop/install_files/ansible-base
 
 # check for persistence
 if [ ! -d /live/persistence/TailsData_unlocked ]; then
@@ -58,7 +58,7 @@ if ! grep -q 'HidServAuth' /etc/tor/torrc; then
 fi
 
 # parse prod-specific.yml YAML into Bash variables
-eval $(parse_yaml $ANSIBLE/prod-specific.yml)
+eval $(parse_yaml $ANSIBLE_BASE/prod-specific.yml)
 
 # check that prod-specific.yml contains IP addresses
 if ! echo $monitor_ip | grep -q -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"; then
@@ -78,8 +78,8 @@ if [ -z $ssh_users ]; then
 fi
 
 # grab .onion hostnames from the Ansible inventory and check that they're not IPs
-APPSSHHOST=`awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE/inventory`
-MONSSHHOST=`awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE/inventory`
+APPSSHHOST=`awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
+MONSSHHOST=`awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
 APP_SSH_HOST="${APPSSHHOST#ansible_ssh_host=}"
 MON_SSH_HOST="${MONSSHHOST#ansible_ssh_host=}"
 
