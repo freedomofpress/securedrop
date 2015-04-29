@@ -4,6 +4,7 @@
 # parse_yaml() courtesy of a StackOverflow user:
 # http://stackoverflow.com/a/21189044
 set -e
+set -u
 
 function parse_yaml {
    local prefix=$2
