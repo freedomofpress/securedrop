@@ -36,11 +36,13 @@ fi
 
 # check if git is installed
 if ! dpkg --get-selections | grep -q "^git[[:space:]]*install$" >/dev/null; then
+    echo "Package 'git' not found, but is required. Installing now."
 	sudo apt-get install git
 fi
 
 # check if ansible is installed
 if ! dpkg --get-selections | grep -q "^ansible[[:space:]]*install$" >/dev/null; then
+    echo "Package 'ansible' not found, but is required. Installing now."
 	sudo apt-get install ansible
 fi
 
