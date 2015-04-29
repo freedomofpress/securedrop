@@ -79,8 +79,8 @@ if [[ -z $ssh_users ]]; then
 fi
 
 # grab .onion hostnames from the Ansible inventory and check that they're not IPs
-app_ssh_host_raw=`awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
-mon_ssh_host_raw=`awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory`
+app_ssh_host_raw=$(awk '/app ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory)
+mon_ssh_host_raw=$(awk '/mon ansible_ssh_host=.* /{ print $2 }' $ANSIBLE_BASE/inventory)
 app_ssh_host="${app_ssh_host_raw#ansible_ssh_host=}"
 mon_ssh_host="${mon_ssh_host_raw#ansible_ssh_host=}"
 
