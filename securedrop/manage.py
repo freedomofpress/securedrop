@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import atexit
 import sys
 import os
+import select
 import shutil
 import subprocess
 import unittest
@@ -57,56 +59,152 @@ def _stop_test_rqworker():
     os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
 
 
-def start():
-    import config
-    source_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.SOURCE_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python source.py'])
-    journo_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.JOURNALIST_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python journalist.py'])
+def run():
+    """
+    Starts development servers for both the Source Interface and the
+    Document Interface concurrently. Their output is collected,
+    labeled, and sent to stdout to present a unified view to the
+    developer.
 
-    if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
-        print "Source interface:     localhost:8080"
-        print "Journalist interface: localhost:8081"
-    else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
+    Ctrl-C will kill the servers and return you to the terminal.
+
+    Useful resources:
+    * https://stackoverflow.com/questions/22565606/python-asynhronously-print-stdout-from-multiple-subprocesses
+
+    """
+
+    def colorize(s, color, bold=False):
+        # https://www.siafoo.net/snippet/88
+        shell_colors = {
+            'gray': '30',
+            'red': '31',
+            'green': '32',
+            'yellow': '33',
+            'blue': '34',
+            'magenta': '35',
+            'cyan': '36',
+            'white': '37',
+            'crimson': '38',
+            'highlighted_red': '41',
+            'highlighted_green': '42',
+            'highlighted_brown': '43',
+            'highlighted_blue': '44',
+            'highlighted_magenta': '45',
+            'highlighted_cyan': '46',
+            'highlighted_gray': '47',
+            'highlighted_crimson': '48'
+        }
+
+        # http://stackoverflow.com/a/2330297/1093000
+        attrs = []
+        attrs.append(shell_colors[color])
+        if bold:
+            attrs.append('1')
+
+        return '\x1b[{}m{}\x1b[0m'.format(';'.join(attrs), s)
 
 
-def stop():
-    import config
-    source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
-    journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
-    if source_rc + journo_rc == 0:
-        print "The web application has been stopped."
-    else:
-        print "There was a problem stopping the web application."
+    class DevServerProcess(subprocess.Popen):
+
+        def __init__(self, label, cmd, color):
+            self.label = label
+            self.cmd = cmd
+            self.color = color
+
+            super(DevServerProcess, self).__init__(
+                self.cmd,
+                stdin  = subprocess.PIPE,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                preexec_fn = os.setsid)
+
+        def print_label(self, to):
+            label = "\n => {} <= \n\n".format(self.label)
+            if to.isatty():
+                label = colorize(label, self.color, True)
+            to.write(label)
 
 
-def restart():
-    stop()
-    sleep(0.1)
-    start()
+    class DevServerProcessMonitor(object):
 
+        def __init__(self, procs):
+            self.procs = procs
+            self.streams = [proc.stdout for proc in procs]
+            self.last_proc = None
+            atexit.register(self.cleanup)
+
+        def _get_proc_by_stream(self, stream):
+            # TODO: this could be optimized, but it hardly matters when there
+            # are only two processes being monitored.
+            for proc in self.procs:
+                if id(stream) == id(proc.stdout):
+                    return proc
+
+        def monitor(self):
+            while True:
+                # TODO: we currently don't handle input, which makes using an
+                # interactive debugger like pdb impossible. Since Flask provides
+                # a featureful in-browser debugger, I'll accept that pdb is
+                # broken for now. If someone really wants it, they should be
+                # able to change this function to make it work (although I'm not
+                # sure how hard it would be).
+                #
+                # If you really want to use pdb, you can just run the
+                # application scripts individually (`python source.py` or
+                # `python journalist.py`).
+                rstreams, _, _ = select.select(self.streams, [], [])
+
+                for stream in rstreams:
+                    current_proc = self._get_proc_by_stream(stream)
+                    # To keep track of which process output what, print a
+                    # helpful label every time the process sending output
+                    # changes.
+                    if current_proc != self.last_proc:
+                        current_proc.print_label(sys.stdout)
+                        self.last_proc = current_proc
+
+                    line = stream.readline()
+                    sys.stdout.write(line)
+                    sys.stdout.flush()
+
+                if any(proc.poll() is not None for proc in self.procs):
+                    # If any of the processes terminates (for example, due to
+                    # a syntax error causing a reload to fail), kill them all
+                    # so we don't get stuck.
+                    sys.stdout.write(colorize(
+                        "\nOne of the development servers exited unexpectedly. "
+                        "See the traceback above for details.\n"
+                        "Once you have resolved the issue, you can re-run "
+                        "'./manage.py run' to continue developing.\n\n",
+                        "red", True))
+                    self.cleanup()
+                    break
+
+            for proc in self.procs:
+                proc.wait()
+
+        def cleanup(self):
+            for proc in self.procs:
+                if proc.poll() is None:
+                    # When the development servers use automatic reloading, they
+                    # spawn new subprocess frequently. In order to make sure we
+                    # kill all of the subprocesses, we need to send SIGTERM to
+                    # the process group and not just the process we initially
+                    # created. See http://stackoverflow.com/a/4791612/1093000
+                    os.killpg(proc.pid, signal.SIGTERM)
+                    proc.terminate()
+
+    procs = [
+        DevServerProcess('Source Interface',
+                         ['python', 'source.py'],
+                         'blue'),
+        DevServerProcess('Document Interface',
+                         ['python', 'journalist.py'],
+                         'cyan'),
+    ]
+
+    monitor = DevServerProcessMonitor(procs)
+    monitor.monitor()
 
 def test():
     """
@@ -254,11 +352,9 @@ def clean_tmp():
 
 def main():
     valid_cmds = [
-        "start",
-        "stop",
+        "run",
         "test_unit",
         "test",
-        "restart",
         "reset",
         "add_admin",
         "clean_tmp"]
