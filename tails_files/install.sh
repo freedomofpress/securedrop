@@ -12,7 +12,6 @@ ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 TAILSCFG=/live/persistence/TailsData_unlocked
-DOTFILES=$TAILSCFG/dotfiles
 
 # check for persistence
 if [ ! -d "$TAILSCFG" ]; then
@@ -50,6 +49,9 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown root:root $INSTALL_DIR/70-tor-reload.sh
 chmod 755 $INSTALL_DIR/70-tor-reload.sh
+
+# remove xsessionrc from 0.3.2 if present
+rm -f $TAILSCFG/dotfiles/.xsessionrc > /dev/null 2>&1
 
 # set up NetworkManager hook
 if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
