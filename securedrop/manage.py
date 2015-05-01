@@ -17,7 +17,7 @@ import psutil
 
 from db import db_session, Journalist
 
-from management.run import run
+from management import run
 
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
