@@ -114,19 +114,15 @@ can specify the name if you want to.
 vagrant up
 vagrant ssh
 cd /vagrant/securedrop
+./manage.py run         # run development servers
 ./manage.py test        # run the unit and functional tests
-./manage.py start       # starts the application servers
-./manage.py stop        # stops the application servers
 ./manage.py reset       # resets the state of the development instance
 ./manage.py add_admin   # create a user to use when logging in to the Document Interface
 ```
 
-Once you start the servers, they will automatically reload when code changes are
-detected. If you accidentally save some incorrect code (e.g. with syntax
-errors), it's possible that one of the servers will get stuck in a bad state and
-be unable to recover. In that case, we recommend running `./manage.py restart`
-to restart the development servers. We are working on making this setup more
-transparent and easier to debug.
+SecureDrop consists of two separate web appications (the Source Interface and
+the Document Interface) that run concurrently. The development servers will
+detect code changes when they are saved and automatically reload.
 
 ## Staging
 
