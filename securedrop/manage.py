@@ -124,21 +124,25 @@ def run():
                 label = colorize(label, self.color, True)
             to.write(label)
 
+        def fileno(self):
+            """
+            Implement fileno() in order to use DevServerProcesses with select.select
+            directly.
+
+            Note this method assumes we only want to select this process'
+            stdout. This is a reasonable assumption for a DevServerProcess
+            because the __init__ redirects stderr to stdout, so all output is
+            available on stdout.
+            """
+            return self.stdout.fileno()
+            
 
     class DevServerProcessMonitor(object):
 
         def __init__(self, procs):
             self.procs = procs
-            self.streams = [proc.stdout for proc in procs]
             self.last_proc = None
             atexit.register(self.cleanup)
-
-        def _get_proc_by_stream(self, stream):
-            # TODO: this could be optimized, but it hardly matters when there
-            # are only two processes being monitored.
-            for proc in self.procs:
-                if id(stream) == id(proc.stdout):
-                    return proc
 
         def monitor(self):
             while True:
@@ -147,23 +151,22 @@ def run():
                 # a featureful in-browser debugger, I'll accept that pdb is
                 # broken for now. If someone really wants it, they should be
                 # able to change this function to make it work (although I'm not
-                # sure how hard it would be).
+                # sure how hard that would be).
                 #
                 # If you really want to use pdb, you can just run the
                 # application scripts individually (`python source.py` or
                 # `python journalist.py`).
-                rstreams, _, _ = select.select(self.streams, [], [])
+                rprocs, _, _ = select.select(self.procs, [], [])
 
-                for stream in rstreams:
-                    current_proc = self._get_proc_by_stream(stream)
+                for proc in rprocs:
                     # To keep track of which process output what, print a
                     # helpful label every time the process sending output
                     # changes.
-                    if current_proc != self.last_proc:
-                        current_proc.print_label(sys.stdout)
-                        self.last_proc = current_proc
+                    if proc != self.last_proc:
+                        proc.print_label(sys.stdout)
+                        self.last_proc = proc
 
-                    line = stream.readline()
+                    line = proc.stdout.readline()
                     sys.stdout.write(line)
                     sys.stdout.flush()
 
@@ -187,7 +190,7 @@ def run():
             for proc in self.procs:
                 if proc.poll() is None:
                     # When the development servers use automatic reloading, they
-                    # spawn new subprocess frequently. In order to make sure we
+                    # spawn new subprocesses frequently. In order to make sure we
                     # kill all of the subprocesses, we need to send SIGTERM to
                     # the process group and not just the process we initially
                     # created. See http://stackoverflow.com/a/4791612/1093000
