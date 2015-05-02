@@ -51,7 +51,26 @@ chown root:root $INSTALL_DIR/99-tor-reload.sh
 chmod 755 $INSTALL_DIR/99-tor-reload.sh
 
 # remove xsessionrc from 0.3.2 if present
-rm -f $TAILSCFG/dotfiles/.xsessionrc > /dev/null 2>&1
+XSESSION_RC=$TAILSCFG/dotfiles/.xsessionrc
+if [ -f $XSESSION_RC ]; then
+    rm -f $XSESSION_RC > /dev/null 2>&1
+
+    # Repair the torrc backup, which was probably busted due to the
+    # race condition between .xsessionrc and
+    # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
+    # Tor after this script is run.
+    #
+    # If the Sandbox directive is on in the torrc (now that the dust
+    # has settled from any race condition shenanigans), *and* there is
+    # no Sandbox directive already present in the backup of the
+    # original, "unmodified-by-SecureDrop" copy of the torrc used by
+    # securedrop_init, then port that Sandbox directive over to avoid
+    # breaking Tor by changing the Sandbox directive while it's
+    # running.
+    if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
+        echo "Sandbox 1" >> /etc/tor/torrc.bak
+    fi
+fi
 
 # set up NetworkManager hook
 if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
