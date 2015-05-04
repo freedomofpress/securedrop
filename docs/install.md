@@ -226,7 +226,7 @@ Install Ubuntu Server 14.04 (Trusty) on both servers. For detailed instructions 
 * The IP address of the Monitor Server
 * The non-root user's name and password on each server.
 
-Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. Open a terminal ![Terminal](images/terminal.png) and verify that you can SSH into both servers, authenticating with your password:
+Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. In the terminal that should still be open from the Download the SecureDrop repository step, verify that you can SSH into both servers, authenticating with your password:
 
 ```sh
 ssh <username>@<App IP address> hostname
@@ -292,9 +292,9 @@ Make sure you have the following information and files before continuing:
 
 ### Install SecureDrop
 
-Change into the `ansible-base` directory of the SecureDrop repo that you cloned earlier:
+From the base of the SecureDrop repo change into the `ansible-base` directory of the SecureDrop repo that you cloned earlier:
 
-    $ cd securedrop/install_files/ansible-base
+    $ cd install_files/ansible-base
 
 You will have to copy the following required files to `securedrop/install_files/ansible-base`:
 
