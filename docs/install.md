@@ -171,7 +171,7 @@ After Tails is fully booted, make sure you're connected to the Internet ![Networ
 
 ### Download the SecureDrop repository
 
-The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop Git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal ![Terminal](images/terminal.png) and run the following commands to download the git repository.
+The rest of the SecureDrop-specific configuration is assisted by files stored in the SecureDrop Git repository. We're going to be using this again once SecureDrop is installed, but you should download it now. To get started, open a terminal ![Terminal](images/terminal.png), keep it open for the rest of the install process and run the following commands to download the git repository.
 
 NOTE: Since the repository is fairly large and Tor can be slow, this may take a few minutes.
 
@@ -226,7 +226,7 @@ Install Ubuntu Server 14.04 (Trusty) on both servers. For detailed instructions 
 * The IP address of the Monitor Server
 * The non-root user's name and password on each server.
 
-Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. Open a terminal ![Terminal](images/terminal.png) and verify that you can SSH into both servers, authenticating with your password:
+Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. In the terminal, verify that you can SSH into both servers, authenticating with your password:
 
 ```sh
 ssh <username>@<App IP address> hostname
@@ -292,11 +292,11 @@ Make sure you have the following information and files before continuing:
 
 ### Install SecureDrop
 
-Change into the `ansible-base` directory of the SecureDrop repo that you cloned earlier:
+From the base of the SecureDrop repo, change into the `ansible-base` directory:
 
-    $ cd securedrop/install_files/ansible-base
+    $ cd install_files/ansible-base
 
-You will have to copy the following required files to `securedrop/install_files/ansible-base`:
+You will have to copy the following required files to `install_files/ansible-base`:
 
 * SecureDrop Application GPG public key file
 * Admin GPG public key file (for encrypting OSSEC alerts)
