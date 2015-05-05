@@ -58,7 +58,7 @@ authd_rules:
 
 # To allow direct access
 direct_access_rules:
-  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - '-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
+  - '-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -m comment --comment "Staging only allow direct access" -j ACCEPT'
