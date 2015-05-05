@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.3
+
+The issues for this release were tracked with the 0.3.3 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.3.
+
+* Remove unnecessary proxy command from Tails SSH aliases (#933)
+* Make grsec reboot idempotent to avoid unnecessary reboots on new installs (#939)
+* Make tmux the default shell on App and Monitor servers (#943)
+* Fully tested migration procedures for 0.2.1 and 0.3pre to 0.3 (#944, #993)
+* Ensure grub is not uninstalled in virtual machines (#945)
+* CSS fixes (#948)
+* Apache AppArmor profile should support TLS/SSL (#949)
+* Fix: document interface no longer flas new submissions as unread (#969)
+* Switch to NetworkManager for automatic ATHS setup on Admin Workstation (#1018)
+* Upgrade Selenium in testing dependencies so functional tests work (#991)
+* Clarify paths in install documentation (#1009)
+
 ## 0.3.2
 
 * Fixes security vulnerabilty (severity=high) in access control on Document Interface (#974)
