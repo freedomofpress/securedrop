@@ -19,6 +19,12 @@ trap cleanup EXIT
 vagrant up /staging/ --no-provision --provider digital_ocean
 vagrant provision /staging/
 
+# TODO: this ugly reload hell and reprovisioning is to
+# accommodate for non-idempotent ansible tasks
+vagrant reload /staging/
+vagrant provision /staging/
+vagrant reload /staging/
+
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
 bundle exec rake spec:app-staging
