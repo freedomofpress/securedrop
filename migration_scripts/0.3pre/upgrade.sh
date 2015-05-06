@@ -26,6 +26,19 @@ function parse_yaml {
 HOMEDIR=/home/amnesia
 ANSIBLE_BASE=$HOMEDIR/Persistent/securedrop/install_files/ansible-base
 
+# check for elevated privileges. running with `sudo` will
+# cause script to fail on SSH connections, since only the normal
+# user has access to the ssh-agent keychain for the ATHS connections.
+if [[ $UID == 0 ]]; then
+  cat <<-EOS
+  This script should not be run as root.
+  If elevated privileges are required to install
+  additional packages, you will be prompted to enter
+  your sudo password.
+EOS
+  exit 1
+fi
+
 # check for persistence
 if [[ ! -d /live/persistence/TailsData_unlocked ]]; then
   echo "Error: This script must be run on Tails with a persistent volume." 1>&2
