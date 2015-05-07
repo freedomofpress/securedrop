@@ -41,6 +41,9 @@ def migrate_config_file(backup):
     with open(config_fn, 'w') as config:
         config.write(new_config)
 
+    # Restart Apache so the web application picks up the changes to config.py
+    subprocess.call(["service", "apache2", "restart"])
+
 
 def extract_tree_to(tar, selector, dest):
     # http://stackoverflow.com/a/15171308/1093000
@@ -232,7 +235,7 @@ def migrate_database(backup):
 
 def migrate_custom_header_image(backup):
     print "* Migrating custom header image..."
-    extract_file_to(backup, 
+    extract_file_to(backup,
                     "var/chroot/source/var/www/securedrop/static/i/securedrop.png",
                     "/var/www/securedrop/static/i/logo.png")
     subprocess.call(['chown', '-R', 'www-data:www-data', "/var/www/securedrop/static/i/logo.png"])
