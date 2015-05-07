@@ -299,22 +299,25 @@ def delete():
 
 
 def valid_codename(codename):
-    return os.path.exists(store.path(crypto_util.hash_codename(codename)))
+    try:
+        filesystem_id = crypto_util.hash_codename(codename)
+    except crypto_util.CryptoException as e:
+        app.logger.warning("Could not compute filesystem ID for codename '{}': {}".format(codename, e))
+        abort(500)
+    source = Source.query.filter_by(filesystem_id=filesystem_id).first()
+    return source is not None
 
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         codename = request.form['codename'].strip()
-        try:
-            valid = valid_codename(codename)
-        except crypto_util.CryptoException:
-            pass
+        if valid_codename(codename):
+            session.update(codename=codename, logged_in=True)
+            return redirect(url_for('lookup', from_login='1'))
         else:
-            if valid:
-                session.update(codename=codename, logged_in=True)
-                return redirect(url_for('lookup', from_login='1'))
-        flash("Sorry, that is not a recognized codename.", "error")
+            app.logger.info("Login failed for invalid codename '{}'".format(codename))
+            flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
 
