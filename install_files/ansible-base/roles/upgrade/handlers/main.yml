@@ -1,0 +1,4 @@
+---
+- name: reload tor for port change
+  service: name=tor state=reloaded
+  sudo: yes
