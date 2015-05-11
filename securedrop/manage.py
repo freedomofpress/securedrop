@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import atexit
 import sys
 import os
+import select
 import shutil
 import subprocess
 import unittest
@@ -14,6 +16,8 @@ import qrcode
 import psutil
 
 from db import db_session, Journalist
+
+from management import run
 
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
@@ -55,57 +59,6 @@ def _start_test_rqworker(config):
 
 def _stop_test_rqworker():
     os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
-
-
-def start():
-    import config
-    source_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.SOURCE_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python source.py'])
-    journo_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.JOURNALIST_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python journalist.py'])
-
-    if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
-        print "Source interface:     localhost:8080"
-        print "Journalist interface: localhost:8081"
-    else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
-
-
-def stop():
-    import config
-    source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
-    journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
-    if source_rc + journo_rc == 0:
-        print "The web application has been stopped."
-    else:
-        print "There was a problem stopping the web application."
-
-
-def restart():
-    stop()
-    sleep(0.1)
-    start()
 
 
 def test():
@@ -254,11 +207,9 @@ def clean_tmp():
 
 def main():
     valid_cmds = [
-        "start",
-        "stop",
+        "run",
         "test_unit",
         "test",
-        "restart",
         "reset",
         "add_admin",
         "clean_tmp"]
