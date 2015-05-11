@@ -22,8 +22,8 @@ vagrant provision /staging/
 # TODO: this ugly reload hell and reprovisioning is to
 # accommodate for non-idempotent ansible tasks
 vagrant reload /staging/
+sleep 90 # wait for servers to come back up
 vagrant provision /staging/
-vagrant reload /staging/
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
