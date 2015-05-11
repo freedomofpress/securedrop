@@ -20,7 +20,9 @@ vagrant plugin install vagrant-hostmanager
 vagrant box add digital_ocean ${SNAP_CACHE_DIR}/digital_ocean.box --force
 
 # Install Ansible dependencies
-sudo yum install ansible -y
+sudo yum install python-pip
+# Install Ansible via pip for fine-grained version control
+sudo pip install ansible==1.9.0.1
 
 # Install serverspec dependencies
 cd /var/snap-ci/repo/spec_tests/ && bundle update
