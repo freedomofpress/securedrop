@@ -15,10 +15,14 @@ def roles(host)
     roles << %w(common-development development)
   when /^build$/
     roles << "build"
-  when /^app-staging$/
-    roles << %w(common-development common-staging app-staging)
-  when /^mon-staging$/
-    roles << %w(common-staging mon-staging)
+  when /^app-staging/
+    roles << %w(common-development common-staging app-staging grsecurity)
+  when /^mon-staging/
+    roles << %w(common-staging mon-staging grsecurity)
+  end
+  if host.match(/-do$/)
+    # DigitalOcean droplets don't support custom kernels
+    roles.delete('grsecurity')
   end
   roles
 end
