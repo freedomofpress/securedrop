@@ -153,9 +153,16 @@ Vagrant.configure("2") do |config|
       # Files` to the default locations /var/snap-ci/repo/id_rsa and
       # /var/snap-ci/repo/id_rsa.pub
       override.ssh.private_key_path = ENV['DO_SSH_KEYFILE'] || '/var/snap-ci/repo/id_rsa'
-      override.ssh.username = 'vagrant'
       override.vm.box = 'digital_ocean'
       override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+
+      # Ansible playbooks will handle SecureDrop configuration,
+      # but DigitalOcean boxes don't have a default "vagrant" user configured.
+      # Even if you set `provider.setup = true`, Ansible sudo calls will fail,
+      # because the vagrant-digitalocean plugin disables ttys for some reason.
+      override.vm.provision :shell, inline: "id -u vagrant >/dev/null || useradd -m -G ssh,sudo vagrant"
+      provider.setup = false
+      provider.ssh.username = 'root'
 
       provider.token = ENV['DO_API_TOKEN']
       provider.region = ENV['DO_REGION'] || 'sfo1'
