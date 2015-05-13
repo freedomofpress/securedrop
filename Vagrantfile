@@ -158,11 +158,10 @@ Vagrant.configure("2") do |config|
 
       # Ansible playbooks will handle SecureDrop configuration,
       # but DigitalOcean boxes don't have a default "vagrant" user configured.
-      # Even if you set `provider.setup = true`, Ansible sudo calls will fail,
-      # because the vagrant-digitalocean plugin disables ttys for some reason.
-      override.vm.provision :shell, inline: "id -u vagrant >/dev/null || useradd -m -G ssh,sudo vagrant"
-      provider.setup = false
-      provider.ssh.username = 'root'
+      # The below settings will allow the vagrant-digitalocean plugin to configure
+      # sudoers acccess for the user "vagrant"
+      provider.setup = true
+      override.ssh.username = 'vagrant'
 
       provider.token = ENV['DO_API_TOKEN']
       provider.region = ENV['DO_REGION'] || 'sfo1'
