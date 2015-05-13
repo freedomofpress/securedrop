@@ -18,7 +18,18 @@ end
 
 host = ENV['TARGET_HOST']
 
-`vagrant up #{host}`
+# Using backticks for a subprocess call means
+# STDOUT will be masked, which blocks silently for
+# a long time if the host isn't up. Using IO.popen
+# instead allows for a tee-like interface
+#`vagrant up #{host}`
+
+IO.popen("vagrant up #{host}") do |output|
+  while line = output.gets do
+    # simply echo it back
+    puts line
+  end
+end
 
 config = Tempfile.new('', Dir.tmpdir)
 config.write(`vagrant ssh-config #{host}`)
