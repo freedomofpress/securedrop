@@ -163,6 +163,15 @@ Vagrant.configure("2") do |config|
       provider.setup = true
       override.ssh.username = 'vagrant'
 
+      # Ansible playbooks sudoers config will clobber the vagrant-digitalocean plugin config,
+      # so drop in a sudoers.d file to ensure that the vagrant user still has password-less sudo.
+      # This mimicks the admin typing in a sudo password during the first Ansible task in production.
+      override.vm.provision :shell,
+        inline: "echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/vagrant && chmod 0440 /etc/sudoers.d/vagrant"
+      # The shell provisioner will generate an error: "stdin: is not a tty" in Ubuntu,
+      # due to vagrant forcing "bash -l" as a login shell. See here for more info:
+      # https://github.com/mitchellh/vagrant/issues/1673
+
       provider.token = ENV['DO_API_TOKEN']
       provider.region = ENV['DO_REGION'] || 'sfo1'
       provider.size = ENV['DO_SIZE'] || '512mb'
