@@ -12,17 +12,22 @@ def roles(host)
   roles = []
   case host
   when /^development$/
-    roles << %w(common-development development)
+    (roles << %w(common-development development)).flatten!
   when /^build$/
-    roles << "build"
+    (roles << "build").flatten!
   when /^app-staging/
-    roles << %w(common-development common-staging app-staging grsecurity)
+    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
   when /^mon-staging/
-    roles << %w(common-staging mon-staging grsecurity)
+    (roles << %w(common-staging mon-staging grsecurity)).flatten!
   end
-  if host.match(/-do$/)
-    # DigitalOcean droplets don't support custom kernels
-    roles.delete('grsecurity')
+
+  # DigitalOcean droplets don't support custom kernels, so remove
+  # any planned spectests for grsecurity. This is only relevant
+  # for the app and mon hosts, so don't delay other tests with check.
+  if host.match(/^(app|mon)/)
+    if `vagrant status #{host}`.match(/\(digital_ocean\)/m)
+      roles.delete('grsecurity')
+    end
   end
   roles
 end
