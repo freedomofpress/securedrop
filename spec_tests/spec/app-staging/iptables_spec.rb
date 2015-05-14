@@ -14,7 +14,7 @@ desired_iptables_rules = [
   '-A INPUT -s 8.8.8.8/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',
   '-A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT',
-  '-A INPUT -s 10.0.1.3/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT',
+  "-A INPUT -s #{TEST_VARS['monitor_ip']}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment \"OSSEC server agent\" -j ACCEPT",
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
   '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
@@ -35,7 +35,7 @@ desired_iptables_rules = [
   '-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',
   '-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT',
-  '-A OUTPUT -d 10.0.1.3/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "OSSEC server agent" -j ACCEPT',
+  "-A OUTPUT -d #{TEST_VARS['monitor_ip']}/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"OSSEC server agent\" -j ACCEPT",
   '-A OUTPUT -o lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A OUTPUT -m comment --comment "Drop all other outgoing traffic" -j DROP',
   '-A LOGNDROP -p tcp -m limit --limit 5/min -j LOG --log-tcp-options --log-ip-options --log-uid',
@@ -52,8 +52,8 @@ desired_iptables_rules = [
 # from the ansible inventory should cover most use cases (except inventories
 # with just the *.onion addresses).
 unwanted_iptables_rules = [
-  '-A OUTPUT -d 10.0.1.3 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
-  '-A INPUT -s 10.0.1.3 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
+  "-A OUTPUT -d #{TEST_VARS['monitor_ip']} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
+  "-A INPUT -s #{TEST_VARS['monitor_ip']} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
 
   # These rules have the wrong interface for the vagrant mon-staging machine.
   # Adding them in here to make sure ansible config changes don't introduce regressions.
