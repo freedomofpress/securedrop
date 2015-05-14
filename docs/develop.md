@@ -53,7 +53,7 @@ latest stable version.
 
 ```sh
 sudo apt-get install python-pip
-sudo pip install -U ansible
+sudo pip install ansible==1.8.4
 ```
 
 If you're using Ubuntu, you can install a sufficiently recent version of Ansible from backports (if you prefer): `sudo apt-get install ansible/trusty-backports`
@@ -71,7 +71,7 @@ Install the requirements:
 3. [Ansible](http://docs.ansible.com/intro_installation.html). There are several
       ways to install Ansible on a Mac. We recommend using pip so you will get
       the latest stable version. To install Ansible via pip, `sudo easy_install
-      pip && sudo pip install -U ansible`.
+      pip && sudo pip install ansible==1.8.4`.
 
 # Clone the repository
 
