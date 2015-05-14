@@ -45,9 +45,14 @@ set :ssh_options, options
 # accept basename for sought vars file,
 # then return a hash based on those settings
 def retrieve_vars(file_basename)
-  fullpath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
-  vars_file = YAML.load_file(fullpath)
-  return vars_file
+  vars_filepath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
+  vars = YAML.load_file(vars_filepath)
+  # Look up IP addresses dynamically and overwrite the imported vars.
+  if file_basename == 'staging'
+    vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
+    vars['app_ip'] = retrieve_ip_addr('app-staging')
+  end
+  return vars
 end
 
 # look up ip address for given hostname,
@@ -58,6 +63,7 @@ def retrieve_ip_addr(hostname)
   # but spectests need the private_network device instead.
   iface1, iface2 = ip_output.split()
   # If we have two devices, assume first is NAT and return second.
+  # Otherwise, assume eth0 is the primary address.
   return iface2 ? iface2 : iface1
 end
 
@@ -68,8 +74,6 @@ when /^development$/
   TEST_VARS = retrieve_vars('development')
 when /-staging$/
   TEST_VARS = retrieve_vars('staging')
-  TEST_VARS['monitor_ip'] = retrieve_ip_addr('mon-staging')
-  TEST_VARS['app_ip'] = retrieve_ip_addr('app-staging')
 end
 
 # Disable sudo
