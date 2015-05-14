@@ -51,6 +51,7 @@ def retrieve_vars(file_basename)
   if file_basename == 'staging'
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
     vars['app_ip'] = retrieve_ip_addr('app-staging')
+    vars['tor_user_uid'] = `vagrant ssh #{ENV['TARGET_HOST']} --command "id -u debian-tor"`
   end
   return vars
 end
