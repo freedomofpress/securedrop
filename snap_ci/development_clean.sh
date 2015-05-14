@@ -25,6 +25,9 @@ bundle exec rake spec:development
 
 # Run application tests
 # Important: these app tests are AFTER spectests because they've been hanging in snap.
-vagrant ssh development --command "export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test"
 
-exit
+# Using 0<&- to close STDIN based on advice here:
+# https://docs.snap-ci.com/troubleshooting/#my-build-is-timing-out
+# These app tests run fine, but always hang before returning to the shell,
+# so the snap-ci stage times out (fails).
+vagrant ssh development --command "export DISPLAY=:1; cd /vagrant/securedrop && ./manage.py test"  0<&-
