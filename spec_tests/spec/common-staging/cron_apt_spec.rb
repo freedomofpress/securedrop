@@ -1,5 +1,5 @@
 # Check for critical packages
-['cron-apt', 'ntp', 'paxctl'].each do |pkg|
+['cron-apt', 'ntp'].each do |pkg|
   describe package(pkg) do
     it { should be_installed }
   end
