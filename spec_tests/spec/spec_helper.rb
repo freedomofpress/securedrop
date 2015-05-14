@@ -50,12 +50,26 @@ def retrieve_vars(file_basename)
   return vars_file
 end
 
+# look up ip address for given hostname,
+# so spectests are relevant regardless of provider
+def retrieve_ip_addr(hostname)
+  ip_output = `vagrant ssh #{hostname} --command "hostname -I"`
+  # Vagrant VirtualBox images will always have eth0 as the NAT device,
+  # but spectests need the private_network device instead.
+  iface1, iface2 = ip_output.split()
+  # If we have two devices, assume first is NAT and return second.
+  return iface2 ? iface2 : iface1
+end
+
+
 # load custom vars for host
 case host
 when /^development$/
   TEST_VARS = retrieve_vars('development')
 when /-staging$/
   TEST_VARS = retrieve_vars('staging')
+  TEST_VARS['monitor_ip'] = retrieve_ip_addr('mon-staging')
+  TEST_VARS['app_ip'] = retrieve_ip_addr('app-staging')
 end
 
 # Disable sudo
