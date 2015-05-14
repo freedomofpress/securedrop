@@ -17,12 +17,16 @@ trap cleanup EXIT
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
 vagrant up /staging/ --no-provision --provider digital_ocean
+
+# Run only the shell provisioner, to ensure the "vagrant"
+# user account exists with nopasswd sudo.
+vagrant provision /staging/ --provision-with shell
 vagrant provision /staging/
 
 # TODO: this ugly reload hell and reprovisioning is to
 # accommodate for non-idempotent ansible tasks
 vagrant reload /staging/
-sleep 90 # wait for servers to come back up
+sleep 180 # wait for servers to come back up
 vagrant provision /staging/
 
 # Run serverspec tests
