@@ -54,7 +54,7 @@ end
 case host
 when /^development$/
   TEST_VARS = retrieve_vars('development')
-when /^app-staging$/
+when /-staging$/
   TEST_VARS = retrieve_vars('staging')
 end
 
