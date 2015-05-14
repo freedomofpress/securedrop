@@ -13,7 +13,7 @@ desired_iptables_rules = [
   '-A INPUT -s 8.8.8.8/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A INPUT -p udp -m udp --sport 123 --dport 123 -m state --state RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',
   '-A INPUT -p tcp -m multiport --sports 80,8080,443 -m state --state RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT',
-  '-A INPUT -s 10.0.1.2/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow OSSEC agent to monitor" -j ACCEPT',
+  "-A INPUT -s #{TEST_VARS['app_ip']}/32 -p udp -m udp --dport 1514 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"Allow OSSEC agent to monitor\" -j ACCEPT",
   '-A INPUT -p tcp -m tcp --sport 587 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT',
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
@@ -29,7 +29,7 @@ desired_iptables_rules = [
   '-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',
   '-A OUTPUT -p tcp -m multiport --dports 80,8080,443 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "apt updates" -j ACCEPT',
-  '-A OUTPUT -d 10.0.1.2/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow OSSEC agent to monitor" -j ACCEPT',
+  "-A OUTPUT -d #{TEST_VARS['app_ip']}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment \"Allow OSSEC agent to monitor\" -j ACCEPT",
   '-A OUTPUT -d 8.8.8.8/32 -p tcp -m tcp --dport 53 -m owner --uid-owner 110 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "postfix dns rule" -j ACCEPT',
   '-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 110 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "postfix dns rule" -j ACCEPT',
   '-A OUTPUT -p tcp -m tcp --dport 587 -m owner --uid-owner 110 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT',
@@ -49,10 +49,10 @@ desired_iptables_rules = [
 # from the ansible inventory should cover most use cases (except inventories
 # with just the *.onion addresses).
 unwanted_iptables_rules = [
-  '-A INPUT -s 10.0.1.2 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
-  '-A OUTPUT -d 10.0.1.2 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "ossec authd rule only required for initial agent registration"',
-  '-A INPUT -s 10.0.1.2 -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT',
-  '-A OUTPUT -d 10.01.2 -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT',
+  "-A INPUT -s #{TEST_VARS['app_ip']} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
+  "-A OUTPUT -d #{TEST_VARS['app_ip']} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
+  "-A INPUT -s #{TEST_VARS['app_ip']} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
+  "-A OUTPUT -d #{TEST_VARS['app_ip']} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT",
 ]
 
 # check for wanted and unwanted iptables rules
