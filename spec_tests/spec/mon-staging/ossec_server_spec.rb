@@ -2,7 +2,8 @@
 # TODO: replace hardcoded ip for app-staging host
 describe file('/etc/hosts') do
   its(:content) { should match /^127\.0\.1\.1 mon-staging mon-staging$/ }
-  its(:content) { should match /^10\.0\.1\.2  app-staging$/ }
+  app_host_regex = Regexp.quote("#{TEST_VARS['app_ip']}  app-staging")
+  its(:content) { should match /^#{app_host_regex}$/ }
 end
 
 # ensure required packages are installed
@@ -86,7 +87,7 @@ end
 
 # ensure ossec considers app-staging host "available"
 describe command('/var/ossec/bin/list_agents -a') do
-  its(:stdout) { should eq "app-staging-10.0.1.2 is available.\n" }
+  its(:stdout) { should eq "app-staging-#{TEST_VARS['app_ip']} is available.\n" }
 end
 
 # ensure ossec gpg homedir exists
