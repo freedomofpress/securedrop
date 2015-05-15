@@ -1,8 +1,8 @@
-### Set up Google Authenticator for the App Server
+### Set up Google Authenticator for the App and Monitor Servers
 
-As part of the SecureDrop installation process, you will need to set up two factor authentication using the Google Authenticator app.
+As part of the SecureDrop installation process, you will need to set up two factor authentication using the Google Authenticator app for both your App and Monitor Servers.
 
-Connect to the App Server using `ssh` and run `google-authenticator`. Open the Google Authenticator app on your smartphone and follow the steps below for either iOS or Android.
+Connect to one of the server using `ssh` and run `google-authenticator`. Open the Google Authenticator app on your smartphone and follow the steps below for either iOS or Android.  Once you've properly set up your first server, repeat these steps again on the other.
 
 **iOS instructions:**
 

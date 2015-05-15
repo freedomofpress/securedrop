@@ -164,7 +164,7 @@ For pfSense, see Section 6 of the pfSense Guide for information on setting up fi
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
 
 #### Example Screenshots
 
