@@ -47,11 +47,12 @@ set :ssh_options, options
 def retrieve_vars(file_basename)
   vars_filepath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
   vars = YAML.load_file(vars_filepath)
-  # Look up IP addresses dynamically and overwrite the imported vars.
+  # Look up dynamic vars from live systems
   if file_basename == 'staging'
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['tor_user_uid'] = `vagrant ssh #{ENV['TARGET_HOST']} --command "id -u debian-tor"`
+    vars['postfix_user_uid'] = `vagrant ssh #{ENV['TARGET_HOST']} --command "id -u postfix"`
   end
   return vars
 end
