@@ -2,6 +2,7 @@
 
 # bail out on errors
 set -e
+set -x
 
 # declare function for EXIT trap
 function cleanup {
@@ -21,13 +22,13 @@ vagrant up /staging/ --no-provision --provider digital_ocean
 # Run only the shell provisioner, to ensure the "vagrant"
 # user account exists with nopasswd sudo.
 vagrant provision /staging/ --provision-with shell
-vagrant provision /staging/
+vagrant provision /staging/ --provision-with ansible
 
 # TODO: this ugly reload hell and reprovisioning is to
 # accommodate for non-idempotent ansible tasks
 vagrant reload /staging/
 sleep 180 # wait for servers to come back up
-vagrant provision /staging/
+vagrant provision /staging/ --provision-with ansible
 
 # Run serverspec tests
 cd /var/snap-ci/repo/spec_tests/
