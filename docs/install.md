@@ -346,7 +346,7 @@ The Ansible playbook will run, installing SecureDrop plus configuring and harden
 Once the installation is complete, the addresses for each Tor Hidden Service will be available in the following files in `install_files/ansible-base`:
 
 * `app-source-ths`: This is the .onion address of the Source Interface
-* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. You need to add this line to your torrc and restart Tor in order to connect to the hidden service address included in the line.
+* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. During a later step, this will be automatically added to your Tor configuration file in order to exclusively connect to the hidden service.
 * `app-ssh-aths`: Same as above, for SSH access to the Application Server.
 * `mon-ssh-aths`: Same as above, for SSH access to the Monitor Server.
 
