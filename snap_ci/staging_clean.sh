@@ -14,7 +14,7 @@ function cleanup {
 
 # Ensure that DigitalOcean droplet will be cleaned up
 # even if script errors (e.g., if serverspec tests fail).
-#trap cleanup EXIT
+trap cleanup EXIT
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
 vagrant up /staging/ --no-provision --provider digital_ocean
