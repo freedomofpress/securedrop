@@ -1,7 +1,7 @@
 # ensure hosts file references app server by ip
 # TODO: replace hardcoded ip for app-staging host
 describe file('/etc/hosts') do
-  its(:content) { should match /^127\.0\.1\.1 mon-staging mon-staging$/ }
+  its(:content) { should match /^127\.0\.1\.1\s+mon-staging\s+mon-staging$/ }
   app_host_regex = Regexp.quote("#{TEST_VARS['app_ip']}  app-staging")
   its(:content) { should match /^#{app_host_regex}$/ }
 end
