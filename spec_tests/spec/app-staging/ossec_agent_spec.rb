@@ -1,7 +1,7 @@
 # ensure hosts file references mon server by ip
 # TODO: replace hardcoded ip for mon-staging host
 describe file('/etc/hosts') do
-  its(:content) { should match /^127\.0\.1\.1 app-staging app-staging$/ }
+  its(:content) { should match /^127\.0\.1\.1\s+app-staging\s+app-staging$/ }
   # TODO: the "securedrop-monitor-server-alias" is an artifact of
   # using the vagrant-hostmanager plugin. it may no longer be necessary
   mon_host_regex = Regexp.quote("#{TEST_VARS['monitor_ip']}  mon-staging securedrop-monitor-server-alias")
