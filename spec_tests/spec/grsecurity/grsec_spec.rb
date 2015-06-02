@@ -65,13 +65,15 @@ paxtest_check_killed = [
   "Return to function (memcpy)",
   "Return to function (memcpy, PIE)",
 ]
-describe command("paxtest blackhat") do
-  paxtest_check_killed.each do |killed|
-    its(:stdout) { should match /^#{Regexp.escape(killed)}\s*:\sKilled/ }
-  end
-  its(:stdout) { should_not match /Vulnerable/i }
-  its(:exit_status) { should eq 0 }
-end
+# TODO: enable the paxtest checks below once the "paxtest"
+# package is included via the grsecurity role.
+#describe command("paxtest blackhat") do
+#  paxtest_check_killed.each do |killed|
+#    its(:stdout) { should match /^#{Regexp.escape(killed)}\s*:\sKilled/ }
+#  end
+#  its(:stdout) { should_not match /Vulnerable/i }
+#  its(:exit_status) { should eq 0 }
+#end
 
 # ensure generic linux kernels have been removed
 describe command("dpkg --get-selections '^linux-image-.*generic$'") do
