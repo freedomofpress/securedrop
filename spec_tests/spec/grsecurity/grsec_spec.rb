@@ -46,8 +46,31 @@ end
 # Check that paxtest does not report anything vulnerable
 # Requires the package paxtest to be installed
 # The paxtest package is currently being installed in the app-test role
+paxtest_check_killed = [
+  "Executable anonymous mapping",
+  "Executable bss",
+  "Executable data",
+  "Executable heap",
+  "Executable stack",
+  "Executable shared library bss",
+  "Executable shared library data",
+  "Executable anonymous mapping (mprotect)",
+  "Executable bss (mprotect)",
+  "Executable data (mprotect)",
+  "Executable heap (mprotect)",
+  "Executable stack (mprotect)",
+  "Executable shared library bss (mprotect)",
+  "Executable shared library data (mprotect)",
+  "Writable text segments",
+  "Return to function (memcpy)",
+  "Return to function (memcpy, PIE)",
+]
 describe command("paxtest blackhat") do
-  its(:stdout) { should_not match /vulnerable/ }
+  paxtest_check_killed.each do |killed|
+    its(:stdout) { should match /^#{Regexp.escape(killed)}\s*:\sKilled/ }
+  end
+  its(:stdout) { should_not match /Vulnerable/i }
+  its(:exit_status) { should eq 0 }
 end
 
 # ensure generic linux kernels have been removed
