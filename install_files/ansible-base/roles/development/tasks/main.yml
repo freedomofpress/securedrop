@@ -6,22 +6,6 @@
     - apt
     - development
 
-# TODO: this is copied from roles/common/tasks/create_users.yml
-# A more DRY solution would be better. This task is necessary
-# to ensure that the default user exists in DigitalOcean instances,
-# which are used for testing. It's also simply a good idea
-# to ensure an assumed user account does actually exist, even though
-# Vagrant VirtualBox images come with the "vagrant" user already configured.
-- name: ensure SecureDrop admin user accounts exist
-  user:
-    name: "{{ item }}"
-    shell: /bin/bash
-    groups: sudo,ssh
-  with_items: ssh_users
-  tags:
-    - users
-    - sudoers
-
 - name: install apt package deps for dev environment
   apt:
     pkg: "{{ item }}"
