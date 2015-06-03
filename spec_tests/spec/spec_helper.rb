@@ -48,16 +48,21 @@ def retrieve_vars(file_basename)
   if file_basename == 'staging'
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
     vars['app_ip'] = retrieve_ip_addr('app-staging')
-    vars['tor_user_uid'] = `vagrant ssh #{ENV['TARGET_HOST']} --command "id -u debian-tor"`
-    vars['postfix_user_uid'] = `vagrant ssh #{ENV['TARGET_HOST']} --command "id -u postfix"`
+    vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
+    vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
   end
   return vars
+end
+
+# ssh into vagrant machine, run command, return output
+def vagrant_ssh_cmd(hostname, command)
+  return `vagrant ssh #{hostname} --command "#{command}"`
 end
 
 # look up ip address for given hostname,
 # so spectests are relevant regardless of provider
 def retrieve_ip_addr(hostname)
-  ip_output = `vagrant ssh #{hostname} --command "hostname -I"`
+  ip_output = vagrant_ssh_cmd(hostname, "hostname -I")
   # Vagrant VirtualBox images will always have eth0 as the NAT device,
   # but spectests need the private_network device instead.
   iface1, iface2 = ip_output.split()
