@@ -1,18 +1,18 @@
 # declare securedrop app directories
 securedrop_app_directories = [
-  TEST_VARS['securedrop_code'],
-  TEST_VARS['securedrop_data'],
-  "#{TEST_VARS['securedrop_data']}/store",
-  "#{TEST_VARS['securedrop_data']}/keys",
-  "#{TEST_VARS['securedrop_data']}/tmp",
+  property['securedrop_code'],
+  property['securedrop_data'],
+  "#{property['securedrop_data']}/store",
+  "#{property['securedrop_data']}/keys",
+  "#{property['securedrop_data']}/tmp",
 ]
 
 # ensure securedrop app directories exist with correct permissions
 securedrop_app_directories.each do |securedrop_app_directory|
   describe file(securedrop_app_directory) do
     it { should be_directory }
-    it { should be_owned_by TEST_VARS['securedrop_user'] }
-    it { should be_grouped_into TEST_VARS['securedrop_user'] }
+    it { should be_owned_by property['securedrop_user'] }
+    it { should be_grouped_into property['securedrop_user'] }
     it { should be_mode '700' }
   end
 end
@@ -36,17 +36,17 @@ end
 
 # ensure default logo header file exists
 # TODO: add check for custom logo header file
-describe file("#{TEST_VARS['securedrop_code']}/static/i/logo.png") do
+describe file("#{property['securedrop_code']}/static/i/logo.png") do
   it { should be_file }
   # TODO: ansible task declares mode 400 but the file ends up as 644 on host
   it { should be_mode '644' }
-  it { should be_owned_by TEST_VARS['securedrop_user'] }
-  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+  it { should be_owned_by property['securedrop_user'] }
+  it { should be_grouped_into property['securedrop_user'] }
 end
 
 # ensure cronjob for securedrop tmp dir cleanup is enabled
 describe cron do
-  it { should have_entry "@daily #{TEST_VARS['securedrop_code']}/manage.py clean_tmp" }
+  it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean_tmp" }
 end
 
 # ensure directory for worker logs is present

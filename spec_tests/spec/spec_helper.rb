@@ -23,7 +23,6 @@ host = ENV['TARGET_HOST']
 # a long time if the host isn't up. Using IO.popen
 # instead allows for a tee-like interface
 #`vagrant up #{host}`
-
 IO.popen("vagrant up #{host}") do |output|
   while line = output.gets do
     # simply echo it back
@@ -31,14 +30,12 @@ IO.popen("vagrant up #{host}") do |output|
   end
 end
 
+# determine SSH config
 config = Tempfile.new('', Dir.tmpdir)
 config.write(`vagrant ssh-config #{host}`)
 config.close
-
 options = Net::SSH::Config.for(host, [config.path])
-
 options[:user]
-
 set :host,        options[:host_name] || host
 set :ssh_options, options
 
@@ -69,11 +66,10 @@ def retrieve_ip_addr(hostname)
   return iface2 ? iface2 : iface1
 end
 
-
-# load custom vars for host
+# load dynamic vars for host
 case host
 when /^development$/
-  TEST_VARS = retrieve_vars('development')
+  set_property retrieve_vars('development')
 when /-staging$/
-  TEST_VARS = retrieve_vars('staging')
+  set_property retrieve_vars('staging')
 end
