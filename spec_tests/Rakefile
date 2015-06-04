@@ -3,6 +3,7 @@ require 'rspec/core/rake_task'
 
 
 task :spec    => 'spec:all'
+task :staging => 'spec:staging'
 task :default => :spec
 
 # this function accepts a hostname and returns a hash
@@ -49,6 +50,10 @@ end
 namespace :spec do
   # assign all hosts to serverspec task run
   task :all => hosts.map { |h| h[:name] }
+
+  # assign only /staging/ hosts to serverspec task run
+  task :staging => hosts.select{ |h| h[:name].match(/staging$/) }.map{ |h| h[:name] }
+
   hosts.each do |host|
     desc "Run spectests against #{host[:name]}"
     RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
