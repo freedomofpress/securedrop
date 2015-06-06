@@ -226,11 +226,7 @@ class Journalist(Base):
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
-        # try clause for debugging intermittent scrypt "could not compute hash" error
-        try:
-            return scrypt.hash(str(password), salt, **params)
-        except scrypt.error as e:
-            print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
+        return scrypt.hash(str(password), salt, **params)
 
     def set_password(self, password):
         self.pw_salt = self._gen_salt()
