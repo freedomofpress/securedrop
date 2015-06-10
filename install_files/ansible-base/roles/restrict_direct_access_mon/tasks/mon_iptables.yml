@@ -34,3 +34,6 @@
   # manually rebooted for production installs.
 - name: ensure iptables rules_v4 file is present
   template: src=mon_rules_v4 dest=/etc/network/iptables/rules_v4 owner=root mode=0644
+
+- name: ensure ip6tables rules_v6 file is present
+  copy: src=mon_rules_v6 dest=/etc/network/iptables/rules_v6 owner=root mode=0644
