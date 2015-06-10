@@ -6,8 +6,8 @@
 # That means they are post-0.3.2 and therefore may need to be tweaked
 # to test older versions.
 desired_iptables_rules = [
-  '-A INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT',
-  '-A INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT',
+  '-A INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
+  '-A INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   '-A INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT',
   '-A INPUT -s 8.8.8.8/32 -p tcp -m tcp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A INPUT -s 8.8.8.8/32 -p udp -m udp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
@@ -18,8 +18,8 @@ desired_iptables_rules = [
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
   '-A INPUT -m comment --comment "Log and drop all other incomming traffic" -j LOGNDROP',
-  '-A OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT',
-  '-A OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Staging only allow direct access" -j ACCEPT',
+  '-A OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
+  '-A OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   "-A OUTPUT -p tcp -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"Allow Tor out\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"SSH with rate limiting only thur tor\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"SSH with rate limiting only thur tor\" -j ACCEPT",
