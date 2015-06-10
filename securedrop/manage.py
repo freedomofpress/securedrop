@@ -22,13 +22,9 @@ from management import run
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
 # development or testing, before importing config.
-#
-# TODO: do we need to store *_PIDFILE in the application config? It seems like
-# an implementation detail that is specifc to this management script.
-
 os.environ['SECUREDROP_ENV'] = 'dev'
 
-WORKER_PIDFILE = "/tmp/test_rqworker.pid"
+from config import WORKER_PIDFILE
 
 
 def get_pid_from_pidfile(pid_file_name):
