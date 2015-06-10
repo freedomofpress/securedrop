@@ -190,6 +190,18 @@ class BadTokenException(Exception):
     """Raised when a user logins in with an incorrect TOTP token"""
 
 
+class InvalidPasswordLength(Exception):
+    """Raised when attempting to create a Journalist or log in with an invalid
+    password length"""
+
+    def __init__(self, password):
+        self.password = password
+
+    def __str__(self):
+        if len(password) > Journalist.MAX_PASSWORD_LEN:
+            return "Password too long (len={})".format(len(password))
+
+
 class Journalist(Base):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
@@ -228,11 +240,19 @@ class Journalist(Base):
             params = self._SCRYPT_PARAMS
         return scrypt.hash(str(password), salt, **params)
 
+    MAX_PASSWORD_LEN = 128
+
     def set_password(self, password):
+        # Enforce a reasonable maximum length for passwords to avoid DoS
+        if len(password) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
 
     def valid_password(self, password):
+        # Avoid hashing passwords that are over the maximum length
+        if len(password) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
     def regenerate_totp_shared_secret(self):
