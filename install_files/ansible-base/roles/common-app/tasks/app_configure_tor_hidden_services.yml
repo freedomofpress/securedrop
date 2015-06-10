@@ -4,12 +4,14 @@
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}"
     owner: "{{ tor_user }}"
+    mode: '0700'
 
 - name: ensure each hidden service's directory exists
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}/{{ item }}"
     owner: "{{ tor_user }}"
+    mode: '0700'
   with_items: app_tor_instances
 
 - name: ensure securedrop app servers torrc is present
