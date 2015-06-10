@@ -1,7 +1,7 @@
 *filter
-:INPUT ACCEPT [0:0]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [0:0]
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
 :LOGNDROP - [0:0]
 
 # Allow the tor instances used for ssh, source and document interface outbound access
