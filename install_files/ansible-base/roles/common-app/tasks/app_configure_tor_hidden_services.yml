@@ -4,6 +4,8 @@
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}"
     owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: '0700'
   tags:
     - tor
 
@@ -12,6 +14,8 @@
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}/{{ item }}"
     owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
+    mode: '0700'
   with_items: app_tor_instances
   tags:
     - tor
@@ -21,6 +25,7 @@
     src: torrc-app
     dest: /etc/tor/torrc
     owner: "{{ tor_user }}"
+    group: "{{ tor_user }}"
     mode: '0644'
   notify:
     - restart tor
