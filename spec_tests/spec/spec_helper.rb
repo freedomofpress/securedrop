@@ -45,7 +45,9 @@ def retrieve_vars(hostname)
   # accept basename for sought vars file,
   # then return a hash based on those settings
   def read_vars_file(file_basename)
-    vars_filepath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
+    vars_filepath = File.expand_path(File.join(
+      File.dirname(__FILE__), 'vars', "#{file_basename}.yml"
+    ))
     return YAML.load_file(vars_filepath)
   end
 
