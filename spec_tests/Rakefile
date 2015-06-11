@@ -26,7 +26,7 @@ def roles(host)
   # any planned spectests for grsecurity. This is only relevant
   # for the app and mon hosts, so don't delay other tests with check.
   if host.match(/^(app|mon)/)
-    if `vagrant status #{host}`.match(/\(digital_ocean\)/m)
+    if `vagrant status #{host} --machine-readable`.match(/#{host},provider-name,digital_ocean/m)
       roles.delete('grsecurity')
     end
   end
