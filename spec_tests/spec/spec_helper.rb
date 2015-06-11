@@ -49,6 +49,7 @@ def retrieve_vars(file_basename)
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
+    vars['apache_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u www-data")
     vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
     vars['ssh_group_gid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "getent group ssh | cut -d: -f3")
   end
