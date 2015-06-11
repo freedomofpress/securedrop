@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: http://ossec.net
 Package: ossec-server
-Version: 2.8.1
+Version: 2.8.2
 Architecture: amd64
 Depends: libc6,libssl1.0.0,adduser,expect,libc6 (>= 2.7),inotify-tools
 Conflicts: ossec-agent

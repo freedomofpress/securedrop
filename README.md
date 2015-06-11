@@ -39,6 +39,18 @@ The vars for building the deb packages are in `ansible/build-deb-pkgs.yml`
 * The naming convention for the file name in the url did not change. If it did update `download_name`
 * The naming convention for the OSSEC archive did not change. If it did update `archive_name`
 
+### Update version in control files
+
+The `ossec-server` and `ossec-agent` control files and changelog are not currently managed my ansible. They currently require maually changing for each release. This will be fixed in a future release.
+
+Versions need to be updated in
+* `ossec-agent/DEBIAN/control`
+* `ossec-server/DEBIAN/control`
+
+The changelogs need to be updated:
+* `ossec-server/usr/share/doc/ossec-server/changelog.Debian`
+* `ossec-agent/usr/share/doc/ossec-agent/changelog.Debian`
+
 ### Example
 For OSSEC version 2.8.2 updated and verified these values in `ansible/build-deb-pkgs.yml`
 
