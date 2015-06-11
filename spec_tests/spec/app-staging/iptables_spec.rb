@@ -30,7 +30,7 @@ desired_iptables_rules = [
   '-A OUTPUT -o lo -p tcp -m tcp --sport 8080 -m owner --uid-owner 33 -m state --state RELATED,ESTABLISHED -m comment --comment "Restrict the apache user outbound connections" -j ACCEPT',
   '-A OUTPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -o lo -p tcp -m owner --uid-owner 33 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "for redis worker all application user local loopback user" -j ACCEPT',
   '-A OUTPUT -m owner --uid-owner 33 -m comment --comment "Drop all other traffic by the securedrop user" -j LOGNDROP',
-  '-A OUTPUT -m owner --gid-owner 108 -m comment --comment "Drop all other outbound traffic for ssh user" -j LOGNDROP',
+  "-A OUTPUT -m owner --gid-owner #{property['ssh_group_gid']} -m comment --comment \"Drop all other outbound traffic for ssh user\" -j LOGNDROP",
   '-A OUTPUT -d 8.8.8.8/32 -p tcp -m tcp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',

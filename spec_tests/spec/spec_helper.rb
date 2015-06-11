@@ -50,6 +50,7 @@ def retrieve_vars(file_basename)
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
     vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
+    vars['ssh_group_gid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "getent group ssh | cut -d: -f3")
   end
   return vars
 end

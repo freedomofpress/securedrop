@@ -24,7 +24,7 @@ desired_iptables_rules = [
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"SSH with rate limiting only thur tor\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"SSH with rate limiting only thur tor\" -j ACCEPT",
   "-A OUTPUT -m owner --uid-owner #{property['tor_user_uid']} -m comment --comment \"Drop all other traffic for the tor instance used for ssh\" -j LOGNDROP",
-  '-A OUTPUT -m owner --gid-owner 108 -m comment --comment "Drop all other outbound traffic for ssh user" -j LOGNDROP',
+  "-A OUTPUT -m owner --gid-owner #{property['ssh_group_gid']} -m comment --comment \"Drop all other outbound traffic for ssh user\" -j LOGNDROP",
   '-A OUTPUT -d 8.8.8.8/32 -p tcp -m tcp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -d 8.8.8.8/32 -p udp -m udp --dport 53 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
   '-A OUTPUT -p udp -m udp --sport 123 --dport 123 -m owner --uid-owner 0 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment ntp -j ACCEPT',
