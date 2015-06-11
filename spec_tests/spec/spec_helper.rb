@@ -62,10 +62,12 @@ def vagrant_ssh_cmd(hostname, command)
   # since dynamic variable fetching makes several ssh calls,
   # let's filter to remove that noisy output from stderr.
   filter_stderr = "2> >( grep -vP '^Connection to [\d.]+ closed\.' )"
+  filter_stderr = ""
   # unfortunately it appears that all of stderr is being filtered,
   # not just the grep pattern. perhaps the popen4 gem would facilitate
   # smarter filtering, but that doesn't seem worthwhile right now.
   vagrant_cmd = "vagrant ssh #{hostname} --command '#{command}'"
+  puts vagrant_cmd
   # Ruby backticks use /bin/sh as shell, and /bin/sh doesn't support
   # process redirection, so force use of /bin/bash
   return `/bin/bash -c "#{vagrant_cmd} #{filter_stderr}"`
