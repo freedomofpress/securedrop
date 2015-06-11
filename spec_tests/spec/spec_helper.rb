@@ -39,20 +39,32 @@ options[:user]
 set :host,        options[:host_name] || host
 set :ssh_options, options
 
-# accept basename for sought vars file,
-# then return a hash based on those settings
-def retrieve_vars(file_basename)
-  vars_filepath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
-  vars = YAML.load_file(vars_filepath)
-  # Look up dynamic vars from live systems
-  if file_basename == 'staging'
-    vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
-    vars['app_ip'] = retrieve_ip_addr('app-staging')
-    vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
-    vars['apache_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u www-data")
-    vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
-    vars['ssh_group_gid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "getent group ssh | cut -d: -f3")
+
+# retrieve dynamic vars for given hostname
+def retrieve_vars(hostname)
+  # accept basename for sought vars file,
+  # then return a hash based on those settings
+  def read_vars_file(file_basename)
+    vars_filepath = File.expand_path(File.join(File.dirname(__FILE__), 'vars', "#{file_basename}.yml"))
+    return YAML.load_file(vars_filepath)
   end
+
+  case hostname
+  when /^development$/
+    vars = read_vars_file('development')
+  when /-staging$/
+    vars = read_vars_file('staging')
+    vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
+    vars['ssh_group_gid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "getent group ssh | cut -d: -f3")
+    vars['app_ip'] = retrieve_ip_addr('app-staging')
+    vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
+    if hostname.match(/^app/)
+      vars['apache_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u www-data")
+    elsif hostname.match(/^mon/)
+      vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
+    end
+  end
+
   return vars
 end
 
@@ -86,9 +98,4 @@ def retrieve_ip_addr(hostname)
 end
 
 # load dynamic vars for host
-case host
-when /^development$/
-  set_property retrieve_vars('development')
-when /-staging$/
-  set_property retrieve_vars('staging')
-end
+set_property retrieve_vars(host)
