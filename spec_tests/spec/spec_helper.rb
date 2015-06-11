@@ -54,14 +54,14 @@ def retrieve_vars(hostname)
     vars = read_vars_file('development')
   when /-staging$/
     vars = read_vars_file('staging')
-    vars['tor_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u debian-tor")
-    vars['ssh_group_gid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "getent group ssh | cut -d: -f3")
+    vars['tor_user_uid'] = vagrant_ssh_cmd(hostname, "id -u debian-tor")
+    vars['ssh_group_gid'] = vagrant_ssh_cmd(hostname, "getent group ssh | cut -d: -f3")
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
     if hostname.match(/^app/)
-      vars['apache_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u www-data")
+      vars['apache_user_uid'] = vagrant_ssh_cmd(hostname, "id -u www-data")
     elsif hostname.match(/^mon/)
-      vars['postfix_user_uid'] = vagrant_ssh_cmd(ENV['TARGET_HOST'], "id -u postfix")
+      vars['postfix_user_uid'] = vagrant_ssh_cmd(hostname, "id -u postfix")
     end
   end
 
