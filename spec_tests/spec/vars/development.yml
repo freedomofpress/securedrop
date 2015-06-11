@@ -1,7 +1,4 @@
 ---
-securedrop_repo: /vagrant
-non_default_securedrop_user: vagrant
 securedrop_user: vagrant
-ssh_users: vagrant
 securedrop_code: /vagrant/securedrop
 securedrop_data: /var/lib/securedrop
