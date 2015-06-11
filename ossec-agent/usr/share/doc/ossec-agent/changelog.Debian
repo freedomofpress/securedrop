@@ -1,5 +1,13 @@
+ossec-agent (2.8.2) unstable; urgency=low
+
+  [ SecureDrop Team ]
+  * Release Notes https://github.com/ossec/ossec-hids/releases/tag/2.8.2
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 11 Jun 2015 16:43:47 -0700
+
 ossec-agent (2.8.1) unstable; urgency=low
 
+  [ James Dolan ]
   * Initial release 
 
  -- James Dolan <securedrop@pressfreedomfoundation.org>  Fri, 14 Mar 2014 15:46:57 -0700

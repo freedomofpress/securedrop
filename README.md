@@ -41,7 +41,7 @@ The vars for building the deb packages are in `ansible/build-deb-pkgs.yml`
 
 ### Update version in control files
 
-The `ossec-server` and `ossec-agent` control files and changelog are not currently managed my ansible. They currently require maually changing for each release. This will be fixed in a future release.
+The `ossec-server` and `ossec-agent` control files and changelog are not currently managed by ansible. They currently require maually changing for each release. This will be fixed in a future release.
 
 Versions need to be updated in
 * `ossec-agent/DEBIAN/control`
