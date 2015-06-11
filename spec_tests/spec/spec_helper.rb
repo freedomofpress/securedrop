@@ -51,22 +51,27 @@ def retrieve_vars(hostname)
     return YAML.load_file(vars_filepath)
   end
 
+  # crude case statement for determining var lookup
   case hostname
   when /^development$/
     vars = read_vars_file('development')
   when /-staging$/
+    # Both staging hosts need a similar list of vars.
     vars = read_vars_file('staging')
     vars['tor_user_uid'] = vagrant_ssh_cmd(hostname, "id -u debian-tor")
     vars['ssh_group_gid'] = vagrant_ssh_cmd(hostname, "getent group ssh | cut -d: -f3")
+    # Ideally these IP addresses would be cached, since they don't
+    # change during a test run. Right now, both values are looked up twice,
+    # once for each staging host.
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
+    # These vars are host-specific, so check hostname before querying.
     if hostname.match(/^app/)
       vars['apache_user_uid'] = vagrant_ssh_cmd(hostname, "id -u www-data")
     elsif hostname.match(/^mon/)
       vars['postfix_user_uid'] = vagrant_ssh_cmd(hostname, "id -u postfix")
     end
   end
-
   return vars
 end
 
