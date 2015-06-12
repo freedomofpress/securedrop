@@ -124,6 +124,19 @@ def generate_unique_codename(num_words):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(num_words)
+
+        # THe maximum length of a word in the wordlist is 6, and the maximum
+        # codename length is 10, so it is currently impossible to generate a
+        # codename that is too long. This code is meant to be defense in depth
+        # to guard against potential future changes, such as modifications to
+        # the word list or the maximum codename length.
+        if len(codename) > Source.MAX_CODENAME_LEN:
+            app.logger.warning(
+                    "Generated a source codename that was too long, "
+                    "skipping it. This should not happen. "
+                    "(Codename='{}')".format(codename))
+            continue
+
         sid = crypto_util.hash_codename(codename)  # scrypt (slow)
         matching_sources = Source.query.filter(Source.filesystem_id == sid).all()
         if len(matching_sources) == 0:
@@ -299,11 +312,20 @@ def delete():
 
 
 def valid_codename(codename):
+    # Ignore codenames that are too long to avoid DoS
+    if len(codename) > Source.MAX_CODENAME_LEN:
+        app.logger.info(
+                "Ignored attempted login because the codename was too long.")
+        return False
+
     try:
         filesystem_id = crypto_util.hash_codename(codename)
     except crypto_util.CryptoException as e:
-        app.logger.warning("Could not compute filesystem ID for codename '{}': {}".format(codename, e))
+        app.logger.info(
+                "Could not compute filesystem ID for codename '{}': {}".format(
+                    codename, e))
         abort(500)
+
     source = Source.query.filter_by(filesystem_id=filesystem_id).first()
     return source is not None
 
@@ -316,7 +338,8 @@ def login():
             session.update(codename=codename, logged_in=True)
             return redirect(url_for('lookup', from_login='1'))
         else:
-            app.logger.info("Login failed for invalid codename '{}'".format(codename))
+            app.logger.info(
+                    "Login failed for invalid codename".format(codename))
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
