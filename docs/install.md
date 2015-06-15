@@ -222,7 +222,7 @@ Now that you've set up your password manager, you can move on to setting up the 
 
 Now that the firewall is set up, you can plug the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
 
-Install Ubuntu Server 14.04 (Trusty) on both servers.  This setup is fairly easy, but please note the follwoing:
+Install Ubuntu Server 14.04 (Trusty) on both servers. For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you save the following information:
 
 * Since the firewall is configured to give the servers a static IP address, you will have to manually configure the network with those values.
 * The hostname for the servers are, conventionally, `app` and `mon`.  Adhering to this isn't necessary, but it will make the rest of your install easier.
@@ -354,7 +354,8 @@ The Ansible playbook will run, installing SecureDrop plus configuring and harden
 Once the installation is complete, the addresses for each Tor Hidden Service will be available in the following files in `install_files/ansible-base`:
 
 * `app-source-ths`: This is the .onion address of the Source Interface
-* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. * `app-ssh-aths`: Same as above, for SSH access to the Application Server.
+* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. During a later step, this will be automatically added to your Tor configuration file in order to exclusively connect to the hidden service.
+* `app-ssh-aths`: Same as above, for SSH access to the Application Server.
 * `mon-ssh-aths`: Same as above, for SSH access to the Monitor Server.
 
 Update the inventory, replacing the IP addresses with the corresponding onion addresses from `app-ssh-aths` and `mon-ssh-aths`. This will allow you to re-run the Ansible playbooks in the future, even though part of SecureDrop's hardening restricts SSH to only being over the specific authenticated Tor Hidden Services.
