@@ -168,7 +168,7 @@ We recognize that this process is cumbersome and may be difficult for people ine
 
 #### Example Screenshots
 
-Here are some example screenshots of a working pfSense firewall configuration.
+Here are some example screenshots of a working pfSense firewall configuration:
 
 ![Firewall IP Aliases](images/firewall/ip_aliases.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
