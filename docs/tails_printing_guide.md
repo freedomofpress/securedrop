@@ -18,7 +18,7 @@ Make sure your computer is NOT connected to the internet.  This will make sure t
 Plug in your printer and navigate to Printing.  "Applications -> System Tools -> Administration -> Printing".  You will need to authenticate this action with the admin passphrase you set when booting up Tails.
 
 ![navigate to Printing](images/printer_setup_guide/path_to_printer_settings.png)
-![grand admin](images/printer_setup_guide/grant_admin.png)
+![grant admin](images/printer_setup_guide/grant_admin.png)
 
 Select "Add".
 
