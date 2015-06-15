@@ -10,10 +10,12 @@ app_hostname: ""
 app_ip: ""
 
 ### Used by the app role ###
-# The securedrop_header_image has to be in the install_files/ansible-base/
+# The securedrop_header_image has to be in the install_files/ansible-base/ or
+# the install_files/ansible-base/roles/app/files/ directory
 # Leave set to empty to use the SecureDrop logo.
 securedrop_header_image: ""
-# The app GPG public key has to be in the install_files/ansible-base/
+# The app GPG public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
 #
 # The format of the app GPG public key can be binary or ASCII-armored,
 # the extension also doesn't matter
@@ -24,7 +26,8 @@ securedrop_app_gpg_public_key: ""
 securedrop_app_gpg_fingerprint: ""
 
 ### Used by the mon role ###
-# The OSSEC alert GPG public key has to be in the install_files/ansible-base/
+# The OSSEC alert GPG public key has to be in the install_files/ansible-base/ or
+# install_files/ansible-base/roles/app/files/ directory
 #
 # The format of the OSSEC alert GPG public key can be binary or
 # ASCII-armored, the extension also doesn't matter

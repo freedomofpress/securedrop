@@ -57,7 +57,7 @@ Don't worry if this happens to you; you can edit the printer configuration to po
 
 To fix this problem, I selected the CUPS + Gutenprint driver, even though it wasn't recommended.  Click "Forward" to save your changes.
 
-![default set up](images/printer_setup_guide/driver_search_result_custom.png)
+![custom choice for make and model](images/printer_setup_guide/driver_search_results_custom.png)
 
 Do another test print, checking your printer for indicators that it's working or not.  This time, printing works perfectly.  If you still experience garbled text, try another driver from your selections.  It is a process of trial-and-error.
 
