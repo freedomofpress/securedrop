@@ -40,6 +40,7 @@ ossec_postfix_dependencies:
   - mailutils
 
 # Configuration info for procmail and postfix
+postfix_hostname: ossec.ossec-server
 #ossec_alert_gpg_public_key_public_key_path is defined in the site-specific.yml config
 #ossec_gpg_fpr is defined in the site-specific.yml config
 #ossec_alert_email is defined in the site-specific.yml config
