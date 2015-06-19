@@ -1,18 +1,27 @@
 *filter
-:INPUT ACCEPT [0:0]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [0:0]
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
 :LOGNDROP - [0:0]
 
-# Allow the tor instances used for ssh, source and document interface outbound access
+# Prod ssh connections happen through an authenticated tor hidden service
+# The ssh connection is proxied on the server by the tor client to
+# the ssh dameon listening on the local loopback.
+# Limit the number of new tcp connections allowed by the tor user to the ssh dameon
+# listening on the local loopback. Drop new connection attempts after the limit
+# by the tor user.
+# limit-burst is set to '3' which means the limit of 3/min only starts after the
+# first three connection are made. To test will need to try to create 7 connections.
+# The 7th (and any additional attempts during that minute) will be dropped.
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit traffic from tor to the ssh dameon"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -j LOGNDROP -m comment --comment "Drop all other new connections from tor to the ssh dameon"
+-A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow the established traffic from tor to the ssh dameon"
+
 # Load before tor user drop rules
+# TODO: use ansible facts to populate the in use interface to further restrict
+# the rules.
 -A OUTPUT -p tcp -m owner --uid-owner debian-tor -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "tor instance that provides ssh access"
 -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow traffic back for tor"
-
-# Rate limit ssh connections coming from the tor network
-# Load before generic loopback rules
--A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "SSH with rate limiting only thru tor"
--A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "SSH with rate limiting only thru tor"
 
 # Drop all other outbound traffic by the tor user.
 # Load before generic loopback rules
