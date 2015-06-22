@@ -17,3 +17,20 @@ describe file('/etc/tor/torrc') do
   end
 end
 
+# declare app-specific tor service directories,
+# for mode and ownership checks. the parent dir
+# and the "ssh" service are validated in the
+# common-staging spectests.
+tor_service_directories = %w(
+  /var/lib/tor/services/document
+  /var/lib/tor/services/source
+)
+# ensure tor service dirs are owned by tor user and mode 0700
+tor_service_directories.each do |tor_service_directory|
+  describe file(tor_service_directory) do
+    it { should be_directory  }
+    it { should be_mode('700')  }
+    it { should be_owned_by 'debian-tor' }
+    it { should be_grouped_into 'debian-tor' }
+  end
+end
