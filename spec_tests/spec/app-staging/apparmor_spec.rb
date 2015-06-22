@@ -91,18 +91,13 @@ describe command("aa-status --complaining") do
   its(:stdout) { should eq complaining_apparmor_profiles.length.to_s + "\n" }
 end
 
+# ensure number of total profiles is sum of enforced and complaining profiles
 describe command("aa-status --profiled") do
-  its(:stdout) { should eq "10\n" }
+  total_profiles = enforced_apparmor_profiles.length + complaining_apparmor_profiles.length
+  its(:stdout) { should eq total_profiles.to_s + "\n" }
 end
-
-# Check that the expected profiles are present in the aa-status command.
-#[ 'apache', 'tor', 'ntp'].each do |enforced_profile|
-#  describe command("aa-status") do
-#    it { should return_stdout /#{enforced_profile}/ }
-#  end
-#end
 
 # Ensure that there are no processes that are unconfined but have a profile
 describe command("aa-status") do
-  its(:stdout) { should match /0 processes are unconfined but have a profile defined/ }
+  its(:stdout) { should contain("0 processes are unconfined but have a profile defined") }
 end
