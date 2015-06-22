@@ -54,9 +54,32 @@ describe command("aa-status --complaining") do
   its(:stdout) { should eq "2\n" }
 end
 
-describe command("aa-status --enforced") do
-  its(:stdout) { should eq "8\n" }
+# declare app-armor profiles expected to be enforced
+enforced_apparmor_profiles = %w(
+  /sbin/dhclient
+  /usr/lib/NetworkManager/nm-dhcp-client.action
+  /usr/lib/connman/scripts/dhclient-script
+  /usr/sbin/apache2//DEFAULT_URI
+  /usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT
+  /usr/sbin/ntpd
+  /usr/sbin/tcpdump
+  system_tor
+)
+# check for enforced app-armor profiles
+# this klunky one-liner uses bash, because serverspec defaults to sh,
+# then provides START and STOP patterns to sed, filters by profile
+# names according to leading whitespace, then trims leading whitespace
+describe command("/bin/bash -c \"sed -ne '/profiles are in enforce mode/,/profiles are in complain mode/ p' <(aa-status) | grep -P '^\s+' | perl -npe 's/^\s//'\"") do
+  enforced_apparmor_profiles.each do |profile|
+    its(:stdout) { should contain(profile) }
+  end
 end
+
+# ensure number of expected enforced profiles matches number checked
+describe command("aa-status --enforced") do
+  its(:stdout) { should eq enforced_apparmor_profiles.length.to_s + "\n" }
+end
+
 
 describe command("aa-status --profiled") do
   its(:stdout) { should eq "10\n" }
