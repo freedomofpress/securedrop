@@ -25,6 +25,25 @@ end
   end
 end
 
+# declare expected app-armor capabilities for apache2
+apache2_capabilities = %w(
+  dac_override
+  kill
+  net_bind_service
+  sys_ptrace
+)
+# check for exact list of expected app-armor capabilities for apache2
+describe command('perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' /etc/apparmor.d/usr.sbin.apache2') do
+  apache2_capabilities.each do |apache2_capability|
+    its(:stdout) { should contain(apache2_capability) }
+  end
+end
+
+# ensure no extra capabilities are defined
+describe command('grep -ic capability /etc/apparmor.d/usr.sbin.apache2') do
+  its(:stdout) { should eq apache2_capabilities.length.to_s + "\n" }
+end
+
 # Explicitly check that enforced profiles are NOT
 # present in /etc/apparmor.d/disable. Polling aa-status
 # only checks the last config that was loaded, whereas
