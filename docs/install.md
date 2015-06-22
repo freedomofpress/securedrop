@@ -222,17 +222,25 @@ Now that you've set up your password manager, you can move on to setting up the 
 
 Now that the firewall is set up, you can plug the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
 
-Install Ubuntu Server 14.04 (Trusty) on both servers. For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you save the following information:
+Install Ubuntu Server 14.04 (Trusty) on both servers.  This setup is fairly easy, but please note the follwoing:
+
+* Since the firewall is configured to give the servers a static IP address, you will have to manually configure the network with those values.
+* The hostname for the servers are, conventionally, `app` and `mon`.  Adhering to this isn't necessary, but it will make the rest of your install easier.
+* The username and password for these two servers **must be the same**.
+
+For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md).
+
+When you are done, make sure you save the following information:
 
 * The IP address of the App Server
 * The IP address of the Monitor Server
-* The non-root user's name and password on each server.
+* The non-root user's name and password for the servers.
 
 Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. In the terminal, verify that you can SSH into both servers, authenticating with your password:
 
 ```sh
-ssh <username>@<App IP address> hostname
-ssh <username>@<Monitor IP address> hostname
+ssh <username>@<App IP address>
+ssh <username>@<Monitor IP address>
 ```
 
 Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
@@ -374,7 +382,9 @@ HidServAuth fsrrszf5qw7z2kjh.onion xW538OvHlDUo5n4LGpQTNh # client: admin
 HidServAuth yt4j52ajfvbmvtc7.onion vNN33wepGtGCFd5HHPiY1h # client: admin
 ```
 
-When you are done, click *Save* and **close** the text editor. The script will finish running soon thereafter.
+An easy way to do this is to run `cat *-aths` from the `install_files/ansible-base` folder in a terminal window, and copy/paste the output into the opened text editor.
+
+When you are done, click *Save* and **close** the text editor. Once the editor is closed, the install script will automatically resume.
 
 Running `install.sh` sets up an initialization script that automatically updates Tor's configuration to work with the authenticated hidden services every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and reach the Document Interface as normal, as well as connect to both servers via secure shell. Tor's [hidden service authentication](https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient) restricts access to only those who have the 'HidServAuth' values.
 

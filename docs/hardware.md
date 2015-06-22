@@ -31,7 +31,20 @@ The *Secure Viewing Station* is a machine that is kept offline and only ever use
  * 1 x encrypted, external hard drive to store documents on while working on a story.
  * 1 x offline printer.
 
-We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/) with a power cord and [4 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/), but note that you will also need to get a monitor and a wired keyboard and mouse. For the printer, we recommend the [HP Deskjet printer](http://www.amazon.com/HP-Deskjet-Printer-CH340A-B1H/dp/B003YGZIY0/).
+We recommend that you either buy or repurpose an old laptop. Another option is to buy an [Intel NUC](http://www.amazon.com/dp/B00F3F38O2/) with a power cord and [4 GB of memory](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/), but note that you will also need to get a monitor and a wired keyboard and mouse.
+
+#### Printers
+
+Careful consideration should be given to the printer used with the SVS. Most printers today have wireless functionality (WiFi or Bluetooth connectivity) which should be **avoided** because it could be used to compromise the airgap.
+
+Unfortunately, it is difficult to find printers that work with Tails, and it is increasingly difficult to find non-wireless printers at all. To assist you, we have compiled the following partial list of airgap-safe printers that have been tested and are known to work with Tails:
+
+| Model                     | Testing Date | Tails Versions | Price (new)      | Price (used)     | Notes      |
+|---------------------------|--------------|----------------|------------------|------------------|------------|
+| HP LaserJet 400 M401n     | 06/2015      | 1.4            | $178.60 (Amazon) | $115.00 (Amazon) | Monochrome laser printer. Heavy (10 lbs.) When adding the printer in Tails, you need to set "Make and model" to "HP LaserJet 400 CUPS+Gutenprint v5.2.9". |
+| HP Deskjet 6940           | 04/2015      | 1.3.2          | $639.99 (Amazon) | $196.99 (Amazon) | Monochrome Inkjet printer |
+
+If you know of another model of printer that fits our requirements and works with Tails, please submit a pull request to add it to this list.
 
 ### Tails and Transfer Devices
 
