@@ -39,9 +39,19 @@ describe command('perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' /etc/apparmo
   end
 end
 
-# ensure no extra capabilities are defined
+# ensure no extra capabilities are defined for apache2
 describe command('grep -ic capability /etc/apparmor.d/usr.sbin.apache2') do
   its(:stdout) { should eq apache2_capabilities.length.to_s + "\n" }
+end
+
+# check for exact list of expected app-armor capabilities for tor
+describe command('perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' /etc/apparmor.d/usr.sbin.tor') do
+  its(:stdout) { should contain("setgid") }
+end
+
+# ensure no extra capabilities are defined for tor
+describe command('grep -ic capability /etc/apparmor.d/usr.sbin.tor') do
+  its(:stdout) { should eq "1\n" }
 end
 
 # Explicitly check that enforced profiles are NOT
