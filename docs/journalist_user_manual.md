@@ -34,7 +34,13 @@ You will only be able to view the documents the source has sent you on the `Secu
 
 ![Load external content](/docs/images/manual/document4.png)
 
-In order to protect you from malware, the browser will display a notice every time you try to download a file that can't be opened in browser itself. Go ahead and click `Launch application` anyway, and save the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
+In order to protect you from malware, the browser only allows you to download documents to a special sandbox folder, located at `/home/amnesia/Tor Browser`.
+
+<!-- ![Download to sandbox folder](/docs/images/manual/sandbox_folder.png) -->
+
+Once downloaded to the sandbox folder, move the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
+
+<!-- ![Move to transfer device](/docs/images/manual/move_to_transfer_device.png) -->
 
 Eject your `Transfer Device` from your `Journalist Workstation`.
 
