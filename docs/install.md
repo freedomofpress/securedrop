@@ -194,8 +194,8 @@ The Freedom of the Press Foundation Master Signing Key should have a fingerprint
 Verify that the current release tag was signed with the master signing key.
 
     cd securedrop/
-    git checkout 0.3.2
-    git tag -v 0.3.2
+    git checkout 0.3.4
+    git tag -v 0.3.4
 
 You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
