@@ -5,10 +5,6 @@
   #include <abstractions/base>
   #include <abstractions/tor>
 
-  signal (send) set=("term") peer=unconfined,
-  ptrace (trace) peer=unconfined,
-
-  capability dac_override,
   capability kill,
   capability net_bind_service,
   capability sys_ptrace,
