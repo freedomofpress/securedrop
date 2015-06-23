@@ -88,9 +88,9 @@ enforced_apparmor_profiles = %w(
 # this klunky one-liner uses bash, because serverspec defaults to sh,
 # then provides START and STOP patterns to sed, filters by profile
 # names according to leading whitespace, then trims leading whitespace
-describe command("/bin/bash -c \"sed -ne '/profiles are in enforce mode/,/profiles are in complain mode/ p' <(aa-status) | grep -P '^\s+' | perl -npe 's/^\s//'\"") do
+describe command("aa-status") do
   enforced_apparmor_profiles.each do |enforced_apparmor_profile|
-    its(:stdout) { should contain(enforced_apparmor_profile) }
+    its(:stdout) { should contain(enforced_apparmor_profile).from(/profiles are in enforce mode/).to(/profiles are in complain mode/) }
   end
 end
 
@@ -109,9 +109,9 @@ complaining_apparmor_profiles = %w(
 )
 
 # check for complaining app-armor profiles
-describe command("/bin/bash -c \"sed -ne '/profiles are in complain mode/,/\d+ processes have profiles defined/ p' <(aa-status) | grep -P '^\s+' | perl -npe 's/^\s//'\"") do
+describe command("aa-status") do
   complaining_apparmor_profiles.each do |complaining_apparmor_profile|
-    its(:stdout) { should contain(complaining_apparmor_profile) }
+    its(:stdout) { should contain(complaining_apparmor_profile).from(/profiles are in complain mode/).to(/\d+ processes have profiles defined/) }
   end
 end
 
