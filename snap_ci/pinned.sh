@@ -7,6 +7,7 @@
 
 
 # Cache and install Vagrant
+vagrant_rpm="${vagrant_rpm:-vagrant_1.7.2_x86_64.rpm}"
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
 [[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
 # TODO: Check for vagrant plugins before installing them.
