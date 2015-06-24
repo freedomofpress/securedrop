@@ -125,9 +125,10 @@ def generate_unique_codename(num_words):
     while True:
         codename = crypto_util.genrandomid(num_words)
 
-        # THe maximum length of a word in the wordlist is 6, and the maximum
-        # codename length is 10, so it is currently impossible to generate a
-        # codename that is too long. This code is meant to be defense in depth
+        # The maximum length of a word in the wordlist is 6 letters and the
+        # maximum codename length is 10 words, so it is currently impossible to
+        # generate a codename that is longer than the maximum codename length
+        # (currently 128 characters). This code is meant to be defense in depth
         # to guard against potential future changes, such as modifications to
         # the word list or the maximum codename length.
         if len(codename) > Source.MAX_CODENAME_LEN:
