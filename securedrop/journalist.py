@@ -18,7 +18,7 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
-                LoginThrottledException)
+                LoginThrottledException, InvalidPasswordLength)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -180,6 +180,10 @@ def admin_add_user():
                                       otp_secret=otp_secret)
                 db_session.add(new_user)
                 db_session.commit()
+            except InvalidPasswordLength:
+                form_valid = False
+                flash("Your password is too long (maximum length {} characters)".format(
+                        Journalist.MAX_PASSWORD_LEN), "error")
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
@@ -250,7 +254,13 @@ def admin_edit_user(user_id):
             if request.form['password'] != request.form['password_again']:
                 flash("Passwords didn't match", "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
-            user.set_password(request.form['password'])
+            try:
+                user.set_password(request.form['password'])
+            except InvalidPasswordLength:
+                flash("Your password is too long "
+                      "(maximum length {} characters)".format(
+                      Journalist.MAX_PASSWORD_LEN), "error")
+                return redirect(url_for("admin_edit_user", user_id=user_id))
 
         user.is_admin = bool(request.form.get('is_admin'))
 
