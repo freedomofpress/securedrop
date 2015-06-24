@@ -254,7 +254,13 @@ def admin_edit_user(user_id):
             if request.form['password'] != request.form['password_again']:
                 flash("Passwords didn't match", "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
-            user.set_password(request.form['password'])
+            try:
+                user.set_password(request.form['password'])
+            except InvalidPasswordLength:
+                flash("Your password is too long "
+                      "(maximum length {} characters)".format(
+                      Journalist.MAX_PASSWORD_LEN), "error")
+                return redirect(url_for("admin_edit_user", user_id=user_id))
 
         user.is_admin = bool(request.form.get('is_admin'))
 
