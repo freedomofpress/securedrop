@@ -81,7 +81,7 @@ Leave the defaults for "Time Server Information". Click Next.
 
 On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
 
-For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. Click Next.
+For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
 
 Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
@@ -114,7 +114,7 @@ We set up the LAN interface during the initial configuration. We now need to set
 -   IPv4 Configuration Type: Static IPv4
 -   IPv4 Address: Monitor Gateway
 
-Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
+Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
 
 ### Disable DHCP on the LAN
 
