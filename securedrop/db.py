@@ -198,11 +198,11 @@ class InvalidPasswordLength(Exception):
     password length"""
 
     def __init__(self, password):
-        self.password = password
+        self.pw_len = len(password)
 
     def __str__(self):
-        if len(password) > Journalist.MAX_PASSWORD_LEN:
-            return "Password too long (len={})".format(len(password))
+        if self.pw_len > Journalist.MAX_PASSWORD_LEN:
+            return "Password too long (len={})".format(self.pw_len)
 
 
 class Journalist(Base):
