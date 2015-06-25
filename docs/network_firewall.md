@@ -64,12 +64,41 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 #### Connect to the pfSense WebGUI
 
 1. Boot the Admin Workstation into Tails from the Admin Live USB.
-2. Connect the Admin Workstation to the switch on the LAN. After a few seconds, you should see a pop up notification saying "Connection established" in the top right corner of the screen.
-3. Launch the Tor Browser, *Applications → Internet → Tor Browser*.
-    1. If there is a conflict between your WAN and the default LAN, you will not be able to connect to Tor, and may see a dialog that says "Tor is not ready. Start Tor Browser anyway?". Click "Start Tor Browser" to continue.
-4. Navigate to the pfSense GUI in the Tor Browser: https://192.168.1.1
+
+2. Connect the Admin Workstation to the switch on the LAN.
+
+3. Launch the *Unsafe Browser*, *Applications → Internet → Unsafe Browser*.
+
+   ![Launching the Unsafe Browser](images/firewall/launching_unsafe_browser.png)
+
+    1. Note that the *Unsafe Browser* is, as the name suggests, **unsafe** (its
+       traffic is not routed through Tor). However, it is the only option in
+       this context because Tails [intentionally][tails_issue_7976] disables
+       LAN access in the *Tor Browser*.
+
+    2. A dialog will ask "Do you really want to launch the Unsafe Browser?". Click **Launch**.
+
+       ![You really want to launch the Unsafe Browser](images/firewall/unsafe_browser_confirmation_dialog.png)
+
+    3. You will see a pop-up notification that says "Starting the Unsafe Browser..."
+
+       ![Pop-up notification](images/firewall/starting_the_unsafe_browser.png)
+
+    4. After a few seconds, the Unsafe Browser should launch. The window has a
+       bright red border to remind you to be careful when using it. You should
+       close it once you're done configuring the firewall and use the Tor
+       Browser for any other web browsing you might do on the Admin
+       Workstation.
+
+       ![Unsafe Browser Homepage](images/firewall/unsafe_browser.png)
+
+4. Navigate to the pfSense GUI in the *Unsafe Browser*: `https://192.168.1.1`
+
 5. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
+
 6. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
+
+[tails_issue_7976]: https://labs.riseup.net/code/issues/7976 "Tails Feature #7976: Disable LAN access in Tor Browser"
 
 #### Setup Wizard
 
@@ -89,7 +118,7 @@ Click Reload.
 
 If you changed the LAN Interface settings, you will no longer be able to connect after reloading the firewall and the next request will probably time out. This is not a problem - the firewall has reloaded and is working correctly. To connect to the new LAN interface, unplug and reconnect your network cable to have a new network address assigned to you via DHCP. Note that if you used a subnet with fewer addresses than `/24`, the default DHCP configuration in pfSense may not work. In this case, you should assign the Admin Workstation a static IP address that is known to be in the subnet to continue.
 
-Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the Tor Browser, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
+Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the *Unsafe Browser*, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
 
 #### Connect Interfaces and Test Connectivity
 
