@@ -187,3 +187,29 @@ Vagrant.configure("2") do |config|
     end
   end
 end
+
+
+# Get .onion URL for connecting to instances over Tor.
+# The Ansible playbooks fetch these values back to the
+# Admin Workstation (localhost) so they can be manually
+# added to the inventory file. Possible values for filename
+# are "app-ssh-aths" and "mon-ssh-aths".
+def find_ssh_aths(filename)
+  require 'find'
+  repo_root = File.expand_path(File.dirname(__FILE__))
+  ansible_dir = File.join(repo_root, "install_files", "ansible-base")
+
+  Find.find(ansible_dir) do |path|
+    if FileTest.file?(path)
+      if File.basename(path) == filename
+        File.open(path).each do |line|
+          # Take second value for URL; format for the ATHS file is:
+          # /^HidServAuth \w{16}.onion \w{22} # client: admin$/
+          return line.split()[1]
+        end
+      else
+        next
+      end
+    end
+  end
+end
