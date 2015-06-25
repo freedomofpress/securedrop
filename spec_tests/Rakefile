@@ -13,11 +13,11 @@ def roles(host)
   roles = []
   case host
   when /^development$/
-    (roles << %w(common-development development)).flatten!
+    (roles << %w(app-test common-development development)).flatten!
   when /^build$/
     (roles << "build").flatten!
   when /^app-staging/
-    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
+    (roles << %w(app-test common-development common-staging app-staging grsecurity)).flatten!
   when /^mon-staging/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
   when /^app-prod/
