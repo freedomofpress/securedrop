@@ -1,24 +1,13 @@
-# declare required pip dependencies.
-# these checks explicitly reference version number
-# to make sure the stack and tests are in sync.
-pip_dependencies = [
-  'Flask-Testing==0.4.2',
-  'mock==1.0.1',
-  'pytest==2.6.4',
-  'selenium==2.45.0',
-]
-# ensure pip depdendencies are installed in staging.
-# these are required for running unit and functional tests
-describe command('pip freeze') do
-  pip_dependencies.each do |pip_dependency|
-    its(:stdout) { should contain(pip_dependency) }
-  end
-end
-
-# these checks are for the role `app-test`,
+# These checks are for the role `app-test`,
 # which is different from simply `app`, which
 # is tested in `securedrop_app_spec.rb`.
-# the development machine should NOT have these files
+# TODO: the Ansible role filters tasks from the
+# app-test role via the "non-development" tag.
+# There should be better separation between hosts
+# and roles, e.g. "development" and "app-test",
+# perhaps leveraging host_vars. Fix that, then
+# come back here and refactor the various versions
+# of `securedrop_app_test_spec.rb`.
 
 # ensure wsgi file is absent in development
 describe command("/bin/bash -c '[[ ! -e /var/www/source.wsgi ]]'") do
