@@ -40,7 +40,7 @@ This guide outlines the steps required to install SecureDrop 0.3.x. If you are l
 When running commands or editing configuration files that include filenames, version numbers, userames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. A basic familiarity with Linux, the GNU core utilities and Bash shell is highly advantageous. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
 
 You will also need the inventory of hardware items for the installation listed in our [Hardware Guide](/docs/hardware.md).
-  
+
 ### Set up Tails USB sticks
 
 Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
@@ -48,7 +48,7 @@ Before installing the SecureDrop application, the first thing you need to do is 
 You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else:
 
 1. *offline Tails USB*
-  
+
 2. *admin Tails USB*
 
 3. *journalist Tails USB*.
