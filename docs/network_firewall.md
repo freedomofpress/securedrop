@@ -204,4 +204,4 @@ Here are some example screenshots of a working pfSense firewall configuration:
 ![Firewall LAN Rules](images/firewall/lan_rules.png)
 ![Firewall OPT1 Rules](images/firewall/opt1_rules.png)
 
-Once you've set up the firewall, continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
+Once you've set up the firewall, **exit the Unsafe Browser**, and continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
