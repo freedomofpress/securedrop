@@ -24,7 +24,13 @@ from management import run
 # development or testing, before importing config.
 os.environ['SECUREDROP_ENV'] = 'dev'
 
-from config import WORKER_PIDFILE
+# TODO: the PID file for the redis worker is hard-coded below.
+# Ideally this constant would be provided by a test harness.
+# It has been intentionally omitted from `config.py.example`
+# in order to isolate the test vars from prod vars.
+# When refactoring the test suite, the TEST_WORKER_PIDFILE
+# TEST_WORKER_PIDFILE is also hard-coded in `tests/common.py`.
+TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
 
 
 def get_pid_from_pidfile(pid_file_name):
@@ -36,7 +42,7 @@ def _start_test_rqworker(config):
     # needed to determine the directory to run the worker in
     worker_running = False
     try:
-        if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
+        if psutil.pid_exists(get_pid_from_pidfile(TEST_WORKER_PIDFILE)):
             worker_running = True
     except IOError:
         pass
@@ -47,14 +53,14 @@ def _start_test_rqworker(config):
             [
                 "rqworker", "test",
                 "-P", config.SECUREDROP_ROOT,
-                "--pid", WORKER_PIDFILE,
+                "--pid", TEST_WORKER_PIDFILE,
             ],
             stdout=tmp_logfile,
             stderr=subprocess.STDOUT)
 
 
 def _stop_test_rqworker():
-    os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
+    os.kill(get_pid_from_pidfile(TEST_WORKER_PIDFILE), signal.SIGTERM)
 
 
 def test():
