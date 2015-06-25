@@ -20,6 +20,10 @@ def roles(host)
     (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
   when /^mon-staging/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
+  when /^app-prod/
+    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
+  when /^mon-prod/
+    (roles << %w(common-staging mon-staging grsecurity)).flatten!
   end
 
   # DigitalOcean droplets don't support custom kernels, so remove
@@ -35,7 +39,7 @@ end
 
 
 # manually declare hosts, and assign them roles for testing
-hosts = %w(development build app-staging mon-staging).map do |host|
+hosts = %w(development build app-staging mon-staging app-prod mon-prod).map do |host|
   {
     :name => host,
     :roles => roles(host)
@@ -53,6 +57,7 @@ namespace :spec do
 
   # assign only /staging/ hosts to serverspec task run
   task :staging => hosts.select{ |h| h[:name].match(/staging$/) }.map{ |h| h[:name] }
+  task :prod => hosts.select{ |h| h[:name].match(/prod$/) }.map{ |h| h[:name] }
 
   hosts.each do |host|
     desc "Run spectests against #{host[:name]}"
