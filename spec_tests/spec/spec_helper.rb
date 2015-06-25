@@ -55,8 +55,8 @@ def retrieve_vars(hostname)
   case hostname
   when /^development$/
     vars = read_vars_file('development')
-  when /-staging$/
-    # Both staging hosts need a similar list of vars.
+  when /^(app|mon)/
+    # Both the app and mon servers need a similar list of vars.
     vars = read_vars_file('staging')
     vars['tor_user_uid'] = vagrant_ssh_cmd(hostname, "id -u debian-tor")
     vars['ssh_group_gid'] = vagrant_ssh_cmd(hostname, "getent group ssh | cut -d: -f3")
