@@ -33,7 +33,7 @@ Before you begin
 
 First, consider how the firewall will be connected to the Internet. You need to be able to provision two unique subnets for SecureDrop: the app subnet and the monitor subnet. There are a number of possible ways to configure this, and the best way will depend on the network that you are connecting to.
 
-Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. This is a very common subnet choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
+Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. The `/24` subnet is a very common choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
 
 The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
 
