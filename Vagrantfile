@@ -87,6 +87,9 @@ Vagrant.configure("2") do |config|
   # The prod hosts are just like production but are virtualized. All access to ssh and
   # the web interfaces is only over tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
+    config.ssh.host = find_ssh_aths("mon-ssh-aths")
+    config.ssh.proxy_command = "connect -R remote -5 -S 127.0.0.1:9050 %h %p"
+    config.ssh.port = 22
     prod.vm.box = "mon-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
@@ -98,6 +101,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'app-prod', autostart: false do |prod|
+    config.ssh.host = find_ssh_aths("app-ssh-aths")
+    config.ssh.proxy_command = "connect -R remote -5 -S 127.0.0.1:9050 %h %p"
+    config.ssh.port = 22
     prod.vm.hostname = "app-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
