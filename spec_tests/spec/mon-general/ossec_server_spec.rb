@@ -1,6 +1,6 @@
 # ensure hosts file references app server by ip
 describe file('/etc/hosts') do
-  localhost_regex = /^#{Regexp.quote('127.0.1.1')}(\s+#{property['mon_hostname']}){2}$/
+  localhost_regex = /^#{Regexp.quote('127.0.1.1')}(\s+#{property['monitor_hostname']}){2}$/
   its(:content) { should match localhost_regex }
   app_host_regex = Regexp.quote("#{property['app_ip']}  #{property['app_hostname']}")
   its(:content) { should match /^#{app_host_regex}$/ }
