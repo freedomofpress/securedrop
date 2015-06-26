@@ -30,11 +30,19 @@ If any sources have uploaded documents or sent you message, they will be listed 
 
 ### Move Documents to the Secure Viewing Station
 
-You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it.
+You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it, or select a number of documents and save them at once by clicking "Download Selected".
 
 ![Load external content](/docs/images/manual/document4.png)
+![Download selected](/docs/images/manual/tbb_Document5.png)
 
-In order to protect you from malware, the browser will display a notice every time you try to download a file that can't be opened in browser itself. Go ahead and click `Launch application` anyway, and save the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
+In order to protect you from malware, the browser only allows you to download documents to a special sandbox folder, located at `/home/amnesia/Tor Browser`.
+
+![Download to sandbox folder](/docs/images/manual/tbb_Document6.png)
+
+Once downloaded to the sandbox folder, move the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
+
+![Move to transfer device](/docs/images/manual/tbb_Document7.png)
+![Move to transfer device](/docs/images/manual/tbb_Document8.png)
 
 Eject your `Transfer Device` from your `Journalist Workstation`.
 
