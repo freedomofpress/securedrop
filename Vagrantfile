@@ -90,7 +90,7 @@ Vagrant.configure("2") do |config|
     config.ssh.host = find_ssh_aths("mon-ssh-aths")
     config.ssh.proxy_command = "connect -R remote -5 -S 127.0.0.1:9050 %h %p"
     config.ssh.port = 22
-    prod.vm.box = "mon-prod"
+    prod.vm.hostname = "mon-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
     prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
