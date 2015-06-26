@@ -69,7 +69,7 @@ def retrieve_vars(hostname)
 
   if hostname =~ /-prod$/
     # TODO: currently reusing staging vars for prod hosts
-    vars = read_vars_file('staging')
+    vars = read_vars_file('prod')
     vars['app_ip'] = retrieve_ip_addr('app-prod')
     vars['monitor_ip'] = retrieve_ip_addr('mon-prod')
   end
