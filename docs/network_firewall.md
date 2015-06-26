@@ -33,7 +33,7 @@ Before you begin
 
 First, consider how the firewall will be connected to the Internet. You need to be able to provision two unique subnets for SecureDrop: the app subnet and the monitor subnet. There are a number of possible ways to configure this, and the best way will depend on the network that you are connecting to.
 
-Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. This is a very common subnet choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
+Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. The `/24` subnet is a very common choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
 
 The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
 
@@ -81,7 +81,7 @@ Leave the defaults for "Time Server Information". Click Next.
 
 On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
 
-For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface. Click Next.
+For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
 
 Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
@@ -114,7 +114,7 @@ We set up the LAN interface during the initial configuration. We now need to set
 -   IPv4 Configuration Type: Static IPv4
 -   IPv4 Address: Monitor Gateway
 
-Leave everything else as the default. Save and Apply Changes.
+Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
 
 ### Disable DHCP on the LAN
 
@@ -156,19 +156,19 @@ For pfSense, see Section 6 of the pfSense Guide for information on setting up fi
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
 3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface:
 
-	* `-s APP_IP` → `LAN`
-	* `-s MONITOR_IP` → `OPT1`
+  * `-s APP_IP` → `LAN`
+  * `-s MONITOR_IP` → `OPT1`
 
 4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
 5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
 
 #### Example Screenshots
 
-Here are some example screenshots of a working pfSense firewall configuration:
+Here are some example screenshots of a working pfSense firewall configuration.
 
 ![Firewall IP Aliases](images/firewall/ip_aliases.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
