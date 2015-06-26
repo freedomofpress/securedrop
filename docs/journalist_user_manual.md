@@ -34,13 +34,18 @@ You will only be able to view the documents the source has sent you on the `Secu
 
 ![Load external content](/docs/images/manual/document4.png)
 
+You can also select a number of documents and save them at once by clicking "Download Selected".
+
+![Download selected](/docs/images/manual/tbb_Document5.png)
+
 In order to protect you from malware, the browser only allows you to download documents to a special sandbox folder, located at `/home/amnesia/Tor Browser`.
 
-<!-- ![Download to sandbox folder](/docs/images/manual/sandbox_folder.png) -->
+![Download to sandbox folder](/docs/images/manual/tbb_Document6.png)
 
 Once downloaded to the sandbox folder, move the document to the designated USB stick you will use to transfer the documents from your Tails `Journalist Workstation` to the `Secure Viewing Station`. This will be known as your `Transfer Device`.
 
-<!-- ![Move to transfer device](/docs/images/manual/move_to_transfer_device.png) -->
+![Move to transfer device](/docs/images/manual/tbb_Document7.png)
+![Move to transfer device](/docs/images/manual/tbb_Document8.png)
 
 Eject your `Transfer Device` from your `Journalist Workstation`.
 
