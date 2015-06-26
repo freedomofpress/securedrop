@@ -21,7 +21,7 @@ def roles(host)
   when /^mon-staging/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
   when /^app-prod/
-    (roles << %w(app-general common-development grsecurity)).flatten!
+    (roles << %w(app-prod app-general common-development grsecurity)).flatten!
   when /^mon-prod/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
   end
