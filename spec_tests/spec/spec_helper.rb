@@ -103,7 +103,12 @@ def vagrant_ssh_cmd(hostname, command)
   vagrant_cmd = "vagrant ssh #{hostname} --command '#{command}'"
   # Ruby backticks use /bin/sh as shell, and /bin/sh doesn't support
   # process redirection, so force use of /bin/bash
-  return `/bin/bash -c "#{vagrant_cmd} #{filter_stderr}"`
+  result = `/bin/bash -c "#{vagrant_cmd} #{filter_stderr}"`
+  if $? != 0
+    puts "Command failed: #{vagrant_cmd}"
+    exit(1)
+  end
+  return result
 end
 
 # look up ip address for given hostname,
