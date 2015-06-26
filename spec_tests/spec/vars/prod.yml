@@ -4,5 +4,5 @@ securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
 securedrop_user: www-data
 
-app_hostname: app-staging
-monitor_hostname: mon-staging
+app_hostname: app-prod
+monitor_hostname: mon-prod
