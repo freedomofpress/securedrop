@@ -42,6 +42,7 @@ set :ssh_options, options
 
 # retrieve dynamic vars for given hostname
 def retrieve_vars(hostname)
+
   # accept basename for sought vars file,
   # then return a hash based on those settings
   def read_vars_file(file_basename)
@@ -51,28 +52,44 @@ def retrieve_vars(hostname)
     return YAML.load_file(vars_filepath)
   end
 
-  # crude case statement for determining var lookup
-  case hostname
-  when /^development$/
+  # noisy, repetitive if statements to build a list
+  # of required dynamic vars.
+  if hostname =~ /^development$/
     vars = read_vars_file('development')
-  when /^(app|mon)/
-    # Both the app and mon servers need a similar list of vars.
+  end
+
+  if hostname =~ /-staging$/
     vars = read_vars_file('staging')
-    vars['tor_user_uid'] = vagrant_ssh_cmd(hostname, "id -u debian-tor")
-    vars['ssh_group_gid'] = vagrant_ssh_cmd(hostname, "getent group ssh | cut -d: -f3")
     # Ideally these IP addresses would be cached, since they don't
     # change during a test run. Right now, both values are looked up twice,
     # once for each staging host.
     vars['app_ip'] = retrieve_ip_addr('app-staging')
     vars['monitor_ip'] = retrieve_ip_addr('mon-staging')
-    # These vars are host-specific, so check hostname before querying.
-    if hostname.match(/^app/)
-      vars['apache_user_uid'] = vagrant_ssh_cmd(hostname, "id -u www-data")
-    elsif hostname.match(/^mon/)
-      vars['postfix_user_uid'] = vagrant_ssh_cmd(hostname, "id -u postfix")
-    end
   end
+
+  if hostname =~ /-prod$/
+    # TODO: currently reusing staging vars for prod hosts
+    vars = read_vars_file('staging')
+    vars['app_ip'] = retrieve_ip_addr('app-prod')
+    vars['monitor_ip'] = retrieve_ip_addr('mon-prod')
+  end
+
+  if hostname =~ /^(app|mon)/
+    vars['tor_user_uid'] = vagrant_ssh_cmd(hostname, "id -u debian-tor")
+    vars['ssh_group_gid'] = vagrant_ssh_cmd(hostname, "getent group ssh | cut -d: -f3")
+  end
+
+  # These vars are host-specific, so check hostname before querying.
+  if hostname =~ /^app/
+    vars['apache_user_uid'] = vagrant_ssh_cmd(hostname, "id -u www-data")
+  end
+
+  if hostname =~ /^mon/
+    vars['postfix_user_uid'] = vagrant_ssh_cmd(hostname, "id -u postfix")
+  end
+
   return vars
+
 end
 
 # ssh into vagrant machine, run command, return output
