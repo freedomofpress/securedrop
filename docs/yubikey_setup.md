@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Using YubiKey with the Document Interface](#using-yubikey-with-the-document-interface)
+  - [Download the YubiKey personalization tool](#download-the-yubikey-personalization-tool)
+  - [Set up OATH-HOTP](#set-up-oath-hotp)
+  - [Set up a user with the OATH-HOTP secret key](#set-up-a-user-with-the-oath-hotp-secret-key)
+    - [manage.py](#managepy)
+    - [Admin Interface](#admin-interface)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Using YubiKey with the Document Interface
 
 This is a quick and dirty guide to using YubiKey for two-factor authentication on the Document Interface.

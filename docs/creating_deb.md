@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Creating the deb packages for SecureDrop](#creating-the-deb-packages-for-securedrop)
+  - [Gathering OSSEC files](#gathering-ossec-files)
+    - [Install the OSSEC server](#install-the-ossec-server)
+    - [Create the zipped files for the OSSEC server files](#create-the-zipped-files-for-the-ossec-server-files)
+    - [Install OSSEC agent](#install-ossec-agent)
+    - [Create the zipped files for the OSSEC agent files](#create-the-zipped-files-for-the-ossec-agent-files)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 #Creating the deb packages for SecureDrop
 
 ## Gathering OSSEC files

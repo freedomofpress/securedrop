@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [SecureDrop Deployment Best Practices](#securedrop-deployment-best-practices)
+    - [Landing Page](#landing-page)
+    - [Minimum requirements for the SecureDrop environment](#minimum-requirements-for-the-securedrop-environment)
+    - [Suggested](#suggested)
+  - [Whole Site Changes](#whole-site-changes)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # SecureDrop Deployment Best Practices
 
 SecureDrop is only as secure as the environment that surrounds it. To keep sources safe, the news organization's website must employ a set of basic security best practices or else you risk losing any source protection provided by SecureDrop.

@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [SecureDrop On-Site Training Schedule](#securedrop-on-site-training-schedule)
+  - [Day 1: Preparation and Install](#day-1-preparation-and-install)
+    - [Setup and Introductions](#setup-and-introductions)
+    - [Overview of SecureDrop](#overview-of-securedrop)
+    - [Questions](#questions)
+    - [Installing SecureDrop](#installing-securedrop)
+  - [Day 2: Journalist and Admin Training](#day-2-journalist-and-admin-training)
+    - [Journalist Training](#journalist-training)
+    - [Admin training](#admin-training)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 #SecureDrop On-Site Training Schedule
 
 This is a high level schedule for what happens for the 2 days during an on-site install.

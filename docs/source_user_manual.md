@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [How To Use SecureDrop As A Source](#how-to-use-securedrop-as-a-source)
+  - [SecureDrop Depends on the Tor Browser](#securedrop-depends-on-the-tor-browser)
+  - [Using SecureDrop As a Source](#using-securedrop-as-a-source)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # How To Use SecureDrop As A Source
 
 ## SecureDrop Depends on the Tor Browser

@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [How to Use SecureDrop As a Journalist](#how-to-use-securedrop-as-a-journalist)
+  - [Using SecureDrop As a Journalist](#using-securedrop-as-a-journalist)
+    - [Create GPG key for the journalist](#create-gpg-key-for-the-journalist)
+    - [Connect to the Document Interface](#connect-to-the-document-interface)
+    - [Move Documents to the Secure Viewing Station](#move-documents-to-the-secure-viewing-station)
+    - [Decrypt and work on the Secure Viewing Station](#decrypt-and-work-on-the-secure-viewing-station)
+    - [Interact With Sources](#interact-with-sources)
+      - [Flag for reply](#flag-for-reply)
+    - [Work with Documents](#work-with-documents)
+    - [Encrypt and move documents to Journalist Workstation](#encrypt-and-move-documents-to-journalist-workstation)
+    - [Decrypt and prepare to publish](#decrypt-and-prepare-to-publish)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # How to Use SecureDrop As a Journalist
 
 Journalists viewing documents on SecureDrop must connect to the respective Source or Document Interface using the [Tails operating system](https://tails.boum.org/), which your administrator should have already set up for you.
