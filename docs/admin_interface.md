@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Admin Interface Guide](#admin-interface-guide)
+  - [Adding Users](#adding-users)
+    - [Google Authenticator](#google-authenticator)
+    - [YubiKey](#yubikey)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Admin Interface Guide
 
 At this point, you (the administrator) should have your own username and password, plus two-factor authentication through either the Google Authenticator app on your smartphone or a YubiKey.

@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Hardware for SecureDrop](#hardware-for-securedrop)
+  - [SecureDrop Infrastructure](#securedrop-infrastructure)
+    - [App Server and Monitor Server](#app-server-and-monitor-server)
+      - [Potential BIOS issue](#potential-bios-issue)
+    - [Secure Viewing Station (SVS)](#secure-viewing-station-svs)
+    - [Tails and Transfer Devices](#tails-and-transfer-devices)
+    - [Two-factor authentication device](#two-factor-authentication-device)
+    - [Network firewall](#network-firewall)
+    - [Network Switch](#network-switch)
+  - [Appendix](#appendix)
+    - [Notes on the NUCs](#notes-on-the-nucs)
+      - [D34010WYK](#d34010wyk)
+      - [DC3217IYE](#dc3217iye)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Hardware for SecureDrop
 
 This document outlines requirements and recommended hardware for use with SecureDrop. If you have any questions, please contact securedrop@freedom.press.

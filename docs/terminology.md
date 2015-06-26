@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Terminology](#terminology)
+  - [App Server](#app-server)
+  - [Monitor Server](#monitor-server)
+  - [Source Interface](#source-interface)
+  - [Document Interface](#document-interface)
+  - [Journalist Workstation](#journalist-workstation)
+  - [Admin Workstation](#admin-workstation)
+  - [Secure Viewing Station](#secure-viewing-station)
+  - [Two-Factor Authenticator](#two-factor-authenticator)
+  - [Transfer Device](#transfer-device)
+- [Hardware](#hardware)
+  - [Computers](#computers)
+  - [USBs/DVDs/CDs](#usbsdvdscds)
+- [Roles and Passphrases](#roles-and-passphrases)
+  - [Passphrases](#passphrases)
+  - [Admin](#admin)
+  - [Journalist](#journalist)
+    - [Secure Viewing Station](#secure-viewing-station-1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Terminology
 
 A number of terms used in this guide, and in the [SecureDrop workflow diagram](https://freedom.press/securedrop-files/SecureDrop_complex.png), are specific to SecureDrop. The list below attempts to enumerate and define these terms.

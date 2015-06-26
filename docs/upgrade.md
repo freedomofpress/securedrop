@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Upgrading SecureDrop](#upgrading-securedrop)
+  - [0.3.x](#03x)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Upgrading SecureDrop
 
 Look up the version you wish to upgrade *to* below.
