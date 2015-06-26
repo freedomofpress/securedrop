@@ -30,12 +30,9 @@ If any sources have uploaded documents or sent you message, they will be listed 
 
 ### Move Documents to the Secure Viewing Station
 
-You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it.
+You will only be able to view the documents the source has sent you on the `Secure Viewing Station`. After clicking on an individual source you will see the page below with the messages that source has sent you. Click on a document or message name to save it, or select a number of documents and save them at once by clicking "Download Selected".
 
 ![Load external content](/docs/images/manual/document4.png)
-
-You can also select a number of documents and save them at once by clicking "Download Selected".
-
 ![Download selected](/docs/images/manual/tbb_Document5.png)
 
 In order to protect you from malware, the browser only allows you to download documents to a special sandbox folder, located at `/home/amnesia/Tor Browser`.
