@@ -17,11 +17,11 @@ def roles(host)
   when /^build$/
     (roles << "build").flatten!
   when /^app-staging/
-    (roles << %w(app-test common-development common-staging app-staging grsecurity)).flatten!
+    (roles << %w(app-test app-general common-development common-staging app-staging grsecurity)).flatten!
   when /^mon-staging/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
   when /^app-prod/
-    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
+    (roles << %w(app-general common-development grsecurity)).flatten!
   when /^mon-prod/
     (roles << %w(common-staging mon-staging grsecurity)).flatten!
   end
