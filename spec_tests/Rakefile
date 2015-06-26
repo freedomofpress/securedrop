@@ -17,13 +17,13 @@ def roles(host)
   when /^build$/
     (roles << "build").flatten!
   when /^app-staging/
-    (roles << %w(app-test app-general common-development common-staging app-staging grsecurity)).flatten!
+    (roles << %w(app-test app-general common-development common app-staging grsecurity)).flatten!
   when /^mon-staging/
-    (roles << %w(mon-general mon-staging common-staging grsecurity)).flatten!
+    (roles << %w(mon-general mon-staging common grsecurity)).flatten!
   when /^app-prod/
-    (roles << %w(app-prod app-general common-development grsecurity)).flatten!
+    (roles << %w(app-prod app-general common common-development grsecurity)).flatten!
   when /^mon-prod/
-    (roles << %w(mon-general mon-prod common-staging grsecurity)).flatten!
+    (roles << %w(mon-general mon-prod common grsecurity)).flatten!
   end
 
   # DigitalOcean droplets don't support custom kernels, so remove
