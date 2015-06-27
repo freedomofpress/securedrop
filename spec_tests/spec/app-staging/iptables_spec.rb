@@ -2,6 +2,11 @@
 # These rules should be present in prod and staging
 # TODO: There are also hardcoded IP addresses in this section.
 desired_iptables_rules = [
+  # TODO backport #1053 and update these tests with DROP checks
+  '-P INPUT ACCEPT',
+  '-P FORWARD ACCEPT',
+  '-P OUTPUT ACCEPT',
+  '-N LOGNDROP',
   '-A INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   '-A INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   '-A INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',

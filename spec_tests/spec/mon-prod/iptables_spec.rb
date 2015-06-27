@@ -1,6 +1,7 @@
 # declare desired iptables rules
 # These rules should be present in prod.
 desired_iptables_rules = [
+  # TODO backport #1053 and update these tests with DROP checks
   '-P INPUT ACCEPT',
   '-P FORWARD ACCEPT',
   '-P OUTPUT ACCEPT',
