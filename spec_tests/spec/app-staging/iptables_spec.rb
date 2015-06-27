@@ -75,3 +75,35 @@ describe iptables do
     it { should have_rule(desired_iptables_rule) }
   end
 end
+
+
+# try to validate local networking config
+describe host(property['monitor_hostname']) do
+  monitor_ip_regex = Regexp.quote(property['monitor_ip'])
+  its(:ipaddress) { should match /^#{monitor_ip_regex}$/ }
+  it { should be_resolvable.by('hosts')  }
+  it { should be_resolvable.by('dns')  }
+  it { should_not be_reachable  }
+  # in staging, direct access allows ssh.
+  # prod hosts should NOT have access on 22.
+  it { should_not be_reachable.with( :port => 22, :proto => 'tcp') }
+end
+
+# declare ports expected to be listening
+listening_ports = [
+  22,     # ssh
+  80,     # source interface
+  8080,   # document interface
+  6001,   # Xvfb
+]
+# ensure ports are listening
+listening_ports.each do |listening_port|
+  describe port(listening_port) do
+    it { should be_listening.on('0.0.0.0').with('tcp') }
+  end
+end
+
+# check redis worker listening port
+describe port(6379) do
+  it { should be_listening.on('127.0.0.1').with('tcp') }
+end

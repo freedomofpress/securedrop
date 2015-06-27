@@ -70,3 +70,38 @@ describe iptables do
     it { should have_rule(desired_iptables_rule) }
   end
 end
+
+# TODO: the iptables rules aren't checked in order,
+# just by grepping individually for each rule.
+# Rule order matters, so work on a before/after chain
+# that validates order.
+
+
+# try to validate local networking config
+describe host(property['app_hostname']) do
+  app_ip_regex = Regexp.quote(property['app_ip'])
+  its(:ipaddress) { should match /^#{app_ip_regex}$/ }
+  it { should be_resolvable.by('hosts')  }
+  it { should be_resolvable.by('dns')  }
+  it { should be_reachable }
+  # in staging, direct access allows ssh.
+  # prod hosts should NOT have access on 22.
+  it { should be_reachable.with( :port => 22, :proto => 'tcp') }
+  it { should be_reachable.with( :port => 80, :proto => 'tcp') }
+  it { should be_reachable.with( :port => 8080, :proto => 'tcp') }
+end
+
+# check for ssh listening (direct access in staging)
+describe port(22) do
+  it{ should be_listening.on('0.0.0.0').with('tcp') }
+end
+
+# check for postfix listening for sending ossec email alerts
+describe port(25) do
+  it{ should be_listening.on('127.0.0.1').with('tcp') }
+end
+
+# check for ossec-server listening
+describe port(1514) do
+  it{ should be_listening.on('0.0.0.0').with('udp') }
+end
