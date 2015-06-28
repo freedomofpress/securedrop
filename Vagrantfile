@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
   # the web interfaces is only over tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
     config.ssh.host = find_ssh_aths("mon-ssh-aths")
-    config.ssh.proxy_command = "connect -R remote -5 -S 127.0.0.1:9050 %h %p"
+    config.ssh.proxy_command = tor_ssh_proxy_command
     config.ssh.port = 22
     prod.vm.hostname = "mon-prod"
     prod.vm.box = "trusty64"
@@ -102,7 +102,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'app-prod', autostart: false do |prod|
     config.ssh.host = find_ssh_aths("app-ssh-aths")
-    config.ssh.proxy_command = "connect -R remote -5 -S 127.0.0.1:9050 %h %p"
+    config.ssh.proxy_command = tor_ssh_proxy_command
     config.ssh.port = 22
     prod.vm.hostname = "app-prod"
     prod.vm.box = "trusty64"
@@ -232,4 +232,26 @@ def find_ssh_aths(filename)
       end
     end
   end
+end
+
+# dynamically built proxy command for connecting to
+# prod instances over tor. connect-proxy is recommended,
+# but netcat is also supported for centos/snapci boxes.
+def tor_ssh_proxy_command
+   def command?(command)
+     system("which #{command} > /dev/null 2>&1")
+   end
+  # prefer connect-proxy, fall back to netcat,
+  # for use in snapci centos box.
+  if command?("connect")
+    base_cmd = "connect -R remote -5 -S"
+  elsif command?("nc")
+    base_cmd = "nc -x"
+  else
+    puts "Failed to build proxy command for SSH over Tor."
+    puts "Install 'connect-proxy' or 'netcat'."
+    exit(1)
+  end
+  cmd = "#{base_cmd} 127.0.0.1:9050 %h %p"
+  return cmd
 end
