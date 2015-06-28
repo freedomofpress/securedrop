@@ -1,0 +1,10 @@
+---
+
+
+
+
+
+- name: ensure tor is running
+  service:
+    name: tor
+    state: running

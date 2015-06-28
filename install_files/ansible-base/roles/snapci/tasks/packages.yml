@@ -1,0 +1,16 @@
+---
+- name: install libselinux-python (required for ansible on centos)
+  yum:
+    name: libselinux-python
+    state: present
+
+- name: add tor rpm repo
+  copy:
+    src: torproject.repo
+    dest: /etc/yum/repos.d/
+
+- name: install tor package
+  yum:
+    name: tor
+    state: latest
+    update_cache: yes
