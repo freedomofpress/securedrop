@@ -32,15 +32,21 @@ vagrant up /prod/ --no-provision --provider digital_ocean
 vagrant provision /prod/ --provision-with shell
 vagrant provision /prod/ --provision-with ansible
 
-# prod playbook reboots servers as final task
-sleep 180 # wait for servers to come back up
+# prod playbook reboots servers as final task,
+# so give them time to come back up. configure
+# tor on test node while servers boot.
+ansible-playbook -i <(echo "snapci localhost") -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
 export SECUREDROP_TOR_OVER_SSH=1
-vagrant provision /prod/ --provision-with ansible
+# shouldn't be necessary to provision again...
+# the apache default web dir may be present and cause
+# a test to fail.
+#
+# vagrant provision /prod/ --provision-with ansible
 
 # Run serverspec tests
-#cd /var/snap-ci/repo/spec_tests/
-cd spec_tests/
+cd "${repo_root}/spec_tests/"
 bundle exec rake spec:app-prod
 bundle exec rake spec:mon-prod
