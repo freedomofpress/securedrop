@@ -33,10 +33,18 @@ vagrant up /prod/ --no-provision --provider digital_ocean
 vagrant provision /prod/ --provision-with shell
 vagrant provision /prod/ --provision-with ansible
 
+
+# Surprisingly, "ansible" allows process substitution for inventory files,
+# but "ansible-playbook" doesn't. Looks like DeHaan never thought of it:
+# https://groups.google.com/forum/#!msg/ansible-project/MxTAXibLNy8/SWoDn-LXZrYJ
+# Probably due to some +x and type:file checking for dynamic inventories,
+# accidentally breaking FIFO pipes. So, create a tempfile instead.
+inventory_file=$(mktemp)
+
 # prod playbook reboots servers as final task,
 # so give them time to come back up. configure
 # tor on test node while servers boot.
-ansible-playbook -i <(echo "snapci") -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
