@@ -36,7 +36,7 @@ vagrant provision /prod/ --provision-with ansible
 # prod playbook reboots servers as final task,
 # so give them time to come back up. configure
 # tor on test node while servers boot.
-ansible-playbook -i <(echo "snapci localhost") -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+ansible-playbook -i <(echo "snapci") -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
