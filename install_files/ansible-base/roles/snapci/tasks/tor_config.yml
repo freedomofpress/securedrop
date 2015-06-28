@@ -1,8 +1,15 @@
 ---
-
-
-
-
+- name: add aths values to torrc
+  lineinfile:
+    backup: yes
+    backrefs: yes
+    dest: /etc/tor/torrc
+    line: "{{item}}"
+    regexp: "^{{item}}"
+  with_items:
+    - "{{mon_ssh_aths}}"
+    - "{{app_ssh_aths}}"
+  notify: reload tor
 
 - name: ensure tor is running
   service:
