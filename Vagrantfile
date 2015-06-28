@@ -144,6 +144,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define 'snapci', autostart: false do |build|
+    build.vm.box = "snapci"
+    build.vm.box = "centos6.6"
+    build.vm.box_url = "https://github.com/tommy-muehle/puppet-vagrant-boxes/releases/download/1.0.0/centos-6.6-x86_64.box"
+    build.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
+      ansible.verbose = 'vvvv'
+    end
+    build.vm.provider "virtualbox" do |v|
+      v.name = "snapci"
+    end
+  end
+
+
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")
   #  config.cache.scope = :box
