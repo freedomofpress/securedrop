@@ -4,6 +4,11 @@
     name: libselinux-python
     state: present
 
+- name: install netcat (required for ssh proxy command)
+  yum:
+    name: nc
+    state: present
+
 - name: add tor rpm repo
   copy:
     src: torproject.repo
