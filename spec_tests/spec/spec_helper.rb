@@ -96,6 +96,7 @@ def vagrant_ssh_cmd(hostname, command)
   # Dump stderr, to avoid noisy "Connection closed" messages.
   # Error code is checked below.
   filter_stderr = "2> /dev/null"
+  filter_stderr = ""
   vagrant_cmd = "vagrant ssh #{hostname} --command '#{command}'"
   result = `#{vagrant_cmd} #{filter_stderr}`
   if $? != 0
