@@ -93,17 +93,11 @@ end
 
 # ssh into vagrant machine, run command, return output
 def vagrant_ssh_cmd(hostname, command)
-  # Every ssh connection will end with a "Connection closed" message.
-  # Since dynamic variable fetching makes several ssh calls,
-  # let's filter to remove that noisy output from stderr.
-  filter_stderr = "2> >( grep -vP '^Connection to [\d.]+ closed\.' )"
-  # Unfortunately it appears that all of stderr is being filtered,
-  # not just the grep pattern. Perhaps the popen4 gem would facilitate
-  # smarter filtering, but that doesn't seem worthwhile right now.
+  # Dump stderr, to avoid noisy "Connection closed" messages.
+  # Error code is checked below.
+  filter_stderr = "2> /dev/null"
   vagrant_cmd = "vagrant ssh #{hostname} --command '#{command}'"
-  # Ruby backticks use /bin/sh as shell, and /bin/sh doesn't support
-  # process redirection, so force use of /bin/bash
-  result = `/bin/bash -c "#{vagrant_cmd} #{filter_stderr}"`
+  result = `#{vagrant_cmd} #{filter_stderr}`
   if $? != 0
     puts "Command failed: #{vagrant_cmd}"
     exit(1)
