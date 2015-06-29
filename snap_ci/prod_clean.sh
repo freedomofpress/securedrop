@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # bail out on errors
-set -e
+#set -e
 set -x
 
 # declare function for EXIT trap
@@ -51,7 +51,7 @@ time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files
 # for a reboot and tor connection to bootstrap. sleep for another
 # few minutes.
 echo "Sleeping for 180 seconds..."
-sleep 180
+sleep 240
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
