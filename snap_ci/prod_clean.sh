@@ -12,11 +12,11 @@ function cleanup {
 
 # Ensure that DigitalOcean droplet will be cleaned up
 # even if script errors (e.g., if serverspec tests fail).
-trap cleanup EXIT
+#trap cleanup EXIT
 
 # If the previous build in snap-ci failed, the droplet
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
-cleanup
+#cleanup
 
 repo_root=$( cd "$( dirname $( dirname "${BASH_SOURCE[0]}" )  )" && pwd  )
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
@@ -46,7 +46,7 @@ echo "snapci ansible_ssh_host=localhost" > "$inventory_file"
 # so give them time to come back up.
 # configure tor on test node while servers boot.
 # ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
-time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml" -vvvv
 # testing shows that the playbook run isn't nearly enough time
 # for a reboot and tor connection to bootstrap. sleep for another
 # few minutes.
