@@ -40,6 +40,7 @@ vagrant provision /prod/ --provision-with ansible
 # Probably due to some +x and type:file checking for dynamic inventories,
 # accidentally breaking FIFO pipes. So, create a tempfile instead.
 inventory_file=$(mktemp)
+echo "snapci ansible_ssh_host=localhost" > "$inventory_file"
 
 # prod playbook reboots servers as final task,
 # so give them time to come back up. configure
