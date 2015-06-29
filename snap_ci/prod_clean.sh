@@ -43,9 +43,15 @@ inventory_file=$(mktemp)
 echo "snapci ansible_ssh_host=localhost" > "$inventory_file"
 
 # prod playbook reboots servers as final task,
-# so give them time to come back up. configure
-# tor on test node while servers boot.
-ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+# so give them time to come back up.
+# configure tor on test node while servers boot.
+# ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml"
+# testing shows that the playbook run isn't nearly enough time
+# for a reboot and tor connection to bootstrap. sleep for another
+# few minutes.
+echo "Sleeping for 180 seconds..."
+sleep 180
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
