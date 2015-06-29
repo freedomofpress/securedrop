@@ -61,6 +61,8 @@ export SECUREDROP_SSH_OVER_TOR=1
 # a test to fail.
 #
 # vagrant provision /prod/ --provision-with ansible
+#
+snap-shell
 
 # Run serverspec tests
 cd "${repo_root}/spec_tests/"
