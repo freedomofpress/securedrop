@@ -82,7 +82,6 @@ describe host(property['monitor_hostname']) do
   monitor_ip_regex = Regexp.quote(property['monitor_ip'])
   its(:ipaddress) { should match /^#{monitor_ip_regex}$/ }
   it { should be_resolvable.by('hosts')  }
-  it { should be_resolvable.by('dns')  }
   it { should_not be_reachable  }
   # in staging, direct access allows ssh.
   # prod hosts should NOT have access on 22.
