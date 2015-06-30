@@ -12,11 +12,11 @@ function cleanup {
 
 # Ensure that DigitalOcean droplet will be cleaned up
 # even if script errors (e.g., if serverspec tests fail).
-#trap cleanup EXIT
+trap cleanup EXIT
 
 # If the previous build in snap-ci failed, the droplet
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
-#cleanup
+cleanup
 
 repo_root=$( cd "$( dirname $( dirname "${BASH_SOURCE[0]}" )  )" && pwd  )
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
