@@ -2,7 +2,6 @@
 - name: add aths values to torrc
   lineinfile:
     backup: yes
-    backrefs: yes
     dest: /etc/tor/torrc
     line: "{{item}}"
     regexp: "^{{item}}"
