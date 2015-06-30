@@ -50,7 +50,7 @@ time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files
 # testing shows that the playbook run isn't nearly enough time
 # for a reboot and tor connection to bootstrap. sleep for another
 # few minutes.
-sleep 180
+sleep 600
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
