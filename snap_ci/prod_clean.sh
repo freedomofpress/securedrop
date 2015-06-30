@@ -50,7 +50,6 @@ time ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files
 # testing shows that the playbook run isn't nearly enough time
 # for a reboot and tor connection to bootstrap. sleep for another
 # few minutes.
-sleep 600
 
 # prod playbooks restrict ssh access to tor aths,
 # so tell vagrant to read aths values for ssh-config
@@ -60,6 +59,7 @@ export SECUREDROP_SSH_OVER_TOR=1
 # a test to fail.
 #
 # vagrant provision /prod/ --provision-with ansible
+exit 0 # exit for snap-shell
 
 # Run serverspec tests
 cd "${repo_root}/spec_tests/"
