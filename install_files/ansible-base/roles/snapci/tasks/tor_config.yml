@@ -11,7 +11,12 @@
     - "{{app_ssh_aths}}"
   notify: reload tor
 
+- name: restart tor
+  service:
+    name: tor
+    state: restarted
+
 - name: ensure tor is running
   service:
     name: tor
-    state: reloaded
+    state: running
