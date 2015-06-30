@@ -5,6 +5,11 @@
 #   * rerunning a single stage from a pipeline of many
 #   * keeping the CI suite DRY
 
+set -e
+set -x
+
+# TODO: temporarily set different zone due to digitalocean SFO1 issues
+export DO_REGION=nyc2
 
 # Cache and install Vagrant
 vagrant_rpm="${vagrant_rpm:-vagrant_1.7.2_x86_64.rpm}"

@@ -2,6 +2,7 @@
 
 # bail out on errors
 set -e
+set -x
 
 # declare function for EXIT trap
 function cleanup {
