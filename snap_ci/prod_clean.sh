@@ -18,12 +18,6 @@ trap cleanup EXIT
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
 cleanup
 
-# Find the root of the git repository. A simpler implementation
-# would be `git rev-parse --show-toplevel`, but that must be run
-# from inside the git repository, whereas the solution below is
-# directory agnostic.
-repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
-
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
     "${repo_root}"/install_files/ansible-base/staging-specific.yml > \

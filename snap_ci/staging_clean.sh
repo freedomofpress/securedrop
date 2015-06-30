@@ -33,6 +33,6 @@ sleep 180 # wait for servers to come back up
 vagrant provision /staging/ --provision-with ansible
 
 # Run serverspec tests
-cd /var/snap-ci/repo/spec_tests/
+cd "${repo_root}/spec_tests/"
 bundle exec rake spec:app-staging
 bundle exec rake spec:mon-staging

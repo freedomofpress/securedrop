@@ -23,7 +23,7 @@ vagrant up development --no-provision --provider digital_ocean
 vagrant provision development
 
 # Run serverspec tests
-cd /var/snap-ci/repo/spec_tests/
+cd "${repo_root}/spec_tests/"
 bundle exec rake spec:development
 
 # Run application tests

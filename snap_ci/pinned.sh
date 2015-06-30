@@ -11,6 +11,15 @@ set -x
 # TODO: temporarily set different zone due to digitalocean SFO1 issues
 export DO_REGION=nyc2
 
+# Find the root of the git repository. A simpler implementation
+# would be `git rev-parse --show-toplevel`, but that must be run
+# from inside the git repository, whereas the solution below is
+# directory agnostic.
+export repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
+
+# Support Snap-CI cache directory, but also allow this script to be run locally.
+export tmp_dir="${SNAP_CACHE_DIR:-/tmp}"
+
 # Cache and install Vagrant
 vagrant_rpm="${vagrant_rpm:-vagrant_1.7.2_x86_64.rpm}"
 [[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
@@ -34,4 +43,4 @@ sudo yum install python-pip
 sudo pip install ansible==1.9.0.1
 
 # Install serverspec dependencies
-cd /var/snap-ci/repo/spec_tests/ && bundle update
+cd "${repo_root}/spec_tests/" && bundle install
