@@ -18,6 +18,13 @@ trap cleanup EXIT
 # will still exist. Ensure that it's gone with a pre-emptive destroy.
 cleanup
 
+# Find the root of the git repository. A simpler implementation
+# would be `git rev-parse --show-toplevel`, but that must be run
+# from inside the git repository, whereas the solution below is
+# directory agnostic. Exporting this variable doesn't work in snapci,
+# so it must be rerun in each stage.
+repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
+
 # Up the host in a separate command to avoid snap-ci command timeouts.
 vagrant up development --no-provision --provider digital_ocean
 vagrant provision development
