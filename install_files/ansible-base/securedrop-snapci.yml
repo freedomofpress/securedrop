@@ -1,15 +1,5 @@
 ---
 - hosts: ['snapci']
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - travis-specific.yml
-
   roles:
     - { role: snapci, tags: snapci }
-#    - { role: development, tags: development }
-#    - { role: app, tags: app }
-#    - { role: app-test, tags: app-test }
-
   sudo: yes
