@@ -6,8 +6,8 @@
 # because the Ansible task to remove the directory runs before
 # the directory has been automatically replaced by Apache.
 # Fix the `app` role playbook, then update this test.
-#describe command('/bin/bash -c "[[ ! -e /var/www/html  ]]"') do
-#  its(:exit_status) { should eq 0 }
+#describe file('/var/www/html') do
+#  it { should_not exist }
 #end
 
 # declare securedrop-app package dependencies

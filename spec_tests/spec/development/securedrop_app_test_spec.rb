@@ -10,8 +10,8 @@
 # of `securedrop_app_test_spec.rb`.
 
 # ensure wsgi file is absent in development
-describe command("/bin/bash -c '[[ ! -e /var/www/source.wsgi ]]'") do
-  its(:exit_status) { should eq 0 }
+describe file("/var/www/source.wsgi") do
+  it { should_not exist }
 end
 
 # ensure app-armor profiles are NOT in complain mode

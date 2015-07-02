@@ -13,8 +13,8 @@ unwanted_packages.each do |unwanted_package|
 end
 
 # ensure default html dir is absent
-describe command("/bin/bash -c '[[ ! -e /var/www/html ]]'") do
-  its(:exit_status) { should eq 0 }
+describe file("/var/www/html") do
+  it { should_not exist }
 end
 
 securedrop_app_directories = [
