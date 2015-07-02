@@ -26,6 +26,13 @@ def roles(host)
     (roles << %w(mon-general mon-prod common grsecurity)).flatten!
   end
 
+  # SSH access over Tor required for prod config,
+  # so assume machines have already been provisioned
+  # and ATHS values fetched, then force SSH over Tor.
+  if host.match(/-prod$/)
+    ENV['SECUREDROP_SSH_OVER_TOR'] = "1"
+  end
+
   # DigitalOcean droplets don't support custom kernels, so remove
   # any planned spectests for grsecurity. This is only relevant
   # for the app and mon hosts, so don't delay other tests with check.
