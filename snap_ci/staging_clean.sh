@@ -31,6 +31,8 @@ vagrant up /staging/ --no-provision --provider digital_ocean
 # Run only the shell provisioner, to ensure the "vagrant"
 # user account exists with nopasswd sudo.
 vagrant provision /staging/ --provision-with shell
+# Run Ansible playbook, skipping local packages and grsecurity.
+export STAGING_SKIP_TAGS=install_local_pkgs,grsec
 vagrant provision /staging/ --provision-with ansible
 
 # TODO: this ugly reload hell and reprovisioning is to
