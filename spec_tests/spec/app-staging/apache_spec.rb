@@ -105,7 +105,7 @@ common_apache2_directory_declarations = <<eos
   </LimitExcept>
 </Directory>
 
-<Directory #{TEST_VARS['securedrop_code']}>
+<Directory #{property['securedrop_code']}>
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
@@ -140,9 +140,9 @@ end
 # declare source-specific apache configs
 source_apache2_config_settings = [
   '<VirtualHost 0.0.0.0:80>',
-  "DocumentRoot #{TEST_VARS['securedrop_code']}/static",
-  "Alias /static #{TEST_VARS['securedrop_code']}/static",
-  "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{TEST_VARS['securedrop_code']}",
+  "DocumentRoot #{property['securedrop_code']}/static",
+  "Alias /static #{property['securedrop_code']}/static",
+  "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
   'WSGIProcessGroup source',
   'WSGIScriptAlias / /var/www/source.wsgi/',
   'AddType text/html .py',
@@ -170,9 +170,9 @@ end
 # declare document-specific apache configs
 document_apache2_config_settings = [
   '<VirtualHost 0.0.0.0:8080>',
-  "DocumentRoot #{TEST_VARS['securedrop_code']}/static",
-  "Alias /static #{TEST_VARS['securedrop_code']}/static",
-  "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{TEST_VARS['securedrop_code']}",
+  "DocumentRoot #{property['securedrop_code']}/static",
+  "Alias /static #{property['securedrop_code']}/static",
+  "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
   'WSGIProcessGroup document',
   'WSGIScriptAlias / /var/www/document.wsgi/',
   'AddType text/html .py',

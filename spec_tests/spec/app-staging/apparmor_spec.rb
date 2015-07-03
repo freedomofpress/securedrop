@@ -25,6 +25,35 @@ end
   end
 end
 
+# declare expected app-armor capabilities for apache2
+apache2_capabilities = %w(
+  dac_override
+  kill
+  net_bind_service
+  sys_ptrace
+)
+# check for exact list of expected app-armor capabilities for apache2
+describe command('perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' /etc/apparmor.d/usr.sbin.apache2') do
+  apache2_capabilities.each do |apache2_capability|
+    its(:stdout) { should contain(apache2_capability) }
+  end
+end
+
+# ensure no extra capabilities are defined for apache2
+describe command('grep -ic capability /etc/apparmor.d/usr.sbin.apache2') do
+  its(:stdout) { should eq apache2_capabilities.length.to_s + "\n" }
+end
+
+# check for exact list of expected app-armor capabilities for tor
+describe command('perl -nE \'/^\s+capability\s+(\w+),$/ && say $1\' /etc/apparmor.d/usr.sbin.tor') do
+  its(:stdout) { should contain("setgid") }
+end
+
+# ensure no extra capabilities are defined for tor
+describe command('grep -ic capability /etc/apparmor.d/usr.sbin.tor') do
+  its(:stdout) { should eq "1\n" }
+end
+
 # Explicitly check that enforced profiles are NOT
 # present in /etc/apparmor.d/disable. Polling aa-status
 # only checks the last config that was loaded, whereas
@@ -44,36 +73,60 @@ enforced_profiles.each do |enforced_profile|
   end
 end
 
-# aa-status does not permit explicit state checking
-# of services, so this is an ugly hack that can easily
-# report false positives. It checks the number of profiles
-# in a given state, but doesn't check which ones. Argh!
-# TODO: Consider writing a nasty perl one-liner to filter
-# the output and ensure the services are filed correctly.
-describe command("aa-status --complaining") do
-  its(:stdout) { should eq "2\n" }
+# declare app-armor profiles expected to be enforced
+enforced_apparmor_profiles = %w(
+  /sbin/dhclient
+  /usr/lib/NetworkManager/nm-dhcp-client.action
+  /usr/lib/connman/scripts/dhclient-script
+  /usr/sbin/apache2//DEFAULT_URI
+  /usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT
+  /usr/sbin/ntpd
+  /usr/sbin/tcpdump
+  system_tor
+)
+# check for enforced app-armor profiles
+# this klunky one-liner uses bash, because serverspec defaults to sh,
+# then provides START and STOP patterns to sed, filters by profile
+# names according to leading whitespace, then trims leading whitespace
+describe command("aa-status") do
+  enforced_apparmor_profiles.each do |enforced_apparmor_profile|
+    its(:stdout) { should contain(enforced_apparmor_profile).from(/profiles are in enforce mode/).to(/profiles are in complain mode/) }
+  end
 end
 
+# ensure number of expected enforced profiles matches number checked
 describe command("aa-status --enforced") do
-  its(:stdout) { should eq "8\n" }
+  its(:stdout) { should eq enforced_apparmor_profiles.length.to_s + "\n" }
 end
 
+# declare app-armor profiles expected to be complaining
+# the staging hosts enabled "complain" mode for more verbose
+# logging during development and testing; production hosts
+# should not have any complain mode.
+complaining_apparmor_profiles = %w(
+  /usr/sbin/apache2
+  /usr/sbin/tor
+)
+
+# check for complaining app-armor profiles
+describe command("aa-status") do
+  complaining_apparmor_profiles.each do |complaining_apparmor_profile|
+    its(:stdout) { should contain(complaining_apparmor_profile).from(/profiles are in complain mode/).to(/\d+ processes have profiles defined/) }
+  end
+end
+
+# ensure number of expected complaining profiles matches number checked
+describe command("aa-status --complaining") do
+  its(:stdout) { should eq complaining_apparmor_profiles.length.to_s + "\n" }
+end
+
+# ensure number of total profiles is sum of enforced and complaining profiles
 describe command("aa-status --profiled") do
-  its(:stdout) { should eq "10\n" }
+  total_profiles = enforced_apparmor_profiles.length + complaining_apparmor_profiles.length
+  its(:stdout) { should eq total_profiles.to_s + "\n" }
 end
-
-describe command("aa-status --profiled") do
-  its(:stdout) { should eq "10\n" }
-end
-
-# Check that the expected profiles are present in the aa-status command.
-#[ 'apache', 'tor', 'ntp'].each do |enforced_profile|
-#  describe command("aa-status") do
-#    it { should return_stdout /#{enforced_profile}/ }
-#  end
-#end
 
 # Ensure that there are no processes that are unconfined but have a profile
 describe command("aa-status") do
-  its(:stdout) { should match /0 processes are unconfined but have a profile defined/ }
+  its(:stdout) { should contain("0 processes are unconfined but have a profile defined") }
 end

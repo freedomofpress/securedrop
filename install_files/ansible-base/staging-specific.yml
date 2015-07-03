@@ -6,11 +6,10 @@ dns_server: "8.8.8.8"
 ### Used by the common role ###
 ssh_users: "vagrant"
 
-# TODO Should use ansible to gather this info
-monitor_ip: "10.0.1.3"
-monitor_hostname: "mon-staging"
-app_hostname: "app-staging"
-app_ip: "10.0.1.2"
+monitor_ip: "{{ hostvars['mon-staging'].ansible_all_ipv4_addresses.0 }}"
+monitor_hostname: "{{ hostvars['mon-staging'].ansible_hostname }}"
+app_ip: "{{ hostvars['app-staging'].ansible_all_ipv4_addresses.0 }}"
+app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
 
 ### Used by the app role ###
 # The securedrop_header_image has to be in the install_files/ansible-base/ or

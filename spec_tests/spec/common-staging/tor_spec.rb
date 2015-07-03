@@ -32,12 +32,19 @@ describe file('/etc/tor/torrc') do
   end
 end
 
-# ensure parent directory for tor hidden services exists
-describe file('/var/lib/tor/services') do
-  it { should be_directory  }
-  it { should be_mode('2755')  }
-  it { should be_owned_by 'debian-tor' }
-  it { should be_grouped_into 'debian-tor' }
+# declare tor service directories, for mode and ownership checks
+tor_service_directories = %w(
+  /var/lib/tor/services
+  /var/lib/tor/services/ssh
+)
+# ensure tor service dirs are owned by tor user and mode 0700
+tor_service_directories.each do |tor_service_directory|
+  describe file(tor_service_directory) do
+    it { should be_directory  }
+    it { should be_mode('700')  }
+    it { should be_owned_by 'debian-tor' }
+    it { should be_grouped_into 'debian-tor' }
+  end
 end
 
 # ensure tor service is running

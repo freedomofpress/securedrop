@@ -1,21 +1,6 @@
 ---
 ### General (used by more than one role) ###
-securedrop_repo: /vagrant
 securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
 securedrop_user: www-data
-dns_server: 8.8.8.8
-ssh_users: vagrant
-
-monitor_ip: 10.0.1.3
-monitor_hostname: mon-staging
-app_ip: 10.0.1.2
-app_hostname: app-staging
-
-# To allow direct connections to source document interfaces for ease of testing
-apache_listening_address: 0.0.0.0
-apache_allow_from: all
-source_apache_log_location: /var/log/apache2/source-error.log
-apache_logging_level: info
-
 

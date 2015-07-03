@@ -85,3 +85,6 @@ nosetests.xml
 
 # Emacs
 \#*#
+
+# ignore cached gems for serverspec tests
+spec_tests/gems/*

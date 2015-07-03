@@ -1,12 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Added snap.rb file holds the digital ocean api token values
-# so we do not accidently check them into git
-
-require_relative 'snap.rb'
-include MyVars
-
 Vagrant.configure("2") do |config|
 
   # Vagrant 1.7.0+ removes the insecure_private_key by default
@@ -23,7 +17,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
-      ansible.skip_tags = [ "non-development" ]
+      ansible.skip_tags = ENV['DEVELOPMENT_SKIP_TAGS'] || 'non-development'
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -74,6 +68,7 @@ Vagrant.configure("2") do |config|
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
+      ansible.tags = ENV['STAGING_TAGS']
       # Quickest boot
       #ansible.skip_tags = [ "common", "ossec", 'app-test' ]
       # Testing the web application installing local securedrop-app-code deb
@@ -85,7 +80,7 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags =  [ "install_local_pkgs" ]
+      ansible.skip_tags = ENV['STAGING_SKIP_TAGS'] || 'install_local_pkgs'
     end
   end
 
@@ -122,7 +117,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
-      ansible.skip_tags = [ "validate" ]
+      ansible.skip_tags = ENV['PROD_SKIP_TAGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
@@ -136,7 +131,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
-      #ansible.skip_tags = [ "ossec" ]
+      ansible.skip_tags = ENV['BUILD_SKIP_TAGS']
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "build"
@@ -152,15 +147,43 @@ Vagrant.configure("2") do |config|
   # Check for presence of digitalocean vagrant plugin, and required env var,
   # and only configure this provider if both conditions are met. Otherwise,
   # even running `vagrant status` throws an error.
-  if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['SNAP_API_TOKEN']
+  if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['DO_API_TOKEN']
     config.vm.provider :digital_ocean do |provider, override|
-      override.ssh.private_key_path = "/var/snap-ci/repo/id_rsa"
+      # In snap-ci the contents of the ssh keyfile should be saved as a `Secure
+      # Files` to the default locations /var/snap-ci/repo/id_rsa and
+      # /var/snap-ci/repo/id_rsa.pub
+      override.ssh.private_key_path = ENV['DO_SSH_KEYFILE'] || '/var/snap-ci/repo/id_rsa'
       override.vm.box = 'digital_ocean'
-      override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-      provider.token = SNAP_API_TOKEN
-      provider.image = 'snapVagrantSSHkey'
-      provider.region = 'nyc2'
-      provider.size = '512mb'
+      override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
+
+      # Ansible playbooks will handle SecureDrop configuration,
+      # but DigitalOcean boxes don't have a default "vagrant" user configured.
+      # The below settings will allow the vagrant-digitalocean plugin to configure
+      # sudoers acccess for the user "vagrant"
+      provider.setup = true
+      override.ssh.username = 'vagrant'
+
+      # Ansible playbooks sudoers config will clobber the vagrant-digitalocean plugin config,
+      # so drop in a sudoers.d file to ensure that the vagrant user still has password-less sudo.
+      # This mimicks the admin typing in a sudo password during the first Ansible task in production.
+      override.vm.provision :shell,
+        inline: "echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/vagrant && chmod 0440 /etc/sudoers.d/vagrant"
+      # The shell provisioner will generate an error: "stdin: is not a tty" in Ubuntu,
+      # due to vagrant forcing "bash -l" as a login shell. See here for more info:
+      # https://github.com/mitchellh/vagrant/issues/1673
+
+      provider.token = ENV['DO_API_TOKEN']
+      provider.region = ENV['DO_REGION'] || 'sfo1'
+      provider.size = ENV['DO_SIZE'] || '512mb'
+
+      # The vagrant-digitalocean plugin changed how it handles
+      # the 'provider.image' parameter starting in v0.7.1,
+      # breaking support for snapshots. Snapshots are useful
+      # when running app tests since box creation happens much faster.
+      # This format works for <= 0.7.0:
+      #provider.image = ENV['DO_IMAGE_NAME'] || '14.04 x64'
+      # This format works for >= 0.7.1:
+      provider.image = ENV['DO_IMAGE_NAME'] || 'ubuntu-14-04-x64'
     end
   end
 end

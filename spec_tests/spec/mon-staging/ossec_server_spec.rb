@@ -1,8 +1,9 @@
 # ensure hosts file references app server by ip
 # TODO: replace hardcoded ip for app-staging host
 describe file('/etc/hosts') do
-  its(:content) { should match /^127\.0\.1\.1 mon-staging mon-staging$/ }
-  its(:content) { should match /^10\.0\.1\.2  app-staging$/ }
+  its(:content) { should match /^127\.0\.1\.1\s+mon-staging\s+mon-staging$/ }
+  app_host_regex = Regexp.quote("#{property['app_ip']}  app-staging")
+  its(:content) { should match /^#{app_host_regex}$/ }
 end
 
 # ensure required packages are installed
@@ -54,7 +55,7 @@ postfix_settings = [
   'smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache',
   'smtp_tls_security_level = fingerprint',
   'smtp_tls_fingerprint_digest = sha1',
-  'smtp_tls_fingerprint_cert_match = 9C:0A:CC:93:1D:E7:51:37:90:61:6B:A1:18:28:67:95:54:C5:69:A8',
+  'smtp_tls_fingerprint_cert_match = D3:7C:82:FC:D0:5F:8F:D7:DA:A2:59:8C:42:D7:B2:9F:C1:9F:7E:60',
   'smtp_tls_ciphers = high',
   'smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2',
   'myhostname = monitor.securedrop',
@@ -86,7 +87,7 @@ end
 
 # ensure ossec considers app-staging host "available"
 describe command('/var/ossec/bin/list_agents -a') do
-  its(:stdout) { should eq "app-staging-10.0.1.2 is available.\n" }
+  its(:stdout) { should eq "app-staging-#{property['app_ip']} is available.\n" }
 end
 
 # ensure ossec gpg homedir exists

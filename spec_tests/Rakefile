@@ -3,6 +3,7 @@ require 'rspec/core/rake_task'
 
 
 task :spec    => 'spec:all'
+task :staging => 'spec:staging'
 task :default => :spec
 
 # this function accepts a hostname and returns a hash
@@ -12,13 +13,22 @@ def roles(host)
   roles = []
   case host
   when /^development$/
-    roles << %w(common-development development)
+    (roles << %w(common-development development)).flatten!
   when /^build$/
-    roles << "build"
-  when /^app-staging$/
-    roles << %w(common-development common-staging app-staging)
-  when /^mon-staging$/
-    roles << %w(common-staging mon-staging)
+    (roles << "build").flatten!
+  when /^app-staging/
+    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
+  when /^mon-staging/
+    (roles << %w(common-staging mon-staging grsecurity)).flatten!
+  end
+
+  # DigitalOcean droplets don't support custom kernels, so remove
+  # any planned spectests for grsecurity. This is only relevant
+  # for the app and mon hosts, so don't delay other tests with check.
+  if host.match(/^(app|mon)/)
+    if `vagrant status #{host} --machine-readable`.match(/#{host},provider-name,digital_ocean/m)
+      roles.delete('grsecurity')
+    end
   end
   roles
 end
@@ -40,6 +50,10 @@ end
 namespace :spec do
   # assign all hosts to serverspec task run
   task :all => hosts.map { |h| h[:name] }
+
+  # assign only /staging/ hosts to serverspec task run
+  task :staging => hosts.select{ |h| h[:name].match(/staging$/) }.map{ |h| h[:name] }
+
   hosts.each do |host|
     desc "Run spectests against #{host[:name]}"
     RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|

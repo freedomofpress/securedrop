@@ -42,7 +42,7 @@ describe service('haveged') do
 end
 
 # ensure the securedrop application gpg pubkey is present
-describe file("#{TEST_VARS['securedrop_data']}/test_journalist_key.pub") do
+describe file("#{property['securedrop_data']}/test_journalist_key.pub") do
   it { should be_file }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
@@ -50,34 +50,34 @@ describe file("#{TEST_VARS['securedrop_data']}/test_journalist_key.pub") do
 end
 
 # ensure config.py (settings for securedrop app) exists
-describe file("#{TEST_VARS['securedrop_code']}/config.py") do
+describe file("#{property['securedrop_code']}/config.py") do
   it { should be_file }
-  it { should be_owned_by TEST_VARS['securedrop_user'] }
-  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+  it { should be_owned_by property['securedrop_user'] }
+  it { should be_grouped_into property['securedrop_user'] }
   it { should be_mode '600' }
   its(:content) { should match /^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$/ }
 end
 
 # ensure sqlite database exists for application
-describe file("#{TEST_VARS['securedrop_data']}/db.sqlite") do
+describe file("#{property['securedrop_data']}/db.sqlite") do
   it { should be_file }
   # TODO: perhaps 640 perms would work here
   it { should be_mode '644' }
-  it { should be_owned_by TEST_VARS['securedrop_user'] }
-  it { should be_grouped_into TEST_VARS['securedrop_user'] }
+  it { should be_owned_by property['securedrop_user'] }
+  it { should be_grouped_into property['securedrop_user'] }
 end
 
 # declare config options for securedrop worker
 securedrop_worker_config_options = [
   '[program:securedrop_worker]',
   'command=/usr/local/bin/rqworker',
-  "directory=#{TEST_VARS['securedrop_code']}",
+  "directory=#{property['securedrop_code']}",
   'autostart=true',
   'autorestart=true',
   'startretries=3',
   'stderr_logfile=/var/log/securedrop_worker/err.log',
   'stdout_logfile=/var/log/securedrop_worker/out.log',
-  "user=#{TEST_VARS['securedrop_user']}",
+  "user=#{property['securedrop_user']}",
   'environment=HOME="/tmp/python-gnupg"',
 ]
 # ensure securedrop worker config for supervisor is present
