@@ -84,8 +84,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # The prod hosts are just like production but are virtualized. All access to ssh and
-  # the web interfaces is only over tor.
+  # The prod hosts are just like production but are virtualized.
+  # All access to SSH and the web interfaces is only over Tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
     if ENV['SECUREDROP_SSH_OVER_TOR']
       config.ssh.host = find_ssh_aths("mon-ssh-aths")
@@ -148,6 +148,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # VM for testing Snap CI configuration changes.
+  # All SecureDrop instances use Ubuntu 64-bit LTS,
+  # but Snap CI uses CentOS. See here for more config info:
+  # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
   config.vm.define 'snapci', autostart: false do |build|
     build.vm.box = "snapci"
     build.vm.box = "centos6.6"
@@ -167,8 +171,8 @@ Vagrant.configure("2") do |config|
   #  config.cache.scope = :box
   #end
 
-  # This is needed for the Snap-ci to provision the digital ocean vps.
-  # Check for presence of digitalocean vagrant plugin, and required env var,
+  # This is needed for Snap-CI to provision the DigitalOcean VPS.
+  # Check for presence of `vagrant-digitalocean` plugin, and required env var,
   # and only configure this provider if both conditions are met. Otherwise,
   # even running `vagrant status` throws an error.
   if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['DO_API_TOKEN']
@@ -238,9 +242,9 @@ def find_ssh_aths(filename)
   end
 end
 
-# dynamically built proxy command for connecting to
-# prod instances over tor. connect-proxy is recommended,
-# but netcat is also supported for centos/snapci boxes.
+# Build proxy command for connecting to prod instances over Tor.
+# connect-proxy is recommended, but netcat is also supported
+# for CentOS Snap CI boxes, where connect-proxy isn't available.
 def tor_ssh_proxy_command
    def command?(command)
      system("which #{command} > /dev/null 2>&1")
@@ -256,6 +260,5 @@ def tor_ssh_proxy_command
     puts "Install 'connect-proxy' or 'netcat'."
     exit(1)
   end
-  cmd = "#{base_cmd} 127.0.0.1:9050 %h %p"
-  return cmd
+  return "#{base_cmd} 127.0.0.1:9050 %h %p"
 end
