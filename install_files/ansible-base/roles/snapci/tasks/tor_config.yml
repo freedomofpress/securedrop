@@ -9,13 +9,19 @@
     - "{{mon_ssh_aths}}"
     - "{{app_ssh_aths}}"
   notify: reload tor
+  tags:
+    - tor
 
 - name: restart tor
   service:
     name: tor
     state: restarted
+  tags:
+    - tor
 
 - name: ensure tor is running
   service:
     name: tor
     state: running
+  tags:
+    - tor
