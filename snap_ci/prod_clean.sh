@@ -29,7 +29,15 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
     "${repo_root}"/install_files/ansible-base/staging-specific.yml > \
     "${repo_root}"/install_files/ansible-base/prod-specific.yml
+
+# Skip "validate" so reused vars don't cause failure,
+# and skip "grsec" because DigitalOcean hosts don't support custom kernels.
 export SECUREDROP_PROD_SKIP_TAGS=validate,grsec
+
+# Assume that /prod/ instances will be created from scratch, as part
+# of a full provisioning run, so initial SSH connections must be
+# made directly, rather than over Tor.
+unset SECUREDROP_SSH_OVER_TOR
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
 vagrant up /prod/ --no-provision --provider digital_ocean
@@ -52,7 +60,7 @@ echo "snapci ansible_ssh_host=localhost" > "$inventory_file"
 # configure Tor on the snapci test node.
 ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansible-base/securedrop-snapci.yml" -vv
 # Ad-hoc testing shows that the above playbook run isn't
-# nearly enough time for a reboot and tor connection to bootstrap,
+# nearly enough time for a reboot and Tor connection to bootstrap,
 # so sleep for another few minutes.
 sleep 300
 
