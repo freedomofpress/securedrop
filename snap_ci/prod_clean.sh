@@ -29,7 +29,7 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
     "${repo_root}"/install_files/ansible-base/staging-specific.yml > \
     "${repo_root}"/install_files/ansible-base/prod-specific.yml
-export PROD_SKIP_TAGS=validate,grsec
+export SECUREDROP_PROD_SKIP_TAGS=validate,grsec
 
 # Up the host in a separate command to avoid snap-ci command timeouts.
 vagrant up /prod/ --no-provision --provider digital_ocean

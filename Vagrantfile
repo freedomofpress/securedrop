@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
-      ansible.skip_tags = ENV['DEVELOPMENT_SKIP_TAGS'] || 'non-development'
+      ansible.skip_tags = ENV['SECUREDROP_DEVELOPMENT_SKIP_TAGS'] || 'non-development'
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags = ENV['STAGING_SKIP_TAGS'] || 'install_local_pkgs'
+      ansible.skip_tags = ENV['SECUREDROP_STAGING_SKIP_TAGS'] || 'install_local_pkgs'
     end
   end
 
@@ -127,7 +127,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
-      ansible.skip_tags = ENV['PROD_SKIP_TAGS']
+      ansible.skip_tags = ENV['SECUREDROP_PROD_SKIP_TAGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
