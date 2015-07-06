@@ -147,6 +147,11 @@ cd /var/www/securedrop
 ## Prod
 
 You will need to fill out the configuration file `securedrop/install_files/ansible_base/prod-specific.yml`.
+Part of the production playbook validates that staging values
+are not used in production. One of the values it verifies is that the user
+Ansible runs as is not `vagrant` To be able to run this playbook in a virtualized
+environment for testing, you will need to disable the `validate` role, which you can
+do by running `export SECUREDROP_PROD_SKIP_TAGS=validate` before provisioning.
 
 To create only the prod servers, run:
 
@@ -158,51 +163,57 @@ cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-NOTE: The prod instance runs the production playbooks (only difference being the
-production installs are not virtualized). Part of the production playbook
-validates that staging values are not used in production. One of the values it
-verifies is that the user Ansible runs as is not `vagrant` To be able to run
-this playbook in a Vagrant/VirtualBox environment you will need to disable the
-'validate' role, which you can do by running `export SECUREDROP_PROD_SKIP_TAGS=validate`
-before provisioning.
-
-```
-vagrant up /prod$/ --no-provision
-ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory \
-        --private-key ~/.vagrant.d/insecure_private_key -u vagrant \
-        install_files/ansible-base/securedrop-prod.yml
-```
-
 In order to access the servers after the install is completed you will need to install
 and configure a proxy tool to proxy your SSH connection over Tor.
 Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor.
 You can find out the SSH addresses for each server by examining the contents of `app-ssh-aths`
-and `mon-ssh-aths` in `/install_files/ansible-base`. Also you must add the `HidServAuth`
+and `mon-ssh-aths` in `./install_files/ansible-base`. Also you must add the `HidServAuth`
 values to your `/etc/tor/torrc` file and reload Tor.
 
 ### connect-proxy (Ubuntu only)
 
 Ubuntu: `sudo apt-get install connect-proxy`
-*Note: you used to be able to install connect-proxy on Mac OS X with Homebrew, but it was not available last we checked (Wed Oct 15 21:15:17 PDT 2014).*
+*Note: you used to be able to install connect-proxy
+on Mac OS X with Homebrew, but it was not available last we checked (Wed Oct 15 21:15:17 PDT 2014).*
 
-After installing connect-proxy via apt-get, you can use something along the lines of the following example to access the server. Again you need Tor running in the background.
-
-```
-ssh admin1@examplenxu7x5ifm.onion -o ProxyCommand="/usr/bin/connect-proxy -5 -S localhost:9050 %h %p"
-```
-
-You can also configure your SSH client to make the settings for proxying over Tor persistent, and then connect using the regular SSH command syntax. Add the following lines to your `~/.ssh/config`:
+After installing connect-proxy via apt-get and appending the tor config options
+to your local config, you can export the environment variable `SECUREDROP_SSH_OVER_TOR=1`
+in order to use `vagrant ssh` commands to access the prod instances. Here is an example
+of how that works:
 
 ```
-Hosts *.onion
-Compression yes # this compresses the SSH traffic to make it less slow over Tor
-ProxyCommand connect -R remote -5 -S localhost:9050 %h %p
-```
-
-This proxies all requests to `*.onion` addresses through connect-proxy, which will connect to the standard Tor SOCKS port on `localhost:9050`. You can now connect to the SSH hidden service with:
-
-```
-ssh <username>@examplenxu7x5ifm.onion
+$ vagrant up --provision /prod/     # restricts SSH to Tor after final reboot
+$ vagrant ssh-config app-prod       # will show incorrect info due to lack of env var
+Host app-prod
+  HostName 127.0.0.1
+  User vagrant
+  Port 2201
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/conor/.vagrant.d/insecure_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+$ vagrant ssh app-prod -c 'echo hello'   # will fail due to incorrect ssh-config
+ssh_exchange_identification: read: Connection reset by peer
+$ export SECUREDROP_SSH_OVER_TOR=1       # instruct Vagrant to use Tor for SSH
+$ vagrant ssh-config app-prod            # will show correct info, with ProxyCommand
+Host app-prod
+  HostName l57xhqhltlu323vi.onion
+  User vagrant
+  Port 22
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/conor/.vagrant.d/insecure_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+  ProxyCommand connect -R remote -5 -S 127.0.0.1:9050 %h %p
+$ # ensure ATHS values are active in local Tor config:
+$ cat *ssh* | sudo tee -a /etc/tor/torrc > /dev/null && sudo service tor reload
+$ vagrant ssh app-prod -c 'echo hello'   # works
+hello
+Connection to l57xhqhltlu323vi.onion closed.
 ```
 
 ### torify (Ubuntu and Mac OS X)
