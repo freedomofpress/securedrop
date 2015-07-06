@@ -1,5 +1,6 @@
 ---
-- hosts: ['snapci']
+- name: install centos dependencies for tests in snapci
+  hosts: snapci
   roles:
     - { role: snapci, tags: snapci }
   sudo: yes
