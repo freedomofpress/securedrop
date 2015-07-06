@@ -153,9 +153,8 @@ Vagrant.configure("2") do |config|
   # but Snap CI uses CentOS. See here for more config info:
   # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
   config.vm.define 'snapci', autostart: false do |build|
-    build.vm.box = "snapci"
-    build.vm.box = "centos6.6"
-    build.vm.box_url = "https://github.com/tommy-muehle/puppet-vagrant-boxes/releases/download/1.0.0/centos-6.6-x86_64.box"
+    build.vm.hostname = "snapci"
+    build.vm.box = "puppetlabs/centos-6.6-64-nocm"
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
