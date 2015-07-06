@@ -166,9 +166,6 @@ cd /var/www/securedrop/
 In order to access the servers after the install is completed you will need to install
 and configure a proxy tool to proxy your SSH connection over Tor.
 Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor.
-You can find out the SSH addresses for each server by examining the contents of `app-ssh-aths`
-and `mon-ssh-aths` in `./install_files/ansible-base`. Also you must add the `HidServAuth`
-values to your `/etc/tor/torrc` file and reload Tor.
 
 ### connect-proxy (Ubuntu only)
 
@@ -215,6 +212,11 @@ $ vagrant ssh app-prod -c 'echo hello'   # works
 hello
 Connection to l57xhqhltlu323vi.onion closed.
 ```
+
+If `SECUREDROP_SSH_OVER_TOR` is declared, Vagrant will look up the ATHS URLs
+and `HidServAuth` values for each server by examining the contents of `app-ssh-aths`
+and `mon-ssh-aths` in `./install_files/ansible-base`. You can manually inspect
+these files to append values to your local `torrc`, as in the `cat` example above.
 
 ### torify (Ubuntu and Mac OS X)
 
