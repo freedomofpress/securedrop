@@ -148,7 +148,7 @@ cd /var/www/securedrop
 
 You will need to fill out the configuration file `securedrop/install_files/ansible_base/prod-specific.yml`.
 
-To just spawn a specific server run:
+To create only the prod servers, run:
 
 ```
 vagrant up /prod$/
@@ -158,19 +158,27 @@ cd /var/www/securedrop/
 ./manage.py add_admin
 ```
 
-NOTE: The demo instance runs the production playbooks (only difference being the
-production installs are not virtualized).  Part of the production playbook
+NOTE: The prod instance runs the production playbooks (only difference being the
+production installs are not virtualized). Part of the production playbook
 validates that staging values are not used in production. One of the values it
 verifies is that the user Ansible runs as is not `vagrant` To be able to run
 this playbook in a Vagrant/VirtualBox environment you will need to disable the
-'validate' role.
+'validate' role, which you can do by running `export SECUREDROP_PROD_SKIP_TAGS=validate`
+before provisioning.
 
 ```
-vagrant up /demo$/ --no-provision
-ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key ~/.vagrant.d/insecure_private_key -u vagrant install_files/ansible-base/site.yml
+vagrant up /prod$/ --no-provision
+ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory \
+        --private-key ~/.vagrant.d/insecure_private_key -u vagrant \
+        install_files/ansible-base/securedrop-prod.yml
 ```
 
-In order to access the servers after the install is completed you will need to install and configure a proxy tool to proxy your SSH connection over Tor. Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor. You can find out the SSH addresses for each server by examining the contents of `app-ssh-aths` and `mon-ssh-aths` in `/install_files/ansible-base`. Also you must add the HidServAuth values to your `/etc/tor/torrc` file and reload Tor.
+In order to access the servers after the install is completed you will need to install
+and configure a proxy tool to proxy your SSH connection over Tor.
+Torify and connect-proxy are two tools that can be used to proxy SSH connections over Tor.
+You can find out the SSH addresses for each server by examining the contents of `app-ssh-aths`
+and `mon-ssh-aths` in `/install_files/ansible-base`. Also you must add the `HidServAuth`
+values to your `/etc/tor/torrc` file and reload Tor.
 
 ### connect-proxy (Ubuntu only)
 
