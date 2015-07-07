@@ -152,14 +152,14 @@ Vagrant.configure("2") do |config|
   # All SecureDrop instances use Ubuntu 64-bit LTS,
   # but Snap CI uses CentOS. See here for more config info:
   # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
-  config.vm.define 'snapci', autostart: false do |build|
-    build.vm.hostname = "snapci"
-    build.vm.box = "puppetlabs/centos-6.6-64-nocm"
-    build.vm.provision "ansible" do |ansible|
+  config.vm.define 'snapci', autostart: false do |snapci|
+    snapci.vm.hostname = "snapci"
+    snapci.vm.box = "puppetlabs/centos-6.6-64-nocm"
+    snapci.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
     end
-    build.vm.provider "virtualbox" do |v|
+    snapci.vm.provider "virtualbox" do |v|
       v.name = "snapci"
     end
   end
