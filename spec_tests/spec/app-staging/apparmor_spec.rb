@@ -27,7 +27,6 @@ end
 
 # declare expected app-armor capabilities for apache2
 apache2_capabilities = %w(
-  dac_override
   kill
   net_bind_service
   sys_ptrace
