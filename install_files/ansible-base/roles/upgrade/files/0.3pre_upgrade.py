@@ -16,7 +16,10 @@ def backup_app():
         t.add('/var/lib/securedrop/')
         t.add('/var/lib/tor/services/')
         t.add('/var/www/securedrop/config.py')
-        t.add('/var/www/securedrop/static/i/logo.png')
+        try:
+            t.add('/var/www/securedrop/static/i/logo.png')
+        except OSError:
+            print "[!] Expected but non-essential file ('logo.png') not found. Continuing..."
     print "**  Backed up system to {} before migrating.".format(tar_fn)
 
 

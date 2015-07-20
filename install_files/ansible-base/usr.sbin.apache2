@@ -5,10 +5,6 @@
   #include <abstractions/base>
   #include <abstractions/tor>
 
-  signal (send) set=("term") peer=unconfined,
-  ptrace (trace) peer=unconfined,
-
-  capability dac_override,
   capability kill,
   capability net_bind_service,
   capability sys_ptrace,
@@ -166,7 +162,8 @@
   /var/www/securedrop/source_templates/why-journalist-key.html r,
   /var/www/securedrop/static/css/font-awesome.css r,
   /var/www/securedrop/static/css/normalize.css r,
-  /var/www/securedrop/static/css/styles.css r,
+  /var/www/securedrop/static/css/source.css r,
+  /var/www/securedrop/static/css/journalist.css r,
   /var/www/securedrop/static/i/favicon.png r,
   /var/www/securedrop/static/i/logo.png r,
   /var/www/securedrop/static/i/no16-global.png r,

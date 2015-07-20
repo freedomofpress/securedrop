@@ -10,11 +10,13 @@
 @-webkit-keyframes fadeout {
   0% { opacity: 1; } 98% { opacity: 1; } 100% { opacity: 0; }
 } 
+
 html {
   animation: fadeout 120s;
   -webkit-animation: fadeout 120s;
   opacity: 0;
 }
+
 html:hover {
   animation: none;
   -webkit-animation: none;

@@ -128,6 +128,20 @@ def generate_unique_codename(num_words):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(num_words)
+
+        # The maximum length of a word in the wordlist is 6 letters and the
+        # maximum codename length is 10 words, so it is currently impossible to
+        # generate a codename that is longer than the maximum codename length
+        # (currently 128 characters). This code is meant to be defense in depth
+        # to guard against potential future changes, such as modifications to
+        # the word list or the maximum codename length.
+        if len(codename) > Source.MAX_CODENAME_LEN:
+            app.logger.warning(
+                    "Generated a source codename that was too long, "
+                    "skipping it. This should not happen. "
+                    "(Codename='{}')".format(codename))
+            continue
+
         sid = crypto_util.hash_codename(codename)  # scrypt (slow)
         matching_sources = Source.query.filter(
             Source.filesystem_id == sid).all()
@@ -334,22 +348,35 @@ def delete():
 
 
 def valid_codename(codename):
-    return os.path.exists(store.path(crypto_util.hash_codename(codename)))
+    # Ignore codenames that are too long to avoid DoS
+    if len(codename) > Source.MAX_CODENAME_LEN:
+        app.logger.info(
+                "Ignored attempted login because the codename was too long.")
+        return False
+
+    try:
+        filesystem_id = crypto_util.hash_codename(codename)
+    except crypto_util.CryptoException as e:
+        app.logger.info(
+                "Could not compute filesystem ID for codename '{}': {}".format(
+                    codename, e))
+        abort(500)
+
+    source = Source.query.filter_by(filesystem_id=filesystem_id).first()
+    return source is not None
 
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         codename = request.form['codename'].strip()
-        try:
-            valid = valid_codename(codename)
-        except crypto_util.CryptoException:
-            pass
+        if valid_codename(codename):
+            session.update(codename=codename, logged_in=True)
+            return redirect(url_for('lookup', from_login='1'))
         else:
-            if valid:
-                session.update(codename=codename, logged_in=True)
-                return redirect(url_for('lookup', from_login='1'))
-        flash("Sorry, that is not a recognized codename.", "error")
+            app.logger.info(
+                    "Login failed for invalid codename".format(codename))
+            flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
 

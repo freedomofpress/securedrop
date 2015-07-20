@@ -124,6 +124,13 @@ def add_admin():
     while True:
         password = getpass("Password: ")
         password_again = getpass("Confirm Password: ")
+
+        if len(password) > Journalist.MAX_PASSWORD_LEN:
+            print ("Your password is too long (maximum length {} characters). "
+                   "Please pick a shorter password.".format(
+                   Journalist.MAX_PASSWORD_LEN))
+            continue
+
         if password == password_again:
             break
         print "Passwords didn't match!"
@@ -137,20 +144,18 @@ def add_admin():
             if otp_secret:
                 break
 
-    admin = Journalist(
-        username=username,
-        password=password,
-        is_admin=True,
-        otp_secret=otp_secret)
     try:
+        admin = Journalist(username=username,
+                           password=password,
+                           is_admin=True,
+                           otp_secret=otp_secret)
         db_session.add(admin)
         db_session.commit()
     except Exception as e:
         if "username is not unique" in str(e):
             print "ERROR: That username is already taken!"
         else:
-            print "ERROR: An unknown error occurred, traceback:"
-            print e
+            print "ERROR: An unexpected error occurred, traceback: \n{}".format(e)
     else:
         print "Admin '{}' successfully added".format(username)
         if not otp_secret:
