@@ -11,6 +11,7 @@ from flask.ext.testing import TestCase
 from flask import session, escape
 from mock import patch, ANY
 import source
+from db import Source
 os.environ['SECUREDROP_ENV'] = 'test'
 
 
@@ -233,6 +234,21 @@ class TestSource(TestCase):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
+    @patch('crypto_util.hash_codename')
+    def test_login_with_overly_long_codename(self, mock_hash_codename):
+        """Attempting to login with an overly long codename should result in
+        an error, and scrypt should not be called to avoid DoS."""
+        overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
+        with self.client as client:
+            rv = client.post(
+                    '/login',
+                    data=dict(codename=overly_long_codename),
+                    follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Sorry, that is not a recognized codename.", rv.data)
+            self.assertFalse(mock_hash_codename.called,
+                    "Called hash_codename for codename w/ invalid length")
 
 
 if __name__ == "__main__":

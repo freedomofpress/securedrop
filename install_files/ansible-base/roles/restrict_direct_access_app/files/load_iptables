@@ -6,4 +6,12 @@ else
   echo "Iptables rules file does not exist"
   exit 1
 fi
+
+if [ -f /etc/network/iptables/rules_v6 ]; then
+  ip6tables-restore < /etc/network/iptables/rules_v6
+else
+  echo "Ip6tables rules file does not exist"
+  exit 1
+fi
+
 exit 0

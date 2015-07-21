@@ -13,7 +13,7 @@ from flask.ext.testing import TestCase
 import crypto_util
 import journalist
 import common
-from db import db_session, Source, Journalist
+from db import db_session, Source, Journalist, InvalidPasswordLength
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -175,6 +175,15 @@ class TestJournalist(TestCase):
         self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
             os.path.join(source.journalist_filename, files[0])
         ))
+
+    def test_max_password_length(self):
+        """Creating a Journalist with a password that is greater than the
+        maximum password length should raise an exception"""
+        overly_long_password = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+        with self.assertRaises(InvalidPasswordLength):
+            temp_journalist = Journalist(
+                    username="My Password is Too Big!",
+                    password=overly_long_password)
 
 
 if __name__ == "__main__":

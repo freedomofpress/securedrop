@@ -26,3 +26,33 @@
 - name: remove the previous signing key
   apt_key: id=BD67D096 state=absent
   sudo: yes
+
+  # This will update the App servers torrc config file for changing the
+  # document interface tor port from 8080 to 80. As of this release the prod
+  # playbook restarts tor if the torrc config changes. This will break ansible
+  # playbook runs that are over tor. Issue #940 will track modifying the prod
+  # playbook to ensure that this isn't an issue going forward.
+  #
+  # This does not change the ATHS onion address or secret value only the port
+  # for the interface will change.
+  #
+  # This will only replace/add the line when the old HiddenServicePort config
+  # for port 8080 exists. This will not modify the torrc on the monitor server
+  # which only has a HiddenServicePort 22 config.
+- name: change the document interface ATHS virtual port to lisen on port 80
+  lineinfile:
+    dest: /etc/tor/torrc
+    regexp: '^HiddenServicePort 8080 127\.0\.0\.1\:8080'
+    backrefs: yes
+    line: 'HiddenServicePort 80 127.0.0.1:8080'
+  notify: reload tor for port change
+  sudo: yes
+
+  # If the config changed, reload tor now instead of after all the remaining
+  # upgrade tasks are run so the next task can verify
+  # that the service is running.
+- meta: flush_handlers
+
+- name: ensure tor is running
+  service: name=tor state=running
+  sudo: yes

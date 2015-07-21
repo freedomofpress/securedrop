@@ -85,6 +85,9 @@ class Source(Base):
     # keep track of how many interactions have happened, for filenames
     interaction_count = Column(Integer, default=0, nullable=False)
 
+    # Don't create or bother checking excessively long codenames to prevent DoS
+    MAX_CODENAME_LEN = 128
+
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
@@ -206,6 +209,18 @@ class BadTokenException(Exception):
     """Raised when a user logins in with an incorrect TOTP token"""
 
 
+class InvalidPasswordLength(Exception):
+    """Raised when attempting to create a Journalist or log in with an invalid
+    password length"""
+
+    def __init__(self, password):
+        self.pw_len = len(password)
+
+    def __str__(self):
+        if self.pw_len > Journalist.MAX_PASSWORD_LEN:
+            return "Password too long (len={})".format(self.pw_len)
+
+
 class Journalist(Base):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
@@ -245,18 +260,21 @@ class Journalist(Base):
     def _scrypt_hash(self, password, salt, params=None):
         if not params:
             params = self._SCRYPT_PARAMS
-        # try clause for debugging intermittent scrypt "could not compute hash"
-        # error
-        try:
-            return scrypt.hash(str(password), salt, **params)
-        except scrypt.error as e:
-            print "Scrypt hashing failed for password='{}', salt='{}', params='{}', traceback: {}".format(password, salt, params, e)
+        return scrypt.hash(str(password), salt, **params)
+
+    MAX_PASSWORD_LEN = 128
 
     def set_password(self, password):
+        # Enforce a reasonable maximum length for passwords to avoid DoS
+        if len(password) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
 
     def valid_password(self, password):
+        # Avoid hashing passwords that are over the maximum length
+        if len(password) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
         return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
 
     def regenerate_totp_shared_secret(self):

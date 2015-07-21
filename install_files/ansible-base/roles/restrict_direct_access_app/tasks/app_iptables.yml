@@ -45,3 +45,13 @@
   tags:
     - iptables
     - permissions
+
+- name: ensure ip6tables rules_v6 file is present
+  copy:
+    src: app_rules_v6
+    dest: /etc/network/iptables/rules_v6
+    owner: root
+    mode: '0644'
+  tags:
+    - iptables
+    - permissions
