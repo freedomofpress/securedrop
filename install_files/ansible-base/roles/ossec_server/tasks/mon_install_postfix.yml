@@ -16,20 +16,6 @@
   tags:
     - postfix
 
-  # By default /etc/ssl/certs should already exist.
-  # However, Admins can override this directory path
-  # when declaring a custom cert file, in which case
-  # it would need to be created.
-- name: ensure certificate directory exists
-  file:
-    path: "{{ smtp_relay_cert_dir }}"
-    mode: "0755"
-    owner: root
-    group: root
-  tags:
-    - postfix
-    - postfix_custom_cert
-
 - name: configure sasl password for smtp relay
   template:
     src: sasl_passwd
@@ -48,20 +34,6 @@
   tags:
     - postfix
     - hardening
-
-- name: add custom cert (if provided)
-  copy:
-    src: "{{smtp_relay_cert_override_file}}"
-    dest: "{{smtp_relay_cert_dir}}/{{smtp_relay_cert_override_file}}"
-    mode: "0755"
-    owner: root
-    group: root
-  when: smtp_relay_cert_override_file is defined and
-        smtp_relay_cert_override_file != ''
-
-  tags:
-    - postfix
-    - postfix_custom_cert
 
 - name: configure postfix main.cf
   template:

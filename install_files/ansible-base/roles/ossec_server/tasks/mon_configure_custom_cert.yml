@@ -1,0 +1,39 @@
+---
+  # Create a separate directory for storing a custom
+  # cert file, if declared. A separate dir is necessary
+  # because otherwise removing a custom cert from the
+  # Ansible config would NOT result in the custom cert
+  # being removed from the /etc/ssl/certs.
+- name: ensure custom certificate directory exists (if necessary)
+  file:
+    path: "{{ smtp_relay_cert_override_dir }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  when: smtp_relay_cert_override_file is defined and
+        smtp_relay_cert_override_file != ''
+  tags:
+    - postfix_custom_cert
+
+- name: ensure custom certificate directory is absent (if necessary)
+  file:
+    path: "{{ smtp_relay_cert_override_dir }}"
+    state: absent
+  when: smtp_relay_cert_override_file is not defined or
+        smtp_relay_cert_override_file == ''
+  tags:
+    - postfix_custom_cert
+
+- name: add custom cert (if provided)
+  copy:
+    src: "{{smtp_relay_cert_override_file}}"
+    dest: "{{smtp_relay_cert_override_dir}}/{{smtp_relay_cert_override_file}}"
+    mode: "0755"
+    owner: root
+    group: root
+  when: smtp_relay_cert_override_file is defined and
+        smtp_relay_cert_override_file != ''
+  tags:
+    - postfix_custom_cert
+
