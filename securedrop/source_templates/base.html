@@ -27,6 +27,9 @@
       {% endblock %}
 
       <div class="panel selected">
+	{% if 'logged_in' in session %}
+	<a href="{{ url_for('logout') }}" class="btn pull-right" id="logout">Log Out</a>
+	{% endif %}
         <hr class="no-line" />
 
         {% block body %}{% endblock %}

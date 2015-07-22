@@ -19,6 +19,7 @@
 
     <div class="content">
       <div class="grid">
+	{% include 'flashed.html' %}
         <div id="header">
           <img src="/static/i/{{ header_image }}" class="logo grid-item" alt="SecureDrop" width="250px">
           {% if use_custom_header_image %}
