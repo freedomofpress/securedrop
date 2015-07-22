@@ -13,7 +13,7 @@ smtp_tls_security_level = {{ smtp_relay_security_level }}
 # var, which is '' by default. If declared, the cert file will be
 # copied to the server and ONLY the cert listed below will be used
 # for validating TLS connections to the SMTP relay.
-smtp_tls_CAfile = {{ smtp_relay_cert_dir }}/{{ smtp_relay_cert_override_file }}
+smtp_tls_CAfile = {{ smtp_relay_cert_override_dir }}/{{ smtp_relay_cert_override_file }}
 {% else %}
 smtp_tls_CApath = {{ smtp_relay_cert_dir }}
 {% endif %}
