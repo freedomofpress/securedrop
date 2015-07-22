@@ -1,6 +1,5 @@
 import tempfile
 
-
 class SourceNavigationSteps():
 
     def _source_visits_source_homepage(self):
@@ -50,5 +49,13 @@ class SourceNavigationSteps():
             'button[type=submit]')
         submit_button.click()
 
+        notification = self.driver.find_element_by_css_selector(
+            'p.notification')
+        self.assertIn('Thanks for submitting something to SecureDrop!'
+                      ' Please check back later for replies.',
+                      notification.text)
+
+    def _source_logs_out(self):
+        logout_button = self.driver.find_element_by_id('logout').click()
         notification = self.driver.find_element_by_css_selector('p.notification')
-        self.assertIn('Thanks for submitting something to SecureDrop! Please check back later for replies.', notification.text)
+        self.assertIn('Thank you for logging out.', notification.text)

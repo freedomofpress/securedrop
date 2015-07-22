@@ -86,6 +86,17 @@ class TestSource(TestCase):
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')
 
+    def test_generate_already_logged_in(self):
+        self._new_codename()
+        # Make sure it redirects to /lookup when logged in
+        rv = self.client.get('/generate')
+        self.assertEqual(rv.status_code, 302)
+        # Make sure it flashes the message on the lookup page
+        rv = self.client.get('/generate', follow_redirects=True)
+        # Should redirect to /lookup
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("because you are already logged in.", rv.data)
+
     def test_create(self):
         with self.client as c:
             rv = c.get('/generate')
@@ -129,6 +140,15 @@ class TestSource(TestCase):
             self.assertEqual(rv.status_code, 200)
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
+
+        with self.client as c:
+            rv = c.post('/login', data=dict(codename=codename),
+                        follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertTrue(session['logged_in'])
+            rv = c.get('/logout', follow_redirects=True)
+            self.assertTrue(not session)
+            self.assertIn('Thank you for logging out.', rv.data)
 
     def test_login_with_whitespace(self):
         """Test that codenames with leading or trailing whitespace still work"""
