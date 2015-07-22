@@ -49,6 +49,20 @@
     - postfix
     - hardening
 
+- name: add custom cert (if provided)
+  copy:
+    src: "{{smtp_relay_cert_override_file}}"
+    dest: "{{smtp_relay_cert_dir}}/{{smtp_relay_cert_override_file}}"
+    mode: "0755"
+    owner: root
+    group: root
+  when: smtp_relay_cert_override_file is defined and
+        smtp_relay_cert_override_file != ''
+
+  tags:
+    - postfix
+    - postfix_custom_cert
+
 - name: configure postfix main.cf
   template:
     src: main.cf
