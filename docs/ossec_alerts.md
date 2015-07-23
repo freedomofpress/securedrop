@@ -20,7 +20,7 @@ In order to receive email alerts from OSSEC, you need to supply several settings
 What you need:
 * The GPG key that OSSEC will encrypt alerts to
 * The email address that will receive alerts from OSSEC
-* Information for your SMTP server or relay (hostname, port) and the fingerprint of its TLS certificate
+* Information for your SMTP server or relay (hostname, port)
 * Credentials for the email address that OSSEC will send alerts from
 
 Receiving email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
