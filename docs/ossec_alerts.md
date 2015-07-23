@@ -102,7 +102,7 @@ The output will show you attempts to send the alerts and provide hints as to wha
 | Problem  | Solution |
 ------------- | -------------
 | Connection timed out | Check that the hostname and port is correct in the relayhost line of /etc/postfix/main.cf |
-| Server certificate not verified | Check that smtp_tls_fingerprint_cert_match in /etc/postfix/main.cf is correct |
+| Server certificate not verified | Check that the relay certificate is valid. Consider adding smtp_relay_cert_override_file to prod_specific.yml as described above. |
 | Authentication failure | Edit /etc/postfix/sasl_passwd and make sure the username, domain and password are correct. Run `postmap /etc/postfix/sasl_passwd` to update when finished. |
 
 After making changes to the Postfix configuration, you should run `service postfix reload` and test the new settings by restarting the OSSEC service.
