@@ -40,7 +40,6 @@ These are the values you must specify in `prod-specific.yml`:
  * Email username to authenticate to the SMTP relay: `sasl_username`
  * Domain name of the email used to send OSSEC alerts: `sasl_domain`
  * Password of the email used to send OSSEC alerts: `sasl_password`
- * The fingerprint of your SMTP relay: `smtp_relay_fingerprint`
 
 If you don't know what value to enter for one of these, please ask your organization's email administrator for the full configuration before proceeding. It is better to get these right the first time rather than changing them after SecureDrop is installed. If you're not sure of the correct `smtp_relay_port` number, you can use a simple mail client such as Thunderbird to test different settings or a port scanning tool such as nmap to see what's open. You could also use telnet to make sure you can connect to an SMTP server, which will always transmit a reply code of 220 meaning "Service ready" upon a successful connection.
 
