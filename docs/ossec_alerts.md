@@ -124,4 +124,4 @@ Other log files that may contain useful information:
 
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
 
-If you believe that the system is behaving abnormally, you should contact us at support@freedom.press for help.
+If you believe that the system is behaving abnormally, you should contact us at securedrop@freedom.press for help.
