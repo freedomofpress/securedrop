@@ -40,7 +40,6 @@ These are the values you must specify in `prod-specific.yml`:
  * Email username to authenticate to the SMTP relay: `sasl_username`
  * Domain name of the email used to send OSSEC alerts: `sasl_domain`
  * Password of the email used to send OSSEC alerts: `sasl_password`
- * The fingerprint of your SMTP relay: `smtp_relay_fingerprint`
 
 If you don't know what value to enter for one of these, please ask your organization's email administrator for the full configuration before proceeding. It is better to get these right the first time rather than changing them after SecureDrop is installed. If you're not sure of the correct `smtp_relay_port` number, you can use a simple mail client such as Thunderbird to test different settings or a port scanning tool such as nmap to see what's open. You could also use telnet to make sure you can connect to an SMTP server, which will always transmit a reply code of 220 meaning "Service ready" upon a successful connection.
 
@@ -88,7 +87,7 @@ Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`,
 
 It's easy to get SecureDrop to use Google's servers to deliver the alerts, but it's not ideal from a security perspective. This option should be regarded as a backup plan. Keep in mind that you're leaking metadata about the timing of alerts to a third party — the alerts are encrypted and only readable to you, however that timing may prove useful to an attacker.
 
-First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com, `smtp_relay_port` is 587 and `smtp_relay_fingerprint` is noted in the example above.
+First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com and the `smtp_relay_port` is 587.
 
 For enhanced security we recommend enabling [Google's 2-Step Verification](https://www.google.com/landing/2step/) for any Gmail account that is dedicated to sending the alert emails. With 2-Step Verification enabled, you won't use the normal account password in this configuration — it will not work; instead you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
 
