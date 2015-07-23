@@ -71,9 +71,13 @@ Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_em
 	
 Now you can move on to the SMTP and SASL settings, which are straightforward. These correspond to the outgoing e-mail address used to send the alerts instead of where you're receiving them. If that e-mail is ossec@news-org.com, the `sasl_username` would be ossec and `sasl_domain` would be news-org.com.
 
-The Postfix configuration enforces certificate verification, and requires both a valid certificate and STARTTLS support on the SMTP relay.
+The Postfix configuration enforces certificate verification, and requires both a valid certificate and STARTTLS support on the SMTP relay. By default the system CAs will be used for validating the relay certificate. If you need to provide a custom CA to perform the validation, copy the cert file to `install_files/ansible-base` add a new variable to `prod-specific.yml`:
 
-Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
+    smtp_relay_cert_override_file: MyOrg.crt
+
+where `MyOrg.crt` is the filename. The file will be copied to the server in `/etc/ssl/certs_local` and the system CAs will be ignored when validating the SMTP relay TLS certificate.
+
+Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 
 ### Using Gmail for OSSEC alerts
 
