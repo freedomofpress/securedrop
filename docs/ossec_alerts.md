@@ -71,15 +71,7 @@ Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_em
 	
 Now you can move on to the SMTP and SASL settings, which are straightforward. These correspond to the outgoing e-mail address used to send the alerts instead of where you're receiving them. If that e-mail is ossec@news-org.com, the `sasl_username` would be ossec and `sasl_domain` would be news-org.com.
 
-The Postfix configuration enforces certificate verification, and requires a fingerprint to be set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
-
-    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
-
-If you are using Tails, you will not be able to connect directly with `openssl s_client` due to the default firewall rules. To get around this, proxy the requests over Tor by adding `torify` at the beginning of the command.
-
-The output of the command above should look like the following (*last updated Tue Jul 21 17:46:42 UTC 2015*):
-
-    6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29
+The Postfix configuration enforces certificate verification, and requires both a valid certificate and STARTTLS support on the SMTP relay.
 
 Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 
