@@ -6,3 +6,12 @@ securedrop_user: www-data
 
 app_hostname: app-staging
 monitor_hostname: mon-staging
+
+# Hard-coding the default interface used in the
+# staging rules for now. In VirtualBox, eth0 is a
+# NAT device used for SSH port forwards. In DigitalOcean,
+# eth0 is the only device, so still the correct device
+# to allow staging access to. TODO: virtualize firewall
+# so these iface values are more flexible. Also consider
+# enabling private_networking in DO.
+staging_iface: eth0
