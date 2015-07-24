@@ -81,13 +81,7 @@ describe host(property['app_hostname']) do
   app_ip_regex = Regexp.quote(property['app_ip'])
   its(:ipaddress) { should match /^#{app_ip_regex}$/ }
   it { should be_resolvable.by('hosts')  }
-  # in staging, direct access allows ssh.
-  # prod hosts should NOT have access on 22.
-  # TODO: oddly, these next two tests pass in vbox but fail in digitalocean.
-#  it { should be_reachable }.
-#  it { should be_reachable.with( :port => 22, :proto => 'tcp') }
-  it { should be_reachable.with( :port => 80, :proto => 'tcp') }
-  it { should be_reachable.with( :port => 8080, :proto => 'tcp') }
+  # TODO: consider adding checks for service absence here.
 end
 
 # check for ssh listening (direct access in staging)
