@@ -3,7 +3,7 @@ relayhost = [{{ smtp_relay }}]:{{ smtp_relay_port }}
 smtp_sasl_auth_enable = yes
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_sasl_security_options = noanonymous
-smtp_use_tls=yes
+smtp_use_tls = yes
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 {% if smtp_relay_fingerprint is defined and
       smtp_relay_fingerprint != '' %}
@@ -15,19 +15,19 @@ smtp_tls_security_level = fingerprint
 smtp_tls_fingerprint_digest = sha1
 smtp_tls_fingerprint_cert_match = {{ smtp_relay_fingerprint }}
 {% elif smtp_relay_cert_override_file is defined and
-         smtp_relay_cert_override_file != '' %}
+        smtp_relay_cert_override_file != '' %}
 # Use custom cert file added via Ansible playbook. Only happens
 # if the local admin has declared the `smtp_relay_cert_override_file`
 # var, which is '' by default. If declared, the cert file will be
 # copied to the server and ONLY the cert listed below will be used
 # for validating TLS connections to the SMTP relay.
-smtp_tls_CAfile = {{ smtp_relay_cert_override_dir }}/{{ smtp_relay_cert_override_file }}
 smtp_tls_security_level = secure
+smtp_tls_CAfile = {{ smtp_relay_cert_override_dir }}/{{ smtp_relay_cert_override_file }}
 {% else %}
 # Default configuration, when no overrides are specified.
 # Uses the system CAs to validate relay TLS certificate.
-smtp_tls_CApath = {{ smtp_relay_cert_dir }}
 smtp_tls_security_level = secure
+smtp_tls_CApath = {{ smtp_relay_cert_dir }}
 {% endif %}
 smtp_tls_ciphers = high
 smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2
