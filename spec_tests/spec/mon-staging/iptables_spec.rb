@@ -6,10 +6,9 @@
 # That means they are post-0.3.2 and therefore may need to be tweaked
 # to test older versions.
 desired_iptables_rules = [
-  # TODO backport #1053 and update these tests with DROP checks
-  '-P INPUT ACCEPT',
-  '-P FORWARD ACCEPT',
-  '-P OUTPUT ACCEPT',
+  '-P INPUT DROP',
+  '-P FORWARD DROP',
+  '-P OUTPUT DROP',
   '-N LOGNDROP',
   '-A INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   '-A INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
