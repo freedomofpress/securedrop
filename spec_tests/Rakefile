@@ -17,13 +17,13 @@ def roles(host)
   when /^build$/
     (roles << "build").flatten!
   when /^app-staging/
-    (roles << %w(app-test app-general common-development common app-staging grsecurity)).flatten!
+    (roles << %w(app-test app-general common-development common app-staging grsecurity ip6tables)).flatten!
   when /^mon-staging/
-    (roles << %w(mon-general mon-staging common grsecurity)).flatten!
+    (roles << %w(mon-general mon-staging common grsecurity ip6tables)).flatten!
   when /^app-prod/
-    (roles << %w(app-prod app-general common common-development grsecurity)).flatten!
+    (roles << %w(app-prod app-general common common-development grsecurity ip6tables)).flatten!
   when /^mon-prod/
-    (roles << %w(mon-general mon-prod common grsecurity)).flatten!
+    (roles << %w(mon-general mon-prod common grsecurity ip6tables)).flatten!
   end
 
   # SSH access over Tor required for prod config,
