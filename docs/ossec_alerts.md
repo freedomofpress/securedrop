@@ -78,9 +78,9 @@ The Postfix configuration enforces certificate verification, and requires a fing
 
 If you are using Tails, you will not be able to connect directly with `openssl s_client` due to the default firewall rules. To get around this, proxy the requests over Tor by adding `torify` at the beginning of the command.
 
-The output of the command above should look like the following (*last updated Mon Mar 23 06:25:37 UTC 2015*):
+The output of the command above should look like the following (*last updated Tue Jul 21 17:46:42 UTC 2015*):
 
-    D3:7C:82:FC:D0:5F:8F:D7:DA:A2:59:8C:42:D7:B2:9F:C1:9F:7E:60
+    6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29
 
 Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 

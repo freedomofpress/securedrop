@@ -40,7 +40,7 @@ This guide outlines the steps required to install SecureDrop 0.3.x. If you are l
 When running commands or editing configuration files that include filenames, version numbers, userames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. A basic familiarity with Linux, the GNU core utilities and Bash shell is highly advantageous. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
 
 You will also need the inventory of hardware items for the installation listed in our [Hardware Guide](/docs/hardware.md).
-	
+
 ### Set up Tails USB sticks
 
 Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
@@ -48,7 +48,7 @@ Before installing the SecureDrop application, the first thing you need to do is 
 You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else:
 
 1. *offline Tails USB*
-	
+
 2. *admin Tails USB*
 
 3. *journalist Tails USB*.
@@ -194,8 +194,8 @@ The Freedom of the Press Foundation Master Signing Key should have a fingerprint
 Verify that the current release tag was signed with the master signing key.
 
     cd securedrop/
-    git checkout 0.3.2
-    git tag -v 0.3.2
+    git checkout 0.3.4
+    git tag -v 0.3.4
 
 You should see 'Good signature from "Freedom of the Press Foundation Master Signing Key"' in the output of `git tag`. If you do not, signature verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
@@ -222,17 +222,25 @@ Now that you've set up your password manager, you can move on to setting up the 
 
 Now that the firewall is set up, you can plug the *Application Server* and the *Monitor Server* into the firewall. If you are using a setup where there is a switch on the LAN port, plug the *Application Server* into the switch and plug the *Monitor Server* into the OPT1 port.
 
-Install Ubuntu Server 14.04 (Trusty) on both servers. For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md). When you are done, make sure you save the following information:
+Install Ubuntu Server 14.04 (Trusty) on both servers. This setup is fairly easy, but please note the following:
+
+* Since the firewall is configured to give the servers a static IP address, you will have to manually configure the network with those values.
+* The hostname for the servers are, conventionally, `app` and `mon`.  Adhering to this isn't necessary, but it will make the rest of your install easier.
+* The username and password for these two servers **must be the same**.
+
+For detailed instructions on installing and configuring Ubuntu for use with SecureDrop, see our [Ubuntu Install Guide](/docs/ubuntu_config.md).
+
+When you are done, make sure you save the following information:
 
 * The IP address of the App Server
 * The IP address of the Monitor Server
-* The non-root user's name and password on each server.
+* The non-root user's name and password for the servers.
 
 Before continuing, you'll also want to make sure you can connect to the App and Monitor servers. You should still have the Admin Workstation connected to the firewall from the firewall setup step. In the terminal, verify that you can SSH into both servers, authenticating with your password:
 
 ```sh
-ssh <username>@<App IP address> hostname
-ssh <username>@<Monitor IP address> hostname
+ssh <username>@<App IP address>
+ssh <username>@<Monitor IP address>
 ```
 
 Once you have verified that you can connect, continue with the installation. If you cannot connect, check the firewall logs.
@@ -259,9 +267,9 @@ First, generate the new SSH keypair:
 
     $ ssh-keygen -t rsa -b 4096
 
-You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. Choose a strong passphrase to protect the SSH private key.
+You'll be asked to "enter file in which to save the key." Here you can just keep the default, so type enter. 
 
-You should save this passphrase in your KeePassX password manager. You can also generate the passphrase using KeePassX as well.
+If you choose to passphrase-protect this key, you must use a strong, diceword-generated, passphrase that you can manually type (as Tails' pinentry will not allow you to copy and paste a passphrase).  It is also acceptable to leave the passphrase blank in this case.
 
 Once the key has finished generating, you need to copy the public key to both servers. Use `ssh-copy-id` to copy the public key to each server in turn. Use the user name and password that you set up during Ubuntu installation.
 
@@ -346,7 +354,7 @@ The Ansible playbook will run, installing SecureDrop plus configuring and harden
 Once the installation is complete, the addresses for each Tor Hidden Service will be available in the following files in `install_files/ansible-base`:
 
 * `app-source-ths`: This is the .onion address of the Source Interface
-* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. You need to add this line to your torrc and restart Tor in order to connect to the hidden service address included in the line.
+* `app-document-aths`: This is the `HidServAuth` configuration line for the Document Interface. During a later step, this will be automatically added to your Tor configuration file in order to exclusively connect to the hidden service.
 * `app-ssh-aths`: Same as above, for SSH access to the Application Server.
 * `mon-ssh-aths`: Same as above, for SSH access to the Monitor Server.
 
@@ -374,7 +382,9 @@ HidServAuth fsrrszf5qw7z2kjh.onion xW538OvHlDUo5n4LGpQTNh # client: admin
 HidServAuth yt4j52ajfvbmvtc7.onion vNN33wepGtGCFd5HHPiY1h # client: admin
 ```
 
-When you are done, click *Save* and **close** the text editor. The script will finish running soon thereafter.
+An easy way to do this is to run `cat *-aths` from the `install_files/ansible-base` folder in a terminal window, and copy/paste the output into the opened text editor.
+
+When you are done, click *Save* and **close** the text editor. Once the editor is closed, the install script will automatically resume.
 
 Running `install.sh` sets up an initialization script that automatically updates Tor's configuration to work with the authenticated hidden services every time you login to Tails. As long as Tails is booted with the persistent volume enabled then you can open the Tor Browser and reach the Document Interface as normal, as well as connect to both servers via secure shell. Tor's [hidden service authentication](https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient) restricts access to only those who have the 'HidServAuth' values.
 

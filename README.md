@@ -4,6 +4,13 @@
 
 SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by [Freedom of the Press Foundation](https://freedom.press).
 
+## Found an issue?
+
+If you're here because you want to report an issue in SecureDrop, please observe the following protocol to report an issue responsibly:
+
+* If you want to report a **_security issue_**, please use our [bug bounty hosted by Bugcrowd](https://bugcrowd.com/freedomofpress).
+* If the issue does not have a security impact, just create a [Github Issue](https://github.com/freedomofpress/securedrop/issues/new).
+
 ## Technical Summary
 
 SecureDrop is a tool for sources to communicate securely with journalists. The SecureDrop application environment consists of three dedicated computers:

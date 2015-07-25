@@ -29,17 +29,16 @@ dev_deps:
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"
-securedrop_app_code_version: "0.3.2"
 securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
 
 # Installing the securedrop-ossec-agent.deb package
-securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.1-amd64" # do not include .deb extension
+securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.2-amd64" # do not include .deb extension
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
   - "{{ securedrop_app_code_deb }}.deb"
-  - ossec-agent-2.8.1-amd64.deb
-  - securedrop-ossec-agent-2.8.1+0.3.2-amd64.deb
+  - ossec-agent-2.8.2-amd64.deb
+  - "securedrop-ossec-agent-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
 
 ### Used by the app role ###
 
@@ -136,14 +135,14 @@ agent_auth_rules:
 
 ### Used by the restrict access role ###
 direct_access_rules:
-  - "-A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -i {{ansible_default_ipv4.interface}}  -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}}  -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -i {{ansible_default_ipv4.interface}} -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}} -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -i {{ansible_default_ipv4.interface}} -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}} -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
 
 test_apt_dependencies:
   - firefox

@@ -33,7 +33,7 @@ Before you begin
 
 First, consider how the firewall will be connected to the Internet. You need to be able to provision two unique subnets for SecureDrop: the app subnet and the monitor subnet. There are a number of possible ways to configure this, and the best way will depend on the network that you are connecting to.
 
-Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. This is a very common subnet choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
+Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. The `/24` subnet is a very common choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
 
 The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
 
@@ -64,12 +64,41 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 #### Connect to the pfSense WebGUI
 
 1. Boot the Admin Workstation into Tails from the Admin Live USB.
-2. Connect the Admin Workstation to the switch on the LAN. After a few seconds, you should see a pop up notification saying "Connection established" in the top right corner of the screen.
-3. Launch the Tor Browser, *Applications → Internet → Tor Browser*.
-    1. If there is a conflict between your WAN and the default LAN, you will not be able to connect to Tor, and may see a dialog that says "Tor is not ready. Start Tor Browser anyway?". Click "Start Tor Browser" to continue.
-4. Navigate to the pfSense GUI in the Tor Browser: https://192.168.1.1
+
+2. Connect the Admin Workstation to the switch on the LAN.
+
+3. Launch the *Unsafe Browser*, *Applications → Internet → Unsafe Browser*.
+
+   ![Launching the Unsafe Browser](images/firewall/launching_unsafe_browser.png)
+
+    1. Note that the *Unsafe Browser* is, as the name suggests, **unsafe** (its
+       traffic is not routed through Tor). However, it is the only option in
+       this context because Tails [intentionally][tails_issue_7976] disables
+       LAN access in the *Tor Browser*.
+
+    2. A dialog will ask "Do you really want to launch the Unsafe Browser?". Click **Launch**.
+
+       ![You really want to launch the Unsafe Browser](images/firewall/unsafe_browser_confirmation_dialog.png)
+
+    3. You will see a pop-up notification that says "Starting the Unsafe Browser..."
+
+       ![Pop-up notification](images/firewall/starting_the_unsafe_browser.png)
+
+    4. After a few seconds, the Unsafe Browser should launch. The window has a
+       bright red border to remind you to be careful when using it. You should
+       close it once you're done configuring the firewall and use the Tor
+       Browser for any other web browsing you might do on the Admin
+       Workstation.
+
+       ![Unsafe Browser Homepage](images/firewall/unsafe_browser.png)
+
+4. Navigate to the pfSense GUI in the *Unsafe Browser*: `https://192.168.1.1`
+
 5. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
+
 6. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
+
+[tails_issue_7976]: https://labs.riseup.net/code/issues/7976 "Tails Feature #7976: Disable LAN access in Tor Browser"
 
 #### Setup Wizard
 
@@ -81,7 +110,7 @@ Leave the defaults for "Time Server Information". Click Next.
 
 On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
 
-For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface. Click Next.
+For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
 
 Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
@@ -89,7 +118,7 @@ Click Reload.
 
 If you changed the LAN Interface settings, you will no longer be able to connect after reloading the firewall and the next request will probably time out. This is not a problem - the firewall has reloaded and is working correctly. To connect to the new LAN interface, unplug and reconnect your network cable to have a new network address assigned to you via DHCP. Note that if you used a subnet with fewer addresses than `/24`, the default DHCP configuration in pfSense may not work. In this case, you should assign the Admin Workstation a static IP address that is known to be in the subnet to continue.
 
-Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the Tor Browser, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
+Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the *Unsafe Browser*, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
 
 #### Connect Interfaces and Test Connectivity
 
@@ -114,7 +143,7 @@ We set up the LAN interface during the initial configuration. We now need to set
 -   IPv4 Configuration Type: Static IPv4
 -   IPv4 Address: Monitor Gateway
 
-Leave everything else as the default. Save and Apply Changes.
+Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
 
 ### Disable DHCP on the LAN
 
@@ -156,23 +185,23 @@ For pfSense, see Section 6 of the pfSense Guide for information on setting up fi
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
 3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface:
 
-	* `-s APP_IP` → `LAN`
-	* `-s MONITOR_IP` → `OPT1`
+  * `-s APP_IP` → `LAN`
+  * `-s MONITOR_IP` → `OPT1`
 
 4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
 5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
 
 #### Example Screenshots
 
-Here are some example screenshots of a working pfSense firewall configuration:
+Here are some example screenshots of a working pfSense firewall configuration.
 
 ![Firewall IP Aliases](images/firewall/ip_aliases.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
 ![Firewall LAN Rules](images/firewall/lan_rules.png)
 ![Firewall OPT1 Rules](images/firewall/opt1_rules.png)
 
-Once you've set up the firewall, continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
+Once you've set up the firewall, **exit the Unsafe Browser**, and continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
