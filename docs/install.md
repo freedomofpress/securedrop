@@ -295,7 +295,7 @@ Make sure you have the following information and files before continuing:
 * Connection information for the SMTP relay that handles OSSEC alerts. For more information, see the [OSSEC Alerts Guide](/docs/ossec_alerts.md).
 * The first username of a journalist who will be using SecureDrop (you can add more later)
 * The username of the system administrator* (Optional) An image to replace the SecureDrop logo on the *Source Interface* and *Document Interface*
-    * Recommended size: `500px x 450px`
+    * Recommended size: `1000px x 1000px`
     * Recommended format: PNG
 
 ### Install SecureDrop
