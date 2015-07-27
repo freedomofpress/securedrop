@@ -1,10 +1,9 @@
 # declare desired iptables rules
 # These rules should be present in prod.
 desired_iptables_rules = [
-  # TODO backport #1053 and update these tests with DROP checks
-  '-P INPUT ACCEPT',
-  '-P FORWARD ACCEPT',
-  '-P OUTPUT ACCEPT',
+  '-P INPUT DROP',
+  '-P FORWARD DROP',
+  '-P OUTPUT DROP',
   '-N LOGNDROP',
   '-A INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT',
   '-A INPUT -s 8.8.8.8/32 -p tcp -m tcp --sport 53 -m state --state RELATED,ESTABLISHED -m comment --comment "tcp/udp dns" -j ACCEPT',
