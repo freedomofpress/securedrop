@@ -22,12 +22,12 @@ smtp_tls_fingerprint_cert_match = {{ smtp_relay_fingerprint }}
 # copied to the server and ONLY the cert listed below will be used
 # for validating TLS connections to the SMTP relay.
 smtp_tls_security_level = secure
-smtp_tls_CAfile = "{{ smtp_relay_cert_override_dir }}/{{ smtp_relay_cert_override_file }}"
+smtp_tls_CAfile = {{ smtp_relay_cert_override_dir }}/{{ smtp_relay_cert_override_file }}
 {% else %}
 # Default configuration, when no overrides are specified.
 # Uses the system CAs to validate relay TLS certificate.
 smtp_tls_security_level = secure
-smtp_tls_CApath = "{{ smtp_relay_cert_dir }}"
+smtp_tls_CApath = {{ smtp_relay_cert_dir }}
 {% endif %}
 smtp_tls_ciphers = high
 smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2
