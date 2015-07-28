@@ -99,7 +99,7 @@ common_apache2_directory_declarations = <<eos
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from all
+    allow from #{property['apache_allow_from']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow
@@ -112,7 +112,7 @@ common_apache2_directory_declarations = <<eos
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from all
+    allow from #{property['apache_allow_from']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow

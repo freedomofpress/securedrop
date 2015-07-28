@@ -9,3 +9,4 @@ monitor_hostname: mon-prod
 
 apache_listening_address: 127.0.0.1
 apache_source_log: /dev/null
+apache_allow_from: 127.0.0.1
