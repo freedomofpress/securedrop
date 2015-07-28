@@ -63,8 +63,10 @@ describe file('/etc/apache2/ports.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match /^Listen 0\.0\.0\.0:8080$/ }
-  its(:content) { should match /^Listen 0\.0\.0\.0:80$/ }
+  ["80", "8080"].each do |listening_port|
+    listening_regex = Regexp.quote("Listen #{property['apache_listening_address']}:#{listening_port}")
+    its(:content) { should match /^#{listening_regex}$/ }
+  end
 end
 
 # declare desired apache headers for vhost configs
@@ -153,7 +155,7 @@ source_apache2_config_settings = [
   'ErrorDocument 403 /notfound',
   'ErrorDocument 404 /notfound',
   'ErrorDocument 500 /notfound',
-  'ErrorLog /var/log/apache2/source-error.log',
+  "ErrorLog #{property['apache_source_log']}",
 ]
 # check source-specific apache2 config
 describe file('/etc/apache2/sites-available/source.conf') do

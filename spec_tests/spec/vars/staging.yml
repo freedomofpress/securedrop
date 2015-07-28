@@ -8,6 +8,7 @@ app_hostname: app-staging
 monitor_hostname: mon-staging
 
 apache_listening_address: 0.0.0.0
+apache_source_log: /var/log/apache2/source-error.log
 
 # Hard-coding the default interface used in the
 # staging rules for now. In VirtualBox, eth0 is a
