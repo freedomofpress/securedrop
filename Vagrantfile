@@ -222,22 +222,18 @@ end
 # added to the inventory file. Possible values for filename
 # are "app-ssh-aths" and "mon-ssh-aths".
 def find_ssh_aths(filename)
-  require 'find'
   repo_root = File.expand_path(File.dirname(__FILE__))
-  ansible_dir = File.join(repo_root, "install_files", "ansible-base")
-
-  Find.find(ansible_dir) do |path|
-    if FileTest.file?(path)
-      if File.basename(path) == filename
-        File.open(path).each do |line|
-          # Take second value for URL; format for the ATHS file is:
-          # /^HidServAuth \w{16}.onion \w{22} # client: admin$/
-          return line.split()[1]
-        end
-      else
-        next
-      end
+  aths_file = File.join(repo_root, "install_files", "ansible-base", filename)
+  if FileTest.file?(aths_file)
+    File.open(aths_file).each do |line|
+      # Take second value for URL; format for the ATHS file is:
+      # /^HidServAuth \w{16}.onion \w{22} # client: admin$/
+      return line.split()[1]
     end
+  else
+    puts "Failed to find ATHS file: #{filename}"
+    puts "Cannot connect via SSH."
+    exit(1)
   end
 end
 
