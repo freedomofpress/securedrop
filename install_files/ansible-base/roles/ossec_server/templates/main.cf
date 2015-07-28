@@ -31,6 +31,8 @@ smtp_tls_CApath = {{ smtp_relay_cert_dir }}
 {% endif %}
 smtp_tls_ciphers = high
 smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2
+# Force IPv4 support, since ip6tables rules drop all IPv6 traffic.
+inet_protocols = ipv4
 myhostname = {{ postfix_hostname }}
 myorigin = $myhostname
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
