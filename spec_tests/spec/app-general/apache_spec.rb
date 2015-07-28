@@ -139,7 +139,7 @@ end
 
 # declare source-specific apache configs
 source_apache2_config_settings = [
-  '<VirtualHost 0.0.0.0:80>',
+  "<VirtualHost #{property['apache_listening_address']}:80>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
   "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
@@ -169,7 +169,7 @@ end
 
 # declare document-specific apache configs
 document_apache2_config_settings = [
-  '<VirtualHost 0.0.0.0:8080>',
+  "<VirtualHost #{property['apache_listening_address']}:8080>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
   "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
@@ -264,12 +264,14 @@ describe user('www-data') do
   it { should have_login_shell '/usr/sbin/nologin' }
 end
 
-# Is apache listening only on localhost:80 and 8080
+# Apache should be listening on 80 and 8080.
+# In staging, expect the service to be bound to 0.0.0.0,
+# but in prod, it should be restricted to 127.0.0.1.
 listening_ports = ['80', '8080']
 listening_ports.each do |listening_port|
   describe port(listening_port) do
     it { should be_listening.with('tcp') }
-    it { should be_listening.on('0.0.0.0').with('tcp') }
+    it { should be_listening.on(property['apache_listening_address']).with('tcp') }
   end
 end
 

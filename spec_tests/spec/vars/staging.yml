@@ -7,6 +7,8 @@ securedrop_user: www-data
 app_hostname: app-staging
 monitor_hostname: mon-staging
 
+apache_listening_address: 0.0.0.0
+
 # Hard-coding the default interface used in the
 # staging rules for now. In VirtualBox, eth0 is a
 # NAT device used for SSH port forwards. In DigitalOcean,
