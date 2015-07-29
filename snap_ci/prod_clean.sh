@@ -41,11 +41,14 @@ export SECUREDROP_PROD_SKIP_TAGS=validate,grsec
 # made directly, rather than over Tor.
 unset SECUREDROP_SSH_OVER_TOR
 
-# Up the host in a separate command to avoid snap-ci command timeouts.
+# Create target hosts, but don't provision them yet. The shell provisioner
+# is only necessary for DigitalOcean hosts, and must run as a separate task
+# from the Ansible provisioner, otherwise it will only run on one of the two
+# hosts, due to the `ansible.limit = 'all'` setting in the Vagrantfile.
 vagrant up /prod/ --no-provision --provider digital_ocean
 
-# Run only the shell provisioner, to ensure the "vagrant"
-# user account exists with nopasswd sudo.
+# First run only the shell provisioner, to ensure the "vagrant"
+# user account exists with nopasswd sudo, then run Ansible.
 vagrant provision /prod/ --provision-with shell
 vagrant provision /prod/ --provision-with ansible
 

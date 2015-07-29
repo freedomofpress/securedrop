@@ -25,14 +25,19 @@ cleanup
 # so it must be rerun in each stage.
 repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
-# Up the host in a separate command to avoid snap-ci command timeouts.
+# Skip "install_local_pkgs" because it requires a special VM,
+# and skip "grsec" because DigitalOcean hosts don't support custom kernels.
+export SECUREDROP_STAGING_SKIP_TAGS=install_local_pkgs,grsec
+
+# Create target hosts, but don't provision them yet. The shell provisioner
+# is only necessary for DigitalOcean hosts, and must run as a separate task
+# from the Ansible provisioner, otherwise it will only run on one of the two
+# hosts, due to the `ansible.limit = 'all'` setting in the Vagrantfile.
 vagrant up /staging/ --no-provision --provider digital_ocean
 
-# Run only the shell provisioner, to ensure the "vagrant"
-# user account exists with nopasswd sudo.
+# First run only the shell provisioner, to ensure the "vagrant"
+# user account exists with nopasswd sudo, then run Ansible.
 vagrant provision /staging/ --provision-with shell
-# Run Ansible playbook, skipping local packages and grsecurity.
-export SECUREDROP_STAGING_SKIP_TAGS=install_local_pkgs,grsec
 vagrant provision /staging/ --provision-with ansible
 
 # TODO: this ugly reload hell and reprovisioning is to
