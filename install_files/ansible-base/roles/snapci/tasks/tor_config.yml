@@ -12,13 +12,6 @@
   tags:
     - tor
 
-- name: restart tor
-  service:
-    name: tor
-    state: restarted
-  tags:
-    - tor
-
 - name: ensure tor is running
   service:
     name: tor
