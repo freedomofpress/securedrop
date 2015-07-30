@@ -29,7 +29,11 @@ case "$1" in
     # mode.
     a2dissite 000-default
     a2dissite default-ssl
-    service apache2 reload
+    # Stop Apache service before making changes to its AppArmor profile.
+    # If the Apache service is running unconfined, and the profile is
+    # set to "enforce", then apache2 will fail to restart, since it lacks
+    # the ability to send signals to unconfined peers.
+    service apache2 stop
 
     # If the profile was disabled enabled it.
     if [ -e "/etc/apparmor.d/disable/usr.sbin.apache2" ]; then
