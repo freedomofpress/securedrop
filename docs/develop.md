@@ -207,7 +207,7 @@ Host app-prod
   LogLevel FATAL
   ProxyCommand connect -R remote -5 -S 127.0.0.1:9050 %h %p
 $ # ensure ATHS values are active in local Tor config:
-$ cat *ssh* | sudo tee -a /etc/tor/torrc > /dev/null && sudo service tor reload
+$ cat *-aths | sudo tee -a /etc/tor/torrc > /dev/null && sudo service tor reload
 $ vagrant ssh app-prod -c 'echo hello'   # works
 hello
 Connection to l57xhqhltlu323vi.onion closed.
@@ -217,6 +217,8 @@ If `SECUREDROP_SSH_OVER_TOR` is declared, Vagrant will look up the ATHS URLs
 and `HidServAuth` values for each server by examining the contents of `app-ssh-aths`
 and `mon-ssh-aths` in `./install_files/ansible-base`. You can manually inspect
 these files to append values to your local `torrc`, as in the `cat` example above.
+Note that the `cat` example above will also add the ATHS info for the
+Document Interface, as well, which is useful for testing.
 
 ### torify (Ubuntu and Mac OS X)
 
