@@ -11,17 +11,15 @@ describe command("aa-status --enabled") do
   its(:exit_status) { should eq 0 }
 end
 
-# SecureDrop apache apparmor profile
 # Staging role has two profiles in complain mode:
-# tor and apache2. Make sure the config file includes
-# that flag, since restarting apparmor will load
-# whatever's on disk
+# tor and apache2. Make sure the config file does NOT include
+# that flag, since restarting apparmor will load whatever's on disk
 ['tor', 'apache2'].each do |complaining_process|
   describe file("/etc/apparmor.d/usr.sbin.#{complaining_process}") do
     it { should be_file }
     it { should be_owned_by 'root' }
     it { should be_mode '644' }
-    its(:content) { should match /^\/usr\/sbin\/#{complaining_process} flags=\(complain\) \{/ }
+    its(:content) { should_not match /^\/usr\/sbin\/#{complaining_process} flags=\(complain\) \{/ }
   end
 end
 
@@ -77,10 +75,12 @@ enforced_apparmor_profiles = %w(
   /sbin/dhclient
   /usr/lib/NetworkManager/nm-dhcp-client.action
   /usr/lib/connman/scripts/dhclient-script
+  /usr/sbin/apache2
   /usr/sbin/apache2//DEFAULT_URI
   /usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT
   /usr/sbin/ntpd
   /usr/sbin/tcpdump
+  /usr/sbin/tor
   system_tor
 )
 # check for enforced app-armor profiles
@@ -107,22 +107,21 @@ complaining_apparmor_profiles = %w(
   /usr/sbin/tor
 )
 
-# check for complaining app-armor profiles
+# check for complaining app-armor profiles; should NOT exist in prod
 describe command("aa-status") do
   complaining_apparmor_profiles.each do |complaining_apparmor_profile|
-    its(:stdout) { should contain(complaining_apparmor_profile).from(/profiles are in complain mode/).to(/\d+ processes have profiles defined/) }
+    its(:stdout) { should_not contain(complaining_apparmor_profile).from(/profiles are in complain mode/).to(/\d+ processes have profiles defined/) }
   end
 end
 
 # ensure number of expected complaining profiles matches number checked
 describe command("aa-status --complaining") do
-  its(:stdout) { should eq complaining_apparmor_profiles.length.to_s + "\n" }
+  its(:stdout) { should eq "0\n" }
 end
 
-# ensure number of total profiles is sum of enforced and complaining profiles
+# ensure number of total profiles matches enforced profiles
 describe command("aa-status --profiled") do
-  total_profiles = enforced_apparmor_profiles.length + complaining_apparmor_profiles.length
-  its(:stdout) { should eq total_profiles.to_s + "\n" }
+  its(:stdout) { should eq enforced_apparmor_profiles.length.to_s + "\n" }
 end
 
 # Ensure that there are no processes that are unconfined but have a profile

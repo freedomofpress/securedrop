@@ -2,10 +2,14 @@
 # These rules should be present in prod and staging
 # TODO: There are also hardcoded IP addresses in this section.
 desired_iptables_rules = [
-  '-A INPUT -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
-  '-A INPUT -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
+  '-P INPUT DROP',
+  '-P FORWARD DROP',
+  '-P OUTPUT DROP',
+  '-N LOGNDROP',
+  "-A INPUT -i #{property['staging_iface']} -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
+  "-A INPUT -i #{property['staging_iface']} -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   '-A INPUT -p udp -m udp --sport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
-  '-A INPUT -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
+  "-A INPUT -i #{property['staging_iface']} -p tcp -m tcp --dport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   '-A INPUT -p tcp -m state --state RELATED,ESTABLISHED -m comment --comment "Allow traffic back for tor" -j ACCEPT',
   '-A INPUT -i lo -p tcp -m tcp --dport 80 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to source int" -j ACCEPT',
   '-A INPUT -i lo -p tcp -m tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -m comment --comment "Allow tor connection from local loopback to connect to document int" -j ACCEPT',
@@ -18,13 +22,13 @@ desired_iptables_rules = [
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
   '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
-  '-A OUTPUT -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
-  '-A OUTPUT -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
+  "-A OUTPUT -o #{property['staging_iface']} -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
+  "-A OUTPUT -o #{property['staging_iface']} -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   '-A OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
-  '-A OUTPUT -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
-  "-A OUTPUT -p tcp -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"tor instance that provides ssh access\" -j ACCEPT",
-  "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"SSH with rate limiting only thru tor\" -j ACCEPT",
-  "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"SSH with rate limiting only thru tor\" -j ACCEPT",
+  "-A OUTPUT -o #{property['staging_iface']} -p tcp -m owner --uid-owner 0 -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
+  "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"Rate limit traffic from tor to the ssh dameon\" -j ACCEPT",
+  "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m comment --comment \"Drop all other new connections from tor to the ssh dameon\" -j LOGNDROP",
+  "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"Allow the established traffic from tor to the ssh dameon\" -j ACCEPT",
   "-A OUTPUT -m owner --uid-owner #{property['tor_user_uid']} -m comment --comment \"Drop all other traffic for the tor instance used for ssh\" -j LOGNDROP",
   "-A OUTPUT -o lo -p tcp -m tcp --sport 80 -m owner --uid-owner #{property['apache_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"Restrict the apache user outbound connections\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --sport 8080 -m owner --uid-owner #{property['apache_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"Restrict the apache user outbound connections\" -j ACCEPT",
@@ -69,4 +73,35 @@ describe iptables do
   desired_iptables_rules.each do |desired_iptables_rule|
     it { should have_rule(desired_iptables_rule) }
   end
+end
+
+
+# try to validate local networking config
+describe host(property['monitor_hostname']) do
+  monitor_ip_regex = Regexp.quote(property['monitor_ip'])
+  its(:ipaddress) { should match /^#{monitor_ip_regex}$/ }
+  it { should be_resolvable.by('hosts')  }
+  it { should_not be_reachable  }
+  # in staging, direct access allows ssh.
+  # prod hosts should NOT have access on 22.
+  it { should_not be_reachable.with( :port => 22, :proto => 'tcp') }
+end
+
+# declare ports expected to be listening
+listening_ports = [
+  22,     # ssh
+  80,     # source interface
+  8080,   # document interface
+  6001,   # Xvfb
+]
+# ensure ports are listening
+listening_ports.each do |listening_port|
+  describe port(listening_port) do
+    it { should be_listening.on('0.0.0.0').with('tcp') }
+  end
+end
+
+# check redis worker listening port
+describe port(6379) do
+  it { should be_listening.on('127.0.0.1').with('tcp') }
 end

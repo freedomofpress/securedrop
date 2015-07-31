@@ -13,13 +13,24 @@ def roles(host)
   roles = []
   case host
   when /^development$/
-    (roles << %w(common-development development)).flatten!
+    (roles << %w(app-test common-development development)).flatten!
   when /^build$/
     (roles << "build").flatten!
   when /^app-staging/
-    (roles << %w(common-development common-staging app-staging grsecurity)).flatten!
+    (roles << %w(app-test app-general common-development common app-staging grsecurity ip6tables)).flatten!
   when /^mon-staging/
-    (roles << %w(common-staging mon-staging grsecurity)).flatten!
+    (roles << %w(mon-general mon-staging common grsecurity ip6tables)).flatten!
+  when /^app-prod/
+    (roles << %w(app-prod app-general common common-development grsecurity ip6tables)).flatten!
+  when /^mon-prod/
+    (roles << %w(mon-general mon-prod common grsecurity ip6tables)).flatten!
+  end
+
+  # SSH access over Tor required for prod config,
+  # so assume machines have already been provisioned
+  # and ATHS values fetched, then force SSH over Tor.
+  if host.match(/-prod$/)
+    ENV['SECUREDROP_SSH_OVER_TOR'] = "1"
   end
 
   # DigitalOcean droplets don't support custom kernels, so remove
@@ -35,7 +46,7 @@ end
 
 
 # manually declare hosts, and assign them roles for testing
-hosts = %w(development build app-staging mon-staging).map do |host|
+hosts = %w(development build app-staging mon-staging app-prod mon-prod).map do |host|
   {
     :name => host,
     :roles => roles(host)
@@ -53,6 +64,7 @@ namespace :spec do
 
   # assign only /staging/ hosts to serverspec task run
   task :staging => hosts.select{ |h| h[:name].match(/staging$/) }.map{ |h| h[:name] }
+  task :prod => hosts.select{ |h| h[:name].match(/prod$/) }.map{ |h| h[:name] }
 
   hosts.each do |host|
     desc "Run spectests against #{host[:name]}"

@@ -5,23 +5,30 @@
 #   * rerunning a single stage from a pipeline of many
 #   * keeping the CI suite DRY
 
+set -e
+set -x
+
+# Support Snap-CI cache directory, but also allow this script to be run locally.
+tmp_dir="${SNAP_CACHE_DIR:-/tmp}"
+
+# Find the root of the git repository. A simpler implementation
+# would be `git rev-parse --show-toplevel`, but that must be run
+# from inside the git repository, whereas the solution below is
+# directory agnostic. Exporting this variable doesn't work in snapci,
+# so it must be rerun in each stage.
+repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
 # Cache and install Vagrant
-vagrant_rpm="${vagrant_rpm:-vagrant_1.7.2_x86_64.rpm}"
-[[ -f ${SNAP_CACHE_DIR}/$vagrant_rpm ]] || wget https://dl.bintray.com/mitchellh/vagrant/$vagrant_rpm -O ${SNAP_CACHE_DIR}/$vagrant_rpm
-[[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh ${SNAP_CACHE_DIR}/$vagrant_rpm
-# TODO: Check for vagrant plugins before installing them.
+vagrant_version="${vagrant_version:-1.7.2}"
+vagrant_rpm="vagrant_${vagrant_version}_x86_64.rpm"
+vagrant_url="https://dl.bintray.com/mitchellh/vagrant/${vagrant_rpm}"
 
-# An older version of digital_ocean plugin is used because of an issue with the
-# current version that doesn't support using snapshots.
-# https://github.com/smdahlen/vagrant-digitalocean/issues/187
-#/usr/bin/vagrant plugin install vagrant-digitalocean --plugin-version '0.7.0'
-/usr/bin/vagrant plugin install vagrant-digitalocean
+[[ -f "${tmp_dir}/${vagrant_rpm}" ]] || wget "$vagrant_url" -O "${tmp_dir}/${vagrant_rpm}"
+[[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh "${tmp_dir}/$vagrant_rpm"
 
+# Install Vagrant plugins
+vagrant plugin install vagrant-digitalocean
 vagrant plugin install vagrant-hostmanager
-[[ -f ${SNAP_CACHE_DIR}/digital_ocean.box ]] || wget https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box -O ${SNAP_CACHE_DIR}/digital_ocean.box
-# TODO: Check to see if the box was already added before doing again.
-vagrant box add digital_ocean ${SNAP_CACHE_DIR}/digital_ocean.box --force
 
 # Install Ansible dependencies
 sudo yum install python-pip
@@ -29,4 +36,4 @@ sudo yum install python-pip
 sudo pip install ansible==1.9.0.1
 
 # Install serverspec dependencies
-cd /var/snap-ci/repo/spec_tests/ && bundle update
+cd "${repo_root}/spec_tests/" && bundle install

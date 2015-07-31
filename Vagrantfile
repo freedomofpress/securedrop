@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
-      ansible.skip_tags = ENV['DEVELOPMENT_SKIP_TAGS'] || 'non-development'
+      ansible.skip_tags = ENV['SECUREDROP_DEVELOPMENT_SKIP_TAGS'] || 'non-development'
       ansible.verbose = 'v'
     end
     development.vm.provider "virtualbox" do |v|
@@ -80,14 +80,19 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags = ENV['STAGING_SKIP_TAGS'] || 'install_local_pkgs'
+      ansible.skip_tags = ENV['SECUREDROP_STAGING_SKIP_TAGS'] || 'install_local_pkgs'
     end
   end
 
-  # The prod hosts are just like production but are virtualized. All access to ssh and
-  # the web interfaces is only over tor.
+  # The prod hosts are just like production but are virtualized.
+  # All access to SSH and the web interfaces is only over Tor.
   config.vm.define 'mon-prod', autostart: false do |prod|
-    prod.vm.box = "mon-prod"
+    if ENV['SECUREDROP_SSH_OVER_TOR']
+      config.ssh.host = find_ssh_aths("mon-ssh-aths")
+      config.ssh.proxy_command = tor_ssh_proxy_command
+      config.ssh.port = 22
+    end
+    prod.vm.hostname = "mon-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
     prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
@@ -98,6 +103,11 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'app-prod', autostart: false do |prod|
+    if ENV['SECUREDROP_SSH_OVER_TOR']
+      config.ssh.host = find_ssh_aths("app-ssh-aths")
+      config.ssh.proxy_command = tor_ssh_proxy_command
+      config.ssh.port = 22
+    end
     prod.vm.hostname = "app-prod"
     prod.vm.box = "trusty64"
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
@@ -117,7 +127,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
-      ansible.skip_tags = ENV['PROD_SKIP_TAGS']
+      ansible.skip_tags = ENV['SECUREDROP_PROD_SKIP_TAGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
@@ -138,13 +148,30 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # VM for testing Snap CI configuration changes.
+  # All SecureDrop instances use Ubuntu 64-bit LTS,
+  # but Snap CI uses CentOS. See here for more config info:
+  # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
+  config.vm.define 'snapci', autostart: false do |snapci|
+    snapci.vm.hostname = "snapci"
+    snapci.vm.box = "puppetlabs/centos-6.6-64-nocm"
+    snapci.vm.provision "ansible" do |ansible|
+      ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
+      ansible.verbose = 'v'
+    end
+    snapci.vm.provider "virtualbox" do |v|
+      v.name = "snapci"
+    end
+  end
+
+
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")
   #  config.cache.scope = :box
   #end
 
-  # This is needed for the Snap-ci to provision the digital ocean vps.
-  # Check for presence of digitalocean vagrant plugin, and required env var,
+  # This is needed for Snap-CI to provision the DigitalOcean VPS.
+  # Check for presence of `vagrant-digitalocean` plugin, and required env var,
   # and only configure this provider if both conditions are met. Otherwise,
   # even running `vagrant status` throws an error.
   if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['DO_API_TOKEN']
@@ -175,15 +202,50 @@ Vagrant.configure("2") do |config|
       provider.token = ENV['DO_API_TOKEN']
       provider.region = ENV['DO_REGION'] || 'sfo1'
       provider.size = ENV['DO_SIZE'] || '512mb'
-
-      # The vagrant-digitalocean plugin changed how it handles
-      # the 'provider.image' parameter starting in v0.7.1,
-      # breaking support for snapshots. Snapshots are useful
-      # when running app tests since box creation happens much faster.
-      # This format works for <= 0.7.0:
-      #provider.image = ENV['DO_IMAGE_NAME'] || '14.04 x64'
-      # This format works for >= 0.7.1:
       provider.image = ENV['DO_IMAGE_NAME'] || 'ubuntu-14-04-x64'
     end
   end
+end
+
+
+# Get .onion URL for connecting to instances over Tor.
+# The Ansible playbooks fetch these values back to the
+# Admin Workstation (localhost) so they can be manually
+# added to the inventory file. Possible values for filename
+# are "app-ssh-aths" and "mon-ssh-aths".
+def find_ssh_aths(filename)
+  repo_root = File.expand_path(File.dirname(__FILE__))
+  aths_file = File.join(repo_root, "install_files", "ansible-base", filename)
+  if FileTest.file?(aths_file)
+    File.open(aths_file).each do |line|
+      # Take second value for URL; format for the ATHS file is:
+      # /^HidServAuth \w{16}.onion \w{22} # client: admin$/
+      return line.split()[1]
+    end
+  else
+    puts "Failed to find ATHS file: #{filename}"
+    puts "Cannot connect via SSH."
+    exit(1)
+  end
+end
+
+# Build proxy command for connecting to prod instances over Tor.
+# connect-proxy is recommended, but netcat is also supported
+# for CentOS Snap CI boxes, where connect-proxy isn't available.
+def tor_ssh_proxy_command
+   def command?(command)
+     system("which #{command} > /dev/null 2>&1")
+   end
+  # prefer connect-proxy, fall back to netcat,
+  # for use in snapci centos box.
+  if command?("connect")
+    base_cmd = "connect -R remote -5 -S"
+  elsif command?("nc")
+    base_cmd = "nc -x"
+  else
+    puts "Failed to build proxy command for SSH over Tor."
+    puts "Install 'connect-proxy' or 'netcat'."
+    exit(1)
+  end
+  return "#{base_cmd} 127.0.0.1:9050 %h %p"
 end

@@ -1,8 +1,8 @@
 # ensure hosts file references app server by ip
-# TODO: replace hardcoded ip for app-staging host
 describe file('/etc/hosts') do
-  its(:content) { should match /^127\.0\.1\.1\s+mon-staging\s+mon-staging$/ }
-  app_host_regex = Regexp.quote("#{property['app_ip']}  app-staging")
+  localhost_regex = /^#{Regexp.quote('127.0.1.1')}(\s+#{property['monitor_hostname']}){2}$/
+  its(:content) { should match localhost_regex }
+  app_host_regex = Regexp.quote("#{property['app_ip']}  #{property['app_hostname']}")
   its(:content) { should match /^#{app_host_regex}$/ }
 end
 
@@ -55,10 +55,10 @@ postfix_settings = [
   'smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache',
   'smtp_tls_security_level = fingerprint',
   'smtp_tls_fingerprint_digest = sha1',
-  'smtp_tls_fingerprint_cert_match = D3:7C:82:FC:D0:5F:8F:D7:DA:A2:59:8C:42:D7:B2:9F:C1:9F:7E:60',
+  'smtp_tls_fingerprint_cert_match = 6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29',
   'smtp_tls_ciphers = high',
   'smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2',
-  'myhostname = monitor.securedrop',
+  'myhostname = ossec.server',
   'myorigin = $myhostname',
   'smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)',
   'biff = no',
@@ -87,7 +87,7 @@ end
 
 # ensure ossec considers app-staging host "available"
 describe command('/var/ossec/bin/list_agents -a') do
-  its(:stdout) { should eq "app-staging-#{property['app_ip']} is available.\n" }
+  its(:stdout) { should eq "#{property['app_hostname']}-#{property['app_ip']} is available.\n" }
 end
 
 # ensure ossec gpg homedir exists

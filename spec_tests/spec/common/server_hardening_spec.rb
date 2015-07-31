@@ -19,10 +19,9 @@ sysctl_flags = {
   'net.ipv6.conf.lo.disable_ipv6' => 1,
 }
 # ensure sysctl flags are set correctly
-describe command('sysctl --all') do
-  sysctl_flags.each do |sysctl_flag, value|
-    sysctl_flag_regex = Regexp.quote("#{sysctl_flag} = #{value}")
-    its(:stdout) { should match /^#{sysctl_flag_regex}$/ }
+sysctl_flags.each do |sysctl_flag, value|
+  describe linux_kernel_parameter(sysctl_flag) do
+    its(:value) { should eq value }
   end
 end
 

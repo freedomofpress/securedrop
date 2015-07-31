@@ -63,8 +63,10 @@ describe file('/etc/apache2/ports.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_mode '644' }
-  its(:content) { should match /^Listen 0\.0\.0\.0:8080$/ }
-  its(:content) { should match /^Listen 0\.0\.0\.0:80$/ }
+  ["80", "8080"].each do |listening_port|
+    listening_regex = Regexp.quote("Listen #{property['apache_listening_address']}:#{listening_port}")
+    its(:content) { should match /^#{listening_regex}$/ }
+  end
 end
 
 # declare desired apache headers for vhost configs
@@ -97,7 +99,7 @@ common_apache2_directory_declarations = <<eos
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from all
+    allow from #{property['apache_allow_from']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow
@@ -110,7 +112,7 @@ common_apache2_directory_declarations = <<eos
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from all
+    allow from #{property['apache_allow_from']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow
@@ -139,7 +141,7 @@ end
 
 # declare source-specific apache configs
 source_apache2_config_settings = [
-  '<VirtualHost 0.0.0.0:80>',
+  "<VirtualHost #{property['apache_listening_address']}:80>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
   "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
@@ -153,7 +155,7 @@ source_apache2_config_settings = [
   'ErrorDocument 403 /notfound',
   'ErrorDocument 404 /notfound',
   'ErrorDocument 500 /notfound',
-  'ErrorLog /var/log/apache2/source-error.log',
+  "ErrorLog #{property['apache_source_log']}",
 ]
 # check source-specific apache2 config
 describe file('/etc/apache2/sites-available/source.conf') do
@@ -169,7 +171,7 @@ end
 
 # declare document-specific apache configs
 document_apache2_config_settings = [
-  '<VirtualHost 0.0.0.0:8080>',
+  "<VirtualHost #{property['apache_listening_address']}:8080>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
   "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
@@ -264,12 +266,14 @@ describe user('www-data') do
   it { should have_login_shell '/usr/sbin/nologin' }
 end
 
-# Is apache listening only on localhost:80 and 8080
+# Apache should be listening on 80 and 8080.
+# In staging, expect the service to be bound to 0.0.0.0,
+# but in prod, it should be restricted to 127.0.0.1.
 listening_ports = ['80', '8080']
 listening_ports.each do |listening_port|
   describe port(listening_port) do
     it { should be_listening.with('tcp') }
-    it { should be_listening.on('0.0.0.0').with('tcp') }
+    it { should be_listening.on(property['apache_listening_address']).with('tcp') }
   end
 end
 

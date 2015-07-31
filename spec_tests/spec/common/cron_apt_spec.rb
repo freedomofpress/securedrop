@@ -55,8 +55,8 @@ describe file('/etc/cron-apt/action.d/5-security') do
 end
 
 # ensure default cron-apt file to download all updates does not exist
-describe command('/bin/bash -c "[[ ! -e /etc/cron-apt/action.d/3-download ]]"') do
-  its(:exit_status) { should eq 0 }
+describe file('/etc/cron-apt/action.d/3-download') do
+  it { should_not exist }
 end
 
 desired_cronjobs = [
