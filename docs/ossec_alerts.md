@@ -20,7 +20,7 @@ In order to receive email alerts from OSSEC, you need to supply several settings
 What you need:
 * The GPG key that OSSEC will encrypt alerts to
 * The email address that will receive alerts from OSSEC
-* Information for your SMTP server or relay (hostname, port) and the fingerprint of its TLS certificate
+* Information for your SMTP server or relay (hostname, port)
 * Credentials for the email address that OSSEC will send alerts from
 
 Receiving email alerts from OSSEC requires that you have an SMTP relay to route the emails. You can use an SMTP relay hosted internally, if one is available to you, or you can use a third-party SMTP relay such as Gmail. The SMTP relay does not have to be on the same domain as the destination email address, i.e. smtp.gmail.com can be the SMTP relay and the destination address can be securedrop@freedom.press.
@@ -71,25 +71,22 @@ Next you specify the e-mail that you'll be sending alerts to, as `ossec_alert_em
 	
 Now you can move on to the SMTP and SASL settings, which are straightforward. These correspond to the outgoing e-mail address used to send the alerts instead of where you're receiving them. If that e-mail is ossec@news-org.com, the `sasl_username` would be ossec and `sasl_domain` would be news-org.com.
 
-The Postfix configuration enforces certificate verification, and requires a fingerprint to be set. You can retrieve the fingerprint of your SMTP relay by running the command below (all on one line). Please note that you will need to replace `smtp.gmail.com` and `587` with the correct domain and port for your SMTP relay.
+The Postfix configuration enforces certificate verification, and requires both a valid certificate and STARTTLS support on the SMTP relay. By default the system CAs will be used for validating the relay certificate. If you need to provide a custom CA to perform the validation, copy the cert file to `install_files/ansible-base` add a new variable to `prod-specific.yml`:
 
-    openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
+    smtp_relay_cert_override_file: MyOrg.crt
 
-If you are using Tails, you will not be able to connect directly with `openssl s_client` due to the default firewall rules. To get around this, proxy the requests over Tor by adding `torify` at the beginning of the command.
+where `MyOrg.crt` is the filename. The file will be copied to the server in `/etc/ssl/certs_local` and the system CAs will be ignored when validating the SMTP relay TLS certificate.
 
-The output of the command above should look like the following (*last updated Mon Mar 23 06:25:37 UTC 2015*):
-
-    D3:7C:82:FC:D0:5F:8F:D7:DA:A2:59:8C:42:D7:B2:9F:C1:9F:7E:60
-
-Finally, enter the result as `smtp_relay_fingerprint`. Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
+Save `prod-specific.yml`, exit the editor and [proceed with the installation](install.md#install-securedrop) by running the playbooks.
 
 ### Using Gmail for OSSEC alerts
 
 It's easy to get SecureDrop to use Google's servers to deliver the alerts, but it's not ideal from a security perspective. This option should be regarded as a backup plan. Keep in mind that you're leaking metadata about the timing of alerts to a third party — the alerts are encrypted and only readable to you, however that timing may prove useful to an attacker.
 
-First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). You may use an existing Gmail account, but it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase. Skip the creation of a Google+ profile and continue straight to Gmail. Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd` for the password. The `smtp_relay` is smtp.gmail.com and the `smtp_relay_port` is 587.
+First you should [sign up for a new account](https://accounts.google.com/SignUp?service=mail). While it's technically possible to use an existing Gmail account, it's best to compartmentalize these alerts from any of your other activities. Choose a strong and random passphrase for the new account. Skip the creation of a Google+ profile and continue straight to Gmail. Next, enable [Google's 2-Step Verification](https://www.google.com/landing/2step/). With 2-Step Verification enabled, you won't use the normal account password in this configuration — it will not work; instead you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
 
-For enhanced security we recommend enabling [Google's 2-Step Verification](https://www.google.com/landing/2step/) for any Gmail account that is dedicated to sending the alert emails. With 2-Step Verification enabled, you won't use the normal account password in this configuration — it will not work; instead you must navigate (using the settings in the top right) to Account > Signing in > App passwords, and generate a new App password which you will use as the `sasl_passwd`.
+Once the account is created you can log out and provide the values for `sasl_username` as your new Gmail username (without the domain), `sasl_domain`, which is typically gmail.com (or your custom Google Apps domain), and `sasl_passwd`. Remember to use the App password generated from the 2-step config for `sasl_passwd`, as the primary account password won't work. The `smtp_relay` is smtp.gmail.com and the `smtp_relay_port` is 587.
+
 
 ## Troubleshooting
 
@@ -106,7 +103,7 @@ The output will show you attempts to send the alerts and provide hints as to wha
 | Problem  | Solution |
 ------------- | -------------
 | Connection timed out | Check that the hostname and port is correct in the relayhost line of /etc/postfix/main.cf |
-| Server certificate not verified | Check that smtp_tls_fingerprint_cert_match in /etc/postfix/main.cf is correct |
+| Server certificate not verified | Check that the relay certificate is valid. Consider adding smtp_relay_cert_override_file to prod_specific.yml as described above. |
 | Authentication failure | Edit /etc/postfix/sasl_passwd and make sure the username, domain and password are correct. Run `postmap /etc/postfix/sasl_passwd` to update when finished. |
 
 After making changes to the Postfix configuration, you should run `service postfix reload` and test the new settings by restarting the OSSEC service.
@@ -127,4 +124,4 @@ Other log files that may contain useful information:
 
  Understanding the contents of the OSSEC alerts requires a background and knowledge in Linux systems administration. They may be confusing, and at first it will be hard to tell between a genuine problem and a fluke. You should examine these alerts regularly to ensure that the SecureDrop environment has not been compromised in any way, and follow up on any particularly concerning messages with direct investigation.
 
-If you believe that the system is behaving abnormally, you should contact us at support@freedom.press for help.
+If you believe that the system is behaving abnormally, you should contact us at securedrop@freedom.press for help.
