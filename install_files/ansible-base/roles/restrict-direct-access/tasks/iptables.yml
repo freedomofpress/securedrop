@@ -38,7 +38,7 @@
 
 - name: ensure iptables rules_v4 file is present
   template:
-    src: app_rules_v4
+    src: rules_v4
     dest: /etc/network/iptables/rules_v4
     owner: root
     mode: '0644'
@@ -48,7 +48,7 @@
 
 - name: ensure ip6tables rules_v6 file is present
   copy:
-    src: app_rules_v6
+    src: iptables_rules_v6
     dest: /etc/network/iptables/rules_v6
     owner: root
     mode: '0644'
