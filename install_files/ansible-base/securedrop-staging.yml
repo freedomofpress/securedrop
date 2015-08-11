@@ -2,7 +2,6 @@
 - hosts: [ 'mon-staging', 'app-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - staging-specific.yml
 
   roles:
@@ -13,7 +12,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - host_vars/mon.yml
     - staging-specific.yml
 
@@ -28,7 +26,6 @@
 - hosts: [ 'app-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - host_vars/app.yml
     - staging-specific.yml
 
@@ -57,7 +54,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - host_vars/mon.yml
     - staging-specific.yml
 
@@ -75,7 +71,6 @@
 - hosts: [ 'app-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - host_vars/app.yml
     - staging-specific.yml
 
@@ -89,7 +84,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - group_vars/securedrop.yml
     - host_vars/mon.yml
     - staging-specific.yml
 

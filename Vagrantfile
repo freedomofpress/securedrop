@@ -158,6 +158,9 @@ Vagrant.configure("2") do |config|
     snapci.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
+      ansible.groups = {
+        'securedrop' => ['app-staging', 'mon-staging'],
+      }
     end
     snapci.vm.provider "virtualbox" do |v|
       v.name = "snapci"
