@@ -54,4 +54,3 @@ sysctl_flags:
     value: "1"
 
 ossec_group: ossec
-apt_repo_url: "https://apt.freedom.press"

@@ -3,3 +3,4 @@
 dependencies:
   - install_fpf_repo
   - grsecurity
+  - tor-hidden-services

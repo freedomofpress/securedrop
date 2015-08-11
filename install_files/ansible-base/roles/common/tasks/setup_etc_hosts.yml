@@ -1,4 +1,6 @@
 ---
+  # Since production environment does not have DHCP or DNS,
+  # create hard-coded /etc/hosts entries with assigned local IP addresses.
 - name: ensure /etc/hosts file has entry for app and monitor servers
   lineinfile:
     backup: yes

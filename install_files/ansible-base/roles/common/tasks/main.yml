@@ -1,6 +1,8 @@
 ---
 - include: create_users.yml
 
+- include: setup_etc_hosts.yml
+
 - include: harden_dns.yml
 
 - include: install_ntp.yml

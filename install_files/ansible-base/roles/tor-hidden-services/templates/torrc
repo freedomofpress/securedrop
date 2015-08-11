@@ -3,7 +3,7 @@ SafeLogging 1
 RunAsDaemon 1
 Sandbox 1
 
-{% if inventory_hostname | beginswith('app') %}
+{% if inventory_hostname in groups['app']  %}
 HiddenServiceDir /var/lib/tor/services/source
 HiddenServicePort 80 127.0.0.1:80
 

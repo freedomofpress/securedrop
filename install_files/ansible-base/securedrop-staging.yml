@@ -34,7 +34,6 @@
     # It installs tor. Tor is required to be installed prior to the securedrop
     # app-code package which contains an apparmor profile that depends on tor
     # being present.
-    - { role: common-app, tags: ['common-app', 'tor'] }
     # this is a staging only role
     - { role: install_local_pkgs, tags: install_local_pkgs }
     - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
