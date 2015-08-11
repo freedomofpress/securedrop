@@ -16,7 +16,6 @@
     - staging-specific.yml
 
   roles:
-    - { role: common-mon, tags: 'tor' }
     # this is a staging only role
     - { role: install_local_pkgs, tags: install_local_pkgs }
     - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
@@ -74,7 +73,7 @@
     - staging-specific.yml
 
   roles:
-    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
+    - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
     - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
     - { role: backup, tags: backup }
 
@@ -87,7 +86,7 @@
     - staging-specific.yml
 
   roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
+    - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
     - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
 
   sudo: yes

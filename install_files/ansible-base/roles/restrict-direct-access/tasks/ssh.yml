@@ -1,9 +1,8 @@
 ---
 - name: install 2fa pam module for ssh access
   apt:
-    name: "{{ item }}"
+    name: libpam-google-authenticator
     state: latest
-  with_items: ssh_2fa_dependencies
   tags:
     - apt
     - 2fa
@@ -17,8 +16,8 @@
     owner: root
     mode: '0644'
   with_items:
-   - sshd_config
    - ssh_config
+   - sshd_config
   tags:
     - ssh
     - 2fa

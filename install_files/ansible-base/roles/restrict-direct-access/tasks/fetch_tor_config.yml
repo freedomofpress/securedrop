@@ -2,38 +2,16 @@
 - name: wait for all tor hidden services hostname files
   wait_for:
     state: present
-    path: "{{ tor_hidden_services_parent_dir }}/{{ item }}/hostname"
+    path: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}/hostname"
     delay: 5
-  with_items: app_tor_instances
+  with_items: tor_instances
   tags:
     - tor
 
-- name: fetch securedrop source ths
+- name: fetch tor hidden service config files
   fetch:
-    src: /var/lib/tor/services/source/hostname
-    dest: ./app-source-ths
-    flat: yes
-    fail_on_missing: yes
-  tags:
-    - tor
-    - fetch
-    - admin
-
-- name: fetch securedrop document aths
-  fetch:
-    src: /var/lib/tor/services/document/hostname
-    dest: ./app-document-aths
-    flat: yes
-    fail_on_missing: yes
-  tags:
-    - tor
-    - fetch
-    - admin
-
-- name: fetch securedrop ssh aths
-  fetch:
-    src: /var/lib/tor/services/ssh/hostname
-    dest: ./app-ssh-aths
+    src: /var/lib/tor/services/{{ item.service }}/hostname
+    dest: ./{{ item.filename }}
     flat: yes
     fail_on_missing: yes
   tags:

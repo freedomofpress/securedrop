@@ -1,6 +1,0 @@
----
-- include: mon_display_onions.yml
-
-- include: ssh.yml
-
-- include: mon_iptables.yml
