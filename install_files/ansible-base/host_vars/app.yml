@@ -43,10 +43,13 @@ local_deb_packages:
 ### Used by the app role ###
 
 # Configuring the tor hidden services
-app_tor_instances:
-  - ssh
-  - source
-  - document
+tor_instances:
+  - service: ssh
+    filename: app-ssh-aths
+  - service: source
+    filename: app-source-ths
+  - service: document
+    filename: app-document-aths
 
 # Installing securedrop web application
 #securedrop_user: is defined in the site-specific.yml config file

@@ -12,17 +12,17 @@
 - name: ensure each hidden service's directory exists
   file:
     state: directory
-    dest: "{{ tor_hidden_services_parent_dir }}/{{ item }}"
+    dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: '0700'
-  with_items: app_tor_instances
+  with_items: tor_instances
   tags:
     - tor
 
-- name: ensure securedrop app servers torrc is present
-  copy:
-    src: torrc-app
+- name: ensure securedrop server torrc is present
+  template:
+    src: torrc
     dest: /etc/tor/torrc
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"

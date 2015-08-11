@@ -9,4 +9,4 @@
 
 - include: install_tor.yml
 
-- include: app_configure_tor_hidden_services.yml
+- include: configure_tor_hidden_services.yml

@@ -25,9 +25,11 @@ local_deb_packages:
 
 ### Used by the mon role ###
 
-# Configure the tor hidden services
-mon_tor_instances:
-  - ssh
+# Configure the tor hidden services. The Monitor server has only one,
+# for SSH, since no web interfaces.
+tor_instances:
+  - service: ssh
+    filename: mon-ssh-aths
 
 # Packages to install from fpf repo
 mon_fpf_packages:
