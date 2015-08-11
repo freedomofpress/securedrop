@@ -12,7 +12,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - host_vars/mon.yml
     - staging-specific.yml
 
   roles:
@@ -25,7 +24,6 @@
 - hosts: [ 'app-staging' ]
 
   vars_files:
-    - host_vars/app.yml
     - staging-specific.yml
 
   roles:
@@ -52,7 +50,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - host_vars/mon.yml
     - staging-specific.yml
 
   roles:
@@ -69,7 +66,6 @@
 - hosts: [ 'app-staging' ]
 
   vars_files:
-    - host_vars/app.yml
     - staging-specific.yml
 
   roles:
@@ -82,7 +78,6 @@
 - hosts: [ 'mon-staging' ]
 
   vars_files:
-    - host_vars/mon.yml
     - staging-specific.yml
 
   roles:
