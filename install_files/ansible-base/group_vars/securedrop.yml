@@ -1,6 +1,6 @@
 ---
 # Variables that apply to both the app and monitor server go in this file
-# If the monitor or app server need different values define the variable in 
+# If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
 securedrop_app_code_version: "0.3.6"
 
@@ -54,21 +54,6 @@ sysctl_flags:
     value: "1"
   - name: "net.ipv6.conf.lo.disable_ipv6"
     value: "1"
-
-grsec_sysctl_flags:
-  - name: "kernel.grsecurity.rwxmap_logging"
-    value: "0"
-    # The grsec lock value needs to be the last sysctl flag set or else the
-    # rest will not be applied
-  - name: "kernel.grsecurity.grsec_lock"
-    value: "1"
-
-# grsec vars
-grub_pax:
-  - /usr/sbin/grub-probe
-  - /usr/sbin/grub-mkdevicemap
-
-grsec_package: securedrop-grsec
 
 ossec_group: ossec
 apt_repo_url: "https://apt.freedom.press"

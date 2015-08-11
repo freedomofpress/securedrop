@@ -2,3 +2,4 @@
 # Add dependency for FPF repo installation role.
 dependencies:
   - install_fpf_repo
+  - grsecurity

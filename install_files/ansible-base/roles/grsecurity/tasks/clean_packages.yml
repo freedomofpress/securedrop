@@ -1,0 +1,37 @@
+---
+# After installing securedrop-grsec, remove
+# old generic kernels to avoid accidental
+# boots into a less secure environment.
+- name: remove generic kernel metapackages
+  apt:
+    name: "{{item}}"
+    state: absent
+  with_items:
+    - linux-signed-generic
+    - linux-signed-generic-lts-utopic
+    - linux-signed-image-generic
+    - linux-signed-image-generic-lts-utopic
+  tags:
+    - apt
+
+- name: remove remaining generic kernels
+  command: apt-get -y remove '^linux-image-.*generic$'
+  tags:
+    - apt
+
+- name: remove remaining kernel headers
+  command: apt-get -y remove '^linux-headers-.*'
+  tags:
+    - apt
+
+- name: mark GRUB2 as manually installed so its not removed
+  command: apt-mark manual grub-pc
+  tags:
+    - apt
+    - kernel
+    - grub
+
+- name: cleanup any dependencies left
+  command: apt-get -y autoremove
+  tags:
+    - apt

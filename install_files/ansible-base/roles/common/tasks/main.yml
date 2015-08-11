@@ -3,26 +3,13 @@
 
 - include: harden_dns.yml
 
-- include: remove_kernel_modules.yml
-
 - include: install_ntp.yml
-
-  # Install the grsec kernel prior to running unattended-upgrades to avoid
-  # reboots
-- include: from_fpf_repo_install_grsec.yml
-  tags:
-    - grsec
 
 - include: cron_apt.yml
   tags:
     - reboot
 
 - include: sysctl.yml
-
-- include: apply_grsec_lock.yml
-  tags:
-    - reboot
-    - grsec
 
 - name: disable swap space
   command: swapoff -a
