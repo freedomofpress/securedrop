@@ -80,6 +80,11 @@ Vagrant.configure("2") do |config|
       #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
       # Testing the full install install with local access exemptions
       # This requires to also up mon-staging or else authd will error
+      ansible.groups = {
+        'app' => %(app-staging),
+        'mon' => %(mon-staging),
+        'securedrop:children' => %w(app mon),
+      }
       ansible.skip_tags = ENV['SECUREDROP_STAGING_SKIP_TAGS'] || 'install_local_pkgs'
     end
   end
@@ -158,9 +163,6 @@ Vagrant.configure("2") do |config|
     snapci.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
-      ansible.groups = {
-        'securedrop' => ['app-staging', 'mon-staging'],
-      }
     end
     snapci.vm.provider "virtualbox" do |v|
       v.name = "snapci"
