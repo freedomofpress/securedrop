@@ -1,5 +1,5 @@
 ---
-- hosts: [ 'development' ]
+- hosts: development
   roles:
     - { role: development, tags: development }
     - { role: app, tags: app }

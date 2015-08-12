@@ -3,13 +3,13 @@
 - include: create_app_dirs.yml
 
 - include: app_install_fpf_deb_pkgs.yml
-  when: inventory_hostname not in groups.development
+  when: "'development' not in group_names"
   tags: non-development
 
 - include: initialize_securedrop_app.yml
 
 - include: install_and_harden_apache.yml
-  when: inventory_hostname not in groups.development
+  when: "'development' not in group_names"
   tags: non-development
 
 - include: configure_securedrop_worker.yml
