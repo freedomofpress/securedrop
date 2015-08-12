@@ -20,6 +20,8 @@
     su -s /bin/bash -c 'gpg
     --homedir {{ securedrop_data }}/keys
     --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}' {{ securedrop_user }}
+  register: gpg_app_key_import
+  changed_when: "'unchanged: 1' not in gpg_app_key_import.stderr"
   tags:
     - gpg
     - securedrop_config
