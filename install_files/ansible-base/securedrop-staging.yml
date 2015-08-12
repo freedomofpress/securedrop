@@ -1,31 +1,17 @@
 ---
 - hosts: [ 'mon-staging', 'app-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     - { role: common, tags: common }
-
   sudo: yes
 
 - hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     # this is a staging only role
     - { role: install_local_pkgs, tags: install_local_pkgs }
     - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
-
   sudo: yes
 
 - hosts: [ 'app-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     # The common-app role should be renamed.
     # It installs tor. Tor is required to be installed prior to the securedrop
@@ -36,7 +22,6 @@
     - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
-
   sudo: yes
 
   # If the OSSEC authd iptables rule exemptions are in place remove them and
@@ -48,13 +33,8 @@
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
 - hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
-
   sudo: yes
 
   # This section will put the ssh and iptables rules in place
@@ -64,24 +44,14 @@
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
 - hosts: [ 'app-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
     - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
     - { role: backup, tags: backup }
-
   sudo: yes
 
 - hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - staging-specific.yml
-
   roles:
     - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
     - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
-
   sudo: yes
