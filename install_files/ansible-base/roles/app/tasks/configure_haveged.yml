@@ -2,8 +2,8 @@
 - name: increase haveged's low entropy watermark to minimize "flag for reply" flow
   lineinfile:
     dest: /etc/default/haveged
-    regexp: 'DAEMON_ARGS="-w 1000"'
-    line: 'DAEMON_ARGS="-w 2400"'
+    regexp: ^DAEMON_ARGS
+    line: DAEMON_ARGS="-w 2400"
   notify:
     - restart haveged
   tags:
