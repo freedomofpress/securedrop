@@ -1,14 +1,7 @@
 ---
 - hosts: [ 'development' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - development-specific.yml
-
   roles:
     - { role: development, tags: development }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
-
   sudo: yes
