@@ -2,12 +2,12 @@
 - hosts: staging
   roles:
     - { role: common, tags: common }
+    - { role: install_local_pkgs, tags: install_local_pkgs,
+        when: install_local_packages }
   sudo: yes
 
 - hosts: mon-staging
   roles:
-    # this is a staging only role
-    - { role: install_local_pkgs, tags: install_local_pkgs }
     - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
   sudo: yes
 
@@ -18,7 +18,6 @@
     # app-code package which contains an apparmor profile that depends on tor
     # being present.
     # this is a staging only role
-    - { role: install_local_pkgs, tags: install_local_pkgs }
     - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }

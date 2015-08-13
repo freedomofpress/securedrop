@@ -1,6 +1,6 @@
 ---
 # Add dependency for FPF repo installation role.
 dependencies:
-  - install_fpf_repo
-  - grsecurity
+  - { role: install_fpf_repo, when: not install_local_packages }
+  - { role: grsecurity, when: grsecurity }
   - tor-hidden-services
