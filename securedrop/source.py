@@ -421,5 +421,5 @@ def write_pidfile():
 
 if __name__ == "__main__":
     write_pidfile()
-    # TODO make sure debug is not on in production
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    debug = getattr(config, 'env', 'prod') != 'prod'
+    app.run(debug=debug, host='0.0.0.0', port=8080)
