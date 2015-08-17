@@ -5,9 +5,9 @@
   lineinfile:
     backup: yes
     dest: /etc/hosts
-    insertafter: EOF
+    regexp: "{{ item.hostname }}"
     line: "{{ item.ip }}  {{ item.hostname }}"
-    regexp: "^{{ item.ip }}    {{ item.hostname }}"
+    insertafter: EOF
   with_items: ip_info
   tags:
     - host_aliases
