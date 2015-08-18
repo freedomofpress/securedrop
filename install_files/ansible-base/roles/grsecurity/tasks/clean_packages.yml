@@ -16,16 +16,22 @@
 
 - name: remove remaining generic kernels
   command: apt-get -y remove '^linux-image-.*generic$'
+  register: linux_image_removal
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_image_removal.stdout"
   tags:
     - apt
 
 - name: remove remaining kernel headers
   command: apt-get -y remove '^linux-headers-.*'
+  register: linux_headers_removal
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_headers_removal.stdout"
   tags:
     - apt
 
 - name: mark GRUB2 as manually installed so its not removed
   command: apt-mark manual grub-pc
+  register: grubpc_manual_mark
+  changed_when: "'grub-pc was already set to manually installed.' not in grubpc_manual_mark.stdout"
   tags:
     - apt
     - kernel
@@ -33,5 +39,7 @@
 
 - name: cleanup any dependencies left
   command: apt-get -y autoremove
+  register: apt_autoremove_all
+  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in apt_autoremove_all.stdout"
   tags:
     - apt
