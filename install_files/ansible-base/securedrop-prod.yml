@@ -1,21 +1,15 @@
 ---
 - hosts: [ 'mon', 'app', 'mon-prod', 'app-prod' ]
-
   vars_files:
-    - group_vars/securedrop.yml
     - prod-specific.yml
-
   roles:
+    - { role: manage-groups, tags: manage-groups }
+    - { role: validate, tags: validate }
     - { role: common, tags: common }
-
   sudo: yes
 
-
 - hosts: [ 'mon', 'mon-prod' ]
-
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
 
   roles:
@@ -28,8 +22,6 @@
 - hosts: [ 'app', 'app-prod' ]
 
   vars_files:
-   - group_vars/securedrop.yml
-   - host_vars/app.yml
    - prod-specific.yml
 
   vars:
@@ -54,8 +46,6 @@
 - hosts: [ 'mon', 'mon-prod' ]
 
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
 
   roles:
@@ -72,8 +62,6 @@
 - hosts: [ 'app', 'app-prod' ]
 
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
     - prod-specific.yml
 
   roles:
@@ -85,8 +73,6 @@
 - hosts: [ 'mon', 'mon-prod' ]
 
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
 
   roles:

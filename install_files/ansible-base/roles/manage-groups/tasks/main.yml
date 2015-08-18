@@ -1,0 +1,19 @@
+---
+# Since the production inventory filed is managed
+# by hand, adding group support to it would require
+# Admin intervention. Instead, manage the group
+# membership programmatically, according to hostnames.
+- name: ensure app host is in appropriate groups
+  add_host:
+    name: "{{ item }}"
+    groups: securedrop,app
+  when: "item.startswith('app')"
+  with_items: play_hosts
+
+- name: ensure mon host is in appropriate groups
+  add_host:
+    name: "{{ item }}"
+    groups: securedrop,mon
+  when: "item.startswith('mon')"
+  with_items: play_hosts
+
