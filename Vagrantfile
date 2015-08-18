@@ -143,6 +143,7 @@ Vagrant.configure("2") do |config|
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
       ansible.skip_tags = ENV['SECUREDROP_PROD_SKIP_TAGS']
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
