@@ -1,0 +1,18 @@
+---
+- name: check current swap status
+  command: swapon --summary
+  register: swap_status
+  # This task is read-only, and so should never report "changed".
+  # Its result is stored for a conditional check on reporting
+  # "changed" status when disabling swap.
+  changed_when: false
+  tags:
+    - swapspace
+
+- name: disable swap space
+  command: swapoff -a
+  # Check whether there was previously swap space in use,
+  # and report this task as changed if so.
+  changed_when: swap_status.stdout.find('/') == 0
+  tags:
+    - swapspace

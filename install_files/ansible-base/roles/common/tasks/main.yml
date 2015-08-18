@@ -13,7 +13,5 @@
 
 - include: sysctl.yml
 
-- name: disable swap space
-  command: swapoff -a
-  tags:
-    - swapspace
+- include: disable_swap.yml
+
