@@ -1,13 +1,4 @@
 ---
-  # Check to ensure a restart is needed to apply sysctl grsec lock command.
-  # If the grsec_lock file exists, then grsec is already running,
-  # and the reboot tasks below will be skipped.
-- stat:
-    path: /proc/sys/kernel/grsecurity/grsec_lock
-  register: grsec_lock
-  tags:
-    - grsec
-
   # If the grsec package is installed (via common role) and the grsec_lock is
   # not present reboot the system, to boot into the grsec kernel.
 - name: restart machine if the grsec lock sysctl option does not exist
@@ -15,7 +6,7 @@
   async: 0
   poll: 0
   ignore_errors: true
-  when: not grsec_lock.stat.exists
+  when: not running_grsec.stat.exists
   sudo: yes
   tags:
     - reboot
@@ -31,7 +22,7 @@
       port={{ ansible_ssh_port }}
       delay=45
       state=started
-  when: not grsec_lock.stat.exists
+  when: not running_grsec.stat.exists
   # Local wait action, doesn't require sudo privileges,
   # `wait_for` essentially means "do nothing for a while."
   # Since the top-level playbook (e.g. securedrop-prod.yml)
