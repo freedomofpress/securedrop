@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       ansible.groups = {
         'development' => %(development),
-        'app' => %w(development),
+        'securedrop_application_server' => %w(development),
         'securedrop:children' => %w(development),
       }
     end
@@ -90,10 +90,10 @@ Vagrant.configure("2") do |config|
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'app' => %(app-staging),
-        'mon' => %(mon-staging),
-        'staging:children' => %w(app mon),
-        'securedrop:children' => %w(app mon),
+        'securedrop_application_server' => %(app-staging),
+        'securedrop_monitor_server' => %(mon-staging),
+        'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
+        'securedrop:children' => %w(securedrop_application_server securedrop_monitor_server),
       }
       ansible.skip_tags = ENV['SECUREDROP_STAGING_SKIP_TAGS']
     end
@@ -160,7 +160,7 @@ Vagrant.configure("2") do |config|
       ansible.skip_tags = ENV['BUILD_SKIP_TAGS']
       ansible.groups = {
         'development' => %(build),
-        'app' => %(build),
+        'securedrop_application_server' => %(build),
         'securedrop:children' => %w(development),
       }
     end

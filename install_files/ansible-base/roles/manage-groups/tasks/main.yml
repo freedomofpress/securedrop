@@ -6,14 +6,14 @@
 - name: ensure app host is in appropriate groups
   add_host:
     name: "{{ item }}"
-    groups: securedrop,app
+    groups: securedrop,securedrop_application_server
   when: "item.startswith('app')"
   with_items: play_hosts
 
 - name: ensure mon host is in appropriate groups
   add_host:
     name: "{{ item }}"
-    groups: securedrop,mon
+    groups: securedrop,securedrop_monitor_server
   when: "item.startswith('mon')"
   with_items: play_hosts
 

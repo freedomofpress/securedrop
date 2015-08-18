@@ -1,39 +1,31 @@
 ---
-- hosts: [ 'mon', 'app', 'mon-prod', 'app-prod' ]
+- hosts: [ mon, app, mon-prod, app-prod ]
+  roles:
+    - { role: manage-groups, tags: manage-groups }
+
+- hosts: securedrop
   vars_files:
     - prod-specific.yml
   roles:
-    - { role: manage-groups, tags: manage-groups }
     - { role: validate, tags: validate }
     - { role: common, tags: common }
   sudo: yes
 
-- hosts: [ 'mon', 'mon-prod' ]
+- hosts: securedrop_monitor_server
   vars_files:
     - prod-specific.yml
-
   roles:
-    - { role: validate, tags: validate }
-    - { role: common-mon, tags: 'tor' }
-    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
-
+    - { role: ossec_server, tags: [ ossec, ossec_server ] }
   sudo: yes
 
-- hosts: [ 'app', 'app-prod' ]
-
+- hosts: securedrop_application_server
   vars_files:
    - prod-specific.yml
-
   vars:
-
   roles:
-    - { role: validate, tags: validate }
-    - { role: common-app, tags: ['common-app', 'tor'] }
-    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: ossec_agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
-
   sudo: yes
-
 
   # If the OSSEC authd iptables rule exemptions are in place remove them and
   # restart OSSEC. For the ossec agent the exemptions are removed as part of
@@ -43,14 +35,11 @@
   # service needs to be listening and reachable, then agent needs to connect to
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
-- hosts: [ 'mon', 'mon-prod' ]
-
+- hosts: securedrop_monitor_server
   vars_files:
     - prod-specific.yml
-
   roles:
-    - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
-
+    - { role: remove_authd_exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
   sudo: yes
 
   # This section will put the ssh and iptables rules in place
@@ -59,30 +48,23 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-- hosts: [ 'app', 'app-prod' ]
-
+- hosts: securedrop
   vars_files:
     - prod-specific.yml
-
   roles:
-    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
+  sudo: yes
+
+- hosts: securedrop_application_server
+  vars_files:
+    - prod-specific.yml
+  roles:
     - { role: backup, tags: backup }
-
   sudo: yes
 
-- hosts: [ 'mon', 'mon-prod' ]
-
+- hosts: securedrop
   vars_files:
     - prod-specific.yml
-
-  roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
-
-  sudo: yes
-
-- hosts: [ 'app', 'mon', 'app-prod', 'mon-prod' ]
-
   roles:
     - { role: reboot, tags: reboot }
-
   sudo: yes
