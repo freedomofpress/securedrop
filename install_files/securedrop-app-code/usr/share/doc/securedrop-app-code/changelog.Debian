@@ -1,3 +1,14 @@
+securedrop-app-code (0.3.5) trusty; urgency=medium
+
+ * Use certificate verification instead of fingerprint verification by default for the OSSEC Postfix configuration (#1076)
+ * Fix apache2 service failing to start on Digital Ocean (#1078)
+ * Allow Apache to rotate its logs (#1074)
+ * Prevent reboots during cron-apt upgrade (#1071)
+ * Update documentation (#1107, #1112, #1113)
+ * Blacklist additional kernel modules used for wireless networking (#1116)
+
+ -- SecureDrop Team <securedrop@freedom.press>  Fri, 18 Sep 2015 21:28:41 +0000
+
 securedrop-app-code (0.3.4) trusty; urgency=medium
 
  * Fix ineffective SSH connection throttling (iSEC-15FTC-7, #1053)

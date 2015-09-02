@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.5
+
+The issues for this release were tracked with the 0.3.5 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.5
+
+* Use certificate verification instead of fingerprint verification by default for the OSSEC Postfix configuration (#1076)
+* Fix apache2 service failing to start on Digital Ocean (#1078)
+* Allow Apache to rotate its logs (#1074)
+* Prevent reboots during cron-apt upgrade (#1071)
+* Update documentation (#1107, #1112, #1113)
+* Blacklist additional kernel modules used for wireless networking (#1116)
+
 ## 0.3.4
 
 The issues for this release were tracked with the 0.3.4 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.4
