@@ -31,8 +31,8 @@ sed -i "s/$OLD_VERSION/$NEW_VERSION/g" securedrop/version.py
 
 # Update the version in the Debian packages
 sed -i "s/^\(Version: \).*/\1$NEW_VERSION/" install_files/securedrop-app-code/DEBIAN/control
-sed -i "s/^\(Version: 2.8.1+\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control
-sed -i "s/^\(Version: 2.8.1+\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-agent/DEBIAN/control
+sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control
 
 # Update the version used by Ansible for the filename of the output of the deb building role
 sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$NEW_VERSION/" install_files/ansible-base/group_vars/securedrop.yml
