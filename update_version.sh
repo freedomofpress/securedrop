@@ -55,9 +55,10 @@ git commit -a
 
 # Initiate the process of creating a signed tag, using the workflow for signing with the airgapped signing key.
 git tag -a $NEW_VERSION
-git cat-file tag $NEW_VERSION > "$NEW_VERSION.tag"
+TAGFILE="$NEW_VERSION.tag"
+git cat-file tag $NEW_VERSION > $TAGFILE
 
 echo
 echo "[ok] Version update complete and committed."
-echo "     Please continue the airgapped signing process with $TAGFILE".
+echo "     Please continue the airgapped signing process with the tag file: $TAGFILE"
 echo
