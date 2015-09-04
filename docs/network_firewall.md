@@ -13,11 +13,11 @@ Network Firewall Setup Guide
     - [Setup Wizard](#setup-wizard)
     - [Connect Interfaces and Test Connectivity](#connect-interfaces-and-test-connectivity)
 - [SecureDrop-specific Configuration](#securedrop-specific-configuration)
-  - [Set up OPT1](#set-up-opt1)
-  - [Set up OPT2](#set-up-opt2)
   - [Disable DHCP on the LAN](#disable-dhcp-on-the-lan)
     - [Disabling DHCP](#disabling-dhcp)
     - [Assigning a static IP address to the Admin Workstation](#assigning-a-static-ip-address-to-the-admin-workstation)
+  - [Set up OPT1](#set-up-opt1)
+  - [Set up OPT2](#set-up-opt2)
   - [Set up the network firewall rules](#set-up-the-network-firewall-rules)
     - [Example Screenshots](#example-screenshots)
 
