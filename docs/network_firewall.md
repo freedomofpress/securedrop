@@ -200,8 +200,8 @@ For pfSense, see Section 6 of the pfSense Guide for information on setting up fi
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
 3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface:
 
-  * `-s APP_IP` → `LAN`
-  * `-s ADMIN_IP` → `OPT1`
+  * `-s ADMIN_IP` → `LAN`
+  * `-s APP_IP` → `OPT1`
   * `-s MONITOR_IP` → `OPT2`
 
 4. Make sure you delete any default "allow all" rules on the LAN interface. Leave the "Anti-Lockout" rule enabled.
