@@ -246,6 +246,14 @@ button.small, a.btn.small, .btn.small {
   cursor: pointer;
 }
 
+.confirm-prompt {
+  opacity: 0;
+}
+
+.confirm-prompt:target {
+  opacity: 1;
+}
+
 p.serious {
   font-weight: bold;
   color: #ae3840;
@@ -456,6 +464,7 @@ p#codename {
   text-align: left;
   margin-bottom: 1em;
   border-radius: 5px;
+  position: relative;
 }
 #replies .reply .date {
   float: right;
@@ -465,23 +474,45 @@ p#codename {
   font-weight: bold;
   padding: 5px;
 }
-#replies .reply button {
+#replies .reply a.delete {
   float: right;
   padding: 5px;
   background-color: inherit;
   color: #d55c5c;
   font-size: 14px;
-  border: 0;
   clear: right;
+  text-decoration: none;
 }
-#replies .reply button:hover {
-  border: 0;
+#replies .reply a.delete:hover {
   color: #FA6E6E;
 }
 #replies p {
   color: #777;
   font-style: italic;
 }
+#replies .confirm-prompt {
+  position: absolute;
+  width: 300px;
+  right: 5%;
+  top: -9%;
+  font-size: 14px;
+}
+
+#replies .confirm-prompt p * {
+  margin: 0 2%;
+  font-style: normal;
+  font-size: inherit;
+}
+
+#replies .confirm-prompt p a {
+  color: inherit;
+}
+
+#replies .confirm-prompt p button {
+  margin: 0 2%;
+  padding: 5px 15px;
+}
+
 p#no-replies {
   text-align: center;
 }
