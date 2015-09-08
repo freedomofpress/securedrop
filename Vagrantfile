@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/build-deb-pkgs.yml"
       ansible.verbose = 'v'
+      ansible.extra_vars = "ansible_vars.json"
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "ossec-build"

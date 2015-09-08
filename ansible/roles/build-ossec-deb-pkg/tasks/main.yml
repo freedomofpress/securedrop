@@ -52,6 +52,11 @@
 - name: copy OSSEC DEBIAN dir to build dir
   command: cp -R /vagrant/ossec-{{ purpose }}/DEBIAN /tmp/{{ ossec_build_dir }}
 
+- name: template the control file
+  template:
+    src: "{{ purpose }}_control.j2"
+    dest: /tmp/{{ ossec_build_dir }}/DEBIAN/control
+
 - name: copy OSSEC usr dir to build dir
   command: cp -R /vagrant/ossec-{{ purpose }}/usr /tmp/{{ ossec_build_dir }}
 

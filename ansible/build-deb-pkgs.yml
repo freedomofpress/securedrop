@@ -6,8 +6,6 @@
     version: "2.8.2"
     download_url: "https://github.com/ossec/ossec-hids/archive"
     download_name: "{{ version }}.tar.gz"
-    download_checksum_sha256: "61e0892175a79fe119c8bab886cd41fcc3be9b84526600b06c18fa178a59cb34"
-    download_checksum_md5: "3036d5babc96216135759338466e1f79"
     archive_name: "ossec-hids-{{ download_name }}"
     build_path: "/vagrant/build"
     arch: "amd64"

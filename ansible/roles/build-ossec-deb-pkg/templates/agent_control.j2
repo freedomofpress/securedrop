@@ -3,8 +3,8 @@ Section: web
 Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: http://ossec.net
-Package: ossec-agent
-Version: 2.8.2
+Package: ossec-{{ purpose }}
+Version: {{ version }}
 Architecture: amd64
 Depends: libc6,libssl1.0.0,expect,inotify-tools,adduser
 Conflicts: ossec-server
