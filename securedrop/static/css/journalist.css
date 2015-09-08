@@ -219,6 +219,14 @@ button.small, a.btn.small, .btn.small {
   cursor: pointer;
 }
 
+.confirm-prompt {
+  display: none;
+}
+
+.confirm-prompt:target {
+  display: block;
+}
+
 p.serious {
   font-weight: bold;
   color: #ae3840;
@@ -552,6 +560,7 @@ div.bubble.tbb31plus {
 
 p.breadcrumbs {
   text-align: left;
+  position: relative;
 }
 
 .button-star {
@@ -630,18 +639,32 @@ table#users td {
   padding: 5px 5px;
   color: #999;
   font-size: 14px;
+  text-decoration: none;
 }
 
 #regenerate-codename-btn:hover {
   color:#333;
 }
 
-#regenerate-codename-btn:focus {
-  outline: 0;
-}
-
 #regenerate-codename-btn-label {
   font-size: 10px;
+}
+
+#regenerate-code .confirm-prompt {
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+}
+
+
+#regenerate-code .confirm-prompt button {
+  padding: 5px 15px;
+}
+
+#regenerate-code .confirm-prompt * {
+  margin: 0 1%;
+  font-size: inherit;
+  font-style: normal;
 }
 
 div#select-container {
