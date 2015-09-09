@@ -10,12 +10,23 @@ task :default do
   puts "Building packages"
   download_source
   write_vars_file(hashes)
+
   %x(vagrant up)
+
   if $?.success?
     %x(vagrant destroy --force)
+    puts "Packages built and now available in build/"
+    puts %x(ls -ltr build/*.deb)
+  else
+    message = %q(Vagrant or Ansible playbook has failed.
+Run
+    vagrant status
+and
+    vagrant provision
+to troubleshoot.
+    )
+    puts message
   end
-  puts "Packages built and now available in build/"
-  puts %x(ls -ltr build/*.deb)
 end
 
 def version
@@ -50,12 +61,11 @@ end
 
 def hashes
   md5 = ""
-  sha1 = ""
   filename = "ossec-hids-#{version}-checksum.txt"
+
   Net::HTTP.start(DOWNLOAD_SOURCE) do |http|
     response = http.request_get("/#{DOWNLOAD_PATH}#{filename}")
     md5 = /MD5.*= (.*)$/.match(response.body)[1]
-    sha1 = /SHA1.*= (.*)$/.match(response.body)[1]
   end
 
   {
@@ -64,8 +74,9 @@ def hashes
   }
 end
 
-def write_vars_file(hashes)
+def write_vars_file(ansible_vars)
+  ansible_vars[:version] = version
   File.open("ansible_vars.json", "wb") do |f|
-    f.write(hashes.to_json)
+    f.write(ansible_vars.to_json)
   end
 end
