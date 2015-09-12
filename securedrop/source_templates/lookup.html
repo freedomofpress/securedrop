@@ -44,10 +44,16 @@
     {% for reply in replies %}
       <div class="reply">
         <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
-        <form class="message" method="post" action="/delete" autocomplete="off">
+        <form id="delete" class="message" method="post" action="/delete" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
-          <button type="submit"><i class="fa fa-trash-o"></i> Delete</button>
+          <a href="#confirm-delete-{{ reply.filename }}" class="delete"><i class="fa fa-trash-o"></i> Delete</a>
+          <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
+            <p>Delete this reply?
+              <a href="#delete">Cancel</a>
+              <button type="submit" class="btn danger">Delete</button>
+              </p>
+          </div>
         </form>
         <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
         <div class="clearfix"></div>
