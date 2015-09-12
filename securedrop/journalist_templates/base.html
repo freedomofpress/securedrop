@@ -15,10 +15,9 @@
 
     {% if g.user %}
     <div id="logout">
+      <a href="{{ url_for('edit_account') }}">Edit Account</a> | 
       {% if g.user and g.user.is_admin %}
       <a href="{{ url_for('admin_index') }}">Admin</a> | 
-      {% else %}
-      <a href="{{ url_for('edit_account') }}">Edit Account</a>
       {% endif %}
       <a href="{{ url_for('logout') }}">Logout</a>
     </div>
