@@ -321,11 +321,12 @@ def edit_account():
                 "Password successfully changed!",
                 "notification")
         except Exception as e:
-            db_session.rollback()
             flash(
                 "An unknown error occurred, please inform your administrator",
                 "error")
-    
+            app.logger.error("Password change for '{}' failed: {}".format(
+                user, e))
+            db_session.rollback()
     return render_template('edit_account.html')
 
 
