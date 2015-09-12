@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-The *Application Server* and the *Monitor Server* specifically require the 64-bit version of [Ubuntu Server 14.04.2 LTS (Trusty Tahr)](http://releases.ubuntu.com/14.04.2/). The image you want to get is named `ubuntu-14.04.2-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
+The *Application Server* and the *Monitor Server* specifically require the 64-bit version of [Ubuntu Server 14.04.2 LTS (Trusty Tahr)](http://old-releases.ubuntu.com/releases/14.04.2/). The image you want to get is named `ubuntu-14.04.2-server-amd64.iso`. In order to verify the installation media, you should also download the files named `SHA256SUMS` and `SHA256SUMS.gpg`.
 
 ## Verify the Ubuntu installation media
 
