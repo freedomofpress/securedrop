@@ -541,6 +541,71 @@ class TestIntegration(unittest.TestCase):
             soup.select('ul#submissions li a .filename')[2].contents[0])
         self.assertTrue(re.match(submission_filename_re.format(4), filename))
 
+    def test_user_change_password(self):
+        """Test that a journalist can successfully login after changing their password"""
+          
+        # change password
+        self.journalist_app.post('/account', data=dict(
+            password='newpass',
+            password_again='newpass'
+        ))
+
+        # logout
+        common.logout(self.journalist_app)
+
+        # login with new credentials should redirect to index page
+        rv = self.journalist_app.post('/login', data=dict(
+            username=self.user.username,
+            password='newpass',
+            token=self.user.totp.now(),
+            follow_redirects=True))
+        self.assertEqual(rv.status_code, 302)
+
+    def test_login_after_regenerate_totp(self):
+        """Test that journalists can login after resetting their Google Authenticator 2fa"""
+
+        # regenerate totp
+        self.journalist_app.post('/account/reset-2fa-totp')
+      
+        # successful verification should redirect to /account
+        rv = self.journalist_app.post('/account/2fa', data=dict(
+            token=self.user.totp.now()))
+        self.assertEqual(rv.status_code, 302)
+      
+        # log out
+        common.logout(self.journalist_app)
+
+        # login with new 2fa secret should redirect to index page
+        rv = self.journalist_app.post('/login', data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now(),
+            follow_redirects=True))
+        self.assertEqual(rv.status_code, 302)
+
+    def test_login_after_regenerate_hotp(self):
+        """Test that journalists can login after resetting their HOTP 2fa"""
+
+        # edit hotp
+        self.journalist_app.post('/account/reset-2fa-hotp', data=dict(
+            otp_secret=123456))
+      
+        # successful verificaton should redirect to /account
+        rv = self.journalist_app.post('/account/2fa', data=dict(
+            token=self.user.hotp))
+        self.assertEqual(rv.status_code, 302)
+
+        # log out
+        common.logout(self.journalist_app)
+        
+        # login with new 2fa secret should redirect to index page
+        rv = self.journalist_app.post('/login', data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.hotp,
+            follow_redirects=True))
+        self.assertEqual(rv.status_code, 302)
+
     def helper_filenames_submit(self):
         self.source_app.post('/submit', data=dict(
             msg="This is a test.",
@@ -583,6 +648,7 @@ class TestIntegration(unittest.TestCase):
         # Make sure the files were deleted from the filesystem
         self._wait_for(lambda: self.assertFalse(
             any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

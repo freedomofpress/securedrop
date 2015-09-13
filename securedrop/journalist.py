@@ -219,7 +219,6 @@ def admin_new_user_two_factor():
 
     return render_template("admin_new_user_two_factor.html", user=user)
 
-
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
 def admin_reset_two_factor_totp():
@@ -271,6 +270,11 @@ def admin_edit_user(user_id):
         try:
             db_session.add(user)
             db_session.commit()
+            flash("Password successfully changed for user {} ".format(
+                  user.username),
+                  "notification"
+            )
+
         except Exception as e:
             db_session.rollback()
             if "username is not unique" in str(e):
@@ -290,6 +294,81 @@ def admin_delete_user(user_id):
     db_session.delete(user)
     db_session.commit()
     return redirect(url_for('admin_index'))
+
+
+@app.route('/account', methods=('GET', 'POST'))
+@login_required
+def edit_account():
+    user = g.user
+
+    if request.method == 'POST':
+        if request.form['password'] != "":
+            if request.form['password'] != request.form['password_again']:
+                flash("Passwords didn't match", "error")
+                return redirect(url_for("edit_account"))
+            try:
+                user.set_password(request.form['password'])
+            except InvalidPasswordLength:
+                flash("Your password is too long "
+                      "(maximum length {} characters)".format(
+                      Journalist.MAX_PASSWORD_LEN), "error")
+                return redirect(url_for("edit_account"))
+
+        try:
+            db_session.add(user)
+            db_session.commit()
+            flash(
+                "Password successfully changed!",
+                "notification")
+        except Exception as e:
+            flash(
+                "An unknown error occurred, please inform your administrator",
+                "error")
+            app.logger.error("Password change for '{}' failed: {}".format(
+                user, e))
+            db_session.rollback()
+    return render_template('edit_account.html')
+
+
+@app.route('/account/2fa', methods=('GET', 'POST'))
+@login_required
+def account_new_two_factor():
+    user = g.user
+
+    if request.method == 'POST':
+        token = request.form['token']
+        if user.verify_token(token):
+            flash(
+                "Two factor token successfully verified!",
+                "notification")
+            return redirect(url_for('edit_account'))
+        else:
+            flash("Two factor token failed to verify", "error")
+
+    return render_template('account_new_two_factor.html', user=user)
+
+
+@app.route('/account/reset-2fa-totp', methods=['POST'])
+@login_required
+def account_reset_two_factor_totp():
+    user = g.user
+    user.is_totp = True
+    user.regenerate_totp_shared_secret()
+    db_session.commit()
+    return redirect(url_for('account_new_two_factor'))
+
+
+@app.route('/account/reset-2fa-hotp', methods=['POST'])
+@login_required
+def account_reset_two_factor_hotp():
+    user = g.user
+    otp_secret = request.form.get('otp_secret', None)
+    if otp_secret:
+        user.set_hotp_secret(otp_secret)
+        db_session.commit()
+        return redirect(url_for('account_new_two_factor'))
+    else:
+        return render_template('account_edit_hotp_secret.html')
 
 
 def make_star_true(sid):

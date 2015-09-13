@@ -96,6 +96,17 @@ class TestJournalist(TestCase):
             "Admin")
         self.assertIn(admin_link, res.data)
 
+    def test_user_has_edit_account_link_in_index(self):
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.user.username,
+            password=self.user_pw,
+            token=self.user.totp.now()),
+            follow_redirects=True)
+        edit_account_link = '<a href="{}">{}</a>'.format(
+            url_for('edit_account'),
+            "Edit Account")
+        self.assertIn(edit_account_link, res.data)
+
     def _login_user(self):
         self.client.post(url_for('login'), data=dict(
             username=self.user.username,
@@ -138,7 +149,7 @@ class TestJournalist(TestCase):
 
     def test_user_authorization_for_gets(self):
         urls = [url_for('index'), url_for('col', sid='1'),
-                url_for('doc', sid='1', fn='1')]
+                url_for('doc', sid='1', fn='1'), url_for('edit_account')]
 
         for url in urls:
             res = self.client.get(url)
@@ -147,10 +158,53 @@ class TestJournalist(TestCase):
     def test_user_authorization_for_posts(self):
         urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
                 url_for('col_process'), url_for('col_delete_single', sid='1'),
-                url_for('reply'), url_for('generate_code'), url_for('bulk')]
+                url_for('reply'), url_for('generate_code'), url_for('bulk'),
+                url_for('account_new_two_factor'), url_for('account_reset_two_factor_totp'),
+                url_for('account_reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
             self.assert_status(res, 302)
+
+    def test_invalid_user_password_change(self):
+        self._login_user()
+        res = self.client.post(url_for('edit_account'), data=dict(
+            password='not',
+            password_again='thesame'))
+        self.assert_redirects(res, url_for('edit_account'))
+        
+    def test_valid_user_password_change(self):
+        self._login_user()
+        res = self.client.post(url_for('edit_account'), data=dict(
+            password='valid',
+            password_again='valid'))
+        self.assertIn("Password successfully changed", res.data)
+
+    def test_regenerate_totp(self):
+        self._login_user()
+        oldTotp = self.user.totp
+
+        res = self.client.post(url_for('account_reset_two_factor_totp'))
+        newTotp = self.user.totp
+
+        # check that totp is different
+        self.assertNotEqual(oldTotp, newTotp)
+        
+        # should redirect to verification page
+        self.assert_redirects(res, url_for('account_new_two_factor'))
+
+    def test_edit_hotp(self):
+        self._login_user()
+        oldHotp = self.user.hotp
+
+        res = self.client.post(url_for('account_reset_two_factor_hotp'), data=dict(
+            otp_secret=123456))
+        newHotp = self.user.hotp
+
+        # check that hotp is different 
+        self.assertNotEqual(oldHotp, newHotp)
+
+        # should redirect to verification page
+        self.assert_redirects(res, url_for('account_new_two_factor'))
 
     # TODO: more tests for admin interface
 
