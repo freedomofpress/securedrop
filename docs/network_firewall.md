@@ -13,10 +13,11 @@ Network Firewall Setup Guide
     - [Setup Wizard](#setup-wizard)
     - [Connect Interfaces and Test Connectivity](#connect-interfaces-and-test-connectivity)
 - [SecureDrop-specific Configuration](#securedrop-specific-configuration)
-  - [Set up OPT1](#set-up-opt1)
   - [Disable DHCP on the LAN](#disable-dhcp-on-the-lan)
     - [Disabling DHCP](#disabling-dhcp)
     - [Assigning a static IP address to the Admin Workstation](#assigning-a-static-ip-address-to-the-admin-workstation)
+  - [Set up OPT1](#set-up-opt1)
+  - [Set up OPT2](#set-up-opt2)
   - [Set up the network firewall rules](#set-up-the-network-firewall-rules)
     - [Example Screenshots](#example-screenshots)
 
@@ -24,7 +25,9 @@ Network Firewall Setup Guide
 
 Unfortunately, due to the wide variety of firewalls that may be used, we do not provide specific instructions to cover every type or variation in software or hardware.
 
-This guide will focus on pfSense, and assumes your firewall has at least three interfaces: WAN, LAN, and OPT1. These are the default interfaces on the recommended Netgate firewall, and it should be easy to configure any pfSense firewall with 3 or more NICs this way.
+This guide will focus on pfSense, and assumes your firewall has at least three interfaces: WAN, LAN, and OPT1.  The latest recommended firewall has four interfaces: WAN, LAN, OPT1, and OPT2. This guide will cover setting up the default NICs for both 3- or 4-NIC configurations on the pfSense firewall.
+
+If your firewall only has 3 NICs (WAN, LAN, and OPT1), you can use the OPT1 interface with a switch on the LAN port. If your firewall has 4 NICs (WAN, LAN, OPT1, and OPT2), a switch will not be required.
 
 To avoid duplication, this guide refers to sections of the [pfSense Guide](http://data.sfb.bg.ac.rs/sftp/bojan.radic/Knjige/Guide_pfsense.pdf), so you will want to have that handy.
 
@@ -37,16 +40,37 @@ Note that many firewalls, including the recommended Netgate pfSense, automatical
 
 The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
 
-We assume that you have examined your network configuration and have selected two appropriate subnets. We will refer to your chosen subnets as "App Subnet" and "Monitor Subnet" throughout the rest of the documentation. For the examples in the documentation, we have chosen:
+We assume that you have examined your network configuration and have selected two appropriate subnets. We will refer to your chosen subnets as "App Subnet" and "Monitor Subnet" throughout the rest of the documentation. 
+
+#### 3 NIC configuration
+
+For the examples in the documentation, we have chosen:
 
 * App Subnet: 10.20.1.0/24
 * App Gateway: 10.20.1.1
 * App Server: 10.20.1.2
+
 * Admin Workstation: 10.20.1.3
 
 * Monitor Subnet: 10.20.2.0/24
 * Monitor Gateway: 10.20.2.1
 * Monitor Server: 10.20.2.2
+
+#### 4 NIC configuration
+
+For the examples in the documentation, we have chosen:
+
+* Admin Subnet: 10.20.1.0/24
+* Admin Gateway: 10.20.1.1
+* Admin Workstation: 10.20.1.2
+
+* App Subnet: 10.20.2.0/24
+* App Gateway: 10.20.2.1
+* App Server: 10.20.2.2
+
+* Monitor Subnet: 10.20.3.0/24
+* Monitor Gateway: 10.20.3.1
+* Monitor Server: 10.20.3.2
 
 Initial Setup
 -------------
@@ -110,7 +134,7 @@ Leave the defaults for "Time Server Information". Click Next.
 
 On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
 
-For "Configure LAN Interface", set the IP address and subnet mask of the Application Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
+For "Configure LAN Interface", set the IP address and subnet mask of the Admin Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
 
 Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
@@ -135,15 +159,6 @@ SecureDrop uses the firewall to achieve two primary goals:
 2.  Isolating the app and the monitor servers from each other as much as possible, to reduce attack surface.
 
 In order to use the firewall to isolate the app and monitor servers from each other, we need to connect them to separate interfaces, and then set up firewall rules that allow them to communicate.
-
-### Set up OPT1
-
-We set up the LAN interface during the initial configuration. We now need to set up the OPT1 interface. Start by connecting the Monitor Server to the OPT1 port. Then use the WebGUI to configure the OPT1 interface. Go to `Interfaces → OPT1`, and check the box to "Enable Interface". Use these settings:
-
--   IPv4 Configuration Type: Static IPv4
--   IPv4 Address: Monitor Gateway
-
-Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
 
 ### Disable DHCP on the LAN
 
@@ -175,6 +190,24 @@ Change to the "IPv4 Settings" tab. Change "Method:" from "Automatic (DHCP)" to "
 
 Click "Save...". If the network does not come up within 15 seconds or so, try disconnecting and reconnecting your network cable to trigger the change. You will need you have succeeded in connecting with your new static IP when you see a pop-up notification that says "Tor is ready. You can now access the Internet".
 
+### Set up OPT1
+
+We set up the LAN interface during the initial configuration. We now need to set up the OPT1 interface. Start by connecting the Application Server to the OPT1 port. Then use the WebGUI to configure the OPT1 interface. Go to `Interfaces → OPT1`, and check the box to "Enable Interface". Use these settings:
+
+-   IPv4 Configuration Type: Static IPv4
+-   IPv4 Address: Application Gateway
+
+Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
+
+### Set up OPT2
+
+If you have 4 NICs, you will have to enable the OPT2 interface. Go to `Interfaces → OPT2`, and check the box to "Enable Interface". OPT2 interface is set up similarly to how we set up OPT1 in the previous section. Use these settings:
+
+-   IPv4 Configuration Type: Static IPv4
+-   IPv4 Address: Monitor Gateway
+
+Check the CIDR prefix once again (`/24`). Save and Apply Changes.
+
 ### Set up the network firewall rules
 
 Since there are a variety of firewalls with different configuration interfaces and underlying sets of software, we cannot provide a set of network firewall rules to match every use case. Instead, we provide a firewall rules template in `install_files/network_firewall/rules`. This template is written in the iptables format, which you will need to manually translate for your firewall and preferred configuration method.
@@ -183,12 +216,20 @@ For pfSense, see Section 6 of the pfSense Guide for information on setting up fi
 
 1. Create aliases for the repeated values (IPs and ports).
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
-3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface:
+3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface.
+
+If you have 3 NICs, your rules are:
 
   * `-s APP_IP` → `LAN`
   * `-s MONITOR_IP` → `OPT1`
 
-4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
+If you have 4 NICs, your rules are:
+
+  * `-s ADMIN_IP` → `LAN`
+  * `-s APP_IP` → `OPT1`
+  * `-s MONITOR_IP` → `OPT2`
+
+4. Make sure you delete any default "allow all" rules on the LAN interface. Leave the "Anti-Lockout" rule enabled.
 5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
@@ -199,9 +240,19 @@ We recognize that this process is cumbersome and may be difficult for people ine
 
 Here are some example screenshots of a working pfSense firewall configuration.
 
+#### 3 NICs Configuration
+
 ![Firewall IP Aliases](images/firewall/ip_aliases.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
 ![Firewall LAN Rules](images/firewall/lan_rules.png)
 ![Firewall OPT1 Rules](images/firewall/opt1_rules.png)
+
+#### 4 NICs Configuration
+
+![Firewall IP Aliases](images/firewall/ip_aliases_with_opt2.png)
+![Firewall Port Aliases](images/firewall/port_aliases.png)
+![Firewall LAN Rules](images/firewall/lan_rules_with_opt2.png)
+![Firewall OPT1 Rules](images/firewall/opt1_rules_with_opt2.png)
+![Firewall OPT2 Rules](images/firewall/opt2_rules.png)
 
 Once you've set up the firewall, **exit the Unsafe Browser**, and continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
