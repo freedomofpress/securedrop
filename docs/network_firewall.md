@@ -6,6 +6,8 @@ Network Firewall Setup Guide
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [Before you begin](#before-you-begin)
+    - [3 NIC configuration](#3-nic-configuration)
+    - [4 NIC configuration](#4-nic-configuration)
 - [Initial Setup](#initial-setup)
   - [Assign interfaces](#assign-interfaces)
   - [Initial configuration](#initial-configuration)
@@ -20,6 +22,8 @@ Network Firewall Setup Guide
   - [Set up OPT2](#set-up-opt2)
   - [Set up the network firewall rules](#set-up-the-network-firewall-rules)
     - [Example Screenshots](#example-screenshots)
+      - [3 NICs Configuration](#3-nics-configuration)
+      - [4 NICs Configuration](#4-nics-configuration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -241,14 +245,14 @@ We recognize that this process is cumbersome and may be difficult for people ine
 
 Here are some example screenshots of a working pfSense firewall configuration.
 
-#### 3 NICs Configuration
+##### 3 NICs Configuration
 
 ![Firewall IP Aliases](images/firewall/ip_aliases.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
 ![Firewall LAN Rules](images/firewall/lan_rules.png)
 ![Firewall OPT1 Rules](images/firewall/opt1_rules.png)
 
-#### 4 NICs Configuration
+##### 4 NICs Configuration
 
 ![Firewall IP Aliases](images/firewall/ip_aliases_with_opt2.png)
 ![Firewall Port Aliases](images/firewall/port_aliases.png)
