@@ -46,8 +46,9 @@ We assume that you have examined your network configuration and have selected tw
 
 For the examples in the documentation, we have chosen:
 
-* App Subnet: 10.20.1.0/24
-* App Gateway: 10.20.1.1
+* Admin/App Gateway: 10.20.1.1
+* Admin/App Subnet: 10.20.1.0/24
+
 * App Server: 10.20.1.2
 
 * Admin Workstation: 10.20.1.3
