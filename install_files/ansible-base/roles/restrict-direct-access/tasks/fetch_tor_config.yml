@@ -23,24 +23,14 @@
   # format it for a torrc file on the admins workstation.
   # This should make it easier for the admin or journalist to copy paste the
   # line correctly.
-- name: format securedrop document aths
+- name: format securedrop aths files
   local_action: lineinfile
-    dest=./app-document-aths
+    dest=./{{ item.filename }}
     regexp='(.*)'
     backrefs=yes
     line='HidServAuth \1'
   sudo: no
-  tags:
-    - tor
-    - admin
-
-- name: format app ssh aths
-  local_action: lineinfile
-    dest=./app-ssh-aths
-    regexp='(.*)'
-    backrefs=yes
-    line='HidServAuth \1'
-  sudo: no
+  with_items: tor_instances
   tags:
     - tor
     - admin
