@@ -25,7 +25,7 @@ and
     vagrant provision
 to troubleshoot.
     )
-    puts message
+    fail message
   end
 end
 
