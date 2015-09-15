@@ -14,7 +14,7 @@ desired_iptables_rules = [
   '-A INPUT -p tcp -m tcp --sport 587 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT',
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
-  '-A INPUT -m comment --comment "Log and drop all other incomming traffic" -j LOGNDROP',
+  '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
   "-A OUTPUT -p tcp -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"tor instance that provides ssh access\" -j ACCEPT",
   "-A OUTPUT -m owner --uid-owner #{property['tor_user_uid']} -m comment --comment \"Drop all other traffic for the tor instance used for ssh\" -j LOGNDROP",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"Rate limit traffic from tor to the ssh dameon\" -j ACCEPT",
