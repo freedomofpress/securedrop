@@ -247,13 +247,11 @@ button.small, a.btn.small, .btn.small {
 }
 
 .confirm-prompt {
-  opacity: 0;
-  z-index: -1;
+  visibility: hidden;
 }
 
 .confirm-prompt:target {
-  opacity: 1;
-  z-index: 1;
+  visibility: visible;
 }
 
 p.serious {
