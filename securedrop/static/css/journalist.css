@@ -220,11 +220,11 @@ button.small, a.btn.small, .btn.small {
 }
 
 .confirm-prompt {
-  display: none;
+  visibility: hidden;
 }
 
 .confirm-prompt:target {
-  display: block;
+  visibility: visible;
 }
 
 p.serious {
