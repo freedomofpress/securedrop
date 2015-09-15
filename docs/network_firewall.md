@@ -27,11 +27,11 @@ Network Firewall Setup Guide
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Unfortunately, due to the wide variety of firewalls that may be used, we do not provide specific instructions to cover every type or variation in software or hardware.
+Unfortunately, due to the wide variety of firewalls that may be used, we do not provide specific instructions to cover every type or variation in software or hardware. This guide is based on pfSense, and assumes your firewall hardware has at least three interfaces: WAN, LAN, and OPT1. For hardware, you can build your own network firewall (not covered in this guide) and [install pfSense](https://doc.pfsense.org/index.php/Installing_pfSense) on it. For most installations, we recommend buying a dedicated firewall appliance with pfSense pre-installed, such as the one recommended in the Hardware Guide.
 
-This guide will focus on pfSense, and assumes your firewall has at least three interfaces: WAN, LAN, and OPT1.  The latest recommended firewall has four interfaces: WAN, LAN, OPT1, and OPT2. This guide will cover setting up the default NICs for both 3- or 4-NIC configurations on the pfSense firewall.
+We used to recommend the 3-NIC [Netgate APU 2](http://store.netgate.com/NetgateAPU2.aspx), but it has since been discontinued. We currently recommend the [pfSense SG-2440](http://store.pfsense.org/SG-2440/), which has 4 interfaces: WAN, LAN, OPT1, and OPT2. This guide covers both the old 3-NIC configuration, for existing installs that are still using it, and the 4-NIC configuration recommended for new installs.
 
-If your firewall only has 3 NICs (WAN, LAN, and OPT1), you can use the OPT1 interface with a switch on the LAN port. If your firewall has 4 NICs (WAN, LAN, OPT1, and OPT2), a switch will not be required.
+If your firewall only has 3 NICs (WAN, LAN, and OPT1), you will need to use a switch on the OPT1 interface to connect the Admin Workstation for the initial installation. If your firewall has 4 NICs (WAN, LAN, OPT1, and OPT2), a switch is not necessary.
 
 To avoid duplication, this guide refers to sections of the [pfSense Guide](http://data.sfb.bg.ac.rs/sftp/bojan.radic/Knjige/Guide_pfsense.pdf), so you will want to have that handy.
 
