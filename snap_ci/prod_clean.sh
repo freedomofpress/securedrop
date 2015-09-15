@@ -28,7 +28,7 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
 # Staging config includes looser Apache rules, so filter those out.
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
-    "${repo_root}"/install_files/ansible-base/staging-specific.yml | \
+    "${repo_root}"/install_files/ansible-base/group_vars/staging.yml | \
     grep -vi apache > \
     "${repo_root}"/install_files/ansible-base/prod-specific.yml
 
