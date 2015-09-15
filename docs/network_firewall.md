@@ -33,7 +33,11 @@ We used to recommend the 3-NIC [Netgate APU 2](http://store.netgate.com/NetgateA
 
 If your firewall only has 3 NICs (WAN, LAN, and OPT1), you will need to use a switch on the OPT1 interface to connect the Admin Workstation for the initial installation. If your firewall has 4 NICs (WAN, LAN, OPT1, and OPT2), a switch is not necessary.
 
-To avoid duplication, this guide refers to sections of the [pfSense Guide](http://data.sfb.bg.ac.rs/sftp/bojan.radic/Knjige/Guide_pfsense.pdf), so you will want to have that handy.
+If you are new to pfSense or firewall management in general, we recommend the following resources:
+
+- [Official pfSense Wiki](https://doc.pfsense.org/index.php/Main_Page)
+- [pfSense: The Definitive Guide](http://www.amazon.com/pfSense-Definitive-Guide-Christopher-Buechler-ebook/dp/B004OYTMPC)
+    - *Note:* This guide is now slightly out of date, although we found it to be a useful reference approximately 1 year ago. To get the latest version of this book, you need to become a [pfSense Gold Member](https://www.pfsense.org/our-services/gold-membership.html).
 
 Before you begin
 ----------------
@@ -82,10 +86,6 @@ Initial Setup
 
 Unpack the firewall, connect power, and power on.
 
-### Assign interfaces
-
-Section 3.2.3, "Assigning Interfaces", of the pfSense Guide. Some firewalls, like the Netgate recommended in the Hardware Guide, have this set up already, in which case you can skip this step.
-
 ### Initial configuration
 
 We will use the pfSense WebGUI to do the initial configuration of the network firewall.
@@ -123,7 +123,7 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 
 4. Navigate to the pfSense GUI in the *Unsafe Browser*: `https://192.168.1.1`
 
-5. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected (see Section 4.5.6 of the pfSense Guide). You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
+5. The firewall uses a self-signed certificate, so you will see a "This Connection Is Untrusted" warning when you connect. This is expected. You can safely continue by clicking "I Understand the Risks", "Add Exception...", and "Confirm Security Exception."
 
 6. You should see the login page for the pfSense GUI. Log in with the default username and password (admin / pfsense).
 
@@ -217,11 +217,11 @@ Check the CIDR prefix once again (`/24`). Save and Apply Changes.
 
 Since there are a variety of firewalls with different configuration interfaces and underlying sets of software, we cannot provide a set of network firewall rules to match every use case. Instead, we provide a firewall rules template in `install_files/network_firewall/rules`. This template is written in the iptables format, which you will need to manually translate for your firewall and preferred configuration method.
 
-For pfSense, see Section 6 of the pfSense Guide for information on setting up firewall rules through the WebGUI. Here are some tips on interpreting the rules template for pfSense:
+Here are some tips on interpreting the rules template for pfSense:
 
 1. Create aliases for the repeated values (IPs and ports).
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
-3. You should create the rules on the interface where the traffic originates from. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface.
+3. You should create the rules *on the interface where the traffic originates*. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface.
 
 If you have 3 NICs, your rules are:
 
@@ -239,7 +239,7 @@ If you have 4 NICs, your rules are:
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for people inexperienced in managing networks to understand. We are working on automating much of this for the next SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing a firewall to understand. We are working on automating much of this for an upcoming SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
 
 #### Example Screenshots
 
