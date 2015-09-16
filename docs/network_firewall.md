@@ -42,44 +42,50 @@ If you are new to pfSense or firewall management in general, we recommend the fo
 Before you begin
 ----------------
 
-First, consider how the firewall will be connected to the Internet. You need to be able to provision two unique subnets for SecureDrop: the app subnet and the monitor subnet. There are a number of possible ways to configure this, and the best way will depend on the network that you are connecting to.
+First, consider how the firewall will be connected to the Internet. You will need to provision several unique subnets, which should not conflict with the network configuration on the WAN interface. If you are unsure, consult your local sysadmin.
 
-Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on 192.168.1.1/24. The `/24` subnet is a very common choice for home routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
-
-The app subnet will need at least three IP addresses: one for the gateway, one for the app server, and one for the admin workstation. The monitor subnet will need at least two IP addresses: one for the gateway and one for the monitor server.
-
-We assume that you have examined your network configuration and have selected two appropriate subnets. We will refer to your chosen subnets as "App Subnet" and "Monitor Subnet" throughout the rest of the documentation. 
+Note that many firewalls, including the recommended Netgate pfSense, automatically set up the LAN interface on `192.168.1.1/24`. This particular private network is also a very common choice for home and office routers. If you are connecting the firewall to a router with the same subnet (common in a small office, home, or testing environment), you will probably be unable to connect to the network at first. However, you will be able to connect from the LAN to the pfSense WebGUI configuration wizard, and from there you will be able to configure the network so it is working correctly.
 
 #### 3 NIC configuration
 
-For the examples in the documentation, we have chosen:
+If your firewall has 3 NICs, we will refer to them as WAN, LAN, and OPT1. WAN is used to connect to the external network. LAN and OPT1 are used for the Application and Monitor Servers, respectively. Putting them on separate interfaces allows us to use the network firewall to filter and monitor the traffic *between* them.
 
-* Admin/App Gateway: 10.20.1.1
-* Admin/App Subnet: 10.20.1.0/24
+In addition, you will need to be able to connect the Admin Workstation to this setup for the initial installation. Before SecureDrop is installed, the only way to connect to the servers is via SSH over the local network, so the Admin Workstation needs to be directly connected. Once it is installed, SSH will be available remotely (as an authenticated Tor Hidden Servce) and you will not necessarily need to connect the Admin Workstation directly to adminster the servers - although you will still need to connect it directly to administer the network firewall. Since there isn't another NIC to connect the Admin Workstation to, we recommend using a small switch on the LAN (the specific choice of interface doesn't matter, but we recommend using the LAN to stay consistent with the rest of this guide) so you can connect both the Admin Workstation and the Application Server.
 
-* App Server: 10.20.1.2
+Depending on your network configuration, you should define the following values before continuing. For the examples in this guide, we have chosen:
 
-* Admin Workstation: 10.20.1.3
+* Admin/App Gateway: `10.20.1.1`
+* Admin/App Subnet: `10.20.1.0/24`
+* App Server: `10.20.1.2`
+* Admin Workstation: `10.20.1.3`
 
-* Monitor Subnet: 10.20.2.0/24
-* Monitor Gateway: 10.20.2.1
-* Monitor Server: 10.20.2.2
+<!-- -->
+
+* Monitor Subnet: `10.20.2.0/24`
+* Monitor Gateway: `10.20.2.1`
+* Monitor Server: `10.20.2.2`
 
 #### 4 NIC configuration
 
-For the examples in the documentation, we have chosen:
+If your firewall has 4 NICs, we refer to them as WAN, LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network firewall for each component of SecureDrop (Application Server, Monitor Server, and Admin Workstation), so you do not need a switch like you do for the 3-NIC configuration.
 
-* Admin Subnet: 10.20.1.0/24
-* Admin Gateway: 10.20.1.1
-* Admin Workstation: 10.20.1.2
+Depending on your network configuration, you should define the following values before continuing. For the examples in this guide, we have chosen:
 
-* App Subnet: 10.20.2.0/24
-* App Gateway: 10.20.2.1
-* App Server: 10.20.2.2
+* Admin Subnet: `10.20.1.0/24`
+* Admin Gateway: `10.20.1.1`
+* Admin Workstation: `10.20.1.2`
 
-* Monitor Subnet: 10.20.3.0/24
-* Monitor Gateway: 10.20.3.1
-* Monitor Server: 10.20.3.2
+<!-- -->
+
+* App Subnet: `10.20.2.0/24`
+* App Gateway: `10.20.2.1`
+* App Server: `10.20.2.2`
+
+<!-- -->
+
+* Monitor Subnet: `10.20.3.0/24`
+* Monitor Gateway: `10.20.3.1`
+* Monitor Server: `10.20.3.2`
 
 Initial Setup
 -------------
