@@ -198,15 +198,23 @@ Start by *right-clicking* the networking icon in the top right of the menu bar, 
 
 ![Edit Connections](images/firewall/edit_connections.png)
 
-Select "Wired connection" from the list and click the "Edit..." button.
+Select the name of the current connection from the list and click the "Edit..." button.
 
-![Edit Wired Connection](images/firewall/edit_wired_connection.png)
+![Edit Wired Connection](images/firewall/edit_network_connection.png)
 
 Change to the "IPv4 Settings" tab. Change "Method:" from "Automatic (DHCP)" to "Manual". Click the Add button and fill in the static networking information for the Admin Workstation.
 
-![Editing Wired Connection](images/firewall/editing_wired_connection.png)
+*Note:* The Unsafe Browser will not launch when using a manual network configuration if it does not have DNS servers configured. This is technically unnecessary for our use case because we are only using it to access IP addresses on the LAN, and do not need to resolve anything with DNS. Nonetheless, you should configure some DNS servers here so you can continue to use the Unsafe Browser to access the WebGUI in future sessions. We recommend keeping it simple and using the same DNS servers that you used for the network firewall in the setup wizard.
+
+![Admin Wokstation Static IP Configuration](images/firewall/admin_workstation_static_ip_configuration.png)
 
 Click "Save...". If the network does not come up within 15 seconds or so, try disconnecting and reconnecting your network cable to trigger the change. You will need you have succeeded in connecting with your new static IP when you see a pop-up notification that says "Tor is ready. You can now access the Internet".
+
+##### Troubleshooting: DNS servers and the Unsafe Browser
+
+After saving the new network configuration, you may still encounter the "No DNS servers configured" error when trying to launch the Unsafe Browser. If you encounter this issue, you can resolve it by disconnecting from the network and then reconnecting, which causes the network configuration to be reloaded.
+
+To do this, click the network icon in the system toolbar, and click "Disconnect" under the bolded name of the currently active network connection. After it disconnects, click the network icon again and click the name of the connection to reconnect. You should see a popup notification that says "Connection Established", followed several seconds later by a "Tor is ready" popup notification.
 
 ### Set up OPT1
 
