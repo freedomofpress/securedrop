@@ -144,29 +144,29 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 
 #### Setup Wizard
 
-If you're setting up a brand new (or recently factory reset) router, pfSense will start you on the Setup Wizard. Click next, then next again. Don't sign up for a pfSense Gold subscription.
+If you're setting up a brand new (or recently factory reset) router, logging in to the pfSense WebGUI will automatically start the Setup Wizard. Click next, then next again. Don't sign up for a pfSense Gold subscription (unless you want to).
 
-On the "General Information" page, we recommend leaving your hostname as the default (pfSense). There is no relevant domain for SecureDrop, so we recommend setting this to "securedrop.local" or something similar. Use whatever DNS servers you wish. If you don't know what DNS servers to use, we recommend using Google's DNS servers: `8.8.8.8` and `8.8.4.4`. Click Next.
+On the "General Information" page, we recommend leaving your hostname as the default (pfSense). There is no relevant domain for SecureDrop, so we recommend setting this to `securedrop.local` or something similar. Use your preferred DNS servers. If you don't know what DNS servers to use, we recommend using Google's DNS servers: `8.8.8.8` and `8.8.4.4`. Click Next.
 
 Leave the defaults for "Time Server Information". Click Next.
 
 On "Configure WAN Interface", enter the appropriate configuration for your network. Consult your local sysadmin if you are unsure what to enter here. For many environments, the default of DHCP will work and the rest of the fields can be left blank. Click Next.
 
-For "Configure LAN Interface", set the IP address and subnet mask of the Admin Subnet for the LAN interface.  Be sure that the CIDR prefix correctly corresponds to your subnet mask-- pfsense should automatically calculate this for you, but you should always check. In most cases, your CIDR prefix should be `/24`.  Click Next.
+For "Configure LAN Interface", use the IP address and subnet mask of the *gateway* for the **Admin Subnet**. Click Next.
 
-Set a strong admin password. We recommend generating a random password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
+Set a strong admin password. We recommend generating a strong password with KeePassX, and saving it in the Tails Persistent folder using the provided KeePassX database template. Click Next.
 
-Click Reload.
+Click Reload. Once the reload completes and the web page refreshes, click the corresponding "here" link to "continue on to the pfSense webConfigurator".
 
-If you changed the LAN Interface settings, you will no longer be able to connect after reloading the firewall and the next request will probably time out. This is not a problem - the firewall has reloaded and is working correctly. To connect to the new LAN interface, unplug and reconnect your network cable to have a new network address assigned to you via DHCP. Note that if you used a subnet with fewer addresses than `/24`, the default DHCP configuration in pfSense may not work. In this case, you should assign the Admin Workstation a static IP address that is known to be in the subnet to continue.
+At this point, since you (probably) changed the LAN subnet settings from their defaults, you will no longer be able to connect after reloading the firewall and the next request will probably time out. This is not an error - the firewall has reloaded and is working correctly. To connect to the new LAN interface, unplug and reconnect your network cable to get a new network address assigned via DHCP. Note that if you used a subnet with fewer addresses than `/24`, the default DHCP configuration in pfSense may not work. In this case, you should assign the Admin Workstation a static IP address that is known to be in the subnet to continue.
 
-Now the WebGUI will be available on the App Gateway address. Navigate to `https://<App Gateway IP>` in the *Unsafe Browser*, and do the same dance as before to log in to the pfSense WebGUI and continue configuring the firewall.
+Now the WebGUI will be available on the Admin Gateway address. Navigate to `https://<Admin Gateway IP>` in the *Unsafe Browser*, and do the same dance as before to log in to the pfSense WebGUI. Once you've logged in to the WebGUI, you are ready to continue configuring the firewall.
 
 #### Connect Interfaces and Test Connectivity
 
-Now that the initial configuration is completed, you can connect the WAN port without potentially conflicting with the default LAN settings (as explained earlier). Connect the WAN port to the external network. You can watch the WAN entry in the Interfaces table on the pfSense WebGUI homepage to see as it changes from down (red arrow pointing down) to up (green arrow pointing up). The WAN's IP address will be shown once it comes up.
+Now that the initial configuration is completed, you can connect the WAN port without potentially conflicting with the default LAN settings (as explained earlier). Connect the WAN port to the external network. You can watch the WAN entry in the Interfaces table on the pfSense WebGUI homepage to see as it changes from down (red arrow pointing down) to up (green arrow pointing up). This usually takes several seconds. The WAN's IP address will be shown once it comes up.
 
-Finally, test connectivity to make sure you are able to connect to the Internet through the WAN. The easiest way to do this is to use ping (Diagnostics → Ping in the WebGUI).
+Finally, test connectivity to make sure you are able to connect to the Internet through the WAN. The easiest way to do this is to use ping (Diagnostics → Ping in the WebGUI). Enter an external hostname or IP that you expect to be up (e.g. `google.com`) and click "Ping".
 
 SecureDrop-specific Configuration
 ---------------------------------
@@ -188,7 +188,7 @@ In order to tighten the firewall rules as much as possible, we recommend disabli
 
 #### Disabling DHCP
 
-To disable DHCP, navigate to "Services → DHCP Server". Uncheck the box to "Enable DHCP servers on LAN interface", scroll down, and click the Save button.
+To disable DHCP, navigate to "Services → DHCP Server". Uncheck the box to "Enable DHCP server on LAN interface", scroll down, and click the Save button.
 
 #### Assigning a static IP address to the Admin Workstation
 
@@ -210,12 +210,12 @@ Click "Save...". If the network does not come up within 15 seconds or so, try di
 
 ### Set up OPT1
 
-We set up the LAN interface during the initial configuration. We now need to set up the OPT1 interface. Start by connecting the Application Server to the OPT1 port. Then use the WebGUI to configure the OPT1 interface. Go to `Interfaces → OPT1`, and check the box to "Enable Interface". Use these settings:
+We set up the LAN interface during the initial configuration. We now need to set up the OPT1 interface for the Application Server. Start by connecting the Application Server to the OPT1 port. Then use the WebGUI to configure the OPT1 interface. Go to `Interfaces → OPT1`, and check the box to "Enable Interface". Use these settings:
 
 -   IPv4 Configuration Type: Static IPv4
 -   IPv4 Address: Application Gateway
 
-Once again, be sure that the CIDR prefix correctly corresponds to your subnet mask (and should be `/24` in most cases). Pfsense should automatically calculate this for you, but you should always check.  Leave everything else as the default. Save and Apply Changes.
+Make sure that the CIDR routing prefix is correct. Leave everything else as the default. Save and Apply Changes.
 
 ### Set up OPT2
 
@@ -224,7 +224,7 @@ If you have 4 NICs, you will have to enable the OPT2 interface. Go to `Interface
 -   IPv4 Configuration Type: Static IPv4
 -   IPv4 Address: Monitor Gateway
 
-Check the CIDR prefix once again (`/24`). Save and Apply Changes.
+Make sure that the CIDR routing prefix is correct. Leave everything else as the default. Save and Apply Changes.
 
 ### Set up the network firewall rules
 
@@ -247,10 +247,10 @@ If you have 4 NICs, your rules are:
   * `-s APP_IP` → `OPT1`
   * `-s MONITOR_IP` → `OPT2`
 
-4. Make sure you delete any default "allow all" rules on the LAN interface. Leave the "Anti-Lockout" rule enabled.
+4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
 5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
 6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
-7. If you are having trouble with connections, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
+7. If you are troubleshooting connectivity, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
 We recognize that this process is cumbersome and may be difficult for people inexperienced in managing a firewall to understand. We are working on automating much of this for an upcoming SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
 
