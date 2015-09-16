@@ -261,3 +261,20 @@ Here are some example screenshots of a working pfSense firewall configuration.
 ![Firewall OPT2 Rules](images/firewall/opt2_rules.png)
 
 Once you've set up the firewall, **exit the Unsafe Browser**, and continue with the instructions in the [Install Guide](/docs/install.md#set-up-the-servers).
+
+
+### Keeping pfSense Up to Date
+
+Periodically, the pfSense project maintainers release an update to the pfSense software running on your firewall. You will be notified by the appearance of bold red text saying "Update available" in the **Version** section of the "Status: Dashboard" page (the home page of the WebGUI).
+
+![Update available](images/firewall/pfsense_update_available.png)
+
+If you see that an update is available, we recommend installing it. Most of these updates are for minor bugfixes, but occasionally they can contain important security fixes. If you are receiving support from Freedom of the Press Foundation, we will inform you when an important security update is available for your pfSense firewall. Alternatively, you can keep appraised of updates yourself by checking the ["releases" tag on the pfSense Blog](https://blog.pfsense.org/?tag=releases) (protip: use the RSS feed).
+
+To install the update, click the "click here" link next to "Update available". We recommend checking the "perform full backup prior to upgrade" box in case something goes wrong. Click "Invoke auto upgrade".
+
+![Invoke auto upgrade](images/firewall/invoke_auto_upgrade.png)
+
+You will see a blank page with a spinning progress indicator in the browser tab while pfSense performs the backup prior to upgrade. This typically takes a few minutes. Once that's done, you will see a page with a progress bar at the top that will periodically update as the upgrade progresses. Wait for the upgrade to complete, which may take a while depending on the speed of your network.
+
+*Note:* In a recent test, the progress page did not successfully update itself as the upgraded progressed. After waiting for some time, we refreshed the page and found that the upgrade had completed successfully. If your upgrade is taking longer than expected or not showing any progress, try refreshing the page.
