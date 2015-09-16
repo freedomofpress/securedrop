@@ -110,28 +110,29 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 
 3. Launch the *Unsafe Browser*, *Applications → Internet → Unsafe Browser*.
 
-   ![Launching the Unsafe Browser](images/firewall/launching_unsafe_browser.png)
+    ![Launching the Unsafe Browser](images/firewall/launching_unsafe_browser.png)
 
-    1. Note that the *Unsafe Browser* is, as the name suggests, **unsafe** (its
-       traffic is not routed through Tor). However, it is the only option in
-       this context because Tails [intentionally][tails_issue_7976] disables
-       LAN access in the *Tor Browser*.
+    1. Note that the *Unsafe Browser* is, as the name suggests,
+       **unsafe** (its traffic is not routed through Tor). However, it
+       is the only option in this context because Tails
+       [intentionally][tails_issue_7976] disables LAN access in the
+       *Tor Browser*.
 
     2. A dialog will ask "Do you really want to launch the Unsafe Browser?". Click **Launch**.
 
-       ![You really want to launch the Unsafe Browser](images/firewall/unsafe_browser_confirmation_dialog.png)
+        ![You really want to launch the Unsafe Browser](images/firewall/unsafe_browser_confirmation_dialog.png)
 
     3. You will see a pop-up notification that says "Starting the Unsafe Browser..."
 
-       ![Pop-up notification](images/firewall/starting_the_unsafe_browser.png)
+        ![Pop-up notification](images/firewall/starting_the_unsafe_browser.png)
 
-    4. After a few seconds, the Unsafe Browser should launch. The window has a
-       bright red border to remind you to be careful when using it. You should
-       close it once you're done configuring the firewall and use the Tor
-       Browser for any other web browsing you might do on the Admin
-       Workstation.
+    4. After a few seconds, the Unsafe Browser should launch. The
+       window has a bright red border to remind you to be careful when
+       using it. You should close it once you're done configuring the
+       firewall and use the Tor Browser for any other web browsing you
+       might do on the Admin Workstation.
 
-       ![Unsafe Browser Homepage](images/firewall/unsafe_browser.png)
+        ![Unsafe Browser Homepage](images/firewall/unsafe_browser.png)
 
 4. Navigate to the pfSense GUI in the *Unsafe Browser*: `https://192.168.1.1`
 
