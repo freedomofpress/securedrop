@@ -100,7 +100,13 @@ We will use the pfSense WebGUI to do the initial configuration of the network fi
 
 1. Boot the Admin Workstation into Tails from the Admin Live USB.
 
-2. Connect the Admin Workstation to the switch on the LAN.
+2. Connect the Admin Workstation to the LAN interface. You should see
+   a popup notification in Tails that says "Connection Established".
+
+    - Make sure your *only* active connections is the one you just
+      established with the network firewall. If you are connected to
+      another network at the same time (e.g. a wireless network), you
+      may encounter problems trying to connect the pfSense WebGUI.
 
 3. Launch the *Unsafe Browser*, *Applications → Internet → Unsafe Browser*.
 
