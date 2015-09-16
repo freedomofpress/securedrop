@@ -244,16 +244,16 @@ Here are some tips on interpreting the rules template for pfSense:
 2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
 3. You should create the rules *on the interface where the traffic originates*. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface.
 
-If you have 3 NICs, your rules are:
+    If you have 3 NICs, your sources map to the following interfaces:
 
-  * `-s APP_IP` → `LAN`
-  * `-s MONITOR_IP` → `OPT1`
+      * `-s APP_IP` → `LAN`
+      * `-s MONITOR_IP` → `OPT1`
 
-If you have 4 NICs, your rules are:
+    If you have 4 NICs, your sources map to the following interfaces:
 
-  * `-s ADMIN_IP` → `LAN`
-  * `-s APP_IP` → `OPT1`
-  * `-s MONITOR_IP` → `OPT2`
+      * `-s ADMIN_IP` → `LAN`
+      * `-s APP_IP` → `OPT1`
+      * `-s MONITOR_IP` → `OPT2`
 
 4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
 5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
