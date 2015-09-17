@@ -6,10 +6,25 @@ This document outlines the required hardware components necessary to successfull
 
 ### Required Hardware
 
+#### Servers
+
+These are the core components of a SecureDrop instance.
+
 - **Application Server**: 1 physical server to run the SecureDrop web services.
 - **Monitor Server**: 1 physical server which monitors activity on the *Application Server* and sends email notifications to an administrator.
 - **Network Firewall**: 1 physical computer that is used as a dedicated firewall for the SecureDrop servers.
-- **Secure Viewing Station (SVS)**: 1 physical computer that is used as an airgap to decrypt and view submissions retrieved from the **Application Server**.
+
+##### A note about virtualization
+
+We are often asked if it is acceptable to run SecureDrop on cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) instead of on dedicated hardware. This requrest is generally motivated by a desire for cost savings and convenience; however, cloud servers are trivially acccessible and manipulable by the provider that operates them. In the context of SecureDrop, this means that the provider could access extremely sensitive information, such as the plaintext of submissions or the encryption keys used to identify and access the Tor Hidden Services.
+
+One of the core goals of SecureDrop is to avoid the potential compromise of sources through the compromise of third party communications providers. Therefore, we consider the use of virtualization for production instances of SecureDrop to be an unacceptable compromise and do not support it. While it is technically possible to modify SecureDrop's automated installation process to work on virtualized servers (for example, we do so to support our CI pipeline), you do so at your own risk and without our support or consent.
+
+#### Workstations
+
+THese components are necessary to do the initial installation of SecureDrop and to process submissions using the airgapped workflow.
+
+- **Secure Viewing Station (SVS)**: 1 physical computer used as an airgap to decrypt and view submissions retrieved from the **Application Server**.
     - The chosen hardware should be solely used for this purpose and should have any wireless networking hardware removed before use.
 - **Admin/Journalist Workstation(s)**: *At least 1* physical computer that is used as a workstation for SecureDrop admins and/or journalists.
     - Each Admin and Journalist will have their own bootable Tails USB with an encrypted persistent partition that they will use to access SecureDrop. You will need at least one *workstation* to boot the Tails USBs, and may need more depending on: the number of admins/journalists you wish to grant access to SecureDrop, whether they can share the same workstation due to availability requirements, geographic distribution, etc.
@@ -28,12 +43,6 @@ This document outlines the required hardware components necessary to successfull
 [BadUSB]: https://srlabs.de/badusb/
 [Google Authenticator]: https://support.google.com/accounts/answer/1066447?hl=en
 [Yubikey]: https://www.yubico.com/products/yubikey-hardware/yubikey/
-
-#### A note about virtualization
-
-We are often asked if it is acceptable to run SecureDrop on cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) instead of on dedicated hardware. This requrest is generally motivated by a desire for cost savings and convenience; however, cloud servers are trivially acccessible and manipulable by the provider that operates them. In the context of SecureDrop, this means that the provider could access extremely sensitive information, such as the plaintext of submissions or the encryption keys used to identify and access the Tor Hidden Services.
-
-One of the core goals of SecureDrop is to avoid the potential compromise of sources through the compromise of third party communications providers. Therefore, we consider the use of virtualization for production instances of SecureDrop to be an unacceptable compromise and do not support it. While it is technically possible to modify SecureDrop's automated installation process to work on virtualized servers (for example, we do so to support our CI pipeline), you do so at your own risk and without our support or consent.
 
 #### A note about recycled hardware
 
