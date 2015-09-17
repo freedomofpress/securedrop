@@ -80,6 +80,8 @@ Note that the NUCs come as kits and some assembly is required. You will need to 
 - A [4 GB (4GBx2) memory kit](http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/)
     - You can put one 4GB memory stick in each of the servers.
 
+*Warning:* The D54250WYK has recently been [EOL'ed by Intel](http://ark.intel.com/products/series/70407/Intel-NUC-Boards-and-Kits). Availability and prices may be subject to change. We are working on analyzing alternative recommendations, but there are no immediately obvious alternatives that share the benefits of the D54250WYK (primarily, the lack of integrated wireless networking hardware).
+
 #### Potential BIOS issue
 
 An earlier release of SecureDrop (0.2.1) was based on Ubuntu 12.04.1 (precise). We encountered issues installing this version of Ubuntu on some types of Intel NUCs. The problem manifested after installing Ubuntu on the NUC. The installation would complete, but rebooting after installation would not succeed.
