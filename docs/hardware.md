@@ -1,5 +1,29 @@
 # Hardware for SecureDrop
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Overview](#overview)
+  - [Required Hardware](#required-hardware)
+    - [Servers](#servers)
+      - [A note about virtualization](#a-note-about-virtualization)
+    - [Workstations](#workstations)
+    - [A note about recycled hardware](#a-note-about-recycled-hardware)
+  - [Optional Hardware](#optional-hardware)
+- [Specific Hardware Recommendations](#specific-hardware-recommendations)
+  - [Application/Monitor Servers](#applicationmonitor-servers)
+    - [Potential BIOS issue](#potential-bios-issue)
+  - [Secure Viewing Station (SVS)](#secure-viewing-station-svs)
+    - [A note about Hi-DPI displays](#a-note-about-hi-dpi-displays)
+  - [Tails USBs](#tails-usbs)
+  - [Transfer Device](#transfer-device)
+  - [Network Firewall](#network-firewall)
+  - [Network Switch](#network-switch)
+  - [Monitor, Keyboard, Mouse](#monitor-keyboard-mouse)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 This document outlines the required hardware components necessary to successfully install and operate a SecureDrop instance, and recommends some specific components that we have found to work well. If you have any questions, please email securedrop@freedom.press.
 
 ## Overview
