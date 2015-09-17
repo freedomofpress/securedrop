@@ -236,31 +236,23 @@ Make sure that the CIDR routing prefix is correct. Leave everything else as the 
 
 ### Set up the network firewall rules
 
-Since there are a variety of firewalls with different configuration interfaces and underlying sets of software, we cannot provide a set of network firewall rules to match every use case. Instead, we provide a firewall rules template in `install_files/network_firewall/rules`. This template is written in the iptables format, which you will need to manually translate for your firewall and preferred configuration method.
+Since there are a variety of firewalls with different configuration interfaces and underlying sets of software, we cannot provide a set of network firewall rules to match every use case.
 
-Here are some tips on interpreting the rules template for pfSense:
+This document is currently geared towards pfSense configured using the WebGUI; as a result, the easiest way to set up your firewall rules is to look at the screenshots of a correctly configured firewall below and edit the interfaces, aliases, and firewall rules on your firewall to match them.
+
+Here are some general tips for setting up pfSense firewall rules:
 
 1. Create aliases for the repeated values (IPs and ports).
-2. pfSense is a stateful firewall, which means that you don't need corresponding rules for the iptables rules that allow incoming traffic in response to outgoing traffic (`--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
-3. You should create the rules *on the interface where the traffic originates*. The easy way to do this is look at the sources (`-s`) of each of the iptables rules, and create that rule on the corresponding interface.
-
-    If you have 3 NICs, your sources map to the following interfaces:
-
-      * `-s APP_IP` → `LAN`
-      * `-s MONITOR_IP` → `OPT1`
-
-    If you have 4 NICs, your sources map to the following interfaces:
-
-      * `-s ADMIN_IP` → `LAN`
-      * `-s APP_IP` → `OPT1`
-      * `-s MONITOR_IP` → `OPT2`
-
+2. pfSense is a stateful firewall, which means that you don't need corresponding rules to allow incoming traffic in response to outgoing traffic (like you would in, e.g. iptables with `--state ESTABLISHED,RELATED`). pfSense does this for you automatically.
+3. You should create the rules *on the interface where the traffic originates*.
 4. Make sure you delete the default "allow all" rule on the LAN interface. Leave the "Anti-Lockout" rule enabled.
-5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (`LOGNDROP`) for that.
-6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server (`-s MONITOR_IP,APP_IP`), you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
+5. Any traffic that is not explicitly passed is logged and dropped by default in pfSense, so you don't need to add explicit rules (iptables `LOGNDROP`) for that.
+6. Since some of the rules are almost identical except for whether they allow traffic from the App Server or the Monitor Server, you can use the "add a new rule based on this one" button to save time creating a copy of the rule on the other interface.
 7. If you are troubleshooting connectivity, the firewall logs can be very helpful. You can find them in the WebGUI in *Status → System Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for people inexperienced in managing a firewall to understand. We are working on automating much of this for an upcoming SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
+We recognize that this process is cumbersome and may be difficult for people inexperienced in managing a firewall. We are working on automating much of this for an upcoming SecureDrop release.  If you're unsure how to set up your firewall, use the screenshots in the next section as your guide.
+
+For more experienced pfSense users, we have included a copy of the `.xml` backup from a correctly configured example firewall (SG-2440) in `install_files/network_firewall/pfsense_full_backup.xml`. Note that this file has been edited by hand to remove potentially sensitive information (admin password hashes and the test server's TLS private key, among other things, were replaced with `REDACTED`), so you probably won't be able to import it directly (we haven't tried). The main sections of the file that you should be interested in are `interfaces`, `filter` (the firewall rules), and `aliases` (necessary to parse the firewall rules).
 
 #### Example Screenshots
 
