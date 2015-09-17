@@ -46,7 +46,7 @@ One of the core goals of SecureDrop is to avoid the potential compromise of sour
 
 #### Workstations
 
-THese components are necessary to do the initial installation of SecureDrop and to process submissions using the airgapped workflow.
+These components are necessary to do the initial installation of SecureDrop and to process submissions using the airgapped workflow.
 
 - **Secure Viewing Station (SVS)**: 1 physical computer used as an airgap to decrypt and view submissions retrieved from the **Application Server**.
     - The chosen hardware should be solely used for this purpose and should have any wireless networking hardware removed before use.
@@ -57,7 +57,7 @@ THese components are necessary to do the initial installation of SecureDrop and 
     - We also recommend buying two additional USBs to use as bootable backups of the **SVS** and **Admin Tails**.
 - **Two-factor authenticator**: Two-factor authentication is used when connecting to different parts of the SecureDrop system. Each admin and each journalist needs a two-factor authenticator. We currently support two options for two-factor authentication:
     - Your existing smartphone with an app that computes TOTP codes (e.g. [Google Authenticator][])
-    - A dedicated hardware dongle that computes HOTP codes (e.g. a [Yubikey][]).
+    - A dedicated hardware dongle that computes HOTP codes (e.g. a [YubiKey][]).
 - **Transfer Device(s)**: You need a mechanism to transfer encrypted submissions from the **Journalist Workstation** to the **SVS** to decrypt and view them. The most common transfer devices are DVD/CD-R discs and USB drives.
     - From a security perspective, it is preferable to use write-once media such as DVD/CD-R discs because it eliminates the risk of exfiltration by malware that persists on the Transfer Device (e.g. [BadUSB][]).
     - On the other hand, using write-once media to transfer data is typically inconvenient and time-consuming. You should consider your threat model and choose your transfer device accordingly.
@@ -66,7 +66,7 @@ THese components are necessary to do the initial installation of SecureDrop and 
 
 [BadUSB]: https://srlabs.de/badusb/
 [Google Authenticator]: https://support.google.com/accounts/answer/1066447?hl=en
-[Yubikey]: https://www.yubico.com/products/yubikey-hardware/yubikey/
+[YubiKey]: https://www.yubico.com/products/yubikey-hardware/yubikey/
 
 #### A note about recycled hardware
 
