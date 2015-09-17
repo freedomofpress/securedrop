@@ -40,7 +40,7 @@ These are the core components of a SecureDrop instance.
 
 ##### A note about virtualization
 
-We are often asked if it is acceptable to run SecureDrop on cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) instead of on dedicated hardware. This requrest is generally motivated by a desire for cost savings and convenience; however, cloud servers are trivially acccessible and manipulable by the provider that operates them. In the context of SecureDrop, this means that the provider could access extremely sensitive information, such as the plaintext of submissions or the encryption keys used to identify and access the Tor Hidden Services.
+We are often asked if it is acceptable to run SecureDrop on cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) instead of on dedicated hardware. This request is generally motivated by a desire for cost savings and convenience; however, cloud servers are trivially accessible and manipulable by the provider that operates them. In the context of SecureDrop, this means that the provider could access extremely sensitive information, such as the plaintext of submissions or the encryption keys used to identify and access the Tor Hidden Services.
 
 One of the core goals of SecureDrop is to avoid the potential compromise of sources through the compromise of third party communications providers. Therefore, we consider the use of virtualization for production instances of SecureDrop to be an unacceptable compromise and do not support it. While it is technically possible to modify SecureDrop's automated installation process to work on virtualized servers (for example, we do so to support our CI pipeline), you do so at your own risk and without our support or consent.
 
@@ -70,11 +70,11 @@ These components are necessary to do the initial installation of SecureDrop and 
 
 #### A note about recycled hardware
 
-If you cannot afford to purchase new hardware for your SecureDrop instance, we encourage you to consider repurposing existing hardware to use with SecureDrop. If you are comfortable working with hardware, this is a great way to set up a SecureDrop instance for cheap.
+If you cannot afford to purchase new hardware for your SecureDrop instance, we encourage you to consider re-purposing existing hardware to use with SecureDrop. If you are comfortable working with hardware, this is a great way to set up a SecureDrop instance for cheap.
 
 Since SecureDrop's throughput is significantly limited by the use of Tor for all connections, there is no need to use top of the line hardware for any of the servers or the firewall. In our experience, relatively recent recycled Dell desktops or servers are adequate for the SecureDrop servers, and recycled Thinkpad laptops work well for the Admin/Journalist workstations.
 
-If you choose to use recycled hardware, you should of course consider whether or not it is trusthworthy; making that determination is outside the scope of this document.
+If you choose to use recycled hardware, you should of course consider whether or not it is trustworthy; making that determination is outside the scope of this document.
 
 ### Optional Hardware
 
