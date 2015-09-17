@@ -9,7 +9,6 @@ Network Firewall Setup Guide
     - [3 NIC configuration](#3-nic-configuration)
     - [4 NIC configuration](#4-nic-configuration)
 - [Initial Setup](#initial-setup)
-  - [Assign interfaces](#assign-interfaces)
   - [Initial configuration](#initial-configuration)
     - [Connect to the pfSense WebGUI](#connect-to-the-pfsense-webgui)
     - [Setup Wizard](#setup-wizard)
@@ -18,12 +17,14 @@ Network Firewall Setup Guide
   - [Disable DHCP on the LAN](#disable-dhcp-on-the-lan)
     - [Disabling DHCP](#disabling-dhcp)
     - [Assigning a static IP address to the Admin Workstation](#assigning-a-static-ip-address-to-the-admin-workstation)
+      - [Troubleshooting: DNS servers and the Unsafe Browser](#troubleshooting-dns-servers-and-the-unsafe-browser)
   - [Set up OPT1](#set-up-opt1)
   - [Set up OPT2](#set-up-opt2)
   - [Set up the network firewall rules](#set-up-the-network-firewall-rules)
     - [Example Screenshots](#example-screenshots)
       - [3 NICs Configuration](#3-nics-configuration)
       - [4 NICs Configuration](#4-nics-configuration)
+  - [Keeping pfSense Up to Date](#keeping-pfsense-up-to-date)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
