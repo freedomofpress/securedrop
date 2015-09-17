@@ -11,7 +11,9 @@ tor_DataDirectory: /var/lib/tor
 securedrop_tor_user: "debian-tor"
 
 disabled_kernel_modules:
+  - btusb
   - bluetooth
+  - iwlmvm
   - iwlwifi
 
 ssh_2fa_dependencies:
