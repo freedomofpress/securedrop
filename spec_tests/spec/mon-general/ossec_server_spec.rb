@@ -81,6 +81,10 @@ postfix_settings = [
   'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128',
   'mailbox_size_limit = 0',
   'recipient_delimiter = +',
+
+  # This line was merged into develop via #1102,
+  # but hasn't made it into a release yet, so don't check for it.
+  # 'maximal_queue_lifetime = 14d',
 ]
 # ensure all desired postfix settings are declared
 describe file('/etc/postfix/main.cf') do
