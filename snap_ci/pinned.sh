@@ -19,7 +19,7 @@ tmp_dir="${SNAP_CACHE_DIR:-/tmp}"
 repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
 # Cache and install Vagrant
-vagrant_version="${vagrant_version:-1.7.2}"
+vagrant_version="${vagrant_version:-1.7.3}"
 vagrant_rpm="vagrant_${vagrant_version}_x86_64.rpm"
 vagrant_url="https://dl.bintray.com/mitchellh/vagrant/${vagrant_rpm}"
 
