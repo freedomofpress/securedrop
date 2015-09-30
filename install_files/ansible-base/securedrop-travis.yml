@@ -1,10 +1,10 @@
 ---
-- hosts: [ 'localhost' ]
+- hosts: localhost
 
   vars_files:
     - group_vars/securedrop.yml
+    - group_vars/travis.yml
     - host_vars/app.yml
-    - travis-specific.yml
 
   roles:
     - { role: development, tags: development }
