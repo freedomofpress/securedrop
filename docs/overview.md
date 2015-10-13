@@ -18,7 +18,7 @@ A source submits documents and messages by using [Tor Browser]() (or Tails) to a
 
 Journalists working in the newsroom use two machines to interact with SecureDrop. First, they use a *Journalist Workstation* running Tails to connect to the *Document Interface*, an authenticated Tor Hidden Service. Journalists download [GPG]()-encrypted submissions and copy them to a *Transfer Device* (a thumb drive or DVD). Those submissions are then connected to the airgapped *Secure Viewing Station* (SVS) which holds the key to decrypt them. Journalists can then use the SVS to read, print, and otherwise prepare documents for publication. Apart from those deliberately published, decrypted document are never accessed on an Internet-connected computer.
 
-The terms in italics are terms of art specific to SecureDrop. The [Terminology Guide](./terminology.md) provides more-precise definitions of these and other terms.
+The terms in italics are terms of art specific to SecureDrop. The [Terminology Guide](./terminology.md) provides more-precise definitions of these and other terms. SecureDrop is designed against a comprehensive [threat model](./thread-model.md), and has a specific notion of the [roles](./roles.md) that are involved in its operation.
 
 [FPF]: https://freedom.press
 [Tails]: https://tails.boum.org
