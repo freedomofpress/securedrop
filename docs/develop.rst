@@ -1,38 +1,6 @@
 Development Guide
 =================
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <http://doctoc.herokuapp.com/>`__*
-
--  `Prerequisites <#prerequisites>`__
--  `Ubuntu/Debian <#ubuntudebian>`__
--  `Mac OS X <#mac-os-x>`__
--  `Clone the repository <#clone-the-repository>`__
--  `Pick a development environment <#pick-a-development-environment>`__
--  `Development <#development>`__
--  `Staging <#staging>`__
--  `Prod <#prod>`__
-
-   -  `connect-proxy (Ubuntu only) <#connect-proxy-ubuntu-only>`__
-   -  `torify (Ubuntu and Mac OS X) <#torify-ubuntu-and-mac-os-x>`__
-
--  `Tips & Tricks <#tips-&-tricks>`__
--  `Using Tor Browser with the development
-   environment <#using-tor-browser-with-the-development-environment>`__
--  `Version Notes <#version-notes>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Prerequisites
 =============
 

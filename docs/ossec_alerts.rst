@@ -1,29 +1,6 @@
 OSSEC Guide
 ===========
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <http://doctoc.herokuapp.com/>`__*
-
--  `Setting up OSSEC alerts <#setting-up-ossec-alerts>`__
--  `Using Gmail for OSSEC alerts <#using-gmail-for-ossec-alerts>`__
--  `Configuring fingerprint
-   verification <#configuring-fingerprint-verification>`__
--  `Troubleshooting <#troubleshooting>`__
--  `Troubleshooting SMTP TLS <#troubleshooting-smtp-tls>`__
--  `Analyzing the Alerts <#analyzing-the-alerts>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Setting up OSSEC alerts
 -----------------------
 

@@ -1,31 +1,6 @@
 Ubuntu Install Guide
 ====================
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <http://doctoc.herokuapp.com/>`__*
-
--  `Verify the Ubuntu installation
-   media <#verify-the-ubuntu-installation-media>`__
--  `Create the Ubuntu installation
-   media <#create-the-ubuntu-installation-media>`__
--  `Install Ubuntu <#install-ubuntu>`__
--  `Configure the network manually <#configure-the-network-manually>`__
--  `Continue the installation <#continue-the-installation>`__
--  `Partition the disks <#partition-the-disks>`__
--  `Finish the installation <#finish-the-installation>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 The *Application Server* and the *Monitor Server* specifically require
 the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty
 Tahr) <http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image

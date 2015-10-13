@@ -1,62 +1,6 @@
 Installing SecureDrop
 =====================
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <https://github.com/thlorenz/doctoc>`__*
-
--  `Before you begin <#before-you-begin>`__
--  `Set up Tails USB sticks <#set-up-tails-usb-sticks>`__
-
-   -  `Installing Tails <#installing-tails>`__
-   -  `Enabling Persistence Storage on
-      Tails <#enabling-persistence-storage-on-tails>`__
-
--  `Set up the Secure Viewing
-   Station <#set-up-the-secure-viewing-station>`__
--  `Create a GPG key for the SecureDrop
-   application <#create-a-gpg-key-for-the-securedrop-application>`__
--  `Import GPG keys for journalists with access to
-   SecureDrop <#import-gpg-keys-for-journalists-with-access-to-securedrop>`__
--  `Set up Admin Tails USB and
-   Workstation <#set-up-admin-tails-usb-and-workstation>`__
--  `Start Tails and enable the persistent
-   volume <#start-tails-and-enable-the-persistent-volume>`__
--  `Download the SecureDrop
-   repository <#download-the-securedrop-repository>`__
--  `Passphrase Database <#passphrase-database>`__
--  `Set up the Network Firewall <#set-up-the-network-firewall>`__
--  `Set up the Servers <#set-up-the-servers>`__
--  `Install the SecureDrop
-   application <#install-the-securedrop-application>`__
--  `Install Ansible <#install-ansible>`__
--  `Set up SSH keys for the Admin <#set-up-ssh-keys-for-the-admin>`__
--  `Gather the required
-   information <#gather-the-required-information>`__
--  `Install SecureDrop <#install-securedrop>`__
--  `Set up access to the authenticated hidden
-   services <#set-up-access-to-the-authenticated-hidden-services>`__
--  `Set up SSH host aliases <#set-up-ssh-host-aliases>`__
--  `Set up two-factor authentication for the
-   Admin <#set-up-two-factor-authentication-for-the-admin>`__
--  `Create users for the web
-   application <#create-users-for-the-web-application>`__
--  `Finalizing the Installation <#finalizing-the-installation>`__
--  `Test the web application and
-   connectivity <#test-the-web-application-and-connectivity>`__
--  `Additional testing <#additional-testing>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 This guide outlines the steps required to install SecureDrop 0.3.x. If
 you are looking to upgrade from version 0.2.1, please use the `migration
 scripts </migration_scripts/0.3>`__ we have created.

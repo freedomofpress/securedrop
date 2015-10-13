@@ -1,37 +1,6 @@
 Setting up the Admin and Journalist Tails USB
 =============================================
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <http://doctoc.herokuapp.com/>`__*
-
--  `Installing Tails on USB sticks <#installing-tails-on-usb-sticks>`__
--  `Note for Mac OS X users manually installing
-   Tails <#note-for-mac-os-x-users-manually-installing-tails>`__
--  `Configure Tails for use with
-   SecureDrop <#configure-tails-for-use-with-securedrop>`__
--  `Persistence <#persistence>`__
--  `Start Tails and enable the persistent
-   volume <#start-tails-and-enable-the-persistent-volume>`__
--  `Download the repository <#download-the-repository>`__
--  `Passphrase Database <#passphrase-database>`__
--  `Set up easy access to the Document
-   Interface <#set-up-easy-access-to-the-document-interface>`__
-
-   -  `Create bookmarks for Source and Document
-      Interfaces <#create-bookmarks-for-source-and-document-interfaces>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 To log-in SecureDrop and retreived messages sent by sources, the
 journalist must be using the Tails operating system. The admin must also
 use Tails to access the *Document Interface* and create new users.

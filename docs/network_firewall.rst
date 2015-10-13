@@ -1,55 +1,6 @@
 Network Firewall Setup Guide
 ============================
 
-.. raw:: html
-
-   <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
-.. raw:: html
-
-   <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** *generated with
-`DocToc <http://doctoc.herokuapp.com/>`__*
-
--  `Before you begin <#before-you-begin>`__
-
-   -  `3 NIC configuration <#3-nic-configuration>`__
-   -  `4 NIC configuration <#4-nic-configuration>`__
-
--  `Initial Setup <#initial-setup>`__
--  `Initial configuration <#initial-configuration>`__
-
-   -  `Connect to the pfSense WebGUI <#connect-to-the-pfsense-webgui>`__
-   -  `Setup Wizard <#setup-wizard>`__
-   -  `Connect Interfaces and Test
-      Connectivity <#connect-interfaces-and-test-connectivity>`__
-
--  `SecureDrop-specific
-   Configuration <#securedrop-specific-configuration>`__
--  `Disable DHCP on the LAN <#disable-dhcp-on-the-lan>`__
-
-   -  `Disabling DHCP <#disabling-dhcp>`__
-   -  `Assigning a static IP address to the Admin
-      Workstation <#assigning-a-static-ip-address-to-the-admin-workstation>`__
-   -  `Troubleshooting: DNS servers and the Unsafe
-      Browser <#troubleshooting-dns-servers-and-the-unsafe-browser>`__
-
--  `Set up OPT1 <#set-up-opt1>`__
--  `Set up OPT2 <#set-up-opt2>`__
--  `Set up the network firewall
-   rules <#set-up-the-network-firewall-rules>`__
-
-   -  `Example Screenshots <#example-screenshots>`__
-   -  `3 NICs Configuration <#3-nics-configuration>`__
-   -  `4 NICs Configuration <#4-nics-configuration>`__
-
--  `Keeping pfSense Up to Date <#keeping-pfsense-up-to-date>`__
-
-.. raw:: html
-
-   <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Unfortunately, due to the wide variety of firewalls that may be used, we
 do not provide specific instructions to cover every type or variation in
 software or hardware. This guide is based on pfSense, and assumes your
