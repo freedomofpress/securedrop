@@ -22,7 +22,6 @@ Contents:
    develop
    google_authenticator
    hardware
-   index
    install
    journalist_user_manual
    logging
