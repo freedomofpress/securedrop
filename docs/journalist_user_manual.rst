@@ -237,21 +237,21 @@ encrypted documents to it. Decrypt them with ``gnupg``.
 Write articles and blog posts, edit video and audio, and publish. Expose
 crimes and corruption, and change the world.
 
-.. |Document Interface Login| image:: /docs/images/manual/document6.png
-.. |Document Interface| image:: /docs/images/manual/document1.png
-.. |Load external content| image:: /docs/images/manual/document4.png
-.. |Download selected| image:: /docs/images/manual/tbb_Document5.png
-.. |Download to sandbox folder| image:: /docs/images/manual/tbb_Document6.png
-.. |Move to transfer device| image:: /docs/images/manual/tbb_Document7.png
-.. |Move to transfer device| image:: /docs/images/manual/tbb_Document8.png
-.. |Copy files to Persistent| image:: /docs/images/manual/viewing1.png
-.. |Decrypting| image:: /docs/images/manual/viewing2.png
-.. |Decrypted documents| image:: /docs/images/manual/viewing3.png
-.. |Opened document| image:: /docs/images/manual/viewing4.png
-.. |Sent reply| image:: /docs/images/manual/document2.png
-.. |Read documents| image:: /docs/images/manual/document4.png
-.. |Flag source for reply| image:: /docs/images/manual/document3.png
-.. |Wiping documents| image:: /docs/images/manual/viewing5.png
-.. |Encrypting 1| image:: /docs/images/manual/viewing6.png
-.. |Encrypting 2| image:: /docs/images/manual/viewing7.png
-.. |Encrypted document| image:: /docs/images/manual/viewing8.png
+.. |Document Interface Login| image:: images/manual/document6.png
+.. |Document Interface| image:: images/manual/document1.png
+.. |Load external content| image:: images/manual/document4.png
+.. |Download selected| image:: images/manual/tbb_Document5.png
+.. |Download to sandbox folder| image:: images/manual/tbb_Document6.png
+.. |Move to transfer device| image:: images/manual/tbb_Document7.png
+.. |Move to transfer device| image:: images/manual/tbb_Document8.png
+.. |Copy files to Persistent| image:: images/manual/viewing1.png
+.. |Decrypting| image:: images/manual/viewing2.png
+.. |Decrypted documents| image:: images/manual/viewing3.png
+.. |Opened document| image:: images/manual/viewing4.png
+.. |Sent reply| image:: images/manual/document2.png
+.. |Read documents| image:: images/manual/document4.png
+.. |Flag source for reply| image:: images/manual/document3.png
+.. |Wiping documents| image:: images/manual/viewing5.png
+.. |Encrypting 1| image:: images/manual/viewing6.png
+.. |Encrypting 2| image:: images/manual/viewing7.png
+.. |Encrypted document| image:: images/manual/viewing8.png

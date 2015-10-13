@@ -116,13 +116,13 @@ log in again to see if a journalist has responded.
 
 Repeat these steps to continue communicating with the journalist.
 
-.. |Javascript warning| image:: /docs/images/manual/source-step1.png
-.. |Fix Javascript warning| image:: /docs/images/manual/source-step2.png
-.. |Source Interface| image:: /docs/images/manual/source-step3-and-step7.png
-.. |Memorizing your codename| image:: /docs/images/manual/source-step4.png
-.. |Submit a document| image:: /docs/images/manual/source-step5.png
-.. |Confirmation page| image:: /docs/images/manual/source-step6.png
-.. |Check for response| image:: /docs/images/manual/source-step8.png
-.. |Check for a reply| image:: /docs/images/manual/source-step9.png
-.. |Delete received messages| image:: /docs/images/manual/source-step10.png
-.. |Check for an initial response| image:: /docs/images/manual/source_flagged_for_reply.png
+.. |Javascript warning| image:: images/manual/source-step1.png
+.. |Fix Javascript warning| image:: images/manual/source-step2.png
+.. |Source Interface| image:: images/manual/source-step3-and-step7.png
+.. |Memorizing your codename| image:: images/manual/source-step4.png
+.. |Submit a document| image:: images/manual/source-step5.png
+.. |Confirmation page| image:: images/manual/source-step6.png
+.. |Check for response| image:: images/manual/source-step8.png
+.. |Check for a reply| image:: images/manual/source-step9.png
+.. |Delete received messages| image:: images/manual/source-step10.png
+.. |Check for an initial response| image:: images/manual/source_flagged_for_reply.png
