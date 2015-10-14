@@ -58,19 +58,19 @@ Set up Tails USB sticks
 
 [Tails](https://tails.boum.org) is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
 
-Most of the work of installing, administering, and using SecureDrop is done from computers using Tails, so the first thing you need to do is set up several USB sticks with the Tails operating system. To get started, you'll need two Tails disks: one for the *admin workstation* and one for the *secure viewing station*. Later, you'll set up a bunch more disks for your journalists and backups, but for now you just need two.
+Most of the work of installing, administering, and using SecureDrop is done from computers using Tails, so the first thing you need to do is set up several USB drives with the Tails operating system. To get started, you'll need two Tails drives: one for the *Admin Workstation* and one for the *Secure Viewing Station*. [Later](./onboarding.md), you'll set up a bunch more Tails drives for your journalists and backups, but for now you just need two.
 
-As soon as you create a new Tails disk, *label it immediately*. Disks all look alike and you're going to be juggling thumb drives throughout this installation. Label immediately. Always.
+As soon as you create a new Tails drives, *label it immediately*. USB drives all look alike and you're going to be juggling a whole bunch of them throughout this installation. Label immediately. Always.
 
 
 ### Installing Tails
 
-We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. All of your Tails disks will need persistence: a way of safely saving files and so on between reboots. *It is only possible to set up persistence on USB disks which were created via the Tails Installer*.
+We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails drives with the *Tails Installer*, a special program that is only available from inside Tails. All of your Tails drives will need persistence: a way of safely saving files and so on between reboots. *It is only possible to set up persistence on USB drives which were created via the Tails Installer*.
 
-The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a bootable Tails USB stick. Follow the instructions at these links and then return to this page:
+The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a bootable Tails USB drive. Follow the instructions at these links and then return to this page:
 
 * [Download and verify the Tails .iso](https://tails.boum.org/download/index.en.html)
-* [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
+* [Install onto a USB drive](https://tails.boum.org/doc/first_steps/installation/index.en.html)
 
 The current Tails signing key looks like this:
 
@@ -83,60 +83,97 @@ sub   4096R/0x98FEC6BC752A3DB6 2015-01-18 [expires: 2017-01-11]
 sub   4096R/0x3C83DCB52F699C56 2015-01-18 [expires: 2017-01-11]
 ```
 
-Note that this process will take some time because once you have one copy of Tails, you have to create each additional Tails USB, shut down, and boot into each one to complete the next step.
+Note that this process will take some time because once you have one copy of Tails, you have to create each additional Tails drive, shut down, and boot into each one to complete the next step.
 
 Also, you should be aware that Tails doesn't always completely shut down and reboot properly when you click "restart", so if you notice a significant delay, you may have to manually power off and restart your computer for it to work properly.
 
 
 ### Enabling Persistence Storage on Tails
 
-Creating an encrypted persistent volume will allow you to securely save information and settings in the free space that is left on your Tails USB. This information will remain available to you even if you reboot Tails. (Tails securely erases all other data on every shutdown.)
+Creating an encrypted persistent volume will allow you to securely save information and settings in the free space that is left on your Tails drive. This information will remain available to you even if you reboot Tails. (Tails securely erases all other data on every shutdown.)
 
-You will need to create a persistent storage on each Tails USB, with a unique password for each.
+You will need to create a persistent storage on each Tails drive, with a unique password for each.
 
-Please use the instructions on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html) to make the persistent volume on each Tails USB stick you create.
+Please use the instructions on the [Tails website](https://tails.boum.org/doc/first_steps/persistence/index.en.html) to make the persistent volume on each Tails drive you create.
 
 When creating the persistence volume, you will be asked to select from a list of features, such as 'Personal Data'. We recommend that you enable **all** features.
 
 Some other things to keep in mind:
 
-* Right now, you need to create a persistent volume on both the *admin workstation* Tails disk and the *secure viewing station* Tails disk.
+* Right now, you need to create a persistent volume on both the *Admin Workstation* Tails drive and the *Secure Viewing Station* Tails drive.
 
 * Each Tails persistent volume should have an unique and complex passphrase that's easy to write down or remember. We recommend using [Diceware passphrases.](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/).
 
-* Each journalist will need their own Tails disk with their own persistent volume secured with their own passphrase — but that comes later.
+* Each journalist will need their own Tails drive with their own persistent volume secured with their own passphrase — but [that comes later](./onboarding.md).
 
 * Journalists and admins will eventually need to remember these passphrases. We recommend using spaced-repetition to memorize Diecware passphrases.
 
-**NOTE: Make sure that you never use the *secure viewing station* Tails disk on a computer connected to the Internet or a local network. This Tails disk will only be used on the air-gapped *Secure Viewing Station*.**
+**NOTE: Make sure that you never use the *Secure Viewing Station* Tails drive on a computer connected to the Internet or a local network. This Tails drive will only be used on the air-gapped *Secure Viewing Station*.**
 
 
-Set up the Secure Viewing Station
----------------------------------
+Set up the *Secure Viewing Station*
+-----------------------------------
 
-The *Secure Viewing Station (SVS)* is a computer that is kept offline and only ever used together with the *offline Tails USB*. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
+The *Secure Viewing Station* is the computer where journalists read and respond to SecureDrop submissions. Once submissions are encrypted on the *Application Server*, only the *Secure Viewing Station* has the key to decrypt them. The *Secure Viewing Station* is never connected to the internet or a local network, and only ever runs from a dedicated Tails drive. Journalists download encrypted submittions using their *Journalist Workstation*, copy them to a *Data Transfer Device* (a USB drive or a DVD) and physically transfer the *Data Transfer Device* to the *Secure Viewing Station*.
 
-We recommend that you physically remove the hard drive and networking cards, such as wireless and Bluetooth, from this machine. If you are unable to remove a card, place tape over the port or otherwise physically disable it. If you have questions about using an older machine for this purpose, please contact us at securedrop@freedom.press.
+Since the *Secure Viewing Station* never uses a network connection or an internal hard drive, we recommend that you physically remove any any internal storage devices or networking hardware such as wireless cards or Bluetooth adapters. If the machine has network ports you can't physically remove, you should clearly cover these ports with labels noting not to use them. For an even safer approach, fill a port with epoxy to physically disable it. If you have questions about repurposing hardware for the *Secure Viewing Station*, contact the [Freedom of the Press Foundation](https://securedrop.org/help).
 
-At this point, you should have created a Tails Live USB with persistence on the *offline Tails USB*. If you haven't, follow the instructions in the first half of our [Tails Guide](/docs/tails_guide.md).
-
-Boot your *offline Tails USB* on the *Secure Viewing Station*.
-
-After it loads, you should see a "Welcome to Tails" screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options,' select *Yes* and click *Forward*.
+You should have a Tails drive clearly labeled “SecureDrop Secure Viewing Station”. If it's not labeled, label it right now, then boot it on the *Secure Viewing Station*. After it loads, you should see a "Welcome to Tails" screen with two options. Select *Yes* to enable the persistent volume and enter your password, but do NOT click Login yet. Under 'More Options,' select *Yes* and click *Forward*.
 
 Enter an *Administration password* for use with this specific Tails session and click *Login*. (NOTE: the *Administration password* is a one-time password. It will reset every time you shut down Tails.)
 
-### Create a GPG key for the SecureDrop application
 
-When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the SecureDrop Application GPG key. You will need to create that key now before you continue with the installation.
+### Set up the *Data Transfer Device*
 
-After booting up Tails, you will need to manually set the system time before you create the GPG key. To set the system time, right-click the time in the top menu bar and select *Adjust Date & Time.*
+Journalists copy submissions from their *Journalist Workstation* to the *Secure Viewing Station* using the *Data Transfer Device* which can be a DVD or a USB drive.
 
-Click *Unlock* in the top-right corner of the dialog window and enter your *Administration password.* Set the correct time, region and city.
+Using DVDs as the *Data Transfer Device* provides some protection against certain kinds of esoteric USB-based attacks on the *Secure Viewing Station*, but requires that you keep blank DVDs on hand, have a dedicated DVD drive for the *Secure Viewing Station*, DVD drives for use with *Journalist Workstation*s, and a shredder capable of destroying DVDs. Unless you are certain that you need to use DVDs as the *Data Transfer Device*, you should use USB drives instead. If you have chosen to use DVDs instead, there is nothing to set up now — just make sure that you have all the hardware on hand.
 
-Then click *Lock*, enter your password one more time and wait for the system time to update in the top panel.
+The easiest and recommended option for a *Data Transfer Device* is a USB drive. If you have a large team of journalists you may want to [create several](./onboarding.md) of these. Here we'll just walk through making one *Data Transfer Device*. Note: this process will destroy all data currently on the drive. You should probably use a new USB drive.
 
-Once that's done, follow the steps below to create a GPG key.
+First, label your USB drive “SecureDrop Data Transfer Device”. Open the *Applications* menu in the top left corner and select ![Accessories icon](images/icons/accessories.png) *Accessories* then ![Disk Utility icon](images/icons/disk-utility.png) *Disk Utility*.
+
+![screenshot of the Applications menu in Tails, highlighting Disk Utility](images/screenshots/applications_accessories_disk-utility.png)
+
+Connect your *Data Transfer Device* then pick your device in the menu on the left. Since we're going to destroy all the data on this drive, it's important that you pick the right drive. It should be named something that sounds similar to the manufacturer's label on the ouside of the drive, and it will only appear after you plug it in. Double check that you have clicked on the correct drive.
+
+![screenshot of Disk Utility application](images/screenshots/disk-utility.png)
+
+Once you're sure you have the right drive, click *Format Drive*. The default *Scheme* of *Master Boot Record* is fine. Click *Format*, then confirm by clicking *Format* again. Under the *Volumes* heading towards the bottom of the right pane of *Disk Utility* click the large grey bar that represents your newly-formatted drive and then click *Create Partition* below.
+
+![screenshot of the menu to create a new partition in the Disk Utility application](images/screenshots/create-partition.png)
+
+Give the new partition on your *Data Transfer Device* a descriptive name like “Transfer Device” and check the *Encrypt underlying device* box, then click *Create* to continue. You will now be prompted to create a passphrase.
+
+![screenshot of passphrase selection promprt in the Disk Utility application](images/screenshots/create-passphrase.png)
+
+You won't need to memorize this passphrase or type it more than a few times, so feel free to make a good long one. Pick the *Remember forever* option — this will save the passphrase securely on *Secure Viewing Station*'s persistent volume. Click *Create* to continue. After a few seconds, you new *Data Transfer Device* should be ready for use.
+
+If you haven't already, make sure to label it.
+
+* * * * *
+
+Since a *Data Transfer Device* is used to move files from a *Journalist Workstation* to the *Secure Viewing Station*, you'll also need to enter the passphrase on each *Journalist Workstation* you use this *Data Transfer Device* with. When you connect the *Data Transfer Device* to a new *Journalist Workstation* for the first time, you'll be prompted to enter the passphrase to unlock the encrypted disk.
+
+![image of the disk unlock prompt on Tails](images/screenshots/passphrase-keyring.png)
+
+Make sure to select the *Remember forever* option before entering your passphrase. As in the *Disk Utility* application this will securely save the passphrase on the persistent volume of that *Journalist Workstation*, ensuring that you only ever have to type in the passphrase once on any particular machine.
+
+
+### Generate the *SecureDrop Application GPG Key*
+
+When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the *SecureDrop Application GPG Key*. The private part of this key is only stored on the *Secure Viewing Station* which is never connected to the Internet. SecureDrop submissions can only be decrypted and read on the *Secure Viewing Station.
+
+We will now generate the *SecureDrop Application GPG Key* key.
+
+After booting up Tails on the *Secure Viewing Station*, you will need to manually set the system time before you create the *SecureDrop Application GPG Key*. To set the system time:
+
+1. Right-click the time in the top menu bar and select *Adjust Date & Time.*
+2. Click *Unlock* in the top-right corner of the dialog window and enter your temporary Tails administration password.
+3. Set the correct time, region and city.
+4. Click *Lock*, enter your temporary Tails administration password one more time and wait for the system time to update in the top panel.
+
+Once that's done, follow the steps below to create the key.
 
 * Open a terminal ![Terminal](images/terminal.png) and run `gpg --gen-key`
 * When it says, `Please select what kind of key you want`, choose `(1) RSA and RSA (default)`
