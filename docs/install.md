@@ -35,42 +35,60 @@ Installing SecureDrop
 
 This guide outlines the steps required to install SecureDrop 0.3.x. If you are looking to upgrade from version 0.2.1, please use the [migration scripts](/migration_scripts/0.3) we have created.
 
-## Before you begin
+Before you begin
+----------------
 
-When running commands or editing configuration files that include filenames, version numbers, usernames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. A basic familiarity with Linux, the GNU core utilities and Bash shell is highly advantageous. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
+Before you get started, you should familiarize yourself with the [SecureDrop overview](./overview.md), [specific terminology](./terminology.md), and the description of [roles](./roles.md) involved in SecureDrop's operations. You may wish to leave these open in other tabs as you work.
+
+SecureDrop is a technical tool. It is designed to protect journalists and sources, but no tool can guarantee safety. This guide will instruct you in installing and configuring SecureDrop, but it does not explain how to use safely and effectively. Put another way: at the end of this guide, you will have built a car; you will not know how to drive. Make sure to review the [deployment best-practices](deployment_practices.md) to get the most out of your new SecureDrop instance.
+
+Installing SecureDrop is an extended manual process which requires a bunch of preparation and equipment. You should probably set aside a day to complete the install process. A successful install requires an administrator with at-least basic familiarity with Linux, the GNU core utilities and Bash shell. If you are not proficient in these areas, it is strongly recommended that you contact the [Freedom of the Press Foundation](https://securedrop.org/help) for installation assistance.
+
+Before you begin, you will need to assemble all the [hardware](./hardware.md) that you are going to use.
+
+When running commands or editing configuration files that include filenames, version numbers, userames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
 
 You will also need the inventory of hardware items for the installation listed in our [Hardware Guide](/docs/hardware.md).
 
-### Set up Tails USB sticks
+Once you're familiar with SecureDrop, you've made your plan, your organization is ready to follow-through and you have the required hardware assembled before you, you're ready to begin.
 
-Before installing the SecureDrop application, the first thing you need to do is set up several USB sticks with the Tails operating system. Tails is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
 
-You'll need to install Tails onto at least four USB sticks and enable persistent storage, which is an encrypted volume that allows you to save information even when Tails securely wipes everything else:
+Set up Tails USB sticks
+-----------------------
 
-1. *offline Tails USB*
+[Tails](https://tails.boum.org) is a privacy-enhancing live operating system that runs on removable media, such as a DVD or a USB stick. It sends all your Internet traffic through Tor, does not touch your computer's hard drive, and securely wipes unsaved work on shutdown.
 
-2. *admin Tails USB*
+Most of the work of installing, administering, and using SecureDrop is done from computers using Tails, so the first thing you need to do is set up several USB sticks with the Tails operating system. To get started, you'll need two Tails disks: one for the *admin workstation* and one for the *secure viewing station*. Later, you'll set up a bunch more disks for your journalists and backups, but for now you just need two.
 
-3. *journalist Tails USB*.
+As soon as you create a new Tails disk, *label it immediately*. Disks all look alike and you're going to be juggling thumb drives throughout this installation. Label immediately. Always.
 
-4. *long-term storage Tails USB*
 
-You will need one Tails USB for each journalist, so if you have more than one journalist checking SecureDrop, you'll need to create even more. It's a good idea to label or color-code these in order to tell them apart.
+### Installing Tails
 
-#### Installing Tails
-
-We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. *You will only be able to create persistent volumes on USB sticks that had Tails installed via the Tails Installer*.
+We recommend creating an initial Tails Live DVD or USB, and then using that to create additional Tails Live USBs with the *Tails Installer*, a special program that is only available from inside Tails. All of your Tails disks will need persistence: a way of safely saving files and so on between reboots. *It is only possible to set up persistence on USB disks which were created via the Tails Installer*.
 
 The [Tails website](https://tails.boum.org/) has detailed and up-to-date instructions on how to download and verify Tails, and how to create a bootable Tails USB stick. Follow the instructions at these links and then return to this page:
 
 * [Download and verify the Tails .iso](https://tails.boum.org/download/index.en.html)
 * [Install onto a USB stick or SD card](https://tails.boum.org/doc/first_steps/installation/index.en.html)
 
+The current Tails signing key looks like this:
+
+```
+pub   4096R/0xDBB802B258ACD84F 2015-01-18 [expires: 2017-01-11]
+      Key fingerprint = A490 D0F4 D311 A415 3E2B  B7CA DBB8 02B2 58AC D84F
+uid                 [  full  ] Tails developers (offline long-term identity key) <tails@boum.org>
+uid                 [  full  ] Tails developers <tails@boum.org>
+sub   4096R/0x98FEC6BC752A3DB6 2015-01-18 [expires: 2017-01-11]
+sub   4096R/0x3C83DCB52F699C56 2015-01-18 [expires: 2017-01-11]
+```
+
 Note that this process will take some time because once you have one copy of Tails, you have to create each additional Tails USB, shut down, and boot into each one to complete the next step.
 
 Also, you should be aware that Tails doesn't always completely shut down and reboot properly when you click "restart", so if you notice a significant delay, you may have to manually power off and restart your computer for it to work properly.
 
-#### Enabling Persistence Storage on Tails
+
+### Enabling Persistence Storage on Tails
 
 Creating an encrypted persistent volume will allow you to securely save information and settings in the free space that is left on your Tails USB. This information will remain available to you even if you reboot Tails. (Tails securely erases all other data on every shutdown.)
 
@@ -82,17 +100,19 @@ When creating the persistence volume, you will be asked to select from a list of
 
 Some other things to keep in mind:
 
-* You will want to create a persistent volume for all three main Tails USBs: the *offline Tails USB*, the *admin Tails USB*, and the *journalist Tails USB*.
+* Right now, you need to create a persistent volume on both the *admin workstation* Tails disk and the *secure viewing station* Tails disk.
 
-* The admin and the journalist should create separate passwords for their own USBs.
+* Each Tails persistent volume should have an unique and complex passphrase that's easy to write down or remember. We recommend using [Diceware passphrases.](https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/).
 
-* Only the journalist should have access to the *offline Tails USB password*, though during the initial installation, often the admin will create their own password to facilitate setup and then the journalist can change it afterwards.
+* Each journalist will need their own Tails disk with their own persistent volume secured with their own passphrase — but that comes later.
 
-* Unlike many of the other passphrases for SecureDrop, the persistence volume passwords must be remembered by the admin and journalist. So after creating each passphrase, you should write it down until you can memorize it, and then destroy the paper you wrote it on.
+* Journalists and admins will eventually need to remember these passphrases. We recommend using spaced-repetition to memorize Diecware passphrases.
 
-NOTE: Make sure that you never use the *offline Tails USB* on a computer connected to the Internet or a local network. This USB will be used on the air-gapped *Secure Viewing Station* only.
+**NOTE: Make sure that you never use the *secure viewing station* Tails disk on a computer connected to the Internet or a local network. This Tails disk will only be used on the air-gapped *Secure Viewing Station*.**
 
-## Set up the Secure Viewing Station
+
+Set up the Secure Viewing Station
+---------------------------------
 
 The *Secure Viewing Station (SVS)* is a computer that is kept offline and only ever used together with the *offline Tails USB*. Since this machine will never touch the Internet or run an operating system other than Tails on a USB, it does not need a hard drive or network device.
 
