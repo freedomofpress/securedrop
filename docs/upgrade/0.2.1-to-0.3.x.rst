@@ -1,0 +1,84 @@
+Upgrade from 0.2.1 to 0.3.x
+===========================
+
+Since the changes between 0.2.1 and 0.3.x are substantial (including changing
+the default operating system from Ubuntu 12 LTS to Ubuntu 14 LTS), it is
+impossible to automatically migrate a 0.2.1 instance to 0.3.x.
+
+Instead, the process of upgrading a 0.2.1 version involves:
+
+#. Backing up the existing 0.2.1 instance's data
+#. A clean install (including re-installing Ubuntu) of 0.3.x
+#. Migrating the old instance data from the backup to the new instance.
+
+Prerequisites
+-------------
+
+- A networked Admin tails workstation configured with the SecureDrop repo
+  cloned to the ``Persistent`` directory.
+- Physical/remote access to the app and monitor servers
+
+Upgrade Procedure
+-----------------
+
+#. Verify the version of the latest stable release of SecureDrop.
+
+   * If you have an up-to-date clone/pull of the SecureDrop git repository, you
+     could find the most recent tagged version with ``git describe --abbrev=0``.
+   * You can also check the "Current version" banner on the `SecureDrop
+     website`_.
+
+#. The upgrade steps in this document will work for each ``0.3.x`` SecureDrop
+   version. Throughout the rest of this document, substitute ``0.3.x`` with the
+   current release's version number.
+
+#. Checkout and verify the current release on the Admin Workstation. ::
+
+     cd /home/amnesia/Persistent/SecureDrop
+     git pull
+     git tag -v 0.3.x # Make sure you get a "Good signature"
+     git checkout 0.3.x
+
+#. Copy the 0.2.1 migration script to the app server using scp or physical
+   media (usb). ::
+
+     /home/amnesia/Persistent/securedrop/migration_scripts/0.2.1/0.2.1_collect.py
+
+#. On the app server, run ``0.2.1_collect.py`` as root and provide a name for
+   the backup file (it will have a ``.tar.gz`` extension appended
+   automatically). ::
+
+     sudo ./0.2.1_collect.py sdbackup
+
+#. Copy ``sdbackup.tar.gz`` to removable media and transfer it to the new
+   instance's app server. If you are re-using the same hardware for your 0.3.x
+   installation as you did for 0.2.1, make sure you copy this file to a
+   external media before beginning the 0.3.x installation - otherwise you will
+   lose your data!
+
+#. Ensure that you've completed the installation process for the latest stable
+   version of SecureDrop, and ensure that you've created at least one user on
+   the Document Interface (with ``./manage.py add_admin``) before continuing.
+
+#. Once you've successfully installed 0.3.x, copy ``sdbackup.tar.gz`` to any
+   location on the 0.3.x app server. You will also need to copy the
+   ``migration_scripts/0.2.1`` directory to the new app server. You can copy it
+   from the git repository on the Admin Workstation and transfer it to the app
+   server with a flash drive, or ``git clone`` the repo to your home directory
+   on the app server.
+
+#. ``cd`` into ``migration_scripts/0.2.1`` and run ``0.3_migrate.py`` as root,
+   passing the path to the backup file from the 0.2.1 instance. ::
+
+     sudo ./0.3_migrate.py sdbackup.tar.gz
+
+The script will say "Done!" when it completes successfully. Otherwise, it will
+print an error and a Python traceback. If you encounter such an error, please
+send an encrypted email with the traceback attached to
+securedrop@freedom.press.
+
+Finally, test your new installation and make sure that everything was
+successfully migrated.
+
+.. _SecureDrop website: https://securedrop.org/
+
