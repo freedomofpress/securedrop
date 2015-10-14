@@ -10,13 +10,6 @@ SecureDrop is an open-source whistleblower submission system that media
 organizations can use to securely accept documents from and communicate with
 anonymous sources.
 
-This is the end-user documentation, for sources and journalists who use
-SecureDrop, and administrators who are interested in setting up and maintaining
-a SecureDrop. The developer documentation is maintained separately, on the
-`Github project wiki`_.
-
-.. _`Github project wiki`: https://github.com/freedomofpress/securedrop/wiki
-
 .. toctree::
    :caption: User Guides
    :name: userguidetoc
@@ -37,11 +30,12 @@ a SecureDrop. The developer documentation is maintained separately, on the
    troubleshooting
    upgrade
 
+.. toctree::
+   :caption: Developer Documentation
+   :name: devdocs
+   :maxdepth: 2
+   :glob:
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   development/getting_started
+   development/*
 
