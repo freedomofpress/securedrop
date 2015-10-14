@@ -130,4 +130,4 @@ practices <deployment_practices.md>`__ for ways to show off and
 communicate your SecureDrop address, but more is better. Create a
 promotion/advocacy plan and go wild.
 
-.. |SecureDrop architecture overview diagram| image:: ./SecureDrop_diagram.png
+.. |SecureDrop architecture overview diagram| image:: ./diagrams/SecureDrop.png
