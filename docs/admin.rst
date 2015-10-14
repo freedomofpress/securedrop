@@ -1,4 +1,4 @@
-Admin Interface Guide
+Admininstrator Guide
 =====================
 
 At this point, you (the administrator) should have your own username and
@@ -78,7 +78,7 @@ Once you've configured your YubiKey and entered the Secret Key, click
 *Add user*. On the next page, enter a code from your YubiKey by
 inserting it into the workstation and pressing the button.
 
-|"Enable YubiKey"|
+|"Verify YubiKey"|
 
 If everything was set up correctly, you will be redirected back to the
 Admin Interface, where you should see a flashed message that says "Two
@@ -95,4 +95,4 @@ possession when they attempt to log in to SecureDrop.
 .. |“Enable Google Authenticator”| image:: images/admin_enable_authenticator.png
 .. |“Verify Google Authenticator works”| image:: images/admin_enter_verification.png
 .. |"Enable YubiKey"| image:: images/admin_enable_yubikey.png
-.. |"Enable YubiKey"| image:: images/admin_verify_yubikey.png
+.. |"Verify YubiKey"| image:: images/admin_verify_yubikey.png

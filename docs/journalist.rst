@@ -1,16 +1,19 @@
-How to Use SecureDrop As a Journalist
-=====================================
+Journalist Guide
+================
 
 Journalists viewing documents on SecureDrop must connect to the
 respective Source or Document Interface using the `Tails operating
 system <https://tails.boum.org/>`__, which your administrator should
 have already set up for you.
 
-Using SecureDrop As a Journalist
---------------------------------
+Workflow
+--------
+
+.. todo:: This whole document needs to be reworked, it's all over the
+          place and does not flow from top to bottom.
 
 Create GPG key for the journalist
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 Each journalist must have a personal GPG key that they use for
 encrypting files transferred from the Secure Viewing Station to their
@@ -27,7 +30,7 @@ instructions to set one up with GnuPG (GPG).
    X <https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin>`__
 
 Connect to the Document Interface
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 Each journalist has their own authenticated Tor hidden service URL to
 login to the ``Document Interface``. The journalist needs to use the
@@ -53,7 +56,7 @@ journalists see is different than the codename that sources see.**
 |Document Interface|
 
 Move Documents to the Secure Viewing Station
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------
 
 You will only be able to view the documents the source has sent you on
 the ``Secure Viewing Station``. After clicking on an individual source
@@ -75,8 +78,8 @@ designated USB stick you will use to transfer the documents from your
 Tails ``Journalist Workstation`` to the ``Secure Viewing Station``. This
 will be known as your ``Transfer Device``.
 
-| |Move to transfer device|
-| |Move to transfer device|
+| |Move to transfer device 1|
+| |Move to transfer device 2|
 
 Eject your ``Transfer Device`` from your ``Journalist Workstation``.
 
@@ -100,7 +103,7 @@ on the file, and then click "Wipe" to securely wipe the file from your
 device.
 
 Decrypt and work on the Secure Viewing Station
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------
 
 To decrypt documents, return to your Persistent folder and double-click
 on zipped file folder. After you extract the files, click on each file
@@ -126,7 +129,7 @@ right-click on a file and choose ``Rename...`` to rename a document and
 give it a file extension.
 
 Interact With Sources
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 | Click on the codename to see the page specifically for that source.
   You will see all of the messages that they have written and documents
@@ -149,7 +152,7 @@ you may infer that the source read and deleted them. You may also delete
 replies if you change your mind after sending them.
 
 Flag for reply
-^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~
 
 If the server experiences a large number of new sources signing up at
 once and is overloaded with submissions, you will need to flag sources
@@ -171,7 +174,7 @@ will automatically be generated and you can log back in and send a
 reply.
 
 Work with Documents
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 As long as you're using the latest version of Tails, you should be able
 to open any document that gets submitted to you without the risk of
@@ -204,7 +207,7 @@ Wipe to delete them.
 |Wiping documents|
 
 Encrypt and move documents to Journalist Workstation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------
 
 Before you move documents back to the ``Transfer Device`` to copy them
 to your workstation you should encrypt them to your personal GPG public
@@ -229,7 +232,7 @@ them to your workstation.
 |Encrypted document|
 
 Decrypt and prepare to publish
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 Plug the ``Transfer Device`` into your workstation computer and copy the
 encrypted documents to it. Decrypt them with ``gnupg``.
@@ -242,8 +245,8 @@ crimes and corruption, and change the world.
 .. |Load external content| image:: images/manual/document4.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
 .. |Download to sandbox folder| image:: images/manual/tbb_Document6.png
-.. |Move to transfer device| image:: images/manual/tbb_Document7.png
-.. |Move to transfer device| image:: images/manual/tbb_Document8.png
+.. |Move to transfer device 1| image:: images/manual/tbb_Document7.png
+.. |Move to transfer device 2| image:: images/manual/tbb_Document8.png
 .. |Copy files to Persistent| image:: images/manual/viewing1.png
 .. |Decrypting| image:: images/manual/viewing2.png
 .. |Decrypted documents| image:: images/manual/viewing3.png

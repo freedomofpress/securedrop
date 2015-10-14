@@ -1,5 +1,5 @@
-SecureDrop Overview
-===================
+Overview
+========
 
 SecureDrop is an open-source whistleblower submission system that media
 organizations can use to securely accept documents from and communicate

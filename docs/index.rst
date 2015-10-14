@@ -6,38 +6,36 @@
 Welcome to SecureDrop's documentation!
 ======================================
 
-Contents:
+SecureDrop is an open-source whistleblower submission system that media
+organizations can use to securely accept documents from and communicate with
+anonymous sources.
+
+This is the end-user documentation, for sources and journalists who use
+SecureDrop, and administrators who are interested in setting up and maintaining
+a SecureDrop. The developer documentation is maintained separately, on the
+`Github project wiki`_.
+
+.. _`Github project wiki`: https://github.com/freedomofpress/securedrop/wiki
 
 .. toctree::
-   :maxdepth: 5
+   :caption: User Guides
+   :name: userguidetoc
+   :maxdepth: 2
 
-   0.2.1-upgrade-to-0.3.3
-   0.2.1-upgrade-to-0.3.x
-   0.3-pre-upgrade-to-0.3.3
-   0.3-pre-upgrade-to-0.3.x
-   admin_interface
-   apparmor_profiles
-   creating_deb
-   deployment_practices
-   develop
-   google_authenticator
+   source
+   journalist
+   admin
+
+.. toctree::
+   :caption: Install SecureDrop
+   :name: installtoc
+   :maxdepth: 2
+
+   overview
    hardware
    install
-   journalist_user_manual
-   logging
-   network_firewall
-   ossec_alerts
-   snap_ci
-   source_user_manual
-   spec_tests
-   tails_guide
-   tails_printing_guide
-   terminology
-   threat_model
-   training_schedule
-   ubuntu_config
+   troubleshooting
    upgrade
-   yubikey_setup
 
 
 Indices and tables
