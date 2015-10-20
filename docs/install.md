@@ -37,7 +37,7 @@ This guide outlines the steps required to install SecureDrop 0.3.x. If you are l
 
 ## Before you begin
 
-When running commands or editing configuration files that include filenames, version numbers, userames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. A basic familiarity with Linux, the GNU core utilities and Bash shell is highly advantageous. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
+When running commands or editing configuration files that include filenames, version numbers, usernames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. A basic familiarity with Linux, the GNU core utilities and Bash shell is highly advantageous. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
 
 You will also need the inventory of hardware items for the installation listed in our [Hardware Guide](/docs/hardware.md).
 
@@ -68,7 +68,7 @@ The [Tails website](https://tails.boum.org/) has detailed and up-to-date instruc
 
 Note that this process will take some time because once you have one copy of Tails, you have to create each additional Tails USB, shut down, and boot into each one to complete the next step.
 
-Also, you should be aware that Tails doesn't always completely shut down and reboot properly when you click "restart", so if you notice a signficant delay, you may have to manually power off and restart your computer for it to work properly.
+Also, you should be aware that Tails doesn't always completely shut down and reboot properly when you click "restart", so if you notice a significant delay, you may have to manually power off and restart your computer for it to work properly.
 
 #### Enabling Persistence Storage on Tails
 
@@ -280,7 +280,7 @@ Verify that you are able to authenticate to both servers by running the below co
 
 ```sh
 ssh <username>@<App IP address> hostname
-ssh <username>@<Montior IP address> hostname
+ssh <username>@<Monitor IP address> hostname
 ```
 Make sure to run the 'exit' command after testing each one.
 
