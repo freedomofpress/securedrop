@@ -3,12 +3,13 @@
 
   vars:
     ossec_server_hostname: ossec-server
+    ossec_version: 2.8.2
     download_url: "https://github.com/ossec/ossec-hids/archive"
-    download_name: "{{ version }}.tar.gz"
+    download_name: "{{ ossec_version }}.tar.gz"
     archive_name: "ossec-hids-{{ download_name }}"
     build_path: "/vagrant/build"
     arch: "amd64"
-    ossec_build_dir: "ossec-{{ purpose }}-{{ version }}-{{ arch }}"
+    ossec_build_dir: "ossec-{{ purpose }}-{{ ossec_version }}-{{ arch }}"
     build_ossec_deb_pkg_dependencies:
       - inotify-tools
       - libssl-dev

@@ -10,8 +10,6 @@
   stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
   register: ossec_download
 
-- debug: var=ossec_download
-
 - debug: msg="OSSEC download exists will skip downloading again"
   when: ossec_download.stat.exists
 
@@ -50,20 +48,23 @@
   with_items: build_ossec_deb_pkg_dependencies
 
 - name: extract OSSEC archive to /tmp
-  shell: tar -xvf {{ build_path }}/{{ archive_name }} -C /tmp
+  unarchive:
+    copy: no
+    src: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    dest: /tmp
 
 - name: ensure ossec /etc dir exists
   file:
     state: directory
-    dest: /tmp/ossec-hids-{{ version }}/etc
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc
 
 - name: copy ossec preloaded vars
   template:
     src: "{{ purpose }}-preloaded-vars.conf"
-    dest: /tmp/ossec-hids-{{ version }}/etc/preloaded-vars.conf
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc/preloaded-vars.conf
 
 - name: run ossec installer
-  command: /tmp/ossec-hids-{{ version }}/install.sh
+  command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
 
 - name: create ossec agent deb build dir
   file:
@@ -106,7 +107,7 @@
 - name: delete tmp install paths
   file:
     state: absent
-    dest: /tmp/ossec-hids-{{ version }}
+    dest: /tmp/ossec-hids-{{ ossec_version }}
 
 - name: delete ossec install directory
   file:
