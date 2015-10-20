@@ -442,19 +442,19 @@ configuration.
 3 NICs Configuration
 ''''''''''''''''''''
 
-| |Firewall IP Aliases|
-| |Firewall Port Aliases|
-| |Firewall LAN Rules|
-| |Firewall OPT1 Rules|
+|Firewall IP Aliases|
+|Firewall Port Aliases|
+|Firewall LAN Rules|
+|Firewall OPT1 Rules|
 
 4 NICs Configuration
 ''''''''''''''''''''
 
-| |Firewall IP Aliases|
-| |Firewall Port Aliases|
-| |Firewall LAN Rules|
-| |Firewall OPT1 Rules|
-| |Firewall OPT2 Rules|
+|Firewall IP Aliases with OPT2|
+|Firewall Port Aliases|
+|Firewall LAN Rules with OPT2|
+|Firewall OPT1 Rules with OPT2|
+|Firewall OPT2 Rules|
 
 Once you've set up the firewall, **exit the Unsafe Browser**, and
 continue with the instructions in the `Install
@@ -510,9 +510,9 @@ showing any progress, try refreshing the page.
 .. |Firewall Port Aliases| image:: images/firewall/port_aliases.png
 .. |Firewall LAN Rules| image:: images/firewall/lan_rules.png
 .. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules.png
-.. |Firewall IP Aliases| image:: images/firewall/ip_aliases_with_opt2.png
-.. |Firewall LAN Rules| image:: images/firewall/lan_rules_with_opt2.png
-.. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules_with_opt2.png
+.. |Firewall IP Aliases with OPT2| image:: images/firewall/ip_aliases_with_opt2.png
+.. |Firewall LAN Rules with OPT2| image:: images/firewall/lan_rules_with_opt2.png
+.. |Firewall OPT1 Rules with OPT2| image:: images/firewall/opt1_rules_with_opt2.png
 .. |Firewall OPT2 Rules| image:: images/firewall/opt2_rules.png
 .. |Update available| image:: images/firewall/pfsense_update_available.png
 .. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png

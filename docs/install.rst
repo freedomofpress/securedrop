@@ -326,8 +326,8 @@ after switching to armored keys.
 
 NOTE: This is the public key only.
 
-| |My Keys|
-| |My Keys|
+|Export Key|
+|Export Key 2|
 
 You'll need to verify the fingerprint for this new key during the
 ``App Server`` installation. Double-click on the newly generated key and
@@ -918,8 +918,8 @@ easier.
 .. |Terminal| image:: images/terminal.png
 .. |gpgApplet| image:: images/gpgapplet.png
 .. |My Keys| image:: images/install/keyring.png
-.. |My Keys| image:: images/install/exportkey.png
-.. |My Keys| image:: images/install/exportkey2.png
+.. |Export Key| image:: images/install/exportkey.png
+.. |Export Key 2| image:: images/install/exportkey2.png
 .. |Fingerprint| image:: images/install/fingerprint.png
 .. |Nautilus| image:: images/nautilus.png
 .. |Importing Journalist GPG Keys| image:: images/install/importkey.png

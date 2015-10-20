@@ -49,8 +49,8 @@ Tails will guide you through a default set-up, suggesting the best match
 for the printer you have. These choices come from Tails' pre-installed
 driver database.
 
-| |default set up|
-| |default set up|
+|default set up 1|
+|default set up 2|
 
 The recommended driver does not always match the actual make and model
 of your printer, but starting with the recommendations is a good idea.
@@ -102,8 +102,8 @@ a process of trial-and-error.
 .. |grant admin| image:: images/printer_setup_guide/grant_admin.png
 .. |add new printer| image:: images/printer_setup_guide/printer_list.png
 .. |searching for drivers...| image:: images/printer_setup_guide/searching_for_drivers.png
-.. |default set up| image:: images/printer_setup_guide/driver_search_result_default_1.png
-.. |default set up| image:: images/printer_setup_guide/driver_search_result_default_2.png
+.. |default set up 1| image:: images/printer_setup_guide/driver_search_result_default_1.png
+.. |default set up 2| image:: images/printer_setup_guide/driver_search_result_default_2.png
 .. |apply settings| image:: images/printer_setup_guide/save_printer_config.png
 .. |add your printer| image:: images/printer_setup_guide/printer_config_added.png
 .. |select "Properties"| image:: images/printer_setup_guide/edit_properties.png
