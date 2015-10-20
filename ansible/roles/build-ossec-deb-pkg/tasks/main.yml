@@ -1,4 +1,8 @@
 ---
+- name: Fetch OSSEC variables dynamically.
+  ossec_urls:
+    ossec_version: "{{ ossec_version }}"
+
 - name: apt-get update
   apt: update_cache=yes
 
@@ -11,8 +15,8 @@
 
 - name: download OSSEC
   get_url:
-    url: "{{ download_url }}/{{ download_name }}"
-    dest: "{{ build_path }}"
+    url: "{{ ossec_tarball_url }}"
+    dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
     sha256sum: "{{ download_checksum_sha256 }}"
   when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ download_checksum_md5 }}")
 
