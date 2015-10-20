@@ -71,7 +71,7 @@ This document outlines the threat model for SecureDrop 0.3 and is inspired by th
  * The server stores hashes of codenames, created with scrypt and randomly-generated salts.
  * The server stores only encrypted submissions and communication on disk.
  * The server stores a GPG key for each source, with the source's codename as the passphrase.
- * The server may [store plaintext submissions in memory for at most 24 hours](https://github.com/freedomofpress/securedrop/issues/802/pull/805).
+ * The server may [store plaintext submissions in memory for at most 24 hours](https://github.com/freedomofpress/securedrop/pull/805).
  * The server stores sanitized Tor logs, created using the [SafeLogging option](https://www.torproject.org/docs/tor-manual.html.en), for the Source Interface, the Document Interface, and SSH.
  * The server stores both access and error logs for the Document Interface.
  * The server stores connection history and audit logs for the admin.
