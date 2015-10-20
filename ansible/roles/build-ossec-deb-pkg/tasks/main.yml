@@ -1,5 +1,5 @@
 ---
-- name: Fetch OSSEC variables dynamically.
+- name: Include OSSEC download URLs.
   ossec_urls:
     ossec_version: "{{ ossec_version }}"
 
@@ -7,8 +7,10 @@
   apt: update_cache=yes
 
 - name: check if ossec was already downloaded
-  stat: path="{{ build_path }}/{{ download_name }}" get_md5=yes
+  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
   register: ossec_download
+
+- debug: var=ossec_download
 
 - debug: msg="OSSEC download exists will skip downloading again"
   when: ossec_download.stat.exists
@@ -17,8 +19,31 @@
   get_url:
     url: "{{ ossec_tarball_url }}"
     dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
-    sha256sum: "{{ download_checksum_sha256 }}"
-  when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ download_checksum_md5 }}")
+  when: not (ossec_download.stat.exists and
+             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
+             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
+
+- name: check if ossec was already downloaded
+  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
+  register: ossec_download
+
+- name: Fail if MD5 and SHA1 checksums for tarball are not correct.
+  fail:
+    msg: >
+      The checksums for {{ ossec_tarball_filename }} do not match.
+      Both MD5 and SHA1 checksums were inspected. The checksums
+      used for the inspection where:
+        MD5: {{ ossec_md5_checksum }}
+        SHA1: {{ ossec_sha1_checksum }}
+
+      The checksums found were:
+        MD5: {{ ossec_download.stat.md5 }}
+        SHA1: {{ ossec_download.stat.checksum }}
+
+      Try rerunning the playbook to download the files again.
+  when: not (ossec_download.stat.exists and
+             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
+             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest
