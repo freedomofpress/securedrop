@@ -18,17 +18,17 @@ At SecureDrop's heart is a pair of severs: the *Application (“App”) Server* 
 
 ### Systems Administrator
 
-The SecureDrop servers are managed by a systems administrator; for larger newooms, there may be a team of systems administrators. The administrator uses a dedicated *Admin Workstation* running [Tails]() and connects to the App and Mon servers over authenticated [Tor Hidden Services]() and manages them using [Ansible]().
+The SecureDrop servers are managed by a systems administrator; for larger newsrooms, there may be a team of systems administrators. The administrator uses a dedicated *Admin Workstation* running [Tails][] and connects to the App and Mon servers over authenticated [Tor Hidden Services][] and manages them using [Ansible][].
 
 
 ### Source
 
-A source submits documents and messages by using [Tor Browser]() (or Tails) to access the *Source Interface*: a public Tor Hidden Service. Submissions are encrypted in place on the App server as they are uploaded.
+A source submits documents and messages by using [Tor Browser][] (or Tails) to access the *Source Interface*: a public Tor Hidden Service. Submissions are encrypted in place on the App server as they are uploaded.
 
 
 ### Journalists
 
-Journalists working in the newsroom use two machines to interact with SecureDrop. First, they use a *Journalist Workstation* running Tails to connect to the *Document Interface*, an authenticated Tor Hidden Service. Journalists download [GPG]()-encrypted submissions and copy them to a *Transfer Device* (a thumb drive or DVD). Those submissions are then connected to the airgapped *Secure Viewing Station* (SVS) which holds the key to decrypt them. Journalists can then use the SVS to read, print, and otherwise prepare documents for publication. Apart from those deliberately published, decrypted document are never accessed on an Internet-connected computer.
+Journalists working in the newsroom use two machines to interact with SecureDrop. First, they use a *Journalist Workstation* running Tails to connect to the *Document Interface*, an authenticated Tor Hidden Service. Journalists download [GPG][]-encrypted submissions and copy them to a *Transfer Device* (a thumb drive or DVD). Those submissions are then connected to the airgapped *Secure Viewing Station* (SVS) which holds the key to decrypt them. Journalists can then use the SVS to read, print, and otherwise prepare documents for publication. Apart from those deliberately published, decrypted documents are never accessed on an Internet-connected computer.
 
 * * * * *
 

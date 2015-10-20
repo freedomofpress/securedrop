@@ -40,13 +40,13 @@ Before you begin
 
 Before you get started, you should familiarize yourself with the [SecureDrop overview](./overview.md), [specific terminology](./terminology.md), and the description of [roles](./roles.md) involved in SecureDrop's operations. You may wish to leave these open in other tabs as you work.
 
-SecureDrop is a technical tool. It is designed to protect journalists and sources, but no tool can guarantee safety. This guide will instruct you in installing and configuring SecureDrop, but it does not explain how to use safely and effectively. Put another way: at the end of this guide, you will have built a car; you will not know how to drive. Make sure to review the [deployment best-practices](deployment_practices.md) to get the most out of your new SecureDrop instance.
+SecureDrop is a technical tool. It is designed to protect journalists and sources, but no tool can guarantee safety. This guide will instruct you in installing and configuring SecureDrop, but it does not explain how to use it safely and effectively. Put another way: at the end of this guide, you will have built a car; you will not know how to drive. Make sure to review the [deployment best-practices](deployment_practices.md) to get the most out of your new SecureDrop instance.
 
 Installing SecureDrop is an extended manual process which requires a bunch of preparation and equipment. You should probably set aside a day to complete the install process. A successful install requires an administrator with at-least basic familiarity with Linux, the GNU core utilities and Bash shell. If you are not proficient in these areas, it is strongly recommended that you contact the [Freedom of the Press Foundation](https://securedrop.org/help) for installation assistance.
 
 Before you begin, you will need to assemble all the [hardware](./hardware.md) that you are going to use.
 
-When running commands or editing configuration files that include filenames, version numbers, userames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
+When running commands or editing configuration files that include filenames, version numbers, usernames, and hostnames or IP addresses, make sure it all matches your setup. This guide contains several words and phrases associated with SecureDrop that you may not be familiar with. It's recommended that you read our [Terminology Guide](/docs/terminology.md) once before starting and keep it open in another tab to refer back to.
 
 You will also need the inventory of hardware items for the installation listed in our [Hardware Guide](/docs/hardware.md).
 
@@ -60,7 +60,7 @@ Set up Tails USB sticks
 
 Most of the work of installing, administering, and using SecureDrop is done from computers using Tails, so the first thing you need to do is set up several USB drives with the Tails operating system. To get started, you'll need two Tails drives: one for the *Admin Workstation* and one for the *Secure Viewing Station*. [Later](./onboarding.md), you'll set up a bunch more Tails drives for your journalists and backups, but for now you just need two.
 
-As soon as you create a new Tails drives, *label it immediately*. USB drives all look alike and you're going to be juggling a whole bunch of them throughout this installation. Label immediately. Always.
+As soon as you create a new Tails drive, *label it immediately*. USB drives all look alike and you're going to be juggling a whole bunch of them throughout this installation. Label immediately. Always.
 
 
 ### Installing Tails
@@ -106,7 +106,7 @@ Some other things to keep in mind:
 
 * Each journalist will need their own Tails drive with their own persistent volume secured with their own passphrase — but [that comes later](./onboarding.md).
 
-* Journalists and admins will eventually need to remember these passphrases. We recommend using spaced-repetition to memorize Diecware passphrases.
+* Journalists and admins will eventually need to remember these passphrases. We recommend using spaced-repetition to memorize Diceware passphrases.
 
 **NOTE: Make sure that you never use the *Secure Viewing Station* Tails drive on a computer connected to the Internet or a local network. This Tails drive will only be used on the air-gapped *Secure Viewing Station*.**
 
@@ -162,7 +162,7 @@ Make sure to select the *Remember forever* option before entering your passphras
 
 ### Generate the *SecureDrop Application GPG Key*
 
-When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the *SecureDrop Application GPG Key*. The private part of this key is only stored on the *Secure Viewing Station* which is never connected to the Internet. SecureDrop submissions can only be decrypted and read on the *Secure Viewing Station.
+When a document or message is submitted to SecureDrop by a source, it is automatically encrypted with the *SecureDrop Application GPG Key*. The private part of this key is only stored on the *Secure Viewing Station* which is never connected to the Internet. SecureDrop submissions can only be decrypted and read on the *Secure Viewing Station*.
 
 We will now generate the *SecureDrop Application GPG Key* key.
 
