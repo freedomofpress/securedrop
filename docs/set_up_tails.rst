@@ -49,6 +49,17 @@ The current Tails signing key looks like this:
     sub   4096R/0x98FEC6BC752A3DB6 2015-01-18 [expires: 2017-01-11]
     sub   4096R/0x3C83DCB52F699C56 2015-01-18 [expires: 2017-01-11]
 
+.. todo:: I'm not sure why the current Tails signing key was added
+          here. Is it to provide multi-path verification for the Tails
+          key fingerprint (i.e. adversary has to compromise both
+          Tails' website and Read the Docs)?
+
+	  Either way, we can't just stick this here without explaining
+	  what it's for and how to use it. So we should either get rid
+	  of it and let the Tails docs do this for us (which I am
+	  personally in favor of), or we need to add a section about
+	  verifying iso's with GPG.
+
 Note that this process will take some time because once you have one
 copy of Tails, you have to create each additional Tails drive, shut
 down, and boot into each one to complete the next step.
