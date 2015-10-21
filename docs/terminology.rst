@@ -6,6 +6,8 @@ diagram <https://freedom.press/securedrop-files/SecureDrop_complex.png>`__,
 are specific to SecureDrop. The list below attempts to enumerate and
 define these terms.
 
+.. todo:: Pictures would be good for many of the objects defined here
+
 App Server
 ----------
 
