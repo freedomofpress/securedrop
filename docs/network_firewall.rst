@@ -1,6 +1,10 @@
 Network Firewall Setup Guide
 ============================
 
+Now that you've set up your password manager, you can move on to setting
+up the Network Firewall. You should stay logged in to your *admin Tails
+USB* to access the Network Firewall's web interface for configuration.
+
 Unfortunately, due to the wide variety of firewalls that may be used, we
 do not provide specific instructions to cover every type or variation in
 software or hardware. This guide is based on pfSense, and assumes your

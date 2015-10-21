@@ -1,19 +1,16 @@
-Hardware for SecureDrop
-=======================
+Hardware
+========
 
 This document outlines the required hardware components necessary to
 successfully install and operate a SecureDrop instance, and recommends
 some specific components that we have found to work well. If you have
 any questions, please email securedrop@freedom.press.
 
-Overview
---------
-
 Required Hardware
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Servers
-^^^^^^^
+~~~~~~~
 
 These are the core components of a SecureDrop instance.
 
@@ -25,29 +22,31 @@ These are the core components of a SecureDrop instance.
 -  **Network Firewall**: 1 physical computer that is used as a dedicated
    firewall for the SecureDrop servers.
 
-A note about virtualization
-'''''''''''''''''''''''''''
+.. warning:: We are often asked if it is acceptable to run SecureDrop
+	     on cloud servers (e.g. Amazon EC2, DigitalOcean, etc.)
+	     instead of on dedicated hardware. This request is
+	     generally motivated by a desire for cost savings and
+	     convenience; however, cloud servers are trivially
+	     accessible and manipulable by the provider that operates
+	     them. In the context of SecureDrop, this means that the
+	     provider could access extremely sensitive information,
+	     such as the plaintext of submissions or the encryption
+	     keys used to identify and access the Tor Hidden Services.
 
-We are often asked if it is acceptable to run SecureDrop on cloud
-servers (e.g. Amazon EC2, DigitalOcean, etc.) instead of on dedicated
-hardware. This request is generally motivated by a desire for cost
-savings and convenience; however, cloud servers are trivially accessible
-and manipulable by the provider that operates them. In the context of
-SecureDrop, this means that the provider could access extremely
-sensitive information, such as the plaintext of submissions or the
-encryption keys used to identify and access the Tor Hidden Services.
-
-One of the core goals of SecureDrop is to avoid the potential compromise
-of sources through the compromise of third party communications
-providers. Therefore, we consider the use of virtualization for
-production instances of SecureDrop to be an unacceptable compromise and
-do not support it. While it is technically possible to modify
-SecureDrop's automated installation process to work on virtualized
-servers (for example, we do so to support our CI pipeline), you do so at
-your own risk and without our support or consent.
+	     One of the core goals of SecureDrop is to avoid the
+	     potential compromise of sources through the compromise of
+	     third party communications providers. Therefore, we
+	     consider the use of virtualization for production
+	     instances of SecureDrop to be an unacceptable compromise
+	     and do not support it. While it is technically possible
+	     to modify SecureDrop's automated installation process to
+	     work on virtualized servers (for example, we do so to
+	     support our CI pipeline), doing so in order to run it on
+	     cloud servers is at your own risk and without our support
+	     or consent.
 
 Workstations
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the airgapped workflow.
@@ -111,29 +110,26 @@ SecureDrop and to process submissions using the airgapped workflow.
    -  Depending on your setup, you may also need these to work on the
       **SVS**.
 
-                                  release/0.3.5
+.. note:: If you cannot afford to purchase new hardware for your
+	  SecureDrop instance, we encourage you to consider
+	  re-purposing existing hardware to use with SecureDrop. If
+	  you are comfortable working with hardware, this is a great
+	  way to set up a SecureDrop instance for cheap.
 
-A note about recycled hardware
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	  Since SecureDrop's throughput is significantly limited by
+	  the use of Tor for all connections, there is no need to use
+	  top of the line hardware for any of the servers or the
+	  firewall. In our experience, relatively recent recycled Dell
+	  desktops or servers are adequate for the SecureDrop servers,
+	  and recycled Thinkpad laptops work well for the
+	  Admin/Journalist workstations.
 
-If you cannot afford to purchase new hardware for your SecureDrop
-instance, we encourage you to consider re-purposing existing hardware to
-use with SecureDrop. If you are comfortable working with hardware, this
-is a great way to set up a SecureDrop instance for cheap.
-
-Since SecureDrop's throughput is significantly limited by the use of Tor
-for all connections, there is no need to use top of the line hardware
-for any of the servers or the firewall. In our experience, relatively
-recent recycled Dell desktops or servers are adequate for the SecureDrop
-servers, and recycled Thinkpad laptops work well for the
-Admin/Journalist workstations.
-
-If you choose to use recycled hardware, you should of course consider
-whether or not it is trustworthy; making that determination is outside
-the scope of this document.
+	  If you choose to use recycled hardware, you should of course
+	  consider whether or not it is trustworthy; making that
+	  determination is outside the scope of this document.
 
 Optional Hardware
-~~~~~~~~~~~~~~~~~
+-----------------
 
 This hardware is not *required* to run a SecureDrop instance, but most
 of it is still recommended.
@@ -181,17 +177,19 @@ to choose from. We recommend the
 `D54250WYK <https://www-ssl.intel.com/content/www/us/en/nuc/nuc-kit-d54250wyk.html>`__
 because it has a mid-range CPU (Intel i5), the common Mini DisplayPort
 connector for the monitor, and USB 3.0 ports for faster OS installation
-and data transfer. Conveniently (for the paranoid), it supports wireless
-networking (Wifi and Bluetooth) through *optional* expansion cards not
-included by default - which means you don't have to spend time ripping
-out the wireless hardware before beginning the installation.
+and data transfer.
 
-If you purchase the NUC from
-`Amazon <http://www.amazon.com/Intel-D54250WYK-DisplayPort-Graphics-i5-4250U/dp/B00F3F38O2/>`__,
-make sure you click "With Powercord" to have one included in the
-package.
+Conveniently (for the paranoid), it supports wireless networking (Wifi
+and Bluetooth) through *optional* expansion cards not included by
+default - which means you don't have to spend time ripping out the
+wireless hardware before beginning the installation.
 
-Note that the NUCs come as kits and some assembly is required. You will
+.. note:: If you purchase the NUC from `Amazon
+	  <http://www.amazon.com/Intel-D54250WYK-DisplayPort-Graphics-i5-4250U/dp/B00F3F38O2/>`__,
+	  make sure you click "With Powercord" to have one included in
+	  the package.
+
+The NUCs come as kits, and some assembly is required. You will
 need to purchase the RAM and hard drive separately for each NUC and
 insert the cards into the NUC before it can be used. We recommend:
 
@@ -201,30 +199,30 @@ insert the cards into the NUC before it can be used. We recommend:
 
    -  You can put one 4GB memory stick in each of the servers.
 
-*Warning:* The D54250WYK has recently been `EOL'ed by
-Intel <http://ark.intel.com/products/series/70407/Intel-NUC-Boards-and-Kits>`__.
-Availability and prices may be subject to change. We are working on
-analyzing alternative recommendations, but there are no immediately
-obvious alternatives that share the benefits of the D54250WYK
-(primarily, the lack of integrated wireless networking hardware).
+.. note:: The D54250WYK has recently been `EOL'ed by Intel
+	  <http://ark.intel.com/products/series/70407/Intel-NUC-Boards-and-Kits>`__.
+	  Availability and prices may be subject to change. We are
+	  working on analyzing alternative recommendations, but there
+	  are no immediately obvious alternatives that share the
+	  benefits of the D54250WYK (primarily, the lack of integrated
+	  wireless networking hardware).
 
-Potential BIOS issue
-^^^^^^^^^^^^^^^^^^^^
+.. note:: An earlier release of SecureDrop (0.2.1) was based on Ubuntu
+	  12.04.1 (precise). We encountered issues installing this
+	  version of Ubuntu on some types of Intel NUCs. The problem
+	  manifested after installing Ubuntu on the NUC. The
+	  installation would complete, but rebooting after
+	  installation would not succeed.
 
-An earlier release of SecureDrop (0.2.1) was based on Ubuntu 12.04.1
-(precise). We encountered issues installing this version of Ubuntu on
-some types of Intel NUCs. The problem manifested after installing Ubuntu
-on the NUC. The installation would complete, but rebooting after
-installation would not succeed.
+	  We have not encountered this or any similar problems in
+	  testing the current release series (0.3.x) with the Intel
+	  NUCs. Since 0.3 is based on Ubuntu 14.04.1 (trusty), we
+	  believe the issue has been resolved in the newer release of
+	  Ubuntu.
 
-We have not encountered this or any similar problems in testing the
-current release series (0.3.x) with the Intel NUCs. Since 0.3 is based
-on Ubuntu 14.04.1 (trusty), we believe the issue has been resolved in
-the newer release of Ubuntu.
-
-If you do encounter issues booting Ubuntu on the NUCs, try updating the
-BIOS according to `these
-instructions <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
+	  If you do encounter issues booting Ubuntu on the NUCs, try
+	  updating the BIOS according to `these instructions
+	  <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
 Secure Viewing Station (SVS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,7 +257,7 @@ These NUCs have wireless networking built into the motherboard, and it
 is impossible to physically remove.
 
 A note about Hi-DPI displays
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+''''''''''''''''''''''''''''
 
 The current version of Tails (1.5.1) is based on Debian 7 ("Wheezy"),
 which does not have good support for Hi-DPI displays. Examples of

@@ -1,5 +1,5 @@
-Setting up the Admin and Journalist Tails USB
-=============================================
+Tails Guide
+===========
 
 To log-in SecureDrop and retreived messages sent by sources, the
 journalist must be using the Tails operating system. The admin must also

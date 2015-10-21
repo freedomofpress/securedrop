@@ -1,28 +1,17 @@
-Roles and Passphrases
-=====================
-
-There are several roles for SecureDrop and each requires knowing a
-unique set of passphrases.
-
 Passphrases
------------
+===========
 
-A SecureDrop installation will require at least two roles, an admin and
-a journalist, and each role will require a number of strong, unique
-passphrases. The Secure Viewing Station, which will be used by the
-journalist, also requires secure and unique passphrases. The list below
-is meant to be an overview of the accounts, passphrases and two-factor
-secrets that are required by SecureDrop.
+Each individual with a role (admin or journalist) at a given
+SecureDrop instance must generate and retain a number of strong,
+unique passphrases. The document is an overview of the passphrases,
+keys, two-factor secrets, and other credentials that are required for
+each role in a SecureDrop installation.
 
-We have created a KeePassX password database template that both the
-admin and the journalist can use on Tails to ensure they not only
-generate strong passphrases, but also store them safely. By using
-KeePassX to generate strong, unique passphrases, you will be able to
-achieve excellent security while also maintaining usability, since you
-will only have to personally memorize a small number of strong
-passphrases. More information about using the password database template
-on Tails is included in the `Tails Setup
-Guide </docs/tails_guide.md#passphrase-database>`__.
+.. note:: We encourage each end user to use KeePassX, an easy-to-use
+          password manager included in Tails, to generate and retain
+          strong and unique passphrases. We have created a template
+          password database that you can use to get started. For more
+          information, see the :doc:`tails_guide`.
 
 Admin
 -----

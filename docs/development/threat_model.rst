@@ -1,5 +1,5 @@
-SecureDrop Threat Model
-=======================
+Threat Model
+============
 
 This document outlines the threat model for SecureDrop 0.3 and is
 inspired by the `threat model document Adam Langley wrote for

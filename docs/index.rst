@@ -25,10 +25,30 @@ anonymous sources.
    :maxdepth: 2
 
    overview
+   terminology
+   passphrases
    hardware
+   before_you_begin
+   set_up_tails
+   set_up_svs
+   set_up_dtd
+   generate_securedrop_application_key
+   set_up_admin_tails
+   download_securedrop_repo
+   network_firewall
+   servers
    install
+   aths_auto_connect
+   create_users
+   test_the_installation
    troubleshooting
-   upgrade
+
+.. toctree::
+   :caption: Upgrade SecureDrop
+   :name: upgradetoc
+   :maxdepth: 2
+
+   upgrade/upgrade-0.3.x.rst
 
 .. toctree::
    :caption: Developer Documentation

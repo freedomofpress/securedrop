@@ -10,23 +10,23 @@ Foundation <https://freedom.press>`__.
 Infrastructure
 --------------
 
-|SecureDrop architecture overview diagram|
-
 There are four main components of SecureDrop: the servers, the
 administrators, the sources, and the journalists.
+
+|SecureDrop architecture overview diagram|
 
 Servers
 ~~~~~~~
 
 At SecureDrop's heart is a pair of severs: the *Application (“App”)
-Server* which runs the core SecureDrop software, and the *Monitor
-(“Mon”) Server* which keeps track of the *Application Server* and sends
+Server*, which runs the core SecureDrop software, and the *Monitor
+(“Mon”) Server*, which keeps track of the *Application Server* and sends
 out alerts if there's a problem. These two servers run on dedicated
 hardware connected to a dedicated firewall appliance. They are typically
 located physically inside the newsroom.
 
-Systems Administrator
-~~~~~~~~~~~~~~~~~~~~~
+Administrators
+~~~~~~~~~~~~~~
 
 The SecureDrop servers are managed by a systems administrator; for
 larger newsrooms, there may be a team of systems administrators. The
@@ -36,8 +36,8 @@ servers over authenticated `Tor Hidden
 Services <https://www.torproject.org/docs/hidden-services.html>`__ and
 manages them using `Ansible <http://www.ansible.com/>`__.
 
-Source
-~~~~~~
+Sources
+~~~~~~~
 
 A source submits documents and messages by using `Tor
 Browser <https://www.torproject.org/projects/torbrowser.html>`__ (or
@@ -59,13 +59,11 @@ use the SVS to read, print, and otherwise prepare documents for
 publication. Apart from those deliberately published, decrypted
 documents are never accessed on an Internet-connected computer.
 
---------------
-
-The terms in italics are terms of art specific to SecureDrop. The
-`Terminology Guide <./terminology.md>`__ provides more-precise
-definitions of these and other terms. SecureDrop is designed against a
-comprehensive `threat model <./thread-model.md>`__, and has a specific
-notion of the `roles <./roles.md>`__ that are involved in its operation.
+.. note:: The terms in italics are terms of art specific to SecureDrop. The
+	  :doc:`Terminology Guide <terminology>` provides more-precise definitions of
+	  these and other terms. SecureDrop is designed against a comprehensive
+	  :doc:`development/threat_model`, and has a specific notion of the :doc:`roles
+	  <passphrases>` that are involved in its operation.
 
 Operation
 ---------
