@@ -241,12 +241,11 @@ git clone https://github.com/freedomofpress/securedrop.git
 
 Before proceeding, verify the signed git tag for this release.
 
-First, download the *Freedom of the Press Foundation Master Signing Key* and verify the fingerprint.
+First, download the *Freedom of the Press Foundation Master Signing Key*. When the full fingerprint is passed to GPG's `--recv-key` option, GPG will implicitly check that the fingerprint of the key received matches.
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
-    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
-The Freedom of the Press Foundation Master Signing Key should have a fingerprint of "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818". If the fingerprint does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
+If GPG informs you the fingerprint of the key received does not match, fingerprint verification has failed and you *should not* proceed with the installation. If this happens, please contact us at securedrop@freedom.press.
 
 Verify that the current release tag was signed with the master signing key.
 
