@@ -34,16 +34,25 @@ To get started, you will need to install Vagrant, Virtualbox, and Ansible.
 sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
 ```
 
-We recommend using the latest stable version of Vagrant (`1.7.2` at the time of
-this writing), which is newer than what is in the Ubuntu repositories at the
-time of this writing.  Download the current version from
-https://www.vagrantup.com/downloads.html. We *do not* recommend using the
-version of Vagrant available from Ubuntu's package repositories (1.5.4), which
+We recommend using the latest stable version of Vagrant (`1.7.4` at the time of
+this writing), which might be newer than what is in the Ubuntu repositories.
+
+If `apt-cache policy vagrant` says your candidate version is not at least
+1.7, you should download the current version from
+https://www.vagrantup.com/downloads.html and then install it.
+
+```sh
+sudo dpkg -i vagrant.deb    # if you downloaded vagrant.deb from vagrantup.com
+
+sudo apt-get install vagrant    # OR this, if your OS vagrant is recent enough
+```
+
+We *do not* recommend using an older version of Vagrant older than 1.7 from
+Ubuntu's package repositories. For instance, version 1.5.4 in Ubuntu
 is significantly out of date and does not work with SecureDrop
 ([context](https://github.com/freedomofpress/securedrop/pull/932)).
 
 ```sh
-sudo dpkg -i vagrant.deb
 sudo dpkg-reconfigure virtualbox-dkms
 ```
 
