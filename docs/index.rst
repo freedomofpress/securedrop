@@ -41,8 +41,7 @@ anonymous sources.
    create_admin_account
    test_the_installation
    onboarding
-   troubleshooting
-
+   
 .. toctree::
    :caption: Topic Guides
    :name: topictoc
