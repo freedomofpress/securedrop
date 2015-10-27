@@ -51,8 +51,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SecureDrop'
-copyright = u'2015, Garrett Robinson, James Dolan, Conor Schafer, Kevin Gallagher'
-author = u'Garrett Robinson, James Dolan, Conor Schafer, Kevin Gallagher'
+copyright = u'2015, Freedom of the Press Foundation'
+author = u'SecureDrop Team and Contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -242,7 +242,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   (master_doc, 'SecureDrop.tex', u'SecureDrop Documentation',
-   u'Garrett Robinson, James Dolan, Conor Schafer, Kevin Gallagher', 'manual'),
+   author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
