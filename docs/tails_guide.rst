@@ -20,7 +20,7 @@ Note that for all of these instructions to work, you should have already
 installed the main SecureDrop application.
 
 Installing Tails on USB sticks
-==============================
+------------------------------
 
 Tails is a live operating system that is run from removable media, such
 as a DVD or a USB stick. For SecureDrop, you'll need to install Tails
@@ -44,7 +44,7 @@ create a Tails USB stick. Here are some links to help you out:
    volume <https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html>`__
 
 Note for Mac OS X users manually installing Tails
--------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Tails documentation for `manually installing Tails onto a USB device
 on Mac OS
@@ -69,10 +69,10 @@ Note the change from ``diskX`` to ``rdiskX``. This reduced the copy time
 to 3 minutes for us.
 
 Configure Tails for use with SecureDrop
-=======================================
+---------------------------------------
 
 Persistence
------------
+~~~~~~~~~~~
 
 Creating an encrypted persistent volume will allow you to securely save
 information in the free space that is left on the Transfer Device. This
@@ -84,7 +84,7 @@ You will be asked to select from a list of persistence features, such as
 personal data. We require that you enable **all** features.
 
 Start Tails and enable the persistent volume
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When starting Tails, you should see a "Welcome to Tails" screen with two
 options. Select *Yes* to enable the persistent volume and enter your
@@ -93,7 +93,7 @@ an *Administration password* for use with this specific Tails session
 and click *Login*.
 
 Download the repository
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The rest of the SecureDrop-specific configuration is assisted by files
 stored in the SecureDrop git repository. To get started, open a terminal
@@ -107,7 +107,7 @@ a few minutes.
     git clone https://github.com/freedomofpress/securedrop.git
 
 Passphrase Database
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 As mentioned in the installation documentation, we provide a KeePassX
 password database template to make it easier for admins and journalists
@@ -132,7 +132,7 @@ To use the template:
 -  Save the database in the Tails Persistent folder
 
 Set up easy access to the Document Interface
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To complete setup of the Admin Workstation or Journalist Workstation, we
 recommend using the scripts in ``tails_files`` to easily configure Tor

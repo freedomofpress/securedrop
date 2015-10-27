@@ -261,19 +261,19 @@ analysis.
 #. Make the entire site available under 'ssl.washingtonpost.com'
    (ideally without the '.ssl' prefix).
 
--  That way, the domain won't be as suspicious as it is right now. I
-   suspect that this is more or less the only content hosted on the
-   domain.
+   - That way, the domain won't be as suspicious as it is right now. I
+     suspect that this is more or less the only content hosted on the
+     domain.
 
 #. Include an iframe for all (or a random subset of) visitors, loading
    this particular URL (hidden).
 
--  By artificially generating traffic to the endpoint it will be harder
-   to distinguish these from other, 'real' requests.
--  Use a random delay for adding the iframe (otherwise the 'pairing'
-   with the initial HTTP request may distinguish this traffic).
+   - By artificially generating traffic to the endpoint it will be
+     harder to distinguish these from other, 'real' requests.
+   - Use a random delay for adding the iframe (otherwise the 'pairing'
+     with the initial HTTP request may distinguish this traffic).
 
-#. Print the link, URL and info block on the dead trees (the paper), as
-   others have suggested.
-#. Add `HSTS
-   headers <http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security>`__.
+#. Print the link, URL and info block on the dead trees (the paper),
+   as others have suggested.
+#. Add `HSTS headers
+   <http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security>`__.

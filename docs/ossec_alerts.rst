@@ -49,18 +49,18 @@ solutions should be able to meet those requirements.
 
 These are the values you must specify in ``prod-specific.yml``:
 
--  GPG public key used to encrypt OSSEC alerts:
-   ``ossec_alert_gpg_public_key``
--  Fingerprint of key used when encrypting OSSEC alerts:
-   ``ossec_gpg_fpr``
--  The email address that will receive alerts from OSSEC:
-   ``ossec_alert_email``
--  The reachable hostname of your SMTP relay: ``smtp_relay``
--  The secure SMTP port of your SMTP relay: ``smtp_relay_port``
-    (typically 25, 587, or 465. must support TLS encryption)
--  Email username to authenticate to the SMTP relay: ``sasl_username``
--  Domain name of the email used to send OSSEC alerts: ``sasl_domain``
--  Password of the email used to send OSSEC alerts: ``sasl_password``
+- GPG public key used to encrypt OSSEC alerts:
+  ``ossec_alert_gpg_public_key``
+- Fingerprint of key used when encrypting OSSEC alerts:
+  ``ossec_gpg_fpr``
+- The email address that will receive alerts from OSSEC:
+  ``ossec_alert_email``
+- The reachable hostname of your SMTP relay: ``smtp_relay``
+- The secure SMTP port of your SMTP relay: ``smtp_relay_port``
+  (typically 25, 587, or 465. must support TLS encryption)
+- Email username to authenticate to the SMTP relay: ``sasl_username``
+- Domain name of the email used to send OSSEC alerts: ``sasl_domain``
+- Password of the email used to send OSSEC alerts: ``sasl_password``
 
 If you don't know what value to enter for one of these, please ask your
 organization's email administrator for the full configuration before

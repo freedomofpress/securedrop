@@ -44,6 +44,21 @@ anonymous sources.
    troubleshooting
 
 .. toctree::
+   :caption: Topic Guides
+   :name: topictoc
+   :maxdepth: 2
+
+   deployment_practices
+   google_authenticator
+   logging
+   ossec_alerts
+   tails_guide
+   tails_printing_guide
+   training_schedule
+   ubuntu_install
+   yubikey_setup
+
+.. toctree::
    :caption: Upgrade SecureDrop
    :name: upgradetoc
    :maxdepth: 2

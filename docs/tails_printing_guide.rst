@@ -1,3 +1,6 @@
+Setting up a printer with Tails
+===============================
+
 Because Tails is supposed to be as "amnesiac" as possible, you want to
 shield your Tails stick from any extra inputs from, and outputs to, a
 potentially untrusted network. This is why **we strongly recommend using
@@ -11,17 +14,10 @@ a large number of drivers for just about any popularly manufactured
 printer on hand, without even having to download new drivers from the
 web.
 
-Setting up a printer with Tails
-===============================
+Boot up Tails with both your persistent volume, and set an admin passphrase.
 
-Boot up Tails with both your persistant volume, and an admin passphrase.
-
-.. raw:: html
-
-   <!--
-   ![persistence and admin passphrase enabled](images/printer_setup_guide/)
-   ![set an admin passphrase](images/printer_setup_guide/)
-   -->
+.. todo:: Consider adding images of enabling persistence and setting an admin
+          passphrase when starting Tails.
 
 Make sure your computer is NOT connected to the internet. This will make
 sure that your printer set-up is never influenced by a network
@@ -33,10 +29,11 @@ Plug in your printer and navigate to Printing. "Applications -> System
 Tools -> Administration -> Printing". You will need to authenticate this
 action with the admin passphrase you set when booting up Tails.
 
-| |navigate to Printing|
-| |grant admin|
+|navigate to Printing|
 
-Select "Add".
+|grant admin|
+
+Click **Add**.
 
 |add new printer|
 
@@ -50,12 +47,13 @@ for the printer you have. These choices come from Tails' pre-installed
 driver database.
 
 |default set up 1|
+
 |default set up 2|
 
 The recommended driver does not always match the actual make and model
 of your printer, but starting with the recommendations is a good idea.
 Sometimes you get lucky, and Tails suggests a perfect match. Click
-forward, and apply your settings.
+**Forward**, and **Apply** your settings.
 
 |apply settings|
 
@@ -65,28 +63,30 @@ Configurations in your persistent storage.
 |add your printer|
 
 The only way to be sure you have the right driver is by doing a test
-print. Right-click on your new printer config and select "Properties" to
-open its settings, and click "Print Test Page".
+print. Right-click on your new printer config and select **Properties** to
+open its settings, then click **Print Test Page**.
 
-| |select "Properties"|
-| |print a test page|
+|select "Properties"|
+
+|print a test page|
 
 In this initial test, the recommended driver was wrong! My test page
 came out garbled, and my printer gave me a warning that I had to
 manually clear before the page printed.
 
-| |garbled test print|
-| |warning light indicator|
+|garbled test print|
+
+|warning light indicator|
 
 Don't worry if this happens to you; you can edit the printer
 configuration to point it to the correct driver for your model. Select
-"Properties" again and choose "Change..." next to the "Make and Model"
+**Properties** again and choose **Change...** next to the "Make and Model"
 directive.
 
 |change make and model|
 
 To fix this problem, I selected the CUPS + Gutenprint driver, even
-though it wasn't recommended. Click "Forward" to save your changes.
+though it wasn't recommended. Click **Forward** to save your changes.
 
 |custom choice for make and model|
 
