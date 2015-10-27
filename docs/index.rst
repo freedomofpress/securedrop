@@ -34,13 +34,13 @@ anonymous sources.
    set_up_dtd
    generate_securedrop_application_key
    set_up_admin_tails
-   download_securedrop_repo
    network_firewall
    servers
    install
-   aths_auto_connect
-   create_users
+   configure_admin_workstation_post_install
+   create_admin_account
    test_the_installation
+   onboarding
    troubleshooting
 
 .. toctree::

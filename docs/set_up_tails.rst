@@ -1,4 +1,4 @@
-Set up Tails USBs
+Create Tails USBs
 =================
 
 `Tails <https://tails.boum.org>`__ is a privacy-enhancing live operating
@@ -18,8 +18,8 @@ As soon as you create a new Tails drive, *label it immediately*. USB
 drives all look alike and you're going to be juggling a whole bunch of
 them throughout this installation. Label immediately. Always.
 
-Installing Tails
-----------------
+Install Tails
+-------------
 
 We recommend creating an initial Tails Live DVD or USB, and then using
 that to create additional Tails drives with the *Tails Installer*, a
@@ -37,6 +37,22 @@ links and then return to this page:
    .iso <https://tails.boum.org/download/index.en.html>`__
 -  `Install onto a USB
    drive <https://tails.boum.org/doc/first_steps/installation/index.en.html>`__
+
+You will need to create 3 Tails USBs to perform the SecureDrop installation:
+
+#. A "master" Tails USB, which you will create by copying a Tails .iso
+   onto a USB drive, using one of the techniques outlined in the Tails
+   documentation. This Tails USB is only used for creating other Tails
+   USBs with the **Tails Installer**.
+#. The *Secure Viewing Station Tails USB*.
+#. The *Admin Workstation Tails USB*.
+
+.. tip:: This process will take some time, most of which will be spent
+	 waiting around. Once you have the "master" copy of Tails, you
+	 have to boot it, create another Tails drive with the **Tails
+	 Installer**, shut down, and boot into the new Tails USB to
+	 complete the next step of setting up the persistence - for
+	 each additional Tails USB.
 
 The current Tails signing key looks like this:
 
@@ -60,17 +76,13 @@ The current Tails signing key looks like this:
 	  personally in favor of), or we need to add a section about
 	  verifying iso's with GPG.
 
-Note that this process will take some time because once you have one
-copy of Tails, you have to create each additional Tails drive, shut
-down, and boot into each one to complete the next step.
+.. note:: Tails doesn't always completely shut down and reboot
+	  properly when you click "restart", so if you notice a
+	  significant delay, you may have to manually power off and
+	  restart your computer for it to work properly.
 
-Also, you should be aware that Tails doesn't always completely shut down
-and reboot properly when you click "restart", so if you notice a
-significant delay, you may have to manually power off and restart your
-computer for it to work properly.
-
-Enabling Persistence Storage on Tails
--------------------------------------
+Enable Persistent Storage
+-------------------------
 
 Creating an encrypted persistent volume will allow you to securely save
 information and settings in the free space that is left on your Tails
@@ -80,13 +92,12 @@ Tails. (Tails securely erases all other data on every shutdown.)
 You will need to create a persistent storage on each Tails drive, with a
 unique password for each.
 
-Please use the instructions on the `Tails
-website <https://tails.boum.org/doc/first_steps/persistence/index.en.html>`__
-to make the persistent volume on each Tails drive you create.
-
-When creating the persistence volume, you will be asked to select from a
-list of features, such as 'Personal Data'. We recommend that you enable
-**all** features.
+Please use the instructions on the `Tails website
+<https://tails.boum.org/doc/first_steps/persistence/index.en.html>`__
+to make the persistent volume on each Tails drive you create. When
+creating the persistence volume, you will be asked to select from a
+list of features, such as 'Personal Data'. We recommend that you
+enable **all** features.
 
 Some other things to keep in mind:
 

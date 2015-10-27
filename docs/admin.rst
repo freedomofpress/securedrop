@@ -5,6 +5,8 @@ At this point, you (the administrator) should have your own username and
 password, plus two-factor authentication through either the Google
 Authenticator app on your smartphone or a YubiKey.
 
+.. _Adding Users:
+
 Adding Users
 ------------
 

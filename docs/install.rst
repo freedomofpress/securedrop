@@ -4,72 +4,20 @@ Install SecureDrop
 Install Ansible
 ---------------
 
-You should still be on your admin workstation with your *admin Tails
-USB*.
+SecureDrop uses the Ansible automation tool for installation and maintenance.
 
-Next you need to install Ansible. To do this, you first need to update
-your package manager's package lists to be sure you get the latest
-version of Ansible. It should take a couple minutes.
-
-::
-
-    sudo apt-get update
-
-Now, install Ansible by entering this command:
-
-::
-
-    sudo apt-get install ansible
-
-Set up SSH keys for the Admin
------------------------------
-
-Now that you've verified the code that's needed for installation, you
-need to create an SSH key on the Admin Workstation. Initially, Ubuntu
-has SSH configured to authenticate users with their password. This new
-key will be copied to the *Application Server* and the *Monitor Server*,
-and will replace the use of the password for authentication. Since the
-Admin Live USB was set up with `SSH Client
-persistence <https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html#index3h2>`__,
-this key will be saved on the Admin Live USB and can be used in the
-future to authenticate to the servers in order to perform administrative
-tasks.
-
-First, generate the new SSH keypair:
-
-::
-
-    $ ssh-keygen -t rsa -b 4096
-
-You'll be asked to "enter file in which to save the key." Here you can
-just keep the default, so type enter.
-
-If you choose to passphrase-protect this key, you must use a strong,
-diceword-generated, passphrase that you can manually type (as Tails'
-pinentry will not allow you to copy and paste a passphrase). It is also
-acceptable to leave the passphrase blank in this case.
-
-Once the key has finished generating, you need to copy the public key to
-both servers. Use ``ssh-copy-id`` to copy the public key to each server
-in turn. Use the user name and password that you set up during Ubuntu
-installation.
+To install Ansible on the Admin Workstation, first update the ``apt``
+package manager's package lists to make sure you get the latest and
+greatest version of Ansible. This usually takes a few minutes over
+Tor. Once that's done, you can install Ansible:
 
 .. code:: sh
 
-    $ ssh-copy-id <username>@<App IP address>
-    $ ssh-copy-id <username>@<Mon IP address>
+    $ sudo apt-get update
+    $ sudo apt-get install ansible
 
-Verify that you are able to authenticate to both servers by running the
-below commands (you will be prompted for the SSH password you just
-created).
-
-.. code:: sh
-
-    ssh <username>@<App IP address> hostname
-    ssh <username>@<Monitor IP address> hostname
-
-Gather the required information
--------------------------------
+Configure the Installation
+--------------------------
 
 Make sure you have the following information and files before
 continuing:
@@ -93,9 +41,6 @@ continuing:
 
    -  Recommended size: ``500px x 450px``
    -  Recommended format: PNG
-
-Install SecureDrop with Ansible
--------------------------------
 
 From the base of the SecureDrop repo, change into the ``ansible-base``
 directory:
@@ -159,6 +104,10 @@ following:
    ``smtp_relay_fingerprint``
 
 When you're done, save the file and quit the editor.
+
+
+Run the Ansible playbook
+------------------------
 
 Now you are ready to run the playbook! This will automatically configure
 the servers and install SecureDrop and all of its dependencies.

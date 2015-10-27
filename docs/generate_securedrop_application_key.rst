@@ -1,5 +1,5 @@
-Generate the *SecureDrop Application GPG Key*
-=============================================
+Generate the SecureDrop Application GPG Key
+===========================================
 
 .. todo:: Tom complained about the name "SecureDrop Application GPG
           Key". It's verbose, and "application key" is kind of vague
@@ -12,7 +12,8 @@ private part of this key is only stored on the *Secure Viewing Station*
 which is never connected to the Internet. SecureDrop submissions can
 only be decrypted and read on the *Secure Viewing Station*.
 
-We will now generate the *SecureDrop Application GPG Key*.
+We will now generate the *SecureDrop Application GPG Key* on the
+*Secure Viewing Station*.
 
 Correct the system time
 -----------------------
@@ -35,21 +36,21 @@ Create the key
 --------------
 
 -  Open a terminal |Terminal| and run ``gpg --gen-key``
--  When it says, ``Please select what kind of key you want``, choose
-   ``(1) RSA and RSA (default)``
--  When it asks, ``What keysize do you want?`` type **``4096``**
--  When it asks, ``Key is valid for?`` press Enter to keep the default
--  When it asks, ``Is this correct?`` verify that you've entered
-   everything correctly so far, and type ``y``
--  For ``Real name`` type: ``SecureDrop``
--  For ``Email address``, leave the field blank and press Enter
--  For ``Comment`` type
+-  When it says *Please select what kind of key you want*, choose
+   *(1) RSA and RSA (default)*.
+-  When it asks *What keysize do you want?*, type ``4096``.
+-  When it asks *Key is valid for?*, press Enter to keep the default.
+-  When it asks *Is this correct?*, verify that you've entered
+   everything correctly so far, then type ``y``.
+-  For *Real name*, type: ``SecureDrop``
+-  For *Email address*, leave the field blank and press Enter
+-  For *Comment*, type
    ``[Your Organization's Name] SecureDrop Application GPG Key``
--  Verify that everything is correct so far, and type ``o`` for
+-  Verify that everything is correct so far, then type ``o`` for
    ``(O)kay``
 -  It will pop up a box asking you to type a passphrase, but it's safe
-   to click okay without typing one (since your persistent volume is
-   encrypted, this GPG key is already protected)
+   to click okay without typing one. The key is protected by the
+   encryption on the Tails persistent volume.
 -  Wait for your GPG key to finish generating
 
 To manage GPG keys using the graphical interface (a program called
@@ -65,21 +66,37 @@ you change the file type from "PGP keys" to "Armored PGP keys" which can
 be switched right above the 'Export' button. Click the 'Export' button
 after switching to armored keys.
 
-NOTE: This is the public key only.
+.. todo:: I would prefer a filename of ``SecureDrop.pub.asc``, as that
+          explicitly denotes the file is a public key and is
+          ASCII-armored.
+
+.. note:: This is the public key only.
 
 |Export Key|
+
 |Export Key 2|
 
-You'll need to verify the fingerprint for this new key during the
-``App Server`` installation. Double-click on the newly generated key and
-change to the ``Details`` tab. Write down the 40 hexadecimal digits
-under ``Fingerprint``. (Your GPG key fingerprint will be different than
-what's in this photo.)
+.. todo:: The screenshot shows them saving the public key with a
+          filename of ``SecureDrop.asc``. The screenshot should be
+          consistent with the recommendations in the text of the docs.
+
+You'll need to provide the fingerprint of this new key during the
+installation.  Double-click on the newly generated key and change to
+the *Details* tab. Write down the 40 hexadecimal digits under
+*Fingerprint*.
 
 |Fingerprint|
 
+.. note:: Your fingerprint will be different from the one in the
+          example screenshot.
+
 Import GPG keys for journalists with access to SecureDrop
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. todo:: This is the wrong place for this. The first phase of the
+          documentation should be focused just on installing
+          SecureDrop. We should have a whole separate section for
+          onboarding journalists.
 
 While working on a story, journalists may need to transfer some
 documents or notes from the *Secure Viewing Station* to the journalist's

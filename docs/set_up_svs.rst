@@ -1,5 +1,5 @@
-Set up the *Secure Viewing Station*
-===================================
+Set up the Secure Viewing Station
+=================================
 
 The *Secure Viewing Station* is the computer where journalists read and
 respond to SecureDrop submissions. Once submissions are encrypted on the

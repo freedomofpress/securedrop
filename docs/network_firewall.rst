@@ -1,5 +1,5 @@
-Network Firewall Setup Guide
-============================
+Set up the Network Firewall
+===========================
 
 Now that you've set up your password manager, you can move on to setting
 up the Network Firewall. You should stay logged in to your *admin Tails
@@ -133,73 +133,71 @@ chosen:
 -  Monitor Gateway: ``10.20.3.1``
 -  Monitor Server: ``10.20.3.2``
 
-Initial Setup
--------------
+Initial Configuration
+---------------------
 
 Unpack the firewall, connect power, and power on.
-
-Initial configuration
-~~~~~~~~~~~~~~~~~~~~~
 
 We will use the pfSense WebGUI to do the initial configuration of the
 network firewall.
 
 Connect to the pfSense WebGUI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Boot the Admin Workstation into Tails from the Admin Live USB.
 
-#. | Connect the Admin Workstation to the LAN interface. You should see
-   |  a popup notification in Tails that says "Connection Established".
+#. Connect the Admin Workstation to the LAN interface. You should see
+   a popup notification in Tails that says "Connection Established".
 
-   -  Make sure your *only* active connections is the one you just
-       established with the network firewall. If you are connected to
-       another network at the same time (e.g. a wireless network), you
-       may encounter problems trying to connect the pfSense WebGUI.
+   .. warning:: Make sure your *only* active connection is the one you
+		just established with the network firewall. If you are
+		connected to another network at the same time (e.g. a
+		wireless network), you may encounter problems trying
+		to connect the pfSense WebGUI.
 
-#. Launch the *Unsafe Browser*, *Applications → Internet → Unsafe
-   Browser*.
+#. Launch the **Unsafe Browser** from the menu bar: **Applications ▸ Internet ▸ Unsafe
+   Browser**.
 
    |Launching the Unsafe Browser|
 
-   #. | Note that the *Unsafe Browser* is, as the name suggests,
-      |  **unsafe** (its traffic is not routed through Tor). However, it
-      |  is the only option in this context because Tails
-      |  `intentionally <https://labs.riseup.net/code/issues/7976>`__
-        disables LAN access in the
-      |  *Tor Browser*.
+   .. note:: The *Unsafe Browser* is, as the name suggests, **unsafe**
+	     (its traffic is not routed through Tor). However, it is
+	     the only option because Tails `intentionally disables LAN
+	     access`_ in the **Tor Browser**.
 
-   #. A dialog will ask "Do you really want to launch the Unsafe
-      Browser?". Click **Launch**.
+#. A dialog will ask "Do you really want to launch the Unsafe
+   Browser?". Click **Launch**.
 
-      |You really want to launch the Unsafe Browser|
+   |You really want to launch the Unsafe Browser|
 
-   #. You will see a pop-up notification that says "Starting the Unsafe
-      Browser..."
+#. You will see a pop-up notification that says "Starting the Unsafe
+   Browser..."
 
-      |Pop-up notification|
+   |Pop-up notification|
 
-   #. | After a few seconds, the Unsafe Browser should launch. The
-      |  window has a bright red border to remind you to be careful when
-      |  using it. You should close it once you're done configuring the
-      |  firewall and use the Tor Browser for any other web browsing you
-      |  might do on the Admin Workstation.
+#. After a few seconds, the Unsafe Browser should launch. The window
+   has a bright red border to remind you to be careful when using
+   it. You should close it once you're done configuring the firewall
+   and use the Tor Browser for any other web browsing you might do on
+   the Admin Workstation.
 
-      |Unsafe Browser Homepage|
+   |Unsafe Browser Homepage|
 
-#. Navigate to the pfSense GUI in the *Unsafe Browser*:
+#. Navigate to the pfSense WebGUI in the *Unsafe Browser*:
    ``https://192.168.1.1``
 
 #. The firewall uses a self-signed certificate, so you will see a "This
    Connection Is Untrusted" warning when you connect. This is expected.
-   You can safely continue by clicking "I Understand the Risks", "Add
-   Exception...", and "Confirm Security Exception."
+   You can safely continue by clicking **I Understand the Risks**, **Add
+   Exception...**, and **Confirm Security Exception**.
 
 #. You should see the login page for the pfSense GUI. Log in with the
-   default username and password (admin / pfsense).
+   default username and password (``admin`` / ``pfsense``).
+
+.. _intentionally disables LAN access: https://labs.riseup.net/code/issues/7976
 
 Setup Wizard
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 If you're setting up a brand new (or recently factory reset) router,
 logging in to the pfSense WebGUI will automatically start the Setup
@@ -225,7 +223,7 @@ For "Configure LAN Interface", use the IP address and subnet mask of the
 
 Set a strong admin password. We recommend generating a strong password
 with KeePassX, and saving it in the Tails Persistent folder using the
-provided KeePassX database template. Click Next.
+sprovided KeePassX database template. Click Next.
 
 Click Reload. Once the reload completes and the web page refreshes,
 click the corresponding "here" link to "continue on to the pfSense
@@ -247,8 +245,8 @@ to ``https://<Admin Gateway IP>`` in the *Unsafe Browser*, and do the
 same dance as before to log in to the pfSense WebGUI. Once you've logged
 in to the WebGUI, you are ready to continue configuring the firewall.
 
-Connect Interfaces and Test Connectivity
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Connect Interfaces and Test
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now that the initial configuration is completed, you can connect the WAN
 port without potentially conflicting with the default LAN settings (as
@@ -263,8 +261,8 @@ Internet through the WAN. The easiest way to do this is to use ping
 (Diagnostics → Ping in the WebGUI). Enter an external hostname or IP
 that you expect to be up (e.g. ``google.com``) and click "Ping".
 
-SecureDrop-specific Configuration
----------------------------------
+SecureDrop Configuration
+------------------------
 
 SecureDrop uses the firewall to achieve two primary goals:
 
@@ -286,7 +284,7 @@ stage in the documentation, the Admin Workstation has an IP address
 assigned via that DHCP server. You can easily check your current IP
 address by *right-clicking* the networking icon (a blue cable going in
 to a white jack) in the top right of the menu bar, and choosing
-"Connection Information".
+**Connection Information**.
 
 |Connection Information|
 
@@ -294,46 +292,50 @@ In order to tighten the firewall rules as much as possible, we recommend
 disabling the DHCP server and assigning a static IP address to the Admin
 Workstation instead.
 
-Disabling DHCP
-^^^^^^^^^^^^^^
+Disable DHCP
+^^^^^^^^^^^^
 
-To disable DHCP, navigate to "Services → DHCP Server". Uncheck the box
-to "Enable DHCP server on LAN interface", scroll down, and click the
-Save button.
+To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
+WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
+interface**, scroll down, and click the **Save** button.
 
-Assigning a static IP address to the Admin Workstation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Assign a static IP address to the Admin Workstation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now you will need to assign a static IP to the Admin Workstation. Use
 the *Admin Workstation IP* that you selected earlier, and make sure you
 use the same IP when setting up the firewall rules later.
 
 Start by *right-clicking* the networking icon in the top right of the
-menu bar, and choosing "Edit Connections...".
+menu bar, and choose **Edit Connections...**.
 
 |Edit Connections|
 
-Select the name of the current connection from the list and click the
-"Edit..." button.
+Select the name of the current connection from the list and click
+**Edit...**.
 
 |Edit Wired Connection|
 
-Change to the "IPv4 Settings" tab. Change "Method:" from "Automatic
-(DHCP)" to "Manual". Click the Add button and fill in the static
-networking information for the Admin Workstation.
+Change to the **IPv4 Settings** tab. Change **Method:** from
+**Automatic (DHCP)** to **Manual**. Click **Add** and fill in the
+static networking information for the Admin Workstation.
 
-*Note:* The Unsafe Browser will not launch when using a manual network
-configuration if it does not have DNS servers configured. This is
-technically unnecessary for our use case because we are only using it to
-access IP addresses on the LAN, and do not need to resolve anything with
-DNS. Nonetheless, you should configure some DNS servers here so you can
-continue to use the Unsafe Browser to access the WebGUI in future
-sessions. We recommend keeping it simple and using the same DNS servers
-that you used for the network firewall in the setup wizard.
+.. note:: The Unsafe Browser will not launch when using a manual
+	  network configuration if it does not have DNS servers
+	  configured. This is technically unnecessary for our use case
+	  because we are only using it to access IP addresses on the
+	  LAN, and do not need to resolve anything with
+	  DNS. Nonetheless, you should configure some DNS servers here
+	  so you can continue to use the Unsafe Browser to access the
+	  WebGUI in future sessions.
+
+	  We recommend keeping it simple and using the same DNS
+	  servers that you used for the network firewall in the setup
+	  wizard.
 
 |Admin Wokstation Static IP Configuration|
 
-Click "Save...". If the network does not come up within 15 seconds or
+Click **Save...**. If the network does not come up within 15 seconds or
 so, try disconnecting and reconnecting your network cable to trigger the
 change. You will need you have succeeded in connecting with your new
 static IP when you see a pop-up notification that says "Tor is ready.
@@ -349,11 +351,12 @@ disconnecting from the network and then reconnecting, which causes the
 network configuration to be reloaded.
 
 To do this, click the network icon in the system toolbar, and click
-"Disconnect" under the bolded name of the currently active network
-connection. After it disconnects, click the network icon again and click
-the name of the connection to reconnect. You should see a popup
-notification that says "Connection Established", followed several
-seconds later by a "Tor is ready" popup notification.
+**Disconnect** under the name of the currently active network
+connection, which is displayed in bold. After it disconnects, click
+the network icon again and click the name of the connection to
+reconnect. You should see a popup notification that says "Connection
+Established", followed several seconds later by the "Tor is ready"
+popup notification.
 
 Set up OPT1
 ~~~~~~~~~~~
@@ -361,20 +364,20 @@ Set up OPT1
 We set up the LAN interface during the initial configuration. We now
 need to set up the OPT1 interface for the Application Server. Start by
 connecting the Application Server to the OPT1 port. Then use the WebGUI
-to configure the OPT1 interface. Go to ``Interfaces → OPT1``, and check
-the box to "Enable Interface". Use these settings:
+to configure the OPT1 interface. Go to **Interfaces ▸ OPT1**, and check
+the box to **Enable Interface**. Use these settings:
 
 -  IPv4 Configuration Type: Static IPv4
 -  IPv4 Address: Application Gateway
 
 Make sure that the CIDR routing prefix is correct. Leave everything else
-as the default. Save and Apply Changes.
+as the default. **Save** and **Apply Changes**.
 
 Set up OPT2
 ~~~~~~~~~~~
 
 If you have 4 NICs, you will have to enable the OPT2 interface. Go to
-``Interfaces → OPT2``, and check the box to "Enable Interface". OPT2
+**Interfaces ▸ OPT2**, and check the box to **Enable Interface**. OPT2
 interface is set up similarly to how we set up OPT1 in the previous
 section. Use these settings:
 
@@ -382,10 +385,10 @@ section. Use these settings:
 -  IPv4 Address: Monitor Gateway
 
 Make sure that the CIDR routing prefix is correct. Leave everything else
-as the default. Save and Apply Changes.
+as the default. **Save** and **Apply Changes**.
 
-Set up the network firewall rules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Set up the Firewall Rules
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Since there are a variety of firewalls with different configuration
 interfaces and underlying sets of software, we cannot provide a set of
@@ -460,12 +463,11 @@ configuration.
 |Firewall OPT1 Rules with OPT2|
 |Firewall OPT2 Rules|
 
-Once you've set up the firewall, **exit the Unsafe Browser**, and
-continue with the instructions in the `Install
-Guide </docs/install.md#set-up-the-servers>`__.
+Once you've set up the firewall, exit the Unsafe Browser, and continue
+with the next step of the installation instructions.
 
-Keeping pfSense Up to Date
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Keeping pfSense up to date
+--------------------------
 
 Periodically, the pfSense project maintainers release an update to the
 pfSense software running on your firewall. You will be notified by the
@@ -479,9 +481,12 @@ of these updates are for minor bugfixes, but occasionally they can
 contain important security fixes. If you are receiving support from
 Freedom of the Press Foundation, we will inform you when an important
 security update is available for your pfSense firewall. Alternatively,
-you can keep appraised of updates yourself by checking the `"releases"
-tag on the pfSense Blog <https://blog.pfsense.org/?tag=releases>`__
-(protip: use the RSS feed).
+you can keep appraised of updates yourself by checking the `pfSense Blog posts with the "releases"
+tag <https://blog.pfsense.org/?tag=releases>`__.
+
+.. note:: Protip: Subscribe to the `RSS feed`_.
+
+.. _RSS feed: https://blog.pfsense.org/?feed=rss2&tag=releases
 
 To install the update, click the "click here" link next to "Update
 available". We recommend checking the "perform full backup prior to
@@ -496,11 +501,12 @@ with a progress bar at the top that will periodically update as the
 upgrade progresses. Wait for the upgrade to complete, which may take a
 while depending on the speed of your network.
 
-*Note:* In a recent test, the progress page did not successfully update
-itself as the upgraded progressed. After waiting for some time, we
-refreshed the page and found that the upgrade had completed
-successfully. If your upgrade is taking longer than expected or not
-showing any progress, try refreshing the page.
+.. note:: In a recent test, the progress page did not successfully
+	  update itself as the upgraded progressed. After waiting for
+	  some time, we refreshed the page and found that the upgrade
+	  had completed successfully. If your upgrade is taking longer
+	  than expected or not showing any progress, try refreshing
+	  the page.
 
 .. |Launching the Unsafe Browser| image:: images/firewall/launching_unsafe_browser.png
 .. |You really want to launch the Unsafe Browser| image:: images/firewall/unsafe_browser_confirmation_dialog.png

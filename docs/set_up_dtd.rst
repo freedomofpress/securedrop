@@ -1,5 +1,5 @@
-Set up the *Data Transfer Device*
-=================================
+Set up the Data Transfer Device
+===============================
 
 Journalists copy submissions from their *Journalist Workstation* to the
 *Secure Viewing Station* using the *Data Transfer Device* which can be a
