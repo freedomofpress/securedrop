@@ -1,7 +1,7 @@
 Source Guide
 ============
 
-.. todo:: There's a lot more to it than this, but we begin to
+.. todo:: There's a lot more to it than this, but then we begin to
           duplicate content from individual organization's landing
           pages and Micah's Intercept article. For example: what
           computer should you use? what network should you be on? etc.

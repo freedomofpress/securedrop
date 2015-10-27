@@ -21,6 +21,13 @@ Journalist Workstation. The private key, used for decryption, stays on
 their Journalist Workstation. The public key, used for encryption, gets
 copied to the Secure Viewing Station.
 
+.. todo:: This document recommends transferring documents from the SVS
+          to the Journalist Workstation, without any discussion of the
+          potential risks or mitigations that should be taken when
+          doing so. A section needs to be added on why doing this
+          could be risky, and what can be done to make this situation
+          better.
+
 If a journalist does not yet have a GPG key, they can follow these
 instructions to set one up with GnuPG (GPG).
 
