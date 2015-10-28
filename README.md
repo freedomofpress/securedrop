@@ -6,8 +6,7 @@ This repository contains all of the code and documentation related to the generi
 ## Build the packages
 
 ```
-bundle install
-bundle exec rake
+vagrant up
 ```
 
 The `ossec-server-VERSION-amd64.deb` and `ossec-agent-VERSION-amd64.deb` packages will be in the ./build directory.

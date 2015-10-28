@@ -1,9 +1,13 @@
 ---
+- name: Include OSSEC download URLs.
+  ossec_urls:
+    ossec_version: "{{ ossec_version }}"
+
 - name: apt-get update
   apt: update_cache=yes
 
 - name: check if ossec was already downloaded
-  stat: path="{{ build_path }}/{{ download_name }}" get_md5=yes
+  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
   register: ossec_download
 
 - debug: msg="OSSEC download exists will skip downloading again"
@@ -11,30 +15,56 @@
 
 - name: download OSSEC
   get_url:
-    url: "{{ download_url }}/{{ download_name }}"
-    dest: "{{ build_path }}"
-    sha256sum: "{{ download_checksum_sha256 }}"
-  when: not (ossec_download.stat.exists and ossec_download.stat.md5 == "{{ download_checksum_md5 }}")
+    url: "{{ ossec_tarball_url }}"
+    dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
+  when: not (ossec_download.stat.exists and
+             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
+             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
+
+- name: check if ossec was already downloaded
+  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
+  register: ossec_download
+
+- name: Fail if MD5 and SHA1 checksums for tarball are not correct.
+  fail:
+    msg: >
+      The checksums for {{ ossec_tarball_filename }} do not match.
+      Both MD5 and SHA1 checksums were inspected. The checksums
+      used for the inspection where:
+        MD5: {{ ossec_md5_checksum }}
+        SHA1: {{ ossec_sha1_checksum }}
+
+      The checksums found were:
+        MD5: {{ ossec_download.stat.md5 }}
+        SHA1: {{ ossec_download.stat.checksum }}
+
+      Try rerunning the playbook to download the files again.
+  when: not (ossec_download.stat.exists and
+             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
+             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest
   with_items: build_ossec_deb_pkg_dependencies
 
 - name: extract OSSEC archive to /tmp
-  shell: tar -xvf {{ build_path }}/{{ archive_name }} -C /tmp
+  unarchive:
+    copy: no
+    src: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    dest: /tmp
 
 - name: ensure ossec /etc dir exists
   file:
     state: directory
-    dest: /tmp/ossec-hids-{{ version }}/etc
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc
 
 - name: copy ossec preloaded vars
   template:
     src: "{{ purpose }}-preloaded-vars.conf"
-    dest: /tmp/ossec-hids-{{ version }}/etc/preloaded-vars.conf
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc/preloaded-vars.conf
 
 - name: run ossec installer
-  command: /tmp/ossec-hids-{{ version }}/install.sh
+  command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
 
 - name: create ossec agent deb build dir
   file:
@@ -77,7 +107,7 @@
 - name: delete tmp install paths
   file:
     state: absent
-    dest: /tmp/ossec-hids-{{ version }}
+    dest: /tmp/ossec-hids-{{ ossec_version }}
 
 - name: delete ossec install directory
   file:
