@@ -196,7 +196,7 @@ information, visit `Work on sensitive
 documents <https://tails.boum.org/doc/sensitive_documents/index.en.html>`__
 on the Tails website.
 
-Tails also comes with the `Metadata Anonymization
+Tails also comes with the `Metadata Anonymisation
 Toolkit <https://mat.boum.org/>`__ (MAT) that is used to help strip
 metadata from a variety of types of files, including png, jpg,
 OpenOffice/LibreOffice documents, Microsoft Office documents, pdf, tar,
