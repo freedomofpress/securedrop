@@ -122,7 +122,7 @@ Going Public
 ~~~~~~~~~~~~
 
 Once you have a SecureDrop instance and your team knows how to use it,
-you should test is thoroughly and then tell the world. The `Freedom of
+you should test it thoroughly and then tell the world. The `Freedom of
 the Press Foundation <https://securedrop.org/help>`__ are happy to help
 you check that your SecureDrop setup is up-to-code and properly
 grounded. After that, you'll need to use your existing tools to announce
