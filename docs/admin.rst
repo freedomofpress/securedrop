@@ -1,4 +1,4 @@
-Admininstrator Guide
+Administrator Guide
 =====================
 
 At this point, you (the administrator) should have your own username and
