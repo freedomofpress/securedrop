@@ -98,7 +98,7 @@ Participants: journalists and admins
    to a distant journalist's air-gapped SVS
 -  Do complete journalist process walk through twice, either on
    different days or between morning/afternoon sessions
--  Using MAT
+-  Using MAT (Metadata Anonymisation Toolkit)
 -  What to do for unsupported formats
 
 Admin training
