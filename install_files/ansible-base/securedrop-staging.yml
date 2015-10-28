@@ -1,17 +1,20 @@
 ---
-- hosts: staging
+- name: Add FPF apt repository and install base packages.
+  hosts: staging
   roles:
     - { role: common, tags: common }
     - { role: install_local_pkgs, tags: install_local_pkgs,
         when: install_local_packages }
   sudo: yes
 
-- hosts: mon-staging
+- name: Configure OSSEC manager.
+  hosts: mon-staging
   roles:
     - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
   sudo: yes
 
-- hosts: app-staging
+- name: Configure SecureDrop Application Server.
+  hosts: app-staging
   roles:
     # The common-app role should be renamed.
     # It installs tor. Tor is required to be installed prior to the securedrop
@@ -31,7 +34,8 @@
   # service needs to be listening and reachable, then agent needs to connect to
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
-- hosts: mon-staging
+- name: Remove temporary firewall exemptions from Monitor Server.
+  hosts: mon-staging
   roles:
     - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
   sudo: yes
@@ -42,13 +46,15 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-- hosts: staging
+- name: Configure host firewalls (with direct access for staging).
+  hosts: staging
   roles:
     - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
     - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
   sudo: yes
 
-- hosts: app-staging
+- name: Perform backup of Application Server configuration.
+  hosts: app-staging
   roles:
     - { role: backup, tags: backup }
   sudo: yes

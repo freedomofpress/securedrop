@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: Configure SecureDrop testing environment in Travis-CI.
+  hosts: localhost
 
   vars_files:
     - group_vars/securedrop.yml

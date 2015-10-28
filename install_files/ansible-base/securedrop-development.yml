@@ -1,5 +1,6 @@
 ---
-- hosts: development
+- name: Configure SecureDrop Development machine.
+  hosts: development
   roles:
     - { role: development, tags: development }
     - { role: app, tags: app }
