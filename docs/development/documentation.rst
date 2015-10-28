@@ -53,9 +53,18 @@ build artifacts and re-building the docs from scratch:
 
    $ make clean && make html
 
-.. todo:: Once we've added a git commit hook to build the docs,
-          mention it here.
 
+Integration with Read the Docs
+------------------------------
+
+Our documentation is built and hosted by `Read the Docs`_ and is available at
+https://securedrop.readthedocs.org. The "latest" documentation is currently
+based on the **develop** branch of the `upstream Git repository`_. We use a
+`webhook`_ so the docs are rebuilt automatically when commits get pushed to the
+branch.
+
+.. _upstream Git repository: https://github.com/freedomofpress/securedrop
+.. _webhook: http://docs.readthedocs.org/en/latest/webhooks.html
 
 Style Guide
 -----------
