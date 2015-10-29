@@ -2,7 +2,7 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in 
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
-securedrop_app_code_version: "0.3.5"
+securedrop_app_code_version: "0.3.6"
 
 tor_wait_for_hidden_services: yes
 tor_hidden_services_parent_dir: "/var/lib/tor/services"
