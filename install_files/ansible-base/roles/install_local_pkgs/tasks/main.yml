@@ -1,9 +1,14 @@
 ---
 # This will look for packages in install_files/ansible-base
 - name: if defined copy local deb packages to target system
-  copy: src=../../build/{{ item }} dest=/root/
+  copy:
+    src: ../../build/{{ item }}
+    dest: /root/
   with_items: local_deb_packages
+  tags:
+    - install_local_pkgs
 
+# TODO:
 # This should use the ansible apt module
 # apt: deb=/root/{{ item }}
 # but keep getting an error when using a list with that module. Using the shell
@@ -11,3 +16,5 @@
 - name: if defined install local deb packages
   shell: "dpkg -i /root/{{ item }} || true && apt-get -f install -y"
   with_items: local_deb_packages
+  tags:
+    - install_local_pkgs

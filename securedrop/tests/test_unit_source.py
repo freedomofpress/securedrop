@@ -11,6 +11,7 @@ from flask.ext.testing import TestCase
 from flask import session, escape
 from mock import patch, ANY
 import source
+from db import Source
 os.environ['SECUREDROP_ENV'] = 'test'
 
 
@@ -129,6 +130,26 @@ class TestSource(TestCase):
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
 
+    def test_login_with_whitespace(self):
+        """Test that codenames with leading or trailing whitespace still work"""
+        def login_test(codename):
+            rv = self.client.get('/login')
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Login to check for responses", rv.data)
+
+            with self.client as c:
+                rv = c.post('/login', data=dict(codename=codename),
+                            follow_redirects=True)
+                self.assertEqual(rv.status_code, 200)
+                self.assertIn("Submit documents and messages", rv.data)
+                self.assertTrue(session['logged_in'])
+                common.logout(c)
+
+        codename = self._new_codename()
+        login_test(codename + ' ')
+        login_test(' ' + codename + ' ')
+        login_test(' ' + codename)
+
     def _dummy_submission(self):
         """
         Helper to make a submission (content unimportant), mostly useful in
@@ -213,6 +234,21 @@ class TestSource(TestCase):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
+    @patch('crypto_util.hash_codename')
+    def test_login_with_overly_long_codename(self, mock_hash_codename):
+        """Attempting to login with an overly long codename should result in
+        an error, and scrypt should not be called to avoid DoS."""
+        overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
+        with self.client as client:
+            rv = client.post(
+                    '/login',
+                    data=dict(codename=overly_long_codename),
+                    follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertIn("Sorry, that is not a recognized codename.", rv.data)
+            self.assertFalse(mock_hash_codename.called,
+                    "Called hash_codename for codename w/ invalid length")
 
 
 if __name__ == "__main__":

@@ -9,6 +9,14 @@ import config
 from db import init_db, db_session, Source, Submission
 import crypto_util
 
+# TODO: the PID file for the redis worker is hard-coded below.
+# Ideally this constant would be provided by a test harness.
+# It has been intentionally omitted from `config.py.example`
+# in order to isolate the test vars from prod vars.
+# When refactoring the test suite, the TEST_WORKER_PIDFILE
+# TEST_WORKER_PIDFILE is also hard-coded in `manage.py`.
+TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
+
 
 def clean_root():
     shutil.rmtree(config.SECUREDROP_DATA_ROOT)
@@ -70,9 +78,9 @@ def shared_setup():
     crypto_util.do_runtime_tests()
 
     # Start the Python-RQ worker if it's not already running
-    if not os.path.exists(config.WORKER_PIDFILE):
+    if not os.path.exists(TEST_WORKER_PIDFILE):
         subprocess.Popen(["rqworker", "-P", config.SECUREDROP_ROOT,
-                                      "--pid", config.WORKER_PIDFILE])
+                                      "--pid", TEST_WORKER_PIDFILE])
 
 
 def shared_teardown():

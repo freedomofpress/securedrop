@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Edit your account</h2>
+
+<form method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <p>
+    <label for="password">Change password</label>
+    <input name="password" id="password" type="password" />
+  </p>
+  <p>
+    <label for="password_again">Change password (confirm)</label>
+    <input name="password_again" id="password_again" type="password" />
+  </p>
+  <button type="submit" id="update">Update</button>
+</form>
+
+<hr class="no-line">
+
+<h2>Reset Two Factor Authentication</h2>
+<p>If your two factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em></p>
+<form method="post" action="{{ url_for('account_reset_two_factor_totp') }}" id="reset-two-factor-totp">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <button type="submit" class="center"><i class="fa fa-refresh"></i> Reset two factor authentication (Google Authenticator)</button>
+</form>
+<br />
+<form method="post" action="{{ url_for('account_reset_two_factor_hotp') }}" id="reset-two-factor-hotp">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <button type="submit" class="center"><i class="fa fa-refresh"></i> Reset two factor authentication (HOTP Yubikey)</button>
+</form>
+{% endblock %}

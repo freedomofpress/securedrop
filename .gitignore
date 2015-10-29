@@ -21,7 +21,7 @@ secrets.rb
 vagrant_ansible_inventory*
 
 # ignore some things for the rspec tests
-spec-tests/gems/*
+spec_tests/gems/*
 Gemfile.lock
 
 # ignore "external" Ansible configuration file
@@ -85,3 +85,6 @@ nosetests.xml
 
 # Emacs
 \#*#
+
+# ignore cached gems for serverspec tests
+spec_tests/gems/*

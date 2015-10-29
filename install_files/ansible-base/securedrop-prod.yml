@@ -6,8 +6,8 @@
     - prod-specific.yml
 
   roles:
-    - install_fpf_repo
-    - common
+    - { role: install_fpf_repo, tags: fpf_repo }
+    - { role: common, tags: common }
 
   sudo: yes
 
@@ -20,9 +20,9 @@
     - prod-specific.yml
 
   roles:
-    - { role: validate, tags: [ 'validate' ] }
-    - common-mon
-    - ossec_server
+    - { role: validate, tags: validate }
+    - { role: common-mon, tags: 'tor' }
+    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
 
   sudo: yes
 
@@ -36,10 +36,10 @@
   vars:
 
   roles:
-    - { role: validate, tags: [ 'validate' ] }
-    - common-app
-    - ossec_agent
-    - app
+    - { role: validate, tags: validate }
+    - { role: common-app, tags: ['common-app', 'tor'] }
+    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: app, tags: app }
 
   sudo: yes
 
@@ -60,7 +60,7 @@
     - prod-specific.yml
 
   roles:
-    - remove_authd_exemptions
+    - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
 
   sudo: yes
 
@@ -78,8 +78,8 @@
     - prod-specific.yml
 
   roles:
-    - restrict_direct_access_app
-    - { role: backup, tags: [ 'backup' ] }
+    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
+    - { role: backup, tags: backup }
 
   sudo: yes
 
@@ -91,13 +91,13 @@
     - prod-specific.yml
 
   roles:
-    - restrict_direct_access_mon
+    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
 
   sudo: yes
 
 - hosts: [ 'app', 'mon', 'app-prod', 'mon-prod' ]
 
   roles:
-    - reboot
+    - { role: reboot, tags: reboot }
 
   sudo: yes

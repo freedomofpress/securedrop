@@ -1,24 +1,40 @@
 ---
 - name: ensure latest sudoers file is copied to sudoers.tmp
   copy:
-    src="sudoers"
-    dest=/etc/sudoers.tmp
-    owner=root
-    group=root
-    mode=0440
+    src: sudoers
+    dest: /etc/sudoers.tmp
+    owner: root
+    group: root
+    mode: '0440'
   register: sudoers_st
+  tags:
+    - users
+    - sudoers
 
 - name: ensure sudoers file is installed if syntax check passes
+  # TODO: copy module provides a 'validate' parameter that
+  # accomplishes what this shell command does. Add that, then
+  # remove this task.
   shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
   when: sudoers_st.changed
+  tags:
+    - users
+    - sudoers
 
-- name: ensure secureDrop admin user accounts exist
+- name: ensure SecureDrop admin user accounts exist
   user:
-    name="{{ item }}"
-    shell=/bin/bash
-    groups=sudo,ssh
+    name: "{{ item }}"
+    shell: /bin/bash
+    groups: sudo,ssh
   with_items: ssh_users
+  tags:
+    - users
+    - sudoers
 
+  # TODO: consider moving this to /etc/profile.d,
+  # so subsequent task modifiying .bashrc files
+  # can be removed. (Don't forget to include .sh
+  # on dest file if in /etc/profile.d)
 - name: copy SecureDrop bashrc additions
   copy:
     src: bashrc_securedrop_additions
@@ -26,10 +42,18 @@
     owner: root
     group: root
     mode: 0644
+  tags:
+    - users
+    - environment
 
+  # TODO: see above; if environment config is moved
+  # to /etc/profile.d, this task can be removed altogether.
 - name: add line to each users bashrc to source the SecureDrop additions
   lineinfile:
-    dest: "/home/{{ item }}/.bashrc"
-    line: ". /etc/bashrc.securedrop_additions"
+    dest: /home/{{ item }}/.bashrc
+    line: '. /etc/bashrc.securedrop_additions'
     insertbefore: BOF
   with_items: ssh_users
+  tags:
+    - users
+    - environment

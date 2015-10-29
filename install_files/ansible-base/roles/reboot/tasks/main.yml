@@ -5,3 +5,5 @@
   poll: 0
   ignore_errors: true
   sudo: yes
+  tags:
+    - reboot

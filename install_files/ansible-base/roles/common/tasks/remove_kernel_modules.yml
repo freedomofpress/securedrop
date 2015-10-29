@@ -1,8 +1,19 @@
 ---
 - name: remove kernel modules
-  modprobe: name="{{ item }}" state=absent
+  modprobe:
+    name: "{{ item }}"
+    state: absent
   with_items: disabled_kernel_modules
+  tags:
+    - kernel
+    - hardening
 
 - name: add disabled kernels modules to modprobe.d blacklist
-  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist {{ item }}" insertafter=EOF
+  lineinfile:
+    dest: /etc/modprobe.d/blacklist.conf
+    line: "blacklist {{ item }}"
+    insertafter: EOF
   with_items: disabled_kernel_modules
+  tags:
+    - kernel
+    - hardening

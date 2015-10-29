@@ -1,0 +1,21 @@
+---
+### General (used by more than one role) ###
+securedrop_code: /var/www/securedrop
+securedrop_data: /var/lib/securedrop
+securedrop_user: www-data
+
+app_hostname: app-staging
+monitor_hostname: mon-staging
+
+apache_listening_address: 0.0.0.0
+apache_source_log: /var/log/apache2/source-error.log
+apache_allow_from: all
+
+# Hard-coding the default interface used in the
+# staging rules for now. In VirtualBox, eth0 is a
+# NAT device used for SSH port forwards. In DigitalOcean,
+# eth0 is the only device, so still the correct device
+# to allow staging access to. TODO: virtualize firewall
+# so these iface values are more flexible. Also consider
+# enabling private_networking in DO.
+staging_iface: eth0

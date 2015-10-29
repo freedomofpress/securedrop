@@ -1,5 +1,65 @@
 # Changelog
 
+## 0.3.6
+
+This is an emergency release to update the copy of the FPF code signing public
+key in the repo because it expired on Oct 26. This fix is required for new
+installs to succeed; otherwise, the installation will fail because apt's
+package authentication fails if the corresponding key is expired.
+
+## 0.3.5
+
+The issues for this release were tracked with the 0.3.5 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.5
+
+* Use certificate verification instead of fingerprint verification by default for the OSSEC Postfix configuration (#1076)
+* Fix apache2 service failing to start on Digital Ocean (#1078)
+* Allow Apache to rotate its logs (#1074)
+* Prevent reboots during cron-apt upgrade (#1071)
+* Update documentation (#1107, #1112, #1113)
+* Blacklist additional kernel modules used for wireless networking (#1116)
+
+## 0.3.4
+
+The issues for this release were tracked with the 0.3.4 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.4
+
+This release contains fixes for issues described in the most recent security audit by iSec. It also contains some improvements and updates to the documentation, and a fix for Tor hidden service directory permissions that caused new installs to fail.
+
+### iSec audit fixes
+
+* Fix ineffective SSH connection throttling (iSEC-15FTC-7, #1053)
+* Remove debugging print statements that could leak sensitive information to the logs for the document interface (iSEC-15FTC-2, #1059)
+* Harden default iptables policies (iSEC-15FTC-3, #1053)
+* Don't check passwords or codenames that exceed a maximum length to prevent DoS via excessive scrypt computation (iSEC-15FTC-6, #1059)
+* Remove unnecessary capabilties from the Apache AppArmor profile (iSEC-15FTC-9, #1058).
+* Change postfix hostname to something generic to prevent fingerprinting via OSSEC email headers (iSEC-15FTC-10, #1057)
+
+### Other changes
+
+* Ensure correct permissions for Tor hidden service directories so new installs won't break (#1052)
+* Clarify server setup steps in the install documentation (#1027, #1061)
+* Clarify that Tor ATHS setup is now automatic and does not require manual changes (#1030)
+* Explain that you can only download files to the "Tor Browser" folder on Tails as of Tails 1.3, due to the addition of AppArmor confinement for the Tor Browser (#1036, #1062).
+* Explain that you must use the Unsafe Browser to configure the network firewall because the Tor Browser will be blocked from accessing LAN addresses starting in Tails 1.5 (#1050)
+* Fix "gotcha" in network firewall configuration where pfSense guesses the wrong CIDR subnet (#1060)
+* Update the upgrade docs to refer to the latest version of the 0.3.x release series instead of a specific version that would need to be updated every time (#1063)
+
+## 0.3.3
+
+The issues for this release were tracked with the 0.3.3 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.3.
+
+* Remove unnecessary proxy command from Tails SSH aliases (#933)
+* Make grsec reboot idempotent to avoid unnecessary reboots on new installs (#939)
+* Make tmux the default shell on App and Monitor servers (#943)
+* Fully tested migration procedures for 0.2.1 and 0.3pre to 0.3 (#944, #993)
+* Ensure grub is not uninstalled in virtual machines (#945)
+* CSS fixes (#948)
+* Apache AppArmor profile should support TLS/SSL (#949)
+* Fix: document interface no longer flas new submissions as unread (#969)
+* Switch to NetworkManager for automatic ATHS setup on Admin Workstation (#1018)
+* Upgrade Selenium in testing dependencies so functional tests work (#991)
+* Clarify paths in install documentation (#1009)
+
 ## 0.3.2
 
 * Fixes security vulnerabilty (severity=high) in access control on Document Interface (#974)

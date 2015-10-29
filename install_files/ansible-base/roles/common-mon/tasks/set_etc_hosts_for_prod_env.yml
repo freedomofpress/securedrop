@@ -7,3 +7,7 @@
     line: "{{ item.ip }}  {{ item.hostname }}"
     regexp: "^{{ item.ip }}    {{ item.hostname }}"
   with_items: ip_info
+  tags:
+    - host_aliases
+    - static-hosts
+

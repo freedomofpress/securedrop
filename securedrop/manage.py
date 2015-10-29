@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import atexit
 import sys
 import os
+import select
 import shutil
 import subprocess
 import unittest
@@ -15,16 +17,20 @@ import psutil
 
 from db import db_session, Journalist
 
+from management import run
+
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
 # development or testing, before importing config.
-#
-# TODO: do we need to store *_PIDFILE in the application config? It seems like
-# an implementation detail that is specifc to this management script.
-
 os.environ['SECUREDROP_ENV'] = 'dev'
 
-WORKER_PIDFILE = "/tmp/test_rqworker.pid"
+# TODO: the PID file for the redis worker is hard-coded below.
+# Ideally this constant would be provided by a test harness.
+# It has been intentionally omitted from `config.py.example`
+# in order to isolate the test vars from prod vars.
+# When refactoring the test suite, the TEST_WORKER_PIDFILE
+# TEST_WORKER_PIDFILE is also hard-coded in `tests/common.py`.
+TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
 
 
 def get_pid_from_pidfile(pid_file_name):
@@ -36,7 +42,7 @@ def _start_test_rqworker(config):
     # needed to determine the directory to run the worker in
     worker_running = False
     try:
-        if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
+        if psutil.pid_exists(get_pid_from_pidfile(TEST_WORKER_PIDFILE)):
             worker_running = True
     except IOError:
         pass
@@ -47,65 +53,14 @@ def _start_test_rqworker(config):
             [
                 "rqworker", "test",
                 "-P", config.SECUREDROP_ROOT,
-                "--pid", WORKER_PIDFILE,
+                "--pid", TEST_WORKER_PIDFILE,
             ],
             stdout=tmp_logfile,
             stderr=subprocess.STDOUT)
 
 
 def _stop_test_rqworker():
-    os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
-
-
-def start():
-    import config
-    source_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.SOURCE_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python source.py'])
-    journo_rc = subprocess.call(['start-stop-daemon',
-                                 '--start',
-                                 '-b',
-                                 '--quiet',
-                                 '--pidfile',
-                                 config.JOURNALIST_PIDFILE,
-                                 '--startas',
-                                 '/bin/bash',
-                                 '--',
-                                 '-c',
-                                 'cd /vagrant/securedrop && python journalist.py'])
-
-    if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
-        print "Source interface:     localhost:8080"
-        print "Journalist interface: localhost:8081"
-    else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
-
-
-def stop():
-    import config
-    source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
-    journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
-    if source_rc + journo_rc == 0:
-        print "The web application has been stopped."
-    else:
-        print "There was a problem stopping the web application."
-
-
-def restart():
-    stop()
-    sleep(0.1)
-    start()
+    os.kill(get_pid_from_pidfile(TEST_WORKER_PIDFILE), signal.SIGTERM)
 
 
 def test():
@@ -169,6 +124,13 @@ def add_admin():
     while True:
         password = getpass("Password: ")
         password_again = getpass("Confirm Password: ")
+
+        if len(password) > Journalist.MAX_PASSWORD_LEN:
+            print ("Your password is too long (maximum length {} characters). "
+                   "Please pick a shorter password.".format(
+                   Journalist.MAX_PASSWORD_LEN))
+            continue
+
         if password == password_again:
             break
         print "Passwords didn't match!"
@@ -182,20 +144,18 @@ def add_admin():
             if otp_secret:
                 break
 
-    admin = Journalist(
-        username=username,
-        password=password,
-        is_admin=True,
-        otp_secret=otp_secret)
     try:
+        admin = Journalist(username=username,
+                           password=password,
+                           is_admin=True,
+                           otp_secret=otp_secret)
         db_session.add(admin)
         db_session.commit()
     except Exception as e:
         if "username is not unique" in str(e):
             print "ERROR: That username is already taken!"
         else:
-            print "ERROR: An unknown error occurred, traceback:"
-            print e
+            print "ERROR: An unexpected error occurred, traceback: \n{}".format(e)
     else:
         print "Admin '{}' successfully added".format(username)
         if not otp_secret:
@@ -254,11 +214,9 @@ def clean_tmp():
 
 def main():
     valid_cmds = [
-        "start",
-        "stop",
+        "run",
         "test_unit",
         "test",
-        "restart",
         "reset",
         "add_admin",
         "clean_tmp"]

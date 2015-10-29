@@ -1,8 +1,78 @@
 require 'rake'
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/*/*_spec.rb'
+
+task :spec    => 'spec:all'
+task :staging => 'spec:staging'
+task :default => :spec
+
+# this function accepts a hostname and returns a hash
+# that includes roles assigned to that host. changes made
+# in ansible config must be manually duplicated here.
+def roles(host)
+  roles = []
+  case host
+  when /^development$/
+    (roles << %w(app-test common-development development)).flatten!
+  when /^build$/
+    (roles << "build").flatten!
+  when /^app-staging/
+    (roles << %w(app-test app-general common-development common app-staging grsecurity ip6tables)).flatten!
+  when /^mon-staging/
+    (roles << %w(mon-general mon-staging common grsecurity ip6tables)).flatten!
+  when /^app-prod/
+    (roles << %w(app-prod app-general common common-development grsecurity ip6tables)).flatten!
+  when /^mon-prod/
+    (roles << %w(mon-general mon-prod common grsecurity ip6tables)).flatten!
+  end
+
+  # SSH access over Tor required for prod config,
+  # so assume machines have already been provisioned
+  # and ATHS values fetched, then force SSH over Tor.
+  if host.match(/-prod$/)
+    ENV['SECUREDROP_SSH_OVER_TOR'] = "1"
+  end
+
+  # DigitalOcean droplets don't support custom kernels, so remove
+  # any planned spectests for grsecurity. This is only relevant
+  # for the app and mon hosts, so don't delay other tests with check.
+  if host.match(/^(app|mon)/)
+    if `vagrant status #{host} --machine-readable`.match(/#{host},provider-name,digital_ocean/m)
+      roles.delete('grsecurity')
+    end
+  end
+  roles
 end
 
-task :default => :spec
+
+# manually declare hosts, and assign them roles for testing
+hosts = %w(development build app-staging mon-staging app-prod mon-prod).map do |host|
+  {
+    :name => host,
+    :roles => roles(host)
+  }
+end
+
+
+# dynamically determine roles per host
+# this brilliant pragma conceived by @vincentbernat, see
+# https://github.com/vincentbernat/serverspec-example
+# http://vincent.bernat.im/en/blog/2014-serverspec-test-infrastructure.html
+namespace :spec do
+  # assign all hosts to serverspec task run
+  task :all => hosts.map { |h| h[:name] }
+
+  # assign only /staging/ hosts to serverspec task run
+  task :staging => hosts.select{ |h| h[:name].match(/staging$/) }.map{ |h| h[:name] }
+  task :prod => hosts.select{ |h| h[:name].match(/prod$/) }.map{ |h| h[:name] }
+
+  hosts.each do |host|
+    desc "Run spectests against #{host[:name]}"
+    RSpec::Core::RakeTask.new(host[:name].to_sym) do |t|
+      ENV['TARGET_HOST'] = host[:name]
+      t.pattern = './spec/{' + host[:roles].join(",") + '}/*_spec.rb'
+      puts "Running spectests for host '#{host[:name]}'..."
+      t.verbose = false
+    end
+  end
+end

@@ -1,8 +1,12 @@
 ---
 - include: staging_wsgi_files.yml
-  tags: non-development
+  tags:
+    - apache
+    - non-development
 
 - include: apparmor_complain.yml
-  tags: non-development,aa-complain
+  tags:
+    - aa-complain
+    - non-development
 
 - include: dev_setup_xvfb_for_functional_tests.yml
