@@ -72,7 +72,7 @@ YubiKey
 If the journalist wishes to use a YubiKey for two-factor authentication,
 check the box next to "I'm using a YubiKey". You will then need to enter
 the OATH-HOTP Secret Key that your YubiKey is configured with. For more
-information, read the `YubiKey Setup Guide <yubikey_setup.md>`__.
+information, read the `YubiKey Setup Guide <yubikey_setup.rst>`__.
 
 |"Enable YubiKey"|
 

@@ -152,7 +152,7 @@ server in ``/etc/ssl/certs_local`` and the system CAs will be ignored
 when validating the SMTP relay TLS certificate.
 
 Save ``prod-specific.yml``, exit the editor and `proceed with the
-installation <install.md#install-securedrop>`__ by running the
+installation <install.rst#run-the-ansible-playbook>`__ by running the
 playbooks.
 
 Using Gmail for OSSEC alerts
@@ -233,7 +233,7 @@ Specifying the fingerprint will configure Postfix to use it for
 verification on the next playbook run. (To disable fingerprint
 verification, simply delete the variable line you added, and rerun the
 playbooks.) Save ``prod-specific.yml``, exit the editor and `proceed
-with the installation <install.md#install-securedrop>`__ by running the
+with the installation <install.md#run-the-ansible-playbook>`__ by running the
 playbooks.
 
 Troubleshooting

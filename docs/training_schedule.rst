@@ -72,7 +72,7 @@ Installing SecureDrop
 
 Time: 6 hours
 
--  Follow `Installing SecureDrop <install.md>`__
+-  Follow `Installing SecureDrop <install.rst>`__
 
 Day 2: Journalist and Admin Training
 ------------------------------------
@@ -133,7 +133,7 @@ Participants: admins
 -  Backups
 -  Disk space monitoring
 -  Updating SMTP and OSSEC alert configs
--  Changing passwords (for FDE, persistent volumes, 2FA, KeePass
+-  Changing passwords (for FDE, persistent volumes, 2FA, KeePassX
    managers...)
 -  What will happen to local modifications to prod system after updates
 -  Updating SecureDrop Application

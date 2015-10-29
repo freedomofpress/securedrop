@@ -32,7 +32,7 @@ continuing:
    receive the alerts
 -  Connection information for the SMTP relay that handles OSSEC alerts.
    For more information, see the `OSSEC Alerts
-   Guide </docs/ossec_alerts.md>`__.
+   Guide </docs/ossec_alerts.rst>`__.
 -  The first username of a journalist who will be using SecureDrop (you
    can add more later)
 -  The username of the system administrator
