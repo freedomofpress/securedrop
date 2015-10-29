@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
 Homepage: https://freedom.press/securedrop
 Package: securedrop-ossec-server
-Version: 2.8.2+0.3.5
+Version: 2.8.2+0.3.6
 Architecture: amd64
 Depends: ossec-server
 Replaces: ossec-server

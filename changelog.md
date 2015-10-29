@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.6
+
+This is an emergency release to update the copy of the FPF code signing public
+key in the repo because it expired on Oct 26. This fix is required for new
+installs to succeed; otherwise, the installation will fail because apt's
+package authentication fails if the corresponding key is expired.
+
 ## 0.3.5
 
 The issues for this release were tracked with the 0.3.5 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.5
