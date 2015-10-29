@@ -16,6 +16,7 @@ torrc_settings = [
   'SocksPort 0',
   'SafeLogging 1',
   'RunAsDaemon 1',
+  'Sandbox 1',
   'HiddenServiceDir /var/lib/tor/services/ssh',
   'HiddenServicePort 22 127.0.0.1:22',
   'HiddenServiceAuthorizeClient stealth admin',
