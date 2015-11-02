@@ -123,9 +123,8 @@ Google Authenticator mobile app.
 
 After your torrc has been updated with the HidServAuth values, connect
 to the App Server using ``ssh`` and run ``google-authenticator``. Follow
-the instructions in `our Google Authenticator
-guide </docs/google_authenticator.rst>`__ to set up the app on your
-Android or iOS device.
+the instructions in :doc:`our Google Authenticator guide <google_authenticator>`
+to set up the app on your Android or iOS device.
 
 To disconnect enter the command ``exit``. Now do the same thing on the
 Monitor Server. You'll end up with an account for each server in the

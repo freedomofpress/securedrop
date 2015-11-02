@@ -16,8 +16,8 @@ to use DVDs instead, there is nothing to set up now — just make sure
 that you have all the hardware on hand.
 
 The easiest and recommended option for a *Data Transfer Device* is a USB
-drive. If you have a large team of journalists you may want to `create
-several <./onboarding.md>`__ of these. Here we'll just walk through
+drive. If you have a large team of journalists you may want to :doc:`create
+several <onboarding>` of these. Here we'll just walk through
 making one *Data Transfer Device*. Note: this process will destroy all
 data currently on the drive. You should probably use a new USB drive.
 

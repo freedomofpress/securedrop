@@ -47,7 +47,7 @@ navigate to the Document Interface's .onion address. Verify that you
 can log in to the Document Interface with the admin account you just
 created.
 
-For adding more user accounts, please refer now to our `Admin
-Interface Guide </docs/admin_interface.md>`__.
+For adding more user accounts, please refer now to our :doc:`Admin
+Interface Guide <admin>`.
 
 .. |TorBrowser| image:: images/torbrowser.png

@@ -145,7 +145,7 @@ development, staging, and prod (production).
    hardening applied but virtualized
 
 If you plan to alter the configuration of any of these machines, make sure to
-review the `Development Guide for Serverspec Tests </docs/development/spec_tests.rst>`__.
+review the :doc:`Development Guide for Serverspec Tests <spec_tests>`.
 
 Development
 ~~~~~~~~~~~

@@ -32,8 +32,8 @@ On each server:
 #. Check the current applied iptables rules with ``iptables-save``. It
    should output *approximately* 50 lines.
 #. You should have received an email alert from OSSEC when it first
-   started. If not, review our `OSSEC Alerts
-   Guide </docs/ossec_alerts.rst>`__.
+   started. If not, review our :doc:`OSSEC Alerts
+   Guide <ossec_alerts>`.
 
 Test the web interfaces
 -----------------------
@@ -45,8 +45,8 @@ Test the web interfaces
      URL from ``app-source-ths``. Proceed through the codename
      generation (copy this down somewhere) and you can submit a
      message or attach any random unimportant file.
-   - Usage of the Source Interface is covered by our `Source User
-     Manual </docs/source.rst>`__.
+   - Usage of the Source Interface is covered by our :doc:`Source User
+     Manual <source>`.
 
 #. Test that you can access the Document Interface, and that you can log
    in as the admin user you just created.
@@ -64,8 +64,8 @@ Test the web interfaces
 
    - While logged in as an admin, you can send a reply to the test
      source submission you made earlier.
-   - Usage of the Document Interface is covered by our `Journalist
-     User Manual </docs/journalist.rst>`__.
+   - Usage of the Document Interface is covered by our :doc:`Journalist
+     User Manual <journalist>`.
 
 #. Test that the source received the reply.
 
@@ -82,5 +82,4 @@ Test the web interfaces
    click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is
-working, see `How to Use
-SecureDrop </docs/journalist.rst>`__.
+working, see :doc:`How to Use SecureDrop <journalist>`.

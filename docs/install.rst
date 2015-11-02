@@ -31,8 +31,8 @@ continuing:
 -  The GPG public key and fingerprint for the email address that will
    receive the alerts
 -  Connection information for the SMTP relay that handles OSSEC alerts.
-   For more information, see the `OSSEC Alerts
-   Guide </docs/ossec_alerts.rst>`__.
+   For more information, see the :doc:`OSSEC Alerts
+   Guide <ossec_alerts>`.
 -  The first username of a journalist who will be using SecureDrop (you
    can add more later)
 -  The username of the system administrator
@@ -105,6 +105,7 @@ following:
 
 When you're done, save the file and quit the editor.
 
+.. _Run the Ansible playbook:
 
 Run the Ansible playbook
 ------------------------

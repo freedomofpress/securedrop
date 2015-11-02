@@ -72,7 +72,7 @@ Installing SecureDrop
 
 Time: 6 hours
 
--  Follow `Installing SecureDrop <install.rst>`__
+-  Follow :doc:`Installing SecureDrop <install>`
 
 Day 2: Journalist and Admin Training
 ------------------------------------

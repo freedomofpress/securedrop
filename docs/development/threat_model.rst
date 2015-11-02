@@ -21,7 +21,7 @@ Assumptions about the source
 -  The source would like to remain anonymous, even against a forensic
    attacker.
 -  The source obtains an authentic copy of Tails or the Tor Browser.
--  The source follows our `guidelines </docs/source.rst>`__
+-  The source follows our :doc:`guidelines <../source>`
    for using SecureDrop.
 -  The source is accessing an authentic SecureDrop site.
 
@@ -33,7 +33,7 @@ Assumptions about the admin and the journalist
    material to the attacker that would be unreasonable.
 -  The admin and the journalist obtain authentic copies of Tails.
 -  The journalist follows our
-   `guidelines </docs/journalist.rst>`__ for using SecureDrop
+   :doc:`guidelines <../journalist>` for using SecureDrop
    and working with submitted documents.
 
 Assumptions about the person installing SecureDrop, usually the admin
@@ -43,10 +43,10 @@ Assumptions about the person installing SecureDrop, usually the admin
    to give the attacker system-level access that would be unreasonable.
 -  The person obtains an authentic copy of SecureDrop and its
    dependencies.
--  The person follows our guidelines for `deploying the system, setting
+-  The person follows our guidelines for :doc:`deploying the system, setting
    up the landing page for the
-   organization </docs/deployment_practices.rst>`__, and for `installing
-   SecureDrop </docs/install.rst>`__.
+   organization <../deployment_practices>`, and for :doc:`installing
+   SecureDrop <../install>`.
 
 Assumptions about the source's computer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,18 +156,18 @@ What the Workstations can achieve
 
 -  The **Admin Workstation** requires Tails with a persistent volume,
    which stores information such as GPG and SSH keys, as well as a
-   `database with passphrases </docs/passphrases.rst>`__
+   :doc:`database with passphrases <../passphrases>`
    for the Application Server, the Monitor Server, and the GPG key the
    Monitor Server will encrypt OSSEC alerts to.
 -  The **Journalist Workstation** requires Tails with a persistent
    volume, which stores information such as the Hidden Service value
-   required to connect to the Document Interface, as well as a `database
-   with passphrases </docs/passphrases.rst>`__ for the
+   required to connect to the Document Interface, as well as a :doc:`database
+   with passphrases <../passphrases>` for the
    Document Interface and the journalist's personal GPG key.
 -  The **Secure Viewing Station** requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
-   GPG key, as well as a `database with the
-   passphrase </docs/passphrases.rst>`__ for that key.
+   GPG key, as well as a :doc:`database with the
+   passphrase <../passphrases>` for that key.
 
 What a compromise of the source's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
