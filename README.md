@@ -1,4 +1,6 @@
-<img src="/docs/images/logo.png" width="350" height="350">
+<p align="center">
+  <img src="/docs/images/logo.png" width="350" height="350">
+</p>
 
 [![Build Status](https://travis-ci.org/freedomofpress/securedrop.png)](http://travis-ci.org/freedomofpress/securedrop)
 
