@@ -46,8 +46,8 @@ browser in the Tails operating system to connect to the
 want to login, but after practicing a few times, it will become
 automatic.
 
-See our guide on setting up `Tails for the Admin and Journalist
-Workstation <tails_guide.md>`__ before continuing. We recommend that you
+See our guide on setting up :doc:`Tails for the Admin and Journalist
+Workstation <tails_guide>` before continuing. We recommend that you
 create bookmarks for the Source and Document Interfaces.
 
 After clicking on the SecureDrop ``Document Interface`` link, you can

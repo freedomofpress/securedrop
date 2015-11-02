@@ -6,11 +6,11 @@ Prerequisites
 
 SecureDrop is a multi-machine design. To make development and testing easy, we
 provide a set of virtual environments, each tailored for a specific type of
-development task. We use Vagrant and Virtualbox to conveniently develop with a
+development task. We use Vagrant and VirtualBox to conveniently develop with a
 set of virtual environments, and our Ansible playbooks can provison these
 environments on either virtual machines or physical hardware.
 
-To get started, you will need to install Vagrant, Virtualbox, and Ansible on
+To get started, you will need to install Vagrant, VirtualBox, and Ansible on
 your development workstation.
 
 
@@ -28,10 +28,10 @@ of this writing), which is newer than what is in the Ubuntu repositories at the
 time of this writing. Download the current version from the `Vagrant Downloads
 page`_. We *do not* recommend using the version of Vagrant available from
 Ubuntu's package repositories because it is significantly out of date and will
-not work with SecureDrop (`Github #932`_).
+not work with SecureDrop (`GitHub #932`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
-.. _`Github #932`: https://github.com/freedomofpress/securedrop/pull/932
+.. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
 
 .. code:: sh
 
@@ -51,7 +51,7 @@ If you're using Ubuntu, you can install a sufficiently recent version of
 Ansible from backports (if you prefer): ``sudo apt-get install
 ansible/trusty-backports``
 
-.. note:: Tested: Ansible 1.8.4
+.. note:: Tested: Ansible 1.9.4
 
 .. warning:: We do not recommend installing vagrant-cachier. It destroys apt's
 	     state unless the VMs are always shut down/rebooted with Vagrant,
@@ -145,7 +145,7 @@ development, staging, and prod (production).
    hardening applied but virtualized
 
 If you plan to alter the configuration of any of these machines, make sure to
-review the `Development Guide for Serverspec Tests </docs/spec_tests.md>`__.
+review the :doc:`Development Guide for Serverspec Tests <spec_tests>`.
 
 Development
 ~~~~~~~~~~~

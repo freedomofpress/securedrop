@@ -20,7 +20,7 @@ potential sources from using your instance of SecureDrop. However, it
 can easily be avoided by following the below best practices.
 
 Freedom of the Press Foundation eventually plans to `list all of those
-SecureDrop onion URLs <https://freedom.press/securedrop/directory>`__ as
+SecureDrop onion URLs <https://securedrop.org/directory>`__ as
 "verified" on its website that meet the minimum requirements for
 deployment best practices. If your organization cannot follow the
 minimum guidelines we cannot recommend to users that your SecureDrop

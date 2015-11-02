@@ -210,7 +210,6 @@ install the bootloader (GRUB). If it asks to install the bootloader to
 the Master Boot Record, choose **Yes**. When everything is done, reboot.
 
 You can now return to where you left off in the main SecureDrop install
-guide `by clicking
-here </docs/install.md#install-the-securedrop-application>`__.
+guide :doc:`by clicking here <servers>`.
 
 .. |Ubuntu Server| image:: images/install/ubuntu_server.png

@@ -10,13 +10,13 @@ Source Guide
 Choose who to submit to
 -----------------------
 
-There are currently over 20 organizations running SecureDrop. Each instance is totally independent, and submissions to that are instance are only available to journalists associated with that organization.
+There are currently over 20 organizations running SecureDrop. Each instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
 
 All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
 
 Most organizations make their landing page prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
 
-.. _`SecureDrop Directory`: https://freedom.press/securedrop/directory
+.. _`SecureDrop Directory`: https://securedrop.org/directory
 
 
 Get the Tor Browser

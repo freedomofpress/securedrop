@@ -6,7 +6,7 @@ respond to SecureDrop submissions. Once submissions are encrypted on the
 *Application Server*, only the *Secure Viewing Station* has the key to
 decrypt them. The *Secure Viewing Station* is never connected to the
 internet or a local network, and only ever runs from a dedicated Tails
-drive. Journalists download encrypted submittions using their
+drive. Journalists download encrypted submissions using their
 *Journalist Workstation*, copy them to a *Data Transfer Device* (a USB
 drive or a DVD) and physically transfer the *Data Transfer Device* to
 the *Secure Viewing Station*.

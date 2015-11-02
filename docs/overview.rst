@@ -78,7 +78,7 @@ Setting up SecureDrop is a multi-step process. Before getting started,
 you should make sure that you're prepared to operate and maintain it.
 You'll need a systems administrator who's familiar with Linux, the GNU
 utilities, and the Bash shell. You'll need the
-`hardware <./hardware.md>`__ on which SecureDrop runs — this will
+:doc:`hardware <hardware>` on which SecureDrop runs — this will
 normally cost $2000-$3000 dollars. The journalists in your organization
 will need to be trained in the operation of SecureDrop, and you'll need
 to publish and promote your new SecureDrop instance afterwards — using
@@ -94,16 +94,16 @@ Technical Setup
 ~~~~~~~~~~~~~~~
 
 Once you are familiar with the architecture and have all the hardware,
-`setting up SecureDrop <./install.md>`__ will take at least a day's work
+:doc:`setting up SecureDrop <install>` will take at least a day's work
 for your admin. We recommend that you set aside at least a week to
-`complete and test <deployment_practices.md>`__ your setup.
+:doc:`complete and test <deployment_practices>` your setup.
 
 Provisioning & Training
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Once SecureDrop is installed, journalists will need to be provided with
 accounts, two-factor tokens, workstations, and so on — and then
-`trained <./training_schedule.md>`__ to use these tools safely and
+:doc:`trained <training_schedule>` to use these tools safely and
 reliably. You will probably also need to train additional backup
 administrators so that you can be sure that your SecureDrop setup keeps
 running even when your main administrator is on holiday.
@@ -122,12 +122,12 @@ Going Public
 ~~~~~~~~~~~~
 
 Once you have a SecureDrop instance and your team knows how to use it,
-you should test is thoroughly and then tell the world. The `Freedom of
+you should test it thoroughly and then tell the world. The `Freedom of
 the Press Foundation <https://securedrop.org/help>`__ are happy to help
 you check that your SecureDrop setup is up-to-code and properly
 grounded. After that, you'll need to use your existing tools to announce
-and promote your SecureDrop. There are some `best
-practices <deployment_practices.md>`__ for ways to show off and
+and promote your SecureDrop. There are some :doc:`best
+practices <deployment_practices>` for ways to show off and
 communicate your SecureDrop address, but more is better. Create a
 promotion/advocacy plan and go wild.
 

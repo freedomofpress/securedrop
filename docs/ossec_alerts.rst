@@ -80,8 +80,8 @@ vary and you may require later edits to the Postfix configuration
 (mainly /etc/postfix/main.cf) on the Monitor Server in order to get
 alerts to work. You can consult `Postfix's official
 documentation <http://www.postfix.org/documentation.html>`__ for help,
-although we've described some common scenarios in the `troubleshooting
-section <#Troubleshooting>`__ of this document.
+although we've described some common scenarios in the 
+:ref:`troubleshooting section <Troubleshooting>` of this document.
 
 If you have your GPG public key handy, copy it to
 install\_files/ansible-base and then specify the filename in the
@@ -151,9 +151,8 @@ where ``MyOrg.crt`` is the filename. The file will be copied to the
 server in ``/etc/ssl/certs_local`` and the system CAs will be ignored
 when validating the SMTP relay TLS certificate.
 
-Save ``prod-specific.yml``, exit the editor and `proceed with the
-installation <install.md#install-securedrop>`__ by running the
-playbooks.
+Save ``prod-specific.yml``, exit the editor and :ref:`proceed with the
+installation <Run the Ansible playbook>` by running the playbooks.
 
 Using Gmail for OSSEC alerts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -232,9 +231,11 @@ Finally, add a new variable to ``prod-specific.yml`` as
 Specifying the fingerprint will configure Postfix to use it for
 verification on the next playbook run. (To disable fingerprint
 verification, simply delete the variable line you added, and rerun the
-playbooks.) Save ``prod-specific.yml``, exit the editor and `proceed
-with the installation <install.md#install-securedrop>`__ by running the
+playbooks.) Save ``prod-specific.yml``, exit the editor and :ref:`proceed
+with the installation <Run the Ansible playbook>` by running the
 playbooks.
+
+.. _Troubleshooting:
 
 Troubleshooting
 ---------------
