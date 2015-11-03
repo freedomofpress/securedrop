@@ -21,7 +21,7 @@ security_repositories = [
   'deb http://security.ubuntu.com/ubuntu trusty-security universe',
   'deb-src http://security.ubuntu.com/ubuntu trusty-security universe',
   'deb [arch=amd64] https://apt.freedom.press trusty main',
-  'deb http://deb.torproject.org/torproject.org trusty main',
+  'deb https://deb.torproject.org/torproject.org trusty main',
 ]
 # ensure custom security.list file is present
 describe file('/etc/apt/security.list') do
