@@ -31,10 +31,6 @@ tor_instances:
   - service: ssh
     filename: mon-ssh-aths
 
-# Packages to install from fpf repo
-mon_fpf_packages:
-  - securedrop-ossec-server
-
 # Apt dependencies for the ossec server package
 ossec_postfix_dependencies:
   - procmail
