@@ -113,11 +113,14 @@ installation:
 
     cp ossec.pub install_files/ansible-base/
 
-The fingerprint is a unique identifier for an encryption key that is
-longer than, but contains both the shortid and longid. The value for
-``ossec_gpg_fpr`` must be the full 40-character GPG fingerprint for this
-same key, with all capital letters and no spaces. Here's a series of
-commands that will retrieve and format the fingerprint per our
+The fingerprint is a unique identifier for an encryption (public) key. It is the
+output of running a cryptographic hash function (in this case SHA1) over the
+key, represented in hexadecimal. The short and long key IDs correspond to the
+last 8 and 16 hexadecimal digits (or 32 and 64 bits) of the fingerprint,
+respectively, and are thus a subset of the fingerprint. The value for
+``ossec_gpg_fpr`` must be the full 40 hexadecimal digit (160 bit) GPG
+fingerprint for this same key, with all capital letters and no spaces. Here's a
+series of commands that will retrieve and format the fingerprint per our
 requirements:
 
 ::
