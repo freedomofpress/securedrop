@@ -87,7 +87,6 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
 
      git pull
 
-
 #. Verify the signed git tag for the latest stable release ::
 
      git tag -v 0.3.5
@@ -114,7 +113,6 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
 #. Run the Ansible playbooks (substitute the admin account on the servers for ``<user>``) ::
 
     ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
-
 
 During the playbook run, the Postfix TLS verification settings will be updated
 on the Monitor Server, the AppArmor profiles will be updated on the Application Server,

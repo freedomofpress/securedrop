@@ -1,0 +1,100 @@
+Upgrade from 0.3.5 to 0.3.6
+============================
+
+SecureDrop 0.3.6 was a maintenance release to update the expiration
+date on the GPG signing key used for the Freedom of the Press
+apt repository. The signing key expired on October 26, 2015, preventing
+automatically updates from Freedom of the Press until the issue is
+manually resolved.
+
+
+.. note:: We're considering creating a separate ``securedrop-keyring`` 
+      Debian package to package to manage the signing keys into the future. 
+      If you have strong feelings about how the signing key is managed,
+      `open an issue <https://github.com/freedomofpress/securedrop/issues/>`_.
+
+
+The upgrade steps in this document will upgrade a 0.3.5 SecureDrop to
+0.3.6. If you have not yet upgraded to 0.3.5, :doc:`do that first <0.3.x-to-0.3.5>`.
+
+Important Changes
+-----------------
+
+Update Expired GPG Signing Key (Admin Workstation)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Admin Workstation is used to verify the signed git tag on new
+SecureDrop releases. Prior to running the 0.3.6 upgrade, the Admin
+Workstation should update the signing key.
+
+Update Expired GPG Signing Key (SecureDrop Servers)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Application Server and Monitor Server will need to have their apt
+keyrings updated, which can be accomplished by running the Ansible playbooks.
+
+
+Prerequisites
+-------------
+
+-  An Admin networked Tails workstation with persistence enabled and an
+   Admin password set during boot.
+   
+-  A running SecureDrop instance of 0.3.5.
+
+.. note:: If your SecureDrop instance is not already running 0.3.5,
+          :doc:`run that upgrade first <0.3.x-to-0.3.5>`. Failure to do 
+          so will result in a merge conflict for your site-specific
+          settings, which can be tedious to resolve if you're not
+          experienced with git.
+
+Upgrade Procedure
+-----------------
+
+The upgrade procedure can be performed entirely from the Admin
+Workstation. Start by booting the Admin Tails USB on the Admin 
+Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*.
+
+#. Open a terminal (it is an icon on the top of the screen that looks
+   like a little black TV).
+
+#. Change into the SecureDrop repo directory ::
+
+     cd /home/amnesia/Persistent/securedrop
+
+#. Stash your local changes to the inventory and prod-specific.yml ::
+
+     git stash save "site specific configs"
+
+#. Update the Freedom of the Press signing key
+   (these commands are from the :doc:`../set_up_admin_tails` guide) ::
+
+    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+
+#. Pull the latest code ::
+
+     git pull
+
+#. Verify the signed git tag for the latest stable release ::
+
+     git tag -v 0.3.6
+
+#. Checkout the latest release ::
+
+     git checkout 0.3.6
+
+#. Pop the site specific configs back in place ::
+
+     git stash pop
+
+#. Make sure you have Ansible installed. If running ``which ansible`` returns ``ansible not found``, you should ::
+
+    sudo apt-get update
+    sudo apt-get install ansible
+
+#. Run the Ansible playbooks (substitute the admin account on the servers for ``<user>``) ::
+
+    ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
+
+During the playbook run, the GPG signing key will be updated, and all packages
+will be upgraded on both servers. The new signing key is valid until October 2016,
+at which point another manual update may be necessary.
