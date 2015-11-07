@@ -579,23 +579,37 @@ def download_unread(sid):
     return bulk_download(sid, docs)
 
 
+@app.route('/download_all_unread')
+@login_required
+def download_all_unread():
+    docs = Submission.query.filter(Submission.downloaded == False).all()
+    if docs == []:
+        flash("No unread documents in collections!", "error")
+        return redirect(url_for('index'))
+    return bulk_dl('all_unread_' + g.user.username, docs)
+
+
 @app.route('/bulk', methods=('POST',))
 @login_required
 def bulk():
     action = request.form['action']
 
     doc_names_selected = request.form.getlist('doc_names_selected')
-    selected_docs = [doc for doc in g.source.collection
-                     if doc.filename in doc_names_selected]
-
+    if action == 'download_all':
+        selected_docs = g.source.collection
+    else:
+        selected_docs = [doc for doc in g.source.collection
+                         if doc.filename in doc_names_selected]
     if selected_docs == []:
         if action == 'download':
             flash("No collections selected to download!", "error")
+        elif action == 'download_all':
+            flash("No collections available to download!", "error")
         elif action == 'delete' or action == 'confirm_delete':
             flash("No collections selected to delete!", "error")
         return redirect(url_for('col', sid=g.sid))
 
-    if action == 'download':
+    if action == 'download' or action == 'download_all':
         return bulk_download(g.sid, selected_docs)
     elif action == 'delete':
         return bulk_delete(g.sid, selected_docs)
@@ -628,7 +642,11 @@ def bulk_delete(sid, items_selected):
 
 def bulk_download(sid, items_selected):
     source = get_source(sid)
-    filenames = [store.path(sid, item.filename) for item in items_selected]
+    return bulk_dl(source.journalist_filename, items_selected)
+
+def bulk_dl(zip_directory, items_selected):
+    filenames = [store.path(item.source.filesystem_id, item.filename)
+                 for item in items_selected]
 
     # Mark the submissions that are about to be downloaded as such
     for item in items_selected:
@@ -636,12 +654,10 @@ def bulk_download(sid, items_selected):
             item.downloaded = True
     db_session.commit()
 
-    zf = store.get_bulk_archive(
-        filenames,
-        zip_directory=source.journalist_filename)
+    zf = store.get_bulk_archive(filenames,
+                                zip_directory=zip_directory)
     attachment_filename = "{}--{}.zip".format(
-        source.journalist_filename,
-        datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+        zip_directory, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)

@@ -21,11 +21,12 @@
   {% if source.collection %}
     <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.</p>
     <form action="/bulk" method="post">
-      <div class="document-actions">
-        <div id='select-container'></div>
-        <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-        <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-times"></i> Delete selected</button>
-      </div>
+    <div class="document-actions">
+      <div id='select-container'></div>
+      <button type="submit" name="action" value="download_all"><i class="fa fa-download"></i> Download all</button>
+      <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
+      <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-times"></i> Delete selected</button>
+    </div>
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
           <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>

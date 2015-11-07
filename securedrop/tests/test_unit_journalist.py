@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-from cStringIO import StringIO
-import unittest
-import zipfile
-import mock
-import time
-import datetime
-
-from flask_testing import TestCase
-from flask import url_for, escape
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
-import config
 
+from cStringIO import StringIO
+import datetime
+from flask import url_for, escape
+from flask_testing import TestCase
+import mock
+import os
+import time
+import unittest
+import zipfile
+
+import common
 import crypto_util
 import journalist
-import common
-from db import (db_session, Source, Submission, Journalist, Reply,
-               InvalidPasswordLength)
+from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
+                Submission)
 
 
 class TestJournalist(TestCase):
@@ -28,7 +27,7 @@ class TestJournalist(TestCase):
         return journalist.app
 
     def add_source_and_submissions(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        sid = crypto_util.hashd_codename(crypto_util.genrandomid())
         codename = crypto_util.display_id()
         crypto_util.genkeypair(sid, codename)
         source = Source(sid, codename)
@@ -511,22 +510,89 @@ class TestJournalist(TestCase):
         dir_source_docs = os.path.join(config.STORE_DIR, source.filesystem_id)
         self.assertFalse(os.path.exists(dir_source_docs))
 
-    def test_bulk_download(self):
-        source, files = self.add_source_and_submissions()
+    def test_selected_bulk_download(self):
+        sid = crypto_util.hashd_codename(crypto_util.genrandomid())
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        selected_files = files[:2]
+        unselected_files = files[2:]
+        filenames = common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk',
+                              data=dict(action='download', sid=sid,
+                                        doc_names_selected=selected_files))
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
+
+        for file in selected_files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                 os.path.join(source.journalist_filename, file)
+            ))
+
+        for file in unselected_files:
+            try:
+                zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                    os.path.join(source.journalist_filename, file))
+            except KeyError:
+                pass
+            else:
+                self.assertTrue(False)
+
+
+
+    def test_download_all_bulk_download(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        filenames = common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
-            action='download',
-            sid=source.filesystem_id,
-            doc_names_selected=files
+             action='download_all',
+             sid=sid
         ))
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
-        self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-            os.path.join(source.journalist_filename, files[0])
+        for file in files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                 os.path.join(source.journalist_filename, file)
+            ))
+
+
+    def test_download_all(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        selected_files = files[::2]
+        unselected_files = files[1::2]
+        filenames = common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='download',
+                sid=sid,
+                doc_names_selected=selected_files
         ))
+        rv = self.client.get('/download_all_unread')
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(len(zipfile.ZipFile(StringIO(rv.data)).namelist()) == \
+                        len(unselected_files))
+        for file in unselected_files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                os.path.join('all_unread_'+g.user.username, file
+            )))
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
