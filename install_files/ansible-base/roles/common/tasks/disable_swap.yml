@@ -1,5 +1,5 @@
 ---
-- name: check current swap status
+- name: Check current swap status.
   command: swapon --summary
   register: swap_status
   # This task is read-only, and so should never report "changed".
@@ -9,7 +9,7 @@
   tags:
     - swapspace
 
-- name: disable swap space
+- name: Disable swap space.
   command: swapoff -a
   # Check whether there was previously swap space in use,
   # and report this task as changed if so.

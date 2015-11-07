@@ -1,8 +1,10 @@
-- name: install ntp for ntpd
+- name: Install ntp for ntpd.
   apt:
     pkg: ntp
     state: latest
     force: yes
+    update_cache: yes
+    cache_valid_time: 3600
   tags:
     - apt
     - ntp
