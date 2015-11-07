@@ -1,5 +1,5 @@
 ---
-- name: install cron-apt to handle unattended security upgrades
+- name: Install cron-apt for unattended security upgrades.
   apt:
     name: cron-apt
     state: latest
@@ -7,7 +7,7 @@
     - apt
     - cron-apt
 
-- name: ensure custom cron-apt config file is present
+- name: Copy cron-apt config file.
   copy:
     src: cron-apt-config
     dest: /etc/cron-apt/config
@@ -15,14 +15,14 @@
     - apt
     - cron-apt
 
-- name: ensure security.list file exists
+- name: Add security.list apt configuration.
   template:
     src: security.list
     dest: /etc/apt/security.list
   tags:
     - apt
 
-- name: ensure cron-apt updates the security.list packages
+- name: Configure cron-apt to update the security.list repos.
   copy:
     src: 0-update
     dest: /etc/cron-apt/action.d/0-update
@@ -30,7 +30,7 @@
     - apt
     - cron-apt
 
-- name: ensure cron-apt upgrades the secruity.list packages
+- name: Configure cron-apt to upgrade the packages in the security.list repos.
   copy:
     src: 5-security
     dest: /etc/cron-apt/action.d/5-security
@@ -41,7 +41,7 @@
   # The default config file would download all security update every night
   # regardless if they were a security update. we only need it download and
   # install the security updates.
-- name: ensure default cron-apt file to download all updates does not exist
+- name: Remove default cron-apt config file for downloading all updates.
   file:
     dest: /etc/cron-apt/action.d/3-download
     state: absent
@@ -49,7 +49,7 @@
     - apt
     - cron-apt
 
-- name: ensure the cron.d config for cron-apt exists
+- name: Create cronjob for running cron-apt updates nightly.
   copy:
     src: cron-apt
     dest: /etc/cron.d/cron-apt
@@ -59,26 +59,31 @@
     - apt
     - cron-apt
 
-- name: perform safe upgrade to ensure all the packages are updated
+- name: Perform safe upgrade to ensure all the packages are updated.
   apt:
     upgrade: safe
+    update_cache: yes
+    cache_valid_time: 3600
   tags:
     - apt
     - apt-upgrade
 
-- stat:
+- name: Check if reboot is required due to security updates.
+  stat:
     path: /var/run/reboot-required
   register: reboot_required
+  # Task is read-only, so don't mark changed.
+  changed_when: false
   tags:
     - reboot
 
-- name: reboot if required due to security updates
+- name: Reboot if required due to security updates.
   command: reboot
   when: reboot_required.stat.exists
   tags:
     - reboot
 
-- name: waiting for server to come back
+- name: Wait for server to come back.
   local_action:
     # action/local_action modules don't support
     # dict-style arg declaration, so use 'key=value' syntax
@@ -88,6 +93,7 @@
       delay=20
       state=started
   when: reboot_required.stat.exists
+  # Wait action runs on localhost, and does NOT require sudo.
   sudo: false
   tags:
     - reboot
