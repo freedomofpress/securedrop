@@ -1,27 +1,19 @@
 ---
-- name: ensure latest sudoers file is copied to sudoers.tmp
+- name: Copy sudoers file.
   copy:
     src: sudoers
-    dest: /etc/sudoers.tmp
+    dest: /etc/sudoers
     owner: root
     group: root
     mode: '0440'
+    backup: yes
+    validate: "visudo -cf %s"
   register: sudoers_st
   tags:
     - users
     - sudoers
 
-- name: ensure sudoers file is installed if syntax check passes
-  # TODO: copy module provides a 'validate' parameter that
-  # accomplishes what this shell command does. Add that, then
-  # remove this task.
-  shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
-  when: sudoers_st.changed
-  tags:
-    - users
-    - sudoers
-
-- name: ensure SecureDrop admin user accounts exist
+- name: Create shell accounts for SecureDrop admins.
   user:
     name: "{{ item }}"
     shell: /bin/bash
