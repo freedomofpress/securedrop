@@ -2,12 +2,15 @@
 <html>
   <head>
     <title>SecureDrop | Protecting Journalists and Sources</title>
-    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/source.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <script type="text/javascript" src="/static/js/libs/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/source.js"></script>
+    {% assets filters="cssmin", output="gen/source.css",
+      "css/normalize.css", "css/source.css", "css/font-awesome.css" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets filters="jsmin", output="gen/source.js",
+      "js/libs/jquery-2.1.1.min.js", "js/source.js" %}
+      <script type="javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
   </head>
   <body>
     <div class="warning"><strong>We recommend disabling JavaScript to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <i id="warning-close" class="fa fa-times"></i></div>

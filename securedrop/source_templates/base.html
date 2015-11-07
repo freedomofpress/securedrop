@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>SecureDrop | Protecting Journalists and Sources</title>
-    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/source.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
+    {% assets filters="cssmin", output="source"
+      "css/normalize.css", "css/source.css", "css/font-awesome.css" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
     <link rel="icon" type="image/png" href="/static/i/favicon.png" >
     {% block extrahead %}{% endblock %}
   </head>
