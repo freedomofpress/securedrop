@@ -10,7 +10,7 @@
   # uid/euid:0/0 gid/egid:0/0
   #
   # So, let's remove the default motd so that doesn't happen.
-- name: remove motd pam module from ssh logins
+- name: Remove MOTD pam module from SSH logins.
   lineinfile:
     dest: /etc/pam.d/sshd
     regexp: pam.motd
@@ -20,7 +20,7 @@
     - motd
     - grsecurity
 
-- name: install grsec predepends paxctl package
+- name: Install paxctl.
   apt:
     pkg: paxctl
     state: present
@@ -30,7 +30,7 @@
     - kernel
     - hardening
 
-- name: make the required grub paxctl changes
+- name: Adjust paxctl headers on grub binaries.
   command: paxctl -Cpm {{ item }}
   with_items:
     - /usr/sbin/grub-probe
@@ -40,7 +40,7 @@
     - kernel
     - hardening
 
-- name: install grsec package from fpf repo
+- name: Install the grsecurity-patched kernel from the FPF repo.
   apt:
     pkg: securedrop-grsec
     state: latest
@@ -52,8 +52,9 @@
     - kernel
     - hardening
 
-- name: get grsec kernel string
+- name: Get grsec kernel string from grub config.
   shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | head -1 | cut -d "'" -f2
+  # Read-only task for
   changed_when: false
   register: grsec_str
   tags:
@@ -61,14 +62,14 @@
     - kernel
     - hardening
 
-- name: set grsec kernel as default for next boot
+- name: Set grsec kernel as default for next boot.
   command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
   tags:
     - grsec
     - kernel
     - hardening
 
-- name: reboot into the grsec kernel
+- name: Reboot into the grsec kernel.
   command: shutdown -r now "Rebooting into the grsec kernel..."
   async: 0
   poll: 0
@@ -80,7 +81,7 @@
     - kernel
     - hardening
 
-- name: waiting for server to come back
+- name: Wait for server to come back.
   local_action:
     module: wait_for
       host={{ ansible_ssh_host }}

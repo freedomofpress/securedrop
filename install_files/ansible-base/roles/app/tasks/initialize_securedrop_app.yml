@@ -1,20 +1,20 @@
 ---
-- name: ensure secureDrop web application apt packages are installed
+- name: Install SecureDrop Application Server dependencies.
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: app_deps
+  with_items: appserver_dependencies
   tags:
     - apt
 
-- name: copy the app gpg key from the admin host machine to the app server
+- name: Copy the SecureDrop Application GPG public key to the Application Server.
   copy:
     src: "{{ securedrop_app_gpg_public_key }}"
     dest: "{{ securedrop_data }}/"
   tags:
     - securedrop_config
 
-- name: import app gpg public key
+- name: Import the SecureDrop Application GPG public key to the Application Server keyring.
   # multiline format for command module, since this is a long command
   command: >
     su -s /bin/bash -c 'gpg
@@ -31,19 +31,22 @@
   # package would not overwrite the config.py on upgrades.
   # If 'config.py' exists, then the SecureDrop application
   # has already been configured, and most of the following tasks will be skipped.
-- stat:
+- name: Check whether SecureDrop config.py file already exists.
+  stat:
     path: "{{ securedrop_code }}/config.py"
   register: config
+  # Read-only task, so don't report as changed.
+  changed_when: false
   tags:
     - securedrop_config
 
-- name: if config.py does not exist copy example from the securedrop code root
+- name: Copy starter config.py template if missing.
   command: cp {{ securedrop_code }}/config.py.example {{ securedrop_code }}/config.py
   when: not config.stat.exists
   tags:
     - securedrop_config
 
-- name: ensure config.py is owned by www-data
+- name: Set ownership and permissions on config.py.
   file:
     dest: "{{ securedrop_code }}/config.py"
     owner: "{{ securedrop_user }}"
@@ -65,14 +68,14 @@
 # here. See
 # http://docs.ansible.com/playbooks_loops.html#using-register-with-a-loop
 
-- name: generating 32 byte value for "source secret key"
+- name: Generate 32-byte value for "source secret key".
   shell: "head -c 32 /dev/urandom | base64"
   register: source_secret_key
   when: not config.stat.exists
   tags:
     - securedrop_config
 
-- name: if source secret key is blank insert 32 byte random value
+- name: Add 32-byte value for "source secret key" to config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"
     regexp: "source_secret_key"
@@ -81,14 +84,14 @@
   tags:
     - securedrop_config
 
-- name: generating 32 byte value for "journalist secret key"
+- name: Generate 32-byte value for "journalist secret key".
   shell: "head -c 32 /dev/urandom | base64"
   register: journalist_secret_key
   when: not config.stat.exists
   tags:
     - securedrop_config
 
-- name: if journalist secret key is blank insert 32 byte random value
+- name: Add 32-byte value for "journalist secret key" to config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"
     regexp: "journalist_secret_key"
@@ -97,14 +100,14 @@
   tags:
     - securedrop_config
 
-- name: generating 32 byte value for "scrypt id pepper"
+- name: Generate 32-byte value for "scrypt id pepper".
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_id_pepper
   when: not config.stat.exists
   tags:
     - securedrop_config
 
-- name: if scrypt id pepper is blank insert 32 byte random value
+- name: Add 32-byte value for "scrypt id pepper" to config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"
     regexp: "scrypt_id_pepper"
@@ -113,14 +116,14 @@
   tags:
     - securedrop_config
 
-- name: generating 32 byte value for "scrypt gpg pepper"
+- name: Generate 32-byte value for "scrypt gpg pepper".
   shell: "head -c 32 /dev/urandom | base64"
   register: scrypt_gpg_pepper
   when: not config.stat.exists
   tags:
     - securedrop_config
 
-- name: if scrypt gpg pepper is blank insert 32 byte random value
+- name: Add 32-byte value for "scrypt gpg pepper" to config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"
     regexp: "scrypt_gpg_pepper"
@@ -129,7 +132,7 @@
   tags:
     - securedrop_config
 
-- name: verify application gpg fingerprint is defined in config.py
+- name: Declare Application GPG fingerprint in config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"
     regexp: "^JOURNALIST_KEY = "
@@ -138,15 +141,22 @@
     - gpg
     - securedrop_config
 
-- stat:
+- name: Check whether sqlite database exists.
+  stat:
     path: "{{ securedrop_data }}/db.sqlite"
   register: db
+  # Read-only task, so don't report changed.
+  changed_when: false
   tags:
     - database
     - securedrop_config
 
-- name: initialize sqlite db
-  shell: "su -s /bin/bash -c \"PYTHONPATH={{ securedrop_code }} python -c 'import db; db.init_db()'\" {{ securedrop_user }}"
+- name: Initialize sqlite database.
+  shell: >
+    su -s /bin/bash -c
+    "PYTHONPATH={{ securedrop_code }}
+    python -c 'import db; db.init_db()'"
+    {{ securedrop_user }}
   when: not db.stat.exists
   tags:
     - database
@@ -157,7 +167,7 @@
   # to securedrop-app-code, dpkg will not overwrite the custom logo.
   # The apache2 apparmor profile that ships with securedrop-app-code
   # allows reading this specific filepath, so the custom logo must reside here.
-- name: if configured move the custom header image into the image folder as logo.png
+- name: Set custom logo file for Source Interface.
   copy:
     src: "{{ securedrop_header_image }}"
     dest: "{{ securedrop_code }}/static/i/logo.png"
@@ -165,7 +175,8 @@
     group: "{{ securedrop_user }}"
     mode: 400
     backup: yes
-  when: securedrop_header_image != ""
+  when: securedrop_header_image is defined and
+        securedrop_header_image != ""
   tags:
     - logo
     - securedrop_config

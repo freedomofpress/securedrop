@@ -1,5 +1,5 @@
 ---
-- name: ensure securedrop worker configuration for supervisor is present
+- name: Configure supervisor for SecureDrop worker.
   template:
     src: "securedrop_worker.conf"
     dest: "/etc/supervisor/conf.d/securedrop_worker.conf"
@@ -12,7 +12,7 @@
 
   # Supervisor will not write logs if the parent directory does not exist, so
   # we create it here.
-- name: ensure directory for securedrop worker logs is present
+- name: Create directory for SecureDrop worker logs.
   file:
     path: "{{ worker_logs_dir }}"
     state: directory

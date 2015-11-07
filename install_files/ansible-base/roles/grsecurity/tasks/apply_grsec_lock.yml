@@ -1,7 +1,7 @@
 ---
   # If the grsec package is installed (via common role) and the grsec_lock is
   # not present reboot the system, to boot into the grsec kernel.
-- name: restart machine if the grsec lock sysctl option does not exist
+- name: Restart machine if the grsec lock sysctl option does not exist.
   shell: shutdown -r now "Ansible restart to boot into grsec kernel"
   async: 0
   poll: 0
@@ -15,7 +15,7 @@
   # after rebooting. The Ansible variable {{ ansible_ssh_host }} refers
   # to the host just rebooted, and this syntax will work in production,
   # vagrant/virtualbox, and snap-ci environments.
-- name: waiting for server to come back
+- name: Wait for server to come back.
   local_action:
     module: wait_for
       host={{ ansible_ssh_host }}
@@ -36,7 +36,7 @@
   tags:
     - reboot
 
-- name: set sysctl flags for grsecurity
+- name: Set sysctl flags for grsecurity.
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"

@@ -1,28 +1,31 @@
 ---
-- name: update apt package lists
+- name: Update apt package lists.
   apt:
       update_cache: yes
   tags:
     - apt
     - development
 
-- name: install apt package deps for dev environment
+- name: Install apt package dependencies for Development environment.
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: dev_deps
+  with_items: development_dependencies
   tags:
     - apt
     - development
 
-- name: install pip dependencies for securedrop
+- name: Install pip dependencies for SecureDrop.
   pip:
     requirements: "{{ securedrop_pip_requirements }}"
   tags:
     - pip
     - development
 
-- name: set SECUREDROP_ENV in bashrc
+# TODO: Probably better to set this env var in /etc/profile.d,
+# since it doesn't need to be set ONLY for the securedrop user.
+# Warrants further testing (e.g. Travis CI?), so leaving for now.
+- name: Set SECUREDROP_ENV in bashrc.
   lineinfile:
     dest: /home/{{ securedrop_user }}/.bashrc
     state: present

@@ -1,5 +1,5 @@
 ---
-- name: install postfix
+- name: Install postfix.
   apt:
     pkg: "{{ item }}"
     state: latest
@@ -8,7 +8,7 @@
     - apt
     - postfix
 
-- name: ensure postfix /etc/aliases is present and configured for ossec
+- name: Copy postfix /etc/aliases file to route root mail alerts to OSSEC.
   copy:
     src: aliases
     dest: /etc/aliases
@@ -16,7 +16,7 @@
   tags:
     - postfix
 
-- name: configure sasl password for smtp relay
+- name: Configure SASL password for SMTP relay.
   template:
     src: sasl_passwd
     dest: /etc/postfix/sasl_passwd
@@ -26,7 +26,7 @@
     - postfix
     - permissions
 
-- name: ensure header_checks regex to strip smtp headers is present
+- name: Configure Postfix to strip SMTP headers.
   copy:
     src: header_checks
     dest: /etc/postfix/header_checks
@@ -35,7 +35,7 @@
     - postfix
     - hardening
 
-- name: configure postfix main.cf
+- name: Copy Postfix config file.
   template:
     src: main.cf
     dest: /etc/postfix/main.cf

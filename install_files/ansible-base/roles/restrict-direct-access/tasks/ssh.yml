@@ -1,5 +1,5 @@
 ---
-- name: install 2fa pam module for ssh access
+- name: Install 2FA pam module.
   apt:
     name: libpam-google-authenticator
     state: latest
@@ -9,7 +9,7 @@
     - ssh
     - pam
 
-- name: ensure ssh configuration files are present
+- name: Copy SSH config files.
   copy:
     src: "{{ item }}"
     dest: /etc/ssh/{{ item }}
@@ -23,7 +23,7 @@
     - 2fa
     - permissions
 
-- name: ensure pam config is installed
+- name: Copy pam common-auth config file.
   copy:
     src: common-auth
     dest: /etc/pam.d/
@@ -34,7 +34,7 @@
     - pam
     - permissions
 
-- name: ensure sshd is running
+- name: Ensure sshd is running.
   service:
     name: ssh
     state: running

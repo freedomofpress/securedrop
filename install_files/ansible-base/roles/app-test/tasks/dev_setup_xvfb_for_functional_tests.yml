@@ -1,11 +1,11 @@
 ---
-- name: install pip dependencies for running the unit and functional tests
+- name: Install pip dependencies for running the unit and functional tests.
   pip:
     requirements: "{{ test_pip_requirements }}"
   tags:
     - pip
 
-- name: install testing deb pkg dependencies
+- name: Install testing package dependencies.
   apt:
     name: "{{ item }}"
     state: latest
@@ -13,7 +13,7 @@
   tags:
     - apt
 
-- name: copy xvfb init script to /etc/init.d
+- name: Copy xvfb init script.
   copy:
     src: xvfb
     dest: /etc/init.d/xvfb
@@ -23,7 +23,7 @@
     - xvfb
     - permissions
 
-- name: update rc.d to run xvfb at boot
+- name: Update rc.d to run xvfb at boot.
   command: update-rc.d xvfb defaults
   register: xvfb_setup
   changed_when: "'System start/stop links for /etc/init.d/xvfb already exist' not in xvfb_setup.stdout"
@@ -31,7 +31,7 @@
   tags:
     - xvfb
 
-- name: set DISPLAY environment variable for xvfb on reboot
+- name: Set DISPLAY environment variable for xvfb.
   copy:
     src: xvfb_display.sh
     dest: /etc/profile.d/xvfb_display.sh

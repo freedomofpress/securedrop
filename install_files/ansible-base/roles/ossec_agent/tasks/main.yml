@@ -1,24 +1,30 @@
 ---
-- name: ensure securedrop-ossec-agent package is installed
+- name: Install securedrop-ossec-agent package.
   apt:
     name: securedrop-ossec-agent
     state: present
   tags:
     - apt
 
-- stat:
+- name: Check whether client SSL keys already exist.
+  stat:
     path: /var/ossec/etc/client.keys
   register: ossec_client_keys
+  # Read-only task, so don't report as changed.
+  changed_when: false
   tags:
     - ossec_auth
 
-- stat:
+- name: Check whether IPv4 rules exist on OSSEC agent.
+  stat:
     path: /etc/network/iptables/rules_v4
   register: iptables_rules
+  # Read-only task, so don't report as changed.
+  changed_when: false
   tags:
     - iptables
 
-- name: add agent_auth firewall exemption rules (if agent is not already added)
+- name: Add firewall exemption for OSSEC agent registration.
   lineinfile:
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)
@@ -29,13 +35,14 @@
   notify:
     - reload iptables rules
   with_items: agent_auth_rules
-  when: iptables_rules.stat.exists and not ossec_client_keys.stat.exists
+  when: iptables_rules.stat.exists and
+        not ossec_client_keys.stat.exists
   tags:
     - iptables
     - ossec_auth
 
-- name: run agent auth (if agent is not already added)
-  shell: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
+- name: Register OSSEC agent.
+  command: /var/ossec/bin/agent-auth -m {{ monitor_ip }} -p 1515 -A {{ app_hostname }}
   when: not ossec_client_keys.stat.exists
   tags:
     - ossec_auth
@@ -45,7 +52,7 @@
   # ossec agent needs to restart to load the imported cert from authd and
   # connect to the ossec server. The monitor server's OSSEC server needs to
   # restart after the agent connects to correctly display the agent status.
-- name: remove insecure ossec agent auth firewall exemptions
+- name: Remove firewall exemption for OSSEC agent registration.
   lineinfile:
     state: absent
     dest: /etc/network/iptables/rules_v4

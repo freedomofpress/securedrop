@@ -1,5 +1,5 @@
 ---
-- name: allow direct SSH access in sshd config
+- name: Allow direct SSH access in sshd config (Staging only).
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "ListenAddress 127.0.0.1:22"
@@ -9,13 +9,14 @@
   tags:
     - ssh
 
-- stat:
+- name: Check whether IPv4 rules already exist.
+  stat:
     path: /etc/network/iptables/rules_v4
   register: iptables_rules
   tags:
     - iptables
 
-- name: allow direct SSH acccess in iptables rules
+- name: Allow direct SSH access in iptables rules.
   lineinfile:
     dest: /etc/network/iptables/rules_v4
     # last line in the initial *filter stanza (which must come before any rules)

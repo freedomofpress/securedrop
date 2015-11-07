@@ -1,27 +1,31 @@
 ---
-- name: ensure ossec server package is installed
+- name: Install OSSEC manager package.
   apt:
     name: securedrop-ossec-server
-    state: present
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
   tags:
     - apt
 
-- name: ensure procmail is installed
+- name: Install procmail.
   apt:
     name: procmail
     state: latest
+    update_cache: yes
+    cache_valid_time: 3600
   tags:
     - apt
     - procmail
 
-- name: copy the ossec alert gpg public key to the monitor server
+- name: Copy the OSSEC GPG public key for sending encrypted alerts.
   copy:
     src: "{{ ossec_alert_gpg_public_key }}"
     dest: /var/ossec
   tags:
     - gpg
 
-- name: ensure ossec alert gpg public key is in the ossec keyring
+- name: Add the OSSEC GPG public key to the OSSEC manager keyring.
   # multiline format for command module, since this is a long command
   command: >
     su -s /bin/bash -c 'gpg
@@ -30,7 +34,7 @@
   tags:
     - gpg
 
-- name: ensure send_encrypted_alarm script is present
+- name: Copy script for sending GPG-encrypted OSSEC alerts.
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
@@ -42,7 +46,7 @@
     - permissions
 
   # TODO This might not be necessary
-- name: create procmail log file
+- name: Create procmail log file.
   file:
     state: touch
     dest: /var/log/procmail.log
@@ -54,7 +58,7 @@
     - permissions
     - logging
 
-- name: ensure procmail config is present
+- name: Copy procmail config file.
   copy:
     src: procmailrc
     dest: /var/ossec/.procmailrc

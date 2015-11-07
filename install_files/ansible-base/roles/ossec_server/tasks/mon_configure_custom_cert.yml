@@ -4,7 +4,7 @@
   # because otherwise removing a custom cert from the
   # Ansible config would NOT result in the custom cert
   # being removed from the /etc/ssl/certs.
-- name: ensure custom certificate directory exists (if necessary)
+- name: Create Postfix certificate directory (if using custom certificate).
   file:
     path: "{{ smtp_relay_cert_override_dir }}"
     state: directory
@@ -16,7 +16,7 @@
   tags:
     - postfix_custom_cert
 
-- name: ensure custom certificate directory is absent (if necessary)
+- name: Remove Postfix certificate directory (if not using custom certificate).
   file:
     path: "{{ smtp_relay_cert_override_dir }}"
     state: absent
@@ -25,7 +25,7 @@
   tags:
     - postfix_custom_cert
 
-- name: add custom cert (if provided)
+- name: Copy custom Postfix certificate (if provided).
   copy:
     src: "{{smtp_relay_cert_override_file}}"
     dest: "{{smtp_relay_cert_override_dir}}/{{smtp_relay_cert_override_file}}"

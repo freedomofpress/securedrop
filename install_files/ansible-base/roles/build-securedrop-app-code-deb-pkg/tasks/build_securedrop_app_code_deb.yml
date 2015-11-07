@@ -1,54 +1,54 @@
 ---
-- name: install deb packages required to build securedrop-app-code.deb
+- name: Install dependencies for building securedrop-app-code deb package.
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: dev_deps
+  with_items: development_dependencies
   tags:
     - apt
 
-- name: install pip install wheel
+- name: Install pip wheel.
   pip:
     name: wheel
   tags:
     - pip
 
-- name: copy install_files/securedrop-app-code dir to build path
+- name: Copy install_files/securedrop-app-code dir to build path
   command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
   args:
     creates: /tmp/{{ securedrop_app_code_deb }}/
   tags:
     - build
 
-- name: ensure build path var structure exists
+- name: Create var directory in build path.
   file:
     state: directory
     dest: /tmp/{{ securedrop_app_code_deb }}/var/
   tags:
     - build
 
-- name: ensure build path www structure exists
+- name: Create www directory in build path.
   file:
     state: directory
     dest: /tmp/{{ securedrop_app_code_deb }}/var/www
   tags:
     - build
 
-- name: ensure build path directory for wheelhouse exists
+- name: Create wheelhouse directory in build path.
   file:
     state: directory
     dest: /tmp/{{ securedrop_app_code_deb }}/var/securedrop
   tags:
     - build
 
-- name: copy securedrop to build path
+- name: Copy securedrop to build path
   command: cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
   args:
     creates: /tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }}
   tags:
     - build
 
-- name: ensure config.py does not exist in the build path
+- name: Remove config.py from build path.
   file:
     state: absent
     dest: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py
@@ -56,20 +56,20 @@
     - build
     - cleanup
 
-- name: make pip wheel archive for our debian package requirements
+- name: Create pip wheel archive for Debian package requirements.
   command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
   tags:
     - pip
     - build
 
-- name: ensure build dir /etc exists
+- name: Create etc directory in build path.
   file:
     state: directory
     dest: /tmp/{{ securedrop_app_code_deb }}/etc/
   tags:
     - build
 
-- name: ensure apparmor build dir exists
+- name: Create apparmor.d directory in build path.
   file:
     state: directory
     dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
@@ -77,7 +77,7 @@
     - build
     - apparmor
 
-- name: copy apparmor profiles to build path
+- name: Copy AppArmor profiles to build path.
   copy:
     src: "{{ item }}"
     dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
@@ -86,7 +86,7 @@
     - build
     - apparmor
 
-- name: create the deb package
+- name: Build securedrop-app-code Debian package.
   command: dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
   args:
     creates: /tmp/{{ securedrop_app_code_deb }}.deb
@@ -98,7 +98,7 @@
   tags:
     - build
 
-- name: remove the build temp dir
+- name: Remove the build path.
   file:
     state: absent
     dest: /tmp/{{ securedrop_app_code_deb }}
@@ -106,7 +106,7 @@
     - build
     - cleanup
 
-- name: remove temp package
+- name: Remove newly built Debian package from build machine.
   file:
     state: absent
     dest: /tmp/{{ securedrop_app_code_deb }}.deb

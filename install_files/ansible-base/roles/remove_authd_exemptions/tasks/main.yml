@@ -5,7 +5,7 @@
   # OSSEC agent needs to restart to load the imported cert from authd and
   # connect to the ossec server. The monitor server's OSSEC service needs to
   # restart after the agent connects to correctly display the agent status.
-- name: remove insecure ossec authd firewall exemptions
+- name: Remove firewall exemptions for OSSEC authd registration.
   lineinfile:
     state: absent
     dest: /etc/network/iptables/rules_v4
@@ -20,7 +20,7 @@
     - iptables
     - ossec_auth
 
-- name: kill authd if it is running
+- name: Kill authd process if running.
   # This should work using the pattern to grep for in the output of ps per
   # http://docs.ansible.com/service_module.html
   # Currently getting an error saying

@@ -1,5 +1,5 @@
 ---
-- name: ensure the parent directory for hidden services exists
+- name: Create parent directory for Tor hidden services.
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}"
@@ -9,7 +9,7 @@
   tags:
     - tor
 
-- name: ensure each hidden service's directory exists
+- name: Create directories for Tor hidden services.
   file:
     state: directory
     dest: "{{ tor_hidden_services_parent_dir }}/{{ item.service }}"
@@ -20,7 +20,7 @@
   tags:
     - tor
 
-- name: ensure securedrop server torrc is present
+- name: Copy torrc config file.
   template:
     src: torrc
     dest: /etc/tor/torrc
@@ -32,11 +32,12 @@
   tags:
     - tor
 
-- meta: flush_handlers
+- name: Flush handlers to restart Tor.
+  meta: flush_handlers
   tags:
     - tor
 
-- name: ensure tor is running
+- name: Ensure tor is running.
   service:
     name: tor
     state: running

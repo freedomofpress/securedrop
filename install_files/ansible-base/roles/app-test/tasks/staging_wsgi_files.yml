@@ -4,7 +4,13 @@
 # about the behavior of sources. In the staging environment, however,
 # logging for the source interface is useful for debugging,
 # so we enable it here.
-- name: ensure logging enabled source wsgi app files exists
+
+# TODO: This staging-only template clobbers the production template
+# installed by the `app` role. That means the app-staging host
+# will always mark the task as changed. It would be cleaner to merge
+# the templates and use group_vars to conditionally enable the logging
+# for staging, defaulting to no logging for safety.
+- name: Enable logging for Source Interface.
   copy:
     src: source.wsgi.logging
     dest: /var/www/source.wsgi

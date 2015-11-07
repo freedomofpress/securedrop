@@ -2,7 +2,7 @@
 # This will look for packages in install_files/ansible-base,
 # so the "build" directory is relative to playbook, which is
 # why the parent dirs ("..") are necessary.
-- name: if defined copy local deb packages to target system
+- name: Copy locally built deb packages to server (Staging only).
   copy:
     src: ../../build/{{ item }}
     dest: /root/
@@ -16,7 +16,7 @@
 # `with_indexed_items` and reference the value, which tricks
 # the `apt` module into installing each deb package separately,
 # rather than joining into a single comma-separated string.
-- name: if defined install local deb packages
+- name: Install locally built deb packages.
   apt:
     deb: /root/{{ item.1 }}
   with_indexed_items: local_deb_packages

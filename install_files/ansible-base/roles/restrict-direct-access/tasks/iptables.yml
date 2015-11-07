@@ -15,7 +15,7 @@
   # The process should be re-designed so the iptables rules are not applied in
   # bulk. When that is done this issue will be avoided.
 
-- name: ensure load_iptables script is present
+- name: Copy load_iptables if-up script.
   copy:
     src: load_iptables
     dest: /etc/network/if-up.d/load_iptables
@@ -25,7 +25,7 @@
     - iptables
     - permissions
 
-- name: ensure iptables directory exists
+- name: Create iptables directory.
   file:
     state: directory
     mode: 0700
@@ -36,7 +36,7 @@
     - iptables
     - permissions
 
-- name: ensure iptables rules_v4 file is present
+- name: Copy IPv4 iptables rules.
   template:
     src: rules_v4
     dest: /etc/network/iptables/rules_v4
@@ -46,7 +46,7 @@
     - iptables
     - permissions
 
-- name: ensure ip6tables rules_v6 file is present
+- name: Copy IPv6 iptables rules.
   copy:
     src: iptables_rules_v6
     dest: /etc/network/iptables/rules_v6

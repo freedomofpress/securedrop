@@ -2,7 +2,7 @@
   # Check to ensure a restart is needed to apply sysctl grsec lock command.
   # If the grsec_lock file exists, then grsec is already running,
   # and the reboot tasks below will be skipped.
-- name: check whether grsecurity has been applied to currently running kernel
+- name: Check whether grsecurity has been applied to currently running kernel.
   stat:
     path: /proc/sys/kernel/grsecurity/grsec_lock
   register: running_grsec
