@@ -11,6 +11,7 @@ import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file)
 from flask_wtf.csrf import CsrfProtect
+from flask.ext.assets import Environment
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -32,6 +33,8 @@ log = logging.getLogger('source')
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+
+assets = Environment(app)
 
 # The default CSRF token expiration is 1 hour. Since large uploads can
 # take longer than an hour over Tor, we increase the valid window to 24h.
