@@ -23,14 +23,10 @@
     - users
     - sudoers
 
-  # TODO: consider moving this to /etc/profile.d,
-  # so subsequent task modifiying .bashrc files
-  # can be removed. (Don't forget to include .sh
-  # on dest file if in /etc/profile.d)
-- name: copy SecureDrop bashrc additions
+- name: Set SecureDrop bash profile additions.
   copy:
     src: bashrc_securedrop_additions
-    dest: /etc/bashrc.securedrop_additions
+    dest: /etc/profile.d/securedrop_additions.sh
     owner: root
     group: root
     mode: 0644
@@ -38,13 +34,17 @@
     - users
     - environment
 
-  # TODO: see above; if environment config is moved
-  # to /etc/profile.d, this task can be removed altogether.
-- name: add line to each users bashrc to source the SecureDrop additions
+# TODO: Backwards-compatibility. Previously, the SecureDrop bashrc additions
+# for forcing a terminal multiplexer during interactive login sessions were
+# added to ~/.bashrc for each admin user account. It's cleaner to add the
+# config lines to /etc/profile.d, so all accounts get them by default.
+# Post 0.4, we can remove this task, which is here to clean up the local
+# bashrc files so that the additions are only sourced once.
+- name: Clean up local bashrc config for admin accounts.
   lineinfile:
     dest: /home/{{ item }}/.bashrc
     line: '. /etc/bashrc.securedrop_additions'
-    insertbefore: BOF
+    state: absent
   with_items: ssh_users
   tags:
     - users
