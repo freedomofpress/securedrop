@@ -584,16 +584,17 @@ def bulk():
 
     doc_names_selected = request.form.getlist('doc_names_selected')
     selected_docs = [doc for doc in g.source.collection
-                     if doc.filename in doc_names_selected]
-
+                     if (doc.filename in doc_names_selected) or action == 'download_all']
     if selected_docs == []:
         if action == 'download':
             flash("No collections selected to download!", "error")
+        elif action == 'download_all':
+            flash("No collections available to download!", "error")
         elif action == 'delete' or action == 'confirm_delete':
             flash("No collections selected to delete!", "error")
         return redirect(url_for('col', sid=g.sid))
 
-    if action == 'download':
+    if action == 'download' or action == 'download_all':
         return bulk_download(g.sid, selected_docs)
     elif action == 'delete':
         return bulk_delete(g.sid, selected_docs)
