@@ -13,4 +13,5 @@ you are currently running:
 
    0.2.1-to-0.3.x
    0.3pre-to-0.3.x
+   0.3.x-to-0.3.5
 
