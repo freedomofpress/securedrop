@@ -42,41 +42,11 @@ directory with these scripts, and run the install script:
 
 Type the Administration Password that you selected when starting Tails
 and hit enter. The install script will download some additional
-software, which may take a few minutes. It will then pop open a text
-editor with a file named ``torrc_additions``.
+software, which may take a few minutes.
 
-Edit this file, adding the ``HidServAuth`` information for each of the
-three authenticated hidden services that were created during the
-install process:
-
-#. ``app-document-aths``
-#. ``app-ssh-aths``
-#. ``mon-ssh-aths``
-
-You can double-click or use the 'cat' command to read the values from
-the corresponding files in ``install_files/ansible-base``. When you're
-done, ``torrc_additions`` will look something like this:
-
-::
-
-    # add HidServAuth lines here
-    HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: user
-    HidServAuth fsrrszf5qw7z2kjh.onion xW538OvHlDUo5n4LGpQTNh # client: admin
-    HidServAuth yt4j52ajfvbmvtc7.onion vNN33wepGtGCFd5HHPiY1h # client: admin
-
-.. tip:: An easy way to do this is to run ``cat *-aths`` from the
-	 ``install_files/ansible-base`` folder in a terminal window,
-	 and copy/paste the output into the opened text editor.
-
-When you are done, click **Save** and close the text editor. Once the
-editor is closed, the install script will automatically continue.
-
-.. todo:: This process is confusing and error prone. Since the
-          necessary information (the ``*-aths`` files) is in a
-          predictable location, can't we just skip the "manually
-          copy/paste into a text editor" step?
-
-The install scripts installs a Network Manager hook that runs on boot. It automatically adds the HidServAuth values from ``torrc_additions`` to the ``torrc`` and restarts Tor.
+This script installs a Network Manager hook that runs every time you connect to Tor. It automatically adds the HidServAuth values from ``torrc_additions`` to the ``torrc`` and restarts Tor.
+In addition, it creates desktop and main menu shortcuts for both interfaces, updates your Ansible inventory file to install playbooks over Tor in the future, directs Tails
+to install Ansible at the beginning of every session, and sets up SSH host aliases for the servers.
 
 .. note:: The only thing you need to remember to do is enable
           persistence when you boot the Admin Workstation. If you are
@@ -91,25 +61,11 @@ The install scripts installs a Network Manager hook that runs on boot. It automa
 SSH Host Aliases
 ----------------
 
-.. note:: This step is optional, but it makes it much easier to
-	  connect to the servers in order to administrate them in the future.
+The installation script in ``tails_files`` also sets up SSH host aliases for the admin.
 
-Create the file ``/home/amnesia/.ssh/config`` and add a configuration
-following the scheme below, replacing ``Hostname`` and ``User`` with
-the values specific to your setup:
-
-::
-
-    Host app
-      Hostname <app hostname>.onion
-      User <ssh username>
-    Host mon
-      Hostname <mon hostname>.onion
-      User <ssh username>
-
-Now you can simply use ``ssh app`` and ``ssh mon`` to connect to each
+You can simply use ``ssh app`` and ``ssh mon`` to connect to each
 server. This configuration will be persisted across reboots thanks to
-Tails' SSH Client persistence.
+Tails' SSH client persistence.
 
 Set up two-factor authentication for the Admin
 ----------------------------------------------

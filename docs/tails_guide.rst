@@ -147,37 +147,29 @@ installation by typing these commands into the terminal:
     sudo ./install.sh
 
 Type the administration password that you selected when starting Tails
-and hit enter. The installation process will download additional
-software and then open a text editor with a file called
-*torrc\_additions*.
+and hit enter. This installation script does the following: 
 
-Edit the file, inserting the *HidServAuth* information for your
-SecureDrop instance that you received during the installation process.
-The values can be found in
-``install_files/ansible-base/app-document-aths``. This information
-includes the address to the Document Interface and your personal
-authentication string, as seen in the example below:
+* Downloads additional software
+* Installs a program that automatically and persistently configures Tor to access the
+SecureDrop servers and interfaces, by adding ``HidServAuth`` values to ``/etc/tor/torrc``.
+* Sets up desktop and main menu shortcuts for the *Document Interface* and *Source Interface*
+* Sets up SSH host aliases for ``mon`` and ``app``
+* Updates your Ansible inventory file to run the playbooks over Tor in the future
+* Makes it so that Tails installs Ansible at the beginning of every session
 
-::
+If you are missing any files, the script will exit with an error. If you're 
+running this script as an admin, the entire setup should be automatic.
 
-    # add HidServAuth lines here
-    HidServAuth gu6yn2ml6ns5qupv.onion Us3xMTN85VIj5NOnkNWzW # client: bob
+If you're running the script as a journalist, you will need the .onion addresses
+for each interface, provided to you by the admin.
 
-If you're working on the Admin Workstation, you should also insert the
-lines found in ``app-ssh-aths`` and ``mon-ssh-aths``, which will allow
-you to connect using a secure shell over Tor to the App and Monitor
-Servers. When you are done, click *Save* and close the text editor.
-
-The preceding steps are taken so that no one but the journalist will be
+We employ hidden service authentication so that no one but the journalist will be
 able to access to the *Document Interface*, even if they manage to steal
-the journalist's username, password, and two-factor authentication
-token.
+the journalist's username, password, and two-factor authentication token.
 
-Our ``install.sh`` sets up an initialization script that automatically
-updates Tor's configuration to work with SecureDrop every time you login
-to Tails. As long as Tails is booted with the persistent volume enabled
-then you can open the Tor Browser and connect to the Document Interface
-as normal.
+Our ``install.sh`` sets up Tails to work with SecureDrop every time you login. 
+As long as Tails is booted with the persistent volume enabled then you can open
+ the Tor Browser and connect to the Document Interface as normal.
 
 Create bookmarks for Source and Document Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
