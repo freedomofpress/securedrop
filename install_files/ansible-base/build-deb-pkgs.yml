@@ -1,5 +1,14 @@
 ---
-- hosts: build
+- name: Build securedrop-app-code deb package from local code.
+  hosts: build
+  vars_files:
+    # The order of these files files is important, since each successive
+    # include overrides vars in the previous files. Ordinarily we'd
+    # use group memberships to manage the variable resolution order, but
+    # since we're using Vagrant with Ansible, group management becomes tricky.
+    - group_vars/securedrop.yml
+    - group_vars/securedrop_application_server.yml
+    - group_vars/development.yml
   roles:
     - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }

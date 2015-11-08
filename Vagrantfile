@@ -139,8 +139,8 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'development' => %(build),
-        'securedrop_application_server' => %(build),
+        'development' => %w(build),
+        'securedrop_application_server' => %w(build),
         'securedrop:children' => %w(development),
       }
     end
