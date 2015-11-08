@@ -49,7 +49,7 @@
   vars_files:
     - prod-specific.yml
   roles:
-    - { role: remove_authd_exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
+    - { role: remove-authd-exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
   sudo: yes
 
   # This section will put the ssh and iptables rules in place
