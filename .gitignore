@@ -88,3 +88,7 @@ nosetests.xml
 
 # ignore cached gems for serverspec tests
 spec_tests/gems/*
+
+# compiled assets
+securedrop/static/gen
+securedrop/static/.webassets-cache
