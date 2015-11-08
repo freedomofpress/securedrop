@@ -132,7 +132,8 @@ class Submission(Base):
         "Source",
         backref=backref(
             'submissions',
-            order_by=id))
+            order_by=id,
+        cascade="delete"))
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
@@ -158,7 +159,8 @@ class Reply(Base):
             order_by=id))
 
     source_id = Column(Integer, ForeignKey('sources.id'))
-    source = relationship("Source", backref=backref('replies', order_by=id))
+    source = relationship("Source", backref=backref('replies', order_by=id,
+                          cascade="delete"))
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
