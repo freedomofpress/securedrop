@@ -21,7 +21,7 @@ desired_iptables_rules = [
   '-A INPUT -p tcp -m tcp --sport 587 -m state --state RELATED,ESTABLISHED -m comment --comment "Allow ossec email alerts out" -j ACCEPT',
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
-  '-A INPUT -m comment --comment "Log and drop all other incomming traffic" -j LOGNDROP',
+  '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
   '-A OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',
   "-A OUTPUT -o #{property['staging_iface']} -p tcp -m tcp --sport 22 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   "-A OUTPUT -p tcp -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"tor instance that provides ssh access\" -j ACCEPT",
