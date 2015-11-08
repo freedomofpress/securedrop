@@ -49,8 +49,8 @@
 - name: Configure host firewalls (with direct access for staging).
   hosts: staging
   roles:
-    - { role: restrict-direct-access, tags: [ 'common', 'restrict-direct-access' ] }
-    - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
+    - { role: allow-direct-access, tags: [ common, allow_direct_access ] }
   sudo: yes
 
 - name: Perform backup of Application Server configuration.
