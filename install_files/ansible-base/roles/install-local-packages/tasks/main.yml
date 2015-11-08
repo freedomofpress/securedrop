@@ -7,8 +7,6 @@
     src: ../../build/{{ item }}
     dest: /root/
   with_items: local_deb_packages
-  tags:
-    - install_local_pkgs
 
 # There's a known bug in Ansible that causes installing
 # .deb packages via the apt module to fail when invoked
@@ -20,5 +18,3 @@
   apt:
     deb: /root/{{ item.1 }}
   with_indexed_items: local_deb_packages
-  tags:
-    - install_local_pkgs

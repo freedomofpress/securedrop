@@ -3,7 +3,7 @@
   hosts: staging
   roles:
     - { role: common, tags: common }
-    - { role: install_local_pkgs, tags: install_local_pkgs,
+    - { role: install-local-packages, tags: install_local_packages,
         when: install_local_packages }
   sudo: yes
 
