@@ -584,8 +584,11 @@ def bulk():
     action = request.form['action']
 
     doc_names_selected = request.form.getlist('doc_names_selected')
-    selected_docs = [doc for doc in g.source.collection
-                     if (doc.filename in doc_names_selected) or action == 'download_all']
+    if action == 'download_all':
+        selected_docs = g.source.collection
+    else:
+        selected_docs = [doc for doc in g.source.collection
+                         if doc.filename in doc_names_selected]
     if selected_docs == []:
         if action == 'download':
             flash("No collections selected to download!", "error")
