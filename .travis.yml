@@ -12,6 +12,7 @@ before_install:
 - sudo /etc/init.d/rng-tools restart
 install:
 - pip install ansible
+- pip install coveralls
 script:
 - echo localhost > inventory
 - ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
@@ -24,6 +25,8 @@ script:
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
+after_success:
+  cd securedrop && coveralls
 notifications:
   slack:
     secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
