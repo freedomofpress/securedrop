@@ -1,4 +1,9 @@
 ---
+  # Staging machines should be provisioned with local code,
+  # rather than pulling down stable releases from the app code.
+  # Therefore build the local debs before provisioning the staging hosts.
+- include: build-deb-pkgs.yml
+
 - name: Add FPF apt repository and install base packages.
   hosts: staging
   roles:
