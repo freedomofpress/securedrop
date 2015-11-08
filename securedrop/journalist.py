@@ -578,6 +578,16 @@ def download_unread(sid):
     return bulk_download(sid, docs)
 
 
+@app.route('/download_all_unread')
+@login_required
+def download_all_unread():
+    docs = Submission.query.filter(Submission.downloaded == False).all()
+    if docs == []:
+        flash("No unread documents in collections!", "error")
+        return redirect(url_for('index'))
+    return bulk_dl('all_unread_' + g.user.username, docs)
+
+
 @app.route('/bulk', methods=('POST',))
 @login_required
 def bulk():
@@ -631,7 +641,11 @@ def bulk_delete(sid, items_selected):
 
 def bulk_download(sid, items_selected):
     source = get_source(sid)
-    filenames = [store.path(sid, item.filename) for item in items_selected]
+    return bulk_dl(source.journalist_filename, items_selected)
+
+def bulk_dl(zip_directory, items_selected):
+    filenames = [store.path(item.source.filesystem_id, item.filename)
+                 for item in items_selected]
 
     # Mark the submissions that are about to be downloaded as such
     for item in items_selected:
@@ -639,12 +653,10 @@ def bulk_download(sid, items_selected):
             item.downloaded = True
     db_session.commit()
 
-    zf = store.get_bulk_archive(
-        filenames,
-        zip_directory=source.journalist_filename)
+    zf = store.get_bulk_archive(filenames,
+                                zip_directory=zip_directory)
     attachment_filename = "{}--{}.zip".format(
-        source.journalist_filename,
-        datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+        zip_directory, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)
