@@ -2,4 +2,4 @@
 # Add dependency for FPF repo installation role,
 # since the securedrop-grsec package is hosted there.
 dependencies:
-  - install_fpf_repo
+  - install-fpf-repo
