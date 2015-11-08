@@ -10,7 +10,7 @@
 - name: Configure OSSEC manager.
   hosts: mon-staging
   roles:
-    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
+    - { role: ossec-server, tags: [ ossec, ossec_server ] }
   sudo: yes
 
 - name: Configure SecureDrop Application Server.
@@ -21,7 +21,7 @@
     # app-code package which contains an apparmor profile that depends on tor
     # being present.
     # this is a staging only role
-    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
   sudo: yes
