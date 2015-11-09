@@ -58,3 +58,5 @@ allow_direct_access: true
 # To use uncomment the following line and enter the correct decrypted zip
 # filename between the quotes.
 #backup_zip: ""
+
+install_local_packages: true

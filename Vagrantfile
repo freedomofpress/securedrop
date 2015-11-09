@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
         'securedrop_application_server' => %(app-staging),
         'securedrop_monitor_server' => %(mon-staging),
         'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
-        'securedrop:children' => %w(securedrop_application_server securedrop_monitor_server),
+        'securedrop:children' => %w(staging),
       }
     end
   end
