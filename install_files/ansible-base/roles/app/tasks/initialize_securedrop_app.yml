@@ -168,3 +168,5 @@
     - logo
     - securedrop_config
 
+- name: compile language files
+  shell: "{{ securedrop_repo }}/loc_tools.py compile"
