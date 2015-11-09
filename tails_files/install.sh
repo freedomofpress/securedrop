@@ -80,7 +80,7 @@ EOL
     echo "ansible" >> $TAILSCFG/live-additional-software.conf
   fi
   # update ansible inventory with .onion hostnames
-  if ! grep -q onion "$ANSIBLE/inventory"; then
+  if ! grep -v "^#.*onion" "$ANSIBLE/inventory" | grep -q onion; then
     sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $ANSIBLE/inventory
     sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $ANSIBLE/inventory
   fi
