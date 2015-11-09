@@ -41,14 +41,17 @@ create a Tails USB stick. Here are some links to help you out:
 -  `Install onto a USB stick or SD
    card <https://tails.boum.org/doc/first_steps/installation/index.en.html>`__
 -  `Create & configure the persistent
-   volume <https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html>`__
+   volume 
+<https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html>`__
 
 Note for Mac OS X users manually installing Tails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Tails documentation for `manually installing Tails onto a USB device
 on Mac OS
-X <https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html>`__
+X 
+<https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html>`_
+_
 describes how to copy the downloaded .iso image to a USB stick in
 Section 4, "Do the copy". This section includes the following ``dd``
 invocation to copy the .iso to the USB:
@@ -150,11 +153,15 @@ Type the administration password that you selected when starting Tails
 and hit enter. This installation script does the following: 
 
 * Downloads additional software
-* Installs a program that automatically and persistently configures Tor to access the
-SecureDrop servers and interfaces, by adding ``HidServAuth`` values to ``/etc/tor/torrc``.
-* Sets up desktop and main menu shortcuts for the *Document Interface* and *Source Interface*
+* Installs a program that automatically and persistently configures Tor to 
+access the
+SecureDrop servers and interfaces, by adding ``HidServAuth`` values to 
+``/etc/tor/torrc``.
+* Sets up desktop and main menu shortcuts for the *Document Interface* and 
+*Source Interface*
 * Sets up SSH host aliases for ``mon`` and ``app``
-* Updates your Ansible inventory file to run the playbooks over Tor in the future
+* Updates your Ansible inventory file to run the playbooks over Tor in the 
+future
 * Makes it so that Tails installs Ansible at the beginning of every session
 
 If you are missing any files, the script will exit with an error. If you're 
@@ -163,9 +170,11 @@ running this script as an admin, the entire setup should be automatic.
 If you're running the script as a journalist, you will need the .onion addresses
 for each interface, provided to you by the admin.
 
-We employ hidden service authentication so that no one but the journalist will be
-able to access to the *Document Interface*, even if they manage to steal
-the journalist's username, password, and two-factor authentication token.
+We use an authenticated Tor Hidden Service so that adversaries cannot access the
+Document Interface, which provides a layer of defense-in-depth and protects the
+Document Interface even if there is a security vulnerability in the 
+authentication implemented by the web application, or if the journalist's 
+username, password, and two-factor token are stolen.
 
 Our ``install.sh`` sets up Tails to work with SecureDrop every time you login. 
 As long as Tails is booted with the persistent volume enabled then you can open

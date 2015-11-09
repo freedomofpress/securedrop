@@ -44,9 +44,14 @@ Type the Administration Password that you selected when starting Tails
 and hit enter. The install script will download some additional
 software, which may take a few minutes.
 
-This script installs a Network Manager hook that runs every time you connect to Tor. It automatically adds the HidServAuth values from ``torrc_additions`` to the ``torrc`` and restarts Tor.
-In addition, it creates desktop and main menu shortcuts for both interfaces, updates your Ansible inventory file to install playbooks over Tor in the future, directs Tails
-to install Ansible at the beginning of every session, and sets up SSH host aliases for the servers.
+This script installs a Network Manager hook that runs every time you connect to 
+Tor. It automatically adds the HidServAuth values from ``torrc_additions`` to 
+the ``torrc`` and restarts Tor.
+
+In addition, it creates desktop and main menu shortcuts for both interfaces, 
+updates your Ansible inventory file to install playbooks over Tor in the 
+future, directs Tails to install Ansible at the beginning of every session, and
+sets up SSH host aliases for the servers.
 
 .. note:: The only thing you need to remember to do is enable
           persistence when you boot the Admin Workstation. If you are
@@ -54,14 +59,16 @@ to install Ansible at the beginning of every session, and sets up SSH host alias
           of the authenticated hidden services, restart Tails and make
           sure to enable persistence.
 
-.. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
+.. _Authenticated Tor Hidden Services: 
+https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
 
 .. _SSH Host Aliases:
 
 SSH Host Aliases
 ----------------
 
-The installation script in ``tails_files`` also sets up SSH host aliases for the admin.
+The installation script in ``tails_files`` also sets up SSH host aliases for 
+the admin. These can be found in ``~/.ssh/config``.
 
 You can simply use ``ssh app`` and ``ssh mon`` to connect to each
 server. This configuration will be persisted across reboots thanks to
