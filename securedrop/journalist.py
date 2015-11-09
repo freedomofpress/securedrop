@@ -7,6 +7,7 @@ import functools
 from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CsrfProtect
+from flask.ext.babel import Babel, _, ngettext
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
@@ -25,6 +26,8 @@ app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CsrfProtect(app)
 
+babel = Babel(app)
+
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
@@ -34,6 +37,18 @@ else:
     app.jinja_env.globals['use_custom_header_image'] = False
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+
+
+@babel.localeselector
+def get_locale():
+    locale = session.get("locale")
+    try:
+        if locale and locale in config.LOCALES.keys():
+            return locale
+        return request.accept_languages.best_match(config.LOCALES.keys())
+    except AttributeError:
+        app.logger.warning("LOCALES is not defined in config")
+        return None
 
 
 @app.teardown_appcontext
@@ -67,6 +82,22 @@ def setup_g():
             g.source = get_source(sid)
 
 
+@app.before_request
+def apply_locale():
+    try:
+        if 'l' in request.args:
+            locale = request.args['l']
+            if locale in config.LOCALES.keys():
+                session['locale'] = locale
+            elif len(locale) == 0 and 'locale' in session:
+                del session['locale']
+    except AttributeError:
+        pass
+    # Save the resolved locale in g for templates
+    g.resolved_locale = get_locale()
+    g.locales = getattr(config, 'LOCALES', None)
+
+
 def logged_in():
     # When a user is logged in, we push their user id (database primary key)
     # into the session. setup_g checks for this value, and if it finds it,
@@ -93,7 +124,7 @@ def admin_required(func):
         if logged_in() and g.user.is_admin:
             return func(*args, **kwargs)
         # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash("You must be an administrator to access that page",
+        flash(_("You must be an administrator to access that page"),
               "notification")
         return redirect(url_for('index'))
     return wrapper
@@ -109,16 +140,16 @@ def login():
         except Exception as e:
             app.logger.error("Login for '{}' failed: {}".format(
                 request.form['username'], e))
-            login_flashed_msg = "Login failed."
+            login_flashed_msg = _("Login failed.")
 
             if isinstance(e, LoginThrottledException):
-                login_flashed_msg += " Please wait at least 60 seconds before logging in again."
+                login_flashed_msg = _("Login failed. Please wait at least 60 seconds before logging in again.")
             else:
                 try:
                     user = Journalist.query.filter_by(
                         username=request.form['username']).one()
                     if user.is_totp:
-                        login_flashed_msg += " Please wait for a new two-factor token before logging in again."
+                        login_flashed_msg = _("Login failed. Please wait for a new two-factor token before logging in again.")
                 except:
                     pass
 
@@ -160,13 +191,13 @@ def admin_add_user():
         username = request.form['username']
         if len(username) == 0:
             form_valid = False
-            flash("Missing username", "error")
+            flash(_("Missing username"), "error")
 
         password = request.form['password']
         password_again = request.form['password_again']
         if password != password_again:
             form_valid = False
-            flash("Passwords didn't match", "error")
+            flash(_("Passwords didn't match"), "error")
 
         is_admin = bool(request.form.get('is_admin'))
 
@@ -188,10 +219,10 @@ def admin_add_user():
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
-                    flash("That username is already in use",
+                    flash(_("That username is already in use"),
                           "error")
                 else:
-                    flash("An error occurred saving this user to the database",
+                    flash(_("An error occurred saving this user to the database"),
                           "error")
 
         if form_valid:
@@ -209,13 +240,10 @@ def admin_new_user_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if user.verify_token(token):
-            flash(
-                "Two factor token successfully verified for user {}!".format(
-                    user.username),
-                "notification")
+            flash(_("Two factor token successfully verified for user {username}!").format(username=user.username), "notification")
             return redirect(url_for("admin_index"))
         else:
-            flash("Two factor token failed to verify", "error")
+            flash(_("Two factor token failed to verify"), "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
 
@@ -255,14 +283,13 @@ def admin_edit_user(user_id):
 
         if request.form['password'] != "":
             if request.form['password'] != request.form['password_again']:
-                flash("Passwords didn't match", "error")
+                flash(_("Passwords didn't match"), "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
             try:
                 user.set_password(request.form['password'])
             except InvalidPasswordLength:
-                flash("Your password is too long "
-                      "(maximum length {} characters)".format(
-                      Journalist.MAX_PASSWORD_LEN), "error")
+                flash(_("Your password is too long (maximum length {max_password_len} characters)").format(
+                      max_password_len=Journalist.MAX_PASSWORD_LEN), "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
 
         user.is_admin = bool(request.form.get('is_admin'))
@@ -278,11 +305,9 @@ def admin_edit_user(user_id):
         except Exception as e:
             db_session.rollback()
             if "username is not unique" in str(e):
-                flash("That username is already in use", "notification")
+                flash(_("That username is already in use"), "notification")
             else:
-                flash(
-                    "An unknown error occurred, please inform your administrator",
-                    "error")
+                flash(_("An unknown error occurred, please inform your administrator"), "error")
 
     return render_template("admin_edit_user.html", user=user)
 
@@ -491,23 +516,20 @@ def col_delete_single(sid):
     """deleting a single collection from its /col page"""
     source = get_source(sid)
     delete_collection(sid)
-    flash(
-        "%s's collection deleted" %
-        (source.journalist_designation,), "notification")
+    flash(_("{journalist_designation}'s collection deleted").format(journalist_designation=source.journalist_designation), "notification")
     return redirect(url_for('index'))
 
 
 def col_delete(cols_selected):
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "error")
+        flash(_("No collections selected to delete!"), "error")
     else:
         for source_id in cols_selected:
             delete_collection(source_id)
-        flash("%s %s deleted" % (
+        flash(ngettext("%(cols_selected)d collection deleted", "%(cols_selected)d collections deleted",
             len(cols_selected),
-            "collection" if len(cols_selected) == 1 else "collections"
-        ), "notification")
+            cols_selected=len(cols_selected)), "notification")
 
     return redirect(url_for('index'))
 
@@ -556,11 +578,7 @@ def generate_code():
             g.source.journalist_filename)
     db_session.commit()
 
-    flash(
-        "The source '%s' has been renamed to '%s'" %
-        (original_journalist_designation,
-         g.source.journalist_designation),
-        "notification")
+    flash(_("The source '{original_journalist_designation}' has been renamed to '{new_journalist_designation}'").format(original_journalist_designation=original_journalist_designation, new_journalist_designation=g.source.journalist_designation), "notification")
     return redirect('/col/' + g.sid)
 
 
@@ -585,9 +603,9 @@ def bulk():
 
     if selected_docs == []:
         if action == 'download':
-            flash("No collections selected to download!", "error")
+            flash(_("No collections selected to download!"), "error")
         elif action == 'delete' or action == 'confirm_delete':
-            flash("No collections selected to delete!", "error")
+            flash(_("No collections selected to delete!"), "error")
         return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':

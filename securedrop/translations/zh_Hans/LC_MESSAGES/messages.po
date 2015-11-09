@@ -1,0 +1,848 @@
+# Translations template for SecureDrop.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the SecureDrop project.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: SecureDrop\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-11-17 03:00+0000\n"
+"PO-Revision-Date: 2014-11-17 03:00+0000\n"
+"Last-Translator: edwincheese <edwincheese@gmail.com>\n"
+"Language-Team: Chinese Simplified (http://www.transifex.com/projects/p/securedrop-app-code/language/zh-Hans/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+"Language: zh-Hans\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: securedrop/journalist.py:127
+msgid "You must be an administrator to access that page"
+msgstr ""
+
+#: securedrop/journalist.py:144
+msgid "Login failed"
+msgstr ""
+
+#: securedrop/journalist.py:178
+msgid "Missing username"
+msgstr ""
+
+#: securedrop/journalist.py:184 securedrop/journalist.py:267
+msgid "Passwords didn't match"
+msgstr ""
+
+#: securedrop/journalist.py:202 securedrop/journalist.py:279
+msgid "That username is already in use"
+msgstr ""
+
+#: securedrop/journalist.py:205
+msgid "An error occurred saving this user to the database"
+msgstr ""
+
+#: securedrop/journalist.py:223
+#, python-format
+msgid "Two factor token successfully verified for user %(username)s!"
+msgstr ""
+
+#: securedrop/journalist.py:226
+msgid "Two factor token failed to verify"
+msgstr ""
+
+#: securedrop/journalist.py:281
+msgid "An unknown error occurred, please inform your administrator"
+msgstr ""
+
+#: securedrop/journalist.py:429
+#, python-format
+msgid "%(journalist_designation)s's collection deleted"
+msgstr ""
+
+#: securedrop/journalist.py:436 securedrop/journalist.py:514
+msgid "No collections selected to delete!"
+msgstr ""
+
+#: securedrop/journalist.py:442
+#, python-format
+msgid "%(cols_selected)d collection deleted"
+msgid_plural "%(cols_selected)d collections deleted"
+msgstr[0] ""
+
+#: securedrop/journalist.py:486
+#, python-format
+msgid ""
+"The source '%(original_journalist_designation)s' has been renamed to "
+"'%(new_journalist_designation)s'"
+msgstr ""
+
+#: securedrop/journalist.py:512
+msgid "No collections selected to download!"
+msgstr ""
+
+#: securedrop/source.py:124
+#, python-format
+msgid ""
+"<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
+"not</strong> provide anonymity. %(tor2web_warning)s"
+msgstr ""
+
+#: securedrop/source.py:259
+msgid "Thanks! We received your message."
+msgstr ""
+
+#: securedrop/source.py:264
+#, python-format
+msgid "Thanks! We received your document \"%(filename)s\"."
+msgstr ""
+
+#: securedrop/source.py:294
+msgid "Reply deleted"
+msgstr ""
+
+#: securedrop/source.py:314
+msgid "Sorry, that is not a recognized codename."
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:3
+msgid "Admin Interface"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:6
+#: securedrop/journalist_templates/admin_add_user.html:21
+msgid "Add user"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:16
+#: securedrop/journalist_templates/admin_add_user.html:9
+#: securedrop/journalist_templates/login.html:8
+msgid "Username"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:17
+msgid "Edit"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:18
+#: securedrop/source_templates/lookup.html:50
+msgid "Delete"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:19
+msgid "Created"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:20
+msgid "Last login"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:31
+msgid "Never"
+msgstr ""
+
+#: securedrop/journalist_templates/admin.html:38
+msgid "No users to display"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:4
+#: securedrop/journalist_templates/admin_edit_user.html:4
+msgid "Back to admin interface"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:10
+#: securedrop/journalist_templates/login.html:9
+msgid "Password"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:11
+msgid "Password (again)"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:14
+#: securedrop/journalist_templates/admin_edit_user.html:23
+msgid "Is Administrator"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:18
+msgid "I'm using a Yubikey "
+msgstr ""
+
+#: securedrop/journalist_templates/admin_add_user.html:19
+msgid "HOTP Secret"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_hotp_secret.html:7
+msgid "Change Secret"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_hotp_secret.html:10
+#: securedrop/source_templates/generate.html:39
+#: securedrop/source_templates/login.html:11
+msgid "Continue"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:3
+msgid "Edit user"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:9
+msgid "Change username"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:13
+msgid "Change password"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:15
+msgid "Leave blank for no change"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:18
+msgid "Change password (confirm)"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:25
+msgid "Update user"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:30
+msgid "Reset Two Factor Authentication"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:31
+msgid ""
+"If a user's two factor authentication credentials have been lost or "
+"compromised, you can reset them here. "
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:31
+msgid ""
+"If you do this, make sure the user is present and ready to set up their "
+"device with the new two factor credentials. Otherwise, they will be locked "
+"out of their account."
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:35
+msgid "Reset two factor authentication (Google Authenticator)"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_edit_user.html:41
+msgid "Reset two factor authentication (HOTP Yubikey)"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:4
+msgid "Enable Google Authenticator"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:5
+msgid ""
+"You're almost done! To finish adding this new user, have them follow the "
+"instructions below to set up two factor authentication with Google "
+"Authenticator. Once they've added an entry for this account in the app, have"
+" them enter one of the 6-digit codes from the app to confirm that two factor"
+" authentication is set up correctly."
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:7
+msgid "Install Google Authenticator on your phone"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:8
+msgid "Open the Google Authenticator app"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:9
+msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:10
+msgid ""
+"Your phone will now be in \"scanning\" mode. When you are in this mode, scan"
+" the barcode below:"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:13
+msgid "Can't scan the barcode? Enter the following code manually:"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:14
+msgid "Once you have scanned the barcode, enter the 6-digit code below:"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:16
+msgid "Enable Yubikey (OATH-HOTP)"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:17
+msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:21
+msgid "Verification code"
+msgstr ""
+
+#: securedrop/journalist_templates/admin_new_user_two_factor.html:23
+#: securedrop/journalist_templates/col.html:61
+#: securedrop/source_templates/lookup.html:31
+msgid "Submit"
+msgstr ""
+
+#: securedrop/journalist_templates/base.html:4
+msgid "SecureDrop"
+msgstr ""
+
+#: securedrop/journalist_templates/base.html:18
+msgid "Admin"
+msgstr ""
+
+#: securedrop/journalist_templates/base.html:20
+msgid "Logout"
+msgstr ""
+
+#: securedrop/journalist_templates/base.html:46
+#, python-format
+msgid "Powered by <em>SecureDrop %(version)s</em>."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:10
+msgid "All Sources"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:13
+msgid ""
+"Generate a new random codename for this source. We recommend doing this if "
+"the first random codename is difficult to say or remember. You can generate "
+"new random codenames as many times as you like."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:13
+msgid "Change codename"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:18
+msgid ""
+"The documents are stored encrypted for security. To read them, you will need"
+" to decrypt them using GPG."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:22
+msgid "Download selected"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:23
+#: securedrop/journalist_templates/index.html:11
+msgid "Delete selected"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:30
+#, python-format
+msgid "%(file_size)s sent %(date)s"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:33
+#, python-format
+msgid "%(file_size)s uploaded %(date)s"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:36
+msgid "Uploaded Document"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:38
+msgid "Message"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:48
+msgid "No documents to display."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:53
+msgid "Reply"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:55
+msgid ""
+"You can write a secure reply to the person who submitted these documents:"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:64
+msgid "You've flagged this source for reply."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:65
+msgid ""
+"An encryption key will be generated for the source the next time they log "
+"in, after which you will be able to reply to the source here."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:67
+msgid "Click below if you would like to write a reply to this source."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:71
+msgid "Flag this source for reply"
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:76
+msgid "Click below to delete this source's collection. "
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:76
+msgid ""
+"Warning: If you do this, the files seen here will be unrecoverable and the "
+"source will no longer be able to login using their previous codename."
+msgstr ""
+
+#: securedrop/journalist_templates/col.html:82
+msgid "Delete collection"
+msgstr ""
+
+#: securedrop/journalist_templates/delete.html:7
+msgid "File permanently deleted."
+msgid_plural "Files permanently deleted."
+msgstr[0] ""
+
+#: securedrop/journalist_templates/delete.html:13
+#, python-format
+msgid ""
+"The following file has been selected for <strong>permanent deletion</strong>"
+msgid_plural ""
+"The following %(value)d files have been selected for <strong>permanent "
+"deletion</strong>"
+msgstr[0] ""
+
+#: securedrop/journalist_templates/delete.html:23
+#, python-format
+msgid "(sent %(date)s)"
+msgstr ""
+
+#: securedrop/journalist_templates/delete.html:25
+#, python-format
+msgid "(uploaded %(date)s)"
+msgstr ""
+
+#: securedrop/journalist_templates/delete.html:32
+msgid "Permanently delete files"
+msgstr ""
+
+#: securedrop/journalist_templates/delete.html:38
+#, python-format
+msgid "Return to the list of documents for %(codename)s..."
+msgstr ""
+
+#: securedrop/journalist_templates/flag.html:5
+msgid "Thanks!"
+msgstr ""
+
+#: securedrop/journalist_templates/flag.html:8
+msgid ""
+"SecureDrop will generate a secure encryption key for this source the next "
+"time that they log in. Once the key has been generated, a reply box will "
+"appear under their collection of documents. You can use this box to write "
+"encrypted replies to them."
+msgstr ""
+
+#: securedrop/journalist_templates/flag.html:10
+msgid "Continue to the list of documents for"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:4
+msgid "Sources"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:10
+msgid "select all"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:10
+msgid "select none"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:12
+msgid "Star Selected"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:13
+msgid "Un-star Selected"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:29
+#: securedrop/journalist_templates/index.html:55
+msgid "docs"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:30
+#: securedrop/journalist_templates/index.html:56
+msgid "messages"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:33
+msgid " unread"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:59
+msgid "unread"
+msgstr ""
+
+#: securedrop/journalist_templates/index.html:71
+msgid "No documents have been submitted!"
+msgstr ""
+
+#: securedrop/journalist_templates/login.html:4
+msgid "Login to access the journalist interface"
+msgstr ""
+
+#: securedrop/journalist_templates/login.html:10
+msgid "Two-factor Code"
+msgstr ""
+
+#: securedrop/journalist_templates/login.html:11
+msgid "Log in"
+msgstr ""
+
+#: securedrop/journalist_templates/reply.html:5
+msgid "Thanks! Your reply has been stored."
+msgstr ""
+
+#: securedrop/journalist_templates/reply.html:8
+msgid ""
+"You will now see it in the list of documents in that collection. Once the "
+"source has read it, they will be asked to delete it. If it disappears from "
+"the list, then you know it has been read."
+msgstr ""
+
+#: securedrop/journalist_templates/reply.html:10
+#, python-format
+msgid "Return to the list of documents for <strong>%(codename)s</strong>..."
+msgstr ""
+
+#: securedrop/source_templates/base.html:4
+msgid "SecureDrop | Protecting Journalists and Sources"
+msgstr ""
+
+#: securedrop/source_templates/base.html:36
+#: securedrop/source_templates/index.html:50
+#, python-format
+msgid ""
+"Like all software, SecureDrop may contain security bugs. Use at your own "
+"risk. Powered by SecureDrop %(version)s."
+msgstr ""
+
+#: securedrop/source_templates/error.html:5
+msgid "Server error"
+msgstr ""
+
+#: securedrop/source_templates/error.html:7
+msgid ""
+"Sorry, the website encountered an error and was unable to complete your "
+"request."
+msgstr ""
+
+#: securedrop/source_templates/error.html:9
+#: securedrop/source_templates/notfound.html:9
+msgid "Look up a codename..."
+msgstr ""
+
+#: securedrop/source_templates/generate.html:4
+msgid "Remember this code and keep it secret"
+msgstr ""
+
+#: securedrop/source_templates/generate.html:5
+msgid "To protect your identity, we're assigning you a unique codename."
+msgstr ""
+
+#: securedrop/source_templates/generate.html:29
+msgid ""
+"Store this code somewhere safe, or memorize it. It can be used to compromise"
+" your anonymity."
+msgstr ""
+
+#: securedrop/source_templates/generate.html:33
+msgid "Important:"
+msgstr ""
+
+#: securedrop/source_templates/generate.html:33
+msgid ""
+" After you submit documents and messages, you will need this code to log in "
+"and read replies. This is the only way we can communicate back to you. You "
+"can also use your code to log in to submit more files and messages."
+msgstr ""
+
+#: securedrop/source_templates/generate.html:40
+msgid "Already have a codename?"
+msgstr ""
+
+#: securedrop/source_templates/howto-disable-js.html:4
+msgid "Disable JavaScript to Protect Your Anonymity"
+msgstr ""
+
+#: securedrop/source_templates/howto-disable-js.html:6
+msgid ""
+"JavaScript is a widely used programming language for creating interactive "
+"web pages. Unfortunately, JavaScript is also the most common source of "
+"security vulnerabilities in browsers. In August 2013, the FBI wrote malware "
+"that used a JavaScript exploit to de-anonymize Tor users "
+"(http://www.wired.com/threatlevel/2013/09/freedom-hosting-fbi). JavaScript "
+"exploits are also mentioned in documents describing the NSA's Egotistical "
+"Giraffe (http://www.theguardian.com/world/interactive/2013/oct/04"
+"/egotistical-giraffe-nsa-tor-document) program, which also has the goal of "
+"targeting and de-anonymizing Tor users."
+msgstr ""
+
+#: securedrop/source_templates/howto-disable-js.html:8
+msgid ""
+"We encourage SecureDrop users to disable JavaScript to protect themselves "
+"from malware that would use it to attack their browser and potentially de-"
+"anonymize them. There are other ways to get hacked, but given the use of "
+"JavaScript-based attacks recently, we believe it is prudent to disable it at"
+" this time."
+msgstr ""
+
+#: securedrop/source_templates/howto-disable-js.html:10
+msgid ""
+"The Tor Browser comes with an add-on called NoScript that can be used to "
+"completely disable JavaScript by default, and to only enable it for sites "
+"that you trust."
+msgstr ""
+
+#: securedrop/source_templates/howto-disable-js.html:12
+#, python-format
+msgid ""
+"To disable JavaScript in Tor Browser, click the NoScript icon %(icon)s to "
+"the left of the address bar above and choose \"Forbid Scripts Globally "
+"(advised)\""
+msgstr ""
+
+#: securedrop/source_templates/index.html:13
+msgid "We recommend disabling JavaScript to protect your anonymity:"
+msgstr ""
+
+#: securedrop/source_templates/index.html:13
+#, python-format
+msgid " %(howto_disable_js)s, or ignore this warning to continue."
+msgstr ""
+
+#: securedrop/source_templates/index.html:13
+msgid "Learn how to disable it"
+msgstr ""
+
+#: securedrop/source_templates/index.html:31
+msgid "Submit documents for the first time"
+msgstr ""
+
+#: securedrop/source_templates/index.html:34
+msgid ""
+"If this is your first time submitting documents to journalists, start here."
+msgstr ""
+
+#: securedrop/source_templates/index.html:36
+msgid "Submit Documents"
+msgstr ""
+
+#: securedrop/source_templates/index.html:40
+msgid "Already submitted something?"
+msgstr ""
+
+#: securedrop/source_templates/index.html:43
+msgid ""
+"If you have already submitted documents in the past, log in here to check "
+"for responses."
+msgstr ""
+
+#: securedrop/source_templates/index.html:45
+msgid "Check for a response"
+msgstr ""
+
+#: securedrop/source_templates/index.html:59
+msgid ""
+"You appear to be using the Tor Browser. You can disable Javascript in 3 easy"
+" steps!"
+msgstr ""
+
+#: securedrop/source_templates/index.html:61
+#, python-format
+msgid "Click %(img)s NoScript icon in the toolbar above"
+msgstr ""
+
+#: securedrop/source_templates/index.html:62
+#, python-format
+msgid "Click <strong>%(img)s Forbid Scripts Globally (advised)</strong>"
+msgstr ""
+
+#: securedrop/source_templates/index.html:63
+#, python-format
+msgid ""
+"If the page does not refresh automatically, %(click_here)s to refresh the "
+"page"
+msgstr ""
+
+#: securedrop/source_templates/index.html:63
+msgid "click here"
+msgstr ""
+
+#: securedrop/source_templates/index.html:65
+msgid "Not using the Tor Browser Bundle?"
+msgstr ""
+
+#: securedrop/source_templates/login.html:4
+msgid "Login to check for responses"
+msgstr ""
+
+#: securedrop/source_templates/login.html:10
+msgid "Enter your codename"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:8
+msgid ""
+"A journalist has been waiting for you to log in again so SecureDrop can "
+"generate a crypto key for you. Now that you have logged in, they are able to"
+" write you a reply. Check back later for replies."
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:11
+msgid "Submit documents and messages"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:12
+msgid "You can send a file, a message, or both."
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:22
+msgid "Maximum upload size:"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:25
+msgid "Add message"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:34
+msgid "Tip:"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:34
+#, python-format
+msgid ""
+" If you are already familiar with GPG, you can optionally encrypt your files"
+" and messages with our %(journalist_key)s before submission. Files are "
+"encrypted as they are received by SecureDrop; encrypting before submission "
+"provides an extra layer of security before your data reaches SecureDrop. "
+"%(why_journalist_key)s."
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:34
+msgid "public key"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:34
+msgid "Learn more"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:38
+msgid "Replies"
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:42
+msgid ""
+"You have received a reply. For your security, please delete all replies when"
+" you're done with them. This also lets us know that you have received our "
+"reply. You can respond by submitting a new message above."
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:57
+msgid "There are no replies at this time."
+msgstr ""
+
+#: securedrop/source_templates/lookup.html:64
+msgid "Remember, your codename is:"
+msgstr ""
+
+#: securedrop/source_templates/notfound.html:5
+msgid "Page not found"
+msgstr ""
+
+#: securedrop/source_templates/notfound.html:7
+msgid "Sorry, we couldn't locate what you requested."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:3
+msgid "Why download the journalist's public key?"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:4
+msgid ""
+"SecureDrop encrypts files and messages after they are submitted. Encrypting "
+"messages and files before submission can provide an extra layer of security "
+"before your data reaches the SecureDrop server."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:5
+msgid ""
+"If you are already familiar with the GPG encryption software, you may wish "
+"to encrypt your submissions yourself. To do so:"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:7
+#, python-format
+msgid ""
+"%(download)s the public key. The public key is a text file with the "
+"extension <code>.asc</code>"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:7
+msgid "Download"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:8
+msgid "Import it into your GPG keyring."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:10
+msgid ""
+"If you are using Tails (https://tails.boum.org/), you can double-click the "
+"<code>.asc</code> file you just downloaded and it will be automatically "
+"imported to your keyring."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:11
+msgid ""
+"If you are using Mac/Linux, open the Terminal. You can import the key with "
+"<code>gpg --import /path/to/key.asc</code>."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:14
+msgid "Encrypt your submission."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:16
+msgid ""
+"You will need to be able to identify the key (this is called the \"user ID\""
+" or uid). Since the public key's filename is the key's fingerprint (with "
+".asc at the end), you can just copy and paste that. (don't include the "
+"<code>.asc</code>!)"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:17
+msgid ""
+"On all systems, open the Terminal and use this gpg command: <code>gpg "
+"--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:20
+msgid ""
+"Upload your encrypted submission. It will have the same filename as the "
+"unencrypted file, with .gpg at the end (e.g. "
+"<code>roswell_photos.pdf.gpg</code>)"
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:23
+msgid ""
+"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do "
+"not</strong> use GPG to sign the encrypted file (with the "
+"<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG "
+"identity to us."
+msgstr ""
+
+#: securedrop/source_templates/why-journalist-key.html:25
+msgid "Back to submission page"
+msgstr ""

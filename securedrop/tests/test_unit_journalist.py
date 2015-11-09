@@ -7,7 +7,7 @@ import zipfile
 
 import mock
 
-from flask import url_for
+from flask import url_for, session, g
 from flask.ext.testing import TestCase
 
 import crypto_util
@@ -171,7 +171,7 @@ class TestJournalist(TestCase):
             password='not',
             password_again='thesame'))
         self.assert_redirects(res, url_for('edit_account'))
-        
+
     def test_valid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('edit_account'), data=dict(
@@ -188,7 +188,7 @@ class TestJournalist(TestCase):
 
         # check that totp is different
         self.assertNotEqual(oldTotp, newTotp)
-        
+
         # should redirect to verification page
         self.assert_redirects(res, url_for('account_new_two_factor'))
 
@@ -200,7 +200,7 @@ class TestJournalist(TestCase):
             otp_secret=123456))
         newHotp = self.user.hotp
 
-        # check that hotp is different 
+        # check that hotp is different
         self.assertNotEqual(oldHotp, newHotp)
 
         # should redirect to verification page
@@ -238,6 +238,20 @@ class TestJournalist(TestCase):
             temp_journalist = Journalist(
                     username="My Password is Too Big!",
                     password=overly_long_password)
+
+    def test_apply_locale(self):
+        journalist.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/?l=zh')
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session['locale'], 'zh')
+
+    def test_apply_locale_accept_language(self):
+        journalist.config.LOCALES = {'en': 'English', 'zh': 'Chinese'}
+        with self.client as c:
+            c.get('/', headers=[('Accept-Language', 'zh-Hant, zh;q=0.8')])
+            self.assertEqual(g.resolved_locale, 'zh')
+            self.assertEqual(session.get('locale'), None)
 
 
 if __name__ == "__main__":

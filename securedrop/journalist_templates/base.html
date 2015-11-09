@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>SecureDrop</title>
+    <title>{{_("SecureDrop")}}</title>
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/static/css/journalist.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
@@ -15,11 +15,11 @@
 
     {% if g.user %}
     <div id="logout">
-      <a href="{{ url_for('edit_account') }}">Edit Account</a> | 
+      <a href="{{ url_for('edit_account') }}">Edit Account</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}">Admin</a> | 
+      <a href="{{ url_for('admin_index') }}">{{_("Admin")}}</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}">Logout</a>
+      <a href="{{ url_for('logout') }}">{{_("Logout")}}</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
@@ -45,8 +45,9 @@
 
       {% block footer %}
       <footer>
-        Powered by <em>SecureDrop {{ version }}</em>.
+        {{_("Powered by <em>SecureDrop %(version)s</em>.", version=version)}}
       </footer>
+      {% include 'locale_selection.html' %}
       {% endblock %}
     </div>
   </body>

@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[securedrop-app-code.messagespot-develop]
+file_filter = securedrop/translations/<lang>/LC_MESSAGES/messages.po
+source_file = securedrop/translations/messages.pot
+source_lang = en
+type = PO
+lang_map = zh-Hant:zh_Hant,zh-Hans:zh_Hans

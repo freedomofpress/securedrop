@@ -448,7 +448,7 @@ class TestIntegration(unittest.TestCase):
                                       follow_redirects=True)
         self.assertEquals(rv.status_code, 200)
 
-        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
+        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data.decode('utf-8'))
         self.assertIn("No documents have been submitted!", rv.data)
 
         # Make sure the collection is deleted from the filesystem
