@@ -13,8 +13,6 @@ Technical Summary
 SecureDrop is a tool for sources to communicate securely with journalists. The
 SecureDrop application environment consists of three dedicated computers:
 
-.. _`Tails operating system`: https://tails.boum.org
-
 - ``Secure Viewing Station``: An air-gapped laptop running the 
    `Tails operating system`_ from a USB stick that journalists use to decrypt 
    and view submitted documents.
@@ -43,6 +41,8 @@ journalists always use the `Tails operating system`_ on their
 Alternatively, this can also be its own dedicated computer.
 
 These computers should all physically be in your organization's office.
+
+.. _`Tails operating system`: https://tails.boum.org
 
 Infrastructure
 --------------

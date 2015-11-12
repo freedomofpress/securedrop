@@ -34,14 +34,13 @@ The `Tails website <https://tails.boum.org/>`__ has detailed and up-to-date
 instructions on how to download and verify Tails, and how to create a Tails USB 
 stick. Here are some links to help you out:
 
-.. _`Download and verify the Tails .iso`: https://tails.boum.org/download/index.en.html
-.. _`Install onto a USB stick or SD card`: https://tails.boum.org/doc/first_steps/installation/index.en.html
-.. _`Create & configure the persistent volume`: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
-.. _`manually installing Tails onto a USB device on Mac OS X`: https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html
-
 -  `Download and verify the Tails .iso`_
 -  `Install onto a USB stick or SD card`_
 -  `Create & configure the persistent volume`_
+
+.. _`Download and verify the Tails .iso`: https://tails.boum.org/download/index.en.html
+.. _`Install onto a USB stick or SD card`: https://tails.boum.org/doc/first_steps/installation/index.en.html
+.. _`Create & configure the persistent volume`: https://tails.boum.org/doc/first_steps/persistence/configure/index.en.html
 
 Note for Mac OS X users manually installing Tails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +64,8 @@ the .iso to a USB 2.0 drive. You can speed it up by changing the arguments to
 
 Note the change from ``diskX`` to ``rdiskX``. This reduced the copy time to 3 
 minutes for us.
+
+.. _`manually installing Tails onto a USB device on Mac OS X`: https://tails.boum.org/doc/first_steps/installation/manual/mac/index.en.html
 
 Configure Tails for use with SecureDrop
 ---------------------------------------
