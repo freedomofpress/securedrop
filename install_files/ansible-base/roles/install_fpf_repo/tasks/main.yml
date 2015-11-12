@@ -9,3 +9,8 @@
     repo='deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main'
     state=present
     update_cache=yes
+
+- name: ensure the fpf apt repo keyring package is installed
+  apt:
+    pkg: securedrop-keyring
+    state: present
