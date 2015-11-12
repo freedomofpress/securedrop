@@ -6,6 +6,9 @@
 
 - name: Validate instance-specific variables before provisioning.
   hosts: securedrop
+  # Manual include for the production vars file, since we don't have support
+  # for "group_vars" for prod-specific yet. Must be included on all plays
+  # for the SecureDrop Application and Monitor Servers.
   vars_files:
     - prod-specific.yml
   roles:
@@ -14,6 +17,8 @@
 
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
+  vars_files:
+    - prod-specific.yml
   roles:
     - { role: common, tags: common }
   sudo: yes
