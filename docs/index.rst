@@ -63,6 +63,8 @@ anonymous sources.
    :maxdepth: 2
 
    upgrade/upgrade-0.3.x.rst
+   upgrade/0.3.x-to-0.3.5.rst
+   upgrade/0.3.5-to-0.3.6.rst
 
 .. toctree::
    :caption: Developer Documentation
