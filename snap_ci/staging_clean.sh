@@ -27,7 +27,7 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
 # Skip "install_local_pkgs" because it requires a special VM,
 # and skip "grsec" because DigitalOcean hosts don't support custom kernels.
-export SECUREDROP_STAGING_SKIP_TAGS=install_local_packages,grsec
+export ANSIBLE_ARGS="--skip-tags=install_local_packages,grsec"
 
 # Create target hosts, but don't provision them yet. The shell provisioner
 # is only necessary for DigitalOcean hosts, and must run as a separate task

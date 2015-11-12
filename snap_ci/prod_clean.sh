@@ -34,7 +34,7 @@ sed -r -e 's/(app|mon)-staging/\1-prod/' \
 
 # Skip "validate" so reused vars don't cause failure,
 # and skip "grsec" because DigitalOcean hosts don't support custom kernels.
-export SECUREDROP_PROD_SKIP_TAGS=validate,grsec
+export ANSIBLE_ARGS="--skip-tags=validate,grsec"
 
 # Assume that /prod/ instances will be created from scratch, as part
 # of a full provisioning run, so initial SSH connections must be
