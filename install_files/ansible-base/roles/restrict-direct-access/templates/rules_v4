@@ -27,7 +27,7 @@
 # Load before generic loopback rules
 -A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for the tor instance used for ssh"
 
-{% if inventory_hostname in groups['securedrop_application_server'] %}
+{% if 'securedrop_application_server' in group_names %}
 # Only allow inbound rules from loopback with a dport of 80 or 8080 respectively for apache user
 # Load before application users drop rules
 # Rate limiting does not make sense here because src ip is always loopback address
@@ -64,13 +64,13 @@
 -A OUTPUT -p tcp --match multiport --dports 80,8080,443 -m owner --uid-owner root -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
 -A INPUT -p tcp --match multiport --sports 80,8080,443 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "apt updates"
 
-{% if inventory_hostname in groups['securedrop_application_server'] %}
+{% if 'securedrop_application_server' in group_names %}
 # OSSEC server-agent rules
 # TODO add owner to OUTPUT rule
 -A OUTPUT -d {{ monitor_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 -A INPUT -s {{ monitor_hostname }} -p udp --sport 1514 -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "OSSEC server agent"
 
-{% elif inventory_hostname in groups['securedrop_monitor_server'] %}
+{% elif 'securedrop_monitor_server' in group_names %}
 # OSSEC server-agent rules
 # TODO add owner to OUTPUT rule
 -A INPUT -s {{ app_hostname }} -p udp --dport 1514 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow OSSEC agent to monitor"
