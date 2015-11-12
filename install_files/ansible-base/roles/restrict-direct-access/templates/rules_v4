@@ -96,7 +96,7 @@
 -A INPUT -p tcp -m state --state INVALID -j DROP -m comment --comment "drop but do not log inbound invalid state packets"
 
 # Catch all drop rule
--A INPUT -j LOGNDROP -m comment --comment "Drop and log all other incomming traffic"
+-A INPUT -j LOGNDROP -m comment --comment "Drop and log all other incoming traffic"
 -A OUTPUT -j DROP -m comment --comment "Drop all other outgoing traffic"
 
 # LOGNDROP everything else

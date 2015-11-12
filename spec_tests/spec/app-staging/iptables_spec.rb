@@ -21,7 +21,7 @@ desired_iptables_rules = [
   "-A INPUT -s #{property['monitor_ip']}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment \"OSSEC server agent\" -j ACCEPT",
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
-  '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
+  '-A INPUT -m comment --comment "Drop and log all other incoming traffic" -j LOGNDROP',
   "-A OUTPUT -o #{property['staging_iface']} -p tcp -m tcp --sport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   "-A OUTPUT -o #{property['staging_iface']} -p tcp -m tcp --sport 80 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT",
   '-A OUTPUT -p udp -m udp --dport 53 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT',

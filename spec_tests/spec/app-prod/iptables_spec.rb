@@ -17,7 +17,7 @@ desired_iptables_rules = [
   "-A INPUT -s #{property['monitor_ip']}/32 -p udp -m udp --sport 1514 -m state --state RELATED,ESTABLISHED -m comment --comment \"OSSEC server agent\" -j ACCEPT",
   '-A INPUT -i lo -m comment --comment "Allow lo to lo traffic all protocols" -j ACCEPT',
   '-A INPUT -p tcp -m state --state INVALID -m comment --comment "drop but do not log inbound invalid state packets" -j DROP',
-  '-A INPUT -m comment --comment "Drop and log all other incomming traffic" -j LOGNDROP',
+  '-A INPUT -m comment --comment "Drop and log all other incoming traffic" -j LOGNDROP',
   "-A OUTPUT -p tcp -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW,RELATED,ESTABLISHED -m comment --comment \"tor instance that provides ssh access\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state NEW -m limit --limit 3/min --limit-burst 3 -m comment --comment \"Rate limit traffic from tor to the ssh dameon\" -j ACCEPT",
   "-A OUTPUT -o lo -p tcp -m tcp --dport 22 -m owner --uid-owner #{property['tor_user_uid']} -m state --state RELATED,ESTABLISHED -m comment --comment \"Allow the established traffic from tor to the ssh dameon\" -j ACCEPT",
