@@ -1,10 +1,9 @@
 Upgrade from 0.3.x to 0.3.5
 ============================
 
-SecureDrop 0.3.5 updates how TLS certificates for the SMTP relay
-used to send OSSEC notifications are handled. It also updates
-the AppArmor profile for Apache to ensure the service starts
-successfully.
+SecureDrop 0.3.5 updates how TLS certificates for the SMTP relay used to send 
+OSSEC notifications are handled. It also updates the AppArmor profile for 
+Apache to ensure the service starts successfully.
 
 The upgrade steps in this document will upgrade a 0.3.x (where x < 5)
 SecureDrop instance to 0.3.5.
@@ -26,7 +25,6 @@ In order to upgrade to the new verification functionality, admins update the
 ``prod-specific.yml`` file and run a special git command designed to merge
 site-specific changes in safely.
 
-
 Allow log rotation for Apache
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The AppArmor profile for Apache was aggressively preventing the service
@@ -46,7 +44,6 @@ Blacklist additional kernel modules
 Newer versions of the Intel NUCs come with wifi and bluetooth hardware,
 so the playbooks now disable the ``btusb`` and ``iwlmvm`` kernel modules,
 in addition to ``bluetooth`` and ``iwlwifi``, which are still blacklisted.
-
 
 Prerequisites
 -------------
@@ -75,9 +72,8 @@ Greeter*.
 
      cd /home/amnesia/Persistent/securedrop/install_files/ansible-base
 
-#. Open ``prod-specific.yml`` in your preferred text editor.
-   Delete the line that starts with ``smtp_relay_fingerprint`` and save the 
-file.
+#. Open ``prod-specific.yml`` in your preferred text editor. Delete the line 
+   that starts with ``smtp_relay_fingerprint`` and save the file.
    If you are using your own or your organization's SMTP relay (not Google's),
    you may want want to continue using fingerprint verification.
    If you are unsure, contact us and we will help you make a determination.

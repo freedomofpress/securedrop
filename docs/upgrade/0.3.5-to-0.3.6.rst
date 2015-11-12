@@ -1,18 +1,15 @@
 Upgrade from 0.3.5 to 0.3.6
 ============================
 
-SecureDrop 0.3.6 was a maintenance release to update the expiration
-date on the GPG signing key used for the Freedom of the Press
-apt repository. The signing key expired on October 26, 2015, preventing
-automatic updates from Freedom of the Press until the issue is
-manually resolved.
+SecureDrop 0.3.6 was a maintenance release to update the expiration date on 
+the GPG signing key used for the Freedom of the Press apt repository. The 
+signing key expired on October 26, 2015, preventing automatic updates from 
+Freedom of the Press until the issue is manually resolved.
 
-
-.. note:: We're considering creating a separate ``securedrop-keyring`` 
-      Debian package to package to manage the signing keys into the future. 
-      If you have strong feelings about how the signing key is managed,
-      `open an issue <https://github.com/freedomofpress/securedrop/issues/>`_.
-
+.. note:: We're considering creating a separate Debian package to
+          manage the signing keys into the future. If you have strong 
+          feelings about how the signing key is managed, `open an issue 
+          <https://github.com/freedomofpress/securedrop/issues/>`_.
 
 The upgrade steps in this document will upgrade a 0.3.5 SecureDrop to
 0.3.6. If you have not yet upgraded to 0.3.5, :doc:`do that first 
@@ -31,7 +28,6 @@ Update Expired GPG Signing Key (SecureDrop Servers)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Application Server and Monitor Server will need to have their apt
 keyrings updated, which can be accomplished by running the Ansible playbooks.
-
 
 Prerequisites
 -------------
@@ -73,11 +69,11 @@ Greeter*.
     gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
    .. tip:: The GPG Master Signing Key is also available from the
-             `Freedom of the Press website 
-<https://freedom.press/sites/default/files/fpf.asc>`_,
-             and the key is signed by the Lead Developer's personal GPG keys, 
-so you can verify
-             that you have the correct key through the GPG Web of Trust (WoT).
+            `Freedom of the Press website 
+            <https://freedom.press/sites/default/files/fpf.asc>`_,
+            and the key is signed by the Lead Developer's personal GPG keys, 
+            so you can verify that you have the correct key 
+            through the GPG Web of Trust (WoT).
 
 #. Pull the latest code ::
 
@@ -96,17 +92,16 @@ so you can verify
      git stash pop
 
 #. Make sure you have Ansible installed. If running ``which ansible`` returns 
-``ansible not found``, you should ::
+   ``ansible not found``, you should ::
 
     sudo apt-get update
     sudo apt-get install ansible
 
 #. Run the Ansible playbooks (substitute the admin account on the servers for 
-``<user>``) ::
+   ``<user>``) ::
 
     ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
 
 During the playbook run, the GPG signing key will be updated, and all packages
 will be upgraded on both servers. The new signing key is valid until October 
-2016,
-at which point another manual update may be necessary.
+2016, at which point another manual update may be necessary.
