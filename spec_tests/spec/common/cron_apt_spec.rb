@@ -60,6 +60,10 @@ describe file('/etc/cron-apt/action.d/3-download') do
 end
 
 desired_cronjobs = [
+  '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot'
+]
+# Checking for old cronjobs to guard against regressions.
+unwanted_cronjobs = [
   '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
   '0 5 * * * root    /sbin/reboot',
 ]
@@ -71,6 +75,10 @@ describe file('/etc/cron.d/cron-apt') do
   desired_cronjobs.each do |cronjob|
     cronjob_regex = Regexp.quote(cronjob)
     its(:content) { should match /^#{cronjob_regex}$/ }
+  end
+  unwanted_cronjobs.each do |cronjob|
+    cronjob_regex = Regexp.quote(cronjob)
+    its(:content) { should_not match /^#{cronjob_regex}$/ }
   end
 end
 
