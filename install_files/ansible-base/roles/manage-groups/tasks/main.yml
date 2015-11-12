@@ -3,17 +3,31 @@
 # by hand, adding group support to it would require
 # Admin intervention. Instead, manage the group
 # membership programmatically, according to hostnames.
-- name: ensure app host is in appropriate groups
+- name: Configure role list for SecureDrop Application Server.
   add_host:
     name: "{{ item }}"
     groups: securedrop,securedrop_application_server
-  when: "item.startswith('app')"
+  when: item.startswith('app')
   with_items: play_hosts
 
-- name: ensure mon host is in appropriate groups
+- name: Configure role list for SecureDrop Monitor Server.
   add_host:
     name: "{{ item }}"
     groups: securedrop,securedrop_monitor_server
-  when: "item.startswith('mon')"
+  when: item.startswith('mon')
   with_items: play_hosts
 
+# Failsafe to ensure that dynamic group population worked as expected.
+# Since we're adding the "app" and "mon" production hosts via the above
+# tasks, rather than specifying membership in the inventory, as Ansible
+# recommends, we don't want to continue with provisioning unless the
+# groups are structured how we expect. If not, fail and display a
+# recommendation to the Admin.
+- name: Check role lists for SecureDrop Servers.
+  fail:
+    msg: >
+      Failed to create role lists for SecureDrop servers.
+      Make sure the servers are called "app" and "mon" in the
+      Ansible inventory file.
+  when: groups.securedrop_application_server | length != 1 or
+        groups.securedrop_monitor_server | length != 1
