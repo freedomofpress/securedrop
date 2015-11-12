@@ -4,7 +4,7 @@ Upgrade from 0.3.5 to 0.3.6
 SecureDrop 0.3.6 was a maintenance release to update the expiration
 date on the GPG signing key used for the Freedom of the Press
 apt repository. The signing key expired on October 26, 2015, preventing
-automatically updates from Freedom of the Press until the issue is
+automatic updates from Freedom of the Press until the issue is
 manually resolved.
 
 
@@ -15,7 +15,8 @@ manually resolved.
 
 
 The upgrade steps in this document will upgrade a 0.3.5 SecureDrop to
-0.3.6. If you have not yet upgraded to 0.3.5, :doc:`do that first <0.3.x-to-0.3.5>`.
+0.3.6. If you have not yet upgraded to 0.3.5, :doc:`do that first 
+<0.3.x-to-0.3.5>`.
 
 Important Changes
 -----------------
@@ -51,7 +52,8 @@ Upgrade Procedure
 
 The upgrade procedure can be performed entirely from the Admin
 Workstation. Start by booting the Admin Tails USB on the Admin 
-Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*.
+Workstation. Make sure you set an *Adminstrator Password* in the *Tails 
+Greeter*.
 
 #. Open a terminal (it is an icon on the top of the screen that looks
    like a little black TV).
@@ -70,6 +72,13 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
     gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
     gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
+   .. tip:: The GPG Master Signing Key is also available from the
+             `Freedom of the Press website 
+<https://freedom.press/sites/default/files/fpf.asc>`_,
+             and the key is signed by the Lead Developer's personal GPG keys, 
+so you can verify
+             that you have the correct key through the GPG Web of Trust (WoT).
+
 #. Pull the latest code ::
 
      git pull
@@ -86,15 +95,18 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
 
      git stash pop
 
-#. Make sure you have Ansible installed. If running ``which ansible`` returns ``ansible not found``, you should ::
+#. Make sure you have Ansible installed. If running ``which ansible`` returns 
+``ansible not found``, you should ::
 
     sudo apt-get update
     sudo apt-get install ansible
 
-#. Run the Ansible playbooks (substitute the admin account on the servers for ``<user>``) ::
+#. Run the Ansible playbooks (substitute the admin account on the servers for 
+``<user>``) ::
 
     ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
 
 During the playbook run, the GPG signing key will be updated, and all packages
-will be upgraded on both servers. The new signing key is valid until October 2016,
+will be upgraded on both servers. The new signing key is valid until October 
+2016,
 at which point another manual update may be necessary.

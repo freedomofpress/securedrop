@@ -15,10 +15,11 @@ Important Changes
 OSSEC Postfix configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Postfix configuration on the Monitor Server previously used a hard-coded
-fingerprint value, specified as ``smtp_relay_fingerprint`` in the ``prod-specific.yml`` file,
-to verify the TLS certificate prior to sending mail. Some mail providers use load balancing
-on the SMTP relay, which causes the fingerprint to change periodicially during normal use.
-With a hard-coded fingerprint, this caused OSSEC alerts to be delayed, so the default
+fingerprint value, specified as ``smtp_relay_fingerprint`` in the 
+``prod-specific.yml`` file, to verify the TLS certificate prior to sending 
+mail.Some mail providers use load balancing on the SMTP relay, which causes
+the fingerprint to change periodicially during normal use. With a hard-coded
+fingerprint, this caused OSSEC alerts to be delayed, so the default
 functionality is now to trust the system CAs on the Monitor Server.
 
 In order to upgrade to the new verification functionality, admins update the 
@@ -64,7 +65,8 @@ Upgrade Procedure
 
 The upgrade procedure can be performed entirely from the Admin
 Workstation. Start by booting the Admin Tails USB on the Admin 
-Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*.
+Workstation. Make sure you set an *Adminstrator Password* in the *Tails 
+Greeter*.
 
 #. Open a terminal (it is an icon on the top of the screen that looks
    like a little black TV).
@@ -74,7 +76,8 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
      cd /home/amnesia/Persistent/securedrop/install_files/ansible-base
 
 #. Open ``prod-specific.yml`` in your preferred text editor.
-   Delete the line that starts with ``smtp_relay_fingerprint`` and save the file.
+   Delete the line that starts with ``smtp_relay_fingerprint`` and save the 
+file.
    If you are using your own or your organization's SMTP relay (not Google's),
    you may want want to continue using fingerprint verification.
    If you are unsure, contact us and we will help you make a determination.
@@ -105,15 +108,17 @@ Workstation. Make sure you set an *Adminstrator Password* in the *Tails Greeter*
              Since 0.3.5 makes changes to the ``prod-specific.yml`` file,
              more verbose git commands are necessary to avoid a merge conflict.
 
-#. Make sure you have Ansible installed. If running ``which ansible`` returns ``ansible not found``, you should ::
+#. Make sure you have Ansible installed. If running ``which ansible`` returns 
+``ansible not found``, you should ::
 
     sudo apt-get update
     sudo apt-get install ansible
 
-#. Run the Ansible playbooks (substitute the admin account on the servers for ``<user>``) ::
+#. Run the Ansible playbooks (substitute the admin account on the servers for 
+``<user>``) ::
 
     ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
 
 During the playbook run, the Postfix TLS verification settings will be updated
-on the Monitor Server, the AppArmor profiles will be updated on the Application Server,
-and both servers will receive new logic for rebooting after unattended-upgrades.
+on the Monitor Server, and both servers will receive new logic for rebooting
+after unattended-upgrades.
