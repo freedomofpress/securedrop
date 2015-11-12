@@ -9,7 +9,7 @@
 
 - name: setup tor apt repo
   apt_repository:
-    repo: deb http://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main
+    repo: deb https://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main
     state: present
     update_cache: yes
   tags:
