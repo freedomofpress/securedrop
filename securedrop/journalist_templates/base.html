@@ -3,12 +3,19 @@
   <head>
     <meta charset="utf-8">
     <title>SecureDrop</title>
-    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/journalist.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="/static/css/font-awesome.css" type="text/css" media="all" />
+    
+    {% assets filters="cssmin", output="gen/journalist.css",
+      "css/normalize.css", "css/journalist.css", "css/font-awesome.css" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <script src="/static/js/libs/jquery-2.1.1.min.js"></script>
-    <script src="/static/js/journalist.js"></script>
+
+    {% assets filters="jsmin", output="gen/journalist.js",
+      "js/libs/jquery-2.1.1.min.js", "js/journalist.js" %}
+      <script type="javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
     {% block extrahead %}{% endblock %}
   </head>
   <body>
@@ -27,7 +34,7 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop"></a>
+        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br/>

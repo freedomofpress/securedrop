@@ -150,6 +150,12 @@ a.text-link {
   height: auto;
 }
 
+.option a.btn.block {
+  margin-bottom: 0px;
+  width: 100%;
+  display: block;
+}
+
 button, a.btn, .btn {
   background: #7985aa;
   box-sizing: border-box;
@@ -324,11 +330,6 @@ p.serious {
 }
 .snippet .message textarea:focus {
   outline: none;
-}
-
-.pull-bottom {
-  position: absolute;
-  bottom: 0px;
 }
 
 .pull-left {
