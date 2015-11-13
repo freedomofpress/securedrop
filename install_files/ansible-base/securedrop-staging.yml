@@ -9,10 +9,10 @@
   hosts: staging
   roles:
     - { role: common, tags: common }
+    - { role: tor-hidden-services, tags: tor }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: install-local-packages, tags: install_local_packages,
         when: install_local_packages }
-    - { role: tor-hidden-services, tags: tor }
   sudo: yes
 
 - name: Configure OSSEC manager.
