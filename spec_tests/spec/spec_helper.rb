@@ -103,12 +103,15 @@ end
 # have accurate dynamic vars regardless of provider.
 def retrieve_ip_addr(hostname)
   ip_output = vagrant_ssh_cmd(hostname, "hostname -I")
-  # Vagrant VirtualBox images will always have eth0 as the NAT device,
-  # but spectests need the private_network device instead.
   iface1, iface2 = ip_output.split()
-  # If we have two devices, assume first is NAT and return second.
-  # Otherwise, assume eth0 is the primary address.
-  return iface2 ? iface2 : iface1
+  # Vagrant VirtualBox images will always have eth0 as the NAT device,
+  # so we actually what the IP address from the eth1 device on VirtualBox hosts.
+  # In other testing environments, we can assume the first address is correct.
+  if `vagrant status #{hostname} --machine-readable`.match(/#{hostname},provider-name,virtualbox/m)
+    return iface2
+  else
+    return iface1
+  end
 end
 
 # Load dynamic variables for current host.
