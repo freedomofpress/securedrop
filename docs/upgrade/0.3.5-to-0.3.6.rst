@@ -19,13 +19,13 @@ Important Changes
 -----------------
 
 Update Expired GPG Signing Key (Admin Workstation)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Admin Workstation is used to verify the signed git tag on new
 SecureDrop releases. Prior to running the 0.3.6 upgrade, the Admin
 Workstation should update the signing key.
 
 Update Expired GPG Signing Key (SecureDrop Servers)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Application Server and Monitor Server will need to have their apt
 keyrings updated, which can be accomplished by running the Ansible playbooks.
 
