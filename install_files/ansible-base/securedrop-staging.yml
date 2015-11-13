@@ -4,7 +4,7 @@
   roles:
     - { role: common, tags: common }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
-    - { role: install-local-packages, tags: install_local_packages,
+    - { role: install-local-packages, tags: [install_local_packages, rebuild],
         when: install_local_packages }
     - { role: tor-hidden-services, tags: tor }
   sudo: yes
