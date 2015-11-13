@@ -31,6 +31,8 @@
     su -s /bin/bash -c 'gpg
     --homedir /var/ossec/.gnupg
     --import /var/ossec/{{ ossec_alert_gpg_public_key }}' {{ ossec_group }}
+  register: add_ossec_gpg_key_result
+  changed_when: "'imported: 1' in add_ossec_gpg_key_result.stderr"
   tags:
     - gpg
 
