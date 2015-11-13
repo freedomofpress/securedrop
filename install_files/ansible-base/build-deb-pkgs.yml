@@ -3,26 +3,34 @@
   hosts: localhost
   connection: local
   gather_facts: no
+  sudo: no
   tasks:
     - name: Bring up Build VM.
       command: vagrant up --no-provision build
       register: bring_up_build_vm_result
       changed_when: "'already running' not in bring_up_build_vm_result.stdout"
+  tags: rebuild
 
+  # Need a separate play, rather than an additional task in the same play,
+  # to ensure that the "build" machine is present in the inventory.
+  # If the machine was not running, and the `vagrant up` command brought it up,
+  # Ansible won't know about it within the previous play.
 - name: Ensure Build VM is available.
   hosts: localhost
   connection: local
   gather_facts: no
+  sudo: no
   tasks:
     - name: Check for "build" machine in inventory.
       fail:
         msg: >
-          The "build" VM is not reachable, but is required for
-          building the app code Debian packages on the staging machines.
-          Run `vagrant up build`, then `vagrant provision /staging/`.
-          Thereafter you can run `vagrant provision /staging/` again
-          and the application code will be rebuilt and reinstalled on each run.
+          The "build" VM is not reachable, but is required for building the
+          app code Debian packages on the staging machines. Run `vagrant up build`,
+          then `vagrant provision /staging/`. Thereafter you can run
+          `ANSIBLE_ARGS="--tags rebuild" vagrant provision /staging/` to rebuild
+          and reinstall the application code.
       when: "'build' not in groups.all"
+  tags: rebuild
 
 - name: Build securedrop-app-code deb package from local code.
   hosts: build
@@ -35,7 +43,8 @@
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
   roles:
-    - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
-    - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
-    - { role: build-generic-pkg, tags: ["securedrop-ossec-agent"], package_name: "securedrop-ossec-agent" }
+    - { role: build-securedrop-app-code-deb-pkg, tags: app-deb }
+    - { role: build-generic-pkg, tags: securedrop-ossec-server, package_name: securedrop-ossec-server }
+    - { role: build-generic-pkg, tags: securedrop-ossec-agent, package_name: securedrop-ossec-agent }
   sudo: yes
+  tags: rebuild
