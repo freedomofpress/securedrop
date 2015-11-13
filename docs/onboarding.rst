@@ -72,7 +72,8 @@ Administrators need to access the servers over SSH.
 To get started, you should copy the ``HidServAuth`` value for the
 Document Interface ATHS from the Admin Workstation to the Journalist
 Workstation. The easiest way to do this is to copy the
-``app-document-aths`` file from the Admin Workstation to the
+``app-document-aths`` and ``app-source-ths`` files from the Admin Workstation 
+to the
 Journalist Workstation with the Data Transfer Device.
 
 Now you need the Tails setup scripts (``securedrop/tails_files``) that
@@ -84,12 +85,14 @@ Workstation. Refer to the docs for :ref:`cloning the SecureDrop
 repository <Download the SecureDrop repository>`, then return here to
 continue setting up the Journalist Workstation.
 
-Once you've done this, you should set up auto-connect for the Document
+Once you've done this, you should set up auto-connect and shortcuts for the 
+Document
 Interface ATHS the same way you did on the Admin Workstation. Follow
 :ref:`the same docs <auto-connect ATHS>`, except on the Journalist
-Workstation, you should only add the line from ``app-document-aths``
-to ``torrc_additions``; only the Admin Workstation should *also* have
-the ``HidServAuth`` lines from ``app-ssh-aths`` and ``mon-ssh-aths``.
+Workstation, you should enter the lines from ``app-document-aths``
+and ``app-source-ths`` when prompted to by the ``install.sh`` script. Only the 
+Admin Workstation should have the ``HidServAuth`` lines from ``app-ssh-aths`` 
+and ``mon-ssh-aths``.
 
 Once the ``install.sh`` script is finished, you should be able to access the
 Document Interface. Open the Tor Browser and navigate to the .onion address for
