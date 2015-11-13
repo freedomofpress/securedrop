@@ -1,4 +1,14 @@
 ---
+- name: Create Build VM if necessary.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Bring up Build VM.
+      command: vagrant up --no-provision build
+      register: bring_up_build_vm_result
+      changed_when: "'already running' not in bring_up_build_vm_result.stdout"
+
 - name: Ensure Build VM is available.
   hosts: localhost
   connection: local
