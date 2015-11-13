@@ -1,4 +1,19 @@
 ---
+- name: Ensure Build VM is available.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Check for "build" machine in inventory.
+      fail:
+        msg: >
+          The "build" VM is not reachable, but is required for
+          building the app code Debian packages on the staging machines.
+          Run `vagrant up build`, then `vagrant provision /staging/`.
+          Thereafter you can run `vagrant provision /staging/` again
+          and the application code will be rebuilt and reinstalled on each run.
+      when: "'build' not in groups.all"
+
 - name: Build securedrop-app-code deb package from local code.
   hosts: build
   vars_files:
