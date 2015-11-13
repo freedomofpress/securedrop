@@ -66,7 +66,7 @@ wanted_debs.each do |wanted_deb|
   describe command("dpkg-deb --field #{wanted_deb}") do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should contain("Maintainer: SecureDrop Team <securedrop@freedom.press>") }
-    its(:stdout) { should contain("Homepage: https://freedom.press/securedrop") }
+    its(:stdout) { should contain("Homepage: https://securedrop.org") }
     its(:stdout) { should contain("Package: #{package_name}")}
     its(:stdout) { should contain("Architecture: amd64") }
   end
