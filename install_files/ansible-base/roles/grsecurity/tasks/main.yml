@@ -11,8 +11,6 @@
 
 - include: clean_packages.yml
 
-- include: remove_kernel_modules.yml
-
 - include: apply_grsec_lock.yml
   tags:
     - reboot

@@ -15,3 +15,5 @@
 
 - include: disable_swap.yml
 
+- include: remove_kernel_modules.yml
+
