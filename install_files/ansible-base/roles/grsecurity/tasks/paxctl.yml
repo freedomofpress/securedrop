@@ -1,0 +1,21 @@
+---
+- name: Install paxctl.
+  apt:
+    pkg: paxctl
+    state: present
+  tags:
+    - apt
+    - paxctl
+    - kernel
+    - hardening
+
+- name: Adjust paxctl headers on grub binaries.
+  command: paxctl -Cpm {{ item }}
+  with_items:
+    - /usr/sbin/grub-probe
+    - /usr/sbin/grub-mkdevicemap
+  tags:
+    - paxctl
+    - kernel
+    - hardening
+

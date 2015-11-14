@@ -3,6 +3,7 @@
   # since that fact will be used in multiple includes.
 - include: check_installation.yml
 
+- include: paxctl.yml
   # Install the grsec kernel prior to running unattended-upgrades to avoid
   # reboots
 - include: from_fpf_repo_install_grsec.yml
