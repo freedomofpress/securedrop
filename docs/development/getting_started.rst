@@ -248,6 +248,11 @@ To rebuild the local packages for the app code: ::
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
 
+.. tip::
+    You will also need to build the OSSEC packages in a separate repo.
+    Clone the ossec repo from https://github.com/freedomofpress/ossec and run
+    ``vagrant up``, then copy the deb packages into the ``build/``
+    directory in the securedrop repo.
 
 Prod
 ~~~~
