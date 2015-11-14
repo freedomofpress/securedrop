@@ -19,6 +19,6 @@
       Cannot find local Debian package "{{ item }}".
       You will need to build the OSSEC packages in a separate repo
       and copy them into the "build/" directory.
-      See the Developer docs for details: https://docs.securedrop.org/en/latest/development/getting_started.html
+      See the Developer docs for details: https://docs.securedrop.org/en/latest/development/virtual_environments.html#staging
   when: item.stat.exists == false
   with_items: local_packages_existence_check.results
