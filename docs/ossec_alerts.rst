@@ -261,15 +261,22 @@ Postfix, run the following command:
 The output will show you attempts to send the alerts and provide hints
 as to what went wrong. Here's a few possibilities and how to fix them:
 
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Problem                           | Solution                                                                                                                                                                                                                           |
-+===================================+====================================================================================================================================================================================================================================+
-| Connection timed out              | Check that the hostname and port is correct in the relayhost line of ``/etc/postfix/main.cf``                                                                                                                                      |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Server certificate not verified   | Check that the relay certificate is valid (for more detailed help, see `Troubleshooting SMTP TLS <#troubleshooting-smtp-tls>`__). Consider adding ``smtp_relay_cert_override_file`` to ``prod_specific.yml`` as described above.   |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Authentication failure            | Edit ``/etc/postfix/sasl_passwd`` and make sure the username, domain and password are correct. Run ``postmap /etc/postfix/sasl_passwd`` to update when finished.                                                                   |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+================================ ===================================================
+Problem                          Solution
+================================ ===================================================
+Connection timed out             | Check that the hostname and port is correct
+                                   in the relayhost line of
+                                 | ``/etc/postfix/main.cf``
+Server certificate not verified  | Check that the relay certificate is valid
+                                   (for more detailed help, see `Troubleshooting
+                                   SMTP TLS <#troubleshooting-smtp-tls>`_).
+                                   Consider adding ``smtp_relay_cert_override_file``
+                                 | to ``prod_specific.yml`` as described above.
+Authentication failure           | Edit ``/etc/postfix/sasl_passwd`` and make
+                                   sure the username, domain and password are
+                                   correct. Run ``postmap /etc/postfix/sasl_passwd``
+                                 | to update when finished.
+================================ ===================================================
 
 After making changes to the Postfix configuration, you should run
 ``service postfix reload`` and test the new settings by restarting the
