@@ -289,18 +289,27 @@ outbound SMTP which are in ``/etc/network/iptables/rules_v4``. We
 recommend modifying and re-running the Ansible playbook instead of doing
 things like this.
 
+Useful log files for OSSEC
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Other log files that may contain useful information:
 
--  /var/log/procmail.log - there will be lines in this for every alert
-   that gets triggered
+/var/log/procmail.log
+    Includes lines for sending mail containing OSSEC alerts.
 
--  /var/ossec/logs/ossec.log - OSSEC's general operation is covered here
+/var/log/syslog
+    Messages related to grsecurity, AppArmor and iptables.
 
--  /var/ossec/logs/alerts/alerts.log - contains details of every recent
-   OSSEC alert
+/var/ossec/logs/ossec.log
+    OSSEC's general operation is covered here.
 
--  /var/log/syslog - messages related to grsecurity, AppArmor and
-   iptables
+/var/ossec/logs/alerts/alerts.log
+    Contains details of every recent OSSEC alert.
+
+.. tip:: Remember to encrypt any log files before sending via email,
+         for example to securedrop@freedom.press, in order to protect
+         security-related information about your organization's
+         SecureDrop instance.
 
 Troubleshooting SMTP TLS
 ~~~~~~~~~~~~~~~~~~~~~~~~
