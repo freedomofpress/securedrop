@@ -1,22 +1,25 @@
 #!/bin/bash
-
-# bail out on errors
 set -e
 set -x
 
-# declare function for EXIT trap
-function cleanup {
-    echo "Destroying droplet..."
-    vagrant destroy /prod/ -f
-}
 
-# Ensure that DigitalOcean droplet will be cleaned up
-# even if script errors (e.g., if serverspec tests fail).
-trap cleanup EXIT
-
-# If the previous build in snap-ci failed, the droplet
-# will still exist. Ensure that it's gone with a pre-emptive destroy.
-cleanup
+# Only enabled auto-destroy for testing droplets
+# if we're running in Snap-CI. If not running in Snap-CI,
+# then executing this bash script will run all the tests
+# locally.
+if [[ "${SNAP_CI}" == "true" ]]; then
+    # declare function for EXIT trap
+    function cleanup {
+        echo "Destroying droplet..."
+        vagrant destroy /staging/ -f
+    }
+    # Ensure that DigitalOcean droplet will be cleaned up
+    # even if script errors (e.g., if serverspec tests fail).
+    trap cleanup EXIT
+    # If the previous build in snap-ci failed, the droplet
+    # will still exist. Ensure that it's gone with a pre-emptive destroy.
+    cleanup
+fi
 
 # Find the root of the git repository. A simpler implementation
 # would be `git rev-parse --show-toplevel`, but that must be run
