@@ -6,6 +6,11 @@ describe file('/etc/hosts') do
   its(:content) { should match /^#{app_host_regex}$/ }
 end
 
+# Regression test to check for duplicate entries.
+describe command('uniq --repeated /etc/hosts') do
+  its(:stdout) { should eq "" }
+end
+
 # ensure required packages are installed
 ['postfix', 'procmail', 'mailutils', 'securedrop-ossec-server'].each do |pkg|
   describe package(pkg) do

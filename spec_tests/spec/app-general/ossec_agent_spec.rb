@@ -8,6 +8,11 @@ describe file('/etc/hosts') do
   its(:content) { should match /^#{mon_host_regex}$/ }
 end
 
+# Regression test to check for duplicate entries.
+describe command('uniq --repeated /etc/hosts') do
+  its(:stdout) { should eq "" }
+end
+
 # ensure custom ossec-agent package is installed
 describe package('securedrop-ossec-agent') do
   it { should be_installed }
