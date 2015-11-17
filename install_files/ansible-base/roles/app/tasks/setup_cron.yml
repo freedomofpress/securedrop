@@ -1,5 +1,5 @@
 ---
-- name: Add cronjob to clean SecureDrop tmp dir daily.
+- name: Add cron job to clean SecureDrop tmp dir daily.
   cron:
     name: cleanup SecureDrop temp dir
     job: "{{ securedrop_code }}/manage.py clean_tmp"

@@ -54,7 +54,7 @@ describe file(property['securedrop_code']) do
   it { should be_executable.by('owner') }
 end
 
-# ensure cronjob for securedrop tmp dir cleanup is enabled
+# ensure cron job for securedrop tmp dir cleanup is enabled
 describe cron do
   # TODO: this should be using property, but the ansible role
   # doesn't use a var, it's hard-coded. update ansible, then fix test.

@@ -49,7 +49,7 @@
     - apt
     - cron-apt
 
-- name: Create cronjob for running cron-apt updates nightly.
+- name: Create cron job for running cron-apt updates nightly.
   copy:
     src: cron-apt
     dest: /etc/cron.d/cron-apt

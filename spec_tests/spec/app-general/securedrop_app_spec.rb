@@ -44,7 +44,7 @@ describe file("#{property['securedrop_code']}/static/i/logo.png") do
   it { should be_grouped_into property['securedrop_user'] }
 end
 
-# ensure cronjob for securedrop tmp dir cleanup is enabled
+# ensure cron job for securedrop tmp dir cleanup is enabled
 describe cron do
   it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean_tmp" }
 end

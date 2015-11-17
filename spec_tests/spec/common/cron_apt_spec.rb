@@ -62,7 +62,7 @@ end
 desired_cronjobs = [
   '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot'
 ]
-# Checking for old cronjobs to guard against regressions.
+# Checking for old cron jobs to guard against regressions.
 unwanted_cronjobs = [
   '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
   '0 5 * * * root    /sbin/reboot',

@@ -4,7 +4,7 @@
 
 # Every night at 4:00 AM run cron-apt, then reboot.
 # Note that cron-apt sleeps for 0-60 minutes when run
-# noninteractively (e.g. in this cronjob), so the actual
+# noninteractively (e.g. in this cron job), so the actual
 # start time may be as late as 5:00 AM. Only reboot
 # if cron-apt exited successfully, so broken or partially
 # installed packages don't cause problems with booting.
