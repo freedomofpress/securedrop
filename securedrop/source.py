@@ -154,12 +154,10 @@ def generate_unique_codename(num_words):
 
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
-    # Popping this key prevents errors when a logged in user returns to /generate.
-    # TODO: is this the best experience? A logged in user will be automatically
-    # logged out if they navigate to /generate by accident, which could be
-    # confusing. It might be better to instead redirect them to the lookup
-    # page, or inform them that they're logged in.
-    session.pop('logged_in', None)
+    if logged_in():
+        flash("You were redirected because you are already logged in. If you want"
+              "to create a new account, you should log out first.", "notification")
+        return redirect(url_for('lookup'))
 
     num_words = 7
     if request.method == 'POST':
@@ -381,6 +379,15 @@ def login():
                     "Login failed for invalid codename".format(codename))
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    if logged_in():
+        session.clear()
+        flash("Thank you for logging out.", "notification")
+
+    return redirect(url_for('index'))
+        
 
 
 @app.route('/howto-disable-js')
