@@ -1,3 +1,9 @@
+# Source: https://github.com/jlafon/ansible-profile
+# License: MIT
+# More info: http://jlafon.io/ansible-profiling.html
+# The profiling functionality will be provided by Ansible v2,
+# since this callback_plugin has been merged into core,
+# but we're including here to support older versions of Ansible.
 import datetime
 import os
 import time
