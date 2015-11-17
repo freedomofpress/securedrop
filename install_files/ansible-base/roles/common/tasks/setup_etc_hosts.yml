@@ -1,13 +1,37 @@
 ---
+- name: Read /etc/hosts file to filter duplicate entries.
+  command: awk '!a[$0]++' /etc/hosts
+  register: etc_hosts_no_duplicates_result
+  # Read-only task, so don't perform change.
+  # When writing to the file in a subsequent task,
+  # the "changed" attribute will be honored (if appropriate).
+  changed_when: false
+
+  # Previous Ansible tasks for managing /etc/hosts have
+  # appended redundant lines to the file. By default the
+  # `lineinfile` module changes only the final line matching,
+  # but under Linux the first matching line in /etc/hosts
+  # wins, and the resolved address is used. So first we need
+  # to remove all duplicates.
+- name: Remove duplicate entries from /etc/hosts.
+  copy:
+    dest: /etc/hosts
+    # Appending newline is necessary for idempotence,
+    # since the `lineinfile` task below will add it if not found.
+    content: "{{ etc_hosts_no_duplicates_result.stdout }}\\n"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+
   # Since production environment does not have DHCP or DNS,
   # create hard-coded /etc/hosts entries with assigned local IP addresses.
-- name: ensure /etc/hosts file has entry for app and monitor servers
+- name: Add local IPv4 addresses for SecureDrop servers to /etc/hosts.
   lineinfile:
-    backup: yes
     dest: /etc/hosts
     regexp: "{{ item.hostname }}"
     line: "{{ item.ip }}  {{ item.hostname }}"
-    insertafter: EOF
+    backup: yes
   with_items: ip_info
   tags:
     - host_aliases
