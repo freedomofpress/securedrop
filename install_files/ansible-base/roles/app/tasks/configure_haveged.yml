@@ -1,4 +1,33 @@
 ---
+- name: Read haveged defaults file to filter duplicate entries.
+  command: awk '!a[$0]++' /etc/default/haveged
+  register: haveged_defaults_no_duplicates_result
+  # Read-only task, so don't perform change.
+  # When writing to the file in a subsequent task,
+  # the "changed" attribute will be honored (if appropriate).
+  changed_when: false
+  tags:
+    - haveged
+    - hardening
+
+  # Previous Ansible tasks for managing /etc/default/haveged have
+  # appended redundant lines to the file. To ensure idempotence,
+  # we'll first remove any duplicate lines, then set the args
+  # we want via `lineinfile` below.
+- name: Remove duplicate entries from haveged defaults file.
+  copy:
+    dest: /etc/default/haveged
+    # Appending newline is necessary for idempotence,
+    # since the `lineinfile` task below will add it if not found.
+    content: "{{ haveged_defaults_no_duplicates_result.stdout }}\\n"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  tags:
+    - haveged
+    - hardening
+
 - name: Increase haveged's low entropy watermark to minimize "flag for reply" flow.
   lineinfile:
     dest: /etc/default/haveged
