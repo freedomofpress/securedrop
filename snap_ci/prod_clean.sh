@@ -1,22 +1,25 @@
 #!/bin/bash
-
-# bail out on errors
 set -e
 set -x
 
-# declare function for EXIT trap
-function cleanup {
-    echo "Destroying droplet..."
-    vagrant destroy /prod/ -f
-}
 
-# Ensure that DigitalOcean droplet will be cleaned up
-# even if script errors (e.g., if serverspec tests fail).
-trap cleanup EXIT
-
-# If the previous build in snap-ci failed, the droplet
-# will still exist. Ensure that it's gone with a pre-emptive destroy.
-cleanup
+# Only enabled auto-destroy for testing droplets
+# if we're running in Snap-CI. If not running in Snap-CI,
+# then executing this bash script will run all the tests
+# locally.
+if [[ "${SNAP_CI}" == "true" ]]; then
+    # declare function for EXIT trap
+    function cleanup {
+        echo "Destroying droplet..."
+        vagrant destroy /staging/ -f
+    }
+    # Ensure that DigitalOcean droplet will be cleaned up
+    # even if script errors (e.g., if serverspec tests fail).
+    trap cleanup EXIT
+    # If the previous build in snap-ci failed, the droplet
+    # will still exist. Ensure that it's gone with a pre-emptive destroy.
+    cleanup
+fi
 
 # Find the root of the git repository. A simpler implementation
 # would be `git rev-parse --show-toplevel`, but that must be run
@@ -28,13 +31,13 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
 # Staging config includes looser Apache rules, so filter those out.
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
-    "${repo_root}"/install_files/ansible-base/staging-specific.yml | \
+    "${repo_root}"/install_files/ansible-base/group_vars/staging.yml | \
     grep -vi apache > \
     "${repo_root}"/install_files/ansible-base/prod-specific.yml
 
 # Skip "validate" so reused vars don't cause failure,
 # and skip "grsec" because DigitalOcean hosts don't support custom kernels.
-export SECUREDROP_PROD_SKIP_TAGS=validate,grsec
+export ANSIBLE_ARGS="--skip-tags=validate,grsec"
 
 # Assume that /prod/ instances will be created from scratch, as part
 # of a full provisioning run, so initial SSH connections must be

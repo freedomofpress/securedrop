@@ -1,0 +1,51 @@
+---
+  # If the grsec package is installed (via common role) and the grsec_lock is
+  # not present reboot the system, to boot into the grsec kernel.
+- name: Restart machine if the grsec lock sysctl option does not exist.
+  shell: shutdown -r now "Ansible restart to boot into grsec kernel"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: not running_grsec.stat.exists
+  sudo: yes
+  tags:
+    - reboot
+
+  # If grsec wasn't already running, wait for the host to come back up
+  # after rebooting. The Ansible variable {{ ansible_ssh_host }} refers
+  # to the host just rebooted, and this syntax will work in production,
+  # vagrant/virtualbox, and snap-ci environments.
+- name: Wait for server to come back.
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  when: not running_grsec.stat.exists
+  # Local wait action, doesn't require sudo privileges,
+  # `wait_for` essentially means "do nothing for a while."
+  # Since the top-level playbook (e.g. securedrop-prod.yml)
+  # sets `sudo: true`, the sudo parameter must be explicitly
+  # overridden on a per-task basis. If sudo remains true
+  # for this task, Ansible will prompt for the sudo password
+  # of the host machine (i.e. the machine running the playbook)
+  # in order to proceed. This would be annoying and is
+  # completely unnecessary for a simple wait action.
+  sudo: false
+  tags:
+    - reboot
+
+- name: Set sysctl flags for grsecurity.
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items: grsec_sysctl_flags
+  sudo: yes
+  tags:
+    - hardening
+    - grsec
+    - sysctl

@@ -1,14 +1,16 @@
 ---
-- name: install apache packages
+- name: Install apache packages.
   apt:
     pkg: "{{ item }}"
     state: latest
+    update_cache: yes
+    cache_valid_time: 3600
   with_items: apache_packages
   tags:
     - apt
     - apache
 
-- name: ensure apache configuration files are present
+- name: Copy Apache configuration and security files.
   copy:
     src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
@@ -18,7 +20,7 @@
   tags:
     - apache
 
-- name: ensure templatized apache configs are present
+- name: Copy Apache ports and site configs.
   template:
     src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
@@ -28,7 +30,7 @@
   tags:
     - apache
 
-- name: ensure required apache modules are present
+- name: Enable required Apache modules.
   apache2_module:
     state: present
     name: "{{ item }}"
@@ -36,7 +38,7 @@
   tags:
     - apache
 
-- name: ensure non-required apache modules are disabled
+- name: Disable blacklisted Apache modules.
   apache2_module:
     state: absent
     name: "{{ item }}"
@@ -45,36 +47,26 @@
     - apache
     - hardening
 
-- name: ensure 000-default site is disabled
+- name: Disable default Apache sites.
   file:
     state: absent
-    dest: /etc/apache2/sites-enabled/000-default.conf
+    dest: /etc/apache2/sites-enabled/{{ item }}
+  with_items:
+    - 000-default.conf
+    - default-ssl.conf
+    - default.conf
   tags:
     - apache
     - hardening
 
-- name: ensure default-ssl site is disabled
-  file:
-    state: absent
-    dest: /etc/apache2/sites-enabled/default-ssl.conf
-  tags:
-    - apache
-    - hardening
-
-- name: ensure default site is disabled
-  file:
-    state: absent
-    dest: /etc/apache2/sites-enabled/default.conf
-  tags:
-    - apache
-    - hardening
-
-- name: ensure securedrop sites are enabled
+- name: Enable SecureDrop Apache sites.
   file:
     state: link
     src: "/etc/apache2/sites-available/{{ item }}.conf"
     dest: "/etc/apache2/sites-enabled/{{ item }}.conf"
-  with_items: apache_sites
+  with_items:
+    - document
+    - source
   notify:
     - restart apache2
   tags:

@@ -16,9 +16,18 @@ Vagrant.configure("2") do |config|
     development.vm.network "forwarded_port", guest: 8081, host: 8081
     development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
+      # Hack to trick Vagrant into parsing the command-line args for
+      # Ansible options, see https://gist.github.com/phantomwhale/9657134
+      # Example usage:
+      #   ANSIBLE_ARGS="--skip-tags=foo" vagrant provision development
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
-      ansible.skip_tags = ENV['SECUREDROP_DEVELOPMENT_SKIP_TAGS'] || 'non-development'
       ansible.verbose = 'v'
+      ansible.groups = {
+        'development' => %(development),
+        'securedrop_application_server' => %w(development),
+        'securedrop:children' => %w(development),
+      }
     end
     development.vm.provider "virtualbox" do |v|
       v.name = "development"
@@ -68,19 +77,13 @@ Vagrant.configure("2") do |config|
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
-      ansible.tags = ENV['STAGING_TAGS']
-      # Quickest boot
-      #ansible.skip_tags = [ "common", "ossec", 'app-test' ]
-      # Testing the web application installing local securedrop-app-code deb
-      # package
-      #ansible.skip_tags = [ "common", "ossec", 'fpf_repo' ]
-      # Testing the web app from repo
-      #ansible.skip_tags = [ "install_local_pkgs", "common", "ossec" ]
-      # Creating the apparmor profiles
-      #ansible.skip_tags = [ "grsec",  "ossec", "app-test" ]
-      # Testing the full install install with local access exemptions
-      # This requires to also up mon-staging or else authd will error
-      ansible.skip_tags = ENV['SECUREDROP_STAGING_SKIP_TAGS'] || 'install_local_pkgs'
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+      ansible.groups = {
+        'securedrop_application_server' => %(app-staging),
+        'securedrop_monitor_server' => %(mon-staging),
+        'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
+        'securedrop:children' => %w(securedrop_application_server securedrop_monitor_server),
+      }
     end
   end
 
@@ -127,7 +130,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # the production playbook verifies that staging default values are not
       # used will need to skip the this role to run in Vagrant
-      ansible.skip_tags = ENV['SECUREDROP_PROD_SKIP_TAGS']
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
@@ -141,7 +144,12 @@ Vagrant.configure("2") do |config|
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
-      ansible.skip_tags = ENV['BUILD_SKIP_TAGS']
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+      ansible.groups = {
+        'development' => %(build),
+        'securedrop_application_server' => %(build),
+        'securedrop:children' => %w(development),
+      }
     end
     build.vm.provider "virtualbox" do |v|
       v.name = "build"
@@ -158,6 +166,7 @@ Vagrant.configure("2") do |config|
     snapci.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
     end
     snapci.vm.provider "virtualbox" do |v|
       v.name = "snapci"

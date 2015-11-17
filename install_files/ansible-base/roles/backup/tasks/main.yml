@@ -2,14 +2,12 @@
   # TODO the version is hardcoded into the collect.py script name and ansible
   # task. This should be changed in the ansible task to use a group_var with the
   # version or to read it from the securedrop_code version.py
-- name: copy the versions collect.py script to the target server /tmp directory
+- name: Copy the collect.py script to the Application Server /tmp directory
   copy:
     src: 0.3_collect.py
     dest: /tmp/
     owner: root
-    # file mode must be specified as a string in dict syntax, see:
-    # https://github.com/ansible/ansible/issues/9196
-    mode: '770'
+    mode: '0770'
   tags:
     - collect
     - script
@@ -23,10 +21,10 @@
   #   - custom header image (if applicable)
   # These files are packed into a gpg encrypted zipfile with filename
   # format: sd-backup-TIMESTAMP.zip.gpg
-- name: run the collect script to backup all the needed files to perform a restore
+- name: Run the collect script to backup all the needed files to perform a restore
   # IMPORTANT: chdir must be specified in one-liner syntax when using async.
   # This is a bug in Ansible, see: https://github.com/ansible/ansible/issues/9693
-  shell: chdir=/tmp /tmp/0.3_collect.py
+  command: chdir=/tmp /tmp/0.3_collect.py
   # Long-running installs may have more submissions, which means retrieving
   # the files for backup will take longer. Make this task async, so
   # the rest of the playbook can run in tandem.
@@ -37,7 +35,7 @@
     - collect
     - script
 
-- name: fetch the created backup file back to the host machine's ansible_base directory
+- name: Fetch the created backup file back to the Admin Workstation's ansible_base directory.
   fetch:
     src: /tmp/{{ backup_filename.stdout }}.gpg
     dest: ./{{ backup_filename.stdout }}.gpg
@@ -46,14 +44,14 @@
   tags:
     - fetch
 
-- name: secure delete backup zip from server
+- name: Secure-delete the backup zip from the Application Server.
   command: srm /tmp/{{ backup_filename.stdout }}
   async: 300
   poll: 10
   tags:
     - srm
 
-- name: secure delete the encrypted backup from server
+- name: Secure-delete the encrypted backup from the Application Server.
   command: srm /tmp/{{ backup_filename.stdout }}.gpg
   async: 300
   poll: 10
@@ -61,7 +59,7 @@
     - srm
 
   # TODO: consider moving restore tasks to separate yaml file.
-- name: if a restore file is declared copy migrate script to the app server tmp dir
+- name: Restore | Copy migration script to the Application Server.
   copy:
     src: 0.3_restore.py
     dest: /tmp/
@@ -73,7 +71,7 @@
     - restore
     - permissions
 
-- name: if a restore file is defined copy it to the app server tmp dir
+- name: Restore | Copy backup zip file for restore to Application Server.
   copy:
     src: "{{ backup_zip }}"
     dest: /tmp/{{ backup_zip }}
@@ -81,13 +79,13 @@
   tags:
     - restore
 
-- name: if a restore file is defined run the restore.py script
+- name: Restore | Run the restore.py script.
   shell: /tmp/0.3_restore.py /tmp/{{ backup_zip }}
   when: backup_zip is defined
   tags:
     - restore
 
-- name: if a restore file is defined secure delete it
+- name: Restore | Secure-delete the restore file.
   command: srm /tmp/{{ backup_zip }}
   async: 300
   poll: 10

@@ -35,8 +35,12 @@ describe file('/etc/default/haveged') do
   it { should be_mode '644' }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
-  # TODO: lineinfile is appending needlessly here, let's just template this file
   its(:content) { should match /^DAEMON_ARGS="-w 2400"$/ }
+end
+
+# Regression test to check for duplicate entries.
+describe command('uniq --repeated /etc/default/haveged') do
+  its(:stdout) { should eq "" }
 end
 
 # ensure haveged is running

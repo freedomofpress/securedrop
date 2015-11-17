@@ -1,5 +1,8 @@
 ---
-- name: ensure custom appamror profiles are in complain mode
+# TODO: Idempotence will be difficult here. We could register the
+# output of aa-status and read the "complain" lines, but grepping
+# the aa-status would be painful.
+- name: Set AppArmor profiles to complain mode.
   command: aa-complain /etc/apparmor.d/{{ item }}
   with_items: apparmor_profiles
   tags:

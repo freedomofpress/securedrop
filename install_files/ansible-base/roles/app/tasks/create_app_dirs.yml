@@ -1,5 +1,5 @@
 ---
-- name: ensure /var/www/html/ is removed
+- name: Remove default Apache site directory /var/www/html/.
   file:
     state: absent
     dest: "/var/www/html"
@@ -7,7 +7,7 @@
     - apache
     - permissions
 
-- name: ensure securedrop root directory exists
+- name: Create SecureDrop app code directory.
   file:
     state: directory
     mode: 0700
@@ -17,7 +17,7 @@
   tags:
     - permissions
 
-- name: ensure securedrop data directory exists
+- name: Create SecureDrop data directory.
   file:
     state: directory
     mode: 0700
@@ -27,7 +27,7 @@
   tags:
     - permissions
 
-- name: ensure securedrop data store directory exists
+- name: Create SecureDrop data store directory.
   file:
     state: directory
     mode: 0700
@@ -37,7 +37,7 @@
   tags:
     - permissions
 
-- name: ensure securedrop keyring directory exists
+- name: Create SecureDrop keyring directory.
   file:
     state: directory
     mode: 0700
@@ -47,7 +47,7 @@
   tags:
     - permissions
 
-- name: ensure securedrop temp directory exists
+- name: Create SecureDrop temp directory.
   file:
     state: directory
     mode: 0700

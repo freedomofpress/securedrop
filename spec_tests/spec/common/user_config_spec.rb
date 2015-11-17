@@ -1,5 +1,5 @@
 # ensure sudoers file is present
-['/etc/sudoers', '/etc/sudoers.tmp'].each do |sudoers|
+['/etc/sudoers'].each do |sudoers|
   describe file(sudoers) do
     it { should be_mode '440' }
     it { should be_readable.by_user('root') }
@@ -13,7 +13,7 @@
 end
 
 # ensure securedrop-specific bashrc additions are present
-describe file('/etc/bashrc.securedrop_additions') do
+describe file('/etc/profile.d/securedrop_additions.sh') do
   non_interactive_str = Regexp.quote('[[ $- != *i* ]] && return')
   its(:content) { should match /^#{non_interactive_str}$/ }
   its(:content) { should match /^if which tmux >\/dev\/null 2>&1; then$/ }
@@ -25,5 +25,7 @@ end
 # find some way to read this variable dynamically.
 # probably best to parse the YAML vars file via spec_helper.rb
 describe file('/home/vagrant/.bashrc') do |bashrc|
-  its(:content) { should match /^. \/etc\/bashrc\.securedrop_additions$/  }
+  # Regression test: SecureDrop bashrc additions were previously added to local
+  # ~/.bashrc files in admin accounts, so now we're checking that the line does NOT exist.
+  its(:content) { should_not match /^. \/etc\/bashrc\.securedrop_additions$/  }
 end

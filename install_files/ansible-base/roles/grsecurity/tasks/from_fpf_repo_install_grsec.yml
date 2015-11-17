@@ -1,0 +1,97 @@
+---
+  # The default motd shipped with Ubuntu displays system load averages.
+  # The calls used to gather the system load information are blocked
+  # by grsecurity, which causes error messages like this on login:
+  #
+  # From 10.0.2.2: denied RWX mmap of <anonymous mapping>
+  # by /usr/bin/landscape-sysinfo[landscape-sysin:3393] uid/euid:0/0
+  # gid/egid:0/0, parent
+  # /usr/share/landscape/landscape-sysinfo.wrapper[50-landscape-sy:3386]
+  # uid/euid:0/0 gid/egid:0/0
+  #
+  # So, let's remove the default motd so that doesn't happen.
+- name: Remove MOTD pam module from SSH logins.
+  lineinfile:
+    dest: /etc/pam.d/sshd
+    regexp: pam.motd
+    state: absent
+    backup: yes
+  tags:
+    - motd
+    - grsecurity
+
+- name: Install paxctl.
+  apt:
+    pkg: paxctl
+    state: present
+  tags:
+    - apt
+    - paxctl
+    - kernel
+    - hardening
+
+- name: Adjust paxctl headers on grub binaries.
+  command: paxctl -Cpm {{ item }}
+  with_items:
+    - /usr/sbin/grub-probe
+    - /usr/sbin/grub-mkdevicemap
+  tags:
+    - paxctl
+    - kernel
+    - hardening
+
+- name: Install the grsecurity-patched kernel from the FPF repo.
+  apt:
+    pkg: securedrop-grsec
+    state: latest
+  async: 300
+  poll: 10
+  tags:
+    - apt
+    - grsec
+    - kernel
+    - hardening
+
+- name: Get grsec kernel string from grub config.
+  shell: grep menuentry /boot/grub/grub.cfg | grep grsec | grep -v recovery | head -1 | cut -d "'" -f2
+  # Read-only task for
+  changed_when: false
+  register: grsec_str
+  tags:
+    - grsec
+    - kernel
+    - hardening
+
+- name: Set grsec kernel as default for next boot.
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
+  tags:
+    - grsec
+    - kernel
+    - hardening
+
+- name: Reboot into the grsec kernel.
+  command: shutdown -r now "Rebooting into the grsec kernel..."
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: not running_grsec.stat.exists
+  tags:
+    - reboot
+    - grsec
+    - kernel
+    - hardening
+
+- name: Wait for server to come back.
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port }}
+      delay=45
+      state=started
+  sudo: false
+  when: not running_grsec.stat.exists
+  tags:
+    - reboot
+    - grsec
+    - kernel
+    - hardening

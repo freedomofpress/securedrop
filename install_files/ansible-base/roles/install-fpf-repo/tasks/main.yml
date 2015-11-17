@@ -1,0 +1,17 @@
+---
+- name: Install FPF apt repo GPG signing key.
+  apt_key:
+    state: present
+    data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+  tags:
+    - apt
+    - fpf_repo
+
+- name: Setup FPF apt repo.
+  apt_repository:
+    repo: deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main
+    state: present
+    update_cache: yes
+  tags:
+    - apt
+    - fpf_repo

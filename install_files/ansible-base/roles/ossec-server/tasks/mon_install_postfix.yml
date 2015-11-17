@@ -1,0 +1,46 @@
+---
+- name: Install postfix.
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: ossec_postfix_dependencies
+  tags:
+    - apt
+    - postfix
+
+- name: Copy postfix /etc/aliases file to route root mail alerts to OSSEC.
+  copy:
+    src: aliases
+    dest: /etc/aliases
+  notify: update aliases
+  tags:
+    - postfix
+
+- name: Configure SASL password for SMTP relay.
+  template:
+    src: sasl_passwd
+    dest: /etc/postfix/sasl_passwd
+    mode: 0400
+  notify: update sasl_passwd db
+  tags:
+    - postfix
+    - permissions
+
+- name: Configure Postfix to strip SMTP headers.
+  copy:
+    src: header_checks
+    dest: /etc/postfix/header_checks
+  notify: postmap_header_checks
+  tags:
+    - postfix
+    - hardening
+
+- name: Copy Postfix config file.
+  template:
+    src: main.cf
+    dest: /etc/postfix/main.cf
+  notify: restart postfix
+  tags:
+    - postfix
+
+# TODO - name: configure postfix proxy

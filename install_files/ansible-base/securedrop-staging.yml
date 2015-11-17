@@ -1,50 +1,26 @@
 ---
-- hosts: [ 'mon-staging', 'app-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - staging-specific.yml
-
+- name: Add FPF apt repository and install base packages.
+  hosts: staging
   roles:
-    - { role: install_fpf_repo, tags: fpf_repo }
     - { role: common, tags: common }
-
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: install-local-packages, tags: install_local_packages,
+        when: install_local_packages }
+    - { role: tor-hidden-services, tags: tor }
   sudo: yes
 
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
+- name: Configure OSSEC manager.
+  hosts: mon-staging
   roles:
-    - { role: common-mon, tags: 'tor' }
-    # this is a staging only role
-    - { role: install_local_pkgs, tags: install_local_pkgs }
-    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
-
+    - { role: ossec-server, tags: [ ossec, ossec_server ] }
   sudo: yes
 
-- hosts: [ 'app-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - staging-specific.yml
-
+- name: Configure SecureDrop Application Server.
+  hosts: app-staging
   roles:
-    # The common-app role should be renamed.
-    # It installs tor. Tor is required to be installed prior to the securedrop
-    # app-code package which contains an apparmor profile that depends on tor
-    # being present.
-    - { role: common-app, tags: ['common-app', 'tor'] }
-    # this is a staging only role
-    - { role: install_local_pkgs, tags: install_local_pkgs }
-    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
-
   sudo: yes
 
   # If the OSSEC authd iptables rule exemptions are in place remove them and
@@ -55,16 +31,10 @@
   # service needs to be listening and reachable, then agent needs to connect to
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
+- name: Remove temporary firewall exemptions from Monitor Server.
+  hosts: mon-staging
   roles:
-    - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
-
+    - { role: remove-authd-exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
   sudo: yes
 
   # This section will put the ssh and iptables rules in place
@@ -73,29 +43,15 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-- hosts: [ 'app-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - staging-specific.yml
-
+- name: Configure host firewalls (with direct access for staging).
+  hosts: staging
   roles:
-    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
-    - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
-    - { role: backup, tags: backup }
-
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
+    - { role: allow-direct-access, tags: [ common, allow_direct_access ] }
   sudo: yes
 
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
+- name: Perform backup of Application Server configuration.
+  hosts: app-staging
   roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
-    - { role: allow_direct_access, tags: [ 'common', 'allow_direct_access' ] }
-
+    - { role: backup, tags: backup }
   sudo: yes

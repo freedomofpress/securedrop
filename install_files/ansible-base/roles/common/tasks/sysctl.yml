@@ -1,7 +1,7 @@
 ---
   # These are not the same sysctl flags as
   # {{ grsec_sysctl_flags }}, thus the separate task.
-- name: set sysctl flags for net.ipv4 config
+- name: Set sysctl flags for net.ipv4 config.
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"

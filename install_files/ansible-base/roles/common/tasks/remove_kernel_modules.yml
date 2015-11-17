@@ -1,5 +1,5 @@
 ---
-- name: remove kernel modules
+- name: Remove blacklisted kernel modules.
   modprobe:
     name: "{{ item }}"
     state: absent
@@ -8,7 +8,7 @@
     - kernel
     - hardening
 
-- name: add disabled kernels modules to modprobe.d blacklist
+- name: Add disabled kernels modules to modprobe.d blacklist.
   lineinfile:
     dest: /etc/modprobe.d/blacklist.conf
     line: "blacklist {{ item }}"

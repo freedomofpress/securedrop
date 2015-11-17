@@ -1,48 +1,52 @@
 ---
-- hosts: [ 'mon', 'app', 'mon-prod', 'app-prod' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - prod-specific.yml
-
+- name: Validate presence of Application and Monitor Servers.
+  hosts: [ mon, app, mon-prod, app-prod ]
+  # The manage-groups role dynamically adds hosts to groups,
+  # which allows Ansible to reference group_vars files. Since
+  # group_vars files are only read on the start of a play,
+  # it's important that this role happen in its own play, before
+  # running the playbook against production servers.
   roles:
-    - { role: install_fpf_repo, tags: fpf_repo }
+    - { role: manage-groups, tags: manage-groups }
+
+- name: Validate instance-specific variables before provisioning.
+  hosts: securedrop
+  # Manual include for the production vars file, since we don't have support
+  # for "group_vars" for prod-specific yet. Must be included on all plays
+  # for the SecureDrop Application and Monitor Servers.
+  vars_files:
+    - prod-specific.yml
+  roles:
+    - { role: validate, tags: validate }
+  sudo: yes
+
+- name: Add FPF apt repository and install base packages.
+  hosts: securedrop
+  vars_files:
+    - prod-specific.yml
+  roles:
     - { role: common, tags: common }
-
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: tor-hidden-services, tags: tor }
   sudo: yes
 
-
-- hosts: [ 'mon', 'mon-prod' ]
-
+- name: Configure SecureDrop Monitor Server.
+  hosts: securedrop_monitor_server
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
-
   roles:
-    - { role: validate, tags: validate }
-    - { role: common-mon, tags: 'tor' }
-    - { role: ossec_server, tags: ['ossec', 'ossec_server'] }
-
+    - { role: ossec-server, tags: [ ossec, ossec_server ] }
   sudo: yes
 
-- hosts: [ 'app', 'app-prod' ]
-
+- name: Configure SecureDrop Application Server.
+  hosts: securedrop_application_server
   vars_files:
-   - group_vars/securedrop.yml
-   - host_vars/app.yml
    - prod-specific.yml
-
   vars:
-
   roles:
-    - { role: validate, tags: validate }
-    - { role: common-app, tags: ['common-app', 'tor'] }
-    - { role: ossec_agent, tags: [ 'ossec', 'ossec_agent' ] }
+    - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
-
   sudo: yes
-
 
   # If the OSSEC authd iptables rule exemptions are in place remove them and
   # restart OSSEC. For the ossec agent the exemptions are removed as part of
@@ -52,16 +56,12 @@
   # service needs to be listening and reachable, then agent needs to connect to
   # ossec server, agent needs to restart, then ossec server exemptions can be
   # removed and the ossec server process can restart.
-- hosts: [ 'mon', 'mon-prod' ]
-
+- name: Remove temporary firewall exemptions from Monitor Server.
+  hosts: securedrop_monitor_server
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
-
   roles:
-    - { role: remove_authd_exemptions, tags: ['ossec', 'ossec_server', 'remove_authd_exemptions' ] }
-
+    - { role: remove-authd-exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
   sudo: yes
 
   # This section will put the ssh and iptables rules in place
@@ -70,34 +70,26 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-- hosts: [ 'app', 'app-prod' ]
-
+  name: Lock down firewall configuration for Application and Monitor Servers.
+  hosts: securedrop
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
     - prod-specific.yml
-
   roles:
-    - { role: restrict_direct_access_app, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_app' ] }
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
+  sudo: yes
+
+- name: Perform backup of Application Server configuration.
+  hosts: securedrop_application_server
+  vars_files:
+    - prod-specific.yml
+  roles:
     - { role: backup, tags: backup }
-
   sudo: yes
 
-- hosts: [ 'mon', 'mon-prod' ]
-
+- name: Reboot Application and Monitor Servers.
+  hosts: securedrop
   vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
     - prod-specific.yml
-
-  roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common', 'restrict_direct_access', 'restrict_direct_access_mon' ] }
-
-  sudo: yes
-
-- hosts: [ 'app', 'mon', 'app-prod', 'mon-prod' ]
-
   roles:
     - { role: reboot, tags: reboot }
-
   sudo: yes

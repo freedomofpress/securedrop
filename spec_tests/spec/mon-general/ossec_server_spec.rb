@@ -6,6 +6,11 @@ describe file('/etc/hosts') do
   its(:content) { should match /^#{app_host_regex}$/ }
 end
 
+# Regression test to check for duplicate entries.
+describe command('uniq --repeated /etc/hosts') do
+  its(:stdout) { should eq "" }
+end
+
 # ensure required packages are installed
 ['postfix', 'procmail', 'mailutils', 'securedrop-ossec-server'].each do |pkg|
   describe package(pkg) do
@@ -51,11 +56,19 @@ postfix_settings = [
   'smtp_sasl_auth_enable = yes',
   'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd',
   'smtp_sasl_security_options = noanonymous',
-  'smtp_use_tls=yes',
+  'smtp_use_tls = yes',
   'smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache',
-  'smtp_tls_security_level = fingerprint',
-  'smtp_tls_fingerprint_digest = sha1',
-  'smtp_tls_fingerprint_cert_match = 6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29',
+
+  # The security settings below are the default values
+  # set by the Ansible config as of #1100, but the playbooks
+  # still support TLS fingerprint verification. If you're testing
+  # the fingerprint verification functionality, you'll need to
+  # swap the strings below so the tests check for the appropriate config lines.
+  # 'smtp_tls_fingerprint_digest = sha1',
+  # 'smtp_tls_fingerprint_cert_match = 6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29',
+  'smtp_tls_security_level = secure',
+  'smtp_tls_CApath = /etc/ssl/certs',
+
   'smtp_tls_ciphers = high',
   'smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2',
   'myhostname = ossec.server',
@@ -73,6 +86,10 @@ postfix_settings = [
   'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128',
   'mailbox_size_limit = 0',
   'recipient_delimiter = +',
+
+  # This line was merged into develop via #1102,
+  # but hasn't made it into a release yet, so don't check for it.
+  # 'maximal_queue_lifetime = 14d',
 ]
 # ensure all desired postfix settings are declared
 describe file('/etc/postfix/main.cf') do

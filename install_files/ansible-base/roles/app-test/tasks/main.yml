@@ -1,10 +1,12 @@
 ---
 - include: staging_wsgi_files.yml
+  when: "'staging' in group_names"
   tags:
     - apache
     - non-development
 
 - include: apparmor_complain.yml
+  when: "'staging' in group_names"
   tags:
     - aa-complain
     - non-development

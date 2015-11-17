@@ -54,12 +54,12 @@ describe file(property['securedrop_code']) do
   it { should be_executable.by('owner') }
 end
 
-# ensure cronjob for securedrop tmp dir cleanup is enabled
+# ensure cron job for securedrop tmp dir cleanup is enabled
 describe cron do
   # TODO: this should be using property, but the ansible role
   # doesn't use a var, it's hard-coded. update ansible, then fix test.
   # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean_tmp" }
-  it { should have_entry "@daily /var/www/securedrop/manage.py clean_tmp" }
+  it { should have_entry "@daily /vagrant/securedrop/manage.py clean_tmp" }
 end
 
 
@@ -67,9 +67,14 @@ end
 # TODO: add check for custom logo header file
 describe file("#{property['securedrop_code']}/static/i/logo.png") do
   it { should be_file }
-  # TODO: ansible task declares mode 400 but the file ends up as 644 on host
-  # TODO: 644 on app-staging, 664 in development
-  it { should be_mode '664' }
+  # TODO: Ansible task declares mode 400 but not as string, needs to be fixed
+  # and tests updated. Also, not using "mode" in tests below because umask
+  # on snapci machines differs from the /vagrant folder in dev VM.
+  # Fixing Ansible task may fix differing perms.
+  it { should be_writable.by('owner') }
+  it { should be_readable.by('owner') }
+  it { should be_readable.by('group') }
+  it { should be_readable.by('others') }
   it { should be_owned_by property['securedrop_user'] }
   it { should be_grouped_into property['securedrop_user'] }
 end

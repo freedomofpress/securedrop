@@ -1,0 +1,150 @@
+---
+#securedop_repo is defined in site-specific.yml config
+# Only the development and travis playbooks use a non-default value for
+# securedrop_code and securedrop_user variables. Setting a default values
+# allows us not to define these two variables in the prod-specific and
+# staging-specific yml configs.
+securedrop_code: "{{ non_default_securedrop_code | default('/var/www/securedrop') }}"
+securedrop_user: "{{ non_default_securedrop_user | default('www-data') }}"
+
+### Used by the common role ###
+# ssh_users is defined in the site-specific.yml config
+# monitor_ip is defined in the site-specific.yml config
+# monitor_hostname is defined in the site-specific.yml config
+
+# For setting the etc hosts entries
+ip_info:
+  - ip: "{{ monitor_ip }}"
+    hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
+
+# Building the securedrop-app-code deb package
+securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
+build_app_code_dir: "{{ securedrop_repo }}/securedrop"
+securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requirements.txt"
+test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
+development_dependencies:
+  - libssl-dev
+  - python-dev
+  - python-pip
+
+# Installing the securedrop-app-code.deb package
+securedrop_deb_path: "{{ securedrop_repo }}"
+securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
+
+# Installing the securedrop-ossec-agent.deb package
+securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.2-amd64" # do not include .deb extension
+
+### Used by the install_local_deb_pkgs role ###
+local_deb_packages:
+  - "{{ securedrop_app_code_deb }}.deb"
+  - ossec-agent-2.8.2-amd64.deb
+  - "securedrop-ossec-agent-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
+
+### Used by the app role ###
+
+# Configuring the tor hidden services
+tor_instances:
+  - service: ssh
+    filename: app-ssh-aths
+  - service: source
+    filename: app-source-ths
+  - service: document
+    filename: app-document-aths
+
+# Installing securedrop web application
+#securedrop_user: is defined in the site-specific.yml config file
+#securedrop-code is defined in the site-specific.yml config file
+securedrop_data: "/var/lib/securedrop"
+
+apache_user: "www-data"
+
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_files:
+  - 'apache2.conf'
+  - 'security'
+
+apache_templates:
+  - 'ports.conf'
+  - 'sites-available/document.conf'
+  - 'sites-available/source.conf'
+
+apache_modules:
+  - access_compat
+  - authn_core
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - wsgi
+  - xsendfile
+
+## TODO instead of hard coding disabled modules find intersection of
+#apache_modules vs enabled modules
+apache_disabled_modules:
+  - auth_basic
+  - authn_file
+  - autoindex
+  - env
+  - setenvif
+  - status
+
+appserver_dependencies:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils
+  - redis-server
+  - supervisor
+
+apparmor_profiles:
+  - usr.sbin.tor
+  - usr.sbin.apache2
+
+# initialize securedrop web application
+#securedrop_header_image is defined in site-specific.yml config
+#securedrop_app_gpg_public_key is defined in site-specific.yml config
+#securedrop_app_gpg_fingerprint  is defined in site-specific.yml config
+
+ossec_apt_dependencies:
+  - libc6
+  - libssl1.0.0
+  - expect
+  - inotify-tools
+  - adduser
+
+agent_auth_rules:
+  - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
+
+### Used by the restrict access role ###
+direct_access_rules:
+  - "-A INPUT -i {{ansible_default_ipv4.interface}}  -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}}  -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -i {{ansible_default_ipv4.interface}} -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}} -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A INPUT -i {{ansible_default_ipv4.interface}} -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+  - "-A OUTPUT -o {{ansible_default_ipv4.interface}} -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
+
+test_apt_dependencies:
+  - firefox
+  - xvfb
+
+worker_logs_dir: "/var/log/securedrop_worker"

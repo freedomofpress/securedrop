@@ -23,7 +23,7 @@ vagrant_version="${vagrant_version:-1.7.2}"
 vagrant_rpm="vagrant_${vagrant_version}_x86_64.rpm"
 vagrant_url="https://dl.bintray.com/mitchellh/vagrant/${vagrant_rpm}"
 
-[[ -f "${tmp_dir}/${vagrant_rpm}" ]] || wget "$vagrant_url" -O "${tmp_dir}/${vagrant_rpm}"
+[[ -f "${tmp_dir}/${vagrant_rpm}" ]] || wget -q "$vagrant_url" -O "${tmp_dir}/${vagrant_rpm}"
 [[ -x /usr/bin/vagrant ]] || sudo -E rpm -ivh "${tmp_dir}/$vagrant_rpm"
 
 # Install Vagrant plugins
