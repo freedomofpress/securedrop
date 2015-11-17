@@ -1,6 +1,11 @@
 ---
 - name: Validate presence of Application and Monitor Servers.
   hosts: [ mon, app, mon-prod, app-prod ]
+  # The manage-groups role dynamically adds hosts to groups,
+  # which allows Ansible to reference group_vars files. Since
+  # group_vars files are only read on the start of a play,
+  # it's important that this role happen in its own play, before
+  # running the playbook against production servers.
   roles:
     - { role: manage-groups, tags: manage-groups }
 
