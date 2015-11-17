@@ -261,39 +261,56 @@ Postfix, run the following command:
 The output will show you attempts to send the alerts and provide hints
 as to what went wrong. Here's a few possibilities and how to fix them:
 
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Problem                           | Solution                                                                                                                                                                                                                           |
-+===================================+====================================================================================================================================================================================================================================+
-| Connection timed out              | Check that the hostname and port is correct in the relayhost line of ``/etc/postfix/main.cf``                                                                                                                                      |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Server certificate not verified   | Check that the relay certificate is valid (for more detailed help, see `Troubleshooting SMTP TLS <#troubleshooting-smtp-tls>`__). Consider adding ``smtp_relay_cert_override_file`` to ``prod_specific.yml`` as described above.   |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Authentication failure            | Edit ``/etc/postfix/sasl_passwd`` and make sure the username, domain and password are correct. Run ``postmap /etc/postfix/sasl_passwd`` to update when finished.                                                                   |
-+-----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+================================ ===================================================
+Problem                          Solution
+================================ ===================================================
+Connection timed out             | Check that the hostname and port is correct
+                                   in the relayhost line of
+                                 | ``/etc/postfix/main.cf``
+Server certificate not verified  | Check that the relay certificate is valid
+                                   (for more detailed help, see `Troubleshooting
+                                   SMTP TLS <#troubleshooting-smtp-tls>`_).
+                                   Consider adding ``smtp_relay_cert_override_file``
+                                 | to ``prod_specific.yml`` as described above.
+Authentication failure           | Edit ``/etc/postfix/sasl_passwd`` and make
+                                   sure the username, domain and password are
+                                   correct. Run ``postmap /etc/postfix/sasl_passwd``
+                                 | to update when finished.
+================================ ===================================================
 
 After making changes to the Postfix configuration, you should run
 ``service postfix reload`` and test the new settings by restarting the
 OSSEC service.
 
-Note that if you change the SMTP relay port after installation for any
-reason, you must update not only the relayhost in main.cf and contents
-of sasl\_passwd, but also the iptables firewall rules applying to
-outbound SMTP which are in ``/etc/network/iptables/rules_v4``. We
-recommend modifying and re-running the Ansible playbook instead of doing
-things like this.
+.. tip:: If you change the SMTP relay port after installation for any
+         reason, you must update the ``smtp_relay_port`` variable in the
+         ``prod-specific.yml`` file, then rerun the Ansible playbook.
+         As a general best practice, we recommend modifying and
+         rerunning the Ansible playbook instead of manually editing
+         the files live on the servers, since values like ``smtp_relay_port``
+         are used in several locations throughout the config.
+
+Useful log files for OSSEC
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Other log files that may contain useful information:
 
--  /var/log/procmail.log - there will be lines in this for every alert
-   that gets triggered
+/var/log/procmail.log
+    Includes lines for sending mail containing OSSEC alerts.
 
--  /var/ossec/logs/ossec.log - OSSEC's general operation is covered here
+/var/log/syslog
+    Messages related to grsecurity, AppArmor and iptables.
 
--  /var/ossec/logs/alerts/alerts.log - contains details of every recent
-   OSSEC alert
+/var/ossec/logs/ossec.log
+    OSSEC's general operation is covered here.
 
--  /var/log/syslog - messages related to grsecurity, AppArmor and
-   iptables
+/var/ossec/logs/alerts/alerts.log
+    Contains details of every recent OSSEC alert.
+
+.. tip:: Remember to encrypt any log files before sending via email,
+         for example to securedrop@freedom.press, in order to protect
+         security-related information about your organization's
+         SecureDrop instance.
 
 Troubleshooting SMTP TLS
 ~~~~~~~~~~~~~~~~~~~~~~~~
