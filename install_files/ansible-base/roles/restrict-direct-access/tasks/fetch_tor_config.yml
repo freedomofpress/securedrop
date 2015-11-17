@@ -29,8 +29,9 @@
     dest: ./{{ item.item.filename }}
     # The `content` parameter does not automatically append a newline, so
     # force adding one. Doing so ensures that the resulting files can be
-    # concatenated into the torrc.
-    content: "HidServAuth {{ item.stdout }}\\n"
+    # concatenated into the torrc. We also only want the "HidServAuth"
+    # string for ATHS URLs, but not for THS urls.
+    content: "{% if item.item.filename.endswith('-aths') %}HidServAuth {% endif %}{{ item.stdout }}\\n"
   # Local action, so we don't want elevated privileges
   sudo: no
   with_items: tor_hidden_service_hostname_lookup.results
