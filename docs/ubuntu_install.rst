@@ -9,6 +9,9 @@ is named ``ubuntu-14.04.2-server-amd64.iso``. In order to verify the
 installation media, you should also download the files named ``SHA256SUMS`` and
 ``SHA256SUMS.gpg``.
 
+.. note:: Downloading Ubuntu over Tails may take a very long time because it's
+          being done over Tor.
+
 Verify the Ubuntu installation media
 ------------------------------------
 
@@ -25,8 +28,8 @@ received matches the one requested when the full fingerprint is passed to the
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
 
 
-If the fingerprint does not match, please get in touch at
-securedrop@freedom.press.
+.. warning:: If the fingerprint does not match, please get in touch at
+             securedrop@freedom.press.
 
 Verify the ``SHA256SUMS`` file and move on to the next step if you see
 "Good Signature" in the output.
@@ -35,9 +38,7 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
     gpg --verify SHA256SUMS.gpg SHA256SUMS
 
-The next and final step is to verify the Ubuntu image.
-
-::
+The next and final step is to verify the Ubuntu image. ::
 
     sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 
@@ -57,9 +58,7 @@ CD-R or create a bootable USB stick.  As a reliable method we recommend using
 the ``dd`` command to copy the hybrid ISO directly to a USB drive rather than a
 utility like UNetbootin which can result in errors. Once you have a CD or USB
 with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
-SecureDrop servers. If your USB is mapped to /dev/sdb, you would use dd like so:
-
-::
+SecureDrop servers. If your USB is mapped to /dev/sdb, you would use dd like so: ::
 
     sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdb
 

@@ -57,8 +57,8 @@ Verify the Release Tag
 
 First, download and verify the *Freedom of the Press Foundation Master
 Signing Key*. When passing the full public key fingerprint to the
-:code:`--recv-key` command, GPG will implicitly verify that the
-fingerprint of the key received matches the argument passed.
+``--recv-key`` command, GPG will implicitly verify that the fingerprint
+of the key received matches the argument passed.
 
 .. code:: sh
 
