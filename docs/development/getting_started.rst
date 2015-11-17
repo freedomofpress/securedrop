@@ -23,19 +23,33 @@ Ubuntu/Debian
 
    sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
 
-We recommend using the latest stable version of Vagrant (``1.7.2`` at the time
-of this writing), which is newer than what is in the Ubuntu repositories at the
-time of this writing. Download the current version from the `Vagrant Downloads
-page`_. We *do not* recommend using the version of Vagrant available from
-Ubuntu's package repositories because it is significantly out of date and will
-not work with SecureDrop (`GitHub #932`_).
+We recommend using the latest stable version of Vagrant (``1.7.4`` at the time
+of this writing), which might be newer than what is in your distro's package
+repositories.
+
+If ``apt-cache policy vagrant`` says your candidate version is not at least 1.7,
+you should download the current version from the `Vagrant Downloads page`_ and
+then install it.
+
+.. code:: sh
+
+    # If you downloaded vagrant.deb from vagrantup.com
+    sudo dpkg -i vagrant.deb
+    # OR this, if your OS vagrant is recent enough
+    sudo apt-get install vagrant
+
+We *do not* recommend using a version of Vagrant older than 1.7. For instance,
+the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
+which is signficantly out of date and known not to work with SecureDrop (`Github
+#932`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
 
+Either way, once you've installed Vagrant you should run:
+
 .. code:: sh
 
-    sudo dpkg -i vagrant.deb
     sudo dpkg-reconfigure virtualbox-dkms
 
 Finally, install Ansible so it can be used with Vagrant to automatically
@@ -340,4 +354,3 @@ exception to allow Tor Browser to access localhost:
 
 You should now be able to access the development server in the Tor
 Browser by navigating to ``127.0.0.1:8080`` and ``127.0.0.1:8081``.
-
