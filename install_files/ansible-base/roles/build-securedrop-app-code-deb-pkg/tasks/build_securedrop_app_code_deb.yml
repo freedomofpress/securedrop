@@ -83,8 +83,12 @@
   tags:
     - build
 
-- name: move the deb to the Vagrant shared folder
-  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
+- name: Fetch the securedrop-app-code deb package back to localhost.
+  fetch:
+    flat: yes
+    src: /tmp/{{ securedrop_app_code_deb }}.deb
+    dest: ../../build/
+    fail_on_missing: yes
   tags:
     - build
 
