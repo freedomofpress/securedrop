@@ -1,0 +1,4 @@
+---
+# Building the securedrop-app-code deb package
+securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
+build_app_code_dir: "{{ securedrop_repo }}/securedrop"

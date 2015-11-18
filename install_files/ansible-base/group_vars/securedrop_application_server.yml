@@ -17,9 +17,6 @@ ip_info:
   - ip: "{{ monitor_ip }}"
     hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
 
-# Building the securedrop-app-code deb package
-securedrop_app_code_deb_config: "{{ securedrop_repo }}/install_files/securedrop-app-code/"
-build_app_code_dir: "{{ securedrop_repo }}/securedrop"
 securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requirements.txt"
 test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
 development_dependencies:
@@ -28,11 +25,7 @@ development_dependencies:
   - python-pip
 
 # Installing the securedrop-app-code.deb package
-securedrop_deb_path: "{{ securedrop_repo }}"
 securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
-
-# Installing the securedrop-ossec-agent.deb package
-securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.2-amd64" # do not include .deb extension
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
