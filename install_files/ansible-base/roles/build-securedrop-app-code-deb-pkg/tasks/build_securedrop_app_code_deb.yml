@@ -20,24 +20,14 @@
   tags:
     - build
 
-- name: Create var directory in build path.
+- name: Create build path directories.
   file:
     state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/var/
-  tags:
-    - build
-
-- name: Create www directory in build path.
-  file:
-    state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/var/www
-  tags:
-    - build
-
-- name: Create wheelhouse directory in build path.
-  file:
-    state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/var/securedrop
+    dest: /tmp/{{ securedrop_app_code_deb }}/{{ item }}
+  with_items:
+    - var
+    - var/www
+    - var/securedrop
   tags:
     - build
 
