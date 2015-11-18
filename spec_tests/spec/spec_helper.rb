@@ -5,30 +5,7 @@ require 'yaml'
 
 set :backend, :ssh
 
-if ENV['ASK_SUDO_PASSWORD']
-  begin
-    require 'highline/import'
-  rescue LoadError
-    fail "highline is not available. Try installing it."
-  end
-  set :sudo_password, ask("Enter sudo password: ") { |q| q.echo = false }
-else
-  set :sudo_password, ENV['SUDO_PASSWORD']
-end
-
 host = ENV['TARGET_HOST']
-
-# Using backticks for a subprocess call means
-# STDOUT will be masked, which blocks silently for
-# a long time if the host isn't up. Using IO.popen
-# instead allows for a tee-like interface
-#`vagrant up #{host}`
-IO.popen("vagrant up #{host}") do |output|
-  while line = output.gets do
-    # simply echo it back
-    puts line
-  end
-end
 
 # Determine SSH config for this host.
 config = Tempfile.new('', Dir.tmpdir)
