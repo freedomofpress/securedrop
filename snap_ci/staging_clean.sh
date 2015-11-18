@@ -30,6 +30,11 @@ fi
 # to additional tasks in the testing environment.
 export VAGRANT_DEFAULT_PROVIDER
 
+if [[ "${VAGRANT_DEFAULT_PROVIDER}" == "digital_ocean" ]] ; then
+    # Skip "grsec" because DigitalOcean Ubuntu 14.04 hosts don't support custom kernels.
+    export ANSIBLE_ARGS="--skip-tags=grsec"
+fi
+
 # Find the root of the git repository. A simpler implementation
 # would be `git rev-parse --show-toplevel`, but that must be run
 # from inside the git repository, whereas the solution below is
@@ -37,15 +42,11 @@ export VAGRANT_DEFAULT_PROVIDER
 # so it must be rerun in each stage.
 repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
-# Skip "install_local_pkgs" because it requires a special VM,
-# and skip "grsec" because DigitalOcean hosts don't support custom kernels.
-export ANSIBLE_ARGS="--skip-tags=grsec"
-
 # Create target hosts, but don't provision them yet. The shell provisioner
 # is only necessary for DigitalOcean hosts, and must run as a separate task
 # from the Ansible provisioner, otherwise it will only run on one of the two
 # hosts, due to the `ansible.limit = 'all'` setting in the Vagrantfile.
-vagrant up build /staging/ --no-provision
+vagrant up build /staging/ --no-provision --provider "${VAGRANT_DEFAULT_PROVIDER}"
 
 # First run only the shell provisioner, to ensure the "vagrant"
 # user account exists with nopasswd sudo, then run Ansible.

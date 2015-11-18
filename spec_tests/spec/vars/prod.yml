@@ -10,3 +10,22 @@ monitor_hostname: mon-prod
 apache_listening_address: 127.0.0.1
 apache_source_log: /dev/null
 apache_allow_from: 127.0.0.1
+
+# Production hosts should have both the FPF repo and the Tor Project repo.
+tor_repo_info:
+  - repo_line: deb http://deb.torproject.org/torproject.org
+    filename: deb_torproject_org_torproject_org.list
+    fingerprint: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+    public_key_info: >
+      pub  2048R/886DDD89 2009-09-04 deb.torproject.org archive signing key
+            Key fingerprint = A3C4 F0F9 79CA A22C DBA8  F512 EE8C BC9E 886D DD89
+      sub  2048R/219EC810 2009-09-04 [expires: 2018-08-30]
+
+fpf_repo_info:
+  - repo_line: deb [arch=amd64] https://apt.freedom.press
+    filename: apt_freedom_press.list
+    fingerprint: B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    public_key_info: >
+      pub  4096R/FC9F6818 2014-10-26 Freedom of the Press Foundation Master Signing Key
+            Key fingerprint = B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818
+      sub  4096R/4833B9A3 2014-10-26
