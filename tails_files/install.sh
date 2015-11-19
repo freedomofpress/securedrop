@@ -109,7 +109,11 @@ chmod 755 $INSTALL_DIR/99-tor-reload.sh
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! $ADMIN; then
-  HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
+  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"                   
+  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];                                         
+  do                                                                              
+    HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
+  done  
   echo $HIDSERVAUTH >> $ADDITIONS
   SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
   SOURCE="${SRC#http://}"
