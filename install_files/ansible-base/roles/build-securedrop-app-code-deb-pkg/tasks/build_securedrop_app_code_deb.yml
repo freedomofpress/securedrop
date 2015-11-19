@@ -28,6 +28,8 @@
     - var
     - var/www
     - var/securedrop
+    - etc
+    - etc/apparmor.d
   tags:
     - build
 
@@ -51,21 +53,6 @@
   tags:
     - pip
     - build
-
-- name: Create etc directory in build path.
-  file:
-    state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/etc/
-  tags:
-    - build
-
-- name: Create apparmor.d directory in build path.
-  file:
-    state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
-  tags:
-    - build
-    - apparmor
 
 - name: Copy AppArmor profiles to build path.
   copy:
