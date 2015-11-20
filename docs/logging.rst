@@ -20,8 +20,8 @@ Monitor Server
 
 - OSSEC ::
 
-     /var/ossec/log/ossec.log
-     /var/ossec/log/alerts/alerts.log
+     /var/ossec/logs/ossec.log
+     /var/ossec/logs/alerts/alerts.log
 
 - Postfix/Procmail ::
 
