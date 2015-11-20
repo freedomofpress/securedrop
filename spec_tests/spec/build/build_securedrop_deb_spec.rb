@@ -1,5 +1,7 @@
 # TODO: dynamically read the securedrop_app_code_version var
-securedrop_app_code_version = "0.3.2"
+securedrop_app_code_version = "0.3.6"
+ossec_version = "2.8.2"
+
 # declare development apt dependencies for building
 development_apt_dependencies = [
   'libssl-dev',
@@ -20,8 +22,8 @@ end
 
 # declare required directories
 required_directories = [
-#  "/tmp/build/securedrop-ossec-agent-2.8.1+#{securedrop_app_code_version}-amd64/",
-#  "/tmp/build/securedrop-ossec-server-2.8.1+#{securedrop_app_code_version}-amd64/",
+  "/tmp/build/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
+  "/tmp/build/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
   '/vagrant/build',
 ]
 # ensure required directories exist
@@ -34,8 +36,8 @@ end
 # declare filenames for built debs
 wanted_debs = [
   "/vagrant/build/securedrop-app-code-#{securedrop_app_code_version}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-agent-2.8.1+#{securedrop_app_code_version}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-server-2.8.1+#{securedrop_app_code_version}-amd64.deb",
+  "/vagrant/build/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
+  "/vagrant/build/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
 ]
 wanted_debs.each do |wanted_deb|
   # ensure required debs exist
