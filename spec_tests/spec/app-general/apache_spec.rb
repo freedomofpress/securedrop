@@ -71,10 +71,7 @@ end
 
 # declare desired apache headers for vhost configs
 apache2_common_headers = [
-  'Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"',
   'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
-  'Header set Pragma "no-cache"',
-  'Header set Expires "-1"',
   'Header always append X-Frame-Options: DENY',
   'Header set X-XSS-Protection: "1; mode=block"',
   'Header set X-Content-Type-Options: nosniff',
@@ -84,6 +81,7 @@ apache2_common_headers = [
   %{Header set Content-Security-Policy: "default-src 'self'"},
   'Header unset Etag',
 ]
+
 # declare block of directory declarations common to both
 # source and document interfaces.
 common_apache2_directory_declarations = <<eos
@@ -157,6 +155,13 @@ source_apache2_config_settings = [
   'ErrorDocument 500 /notfound',
   "ErrorLog #{property['apache_source_log']}",
 ]
+
+# TODO: Recent changes to the Apache config (#1185) are present in staging,
+# but have not made it into a tagged release yet. Therefore we need
+# to check headers based on staging or prod. So let's pull in env-specific
+# settings from vars/prod.yml vars/staging.yml.
+source_apache2_config_settings.concat(property['apache_source_special_config'])
+
 # check source-specific apache2 config
 describe file('/etc/apache2/sites-available/source.conf') do
   it { should be_file }
@@ -184,6 +189,13 @@ document_apache2_config_settings = [
   'ErrorLog /var/log/apache2/document-error.log',
   'CustomLog /var/log/apache2/document-access.log combined',
 ]
+
+# TODO: Recent changes to the Apache config (#1185) are present in staging,
+# but have not made it into a tagged release yet. Therefore we need
+# to check headers based on staging or prod. So let's pull in env-specific
+# settings from vars/prod.yml vars/staging.yml.
+document_apache2_config_settings.concat(property['apache_document_special_config'])
+
 # check document-specific apache2 config
 describe file('/etc/apache2/sites-available/document.conf') do
   it { should be_file }

@@ -11,6 +11,18 @@ apache_listening_address: 127.0.0.1
 apache_source_log: /dev/null
 apache_allow_from: 127.0.0.1
 
+# Prod and staging hosts have diverged here, until the changes in
+# #1185 make it into a tagged release.
+apache_source_special_config:
+  - Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  - Header set Pragma "no-cache"
+  - Header set Expires "-1"
+
+apache_document_special_config:
+  - Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+  - Header set Pragma "no-cache"
+  - Header set Expires "-1"
+
 # Production hosts should have both the FPF repo and the Tor Project repo.
 tor_repo_info:
   - repo_line: deb http://deb.torproject.org/torproject.org
