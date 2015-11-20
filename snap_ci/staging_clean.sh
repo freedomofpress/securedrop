@@ -2,6 +2,13 @@
 set -e
 set -x
 
+# Find the root of the git repository. A simpler implementation
+# would be `git rev-parse --show-toplevel`, but that must be run
+# from inside the git repository, whereas the solution below is
+# directory agnostic. Exporting this variable doesn't work in snapci,
+# so it must be rerun in each stage.
+repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
+
 # Respect environment variables, but default to VirtualBox.
 VAGRANT_DEFAULT_PROVIDER="${VAGRANT_DEFAULT_PROVIDER:-virtualbox}"
 
@@ -24,6 +31,15 @@ if [[ "${SNAP_CI}" == "true" ]]; then
 
     # Force DigitalOcean testing in Snap-CI.
     VAGRANT_DEFAULT_PROVIDER="digital_ocean"
+
+    # Snap-CI does not allow large files for uploads in build stages. For local development,
+    # the OSSEC packages should be built in the "ossec" repo and copied into the "build" directory.
+    # Since these deb files seldom change, it's OK to pull them down for each build.
+    # Certainly faster than building unchanged files repeatedly.
+    wget http://apt.freedom.press/pool/main/o/ossec.net/ossec-server-2.8.2-amd64.deb \
+        --continue --output-document "${repo_root}/build/ossec-server-2.8.2-amd64.deb"
+    wget http://apt.freedom.press/pool/main/o/ossec.net/ossec-agent-2.8.2-amd64.deb \
+        --continue --output-document "${repo_root}/build/ossec-agent-2.8.2-amd64.deb"
 fi
 
 # Make sure the environment variable is available
@@ -34,13 +50,6 @@ if [[ "${VAGRANT_DEFAULT_PROVIDER}" == "digital_ocean" ]] ; then
     # Skip "grsec" because DigitalOcean Ubuntu 14.04 hosts don't support custom kernels.
     export ANSIBLE_ARGS="--skip-tags=grsec"
 fi
-
-# Find the root of the git repository. A simpler implementation
-# would be `git rev-parse --show-toplevel`, but that must be run
-# from inside the git repository, whereas the solution below is
-# directory agnostic. Exporting this variable doesn't work in snapci,
-# so it must be rerun in each stage.
-repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
 # Create target hosts, but don't provision them yet. The shell provisioner
 # is only necessary for DigitalOcean hosts, and must run as a separate task
