@@ -1,30 +1,31 @@
 Ubuntu Install Guide
 ====================
 
-The *Application Server* and the *Monitor Server* specifically require
-the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty
-Tahr) <http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image
-you want to get is named ``ubuntu-14.04.2-server-amd64.iso``. In order
-to verify the installation media, you should also download the files
-named ``SHA256SUMS`` and ``SHA256SUMS.gpg``.
+The *Admin Workstation*, running Tails, should be used to download and verify
+Ubuntu Server.  The *Application Server* and the *Monitor Server* specifically
+require the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty Tahr)
+<http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image you want to get
+is named ``ubuntu-14.04.2-server-amd64.iso``. In order to verify the
+installation media, you should also download the files named ``SHA256SUMS`` and
+``SHA256SUMS.gpg``.
 
 Verify the Ubuntu installation media
 ------------------------------------
 
-First you should make sure that the Ubuntu image you downloaded hasn't
-been modified by a malicious attacker by checking its integrity with
-cryptographic signatures and hashes — which might sound complex but it's
-relatively easy to do. Before you can verify the Ubuntu installation
-media, you will need to download the associated public key.
+First, you should verify the Ubuntu image you downloaded hasn't been modified by
+a malicious attacker or otherwise corrupted. We can do so by checking its
+integrity with cryptographic signatures and hashes. First, we will download
+*Ubuntu Image Signing Key* and verify its fingerprint. Fortunately, we can do
+this in one step; GPG will implicity verify that the fingerprint of the key
+received matches the one requested when the full fingerprint is passed to the
+:code:`--recv-key` command.
 
 ::
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
-    gpg --fingerprint C5986B4F1257FFA86632CBA746181433FBB75451
+    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
 
-The Ubuntu CD Image Automatic Signing Key should have a fingerprint of
-"C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451". If the fingerprint
-does not match what you see here, please get in touch at
+
+If the fingerprint does not match, please get in touch at
 securedrop@freedom.press.
 
 Verify the ``SHA256SUMS`` file and move on to the next step if you see
@@ -34,18 +35,12 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
     gpg --verify SHA256SUMS.gpg SHA256SUMS
 
-The next and final step is to verify the Ubuntu image. If you are using
-Linux, use the following command.
+The next and final step is to verify the Ubuntu image.
 
 ::
 
     sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 
-If you are using OS X, use the command below.
-
-::
-
-    shasum -a 256 -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 
 If the final verification step is successful, you should see the
 following output in your terminal.
@@ -57,18 +52,16 @@ following output in your terminal.
 Create the Ubuntu installation media
 ------------------------------------
 
-To create the Ubuntu installation media, you can either burn the ISO
-image to a CD-R or create a bootable USB stick (see instructions for
-doing this on `OS
-X <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx>`__,
-`Ubuntu <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu>`__
-and
-`Windows <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows>`__).
-As a reliable method we recommend using the ``dd`` command to copy the
-hybrid ISO directly to a USB drive rather than a utility like UNetbootin
-which can result in errors. Once you have a CD or USB with an ISO image
-of Ubuntu on it, you may begin the Ubuntu installation on both
-SecureDrop servers.
+To create the Ubuntu installation media, you can either burn the ISO image to a
+CD-R or create a bootable USB stick.  As a reliable method we recommend using
+the ``dd`` command to copy the hybrid ISO directly to a USB drive rather than a
+utility like UNetbootin which can result in errors. Once you have a CD or USB
+with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
+SecureDrop servers. If your USB is mapped to /dev/sdb, you would use dd like so:
+
+::
+
+    sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdb
 
 Install Ubuntu
 --------------
