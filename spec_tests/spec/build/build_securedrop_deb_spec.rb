@@ -22,9 +22,8 @@ end
 
 # declare required directories
 required_directories = [
-  "/tmp/build/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
-  "/tmp/build/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
-  '/vagrant/build',
+  "/tmp/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
+  "/tmp/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
 ]
 # ensure required directories exist
 required_directories.each do |required_directory|
@@ -35,9 +34,9 @@ end
 
 # declare filenames for built debs
 wanted_debs = [
-  "/vagrant/build/securedrop-app-code-#{securedrop_app_code_version}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
+  "/tmp/securedrop-app-code-#{securedrop_app_code_version}-amd64.deb",
+  "/tmp/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
+  "/tmp/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
 ]
 wanted_debs.each do |wanted_deb|
   # ensure required debs exist

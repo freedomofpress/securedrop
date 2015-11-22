@@ -34,14 +34,41 @@
     - group_vars/securedrop.yml
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
+  roles:
+    - role: ~/gits/freedomofpress/build-debian-package
+      build_debian_package_name: securedrop-app-code
+      build_debian_package_version: "{{ securedrop_app_code_version }}"
+      build_debian_package_files_directories:
+        - src: "{{ securedrop_app_code_files }}/"
+          dest: ""
+        - src: "{{ securedrop_app_code_directory }}"
+          dest: var/www/
+      build_debian_package_version: "{{ securedrop_app_code_version }}"
+      build_debian_package_pip_requirements: var/www/securedrop/requirements/securedrop-requirements.txt
+      build_debian_package_pip_wheel_directory: var/securedrop/wheelhouse
+      build_debian_package_description: >
+        Packages the SecureDrop application code pip dependencies
+        and apparmor profiles. This package will put the apparmor
+        profiles in enforce mode. This package does use pip to install the pip wheelhouse
+      tags: app-deb
+  sudo: yes
+  tags: rebuild
+
+- name: Build OSSEC metapackages for server and agent.
+  hosts: build
+  vars_files:
+  # The order of these files files is important, since each successive
+  # include overrides vars in the previous files. Ordinarily we'd
+  # use group memberships to manage the variable resolution order, but
+  # since we're using Vagrant with Ansible, group management becomes tricky.
+    - group_vars/securedrop.yml
+    - group_vars/securedrop_application_server.yml
+    - group_vars/development.yml
   # Providing custom vars at the playbook level to override the role defaults.
   vars:
     ossec_agent_files: ../securedrop-ossec-agent
     ossec_server_files: ../securedrop-ossec-server
   roles:
-    - role: build-securedrop-app-code-deb-pkg
-      tags: app-deb
-
     - role: build-generic-pkg
       build_package_name: securedrop-ossec-server
       build_package_version: "{{ ossec_version }}+{{ securedrop_app_code_version }}"
