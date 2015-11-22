@@ -1,0 +1,15 @@
+---
+build_package_name: dummy-package
+build_arch: amd64
+
+build_package_version: "0.1"
+build_package_base_directory: "/tmp/{{ build_package_name }}-{{ build_package_version }}-{{ build_arch }}"
+build_package_deb_file: "{{ build_package_base_directory }}.deb"
+
+# Default location for the DEBIAN control files and postinst scripts
+# is in the parent directory relative to the playbooks. The default
+# value will find it. Setting it as var allows overriding in CI.
+build_package_files_directory: "../{{ build_package_name }}"
+
+# Local directory where built deb packages will be fetched to.
+build_package_local_dest: build/

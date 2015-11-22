@@ -1,6 +1,47 @@
 ---
-- name: run bash script to build generic packages
-  command: "{{ securedrop_repo }}/build/build_generic_package.sh {{ package_name }}"
-  tags:
-    - build
-    - script
+- name: Update apt cache.
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install build package dependencies.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - build-essential
+    - gcc-4.8
+    - make
+
+- name: Purge build directory.
+  file:
+    state: absent
+    path: "{{ build_package_base_directory }}"
+
+- name: Create build directory.
+  file:
+    state: directory
+    path: "{{ build_package_base_directory }}"
+
+- name: Copy static files for package.
+  synchronize:
+    mode: push
+    src: "{{ build_package_files_directory }}/"
+    dest: "{{ build_package_base_directory }}/"
+    rsync_path: "sudo rsync"
+
+- name: Build Debian package.
+  command: dpkg-deb --build {{ build_package_base_directory }}
+
+- name: Fetch back built Debian package.
+  fetch:
+    src: "{{ build_package_deb_file }}"
+    dest: "{{ build_package_local_dest }}"
+    fail_on_missing: yes
+    flat: yes
+
+- name: Remove newly built Debian package from build machine.
+  file:
+    state: absent
+    path: "{{ build_package_deb_file }}"
+

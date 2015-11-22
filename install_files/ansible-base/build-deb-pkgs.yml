@@ -34,9 +34,29 @@
     - group_vars/securedrop.yml
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
+  # Providing custom vars at the playbook level to override the role defaults.
+  vars:
+    ossec_agent_files: ../securedrop-ossec-agent
+    ossec_server_files: ../securedrop-ossec-server
   roles:
-    - { role: build-securedrop-app-code-deb-pkg, tags: app-deb }
-    - { role: build-generic-pkg, tags: securedrop-ossec-server, package_name: securedrop-ossec-server }
-    - { role: build-generic-pkg, tags: securedrop-ossec-agent, package_name: securedrop-ossec-agent }
+    - role: build-securedrop-app-code-deb-pkg
+      tags: app-deb
+
+    - role: build-generic-pkg
+      build_package_name: securedrop-ossec-server
+      build_package_version: "{{ ossec_version }}+{{ securedrop_app_code_version }}"
+      build_package_files_directory: "{{ ossec_server_files }}"
+      tags:
+        - ossec
+        - securedrop-ossec-server
+
+    - role: build-generic-pkg
+      build_package_name: securedrop-ossec-agent
+      build_package_version: "{{ ossec_version }}+{{ securedrop_app_code_version }}"
+      build_package_files_directory: "{{ ossec_agent_files }}"
+      tags:
+        - ossec
+        - securedrop-ossec-agent
+
   sudo: yes
   tags: rebuild
