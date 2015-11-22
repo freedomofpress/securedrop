@@ -13,10 +13,28 @@
   tags:
     - pip
 
-- name: Copy install_files/securedrop-app-code dir to build path
-  command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+# Important to remove the build directory before starting to collect files.
+# Better than removing at the end of the task list, since it affords debugging
+# and guarantees a clean slate for subsequent builds.
+- name: Remove the build path.
+  file:
+    state: absent
+    dest: /tmp/{{ securedrop_app_code_deb }}
   tags:
     - build
+    - cleanup
+
+# The trailing slashes are important here (classic rsync).
+# Ansible treats the default base directory for the `synchronize` module
+# as the role's "files" directory, when running tasks within a role.
+# Since we want all the files included in the role, copy them recursively.
+# This may prevent the role from being extensible via meta/main.yml.
+- name: Copy package static files.
+  synchronize:
+    mode: push
+    dest: /tmp/{{ securedrop_app_code_deb }}/
+    src: "{{ role_path }}/files/"
+    rsync_path: "sudo rsync"
 
 - name: Remove the build path.
   file:
@@ -39,13 +57,6 @@
   tags:
     - build
 
-- name: Copy securedrop to build path
-  command: cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
-  args:
-    creates: /tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }}
-  tags:
-    - build
-
 - name: Remove config.py from build path.
   file:
     state: absent
@@ -54,8 +65,16 @@
     - build
     - cleanup
 
+- name: Copy SecureDrop application code.
+  synchronize:
+    mode: push
+    src: "{{ securedrop_app_code_directory }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}/var/www/
+
 - name: Create pip wheel archive for Debian package requirements.
-  command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
+  command: >
+    pip wheel -r /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/requirements/securedrop-requirements.txt
+    -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
   tags:
     - pip
     - build
