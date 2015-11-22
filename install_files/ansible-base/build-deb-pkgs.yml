@@ -1,20 +1,8 @@
 ---
-- name: Create Build VM if necessary.
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  sudo: no
-  tasks:
-    - name: Bring up Build VM.
-      command: vagrant up --no-provision build
-      register: bring_up_build_vm_result
-      changed_when: "'already running' not in bring_up_build_vm_result.stdout"
-  tags: rebuild
-
-  # Need a separate play, rather than an additional task in the same play,
-  # to ensure that the "build" machine is present in the inventory.
-  # If the machine was not running, and the `vagrant up` command brought it up,
-  # Ansible won't know about it within the previous play.
+# Ensure that the build machine is present. If it hasn't been created,
+# then Vagrant will not add it to the generated inventory file. Since
+# the build machine is required for staging runs, error out with a helpful
+# message, pointing the developer to the docs.
 - name: Ensure Build VM is available.
   hosts: localhost
   connection: local
@@ -32,7 +20,11 @@
       when: "'build' not in groups.all"
   tags: rebuild
 
-- name: Build securedrop-app-code deb package from local code.
+# All plays in this playbook target the build host, but most be invoked separately,
+# since we're using wrapper roles for the build. If you add multiple child roles with
+# the same parent in the same play, Ansible conflates the dependencies, and only the
+# last wrapper role will run. This is a known bug and will be fixed in v2.0.
+- name: Build SecureDrop application Debian package from local repository.
   hosts: build
   vars_files:
     # The order of these files files is important, since each successive
