@@ -59,6 +59,9 @@ def retrieve_vars(hostname)
   if hostname.match(/^mon/)
     vars['postfix_user_uid'] = vagrant_ssh_cmd(hostname, "id -u postfix")
   end
+  if hostname.match(/^build$/)
+    vars = read_vars_file('build')
+  end
   return vars
 end
 

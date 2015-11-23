@@ -1,15 +1,6 @@
-# TODO: dynamically read the securedrop_app_code_version var
-securedrop_app_code_version = "0.3.6"
-ossec_version = "2.8.2"
 
-# declare development apt dependencies for building
-development_apt_dependencies = [
-  'libssl-dev',
-  'python-dev',
-  'python-pip',
-]
 # ensure development apt dependencies are installed
-development_apt_dependencies.each do |development_apt_dependency|
+property['development_apt_dependencies'].each do |development_apt_dependency|
   describe package(development_apt_dependency) do
     it { should be_installed }
   end
@@ -22,8 +13,8 @@ end
 
 # declare required directories
 required_directories = [
-  "/tmp/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
-  "/tmp/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64/",
+  "/tmp/securedrop-ossec-agent-#{property['ossec_version']}+#{property['securedrop_app_code_version']}-amd64/",
+  "/tmp/securedrop-ossec-server-#{property['ossec_version']}+#{property['securedrop_app_code_version']}-amd64/",
 ]
 # ensure required directories exist
 required_directories.each do |required_directory|
@@ -34,18 +25,24 @@ end
 
 # declare filenames for built debs
 wanted_debs = [
-  "/tmp/securedrop-app-code-#{securedrop_app_code_version}-amd64.deb",
-  "/tmp/securedrop-ossec-agent-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
-  "/tmp/securedrop-ossec-server-#{ossec_version}+#{securedrop_app_code_version}-amd64.deb",
+  { "path" => "/tmp/securedrop-app-code-#{property['securedrop_app_code_version']}-amd64.deb",
+    "dependencies" => %w( python-pip apparmor-utils gnupg2 haveged python python-pip secure-delete sqlite apache2-mpm-worker libapache2-mod-wsgi libapache2-mod-xsendfile redis-server supervisor ),
+  },
+  { "path" => "/tmp/securedrop-ossec-agent-#{property['ossec_version']}+#{property['securedrop_app_code_version']}-amd64.deb",
+    "dependencies" => %w(ossec-agent),
+  },
+  { "path" => "/tmp/securedrop-ossec-server-#{property['ossec_version']}+#{property['securedrop_app_code_version']}-amd64.deb",
+    "dependencies" => %w(ossec-server),
+  },
 ]
 wanted_debs.each do |wanted_deb|
   # ensure required debs exist
-  describe file(wanted_deb) do
+  describe file(wanted_deb['path']) do
     it { should be_file }
   end
 
   # get file basename of package, stripping leading dirs
-  deb_basename = File.basename(wanted_deb)
+  deb_basename = File.basename(wanted_deb['path'])
 
   # cut up filename to extract package name
   # this garish regex finds just the package name and strips the version info, e.g.
@@ -54,21 +51,25 @@ wanted_debs.each do |wanted_deb|
   package_name = deb_basename.scan(/^([a-z\-]+(?!\d))/)[0][0].to_s
 
   # ensure required debs appear installable
-  describe command("dpkg --install --dry-run #{wanted_deb}") do
+  describe command("dpkg --install --dry-run #{wanted_deb['path']}") do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should contain("Selecting previously unselected package #{package_name}.") }
 #    its(:stdout) { should contain("Preparing to unpack #{deb_basename} ...")}
   end
 
-  # ensure control fields are populated as expected
-  # TODO: these checks are rather superficial, and don't actually confirm that the
-  # .deb files are not broken. at a later date, consider integration tests
-  # that actually use these built files during an ansible provisioning run.
-  describe command("dpkg-deb --field #{wanted_deb}") do
+  # Ensure control fields are populated as expected
+  describe command("dpkg-deb --field #{wanted_deb['path']}") do
     its(:exit_status) { should eq 0 }
     its(:stdout) { should contain("Maintainer: SecureDrop Team <securedrop@freedom.press>") }
     its(:stdout) { should contain("Homepage: https://securedrop.org") }
     its(:stdout) { should contain("Package: #{package_name}")}
     its(:stdout) { should contain("Architecture: amd64") }
+    its(:stdout) { should contain("Depends: #{wanted_deb['dependencies'].join(',')}")}
+  end
+
+  describe command("dpkg --contents #{wanted_deb['path']}") do
+    # Regression test to ensure that umask is set correctly in the build scripts.
+    # All files in the deb package should be root-owned.
+    its(:stdout) { should_not contain("vagrant") }
   end
 end
