@@ -1,0 +1,16 @@
+---
+- name: Install pip.
+  apt:
+    name: python-pip
+    state: present
+
+- name: Install pip wheel.
+  pip:
+    name: wheel
+    state: present
+
+- name: Create pip wheel archive for Debian package requirements.
+  command: >
+    pip wheel --requirement {{ build_debian_package_directory }}/{{ build_debian_package_pip_requirements }}
+    --wheel-dir {{ build_debian_package_directory }}/{{ build_debian_package_pip_wheel_directory }}
+

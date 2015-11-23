@@ -1,0 +1,51 @@
+---
+# defaults file for build-debian-package
+build_debian_package_local_directory: build
+
+# Used with synchronize module. All files within the specified directory
+# will be copied into the build directory for packaging. Filetrees are preserved.
+# Directories will be copied and merged in the order they are declared.
+# Format should be a list of dicts with "src" and "dest" attributes.
+# Set "dest" to an empty string to add the files to the base build directory.
+build_debian_package_files_directories: []
+
+# Simple files to to copy. Again, use a dict with "src" and "dest" attributes.
+build_debian_package_extra_files: []
+
+build_debian_package_base_dependencies:
+  - build-essential
+  - gcc-4.8
+  - make
+
+# List of system packages to install on the build host prior to building.
+build_debian_package_extra_dependencies: []
+
+# DEBIAN/control fields
+build_debian_package_name: dummy-package
+build_debian_package_source: ""
+build_debian_package_section: ""
+build_debian_package_version: 0.1
+build_debian_package_priority: optional
+build_debian_package_arch: amd64
+build_debian_package_maintainer: ""
+build_debian_package_homepage: ""
+build_debian_package_depends: []
+build_debian_package_conflicts: []
+build_debian_package_replaces: []
+build_debian_package_description: ""
+
+# Build directories.
+build_debian_package_directory: /tmp/{{ build_debian_package_name }}-{{ build_debian_package_version }}-{{ build_debian_package_arch }}
+build_debian_package_deb_file: "{{ build_debian_package_directory }}.deb"
+
+# Support for pip wheel archives. Skipped by default. Paths should be relative
+# to the Debian package files, and will be concatenated with the build directory.
+# Both vars must be defined.
+build_debian_package_pip_requirements: ""
+build_debian_package_pip_wheel_directory: ""
+
+# Force ownership of files prior to building. Passed in as rsync flags
+# to the `synchronize` module. Setting "root" as default, with the assumption
+# of system packages. Chmod options to rsync also force D755 and Fo-w
+build_debian_package_owner_username: root
+build_debian_package_group_username: root

@@ -1,0 +1,11 @@
+---
+# tasks file for build-debian-package
+- include: packages.yml tags=apt,packages
+
+- include: create_directories.yml tags=directories
+
+- include: pip_wheel.yml tags=pip,wheel
+  when: build_debian_package_pip_requirements is defined and
+        build_debian_package_pip_requirements != ""
+
+- include: build_debian_package.yml tags=build
