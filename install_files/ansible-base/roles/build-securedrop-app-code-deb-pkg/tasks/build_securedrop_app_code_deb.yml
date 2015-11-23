@@ -15,10 +15,16 @@
 
 - name: Copy install_files/securedrop-app-code dir to build path
   command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
-  args:
-    creates: /tmp/{{ securedrop_app_code_deb }}/
   tags:
     - build
+
+- name: Remove the build path.
+  file:
+    state: absent
+    dest: /tmp/{{ securedrop_app_code_deb }}
+  tags:
+    - build
+    - cleanup
 
 - name: Create build path directories.
   file:
@@ -78,14 +84,6 @@
     fail_on_missing: yes
   tags:
     - build
-
-- name: Remove the build path.
-  file:
-    state: absent
-    dest: /tmp/{{ securedrop_app_code_deb }}
-  tags:
-    - build
-    - cleanup
 
 - name: Remove newly built Debian package from build machine.
   file:
