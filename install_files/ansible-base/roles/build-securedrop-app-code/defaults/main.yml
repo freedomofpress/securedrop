@@ -1,0 +1,41 @@
+---
+# Set relative path for the directory containing the app code.
+# Making this a variable since it may be different in CI scripts,
+# and be overridden there. The default is provided here.
+securedrop_app_code_files: ../securedrop-app-code
+securedrop_app_code_directory: ../../securedrop
+
+build_debian_package_name: securedrop-app-code
+build_debian_package_files_directories:
+  - src: "{{ securedrop_app_code_files }}/"
+    dest: ""
+  - src: "{{ securedrop_app_code_directory }}"
+    dest: var/www/
+build_debian_package_version: "{{ securedrop_app_code_version }}"
+build_debian_package_source: securedrop
+build_debian_package_section: web
+build_debian_package_pip_requirements: var/www/securedrop/requirements/securedrop-requirements.txt
+build_debian_package_pip_wheel_directory: var/securedrop/wheelhouse
+
+# Using the YAML string folding syntax (>) to ensure that the lines are concatenated.
+build_debian_package_description: >
+  Packages the SecureDrop application code pip dependencies
+  and AppArmor profiles. This package will put the AppArmor
+  profiles in enforce mode. This package also uses pip to install the pip wheelhouse.
+
+# TODO: These vars are taken verbatim from the previous, hard-coded control file for
+# securedrop-app-code. It has redundant entries. Once integration tests are stable, refactor.
+build_debian_package_depends:
+  - python-pip
+  - apparmor-utils
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+  - redis-server
+  - supervisor

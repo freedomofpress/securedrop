@@ -35,21 +35,7 @@
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
   roles:
-    - role: build-debian-package
-      build_debian_package_name: securedrop-app-code
-      build_debian_package_version: "{{ securedrop_app_code_version }}"
-      build_debian_package_files_directories:
-        - src: "{{ securedrop_app_code_files }}/"
-          dest: ""
-        - src: "{{ securedrop_app_code_directory }}"
-          dest: var/www/
-      build_debian_package_version: "{{ securedrop_app_code_version }}"
-      build_debian_package_pip_requirements: var/www/securedrop/requirements/securedrop-requirements.txt
-      build_debian_package_pip_wheel_directory: var/securedrop/wheelhouse
-      build_debian_package_description: >
-        Packages the SecureDrop application code pip dependencies
-        and apparmor profiles. This package will put the apparmor
-        profiles in enforce mode. This package does use pip to install the pip wheelhouse
+    - role: build-securedrop-app-code
       tags: app-deb
   sudo: yes
   tags: rebuild

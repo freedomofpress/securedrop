@@ -1,6 +1,0 @@
----
-# Set relative path for the directory containing the app code.
-# Making this a variable since it may be different in CI scripts,
-# and be overridden there. The default is provided here.
-securedrop_app_code_directory: ../../securedrop
-
