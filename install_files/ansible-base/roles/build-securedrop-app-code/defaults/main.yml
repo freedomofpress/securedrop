@@ -11,6 +11,13 @@ build_debian_package_files_directories:
     dest: ""
   - src: "{{ securedrop_app_code_directory }}"
     dest: var/www/
+
+build_debian_package_extra_files:
+  - src: "usr.sbin.apache2"
+    dest: "etc/apparmor.d/"
+  - src: "usr.sbin.tor"
+    dest: "etc/apparmor.d/"
+
 build_debian_package_version: "{{ securedrop_app_code_version }}"
 build_debian_package_source: securedrop
 build_debian_package_section: web
