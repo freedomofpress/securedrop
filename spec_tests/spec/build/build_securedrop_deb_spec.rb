@@ -71,5 +71,13 @@ wanted_debs.each do |wanted_deb|
     # Regression test to ensure that umask is set correctly in the build scripts.
     # All files in the deb package should be root-owned.
     its(:stdout) { should_not contain("vagrant") }
+
+    # Regression test to ensure that AppArmor profiles are embedded in the package.
+    # Actual contents out of the profiles and output from `aa-status` checked in the
+    # spectests for AppArmor profiles.
+    if package_name == "securedrop-app-code"
+      its(:stdout) { should contain("etc/apparmor.d/usr.sbin.apache2") }
+      its(:stdout) { should contain("etc/apparmor.d/usr.sbin.tor") }
+    end
   end
 end
