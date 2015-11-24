@@ -24,7 +24,7 @@
 # since we're using wrapper roles for the build. If you add multiple child roles with
 # the same parent in the same play, Ansible conflates the dependencies, and only the
 # last wrapper role will run. This is a known bug and will be fixed in v2.0.
-- name: Build SecureDrop Debian packages from local repository.
+- name: Build SecureDrop application Debian package from local repository.
   hosts: build
   vars_files:
     # The order of these files files is important, since each successive
@@ -32,11 +32,36 @@
     # use group memberships to manage the variable resolution order, but
     # since we're using Vagrant with Ansible, group management becomes tricky.
     - group_vars/securedrop.yml
-    - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
   roles:
-    - { role: build-securedrop-app-code, tags: app-deb }
-    - { role: build-securedrop-ossec-agent, tags: [ossec, securedrop-ossec-agent] }
-    - { role: build-securedrop-ossec-server, tags: [ossec, securedrop-ossec-server] }
+    - { role: build-securedrop-app-code, tags: [build, securedrop-app-code] }
+  sudo: yes
+  tags: rebuild
+
+- name: Build SecureDrop OSSEC Server Debian package from local repository.
+  hosts: build
+  vars_files:
+    # The order of these files files is important, since each successive
+    # include overrides vars in the previous files. Ordinarily we'd
+    # use group memberships to manage the variable resolution order, but
+    # since we're using Vagrant with Ansible, group management becomes tricky.
+    - group_vars/securedrop.yml
+    - group_vars/development.yml
+  roles:
+    - { role: build-securedrop-ossec-server, tags: [build, ossec, securedrop-ossec-server] }
+  sudo: yes
+  tags: rebuild
+
+- name: Build SecureDrop OSSEC Agent Debian package from local repository.
+  hosts: build
+  vars_files:
+    # The order of these files files is important, since each successive
+    # include overrides vars in the previous files. Ordinarily we'd
+    # use group memberships to manage the variable resolution order, but
+    # since we're using Vagrant with Ansible, group management becomes tricky.
+    - group_vars/securedrop.yml
+    - group_vars/development.yml
+  roles:
+    - { role: build-securedrop-ossec-agent, tags: [build, ossec, securedrop-ossec-agent] }
   sudo: yes
   tags: rebuild

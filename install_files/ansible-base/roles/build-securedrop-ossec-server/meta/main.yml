@@ -7,6 +7,5 @@ galaxy_info:
   min_ansible_version: 1.8
   categories:
     - packaging
-  allow_duplicates: yes
 dependencies:
   - role: build-debian-package
