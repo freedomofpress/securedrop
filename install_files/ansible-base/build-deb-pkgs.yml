@@ -33,6 +33,7 @@
     # since we're using Vagrant with Ansible, group management becomes tricky.
     - group_vars/securedrop.yml
     - group_vars/development.yml
+    - group_vars/securedrop_application_server.yml
   roles:
     - { role: build-securedrop-app-code, tags: [build, securedrop-app-code] }
   sudo: yes
