@@ -64,13 +64,18 @@ of the key received matches the argument passed.
 
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
 
-.. caution:: If the fingerprint does not match, fingerprint
-	     verification has failed and you **should not** proceed
-	     with the installation. If this happens, please contact us
-	     at securedrop@freedom.press.
+It is important you type this out correctly. If you are not copy-pasting
+it, we recommend typing the fingerprint out with spaces like so ``B89A
+29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818``, double-checking you have
+it correct, and then removing the spaces before pressing "enter."
+
+.. caution:: If GPG warns you that the fingerprint of the key received
+             does not match the one requested **do not** proceed with
+             the installation. If this happens, please email us at
+             securedrop@freedom.press.
 
 Verify that the current release tag was signed with the master signing
-key.
+key:
 
 .. code:: sh
 
@@ -82,8 +87,8 @@ You should see ``Good signature from "Freedom of the Press Foundation
 Master Signing Key"`` in the output of that last command.
 
 .. caution:: If you do not, signature verification has failed and you
-	     *should not* proceed with the installation. If this
-	     happens, please contact us at securedrop@freedom.press.
+             *should not* proceed with the installation. If this
+             happens, please contact us at securedrop@freedom.press.
 
 Create the Admin Passphrase Database
 ------------------------------------

@@ -54,28 +54,6 @@ You will need to create 3 Tails USBs to perform the SecureDrop installation:
 	 complete the next step of setting up the persistence - for
 	 each additional Tails USB.
 
-The current Tails signing key looks like this:
-
-::
-
-    pub   4096R/0xDBB802B258ACD84F 2015-01-18 [expires: 2017-01-11]
-          Key fingerprint = A490 D0F4 D311 A415 3E2B  B7CA DBB8 02B2 58AC D84F
-    uid                 [  full  ] Tails developers (offline long-term identity key) <tails@boum.org>
-    uid                 [  full  ] Tails developers <tails@boum.org>
-    sub   4096R/0x98FEC6BC752A3DB6 2015-01-18 [expires: 2017-01-11]
-    sub   4096R/0x3C83DCB52F699C56 2015-01-18 [expires: 2017-01-11]
-
-.. todo:: I'm not sure why the current Tails signing key was added
-          here. Is it to provide multi-path verification for the Tails
-          key fingerprint (i.e. adversary has to compromise both
-          Tails' website and Read the Docs)?
-
-	  Either way, we can't just stick this here without explaining
-	  what it's for and how to use it. So we should either get rid
-	  of it and let the Tails docs do this for us (which I am
-	  personally in favor of), or we need to add a section about
-	  verifying iso's with GPG.
-
 .. note:: Tails doesn't always completely shut down and reboot
 	  properly when you click "restart", so if you notice a
 	  significant delay, you may have to manually power off and

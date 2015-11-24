@@ -17,18 +17,25 @@ Verify the Ubuntu installation media
 
 First, you should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
-integrity with cryptographic signatures and hashes. First, we will download
-*Ubuntu Image Signing Key* and verify its fingerprint. Fortunately, we can do
-this in one step; GPG will implicity verify that the fingerprint of the key
-received matches the one requested when the full fingerprint is passed to the
-:code:`--recv-key` command.
+integrity with cryptographic signatures and hashes. 
+
+First, we will download *Ubuntu Image Signing Key* and verify its *fingerprint*.
+Fortunately, we can do this in one step; GPG will implicity verify that the
+fingerprint of the key received matches the one requested when the full
+fingerprint is passed to the :code:`--recv-key` command.
 
 ::
 
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
 
+It is important you type this out correctly. If you are not copy-pasting
+it, we recommend typing the fingerprint out with spaces like so ``C598
+6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451``, double-checking you have
+it correct, and then removing the spaces before pressing "enter."
 
-.. warning:: If the fingerprint does not match, please get in touch at
+.. caution:: If GPG warns you that the fingerprint of the key received
+             does not match the one requested **do not** proceed with
+             the installation. If this happens, please email us at
              securedrop@freedom.press.
 
 Verify the ``SHA256SUMS`` file and move on to the next step if you see
@@ -49,6 +56,10 @@ following output in your terminal.
 ::
 
     ubuntu-14.04.2-server-amd64.iso: OK
+
+
+.. caution:: If you do not see the line above . If this
+             happens, please contact us at securedrop@freedom.press.
 
 Create the Ubuntu installation media
 ------------------------------------
