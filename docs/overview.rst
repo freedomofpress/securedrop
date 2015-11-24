@@ -26,12 +26,12 @@ SecureDrop application environment consists of three dedicated computers:
 - ``Monitor server``: Ubuntu server that monitors the ``Application Server``
    with `OSSEC <http://www.ossec.net/>`__ and sends email alerts.
 
-In addition to these dedicated computers, the journalist will also use his or
-her normal workstation computer:
+In addition to these dedicated computers, the journalist will also use their
+normal workstation computer:
 
 - ``Journalist Workstation``: The every-day laptop that the journalist uses for
-   his or her work. The journalist will use this computer to connect to the
-   ``Application Server`` to download encrypted documents that he or she will
+   their work. The journalist will use this computer to connect to the
+   ``Application Server`` to download encrypted documents that they will
    transfer to the ``Secure Viewing Station``. The ``Journalist Workstation``
    is also used to respond to sources via the *Document Interface*.
 

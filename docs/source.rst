@@ -106,7 +106,7 @@ The next page will ask for your secret codename. Enter it and click
 
 |Check for response|
 
-If a journalist has responded, his or her message will appear on the
+If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
 another message to the journalist. Be sure to delete any messages here
 before navigating away.

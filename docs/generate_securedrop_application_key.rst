@@ -102,7 +102,7 @@ While working on a story, journalists may need to transfer some
 documents or notes from the *Secure Viewing Station* to the journalist's
 work computer on the corporate network. To do this, the journalists
 should re-encrypt them with their own keys. If a journalist does not
-already have a personal GPG key, he or she can follow the same steps
+already have a personal GPG key, they can follow the same steps
 above to create one. The journalist should store the private key
 somewhere safe; the public key should be stored on the *Secure Viewing
 Station*.
