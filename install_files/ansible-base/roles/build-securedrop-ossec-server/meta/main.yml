@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: Freedom of the Press Foundation (@freedomofpress)
+  description: Build Debian package for securedrop-app-code
+  company: Freedom of the Press Foundation (@freedomofpress)
+  license: AGPL
+  min_ansible_version: 1.8
+  categories:
+    - packaging
+  allow_duplicates: yes
+dependencies:
+  - role: build-debian-package

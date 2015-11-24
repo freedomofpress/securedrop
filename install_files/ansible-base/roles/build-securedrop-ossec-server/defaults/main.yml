@@ -1,0 +1,26 @@
+---
+# Set relative path for the directory containing the Debian control
+# files and other static assets for the .deb package.
+# Making this a variable since it may be different in CI scripts,
+# and be overridden there. The default is provided here.
+ossec_server_files: ../securedrop-ossec-server/
+build_debian_package_version: "{{ ossec_version }}+{{ securedrop_app_code_version }}"
+build_debian_package_source: ossec.net
+build_debian_package_section: web
+
+build_debian_package_name: securedrop-ossec-server
+build_debian_package_files_directories:
+  - src: "{{ ossec_server_files }}"
+    dest: ""
+build_debian_package_depends:
+  - ossec-server
+build_debian_package_replaces:
+  - ossec-server
+build_debian_package_conflicts:
+  - securedrop-ossec-agent
+
+build_debian_package_description: >
+  Installs the OSSEC server preconfigured for the SecureDrop Monitor Server.
+  It is configured to email all alerts to root@localhost. The SecureDrop Ansible
+  playbook will configure procmail and postfix to encrypt the OSSEC alerts via GPG
+  and email them to SecureDrop Admin.

@@ -1,0 +1,24 @@
+---
+# Set relative path for the directory containing the Debian control
+# files and other static assets for the .deb package.
+# Making this a variable since it may be different in CI scripts,
+# and be overridden there. The default is provided here.
+ossec_agent_files: ../securedrop-ossec-agent/
+build_debian_package_version: "{{ ossec_version }}+{{ securedrop_app_code_version }}"
+build_debian_package_source: ossec.net
+build_debian_package_section: web
+
+build_debian_package_name: securedrop-ossec-agent
+build_debian_package_files_directories:
+  - src: "{{ ossec_agent_files }}"
+    dest: ""
+build_debian_package_depends:
+  - ossec-agent
+build_debian_package_replaces:
+  - ossec-agent
+build_debian_package_conflicts:
+  - securedrop-ossec-server
+
+build_debian_package_description: >
+  Installs a customized version of the OSSEC agent
+  preconfigured for the SecureDrop Application Server.
