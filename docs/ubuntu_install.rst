@@ -19,17 +19,18 @@ First, you should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
 integrity with cryptographic signatures and hashes. 
 
-First, we will download *Ubuntu Image Signing Key* and verify its *fingerprint*.
-Fortunately, we can do this in one step; GPG will implicity verify that the
-fingerprint of the key received matches the one requested when the full
-fingerprint is passed to the :code:`--recv-key` command. ::
+First, we will download *Ubuntu Image Signing Key* and verify its 
+*fingerprint*. ::
 
-    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
+    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
-It is important you type this out correctly. If you are not copy-pasting
-it, we recommend typing the fingerprint out with spaces like so ``C598
-6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451``, double-checking you have
-it correct, and then removing the spaces before pressing "enter."
+It is important you type this out correctly. If you are not copy-pasting this
+command, we recommend you double check you have entered it correctly before
+pressing enter.
+
+Again, when passing the full public key fingerprint to the ``--recv-key`` command, GPG
+will implicitly verify that the fingerprint of the key received matches the
+argument passed.
 
 .. caution:: If GPG warns you that the fingerprint of the key received
              does not match the one requested **do not** proceed with
