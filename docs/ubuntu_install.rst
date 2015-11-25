@@ -22,9 +22,7 @@ integrity with cryptographic signatures and hashes.
 First, we will download *Ubuntu Image Signing Key* and verify its *fingerprint*.
 Fortunately, we can do this in one step; GPG will implicity verify that the
 fingerprint of the key received matches the one requested when the full
-fingerprint is passed to the :code:`--recv-key` command.
-
-::
+fingerprint is passed to the :code:`--recv-key` command. ::
 
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
 
@@ -39,9 +37,7 @@ it correct, and then removing the spaces before pressing "enter."
              securedrop@freedom.press.
 
 Verify the ``SHA256SUMS`` file and move on to the next step if you see
-"Good Signature" in the output.
-
-::
+"Good Signature" in the output. ::
 
     gpg --verify SHA256SUMS.gpg SHA256SUMS
 
@@ -51,15 +47,13 @@ The next and final step is to verify the Ubuntu image. ::
 
 
 If the final verification step is successful, you should see the
-following output in your terminal.
-
-::
+following output in your terminal. ::
 
     ubuntu-14.04.2-server-amd64.iso: OK
 
-
-.. caution:: If you do not see the line above . If this
-             happens, please contact us at securedrop@freedom.press.
+.. caution:: If you do not see the line above it is not safe to proceed with the
+             installation. If this happens, please contact us at
+             securedrop@freedom.press.
 
 Create the Ubuntu installation media
 ------------------------------------

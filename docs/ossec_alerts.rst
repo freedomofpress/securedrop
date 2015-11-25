@@ -90,42 +90,44 @@ install\_files/ansible-base and then specify the filename in the
 If you don't have your GPG key ready, you can run GnuPG on the command
 line in order to find, import and export your public key. It's best to
 copy the key from a trusted and verified source, but you can also
-request it from keyservers using the known longid. Looking it up by
-email address could cause you to obtain a wrong, malicious or expired
-key. Just replace the key ID in the following example with yours:
+request it from keyservers using the known fingerprint. Looking it up by
+email address or a shorter key ID format could cause you to obtain a
+wrong, malicious or expired key. Just replace the word ``<fingerprint>``
+in the following example with your own:
 
-Download your key and import it into the local keyring:
+Download your key and import it into the local keyring: ::
 
-::
+    gpg --keyserver <fingerprint> hkp://qdigse2yzvuglcix.onion --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
 
-    gpg --recv-keys 0xFD720AD9EBA34B1C
+As in the setup for the *Admin Workstation*, we encourage you to first
+write out the fingerprint in groups of four, double-check you have
+entered it correctly, remove the spaces, and then press "enter" to
+actually fetch the key (and implicitly verify the fingerprint of the key
+received matches the one requested).
 
-Export the key to a file:
+Next we export the key to a local file. It's okay to type the email
+address your key is associated with in the place of ``<fingerprint>`` in
+the command below. Since it is a local operation we don't have to worry
+about the network-based attacks we do during import from a keyserver. ::
 
-::
+    gpg --export -a <fingerprint> > ossec.pub
 
-    gpg --export -a 0xFD720AD9EBA34B1C > ossec.pub
 
 Copy the key to a directory where it's accessible by the SecureDrop
-installation:
-
-::
+installation: ::
 
     cp ossec.pub install_files/ansible-base/
 
-The fingerprint is a unique identifier for an encryption (public) key. It is the
-output of running a cryptographic hash function (in this case SHA1) over the
-key, represented in hexadecimal. The short and long key IDs correspond to the
-last 8 and 16 hexadecimal digits (or 32 and 64 bits) of the fingerprint,
-respectively, and are thus a subset of the fingerprint. The value for
-``ossec_gpg_fpr`` must be the full 40 hexadecimal digit (160 bit) GPG
-fingerprint for this same key, with all capital letters and no spaces. Here's a
-series of commands that will retrieve and format the fingerprint per our
-requirements:
+The fingerprint is a unique identifier for an encryption (public) key.
+the short and long key ids correspond to the last 8 and 16 hexadecimal
+digits of the fingerprint, respectively, and are thus a subset of the
+fingerprint. The value for ``ossec_gpg_fpr`` must be the full 40
+hexadecimal digit GPG fingerprint for this same key, with all capital
+letters and no spaces. Again feel free to use the associated email
+address in place of ``<fingerprint>`` in the command below. This command
+will retrieve and format the fingerprint per our requirements: ::
 
-::
-
-    gpg --with-colons --fingerprint 0xFD720AD9EBA34B1C | grep "^fpr" | cut -d: -f10
+    gpg --with-colons --fingerprint <fingerprint> | grep "^fpr" | cut -d: -f10
 
 Next you specify the e-mail that you'll be sending alerts to, as
 ``ossec_alert_email``. This could be your work email, or an alias for a
@@ -144,9 +146,7 @@ requires both a valid certificate and STARTTLS support on the SMTP
 relay. By default the system CAs will be used for validating the relay
 certificate. If you need to provide a custom CA to perform the
 validation, copy the cert file to ``install_files/ansible-base`` add a
-new variable to ``prod-specific.yml``:
-
-::
+new variable to ``prod-specific.yml``: ::
 
     smtp_relay_cert_override_file: MyOrg.crt
 
@@ -207,9 +207,7 @@ factors.
 You can retrieve the fingerprint of your SMTP relay by running the
 command below (all on one line). Please note that you will need to
 replace ``smtp.gmail.com`` and ``587`` with the correct domain and port
-for your SMTP relay.
-
-::
+for your SMTP relay. ::
 
     openssl s_client -connect smtp.gmail.com:587 -starttls smtp < /dev/null 2>/dev/null |
         openssl x509 -fingerprint -noout -in /dev/stdin | cut -d'=' -f2
@@ -225,9 +223,7 @@ following:
     6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29
 
 Finally, add a new variable to ``prod-specific.yml`` as
-``smtp_relay_fingerprint``, like so:
-
-::
+``smtp_relay_fingerprint``, like so: ::
 
     smtp_relay_fingerprint: "6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29"
 
@@ -255,9 +251,7 @@ OSSEC alerts. First, check your spam/junk folder. If they're not in
 there, then most likely there is a problem with the email configuration.
 In order to find out what's wrong, you'll have to SSH to the Monitor
 Server and take a look at the logs. To examine the mail log created by
-Postfix, run the following command:
-
-::
+Postfix, run the following command: ::
 
     tail /var/log/mail.log
 
@@ -318,18 +312,14 @@ In either case, start by attempting to make a STARTTLS connection to
 your chosen ``smtp_relay:smtp_relay_port`` (get the values from your
 ``prod-specific.yml`` file). On a machine running Ubuntu, run the
 following ``openssl`` command, replacing ``smtp_relay`` and
-``smtp_relay_port`` with your specific values:
-
-::
+``smtp_relay_port`` with your specific values: ::
 
     openssl s_client -showcerts -starttls smtp -connect smtp_relay:smtp_relay_port < /dev/null 2> /dev/null
 
 Note that you will not be able to run this command on the Application
 Server because of the firewall rules. You can run it on the Monitor
 Server, but you will need to run it as the Postfix user (again, due to
-the firewall rules):
-
-::
+the firewall rules): ::
 
     sudo -u postfix openssl s_client -showcerts -starttls smtp -connect smtp.gmail.com:587 < /dev/null 2> /dev/null
 
@@ -352,9 +342,7 @@ which indicates that openssl does not know how to build the certificate
 chain to a trusted root.
 
 If you are using the default verification setup, you can check whether
-your cert is verifiable by the default root store with ``-CApath``:
-
-::
+your cert is verifiable by the default root store with ``-CApath``: ::
 
     openssl s_client -CApath /etc/ssl/certs -showcerts -starttls smtp -connect smtp_relay:smtp_relay_port < /dev/null 2> /dev/null
 
@@ -381,9 +369,7 @@ you can successfully negotiate a secure connection. Begin by copying
 your certificate file (``smtp_relay_cert_override_file`` from
 ``prod-specific.yml``) to the computer you are using for testing. You
 can use ``-CAfile`` to test if your connection will succeed using your
-custom root certificate:
-
-::
+custom root certificate: ::
 
     openssl s_client -CAfile /path/to/smtp_relay_cert_override_file -showcerts -starttls smtp -connect smtp_relay:smtp_relay_port < /dev/null 2> /dev/null
 
@@ -396,9 +382,7 @@ certificates in the chain up to the root cert, which needs to be
 identified as "trusted" for the verification to succeed. To see the
 chain, find the part of the output that start with
 ``Certificate chain``. It will look something like this (example from
-``smtp.gmail.com``, with certificate contents snipped for brevity):
-
-::
+``smtp.gmail.com``, with certificate contents snipped for brevity): ::
 
     ---
     Certificate chain
