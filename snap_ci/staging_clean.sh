@@ -40,6 +40,13 @@ if [[ "${SNAP_CI}" == "true" ]]; then
         --continue --output-document "${repo_root}/build/ossec-server-2.8.2-amd64.deb"
     wget http://apt.freedom.press/pool/main/o/ossec.net/ossec-agent-2.8.2-amd64.deb \
         --continue --output-document "${repo_root}/build/ossec-agent-2.8.2-amd64.deb"
+
+    # The Snap-CI nodes run CentOS, and so have an old version of rsync that doesn't support
+    # --chown or --usermap, one of which is required for the build-debian-package role in staging.
+    rsync_rpm="rsync-3.1.0-1.el6.rfx.x86_64.rpm"
+    rsync_url="http://pkgs.repoforge.org/rsync/${rsync_rpm}"
+    [[ -f "${tmp_dir}/${rsync_rpm}" ]] || wget -q "$rsync_url" -O "${tmp_dir}/${rsync_rpm}"
+    sudo -E rpm -U --force -vh "${tmp_dir}/${rsync_rpm}"
 fi
 
 # Make sure the environment variable is available
