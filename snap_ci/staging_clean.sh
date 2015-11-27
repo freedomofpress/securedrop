@@ -9,6 +9,9 @@ set -x
 # so it must be rerun in each stage.
 repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
+# Support Snap-CI cache directory, but also allow this script to be run locally.
+tmp_dir="${SNAP_CACHE_DIR:-/tmp}"
+
 # Respect environment variables, but default to VirtualBox.
 VAGRANT_DEFAULT_PROVIDER="${VAGRANT_DEFAULT_PROVIDER:-virtualbox}"
 
@@ -16,7 +19,7 @@ VAGRANT_DEFAULT_PROVIDER="${VAGRANT_DEFAULT_PROVIDER:-virtualbox}"
 # if we're running in Snap-CI. If not running in Snap-CI,
 # then executing this bash script will run all the tests
 # locally.
-if [[ "${SNAP_CI}" == "true" ]]; then
+if [[ "$SNAP_CI" == "true" ]]; then
     # declare function for EXIT trap
     function cleanup {
         echo "Destroying droplet..."
