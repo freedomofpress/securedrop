@@ -1,0 +1,5 @@
+---
+# Permit duplicates, since multiple roles require this role.
+# It's a dependency for both `common` and `grsecurity`. If duplicates
+# are not allowed, the role will be inappropriately skipped.
+allow_duplicates: yes
