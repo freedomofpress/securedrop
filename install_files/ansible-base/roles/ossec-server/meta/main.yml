@@ -1,0 +1,4 @@
+---
+# Add dependency for FPF repo installation role.
+dependencies:
+  - { role: install-fpf-repo, when: install_local_packages == false }
