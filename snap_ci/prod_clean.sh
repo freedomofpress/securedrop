@@ -11,7 +11,7 @@ if [[ "${SNAP_CI}" == "true" ]]; then
     # declare function for EXIT trap
     function cleanup {
         echo "Destroying droplet..."
-        vagrant destroy /staging/ -f
+        vagrant destroy /prod/ -f
     }
     # Ensure that DigitalOcean droplet will be cleaned up
     # even if script errors (e.g., if serverspec tests fail).
@@ -19,6 +19,9 @@ if [[ "${SNAP_CI}" == "true" ]]; then
     # If the previous build in snap-ci failed, the droplet
     # will still exist. Ensure that it's gone with a pre-emptive destroy.
     cleanup
+
+    # Force DigitalOcean testing in Snap-CI.
+    VAGRANT_DEFAULT_PROVIDER="digital_ocean"
 fi
 
 # Find the root of the git repository. A simpler implementation
@@ -30,14 +33,25 @@ repo_root=$( dirname "$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd )" )
 
 # Copy staging vars for use as prod vars; will need to skip "validate" role.
 # Staging config includes looser Apache rules, so filter those out.
+# Also filter out the install_local_packages line.
 sed -r -e 's/(app|mon)-staging/\1-prod/' \
     "${repo_root}"/install_files/ansible-base/group_vars/staging.yml | \
-    grep -vi apache > \
+    sed -r -e '/apache/d' | \
+    sed -r -e '/install_local_packages/d' > \
     "${repo_root}"/install_files/ansible-base/prod-specific.yml
+
+# Make sure the environment variable is available
+# to additional tasks in the testing environment.
+export VAGRANT_DEFAULT_PROVIDER
+
+if [[ "${VAGRANT_DEFAULT_PROVIDER}" == "digital_ocean" ]] ; then
+    # Skip "grsec" because DigitalOcean Ubuntu 14.04 hosts don't support custom kernels.
+    export ANSIBLE_ARGS="--extra-vars grsecurity=false"
+fi
 
 # Skip "validate" so reused vars don't cause failure,
 # and skip "grsec" because DigitalOcean hosts don't support custom kernels.
-export ANSIBLE_ARGS="--skip-tags=validate --extra-vars grsecurity=false"
+export ANSIBLE_ARGS="${ANSIBLE_ARGS} --skip-tags=validate"
 
 # Assume that /prod/ instances will be created from scratch, as part
 # of a full provisioning run, so initial SSH connections must be
@@ -48,7 +62,7 @@ unset SECUREDROP_SSH_OVER_TOR
 # is only necessary for DigitalOcean hosts, and must run as a separate task
 # from the Ansible provisioner, otherwise it will only run on one of the two
 # hosts, due to the `ansible.limit = 'all'` setting in the Vagrantfile.
-vagrant up /prod/ --no-provision --provider digital_ocean
+vagrant up /prod/ --no-provision --provider "${VAGRANT_DEFAULT_PROVIDER}"
 
 # First run only the shell provisioner, to ensure the "vagrant"
 # user account exists with nopasswd sudo, then run Ansible.
@@ -70,7 +84,7 @@ ansible-playbook -i $inventory_file -c local -s "${repo_root}/install_files/ansi
 # Ad-hoc testing shows that the above playbook run isn't
 # nearly enough time for a reboot and Tor connection to bootstrap,
 # so sleep for another few minutes.
-sleep 300
+sleep 180
 
 # The prod playbook restricts SSH access to Tor ATHS,
 # so tell Vagrant to read ATHS values for ssh-config.
