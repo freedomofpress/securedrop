@@ -7215,60 +7215,6 @@
          offset="1" />
     </linearGradient>
     <linearGradient
-       x1="19.003906"
-       y1="19.002398"
-       x2="29.019531"
-       y2="32.576614"
-       id="linearGradient4868-5"
-       xlink:href="#linearGradient4862-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.000141,0,-0.00507673)" />
-    <linearGradient
-       x1="23.334524"
-       y1="-18.569054"
-       x2="23.334524"
-       y2="-4.1229234"
-       id="linearGradient3880-5"
-       xlink:href="#linearGradient3161-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9999999,0,0,0.9375,3.0396233,-28.149694)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient3876-3"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient3874-2"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient3870-8"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient3868-0"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
        id="linearGradient3161-3">
       <stop
          id="stop3163-6"
@@ -12241,28 +12187,6 @@
          offset="1" />
     </linearGradient>
     <linearGradient
-       id="linearGradient4435-8">
-      <stop
-         id="stop4437-5"
-         style="stop-color:#729fcf;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop4439-4"
-         style="stop-color:#3465a4;stop-opacity:1"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4423-8">
-      <stop
-         id="stop4425-1"
-         style="stop-color:#babdb6;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop4427-4"
-         style="stop-color:#000000;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
        x1="302.85715"
        y1="366.64789"
        x2="302.85715"
@@ -14159,23 +14083,6 @@
        xlink:href="#linearGradient4862-9-6"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1,0,0,1.000141,0,-0.00507673)" />
-    <linearGradient
-       x1="34.103973"
-       y1="967.77472"
-       x2="79.650581"
-       y2="1047.6388"
-       id="linearGradient72581"
-       xlink:href="#linearGradient4435-8"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       x1="21.970085"
-       y1="961.58539"
-       x2="85.784462"
-       y2="1043.5854"
-       id="linearGradient72583"
-       xlink:href="#linearGradient4423-8"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.99898387,0,0,0.99898387,4.1926986,0.93308116)" />
     <radialGradient
        cx="20.913568"
        cy="47.045319"
@@ -14900,114 +14807,6 @@
          id="path155039"
          style="fill:#0a1091;fill-rule:evenodd;stroke:#0a1091;stroke-width:0.625;stroke-linejoin:round" />
     </marker>
-    <linearGradient
-       x1="23.334524"
-       y1="-18.569054"
-       x2="23.334524"
-       y2="-4.1229234"
-       id="linearGradient6795"
-       xlink:href="#linearGradient3161-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9999999,0,0,0.9375,3.0396233,-28.149694)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient6797"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient6799"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient6801"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient6803"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
-       x1="19.003906"
-       y1="19.002398"
-       x2="29.019531"
-       y2="32.576614"
-       id="linearGradient6805"
-       xlink:href="#linearGradient4862-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.000141,0,-0.00507673)" />
-    <linearGradient
-       x1="23.334524"
-       y1="-18.569054"
-       x2="23.334524"
-       y2="-4.1229234"
-       id="linearGradient6828"
-       xlink:href="#linearGradient3161-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.9999999,0,0,0.9375,3.0396233,-28.149694)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient6830"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient6832"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,-4.9551548,-52.928592)" />
-    <linearGradient
-       x1="20.405081"
-       y1="6.9878068"
-       x2="20.405081"
-       y2="9.1187258"
-       id="linearGradient6834"
-       xlink:href="#linearGradient3494-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
-       x1="21.718279"
-       y1="6.1796846"
-       x2="21.718279"
-       y2="10.010373"
-       id="linearGradient6836"
-       xlink:href="#linearGradient3506-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.3246753,0,0,1.3246756,0.04484516,-52.92859)" />
-    <linearGradient
-       x1="19.003906"
-       y1="19.002398"
-       x2="29.019531"
-       y2="32.576614"
-       id="linearGradient6838"
-       xlink:href="#linearGradient4862-9"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.000141,0,-0.00507673)" />
     <linearGradient
        x1="23.334524"
        y1="-18.569054"
@@ -20770,19 +20569,6 @@
          id="path3004"
          style="fill:#000000;fill-opacity:0.36363639" />
     </g>
-    <text
-       transform="translate(-2,-2)"
-       id="text76269"
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125.99999905%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><textPath
-         xlink:href="#path69508"
-         id="textPath76275"
-         style="line-height:125.99999905%;letter-spacing:1.02999997px"><tspan
-   x="-122.56881"
-   y="418.49039"
-   dx="0.079999998"
-   id="tspan76273"
-   style="font-size:13px;font-variant:normal;font-stretch:normal;line-height:125.99999905%;letter-spacing:1.88px;font-family:Gill Sans Pro Cyrillic;-inkscape-font-specification:Gill Sans Pro Cyrillic Semi-Light">       SSH</tspan></textPath></text>
     <g
        transform="translate(-2.5070404,-2)"
        id="g76758">
@@ -21115,6 +20901,30 @@
         </g>
       </g>
     </g>
+    <text
+       transform="translate(-2,-2)"
+       id="text10834"
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0.36000001px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><textPath
+         xlink:href="#path70264"
+         id="textPath10840"><tspan
+   id="tspan10836"><tspan
+     x="-76.357773"
+     y="318.48444"
+     id="tspan10838"
+     style="font-size:13px;font-variant:normal;font-stretch:normal;text-align:center;letter-spacing:3px;text-anchor:middle;font-family:Gill Sans Pro Cyrillic;-inkscape-font-specification:Gill Sans Pro Cyrillic Semi-Light">SSH    </tspan></tspan></textPath></text>
+    <text
+       transform="translate(-2,-2)"
+       id="text10877"
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><textPath
+         xlink:href="#path70074"
+         id="textPath10887"
+         style="letter-spacing:0.81999999px"><tspan
+           x="-138.03596"
+           y="200.53506"
+           id="tspan10881"
+           style="font-size:13px;font-variant:normal;font-stretch:normal;text-align:center;letter-spacing:0.81999999px;text-anchor:middle;font-family:Gill Sans Pro Cyrillic;-inkscape-font-specification:Gill Sans Pro Cyrillic Semi-Light">SSH        or      Web Interface</tspan></textPath></text>
   </g>
   <style
      type="text/css"
