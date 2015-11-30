@@ -60,5 +60,5 @@ describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ",
   #
   # TODO: ensure the config.py file is not in the package
 #  its(:stdout) { should eq property['securedrop_app_code_debian_package_contents'] }
-#  its(:stdout) { should_not match /config\.py$/ }
+  its(:stdout) { should_not match /\/config\.py$/ }
 end

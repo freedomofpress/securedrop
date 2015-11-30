@@ -17,6 +17,10 @@ build_debian_package_base_dependencies:
   - gcc-4.8
   - make
 
+# List of filepaths that will be removed from the package tree prior to building.
+# It's safer to remove as a separate task than to use an rsync filter.
+build_debian_package_unwanted_files: []
+
 # List of system packages to install on the build host prior to building.
 build_debian_package_extra_dependencies: []
 

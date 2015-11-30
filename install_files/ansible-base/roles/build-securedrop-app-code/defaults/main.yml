@@ -18,6 +18,12 @@ build_debian_package_extra_files:
   - src: "usr.sbin.tor"
     dest: "etc/apparmor.d/"
 
+# Since the securedrop app code directory is copied via rsync, it may include
+# a config.py file used for testing. Remove that file before building the Debian
+# package, otherwise it will clobber the config files for production instances.
+build_debian_package_unwanted_files:
+  - var/www/securedrop/config.py
+
 # Adds in libssl-dev and python-dev, both of which are crucial for a successful
 # install with the built package. See comments in the build spectests for more info.
 build_debian_package_extra_dependencies: "{{ development_dependencies }}"

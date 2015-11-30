@@ -43,3 +43,8 @@
     src: debian-control-file.j2
     dest: "{{ build_debian_package_directory }}/DEBIAN/control"
 
+- name: Remove unwanted files.
+  file:
+    state: absent
+    path: "{{ build_debian_package_directory }}/{{ item }}"
+  with_items: build_debian_package_unwanted_files
