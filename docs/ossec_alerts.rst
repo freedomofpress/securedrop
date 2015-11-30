@@ -93,7 +93,7 @@ from a trusted and verified source, but you can also request it from keyservers
 using the known fingerprint. Looking it up by email address or a shorter key ID
 format could cause you to obtain a wrong, malicious, or expired key. Instead, we
 recommend you type out your fingerprint in groups of four (just like GPG prints
-it) enclosed by parentheses.  The reason we suggest this formatting for the
+it) enclosed by double quotes.  The reason we suggest this formatting for the
 fingerprint is simply because it's easiest to type and verify correctly. In the
 code below simply replace ``<fingerprint>`` with your full, space-separated
 fingerprint:
@@ -101,6 +101,10 @@ fingerprint:
 Download your key and import it into the local keyring: ::
 
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "<fingerprint>"
+
+.. note:: It is important you type this out correctly. If you are not
+          copy-pasting this command, we recommend you double-check you have
+          entered it correctly before pressing enter.
 
 Again, when passing the full public key fingerprint to the ``--recv-key`` command, GPG
 will implicitly verify that the fingerprint of the key received matches the
@@ -111,13 +115,9 @@ argument passed.
              the installation. If this happens, please email us at
              securedrop@freedom.press.
 
-Next we export the key to a local file. Here it is safe to use your email
-address associated with the key instead of your fingerprint since we are
-performing a local action and do not need to worry about network-based attacks
-as when fetching a key from a keyserver. Replace ``<email>`` with this email
-address below. ::
+Next we export the key to a local file. ::
 
-    gpg --export -a <email> > ossec.pub
+    gpg --export -a "<fingerprint>" > ossec.pub
 
 
 Copy the key to a directory where it's accessible by the SecureDrop
@@ -132,10 +132,7 @@ for ``ossec_gpg_fpr`` must be the full 40 hexadecimal digit GPG fingerprint for
 this same key, with all capital letters and no spaces. The following command
 will retrieve and format the fingerprint per our requirements: ::
 
-    gpg --with-colons --fingerprint <email> | grep "^fpr" | cut -d: -f10
-
-Again, we are using our email instead of our fingerprint as a key ID here
-because we are performing a local action.
+    gpg --with-colons --fingerprint "<fingerprint>" | grep "^fpr" | cut -d: -f10
 
 Next you specify the e-mail that you'll be sending alerts to, as
 ``ossec_alert_email``. This could be your work email, or an alias for a

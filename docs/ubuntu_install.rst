@@ -24,9 +24,9 @@ First, we will download *Ubuntu Image Signing Key* and verify its
 
     gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
-It is important you type this out correctly. If you are not copy-pasting this
-command, we recommend you double check you have entered it correctly before
-pressing enter.
+.. note:: It is important you type this out correctly. If you are not
+          copy-pasting this command, we recommend you double-check you have
+          entered it correctly before pressing enter.
 
 Again, when passing the full public key fingerprint to the ``--recv-key`` command, GPG
 will implicitly verify that the fingerprint of the key received matches the
@@ -64,9 +64,22 @@ CD-R or create a bootable USB stick.  As a reliable method we recommend using
 the ``dd`` command to copy the hybrid ISO directly to a USB drive rather than a
 utility like UNetbootin which can result in errors. Once you have a CD or USB
 with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
-SecureDrop servers. If your USB is mapped to /dev/sdb, you would use dd like so: ::
+SecureDrop servers.
 
-    sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdb
+To use `dd` you first need to find where the USB device you wish to install
+Tails on has been mapped. Simply running the command ``lsblk`` in the terminal
+will give you a list of your block storage device mappings (this includes hard
+drives and USB). If the USB you are writing the Ubuntu installer to is of a
+different size or brand than the USB you are running Tails from, it should be
+easy to identify which USB has which sdX identifier. If you are unsure, try
+running ``lsblk`` before and after plugging in the USB you are using for the
+Ubuntu installer.
+
+If your USB is mapped to /dev/sdX and you are currently in the directory that
+contains the Ubuntu ISO, you would use dd like so: ::
+
+    sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdX
+
 
 Install Ubuntu
 --------------
