@@ -1,0 +1,64 @@
+# declare filenames for built debs
+deb_filepath = "/tmp/securedrop-app-code-#{property['securedrop_app_code_version']}-amd64.deb"
+deb_apt_dependencies = %w(
+  python-pip
+  apparmor-utils
+  gnupg2
+  haveged
+  python
+  python-pip
+  secure-delete
+  sqlite
+  apache2-mpm-worker
+  libapache2-mod-wsgi
+  libapache2-mod-xsendfile
+  redis-server
+  supervisor
+)
+
+# ensure required debs exist
+describe file(deb_filepath) do
+  it { should be_file }
+end
+
+# get file basename of package, stripping leading dirs
+deb_basename = File.basename(deb_filepath)
+
+# cut up filename to extract package name
+# this garish regex finds just the package name and strips the version info, e.g.
+# from 'securedrop-ossec-agent-2.8.1+0.3.1-amd64.deb' it will return
+# 'securedrop-ossec-agent'
+package_name = deb_basename.scan(/^([a-z\-]+(?!\d))/)[0][0].to_s
+
+# ensure required debs appear installable
+describe command("dpkg --install --dry-run #{deb_filepath}") do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should contain("Selecting previously unselected package #{package_name}.") }
+#    its(:stdout) { should contain("Preparing to unpack #{deb_basename} ...")}
+end
+
+# Ensure control fields are populated as expected
+describe command("dpkg-deb --field #{deb_filepath}") do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should contain("Maintainer: SecureDrop Team <securedrop@freedom.press>") }
+  its(:stdout) { should contain("Homepage: https://securedrop.org") }
+  its(:stdout) { should contain("Package: #{package_name}")}
+  its(:stdout) { should contain("Architecture: amd64") }
+  its(:stdout) { should contain("Depends: #{deb_apt_dependencies.join(',')}")}
+end
+
+describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])'}) do
+  # Regression test to ensure that all files are present in the deb package. Also checks ownership and permissions.
+  # If any permissions or files change, this test must be updated. That is intentional.
+  # The wacky Perl one-liner parses the tar-format output from dpkg and inspects only permissions,
+  # ownership, and filename. Here's an example line from the filtered output:
+  #   -rw-r--r-- root/root       169 2015-10-28 13:41 ./var/www/document.wsgi
+  #   drwxr-x--- root/root         0 2015-10-28 13:41 ./var/www/securedrop/
+  #   -rw-r--r-- root/root      1550 2015-10-28 13:41 ./var/www/securedrop/request_that_secures_file_uploads.py
+  #   -rw-r--r-- root/root      1786 2015-10-28 13:41 ./var/www/securedrop/template_filters.pyc
+  #   -rw-r--r-- root/root     18725 2015-10-28 13:41 ./var/www/securedrop/journalist.pyc
+  #
+  # TODO: ensure the config.py file is not in the package
+#  its(:stdout) { should eq property['securedrop_app_code_debian_package_contents'] }
+#  its(:stdout) { should_not match /config\.py$/ }
+end
