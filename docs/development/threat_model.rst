@@ -39,7 +39,7 @@ Assumptions about the admin and the journalist
 Assumptions about the person installing SecureDrop, usually the admin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The person acts reasonably and in good faith, e.g. if he or she were
+-  The person acts reasonably and in good faith, e.g. if they were
    to give the attacker system-level access that would be unreasonable.
 -  The person obtains an authentic copy of SecureDrop and its
    dependencies.
@@ -189,7 +189,7 @@ What a compromise of the source's property can achieve
    memorizing them. If a source cannot memorize the codename right away,
    we recommend writing it down and keeping it in a safe place at first,
    and gradually working to memorize it over time. Once the source has
-   memorized it, he or she should destroy the written copy. If the
+   memorized it, they should destroy the written copy. If the
    source does write down the codename, a compromise or physical seizure
    of the source's property may result in the attacker obtaining the
    source's codename.
@@ -277,7 +277,7 @@ What a compromise of the admin's property can achieve
    -  Add, modify, and delete software, configurations, and other files.
    -  See all HTTP requests made by the source, the admin, and the
       journalist.
-   -  See the plaintext codename of a source as he or she is logging in.
+   -  See the plaintext codename of a source as they are logging in.
    -  See the plaintext communication between a source and a journalist
       as it happens.
    -  See the stored list of hashed codenames.
