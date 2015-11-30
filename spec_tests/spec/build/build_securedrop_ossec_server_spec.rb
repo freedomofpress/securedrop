@@ -35,7 +35,7 @@ describe command("dpkg-deb --field #{deb_filepath}") do
   its(:stdout) { should contain("Replaces: ossec-server") }
 end
 
-describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])'}) do
+describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])' | sort -k 3}) do
   # Regression test to ensure that all files are present in the deb package. Also checks ownership and permissions.
   # If any permissions or files change, this test must be updated. That is intentional.
   # The wacky Perl one-liner parses the tar-format output from dpkg and inspects only permissions,
@@ -44,5 +44,8 @@ describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ",
   #   drwxr-xr-x root/root ./var/ossec/etc/
   #   -rw-r--r-- root/root ./var/ossec/etc/ossec.conf
   #   -rw-r--r-- root/root ./var/ossec/etc/local_decoder.xml
+  #
+  # The sort pipe ensures that the files are ordered by path name, which is necessary because `dpkg -c` uses
+  # tar's formatting by default, which can vary. Sorting before comparison makes diff output useful during failure.
   its(:stdout) { should eq property['securedrop_ossec_server_debian_package_contents'] }
 end

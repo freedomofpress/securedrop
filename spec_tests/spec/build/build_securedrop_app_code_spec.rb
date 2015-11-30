@@ -47,18 +47,22 @@ describe command("dpkg-deb --field #{deb_filepath}") do
   its(:stdout) { should contain("Depends: #{deb_apt_dependencies.join(',')}")}
 end
 
-describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])'}) do
+describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])' | sort -k 3}) do
   # Regression test to ensure that all files are present in the deb package. Also checks ownership and permissions.
   # If any permissions or files change, this test must be updated. That is intentional.
   # The wacky Perl one-liner parses the tar-format output from dpkg and inspects only permissions,
   # ownership, and filename. Here's an example line from the filtered output:
-  #   -rw-r--r-- root/root       169 2015-10-28 13:41 ./var/www/document.wsgi
-  #   drwxr-x--- root/root         0 2015-10-28 13:41 ./var/www/securedrop/
-  #   -rw-r--r-- root/root      1550 2015-10-28 13:41 ./var/www/securedrop/request_that_secures_file_uploads.py
-  #   -rw-r--r-- root/root      1786 2015-10-28 13:41 ./var/www/securedrop/template_filters.pyc
-  #   -rw-r--r-- root/root     18725 2015-10-28 13:41 ./var/www/securedrop/journalist.pyc
   #
-  # TODO: ensure the config.py file is not in the package
+  #   -rw-r--r-- root/root ./var/www/document.wsgi
+  #   drwxr-x--- root/root ./var/www/securedrop/
+  #   -rw-r--r-- root/root ./var/www/securedrop/request_that_secures_file_uploads.py
+  #   -rw-r--r-- root/root ./var/www/securedrop/template_filters.pyc
+  #   -rw-r--r-- root/root ./var/www/securedrop/journalist.pyc
+  #
+  # The sort pipe ensures that the files are ordered by path name, which is necessary because `dpkg -c` uses
+  # tar's formatting by default, which can vary. Sorting before comparison makes diff output useful during failure.
+
+  # TODO: update spectests with new coverage files etc.
 #  its(:stdout) { should eq property['securedrop_app_code_debian_package_contents'] }
   its(:stdout) { should_not match /\/config\.py$/ }
 end
