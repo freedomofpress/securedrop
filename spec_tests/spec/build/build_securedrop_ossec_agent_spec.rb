@@ -26,10 +26,10 @@ end
 # Ensure control fields are populated as expected
 describe command("dpkg-deb --field #{deb_filepath}") do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should contain("Maintainer: SecureDrop Team <securedrop@freedom.press>") }
-  its(:stdout) { should contain("Homepage: https://securedrop.org") }
+  property['common_deb_package_fields'].each do |field|
+    its(:stdout) { should contain(field) }
+  end
   its(:stdout) { should contain("Package: #{package_name}")}
-  its(:stdout) { should contain("Architecture: amd64") }
   its(:stdout) { should contain("Depends: #{deb_apt_dependencies.join(',')}")}
   its(:stdout) { should contain("Conflicts: securedrop-ossec-server") }
   its(:stdout) { should contain("Replaces: ossec-agent") }
