@@ -8,3 +8,40 @@ development_apt_dependencies:
   - python-dev
   - python-pip
 
+securedrop_ossec_agent_debian_package_contents: |
+  drwxr-xr-x root/root ./
+  drwxr-xr-x root/root ./var/
+  drwxr-xr-x root/root ./var/ossec/
+  drwxr-xr-x root/root ./var/ossec/etc/
+  -rw-r--r-- root/root ./var/ossec/etc/ossec.conf
+  -rw-r--r-- root/root ./var/ossec/etc/local_decoder.xml
+  drwxr-xr-x root/root ./usr/
+  drwxr-xr-x root/root ./usr/share/
+  drwxr-xr-x root/root ./usr/share/doc/
+  drwxr-xr-x root/root ./usr/share/doc/securedrop-ossec-agent/
+  -rw-r--r-- root/root ./usr/share/doc/securedrop-ossec-agent/copyright
+  -rw-r--r-- root/root ./usr/share/doc/securedrop-ossec-agent/changelog.Debian
+  drwxr-xr-x root/root ./usr/share/lintian/
+  drwxr-xr-x root/root ./usr/share/lintian/overrides/
+  -rw-r--r-- root/root ./usr/share/lintian/overrides/securedrop-ossec-agent
+
+securedrop_ossec_server_debian_package_contents: |
+  drwxr-xr-x root/root ./
+  drwxr-xr-x root/root ./var/
+  drwxr-xr-x root/root ./var/ossec/
+  drwxr-xr-x root/root ./var/ossec/rules/
+  -rw-r--r-- root/root ./var/ossec/rules/local_rules.xml
+  -rwxr-xr-x root/root ./var/ossec/setup_gmail_test.sh
+  drwxr-xr-x root/root ./var/ossec/etc/
+  -rw-r--r-- root/root ./var/ossec/etc/ossec.conf
+  -rw-r--r-- root/root ./var/ossec/etc/local_decoder.xml
+  drwxr-xr-x root/root ./usr/
+  drwxr-xr-x root/root ./usr/share/
+  drwxr-xr-x root/root ./usr/share/doc/
+  drwxr-xr-x root/root ./usr/share/doc/securedrop-ossec-server/
+  -rw-r--r-- root/root ./usr/share/doc/securedrop-ossec-server/copyright
+  -rw-r--r-- root/root ./usr/share/doc/securedrop-ossec-server/changelog.Debian
+  drwxr-xr-x root/root ./usr/share/lintian/
+  drwxr-xr-x root/root ./usr/share/lintian/overrides/
+  -rw-r--r-- root/root ./usr/share/lintian/overrides/securedrop-ossec-server
+
