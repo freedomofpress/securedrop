@@ -172,11 +172,9 @@ describe file('/var/ossec/send_encrypted_alarm.sh') do
   it { should be_mode '1407' }
 end
 
-# TODO: ansible is setting mode 0660, but servers actually have 1224
-# Debug after serverspec tests have been ported
 describe file('/var/log/procmail.log') do
   it { should be_file }
-  it { should be_mode '1224' }
+  it { should be_mode '660' }
   it { should be_owned_by 'ossec' }
 end
 
