@@ -27,7 +27,10 @@
     rsync_path: "sudo rsync"
     rsync_opts:
       - "--chown={{ build_debian_package_owner_username }}:{{ build_debian_package_group_username }}"
-      - "--chmod=D755,Fgo-w"
+      # This is a rather restrictive umask, but appropriate for the packages built for SecureDrop.
+      # The pip wheel directories will be more relaxed. e.g. 0755, according to system umask, since
+      # the wheel archive is created after files are copied in to the build directory.
+      - "--chmod=Dgo-w,Fgo-w"
       - "--no-owner"
       - "--super"
   with_items: build_debian_package_files_directories
