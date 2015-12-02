@@ -16,7 +16,9 @@
           app code Debian packages on the staging machines. Run `vagrant up build`,
           then `vagrant provision /staging/`. Thereafter you can run
           `ANSIBLE_ARGS="--tags rebuild" vagrant provision /staging/` to rebuild
-          and reinstall the application code.
+          and reinstall the application code. See the docs for details:
+          https://docs.securedrop.org/en/latest/development/getting_started.html
+
       when: "'build' not in groups.all"
   tags: rebuild
 
