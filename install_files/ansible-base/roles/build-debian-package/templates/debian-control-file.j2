@@ -1,13 +1,33 @@
 Package: {{ build_debian_package_name | mandatory }}
+{% if build_debian_package_source is defined and
+      build_debian_package_source != [] %}
 Source: {{ build_debian_package_source }}
+{% endif %}
 Version: {{ build_debian_package_version | mandatory }}
+{% if build_debian_package_section is defined and
+      build_debian_package_section != [] %}
 Section: {{ build_debian_package_section }}
+{% endif %}
+{% if build_debian_package_priority is defined and
+      build_debian_package_priority != [] %}
 Priority: {{ build_debian_package_priority }}
+{% endif %}
 Architecture: {{ build_debian_package_arch | mandatory }}
+{% if build_debian_package_depends is defined and
+      build_debian_package_depends != [] %}
 Depends: {{ build_debian_package_depends | join(',') }}
+{% endif %}
+{% if build_debian_package_conflicts is defined and
+      build_debian_package_conflicts != [] %}
 Conflicts: {{ build_debian_package_conflicts | join(',') }}
+{% endif %}
+{% if build_debian_package_replaces is defined and
+      build_debian_package_replaces != [] %}
 Replaces: {{ build_debian_package_replaces | join(',') }}
+{% endif %}
 Maintainer: {{ build_debian_package_maintainer | mandatory }}
 Description: {{ build_debian_package_description | mandatory }}
+{% if build_debian_package_homepage is defined and
+      build_debian_package_homepage != [] %}
 Homepage: {{ build_debian_package_homepage }}
-
+{% endif %}
