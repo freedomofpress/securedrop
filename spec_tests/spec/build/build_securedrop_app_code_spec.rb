@@ -45,6 +45,8 @@ describe command("dpkg-deb --field #{deb_filepath}") do
   end
   its(:stdout) { should contain("Package: #{package_name}")}
   its(:stdout) { should contain("Depends: #{deb_apt_dependencies.join(',')}")}
+  its(:stdout) { should contain("Version: #{property['securedrop_app_code_version']}") }
+  its(:stdout) { should contain("Description: Packages the SecureDrop application code pip dependencies and AppArmor profiles. This package will put the AppArmor profiles in enforce mode. This package also uses pip to install the pip wheelhouse.") }
 end
 
 describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ", @F[0,1,5])' | sort -k 3}) do
