@@ -1,0 +1,30 @@
+---
+# The Debian control file fields should be validated prior to building.
+# This role assumes that binary Debian packages are being built,
+# which have slightly different (and more lax) requirements for fields.
+# See docs at https://www.debian.org/doc/debian-policy/ch-controlfields.html
+#
+# Mandatory fields:
+#
+#   * Package
+#   * Version
+#   * Architecture
+#   * Maintainer
+#   * Description
+
+# Recommended fields:
+#
+#   * Section
+#   * Priority
+
+# Wrapper dicts used for validating control fields for package.
+build_debian_package_required_control_fields:
+  Package: "{{ build_debian_package_name }}"
+  Version: "{{ build_debian_package_version }}"
+  Architecture: "{{ build_debian_package_version }}"
+  Maintainer: "{{ build_debian_package_maintainer }}"
+  Description: "{{ build_debian_package_description }}"
+
+build_debian_package_recommended_control_fields:
+  Section: "{{ build_debian_package_section }}"
+  Priority: "{{ build_debian_package_priority }}"

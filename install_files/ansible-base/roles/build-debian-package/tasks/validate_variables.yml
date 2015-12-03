@@ -1,0 +1,35 @@
+---
+# The Debian control file fields should be validated prior to building.
+# This role assumes that binary Debian packages are being built,
+# which have slightly different (and more lax) requirements for fields.
+# See docs at https://www.debian.org/doc/debian-policy/ch-controlfields.html
+# More info can be fonud in vars/main.yml in this role.
+
+- name: Validate required fields for DEBIAN/control file.
+  fail:
+    msg: |
+      The Debian control field "{{ item.key }}" is not declared,
+      but is required for building Debian packages. The list of required fields is:
+      {% for key, value in build_debian_package_required_control_fields.iteritems() %}
+        {{ key }}
+      {% endfor %}
+      See https://www.debian.org/doc/debian-policy/ch-controlfields.html
+      for more information.
+  with_dict: build_debian_package_required_control_fields
+  when: item.value is not defined or
+        item.value == ""
+
+- name: Validate recommended fields for DEBIAN/control file.
+  debug:
+    msg: |
+      The Debian control field "{{ item.key }}" is not declared,
+      but is recommended for building Debian packages. The list of recommended fields is:
+      {% for key, value in build_debian_package_recommended_control_fields.iteritems() %}
+        {{ key }}
+      {% endfor %}
+      See https://www.debian.org/doc/debian-policy/ch-controlfields.html
+      for more information.
+  with_dict: build_debian_package_recommended_control_fields
+  when: item.value is not defined or
+        item.value == ""
+

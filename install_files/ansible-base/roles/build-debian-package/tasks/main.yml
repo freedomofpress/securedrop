@@ -1,5 +1,7 @@
 ---
 # tasks file for build-debian-package
+- include: validate_variables.yml tags=jawn
+
 - include: packages.yml tags=apt,packages
 
 - include: create_directories.yml tags=directories
