@@ -69,6 +69,6 @@ describe command(%{dpkg --contents #{deb_filepath} | perl -lane 'print join(" ",
   # tar's formatting by default, which can vary. Sorting before comparison makes diff output useful during failure.
 
   # TODO: update spectests with new coverage files etc.
-#  its(:stdout) { should eq property['securedrop_app_code_debian_package_contents'] }
+  its(:stdout) { should eq property['securedrop_app_code_debian_package_contents'] }
   its(:stdout) { should_not match /\/config\.py$/ }
 end

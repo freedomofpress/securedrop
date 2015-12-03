@@ -71,11 +71,14 @@ securedrop_app_code_debian_package_contents: |
   drwxr-xr-x root/root ./var/securedrop/
   drwxr-xr-x root/root ./var/securedrop/wheelhouse/
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/beautifulsoup4-4.3.2-py2-none-any.whl
+  -rw-r--r-- root/root ./var/securedrop/wheelhouse/cssmin-0.2.0-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/Flask-0.10.1-py2-none-any.whl
+  -rw-r--r-- root/root ./var/securedrop/wheelhouse/Flask_Assets-0.11-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/Flask_WTF-0.11-py2.py3-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/gnupg_securedrop-1.2.5_9_g6f9d63a_dirty-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/itsdangerous-0.24-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/Jinja2-2.7.3-py2-none-any.whl
+  -rw-r--r-- root/root ./var/securedrop/wheelhouse/jsmin-2.1.6-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/MarkupSafe-0.23-cp27-none-linux_x86_64.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/pip_tools-0.3.5-cp27-none-linux_x86_64.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/psutil-2.2.0-cp27-none-linux_x86_64.whl
@@ -88,6 +91,7 @@ securedrop_app_code_debian_package_contents: |
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/scrypt-0.6.1-cp27-none-linux_x86_64.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/six-1.9.0-py2.py3-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/SQLAlchemy-0.9.8-cp27-none-linux_x86_64.whl
+  -rw-r--r-- root/root ./var/securedrop/wheelhouse/webassets-0.11.1-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/Werkzeug-0.9.6-py2-none-any.whl
   -rw-r--r-- root/root ./var/securedrop/wheelhouse/WTForms-2.0.2-py27-none-any.whl
   drwxr-xr-x root/root ./var/www/
@@ -110,6 +114,7 @@ securedrop_app_code_debian_package_contents: |
   -rw------- root/root ./var/www/securedrop/config.pyc
   -rw-r--r-- root/root ./var/www/securedrop/config.py.example
   -rw-r----- root/root ./var/www/securedrop/COPYING
+  -rw-r--r-- root/root ./var/www/securedrop/.coveragerc
   -rw-r--r-- root/root ./var/www/securedrop/crypto_util.py
   -rw-r--r-- root/root ./var/www/securedrop/crypto_util.pyc
   -rw-r--r-- root/root ./var/www/securedrop/db.py
@@ -905,7 +910,9 @@ securedrop_app_code_debian_package_contents: |
   -rw-r--r-- root/root ./var/www/securedrop/lib/python2.7/_weakrefset.pyc
   drwxr-xr-x root/root ./var/www/securedrop/management/
   -rw-r--r-- root/root ./var/www/securedrop/management/__init__.py
+  -rw-r--r-- root/root ./var/www/securedrop/management/__init__.pyc
   -rw-r--r-- root/root ./var/www/securedrop/management/run.py
+  -rw-r--r-- root/root ./var/www/securedrop/management/run.pyc
   -rwxr-xr-x root/root ./var/www/securedrop/manage.py
   -rw-r--r-- root/root ./var/www/securedrop/pylintrc
   -rw-r--r-- root/root ./var/www/securedrop/request_that_secures_file_uploads.py
