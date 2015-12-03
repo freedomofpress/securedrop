@@ -34,7 +34,6 @@ describe command("dpkg-deb --field #{deb_filepath}") do
   its(:stdout) { should contain("Conflicts: securedrop-ossec-server") }
   its(:stdout) { should contain("Replaces: ossec-agent") }
   its(:stdout) { should contain("Source: ossec.net") }
-  its(:stdout) { should contain("Section: web") }
   # Note the double backslash escaping the plus sign between the OSSEC and SecureDrop versions.
   # Necessary due to how Serverspec passes strings to sh and grep when running the `contain` matcher.
   its(:stdout) { should contain("Version: #{property['ossec_version']}\\+#{property['securedrop_app_code_version']}") }
