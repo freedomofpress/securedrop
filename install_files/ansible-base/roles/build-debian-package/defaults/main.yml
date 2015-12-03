@@ -36,6 +36,10 @@ build_debian_package_homepage: ""
 build_debian_package_depends: []
 build_debian_package_conflicts: []
 build_debian_package_replaces: []
+
+# If using multiline YAML, use the "line folding" operator '>-' to strip
+# the trailing newline. Otherwise dpkg will error out when it encounters
+# a blank line in the control file.
 build_debian_package_description: ""
 
 # Build directories.

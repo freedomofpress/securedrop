@@ -19,6 +19,7 @@ build_debian_package_replaces:
 build_debian_package_conflicts:
   - securedrop-ossec-server
 
-build_debian_package_description: >
+
+build_debian_package_description: >-
   Installs a customized version of the OSSEC agent
   preconfigured for the SecureDrop Application Server.

@@ -35,7 +35,7 @@ build_debian_package_pip_requirements: var/www/securedrop/requirements/securedro
 build_debian_package_pip_wheel_directory: var/securedrop/wheelhouse
 
 # Using the YAML string folding syntax (>) to ensure that the lines are concatenated.
-build_debian_package_description: >
+build_debian_package_description: >-
   Packages the SecureDrop application code pip dependencies
   and AppArmor profiles. This package will put the AppArmor
   profiles in enforce mode. This package also uses pip to install the pip wheelhouse.

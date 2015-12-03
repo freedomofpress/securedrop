@@ -19,7 +19,7 @@ build_debian_package_replaces:
 build_debian_package_conflicts:
   - securedrop-ossec-agent
 
-build_debian_package_description: >
+build_debian_package_description: >-
   Installs the OSSEC server preconfigured for the SecureDrop Monitor Server.
   It is configured to email all alerts to root@localhost. The SecureDrop Ansible
   playbook will configure procmail and postfix to encrypt the OSSEC alerts via GPG
