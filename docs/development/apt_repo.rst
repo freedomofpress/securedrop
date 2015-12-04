@@ -22,10 +22,10 @@ securedrop-app-code
     AppArmor profiles.
 
 securedrop-ossec-agent
-    Installs the SecureDrop-specific configuration for the App Server.
+    Installs the SecureDrop-specific OSSEC configuration for the App Server.
 
 securedrop-ossec-server
-    Installs the SecureDrop-specific configuration for the Mon Server.
+    Installs the SecureDrop-specific OSSEC configuration for the Mon Server.
 
 `securedrop-grsec <https://github.com/freedomofpress/grsec>`_
     SecureDrop grsec kernel (metapackage depending on the latest version).
