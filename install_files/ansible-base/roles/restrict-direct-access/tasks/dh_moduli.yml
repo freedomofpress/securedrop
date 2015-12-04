@@ -3,6 +3,8 @@
   stat:                                                                         
     path: /etc/ssh/moduli                                                       
   register: dh_moduli                                                           
+
+# SHA1 checksum represents the latest default primes/moduli shipped with OpenSSH
                                                                                 
 - name: Remove weak DH moduli                                                   
   command: awk '$5 > 2000' /etc/ssh/moduli                                      

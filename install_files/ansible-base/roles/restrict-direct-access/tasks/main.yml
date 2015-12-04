@@ -1,6 +1,8 @@
 ---
 - include: fetch_tor_config.yml
 
+- include: dh_moduli.yml
+
 - include: ssh.yml
 
 - include: iptables.yml
