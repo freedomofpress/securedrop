@@ -1,74 +1,85 @@
 Ubuntu Install Guide
 ====================
 
-The *Application Server* and the *Monitor Server* specifically require
-the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty
-Tahr) <http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image
-you want to get is named ``ubuntu-14.04.2-server-amd64.iso``. In order
-to verify the installation media, you should also download the files
-named ``SHA256SUMS`` and ``SHA256SUMS.gpg``.
+The *Admin Workstation*, running Tails, should be used to download and verify
+Ubuntu Server.  The *Application Server* and the *Monitor Server* specifically
+require the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty Tahr)
+<http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image you want to get
+is named ``ubuntu-14.04.2-server-amd64.iso``. In order to verify the
+installation media, you should also download the files named ``SHA256SUMS`` and
+``SHA256SUMS.gpg``.
+
+.. note:: Downloading Ubuntu over Tails may take a very long time because it's
+          being done over Tor.
 
 Verify the Ubuntu installation media
 ------------------------------------
 
-First you should make sure that the Ubuntu image you downloaded hasn't
-been modified by a malicious attacker by checking its integrity with
-cryptographic signatures and hashes — which might sound complex but it's
-relatively easy to do. Before you can verify the Ubuntu installation
-media, you will need to download the associated public key.
+First, you should verify the Ubuntu image you downloaded hasn't been modified by
+a malicious attacker or otherwise corrupted. We can do so by checking its
+integrity with cryptographic signatures and hashes. 
 
-::
+First, we will download *Ubuntu Image Signing Key* and verify its 
+*fingerprint*. ::
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key C5986B4F1257FFA86632CBA746181433FBB75451
-    gpg --fingerprint C5986B4F1257FFA86632CBA746181433FBB75451
+    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
-The Ubuntu CD Image Automatic Signing Key should have a fingerprint of
-"C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451". If the fingerprint
-does not match what you see here, please get in touch at
-securedrop@freedom.press.
+.. note:: It is important you type this out correctly. If you are not
+          copy-pasting this command, we recommend you double-check you have
+          entered it correctly before pressing enter.
+
+Again, when passing the full public key fingerprint to the ``--recv-key`` command, GPG
+will implicitly verify that the fingerprint of the key received matches the
+argument passed.
+
+.. caution:: If GPG warns you that the fingerprint of the key received
+             does not match the one requested **do not** proceed with
+             the installation. If this happens, please email us at
+             securedrop@freedom.press.
 
 Verify the ``SHA256SUMS`` file and move on to the next step if you see
-"Good Signature" in the output.
-
-::
+"Good Signature" in the output. ::
 
     gpg --verify SHA256SUMS.gpg SHA256SUMS
 
-The next and final step is to verify the Ubuntu image. If you are using
-Linux, use the following command.
-
-::
+The next and final step is to verify the Ubuntu image. ::
 
     sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 
-If you are using OS X, use the command below.
-
-::
-
-    shasum -a 256 -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
 
 If the final verification step is successful, you should see the
-following output in your terminal.
-
-::
+following output in your terminal. ::
 
     ubuntu-14.04.2-server-amd64.iso: OK
+
+.. caution:: If you do not see the line above it is not safe to proceed with the
+             installation. If this happens, please contact us at
+             securedrop@freedom.press.
 
 Create the Ubuntu installation media
 ------------------------------------
 
-To create the Ubuntu installation media, you can either burn the ISO
-image to a CD-R or create a bootable USB stick (see instructions for
-doing this on `OS
-X <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx>`__,
-`Ubuntu <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-ubuntu>`__
-and
-`Windows <http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-windows>`__).
-As a reliable method we recommend using the ``dd`` command to copy the
-hybrid ISO directly to a USB drive rather than a utility like UNetbootin
-which can result in errors. Once you have a CD or USB with an ISO image
-of Ubuntu on it, you may begin the Ubuntu installation on both
+To create the Ubuntu installation media, you can either burn the ISO image to a
+CD-R or create a bootable USB stick.  As a reliable method we recommend using
+the ``dd`` command to copy the hybrid ISO directly to a USB drive rather than a
+utility like UNetbootin which can result in errors. Once you have a CD or USB
+with an ISO image of Ubuntu on it, you may begin the Ubuntu installation on both
 SecureDrop servers.
+
+To use `dd` you first need to find where the USB device you wish to install
+Tails on has been mapped. Simply running the command ``lsblk`` in the terminal
+will give you a list of your block storage device mappings (this includes hard
+drives and USB). If the USB you are writing the Ubuntu installer to is of a
+different size or brand than the USB you are running Tails from, it should be
+easy to identify which USB has which sdX identifier. If you are unsure, try
+running ``lsblk`` before and after plugging in the USB you are using for the
+Ubuntu installer.
+
+If your USB is mapped to /dev/sdX and you are currently in the directory that
+contains the Ubuntu ISO, you would use dd like so: ::
+
+    sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdX
+
 
 Install Ubuntu
 --------------

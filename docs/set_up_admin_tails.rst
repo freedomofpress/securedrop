@@ -55,25 +55,28 @@ Start by running the following commands to download the git repository.
 Verify the Release Tag
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First, download the *Freedom of the Press Foundation Master Signing Key*
-and verify the fingerprint.
+First, download and verify the *Freedom of the Press Foundation Master
+Signing Key*. 
 
 .. code:: sh
 
-    gpg --keyserver pool.sks-keyservers.net --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
-    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
 
-The Freedom of the Press Foundation Master Signing Key should have a
-fingerprint of ``B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F
-6818``.
+.. note:: It is important you type this out correctly. If you are not
+          copy-pasting this command, we recommend you double-check you have
+          entered it correctly before pressing enter.
 
-.. caution:: If the fingerprint does not match, fingerprint
-	     verification has failed and you **should not** proceed
-	     with the installation. If this happens, please contact us
-	     at securedrop@freedom.press.
+When passing the full public key fingerprint to the ``--recv-key`` command, GPG
+will implicitly verify that the fingerprint of the key received matches the
+argument passed.
+
+.. caution:: If GPG warns you that the fingerprint of the key received
+             does not match the one requested **do not** proceed with
+             the installation. If this happens, please email us at
+             securedrop@freedom.press.
 
 Verify that the current release tag was signed with the master signing
-key.
+key:
 
 .. code:: sh
 
@@ -85,8 +88,8 @@ You should see ``Good signature from "Freedom of the Press Foundation
 Master Signing Key"`` in the output of that last command.
 
 .. caution:: If you do not, signature verification has failed and you
-	     *should not* proceed with the installation. If this
-	     happens, please contact us at securedrop@freedom.press.
+             *should not* proceed with the installation. If this
+             happens, please contact us at securedrop@freedom.press.
 
 Create the Admin Passphrase Database
 ------------------------------------
