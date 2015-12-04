@@ -11,15 +11,21 @@ linux-image-3.14.*-grsec
 linux-headers-3.14.*-grsec
     Header files related to the Linux kernel.
 
+`ossec-agent <https://github.com/freedomofpress/ossec>`_                        
+    Installs the OSSEC agent.
+                                                                                
+`ossec-server <https://github.com/freedomofpress/ossec>`_ 
+    Installs the OSSEC manager.
+
 securedrop-app-code
     Packages the SecureDrop application code, Python pip dependencies and 
     AppArmor profiles.
 
 securedrop-ossec-agent
-    Installs the pre-configured OSSEC agent for the SecureDrop App Server.
+    Installs the SecureDrop-specific configuration for the App Server.
 
 securedrop-ossec-server
-    Installs the pre-configured OSSEC manager for the SecureDrop Mon Server.
+    Installs the SecureDrop-specific configuration for the Mon Server.
 
 `securedrop-grsec <https://github.com/freedomofpress/grsec>`_
     SecureDrop grsec kernel (metapackage depending on the latest version).
