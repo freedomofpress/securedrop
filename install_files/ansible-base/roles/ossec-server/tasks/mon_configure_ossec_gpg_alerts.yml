@@ -40,7 +40,7 @@
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
-    mode: 775
+    mode: "0750"
     owner: ossec
     group: root
   tags:
