@@ -37,17 +37,13 @@
     - { role: remove-authd-exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
   sudo: yes
 
-  # This section will put the ssh and iptables rules in place
-  # It will then add any staging exemptions required
-  # at the end of each host section is when the handlers are run.
-  # So iptables will not be reloaded until the exemptions are applied
-  # for production the last task is apply iptables. This will break their
-  # connection. After that point the admin will to proxy traffic over tor.
+  # Set iptables rules with exemptions for staging that permit direct access for SSH.
+  # The overrides that permit direct access are managed in group_vars/staging.yml,
+  # and default false in production environments, in order to force SSH traffic over Tor.
 - name: Configure host firewalls (with direct access for staging).
   hosts: staging
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
-    - { role: allow-direct-access, tags: [ common, allow_direct_access ] }
   sudo: yes
 
 - name: Perform backup of Application Server configuration.
