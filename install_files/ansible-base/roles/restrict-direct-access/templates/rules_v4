@@ -105,6 +105,12 @@
 -A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 -A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+
+{% elif 'securedrop_monitor_server' in group_names %}
+-A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 {% endif %}
 
 {% endif %}
