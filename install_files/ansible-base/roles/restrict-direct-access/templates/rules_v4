@@ -44,6 +44,7 @@
 # Block all other traffic by application users
 # Load before generic loopback rules
 -A OUTPUT -m owner --uid-owner www-data -j LOGNDROP -m comment --comment "Drop all other traffic by the securedrop user"
+
 {% endif %}
 
 # Block all other outbound access for users in the ssh group
@@ -86,6 +87,26 @@
 # postfix rule for outbound smtp
 -A OUTPUT -p tcp --dport {{ smtp_relay_port }} -m owner --uid-owner postfix -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
 -A INPUT -p tcp --sport {{ smtp_relay_port }}  -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow ossec email alerts out"
+{% endif %}
+
+
+# Permit direct SSH access for staging environment. Using a dual conditional here for safety;
+# the role default var "allow_direct_access" is false, and the "staging" name is not present in prod.
+# Both conditions must be satisfied to add these exemptions.
+{% if allow_direct_access == true and
+      'staging' in group_names %}
+
+{% if 'securedrop_application_server' in group_names %}
+-A INPUT -i {{ ansible_default_ipv4.interface }}  -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ansible_default_ipv4.interface }}  -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+{% endif %}
+
 {% endif %}
 
 # Allow generic loopback connections

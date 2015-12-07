@@ -5,3 +5,5 @@
 # to enable direct access for testing during development.
 ssh_listening_address: 127.0.0.1
 
+allow_direct_access: false
+
