@@ -66,8 +66,11 @@
 
 <hr class="no-line">
 
+
 <div class="code-reminder">
-  <i class="fa fa-lock pull-left"></i> Remember, your codename is: <strong>{{ codename }}</strong>
+  <i class="fa fa-lock pull-left"></i> Remember your codename is:
+  <div id="show" class="show pull-right"></div>
+  <span id="content"><p class="alert"><strong>{{ codename }}</strong></p></span>
 </div>
 
 {% endblock %}
