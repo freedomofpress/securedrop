@@ -9,8 +9,10 @@ an entry here:
 - `SecureDrop.png`: A high-level overview of the components of and
   data flows through the SecureDrop architecture. Used in the
   [SecureDrop website FAQ][]. Up to date at the time of this writing.
-- `SecureDrop.svg`: SVG source file used to generate
-  `SecureDrop.png`.
+  A symbolic link to the English version of the diagram
+  (`SecureDrop-en.png`).
+- `SecureDrop.svg`: Multi-lingual SVG source file used to generate
+  `SecureDrop-*.png` files for the corresponding languages.
 - `SecureDrop.vsdx`: The Microsoft Visio source file used to generate
   `SecureDrop-visio.png`. For context, see [#274][].
 - `SecureDrop-0.3-DFD.png`: A WIP DFD (data flow diagram) created for
