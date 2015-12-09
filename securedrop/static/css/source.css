@@ -392,6 +392,31 @@ button.center {
   font-size: 18pt;
 }
 
+input#show {
+  display:none;
+}
+#content {
+    display: block;
+    transition: opacity 1s ease-out;
+    opacity: 0; 
+    height: 0;
+    font-size: 0;
+    overflow: hidden;
+}
+#show:before {
+    color:blue;
+    content: "Show"
+}
+#show:hover.show:before {
+    color:gray;
+    content: "Hide"
+}
+#show:hover ~ span#content {
+    opacity: 1;
+    font-size: 100%;
+    height: auto;
+}
+
 input.codename {
   width: 400px;
   padding: 10px;
