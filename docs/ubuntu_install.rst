@@ -168,6 +168,11 @@ Disk Encryption
 If the servers are ever powered down, FDE will ensure all of the
 information on them stays private in case they are seized or stolen.
 
+.. warning:: The Ansible playbooks for SecureDrop will enable nightly reboots
+             after the ``cron-apt`` task runs for automatic updates. Using FDE
+             would therefore require manual intervention every morning.
+             Consequently **we strongly discourage the use of FDE.**
+
 While FDE can be useful in some cases, we currently do not recommend
 that you enable it because there are not many scenarios where it will be
 a net security benefit for SecureDrop operators. Doing so will introduce
