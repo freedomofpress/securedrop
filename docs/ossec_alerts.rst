@@ -447,6 +447,8 @@ download.
 Once you have the root certificate file, you can use ``-CAfile`` to test
 that it will successfully verify the connection.
 
+.. _AnalyzingAlerts:
+
 Analyzing the Alerts
 --------------------
 
