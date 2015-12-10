@@ -457,5 +457,24 @@ should examine these alerts regularly to ensure that the SecureDrop
 environment has not been compromised in any way, and follow up on any
 particularly concerning messages with direct investigation.
 
+Common OSSEC Alerts
+~~~~~~~~~~~~~~~~~~~
+
+The SecureDrop Application and Monitor Servers reboot every night, as part
+of the unattended upgrades process. When the servers come back up, OSSEC will
+start again and report the change in status. Therefore you should receive an
+email alert every morning containing text similar to: ::
+
+    Received From: mon->ossec-monitord
+    Rule: 502 fired (level 3) -> "Ossec server started."
+    Portion of the log(s):
+
+    ossec: Ossec started.
+
+This is a normal alert, and informs you that the system is working as expected.
+
+Uncommon OSSEC Alerts
+~~~~~~~~~~~~~~~~~~~~~
+
 If you believe that the system is behaving abnormally, you should
 contact us at securedrop@freedom.press for help.
