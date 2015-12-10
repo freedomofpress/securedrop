@@ -48,22 +48,6 @@
     - { role: app, tags: app }
   sudo: yes
 
-  # If the OSSEC authd iptables rule exemptions are in place remove them and
-  # restart OSSEC. For the ossec agent the exemptions are removed as part of
-  # the authd role, in order to allow all agents to connect to the ossec server
-  # before killing authd and removing the ossec rules. This is a separate role for
-  # the ossec server. The order of events does matter: the monitor server authd
-  # service needs to be listening and reachable, then agent needs to connect to
-  # ossec server, agent needs to restart, then ossec server exemptions can be
-  # removed and the ossec server process can restart.
-- name: Remove temporary firewall exemptions from Monitor Server.
-  hosts: securedrop_monitor_server
-  vars_files:
-    - prod-specific.yml
-  roles:
-    - { role: remove-authd-exemptions, tags: [ ossec, ossec_server, remove_authd_exemptions ] }
-  sudo: yes
-
   # This section will put the ssh and iptables rules in place
   # It will then add any staging exemptions required
   # at the end of each host section is when the handlers are run.
