@@ -208,6 +208,10 @@ Wait for the base system to finish installing. When you get to the
 subsequent SecureDrop installation will include a task that handles
 regular software updates.
 
+.. note:: The Ansible playbooks for SecureDrop will configure automatic
+          updates via ``cron-apt``. As part of the automatic update process,
+          the servers will reboot nightly.
+
 When you get to the software selection screen, only choose **OpenSSH
 server** by hitting the space bar (Note: hitting enter before the space
 bar will force you to start the installation process over).
