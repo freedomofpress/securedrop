@@ -415,27 +415,65 @@ class TestJournalist(TestCase):
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
 
-    def test_bulk_download(self):
+    def test_selected_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        selected_files = files[:2]
+        unselected_files = files[2:]
         filenames = common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
             action='download',
             sid=sid,
-            doc_names_selected=files
+            doc_names_selected=selected_files
         ))
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(rv.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
-        self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-            os.path.join(source.journalist_filename, files[0])
+
+        for file in selected_files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                 os.path.join(source.journalist_filename, file)
+            ))
+
+        for file in unselected_files:
+            try:
+                zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                    os.path.join(source.journalist_filename, file))
+            except KeyError:
+                pass
+            else:
+                self.assertTrue(False)
+            
+
+
+    def test_download_all_bulk_download(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        filenames = common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+             action='download_all',
+             sid=sid
         ))
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
+        for file in files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                 os.path.join(source.journalist_filename, file)
+            ))
+
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
