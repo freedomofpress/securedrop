@@ -7,7 +7,7 @@ import zipfile
 
 import mock
 
-from flask import url_for
+from flask import url_for, g
 from flask.ext.testing import TestCase
 
 import crypto_util
@@ -267,6 +267,32 @@ class TestJournalist(TestCase):
                  os.path.join(source.journalist_filename, file)
             ))
 
+
+    def test_download_all(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        selected_files = files[::2]
+        unselected_files = files[1::2]
+        filenames = common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='download',
+                sid=sid,
+                doc_names_selected=selected_files
+        ))
+        rv = self.client.get('/download_all_unread')
+        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(rv.content_type, 'application/zip')
+        self.assertTrue(len(zipfile.ZipFile(StringIO(rv.data)).namelist()) == \
+                        len(unselected_files))
+        for file in unselected_files:
+            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                os.path.join('all_unread_'+g.user.username, file
+            )))
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
