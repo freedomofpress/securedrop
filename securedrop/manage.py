@@ -173,7 +173,8 @@ def add_admin():
             print "If the barcode does not render correctly, try changing your terminal's font, (Monospace for Linux, Menlo for OS X)."
             print "If you are using iTerm on Mac OS X, you will need to change the \"Non-ASCII Font\", which is your profile's Text settings."
             print
-            print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
+            print "Can't scan the barcode? Enter following shared secret manually:"
+            print admin.formatted_otp_secret
             print
 
 
