@@ -155,7 +155,7 @@ def generate_unique_codename(num_words):
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. If you want"
+        flash("You were redirected because you are already logged in. If you want "
               "to create a new account, you should log out first.", "notification")
         return redirect(url_for('lookup'))
 
