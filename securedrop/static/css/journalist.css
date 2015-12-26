@@ -78,6 +78,16 @@ footer {
   padding-top: 20px;
   color: #9e9e9e;
 }
+.locales {
+  text-align: center;
+  margin-top: 10px;
+  font-size: small;
+}
+.locales li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
 a.text-link {
   color: #7985aa;
 }

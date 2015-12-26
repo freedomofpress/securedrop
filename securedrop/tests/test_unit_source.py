@@ -230,7 +230,7 @@ class TestSource(TestCase):
         self.assertIn("Thanks! We received your message.", rv.data)
         self.assertIn(
             escape(
-                '{} "{}"'.format(
+                '{} "{}".'.format(
                     "Thanks! We received your document",
                     'test.txt')),
             rv.data)

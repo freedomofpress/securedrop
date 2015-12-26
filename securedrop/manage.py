@@ -4,13 +4,23 @@ import sys
 import os
 import shutil
 import subprocess
+from subprocess import CalledProcessError
+import unittest
+import readline  # makes the add_admin prompt kick ass
 import signal
+from time import sleep
+import version
 import qrcode
 import psutil
+import config
 
 from getpass import getpass
 from argparse import ArgumentParser
 from db import db_session, Journalist
+
+from babel.messages import frontend as babel
+from babel.messages.extract import DEFAULT_KEYWORDS as BABEL_DEFAULT_KEYWORDS
+from distutils.dist import Distribution
 from management import run
 
 # We need to import config in each function because we're running the tests
@@ -25,6 +35,9 @@ os.environ['SECUREDROP_ENV'] = 'dev'
 # When refactoring the test suite, the TEST_WORKER_PIDFILE
 # TEST_WORKER_PIDFILE is also hard-coded in `tests/common.py`.
 TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
+
+BABEL_TRANSLATIONS_DIR = './translations'
+BABEL_MESSAGES_FILE = './translations/messages.pot'
 
 
 def get_pid_from_pidfile(pid_file_name):
@@ -117,13 +130,14 @@ def add_admin():
 
     while True:
         password = getpass("Password: ")
-        password_again = getpass("Confirm Password: ")
 
         if len(password) > Journalist.MAX_PASSWORD_LEN:
             print ("Your password is too long (maximum length {} characters). "
                    "Please pick a shorter password.".format(
                    Journalist.MAX_PASSWORD_LEN))
             continue
+
+        password_again = getpass("Confirm Password: ")
 
         if password == password_again:
             break
@@ -207,6 +221,72 @@ def clean_tmp():
             os.remove(path)
 
 
+def translate():
+    cmds = [
+        [
+            'pybabel', 'extract',
+            '--charset=utf-8',
+            '--mapping=./babel.cfg',
+            '--output=' + BABEL_MESSAGES_FILE,
+            '--project=SecureDrop',
+            "--version=\\'{}\\'".format(version.__version__),
+            "--msgid-bugs-address=\\'securedrop@freedom.press\\'",
+            "--copyright-holder=\\'Freedom of the Press Foundation\\'",
+            '--no-wrap',
+            '.',
+            'source_templates',
+            'journalist_templates',
+        ],
+        # delete this line because it blocks translation extraction and compilation
+        [
+            'sed',
+            '-i',
+            '/^#, fuzzy$/d',
+            BABEL_MESSAGES_FILE,
+        ],
+    ]
+
+    for locale in getattr(config, 'LOCALES', []):
+        if locale.startswith('en'):
+            continue
+
+        cmd = [
+            'pybabel', 'compile',
+            '--locale=' + locale,
+            '--input-file=./translations/{locale}/LC_MESSAGES/messages.po'.format(locale=locale),
+            '--directory=' + BABEL_TRANSLATIONS_DIR,
+            '--statistics',
+        ]
+        cmds.append(cmd)
+
+
+    cmd = [
+        'pybabel', 'update',
+        '--input-file=' + BABEL_MESSAGES_FILE,
+        '--output-dir=' + BABEL_TRANSLATIONS_DIR,
+        '--no-fuzzy-matching',
+        '--no-wrap',
+        '--ignore-obsolete',
+    ]
+    cmds.append(cmd)
+
+
+    for cmd in cmds:
+        run_cmd(cmd)
+
+
+def run_cmd(cmd):
+    print('Running command:')
+    print(' '.join(cmd))
+    try:
+        subprocess.check_output(cmd)
+    except CalledProcessError as e:
+        print '[ERROR] Subprocess had non-zero exit code: ' + str(e.returncode)
+        print e.message
+        print e.output
+        sys.exit(e.returncode)
+
+
 def get_args():
     parser = ArgumentParser(prog=__file__,
                             description='A tool to help admins manage and devs hack')
@@ -230,6 +310,9 @@ def get_args():
 
     clean_tmp_subparser = subparsers.add_parser('clean-tmp', help='Cleanup the SecureDrop temp directory')
     clean_tmp_subparser.set_defaults(func=clean_tmp)
+
+    translate_subparser = subparsers.add_parser('translate', help='Update and compile translations')
+    translate_subparser.set_defaults(func=translate)
 
     return parser
 

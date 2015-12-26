@@ -181,3 +181,10 @@
     - logo
     - securedrop_config
 
+- name: Compile Babel translations
+  shell: ./manage.py translate
+  args:
+    chdir: "{{ securedrop_repo }}/securedrop/"
+    warn: no
+  tags:
+    - development

@@ -240,7 +240,7 @@ class JournalistNavigationSteps():
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
         self.wait_for(
-            lambda: self.assertIn('Edit user "{}"'.format(
+            lambda: self.assertIn("Edit user '{}'".format(
                 self.new_user['username']),
                 self.driver.page_source)
         )
@@ -255,7 +255,7 @@ class JournalistNavigationSteps():
         update_user_btn.click()
 
         self.wait_for(
-            lambda: self.assertIn('Edit user "{}"'.format(new_username),
+            lambda: self.assertIn("Edit user '{}'".format(new_username),
                                   self.driver.page_source)
         )
 
@@ -296,7 +296,7 @@ class JournalistNavigationSteps():
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
         self.wait_for(
-            lambda: self.assertIn('Edit user "{}"'.format(new_username),
+            lambda: self.assertIn("Edit user '{}'".format(new_username),
                                   self.driver.page_source)
         )
 

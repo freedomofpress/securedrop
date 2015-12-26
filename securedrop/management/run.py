@@ -69,7 +69,7 @@ class DevServerProcess(subprocess.Popen):
         directly.
 
         Note this method assumes we only want to select this process'
-        stdout. This is a reasonable assumption for a DevServerProcess
+        stdout. This is a reafsonable assumption for a DevServerProcess
         because the __init__ redirects stderr to stdout, so all output is
         available on stdout.
         """

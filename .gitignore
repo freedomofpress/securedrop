@@ -27,6 +27,9 @@ Gemfile.lock
 # ignore "external" Ansible configuration file
 secureDropConf.yml
 
+# ignore ansible retry files
+*.retry
+
 *.py[cod]
 *.asc
 *.crt
