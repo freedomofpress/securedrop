@@ -53,11 +53,3 @@ authd_rules:
   - "-A INPUT -s {{ app_hostname }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
   - "-A OUTPUT -d {{ app_hostname }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
-### Used by the test role ###
-
-# To allow direct access
-direct_access_rules:
-  - "-A INPUT -i {{ansible_default_ipv4.interface}} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -o {{ansible_default_ipv4.interface}} -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"
-  - "-A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"

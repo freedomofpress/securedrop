@@ -1,12 +1,4 @@
 ---
-- name: Remove default Apache site directory /var/www/html/.
-  file:
-    state: absent
-    dest: "/var/www/html"
-  tags:
-    - apache
-    - permissions
-
 - name: Create SecureDrop app code directory.
   file:
     state: directory

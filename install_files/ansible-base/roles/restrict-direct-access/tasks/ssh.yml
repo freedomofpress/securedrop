@@ -9,15 +9,23 @@
     - ssh
     - pam
 
-- name: Copy SSH config files.
+- name: Copy SSH client config file.
   copy:
-    src: "{{ item }}"
-    dest: /etc/ssh/{{ item }}
+    src: ssh_config
+    dest: /etc/ssh/ssh_config
     owner: root
     mode: '0644'
-  with_items:
-   - ssh_config
-   - sshd_config
+  tags:
+    - ssh
+    - 2fa
+    - permissions
+
+- name: Copy SSH server config file.
+  template:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    mode: '0644'
   tags:
     - ssh
     - 2fa

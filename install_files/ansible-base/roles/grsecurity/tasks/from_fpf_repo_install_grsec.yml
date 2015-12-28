@@ -20,26 +20,6 @@
     - motd
     - grsecurity
 
-- name: Install paxctl.
-  apt:
-    pkg: paxctl
-    state: present
-  tags:
-    - apt
-    - paxctl
-    - kernel
-    - hardening
-
-- name: Adjust paxctl headers on grub binaries.
-  command: paxctl -Cpm {{ item }}
-  with_items:
-    - /usr/sbin/grub-probe
-    - /usr/sbin/grub-mkdevicemap
-  tags:
-    - paxctl
-    - kernel
-    - hardening
-
 - name: Install the grsecurity-patched kernel from the FPF repo.
   apt:
     pkg: securedrop-grsec
@@ -62,12 +42,44 @@
     - kernel
     - hardening
 
-- name: Set grsec kernel as default for next boot.
-  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
+- name: Check initial default grub entry for next boot.
+  stat:
+    path: /boot/grub/grubenv
+  register: grubenv_check_initial_result
   tags:
     - grsec
-    - kernel
+    - grub
     - hardening
+    - kernel
+
+- name: Set grsec kernel as default for next boot.
+  command: grub-reboot "Advanced options for Ubuntu>{{ grsec_str.stdout }}"
+  # The grub-reboot command writes to /boot/grub/grubenv,
+  # so "changed" status can only be determined by comparing
+  # checksums on that file. We'll do so in the subsequent task.
+  changed_when: false
+  tags:
+    - grsec
+    - grub
+    - hardening
+    - kernel
+
+  # Kludge to detect changes accurately from the `grub-reboot` command
+  # in the previous task. We're just comparing checksums on the
+  # /boot/grub/grubenv file before and after the command, since that's
+  # where `grub-reboot` writes its changes. Hopefully a future version
+  # of Ansible will provide an `args: changes:` parameter to command calls.
+- name: Check customized default grub entry for next boot.
+  stat:
+    path: /boot/grub/grubenv
+  register: grubenv_check_configured_result
+  changed_when: grubenv_check_initial_result.stat.checksum !=
+                grubenv_check_configured_result.stat.checksum
+  tags:
+    - grsec
+    - grub
+    - hardening
+    - kernel
 
 - name: Reboot into the grsec kernel.
   command: shutdown -r now "Rebooting into the grsec kernel..."

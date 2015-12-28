@@ -1,5 +1,5 @@
 Port 22
-ListenAddress 127.0.0.1:22
+ListenAddress {{ ssh_listening_address }}:22
 Protocol 2
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key

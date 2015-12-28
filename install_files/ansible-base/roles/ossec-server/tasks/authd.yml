@@ -1,7 +1,26 @@
 ---
 - name: Check whether Application Server is registered as OSSEC agent.
-  shell: /var/ossec/bin/list_agents -a
-  register: list_agents
+  command: /var/ossec/bin/list_agents -a
+  register: ossec_list_agents_result
+  # Read-only task, so don't report changed
+  changed_when: false
+  tags:
+    - ossec_auth
+
+  # Store a boolean host fact that states whether the Application Server
+  # is already registered with the Monitor Server. If it is, we can skip several tasks.
+  # To make the conditional templating simpler, we'll default to false for the fact value,
+  # and overwrite it with "true" only if the Application Server is actually registered.
+- name: Initialize host fact for OSSEC registration state.
+  set_fact:
+    ossec_agent_already_registered: false
+  tags:
+    - ossec_auth
+
+- name: Set host fact for OSSEC registration state.
+  set_fact:
+    ossec_agent_already_registered: true
+  when: ossec_list_agents_result.stdout == "{{ app_hostname }}-{{ app_ip }} is available."
   tags:
     - ossec_auth
 
@@ -9,7 +28,7 @@
   command: openssl genrsa -out /var/ossec/etc/sslmanager.key 4096
   args:
     creates: /var/ossec/etc/sslmanager.key
-  when: list_agents != "{{ app_hostname }}-{{ app_ip }} is available."
+  when: ossec_agent_already_registered == false
   tags:
     - ossec_auth
 
@@ -20,25 +39,14 @@
     -key /var/ossec/etc/sslmanager.key -out /var/ossec/etc/sslmanager.cert -days 365
   args:
     creates: /var/ossec/etc/sslmanager.cert
-  when: list_agents != "{{ app_hostname }}-{{ app_ip }} is available."
+  when: ossec_agent_already_registered == false
   tags:
     - ossec_auth
-
-- name: Check whether IPv4 rules exist on OSSEC manager.
-  stat:
-    path: /etc/network/iptables/rules_v4
-  register: iptables_rules
-  notify: add firewall rule exemption for authd
-  notify: reload authd iptables
-  when: list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
-  tags:
-    - ossec_auth
-    - iptables
 
 - name: Start authd.
   shell: /var/ossec/bin/ossec-authd -i {{ app_ip }} -p 1515 >/dev/null 2>&1 &
   async: 0
   poll: 0
-  when: list_agents.stdout != "{{ app_hostname }}-{{ app_ip }} is available."
+  when: ossec_agent_already_registered == false
   tags:
     - ossec_auth

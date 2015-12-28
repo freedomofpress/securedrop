@@ -59,6 +59,16 @@
     - apache
     - hardening
 
+  # The default html directory gets created during installation
+  # of the apache package, so this task must run after installing.
+- name: Remove default Apache site directory /var/www/html/.
+  file:
+    state: absent
+    dest: /var/www/html
+  tags:
+    - apache
+    - hardening
+
 - name: Enable SecureDrop Apache sites.
   file:
     state: link

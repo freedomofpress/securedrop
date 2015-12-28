@@ -31,6 +31,7 @@ end
 describe file('/etc/postfix/sasl_passwd') do
   sasl_passwd_regex = Regexp.quote('[smtp.gmail.com]:587   test@ossec.test:password123')
   its(:content) { should match /^#{sasl_passwd_regex}$/ }
+  it { should be_mode '400' }
 end
 
 # declare desired regex checks for stripping smtp headers
@@ -164,19 +165,15 @@ describe file("/var/ossec/.procmailrc") do
   end
 end
 
-# TODO: mode 0755 sounds right to me, but the mon-staging host
-# actually has mode 1407. Debug after serverspec tests have been ported
 describe file('/var/ossec/send_encrypted_alarm.sh') do
   it { should be_file }
   it { should be_owned_by 'ossec' }
-  it { should be_mode '1407' }
+  it { should be_mode '750' }
 end
 
-# TODO: ansible is setting mode 0660, but servers actually have 1224
-# Debug after serverspec tests have been ported
 describe file('/var/log/procmail.log') do
   it { should be_file }
-  it { should be_mode '1224' }
+  it { should be_mode '660' }
   it { should be_owned_by 'ossec' }
 end
 
