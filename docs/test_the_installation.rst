@@ -4,20 +4,21 @@ Test the Installation
 Test connectivity
 -----------------
 
-#. SSH to both servers over Tor
+SSH to both servers over Tor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   - On the Admin Workstation, you should be able to SSH to the App
-     Server and the Monitor Server. ::
+On the Admin Workstation, you should be able to SSH to the App
+Server and the Monitor Server. ::
 
-       $ ssh <username>@<app .onion>
-       $ ssh <username>@<mon .onion>
+   $ ssh <username>@<app .onion>
+   $ ssh <username>@<mon .onion>
 
-   - If you set up :ref:`SSH Host Aliases` during the post-install
-     setup for the Admin Workstation, you should be able to connect
-     with the aliases: ::
+If you set up :ref:`SSH Host Aliases` during the post-install
+setup for the Admin Workstation, you should be able to connect
+with the aliases: ::
 
-       $ ssh app
-       $ ssh mon
+   $ ssh app
+   $ ssh mon
 
 Sanity-check the install
 ------------------------
