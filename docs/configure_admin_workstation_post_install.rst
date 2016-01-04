@@ -73,19 +73,7 @@ persistence.
 
 Set up two-factor authentication for the Admin
 ----------------------------------------------
-
-.. todo:: Do we still want to recommend/require this? Should it be
-          optional?
-
-As part of the SecureDrop installation process, you will need to set up 
-two-factor authentication on the App Server and Monitor Server using the Google 
-Authenticator mobile app.
-
-After your torrc has been updated with the HidServAuth values, connect to the 
-App Server using ``ssh`` and run ``google-authenticator``. Follow the 
-instructions in :doc:`our Google Authenticator guide <google_authenticator>` to 
-set up the app on your Android or iOS device.
-
-To disconnect enter the command ``exit``. Now do the same thing on the Monitor 
-Server. You'll end up with an account for each server in the Google 
-Authenticator app that generates two-factor codes needed for logging in.
+The SecureDrop servers should always be accessed over SSH from the Admin
+Workstation. In the event of a connectivity problem, Admins can log in
+directly to the servers by attaching a keyboard and a display. In order to do
+so, you will need to :doc:`configure 2FA TOTP access <google_authenticator>`.

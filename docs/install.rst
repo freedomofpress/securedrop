@@ -144,5 +144,3 @@ onion addresses from ``app-ssh-aths`` and ``mon-ssh-aths``. This will
 allow you to re-run the Ansible playbooks in the future, even though
 part of SecureDrop's hardening restricts SSH to only being over the
 specific authenticated Tor Hidden Services.
-
-
