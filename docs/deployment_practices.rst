@@ -147,6 +147,21 @@ If you use Apache, you can use these:
     Header set X-Permitted-Cross-Domain-Policies: master-only
     Header set Content-Security-Policy: "default-src 'self'"
 
+If you intend to run nginx as your webserver instead, this will work:
+
+::
+
+    add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+    add_header Pragma no-cache;
+    add_header Expires -1;
+    add_header X-Frame-Options DENY;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options nosniff;
+    add_header Content-Security-Policy "default-src 'self'";
+    add_header X-Download-Options: noopen;
+    add_header X-Permitted-Cross-Domain-Policies master-only;
+    
+
 **Additional Apache configuration**
 
 To enforce HTTPS/SSL always, you need to set up redirection within the
@@ -163,19 +178,34 @@ to give preference to the most secure cipher suites:
 
 ::
 
-    Header set Strict-Transport-Security "max-age=16070400; includeSubDomains"
+    Header set Strict-Transport-Security "max-age=16070400;"
     SSLProtocol all -SSLv2 -SSLv3
     SSLHonorCipherOrder on
     SSLCompression off
     SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5
 
+Here's a similar example for nginx:
+
+::
+
+    add_header Strict-Transport-Security max-age=16070400;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5";
+
+.. note:: We have balanced security and compatibility with legacy clients in
+          selecting these cipher suites, originally based upon `CloudFlare's SSL
+          configuration <https://github.com/cloudflare/sslconfig>`__. For other 
+          examples, check out `Cipherli.st <https://cipherli.st/>`__.
+    
 You'll need to run ``a2enmod headers ssl rewrite`` for all these to
 work. You should also set ``ServerSignature Off`` and
-``ServerTokens Prod``, typically in /etc/apache2/conf.d/security.
+``ServerTokens Prod``, typically in /etc/apache2/conf.d/security. For nginx,
+use ``server_tokens off;`` so that the webserver doesn't leak extra information.
 
-If you use Nginx, `you can follow this
+If you use nginx, `you can follow this
 link <https://gist.github.com/mtigas/8601685>`__ and use the
-configuration file provided by ProPublica.
+configuration example provided by ProPublica.
 
 **Change detection monitoring for the web application configuration and
 landing page content**
@@ -193,6 +223,13 @@ logging:
 
     SetEnvIf Request_URI "^/securedrop$" dontlog
     CustomLog logs/access_log common env=!dontlog
+
+In nginx, logging can be disabled like so:
+
+::
+
+    access_log off;
+    error_log off;
 
 **Security suggestions**
 
