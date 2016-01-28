@@ -42,6 +42,15 @@ your top-level domain, e.g. organization.com/securedrop. This is because
 TLS does not encrypt the hostname, so a SecureDrop user whose connection
 is being monitored would be trivially discovered.
 
+If the landing page is deployed on the same domain as another site, you
+might consider having some specific configuration (such as the security
+headers below) apply only to the /securedrop request URI. This can be done
+in Apache by the encapsulating these settings within a 
+`<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__ 
+block, which can be defined similarly in nginx by using the 
+`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__ 
+directive.
+
 **HTTPS only (no mixed content)**
 
 Most news organizations, `in fact almost
