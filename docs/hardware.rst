@@ -258,18 +258,11 @@ is impossible to physically remove.
 
 A note about Hi-DPI displays
 ''''''''''''''''''''''''''''
-
-The current version of Tails (1.5.1) is based on Debian 7 ("Wheezy"),
-which does not have good support for Hi-DPI displays. Examples of
-laptops that use this type of display are MacBook/MacBook Pros with the
-Retina display, or the Dell Precision M3800. We *do not recommend* using
-such laptops with any of the components that run Tails (the SVS, Admin
-Workstation, and Journalist Workstation). While it is possible to use
-them, the screen resolution will not be scaled correctly. Typically,
-this means everything will be really tiny, bordering on unreadable.
-
-Until the upcoming version of Tails (2.x, based on Debian 8) comes out,
-use standard resolution displays with Tails.
+Older versions of Tails (before 2.0, based on Debian 8), had problems to scale the
+resolution correctly. This has mostly been fixed in current versions. You might want
+to use the addon Zoom Menu Elements if you find the Tor browser toolbar too small.
+Another option is avoiding laptops that use this type of display.
+Examples are MacBook/MacBook Pros with the Retina display, or the Dell Precision M3800.
 
 Tails USBs
 ~~~~~~~~~~
