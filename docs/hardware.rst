@@ -224,6 +224,11 @@ insert the cards into the NUC before it can be used. We recommend:
 	  updating the BIOS according to `these instructions
 	  <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
+.. note:: Some BIOS versions on the NUC will cause the server to
+	  `brick itself <https://communities.intel.com/message/359708>`__ if
+	  the device attempts to suspend. Some suggestions include disabling
+	  suspend in the BIOS as well as OS options like "wake on LAN".
+
 Secure Viewing Station (SVS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
