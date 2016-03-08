@@ -100,7 +100,7 @@ fingerprint:
 
 Download your key and import it into the local keyring: ::
 
-    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "<fingerprint>"
+    gpg --recv-key "<fingerprint>"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have

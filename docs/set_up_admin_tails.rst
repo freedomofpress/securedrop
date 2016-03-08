@@ -60,7 +60,7 @@ Signing Key*.
 
 .. code:: sh
 
-    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
+    gpg --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
