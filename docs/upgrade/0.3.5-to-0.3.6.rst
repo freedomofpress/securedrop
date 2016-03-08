@@ -65,8 +65,7 @@ Greeter*.
 #. Update the Freedom of the Press signing key
    (these commands are from the :doc:`../set_up_admin_tails` guide) ::
 
-    gpg --recv-key B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
-    gpg --fingerprint B89A29DB2128160B8E4B1B4CBADDE0C7FC9F6818
+    gpg --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
 
    .. tip:: The GPG Master Signing Key is also available from the
             `Freedom of the Press website 
