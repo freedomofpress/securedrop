@@ -256,21 +256,6 @@ any of the new generation of NUCs, which have names starting with "NUC5"
 These NUCs have wireless networking built into the motherboard, and it
 is impossible to physically remove.
 
-A note about Hi-DPI displays
-''''''''''''''''''''''''''''
-
-The current version of Tails (1.5.1) is based on Debian 7 ("Wheezy"),
-which does not have good support for Hi-DPI displays. Examples of
-laptops that use this type of display are MacBook/MacBook Pros with the
-Retina display, or the Dell Precision M3800. We *do not recommend* using
-such laptops with any of the components that run Tails (the SVS, Admin
-Workstation, and Journalist Workstation). While it is possible to use
-them, the screen resolution will not be scaled correctly. Typically,
-this means everything will be really tiny, bordering on unreadable.
-
-Until the upcoming version of Tails (2.x, based on Debian 8) comes out,
-use standard resolution displays with Tails.
-
 Tails USBs
 ~~~~~~~~~~
 
