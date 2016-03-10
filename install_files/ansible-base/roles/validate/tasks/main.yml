@@ -50,3 +50,19 @@
   tags:
     - validate
     - debug
+
+- name: verify application GPG key matches fingerprint
+  local_action: script validate-gpg-key.sh {{ securedrop_app_gpg_public_key }} {{ securedrop_app_gpg_fingerprint }}
+  changed_when: false
+  sudo: no
+  tags:
+    - validate
+    - debug
+
+- name: verify OSSEC GPG key matches fingerprint
+  local_action: script validate-gpg-key.sh {{ ossec_alert_gpg_public_key }} {{ ossec_gpg_fpr }}
+  changed_when: false
+  sudo: no
+  tags:
+    - validate
+    - debug
