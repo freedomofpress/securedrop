@@ -1,0 +1,11 @@
+---
+
+- include: resolvconf.yml
+
+- name: install ntpd
+  apt:
+    package: ntp
+    state: latest
+    # don't do 'apt-get update' because if the system clock is too far off,
+    # the crypto for https repositories can fail
+    update_cache: no
