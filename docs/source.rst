@@ -1,12 +1,6 @@
 Source Guide
 ============
 
-.. todo:: There's a lot more to it than this, but then we begin to
-          duplicate content from individual organization's landing
-          pages and Micah's Intercept article. For example: what
-          computer should you use? what network should you be on? etc.
-
-	  
 Choose who to submit to
 -----------------------
 
@@ -21,16 +15,6 @@ Most organizations make their landing page prominently accessible from their mai
 
 Get the Tor Browser
 -------------------
-
-.. todo:: There is a classic chicken and egg problem with encouraging
-   sources to use Tor. If their network traffic is already being
-   monitored (e.g. at their workplace by the IT department, at their
-   home by their ISP, anywhere by FVEY...), and they don't know to use
-   Tor from the start (like Snowden did), then their initial interest
-   in using SecureDrop might be enough to make them a target. One
-   partial mitigation might be to make this section the first section
-   in this document, and encourage them to "stop, drop, and Tor
-   Browser" before continuing or clicking any more links.
 
 Each SecureDrop instance has a publicly available *Source Interface*: a website where sources can create anonymous accounts, submit files and messages, and check back for replies.
 
