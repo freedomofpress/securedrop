@@ -12,6 +12,10 @@
   when: "'development' not in group_names"
   tags: non-development
 
+- include: mod_pagespeed.yml
+  when: "'development' not in group_names"
+  tags: non-development
+
 - include: configure_securedrop_worker.yml
 
 - include: setup_cron.yml

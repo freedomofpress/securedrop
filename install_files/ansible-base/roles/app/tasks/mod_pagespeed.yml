@@ -1,0 +1,61 @@
+---
+# TODO remove when mod_pagespeed is an fpf deb package
+- name: download mod_pagespeed
+  get_url:
+    url: https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb
+    dest: /tmp/mod_pagespeed.deb
+  tags:
+    - apache
+
+# TODO remove when mod_pagespeed is an fpf deb package
+- name: install mod_pagespeed
+  apt:
+    deb: /tmp/mod_pagespeed.deb
+  notify:
+    - restart apache2
+  tags:
+    - apache
+
+# TODO enable when mod_pagespeed is an fpf deb package
+#- name: install mod_pagespeed from fpf repo
+#  apt:
+#    package: fpf-mod-pagespeed
+#    state: latest
+#    dpkg_options: force-confnew,force-overwrite
+#  notify:
+#    - restart apache2
+#  tags:
+#    - apache
+
+- name: copy pagespeed.conf
+  copy:
+    src: pagespeed.conf
+    dest: /etc/apache2/mods-available/pagespeed.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart apache2
+  tags:
+    - apache
+
+- name: symlink mod_pagespeed configurations
+  file:
+    state: link
+    src: "/etc/apache2/mods-available/{{ item }}"
+    dest: "/etc/apache2/mods-enabled/{{ item }}"
+  with_items:
+    - pagespeed.conf
+    - pagespeed.load
+  notify:
+    - restart apache2
+  tags:
+    - apache
+
+# only allow updates from verified fpf packages
+- name: remove cron-apt mod_pagespeed entry
+  file:
+    name: /etc/cron.daily/mod-pagespeed
+    state: absent
+  tags:
+    - apache
