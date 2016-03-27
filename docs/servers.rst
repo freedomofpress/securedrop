@@ -32,7 +32,6 @@ administrator of the system (see `this GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554>`__
 for more information).
 
-:
 For detailed instructions on installing and configuring Ubuntu for use
 with SecureDrop, see our :doc:`ubuntu_install`.
 
