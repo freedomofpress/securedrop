@@ -22,6 +22,16 @@ fairly easy, but please keep the following in mind:
 - The username and password for these two servers **must be the
   same**.
 
+.. warning:: The Ansible playbooks for SecureDrop will enable nightly reboots  after the ``cron-apt`` task runs for automatic updates. Using FDE would therefore require manual intervention every morning. Consequently **we strongly discourage the use of FDE.**
+
+While FDE can be useful in some cases, we currently do not recommend
+that you enable it because there are not many scenarios where it will be
+a net security benefit for SecureDrop operators. Doing so will introduce
+the need for more passwords and add even more responsibility on the
+administrator of the system (see `this GitHub
+issue <https://github.com/freedomofpress/securedrop/issues/511#issuecomment-50823554>`__
+for more information).
+
 For detailed instructions on installing and configuring Ubuntu for use
 with SecureDrop, see our :doc:`ubuntu_install`.
 
