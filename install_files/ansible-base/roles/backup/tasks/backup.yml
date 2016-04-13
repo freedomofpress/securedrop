@@ -1,0 +1,30 @@
+---
+  # TODO the version is hardcoded into the collect.py script name and ansible
+  # task. This should be changed in the ansible task to use a group_var with the
+  # version or to read it from the securedrop_code version.py
+- name: copy the versions collect.py script to the target server /tmp directory
+  copy:
+    src: 0.3_collect.py
+    dest: /tmp/
+    owner: root
+    mode: 0770
+
+- name: run the backup script
+  # Setting args inline (against project style conventions) to work around
+  # Ansible bug: https://github.com/ansible/ansible/issues/9693
+  command: /tmp/0.3_collect.py chdir=/tmp
+  # If there are a lot of submissions, this task could take a while.
+  async: 3600
+  register: backup_filename
+
+- name: fetch the backup file back to the host machine\'s ansible-base directory
+  fetch:
+    src: /tmp/{{ backup_filename.stdout }}
+    dest: ./{{ backup_filename.stdout }}
+    flat: yes
+    fail_on_missing: yes
+
+- name: delete backup file to save space
+  file:
+    path: /tmp/{{ backup_filename.stdout }}
+    state: absent

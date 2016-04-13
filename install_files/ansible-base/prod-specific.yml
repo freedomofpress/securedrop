@@ -44,10 +44,9 @@ sasl_domain: ""
 sasl_password: ""
 
 ### Use for backup restores ###
-# If the `backup_zip` variable is defined ansible will copy the defined file to
-# the app server and run the 0.3_collect.py script to unzip and restore those
-# files.
-# ex: backup_zip: "sd-backup-2015-01-15--21-03-32.zip"
-# To use uncomment the following line and enter the correct decrypted zip
-# filename between the quotes.
-#backup_zip: ""
+# If the `restore_file` variable is defined, Ansible will overwrite the state of
+# the app server with the state from the restore file, which should have been
+# created by a previous invocation of the "backup" role.
+# To use uncomment the following line and enter the filename between the quotes.
+# e.g. restore_file: "sd-backup-2015-01-15--21-03-32.tar.gz"
+#restore_file: ""
