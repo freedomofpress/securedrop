@@ -1,0 +1,21 @@
+---
+- name: copy restore script to app server
+  copy:
+    src: 0.3_restore.py
+    dest: /tmp/
+    owner: root
+    mode: 0770
+
+- name: copy restore file to app server
+  copy:
+    src: "{{ restore_file }}"
+    dest: /tmp/{{ restore_file }}
+
+- name: run the restore script
+  command: /tmp/0.3_restore.py /tmp/{{ restore_file }}
+  async: 3600
+
+- name: delete the restore file to save space
+  file:
+    path: /tmp/{{ restore_file }}
+    state: absent
