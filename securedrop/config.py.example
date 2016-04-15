@@ -24,7 +24,7 @@ SECUREDROP_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 SOURCE_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'source_templates')
 JOURNALIST_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'journalist_templates')
-WORD_LIST = os.path.join(SECUREDROP_ROOT, 'wordlist')
+WORD_LIST = os.path.join(SECUREDROP_ROOT, 'dictionaries/diceware.txt')
 NOUNS = os.path.join(SECUREDROP_ROOT, 'dictionaries/nouns.txt')
 ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
 
@@ -82,4 +82,3 @@ TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 # depending on the environment
 DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
-
