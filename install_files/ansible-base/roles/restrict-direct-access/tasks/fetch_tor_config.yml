@@ -18,20 +18,11 @@
     - tor
     - admin
 
-  # The results of the multiple `cat` commands above are stored
-  # in a list, and can be iterated over when writing via the `copy` module.
-  # The cat-then-copy approach allows formatting the config lines prior
-  # to writing, therefore ensuring idempotence, so the task only reports
-  # changed if the contents have indeed changed.
 - name: Write Tor hidden service hostname files to Admin Workstation.
   local_action:
-    module: copy
+    module: template
     dest: ./{{ item.item.filename }}
-    # The `content` parameter does not automatically append a newline, so
-    # force adding one. Doing so ensures that the resulting files can be
-    # concatenated into the torrc. We also only want the "HidServAuth"
-    # string for ATHS URLs, but not for THS urls.
-    content: "{% if item.item.filename.endswith('-aths') %}HidServAuth {% endif %}{{ item.stdout }}\\n"
+    src: ths_config.j2
   # Local action, so we don't want elevated privileges
   sudo: no
   with_items: tor_hidden_service_hostname_lookup.results
