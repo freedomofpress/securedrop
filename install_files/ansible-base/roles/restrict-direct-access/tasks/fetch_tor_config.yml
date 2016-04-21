@@ -21,7 +21,7 @@
 - name: Write Tor hidden service hostname files to Admin Workstation.
   local_action:
     module: template
-    dest: ./{{ item.item.filename }}
+    dest: "{{ role_path }}/../../{{ item.item.filename }}"
     src: ths_config.j2
   # Local action, so we don't want elevated privileges
   sudo: no
