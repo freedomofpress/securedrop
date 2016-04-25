@@ -53,7 +53,7 @@ cp securedrop_icon.png $INSTALL_DIR
 cp document.desktop $INSTALL_DIR
 cp source.desktop $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
-cp 99-tor-reload.sh $INSTALL_DIR
+cp 65-configure-tor-for-securedrop.sh $INSTALL_DIR
 
 if $ADMIN; then
   DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
@@ -105,8 +105,8 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png 
 chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
-chown root:root $INSTALL_DIR/99-tor-reload.sh
-chmod 755 $INSTALL_DIR/99-tor-reload.sh
+chown root:root $INSTALL_DIR/65-configure-tor-for-securedrop.sh
+chmod 755 $INSTALL_DIR/65-configure-tor-for-securedrop.sh
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -162,13 +162,19 @@ if [ -f $XSESSION_RC ]; then
     fi
 fi
 
+# Remove previous NetworkManager hook if present. The "99-" prefix
+# caused the hook to run later than desired.
+for d in $TAILSCFG $INSTALL_DIR /etc/NetworkManager/dispatcher.d; do
+    rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
+done
+
 # set up NetworkManager hook
 if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
   echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $TAILSCFG/persistence.conf
 fi
 mkdir -p $TAILSCFG/custom-nm-hooks
-cp -p $INSTALL_DIR/99-tor-reload.sh $TAILSCFG/custom-nm-hooks
-cp -p $INSTALL_DIR/99-tor-reload.sh /etc/NetworkManager/dispatcher.d/
+cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
+cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh /etc/NetworkManager/dispatcher.d/
 
 # set torrc and reload Tor
 $INSTALL_DIR/securedrop_init
