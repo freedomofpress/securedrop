@@ -488,15 +488,23 @@ p#no-replies {
   border-bottom: none;
 }
 .submission .file {
-  min-width: 300px;
   display: inline-block;
 }
 .submission .file.reply {
   font-size: small;
+  padding: 0 3px;
 }
 .submission .info {
   font-size: 12px;
   color: #666666;
+}
+
+.submission .info > span {
+  padding: 0 6px;
+}
+
+.submission .info > span:first-of-type {
+  padding: 0 6px 0 0;
 }
 
 ul.plain {

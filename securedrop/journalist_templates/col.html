@@ -29,19 +29,29 @@
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
           <li class="submission"><input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
+          <span class="info">
+            
+            <span title="count">{{ doc.filename[0] }}</span>
+
+            |<span title="type">
+              {% if doc.filename.endswith('-doc.gz.gpg') %}
+                Document
+                <i title="Uploaded Document" class="fa fa-file-archive-o"></i>
+              {% elif doc.filename.endswith('-reply.gpg') %}
+                Reply
+						    <i title="Reply" class="fa fa-reply"></i>
+              {% else %} 
+                Message
+                <i title="Messages" class="fa fa-file-text-o"></i>
+              {% endif %}
+            </span>
+            |<span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span>
+
+          </span>
             {% if doc.filename.endswith('reply.gpg') %}
-              <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
+              <span class="file reply pull-right"><span class="filename">{{ doc.filename }}</span></span>
             {% else %}
-              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
-              <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
-            {% endif %}
-            {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>
-						{% elif doc.filename.endswith('-reply.gpg') %}
-						  <i title="Reply" class="fa fa-reply pull-right"></i>
-						{% else %}
-              <i title="Message" class="fa fa-file-text-o pull-right"></i>
+              <span class="file pull-right"><a class="btn small" href="/col/{{ sid }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
             {% endif %}
           </li>
         {% endfor %}
