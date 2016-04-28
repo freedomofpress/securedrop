@@ -43,9 +43,7 @@ continuing:
    -  Recommended format: PNG
 
 From the base of the SecureDrop repo, change into the ``ansible-base``
-directory:
-
-::
+directory: ::
 
     $ cd install_files/ansible-base
 
@@ -59,9 +57,7 @@ You will have to copy the following required files to
 The SecureDrop application GPG key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
 is mounted, but for example, if you are already in the ansible-base
-directory, you can just run:
-
-::
+directory, you can just run: ::
 
     $ cp /media/[USB folder]/SecureDrop.asc .
 
@@ -114,9 +110,7 @@ Now you are ready to run the playbook! This will automatically configure
 the servers and install SecureDrop and all of its dependencies.
 ``<username>`` below is the user you created during the Ubuntu
 installation, and should be the same user you copied the SSH public keys
-to.
-
-::
+to. ::
 
     $ ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
 
@@ -150,5 +144,3 @@ onion addresses from ``app-ssh-aths`` and ``mon-ssh-aths``. This will
 allow you to re-run the Ansible playbooks in the future, even though
 part of SecureDrop's hardening restricts SSH to only being over the
 specific authenticated Tor Hidden Services.
-
-
