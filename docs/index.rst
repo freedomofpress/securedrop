@@ -41,7 +41,7 @@ anonymous sources.
    create_admin_account
    test_the_installation
    onboarding
-   
+
 .. toctree::
    :caption: Topic Guides
    :name: topictoc
@@ -54,7 +54,6 @@ anonymous sources.
    tails_guide
    tails_printing_guide
    training_schedule
-   ubuntu_install
    yubikey_setup
 
 .. toctree::
@@ -74,4 +73,3 @@ anonymous sources.
 
    development/getting_started
    development/*
-
