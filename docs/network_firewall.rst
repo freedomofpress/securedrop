@@ -60,6 +60,39 @@ you will be able to connect from the LAN to the pfSense WebGUI
 configuration wizard, and from there you will be able to configure the
 network so it is working correctly.
 
+4 NIC configuration
+~~~~~~~~~~~~~~~~~~~
+
+If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN, 
+LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network
+firewall for each component of SecureDrop (Application Server, Monitor
+Server, and Admin Workstation), so you do not need a switch like you do
+for the 3-NIC configuration.
+
+Depending on your network configuration, you should define the following
+values before continuing. For the examples in this guide, we have
+chosen:
+
+-  Admin Subnet: ``10.20.1.0/24``
+-  Admin Gateway: ``10.20.1.1``
+-  Admin Workstation: ``10.20.1.2``
+
+.. raw:: html
+
+   <!-- -->
+
+-  Application Subnet: ``10.20.2.0/24``
+-  Application Gateway: ``10.20.2.1``
+-  Application Server (OPT1): ``10.20.2.2``
+
+.. raw:: html
+
+   <!-- -->
+
+-  Monitor Subnet: ``10.20.3.0/24``
+-  Monitor Gateway: ``10.20.3.1``
+-  Monitor Server (OPT2) : ``10.20.3.2``
+
 3 NIC configuration
 ~~~~~~~~~~~~~~~~~~~
 
@@ -87,9 +120,9 @@ Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
 chosen:
 
--  Admin/App Gateway: ``10.20.1.1``
--  Admin/App Subnet: ``10.20.1.0/24``
--  App Server: ``10.20.1.2``
+-  Admin/Application Gateway: ``10.20.1.1``
+-  Admin/Application Subnet: ``10.20.1.0/24``
+-  Application Server: ``10.20.1.2``
 -  Admin Workstation: ``10.20.1.3``
 
 .. raw:: html
@@ -99,39 +132,6 @@ chosen:
 -  Monitor Subnet: ``10.20.2.0/24``
 -  Monitor Gateway: ``10.20.2.1``
 -  Monitor Server: ``10.20.2.2``
-
-4 NIC configuration
-~~~~~~~~~~~~~~~~~~~
-
-If your firewall has 4 NICs, we refer to them as WAN, LAN, OPT1, and
-OPT2. In this case, we can now use a dedicated port on the network
-firewall for each component of SecureDrop (Application Server, Monitor
-Server, and Admin Workstation), so you do not need a switch like you do
-for the 3-NIC configuration.
-
-Depending on your network configuration, you should define the following
-values before continuing. For the examples in this guide, we have
-chosen:
-
--  Admin Subnet: ``10.20.1.0/24``
--  Admin Gateway: ``10.20.1.1``
--  Admin Workstation: ``10.20.1.2``
-
-.. raw:: html
-
-   <!-- -->
-
--  App Subnet: ``10.20.2.0/24``
--  App Gateway: ``10.20.2.1``
--  App Server: ``10.20.2.2``
-
-.. raw:: html
-
-   <!-- -->
-
--  Monitor Subnet: ``10.20.3.0/24``
--  Monitor Gateway: ``10.20.3.1``
--  Monitor Server: ``10.20.3.2``
 
 Initial Configuration
 ---------------------
@@ -241,9 +241,10 @@ Workstation a static IP address that is known to be in the subnet to
 continue.
 
 Now the WebGUI will be available on the Admin Gateway address. Navigate
-to ``https://<Admin Gateway IP>`` in the *Unsafe Browser*, and do the
-same dance as before to log in to the pfSense WebGUI. Once you've logged
-in to the WebGUI, you are ready to continue configuring the firewall.
+to ``https://<Admin Gateway IP>`` in the *Unsafe Browser*, and login as 
+before except with the new passphrase you just set for the pfSense WebGUI. 
+Once you've logged in to the WebGUI, you are ready to continue configuring 
+the firewall.
 
 Connect Interfaces and Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,7 +298,7 @@ Disable DHCP
 
 To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
 WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
-interface**, scroll down, and click the **Save** button.
+interface**, scroll down, and click the **Save** *and then* click Apply.
 
 Assign a static IP address to the Admin Workstation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -446,14 +447,6 @@ Example Screenshots
 Here are some example screenshots of a working pfSense firewall
 configuration.
 
-3 NICs Configuration
-''''''''''''''''''''
-
-|Firewall IP Aliases|
-|Firewall Port Aliases|
-|Firewall LAN Rules|
-|Firewall OPT1 Rules|
-
 4 NICs Configuration
 ''''''''''''''''''''
 
@@ -462,6 +455,14 @@ configuration.
 |Firewall LAN Rules with OPT2|
 |Firewall OPT1 Rules with OPT2|
 |Firewall OPT2 Rules|
+
+3 NICs Configuration
+''''''''''''''''''''
+
+|Firewall IP Aliases|
+|Firewall Port Aliases|
+|Firewall LAN Rules|
+|Firewall OPT1 Rules|
 
 Once you've set up the firewall, exit the Unsafe Browser, and continue
 with the next step of the installation instructions.
