@@ -34,7 +34,7 @@ integrity with cryptographic signatures and hashes.
 First, we will download *Ubuntu Image Signing Key* and verify its
 *fingerprint*. ::
 
-    gpg --keyserver hkp://qdigse2yzvuglcix.onion --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
+    gpg --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
