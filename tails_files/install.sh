@@ -1,5 +1,5 @@
 #!/bin/bash
-# SecureDrop persistent setup script for Tails 
+# SecureDrop persistent setup script for Tails
 
 set -e
 
@@ -96,7 +96,7 @@ chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
 
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
-chmod 600 $INSTALL_DIR/securedrop_icon.png 
+chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chown root:root $INSTALL_DIR/65-configure-tor-for-securedrop.sh
@@ -105,11 +105,11 @@ chmod 755 $INSTALL_DIR/65-configure-tor-for-securedrop.sh
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! $ADMIN; then
-  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"                   
-  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];                                         
-  do                                                                              
+  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
+  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];
+  do
     HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
-  done  
+  done
   echo $HIDSERVAUTH >> $ADDITIONS
   SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
   SOURCE="${SRC#http://}"
