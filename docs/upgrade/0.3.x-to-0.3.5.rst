@@ -1,0 +1,120 @@
+Upgrade from 0.3.x to 0.3.5
+============================
+
+SecureDrop 0.3.5 updates how TLS certificates for the SMTP relay used to send 
+OSSEC notifications are handled. It also updates the AppArmor profile for 
+Apache to ensure the service starts successfully.
+
+The upgrade steps in this document will upgrade a 0.3.x (where x < 5)
+SecureDrop instance to 0.3.5.
+
+Important Changes
+-----------------
+
+OSSEC Postfix configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The Postfix configuration on the Monitor Server previously used a hard-coded
+fingerprint value, specified as ``smtp_relay_fingerprint`` in the 
+``prod-specific.yml`` file, to verify the TLS certificate prior to sending 
+mail.Some mail providers use load balancing on the SMTP relay, which causes
+the fingerprint to change periodicially during normal use. With a hard-coded
+fingerprint, this caused OSSEC alerts to be delayed, so the default
+functionality is now to trust the system CAs on the Monitor Server.
+
+In order to upgrade to the new verification functionality, admins update the 
+``prod-specific.yml`` file and run a special git command designed to merge
+site-specific changes in safely.
+
+Allow log rotation for Apache
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The AppArmor profile for Apache was aggressively preventing the service
+from creating new log files, which prevented normal log rotation functionality.
+The adjustments to the AppArmor profile not only restore the expected rotation,
+but will also reduce false positives reported by OSSEC.
+
+Prevent reboots during cron-apt upgrade
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The servers are set to reboot nightly, to ensure submissions are not retained
+in memory. The timing of the reboot task was fuzzy, and it was possible that
+a reboot would interrupt a running upgrade for cron-apt. The new logic
+ensures that the reboot only takes place after cron-apt exits.
+
+Blacklist additional kernel modules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Newer versions of the Intel NUCs come with wifi and bluetooth hardware,
+so the playbooks now disable the ``btusb`` and ``iwlmvm`` kernel modules,
+in addition to ``bluetooth`` and ``iwlwifi``, which are still blacklisted.
+
+Prerequisites
+-------------
+
+-  An Admin networked Tails workstation with persistence enabled and an
+   Admin password set during boot.
+   
+-  A running SecureDrop instance of 0.3.x, where x is less than 5.
+
+.. note:: If your organization uses an internal SMTP relay, you may
+          wish to continue using fingerprint-style verification of the
+          TLS certificate. You can therefore skip #3 below.
+
+Upgrade Procedure
+-----------------
+
+The upgrade procedure can be performed entirely from the Admin
+Workstation. Start by booting the Admin Tails USB on the Admin 
+Workstation. Make sure you set an *Adminstrator Password* in the *Tails 
+Greeter*.
+
+#. Open a terminal (it is an icon on the top of the screen that looks
+   like a little black TV).
+
+#. Change into the SecureDrop repo directory ::
+
+     cd /home/amnesia/Persistent/securedrop/install_files/ansible-base
+
+#. Open ``prod-specific.yml`` in your preferred text editor. Delete the line 
+   that starts with ``smtp_relay_fingerprint`` and save the file.
+   If you are using your own or your organization's SMTP relay (not Google's),
+   you may want want to continue using fingerprint verification.
+   If you are unsure, contact us and we will help you make a determination.
+
+#. Stash your updated local changes ::
+
+     git stash save "site specific configs"
+
+#. Pull the latest code ::
+
+     git pull
+
+#. Verify the signed git tag for the latest stable release ::
+
+     git tag -v 0.3.5
+
+#. Checkout the latest release ::
+
+     git checkout 0.3.5
+
+#. Restore your instance-specific settings ::
+
+     git checkout stash -- prod-specific.yml inventory
+     git reset
+
+   .. note:: SecureDrop upgrades typically recommend using the simpler
+             ``git stash pop`` command to restore instance-specific settings.
+             Since 0.3.5 makes changes to the ``prod-specific.yml`` file,
+             more verbose git commands are necessary to avoid a merge conflict.
+
+#. Make sure you have Ansible installed. If running ``which ansible`` returns 
+``ansible not found``, you should ::
+
+    sudo apt-get update
+    sudo apt-get install ansible
+
+#. Run the Ansible playbooks (substitute the admin account on the servers for 
+``<user>``) ::
+
+    ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
+
+During the playbook run, the Postfix TLS verification settings will be updated
+on the Monitor Server, and both servers will receive new logic for rebooting
+after unattended-upgrades.
