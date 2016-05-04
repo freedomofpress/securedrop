@@ -49,6 +49,12 @@ cp source.desktop $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
 cp 65-configure-tor-for-securedrop.sh $INSTALL_DIR
 
+# Remove binary setuid wrapper from previous tails_files installation, if it exists
+WRAPPER_BIN=$INSTALL_DIR/securedrop_init
+if [ -f $WRAPPER_BIN ]; then
+    rm $WRAPPER_BIN
+fi
+
 if $ADMIN; then
   DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
   SOURCE=`cat $ANSIBLE/app-source-ths`
