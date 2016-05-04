@@ -93,9 +93,6 @@ fi
 
 # set permissions
 chmod 755 $INSTALL_DIR
-chown root:root $SCRIPT_BIN
-chmod 755 $SCRIPT_BIN
-chmod +s $SCRIPT_BIN
 chown root:root $SCRIPT_PY
 chmod 700 $SCRIPT_PY
 chown root:root $ADDITIONS
