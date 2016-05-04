@@ -15,7 +15,6 @@ PERSISTENT=$HOMEDIR/Persistent
 INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
-SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$HOMEDIR/Desktop
@@ -42,11 +41,6 @@ else
 fi
 
 mkdir -p $INSTALL_DIR
-
-# install deps and compile
-apt-get update
-apt-get install -y build-essential
-gcc -o $SCRIPT_BIN securedrop_init.c
 
 # copy icon, launchers and scripts
 cp securedrop_icon.png $INSTALL_DIR
@@ -177,7 +171,7 @@ cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
 cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh /etc/NetworkManager/dispatcher.d/
 
 # set torrc and reload Tor
-$INSTALL_DIR/securedrop_init
+/usr/bin/python $INSTALL_DIR/securedrop_init.py
 
 # finished
 echo ""
