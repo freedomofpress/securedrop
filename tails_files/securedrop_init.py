@@ -36,14 +36,12 @@ else:
 open(path_torrc, 'w').write(torrc + torrc_additions)
 
 # reload tor
-subprocess.call(['systemctl', 'reload', 'tor@default.service'])
+try:
+    subprocess.check_call(['systemctl', 'reload', 'tor@default.service'])
+except subprocess.CalledProcessError:
+    sys.exit('Error reloading Tor')
 
-# success
-subprocess.call(['/usr/bin/sudo',
-                 '-u',
-                 'amnesia',
-                 '/usr/bin/notify-send',
-                 '-i',
-                 '/home/amnesia/Persistent/.securedrop/securedrop_icon.png',
-                 'Updated torrc!',
-                 'You can now connect to your SecureDrop\ndocument interface.'])
+# notify the user
+subprocess.call(['tails-notify-user',
+                 'SecureDrop successfully auto-configured!',
+                 'You can now access the Document Interface.\nIf you are an admin, you can now SSH to the servers.'])
