@@ -36,7 +36,7 @@ else:
 open(path_torrc, 'w').write(torrc + torrc_additions)
 
 # reload tor
-subprocess.call(['/usr/sbin/service', 'tor', 'reload'])
+subprocess.call(['systemctl', 'reload', 'tor@default.service'])
 
 # success
 subprocess.call(['/usr/bin/sudo',
