@@ -76,7 +76,7 @@ Workstation. The easiest way to do this is to copy the
 to the
 Journalist Workstation with the Data Transfer Device.
 
-Now you need the Tails setup scripts (``securedrop/tails_files``) that
+Now you need the Tails setup scripts (``./tails_files``) that
 you used to :doc:`Configure the Admin Workstation Post-Install
 <configure_admin_workstation_post_install>`. The easiest way to do
 this is to clone (and verify) the SecureDrop repository on the

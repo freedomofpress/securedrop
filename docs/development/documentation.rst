@@ -86,3 +86,12 @@ Style Guide
                italicized, which is confusing when used near
                references to the terminology.
 
+* Use absolute paths when referring to files outside the SecureDrop repository.
+  Exceptions made for when it's clear from the surrounding context what the
+  intended working directory is. For files inside the SecureDrop directory,
+  write them as `./some_dir/file`, where `.` is the top level directory of the
+  SecureDrop repo. Since by default the git repo will be cloned under the name
+  `securedrop` and it also contains a `securedrop` subdirectory this is intended
+  to avoid confusion.  Exceptions made for when it's clear from the context
+  we're outside of the SecureDrop repo, but would like to somehow interact with
+  it (e.g., we just cloned the repo and now we're going to `cd` into it).
