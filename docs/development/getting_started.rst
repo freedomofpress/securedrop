@@ -17,7 +17,7 @@ your development workstation.
 Ubuntu/Debian
 ~~~~~~~~~~~~~
 
-.. note:: Tested on: Ubuntu 14.04
+.. note:: Tested on: Ubuntu 14.04 and Debian Stretch
 
 .. code:: sh
 
@@ -46,6 +46,21 @@ which is signficantly out of date and known not to work with SecureDrop (`Github
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
 
+.. warning:: We do not recommend installing vagrant-cachier. It destroys apt’s
+            state unless the VMs are always shut down/rebooted with Vagrant,
+            which conflicts with the tasks in the Ansible playbooks. The
+            instructions in Vagrantfile that would enable vagrant-cachier are
+            currently commented out.
+
+.. todo:: This warning is here because a common refrain during hackathons for
+          SecureDrop a while back was "setting up VMs is too slow, you should
+          use vagrant-cachier". We tried it and it had some nasty interactions
+          with Ansible, so we dropped it, and added this note to prevent other
+          people from making the same suggestion. Eventually, we should: (i)
+          Build our own base boxes to dramatically cut down on provisioning
+          times (ii) Remove this note as well as the commented vagrant-cachier
+          lines from the Vagrantfile
+          
 Either way, once you've installed Vagrant you should run:
 
 .. code:: sh
@@ -53,25 +68,37 @@ Either way, once you've installed Vagrant you should run:
     sudo dpkg-reconfigure virtualbox-dkms
 
 Finally, install Ansible so it can be used with Vagrant to automatically
-provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
-you have the latest stable version.
+provision VMs. We recommend installing Ansible from PyPi with ``pip``, which
+allows you to specifically install the version of Ansible available in Tails,
+currently 1.7.2 (5/6/16):
 
 .. code:: sh
 
     sudo apt-get install python-pip
-    sudo pip install -U ansible
 
-If you're using Ubuntu, you can install a sufficiently recent version of
-Ansible from backports (if you prefer): ``sudo apt-get install
-ansible/trusty-backports``
+Since the version of ansible required to provision SecureDrop VMs may flux out
+of sync with the version in your distro's repos, we recommend installing the
+version 1.8.4 of ansible to a virtual environment using `virtualenvwrapper` or
+`virtualenv`.
 
-.. note:: Tested: Ansible 1.9.4
+Using virtualenvwrapper:
 
-.. warning:: We do not recommend installing vagrant-cachier. It destroys apt's
-	     state unless the VMs are always shut down/rebooted with Vagrant,
-	     which conflicts with the tasks in the Ansible playbooks. The
-	     instructions in Vagrantfile that would enable vagrant-cachier are
-	     currently commented out.
+.. code:: sh
+
+    sudo apt-get install virtualenvwrapper
+    mkvirtualenv -p python2.7 securedrop
+    pip install ansible==1.8.4
+
+Using virtualenv (we recommend you `cd` into the  base directory of the repo
+before running these commands):
+
+.. code:: sh
+
+    sudo apt-get install virtualenv
+    virtualenv -p python2.7 .
+    . bin/activate
+    pip install ansible==1.8.4
+
 
 Mac OS X
 ~~~~~~~~
