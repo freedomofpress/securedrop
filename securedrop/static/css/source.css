@@ -1,15 +1,15 @@
-@keyframes fadein { 
-  from { opacity: 0; } to { opacity: 1; } 
-}
-@-webkit-keyframes fadein { 
+@keyframes fadein {
   from { opacity: 0; } to { opacity: 1; }
-} 
-@keyframes fadeout { 
-  0% { opacity: 1; } 98% { opacity: 1; } 100% { opacity: 0; } 
+}
+@-webkit-keyframes fadein {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes fadeout {
+  0% { opacity: 1; } 98% { opacity: 1; } 100% { opacity: 0; }
 }
 @-webkit-keyframes fadeout {
   0% { opacity: 1; } 98% { opacity: 1; } 100% { opacity: 0; }
-} 
+}
 
 html {
   animation: fadeout 120s;
@@ -398,7 +398,7 @@ input#show {
 #content {
     display: block;
     transition: opacity 1s ease-out;
-    opacity: 0; 
+    opacity: 0;
     height: 0;
     font-size: 0;
     overflow: hidden;
@@ -671,11 +671,6 @@ button.un-starred:hover {
 
 button.button-star:focus {
     outline:0;
-}
-
-/* Tooltips */
-time:not([title='']):hover, i:not([title='']):hover {
-  cursor: pointer;
 }
 
 div#logout {

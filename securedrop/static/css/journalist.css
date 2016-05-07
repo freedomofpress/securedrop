@@ -598,11 +598,6 @@ button.button-star:focus {
     outline:0;
 }
 
-/* Tooltips */
-time:not([title='']):hover, i:not([title='']):hover {
-  cursor: pointer;
-}
-
 div#logout {
   float:right;
   margin: 1em 1em 0 1em;
