@@ -22,6 +22,13 @@ ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
+# check for Tails 2.x
+source /etc/os-release
+if [[ $TAILS_VERSION_ID =~ ^1\..* ]]; then
+  echo "This script must be used on Tails version 2.x or greater." 1>&2
+  exit 1
+fi
+
 # check for persistence
 if [ ! -d "$TAILSCFG" ]; then
   echo "This script must be run on Tails with a persistent volume." 1>&2
