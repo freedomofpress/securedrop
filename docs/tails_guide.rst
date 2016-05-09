@@ -15,7 +15,8 @@ If you already know how to boot the *admin Tails USB* or the *journalist Tails
 USB* with persistence, you can skip down to the step 'download the repository'.
 
 Note that for all of these instructions to work, you should have already 
-installed the main SecureDrop application.
+installed the main SecureDrop application. It is also required that you use
+Tails version 2.x or greater.
 
 Installing Tails on USB sticks
 ------------------------------

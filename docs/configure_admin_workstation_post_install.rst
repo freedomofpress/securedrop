@@ -30,6 +30,8 @@ configure Tor to access a set of ATHS. In order to persist these changes across
 reboots, the Tails instance must have persistence enabled (specifically, the 
 "dotfiles persistence").
 
+We also require that you are using Tails 2.x or greater.
+
 To install the auto-connect configuration, start by navigating to the directory 
 with these scripts, and run the install script:
 
