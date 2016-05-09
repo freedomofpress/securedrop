@@ -1,5 +1,5 @@
 #!/bin/bash
-# SecureDrop persistent setup script for Tails 
+# SecureDrop persistent setup script for Tails
 
 set -e
 
@@ -15,7 +15,6 @@ PERSISTENT=$HOMEDIR/Persistent
 INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
-SCRIPT_BIN=$INSTALL_DIR/securedrop_init
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$HOMEDIR/Desktop
@@ -43,17 +42,18 @@ fi
 
 mkdir -p $INSTALL_DIR
 
-# install deps and compile
-apt-get update
-apt-get install -y build-essential
-gcc -o $SCRIPT_BIN securedrop_init.c
-
 # copy icon, launchers and scripts
 cp securedrop_icon.png $INSTALL_DIR
 cp document.desktop $INSTALL_DIR
 cp source.desktop $INSTALL_DIR
 cp securedrop_init.py $SCRIPT_PY
 cp 65-configure-tor-for-securedrop.sh $INSTALL_DIR
+
+# Remove binary setuid wrapper from previous tails_files installation, if it exists
+WRAPPER_BIN=$INSTALL_DIR/securedrop_init
+if [ -f $WRAPPER_BIN ]; then
+    rm $WRAPPER_BIN
+fi
 
 if $ADMIN; then
   DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
@@ -93,16 +93,13 @@ fi
 
 # set permissions
 chmod 755 $INSTALL_DIR
-chown root:root $SCRIPT_BIN
-chmod 755 $SCRIPT_BIN
-chmod +s $SCRIPT_BIN
 chown root:root $SCRIPT_PY
 chmod 700 $SCRIPT_PY
 chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
 
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
-chmod 600 $INSTALL_DIR/securedrop_icon.png 
+chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chown root:root $INSTALL_DIR/65-configure-tor-for-securedrop.sh
@@ -111,11 +108,11 @@ chmod 755 $INSTALL_DIR/65-configure-tor-for-securedrop.sh
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! $ADMIN; then
-  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"                   
-  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];                                         
-  do                                                                              
+  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
+  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];
+  do
     HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
-  done  
+  done
   echo $HIDSERVAUTH >> $ADDITIONS
   SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
   SOURCE="${SRC#http://}"
@@ -177,7 +174,7 @@ cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
 cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh /etc/NetworkManager/dispatcher.d/
 
 # set torrc and reload Tor
-$INSTALL_DIR/securedrop_init
+/usr/bin/python $INSTALL_DIR/securedrop_init.py
 
 # finished
 echo ""
