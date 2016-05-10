@@ -45,11 +45,15 @@ The Nautilus window should show both the Transfer Device and the TailsData parti
 
 Insure that all critical data has been successfully copied.  Specifically, be sure the the `gnupg`, `bookmarks`, and `Persistent` folders are completely copied.  Any loss of data from these folders could prevent users from accessing submissions.
 
+Once data are correctly copied, unmount the TailsData partition.
+
 
 4. Upgrade a Tails USB
 ------------------------------------------------------
 
-The Tails Installer program should reliably upgrade the inserted Tails USB, but if for some reason this process fails, you have your data backed up to the Transfer Device. If you find yourself in that unlucky situation, follow step 5. Otherwise, skip to step 6 to reformat the Transfer Device for reuse or if you plan on physically destroying it.
+With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to the Tails Installer (Applications->Tails->Tails Installer) and select the "Upgrade by cloning" option.
+
+The Tails Installer program should reliably upgrade the inserted Tails USB, but if for some reason this process fails, you have your data backed up to the Transfer Device. If you find yourself in that unlucky situation, follow step 5. Otherwise, skip to step 7 to wipe and reformat the Transfer Device for reuse.
 
 5. Restore data from a Transfer Device
 --------------------------------------
