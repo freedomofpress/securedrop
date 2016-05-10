@@ -2,7 +2,7 @@
 """
 This script is copied to the Mon server and run by the Ansible playbook. When
 run (as root), it collects all of the necessary information to backup the 0.3
-system and stores it in /tmp/sd-backup-mon-0.3-TIME_STAMP.tar.gz.
+system and stores it in /tmp/sd-mon-backup-0.3-TIME_STAMP.tar.gz.
 """
 
 from datetime import datetime
