@@ -2,7 +2,7 @@
 """
 This script is copied to the App server and run by the Ansible playbook. When
 run (as root), it collects all of the necessary information to backup the 0.3
-system and stores it in /tmp/sd-backup-0.3-TIME_STAMP.tar.gz.
+system and stores it in /tmp/sd-backup-app-0.3-TIME_STAMP.tar.gz.
 """
 
 from datetime import datetime
@@ -10,7 +10,7 @@ import os
 import tarfile
 
 def main():
-    backup_filename = 'sd-backup-{}.tar.gz'.format(
+    backup_filename = 'sd-app-backup-{}.tar.gz'.format(
         datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
     # This code assumes everything is in the default locations.

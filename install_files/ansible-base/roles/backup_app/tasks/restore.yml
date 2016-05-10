@@ -1,0 +1,92 @@
+---
+# As we move through the restore process, if any task fails we stop the restore
+# process, but do not fail the role for the host. Instead, we attempt the same
+# restore process with the backup_file we just made. In this way we attempt to
+# ensure the ATHS for SSH remains accessible to our admins.
+- name: extract the restore_file to the app server
+  # Note: ansible>=2 has an arg to the unarchive module, list_files, that would
+  # be useful in ensuring the cleanest possible end-state in case of error in
+  # the restore process.
+  unarchive:
+    src: "{{ restore_file_app }}"
+    dest: /
+  ignore_errors: yes
+  register: unarchive_result
+
+- name: reload tor with the restored configuration files
+  when: unarchive_result.extract_results.rc == 0
+  service:
+    name: tor
+    state: reloaded
+  register: reload_tor_result
+  ignore_errors: yes
+
+- name: restart apache with the restored configuration files
+  when: reload_tor_result is defined and reload_tor_result.state == 'started'
+  service:
+    name: apache2
+    state: restarted
+  register: restart_apache_result
+  ignore_errors: yes
+
+# Re-run the restore process with the backup_file if we encountered any errors.
+# Practice idempotence: if we did not reload/restart a service with new values
+# and are restoring the old ones, there is no need to reload/restart the
+# service.
+- name: print a warning message that the restore was unsuccessful
+  when: (restart_apache_result is undefined) or
+        (restart_apache_result is defined and restart_apache_result.state != 'started')
+  fail:
+    msg: "Warning: An error occurred during the restore process. Reverting the
+      system to its previous state."
+  ignore_errors: yes
+
+- name: restore from the backup file since the restore went wrong
+  when: (restart_apache_result is undefined) or
+        (restart_apache_result is defined and restart_apache_result.state != 'started')
+  unarchive:
+    copy: no
+    src: /tmp/{{ backup_filename.stdout }}
+    dest: /
+
+- name: reload tor with the restored configuration files
+  when: reload_tor_result is defined and reload_tor_result.state != 'started'
+  service:
+    name: tor
+    state: reloaded
+
+- name: restart apache with the restored configuration files
+  when: restart_apache_result is defined and restart_apache_result.state != 'started'
+  service:
+    name: apache2
+    state: restarted
+
+# Synchronize state between the app server and the admin workstation. This is
+# only necessary if the restore was successful.
+- name: fetch securedrop source ths
+  when: restart_apache_result is defined and restart_apache_result.state == 'started'
+  fetch: src=/var/lib/tor/services/source/hostname dest=./app-source-ths flat=yes fail_on_missing=yes
+
+- name: fetch securedrop document aths
+  when: restart_apache_result is defined and restart_apache_result.state == 'started'
+  fetch: src=/var/lib/tor/services/document/hostname dest=./app-document-aths flat=yes fail_on_missing=yes
+
+- name: fetch securedrop ssh aths
+  when: restart_apache_result is defined and restart_apache_result.state == 'started'
+  fetch: src=/var/lib/tor/services/ssh/hostname dest=./app-ssh-aths flat=yes fail_on_missing=yes
+
+- name: format securedrop document aths
+  when: restart_apache_result is defined and restart_apache_result.state == 'started'
+  local_action: lineinfile dest=./app-document-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
+  sudo: no
+
+- name: format app ssh aths
+  when: restart_apache_result is defined and restart_apache_result.state == 'started'
+  local_action: lineinfile dest=./app-ssh-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
+  sudo: no
+
+# Cleanup
+- name: delete backup file to save space
+  file:
+    path: /tmp/{{ backup_filename.stdout }}
+    state: absent 

@@ -26,7 +26,7 @@
 
   sudo: yes
 
-- hosts: [ 'app-staging' ]
+- hosts: [ 'mon-staging', 'app-staging' ]
 
   vars_files:
     - group_vars/securedrop.yml
@@ -83,7 +83,7 @@
   roles:
     - { role: restrict_direct_access_app, tags: [ 'common' ] }
     - { role: allow_direct_access, tags: [ 'common' ] }
-    - { role: backup, tags: [ 'backup' ] }
+    - { role: backup_app, tags: [ 'backup_app' ] }
 
   sudo: yes
 
@@ -97,5 +97,6 @@
   roles:
     - { role: restrict_direct_access_mon, tags: [ 'common' ] }
     - { role: allow_direct_access, tags: [ 'common' ] }
+    - { role: backup_mon, tags: [ 'backup_mon' ] }
 
   sudo: yes
