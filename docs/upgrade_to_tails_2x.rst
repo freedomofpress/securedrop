@@ -28,11 +28,15 @@ Open the Disks Utility by navigating to Applications->Utilities->Disks.
 
 Insert your Transfer Device into a USB port and select it from the left column. Brand new devices sometimes have pre-configured partitions, which you will need to remove. Select any block of partitioned data, and click the minus (`-`) button to remove any unwanted partitions.
 
+|Unwanted Bloatware Partition|
+
 Click the plus (`+`) button to register a new partition to cover the entire available space. This should automatically be filled out for you in the wizard.
 
 Be sure to do a full wipe of the existing data during this step, especially if you choose to repurpose an older USB stick. Select "Overwrite existing data with zeroes (Slow)" from the "Erase" options. This does mean that the reformatting step will take some extra time, but it is the best way to insure that previous data from older transfers, or manufacturer bloatware, is removed from the Transfer Device.
 
 Give your new partition a complex, diceware-generated passphrase. If you plan on using this USB stick as a permanent backup, you will be responsible for retaining this passphrase for the long-haul. If you only want to use this USB as an intermediary backup, and plan on discarding the data after a successful migration, you may discard the passphrase once everything is completed.
+
+|Create Partition|
 
 3. Backup a Tails USB
 --------------------------------------------
@@ -41,7 +45,11 @@ Insert your Admin Workstation Tails into a free USB port, and mount it by naviga
 
 Open a Nautilus window with admin priviledges by navigating to Applications->System Tools->Root Terminal. At the terminal prompt, simply type `nautilus`.
 
+|Root Terminal|
+
 The Nautilus window should show both the Transfer Device and the TailsData partition as mounted; copy the contents of the TailsData partition onto the Transfer Device.
+
+|Migrate Data|
 
 Insure that all critical data has been successfully copied.  Specifically, be sure the the `gnupg`, `bookmarks`, and `Persistent` folders are completely copied.  Any loss of data from these folders could prevent users from accessing submissions.
 
@@ -52,6 +60,8 @@ Once data are correctly copied, unmount the TailsData partition.
 ------------------------------------------------------
 
 With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to the Tails Installer (Applications->Tails->Tails Installer) and select the "Upgrade by cloning" option.
+
+|Update by cloning|
 
 The Tails Installer program should reliably upgrade the inserted Tails USB, but if for some reason this process fails, you have your data backed up to the Transfer Device. If you find yourself in that unlucky situation, follow step 5. Otherwise, skip to step 7 to wipe and reformat the Transfer Device for reuse.
 
@@ -65,6 +75,8 @@ Insert your Transfer Device into a free USB port, and mount it by navigating to 
 Open a Nautilus window with admin priviledges by navigating to Applications->System Tools->Root Terminal. At the terminal prompt, simply type `nautilus`.
 
 Type `ctrl+l` and navigate to `/live/persistence/TailsData_unlocked`.
+
+|Navigate to TailsData_unlocked|
 
 Open a new tab (`ctrl+t`) and navigate to your Transfer Device. Drag and drop the backup data from your Transfer Device onto the TailsData_unlocked tab.
 
@@ -103,4 +115,9 @@ Re-install Securedrop with `cd ~/Persistent/securedrop/tails_files && sudo ./ins
 
 Repeat step 1 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Transfer Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
 
-
+.. |Migrate Data| image:: images/backup_and_migrate/migrate_data_1.png
+.. |Create Partition| image:: images/backup_and_migrate/partition_create_3.png
+.. |Unwanted Bloatware Partition| image:: images/backup_and_migrate/partition_create_7.png
+.. |Root Terminal| image:: images/backup_and_migrate/root_terminal_3.png
+.. |Navigate to TailsData_unlocked| image:: images/backup_and_migrate/tails_data_unlocked_2.png
+.. |Upgrade by cloning| image:: images/backup_and_migrate/tails_installer_2.png
