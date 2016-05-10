@@ -70,20 +70,31 @@ In a root terminal, or as sudo, execute the following command to fix the ownersh
 
 `find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;`
 
-Reboot your primary Tails USB and verify EVERYTHING is still there and accessible to you:
+Reboot your primary Tails USB and verify *everything* is still there and accessible to you, including:
 
 #. KeePassX Database
 #. PGP keys
+
+If you are restoring a Secure Viewing Station Tails USB, you may skip to Step 7. However, if you're restoring an Admin or Journalist Tails USB, continue to Step 6.
+
+6. Reinstall SecureDrop
+-----------------------
+
+Continue checking your persistent files for the following critical assets:
+
 #. Bookmarks in Tor Browser
 #. SecureDrop files, especially the `torrc_additions` file in `~/Persistent/.securedrop`.
 #. If you're an admin, also be sure the files in `~/Persistent/securedrop/install_files/` are available.
+
+Shut down your Tails USB on the airgapped station and move to the computer you normally use to check for submissions. At this stage, all data has been migrated and it's safe to use this Tails USB on a networked computer.
+
+Boot up Tails once again with persistence and admin privileges.
 
 *Important:* Copy `~/Persistent/.securedrop/torrc_additions` to a place like your desktop; you'll need these old values for the following step.
 
 Re-install Securedrop with `cd ~/Persistent/securedrop/tails_files && sudo ./install.sh`. Once completed, test your access to the Document Interface, and, if you're a Secure Drop admin, test your ssh connection to the application and monitor servers.
 
-
-6. Reformat the Transfer Device
+7. Reformat the Transfer Device
 -------------------------------
 
 Repeat step 1 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Transfer Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
