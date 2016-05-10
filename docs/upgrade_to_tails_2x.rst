@@ -53,7 +53,7 @@ The Nautilus window should show both the Transfer Device and the TailsData parti
 
 |Migrate Data 1|
 
-Copy the required data from the TailsData partition onto the Transfer Device. You should move everything *except*:
+Copy the all data from the TailsData partition onto the Transfer Device _*except*_:
 
 -	``persistence.conf``: in older versions of Tails, this file might have slightly different directives in it that could temporarily brick a Tails 2.x USB.
 -	``claws-mail`` folder: Claws Mail is no longer included in Tails. The OS uses Icebird instead. Some users might not have this folder, so if you don't see it there, do not be alarmed.
