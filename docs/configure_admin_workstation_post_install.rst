@@ -25,7 +25,7 @@ service setup process.
 In order to access an ATHS, you need to add one or more "auth-cookie" values 
 to your Tor configuration file (``torrc``) and restart Tor. Doing this manually 
 is annoying and error-prone, so SecureDrop includes a set of scripts in 
-``securedrop/tails_files`` that can set up a Tails instance to automatically 
+``./tails_files`` that can set up a Tails instance to automatically 
 configure Tor to access a set of ATHS. In order to persist these changes across 
 reboots, the Tails instance must have persistence enabled (specifically, the 
 "dotfiles persistence").
