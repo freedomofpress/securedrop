@@ -43,15 +43,22 @@ Give your new partition a complex, diceware-generated passphrase.
 3. Backup a Tails USB
 --------------------------------------------
 
-Insert your Admin Workstation Tails into a free USB port, and mount it by navigating to Places ▸ Computer, and clicking on the encrypted disk. You will be prompted to enter the passphrase to unlock the disk (the same passphrase you normally use to log into Tails on this USB stick).
+Insert the Tails USB you want to back up into a free USB port, and mount it by navigating to Places ▸ Computer, and clicking on the encrypted disk. You will be prompted to enter the passphrase to unlock the disk (the same passphrase you normally use to log into Tails on this USB stick).
 
 Open a Nautilus window with admin priviledges by navigating to Applications ▸ System Tools ▸ Root Terminal. At the terminal prompt, simply type ``nautilus``.
 
 |Root Terminal|
 
-The Nautilus window should show both the Transfer Device and the TailsData partition as mounted; copy the contents of the TailsData partition onto the Transfer Device.
+The Nautilus window should show both the Transfer Device and the TailsData partition as mounted.
 
-|Migrate Data 2| |Migrate Data 1|
+|Migrate Data 2|
+
+Copy the required data from the TailsData partition onto the Transfer Device. You should move everything except:
+
+-	``persistence.conf``: in older versions of Tails, this file might have slightly different directives in it that could temporarily brick a Tails 2.x USB.
+-	``claws-mail`` folder: Claws Mail is no longer included in Tails. The OS uses Icebird instead. Some users might not have this folder, so if you don't see it there, do not be alarmed.
+
+|Migrate Data 1|
 
 Insure that all critical data has been successfully copied.  Specifically, be sure the the ``gnupg``, ``bookmarks``, and ``Persistent`` folders are completely copied.  Any loss of data from these folders could prevent users from accessing submissions.
 
