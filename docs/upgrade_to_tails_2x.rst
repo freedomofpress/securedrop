@@ -51,12 +51,11 @@ Open a Nautilus window with admin priviledges by navigating to Applications ▸ 
 
 The Nautilus window should show both the Transfer Device and the TailsData partition as mounted; copy the contents of the TailsData partition onto the Transfer Device.
 
-|Migrate Data|
+|Migrate Data 2| |Migrate Data 1|
 
 Insure that all critical data has been successfully copied.  Specifically, be sure the the ``gnupg``, ``bookmarks``, and ``Persistent`` folders are completely copied.  Any loss of data from these folders could prevent users from accessing submissions.
 
 Once data are correctly copied, unmount the TailsData partition.
-
 
 4. Upgrade a Tails USB
 ------------------------------------------------------
@@ -95,7 +94,7 @@ Reboot your primary Tails USB and verify *everything* is still there and accessi
 -	KeePassX Database
 -	PGP keys
 
-..note:: If you are restoring a Secure Viewing Station Tails USB, you may skip to Step 7. 
+.. note:: If you are restoring a Secure Viewing Station Tails USB, you may skip to Step 7. 
 	However, if you're restoring an Admin or Journalist Tails USB, continue to Step 6.
 
 6. Reinstall SecureDrop
@@ -123,7 +122,8 @@ If you did this correctly, move on to Step 7.
 
 Repeat step 1 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Transfer Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
 
-.. |Migrate Data| image:: images/backup_and_migrate/migrate_data_1.png
+.. |Migrate Data 1| image:: images/backup_and_migrate/migrate_data_2.png
+.. |Migrate Data 2| image:: images/backup_and_migrate/migrate_data_1.png
 .. |Create Partition| image:: images/backup_and_migrate/partition_create_3.png
 .. |Unwanted Bloatware Partition| image:: images/backup_and_migrate/partition_create_7.png
 .. |Root Terminal| image:: images/backup_and_migrate/root_terminal_3.png
