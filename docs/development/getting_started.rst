@@ -68,18 +68,18 @@ Either way, once you've installed Vagrant you should run:
     sudo dpkg-reconfigure virtualbox-dkms
 
 Finally, install Ansible so it can be used with Vagrant to automatically
-provision VMs. We recommend installing Ansible from PyPi with ``pip``, which
-allows you to specifically install the version of Ansible available in Tails,
-currently 1.7.2 (5/6/16):
-
+provision VMs. We recommend installing Ansible from PyPi with ``pip``:
 .. code:: sh
 
     sudo apt-get install python-pip
 
-Since the version of ansible required to provision SecureDrop VMs may flux out
-of sync with the version in your distro's repos, we recommend installing the
-version 1.8.4 of ansible to a virtual environment using `virtualenvwrapper` or
-`virtualenv`.
+The version of Ansible recommended to provision SecureDrop VMs may not be the
+same as the version in your distro's repos, or may at some point flux out of
+sync. For this reason, and also just as a good general development practice, we
+recommend using a Python virtual environment to install version 1.8.4 of
+Ansible. We provide instructions using `virtualenvwrapper
+<http://virtualenvwrapper.readthedocs.io/en/stable/>`_ and `virtualenv
+<https://virtualenv.readthedocs.io/en/latest/>`_.
 
 Using virtualenvwrapper:
 
