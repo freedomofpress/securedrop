@@ -13,7 +13,7 @@
 
     {% assets filters="jsmin", output="gen/journalist.js",
       "js/libs/jquery-2.1.4.min.js", "js/journalist.js" %}
-      <script type="javascript" src="{{ ASSET_URL }}"></script>
+      <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
     {% block extrahead %}{% endblock %}
