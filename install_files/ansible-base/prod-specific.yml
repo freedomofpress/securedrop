@@ -44,9 +44,11 @@ sasl_domain: ""
 sasl_password: ""
 
 ### Use for backup restores ###
-# If the `restore_file` variable is defined, Ansible will overwrite the state of
-# the app server with the state from the restore file, which should have been
-# created by a previous invocation of the "backup" role.
-# To use uncomment the following line and enter the filename between the quotes.
-# e.g. restore_file: "sd-backup-2015-01-15--21-03-32.tar.gz"
-#restore_file: ""
+# If either of the `restore_file` variables are defined, Ansible will overwrite
+# the state of the server(s) a restore file was provided for with the state from
+# the restore file, which should have been created by a previous invocation of
+# the the corresponding backup role.  To use uncomment the following line and
+# enter the filename between the quotes.
+# e.g. restore_file_app: "sd-backup-app-2015-01-15--21-03-32.tar.gz"
+#restore_file_app: ""
+#restore_file_mon: ""

@@ -79,7 +79,7 @@
 
   roles:
     - restrict_direct_access_app
-    - { role: backup, tags: [ 'backup' ] }
+    - { role: backup_app, tags: [ 'backup_app' ] }
 
   sudo: yes
 
@@ -92,6 +92,7 @@
 
   roles:
     - restrict_direct_access_mon
+    - { role: backup_mon, tags: [ 'backup_mon' ] }
 
   sudo: yes
 
