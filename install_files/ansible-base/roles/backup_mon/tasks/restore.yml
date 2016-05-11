@@ -47,15 +47,10 @@
     name: tor
     state: reloaded
 
-# Synchronize state between the mon server and the admin workstation
-- name: fetch securedrop ssh aths
+# Synchronize state between the app server and the admin workstation. This is
+# only necessary if the restore was successful.
+- include: {{ playbook_dir }}/roles/restrict_direct_access_mon/mon_display_onions.yml
   when: reload_tor_result is defined and reload_tor_result.state == 'started'
-  fetch: src=/var/lib/tor/services/ssh/hostname dest=./mon-ssh-aths flat=yes fail_on_missing=yes
-
-- name: format mon ssh aths
-  when: reload_tor_result is defined and reload_tor_result.state == 'started'
-  local_action: lineinfile dest=./mon-ssh-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
-  sudo: no
 
 # Cleanup
 - name: delete backup file to save space

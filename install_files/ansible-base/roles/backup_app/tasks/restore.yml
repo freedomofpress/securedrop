@@ -63,27 +63,9 @@
 
 # Synchronize state between the app server and the admin workstation. This is
 # only necessary if the restore was successful.
-- name: fetch securedrop source ths
+- include: {{ playbook_dir }}/roles/restrict_direct_access_app/app_display_onions.yml
   when: restart_apache_result is defined and restart_apache_result.state == 'started'
-  fetch: src=/var/lib/tor/services/source/hostname dest=./app-source-ths flat=yes fail_on_missing=yes
 
-- name: fetch securedrop document aths
-  when: restart_apache_result is defined and restart_apache_result.state == 'started'
-  fetch: src=/var/lib/tor/services/document/hostname dest=./app-document-aths flat=yes fail_on_missing=yes
-
-- name: fetch securedrop ssh aths
-  when: restart_apache_result is defined and restart_apache_result.state == 'started'
-  fetch: src=/var/lib/tor/services/ssh/hostname dest=./app-ssh-aths flat=yes fail_on_missing=yes
-
-- name: format securedrop document aths
-  when: restart_apache_result is defined and restart_apache_result.state == 'started'
-  local_action: lineinfile dest=./app-document-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
-  sudo: no
-
-- name: format app ssh aths
-  when: restart_apache_result is defined and restart_apache_result.state == 'started'
-  local_action: lineinfile dest=./app-ssh-aths regexp='(.*)' backrefs=yes line='HidServAuth \1'
-  sudo: no
 
 # Cleanup
 - name: delete backup file to save space
