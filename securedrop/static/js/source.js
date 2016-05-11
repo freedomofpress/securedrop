@@ -1,9 +1,30 @@
-// Warn about using Javascript
-$(function(){
-  $('.warning').show();
-  $('#warning-close').click(function(){
-    $('.warning').hide(200);
+
+ready(function() {
+  // Show banner warning about using Javascript
+  var warning = document.querySelector('.warning');
+  warning.style.display = 'block';
+  document.getElementById('warning-close').addEventListener('click', function() {
+    warning.style.display = 'none';
   });
+
+  // Show disable javascript bubble if using Tor Browser
+  if (is_likely_tor_browser()) {
+    document.querySelector('a#disable-js').addEventListener('click', function(evt) {
+      var infoBubble = document.querySelector('div.bubble');
+      if (tbb_version() >= 31) {
+        addClass(infoBubble, 'tbb31plus');
+      }
+      infoBubble.style.display = 'block';
+      fadeIn(infoBubble);
+
+      infoBubble.addEventListener('click', function() {
+        infoBubble.style.display = 'none';
+      });
+
+      evt.preventDefault();
+      return false; // don't follow link
+    });
+  }
 });
 
 // Customized, super-easy instructions for disabling JS in TBB
@@ -27,19 +48,34 @@ function tbb_version() {
   return Number(major_version);
 }
 
-$(function() {
-  if (is_likely_tor_browser()) {
-    $("a#disable-js").click(function() {
-      // Toggle the bubble if it already exists
-      var infoBubble = $("div.bubble");
-      if (tbb_version() >= 31) {
-        infoBubble.addClass("tbb31plus");
-      }
-      infoBubble.fadeIn(500);
-      infoBubble.click(function() {
-        infoBubble.toggle();
-      });
-      return false; // don't follow link
-    });
+function ready(fn) {
+  if (document.readyState != 'loading'){
+    fn();
+  } else {
+    document.addEventListener('DOMContentLoaded', fn);
   }
-});
+}
+
+function fadeIn(el) {
+  el.style.opacity = 0;
+
+  var last = +new Date();
+  var tick = function() {
+    el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
+    last = +new Date();
+
+    if (+el.style.opacity < 1) {
+      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+    }
+  };
+
+  tick();
+}
+
+function addClass(el, className) {
+  if (el.classList) {
+    el.classList.add(className);
+  } else {
+    el.className += ' ' + className;
+  }
+}
