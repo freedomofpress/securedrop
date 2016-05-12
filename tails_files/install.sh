@@ -19,6 +19,7 @@ TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
 # check for persistence
@@ -47,7 +48,6 @@ cp -f securedrop_icon.png $INSTALL_DIR
 cp -f document.desktop $INSTALL_DIR
 cp -f source.desktop $INSTALL_DIR
 cp -f securedrop_init.py $SCRIPT_PY
-cp -f 65-configure-tor-for-securedrop.sh $INSTALL_DIR
 
 # Remove binary setuid wrapper from previous tails_files installation, if it exists
 WRAPPER_BIN=$INSTALL_DIR/securedrop_init
@@ -102,8 +102,6 @@ chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
 chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
-chown root:root $INSTALL_DIR/65-configure-tor-for-securedrop.sh
-chmod 755 $INSTALL_DIR/65-configure-tor-for-securedrop.sh
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -161,7 +159,7 @@ fi
 
 # Remove previous NetworkManager hook if present. The "99-" prefix
 # caused the hook to run later than desired.
-for d in $TAILSCFG $INSTALL_DIR /etc/NetworkManager/dispatcher.d; do
+for d in $TAILSCFG $INSTALL_DIR $NMDISPATCHER; do
     rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
@@ -170,8 +168,10 @@ if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
   echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $TAILSCFG/persistence.conf
 fi
 mkdir -p $TAILSCFG/custom-nm-hooks
-cp -pf $INSTALL_DIR/65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
-cp -pf $INSTALL_DIR/65-configure-tor-for-securedrop.sh /etc/NetworkManager/dispatcher.d/
+cp -f 65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
+cp -f 65-configure-tor-for-securedrop.sh $NMDISPATCHER
+chown root:root $TAILSCFG/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chmod 755 $TAILSCFG/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
 /usr/bin/python $INSTALL_DIR/securedrop_init.py
