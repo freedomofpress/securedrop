@@ -139,7 +139,7 @@ First, write random data to the disk.  You can discover the path to your Transfe
 
 Repeat this step at least twice.
 
-Next, repeat step 1 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Transfer Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
+Next, repeat step 2 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Transfer Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
 
 .. |Migrate Data 1| image:: images/backup_and_migrate/migrate_data_2.png
 .. |Migrate Data 2| image:: images/backup_and_migrate/migrate_data_1.png
