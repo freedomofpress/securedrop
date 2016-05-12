@@ -100,8 +100,6 @@ chmod 400 $ADDITIONS
 
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
-chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
-chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -122,18 +120,28 @@ echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.deskto
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
 
 # copy launchers to desktop and Applications menu
-cp -pf $INSTALL_DIR/document.desktop $DESKTOP
-cp -pf $INSTALL_DIR/source.desktop $DESKTOP
-cp -pf $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
-cp -pf $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
+cp -f $INSTALL_DIR/document.desktop $DESKTOP
+cp -f $INSTALL_DIR/source.desktop $DESKTOP
+cp -f $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
+cp -f $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
 sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
-cp -pf $DESKTOP/document.desktop $DOTFILES/Desktop
-cp -pf $DESKTOP/source.desktop $DOTFILES/Desktop
-cp -pf $DESKTOP/document.desktop $DOTFILES/.local/share/applications
-cp -pf $DESKTOP/source.desktop $DOTFILES/.local/share/applications
+cp -f $DESKTOP/document.desktop $DOTFILES/Desktop
+cp -f $DESKTOP/source.desktop $DOTFILES/Desktop
+cp -f $DESKTOP/document.desktop $DOTFILES/.local/share/applications
+cp -f $DESKTOP/source.desktop $DOTFILES/.local/share/applications
+
+# set ownership and permissions
+chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
+  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
+chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
+  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
 
 # remove xsessionrc from 0.3.2 if present
 XSESSION_RC=$TAILSCFG/dotfiles/.xsessionrc
