@@ -131,7 +131,7 @@ If you did this correctly, move on to Step 7.
 7. Reformat the Transfer Device
 -------------------------------
 
-First, write random data to the disk.  You can discover the path to your Transfer Device by either running the `fdisk -l` command in terminal, or by observing the information listed in Tails' Disks application.  Once you know where your Transfer Device is mounted, run
+First, write random data to the disk.  You can discover the path to your Transfer Device by either running the ``fdisk -l`` command in terminal, or by observing the information listed in Tails' Disks application.  Once you know where your Transfer Device is mounted, run
 
 ::
 	
