@@ -135,10 +135,10 @@ cp -f $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
 sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
-cp -f $DESKTOP/document.desktop $DOTFILES/Desktop
-cp -f $DESKTOP/source.desktop $DOTFILES/Desktop
-cp -f $DESKTOP/document.desktop $DOTFILES/.local/share/applications
-cp -f $DESKTOP/source.desktop $DOTFILES/.local/share/applications
+cp -f $INSTALL_DIR/document.desktop $DOTFILES/Desktop
+cp -f $INSTALL_DIR/source.desktop $DOTFILES/Desktop
+cp -f $INSTALL_DIR/document.desktop $DOTFILES/.local/share/applications
+cp -f $INSTALL_DIR/source.desktop $DOTFILES/.local/share/applications
 
 # set ownership and permissions
 chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
