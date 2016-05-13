@@ -185,8 +185,8 @@ fi
 mkdir -p $TAILSCFG/custom-nm-hooks
 cp -f 65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
 cp -f 65-configure-tor-for-securedrop.sh $NMDISPATCHER
-chown root:root $TAILSCFG/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
-chmod 755 $TAILSCFG/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chown root:root $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chmod 755 $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
 /usr/bin/python $INSTALL_DIR/securedrop_init.py
