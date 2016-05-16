@@ -14,7 +14,7 @@ amnesia_home=/home/amnesia
 PERSISTENT=$amnesia_home/Persistent
 INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
-SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
+securedrop_init_script=$INSTALL_DIR/securedrop_init.py
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$amnesia_home/Desktop
@@ -54,7 +54,7 @@ mkdir -p $INSTALL_DIR
 cp -f securedrop_icon.png $INSTALL_DIR
 cp -f document.desktop $INSTALL_DIR
 cp -f source.desktop $INSTALL_DIR
-cp -f securedrop_init.py $SCRIPT_PY
+cp -f securedrop_init.py $securedrop_init_script
 
 # Remove binary setuid wrapper from previous tails_files installation, if it exists
 WRAPPER_BIN=$INSTALL_DIR/securedrop_init
@@ -100,8 +100,8 @@ fi
 
 # set permissions
 chmod 755 $INSTALL_DIR
-chown root:root $SCRIPT_PY
-chmod 700 $SCRIPT_PY
+chown root:root $securedrop_init_script
+chmod 700 $securedrop_init_script
 chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
 
