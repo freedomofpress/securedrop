@@ -17,7 +17,7 @@ torrc_additions=$securedrop_dotfiles/torrc_additions
 securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
 tails_live_persistence=/live/persistence/TailsData_unlocked
 tails_live_dotfiles=$tails_live_persistence/dotfiles
-DESKTOP=$amnesia_home/Desktop
+amnesia_desktop=$amnesia_home/Desktop
 ANSIBLE=$amnesia_persistent/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
@@ -127,8 +127,8 @@ echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $securedrop_dotfiles/documen
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $securedrop_dotfiles/source.desktop
 
 # copy launchers to desktop and Applications menu
-cp -f $securedrop_dotfiles/document.desktop $DESKTOP
-cp -f $securedrop_dotfiles/source.desktop $DESKTOP
+cp -f $securedrop_dotfiles/document.desktop $amnesia_desktop
+cp -f $securedrop_dotfiles/source.desktop $amnesia_desktop
 cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
 cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
 
@@ -141,11 +141,11 @@ cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/.local/share/ap
 cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/.local/share/applications
 
 # set ownership and permissions
-chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
+chown amnesia:amnesia $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
   $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
   $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
   $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
-chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
+chmod 700 $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
   $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
   $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
   $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
