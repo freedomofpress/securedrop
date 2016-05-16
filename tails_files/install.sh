@@ -20,7 +20,7 @@ tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
 securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
 network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
-SSH_ALIASES=false
+securedrop_ssh_aliases=false
 
 # check for Tails 2.x
 source /etc/os-release
@@ -82,7 +82,7 @@ EOL
     chown amnesia:amnesia $securedrop_dotfiles/ssh_config
     chmod 600 $securedrop_dotfiles/ssh_config
     cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
-    SSH_ALIASES=true
+    securedrop_ssh_aliases=true
   fi
   # set ansible to auto-install
   if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
@@ -204,7 +204,7 @@ if $ADMIN; then
   echo $APPSSH
   echo "The Monitor Server's SSH hidden service address is:"
   echo $MONSSH
-  if $SSH_ALIASES; then
+  if $securedrop_ssh_aliases; then
     echo ""
     echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
   fi
