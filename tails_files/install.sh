@@ -11,14 +11,14 @@ fi
 
 # set paths and variables
 amnesia_home=/home/amnesia
-PERSISTENT=$amnesia_home/Persistent
-INSTALL_DIR=$PERSISTENT/.securedrop
+amnesia_persistent=$amnesia_home/Persistent
+INSTALL_DIR=$amnesia_persistent/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 securedrop_init_script=$INSTALL_DIR/securedrop_init.py
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$amnesia_home/Desktop
-ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+ANSIBLE=$amnesia_persistent/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
