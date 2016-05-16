@@ -15,8 +15,8 @@ amnesia_persistent=$amnesia_home/Persistent
 securedrop_dotfiles=$amnesia_persistent/.securedrop
 torrc_additions=$securedrop_dotfiles/torrc_additions
 securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
-TAILSCFG=/live/persistence/TailsData_unlocked
-DOTFILES=$TAILSCFG/dotfiles
+tails_live_persistence=/live/persistence/TailsData_unlocked
+DOTFILES=$tails_live_persistence/dotfiles
 DESKTOP=$amnesia_home/Desktop
 ANSIBLE=$amnesia_persistent/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
@@ -30,7 +30,7 @@ if [[ $TAILS_VERSION_ID =~ ^1\..* ]]; then
 fi
 
 # check for persistence
-if [ ! -d "$TAILSCFG" ]; then
+if [ ! -d "$tails_live_persistence" ]; then
   echo "This script must be run on Tails with a persistent volume." 1>&2
   exit 1
 fi
@@ -85,8 +85,8 @@ EOL
     SSH_ALIASES=true
   fi
   # set ansible to auto-install
-  if ! grep -q 'ansible' "$TAILSCFG/live-additional-software.conf"; then
-    echo "ansible" >> $TAILSCFG/live-additional-software.conf
+  if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
+    echo "ansible" >> $tails_live_persistence/live-additional-software.conf
   fi
   # update ansible inventory with .onion hostnames
   if ! grep -v "^#.*onion" "$ANSIBLE/inventory" | grep -q onion; then
@@ -151,7 +151,7 @@ chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
   $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
 
 # remove xsessionrc from 0.3.2 if present
-XSESSION_RC=$TAILSCFG/dotfiles/.xsessionrc
+XSESSION_RC=$tails_live_persistence/dotfiles/.xsessionrc
 if [ -f $XSESSION_RC ]; then
   rm -f $XSESSION_RC > /dev/null 2>&1
 
@@ -174,19 +174,19 @@ fi
 
 # Remove previous NetworkManager hook if present. The "99-" prefix
 # caused the hook to run later than desired.
-for d in $TAILSCFG $securedrop_dotfiles $NMDISPATCHER; do
+for d in $tails_live_persistence $securedrop_dotfiles $NMDISPATCHER; do
   rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
 # set up NetworkManager hook
-if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
-  echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $TAILSCFG/persistence.conf
+if ! grep -q 'custom-nm-hooks' "$tails_live_persistence/persistence.conf"; then
+  echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $tails_live_persistence/persistence.conf
 fi
-mkdir -p $TAILSCFG/custom-nm-hooks
-cp -f 65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
+mkdir -p $tails_live_persistence/custom-nm-hooks
+cp -f 65-configure-tor-for-securedrop.sh $tails_live_persistence/custom-nm-hooks
 cp -f 65-configure-tor-for-securedrop.sh $NMDISPATCHER
-chown root:root $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
-chmod 755 $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
 /usr/bin/python $securedrop_dotfiles/securedrop_init.py
