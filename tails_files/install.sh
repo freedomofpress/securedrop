@@ -64,8 +64,25 @@ function copy_securedrop_dotfiles()
   fi
 }
 
+function set_directory_permissions()
+{
+  # set permissions
+  chmod 755 $securedrop_dotfiles
+  chown root:root $securedrop_init_script
+  chmod 700 $securedrop_init_script
+  chown root:root $torrc_additions
+  chmod 400 $torrc_additions
+
+  chown amnesia:amnesia $securedrop_dotfiles/securedrop_icon.png
+  chmod 600 $securedrop_dotfiles/securedrop_icon.png
+}
+
 validate_tails_environment
 copy_securedrop_dotfiles
+
+
+
+set_directory_permissions
 
 if $ADMIN; then
   DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
@@ -102,16 +119,6 @@ else
   # prepare torrc_additions (journalist)
   cp -f torrc_additions $torrc_additions
 fi
-
-# set permissions
-chmod 755 $securedrop_dotfiles
-chown root:root $securedrop_init_script
-chmod 700 $securedrop_init_script
-chown root:root $torrc_additions
-chmod 400 $torrc_additions
-
-chown amnesia:amnesia $securedrop_dotfiles/securedrop_icon.png
-chmod 600 $securedrop_dotfiles/securedrop_icon.png
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
