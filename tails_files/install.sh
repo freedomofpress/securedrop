@@ -13,7 +13,7 @@ fi
 amnesia_home=/home/amnesia
 amnesia_persistent=$amnesia_home/Persistent
 securedrop_dotfiles=$amnesia_persistent/.securedrop
-ADDITIONS=$securedrop_dotfiles/torrc_additions
+torrc_additions=$securedrop_dotfiles/torrc_additions
 securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
@@ -67,7 +67,7 @@ if $ADMIN; then
   SOURCE=`cat $ANSIBLE/app-source-ths`
   APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
   MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
-  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $ADDITIONS
+  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $torrc_additions
   if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
     # create SSH host aliases and install them
     SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
@@ -95,15 +95,15 @@ EOL
   fi
 else
   # prepare torrc_additions (journalist)
-  cp -f torrc_additions $ADDITIONS
+  cp -f torrc_additions $torrc_additions
 fi
 
 # set permissions
 chmod 755 $securedrop_dotfiles
 chown root:root $securedrop_init_script
 chmod 700 $securedrop_init_script
-chown root:root $ADDITIONS
-chmod 400 $ADDITIONS
+chown root:root $torrc_additions
+chmod 400 $torrc_additions
 
 chown amnesia:amnesia $securedrop_dotfiles/securedrop_icon.png
 chmod 600 $securedrop_dotfiles/securedrop_icon.png
@@ -116,7 +116,7 @@ if ! $ADMIN; then
   do
     HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
   done
-  echo $HIDSERVAUTH >> $ADDITIONS
+  echo $HIDSERVAUTH >> $torrc_additions
   SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
   SOURCE="${SRC#http://}"
   DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
