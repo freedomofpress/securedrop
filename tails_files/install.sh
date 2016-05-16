@@ -3,12 +3,6 @@
 
 set -e
 
-# check for root
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root" 1>&2
-  exit 1
-fi
-
 # set paths and variables
 amnesia_home=/home/amnesia
 amnesia_persistent=$amnesia_home/Persistent
@@ -22,24 +16,31 @@ securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-bas
 network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
 securedrop_ssh_aliases=false
 
-# check for Tails 2.x
-source /etc/os-release
-if [[ $TAILS_VERSION_ID =~ ^1\..* ]]; then
-  echo "This script must be used on Tails version 2.x or greater." 1>&2
-  exit 1
-fi
 
-# check for persistence
-if [ ! -d "$tails_live_persistence" ]; then
-  echo "This script must be run on Tails with a persistent volume." 1>&2
-  exit 1
-fi
+function validate_tails_environment()
+{
+  # Ensure that initial expectations about the SecureDrop environment
+  # are met. Error messages below explain each condition.
+  if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+  fi
+  source /etc/os-release
+  if [[ $TAILS_VERSION_ID =~ ^1\..* ]]; then
+    echo "This script must be used on Tails version 2.x or greater." 1>&2
+    exit 1
+  fi
+  if [ ! -d "$tails_live_persistence" ]; then
+    echo "This script must be run on Tails with a persistent volume." 1>&2
+    exit 1
+  fi
+  if [ ! -d "$securedrop_ansible_base" ]; then
+    echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
+    exit 1
+  fi
+}
 
-# check for SecureDrop git repo
-if [ ! -d "$securedrop_ansible_base" ]; then
-  echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
-  exit 1
-fi
+validate_tails_environment
 
 # detect whether admin or journalist
 if [ -f $securedrop_ansible_base/app-document-aths ]; then
