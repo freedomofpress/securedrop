@@ -12,9 +12,9 @@ fi
 # set paths and variables
 amnesia_home=/home/amnesia
 amnesia_persistent=$amnesia_home/Persistent
-INSTALL_DIR=$amnesia_persistent/.securedrop
-ADDITIONS=$INSTALL_DIR/torrc_additions
-securedrop_init_script=$INSTALL_DIR/securedrop_init.py
+securedrop_dotfiles=$amnesia_persistent/.securedrop
+ADDITIONS=$securedrop_dotfiles/torrc_additions
+securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$amnesia_home/Desktop
@@ -48,16 +48,16 @@ else
   ADMIN=false
 fi
 
-mkdir -p $INSTALL_DIR
+mkdir -p $securedrop_dotfiles
 
 # copy icon, launchers and scripts
-cp -f securedrop_icon.png $INSTALL_DIR
-cp -f document.desktop $INSTALL_DIR
-cp -f source.desktop $INSTALL_DIR
+cp -f securedrop_icon.png $securedrop_dotfiles
+cp -f document.desktop $securedrop_dotfiles
+cp -f source.desktop $securedrop_dotfiles
 cp -f securedrop_init.py $securedrop_init_script
 
 # Remove binary setuid wrapper from previous tails_files installation, if it exists
-WRAPPER_BIN=$INSTALL_DIR/securedrop_init
+WRAPPER_BIN=$securedrop_dotfiles/securedrop_init
 if [ -f $WRAPPER_BIN ]; then
     rm $WRAPPER_BIN
 fi
@@ -70,8 +70,8 @@ if $ADMIN; then
   echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $ADDITIONS
   if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
     # create SSH host aliases and install them
-    SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
-    cat > $INSTALL_DIR/ssh_config <<EOL
+    SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
+    cat > $securedrop_dotfiles/ssh_config <<EOL
 Host app
   Hostname $APPSSH
   User $SSHUSER
@@ -79,9 +79,9 @@ Host mon
   Hostname $MONSSH
   User $SSHUSER
 EOL
-    chown amnesia:amnesia $INSTALL_DIR/ssh_config
-    chmod 600 $INSTALL_DIR/ssh_config
-    cp -pf $INSTALL_DIR/ssh_config $amnesia_home/.ssh/config
+    chown amnesia:amnesia $securedrop_dotfiles/ssh_config
+    chmod 600 $securedrop_dotfiles/ssh_config
+    cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
     SSH_ALIASES=true
   fi
   # set ansible to auto-install
@@ -99,14 +99,14 @@ else
 fi
 
 # set permissions
-chmod 755 $INSTALL_DIR
+chmod 755 $securedrop_dotfiles
 chown root:root $securedrop_init_script
 chmod 700 $securedrop_init_script
 chown root:root $ADDITIONS
 chmod 400 $ADDITIONS
 
-chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
-chmod 600 $INSTALL_DIR/securedrop_icon.png
+chown amnesia:amnesia $securedrop_dotfiles/securedrop_icon.png
+chmod 600 $securedrop_dotfiles/securedrop_icon.png
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -114,31 +114,31 @@ if ! $ADMIN; then
   REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
   while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];
   do
-    HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
+    HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
   done
   echo $HIDSERVAUTH >> $ADDITIONS
-  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
+  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
   SOURCE="${SRC#http://}"
   DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
 fi
 
 # make the shortcuts
-echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.desktop
-echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
+echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $securedrop_dotfiles/document.desktop
+echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $securedrop_dotfiles/source.desktop
 
 # copy launchers to desktop and Applications menu
-cp -f $INSTALL_DIR/document.desktop $DESKTOP
-cp -f $INSTALL_DIR/source.desktop $DESKTOP
-cp -f $INSTALL_DIR/document.desktop $amnesia_home/.local/share/applications
-cp -f $INSTALL_DIR/source.desktop $amnesia_home/.local/share/applications
+cp -f $securedrop_dotfiles/document.desktop $DESKTOP
+cp -f $securedrop_dotfiles/source.desktop $DESKTOP
+cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
+cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
 sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
-cp -f $INSTALL_DIR/document.desktop $DOTFILES/Desktop
-cp -f $INSTALL_DIR/source.desktop $DOTFILES/Desktop
-cp -f $INSTALL_DIR/document.desktop $DOTFILES/.local/share/applications
-cp -f $INSTALL_DIR/source.desktop $DOTFILES/.local/share/applications
+cp -f $securedrop_dotfiles/document.desktop $DOTFILES/Desktop
+cp -f $securedrop_dotfiles/source.desktop $DOTFILES/Desktop
+cp -f $securedrop_dotfiles/document.desktop $DOTFILES/.local/share/applications
+cp -f $securedrop_dotfiles/source.desktop $DOTFILES/.local/share/applications
 
 # set ownership and permissions
 chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
@@ -174,7 +174,7 @@ fi
 
 # Remove previous NetworkManager hook if present. The "99-" prefix
 # caused the hook to run later than desired.
-for d in $TAILSCFG $INSTALL_DIR $NMDISPATCHER; do
+for d in $TAILSCFG $securedrop_dotfiles $NMDISPATCHER; do
   rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
@@ -189,7 +189,7 @@ chown root:root $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NM
 chmod 755 $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
-/usr/bin/python $INSTALL_DIR/securedrop_init.py
+/usr/bin/python $securedrop_dotfiles/securedrop_init.py
 
 # finished
 echo ""
