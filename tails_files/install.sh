@@ -40,8 +40,6 @@ function validate_tails_environment()
   fi
 }
 
-validate_tails_environment
-
 # detect whether admin or journalist
 if [ -f $securedrop_ansible_base/app-document-aths ]; then
   ADMIN=true
@@ -49,19 +47,25 @@ else
   ADMIN=false
 fi
 
-mkdir -p $securedrop_dotfiles
+function copy_securedrop_dotfiles()
+{
+  mkdir -p $securedrop_dotfiles
 
-# copy icon, launchers and scripts
-cp -f securedrop_icon.png $securedrop_dotfiles
-cp -f document.desktop $securedrop_dotfiles
-cp -f source.desktop $securedrop_dotfiles
-cp -f securedrop_init.py $securedrop_init_script
+  # copy icon, launchers and scripts
+  cp -f securedrop_icon.png $securedrop_dotfiles
+  cp -f document.desktop $securedrop_dotfiles
+  cp -f source.desktop $securedrop_dotfiles
+  cp -f securedrop_init.py $securedrop_init_script
 
-# Remove binary setuid wrapper from previous tails_files installation, if it exists
-WRAPPER_BIN=$securedrop_dotfiles/securedrop_init
-if [ -f $WRAPPER_BIN ]; then
-    rm $WRAPPER_BIN
-fi
+  # Remove binary setuid wrapper from previous tails_files installation, if it exists
+  securedrop_setuid_wrapper=$securedrop_dotfiles/securedrop_init
+  if [ -f $securedrop_setuid_wrapper ]; then
+    rm $securedrop_setuid_wrapper
+  fi
+}
+
+validate_tails_environment
+copy_securedrop_dotfiles
 
 if $ADMIN; then
   DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
