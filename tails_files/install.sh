@@ -10,14 +10,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # set paths and variables
-HOMEDIR=/home/amnesia
-PERSISTENT=$HOMEDIR/Persistent
+amnesia_home=/home/amnesia
+PERSISTENT=$amnesia_home/Persistent
 INSTALL_DIR=$PERSISTENT/.securedrop
 ADDITIONS=$INSTALL_DIR/torrc_additions
 SCRIPT_PY=$INSTALL_DIR/securedrop_init.py
 TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
-DESKTOP=$HOMEDIR/Desktop
+DESKTOP=$amnesia_home/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
@@ -68,7 +68,7 @@ if $ADMIN; then
   APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
   MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
   echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $ADDITIONS
-  if [[ -d "$HOMEDIR/.ssh" && ! -f "$HOMEDIR/.ssh/config" ]]; then
+  if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
     # create SSH host aliases and install them
     SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$INSTALL_DIR/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
     cat > $INSTALL_DIR/ssh_config <<EOL
@@ -81,7 +81,7 @@ Host mon
 EOL
     chown amnesia:amnesia $INSTALL_DIR/ssh_config
     chmod 600 $INSTALL_DIR/ssh_config
-    cp -pf $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
+    cp -pf $INSTALL_DIR/ssh_config $amnesia_home/.ssh/config
     SSH_ALIASES=true
   fi
   # set ansible to auto-install
@@ -129,8 +129,8 @@ echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
 # copy launchers to desktop and Applications menu
 cp -f $INSTALL_DIR/document.desktop $DESKTOP
 cp -f $INSTALL_DIR/source.desktop $DESKTOP
-cp -f $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
-cp -f $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
+cp -f $INSTALL_DIR/document.desktop $amnesia_home/.local/share/applications
+cp -f $INSTALL_DIR/source.desktop $amnesia_home/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
@@ -143,11 +143,11 @@ cp -f $INSTALL_DIR/source.desktop $DOTFILES/.local/share/applications
 # set ownership and permissions
 chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
   $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
-  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
   $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
 chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
   $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
-  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
   $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
 
 # remove xsessionrc from 0.3.2 if present
