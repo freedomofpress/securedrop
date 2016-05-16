@@ -19,7 +19,7 @@ tails_live_persistence=/live/persistence/TailsData_unlocked
 tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
 securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
-NMDISPATCHER=/etc/NetworkManager/dispatcher.d
+network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
 # check for Tails 2.x
@@ -174,7 +174,7 @@ fi
 
 # Remove previous NetworkManager hook if present. The "99-" prefix
 # caused the hook to run later than desired.
-for d in $tails_live_persistence $securedrop_dotfiles $NMDISPATCHER; do
+for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
   rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
@@ -184,9 +184,9 @@ if ! grep -q 'custom-nm-hooks' "$tails_live_persistence/persistence.conf"; then
 fi
 mkdir -p $tails_live_persistence/custom-nm-hooks
 cp -f 65-configure-tor-for-securedrop.sh $tails_live_persistence/custom-nm-hooks
-cp -f 65-configure-tor-for-securedrop.sh $NMDISPATCHER
-chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
-chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+cp -f 65-configure-tor-for-securedrop.sh $network_manager_dispatcher
+chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
+chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
 /usr/bin/python $securedrop_dotfiles/securedrop_init.py
