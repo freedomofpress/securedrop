@@ -35,7 +35,7 @@ if [ ! -d "$ANSIBLE" ]; then
 fi
 
 # detect whether admin or journalist
-if [ -f $ANSIBLE/app-document-aths ]; then
+if [ -f $ANSIBLE/app-ssh-aths ]; then
   ADMIN=true
 else
   ADMIN=false
