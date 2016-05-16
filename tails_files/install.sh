@@ -16,7 +16,7 @@ securedrop_dotfiles=$amnesia_persistent/.securedrop
 torrc_additions=$securedrop_dotfiles/torrc_additions
 securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
 tails_live_persistence=/live/persistence/TailsData_unlocked
-DOTFILES=$tails_live_persistence/dotfiles
+tails_live_dotfiles=$tails_live_persistence/dotfiles
 DESKTOP=$amnesia_home/Desktop
 ANSIBLE=$amnesia_persistent/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
@@ -133,22 +133,22 @@ cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applicati
 cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
 
 # make it all persistent
-sudo -u amnesia mkdir -p $DOTFILES/Desktop
-sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
-cp -f $securedrop_dotfiles/document.desktop $DOTFILES/Desktop
-cp -f $securedrop_dotfiles/source.desktop $DOTFILES/Desktop
-cp -f $securedrop_dotfiles/document.desktop $DOTFILES/.local/share/applications
-cp -f $securedrop_dotfiles/source.desktop $DOTFILES/.local/share/applications
+sudo -u amnesia mkdir -p $tails_live_dotfiles/Desktop
+sudo -u amnesia mkdir -p $tails_live_dotfiles/.local/share/applications
+cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/Desktop
+cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/Desktop
+cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/.local/share/applications
+cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/.local/share/applications
 
 # set ownership and permissions
 chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
-  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
   $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
-  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
+  $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
 chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
-  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
   $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
-  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
+  $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
 
 # remove xsessionrc from 0.3.2 if present
 XSESSION_RC=$tails_live_persistence/dotfiles/.xsessionrc
