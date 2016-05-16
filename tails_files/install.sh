@@ -19,6 +19,7 @@ TAILSCFG=/live/persistence/TailsData_unlocked
 DOTFILES=$TAILSCFG/dotfiles
 DESKTOP=$HOMEDIR/Desktop
 ANSIBLE=$PERSISTENT/securedrop/install_files/ansible-base
+NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
 # check for Tails 2.x
@@ -41,7 +42,7 @@ if [ ! -d "$ANSIBLE" ]; then
 fi
 
 # detect whether admin or journalist
-if [ -f $ANSIBLE/app-document-aths ]; then
+if [ -f $ANSIBLE/app-ssh-aths ]; then
   ADMIN=true
 else
   ADMIN=false
@@ -50,11 +51,10 @@ fi
 mkdir -p $INSTALL_DIR
 
 # copy icon, launchers and scripts
-cp securedrop_icon.png $INSTALL_DIR
-cp document.desktop $INSTALL_DIR
-cp source.desktop $INSTALL_DIR
-cp securedrop_init.py $SCRIPT_PY
-cp 65-configure-tor-for-securedrop.sh $INSTALL_DIR
+cp -f securedrop_icon.png $INSTALL_DIR
+cp -f document.desktop $INSTALL_DIR
+cp -f source.desktop $INSTALL_DIR
+cp -f securedrop_init.py $SCRIPT_PY
 
 # Remove binary setuid wrapper from previous tails_files installation, if it exists
 WRAPPER_BIN=$INSTALL_DIR/securedrop_init
@@ -81,7 +81,7 @@ Host mon
 EOL
     chown amnesia:amnesia $INSTALL_DIR/ssh_config
     chmod 600 $INSTALL_DIR/ssh_config
-    cp -p $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
+    cp -pf $INSTALL_DIR/ssh_config $HOMEDIR/.ssh/config
     SSH_ALIASES=true
   fi
   # set ansible to auto-install
@@ -95,7 +95,7 @@ EOL
   fi
 else
   # prepare torrc_additions (journalist)
-  cp torrc_additions $ADDITIONS
+  cp -f torrc_additions $ADDITIONS
 fi
 
 # set permissions
@@ -107,10 +107,6 @@ chmod 400 $ADDITIONS
 
 chown amnesia:amnesia $INSTALL_DIR/securedrop_icon.png
 chmod 600 $INSTALL_DIR/securedrop_icon.png
-chown amnesia:amnesia $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
-chmod 700 $INSTALL_DIR/document.desktop $INSTALL_DIR/source.desktop
-chown root:root $INSTALL_DIR/65-configure-tor-for-securedrop.sh
-chmod 755 $INSTALL_DIR/65-configure-tor-for-securedrop.sh
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
@@ -131,45 +127,55 @@ echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $INSTALL_DIR/document.deskto
 echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $INSTALL_DIR/source.desktop
 
 # copy launchers to desktop and Applications menu
-cp -p $INSTALL_DIR/document.desktop $DESKTOP
-cp -p $INSTALL_DIR/source.desktop $DESKTOP
-cp -p $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
-cp -p $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
+cp -f $INSTALL_DIR/document.desktop $DESKTOP
+cp -f $INSTALL_DIR/source.desktop $DESKTOP
+cp -f $INSTALL_DIR/document.desktop $HOMEDIR/.local/share/applications
+cp -f $INSTALL_DIR/source.desktop $HOMEDIR/.local/share/applications
 
 # make it all persistent
 sudo -u amnesia mkdir -p $DOTFILES/Desktop
 sudo -u amnesia mkdir -p $DOTFILES/.local/share/applications
-cp -p $DESKTOP/document.desktop $DOTFILES/Desktop
-cp -p $DESKTOP/source.desktop $DOTFILES/Desktop
-cp -p $DESKTOP/document.desktop $DOTFILES/.local/share/applications
-cp -p $DESKTOP/source.desktop $DOTFILES/.local/share/applications
+cp -f $INSTALL_DIR/document.desktop $DOTFILES/Desktop
+cp -f $INSTALL_DIR/source.desktop $DOTFILES/Desktop
+cp -f $INSTALL_DIR/document.desktop $DOTFILES/.local/share/applications
+cp -f $INSTALL_DIR/source.desktop $DOTFILES/.local/share/applications
+
+# set ownership and permissions
+chown amnesia:amnesia $DESKTOP/document.desktop $DESKTOP/source.desktop \
+  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
+chmod 700 $DESKTOP/document.desktop $DESKTOP/source.desktop \
+  $DOTFILES/Desktop/document.desktop $DOTFILES/Desktop/source.desktop \
+  $HOMEDIR/.local/share/applications/document.desktop $HOMEDIR/.local/share/applications/source.desktop \
+  $DOTFILES/.local/share/applications/document.desktop $DOTFILES/.local/share/applications/source.desktop
 
 # remove xsessionrc from 0.3.2 if present
 XSESSION_RC=$TAILSCFG/dotfiles/.xsessionrc
 if [ -f $XSESSION_RC ]; then
-    rm -f $XSESSION_RC > /dev/null 2>&1
+  rm -f $XSESSION_RC > /dev/null 2>&1
 
-    # Repair the torrc backup, which was probably busted due to the
-    # race condition between .xsessionrc and
-    # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
-    # Tor after this script is run.
-    #
-    # If the Sandbox directive is on in the torrc (now that the dust
-    # has settled from any race condition shenanigans), *and* there is
-    # no Sandbox directive already present in the backup of the
-    # original, "unmodified-by-SecureDrop" copy of the torrc used by
-    # securedrop_init, then port that Sandbox directive over to avoid
-    # breaking Tor by changing the Sandbox directive while it's
-    # running.
-    if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
-        echo "Sandbox 1" >> /etc/tor/torrc.bak
-    fi
+  # Repair the torrc backup, which was probably busted due to the
+  # race condition between .xsessionrc and
+  # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
+  # Tor after this script is run.
+  #
+  # If the Sandbox directive is on in the torrc (now that the dust
+  # has settled from any race condition shenanigans), *and* there is
+  # no Sandbox directive already present in the backup of the
+  # original, "unmodified-by-SecureDrop" copy of the torrc used by
+  # securedrop_init, then port that Sandbox directive over to avoid
+  # breaking Tor by changing the Sandbox directive while it's
+  # running.
+  if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
+    echo "Sandbox 1" >> /etc/tor/torrc.bak
+  fi
 fi
 
 # Remove previous NetworkManager hook if present. The "99-" prefix
 # caused the hook to run later than desired.
-for d in $TAILSCFG $INSTALL_DIR /etc/NetworkManager/dispatcher.d; do
-    rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
+for d in $TAILSCFG $INSTALL_DIR $NMDISPATCHER; do
+  rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
 # set up NetworkManager hook
@@ -177,8 +183,10 @@ if ! grep -q 'custom-nm-hooks' "$TAILSCFG/persistence.conf"; then
   echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $TAILSCFG/persistence.conf
 fi
 mkdir -p $TAILSCFG/custom-nm-hooks
-cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
-cp -p $INSTALL_DIR/65-configure-tor-for-securedrop.sh /etc/NetworkManager/dispatcher.d/
+cp -f 65-configure-tor-for-securedrop.sh $TAILSCFG/custom-nm-hooks
+cp -f 65-configure-tor-for-securedrop.sh $NMDISPATCHER
+chown root:root $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
+chmod 755 $TAILSCFG/custom-nm-hooks/65-configure-tor-for-securedrop.sh $NMDISPATCHER/65-configure-tor-for-securedrop.sh
 
 # set torrc and reload Tor
 /usr/bin/python $INSTALL_DIR/securedrop_init.py
