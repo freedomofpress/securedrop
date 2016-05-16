@@ -18,7 +18,7 @@ securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
 tails_live_persistence=/live/persistence/TailsData_unlocked
 tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
-ANSIBLE=$amnesia_persistent/securedrop/install_files/ansible-base
+securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
 NMDISPATCHER=/etc/NetworkManager/dispatcher.d
 SSH_ALIASES=false
 
@@ -36,13 +36,13 @@ if [ ! -d "$tails_live_persistence" ]; then
 fi
 
 # check for SecureDrop git repo
-if [ ! -d "$ANSIBLE" ]; then
+if [ ! -d "$securedrop_ansible_base" ]; then
   echo "This script must be run with SecureDrop's git repository cloned to 'securedrop' in your Persistent folder." 1>&2
   exit 1
 fi
 
 # detect whether admin or journalist
-if [ -f $ANSIBLE/app-document-aths ]; then
+if [ -f $securedrop_ansible_base/app-document-aths ]; then
   ADMIN=true
 else
   ADMIN=false
@@ -63,11 +63,11 @@ if [ -f $WRAPPER_BIN ]; then
 fi
 
 if $ADMIN; then
-  DOCUMENT=`cat $ANSIBLE/app-document-aths | cut -d ' ' -f 2`
-  SOURCE=`cat $ANSIBLE/app-source-ths`
-  APPSSH=`cat $ANSIBLE/app-ssh-aths | cut -d ' ' -f 2`
-  MONSSH=`cat $ANSIBLE/mon-ssh-aths | cut -d ' ' -f 2`
-  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $ANSIBLE/app-ssh-aths $ANSIBLE/mon-ssh-aths $ANSIBLE/app-document-aths > $torrc_additions
+  DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
+  SOURCE=`cat $securedrop_ansible_base/app-source-ths`
+  APPSSH=`cat $securedrop_ansible_base/app-ssh-aths | cut -d ' ' -f 2`
+  MONSSH=`cat $securedrop_ansible_base/mon-ssh-aths | cut -d ' ' -f 2`
+  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $securedrop_ansible_base/app-ssh-aths $securedrop_ansible_base/mon-ssh-aths $securedrop_ansible_base/app-document-aths > $torrc_additions
   if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
     # create SSH host aliases and install them
     SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
@@ -89,9 +89,9 @@ EOL
     echo "ansible" >> $tails_live_persistence/live-additional-software.conf
   fi
   # update ansible inventory with .onion hostnames
-  if ! grep -v "^#.*onion" "$ANSIBLE/inventory" | grep -q onion; then
-    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $ANSIBLE/inventory
-    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $ANSIBLE/inventory
+  if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
+    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
+    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
   fi
 else
   # prepare torrc_additions (journalist)
