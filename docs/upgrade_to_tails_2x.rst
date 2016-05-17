@@ -78,10 +78,28 @@ With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to 
 
 |Upgrade by cloning|
 
-The Tails Installer program should reliably upgrade the inserted Tails USB, but if for some reason this process fails, you have your data backed up to the Backup Device. If you find yourself in that unlucky situation, follow step 5. Otherwise, skip to Step 7 to wipe and reformat the Backup Device for reuse.
+The clone process will take a few minutes.
 
-5. Restore data from a Backup Device
---------------------------------------
+5. Reformat the Backup Device
+-----------------------------
+
+First, write random data to the disk.  You can discover the path to your Backup Device by either running the ``fdisk -l`` command in terminal, or by observing the information listed in Tails' Disks application.  Once you know where your Backup Device is mounted, run
+
+::
+
+	dd if=/dev/urandom of=/dev/sdX
+
+Repeat this step at least twice.
+
+Next, repeat step 2 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Backup Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
+
+Troubleshooting
+===============
+
+The steps described above should cleanly update your Tails devices without issue. In the event that you are unable to access your persistent files on one of the upgraded Tails devices, don't worry: you can still restore the original files from the Backup Device you created. (Isn't it great to have backups?)
+
+1. Restore data from a Backup Device
+------------------------------------
 
 On the same airgapped machine, boot up the Tails USB stick you want to restore, with both persistence and admin privileges.
 
@@ -111,7 +129,7 @@ Shut down, and boot up **with your primary Tails USB** and verify *everything* i
 .. note:: If you are restoring a Secure Viewing Station Tails USB, you may skip to Step 7. 
 	However, if you're restoring an Admin or Journalist Tails USB, continue to Step 6.
 
-6. Reinstall SecureDrop
+2. Reinstall SecureDrop
 -----------------------
 
 Continue checking your persistent files for the following critical assets:
@@ -131,18 +149,6 @@ Re-install Securedrop with ``cd ~/Persistent/securedrop/tails_files && sudo ./in
 
 If you did this correctly, move on to Step 7.
 
-7. Reformat the Backup Device
--------------------------------
-
-First, write random data to the disk.  You can discover the path to your Backup Device by either running the ``fdisk -l`` command in terminal, or by observing the information listed in Tails' Disks application.  Once you know where your Backup Device is mounted, run
-
-::
-	
-	dd if=/dev/urandom of=/dev/sdX
-
-Repeat this step at least twice.
-
-Next, repeat step 2 to restore a USB stick to a pristine state. While it probably isn't necessary to physically destroy a Backup Device (because LUKS-encrypted data is very hard to forensically recover), you could smash the device with a hammer until the chips containing its flash memory are broken up into pieces before disposal.
 
 .. |Migrate Data 1| image:: images/backup_and_migrate/migrate_data_2.png
 .. |Migrate Data 2| image:: images/backup_and_migrate/migrate_data_1.png
