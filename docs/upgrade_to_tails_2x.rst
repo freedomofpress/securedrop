@@ -13,6 +13,8 @@ Newer versions of SecureDrop leverage improvements to the Tails OS since the int
 	#. Your existing SecureDrop Tails USB sticks (Admin, Journalist, and Secure Viewing Station).
 	#. An airgapped machine to perform each Tails upgrade. (SVS reuse is OK.)
 
+An airgapped machine (such as the SVS) is required in order to perform these upgrades safely. By isolating the machine from all network access, you thereby reduce the threat of compromise by actors who wish to gain access to your SecureDrop instance.
+
 1. Prepare the master Tails USB
 -------------------------------------
 
