@@ -6,12 +6,12 @@ Upgrade Tails from 1.x to 2.x
 Newer versions of SecureDrop leverage improvements to the Tails OS since the introduction of Tails 2.0. It is critical to upgrade all Tails USBs to the latest version before upgrading SecureDrop. Upgrading Tails from 1.x to 2.x must be done manually. Please follow this guide to updating each Tails USB stick used in your SecureDrop instance. Be sure to use the Secure Viewing Station computer so you benefit from its airgap while transfering sensitive data.
 
 .. note::
-	You will need:
+    You will need:
 
-	#. A "master" Tails USB running the most recent version of Tails (at least v2.3).
-	#. A separate USB stick used to store encrypted backups of the old Tails sticks.
-	#. Your existing SecureDrop Tails USB sticks (Admin, Journalist, and Secure Viewing Station).
-	#. An airgapped machine to perform each Tails upgrade. (SVS reuse is OK.)
+    #. A "master" Tails USB running the most recent version of Tails (at least v2.3).
+    #. A separate USB stick used to store encrypted backups of the old Tails sticks.
+    #. Your existing SecureDrop Tails USB sticks (Admin, Journalist, and Secure Viewing Station).
+    #. An airgapped machine to perform each Tails upgrade. (SVS reuse is OK.)
 
 An airgapped machine (such as the SVS) is required in order to perform these upgrades safely. By isolating the machine from all network access, you thereby reduce the threat of compromise by actors who wish to gain access to your SecureDrop instance.
 
@@ -111,7 +111,7 @@ First, write random data to the disk.  You can discover the path to your Backup 
 
 ::
 
-	dd if=/dev/urandom of=/dev/sdX
+    dd if=/dev/urandom of=/dev/sdX
 
 Repeat this step at least twice.
 
@@ -143,7 +143,7 @@ In a root terminal, or as sudo, execute the following command to fix the ownersh
 
 ::
 
-	find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;
+    find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;
 
 Shut down, and boot up **with your primary Tails USB** and verify *everything* is still there and accessible to you, including:
 
@@ -151,7 +151,7 @@ Shut down, and boot up **with your primary Tails USB** and verify *everything* i
 - PGP keys
 
 .. note:: If you are restoring a Secure Viewing Station Tails USB, you may skip to Step 7. 
-	However, if you're restoring an Admin or Journalist Tails USB, continue to Step 6.
+    However, if you're restoring an Admin or Journalist Tails USB, continue to Step 6.
 
 2. Reinstall SecureDrop
 -----------------------
@@ -167,7 +167,7 @@ Shut down your Tails USB on the airgapped station and move to the computer you n
 Boot up Tails once again with persistence and admin privileges.
 
 .. warning:: Copy ``~/Persistent/.securedrop/torrc_additions`` to a place like your desktop.
-	You'll need these old values for the following step.
+    You'll need these old values for the following step.
 
 Re-install Securedrop with ``cd ~/Persistent/securedrop/tails_files && sudo ./install.sh``. Once completed, test your access to the Document Interface, and, if you're a Secure Drop admin, test your ssh connection to the application and monitor servers.
 
