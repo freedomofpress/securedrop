@@ -69,6 +69,12 @@ Copy the all data from the TailsData partition onto the Backup Device **except**
 
 Ensure that all critical data has been successfully copied.  Specifically, be sure the the ``gnupg``, ``bookmarks``, and ``Persistent`` folders are completely copied.  Any loss of data from these folders could prevent users from accessing submissions.
 
+.. tip::
+    Create subdirectories for each USB drive (Admin, Journalist, and SVS) within the Backup Device.
+    Not only will doing so speed up the upgrade process, it will also provide you with long-term encrypted
+    backups of the USB devices. In the event of a lost or stolen drive, you can restore access via
+    this encryped backup device.
+
 Once data are correctly copied, unmount the TailsData partition.
 
 4. Upgrade a Tails USB
@@ -78,10 +84,28 @@ With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to 
 
 |Upgrade by cloning|
 
-The clone process will take a few minutes.
+The clone process will take a few minutes, and will display a message once it is complete. 
+If you see an error message about the device not being ready, try unplugging and remounting the Tails
+device you're trying to back up.
 
-5. Reformat the Backup Device
+Then move on to the next Tails device. If you have backed up all Tails devices, move on to the **Finishing up** section below.
+
+Finishing up
+============
+
+Verify all devices are working
+------------------------------
+
+Boot into each drive and confirm that persistent files are present. Consider submitting a test submission from the Admin Workstation, then downloading it on the Journalist Workstation, and finally decrypting it on the SVS.
+If you are able to decrypt the submission successfully, you have verified that all Tails devices are working properly.
+
+Consider retaining the encrypted backup drive for a disaster recovery device. Document the passphrase in the Admin Workstation KeePass database, and store the physical Backup Device in a locked safe or other secure location.
+
+
+Reformat the Backup Device
 -----------------------------
+
+If you do not have a secure location for storing the backups, or already have other backups, you should destroy the Backup Device. Follow the procedure below to destroy the device safely.
 
 First, write random data to the disk.  You can discover the path to your Backup Device by either running the ``fdisk -l`` command in terminal, or by observing the information listed in Tails' Disks application.  Once you know where your Backup Device is mounted, run
 
