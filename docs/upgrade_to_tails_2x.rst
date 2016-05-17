@@ -11,6 +11,7 @@ Newer versions of SecureDrop leverage improvements to the Tails OS since the int
 	#. A "master" Tails USB running the most recent version of Tails (at least v2.3).
 	#. A separate USB stick used to store encrypted backups of the old Tails sticks.
 	#. Your existing SecureDrop Tails USB sticks (Admin, Journalist, and Secure Viewing Station).
+	#. An airgapped machine to perform each Tails upgrade. (SVS reuse is OK.)
 
 1. Prepare the master Tails USB
 -------------------------------------
