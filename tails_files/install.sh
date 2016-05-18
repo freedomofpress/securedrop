@@ -14,7 +14,6 @@ tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
 securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
 network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
-securedrop_ssh_aliases=false
 
 
 function validate_tails_environment()
@@ -84,6 +83,28 @@ function set_directory_permissions()
   chmod 600 $securedrop_dotfiles/securedrop_icon.png
 }
 
+function configure_ssh_aliases()
+{
+  # Create SSH aliases for Admin Workstation so `ssh app` and `ssh mon` work
+  # as expected. Quite useful for interactive debugging, or harvesting logs.
+  # Don't clobber an existing SSH config file; only run if none exists.
+  if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
+    # Rather than try to parse the YAML vars file in Bash, let's prompt for username.
+    admin_ssh_username=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
+    cat > $securedrop_dotfiles/ssh_config <<EOL
+Host app
+  Hostname $APPSSH
+  User $admin_ssh_username
+Host mon
+  Hostname $MONSSH
+  User $admin_ssh_username
+EOL
+    chown amnesia:amnesia $securedrop_dotfiles/ssh_config
+    chmod 600 $securedrop_dotfiles/ssh_config
+    cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
+  fi
+}
+
 validate_tails_environment
 copy_securedrop_dotfiles
 
@@ -91,28 +112,16 @@ copy_securedrop_dotfiles
 
 set_directory_permissions
 
+
+
+
 if is_admin_workstation; then
   DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
   SOURCE=`cat $securedrop_ansible_base/app-source-ths`
   APPSSH=`cat $securedrop_ansible_base/app-ssh-aths | cut -d ' ' -f 2`
   MONSSH=`cat $securedrop_ansible_base/mon-ssh-aths | cut -d ' ' -f 2`
   echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $securedrop_ansible_base/app-ssh-aths $securedrop_ansible_base/mon-ssh-aths $securedrop_ansible_base/app-document-aths > $torrc_additions
-  if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
-    # create SSH host aliases and install them
-    SSHUSER=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
-    cat > $securedrop_dotfiles/ssh_config <<EOL
-Host app
-  Hostname $APPSSH
-  User $SSHUSER
-Host mon
-  Hostname $MONSSH
-  User $SSHUSER
-EOL
-    chown amnesia:amnesia $securedrop_dotfiles/ssh_config
-    chmod 600 $securedrop_dotfiles/ssh_config
-    cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
-    securedrop_ssh_aliases=true
-  fi
+
   # set ansible to auto-install
   if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
     echo "ansible" >> $tails_live_persistence/live-additional-software.conf
@@ -223,10 +232,9 @@ if is_admin_workstation; then
   echo $APPSSH
   echo "The Monitor Server's SSH hidden service address is:"
   echo $MONSSH
-  if $securedrop_ssh_aliases; then
-    echo ""
-    echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
-  fi
+  echo ""
+  # We're assuming the SSH aliases have been set up as long as ~/.ssh/config exists.
+  echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
 fi
 echo ""
 exit 0
