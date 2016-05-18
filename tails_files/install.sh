@@ -138,6 +138,26 @@ copy_securedrop_dotfiles
 
 set_directory_permissions
 
+function configure_ansible_apt_persistence()
+{
+  # set ansible to auto-install
+  if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
+    echo "ansible" >> $tails_live_persistence/live-additional-software.conf
+  fi
+}
+
+function update_ansible_inventory()
+{
+  # The local IPv4 addresses for the Application and Monitor servers are only
+  # used during initial provisioning. Thereafter the SSH connections must be
+  # made over Tor. Update the static inventory file so the Admin doesn't
+  # have to copy/paste the values.
+  if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
+    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
+    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
+  fi
+}
+
 
 function configure_torrc_additions()
 {
@@ -148,16 +168,6 @@ function configure_torrc_additions()
       $securedrop_ansible_base/app-ssh-aths \
       $securedrop_ansible_base/mon-ssh-aths \
       $securedrop_ansible_base/app-document-aths > $torrc_additions
-
-    # set ansible to auto-install
-    if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
-      echo "ansible" >> $tails_live_persistence/live-additional-software.conf
-    fi
-    # update ansible inventory with .onion hostnames
-    if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
-      sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
-      sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
-    fi
   else
     # On the Journalist Workstation, copy blank template for Tor additions.
     # It contains only a comment.
