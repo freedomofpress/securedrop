@@ -27,8 +27,11 @@ upgrades safely. By isolating the machine from all network access, you thereby
 reduce the threat of compromise by actors who wish to gain access to your
 SecureDrop instance.
 
+Upgrade each Tails device
+-------------------------
+
 1. Prepare the master Tails USB
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Because Tails 2.x is incompatible with older versions, you must create a new
 "master" Tails USB stick for subsequent installations and upgrades to the USB
@@ -41,7 +44,7 @@ perform the next steps. At the Tails Greeter screen, be sure to enable admin
 privileges.
 
 2. Prepare the Backup Device
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tip::
     While it's recommended to use a fresh USB stick for any backup operation,
@@ -79,7 +82,7 @@ Give your new partition a strong passphrase.
     completed.
 
 3. Backup a Tails USB
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 Insert the Tails USB (that you want to back up) into a free USB port.
 
@@ -125,7 +128,7 @@ from accessing submissions.
 Once data are correctly copied, unmount the TailsData partition.
 
 4. Upgrade a Tails USB
-------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to
 **Applications ▸ Tails ▸ Tails Installer** and select the **Upgrade by
@@ -141,10 +144,10 @@ Then move on to the next Tails device. If you have backed up all Tails devices,
 move on to the **Finishing up** section below.
 
 Finishing up
-============
+------------
 
 Verify all devices are working
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Boot into each drive and confirm that persistent files are present. Consider
 submitting a test submission from the Admin Workstation, then downloading it on
@@ -158,7 +161,7 @@ the physical Backup Device in a locked safe or other secure location.
 
 
 Reformat the Backup Device
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you do not have a secure location for storing the backups, or already have
 other backups, you should destroy the Backup Device. Follow the procedure below
@@ -180,7 +183,7 @@ device with a hammer until the chips containing its flash memory are broken up
 into pieces before disposal.
 
 Troubleshooting
-===============
+---------------
 
 The steps described above should cleanly update your Tails devices without
 issue. In the event that you are unable to access your persistent files on one
@@ -188,7 +191,7 @@ of the upgraded Tails devices, don't worry: you can still restore the original
 files from the Backup Device you created. (Isn't it great to have backups?)
 
 1. Restore data from a Backup Device
-------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the same airgapped machine, boot up the Tails USB stick you want to restore,
 with both persistence and admin privileges.
@@ -230,7 +233,7 @@ is still there and accessible to you, including:
     ``install.sh`` script when restoring an Admin or Journalist Workstation.
 
 2. Reinstall SecureDrop
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Continue checking your persistent files for the following critical assets:
 
