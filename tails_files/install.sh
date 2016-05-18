@@ -83,6 +83,31 @@ function set_directory_permissions()
   chmod 600 $securedrop_dotfiles/securedrop_icon.png
 }
 
+# Helper functions for retrieving the Tor Hidden Service URLs post-provisioning.
+# For Admin Workstation, these files will be fetched automatically. For
+# Journalist Workstation, must be copied manually.
+function lookup_app_ssh_aths_url()
+{
+  app_ssh_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-ssh-aths)"
+  echo "$app_ssh_aths"
+}
+function lookup_mon_ssh_aths_url()
+{
+  mon_ssh_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/mon-ssh-aths)"
+  echo "$mon_ssh_aths"
+}
+
+function lookup_document_aths_url()
+{
+  app_document_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  echo "$app_document_aths"
+}
+function lookup_app_source_ths_url()
+{
+  app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  echo "$app_source_ths"
+}
+
 function configure_ssh_aliases()
 {
   # Create SSH aliases for Admin Workstation so `ssh app` and `ssh mon` work
@@ -93,10 +118,10 @@ function configure_ssh_aliases()
     admin_ssh_username=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
     cat > $securedrop_dotfiles/ssh_config <<EOL
 Host app
-  Hostname $APPSSH
+  Hostname $(lookup_app_ssh_aths_url)
   User $admin_ssh_username
 Host mon
-  Hostname $MONSSH
+  Hostname $(lookup_mon_ssh_aths_url)
   User $admin_ssh_username
 EOL
     chown amnesia:amnesia $securedrop_dotfiles/ssh_config
@@ -104,6 +129,7 @@ EOL
     cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
   fi
 }
+
 
 validate_tails_environment
 copy_securedrop_dotfiles
