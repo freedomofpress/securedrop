@@ -40,12 +40,19 @@ function validate_tails_environment()
   fi
 }
 
-# detect whether admin or journalist
-if [ -f $securedrop_ansible_base/app-document-aths ]; then
-  ADMIN=true
-else
-  ADMIN=false
+function is_admin_workstation()
+{
+  # Detect whether the script is being run on Admin or Journalist Workstation.
+  # Under no circumstances should the Journalist Workstation have SSH info,
+  # so we'll assume that if the ATHS file for SSH info on the Application Server
+  # is present, we're running on the Admin Workstation, otherwise Journalist.
+  if [ -f $securedrop_ansible_base/app-ssh-aths ]; then
+    # In Bash, 0 equates to Boolean true and 1 to Boolean false.
+    return 0
+  else
+    return 1
 fi
+{
 
 function copy_securedrop_dotfiles()
 {
@@ -84,7 +91,7 @@ copy_securedrop_dotfiles
 
 set_directory_permissions
 
-if $ADMIN; then
+if is_admin_workstation; then
   DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
   SOURCE=`cat $securedrop_ansible_base/app-source-ths`
   APPSSH=`cat $securedrop_ansible_base/app-ssh-aths | cut -d ' ' -f 2`
@@ -122,7 +129,7 @@ fi
 
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
-if ! $ADMIN; then
+if ! is_admin_workstation; then
   REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
   while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];
   do
@@ -210,7 +217,7 @@ echo "You will see a notification appear in the top-right corner of your screen.
 echo ""
 echo "The Document Interface's Tor onion URL is: http://$DOCUMENT"
 echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
-if $ADMIN; then
+if is_admin_workstation; then
   echo ""
   echo "The App Server's SSH hidden service address is:"
   echo $APPSSH
