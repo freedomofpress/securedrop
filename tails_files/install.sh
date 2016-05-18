@@ -139,29 +139,32 @@ copy_securedrop_dotfiles
 set_directory_permissions
 
 
+function configure_torrc_additions()
+{
+  if is_admin_workstation; then
+    # Store all THS URLs in the torrc_additions file. The securedrop_init.py script
+    # will add these values to /etc/tor/torrc on boot via a NetworkManager hook.
+    cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
+      $securedrop_ansible_base/app-ssh-aths \
+      $securedrop_ansible_base/mon-ssh-aths \
+      $securedrop_ansible_base/app-document-aths > $torrc_additions
 
-
-if is_admin_workstation; then
-  DOCUMENT=`cat $securedrop_ansible_base/app-document-aths | cut -d ' ' -f 2`
-  SOURCE=`cat $securedrop_ansible_base/app-source-ths`
-  APPSSH=`cat $securedrop_ansible_base/app-ssh-aths | cut -d ' ' -f 2`
-  MONSSH=`cat $securedrop_ansible_base/mon-ssh-aths | cut -d ' ' -f 2`
-  echo "# HidServAuth lines for SecureDrop's authenticated hidden services" | cat - $securedrop_ansible_base/app-ssh-aths $securedrop_ansible_base/mon-ssh-aths $securedrop_ansible_base/app-document-aths > $torrc_additions
-
-  # set ansible to auto-install
-  if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
-    echo "ansible" >> $tails_live_persistence/live-additional-software.conf
+    # set ansible to auto-install
+    if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
+      echo "ansible" >> $tails_live_persistence/live-additional-software.conf
+    fi
+    # update ansible inventory with .onion hostnames
+    if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
+      sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
+      sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
+    fi
+  else
+    # On the Journalist Workstation, copy blank template for Tor additions.
+    # It contains only a comment.
+    cp -f torrc_additions $torrc_additions
   fi
-  # update ansible inventory with .onion hostnames
-  if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
-    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
-    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
-  fi
-else
-  # prepare torrc_additions (journalist)
-  cp -f torrc_additions $torrc_additions
-fi
 
+}
 # journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
 # to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
 if ! is_admin_workstation; then
