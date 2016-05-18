@@ -104,12 +104,14 @@ partition as mounted.
 Copy the all data from the TailsData partition onto the Backup Device
 **except**:
 
-- ``persistence.conf``: in older versions of Tails, this file might have
-slightly different directives in it that could temporarily brick a Tails 2.x
-USB.
-- ``claws-mail`` folder: Claws Mail is no longer included in Tails. The OS uses
-Icebird instead. Some users might not have this folder, so if you don't see it
-there, do not be alarmed.
+- ``persistence.conf``
+   In older versions of Tails, this file might have
+   slightly different directives in it that could temporarily brick a Tails 2.x
+   USB.
+- ``claws-mail``
+   Claws Mail is no longer included in Tails. The OS uses Icebird instead. Some
+   users might not have this folder, so if you don't see it there, do not be
+   alarmed.
 
 |Migrate Data 2|
 
