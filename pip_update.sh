@@ -2,35 +2,39 @@
 
 # Usage: ./pip_update.sh
 # Run periodically to keep Python requirements up-to-date
-
 set -e
-cd `dirname $0`/securedrop/requirements
 
-# This method is slow, because we have to:
-# 1. Download all of the packages listed in *requirements.txt
-# 2. Download any updated versions of these packages
-# Unfortunately, it is the only way I have been able to get `pip-dump` to work.
+REQUIREMENTS_DIR=$(pwd)/securedrop/requirements
 
-sudo apt-get install python-pip
+# Test if pip and virtualenv are available and install them if not
+if ! /usr/bin/dpkg-query --show --showformat='\r' 'python-pip'; then
+  sudo apt-get install python-pip
+fi
 
-# Create a temporary virtualenv for the SecureDrop Python packages
-#
-# If we `pip-review --auto` the global pip packages, we will also get
-# packages that are installed as part of Ubuntu/the Vagrant base
-# image, which are not SecureDrop dependencies.
+if ! pip show virtualenv>/dev/null; then
+  sudo apt-get install virtualenv
+fi
+
+# Create a temporary virtualenv for the SecureDrop Python packages in our
+# requirements directory
+cd $REQUIREMENTS_DIR
 VENV=review_env
-virtualenv $VENV
+virtualenv -p python2.7 $VENV
 source $VENV/bin/activate
 
-# Install the requirements from the current lists
-pip install -r securedrop-requirements.txt
-pip install -r test-requirements.txt
+# Install the most recent pip that pip-tools supports and the latest pip-tools
+# (must be done in order as the former is a dependency of the latter).
+pip install --upgrade pip==8.1.1
+pip install pip-tools
 
-# Auto-install updated packages
-pip-review --auto
-
-# Dump updated version numbers to *requirements.txt
-pip-dump
+# Compile new requirements (.txt) files from our top-level dependency (.in)
+# files. See http://nvie.com/posts/better-package-management/
+for r in "securedrop-requirements" "test-requirements"
+do
+  # Maybe pip-tools will get its act together and standardize their cert-pinning
+  # syntax and this line will break. One can only hope.
+  pip-compile -o $r".txt" $r".in"
+done
 
 # Remove the temporary virtualenv
 rm -r $VENV
