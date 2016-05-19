@@ -209,12 +209,6 @@ EOL
   fi
 }
 
-
-validate_tails_environment
-copy_securedrop_dotfiles
-set_directory_permissions
-
-
 function configure_ansible_apt_persistence()
 {
   # set ansible to auto-install
@@ -371,4 +365,25 @@ SD_COMPLETE_MSG2
   fi
 }
 
+function main()
+{
+  # Wrapper function for ordering all the helpers.
+  validate_tails_environment
+  cleanup_legacy_artifacts
+
+  copy_securedrop_dotfiles
+  set_directory_permissions
+
+  configure_ansible_apt_persistence
+  configure_ssh_aliases
+  update_ansible_inventory
+
+  configure_torrc_additions
+  create_desktop_shortcuts
+  configure_network_manager_hook
+
+  print_success_message
+}
+
+main
 exit 0
