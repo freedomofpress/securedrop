@@ -162,16 +162,27 @@ Finishing up
 Verify all devices are working
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Boot into each drive and confirm that persistent files are present. Consider
-submitting a test submission from the Admin Workstation, then downloading it on
-the Journalist Workstation, and finally decrypting it on the SVS.
+Boot into each newly upgraded Tails USB, enabling persistence. Confirm that the
+persistent files are present and that your workflow is unaffected.
+
+As a test, consider submitting a test submission, downloading it on the
+Journalist Workstation, and finally decrypting it on the SVS.
 If you are able to decrypt the submission successfully, you have verified that
-all Tails devices are working properly.
+the Journalist Workstation and SVS are working correctly after the upgrade.
 
-Consider retaining the encrypted backup drive for a disaster recovery device.
-Document the passphrase in the Admin Workstation KeePass database, and store
-the physical Backup Device in a locked safe or other secure location.
+To test the Admin Workstation, make sure you can still SSH into the servers:
 
+.. code:: sh
+
+    $ ssh <username>@<App IP address> hostname
+    app
+    $ ssh <username>@<Monitor IP address> hostname
+    mon
+
+.. tip:: Optionally, consider retaining the encrypted backup drive as a
+         disaster recovery device. Document the passphrase in the Admin
+         Workstation KeePass database, and store the physical Backup Device in a
+         locked safe or other secure location.
 
 Wipe the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~
