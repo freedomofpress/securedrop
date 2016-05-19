@@ -39,47 +39,58 @@ sticks already in-use by your organization.
 To create this brand-new master Tails, follow the same :doc:`directions for
 provisioning the first USB sticks <set_up_tails>` on another networked computer.
 
-You may now boot into the master Tails device from your airgapped computer to
-perform the next steps. At the Tails Greeter screen, be sure to enable admin
-privileges.
+Once you've created a new Tails 2.x USB, boot into it from your airgapped
+computer to perform the next steps. At the Tails Greeter screen, be sure to
+enable admin privileges.
 
 2. Prepare the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. tip::
-    While it's recommended to use a fresh USB stick for any backup operation,
-    to cut down on cost, clutter, and/or waste, you may also repurpose older USB
-    sticks to function as Backup Devices.
+.. tip:: While it's recommended to use a fresh USB stick for any backup operation,
+         to cut down on cost, clutter, and/or waste, you may also repurpose old USB
+         sticks to function as Backup Devices. *Note that this process will
+         permanently erase any data stored on the Backup Device.*
 
 After logging into the master Tails device, open the Disks Utility by
-navigating to **Applications ▸ Utilities ▸ Disks**.
+navigating to **Applications ▸ Utilities ▸ Disks**. Insert the Backup Device
+into a USB port. It will appear in the list of disks in the left column. Select
+it.
 
-Insert your Backup Device into a USB port and select it from the left column.
-Brand new devices sometimes have pre-configured partitions, which you will need
-to remove. Select any block of partitioned data, and click the minus (``-``)
-button to remove any unwanted partitions.
+|Selected Backup Device|
 
-|Unwanted Bloatware Partition|
+Click the button with the interlocking gears icon and choose **Format...**.
 
-Click the plus (``+``) button to register a new partition to cover the entire
-available space. This should automatically be filled out for you in the wizard.
+|Format...|
 
-Be sure to do a full wipe of the existing data during this step, especially if
-you choose to repurpose an older USB stick. Select **Overwrite existing data
-with zeroes (Slow)** from the **Erase** options. This does mean that the
-reformatting step will take some extra time, but it is the best way to insure
-that previous data from older transfers, or manufacturer bloatware, are removed
-from the Backup Device.
-
-Give your new partition a strong passphrase.
-
-|Create Partition|
+Fill out the **Format Volume** settings as shown in the screenshot below.
+There's no need to overwrite existing data, and doing so can take a long time.
+You should use a strong passphrase to encrypt the drive.
 
 .. tip:: If you plan on using this USB stick as a permanent backup, you will be
     responsible for retaining this passphrase for the long-haul. If you only want
     to use this USB as an intermediary backup, and plan on discarding the data
     after a successful migration, you may discard the passphrase once all steps are
     completed.
+
+|Format Settings|
+
+Click **Format...**. A dialog box will ask: "Are you sure you want to format the
+volume?". Click **Format**.
+
+While the drive is being formatted, you will see a spinning progress indicator
+next to the drive's name in the left column. Wait until it is done. When it is
+done, you will see the partition layout has two nested partitions (LUKS and
+ext4), like this:
+
+|Formatted|
+
+You're ready to start backing up your current Tails USBs.
+
+.. |Selected Backup Device| image:: images/upgrade_to_tails_2x/ready_to_format.png
+.. |Format...| image:: images/upgrade_to_tails_2x/format.png
+.. |Format Settings| image:: images/upgrade_to_tails_2x/format_settings.png
+.. |Formatted| image:: images/upgrade_to_tails_2x/formatted.png
+
 
 3. Backup a Tails USB
 ~~~~~~~~~~~~~~~~~~~~~
