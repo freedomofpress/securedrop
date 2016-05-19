@@ -14,11 +14,13 @@ tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
 securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
 network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
+
 # The ATHS info for the Journalist Workstation will need to be reused
 # across multiple functions. During initial provisioning, we may need
 # to prompt for the info, so we'll store the value in a global var
 # so it can be reused without reprompting.
-journalist_document_aths_info=''
+document_aths_info_global=''
+source_ths_url_global=''
 
 function validate_tails_environment()
 {
@@ -121,16 +123,16 @@ function lookup_document_aths_url()
     app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
-    app_document_aths="$(get_document_aths_info | awk '{ print $2 }')"
+    app_document_aths="$(prompt_for_document_aths_info | awk '{ print $2 }')"
   fi
   echo "$app_document_aths"
 }
 
-function get_document_aths_info()
+function prompt_for_document_aths_info()
 {
   # Ad-hoc memoization via a global variable. If we've already prompted for
   # the ATHS info here, the global will be populated. Otherwise, we'll store it.
-  if [ -z $journalist_document_aths_info ] ; then
+  if [ -z $document_aths_info_global ] ; then
     # During initial provisioning of the Journalist Workstation, the ATHS file
     # for the Document Interface may not be present. If not, prompt for the info.
     aths_regex="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
@@ -144,19 +146,49 @@ function get_document_aths_info()
     done
   # The global var is populated, so use it for the function var.
   else
-    document_aths_info="$journalist_document_aths_info"
+    document_aths_info="$document_aths_info_global"
   fi
   echo "$document_aths_info"
 }
 
-  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
-  SOURCE="${SRC#http://}"
-  DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
-
-function lookup_app_source_ths_url()
+function lookup_source_ths_url()
 {
-  app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  # First look for the flat file containing the exact value we want.
+  # The Admin Workstation will certainly have this file, and the Journalist
+  # Workstation probably, but not definitely.
+  if [ -f $securedrop_ansible_base/app-source-ths ] ; then
+    app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-source-ths)"
+  # Failing that, check for the public THS URL in an existing Desktop icon.
+  elif [ -e $amnesia_home/Desktop/source.desktop ] ; then
+    app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
+  # Couldn't find it anywhere. We'll have to prompt!
+  else
+    app_source_ths="$(prompt_for_source_ths_url)"
+  fi
   echo "$app_source_ths"
+}
+
+function prompt_for_source_ths_url()
+{
+  # Ad-hoc memoization via a global variable. If we've already prompted for
+  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
+  if [ -z $source_ths_url_global ] ; then
+    # During initial provisioning of the Journalist Workstation, the THS file
+    # for the Source Interface may not be present. If not, prompt for the info.
+    ths_regex="^[a-z2-7]{16}\.onion"
+    # Loop while reading the input from a dialog box.
+    while [[ ! "$document_aths_info" =~ $ths_regex ]]; do
+      ths_url="$(zenity --entry \
+        --title='Hidden service authentication setup' \
+        --width=600 \
+        --window-icon=$securedrop_dotfiles/securedrop_icon.png \
+        --text='Enter the Source Interface Onion URL:')"
+    done
+  # The global var is populated, so use it for the function var.
+  else
+    ths_url="$source_ths_url_global"
+  fi
+  echo "$ths_url"
 }
 
 function configure_ssh_aliases()
@@ -207,7 +239,6 @@ function update_ansible_inventory()
   fi
 }
 
-
 function configure_torrc_additions()
 {
   if is_admin_workstation; then
@@ -222,28 +253,31 @@ function configure_torrc_additions()
     # Journalist Workstation, to avoid prompting Journalists unnecessarily on
     # subsequent runs of this script (to clean up legacy changes).
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
-      <(get_document_aths_info) > $torrc_additions
+      <(prompt_for_document_aths_info) > $torrc_additions
   fi
 
 }
 
-# make the shortcuts
-echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $securedrop_dotfiles/document.desktop
-echo "Exec=/usr/local/bin/tor-browser $SOURCE" >> $securedrop_dotfiles/source.desktop
+function create_desktop_shortcuts()
+{
+  # make the shortcuts
+  echo "Exec=/usr/local/bin/tor-browser $(lookup_document_aths_url)" >> $securedrop_dotfiles/document.desktop
+  echo "Exec=/usr/local/bin/tor-browser $(lookup_source_ths_url)" >> $securedrop_dotfiles/source.desktop
 
-# copy launchers to desktop and Applications menu
-cp -f $securedrop_dotfiles/document.desktop $amnesia_desktop
-cp -f $securedrop_dotfiles/source.desktop $amnesia_desktop
-cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
-cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
+   # copy launchers to desktop and Applications menu
+  cp -f $securedrop_dotfiles/document.desktop $amnesia_desktop
+  cp -f $securedrop_dotfiles/source.desktop $amnesia_desktop
+  cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
+  cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
 
-# make it all persistent
-sudo -u amnesia mkdir -p $tails_live_dotfiles/Desktop
-sudo -u amnesia mkdir -p $tails_live_dotfiles/.local/share/applications
-cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/Desktop
-cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/Desktop
-cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/.local/share/applications
-cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/.local/share/applications
+  # make it all persistent
+  sudo -u amnesia mkdir -p $tails_live_dotfiles/Desktop
+  sudo -u amnesia mkdir -p $tails_live_dotfiles/.local/share/applications
+  cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/Desktop
+  cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/Desktop
+  cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/.local/share/applications
+  cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/.local/share/applications
+}
 
 # set ownership and permissions
 chown amnesia:amnesia $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
