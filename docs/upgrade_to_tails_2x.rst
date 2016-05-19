@@ -173,27 +173,41 @@ Document the passphrase in the Admin Workstation KeePass database, and store
 the physical Backup Device in a locked safe or other secure location.
 
 
-Reformat the Backup Device
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wipe the Backup Device
+~~~~~~~~~~~~~~~~~~~~~~
 
 If you do not have a secure location for storing the backups, or already have
-other backups, you should destroy the Backup Device. Follow the procedure below
-to destroy the device safely.
+other backups, you should wipe the Backup Device. There is a lot of debate over
+the best way to do this, but we think it's sufficient to simply overwrite it
+with random data a couple of times. Since the Backup Device is encrypted with
+LUKS, which employs a number of anti-forensic-recovery techniques, this should
+be enough to prevent forensic recovery.
 
-First, write random data to the disk.  You can discover the path to your Backup
-Device by either running the ``fdisk -l`` command in terminal, or by observing
-the information listed in Tails' Disks application.  Once you know where your
-Backup Device is mounted, run ::
+First, find the path to the Backup Device. You can find the path with the
+**Disks** application, selecting the drive in the left column, and looking at
+the **Device** entry. It is usually a string that starts with ``/dev/sd``.
 
-    dd if=/dev/urandom of=/dev/sdX
+.. warning:: Make sure you use the correct path for the Backup Device in the
+             next command! Otherwise, you run the risk of irreversibly wiping a
+             different drive on the system, such as the Tails USB you are
+             running.
 
-Repeat this step at least twice.
+To overwrite the Backup Device, open a **Terminal** and run:
 
-Next, repeat step 2 to restore a USB stick to a pristine state. While it
-probably isn't necessary to physically destroy a Backup Device (because
-LUKS-encrypted data is very hard to forensically recover), you could smash the
-device with a hammer until the chips containing its flash memory are broken up
-into pieces before disposal.
+.. code:: sh
+
+    dd if=/dev/urandom of=<path to Backup Device>
+
+Re-run this command at least twice. Each run will take a while.
+
+If you want to reuse the drive for another purpose, use the **Disks** utility to
+reformat it appropriately.
+
+.. note:: While it probably isn't necessary to physically destroy a Backup
+          Device (because it's encrypted, and LUKS is designed to thwart
+          forensic recovery), if you're *really* paranoid you can additionally
+          smash the device with a hammer until the chips containing its flash
+          memory are broken up, then dispose of the pieces in the garbage.
 
 Troubleshooting
 ---------------
