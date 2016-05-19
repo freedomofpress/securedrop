@@ -351,22 +351,24 @@ function configure_network_manager_hook()
   /usr/bin/python $securedrop_dotfiles/securedrop_init.py
 }
 
-# finished
-echo ""
-echo "Successfully configured Tor and set up desktop bookmarks for SecureDrop!"
-echo "You will see a notification appear in the top-right corner of your screen."
-echo ""
-echo "The Document Interface's Tor onion URL is: http://$DOCUMENT"
-echo "The Source Interfaces's Tor onion URL is: http://$SOURCE"
-if is_admin_workstation; then
-  echo ""
-  echo "The App Server's SSH hidden service address is:"
-  echo $APPSSH
-  echo "The Monitor Server's SSH hidden service address is:"
-  echo $MONSSH
-  echo ""
+function print_success_message()
+{
+  cat <<SD_COMPLETE_MSG1
+Successfully configured Tor and set up desktop bookmarks for SecureDrop!
+You will see a notification appear on your screen when Tor is ready.
+
+The Document Interface's Tor onion URL is: http://$(lookup_document_aths_url)
+The Source Interfaces's Tor onion URL is: http://$(lookup_source_ths_url)
+SD_COMPLETE_MSG1
+
   # We're assuming the SSH aliases have been set up as long as ~/.ssh/config exists.
-  echo "SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'"
-fi
-echo ""
+  if is_admin_workstation; then
+    cat <<SD_COMPLETE_MSG2
+The App Server's SSH hidden service address is: $(lookup_app_ssh_aths_url)
+The Monitor Server's SSH hidden service address is: $(lookup_mon_ssh_aths_url)
+SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'.
+SD_COMPLETE_MSG2
+  fi
+}
+
 exit 0
