@@ -57,7 +57,48 @@ function is_admin_workstation()
   else
     return 1
 fi
+}
+
+function cleanup_legacy_artifacts()
 {
+  # Catch-all function for handling backwards-compatibility. If tasks change
+  # between versions of SecureDrop and require this script to be rerun, place
+  # "cleanup" tasks here.
+
+  # Remove xsessionrc from 0.3.2 if present
+  persistent_xsessionrc_file="${tails_live_persistence}/dotfiles/.xsessionrc"
+  if [ -f $persistent_xsessionrc_file ]; then
+    rm -f $persistent_xsessionrc_file > /dev/null 2>&1
+    # Repair the torrc backup, which was probably busted due to the
+    # race condition between .xsessionrc and
+    # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
+    # Tor after this script is run.
+    #
+    # If the Sandbox directive is on in the torrc (now that the dust
+    # has settled from any race condition shenanigans), *and* there is
+    # no Sandbox directive already present in the backup of the
+    # original, "unmodified-by-SecureDrop" copy of the torrc used by
+    # securedrop_init, then port that Sandbox directive over to avoid
+    # breaking Tor by changing the Sandbox directive while it's
+    # running.
+    if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
+      echo "Sandbox 1" >> /etc/tor/torrc.bak
+    fi
+  fi
+
+  # Remove previous NetworkManager hook if present. In 0.3.6 the prefix
+  # was "99-", which caused it to run too late. In 0.3.5 the prefix was "70-"
+  # and should also be removed for backwards-compatibility.
+  for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
+    for f in 70-tor-reload.sh 99-tor-reload.sh ; do
+      rm -f "${d}/${f}" > /dev/null 2>&1
+    done
+  done
+
+  # Remove binary setuid wrapper from previous tails_files installation, if it exists.
+  rm -f "${securedrop_dotfiles}/securedrop_init" 2>&1
+}
+
 
 function copy_securedrop_dotfiles()
 {
@@ -88,14 +129,60 @@ function set_permissions_on_securedrop_dotfiles()
   chmod 600 "${securedrop_dotfiles}/securedrop_icon.png"
 }
 
-# Helper functions for retrieving the Tor Hidden Service URLs post-provisioning.
-# For Admin Workstation, these files will be fetched automatically. For
-# Journalist Workstation, must be copied manually.
+function prompt_for_document_aths_info()
+{
+  # Ad-hoc memoization via a global variable. If we've already prompted for
+  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
+  if [ -z $document_aths_info_global ] ; then
+    # During initial provisioning of the Journalist Workstation, the ATHS file
+    # for the Document Interface may not be present. If not, prompt for the info.
+    aths_regex="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
+    # Loop while reading the input from a dialog box.
+    while [[ ! "$document_aths_info" =~ $aths_regex ]]; do
+      document_aths_info="$(zenity --entry \
+        --title='Hidden service authentication setup' \
+        --width=600 \
+        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
+        --text='Enter the HidServAuth value to be added to /etc/tor/torrc:')"
+    done
+  # The global var is populated, so use it for the function var.
+  else
+    document_aths_info="$document_aths_info_global"
+  fi
+  echo "$document_aths_info"
+}
+
+function prompt_for_source_ths_url()
+{
+  # Interactively prompt for the Source Interface Onion URL.
+  # During initial provisioning of the Journalist Workstation, the THS file
+  # for the Source Interface may not be present. If not, prompt for the info.
+
+  # Ad-hoc memoization via a global variable. If we've already prompted for
+  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
+  if [ -z $source_ths_url_global ] ; then
+    ths_regex="^[a-z2-7]{16}\.onion"
+    # Loop while reading the input from a dialog box.
+    while [[ ! "$document_aths_info" =~ $ths_regex ]]; do
+      ths_url="$(zenity --entry \
+        --title='Hidden service authentication setup' \
+        --width=600 \
+        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
+        --text='Enter the Source Interface Onion URL:')"
+    done
+  # The global var is populated, so use it for the function var.
+  else
+    ths_url="$source_ths_url_global"
+  fi
+  echo "$ths_url"
+}
+
 function lookup_app_ssh_aths_url()
 {
   app_ssh_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-ssh-aths)"
   echo "$app_ssh_aths"
 }
+
 function lookup_mon_ssh_aths_url()
 {
   mon_ssh_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/mon-ssh-aths)"
@@ -126,29 +213,6 @@ function lookup_document_aths_url()
   echo "$app_document_aths"
 }
 
-function prompt_for_document_aths_info()
-{
-  # Ad-hoc memoization via a global variable. If we've already prompted for
-  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
-  if [ -z $document_aths_info_global ] ; then
-    # During initial provisioning of the Journalist Workstation, the ATHS file
-    # for the Document Interface may not be present. If not, prompt for the info.
-    aths_regex="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
-    # Loop while reading the input from a dialog box.
-    while [[ ! "$document_aths_info" =~ $aths_regex ]]; do
-      document_aths_info="$(zenity --entry \
-        --title='Hidden service authentication setup' \
-        --width=600 \
-        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
-        --text='Enter the HidServAuth value to be added to /etc/tor/torrc:')"
-    done
-  # The global var is populated, so use it for the function var.
-  else
-    document_aths_info="$document_aths_info_global"
-  fi
-  echo "$document_aths_info"
-}
-
 function lookup_source_ths_url()
 {
   # Find the Onion URL to the Source Interface. First look for the flat file
@@ -164,31 +228,6 @@ function lookup_source_ths_url()
     app_source_ths="$(prompt_for_source_ths_url)"
   fi
   echo "$app_source_ths"
-}
-
-function prompt_for_source_ths_url()
-{
-  # Interactively prompt for the Source Interface Onion URL.
-  # During initial provisioning of the Journalist Workstation, the THS file
-  # for the Source Interface may not be present. If not, prompt for the info.
-
-  # Ad-hoc memoization via a global variable. If we've already prompted for
-  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
-  if [ -z $source_ths_url_global ] ; then
-    ths_regex="^[a-z2-7]{16}\.onion"
-    # Loop while reading the input from a dialog box.
-    while [[ ! "$document_aths_info" =~ $ths_regex ]]; do
-      ths_url="$(zenity --entry \
-        --title='Hidden service authentication setup' \
-        --width=600 \
-        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
-        --text='Enter the Source Interface Onion URL:')"
-    done
-  # The global var is populated, so use it for the function var.
-  else
-    ths_url="$source_ths_url_global"
-  fi
-  echo "$ths_url"
 }
 
 function configure_ssh_aliases()
@@ -305,45 +344,6 @@ function set_permissions_on_desktop_shortcuts()
     "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
     "${tails_live_dotfiles}/Desktop/document.desktop" \
     "${tails_live_dotfiles}/Desktop/source.desktop"
-}
-
-function cleanup_legacy_artifacts() {
-  # Catch-all function for handling backwards-compatibility. If tasks change
-  # between versions of SecureDrop and require this script to be rerun, place
-  # "cleanup" tasks here.
-
-  # Remove xsessionrc from 0.3.2 if present
-  persistent_xsessionrc_file="${tails_live_persistence}/dotfiles/.xsessionrc"
-  if [ -f $persistent_xsessionrc_file ]; then
-    rm -f $persistent_xsessionrc_file > /dev/null 2>&1
-    # Repair the torrc backup, which was probably busted due to the
-    # race condition between .xsessionrc and
-    # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
-    # Tor after this script is run.
-    #
-    # If the Sandbox directive is on in the torrc (now that the dust
-    # has settled from any race condition shenanigans), *and* there is
-    # no Sandbox directive already present in the backup of the
-    # original, "unmodified-by-SecureDrop" copy of the torrc used by
-    # securedrop_init, then port that Sandbox directive over to avoid
-    # breaking Tor by changing the Sandbox directive while it's
-    # running.
-    if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
-      echo "Sandbox 1" >> /etc/tor/torrc.bak
-    fi
-  fi
-
-  # Remove previous NetworkManager hook if present. In 0.3.6 the prefix
-  # was "99-", which caused it to run too late. In 0.3.5 the prefix was "70-"
-  # and should also be removed for backwards-compatibility.
-  for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
-    for f in 70-tor-reload.sh 99-tor-reload.sh ; do
-      rm -f "${d}/${f}" > /dev/null 2>&1
-    done
-  done
-
-  # Remove binary setuid wrapper from previous tails_files installation, if it exists.
-  rm -f "${securedrop_dotfiles}/securedrop_init" 2>&1
 }
 
 function configure_network_manager_hook()
