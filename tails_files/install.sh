@@ -99,7 +99,26 @@ function lookup_mon_ssh_aths_url()
 
 function lookup_document_aths_url()
 {
-  app_document_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  # First look for the flat file containing the exact value we want.
+  # The Admin Workstation will certainly have this file, and the Journalist
+  # Workstation probably, but not definitely.
+  if [ -f $securedrop_ansible_base/app-document-aths ] ; then
+    app_document_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  # Failing that, check for ATHS info in the existing Tor config. A previously
+  # configured Journalist Workstation will already have the value in torrc.
+  # Since we know we're in a Journalist Workstation, assume there's only one
+  # ATHS value in the torrc, and use the first.
+  elif [ grep '^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ] ; then
+    app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
+  # Last shot before prompting: check for an existing desktop icon specifically
+  # for the Document Interface. If found, we can extract the URL from there.
+  elif [ -e $amnesia_home/Desktop/document.desktop ] ; then
+    app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
+  # Couldn't find it anywhere. We'll have to prompt!
+  else
+
+
+  fi
   echo "$app_document_aths"
 }
 function lookup_app_source_ths_url()
