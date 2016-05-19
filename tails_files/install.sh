@@ -74,8 +74,11 @@ function copy_securedrop_dotfiles()
 
 }
 
-function set_directory_permissions()
+function set_permissions_on_securedrop_dotfiles()
 {
+  # Follow up function to enforce correct permissions and ownership
+  # on SecureDrop dotfiles in the staging directly. Separated
+  # into function to aid readability.
   chown root:root $securedrop_init_script
   chmod 700 $securedrop_init_script
   chown root:root $torrc_additions
@@ -278,26 +281,31 @@ function create_desktop_shortcuts()
   cp -f "${securedrop_dotfiles}/source.desktop" "${tails_live_dotfiles}/.local/share/applications"
 }
 
-# set ownership and permissions
-chown amnesia:amnesia \
-  "${amnesia_desktop}/document.desktop" \
-  "${amnesia_desktop}/source.desktop" \
-  "${amnesia_home}/.local/share/applications/document.desktop" \
-  "${amnesia_home}/.local/share/applications/source.desktop" \
-  "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
-  "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
-  "${tails_live_dotfiles}/Desktop/document.desktop" \
-  "${tails_live_dotfiles}/Desktop/source.desktop"
+function set_permissions_on_desktop_shortcuts()
+{
+  # Follow up function to enforce correct permissions and ownership
+  # on desktop shortcuts for Document and Source Interfaces. Separated
+  # into function to aid readability.
+  chown amnesia:amnesia \
+    "${amnesia_desktop}/document.desktop" \
+    "${amnesia_desktop}/source.desktop" \
+    "${amnesia_home}/.local/share/applications/document.desktop" \
+    "${amnesia_home}/.local/share/applications/source.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
+    "${tails_live_dotfiles}/Desktop/document.desktop" \
+    "${tails_live_dotfiles}/Desktop/source.desktop"
 
-chmod 700 \
-  "${amnesia_desktop}/document.desktop" \
-  "${amnesia_desktop}/source.desktop" \
-  "${amnesia_home}/.local/share/applications/document.desktop" \
-  "${amnesia_home}/.local/share/applications/source.desktop" \
-  "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
-  "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
-  "${tails_live_dotfiles}/Desktop/document.desktop" \
-  "${tails_live_dotfiles}/Desktop/source.desktop"
+  chmod 700 \
+    "${amnesia_desktop}/document.desktop" \
+    "${amnesia_desktop}/source.desktop" \
+    "${amnesia_home}/.local/share/applications/document.desktop" \
+    "${amnesia_home}/.local/share/applications/source.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
+    "${tails_live_dotfiles}/Desktop/document.desktop" \
+    "${tails_live_dotfiles}/Desktop/source.desktop"
+}
 
 function cleanup_legacy_artifacts() {
   # Catch-all function for handling backwards-compatibility. If tasks change
@@ -392,7 +400,7 @@ function main()
   cleanup_legacy_artifacts
 
   copy_securedrop_dotfiles
-  set_directory_permissions
+  set_permissions_on_securedrop_dotfiles
 
   if is_admin_workstation; then
     configure_ansible_apt_persistence
@@ -402,6 +410,7 @@ function main()
 
   configure_torrc_additions
   create_desktop_shortcuts
+  set_permissions_on_desktop_shortcuts
   configure_network_manager_hook
 
   print_success_message
