@@ -151,6 +151,10 @@ from accessing submissions.
 
 Once data are correctly copied, unmount the TailsData partition.
 
+.. |Root Terminal| image:: images/upgrade_to_tails_2x/root_terminal.png
+.. |Migrate Data 1| image:: images/upgrade_to_tails_2x/migrate_data_1.png
+.. |Migrate Data 2| image:: images/upgrade_to_tails_2x/migrate_data_2.png
+
 4. Upgrade a Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -160,12 +164,21 @@ cloning** option.
 
 |Upgrade by cloning|
 
-The clone process will take a few minutes, and will display a message once it
-is complete. If you see an error message about the device not being ready, try unplugging
-and remounting the Tails device you're trying to back up.
+Select the Tails 1.x USB that you wish to upgrade from the drop-down menu
+labeled **Target Device**. If it is the only other USB plugged in to the
+computer, it should be automatically selected.
 
-Then move on to the next Tails device. If you have backed up all Tails devices,
-move on to the **Finishing up** section below.
+|Select Target Device|
+
+The clone process will take a few minutes, and will display a message once it is
+complete. If you see an error message about the device not being ready, try
+unplugging and remounting the Tails device you're trying to upgrade.
+
+When you're done, move on to the next Tails device. Once you have backed up all
+Tails devices, move on to the **Finishing up** section below.
+
+.. |Upgrade by cloning| image:: images/upgrade_to_tails_2x/upgrade_by_cloning.png
+.. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
 
 Finishing up
 ------------
@@ -251,14 +264,18 @@ prompted to enter its passphrase.
 
 Open a Nautilus window with admin priviledges by navigating to **Applications
 ▸ System Tools ▸ Root Terminal**. At the terminal prompt, simply type
-`nautilus`.
+`nautilus` and hit Enter.
 
-Type ``ctrl`` + ``l`` and navigate to `/live/persistence/TailsData_unlocked`.
+Type ``ctrl`` + ``l``, type `/live/persistence/TailsData_unlocked`, and hit
+Enter to navigate there.
 
 |Navigate to TailsData_unlocked|
 
-Open a new tab (``ctrl`` + ``t``) and navigate to your Backup Device. Drag and
-drop the backup data from your Backup Device onto the TailsData_unlocked tab.
+|TailsData_unlocked|
+
+Open a new tab in Nautilus (``ctrl`` + ``t``) and navigate to your Backup
+Device. Drag and drop the backup data from your Backup Device onto the
+TailsData_unlocked tab.
 
 When copying a folder, select the **Apply this action to all files** option and
 click **Merge** to apply to all subfolders. Then you might have to select again
@@ -281,6 +298,9 @@ is still there and accessible to you, including:
     **Reinstall SecureDrop** step below. It is only necessary to rerun the
     ``tails_files/install.sh`` script when restoring an Admin or Journalist
     Workstation.
+
+.. |Navigate to TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_1.png
+.. |TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_2.png
 
 2. Reinstall the SecureDrop Tails Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -309,10 +329,3 @@ Re-install the Securedrop Tails configuration with ``cd
 your access to the Document Interface, and, if you're a Secure Drop admin, test
 your ssh connection to the application and monitor servers.
 
-.. |Migrate Data 1| image:: images/backup_and_migrate/migrate_data_2.png
-.. |Migrate Data 2| image:: images/backup_and_migrate/migrate_data_1.png
-.. |Create Partition| image:: images/backup_and_migrate/partition_create_3.png
-.. |Unwanted Bloatware Partition| image:: images/backup_and_migrate/partition_create_7.png
-.. |Root Terminal| image:: images/backup_and_migrate/root_terminal_3.png
-.. |Navigate to TailsData_unlocked| image:: images/backup_and_migrate/tails_data_unlocked_2.png
-.. |Upgrade by cloning| image:: images/backup_and_migrate/tails_installer_2.png
