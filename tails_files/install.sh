@@ -4,16 +4,16 @@
 set -e
 
 # set paths and variables
-amnesia_home=/home/amnesia
-amnesia_persistent=$amnesia_home/Persistent
-securedrop_dotfiles=$amnesia_persistent/.securedrop
-torrc_additions=$securedrop_dotfiles/torrc_additions
-securedrop_init_script=$securedrop_dotfiles/securedrop_init.py
-tails_live_persistence=/live/persistence/TailsData_unlocked
-tails_live_dotfiles=$tails_live_persistence/dotfiles
-amnesia_desktop=$amnesia_home/Desktop
-securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
-network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
+amnesia_home="/home/amnesia"
+amnesia_desktop="${amnesia_home}/Desktop"
+amnesia_persistent="${amnesia_home}/Persistent"
+network_manager_dispatcher="/etc/NetworkManager/dispatcher.d"
+securedrop_dotfiles="${amnesia_persistent}/.securedrop"
+securedrop_ansible_base="${amnesia_persistent}/securedrop/install_files/ansible-base"
+securedrop_init_script="${securedrop_dotfiles}/securedrop_init.py"
+tails_live_persistence="/live/persistence/TailsData_unlocked"
+tails_live_dotfiles="${tails_live_persistence}/dotfiles"
+torrc_additions="${securedrop_dotfiles}/torrc_additions"
 
 # The ATHS info for the Journalist Workstation will need to be reused
 # across multiple functions. During initial provisioning, we may need
@@ -61,27 +61,28 @@ fi
 
 function copy_securedrop_dotfiles()
 {
-  mkdir -p $securedrop_dotfiles
+  mkdir -p "$securedrop_dotfiles"
 
   # copy icon, launchers and scripts
   cp -f securedrop_icon.png $securedrop_dotfiles
   cp -f document.desktop $securedrop_dotfiles
   cp -f source.desktop $securedrop_dotfiles
   cp -f securedrop_init.py $securedrop_init_script
+
+  # set permissions
+  chmod 755 $securedrop_dotfiles
+
 }
 
 function set_directory_permissions()
 {
-  # set permissions
-  chmod 755 $securedrop_dotfiles
-
   chown root:root $securedrop_init_script
   chmod 700 $securedrop_init_script
   chown root:root $torrc_additions
   chmod 400 $torrc_additions
 
-  chown amnesia:amnesia $securedrop_dotfiles/securedrop_icon.png
-  chmod 600 $securedrop_dotfiles/securedrop_icon.png
+  chown amnesia:amnesia "${securedrop_dotfiles}/securedrop_icon.png"
+  chmod 600 "${securedrop_dotfiles}/securedrop_icon.png"
 }
 
 # Helper functions for retrieving the Tor Hidden Service URLs post-provisioning.
@@ -89,12 +90,12 @@ function set_directory_permissions()
 # Journalist Workstation, must be copied manually.
 function lookup_app_ssh_aths_url()
 {
-  app_ssh_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-ssh-aths)"
+  app_ssh_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-ssh-aths)"
   echo "$app_ssh_aths"
 }
 function lookup_mon_ssh_aths_url()
 {
-  mon_ssh_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/mon-ssh-aths)"
+  mon_ssh_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/mon-ssh-aths)"
   echo "$mon_ssh_aths"
 }
 
@@ -103,8 +104,8 @@ function lookup_document_aths_url()
   # First look for the flat file containing the exact value we want.
   # The Admin Workstation will certainly have this file, and the Journalist
   # Workstation probably, but not definitely.
-  if [ -f $securedrop_ansible_base/app-document-aths ] ; then
-    app_document_aths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
+  if [ -f "${securedrop_ansible_base}/app-document-aths" ] ; then
+    app_document_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-document-aths)"
   # Failing that, check for ATHS info in the existing Tor config. A previously
   # configured Journalist Workstation will already have the value in torrc.
   # Since we know we're in a Journalist Workstation, assume there's only one
@@ -113,7 +114,7 @@ function lookup_document_aths_url()
     app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
   # Last shot before prompting: check for an existing desktop icon specifically
   # for the Document Interface. If found, we can extract the URL from there.
-  elif [ -e $amnesia_desktop/document.desktop ] ; then
+  elif [ -e "${amnesia_desktop}/document.desktop" ] ; then
     app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
@@ -135,7 +136,7 @@ function prompt_for_document_aths_info()
       document_aths_info="$(zenity --entry \
         --title='Hidden service authentication setup' \
         --width=600 \
-        --window-icon=$securedrop_dotfiles/securedrop_icon.png \
+        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
         --text='Enter the HidServAuth value to be added to /etc/tor/torrc:')"
     done
   # The global var is populated, so use it for the function var.
@@ -150,10 +151,10 @@ function lookup_source_ths_url()
   # Find the Onion URL to the Source Interface. First look for the flat file
   # containing the exact value we want. The Admin Workstation will certainly
   # have this file, and the Journalist Workstation probably, but not definitely.
-  if [ -f $securedrop_ansible_base/app-source-ths ] ; then
-    app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-source-ths)"
+  if [ -f "${securedrop_ansible_base}/app-source-ths" ] ; then
+    app_source_ths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-source-ths)"
   # Failing that, check for the public THS URL in an existing Desktop icon.
-  elif [ -e $amnesia_desktop/source.desktop ] ; then
+  elif [ -e "${amnesia_desktop}/source.desktop" ] ; then
     app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
@@ -177,7 +178,7 @@ function prompt_for_source_ths_url()
       ths_url="$(zenity --entry \
         --title='Hidden service authentication setup' \
         --width=600 \
-        --window-icon=$securedrop_dotfiles/securedrop_icon.png \
+        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
         --text='Enter the Source Interface Onion URL:')"
     done
   # The global var is populated, so use it for the function var.
@@ -192,10 +193,13 @@ function configure_ssh_aliases()
   # Create SSH aliases for Admin Workstation so `ssh app` and `ssh mon` work
   # as expected. Quite useful for interactive debugging, or harvesting logs.
   # Don't clobber an existing SSH config file; only run if none exists.
-  if [[ -d "$amnesia_home/.ssh" && ! -f "$amnesia_home/.ssh/config" ]]; then
+  if [[ -d "${amnesia_home}/.ssh" && ! -f "${amnesia_home}/.ssh/config" ]]; then
     # Rather than try to parse the YAML vars file in Bash, let's prompt for username.
-    admin_ssh_username=$(zenity --entry --title="Admin SSH user" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter your username on the App and Monitor server:")
-    cat > $securedrop_dotfiles/ssh_config <<EOL
+    admin_ssh_username="$(zenity --entry \
+        --title='Admin SSH user' \
+        --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
+        --text='Enter your username on the App and Monitor server:')"
+    cat > "${securedrop_dotfiles}/ssh_config" <<EOL
 Host app
   Hostname $(lookup_app_ssh_aths_url)
   User $admin_ssh_username
@@ -203,17 +207,17 @@ Host mon
   Hostname $(lookup_mon_ssh_aths_url)
   User $admin_ssh_username
 EOL
-    chown amnesia:amnesia $securedrop_dotfiles/ssh_config
-    chmod 600 $securedrop_dotfiles/ssh_config
-    cp -pf $securedrop_dotfiles/ssh_config $amnesia_home/.ssh/config
+    chown amnesia:amnesia "${securedrop_dotfiles}/ssh_config"
+    chmod 600 "${securedrop_dotfiles}/ssh_config"
+    cp -pf "${securedrop_dotfiles}/ssh_config" "${amnesia_home}/.ssh/config"
   fi
 }
 
 function configure_ansible_apt_persistence()
 {
   # set ansible to auto-install
-  if ! grep -q 'ansible' "$tails_live_persistence/live-additional-software.conf"; then
-    echo "ansible" >> $tails_live_persistence/live-additional-software.conf
+  if ! grep -q 'ansible' "${tails_live_persistence}/live-additional-software.conf"; then
+    echo "ansible" >> "${tails_live_persistence}/live-additional-software.conf"
   fi
 }
 
@@ -223,9 +227,9 @@ function update_ansible_inventory()
   # used during initial provisioning. Thereafter the SSH connections must be
   # made over Tor. Update the static inventory file so the Admin doesn't
   # have to copy/paste the values.
-  if ! grep -v "^#.*onion" "$securedrop_ansible_base/inventory" | grep -q onion; then
-    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=$APPSSH /" $securedrop_ansible_base/inventory
-    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=$MONSSH /" $securedrop_ansible_base/inventory
+  if ! grep -v "^#.*onion" "${securedrop_ansible_base}/inventory" | grep -q onion; then
+    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=${lookup_app_ssh_aths_url}/" "${securedrop_ansible_base}/inventory"
+    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=${lookup_mon_ssh_aths_url}/" "${securedrop_ansible_base}/inventory"
   fi
 }
 
@@ -235,15 +239,15 @@ function configure_torrc_additions()
     # Store all THS URLs in the torrc_additions file. The securedrop_init.py script
     # will add these values to /etc/tor/torrc on boot via a NetworkManager hook.
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
-      $securedrop_ansible_base/app-ssh-aths \
-      $securedrop_ansible_base/mon-ssh-aths \
-      $securedrop_ansible_base/app-document-aths > $torrc_additions
+      "${securedrop_ansible_base}/app-ssh-aths" \
+      "${securedrop_ansible_base}/mon-ssh-aths" \
+      "${securedrop_ansible_base}/app-document-aths" > $torrc_additions
   else
     # Using a different approach for grabbing the Document ATHS info on the
     # Journalist Workstation, to avoid prompting Journalists unnecessarily on
     # subsequent runs of this script (to clean up legacy changes).
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
-      <(prompt_for_document_aths_info) > $torrc_additions
+      <(prompt_for_document_aths_info) > "$torrc_additions"
   fi
 
 }
@@ -254,34 +258,46 @@ function create_desktop_shortcuts()
   # Source and Document Interfaces. Double-clicking on the icons will
   # open Tor Browser and navigate directly to the page. For the Document Interface,
   # the ATHS value must be present in /etc/tor/torrc for the connection to resolve.
-  echo "Exec=/usr/local/bin/tor-browser $(lookup_document_aths_url)" >> $securedrop_dotfiles/document.desktop
-  echo "Exec=/usr/local/bin/tor-browser $(lookup_source_ths_url)" >> $securedrop_dotfiles/source.desktop
+  echo "Exec=/usr/local/bin/tor-browser $(lookup_document_aths_url)" >> "${securedrop_dotfiles}/document.desktop"
+  echo "Exec=/usr/local/bin/tor-browser $(lookup_source_ths_url)" >> "${securedrop_dotfiles}/source.desktop"
 
   # Copy launchers to Desktop.
-  cp -f $securedrop_dotfiles/document.desktop $amnesia_desktop
-  cp -f $securedrop_dotfiles/source.desktop $amnesia_desktop
+  cp -f "${securedrop_dotfiles}/document.desktop" "${amnesia_desktop}"
+  cp -f "${securedrop_dotfiles}/source.desktop" "${amnesia_desktop}"
+
   # Copy icons to Applications menu.
-  cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
-  cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
+  cp -f "${securedrop_dotfiles}/document.desktop" "${amnesia_home}/.local/share/applications"
+  cp -f "${securedrop_dotfiles}/source.desktop" "${amnesia_home}/.local/share/applications"
 
   # make it all persistent
-  sudo -u amnesia mkdir -p $tails_live_dotfiles/Desktop
-  sudo -u amnesia mkdir -p $tails_live_dotfiles/.local/share/applications
-  cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/Desktop
-  cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/Desktop
-  cp -f $securedrop_dotfiles/document.desktop $tails_live_dotfiles/.local/share/applications
-  cp -f $securedrop_dotfiles/source.desktop $tails_live_dotfiles/.local/share/applications
+  sudo -u amnesia mkdir -p "${tails_live_dotfiles}/Desktop"
+  sudo -u amnesia mkdir -p "${tails_live_dotfiles}/.local/share/applications"
+  cp -f "${securedrop_dotfiles}/document.desktop" "${tails_live_dotfiles}/Desktop"
+  cp -f "${securedrop_dotfiles}/source.desktop" "${tails_live_dotfiles}/Desktop"
+  cp -f "${securedrop_dotfiles}/document.desktop" "${tails_live_dotfiles}/.local/share/applications"
+  cp -f "${securedrop_dotfiles}/source.desktop" "${tails_live_dotfiles}/.local/share/applications"
 }
 
 # set ownership and permissions
-chown amnesia:amnesia $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
-  $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
-  $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
-  $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
-chmod 700 $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
-  $tails_live_dotfiles/Desktop/document.desktop $tails_live_dotfiles/Desktop/source.desktop \
-  $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
-  $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
+chown amnesia:amnesia \
+  "${amnesia_desktop}/document.desktop" \
+  "${amnesia_desktop}/source.desktop" \
+  "${amnesia_home}/.local/share/applications/document.desktop" \
+  "${amnesia_home}/.local/share/applications/source.desktop" \
+  "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+  "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
+  "${tails_live_dotfiles}/Desktop/document.desktop" \
+  "${tails_live_dotfiles}/Desktop/source.desktop"
+
+chmod 700 \
+  "${amnesia_desktop}/document.desktop" \
+  "${amnesia_desktop}/source.desktop" \
+  "${amnesia_home}/.local/share/applications/document.desktop" \
+  "${amnesia_home}/.local/share/applications/source.desktop" \
+  "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+  "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
+  "${tails_live_dotfiles}/Desktop/document.desktop" \
+  "${tails_live_dotfiles}/Desktop/source.desktop"
 
 function cleanup_legacy_artifacts() {
   # Catch-all function for handling backwards-compatibility. If tasks change
@@ -289,7 +305,7 @@ function cleanup_legacy_artifacts() {
   # "cleanup" tasks here.
 
   # Remove xsessionrc from 0.3.2 if present
-  persistent_xsessionrc_file=$tails_live_persistence/dotfiles/.xsessionrc
+  persistent_xsessionrc_file="${tails_live_persistence}/dotfiles/.xsessionrc"
   if [ -f $persistent_xsessionrc_file ]; then
     rm -f $persistent_xsessionrc_file > /dev/null 2>&1
     # Repair the torrc backup, which was probably busted due to the
@@ -314,12 +330,12 @@ function cleanup_legacy_artifacts() {
   # and should also be removed for backwards-compatibility.
   for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
     for f in 70-tor-reload.sh 99-tor-reload.sh ; do
-      rm -f "$d/$f" > /dev/null 2>&1
+      rm -f "${d}/${f}" > /dev/null 2>&1
     done
   done
 
   # Remove binary setuid wrapper from previous tails_files installation, if it exists.
-  rm -f "$securedrop_dotfiles/securedrop_init" 2>&1
+  rm -f "${securedrop_dotfiles}/securedrop_init" 2>&1
 }
 
 function configure_network_manager_hook()
@@ -330,19 +346,23 @@ function configure_network_manager_hook()
   # be added. The hook will run on "up" for any interface other than loopback,
   # and is carefully ordered to run AFTER the Tails Tor hook and BEFORE the
   # Tails Apt update hook.
-  if ! grep -q 'custom-nm-hooks' "$tails_live_persistence/persistence.conf"; then
-    echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $tails_live_persistence/persistence.conf
+  if ! grep -q 'custom-nm-hooks' "${tails_live_persistence}/persistence.conf"; then
+    echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> "${tails_live_persistence}/persistence.conf"
   fi
-  mkdir -p $tails_live_persistence/custom-nm-hooks
+  mkdir -p "${tails_live_persistence}/custom-nm-hooks"
 
-  cp -f 65-configure-tor-for-securedrop.sh $tails_live_persistence/custom-nm-hooks
-  cp -f 65-configure-tor-for-securedrop.sh $network_manager_dispatcher
-  chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
-  chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
+  cp -f 65-configure-tor-for-securedrop.sh "${tails_live_persistence}/custom-nm-hooks"
+  cp -f 65-configure-tor-for-securedrop.sh "$network_manager_dispatcher"
+  chown root:root \
+    "${tails_live_persistence}/custom-nm-hooks/65-configure-tor-for-securedrop.sh" \
+    "${network_manager_dispatcher}/65-configure-tor-for-securedrop.sh"
+  chmod 755 \
+    "${tails_live_persistence}/custom-nm-hooks/65-configure-tor-for-securedrop.sh" \
+    "${network_manager_dispatcher}/65-configure-tor-for-securedrop.sh"
 
   # Run the SecureDrop init script. Among other things, implements the torrc
   # additions configured by this script. See `securedrop_init.py` for details.
-  /usr/bin/python $securedrop_dotfiles/securedrop_init.py
+  /usr/bin/python "${securedrop_dotfiles}/securedrop_init.py"
 }
 
 function print_success_message()
@@ -374,9 +394,11 @@ function main()
   copy_securedrop_dotfiles
   set_directory_permissions
 
-  configure_ansible_apt_persistence
-  configure_ssh_aliases
-  update_ansible_inventory
+  if is_admin_workstation; then
+    configure_ansible_apt_persistence
+    configure_ssh_aliases
+    update_ansible_inventory
+  fi
 
   configure_torrc_additions
   create_desktop_shortcuts
