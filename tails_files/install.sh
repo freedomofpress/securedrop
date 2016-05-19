@@ -119,7 +119,7 @@ function lookup_document_aths_url()
     app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
   # Last shot before prompting: check for an existing desktop icon specifically
   # for the Document Interface. If found, we can extract the URL from there.
-  elif [ -e $amnesia_home/Desktop/document.desktop ] ; then
+  elif [ -e $amnesia_desktop/document.desktop ] ; then
     app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
@@ -153,13 +153,13 @@ function prompt_for_document_aths_info()
 
 function lookup_source_ths_url()
 {
-  # First look for the flat file containing the exact value we want.
-  # The Admin Workstation will certainly have this file, and the Journalist
-  # Workstation probably, but not definitely.
+  # Find the Onion URL to the Source Interface. First look for the flat file
+  # containing the exact value we want. The Admin Workstation will certainly
+  # have this file, and the Journalist Workstation probably, but not definitely.
   if [ -f $securedrop_ansible_base/app-source-ths ] ; then
     app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-source-ths)"
   # Failing that, check for the public THS URL in an existing Desktop icon.
-  elif [ -e $amnesia_home/Desktop/source.desktop ] ; then
+  elif [ -e $amnesia_desktop/source.desktop ] ; then
     app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
@@ -170,11 +170,13 @@ function lookup_source_ths_url()
 
 function prompt_for_source_ths_url()
 {
+  # Interactively prompt for the Source Interface Onion URL.
+  # During initial provisioning of the Journalist Workstation, the THS file
+  # for the Source Interface may not be present. If not, prompt for the info.
+
   # Ad-hoc memoization via a global variable. If we've already prompted for
   # the ATHS info here, the global will be populated. Otherwise, we'll store it.
   if [ -z $source_ths_url_global ] ; then
-    # During initial provisioning of the Journalist Workstation, the THS file
-    # for the Source Interface may not be present. If not, prompt for the info.
     ths_regex="^[a-z2-7]{16}\.onion"
     # Loop while reading the input from a dialog box.
     while [[ ! "$document_aths_info" =~ $ths_regex ]]; do
@@ -260,13 +262,17 @@ function configure_torrc_additions()
 
 function create_desktop_shortcuts()
 {
-  # make the shortcuts
+  # Create user-friendly desktop icons, with the SecureDrop logo, for the
+  # Source and Document Interfaces. Double-clicking on the icons will
+  # open Tor Browser and navigate directly to the page. For the Document Interface,
+  # the ATHS value must be present in /etc/tor/torrc for the connection to resolve.
   echo "Exec=/usr/local/bin/tor-browser $(lookup_document_aths_url)" >> $securedrop_dotfiles/document.desktop
   echo "Exec=/usr/local/bin/tor-browser $(lookup_source_ths_url)" >> $securedrop_dotfiles/source.desktop
 
-   # copy launchers to desktop and Applications menu
+  # Copy launchers to Desktop.
   cp -f $securedrop_dotfiles/document.desktop $amnesia_desktop
   cp -f $securedrop_dotfiles/source.desktop $amnesia_desktop
+  # Copy icons to Applications menu.
   cp -f $securedrop_dotfiles/document.desktop $amnesia_home/.local/share/applications
   cp -f $securedrop_dotfiles/source.desktop $amnesia_home/.local/share/applications
 
@@ -317,18 +323,28 @@ for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatche
   rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
 done
 
-# set up NetworkManager hook
-if ! grep -q 'custom-nm-hooks' "$tails_live_persistence/persistence.conf"; then
-  echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $tails_live_persistence/persistence.conf
-fi
-mkdir -p $tails_live_persistence/custom-nm-hooks
-cp -f 65-configure-tor-for-securedrop.sh $tails_live_persistence/custom-nm-hooks
-cp -f 65-configure-tor-for-securedrop.sh $network_manager_dispatcher
-chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
-chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
+function configure_network_manager_hook()
+{
+  # Install a persistent NetworkManager hook to write ATHS values to the
+  # system /etc/tor/torrc, so the Document Interface can be accessed via
+  # Tor Browser. On the Admin Workstation, the SSH ATHS values will also
+  # be added. The hook will run on "up" for any interface other than loopback,
+  # and is carefully ordered to run AFTER the Tails Tor hook and BEFORE the
+  # Tails Apt update hook.
+  if ! grep -q 'custom-nm-hooks' "$tails_live_persistence/persistence.conf"; then
+    echo "/etc/NetworkManager/dispatcher.d	source=custom-nm-hooks,link" >> $tails_live_persistence/persistence.conf
+  fi
+  mkdir -p $tails_live_persistence/custom-nm-hooks
 
-# set torrc and reload Tor
-/usr/bin/python $securedrop_dotfiles/securedrop_init.py
+  cp -f 65-configure-tor-for-securedrop.sh $tails_live_persistence/custom-nm-hooks
+  cp -f 65-configure-tor-for-securedrop.sh $network_manager_dispatcher
+  chown root:root $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
+  chmod 755 $tails_live_persistence/custom-nm-hooks/65-configure-tor-for-securedrop.sh $network_manager_dispatcher/65-configure-tor-for-securedrop.sh
+
+  # Run the SecureDrop init script. Among other things, implements the torrc
+  # additions configured by this script. See `securedrop_init.py` for details.
+  /usr/bin/python $securedrop_dotfiles/securedrop_init.py
+}
 
 # finished
 echo ""
