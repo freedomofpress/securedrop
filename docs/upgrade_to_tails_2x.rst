@@ -1,31 +1,37 @@
 Upgrade Tails from 1.x to 2.x
 =============================
 
-.. warning:: Tails 1.x is no longer receiving updates, and is therefore
-             vulnerable to a growing list of security vulnerabilities.
+Starting with SecureDrop version 0.3.7, SecureDrop's Tails integration
+leverages improvements to the Tails OS since the introduction of Tails 2.0. It
+is critical to upgrade all of your Tails USBs to the latest version of Tails
+before upgrading SecureDrop to 0.3.7 or later.
 
-Newer versions of SecureDrop leverage improvements to the Tails OS since the
-introduction of Tails 2.0. It is critical to upgrade all Tails USBs to the
-latest version before upgrading SecureDrop. Upgrading Tails from 1.x to 2.x
-must be done manually. Please follow this guide to updating each Tails USB
-stick used in your SecureDrop instance. Be sure to use the Secure Viewing
-Station computer so you benefit from its airgap while transfering sensitive
-data.
+.. warning:: Tails 1.x is no longer receiving updates, and is therefore
+             vulnerable to a growing list of security vulnerabilities. We
+             strongly encourage you to upgrade all of your Tails USBs to the
+             latest version of Tails as soon as possible.
+
+Upgrading Tails from 1.x to 2.x must be done manually. Please follow this guide
+to updating each Tails USB stick used in your SecureDrop instance. Be sure to
+use the Secure Viewing Station computer so you benefit from its airgap while
+transfering sensitive data.
 
 .. note:: You will need:
 
-    #. A "master" Tails USB running the most recent version of Tails (at least
+    #. A *master Tails USB* running the most recent version of Tails (at least
        v2.3).
-    #. A separate USB stick used to store encrypted backups of the old Tails
-       sticks.
-    #. Your existing SecureDrop Tails USB sticks (Admin, Journalist, and Secure
+    #. A *backup device*, a separate, encrypted USB drive used to store backups
+       of the old Tails sticks.
+    #. Your *existing SecureDrop Tails USB sticks* (Admin, Journalist, and Secure
        Viewing Station).
-    #. An airgapped machine to perform each Tails upgrade. (SVS reuse is OK.)
+    #. An *airgapped machine* to perform the Tails upgrades. It is ok to reuse
+       the Secure Viewing Station for this task.
 
 An airgapped machine (such as the SVS) is required in order to perform these
-upgrades safely. By isolating the machine from all network access, you thereby
-reduce the threat of compromise by actors who wish to gain access to your
-SecureDrop instance.
+upgrades safely. By isolating the machine from all network access, you reduce
+the exposure of sensitive data to networked computers, thereby reducing the
+threat of compromise by adversaries who wish to gain access to your SecureDrop
+instance.
 
 Upgrade each Tails device
 -------------------------
@@ -45,6 +51,11 @@ enable admin privileges.
 
 2. Prepare the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We will use the **Tails Installer** to upgrade your Tails 1.x USB to Tails 2.x.
+While this usually works without any issues, we're going to start by making
+backups of the important data on your current Tails USBs, so you can use them for
+recovery in case something goes wrong.
 
 .. tip:: While it's recommended to use a fresh USB stick for any backup operation,
          to cut down on cost, clutter, and/or waste, you may also repurpose old USB
@@ -66,7 +77,7 @@ Fill out the **Format Volume** settings as shown in the screenshot below.
 There's no need to overwrite existing data, and doing so can take a long time.
 You should use a strong passphrase to encrypt the drive.
 
-.. tip:: If you plan on using this USB stick as a permanent backup, you will be
+.. note:: If you plan on using this USB stick as a permanent backup, you will be
     responsible for retaining this passphrase for the long-haul. If you only want
     to use this USB as an intermediary backup, and plan on discarding the data
     after a successful migration, you may discard the passphrase once all steps are
@@ -228,8 +239,8 @@ issue. In the event that you are unable to access your persistent files on one
 of the upgraded Tails devices, don't worry: you can still restore the original
 files from the Backup Device you created. (Isn't it great to have backups?)
 
-1. Restore data from a Backup Device
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. Restore data from the Backup Device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the same airgapped machine, boot up the Tails USB stick you want to restore,
 with both persistence and admin privileges.
@@ -268,10 +279,11 @@ is still there and accessible to you, including:
 .. note::
     If you are restoring a Secure Viewing Station Tails USB, you may skip the
     **Reinstall SecureDrop** step below. It is only necessary to rerun the
-    ``install.sh`` script when restoring an Admin or Journalist Workstation.
+    ``tails_files/install.sh`` script when restoring an Admin or Journalist
+    Workstation.
 
-2. Reinstall SecureDrop
-~~~~~~~~~~~~~~~~~~~~~~~
+2. Reinstall the SecureDrop Tails Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Continue checking your persistent files for the following critical assets:
 
@@ -279,7 +291,8 @@ Continue checking your persistent files for the following critical assets:
 - SecureDrop files, especially the ``torrc_additions`` file in
   ``~/Persistent/.securedrop``.
 - If you're an admin, also be sure the files in
-  ``~/Persistent/securedrop/install_files/`` are available.
+  ``~/Persistent/securedrop/install_files/`` and the SSH keys in ``~/.ssh`` are
+  available.
 
 Shut down your Tails USB on the airgapped station and move to the computer you
 normally use to check for submissions. At this stage, all data has been
@@ -291,10 +304,10 @@ Boot up Tails once again with persistence and admin privileges.
     Copy ``~/Persistent/.securedrop/torrc_additions`` to a place like
     your desktop. You'll need these old values for the following step.
 
-Re-install Securedrop with ``cd ~/Persistent/securedrop/tails_files && sudo
-./install.sh``. Once completed, test your access to the Document Interface,
-and, if you're a Secure Drop admin, test your ssh connection to the application
-and monitor servers.
+Re-install the Securedrop Tails configuration with ``cd
+~/Persistent/securedrop/tails_files && sudo ./install.sh``. Once completed, test
+your access to the Document Interface, and, if you're a Secure Drop admin, test
+your ssh connection to the application and monitor servers.
 
 .. |Migrate Data 1| image:: images/backup_and_migrate/migrate_data_2.png
 .. |Migrate Data 2| image:: images/backup_and_migrate/migrate_data_1.png
