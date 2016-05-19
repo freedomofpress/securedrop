@@ -68,12 +68,6 @@ function copy_securedrop_dotfiles()
   cp -f document.desktop $securedrop_dotfiles
   cp -f source.desktop $securedrop_dotfiles
   cp -f securedrop_init.py $securedrop_init_script
-
-  # Remove binary setuid wrapper from previous tails_files installation, if it exists
-  securedrop_setuid_wrapper=$securedrop_dotfiles/securedrop_init
-  if [ -f $securedrop_setuid_wrapper ]; then
-    rm $securedrop_setuid_wrapper
-  fi
 }
 
 function set_directory_permissions()
@@ -295,33 +289,44 @@ chmod 700 $amnesia_desktop/document.desktop $amnesia_desktop/source.desktop \
   $amnesia_home/.local/share/applications/document.desktop $amnesia_home/.local/share/applications/source.desktop \
   $tails_live_dotfiles/.local/share/applications/document.desktop $tails_live_dotfiles/.local/share/applications/source.desktop
 
-# remove xsessionrc from 0.3.2 if present
-XSESSION_RC=$tails_live_persistence/dotfiles/.xsessionrc
-if [ -f $XSESSION_RC ]; then
-  rm -f $XSESSION_RC > /dev/null 2>&1
+function cleanup_legacy_artifacts() {
+  # Catch-all function for handling backwards-compatibility. If tasks change
+  # between versions of SecureDrop and require this script to be rerun, place
+  # "cleanup" tasks here.
 
-  # Repair the torrc backup, which was probably busted due to the
-  # race condition between .xsessionrc and
-  # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
-  # Tor after this script is run.
-  #
-  # If the Sandbox directive is on in the torrc (now that the dust
-  # has settled from any race condition shenanigans), *and* there is
-  # no Sandbox directive already present in the backup of the
-  # original, "unmodified-by-SecureDrop" copy of the torrc used by
-  # securedrop_init, then port that Sandbox directive over to avoid
-  # breaking Tor by changing the Sandbox directive while it's
-  # running.
-  if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
-    echo "Sandbox 1" >> /etc/tor/torrc.bak
+  # Remove xsessionrc from 0.3.2 if present
+  persistent_xsessionrc_file=$tails_live_persistence/dotfiles/.xsessionrc
+  if [ -f $persistent_xsessionrc_file ]; then
+    rm -f $persistent_xsessionrc_file > /dev/null 2>&1
+    # Repair the torrc backup, which was probably busted due to the
+    # race condition between .xsessionrc and
+    # /etc/NetworkManager/dispatch.d/10-tor.sh This avoids breaking
+    # Tor after this script is run.
+    #
+    # If the Sandbox directive is on in the torrc (now that the dust
+    # has settled from any race condition shenanigans), *and* there is
+    # no Sandbox directive already present in the backup of the
+    # original, "unmodified-by-SecureDrop" copy of the torrc used by
+    # securedrop_init, then port that Sandbox directive over to avoid
+    # breaking Tor by changing the Sandbox directive while it's
+    # running.
+    if grep -q 'Sandbox 1' /etc/tor/torrc && ! grep -q 'Sandbox 1' /etc/tor/torrc.bak; then
+      echo "Sandbox 1" >> /etc/tor/torrc.bak
+    fi
   fi
-fi
 
-# Remove previous NetworkManager hook if present. The "99-" prefix
-# caused the hook to run later than desired.
-for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
-  rm -f "$d/99-tor-reload.sh" > /dev/null 2>&1
-done
+  # Remove previous NetworkManager hook if present. In 0.3.6 the prefix
+  # was "99-", which caused it to run too late. In 0.3.5 the prefix was "70-"
+  # and should also be removed for backwards-compatibility.
+  for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
+    for f in 70-tor-reload.sh 99-tor-reload.sh ; do
+      rm -f "$d/$f" > /dev/null 2>&1
+    done
+  done
+
+  # Remove binary setuid wrapper from previous tails_files installation, if it exists.
+  rm -f "$securedrop_dotfiles/securedrop_init" 2>&1
+}
 
 function configure_network_manager_hook()
 {
