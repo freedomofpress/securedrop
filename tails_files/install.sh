@@ -14,7 +14,11 @@ tails_live_dotfiles=$tails_live_persistence/dotfiles
 amnesia_desktop=$amnesia_home/Desktop
 securedrop_ansible_base=$amnesia_persistent/securedrop/install_files/ansible-base
 network_manager_dispatcher=/etc/NetworkManager/dispatcher.d
-
+# The ATHS info for the Journalist Workstation will need to be reused
+# across multiple functions. During initial provisioning, we may need
+# to prompt for the info, so we'll store the value in a global var
+# so it can be reused without reprompting.
+journalist_document_aths_info=''
 
 function validate_tails_environment()
 {
@@ -74,6 +78,7 @@ function set_directory_permissions()
 {
   # set permissions
   chmod 755 $securedrop_dotfiles
+
   chown root:root $securedrop_init_script
   chmod 700 $securedrop_init_script
   chown root:root $torrc_additions
@@ -116,11 +121,38 @@ function lookup_document_aths_url()
     app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
-
-
+    app_document_aths="$(get_document_aths_info | awk '{ print $2 }')"
   fi
   echo "$app_document_aths"
 }
+
+function get_document_aths_info()
+{
+  # Ad-hoc memoization via a global variable. If we've already prompted for
+  # the ATHS info here, the global will be populated. Otherwise, we'll store it.
+  if [ -z $journalist_document_aths_info ] ; then
+    # During initial provisioning of the Journalist Workstation, the ATHS file
+    # for the Document Interface may not be present. If not, prompt for the info.
+    aths_regex="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
+    # Loop while reading the input from a dialog box.
+    while [[ ! "$document_aths_info" =~ $aths_regex ]]; do
+      document_aths_info="$(zenity --entry \
+        --title='Hidden service authentication setup' \
+        --width=600 \
+        --window-icon=$securedrop_dotfiles/securedrop_icon.png \
+        --text='Enter the HidServAuth value to be added to /etc/tor/torrc:')"
+    done
+  # The global var is populated, so use it for the function var.
+  else
+    document_aths_info="$journalist_document_aths_info"
+  fi
+  echo "$document_aths_info"
+}
+
+  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
+  SOURCE="${SRC#http://}"
+  DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
+
 function lookup_app_source_ths_url()
 {
   app_source_ths="$(awk -F '{ print $2 }' $securedrop_ansible_base/app-document-aths)"
@@ -152,10 +184,8 @@ EOL
 
 validate_tails_environment
 copy_securedrop_dotfiles
-
-
-
 set_directory_permissions
+
 
 function configure_ansible_apt_persistence()
 {
@@ -188,25 +218,14 @@ function configure_torrc_additions()
       $securedrop_ansible_base/mon-ssh-aths \
       $securedrop_ansible_base/app-document-aths > $torrc_additions
   else
-    # On the Journalist Workstation, copy blank template for Tor additions.
-    # It contains only a comment.
-    cp -f torrc_additions $torrc_additions
+    # Using a different approach for grabbing the Document ATHS info on the
+    # Journalist Workstation, to avoid prompting Journalists unnecessarily on
+    # subsequent runs of this script (to clean up legacy changes).
+    cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
+      <(get_document_aths_info) > $torrc_additions
   fi
 
 }
-# journalist workstation does not have the *-aths files created by the Ansible playbook, so we must prompt
-# to get the interface .onion addresses to setup launchers, and for the HidServAuth info used by Tor
-if ! is_admin_workstation; then
-  REGEX="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
-  while [[ ! "$HIDSERVAUTH" =~ $REGEX ]];
-  do
-    HIDSERVAUTH=$(zenity --entry --title="Hidden service authentication setup" --width=600 --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the HidServAuth value to be added to /etc/tor/torrc:")
-  done
-  echo $HIDSERVAUTH >> $torrc_additions
-  SRC=$(zenity --entry --title="Desktop shortcut setup" --window-icon=$securedrop_dotfiles/securedrop_icon.png --text="Enter the Source Interface's .onion address:")
-  SOURCE="${SRC#http://}"
-  DOCUMENT=`echo $HIDSERVAUTH | cut -d ' ' -f 2`
-fi
 
 # make the shortcuts
 echo "Exec=/usr/local/bin/tor-browser $DOCUMENT" >> $securedrop_dotfiles/document.desktop
