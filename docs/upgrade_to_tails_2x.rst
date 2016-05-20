@@ -258,26 +258,22 @@ Troubleshooting
 ---------------
 
 The steps described above should cleanly update your Tails devices without
-issue. In the event that you are unable to access your persistent files on one
-of the upgraded Tails devices, don't worry: you can still restore the original
-files from the Backup Device you created. (Isn't it great to have backups?)
+issue. In the event that one or more of your upgraded Tails USBs are not working
+as expected, don't worry: you can still manually restore from the Backup Device
+you created. (Isn't it great to have backups?)
 
 1. Restore data from the Backup Device
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the same airgapped machine, boot up the Tails USB stick you want to restore,
-with both persistence and admin privileges.
+with both persistence and admin privileges. Insert your Backup Device into a
+free USB port, and mount it by navigating to **Places ▸ Computer**, and clicking
+on the encrypted disk. You will be prompted to enter its passphrase.
 
-Insert your Backup Device into a free USB port, and mount it by navigating to
-**Places ▸ Computer**, and clicking on the encrypted disk. You will be
-prompted to enter its passphrase.
-
-Open a Nautilus window with admin priviledges by navigating to **Applications
-▸ System Tools ▸ Root Terminal**. At the terminal prompt, simply type
-`nautilus` and hit Enter.
-
-Type ``ctrl`` + ``l``, type `/live/persistence/TailsData_unlocked`, and hit
-Enter to navigate there.
+Open a Nautilus window with admin priviledges by navigating to **Applications ▸
+System Tools ▸ Root Terminal**. At the terminal prompt, simply type `nautilus`
+and hit Enter. Type ``ctrl`` + ``l``, type
+`/live/persistence/TailsData_unlocked`, and hit Enter to navigate there.
 
 |Navigate to TailsData_unlocked|
 
