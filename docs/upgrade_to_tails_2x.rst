@@ -293,45 +293,22 @@ ownership of your personal files: ::
 
     find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;
 
-Shut down, and boot up **with your primary Tails USB** and verify *everything*
-is still there and accessible to you, including:
+Shut down, and reboot the Tails USB. Now that you've restored the files, you
+should re-do the :ref:`post-upgrade verification <verify-post-upgrade>` to make
+sure everything is working correctly.
 
-- KeePassX Database
-- PGP keys
+.. todo:: At this point, the user (admin or journalist) has upgraded to Tails
+          2.x and has copied the persistent files from a SecureDrop 0.3.6
+          ``tails_files/install.sh``. Unfortunately, they cannot connect to any
+          of the ATHS because earliest instructions advise them **not** to copy
+          ``persistence.conf``, which includes the line that adds
+          ``custom-nm-hooks`` and thus the Network Manager hook that
+          reconfigures Tor to be aware of the ``torrc_additions``.
 
-.. note::
-    If you are restoring a Secure Viewing Station Tails USB, you may skip the
-    **Reinstall SecureDrop** step below. It is only necessary to rerun the
-    ``tails_files/install.sh`` script when restoring an Admin or Journalist
-    Workstation.
+          However, they also cannot re-run ``tails_files/install.sh`` at the
+          moment, since they have 0.3.6 checked out and that ``tails_files``
+          doesn't work on Tails 2.x. At this point, we need to direct them to
+          the upgrade guide for 0.3.7 (which is yet to be written).
 
 .. |Navigate to TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_1.png
 .. |TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_2.png
-
-2. Reinstall the SecureDrop Tails Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Continue checking your persistent files for the following critical assets:
-
-- Bookmarks in Tor Browser
-- SecureDrop files, especially the ``torrc_additions`` file in
-  ``~/Persistent/.securedrop``.
-- If you're an admin, also be sure the files in
-  ``~/Persistent/securedrop/install_files/`` and the SSH keys in ``~/.ssh`` are
-  available.
-
-Shut down your Tails USB on the airgapped station and move to the computer you
-normally use to check for submissions. At this stage, all data has been
-migrated and it's safe to use this Tails USB on a networked computer.
-
-Boot up Tails once again with persistence and admin privileges.
-
-.. warning::
-    Copy ``~/Persistent/.securedrop/torrc_additions`` to a place like
-    your desktop. You'll need these old values for the following step.
-
-Re-install the Securedrop Tails configuration with ``cd
-~/Persistent/securedrop/tails_files && sudo ./install.sh``. Once completed, test
-your access to the Document Interface, and, if you're a Secure Drop admin, test
-your ssh connection to the application and monitor servers.
-
