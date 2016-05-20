@@ -198,9 +198,9 @@ To test the Admin Workstation, make sure you can still SSH into the servers:
 
 .. code:: sh
 
-    $ ssh <username>@<App IP address> hostname
+    $ ssh app hostname
     app
-    $ ssh <username>@<Monitor IP address> hostname
+    $ ssh mon hostname
     mon
 
 .. tip:: Optionally, consider retaining the encrypted backup drive as a
