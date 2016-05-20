@@ -6,13 +6,24 @@ set -e
 
 REQUIREMENTS_DIR=$(pwd)/securedrop/requirements
 
-# Test if pip and virtualenv are available and install them if not
-if ! /usr/bin/dpkg-query --show --showformat='\r' 'python-pip'; then
-  sudo apt-get install python-pip
+# If we're in a virtualenv, deactivate it
+if [[ -n $VIRTUALENV ]]; then
+  deactivate
 fi
 
-if ! pip show virtualenv>/dev/null; then
-  sudo apt-get install virtualenv
+# Test if pip and virtualenv are available and install them if not
+command -v pip > /dev/null
+pip_installed=$?
+command -v virtualenv > /dev/null
+virualenv_installed=$?
+
+if [ $pip_installed -ne 0 ] || [ $virtualenv_installed -ne 0 ]; then
+  if $(grep -i "debian" /etc/os-release > /dev/null); then
+    sudo apt-get install -y python-pip virtualenv
+  else
+    echo "This script requires pip and virtualenv to run."
+    exit
+  fi
 fi
 
 # Create a temporary virtualenv for the SecureDrop Python packages in our
