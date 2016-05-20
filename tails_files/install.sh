@@ -200,7 +200,7 @@ function lookup_document_aths_url()
   # configured Journalist Workstation will already have the value in torrc.
   # Since we know we're in a Journalist Workstation, assume there's only one
   # ATHS value in the torrc, and use the first.
-  elif [ grep '^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ] ; then
+  elif grep -q -P '^HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ; then
     app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
   # Last shot before prompting: check for an existing desktop icon specifically
   # for the Document Interface. If found, we can extract the URL from there.
