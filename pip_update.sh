@@ -6,9 +6,11 @@ set -e
 
 REQUIREMENTS_DIR=$(pwd)/securedrop/requirements
 
-# If we're in a virtualenv, deactivate it
-if [[ -n $VIRTUALENV ]]; then
-  deactivate
+# This script should not be run with an active virtualenv. Calling deactivate
+# does not work reliably, so instead we warn then quit.
+if [[ -n $VIRTUAL_ENV ]]; then
+  echo "Please deactivate your virtualenv before running this script."
+  exit
 fi
 
 # Test if pip and virtualenv are available and install them if not
@@ -17,7 +19,7 @@ pip_installed=$?
 command -v virtualenv > /dev/null
 virualenv_installed=$?
 
-if [ $pip_installed -ne 0 ] || [ $virtualenv_installed -ne 0 ]; then
+if [[ $pip_installed -ne 0 ]] || [[ $virtualenv_installed -ne 0 ]]; then
   if $(grep -i "debian" /etc/os-release > /dev/null); then
     sudo apt-get install -y python-pip virtualenv
   else
