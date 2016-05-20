@@ -183,11 +183,15 @@ Tails devices, move on to the **Finishing up** section below.
 Finishing up
 ------------
 
+.. _verify-post-upgrade:
+
 Verify all devices are working
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Boot into each newly upgraded Tails USB, enabling persistence. Confirm that the
-persistent files are present and that your workflow is unaffected.
+Shut down each Tails USB on the airgapped computer and move it to the computer
+you normally use it on. Boot into each newly upgraded Tails USB, enabling
+persistence. Confirm that the persistent files are present and that your
+workflow is unaffected.
 
 As a test, consider submitting a test submission, downloading it on the
 Journalist Workstation, and finally decrypting it on the SVS.
@@ -198,15 +202,21 @@ To test the Admin Workstation, make sure you can still SSH into the servers:
 
 .. code:: sh
 
-    $ ssh <username>@<App IP address> hostname
+    $ ssh <username>@<app server .onion address> hostname
     app
-    $ ssh <username>@<Monitor IP address> hostname
+    $ ssh <username>@<monitor server .onion address> hostname
     mon
 
-.. tip:: Optionally, consider retaining the encrypted backup drive as a
-         disaster recovery device. Document the passphrase in the Admin
-         Workstation KeePass database, and store the physical Backup Device in a
-         locked safe or other secure location.
+.. tip:: If you forgot, your SSH username is in
+         ``install_files/ansible-base/prod-specific.yml`` as the value of the
+         ``ssh_users`` variable. The .onion addresses for SSH for each server
+         are in ``install_files/ansible-base/app-ssh-aths`` and
+         ``install_files/ansible-base/mon-ssh-aths``, respectively.
+
+.. tip:: Consider retaining the encrypted backup drive as a disaster recovery
+         device. Document the passphrase in the Admin Workstation KeePassX
+         database, and store the physical Backup Device in a locked safe or
+         other secure location.
 
 Wipe the Backup Device
 ~~~~~~~~~~~~~~~~~~~~~~
