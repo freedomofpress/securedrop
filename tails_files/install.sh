@@ -175,6 +175,9 @@ function prompt_for_source_ths_url()
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
         --text='Enter the Source Interface Onion URL:')"
     done
+    # Store value in script global for reuse without prompting.
+    source_ths_url_global="$ths_url"
+
   # The global var is populated, so use it for the function var.
   else
     ths_url="$source_ths_url_global"
@@ -224,9 +227,12 @@ function lookup_source_ths_url()
   # containing the exact value we want. The Admin Workstation will certainly
   # have this file, and the Journalist Workstation probably, but not definitely.
   if [ -f "${securedrop_ansible_base}/app-source-ths" ] ; then
-    app_source_ths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-source-ths)"
+    app_source_ths="$(cat ${securedrop_ansible_base}/app-source-ths)"
+  # Check if global var is populated (from prompting previously).
+  elif [ -n $source_ths_url_global ] ; then
+    app_source_ths="$source_ths_url_global"
   # Failing that, check for the public THS URL in an existing Desktop icon.
-  elif [ -e "${amnesia_desktop}/source.desktop" ] ; then
+  elif grep -q -P '^Exec=/usr/local/bin/tor-browser\s+[a-z2-7]{16}\.onion' "${amnesia_desktop}/source.desktop" ; then
     app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
@@ -292,11 +298,18 @@ function configure_torrc_additions()
   else
     # Using a different approach for grabbing the Document ATHS info on the
     # Journalist Workstation, to avoid prompting Journalists unnecessarily on
-    # subsequent runs of this script (to clean up legacy changes).
+    # subsequent runs of this script (to clean up legacy changes). First,
+    # check existing HidServAuth values in torrc, and reuse if found.
+    if grep -q -P '^HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ; then
+      app_document_aths_info="$(grep ^HidServAuth /etc/tor/torrc | head -n 1)"
+    # If HidServAuth info can't be found on system, prompt for it.
+    # Generally this will only happen on a new installation.
+    else
+      app_document_aths_info="$(prompt_for_document_aths_info)"
+    fi
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
-      <(prompt_for_document_aths_info) > "$torrc_additions"
+          <<< "$app_document_aths_info" > "$torrc_additions"
   fi
-
 }
 
 function create_desktop_shortcuts()
