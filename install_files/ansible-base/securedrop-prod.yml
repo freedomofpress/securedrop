@@ -78,8 +78,8 @@
     - prod-specific.yml
 
   roles:
-    - restrict_direct_access_app
     - { role: backup, tags: [ 'backup' ] }
+    - restrict_direct_access_app
 
   sudo: yes
 

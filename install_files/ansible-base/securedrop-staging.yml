@@ -81,9 +81,9 @@
     - staging-specific.yml
 
   roles:
+    - { role: backup, tags: [ 'backup' ] }
     - { role: restrict_direct_access_app, tags: [ 'common' ] }
     - { role: allow_direct_access, tags: [ 'common' ] }
-    - { role: backup, tags: [ 'backup' ] }
 
   sudo: yes
 
