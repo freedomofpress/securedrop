@@ -1,9 +1,14 @@
 #!/bin/bash
-# SecureDrop persistent setup script for Tails
+# SecureDrop persistent setup script for Tails.
+#
+# Configures access to SecureDrop over Authenticated Tor Hidden Services (ATHS)
+# for both the Admin and Journalist Workstations, via a NetworkManager hook.
+# Creates convenient desktop icons for easy access. Adds SSH access for Admins.
 
 set -e
 
-# set paths and variables
+# Declare constants. These values will be used by various
+# functions throughout the script.
 amnesia_home="/home/amnesia"
 amnesia_desktop="${amnesia_home}/Desktop"
 amnesia_persistent="${amnesia_home}/Persistent"
@@ -15,10 +20,10 @@ tails_live_persistence="/live/persistence/TailsData_unlocked"
 tails_live_dotfiles="${tails_live_persistence}/dotfiles"
 torrc_additions="${securedrop_dotfiles}/torrc_additions"
 
-# The ATHS info for the Journalist Workstation will need to be reused
-# across multiple functions. During initial provisioning, we may need
-# to prompt for the info, so we'll store the value in a global var
-# so it can be reused without reprompting.
+# Declare globals. During initial provisioning, we may need to prompt
+# for ATHS info for the Document Interface, particularly on the
+# Journalist Workstation. In order to avoid reprompting, we'll store
+# the value in a reusable global var.
 document_aths_info_global=''
 source_ths_url_global=''
 
