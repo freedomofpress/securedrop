@@ -4,7 +4,7 @@
     src: backup.py
     dest: /tmp/
     owner: root
-    mode: 0770
+    mode: "0770"
 
 - name: run the backup script
   # Setting args inline (against project style conventions) to work around

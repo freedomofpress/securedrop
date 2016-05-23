@@ -4,7 +4,7 @@
     src: restore.py
     dest: /tmp/
     owner: root
-    mode: 0770
+    mode: "0770"
 
 - name: copy restore file to app server
   copy:
