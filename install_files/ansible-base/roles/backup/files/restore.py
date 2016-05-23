@@ -4,7 +4,7 @@ This script and backup archive should be copied to the App server and run by
 the Ansible playbook. When run (as root), it restores the contents of the 0.3
 backup file to the machine it's run on.
 
-python 0.3_restore.py sd-backup-TIMESTAMP.tar.gz
+python restore.py sd-backup-TIMESTAMP.tar.gz
 """
 
 import os
@@ -15,9 +15,9 @@ import tarfile
 
 def verify_args():
     usage = """
-Usage: 0.3_restore.py <backup file>
+Usage: restore.py <backup file>
 
-    <backup file>  Path to a SecureDrop 0.3 backup created by 0.3_collect.py"
+    <backup file>  Path to a SecureDrop 0.3 backup created by backup.py"
     """
     if len(sys.argv) != 2:
         print(usage)
