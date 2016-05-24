@@ -402,8 +402,10 @@ The Source Interfaces's Tor onion URL is: http://$(lookup_source_ths_url)
 SD_COMPLETE_MSG1
 
   # We're assuming the SSH aliases have been set up as long as ~/.ssh/config exists.
+  # Intentionally padding with an empty line to improve readability.
   if is_admin_workstation; then
     cat <<SD_COMPLETE_MSG2
+
 The App Server's SSH hidden service address is: $(lookup_app_ssh_aths_url)
 The Monitor Server's SSH hidden service address is: $(lookup_mon_ssh_aths_url)
 SSH aliases are set up. You can use them with 'ssh app' and 'ssh mon'.
