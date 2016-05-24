@@ -1,15 +1,12 @@
 import base64
 import os
 from tempfile import _TemporaryFileWrapper
-# python-gnupg will not recognize our SecureTemporaryFile as a stream-like type
-# and will attempt to call encode on it, thinking it's a string-like type. To
-# avoid this we add it the list of stream-like types.
-from gnupg._util import _STREAMLIKE_TYPES
-_STREAMLIKE_TYPES.append(_TemporaryFileWrapper)
 
 from Crypto.Cipher import AES
 from Crypto.Random import random
 from Crypto.Util import Counter
+
+from gnupg._util import _STREAMLIKE_TYPES
 
 class SecureTemporaryFile(_TemporaryFileWrapper):
     """Temporary file that is ephemerally encrypted on the fly.
@@ -81,3 +78,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
 
     def close(self):
         return _TemporaryFileWrapper.close(self)
+
+# python-gnupg will not recognize our SecureTemporaryFile as a stream-like type
+# and will attempt to call encode on it, thinking it's a string-like type. To
+# avoid this we add it the list of stream-like types.
+_STREAMLIKE_TYPES.append(_TemporaryFileWrapper)
