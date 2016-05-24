@@ -93,8 +93,14 @@ function cleanup_legacy_artifacts()
 
   # Remove previous NetworkManager hook if present. In 0.3.6 the prefix
   # was "99-", which caused it to run too late. In 0.3.5 the prefix was "70-"
-  # and should also be removed for backwards-compatibility.
-  for d in $tails_live_persistence $securedrop_dotfiles $network_manager_dispatcher; do
+  # and should also be removed for backwards-compatibility. There are a variety
+  # of directories the associated files were placed in, so remove from all locations,
+  # otherwise we'll have multiple redundant hooks. Under Tails v2, if you restart
+  # the tor service too rapidly in succession, it will refuse to start.
+  for d in $tails_live_persistence \
+      $securedrop_dotfiles \
+      $network_manager_dispatcher \
+      "${tails_live_persistence}/custom-nm-hooks"; do
     for f in 70-tor-reload.sh 99-tor-reload.sh ; do
       rm -f "${d}/${f}" > /dev/null 2>&1
     done
