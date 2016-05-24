@@ -1,0 +1,7 @@
+---
+- name: disable mprotect on firefox and the firefox plugin container
+  command: paxctl -cm /usr/lib/firefox/{{ item }}
+  with_items:
+    - firefox
+    - plugin-container
+  when: ansible_kernel.endswith('-grsec')
