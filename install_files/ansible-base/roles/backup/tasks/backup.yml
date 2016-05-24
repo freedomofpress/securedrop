@@ -1,5 +1,5 @@
 ---
-- name: copy the versions backup.py script to the target server /tmp directory
+- name: copy the backup script to the target server
   copy:
     src: backup.py
     dest: /tmp/
