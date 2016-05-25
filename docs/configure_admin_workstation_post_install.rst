@@ -66,16 +66,6 @@ sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
 
-.. _SSH Host Aliases:
-
-SSH Host Aliases
-----------------
-
-The installation script in ``tails_files`` also sets up SSH host aliases for the
-admin. These can be found in ``~/.ssh/config``. You can simply use
-``ssh app`` and ``ssh mon`` to connect to each server. This configuration
-will be persisted across reboots thanks to Tails' SSH client persistence.
-
 Set up two-factor authentication for the Admin
 ----------------------------------------------
 The SecureDrop servers should always be accessed over SSH from the Admin
