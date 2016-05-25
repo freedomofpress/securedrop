@@ -392,8 +392,8 @@ function configure_network_manager_hook()
     "${tails_live_persistence}/custom-nm-hooks/65-configure-tor-for-securedrop.sh" \
     "${network_manager_dispatcher}/65-configure-tor-for-securedrop.sh"
 
-  # Run the SecureDrop init script. Among other things, implements the torrc
-  # additions configured by this script. See `securedrop_init.py` for details.
+  # Run the SecureDrop init script, which implements the torrc additions
+  # prepared by this script. See `securedrop_init.py` for details.
   /usr/bin/python "${securedrop_dotfiles}/securedrop_init.py"
 }
 
