@@ -209,19 +209,23 @@ function lookup_document_aths_url()
   # The Admin Workstation will certainly have this file, and the Journalist
   # Workstation probably, but not definitely.
   if [ -f "${securedrop_ansible_base}/app-document-aths" ] ; then
+    echo "Found Document Interface ATHS info in '${securedrop_ansible_base}/app-document-aths'..."
     app_document_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-document-aths)"
   # Failing that, check for ATHS info in the existing Tor config. A previously
   # configured Journalist Workstation will already have the value in torrc.
   # Since we know we're in a Journalist Workstation, assume there's only one
   # ATHS value in the torrc, and use the first.
   elif grep -q -P '^HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ; then
+    echo "Found Document Interface ATHS info in '/etc/tor/torrc'..."
     app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
   # Last shot before prompting: check for an existing desktop icon specifically
   # for the Document Interface. If found, we can extract the URL from there.
   elif [ -e "${amnesia_desktop}/document.desktop" ] ; then
+    echo "Found Document Interface ATHS info in '${amnesia_desktop}/document.desktop'..."
     app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
+    echo "Could not find Document Interface ATHS info, prompting interactively..."
     app_document_aths="$(prompt_for_document_aths_info | awk '{ print $2 }')"
   fi
   echo "$app_document_aths"
@@ -233,15 +237,18 @@ function lookup_source_ths_url()
   # containing the exact value we want. The Admin Workstation will certainly
   # have this file, and the Journalist Workstation probably, but not definitely.
   if [ -f "${securedrop_ansible_base}/app-source-ths" ] ; then
+    echo "Found Source Interface Onion URL in '${securedrop_ansible_base}/app-source-ths'..."
     app_source_ths="$(cat ${securedrop_ansible_base}/app-source-ths)"
   # Check if global var is populated (from prompting previously).
   elif [ -n $source_ths_url_global ] ; then
     app_source_ths="$source_ths_url_global"
   # Failing that, check for the public THS URL in an existing Desktop icon.
   elif grep -q -P '^Exec=/usr/local/bin/tor-browser\s+[a-z2-7]{16}\.onion' "${amnesia_desktop}/source.desktop" ; then
+    echo "Found Source Interface Onion URL in '${amnesia_desktop}/source.desktop'..."
     app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
+    echo "Could not find Source Interface Onion URL, prompting interactively..."
     app_source_ths="$(prompt_for_source_ths_url)"
   fi
   echo "$app_source_ths"
