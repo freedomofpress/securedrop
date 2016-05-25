@@ -426,18 +426,19 @@ function main()
   cleanup_legacy_artifacts
 
   copy_securedrop_dotfiles
+  configure_torrc_additions
   set_permissions_on_securedrop_dotfiles
+
+  create_desktop_shortcuts
+  set_permissions_on_desktop_shortcuts
+
+  configure_network_manager_hook
 
   if is_admin_workstation; then
     configure_ansible_apt_persistence
     configure_ssh_aliases
     update_ansible_inventory
   fi
-
-  configure_torrc_additions
-  create_desktop_shortcuts
-  set_permissions_on_desktop_shortcuts
-  configure_network_manager_hook
 
   print_success_message
 }
