@@ -61,7 +61,7 @@ function is_admin_workstation()
     return 0
   else
     return 1
-fi
+  fi
 }
 
 function cleanup_legacy_artifacts()
