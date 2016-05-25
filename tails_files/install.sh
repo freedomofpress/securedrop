@@ -261,6 +261,7 @@ function configure_ssh_aliases()
   # Don't clobber an existing SSH config file; only run if none exists.
   if [[ -d "${amnesia_home}/.ssh" && ! -f "${amnesia_home}/.ssh/config" ]]; then
     # Rather than try to parse the YAML vars file in Bash, let's prompt for username.
+    echo "Creating SSH aliases for SecureDrop servers in ~/.ssh/config..."
     admin_ssh_username="$(zenity --entry \
         --title='Admin SSH user' \
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
@@ -276,6 +277,8 @@ EOL
     chown amnesia:amnesia "${securedrop_dotfiles}/ssh_config"
     chmod 600 "${securedrop_dotfiles}/ssh_config"
     cp -pf "${securedrop_dotfiles}/ssh_config" "${amnesia_home}/.ssh/config"
+  else
+    echo "SSH config already exists, not overwriting..."
   fi
 }
 
