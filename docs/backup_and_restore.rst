@@ -138,6 +138,11 @@ backup, it should already be there because it was placed there by the backup
 role. Otherwise, you should copy the backup archive that you wish to restore to
 ``install_files/ansible-base``.
 
+.. note:: The backup strategy used for SecureDrop versions prior to 0.3.7
+          created encrypted archives with the extension ``.zip.gpg``.
+          You can safely remove those files once you've created the ``.tar.gz``
+          backup archive described in this guide.
+
 Run the restore Ansible role
 ''''''''''''''''''''''''''''
 
