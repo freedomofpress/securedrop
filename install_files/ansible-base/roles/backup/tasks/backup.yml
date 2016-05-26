@@ -14,7 +14,7 @@
   async: 3600
   register: backup_filename
 
-- name: fetch the backup file back to the host machine\'s ansible-base directory
+- name: fetch the backup file
   fetch:
     src: /tmp/{{ backup_filename.stdout }}
     dest: ./{{ backup_filename.stdout }}
