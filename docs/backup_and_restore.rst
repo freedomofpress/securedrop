@@ -127,8 +127,8 @@ Prerequisites
 '''''''''''''
 
 The process for restoring a backup is very similar to the process of creating
-one. As before, get started by booting the Admin Workstation, ``cd``'ing to the
-SecureDrop repository, and ensuring that you have SecureDrop 0.3.7 or later
+one. As before, to get started, boot the Admin Workstation, ``cd`` to the
+SecureDrop repository, and ensure that you have SecureDrop 0.3.7 or later
 checked out.
 
 The restore role expects to find a ``.tar.gz`` backup archive in
@@ -137,19 +137,6 @@ If you are using the same Admin Workstation to do a restore from a previous
 backup, it should already be there because it was placed there by the backup
 role. Otherwise, you should copy the backup archive that you wish to restore to
 ``install_files/ansible-base``.
-
-Once you have moved the backup archive to the correct location, copy the backup
-archive filename (just the filename, not the full path). Open
-``prod-specific.yml`` in a text editor and add a line that defines
-``restore_file`` as the backup archive filename, e.g.
-
-.. code:: yaml
-
-   restore_file: "<your backup archive filename>"
-
-There is an example and explanatory comment at the end of ``prod-specific.yml``
-to help you. Make sure you save your changes to ``prod-specific.yml`` before
-continuing.
 
 Run the restore Ansible role
 ''''''''''''''''''''''''''''
@@ -160,7 +147,7 @@ backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml
+   ansible-playbook -i inventory -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
@@ -172,12 +159,3 @@ Admin Workstation. This synchronizes the state on the Admin Workstation with the
 state of the restored server. You should re-run the Tails custom configuration
 script (``tails_files/install.sh``, see
 :doc:`configure_admin_workstation_post_install` for detailed instructions).
-
-.. warning:: Once the restore has completed successfully, **be sure to remove**
-             ``restore_file`` from ``prod-specific.yml``. Ansible checks for
-             this variable in order to decide whether to run the restore. If you
-             re-run the ``securedrop-prod.yml`` playbook at a later date (for
-             example, to upgrade SecureDrop), you could overwrite or otherwise
-             damage your existing SecureDrop installation by accidentally
-             repeating the restore (which restores the state of your SecureDrop
-             from an earlier date in the past).
