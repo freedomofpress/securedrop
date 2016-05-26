@@ -14,12 +14,10 @@ In the event of hardware failure on the SecureDrop servers, having a recent back
 will enable you to redeploy the system without changing Onion URLs, recreating
 Journalist accounts, or losing historical submissions from sources.
 
-SecureDrop has had backup and restore functionality included as part of the
-Ansible playbooks since the 0.3 release; however, this functionality had
-numerous shortcomings that made it difficult to use, especially on production
-SecureDrop systems that may have large amounts of saved submissions. These
-issues have been resolved in SecureDrop 0.3.7, so backups and restores are
-significantly easier, faster, and less error-prone.
+.. note:: The backup and restore functionality described in this guide was introduced
+          in SecureDrop 0.3.7. Prior versions of SecureDrop included a less featureful
+          backup process. Make sure you have upgraded to SecureDrop 0.3.7 or greater
+          before continuing.
 
 .. note:: The backup and restore operations both involve transferring *all* of
           your SecureDrop's stored submissions over Tor. Since Tor is very slow,
