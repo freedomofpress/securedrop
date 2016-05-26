@@ -2,15 +2,17 @@ Backup and Restore SecureDrop
 =============================
 
 There are a number of reasons why you might want to backup and restore your SecureDrop.
-
-* You may want to move an existing SecureDrop installation to new hardware.
-  The easiest way to do this is to:
+You may want to move an existing SecureDrop installation to new hardware.
+Performing such a migration consists of:
 
   1. *Backup* the existing installation.
   2. Do a new install of the same version of SecureDrop on the new hardware.
   3. *Restore* the backup to the new installation.
 
-* Periodic backups are generally a good practice to guard against data loss.
+Maintaining periodic backups are generally a good practice to guard against data loss.
+In the event of hardware failure on the SecureDrop servers, having a recent backup
+will enable you to redeploy the system without changing Onion URLs, recreating
+Journalist accounts, or losing historical submissions from sources.
 
 SecureDrop has had backup and restore functionality included as part of the
 Ansible playbooks since the 0.3 release; however, this functionality had
