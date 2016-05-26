@@ -19,43 +19,28 @@ Journalist accounts, or losing historical submissions from sources.
           backup process. Make sure you have upgraded to SecureDrop 0.3.7 or greater
           before continuing.
 
-.. note:: The backup and restore operations both involve transferring *all* of
-          your SecureDrop's stored submissions over Tor. Since Tor is very slow,
-          backups and restores can take a long time. For example, in our testing
-          we found that backing up or restoring an instance with 2GB of stored
-          submissions took 2-6 hours, depending on the speed of the connection
-          to the Tor Hidden Service (which varies widely depending on a number
-          of complex factors that you should not attempt to manipulate, because
-          in doing so you could potentially compromise your anonymity).
+Minimizing disk space
+---------------------
 
-          As a result, it is possible for you to have so many saved submissions
-          that performing a backup or restore, while possible, is infeasible -
-          it could take days or weeks to transfer everything over Tor.
+Since the backup and restore operations both involve transferring *all* of
+your SecureDrop's stored submissions over Tor, the process can take a long time.
+To save time and improve reliability for the transfers, take a moment to clean up
+older submissions in the Document Interface. As a general practice, you should
+encourage your Journalists to delete submissions from the Document Interface
+regularly.
 
-          You can get a sense of the total size of your saved submissions by
-          SSHing to the *App Server* and running ``sudo du -sh
-          /var/lib/securedrop/store``. Empirically, the average sustained
-          throughput of a Tor Hidden Service seems to average around 150 kB/s,
-          so you can use that to estimate the amount of time it will take to
-          transfer a backup which includes all of your saved submissions.
+.. tip:: The throughput of a Tor Hidden Service seems to average around 150 kB/s,
+         or roughly 4 hours for 2GB. Plan your backup and restore accordingly.
 
-          If you find you cannot perform a backup or restore due to this
-          constraint, we recommend taking the following steps, in order:
+You can use the following command to determine the volume of submissions
+currently on the *Application Server* by SSHing in and running
+``sudo du -sh /var/lib/securedrop/store``.
 
-          1. Use the Document Interface to delete unnecessary submissions before
-             performing a backup. It is generally a best practice to minimize
-             the number of submissions stored on the *App Server* - if possible,
-             you should delete them from the App Server after transferring them
-             to the Secure Viewing Station, optionally retaining a copy on
-             encrypted cold storage if the contents of the submissions are worth
-             keeping.
-          2. If that doesn't work, or you are still having trouble, contact us
-             through the `SecureDrop Support Portal`_.
+If you find you cannot perform a backup or restore due to this
+constraint, and have already deleted old submissions from the Document Interface,
+contact us through the `SecureDrop Support Portal`_.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
-
-Backups and restores must be performed from an Admin Workstation, so to get
-started, boot your Admin Workstation with persistence enabled.
 
 Backing Up
 ----------
