@@ -55,6 +55,7 @@ anonymous sources.
    tails_printing_guide
    training_schedule
    yubikey_setup
+   backup_and_restore
 
 .. toctree::
    :caption: Upgrade SecureDrop
