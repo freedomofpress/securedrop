@@ -293,6 +293,9 @@ ownership of your personal files: ::
 
     find /live/persistence/TailsData_unlocked/ -uid 1000 -exec chown -R 1000:1000 '{}' \;
 
+2. Verify the restored data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Shut down, and reboot the Tails USB. Now that you've restored the files, you
 should re-do the :ref:`post-upgrade verification <verify-post-upgrade>` to make
 sure everything is working correctly.
