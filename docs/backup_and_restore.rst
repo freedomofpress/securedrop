@@ -36,6 +36,14 @@ You can use the following command to determine the volume of submissions
 currently on the *Application Server* by SSHing in and running
 ``sudo du -sh /var/lib/securedrop/store``.
 
+.. note:: Submissions are deleted asynchronously and one at a time, so if you
+          delete a lot of submissions through the Document Interface, it may
+          take a while for all of the submissions to actually be deleted. This
+          is especially true because SecureDrop uses ``srm`` to securely erase
+          file submissions, which takes significantly more time than normal file
+          deletion. You can monitor the progress of queued deletion jobs with
+          ``sudo tail -f /var/log/securedrop_worker/err.log``.
+
 If you find you cannot perform a backup or restore due to this
 constraint, and have already deleted old submissions from the Document Interface,
 contact us through the `SecureDrop Support Portal`_.
