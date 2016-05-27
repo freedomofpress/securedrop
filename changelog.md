@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.7
+
+Point release to address some requests from SecureDrop administrators and
+upgrade various components on the SecureDrop architecture.
+
+* Improve backup and restore roles
+* Ensure SecureDrop-specific Tails configuration works on Tails 2.x
+* Document upgrading from Tails 1.x to Tails 2.x for current admins using 1.x
+* Upgrade SecureDrop's Python dependencies
+
+The issues for the release were tracked with the [0.3.7 milestone on
+GitHub](https://github.com/freedomofpress/securedrop/milestones/0.3.7).
+
 ## 0.3.6
 
 This is an emergency release to update the copy of the FPF code signing public
