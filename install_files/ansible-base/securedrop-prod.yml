@@ -78,7 +78,14 @@
     - prod-specific.yml
 
   roles:
-    - { role: backup, tags: [ 'backup' ] }
+    - role: backup
+      # By default backups will NOT run, since they can claim a substantial
+      # amount of disk space. Enable backups explicitly via a backup var, or
+      # implicitly if performing a restore.
+      when: (perform_backup is defined and perform_backup == true) or
+            (restore_file is defined and restore_file != '')
+      tags: backup
+
     - restrict_direct_access_app
 
   sudo: yes

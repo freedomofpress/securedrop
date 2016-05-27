@@ -105,13 +105,13 @@ to debug your connectivity before proceeding further. Make sure:
 Run the backup Ansible role
 '''''''''''''''''''''''''''
 
-Now you can run the production Ansible playbook with the ``backup`` tag to
+Now you can run the production Ansible playbook with special flags tag to
 perform the backup:
 
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml
+   ansible-playbook -i inventory -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real Admin Workstation
 
