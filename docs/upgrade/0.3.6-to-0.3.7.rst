@@ -42,7 +42,7 @@ latest release (0.3.7 or later),
 .. code:: sh
 
    git stash save "site specific configs"
-   git pull
+   git fetch
    git tag -v 0.3.7
 
 .. warning:: The output of ``git tag -v`` should include ``Good signature from
