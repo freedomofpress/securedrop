@@ -65,6 +65,7 @@ anonymous sources.
    upgrade/upgrade-0.3.x.rst
    upgrade/0.3.x-to-0.3.5.rst
    upgrade/0.3.5-to-0.3.6.rst
+   upgrade/0.3.6-to-0.3.7.rst
    upgrade_to_tails_2x.rst
 
 .. toctree::

@@ -194,49 +194,16 @@ was originally set up during installation in
 were enough changes in Tails 2.x that we had to update various aspects of the
 auto-configuration to work properly on it, which is why you need to re-install.
 
-Open a **Terminal** and navigate to your SecureDrop directory.
-
-.. code:: sh
-
-   cd ~/Persistent/securedrop
-
-Stash your local configuration, fetch the latest code, and verify the tag for the
-latest release (0.3.7 or later),
-
-.. code:: sh
-
-   git stash save "site specific configs"
-   git pull
-   git tag -v 0.3.7
-
-.. warning:: The output of ``git tag -v`` should include ``Good signature from
-             "Freedom of the Press Foundation Master Signing Key"``. If it does
-             not, please contact us immediately at support@freedom.press.
-
-Once you've verified the latest release, check it out, then pop your local
-configuration back into place:
-
-.. code:: sh
-
-   git checkout 0.3.7
-   git stash pop
-
-.. note:: Although we try to avoid it, it's possible that you may get merge
-          conflicts when you pop your site-specific changes back onto the latest
-          version of the SecurDrop code. If you are comfortable resolving the
-          merge conflicts yourself, open the affected files listed by git in
-          your favorite editor and resolve the conflicts. If you are not
-          comfortable doing this yourself, contact us at support@freedom.press.
-
-Now that you have the new release checked out, you can re-install the Tails
-auto-configuration:
+First, you need to update your local copy of SecureDrop to the latest version
+(0.3.7 or later). This is documented in :doc:`upgrade/0.3.6-to-0.3.7`. Once
+you've done that, you can re-install the Tails auto-configuration:
 
 .. code:: sh
 
    cd tails_files # from ~/Persistent/securedrop
    sudo ./install.sh
 
-At this point, this process is the same as that described in
+This is the same process as described in
 :doc:`configure_admin_workstation_post_install` (for the Admin Workstation) and
 :doc:`onboarding` (for the Journalist Workstations). If you have questions,
 consult that documentation first.
