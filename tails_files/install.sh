@@ -154,7 +154,7 @@ function prompt_for_document_aths_info()
         --title='Hidden service authentication setup' \
         --width=600 \
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
-        --text='Enter the HidServAuth value to be added to /etc/tor/torrc:')"
+        --text='Enter the HidServAuth value to be added to /etc/tor/torrc:' 2> /dev/null)"
     done
   # The global var is populated, so use it for the function var.
   else
@@ -179,7 +179,7 @@ function prompt_for_source_ths_url()
         --title='Hidden service authentication setup' \
         --width=600 \
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
-        --text='Enter the Source Interface Onion URL:')"
+        --text='Enter the Source Interface Onion URL:' 2> /dev/null)"
     done
     # Store value in script global for reuse without prompting.
     source_ths_url_global="$ths_url"
@@ -265,7 +265,7 @@ function configure_ssh_aliases()
     admin_ssh_username="$(zenity --entry \
         --title='Admin SSH user' \
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
-        --text='Enter your username on the App and Monitor server:')"
+        --text='Enter your username on the App and Monitor server:' 2> /dev/null)"
     cat > "${securedrop_dotfiles}/ssh_config" <<EOL
 Host app
   Hostname $(lookup_app_ssh_aths_url)
