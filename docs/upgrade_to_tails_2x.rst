@@ -174,11 +174,47 @@ The clone process will take a few minutes, and will display a message once it is
 complete. If you see an error message about the device not being ready, try
 unplugging and remounting the Tails device you're trying to upgrade.
 
-When you're done, move on to the next Tails device. Once you have backed up all
-Tails devices, move on to the **Finishing up** section below.
-
 .. |Upgrade by cloning| image:: images/upgrade_to_tails_2x/upgrade_by_cloning.png
 .. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
+
+5. Re-install the automatic Tails configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
+          USBs. If you are upgrading the Secure Viewing Station Tails USB, you
+          can skip this step.
+
+Shut down the Tails USB on the airgapped computer and move it to the computer
+you normally use it on. Boot into each newly upgraded Tails USB, enabling
+persistence, and setting a root password. Confirm that the persistent files are
+present on the upgraded Tails USB. If they are not, or something else went
+wrong, see :ref:`Troubleshooting <troubleshooting>`.
+
+Now that you have successfully upgraded to Tails 2.x with your persistence
+intact, the final step is to re-install the Tails automatic configuration from
+the latest version of SecureDrop (0.3.7 or above). The Tails auto-configuration
+was originally set up during installation in
+:doc:`configure_admin_workstation_post_install` and :doc:`onboarding`. There
+were enough changes in Tails 2.x that we had to update various aspects of the
+auto-configuration to work properly on it, which is why you need to re-install.
+
+First, you need to update your local copy of SecureDrop to the latest version
+(0.3.7 or later). This is documented in :doc:`upgrade/0.3.6-to-0.3.7`. Once
+you've done that, you can re-install the Tails auto-configuration:
+
+.. code:: sh
+
+   cd tails_files # from ~/Persistent/securedrop
+   sudo ./install.sh
+
+This is the same process as described in
+:doc:`configure_admin_workstation_post_install` (for the Admin Workstation) and
+:doc:`onboarding` (for the Journalist Workstations). If you have questions,
+consult that documentation first.
+
+When you're done, repeat this final step on the rest of the Tails devices. Once
+you have re-installed the Tails auto-configuration on all of the Tails devices,
+move on to the **Finishing up** section below.
 
 Finishing up
 ------------
@@ -254,6 +290,8 @@ reformat it appropriately.
           smash the device with a hammer until the chips containing its flash
           memory are broken up, then dispose of the pieces in the garbage.
 
+.. _troubleshooting:
+
 Troubleshooting
 ---------------
 
@@ -299,19 +337,6 @@ ownership of your personal files: ::
 Shut down, and reboot the Tails USB. Now that you've restored the files, you
 should re-do the :ref:`post-upgrade verification <verify-post-upgrade>` to make
 sure everything is working correctly.
-
-.. todo:: At this point, the user (admin or journalist) has upgraded to Tails
-          2.x and has copied the persistent files from a SecureDrop 0.3.6
-          ``tails_files/install.sh``. Unfortunately, they cannot connect to any
-          of the ATHS because earliest instructions advise them **not** to copy
-          ``persistence.conf``, which includes the line that adds
-          ``custom-nm-hooks`` and thus the Network Manager hook that
-          reconfigures Tor to be aware of the ``torrc_additions``.
-
-          However, they also cannot re-run ``tails_files/install.sh`` at the
-          moment, since they have 0.3.6 checked out and that ``tails_files``
-          doesn't work on Tails 2.x. At this point, we need to direct them to
-          the upgrade guide for 0.3.7 (which is yet to be written).
 
 .. |Navigate to TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_1.png
 .. |TailsData_unlocked| image:: images/upgrade_to_tails_2x/tails_data_unlocked_2.png

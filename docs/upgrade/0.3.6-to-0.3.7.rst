@@ -1,0 +1,71 @@
+Upgrade from 0.3.6 to 0.3.7
+===========================
+
+SecureDrop 0.3.7 is a point release that:
+
+- Makes it possible for SecureDrop users to upgrade to Tails 2.x
+- Improves and documents the backup and restore process
+- Upgrades SecureDrop's Python dependencies
+
+There is no need for admins to re-run the Ansible playbooks for 0.3.7. All changes to the servers are contained in the Debian packages for 0.3.7, which all servers that are running 0.3.6 will automatically upgrade to use within 24 hours of their release.
+
+However, if you want to:
+
+- Take advantage of the improved backup and restore procedures, or
+- Upgrade your Tails USBs to Tails 2.x,
+
+you will need to follow the steps in this guide to safely update your copy of
+SecureDrop on your Tails USB.
+
+.. note:: It is **strongly recommended** that Admins and Journalists upgrade
+          their Tails workstations to the latest version as soon as possible.
+          The procedure for upgrading your Tails USBs is documented in detail in
+          :doc:`/upgrade_to_tails_2x`.
+
+.. _0.3.7-upgrade-procedure:
+
+Upgrade Procedure
+------------------
+
+Boot into your Tails USB (an Admin Tails USB or a Journalist Tails USB). At the
+Tails Greeter, enable persistence and set a root password.
+
+Open a **Terminal** and navigate to your SecureDrop directory.
+
+.. code:: sh
+
+   cd ~/Persistent/securedrop
+
+Stash your local configuration, fetch the latest code, and verify the tag for the
+latest release (0.3.7 or later),
+
+.. code:: sh
+
+   git stash save "site specific configs"
+   git pull
+   git tag -v 0.3.7
+
+.. warning:: The output of ``git tag -v`` should include ``Good signature from
+             "Freedom of the Press Foundation Master Signing Key"``. If it does
+             not, please contact us immediately at support@freedom.press.
+
+Once you've verified the latest release, check it out, then pop your local
+configuration back into place:
+
+.. code:: sh
+
+   git checkout 0.3.7
+   git stash pop
+
+.. note:: Although we try to avoid it, it's possible that you may get merge
+          conflicts when you pop your site-specific changes back onto the latest
+          version of the SecurDrop code. If you are comfortable resolving the
+          merge conflicts yourself, open the affected files listed by git in
+          your favorite editor and resolve the conflicts. If you are not
+          comfortable doing this yourself, contact us at support@freedom.press.
+
+Congratulations, you've successfully upgraded your local copy of SecureDrop to
+0.3.7. At this point, you may be interested in:
+
+- Upgrading to Tails 2.x: :doc:`/upgrade_to_tails_2x`
+- Backing up and restoring your SecureDrop installation: :doc:`/backup_and_restore`
