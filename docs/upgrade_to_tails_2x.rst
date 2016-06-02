@@ -180,6 +180,10 @@ unplugging and remounting the Tails device you're trying to upgrade.
 5. Re-install the automatic Tails configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
+          USBs. If you are upgrading the Secure Viewing Station Tails USB, you
+          can skip this step.
+
 Shut down the Tails USB on the airgapped computer and move it to the computer
 you normally use it on. Boot into each newly upgraded Tails USB, enabling
 persistence, and setting a root password. Confirm that the persistent files are
