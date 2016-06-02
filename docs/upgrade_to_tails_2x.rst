@@ -33,6 +33,10 @@ the exposure of sensitive data to networked computers, thereby reducing the
 threat of compromise by adversaries who wish to gain access to your SecureDrop
 instance.
 
+The airgapped machine should have 3 USB ports, so you can plug in all 3 devices
+at the same time. If you don't have 3 USB ports available, you can use a USB
+hub, which may reduce transfer speeds.
+
 Upgrade each Tails device
 -------------------------
 
