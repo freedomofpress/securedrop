@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # postinst script for securedrop-app-code
 #
 # see: dh_installdeb(1)
@@ -16,9 +16,37 @@ set -x
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+REQUIREMENTS="/var/www/securedrop/requirements/securedrop-requirements.txt"
+
+# Helper fn for array membership testing
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
+
 case "$1" in
     configure)
-    pip install --no-index --find-links=/var/securedrop/wheelhouse -r /var/www/securedrop/requirements/securedrop-requirements.txt
+    # Install all wheels shipped in the deb over the old ones
+    pip install --no-index --find-links=/var/securedrop/wheelhouse -r $REQUIREMENTS
+
+    # Add all current requirements to pip whitelist
+    pip_whitelist=()
+    for p in $(grep -oh '^[[:alnum:]-]*' $REQUIREMENTS)
+    do
+      pip_whitelist+=("$p")
+    done
+
+    # Uninstall all dependencies not in pip whitelist. pip will not let you
+    # uninstall python packages provided by system packages, so we don't have to worry about that
+    for p in $(pip list | awk '{print $1}')
+    do
+      if ! containsElement "$p" "${pip_whitelist[@]}"; then
+        # pip lacks a '-y' argument until version 7.1.2, Ubuntu 14.04 is still
+        # on 1.X and will never make it there
+        yes | pip uninstall $p
+      fi
+    done
 
     chown -R www-data:www-data /var/www/securedrop
     chown www-data:www-data /var/www/document.wsgi
