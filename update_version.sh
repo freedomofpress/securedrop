@@ -22,7 +22,7 @@ if [ -z "$NEW_VERSION" ]; then
 fi
 
 # Get the old version from securedrop/version.py
-old_version_regex="^__version__ = '([0-9a-z.]+)'$"
+old_version_regex="^__version__ = '([0-9a-z.+]+)'$"
 [[ `cat securedrop/version.py` =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 
