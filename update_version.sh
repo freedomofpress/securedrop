@@ -7,9 +7,7 @@ dch_installed=$?
 command -v git > /dev/null
 git_installed=$?
 if [ $dch_installed -ne 0 ] || [ $git_installed -ne 0 ]; then
-  echo "You must run this on a system with dch and git available (in order to edit the Debian package changelog and commit message)"
-  echo "If you are on Debian/Ubuntu, apt-get install devscripts git"
-  exit 1
+  sudo apt-get install -y devscripts git
 fi
 
 set -e
@@ -41,7 +39,8 @@ sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$NEW_VERSION/" instal
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/install.md
 
 # Update the changelog
-vim changelog.md
+sed -i 's/\(## '$OLD_VERSION'\)/## '$NEW_VERSION'\n\n\n\n\1/g' changelog.md
+vim +5 changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
