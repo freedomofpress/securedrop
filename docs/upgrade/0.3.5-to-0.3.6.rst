@@ -91,7 +91,7 @@ Greeter*.
      git stash pop
 
 #. Make sure you have Ansible installed. If running ``which ansible`` returns 
-   ``ansible not found``, you should ::
+   nothing, you should ::
 
     sudo apt-get update
     sudo apt-get install ansible
