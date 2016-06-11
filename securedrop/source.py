@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-import uuid
 from functools import wraps
-import zipfile
 from cStringIO import StringIO
 import subprocess
 from threading import Thread
@@ -31,6 +29,7 @@ import logging
 log = logging.getLogger('source')
 
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
+app.debug = False  # safe default
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 
@@ -387,7 +386,7 @@ def logout():
         flash("Thank you for logging out.", "notification")
 
     return redirect(url_for('index'))
-        
+
 
 
 @app.route('/howto-disable-js')
@@ -429,7 +428,18 @@ def write_pidfile():
     with open(config.SOURCE_PIDFILE, 'w') as fp:
         fp.write(pid)
 
-if __name__ == "__main__":
+
+# this will not be called by mod_wsgi, so any changes here only affect the dev environment
+if __name__ == "__main__":  # pragma: no cover
     write_pidfile()
-    debug = getattr(config, 'env', 'prod') != 'prod'
-    app.run(debug=debug, host='0.0.0.0', port=8080)
+
+    # list all files in the templates dir so Flask can reset when they update
+    extra_dirs = ['source_templates']
+    extra_files = extra_dirs[:]
+    for extra_dir in extra_dirs:
+        for dirname, dirs, files in os.walk(extra_dir):
+            for filename in files:
+                filename = os.path.join(dirname, filename)
+                extra_files.append(filename)
+
+    app.run(debug=True, host='0.0.0.0', port=8080, extra_files=extra_files)
