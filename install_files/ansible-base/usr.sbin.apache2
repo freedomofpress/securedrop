@@ -11,6 +11,7 @@
 
   /bin/dash rix,
   /bin/touch rix,
+  /bin/uname rix,
   /dev/null w,
   /dev/urandom r,
   /etc/apache2/apache2.conf r,
