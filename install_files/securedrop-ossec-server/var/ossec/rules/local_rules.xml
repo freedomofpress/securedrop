@@ -115,3 +115,16 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<!--
+  Do not alert on attempted connections to the Tor HS on a port
+  the server is not listening on. Events are produced by
+  automated crawling/scanning.
+-->
+<group name="tor hs scans">
+  <rule id="200001" level="0">
+    <if_sid>1002</if_sid>
+    <match>connection_edge_process_relay_cell</match>
+    <options>no_email_alert</options>
+  </rule>
+</group>
