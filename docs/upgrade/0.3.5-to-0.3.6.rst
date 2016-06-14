@@ -91,10 +91,15 @@ Greeter*.
      git stash pop
 
 #. Make sure you have Ansible installed. If running ``which ansible`` returns 
-   ``ansible not found``, you should ::
+   nothing, you should ::
 
     sudo apt-get update
     sudo apt-get install ansible
+
+#. Change your current working directory to where the files Ansible needs are
+stored ::
+
+    cd install_files/ansible-base
 
 #. Run the Ansible playbooks (substitute the admin account on the servers for 
    ``<user>``) ::
