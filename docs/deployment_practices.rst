@@ -306,7 +306,7 @@ analysis.
 
 #. Make your entire site available through HTTPS.
 
-   - That way, visits to your landing page won't stand out as the only encrypted traffic.
+   - That way, visits to your landing page won't stand out as the only encrypted traffic to your site.
 
 #. Include an iframe for all (or a random subset of) visitors, loading
    this particular URL (hidden).
