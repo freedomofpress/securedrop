@@ -39,6 +39,7 @@ sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$NEW_VERSION/" instal
 
 # Update the version that we tell people to check out in the install doc
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
+sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
 
 # Update the changelog
 vim changelog.md
