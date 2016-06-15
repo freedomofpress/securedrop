@@ -304,12 +304,9 @@ Ideally, some or all of the following changes are made to improve the
 overall security of the path to the landing page and obfuscate traffic
 analysis.
 
-#. Make the entire site available under 'ssl.washingtonpost.com'
-   (ideally without the '.ssl' prefix).
+#. Make your entire site available through HTTPS.
 
-   - That way, the domain won't be as suspicious as it is right now. I
-     suspect that this is more or less the only content hosted on the
-     domain.
+   - That way, visits to your landing page won't stand out as the only encrypted traffic to your site.
 
 #. Include an iframe for all (or a random subset of) visitors, loading
    this particular URL (hidden).
