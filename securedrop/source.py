@@ -350,7 +350,7 @@ def delete():
 @app.route('/delete-all', methods=('POST',))
 @login_required
 def batch_delete():
-    replies = Reply.query.filter(Reply.source_id == g.source.id).all()
+    replies = g.source.replies
     if len(replies) == 0:
         app.logger.error("Found no replies when at least one was expected")
         return redirect(url_for('lookup'))
