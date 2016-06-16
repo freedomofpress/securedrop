@@ -41,8 +41,7 @@
 - name: Configure SecureDrop Application Server.
   hosts: securedrop_application_server
   vars_files:
-   - prod-specific.yml
-  vars:
+    - prod-specific.yml
   roles:
     - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
@@ -54,7 +53,7 @@
   # So iptables will not be reloaded until the exemptions are applied
   # for production the last task is apply iptables. This will break their
   # connection. After that point the admin will to proxy traffic over tor.
-  name: Lock down firewall configuration for Application and Monitor Servers.
+- name: Lock down firewall configuration for Application and Monitor Servers.
   hosts: securedrop
   vars_files:
     - prod-specific.yml
