@@ -41,8 +41,7 @@
 - name: Configure SecureDrop Application Server.
   hosts: securedrop_application_server
   vars_files:
-   - prod-specific.yml
-  vars:
+    - prod-specific.yml
   roles:
     - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
