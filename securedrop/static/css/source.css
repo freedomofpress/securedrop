@@ -485,6 +485,42 @@ p#codename {
   border: 0;
 }
 
+#delete-all .btn:first-child {
+  display: block;
+  padding: 2%;
+  margin: auto;
+  width: 80%;
+}
+
+#delete-all .hidden-prompt {
+  margin: 0;
+  padding: 0;
+  height: 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+#delete-all .hidden-prompt:target {
+  margin: auto;
+  padding: auto;
+  height: auto;
+  overflow: visible;
+}
+
+#delete-all .danger, #delete-all .cancel {
+  display: inline-block;
+  width: 30%;
+}
+
+#delete-all .cancel {
+  background-color: #999;
+}
+
+#delete-all .cancel:hover {
+  color: #999;
+  background-color: white;
+}
+
 #replies .reply {
   border: 1px solid #999999;
   text-align: left;

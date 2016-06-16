@@ -347,6 +347,20 @@ def delete():
     flash("Reply deleted", "notification")
     return redirect(url_for('lookup'))
 
+@app.route('/delete-all', methods=('POST',))
+@login_required
+def batch_delete():
+    replies = g.source.replies
+    if len(replies) == 0:
+        app.logger.error("Found no replies when at least one was expected")
+        return redirect(url_for('lookup'))
+    for reply in replies:
+        store.secure_unlink(store.path(g.sid, reply.filename))
+        db_session.delete(reply)
+    db_session.commit()
+
+    flash("All replies have been deleted", "notification")
+    return redirect(url_for('lookup'))
 
 def valid_codename(codename):
     # Ignore codenames that are too long to avoid DoS

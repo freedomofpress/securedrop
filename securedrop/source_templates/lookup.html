@@ -59,6 +59,15 @@
         <div class="clearfix"></div>
       </div>
     {% endfor %}
+    <form id="delete-all" method="post" action="/delete-all">
+      <a class="btn" href="#delete-all-confirm">Delete all replies</a>
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <div id="delete-all-confirm" class="hidden-prompt">
+        <p>Are you finished with the replies?</p>
+        <button class="danger" type="submit">Yes, delete all replies</button>
+        <a class="btn cancel" href="#delete-all">No, not yet</a>
+      </div>
+    </form>
   {% else %}
     <p id="no-replies">There are no replies at this time.</p>
   {% endif %}
