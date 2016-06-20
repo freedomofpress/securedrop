@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
 from datetime import datetime
 import functools
@@ -8,7 +7,6 @@ from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CsrfProtect
 from flask.ext.assets import Environment
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
@@ -18,11 +16,11 @@ import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
-                WrongPasswordException, BadTokenException,
                 LoginThrottledException, InvalidPasswordLength)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
+app.debug = False  # safe default
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CsrfProtect(app)
 
@@ -660,7 +658,17 @@ def write_pidfile():
         fp.write(pid)
 
 
-if __name__ == "__main__":
+# this will not be called by mod_wsgi, so any changes here only affect the dev environment
+if __name__ == "__main__":  # pragma: no cover
     write_pidfile()
-    debug = getattr(config, 'env', 'prod') != 'prod'
-    app.run(debug=debug, host='0.0.0.0', port=8081)
+
+    # list all files in the templates dir so Flask can reset when they update
+    extra_dirs = ['journalist_templates']
+    extra_files = extra_dirs[:]
+    for extra_dir in extra_dirs:
+        for dirname, dirs, files in os.walk(extra_dir):
+            for filename in files:
+                filename = os.path.join(dirname, filename)
+                extra_files.append(filename)
+
+    app.run(debug=True, host='0.0.0.0', port=8081, extra_files=extra_files)
