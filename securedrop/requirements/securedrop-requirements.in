@@ -3,6 +3,7 @@ Flask
 gnupg
 Jinja2
 psutil
+pycrypto
 pyotp
 qrcode
 redis
