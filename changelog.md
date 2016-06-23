@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.8-rc1
+
+Re-include pycrypto Python module.
+
 ## 0.3.7
 
 Point release to address some requests from SecureDrop administrators and

@@ -1,3 +1,9 @@
+securedrop-app-code (0.3.8-rc1) trusty; urgency=medium
+
+  * Re-include pycrypto Python dependency.
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 23 Jun 2016 17:31:39 +0000
+
 securedrop-app-code (0.3.7) trusty; urgency=medium
 
   * See changelog.md 
