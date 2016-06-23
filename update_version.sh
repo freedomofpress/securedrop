@@ -42,7 +42,7 @@ sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
 
 # Update the changelog
-vim changelog.md
+vi changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
