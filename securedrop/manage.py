@@ -1,22 +1,16 @@
 #!/usr/bin/env python
 
-import atexit
 import sys
 import os
-import select
 import shutil
 import subprocess
-import unittest
-import readline  # makes the add_admin prompt kick ass
-from getpass import getpass
 import signal
-from time import sleep
-
 import qrcode
 import psutil
 
+from getpass import getpass
+from argparse import ArgumentParser
 from db import db_session, Journalist
-
 from management import run
 
 # We need to import config in each function because we're running the tests
@@ -213,27 +207,40 @@ def clean_tmp():
             os.remove(path)
 
 
-def main():
-    valid_cmds = [
-        "run",
-        "test_unit",
-        "test",
-        "reset",
-        "add_admin",
-        "clean_tmp"]
-    help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
+def get_args():
+    parser = ArgumentParser(prog=__file__,
+                            description='A tool to help admins manage and devs hack')
 
-    if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
-        print help_str
-        sys.exit(1)
+    subparsers = parser.add_subparsers()
+    subparsers.required = True
+    subparsers.dest = 'subcommand'
 
-    cmd = sys.argv[1]
+    run_subparser = subparsers.add_parser('run', help='Run the dev webserver (source & journalist)')
+    run_subparser.set_defaults(func=run)
 
+    unit_test_subparser = subparsers.add_parser('unit-test', help='Run the unit tests')
+    unit_test_subparser.set_defaults(func=test_unit)
+
+    test_subparser = subparsers.add_parser('test', help='Run the full test suite')
+    test_subparser.set_defaults(func=test)
+
+    reset_subparser = subparsers.add_parser('reset', help="DANGER!!! Clears the SecureDrop application's state")
+    reset_subparser.set_defaults(func=reset)
+
+    add_admin_subparser = subparsers.add_parser('add-admin', help='Add a new admin to the application')
+    add_admin_subparser.set_defaults(func=add_admin)
+
+    clean_tmp_subparser = subparsers.add_parser('clean-tmp', help='Cleanup the SecureDrop temp directory')
+    clean_tmp_subparser.set_defaults(func=clean_tmp)
+
+    return parser
+
+
+if __name__ == "__main__":  # pragma: no cover
     try:
-        getattr(sys.modules[__name__], cmd)()
+        args = get_args().parse_args()
+        # calling like this works because all functions take zero arguments
+        args.func()
     except KeyboardInterrupt:
         print  # So our prompt appears on a nice new line
-
-
-if __name__ == "__main__":
-    main()
+        exit(1)

@@ -46,7 +46,7 @@ end
 
 # ensure cron job for securedrop tmp dir cleanup is enabled
 describe cron do
-  it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean_tmp" }
+  it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean-tmp" }
 end
 
 # ensure directory for worker logs is present

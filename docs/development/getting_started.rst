@@ -208,7 +208,7 @@ course, you can specify the name if you want to.
    ./manage.py run         # run development servers
    ./manage.py test        # run the unit and functional tests
    ./manage.py reset       # resets the state of the development instance
-   ./manage.py add_admin   # create a user to use when logging in to the Document Interface
+   ./manage.py add-admin   # create a user to use when logging in to the Document Interface
 
 SecureDrop consists of two separate web appications (the Source Interface and
 the Document Interface) that run concurrently. The development servers will
@@ -234,7 +234,7 @@ to fill out your local copy of
    vagrant ssh app-staging
    sudo su
    cd /var/www/securedrop
-   ./manage.py add_admin
+   ./manage.py add-admin
    ./manage.py test
 
 Prod
@@ -256,7 +256,7 @@ To create only the prod servers, run:
    vagrant ssh app-prod
    sudo su
    cd /var/www/securedrop/
-   ./manage.py add_admin
+   ./manage.py add-admin
 
 In order to access the servers after the install is completed you will need to
 install and configure a proxy tool to proxy your SSH connection over Tor.
