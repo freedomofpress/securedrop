@@ -1,0 +1,93 @@
+=button_rules
+  button, a.btn, .btn
+    background: #7985aa
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    padding: 10px 15px
+    border: 1px solid transparent
+    color: white
+    font-size: medium
+    cursor: pointer
+    text-align: center
+    text-decoration: none
+
+  button
+    &.starred
+      color: orange
+
+      &:hover
+        color: #FFC5AD
+        border: none
+        background-color: rgb(240, 240, 240)
+
+    &.un-starred
+      color: lightgray
+
+      &:hover
+        color: lightsalmon
+        border: none
+        background-color: rgb(240, 240, 240)
+
+    &.button-star:focus
+      outline: 0
+
+  button
+    &.plain
+      background: none
+      color: #333
+
+      &:hover
+        background: none
+        color: #333
+        border: 1px solid transparent
+
+    &:hover
+      background: white
+      color: #7985aa
+      border: 1px solid #7985aa
+
+  .btn
+    &.small
+      font-size: small
+      padding: 3px 10px
+
+    &.primary
+      display: block
+      width: 50%
+      margin: 0 auto
+
+  button.block, a.btn.block
+    text-decoration: none
+    min-width: 250px
+    margin-bottom: 20px
+
+  button.small, a.btn.small
+    font-size: small
+    padding: 3px 10px
+
+  a.btn:hover, .btn:hover
+    background: white
+    color: #7985aa
+    border: 1px solid #7985aa
+
+  button.alt, a.btn.alt, .btn.alt
+    background: transparent
+    border: 1px solid white
+
+  button.alt:hover, a.btn.alt:hover, .btn.alt:hover
+    background: white
+    color: #7985aa
+
+  button.danger, a.danger, .btn.danger
+    background-color: #d55c5c
+
+  button.danger:hover, a.btn.danger:hover, .btn.danger:hover
+    background: white
+    border-color: #d55c5c
+    color: #d55c5c
+
+  .button-star
+    padding: 0
+    background-color: rgb(240, 240, 240)
+    color: orange
+    border: none
