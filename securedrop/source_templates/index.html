@@ -2,8 +2,9 @@
 <html>
   <head>
     <title>SecureDrop | Protecting Journalists and Sources</title>
-    {% assets filters="cssmin", output="gen/source.css",
-      "css/normalize.css", "css/source.css", "css/font-awesome.css" %}
+
+    {# TODO why doesn't a link to /static/source.css work? #}
+    {% assets filters="cssmin", output="gen/source.css", "css/source.css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}
 
