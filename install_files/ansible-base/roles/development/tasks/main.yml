@@ -22,6 +22,24 @@
     - pip
     - development
 
+- name: Install sass Ruby gem
+  gem:
+    name: sass
+    version: '3.4.22'
+    state: present
+    user_install: no
+  sudo: yes
+  tags:
+    - development
+
+# necessary for automated tests
+- name: Compile sass to css
+  shell: sass --update sass:static/css
+  args:
+    chdir: '{{ securedrop_repo  }}/securedrop'
+#  register: sass_compile_result
+#  changed_when: sass_compile_result.stdout != ''
+
 # TODO: Probably better to set this env var in /etc/profile.d,
 # since it doesn't need to be set ONLY for the securedrop user.
 # Warrants further testing (e.g. Travis CI?), so leaving for now.
