@@ -58,7 +58,7 @@
     - build
 
 - name: Compile sass to css
-  shell: sass --update sass:static/css
+  shell: sass --update sass:static/css --style compressed
   args:
     chdir: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/
 #  register: sass_compile_result
