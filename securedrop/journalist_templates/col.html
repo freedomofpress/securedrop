@@ -29,13 +29,16 @@
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
           <li class="submission">
-            <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
             {% if unread_subs %}
               {% if doc in unread_subs %}
+                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb"/>
                 <span title="Unread" class="unread"><i class="fa fa-envelope"></i></span>
               {% else %}
+                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
                 <span class="unread"></span>
               {% endif %}
+            {% else %}
+              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check"/>
             {% endif %}
             {% if doc.filename.endswith('reply.gpg') %}
               <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
