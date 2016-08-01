@@ -69,6 +69,7 @@ Either way, once you've installed Vagrant you should run:
 
 Finally, install Ansible so it can be used with Vagrant to automatically
 provision VMs. We recommend installing Ansible from PyPi with ``pip``:
+
 .. code:: sh
 
     sudo apt-get install python-pip
