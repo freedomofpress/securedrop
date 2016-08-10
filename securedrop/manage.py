@@ -212,8 +212,6 @@ def get_args():
                             description='A tool to help admins manage and devs hack')
 
     subparsers = parser.add_subparsers()
-    subparsers.required = True
-    subparsers.dest = 'subcommand'
 
     run_subparser = subparsers.add_parser('run', help='Run the dev webserver (source & journalist)')
     run_subparser.set_defaults(func=run)
