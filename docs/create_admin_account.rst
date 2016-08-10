@@ -35,12 +35,12 @@ To create the first admin account, SSH to the App Server, then:
 
    $ sudo su
    $ cd /var/www/securedrop
-   $ ./manage.py add_admin
+   $ ./manage.py add-admin
 
 Follow the prompts.
 
 .. todo:: Clarify how to set up TOTP/HOTP through ``./manage.py
-          add_admin``.
+          add-admin``.
 	  
 Once that's done, you should open the Tor Browser |TorBrowser| and
 navigate to the Document Interface's .onion address. Verify that you

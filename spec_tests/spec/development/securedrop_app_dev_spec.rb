@@ -58,8 +58,8 @@ end
 describe cron do
   # TODO: this should be using property, but the ansible role
   # doesn't use a var, it's hard-coded. update ansible, then fix test.
-  # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean_tmp" }
-  it { should have_entry "@daily /vagrant/securedrop/manage.py clean_tmp" }
+  # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean-tmp" }
+  it { should have_entry "@daily /vagrant/securedrop/manage.py clean-tmp" }
 end
 
 
