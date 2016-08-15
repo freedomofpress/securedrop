@@ -22,7 +22,7 @@ if [ -z "$NEW_VERSION" ]; then
 fi
 
 # Get the old version from securedrop/version.py
-old_version_regex="^__version__ = '([0-9a-z.]+)'$"
+old_version_regex="^__version__ = '([0-9a-z.+]+)'$"
 [[ `cat securedrop/version.py` =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 
@@ -47,7 +47,7 @@ export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
 # Update the changelog in the Debian package
-dch -v $NEW_VERSION -D trusty -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
+dch -b -v $NEW_VERSION -D trusty -c install_files/securedrop-app-code/usr/share/doc/securedrop-app-code/changelog.Debian
 
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.

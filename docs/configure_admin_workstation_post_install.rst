@@ -30,7 +30,7 @@ configure Tor to access a set of ATHS. In order to persist these changes across
 reboots, the Tails instance must have persistence enabled (specifically, the 
 "dotfiles persistence").
 
-We also require that you are using Tails 2.x or greater.
+.. note:: Starting in version 0.3.7, SecureDrop requires Tails 2.x or greater.
 
 To install the auto-connect configuration, start by navigating to the directory 
 with these scripts, and run the install script:
@@ -40,38 +40,31 @@ with these scripts, and run the install script:
     cd ~/Persistent/securedrop/tails_files/
     sudo ./install.sh
 
-Type the Administration Password that you selected when starting Tails and hit 
-enter. The install script will download some additional software, which may 
-take a few minutes.
+Type the Administration Password that you selected when starting Tails and hit
+**Enter**. This script installs a persistent script that runs every time you
+connect to a network in Tails, and automatically configures access to
+the Document Interface and to the servers via SSH. The HidServAuth info is
+collected from files in
+``~/Persistent/securedrop/install_files/ansible-base`` and stored in
+``~/Persistent/.securedrop/torrc_additions`` thereafter.
 
-This script installs a Network Manager hook that runs every time you connect to 
-Tor. It automatically adds the HidServAuth values from ``torrc_additions`` to 
-the ``torrc`` and restarts Tor.
+.. tip:: Copy the files ``app-document-aths`` and ``app-source-ths`` to
+         the Transfer Device in preparation for setting up the Journalist
+         Workstation. Then you can use the ``install.sh`` script to configure 
+         access for Journalists as well.
 
-In addition, it creates desktop and main menu shortcuts for both interfaces, 
-updates your Ansible inventory file to install playbooks over Tor in the 
-future, directs Tails to install Ansible at the beginning of every session, and
-sets up SSH host aliases for the servers.
+In addition, the script creates desktop and menu shortcuts for the Source
+and Document Interfaces, updates the Ansible inventory file to access the servers
+playbooks over Tor in the future, directs Tails to install Ansible at the
+beginning of every session, and sets up SSH host aliases for the servers.
 
-.. note:: The only thing you need to remember to do is enable
-          persistence when you boot the Admin Workstation. If you are
-          using the Admin Workstation and are unable to connect to any
-          of the authenticated hidden services, restart Tails and make
-          sure to enable persistence.
+The only thing you need to remember to do is enable
+persistence when you boot the Admin Workstation. If you are
+using the Admin Workstation and are unable to connect to any
+of the authenticated hidden services, restart Tails and make
+sure to enable persistence.
 
 .. _Authenticated Tor Hidden Services: https://www.torproject.org/docs/tor-manual.html.en#HiddenServiceAuthorizeClient
-
-.. _SSH Host Aliases:
-
-SSH Host Aliases
-----------------
-
-The installation script in ``tails_files`` also sets up SSH host aliases for the 
-admin. These can be found in ``~/.ssh/config``.
-
-You can simply use ``ssh app`` and ``ssh mon`` to connect to each server. This 
-configuration will be persisted across reboots thanks to Tails' SSH client 
-persistence.
 
 Set up two-factor authentication for the Admin
 ----------------------------------------------

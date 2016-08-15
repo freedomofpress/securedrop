@@ -1,0 +1,12 @@
+Flask-WTF
+Flask
+gnupg
+Jinja2
+psutil
+pyotp
+qrcode
+redis
+rq
+scrypt
+SQLAlchemy
+Werkzeug

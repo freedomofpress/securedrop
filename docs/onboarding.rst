@@ -63,36 +63,39 @@ Set up automatic access to the Document Interface
 
 Since the Document Interface is an ATHS, we need to set up the
 Journalist Tails USB to auto-configure Tor just as we did with the
-Admin Tails USB. The procedure is essentially identical, only instead
-of configuring all 3 of the configured services
-(``app-document-aths``, ``app-ssh-aths``, and ``mon-ssh-aths``), you
-only configure it to connect to ``app-document-aths`` since only
-Administrators need to access the servers over SSH.
+Admin Tails USB. The procedure is essentially identical, except the
+SSH configuration will be skipped, since only Administrators need
+to access the servers over SSH.
 
-To get started, you should copy the ``HidServAuth`` value for the
-Document Interface ATHS from the Admin Workstation to the Journalist
-Workstation. The easiest way to do this is to copy the
-``app-document-aths`` and ``app-source-ths`` files from the Admin Workstation 
-to the
-Journalist Workstation with the Data Transfer Device.
+.. tip:: Copy the files ``app-document-aths`` and ``app-source-ths`` from
+         the Admin Workstation via the Transfer Device. Place these files
+         in ``~/Persistent/securedrop/install_files/ansible-base`` on the
+         Journalist Workstation, and the ``install.sh`` script will
+         automatically use them.
 
-Now you need the Tails setup scripts (``./tails_files``) that
+.. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
+             to the Journalist Workstation. Those files grant access via SSH,
+             and only the Admin Workstation should have shell access to the
+             servers.
+
+Since you need will the Tails setup scripts (``securedrop/tails_files``) that
 you used to :doc:`Configure the Admin Workstation Post-Install
-<configure_admin_workstation_post_install>`. The easiest way to do
-this is to clone (and verify) the SecureDrop repository on the
-journalist workstation, just like you did for the Admin
+<configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
+repository on the Journalist Workstation, just like you did for the Admin
 Workstation. Refer to the docs for :ref:`cloning the SecureDrop
 repository <Download the SecureDrop repository>`, then return here to
 continue setting up the Journalist Workstation.
 
-Once you've done this, you should set up auto-connect and shortcuts for the 
-Document
-Interface ATHS the same way you did on the Admin Workstation. Follow
-:ref:`the same docs <auto-connect ATHS>`, except on the Journalist
-Workstation, you should enter the lines from ``app-document-aths``
-and ``app-source-ths`` when prompted to by the ``install.sh`` script. Only the 
-Admin Workstation should have the ``HidServAuth`` lines from ``app-ssh-aths`` 
-and ``mon-ssh-aths``.
+Once you've done this, run the install script to configure the
+shortcuts for the Source and Document Interfaces: ::
+
+  cd ~/Persistent/securedrop/tails_files/
+  sudo ./install.sh
+
+If you did not copy over the ``app-source-ths`` and ``app-document-aths``
+files from the Admin Workstation, the script will prompt for the information.
+Make sure to type the information carefully, as any typos will break access
+for the Journalist Workstation.
 
 Once the ``install.sh`` script is finished, you should be able to access the
 Document Interface. Open the Tor Browser and navigate to the .onion address for
