@@ -1,0 +1,15 @@
+cssmin
+Flask-Assets
+Flask-WTF
+Flask
+gnupg
+Jinja2
+jsmin
+psutil
+pyotp
+qrcode
+redis
+rq
+scrypt
+SQLAlchemy
+Werkzeug

@@ -157,17 +157,11 @@ def encrypt(plaintext, fingerprints, output=None):
         fingerprints = [fingerprints, ]
     fingerprints = [fpr.replace(' ', '') for fpr in fingerprints]
 
-    if isinstance(plaintext, unicode):
-        plaintext = plaintext.encode('utf8')
-
-    encrypt_fn = gpg.encrypt if isinstance(
-        plaintext,
-        str) else gpg.encrypt_file
-    out = encrypt_fn(plaintext,
-                     *fingerprints,
-                     output=output,
-                     always_trust=True,
-                     armor=False)
+    out = gpg.encrypt(plaintext,
+                      *fingerprints,
+                      output=output,
+                      always_trust=True,
+                      armor=False)
     if out.ok:
         return out.data
     else:

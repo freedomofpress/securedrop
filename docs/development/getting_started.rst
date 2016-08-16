@@ -60,7 +60,7 @@ which is signficantly out of date and known not to work with SecureDrop (`Github
           Build our own base boxes to dramatically cut down on provisioning
           times (ii) Remove this note as well as the commented vagrant-cachier
           lines from the Vagrantfile
-          
+
 Either way, once you've installed Vagrant you should run:
 
 .. code:: sh
@@ -68,7 +68,8 @@ Either way, once you've installed Vagrant you should run:
     sudo dpkg-reconfigure virtualbox-dkms
 
 Finally, install Ansible so it can be used with Vagrant to automatically
-provision VMs. We recommend installing Ansible from PyPi with ``pip``:
+provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
+you have the latest stable version.
 
 .. code:: sh
 
@@ -99,7 +100,6 @@ before running these commands):
     virtualenv -p python2.7 .
     . bin/activate
     pip install ansible==1.8.4
-
 
 Mac OS X
 ~~~~~~~~

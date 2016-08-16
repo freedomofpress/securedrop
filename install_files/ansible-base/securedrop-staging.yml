@@ -21,6 +21,13 @@
     - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
+    - role: backup
+      # By default backups will NOT run, since they can claim a substantial
+      # amount of disk space. Enable backups explicitly via a backup var, or
+      # implicitly if performing a restore.
+      when: (perform_backup is defined and perform_backup == true) or
+            (restore_file is defined and restore_file != '')
+      tags: backup
   sudo: yes
 
   # Set iptables rules with exemptions for staging that permit direct access for SSH.
@@ -30,10 +37,4 @@
   hosts: staging
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
-  sudo: yes
-
-- name: Perform backup of Application Server configuration.
-  hosts: app-staging
-  roles:
-    - { role: backup, tags: backup }
   sudo: yes

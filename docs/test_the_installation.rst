@@ -10,15 +10,18 @@ SSH to both servers over Tor
 On the Admin Workstation, you should be able to SSH to the App
 Server and the Monitor Server. ::
 
+   $ ssh app
+   $ ssh mon
+
+The SSH aliases should have been configured automatically by running
+the ``install.sh`` script. If you're unable to connect via aliases,
+try using the verbose command format to troubleshoot: ::
+
    $ ssh <username>@<app .onion>
    $ ssh <username>@<mon .onion>
 
-If you set up :ref:`SSH Host Aliases` during the post-install
-setup for the Admin Workstation, you should be able to connect
-with the aliases: ::
-
-   $ ssh app
-   $ ssh mon
+.. tip:: You can find the Onion URLs for SSH in ``app-ssh-aths`` and
+         ``mon-ssh-aths`` inside the ``install_files/ansible-base`` directory.
 
 Log in to both servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

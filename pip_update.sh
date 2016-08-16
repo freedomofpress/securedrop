@@ -3,34 +3,40 @@
 # Usage: ./pip_update.sh
 # Run periodically to keep Python requirements up-to-date
 
-set -e
-cd `dirname $0`/securedrop/requirements
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+requirements_dir="${dir}/securedrop/requirements"
+venv="review_env"
 
-# This method is slow, because we have to:
-# 1. Download all of the packages listed in *requirements.txt
-# 2. Download any updated versions of these packages
-# Unfortunately, it is the only way I have been able to get `pip-dump` to work.
+# This script should not be run with an active virtualenv. Calling deactivate
+# does not work reliably, so instead we warn then quit.
+if [[ -n $VIRTUAL_ENV ]]; then
+  echo "Please deactivate your virtualenv before running this script."
+  exit 1
+fi
 
-sudo apt-get install python-pip
+# Test if pip and virtualenv are available and install them if not
+INSTALL='sudo apt-get install -y'
+command -v pip >/dev/null 2>&1 || { eval "$INSTALL python-pip"; }
+command -v virtualenv >/dev/null 2>&1 || { eval "$INSTALL python-virtualenv"; }
 
-# Create a temporary virtualenv for the SecureDrop Python packages
-#
-# If we `pip-review --auto` the global pip packages, we will also get
-# packages that are installed as part of Ubuntu/the Vagrant base
-# image, which are not SecureDrop dependencies.
-VENV=review_env
-virtualenv $VENV
-source $VENV/bin/activate
+# Create a temporary virtualenv for the SecureDrop Python packages in our
+# requirements directory
+cd $requirements_dir
 
-# Install the requirements from the current lists
-pip install -r securedrop-requirements.txt
-pip install -r test-requirements.txt
+trap "rm -rf ${venv}" EXIT
 
-# Auto-install updated packages
-pip-review --auto
+virtualenv -p python2.7 $venv
+source "${venv}/bin/activate"
 
-# Dump updated version numbers to *requirements.txt
-pip-dump
+# Install the most recent pip that pip-tools supports and the latest pip-tools
+# (must be done in order as the former is a dependency of the latter).
+pip install pip==8.1.1
+pip install pip-tools
 
-# Remove the temporary virtualenv
-rm -r $VENV
+# Compile new requirements (.txt) files from our top-level dependency (.in)
+# files. See http://nvie.com/posts/better-package-management/
+for r in "securedrop" "test"; do
+  # Maybe pip-tools will get its act together and standardize their cert-pinning
+  # syntax and this line will break. One can only hope.
+  pip-compile -o "${r}-requirements.txt" "${r}-requirements.in"
+done

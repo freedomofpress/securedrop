@@ -1,0 +1,8 @@
+beautifulsoup4
+Flask-Testing
+mock
+pip-tools
+py
+pytest
+pytest-cov
+selenium

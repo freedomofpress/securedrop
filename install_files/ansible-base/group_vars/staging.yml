@@ -45,7 +45,6 @@ sasl_username: "test"
 sasl_domain: "ossec.test"
 sasl_password: "password123"
 
-
 # Permit direct access for SSH in the staging environment.
 # Otherwise, all SSH connections would be forced over Tor.
 ssh_listening_address: 0.0.0.0
