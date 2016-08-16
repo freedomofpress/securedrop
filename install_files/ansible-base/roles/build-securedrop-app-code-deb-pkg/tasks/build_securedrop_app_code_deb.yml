@@ -40,14 +40,14 @@
     state: directory
     dest: "/tmp/{{ securedrop_app_code_deb }}/etc/"
 
-- name: ensure apparmor build dir exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
+# - name: ensure apparmor build dir exists
+#   file:
+#     state: directory
+#     dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
 
-- name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
+# - name: copy apparmor profiles to build path
+#   copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+#   with_items: apparmor_profiles
 
 - name: create the deb package
   command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}

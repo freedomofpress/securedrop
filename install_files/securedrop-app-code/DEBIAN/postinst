@@ -36,15 +36,15 @@ case "$1" in
     service apache2 stop
 
     # If the profile was disabled enabled it.
-    if [ -e "/etc/apparmor.d/disable/usr.sbin.apache2" ]; then
-        rm /etc/apparmor.d/disable/usr.sbin.apache2
-    fi
+    # if [ -e "/etc/apparmor.d/disable/usr.sbin.apache2" ]; then
+    #     rm /etc/apparmor.d/disable/usr.sbin.apache2
+    # fi
 
-    aa-enforce /etc/apparmor.d/usr.sbin.tor
-    aa-enforce /etc/apparmor.d/usr.sbin.apache2
+    # aa-enforce /etc/apparmor.d/usr.sbin.tor
+    # aa-enforce /etc/apparmor.d/usr.sbin.apache2
 
-    # Restart apache so it loads with the apparmor profiles in enforce mode.
-    service apache2 restart
+    # # Restart apache so it loads with the apparmor profiles in enforce mode.
+    # service apache2 restart
 
     # Version migrations
 
