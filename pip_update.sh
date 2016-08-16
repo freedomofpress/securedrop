@@ -36,12 +36,12 @@ cd $requirements_dir
 
 trap "rm -rf ${venv}" EXIT
 
+pip install --upgrade pip
 virtualenv -p python2.7 $venv
 source "${venv}/bin/activate"
 
 # Install the most recent pip that pip-tools supports and the latest pip-tools
 # (must be done in order as the former is a dependency of the latter).
-pip install pip==8.1.1
 pip install pip-tools
 
 # Compile new requirements (.txt) files from our top-level dependency (.in)
