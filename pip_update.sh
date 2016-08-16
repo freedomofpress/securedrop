@@ -49,5 +49,5 @@ pip install pip-tools
 for r in "securedrop" "test"; do
   # Maybe pip-tools will get its act together and standardize their cert-pinning
   # syntax and this line will break. One can only hope.
-  pip-compile -o "${r}-requirements.txt" "${r}-requirements.in"
+  pip-compile -U -o "${r}-requirements.txt" "${r}-requirements.in"
 done
