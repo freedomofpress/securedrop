@@ -2,7 +2,6 @@
 
 # Usage: ./pip_update.sh
 # Run periodically to keep Python requirements up-to-date
-set -e
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 requirements_dir="${dir}/securedrop/requirements"
@@ -16,19 +15,9 @@ if [[ -n $VIRTUAL_ENV ]]; then
 fi
 
 # Test if pip and virtualenv are available and install them if not
-command -v pip > /dev/null
-pip_installed=$?
-command -v virtualenv > /dev/null
-virualenv_installed=$?
-
-if [[ $pip_installed -ne 0 ]] || [[ $virtualenv_installed -ne 0 ]]; then
-  if [[ -e /etc/os-release ]] && $(grep -i "debian" /etc/os-release > /dev/null); then
-    sudo apt-get install -y python-pip virtualenv
-  else
-    echo "This script requires pip and virtualenv to run."
-    exit
-  fi
-fi
+INSTALL='sudo apt-get install -y'
+command -v pip >/dev/null 2>&1 || { eval "$INSTALL python-pip"; }
+command -v virtualenv >/dev/null 2>&1 || { eval "$INSTALL python-virtualenv"; }
 
 # Create a temporary virtualenv for the SecureDrop Python packages in our
 # requirements directory

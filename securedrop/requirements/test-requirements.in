@@ -4,4 +4,5 @@ mock
 pip-tools
 py
 pytest
+pytest-cov
 selenium
