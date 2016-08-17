@@ -38,7 +38,8 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-os
 sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$NEW_VERSION/" install_files/ansible-base/group_vars/securedrop.yml
 
 # Update the version that we tell people to check out in the install doc
-sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/install.md
+sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
+sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
 
 # Update the changelog
 vim changelog.md
