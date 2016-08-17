@@ -39,9 +39,7 @@ trap "rm -rf ${venv}" EXIT
 virtualenv -p python2.7 $venv
 source "${venv}/bin/activate"
 
-# Install the most recent pip that pip-tools supports and the latest pip-tools
-# (must be done in order as the former is a dependency of the latter).
-pip install pip==8.1.1
+pip install --upgrade pip
 pip install pip-tools
 
 # Compile new requirements (.txt) files from our top-level dependency (.in)
@@ -49,5 +47,5 @@ pip install pip-tools
 for r in "securedrop" "test"; do
   # Maybe pip-tools will get its act together and standardize their cert-pinning
   # syntax and this line will break. One can only hope.
-  pip-compile -o "${r}-requirements.txt" "${r}-requirements.in"
+  pip-compile -U -o "${r}-requirements.txt" "${r}-requirements.in"
 done
