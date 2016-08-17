@@ -22,7 +22,7 @@ if [ -z "$NEW_VERSION" ]; then
 fi
 
 # Get the old version from securedrop/version.py
-old_version_regex="^__version__ = '([0-9a-z.+]+)'$"
+old_version_regex="^__version__ = '(.*)'$"
 [[ `cat securedrop/version.py` =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 
@@ -35,14 +35,14 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-os
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ossec-server/DEBIAN/control
 
 # Update the version used by Ansible for the filename of the output of the deb building role
-sed -i "s/^\(securedrop_app_code_version: \"\)[0-9a-z.]*/\1$NEW_VERSION/" install_files/ansible-base/group_vars/securedrop.yml
+sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/securedrop.yml
 
 # Update the version that we tell people to check out in the install doc
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
 
 # Update the changelog
-vim changelog.md
+vi changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"

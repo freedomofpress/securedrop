@@ -11,10 +11,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
-    development.vm.box = "trusty64"
+    development.vm.box = "bento/ubuntu-14.04"
     development.vm.network "forwarded_port", guest: 8080, host: 8080
     development.vm.network "forwarded_port", guest: 8081, host: 8081
-    development.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     development.vm.provision "ansible" do |ansible|
       # Hack to trick Vagrant into parsing the command-line args for
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
@@ -44,9 +43,8 @@ Vagrant.configure("2") do |config|
   # for the web interfaces and ssh.
   config.vm.define 'mon-staging', autostart: false do |staging|
     staging.vm.hostname = "mon-staging"
-    staging.vm.box = "trusty64"
+    staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: true
-    staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
       v.name = "mon-staging"
@@ -55,12 +53,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'app-staging', autostart: false do |staging|
     staging.vm.hostname = "app-staging"
-    staging.vm.box = "trusty64"
+    staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: true
     staging.vm.network "forwarded_port", guest: 80, host: 8082
     staging.vm.network "forwarded_port", guest: 8080, host: 8083
     staging.vm.synced_folder './', '/vagrant', disabled: true
-    staging.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     staging.vm.provider "virtualbox" do |v|
       v.name = "app-staging"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
@@ -95,9 +92,8 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "mon-prod"
-    prod.vm.box = "trusty64"
+    prod.vm.box = "bento/ubuntu-14.04"
     prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
-    prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
       v.name = "mon-prod"
@@ -111,9 +107,8 @@ Vagrant.configure("2") do |config|
       config.ssh.port = 22
     end
     prod.vm.hostname = "app-prod"
-    prod.vm.box = "trusty64"
+    prod.vm.box = "bento/ubuntu-14.04"
     prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
-    prod.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
       v.name = "app-prod"
@@ -138,8 +133,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'build', autostart: false do |build|
     build.vm.box = "build"
-    build.vm.box = "trusty64"
-    build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    build.vm.box = "bento/ubuntu-14.04"
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'

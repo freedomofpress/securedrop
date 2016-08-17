@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.8
+
+* Re-include the pycrypto Python module to address the regression in 0.3.7 (#1344)
+* Switch to using bento boxes in Vagrantfile for more reproducible test environments
+* Minor fixes to update_version.sh
+
+The issues for this release were trackied with the 0.3.8 mileston on Github https://github.com/freedomofpress/securedrop/milestones/0.3.8
+
 ## 0.3.7
 
 Point release to address some requests from SecureDrop administrators and
