@@ -17,6 +17,7 @@ Jinja2==2.8               # via flask
 jsmin==2.2.1
 MarkupSafe==0.23          # via jinja2
 psutil==4.1.0
+pycrypto==2.6.1
 pyotp==2.1.1
 qrcode==5.2.2
 redis==2.10.5
