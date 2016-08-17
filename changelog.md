@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.9
+
+Point release to fix some minor issues and update our Python dependencies.
+
+* Fix Unicode support regression and implement better Unicode tests (#1370)
+* Add OSSEC rule to ignore futile port scanning (#1374)
+* Update Apache AppArmor profile to allow access to webfonts and to execute uname (#1332, #1373)
+* Update Python dependencies of SD
+
 ## 0.3.8
 
 * Re-include the pycrypto Python module to address the regression in 0.3.7 (#1344)
