@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import argparse
+import imghdr
 import logging
 import re
 import sys
@@ -12,7 +14,7 @@ from yaml.scanner import ScannerError
 
 """
 A CLI tool to help admins configure their SecureDrop instances. Uses argparse, so run this file from
-your terminal with --help to get instructions on how to use this.
+your terminal with --help to get instructions on how to use it.
 """
 
 
@@ -36,7 +38,7 @@ class ConfigToolException(Exception):
 
 def check_ip_address_valid(ip):  # "good enough"
     m = re.match(r"^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$", ip)
-    if bool(m) and all(map(lambda n: 0 <= int(n) <= 255, m.groups())):
+    if m and all(map(lambda n: 0 <= int(n) <= 255, m.groups())):
         log.debug("'{ip}' was a valid ipv4 address".format(ip=ip))
         return True
     else:
@@ -46,7 +48,7 @@ def check_ip_address_valid(ip):  # "good enough"
 
 def check_ssh_users(users):
     def check_user(user):
-        regex = r'^[a-z][-a-z0-9]*$'
+        regex = r'^[a-zA-Z][-a-zA-Z0-9]*$'
         if isinstance(user, str) and re.match(regex, user):
             log.debug("'{user}' was a valid Unix user name".format(user=user))
             return True
@@ -86,7 +88,7 @@ def check_gpg_public_key_fingerprint(fpr):
 
 
 def check_email_address(addr):
-    return '@' in addr
+    return bool(re.match(r'^[^@]*@.*\..*', addr))
 
 
 """
@@ -97,8 +99,8 @@ MASTER_CONFIG = {
     'app': {
         'ip_address': check_ip_address_valid,
         'hostname': lambda x: True,  # no hostname validation
-        'secure_drop': {
-            'header_image': lambda x: True if not x else path.exists(x),
+        'securedrop': {
+            'header_image': lambda:x True if not x else bool(imghdr.what(x)),
             'gpg_public_key': check_gpg_public_key,
             'gpg_public_key_fingerprint': check_gpg_public_key_fingerprint,
         }
@@ -140,21 +142,18 @@ def load_file(path):
     f = None
 
     try:
-        f = open(path, 'r')
-        yml = yaml.safe_load(f)
+        with open(path, 'r') as f:
+            yml = yaml.safe_load(f)
 
-        log.info("Successfully loaded file from path '{path}'".format(path=path))
+            log.info("Successfully loaded file from path '{path}'".format(path=path))
 
-        return yml
+            return yml
     except IOError as e:
         log.error("Cannot open file '{path}'".format(path=path))
         raise e
     except ScannerError as e:
         log.error("Failed to parse YAML for file '{path}'".format(path=path))
         raise e
-    finally:
-        if f is not None:
-            f.close()
 
 
 def finalize(path, conf):

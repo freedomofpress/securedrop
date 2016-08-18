@@ -10,6 +10,15 @@ import unittest
 
 class TestConifgTool(unittest.TestCase):
 
+    def test_check_email_address(self):
+        assert config_tool.check_email_address('test@example.com')
+        assert config_tool.check_email_address('test@sub.example.com')
+        assert config_tool.check_email_address('test.test@example.com')
+        assert config_tool.check_email_address('test.test@.sub.example.com')
+        assert not config_tool.check_email_address('test_example.com')
+        assert not config_tool.check_email_address('test@examplecom')
+        assert not config_tool.check_email_address('test@example,com')
+
     def test_misc(self):
         d = {'foo': {'bar': {'baz': 'quux'}}}
 
@@ -30,7 +39,7 @@ class TestConifgTool(unittest.TestCase):
             'app': {
                 'ip_address': '1.2.3.4',
                 'hostname': 'app',
-                'secure_drop': {
+                'securedrop': {
                     'header_image': '',
                     'gpg_public_key': '-----BEGIN PGP PUBLIC KEY BLOCK-----\nblahblahblah\n-----END PGP PUBLIC KEY BLOCK-----',
                     'gpg_public_key_fingerprint': '0CEC936888A60171461174C5C0A2586F09D77C82',
