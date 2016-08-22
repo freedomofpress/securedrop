@@ -55,10 +55,11 @@ recipients and anyone else interested
    -  https://freedom.press/about/staff
    -  https://securedrop.org
    -  https://docs.securedrop.org
-   -  Hardware for SecureDrop
-   -  SecureDrop Deployment Best Practices
-   -  Source Best Practice Guide
-   -  Journalist Best Practice Guide
+   -  :doc:`Hardware for SecureDrop <hardware>`
+   -  :doc:`SecureDrop Deployment Best Practices <deployment_practices>`
+   -  :doc:`Source Best Practice Guide <source>`
+   -  :doc:`Journalist Best Practice Guide <journalist>`
+   -  :doc:`Admin Best Practice Guide <admin>`
 -  Answering the client vs. server side crypto debate
 -  Link to security audits
 
