@@ -50,14 +50,15 @@ recipients and anyone else interested
 -  Physical security of servers and SVS
 -  How to securely publicize the organization's Source Interface Tor URL
 -  Distribute important info:
--  Third-party security mailing lists to subscribe to
--  https://freedom.press/about/staff
--  https://securedrop.org
--  https://docs.securedrop.org
--  Hardware for SecureDrop
--  SecureDrop Deployment Best Practices
--  Source Best Practice Guide
--  Journalist Best Practice Guide
+
+   -  Third-party security mailing lists to subscribe to
+   -  https://freedom.press/about/staff
+   -  https://securedrop.org
+   -  https://docs.securedrop.org
+   -  Hardware for SecureDrop
+   -  SecureDrop Deployment Best Practices
+   -  Source Best Practice Guide
+   -  Journalist Best Practice Guide
 -  Answering the client vs. server side crypto debate
 -  Link to security audits
 
