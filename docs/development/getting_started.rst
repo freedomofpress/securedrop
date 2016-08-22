@@ -231,7 +231,7 @@ to fill out your local copy of
 
 .. code:: sh
 
-   vagrant up /staging$/
+   vagrant up /staging/
    vagrant ssh app-staging
    sudo su
    cd /var/www/securedrop
@@ -253,7 +253,7 @@ To create only the prod servers, run:
 
 .. code:: sh
 
-   vagrant up /prod$/
+   vagrant up /prod/
    vagrant ssh app-prod
    sudo su
    cd /var/www/securedrop/
