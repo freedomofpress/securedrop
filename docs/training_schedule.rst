@@ -53,6 +53,7 @@ recipients and anyone else interested
 -  Third-party security mailing lists to subscribe to
 -  https://freedom.press/about/staff
 -  https://securedrop.org
+-  https://docs.securedrop.org
 -  Hardware for SecureDrop
 -  SecureDrop Deployment Best Practices
 -  Source Best Practice Guide
