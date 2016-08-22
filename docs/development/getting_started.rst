@@ -38,13 +38,14 @@ then install it.
     # OR this, if your OS vagrant is recent enough
     sudo apt-get install vagrant
 
-We *do not* recommend using a version of Vagrant older than 1.7. For instance,
+We *do not* recommend using a version of Vagrant older than 1.8.4. For instance,
 the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
 which is signficantly out of date and known not to work with SecureDrop (`Github
-#932`_).
+#932`_, `Github #1381`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
+.. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
 
 .. warning:: We do not recommend installing vagrant-cachier. It destroys apt’s
             state unless the VMs are always shut down/rebooted with Vagrant,
