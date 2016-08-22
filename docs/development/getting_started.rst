@@ -23,7 +23,7 @@ Ubuntu/Debian
 
    sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
 
-We recommend using the latest stable version of Vagrant (``1.7.4`` at the time
+We recommend using the latest stable version of Vagrant (``1.8.4`` at the time
 of this writing), which might be newer than what is in your distro's package
 repositories.
 
