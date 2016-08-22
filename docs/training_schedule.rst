@@ -59,8 +59,6 @@ recipients and anyone else interested
 -  Journalist Best Practice Guide
 -  Answering the client vs. server side crypto debate
 -  Link to security audits
--  Bunch of other in-progress docs are on securedrop.hackpad.com, many
-   are still in draft form
 
 Questions
 ~~~~~~~~~
