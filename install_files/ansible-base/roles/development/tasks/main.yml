@@ -15,9 +15,21 @@
     - apt
     - development
 
-- name: Install pip dependencies for SecureDrop.
+- name: Install pip-tools
   pip:
-    requirements: "{{ securedrop_pip_requirements }}"
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - pip # pip-tools requires pip 7 or higher
+    - pip-tools
+  tags:
+    - pip
+    - development
+
+- name: Install and sync dependencies for SecureDrop
+  shell: pip-sync securedrop-requirements.txt test-requirements.txt
+  args:
+    chdir: '{{ securedrop_repo }}/securedrop/requirements/'
   tags:
     - pip
     - development
