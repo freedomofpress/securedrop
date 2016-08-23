@@ -1,6 +1,6 @@
 # ensure hosts file references mon server by ip
 describe file('/etc/hosts') do
-  localhost_regex = /^#{Regexp.quote('127.0.1.1')}(\s+#{property['app_hostname']}){2}$/
+  localhost_regex = /^#{Regexp.quote('127.0.0.1')}(\s+#{property['app_hostname']}){2}$/
   its(:content) { should match localhost_regex }
   # TODO: the "securedrop-monitor-server-alias" is an artifact of
   # using the vagrant-hostmanager plugin. it may no longer be necessary
