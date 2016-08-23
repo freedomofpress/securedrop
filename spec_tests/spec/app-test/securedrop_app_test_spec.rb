@@ -9,7 +9,7 @@ pip_dependencies = [
   'Flask-Testing==0.4.2',
   'mock==2.0.0',
   'pytest==2.9.1',
-  'selenium==2.53.2',
+  'selenium==2.53.6',
 ]
 # ensure pip depdendencies are installed in staging.
 # these are required for running unit and functional tests
