@@ -24,6 +24,7 @@ securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requ
 test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
 development_dependencies:
   - libssl-dev
+  - ipython
   - python-dev
   - python-pip
   - tmux
