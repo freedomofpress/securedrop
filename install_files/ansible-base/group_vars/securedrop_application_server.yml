@@ -26,6 +26,8 @@ development_dependencies:
   - libssl-dev
   - python-dev
   - python-pip
+  - tmux
+  - vim
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"
