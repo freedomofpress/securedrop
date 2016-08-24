@@ -149,6 +149,9 @@ Virtual Environments
 Overview
 ~~~~~~~~
 
+.. note:: If you have errors with mounting shared folders in the Vagrant guest
+          machine, you should look at `Github issue #1381`_.
+
 There are several predefined virtual environments in the Vagrantfile:
 development, staging, and prod (production).
 
@@ -382,3 +385,5 @@ exception to allow Tor Browser to access localhost:
 
 You should now be able to access the development server in the Tor
 Browser by navigating to ``127.0.0.1:8080`` and ``127.0.0.1:8081``.
+
+.. _Github issue #1381: https://github.com/freedomofpress/securedrop/issues/1381
