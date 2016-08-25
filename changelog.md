@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.9
+## 0.3.9-rc1
 
 Point release to fix some minor issues and update our Python dependencies.
 
