@@ -44,6 +44,8 @@ These computers should all physically be in your organization's office.
 
 .. _`Tails operating system`: https://tails.boum.org
 
+.. _securedrop_architecture_diagram:
+
 Infrastructure
 --------------
 

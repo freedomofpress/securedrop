@@ -30,7 +30,7 @@ Participants: journalists, editors, SecureDrop admins, OSSEC alert
 recipients and anyone else interested
 
 -  Go over the SecureDrop `FAQs <https://securedrop.org/faq>`__
--  Go over the SecureDrop environment diagrams
+-  Go over the SecureDrop :ref:`environment diagrams <securedrop_architecture_diagram>`
 -  Importance of the landing page security and Twitter feedback
 -  Demo the source submission process
 -  Demo the journalist's processes for checking the Document Interface
@@ -50,17 +50,18 @@ recipients and anyone else interested
 -  Physical security of servers and SVS
 -  How to securely publicize the organization's Source Interface Tor URL
 -  Distribute important info:
--  Third-party security mailing lists to subscribe to
--  https://freedom.press/about/staff
--  https://securedrop.org
--  Hardware for SecureDrop
--  SecureDrop Deployment Best Practices
--  Source Best Practice Guide
--  Journalist Best Practice Guide
+
+   -  Third-party security mailing lists to subscribe to
+   -  https://freedom.press/about/staff
+   -  https://securedrop.org
+   -  https://docs.securedrop.org
+   -  :doc:`Hardware for SecureDrop <hardware>`
+   -  :doc:`SecureDrop Deployment Best Practices <deployment_practices>`
+   -  :doc:`Source Best Practice Guide <source>`
+   -  :doc:`Journalist Best Practice Guide <journalist>`
+   -  :doc:`Admin Best Practice Guide <admin>`
 -  Answering the client vs. server side crypto debate
 -  Link to security audits
--  Bunch of other in-progress docs are on securedrop.hackpad.com, many
-   are still in draft form
 
 Questions
 ~~~~~~~~~
