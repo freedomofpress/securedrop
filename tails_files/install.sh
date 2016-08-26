@@ -27,12 +27,29 @@ torrc_additions="${securedrop_dotfiles}/torrc_additions"
 document_aths_info_global=''
 source_ths_url_global=''
 
+# Use flock to prevent parallel execution.
+function lock() {
+    local lockfile=/tmp/tails_files.lock
+    # create lock file
+    eval "exec 200>/$lockfile"
+    # acquire the lock
+    flock -n 200 \
+        && return 0 \
+        || return 1
+}
+
+function exit_locked_error()
+{
+    echo "Only one instance of install.sh can be run at a time." 1>&2
+    exit 1
+}
+
 function validate_tails_environment()
 {
   # Ensure that initial expectations about the SecureDrop environment
   # are met. Error messages below explain each condition.
   if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root" 1>&2
+    echo "This script must be run as root." 1>&2
     exit 1
   fi
   source /etc/os-release
@@ -427,6 +444,8 @@ SD_COMPLETE_MSG2
 function main()
 {
   # Wrapper function for ordering all the helpers.
+  lock install.sh \
+    || exit_locked_error
   validate_tails_environment
   cleanup_legacy_artifacts
 
