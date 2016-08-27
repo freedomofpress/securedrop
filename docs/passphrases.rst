@@ -45,16 +45,16 @@ Journalist
 ----------
 
 The journalist will be using the *Journalist Workstation* with Tails to
-connect to the Document Interface. The tasks performed by the journalist
+connect to the Journalist Interface. The tasks performed by the journalist
 will require the following set of passphrases:
 
 -  A master password for the persistent volume on the Tails device.
 -  A master password for the KeePassX password manager, which unlocks
    passphrases to:
 
-   -  The Hidden Service value required to connect to the Document
+   -  The Hidden Service value required to connect to the Journalist
       Interface.
-   -  The Document Interface.
+   -  The Journalist Interface.
    -  The journalist's personal GPG key.
 
 The journalist will also need to have a two-factor authenticator, such
@@ -62,7 +62,7 @@ as an Android or iOS device with Google Authenticator installed, or a
 YubiKey. This means the journalist will also have the following
 credential:
 
--  The secret code for the Document Interface's two-factor
+-  The secret code for the Journalist Interface's two-factor
    authentication.
 
 Secure Viewing Station

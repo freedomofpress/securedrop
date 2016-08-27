@@ -58,7 +58,7 @@ Upgrade Procedure
 
 #. Ensure that you've completed the installation process for the latest stable
    version of SecureDrop, and ensure that you've created at least one user on
-   the Document Interface (with ``./manage.py add-admin``) before continuing.
+   the Journalist Interface (with ``./manage.py add-admin``) before continuing.
 
 #. Once you've successfully installed 0.3.x, copy ``sdbackup.tar.gz`` to any
    location on the 0.3.x app server. You will also need to copy the

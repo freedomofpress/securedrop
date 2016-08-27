@@ -98,7 +98,7 @@ for each server by examining the contents of ``app-ssh-aths`` and ``mon-ssh-aths
 in ``./install_files/ansible-base``. You can manually inspect these files
 to append values to your local ``torrc``, as in the ``cat`` example above.
 Note that the ``cat`` example above will also add the ATHS info for the
-Document Interface, as well, which is useful for testing.
+Journalist Interface, as well, which is useful for testing.
 
 Architecture Diagrams
 ---------------------

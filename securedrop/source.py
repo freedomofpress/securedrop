@@ -203,7 +203,7 @@ def async_genkey(sid, codename):
     crypto_util.genkeypair(sid, codename)
 
     # Register key generation as update to the source, so sources will
-    # filter to the top of the list in the document interface if a
+    # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
     try:
         source = Source.query.filter(Source.filesystem_id == sid).one()

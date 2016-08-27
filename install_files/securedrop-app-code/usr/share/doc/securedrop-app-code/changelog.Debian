@@ -79,7 +79,7 @@ securedrop-app-code (0.3.3) trusty; urgency=medium
  * Ensure grub is not uninstalled in virtual machines (#945)
  * CSS fixes (#948)
  * Apache AppArmor profile should support TLS/SSL (#949)
- * Fix: document interface no longer flas new submissions as unread (#969)
+ * Fix: journalist interface no longer flas new submissions as unread (#969)
  * Switch to NetworkManager for automatic ATHS setup on Admin Workstation (#1018)
  * Upgrade Selenium in testing dependencies so functional tests work (#991)
  * Clarify paths in install documentation (#1009)
@@ -88,7 +88,7 @@ securedrop-app-code (0.3.3) trusty; urgency=medium
 
 securedrop-app-code (0.3.2) trusty; urgency=high
 
- * Fixes security vulnerabilty (severity=high) in access control on Document Interface (#974)
+ * Fixes security vulnerabilty (severity=high) in access control on Journalist Interface (#974)
 
  -- SecureDrop Team <securedrop@freedom.press> Wed, 1 Apr 2015 23:37:16 +0000
 

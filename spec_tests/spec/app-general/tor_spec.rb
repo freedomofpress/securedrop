@@ -2,7 +2,7 @@
 torrc_settings = [
   'HiddenServiceDir /var/lib/tor/services/source',
   'HiddenServicePort 80 127.0.0.1:80',
-  'HiddenServiceDir /var/lib/tor/services/document',
+  'HiddenServiceDir /var/lib/tor/services/journalist',
   'HiddenServicePort 80 127.0.0.1:8080',
   'HiddenServiceAuthorizeClient stealth journalist',
 ]
@@ -22,7 +22,7 @@ end
 # and the "ssh" service are validated in the
 # common-staging spectests.
 tor_service_directories = %w(
-  /var/lib/tor/services/document
+  /var/lib/tor/services/journalist
   /var/lib/tor/services/source
 )
 # ensure tor service dirs are owned by tor user and mode 0700

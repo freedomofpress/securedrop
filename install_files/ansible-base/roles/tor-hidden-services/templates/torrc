@@ -7,7 +7,7 @@ Sandbox 1
 HiddenServiceDir /var/lib/tor/services/source
 HiddenServicePort 80 127.0.0.1:80
 
-HiddenServiceDir /var/lib/tor/services/document
+HiddenServiceDir /var/lib/tor/services/journalist
 HiddenServicePort 80 127.0.0.1:8080
 HiddenServiceAuthorizeClient stealth journalist
 {% endif %}

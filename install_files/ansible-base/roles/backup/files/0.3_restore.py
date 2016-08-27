@@ -112,19 +112,19 @@ def restore_tor_files(zf):
     tor_root_dir = "/var/lib/tor"
     ths_root_dir = os.path.join(tor_root_dir, "services")
     source_ths_dir = os.path.join(ths_root_dir, "source")
-    document_ths_dir = os.path.join(ths_root_dir, "document")
+    journalist_ths_dir = os.path.join(ths_root_dir, "journalist")
 
     print "* Deleting previous source THS interface..."
 
     for fn in os.listdir(source_ths_dir):
         os.remove(os.path.join(source_ths_dir, fn))
 
-    print "* Deleting previous document ATHS interface..."
+    print "* Deleting previous journalist ATHS interface..."
 
-    for fn in os.listdir(document_ths_dir):
-        os.remove(os.path.join(document_ths_dir, fn))
+    for fn in os.listdir(journalist_ths_dir):
+        os.remove(os.path.join(journalist_ths_dir, fn))
 
-    print "* Migrating source and document interface .onion..."
+    print "* Migrating source and journalist interface .onion..."
 
     for zi in zf.infolist():
         if "var/lib/tor/services/source" in zi.filename:
@@ -133,11 +133,11 @@ def restore_tor_files(zf):
                                            "var/lib/tor/services/source",
                                            "/var/lib/tor/services/source"),
                             "debian-tor")
-        elif "var/lib/tor/services/document" in zi.filename:
+        elif "var/lib/tor/services/journalist" in zi.filename:
             extract_to_path(zf, zi,
                             replace_prefix(zi.filename,
-                                           "var/lib/tor/services/document",
-                                           "/var/lib/tor/services/document"),
+                                           "var/lib/tor/services/journalist",
+                                           "/var/lib/tor/services/journalist"),
                             "debian-tor")
 
     # Reload Tor to trigger registering the old Tor Hidden Services

@@ -69,13 +69,13 @@ Test the web interfaces
    - Usage of the Source Interface is covered by our :doc:`Source User
      Manual <source>`.
 
-#. Test that you can access the Document Interface, and that you can log
+#. Test that you can access the Journalist Interface, and that you can log
    in as the admin user you just created.
 
    - Open the Tor Browser and navigate to the onion URL from
-     app-document-aths. Enter your password and two-factor
+     app-journalist-aths. Enter your password and two-factor
      authentication code to log in.
-   - If you have problems logging in to the Admin/Document Interface,
+   - If you have problems logging in to the Admin/Journalist Interface,
      SSH to the App Server and restart the ntp daemon to synchronize
      the time: ``sudo service ntp restart``. Also check that your
      smartphone's time is accurate and set to network time in its
@@ -85,7 +85,7 @@ Test the web interfaces
 
    - While logged in as an admin, you can send a reply to the test
      source submission you made earlier.
-   - Usage of the Document Interface is covered by our :doc:`Journalist
+   - Usage of the Journalist Interface is covered by our :doc:`Journalist
      User Manual <journalist>`.
 
 #. Test that the source received the reply.
@@ -96,10 +96,10 @@ Test the web interfaces
      is present.
 
 #. We highly recommend that you create persistent bookmarks for the
-   Source and Document Interface addresses within Tor Browser.
+   Source and Journalist Interface addresses within Tor Browser.
 
 #. Remove the test submissions you made prior to putting SecureDrop to
-   real use. On the main Document Interface page, select all sources and
+   real use. On the main Journalist Interface page, select all sources and
    click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is

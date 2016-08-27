@@ -82,7 +82,7 @@ apache2_common_headers = [
   'Header unset Etag',
 ]
 # declare block of directory declarations common to both
-# source and document interfaces.
+# source and journalist interfaces.
 common_apache2_directory_declarations = <<eos
 <Directory />
   Options None
@@ -119,7 +119,7 @@ common_apache2_directory_declarations = <<eos
 eos
 # declare desired apache2 available sites
 apache2_available_sites = [
-  '/etc/apache2/sites-available/document.conf',
+  '/etc/apache2/sites-available/journalist.conf',
   '/etc/apache2/sites-available/source.conf',
 ]
 # check desired apache2 available sites for common headers
@@ -167,31 +167,31 @@ describe file('/etc/apache2/sites-available/source.conf') do
   end
 end
 
-# declare document-specific apache configs
-document_apache2_config_settings = [
+# declare journalist-specific apache configs
+journalist_apache2_config_settings = [
   'Header set Cache-Control "max-age=1800"',
   "<VirtualHost #{property['apache_listening_address']}:8080>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
-  "WSGIDaemonProcess document  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
-  'WSGIProcessGroup document',
-  'WSGIScriptAlias / /var/www/document.wsgi/',
+  "WSGIDaemonProcess journalist  processes=2 threads=30 display-name=%{GROUP} python-path=#{property['securedrop_code']}",
+  'WSGIProcessGroup journalist',
+  'WSGIScriptAlias / /var/www/journalist.wsgi/',
   'AddType text/html .py',
   'XSendFile        On',
   'XSendFilePath    /var/lib/securedrop/store/',
   'XSendFilePath    /var/lib/securedrop/tmp/',
-  'ErrorLog /var/log/apache2/document-error.log',
-  'CustomLog /var/log/apache2/document-access.log combined',
+  'ErrorLog /var/log/apache2/journalist-error.log',
+  'CustomLog /var/log/apache2/journalist-access.log combined',
 ]
-# check document-specific apache2 config
-describe file('/etc/apache2/sites-available/document.conf') do
+# check journalist-specific apache2 config
+describe file('/etc/apache2/sites-available/journalist.conf') do
   it { should be_file }
   it { should be_owned_by  'root' }
   it { should be_grouped_into  'root' }
   it { should be_mode '644' }
-  document_apache2_config_settings.each do |document_apache2_config_setting|
-    document_apache2_config_setting_regex = Regexp.quote(document_apache2_config_setting)
-    its(:content) { should match /^#{document_apache2_config_setting_regex}$/ }
+  journalist_apache2_config_settings.each do |journalist_apache2_config_setting|
+    journalist_apache2_config_setting_regex = Regexp.quote(journalist_apache2_config_setting)
+    its(:content) { should match /^#{journalist_apache2_config_setting_regex}$/ }
   end
 end
 
@@ -238,8 +238,8 @@ apache2_disabled_modules.each do |disabled_module|
   end
 end
 
-# Are source and document interface sites enabled?
-['source', 'document'].each do |enabled_site|
+# Are source and journalist interface sites enabled?
+['source', 'journalist'].each do |enabled_site|
   describe command("a2query -s #{enabled_site}") do
     its(:stdout) { should match /^#{enabled_site} \(enabled/ }
   end

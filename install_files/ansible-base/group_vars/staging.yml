@@ -33,7 +33,7 @@ securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 # Custom text on source interface
 custom_notification_text: "This is a SecureDrop Staging VM for testing ONLY"
 
-# To allow direct connections to source document interfaces for ease of testing
+# To allow direct connections to source journalist interfaces for ease of testing
 apache_listening_address: "0.0.0.0"
 apache_allow_from: "all"
 source_apache_log_location: "/var/log/apache2/source-error.log"
