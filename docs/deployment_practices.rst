@@ -151,7 +151,6 @@ If you use Apache, you can use these:
     Header always append X-Frame-Options: DENY
     Header set X-XSS-Protection: "1; mode=block"
     Header set X-Content-Type-Options: nosniff
-    Header set X-Content-Security-Policy: "default-src 'self'"
     Header set X-Download-Options: noopen
     Header set X-Permitted-Cross-Domain-Policies: master-only
     Header set Content-Security-Policy: "default-src 'self'"
