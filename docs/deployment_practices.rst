@@ -181,6 +181,12 @@ HTTP (port 80) virtual host:
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
+The same thing can be achieved in nginx with a single line:
+
+::
+
+    return 301 https://$server_name$request_uri;
+
 In your SSL (port 443) virtual host, set up HSTS and use these settings
 to give preference to the most secure cipher suites:
 
