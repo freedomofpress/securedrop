@@ -45,10 +45,10 @@ is being monitored would be trivially discovered.
 If the landing page is deployed on the same domain as another site, you
 might consider having some specific configuration (such as the security
 headers below) apply only to the /securedrop request URI. This can be done
-in Apache by the encapsulating these settings within a 
-`<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__ 
-block, which can be defined similarly in nginx by using the 
-`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__ 
+in Apache by the encapsulating these settings within a
+`<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__
+block, which can be defined similarly in nginx by using the
+`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
 directive.
 
 **HTTPS only (no mixed content)**
@@ -168,7 +168,7 @@ If you intend to run nginx as your webserver instead, this will work:
     add_header Content-Security-Policy "default-src 'self'";
     add_header X-Download-Options: noopen;
     add_header X-Permitted-Cross-Domain-Policies master-only;
-    
+
 
 **Additional Apache configuration**
 
@@ -190,7 +190,7 @@ to give preference to the most secure cipher suites:
     SSLProtocol all -SSLv2 -SSLv3
     SSLHonorCipherOrder on
     SSLCompression off
-    SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
 
 Here's a similar example for nginx:
 
@@ -199,13 +199,13 @@ Here's a similar example for nginx:
     add_header Strict-Transport-Security max-age=16070400;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
-    ssl_ciphers "EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5";
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 
-.. note:: We have balanced security and compatibility with legacy clients in
-          selecting these cipher suites, originally based upon `CloudFlare's SSL
-          configuration <https://github.com/cloudflare/sslconfig>`__. For other 
-          examples, check out `Cipherli.st <https://cipherli.st/>`__.
-    
+.. note:: We have prioritized security in selecting these cipher suites, so if
+          you choose to use them then your site might not be compatible with
+          legacy or outdated browsers and operating systems. For a good
+          reference check out `Cipherli.st <https://cipherli.st/>`__.
+
 You'll need to run ``a2enmod headers ssl rewrite`` for all these to
 work. You should also set ``ServerSignature Off`` and
 ``ServerTokens Prod``, typically in /etc/apache2/conf.d/security. For nginx,
