@@ -7,19 +7,18 @@
 click==6.6                # via flask, rq
 Flask-WTF==0.12
 Flask==0.11.1             # via flask-wtf
-future==0.15.2            # via pyotp
 gnupg==2.0.2
 itsdangerous==0.24        # via flask
 Jinja2==2.8               # via flask
 MarkupSafe==0.23          # via jinja2
 psutil==4.3.0
 pycrypto==2.6.1
-pyotp==2.1.1
+pyotp==2.2.1
 qrcode==5.3
 redis==2.10.5
 rq==0.6.0
 scrypt==0.7.1
 six==1.10.0               # via qrcode
 SQLAlchemy==1.0.14
-Werkzeug==0.11.10         # via flask, flask-wtf
+Werkzeug==0.11.11         # via flask, flask-wtf
 WTForms==2.1              # via flask-wtf
