@@ -219,7 +219,7 @@ function lookup_document_aths_url()
   # Last shot before prompting: check for an existing desktop icon specifically
   # for the Document Interface. If found, we can extract the URL from there.
   elif [ -e "${amnesia_desktop}/document.desktop" ] ; then
-    app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
+    app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser "${amnesia_desktop}/document.desktop" | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
     echo "Could not find Document Interface ATHS info, prompting interactively..." 1>&2
@@ -240,7 +240,7 @@ function lookup_source_ths_url()
     app_source_ths="$source_ths_url_global"
   # Failing that, check for the public THS URL in an existing Desktop icon.
   elif grep -q -P '^Exec=/usr/local/bin/tor-browser\s+[a-z2-7]{16}\.onion' "${amnesia_desktop}/source.desktop" ; then
-    app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser | awk '{ print $2 }')"
+    app_source_ths="$(grep ^Exec=/usr/local/bin/tor-browser "${amnesia_desktop}/source.desktop" | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
     echo "Could not find Source Interface Onion URL, prompting interactively..." 1>&2
