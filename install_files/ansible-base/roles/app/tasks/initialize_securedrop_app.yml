@@ -141,6 +141,15 @@
     - gpg
     - securedrop_config
 
+- name: Copy custom notification text to config.py.
+  lineinfile:
+     dest: "{{ securedrop_code }}/config.py"
+     regexp: "^CUSTOM_NOTIFICATION"
+     line: "CUSTOM_NOTIFICATION = '{{ custom_notification_text }}'"
+  when: custom_notification_text is defined and custom_notification_text != ''
+  tags:
+    - securedrop_config
+
 - name: Check whether sqlite database exists.
   stat:
     path: "{{ securedrop_data }}/db.sqlite"

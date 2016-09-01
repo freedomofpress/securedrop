@@ -48,6 +48,10 @@
         </div>
       </div>
 
+    {% if custom_notification|length > 0 %}
+        <p class="center"><b>Note:</b> {{ custom_notification }}</p>
+    {% endif %}
+
       <footer>
         Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
       </footer>

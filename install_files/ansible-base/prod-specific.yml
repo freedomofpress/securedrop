@@ -50,3 +50,6 @@ sasl_password: ""
 # To use uncomment the following line and enter the filename between the quotes.
 # e.g. restore_file: "sd-backup-2015-01-15--21-03-32.tar.gz"
 #restore_file: ""
+
+# Custom text that will appear on the source interface
+custom_notification_text: ""
