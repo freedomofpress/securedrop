@@ -17,7 +17,7 @@ mock==2.0.0
 pbr==1.10.0               # via mock
 pip-tools==1.7.0
 py==1.4.31
-pytest==2.9.2
+pytest==3.0.1
 selenium==2.53.6
 six==1.10.0               # via mock, pip-tools
-Werkzeug==0.11.10         # via flask
+Werkzeug==0.11.11         # via flask
