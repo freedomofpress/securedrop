@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.9-rc1
+## 0.3.9-rc2
 
 Point release to fix some minor issues and update our Python dependencies.
 
@@ -8,6 +8,7 @@ Point release to fix some minor issues and update our Python dependencies.
 * Add OSSEC rule to ignore futile port scanning (#1374)
 * Update Apache AppArmor profile to allow access to webfonts and to execute uname (#1332, #1373)
 * Update Python dependencies of SD (#1379)
+* Fix a regression in the new install script (#1397)
 
 ## 0.3.8
 
