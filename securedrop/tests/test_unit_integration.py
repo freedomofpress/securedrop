@@ -643,7 +643,12 @@ class TestIntegration(unittest.TestCase):
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Submission deleted.", rv.data)
+        if len(checkbox_values) == 1:
+            self.assertIn("Submission deleted.", rv.data)
+        elif len(checkbox_values) > 1:
+            self.assertIn("Submissions deleted.", rv.data)
+        else:
+            self.fail("Checkbox values size was not >= 1")
 
         # Make sure the files were deleted from the filesystem
         self._wait_for(lambda: self.assertFalse(

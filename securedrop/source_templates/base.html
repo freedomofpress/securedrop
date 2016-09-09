@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <title>SecureDrop | {{ gettext('Protecting Journalists and Sources') }}</title>
     {% assets filters="cssmin", output="gen/source.css",
       "css/normalize.css", "css/source.css", "css/font-awesome.css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}" />
@@ -19,8 +19,7 @@
         <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br/>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          {{ gettext('Powered by<br/><img src="/static/i/securedrop_small.png" alt="SecureDrop">')|safe }}
         </div>
         {% endif %}
       </div>
@@ -28,7 +27,7 @@
 
       <div class="panel selected">
       {% if 'logged_in' in session %}
-        <a href="{{ url_for('logout') }}" class="btn pull-right" id="logout">Log Out</a>
+        <a href="{{ url_for('logout') }}" class="btn pull-right" id="logout">{{ gettext('Log Out') }}</a>
       {% endif %}
         <hr class="no-line" />
 
@@ -38,8 +37,9 @@
 
       {% block footer %}
       <footer>
-        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+        {{ gettext("Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {version}.").format(version=version) }}
       </footer>
+      {% include 'locales.html' %}
       {% endblock %}
     </div>
   </body>

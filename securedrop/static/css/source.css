@@ -103,13 +103,23 @@ footer {
   padding-top: 20px;
   color: #9e9e9e;
 }
+.locales {
+  text-align: center;
+  margin-top: 10px;
+  font-size: small;
+}
+.locales li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
 a.text-link {
   color: #7985aa;
 }
 
 .grid {
   margin: 0 auto;
-  width: 921px;
+  width: 981px;
 }
 
 .grid-item {
@@ -131,8 +141,8 @@ a.text-link {
 .option {
   display: inline-block;
   width: 30%;
-  min-width: 300px;
-  min-height: 290px;
+  min-width: 310px;
+  min-height: 320px;
   margin: 1%;
   padding: 25px;
   border: 1px solid #c3c3c3;
