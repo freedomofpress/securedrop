@@ -1,0 +1,4 @@
+---
+# This is a wrapper role, and does not include any custom tasks.
+# All tasks are handled via the `build-debian-package` role,
+# determined by the vars in defaults/main.yml in this role.

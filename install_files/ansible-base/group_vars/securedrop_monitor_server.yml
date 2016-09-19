@@ -15,13 +15,13 @@ ip_info:
 #
 # This is the path to the directory where we build the deb. The deb package
 # will be created alongside it and will have ".deb" automatically appended.
-securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-2.8.2-amd64"
+securedrop_ossec_server_deb: "{{ securedrop_repo }}/securedrop-ossec-server-{{ ossec_version }}-amd64"
 
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
-  - ossec-server-2.8.2-amd64.deb
-  - "securedrop-ossec-server-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
+  - ossec-server-{{ ossec_version }}-amd64.deb
+  - "securedrop-ossec-server-{{ ossec_version }}+{{ securedrop_app_code_version }}-amd64.deb"
 
 ### Used by the mon role ###
 

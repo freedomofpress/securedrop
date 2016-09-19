@@ -3,6 +3,7 @@
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
 securedrop_app_code_version: "0.3.8"
+ossec_version: "2.8.2"
 
 tor_wait_for_hidden_services: yes
 tor_hidden_services_parent_dir: "/var/lib/tor/services"

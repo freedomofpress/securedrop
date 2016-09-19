@@ -26,8 +26,8 @@
     - prod-specific.yml
   roles:
     - { role: common, tags: common }
-    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: tor-hidden-services, tags: tor }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
   sudo: yes
 
 - name: Configure SecureDrop Monitor Server.

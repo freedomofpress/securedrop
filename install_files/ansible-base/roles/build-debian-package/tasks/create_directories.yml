@@ -1,0 +1,53 @@
+---
+- name: Clean up build files.
+  file:
+    state: absent
+    path: "{{ build_debian_package_directory }}"
+
+- name: Create base build directory.
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items:
+    - "{{ build_debian_package_directory }}"
+    - "{{ build_debian_package_directory }}/DEBIAN"
+
+- name: Create build subdirectories.
+  file:
+    state: directory
+    path: "{{ item.dest }}"
+  with_items: build_debian_package_files_directories
+  when: item.dest is defined and item.dest != ""
+
+- name: Copy required directories for packaging.
+  synchronize:
+    mode: push
+    dest: "{{ build_debian_package_directory }}/{{ item.dest }}"
+    src: "{{ item.src }}"
+    rsync_path: "sudo rsync"
+    rsync_opts:
+      - "--chown={{ build_debian_package_owner_username }}:{{ build_debian_package_group_username }}"
+      # This is a rather restrictive umask, but appropriate for the packages built for SecureDrop.
+      # The pip wheel directories will be more relaxed. e.g. 0755, according to system umask, since
+      # the wheel archive is created after files are copied in to the build directory.
+      - "--chmod=Dgo-w,Fgo-w"
+      - "--no-owner"
+      - "--super"
+  with_items: build_debian_package_files_directories
+
+- name: Copy static files for packaging.
+  copy:
+    dest: "{{ build_debian_package_directory }}/{{ item.dest }}"
+    src: "{{ item.src }}"
+  with_items: build_debian_package_extra_files
+
+- name: Copy control file.
+  template:
+    src: debian-control-file.j2
+    dest: "{{ build_debian_package_directory }}/DEBIAN/control"
+
+- name: Remove unwanted files.
+  file:
+    state: absent
+    path: "{{ build_debian_package_directory }}/{{ item }}"
+  with_items: build_debian_package_unwanted_files

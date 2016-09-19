@@ -1,0 +1,20 @@
+---
+# Seems superfluous, but since this role is designed to be extended,
+# and therefore possibly used several times in succession, all with the
+# apparent role name of "build-debian-package", it makes since to display
+# the exact package name. Will also show the default "dummy-package" name
+# if the default vars haven't been overridden.
+- name: Declare name of package.
+  debug:
+    msg: Now building {{ build_debian_package_name }}.
+
+- name: Install build dependencies.
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  sudo: yes
+  with_flattened:
+    - "{{ build_debian_package_base_dependencies }}"
+    - "{{ build_debian_package_extra_dependencies }}"

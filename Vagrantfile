@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
       ansible.verbose = 'v'
       ansible.groups = {
-        'development' => %(development),
+        'development' => %w(development),
         'securedrop_application_server' => %w(development),
         'securedrop:children' => %w(development),
       }
@@ -75,10 +75,13 @@ Vagrant.configure("2") do |config|
       ansible.limit = 'all'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'securedrop_application_server' => %(app-staging),
-        'securedrop_monitor_server' => %(mon-staging),
+        # Necessary to include "build" groups for the staging run, otherwise Vagrant will omit
+        # the "build" host from the generated inventory file, which prevents group_vars from loading.
+        'development' => %w(build),
+        'securedrop_application_server' => %w(app-staging),
+        'securedrop_monitor_server' => %w(mon-staging),
         'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
-        'securedrop:children' => %w(securedrop_application_server securedrop_monitor_server),
+        'securedrop:children' => %w(staging development),
       }
     end
   end
@@ -132,15 +135,14 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'build', autostart: false do |build|
-    build.vm.box = "build"
     build.vm.box = "bento/ubuntu-14.04"
+    build.vm.synced_folder './', '/vagrant', disabled: true
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'development' => %(build),
-        'securedrop_application_server' => %(build),
+        'development' => %w(build),
         'securedrop:children' => %w(development),
       }
     end
@@ -165,7 +167,6 @@ Vagrant.configure("2") do |config|
       v.name = "snapci"
     end
   end
-
 
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")

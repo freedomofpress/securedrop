@@ -71,10 +71,7 @@ end
 
 # declare desired apache headers for vhost configs
 apache2_common_headers = [
-  'Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"',
   'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
-  'Header set Pragma "no-cache"',
-  'Header set Expires "-1"',
   'Header always append X-Frame-Options: DENY',
   'Header set X-XSS-Protection: "1; mode=block"',
   'Header set X-Content-Type-Options: nosniff',
@@ -84,6 +81,7 @@ apache2_common_headers = [
   %{Header set Content-Security-Policy: "default-src 'self'"},
   'Header unset Etag',
 ]
+
 # declare block of directory declarations common to both
 # source and document interfaces.
 common_apache2_directory_declarations = <<eos
@@ -156,7 +154,27 @@ source_apache2_config_settings = [
   'ErrorDocument 404 /notfound',
   'ErrorDocument 500 /notfound',
   "ErrorLog #{property['apache_source_log']}",
+  'Header set Cache-Control "max-age=1800, must-revalidate"',
 ]
+
+
+# The Apache2 headers set by the Ansible playbooks recently changed in #1185.
+# Production installations will still have the old headers set, which are:
+#
+#  'Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"',
+#  'Header set Pragma "no-cache"',
+#  'Header set Expires "-1"',
+#
+# But any run of the Ansible playbooks after 0.3.6 will change the vhost configs
+# to match the new headers, which are different for each vhost. Source:
+#
+#  'Header set Cache-Control "max-age=1800, must-revalidate"'
+#
+# Document:
+#
+#  'Header set Cache-Control "max-age=1800"'
+
+
 # check source-specific apache2 config
 describe file('/etc/apache2/sites-available/source.conf') do
   it { should be_file }
@@ -183,7 +201,9 @@ document_apache2_config_settings = [
   'XSendFilePath    /var/lib/securedrop/tmp/',
   'ErrorLog /var/log/apache2/document-error.log',
   'CustomLog /var/log/apache2/document-access.log combined',
+  'Header set Cache-Control "max-age=1800"',
 ]
+
 # check document-specific apache2 config
 describe file('/etc/apache2/sites-available/document.conf') do
   it { should be_file }

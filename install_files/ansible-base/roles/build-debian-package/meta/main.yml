@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Freedom of the Press Foundation (@freedomofpress)
+  description: Build a generic Debian package
+  company: Freedom of the Press Foundation (@freedomofpress)
+  license: AGPL
+  min_ansible_version: 1.8
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - packaging
+allow_duplicates: yes
+dependencies: []

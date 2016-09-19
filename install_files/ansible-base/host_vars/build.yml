@@ -1,0 +1,5 @@
+---
+build_debian_package_maintainer: SecureDrop Team <securedrop@freedom.press>
+build_debian_package_homepage: https://securedrop.org
+
+build_debian_package_local_directory: ../../build

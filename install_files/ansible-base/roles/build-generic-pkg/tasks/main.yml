@@ -1,6 +1,0 @@
----
-- name: run bash script to build generic packages
-  command: "{{ securedrop_repo }}/build/build_generic_package.sh {{ package_name }}"
-  tags:
-    - build
-    - script

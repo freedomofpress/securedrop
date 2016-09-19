@@ -1,0 +1,10 @@
+---
+- name: Build Debian package.
+  command: dpkg-deb --build {{ build_debian_package_directory }}
+
+- name: Fetch build Debian package back to localhost.
+  fetch:
+    src: "{{ build_debian_package_deb_file }}"
+    dest: "{{ build_debian_package_local_directory }}/{{ build_debian_package_deb_file | basename }}"
+    flat: yes
+    fail_on_missing: yes
