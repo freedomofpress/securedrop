@@ -15,3 +15,11 @@
   tags:
     - apt
     - fpf_repo
+
+- name: ensure the fpf apt repo keyring package is installed
+  apt:
+    pkg: securedrop-keyring
+    state: present
+  tags:
+    - apt
+    - fpf_repo
