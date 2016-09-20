@@ -258,8 +258,21 @@ class TestIntegration(unittest.TestCase):
     def test_reply_normal(self):
         self.helper_test_reply("This is a test reply.", True)
 
-    def test_reply_unicode(self):
-        self.helper_test_reply("Teşekkürler", True)
+    def test_unicode_reply_with_ansi_env(self):
+        # This makes python-gnupg handle encoding equivalent to if we were
+        # running SD in an environment where os.getenv("LANG") == "C".
+        # Unfortunately, with the way our test suite is set up simply setting
+        # that env var here will not have the desired effect. Instead we
+        # monkey-patch the GPG object that is called crypto_util to imitate the
+        # _encoding attribute it would have had it been initialized in a "C"
+        # environment. See
+        # https://github.com/freedomofpress/securedrop/issues/1360 for context.
+        old_encoding = crypto_util.gpg._encoding
+        crypto_util.gpg._encoding = "ansi_x3.4_1968"
+        try:
+            self.helper_test_reply("ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+        finally:
+            crypto_util.gpg._encoding = old_encoding
 
     def _can_decrypt_with_key(self, msg, key_fpr, passphrase=None):
         """

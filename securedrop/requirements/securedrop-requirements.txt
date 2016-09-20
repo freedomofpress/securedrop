@@ -4,27 +4,25 @@
 #
 #    pip-compile --output-file securedrop-requirements.txt securedrop-requirements.in
 #
-click==6.6                # via rq
-colorama==0.3.7           # via qrcode
+click==6.6                # via flask, rq
 cssmin==0.2.0
-Flask-Assets==0.11
+Flask-Assets==0.12
 Flask-WTF==0.12
-Flask==0.10.1             # via flask-assets, flask-wtf
-future==0.15.2            # via pyotp
+Flask==0.11.1             # via flask-assets, flask-wtf
 gnupg==2.0.2
 itsdangerous==0.24        # via flask
 Jinja2==2.8               # via flask
 jsmin==2.2.1
 MarkupSafe==0.23          # via jinja2
-psutil==4.1.0
+psutil==4.3.1
 pycrypto==2.6.1
-pyotp==2.1.1
-qrcode==5.2.2
+pyotp==2.2.1
+qrcode==5.3
 redis==2.10.5
 rq==0.6.0
-scrypt==0.7.1
+scrypt==0.8.0
 six==1.10.0               # via qrcode
-SQLAlchemy==1.0.13
-webassets==0.11.1         # via flask-assets
-Werkzeug==0.11.9          # via flask, flask-wtf
+SQLAlchemy==1.0.15
+webassets==0.12.0         # via flask-assets
+Werkzeug==0.11.11         # via flask, flask-wtf
 WTForms==2.1              # via flask-wtf

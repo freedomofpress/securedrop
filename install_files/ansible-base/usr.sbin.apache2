@@ -11,6 +11,7 @@
 
   /bin/dash rix,
   /bin/touch rix,
+  /bin/uname rix,
   /dev/null w,
   /dev/urandom r,
   /etc/apache2/apache2.conf r,
@@ -186,6 +187,7 @@
   /var/www/securedrop/static/js/journalist.js r,
   /var/www/securedrop/static/js/libs/jquery-2.1.1.min.js r,
   /var/www/securedrop/static/js/source.js r,
+  /var/www/securedrop/static/fonts/fontawesome-webfont.eot r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.ttf r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.woff r,
   /var/www/securedrop/store.py r,
