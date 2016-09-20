@@ -65,13 +65,18 @@ class FunctionalTest():
         self.journalist_location = "http://localhost:%d" % journalist_port
 
         def start_source_server():
-            source.app.run(port=source_port, debug=True, use_reloader=False)
+            source.app.run(
+                port=source_port,
+                debug=True,
+                use_reloader=False,
+                threaded=True)
 
         def start_journalist_server():
             journalist.app.run(
                 port=journalist_port,
                 debug=True,
-                use_reloader=False)
+                use_reloader=False,
+                threaded=True)
 
         self.source_process = Process(target=start_source_server)
         self.journalist_process = Process(target=start_journalist_server)
