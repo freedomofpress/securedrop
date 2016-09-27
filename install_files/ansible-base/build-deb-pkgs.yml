@@ -10,5 +10,6 @@
     - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-agent"], package_name: "securedrop-ossec-agent" }
+    - { role: build-generic-pkg, tags: ["securedrop-keyring"], package_name: "securedrop-keyring" }
 
   sudo: yes
