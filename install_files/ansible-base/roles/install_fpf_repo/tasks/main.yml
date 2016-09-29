@@ -3,6 +3,7 @@
   apt_key: >
     state=present
     data="{{ lookup('file', 'fpf-signing-key.pub') }}"
+    keyring=/etc/apt/trusted.gpg.d/securedrop-keyring.gpg
 
 - name: setup fpf apt repo
   apt_repository: >
