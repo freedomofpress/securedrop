@@ -181,7 +181,15 @@ class TestJournalist(TestCase):
             password='not',
             password_again='thesame'))
         self.assert_redirects(res, url_for('edit_account'))
-        
+
+    def test_too_long_user_password_change(self):
+        self._login_user()
+        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        res = self.client.post(url_for('edit_account'), data=dict(
+            password=overly_long_password,
+            password_again=overly_long_password))
+        self.assert_redirects(res, url_for('edit_account'))
+
     def test_valid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('edit_account'), data=dict(
