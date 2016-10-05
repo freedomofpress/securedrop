@@ -173,6 +173,20 @@ class TestJournalist(TestCase):
         self.assert_redirects(res, url_for('admin_edit_user',
                                            user_id=1))
 
+    def test_admin_edits_user_password_too_long(self):
+        self._login_admin()
+        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+
+        res = self.client.post(url_for('admin_edit_user',
+                                       user_id=1),
+                               data=dict(username='foo',
+                                         is_admin=False,
+                                         password=overly_long_password,
+                                         password_again=overly_long_password))
+
+        self.assert_redirects(res, url_for('admin_edit_user',
+                                           user_id=1))
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
