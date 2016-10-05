@@ -219,6 +219,18 @@ class TestJournalist(TestCase):
 
         self.assertIn('Change Secret', res.data)
 
+    def test_admin_reset_totp_success(self):
+        self._login_admin()
+        old_totp = self.user.totp
+
+        res = self.client.post(url_for('admin_reset_two_factor_totp'),
+                               data=dict(uid=1))
+        new_totp = self.user.totp
+
+        self.assertNotEqual(old_totp, new_totp)
+
+        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
