@@ -387,8 +387,6 @@ class TestJournalist(TestCase):
         # should redirect to verification page
         self.assert_redirects(res, url_for('account_new_two_factor'))
 
-    # TODO: more tests for admin interface
-
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         source = Source(sid, crypto_util.display_id())
