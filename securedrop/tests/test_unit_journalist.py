@@ -247,6 +247,59 @@ class TestJournalist(TestCase):
         # any GET req should take a user to the admin_new_user_two_factor page
         self.assertIn('Authenticator', res.data)
 
+    def test_admin_add_user_get_req(self):
+        self._login_admin()
+
+        res = self.client.get(url_for('admin_add_user'))
+
+        # any GET req should take a user to the admin_add_user page
+        self.assertIn('Add user', res.data)
+
+    def test_admin_add_user_success(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_add_user'),
+                               data=dict(username='dellsberg',
+                                         password='pentagonpapers',
+                                         password_again='pentagonpapers',
+                                         is_admin=False))
+
+        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=3))
+
+    def test_admin_add_user_failure_no_username(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_add_user'),
+                               data=dict(username='',
+                                         password='pentagonpapers',
+                                         password_again='pentagonpapers',
+                                         is_admin=False))
+
+        self.assertIn('Missing username', res.data)
+
+    def test_admin_add_user_failure_passwords_dont_match(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_add_user'),
+                               data=dict(username='dellsberg',
+                                         password='not',
+                                         password_again='thesame',
+                                         is_admin=False))
+
+        self.assertIn('Passwords didn', res.data)
+
+    def test_admin_add_user_failure_password_too_long(self):
+        self._login_admin()
+
+        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        res = self.client.post(url_for('admin_add_user'),
+                               data=dict(username='dellsberg',
+                                         password=overly_long_password,
+                                         password_again=overly_long_password,
+                                         is_admin=False))
+
+        self.assertIn('password is too long', res.data)
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
