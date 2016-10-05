@@ -187,6 +187,18 @@ class TestJournalist(TestCase):
         self.assert_redirects(res, url_for('admin_edit_user',
                                            user_id=1))
 
+    def test_admin_edits_user_invalid_username(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_edit_user',
+                                       user_id=1),
+                               data=dict(username='admin',
+                                         is_admin=False,
+                                         password='valid',
+                                         password_again='valid'))
+
+        self.assertIn('An unknown error occurred', res.data)
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
