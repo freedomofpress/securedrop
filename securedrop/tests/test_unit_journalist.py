@@ -418,6 +418,17 @@ class TestJournalist(TestCase):
                     username="My Password is Too Big!",
                     password=overly_long_password)
 
+    def test_add_star(self):
+        self._login_user()
+
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+
+        res = self.client.post(url_for('add_star', sid=sid))
+        self.assert_redirects(res, url_for('index'))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
