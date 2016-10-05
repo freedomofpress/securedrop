@@ -231,6 +231,22 @@ class TestJournalist(TestCase):
 
         self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
 
+    def test_admin_new_user_2fa_success(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_new_user_two_factor', uid=1),
+                               data=dict(token=self.user.totp.now()))
+
+        self.assert_redirects(res, url_for('admin_index'))
+
+    def test_admin_new_user_2fa_get_req(self):
+        self._login_admin()
+
+        res = self.client.get(url_for('admin_new_user_two_factor', uid=1))
+
+        # any GET req should take a user to the admin_new_user_two_factor page
+        self.assertIn('Authenticator', res.data)
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
