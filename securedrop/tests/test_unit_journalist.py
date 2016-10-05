@@ -212,6 +212,13 @@ class TestJournalist(TestCase):
 
         self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
 
+    def test_admin_reset_hotp_empty(self):
+        self._login_admin()
+        res = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                               data=dict(uid=1))
+
+        self.assertIn('Change Secret', res.data)
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
