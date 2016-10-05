@@ -12,6 +12,15 @@ os.environ['SECUREDROP_ENV'] = 'test'
 
 class TestTemplateFilters(unittest.TestCase):
 
+    def test_datetimeformat_default_fmt(self):
+        result = template_filters.datetimeformat(datetime(2016, 1, 1, 1, 1, 1))
+        self.assertEquals("Jan 01, 2016 01:01 AM", result)
+
+    def test_datetimeformat_unusual_fmt(self):
+        result = template_filters.datetimeformat(datetime(2016, 1, 1, 1, 1, 1),
+                                                 fmt="%b %d %Y")
+        self.assertEquals("Jan 01 2016", result)
+
     def test_relative_timestamp_seconds(self):
         test_time = datetime.utcnow() - timedelta(seconds=5)
         result = template_filters._relative_timestamp(test_time)
