@@ -199,6 +199,19 @@ class TestJournalist(TestCase):
 
         self.assertIn('An unknown error occurred', res.data)
 
+    def test_admin_reset_hotp_success(self):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        res = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                               data=dict(uid=1, otp_secret=123456))
+
+        new_hotp = self.user.hotp.secret
+
+        self.assertNotEqual(old_hotp, new_hotp)
+
+        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
