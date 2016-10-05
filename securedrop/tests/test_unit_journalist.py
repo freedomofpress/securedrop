@@ -121,6 +121,16 @@ class TestJournalist(TestCase):
             token=self.admin_user.totp.now()),
             follow_redirects=True)
 
+    def test_user_logout(self):
+        self._login_user()
+        res = self.client.get(url_for('logout'))
+        self.assert_redirects(res, url_for('index'))
+
+    def test_admin_logout(self):
+        self._login_admin()
+        res = self.client.get(url_for('logout'))
+        self.assert_redirects(res, url_for('index'))
+
     def test_admin_index(self):
         self._login_admin()
         res = self.client.get(url_for('admin_index'))
