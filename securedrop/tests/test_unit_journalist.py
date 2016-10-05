@@ -137,6 +137,30 @@ class TestJournalist(TestCase):
         self.assert200(res)
         self.assertIn("Admin Interface", res.data)
 
+    def test_admin_delete_user(self):
+        self._login_admin()
+
+        user_id = 1  # journalist foo
+        user = Journalist.query.get(user_id)
+        res = self.client.post(url_for('admin_delete_user',
+                                       user_id=user_id))
+        self.assert_redirects(res, url_for('admin_index'))
+
+        # verify journalist foo is no longer in the database
+        user = Journalist.query.get(user_id)
+        self.assertEqual(user, None)
+
+    def test_admin_edits_user_password_valid(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_edit_user',
+                                       user_id=1),
+                               data=dict(username='foo',
+                                         is_admin=False,
+                                         password='valid',
+                                         password_again='valid'))
+        self.assertIn('Password successfully changed', res.data)
+
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
             url_for('admin_edit_user', user_id=1)]
