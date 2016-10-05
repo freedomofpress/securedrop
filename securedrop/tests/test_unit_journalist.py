@@ -4,7 +4,6 @@ import os
 from cStringIO import StringIO
 import unittest
 import zipfile
-
 import mock
 
 from flask import url_for
@@ -160,6 +159,19 @@ class TestJournalist(TestCase):
                                          password='valid',
                                          password_again='valid'))
         self.assertIn('Password successfully changed', res.data)
+
+    def test_admin_edits_user_password_dont_match(self):
+        self._login_admin()
+
+        res = self.client.post(url_for('admin_edit_user',
+                                       user_id=1),
+                               data=dict(username='foo',
+                                         is_admin=False,
+                                         password='not',
+                                         password_again='thesame'))
+
+        self.assert_redirects(res, url_for('admin_edit_user',
+                                           user_id=1))
 
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
