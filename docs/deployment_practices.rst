@@ -128,6 +128,8 @@ opened up multiple avenues for third parties to collect information on
 those sources. This information can potentially be accessed by law
 enforcement or intelligence agencies and could unduly expose a source.
 
+Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop landing page. These services intercept requests between a potential source and the SecureDrop landing page and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
+
 **Apply applicable security headers**
 
 Security headers give instructions to the web browser on how to handle
@@ -282,10 +284,10 @@ Minimum requirements for the SecureDrop environment
    SecureDrop's point of demarcation.
 -  Video monitoring should be recorded of the server area and the
    organizations safe.
--  Journalist should ensure that while using the air-gapped viewing
+-  Journalists should ensure that while using the air-gapped viewing
    station they are in an area without video cameras.
 -  An established monitoring plan and incident response plan. Who will
-   receive the OSSEC alerts and what their response plan will be? These
+   receive the OSSEC alerts and what will their response plan be? These
    should cover technical outages and a compromised environment plan.
 
 Suggested
