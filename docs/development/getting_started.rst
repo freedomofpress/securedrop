@@ -387,4 +387,12 @@ exception to allow Tor Browser to access localhost:
 You should now be able to access the development server in the Tor
 Browser by navigating to ``127.0.0.1:8080`` and ``127.0.0.1:8081``.
 
+Architecture Diagrams
+~~~~~~~~~~~~~~~~~~~~~
+
+Some helpful diagrams for getting a sense of the SecureDrop application architecture are stored `here
+<https://github.com/freedomofpress/securedrop/tree/develop/docs/diagrams>`_, including a high-level view of the SecureDrop database structure:
+
+.. image:: ../diagrams/securedrop-database.png
+
 .. _Github issue #1381: https://github.com/freedomofpress/securedrop/issues/1381
