@@ -6,14 +6,16 @@
 #
 click==6.6                # via flask, rq
 cssmin==0.2.0
+decorator==4.0.10         # via sqlalchemy-migrate
 Flask-Assets==0.12
-Flask-WTF==0.12
+Flask-WTF==0.13.1
 Flask==0.11.1             # via flask-assets, flask-wtf
 gnupg==2.0.2
 itsdangerous==0.24        # via flask
 Jinja2==2.8               # via flask
 jsmin==2.2.1
 MarkupSafe==0.23          # via jinja2
+pbr==1.10.0               # via sqlalchemy-migrate
 psutil==4.3.1
 pycrypto==2.6.1
 pyotp==2.2.1
@@ -21,8 +23,11 @@ qrcode==5.3
 redis==2.10.5
 rq==0.6.0
 scrypt==0.8.0
-six==1.10.0               # via qrcode
-SQLAlchemy==1.0.15
+six==1.10.0               # via qrcode, sqlalchemy-migrate
+SQLAlchemy-migrate==0.10.0
+SQLAlchemy==1.1.1         # via sqlalchemy-migrate
+sqlparse==0.2.1           # via sqlalchemy-migrate
+Tempita==0.5.2            # via sqlalchemy-migrate
 webassets==0.12.0         # via flask-assets
 Werkzeug==0.11.11         # via flask, flask-wtf
 WTForms==2.1              # via flask-wtf

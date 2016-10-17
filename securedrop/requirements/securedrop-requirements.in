@@ -13,4 +13,5 @@ redis
 rq
 scrypt
 SQLAlchemy
+SQLAlchemy-migrate
 Werkzeug
