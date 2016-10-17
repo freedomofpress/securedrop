@@ -82,3 +82,6 @@ TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 # depending on the environment
 DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
+
+# Location of database migrations
+SQLALCHEMY_MIGRATE_REPO = os.path.join(SECUREDROP_DATA_ROOT, 'db_repository')
