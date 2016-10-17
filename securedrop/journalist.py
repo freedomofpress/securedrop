@@ -10,6 +10,7 @@ from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
 
 import config
 import version
@@ -19,7 +20,9 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength)
+                LoginThrottledException, InvalidPasswordLength,
+                SourceTag, SubmissionTag, SourceLabelType,
+                SubmissionLabelType)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -52,8 +55,17 @@ def get_source(sid):
     source = None
     query = Source.query.filter(Source.filesystem_id == sid)
     source = get_one_or_else(query, app.logger, abort)
-
     return source
+
+
+def get_submission(filename):
+    """Return a Submission object, representing the database row, for the
+    submission with filename `filename`."""
+    submission = None
+    query = Submission.query.filter(Submission.filename == filename)
+    submission = get_one_or_else(query, app.logger, abort)
+
+    return submission
 
 
 @app.before_request
