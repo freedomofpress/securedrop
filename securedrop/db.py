@@ -412,6 +412,46 @@ class JournalistLoginAttempt(Base):
         self.journalist_id = journalist.id
 
 
+class SourceLabelType(Base):
+    __tablename__ = "source_label_type"
+    id = Column(Integer, primary_key=True)
+    label_text = Column(String(255), nullable=False, unique=True)
+
+    def __repr__(self):
+        return "<Source Label Type {}>".format(self.label_text)
+
+
+class SubmissionLabelType(Base):
+    __tablename__ = "submission_label_type"
+    id = Column(Integer, primary_key=True)
+    label_text = Column(String(255), nullable=False, unique=True)
+
+    def __repr__(self):
+        return "<Submission Label Type {}>".format(self.label_text)
+
+
+class SourceTag(Base):
+    __tablename__ = "source_tags"
+    id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, ForeignKey('sources.id', ondelete='CASCADE'), nullable=False)
+    label_id = Column(Integer, ForeignKey('source_label_type.id', ondelete='CASCADE'), nullable=False)
+
+    def __repr__(self):
+        return "<Source tag ID={}: label_id={}>".format(self.source_id,
+                                                        self.label_id)
+
+
+class SubmissionTag(Base):
+    __tablename__ = "submission_tags"
+    id = Column(Integer, primary_key=True)
+    submission_id = Column(Integer, ForeignKey('submissions.id', ondelete='CASCADE'), nullable=False)
+    label_id = Column(Integer, ForeignKey('submission_label_type.id', ondelete='CASCADE'), nullable=False)
+
+    def __repr__(self):
+        return "<Submission tag ID={}: label_id={}>".format(self.submission_id,
+                                                            self.label_id)
+
+
 # Declare (or import) models before init_db
 def init_db():
     Base.metadata.create_all(bind=engine)
