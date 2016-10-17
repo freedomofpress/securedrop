@@ -3,11 +3,19 @@ import datetime
 import base64
 import binascii
 
+import pdb
+
 # Find the best implementation available on this platform
 try:
     from cStringIO import StringIO
 except:
     from StringIO import StringIO
+
+import imp
+
+from migrate.versioning import api
+
+import shutil
 
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
@@ -36,18 +44,17 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 # http://flask.pocoo.org/docs/patterns/sqlalchemy/
 
 if config.DATABASE_ENGINE == "sqlite":
-    engine = create_engine(
-        config.DATABASE_ENGINE + ":///" +
-        config.DATABASE_FILE
-    )
+    SQLALCHEMY_DATABASE_URI = "{}:///{}".format(config.DATABASE_ENGINE,
+                                                config.DATABASE_FILE)
 else:
-    engine = create_engine(
-        config.DATABASE_ENGINE + '://' +
-        config.DATABASE_USERNAME + ':' +
-        config.DATABASE_PASSWORD + '@' +
-        config.DATABASE_HOST + '/' +
-        config.DATABASE_NAME, echo=False
-    )
+    SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}/".format(config.DATABASE_ENGINE,
+                                                      config.DATABASE_USERNAME,
+                                                      config.DATABASE_PASSWORD,
+                                                      config.DATABASE_HOST,
+                                                      config.DATABASE_NAME)
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+migration_dir = config.SQLALCHEMY_MIGRATE_REPO
 
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
@@ -414,3 +421,42 @@ class JournalistLoginAttempt(Base):
 # Declare (or import) models before init_db
 def init_db():
     Base.metadata.create_all(bind=engine)
+    if not os.path.exists(migration_dir):
+        api.create(migration_dir, 'SecureDrop database repository')
+        api.version_control(SQLALCHEMY_DATABASE_URI,
+                            migration_dir)
+    else:  # the database already exists
+        api.version_control(SQLALCHEMY_DATABASE_URI,
+                            migration_dir,
+                            api.version(migration_dir))
+
+
+def backup_db():
+    shutil.copy(config.DATABASE_FILE,
+                os.path.join(config.SECUREDROP_DATA_ROOT, 'backup_db.sqlite'))
+
+
+def migrate():
+    v = api.db_version(SQLALCHEMY_DATABASE_URI, migration_dir)
+    migration = migration_dir + ('/versions/%03d_migration.py' % (v+1))
+    tmp_module = imp.new_module('old_model')
+    old_model = api.create_model(SQLALCHEMY_DATABASE_URI, migration_dir)
+    exec(old_model, tmp_module.__dict__)
+
+    backup_db()
+    script = api.make_update_script_for_model(SQLALCHEMY_DATABASE_URI,
+                                                  migration_dir,
+                                                  tmp_module.meta,
+                                                  Base.metadata)
+    open(migration, "wt").write(script)
+    api.upgrade(SQLALCHEMY_DATABASE_URI, migration_dir)
+    v = api.db_version(SQLALCHEMY_DATABASE_URI, migration_dir)
+
+    print('New migration saved as: ' + migration)
+    print('Current database version: ' + str(v))
+
+
+def downgrade():
+    api.downgrade(SQLALCHEMY_DATABASE_URI, migration_dir)
+    db_version = api.db_version(SQLALCHEMY_DATABASE_URI, migration_dir)
+    print('Current database version: {}'.format(db_version))
