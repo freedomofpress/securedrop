@@ -141,6 +141,14 @@
     - gpg
     - securedrop_config
 
+- name: Add securedrop database versioning repository location.
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    line: "SQLALCHEMY_MIGRATE_REPO = os.path.join(SECUREDROP_DATA_ROOT, 'db_repository')"
+  when: not config.stat.exists
+  tags:
+    - securedrop_config
+
 - name: Check whether sqlite database exists.
   stat:
     path: "{{ securedrop_data }}/db.sqlite"
