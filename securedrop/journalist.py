@@ -7,7 +7,7 @@ import functools
 from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CsrfProtect
-from flask.ext.assets import Environment
+from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
