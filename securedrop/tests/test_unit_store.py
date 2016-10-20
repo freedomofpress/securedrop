@@ -47,6 +47,22 @@ class TestStore(unittest.TestCase):
             zipped_file_content = archive.read(archived_file)
             self.assertEquals(zipped_file_content, actual_file_content)
 
+    def test_rename_valid_submission(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+
+        source_dir = os.path.join('/tmp/securedrop/store/', sid)
+        if not os.path.exists(source_dir):
+            os.makedirs(source_dir)
+
+        old_filename = '1-abc1-msg.gpg'
+        with open(os.path.join(source_dir, old_filename), 'w'):
+            pass
+
+        new_filestem = 'abc2'
+        expected_filename = '1-abc2-msg.gpg'
+        actual_filename = store.rename_submission(sid, old_filename,
+                                                  new_filestem)
+        self.assertEquals(actual_filename, expected_filename)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
