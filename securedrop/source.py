@@ -9,7 +9,7 @@ import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file)
+                   flash, abort, g, send_file, Markup)
 from flask_wtf.csrf import CsrfProtect
 from flask.ext.assets import Environment
 
@@ -394,11 +394,18 @@ def login():
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
+
 @app.route('/logout')
 def logout():
     if logged_in():
         session.clear()
-        flash("Thank you for logging out.", "notification")
+        tor_msg = Markup("""<strong>Important:</strong> Thank you for logging out.
+                         Please fully end your session by restarting
+                         Tor Browser: Click the <img src='static/i/toronion.png'
+                         alt='Tor icon' /> Tor onion icon in the toolbar above,
+                         click <strong>  New Identity</strong> and click
+                         <strong>Yes</strong> in the dialog box that appears.""")
+        flash(tor_msg, "error")
 
     return redirect(url_for('index'))
         
