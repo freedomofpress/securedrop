@@ -197,16 +197,19 @@ class TestJournalist(TestCase):
                                            user_id=1))
 
     def test_admin_edits_user_invalid_username(self):
+        """Test expected error message when admin attempts to change a user's
+        username to a username that is taken by another user."""
         self._login_admin()
 
-        res = self.client.post(url_for('admin_edit_user',
-                                       user_id=1),
-                               data=dict(username='admin',
-                                         is_admin=False,
-                                         password='valid',
-                                         password_again='valid'))
+        new_username = self.admin_user.username
+        res = self.client.post(
+            url_for('admin_edit_user', user_id=self.user.id),
+            data=dict(username=new_username, is_admin=False,
+                      password='', password_again='')
+            )
 
-        self.assertIn('An unknown error occurred', res.data)
+        self.assertIn('Username {} is already taken'.format(new_username),
+                      res.data)
 
     def test_admin_reset_hotp_success(self):
         self._login_admin()
