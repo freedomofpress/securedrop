@@ -6,8 +6,8 @@ import unittest
 import zipfile
 import mock
 
-from flask import url_for
 from flask_testing import TestCase
+from flask import url_for, escape
 
 import crypto_util
 import journalist
@@ -139,15 +139,24 @@ class TestJournalist(TestCase):
     def test_admin_delete_user(self):
         self._login_admin()
 
-        user_id = 1  # journalist foo
-        user = Journalist.query.get(user_id)
-        res = self.client.post(url_for('admin_delete_user',
-                                       user_id=user_id))
-        self.assert_redirects(res, url_for('admin_index'))
+        res = self.client.post(
+            url_for('admin_delete_user', user_id=self.user.id),
+            follow_redirects=True)
+        self.assert200(res)
+        self.assertIn(escape("Deleted user '{}'".format(self.user.username)),
+                      res.data)
 
         # verify journalist foo is no longer in the database
-        user = Journalist.query.get(user_id)
+        user = Journalist.query.get(self.user.id)
         self.assertEqual(user, None)
+
+    def test_admin_delete_invalid_user(self):
+        self._login_admin()
+
+        invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
+        res = self.client.post(url_for('admin_delete_user',
+                                       user_id=invalid_user_pk))
+        self.assert404(res)
 
     def test_admin_edits_user_password_valid(self):
         self._login_admin()

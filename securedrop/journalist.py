@@ -294,8 +294,16 @@ def admin_edit_user(user_id):
 @admin_required
 def admin_delete_user(user_id):
     user = Journalist.query.get(user_id)
-    db_session.delete(user)
-    db_session.commit()
+    if user:
+        db_session.delete(user)
+        db_session.commit()
+        flash("Deleted user '{}'".format(user.username), "notification")
+    else:
+        app.logger.error(
+            "Admin {} tried to delete nonexistent user with pk={}".format(
+            g.user.username, user_id))
+        abort(404)
+
     return redirect(url_for('admin_index'))
 
 
