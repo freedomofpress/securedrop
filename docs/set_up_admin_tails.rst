@@ -60,7 +60,7 @@ Signing Key*.
 
 .. code:: sh
 
-    gpg --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
+    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
