@@ -161,40 +161,36 @@ class TestJournalist(TestCase):
     def test_admin_edits_user_password_valid(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_edit_user',
-                                       user_id=1),
-                               data=dict(username='foo',
-                                         is_admin=False,
-                                         password='valid',
-                                         password_again='valid'))
+        res = self.client.post(
+            url_for('admin_edit_user', user_id=self.user.id),
+            data=dict(username='foo', is_admin=False,
+                      password='valid', password_again='valid'))
+
         self.assertIn('Password successfully changed', res.data)
 
     def test_admin_edits_user_password_dont_match(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_edit_user',
-                                       user_id=1),
-                               data=dict(username='foo',
-                                         is_admin=False,
-                                         password='not',
-                                         password_again='thesame'))
+        res = self.client.post(
+            url_for('admin_edit_user', user_id=self.user.id),
+            data=dict(username='foo', is_admin=False, password='not',
+                      password_again='thesame'),
+            follow_redirects=True)
 
-        self.assert_redirects(res, url_for('admin_edit_user',
-                                           user_id=1))
+        self.assertIn(escape("Passwords didn't match"), res.data)
 
     def test_admin_edits_user_password_too_long(self):
         self._login_admin()
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
 
-        res = self.client.post(url_for('admin_edit_user',
-                                       user_id=1),
-                               data=dict(username='foo',
-                                         is_admin=False,
-                                         password=overly_long_password,
-                                         password_again=overly_long_password))
+        res = self.client.post(
+            url_for('admin_edit_user', user_id=self.user.id),
+            data=dict(username='foo', is_admin=False,
+                      password=overly_long_password,
+                      password_again=overly_long_password),
+            follow_redirects=True)
 
-        self.assert_redirects(res, url_for('admin_edit_user',
-                                           user_id=1))
+        self.assertIn('Your password is too long', res.data)
 
     def test_admin_edits_user_invalid_username(self):
         self._login_admin()
