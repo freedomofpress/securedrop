@@ -81,8 +81,8 @@ key:
 .. code:: sh
 
     cd securedrop/
-    git checkout 0.3.9
-    git tag -v 0.3.9
+    git checkout 0.3.10
+    git tag -v 0.3.10
 
 You should see ``Good signature from "Freedom of the Press Foundation
 Master Signing Key"`` in the output of that last command.
