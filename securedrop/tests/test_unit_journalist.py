@@ -211,19 +211,24 @@ class TestJournalist(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        res = self.client.post(url_for('admin_reset_two_factor_hotp'),
-                               data=dict(uid=1, otp_secret=123456))
+        res = self.client.post(
+            url_for('admin_reset_two_factor_hotp'),
+            data=dict(uid=self.user.id, otp_secret=123456)
+            )
 
         new_hotp = self.user.hotp.secret
 
         self.assertNotEqual(old_hotp, new_hotp)
 
-        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
+        self.assert_redirects(res,
+            url_for('admin_new_user_two_factor', uid=self.user.id))
 
     def test_admin_reset_hotp_empty(self):
         self._login_admin()
-        res = self.client.post(url_for('admin_reset_two_factor_hotp'),
-                               data=dict(uid=1))
+        res = self.client.post(
+            url_for('admin_reset_two_factor_hotp'),
+            data=dict(uid=self.user.id)
+            )
 
         self.assertIn('Change Secret', res.data)
 
@@ -231,26 +236,33 @@ class TestJournalist(TestCase):
         self._login_admin()
         old_totp = self.user.totp
 
-        res = self.client.post(url_for('admin_reset_two_factor_totp'),
-                               data=dict(uid=1))
+        res = self.client.post(
+            url_for('admin_reset_two_factor_totp'),
+            data=dict(uid=self.user.id)
+            )
         new_totp = self.user.totp
 
         self.assertNotEqual(old_totp, new_totp)
 
-        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=1))
+        self.assert_redirects(res,
+            url_for('admin_new_user_two_factor', uid=self.user.id))
 
     def test_admin_new_user_2fa_success(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_new_user_two_factor', uid=1),
-                               data=dict(token=self.user.totp.now()))
+        res = self.client.post(
+            url_for('admin_new_user_two_factor', uid=self.user.id),
+            data=dict(token=self.user.totp.now())
+            )
 
         self.assert_redirects(res, url_for('admin_index'))
 
     def test_admin_new_user_2fa_get_req(self):
         self._login_admin()
 
-        res = self.client.get(url_for('admin_new_user_two_factor', uid=1))
+        res = self.client.get(
+            url_for('admin_new_user_two_factor', uid=self.user.id)
+            )
 
         # any GET req should take a user to the admin_new_user_two_factor page
         self.assertIn('Authenticator', res.data)
@@ -266,33 +278,33 @@ class TestJournalist(TestCase):
     def test_admin_add_user_success(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_add_user'),
-                               data=dict(username='dellsberg',
-                                         password='pentagonpapers',
-                                         password_again='pentagonpapers',
-                                         is_admin=False))
+        res = self.client.post(
+            url_for('admin_add_user'),
+            data=dict(username='dellsberg',
+                      password='pentagonpapers',
+                      password_again='pentagonpapers',
+                      is_admin=False)
+            )
 
         self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=3))
 
     def test_admin_add_user_failure_no_username(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_add_user'),
-                               data=dict(username='',
-                                         password='pentagonpapers',
-                                         password_again='pentagonpapers',
-                                         is_admin=False))
+        res = self.client.post(
+            url_for('admin_add_user'),
+            data=dict(username='', password='pentagonpapers',
+                      password_again='pentagonpapers', is_admin=False))
 
         self.assertIn('Missing username', res.data)
 
     def test_admin_add_user_failure_passwords_dont_match(self):
         self._login_admin()
 
-        res = self.client.post(url_for('admin_add_user'),
-                               data=dict(username='dellsberg',
-                                         password='not',
-                                         password_again='thesame',
-                                         is_admin=False))
+        res = self.client.post(
+            url_for('admin_add_user'),
+            data=dict(username='dellsberg', password='not',
+                      password_again='thesame', is_admin=False))
 
         self.assertIn('Passwords didn', res.data)
 
@@ -300,17 +312,16 @@ class TestJournalist(TestCase):
         self._login_admin()
 
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
-        res = self.client.post(url_for('admin_add_user'),
-                               data=dict(username='dellsberg',
-                                         password=overly_long_password,
-                                         password_again=overly_long_password,
-                                         is_admin=False))
+        res = self.client.post(
+            url_for('admin_add_user'),
+            data=dict(username='dellsberg', password=overly_long_password,
+                      password_again=overly_long_password, is_admin=False))
 
         self.assertIn('password is too long', res.data)
 
     def test_admin_authorization_for_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
-            url_for('admin_edit_user', user_id=1)]
+            url_for('admin_edit_user', user_id=self.user.id)]
 
         self._login_user()
         for admin_url in admin_urls:
@@ -319,10 +330,13 @@ class TestJournalist(TestCase):
 
     def test_admin_authorization_for_posts(self):
         admin_urls = [url_for('admin_reset_two_factor_totp'),
-            url_for('admin_reset_two_factor_hotp'), url_for('admin_add_user', user_id=1),
-            url_for('admin_new_user_two_factor'), url_for('admin_reset_two_factor_totp'),
-            url_for('admin_reset_two_factor_hotp'), url_for('admin_edit_user', user_id=1),
-            url_for('admin_delete_user', user_id=1)]
+            url_for('admin_reset_two_factor_hotp'),
+            url_for('admin_add_user', user_id=self.user.id),
+            url_for('admin_new_user_two_factor'),
+            url_for('admin_reset_two_factor_totp'),
+            url_for('admin_reset_two_factor_hotp'),
+            url_for('admin_edit_user', user_id=self.user.id),
+            url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
         for admin_url in admin_urls:
             res = self.client.post(admin_url)
@@ -340,7 +354,8 @@ class TestJournalist(TestCase):
         urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
                 url_for('col_process'), url_for('col_delete_single', sid='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
-                url_for('account_new_two_factor'), url_for('account_reset_two_factor_totp'),
+                url_for('account_new_two_factor'),
+                url_for('account_reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
@@ -385,8 +400,10 @@ class TestJournalist(TestCase):
         self._login_user()
         oldHotp = self.user.hotp
 
-        res = self.client.post(url_for('account_reset_two_factor_hotp'), data=dict(
-            otp_secret=123456))
+        res = self.client.post(
+            url_for('account_reset_two_factor_hotp'),
+            data=dict(otp_secret=123456)
+            )
         newHotp = self.user.hotp
 
         # check that hotp is different
