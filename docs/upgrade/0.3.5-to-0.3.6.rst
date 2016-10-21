@@ -6,10 +6,11 @@ the GPG signing key used for the Freedom of the Press apt repository. The
 signing key expired on October 26, 2015, preventing automatic updates from 
 Freedom of the Press until the issue is manually resolved.
 
-.. note:: We're considering creating a separate Debian package to
-          manage the signing keys into the future. If you have strong 
-          feelings about how the signing key is managed, `open an issue 
-          <https://github.com/freedomofpress/securedrop/issues/>`_.
+.. note:: As of SecureDrop 0.3.10, a Debian package `securedrop-keyring`
+          is used for managing apt keys on the servers. In the process
+          the release signing key was rotated. Check the
+          :doc:`../set_up_admin_tails` guide for the most up-to-date
+          instructions.
 
 The upgrade steps in this document will upgrade a 0.3.5 SecureDrop to
 0.3.6. If you have not yet upgraded to 0.3.5, :doc:`do that first 
@@ -65,7 +66,7 @@ Greeter*.
 #. Update the Freedom of the Press signing key
    (these commands are from the :doc:`../set_up_admin_tails` guide) ::
 
-    gpg --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
+    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
 
    .. tip:: The GPG Master Signing Key is also available from the
             `Freedom of the Press website 
