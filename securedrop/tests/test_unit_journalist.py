@@ -369,7 +369,7 @@ class TestJournalist(TestCase):
 
         # check that totp is different
         self.assertNotEqual(oldTotp, newTotp)
-        
+
         # should redirect to verification page
         self.assert_redirects(res, url_for('account_new_two_factor'))
 
@@ -381,7 +381,7 @@ class TestJournalist(TestCase):
             otp_secret=123456))
         newHotp = self.user.hotp
 
-        # check that hotp is different 
+        # check that hotp is different
         self.assertNotEqual(oldHotp, newHotp)
 
         # should redirect to verification page
