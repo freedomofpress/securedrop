@@ -7,7 +7,7 @@ import unittest
 from cStringIO import StringIO
 
 from bs4 import BeautifulSoup
-from flask.ext.testing import TestCase
+from flask_testing import TestCase
 from flask import session, escape
 from mock import patch, ANY
 import source
