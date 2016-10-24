@@ -343,11 +343,7 @@ class Journalist(Base):
             # valid tokens, to compensate for potential time skew
             # between the client and the server. The total valid
             # window is 1:30s.
-            now = datetime.datetime.now()
-            interval = datetime.timedelta(seconds=30)
-            times = [now - interval, now, now + interval]
-            return any([self.totp.verify(token, for_time=time)
-                        for time in times])
+            return self.totp.verify(token, valid_window=1)
         else:
             for counter_val in range(
                     self.hotp_counter,
