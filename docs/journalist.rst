@@ -138,14 +138,13 @@ give it a file extension.
 Interact With Sources
 ---------------------
 
-| Click on the codename to see the page specifically for that source.
-  You will see all of the messages that they have written and documents
-  that they have uploaded. Documents and messages are encrypted to the
-  application's GPG public key. In order to read the messages or look at
-  the documents you will need to transfer them to the
-  ``Secure Viewing Station``.
-| But first, if you'd like to reply to the source, write your message in
-  the text field and click ``Submit``.
+Click on the codename to see the page specifically for that source. You will see all of the messages that they have written and documents that they have uploaded. If the name of a source is difficult to say or remember, you can rename a source using the button next to their current codename: 
+
+|Cycle source codename|
+
+Documents and messages are encrypted to the application's GPG public key. In order to read the messages or look at the documents you will need to transfer them to the ``Secure Viewing Station``.
+
+But first, if you'd like to reply to the source, write your message in the text field and click ``Submit``.
 
 |Sent reply|
 
@@ -258,6 +257,7 @@ crimes and corruption, and change the world.
 .. |Decrypting| image:: images/manual/viewing2.png
 .. |Decrypted documents| image:: images/manual/viewing3.png
 .. |Opened document| image:: images/manual/viewing4.png
+.. |Cycle source codename| image:: images/manual/change-codename.png
 .. |Sent reply| image:: images/manual/document2.png
 .. |Read documents| image:: images/manual/document4.png
 .. |Flag source for reply| image:: images/manual/document3.png
