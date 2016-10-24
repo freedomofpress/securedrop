@@ -8,7 +8,7 @@ import zipfile
 import mock
 
 from flask import url_for
-from flask.ext.testing import TestCase
+from flask_testing import TestCase
 
 import crypto_util
 import journalist
