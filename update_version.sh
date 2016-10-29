@@ -2,17 +2,15 @@
 ## Usage: ./update_version.sh <version>
 
 # Only run this on the Vagrant build VM, with dch and git available
-command -v dch > /dev/null
-dch_installed=$?
-command -v git > /dev/null
-git_installed=$?
-if [ $dch_installed -ne 0 ] || [ $git_installed -ne 0 ]; then
-  echo "You must run this on a system with dch and git available (in order to edit the Debian package changelog and commit message)"
-  echo "If you are on Debian/Ubuntu, apt-get install devscripts git"
+set -e
+
+# Only run this on the Vagrant build VM, with dch and git available
+if [[ "$(whoami)" != 'vagrant' ]]; then
+  echo 'Only run this on the Vagrant build VM'
   exit 1
 fi
 
-set -e
+sudo apt-get install devscripts git -qq
 
 NEW_VERSION=$1
 
