@@ -111,7 +111,7 @@ perform the backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -i inventory -u <SSH username> -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real Admin Workstation
 
