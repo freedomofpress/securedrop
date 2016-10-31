@@ -1,31 +1,30 @@
 # -*- coding: utf-8 -*-
-import os
-from datetime import datetime
-import uuid
-from functools import wraps
-import zipfile
 from cStringIO import StringIO
-import subprocess
-from threading import Thread
-import operator
+from datetime import datetime
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup)
-from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
+from flask_wtf.csrf import CsrfProtect
+from functools import wraps
+from jinja2 import evalcontextfilter
+import logging
+import operator
+import os
+import subprocess
+from threading import Thread
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
-import version
 import crypto_util
-import store
-import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from jinja2 import evalcontextfilter
+from session import Session
+import store
+import template_filters
+import version
 
-import logging
 # This module's logger is explicitly labeled so the correct logger is used,
 # even when this is run from the command line (e.g. during development)
 log = logging.getLogger('source')
@@ -33,6 +32,7 @@ log = logging.getLogger('source')
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+Session(app)
 
 assets = Environment(app)
 
@@ -382,8 +382,7 @@ def valid_codename(codename):
 
 
 @app.route('/login', methods=('GET', 'POST'))
-def login():
-    if request.method == 'POST':
+
         codename = request.form['codename'].strip()
         if valid_codename(codename):
             session.update(codename=codename, logged_in=True)
