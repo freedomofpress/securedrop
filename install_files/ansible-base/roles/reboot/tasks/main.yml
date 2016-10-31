@@ -4,6 +4,6 @@
   async: 0
   poll: 0
   ignore_errors: true
-  sudo: yes
+  become: yes
   tags:
     - reboot

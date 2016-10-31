@@ -100,7 +100,7 @@
       port={{ ansible_ssh_port }}
       delay=45
       state=started
-  sudo: false
+  become: false
   when: not running_grsec.stat.exists
   tags:
     - reboot

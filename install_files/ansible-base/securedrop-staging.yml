@@ -7,13 +7,13 @@
     - { role: install-local-packages, tags: install_local_packages,
         when: install_local_packages }
     - { role: tor-hidden-services, tags: tor }
-  sudo: yes
+  become: yes
 
 - name: Configure OSSEC manager.
   hosts: mon-staging
   roles:
     - { role: ossec-server, tags: [ ossec, ossec_server ] }
-  sudo: yes
+  become: yes
 
 - name: Configure SecureDrop Application Server.
   hosts: app-staging
@@ -28,7 +28,7 @@
       when: (perform_backup is defined and perform_backup == true) or
             (restore_file is defined and restore_file != '')
       tags: backup
-  sudo: yes
+  become: yes
 
   # Set iptables rules with exemptions for staging that permit direct access for SSH.
   # The overrides that permit direct access are managed in group_vars/staging.yml,
@@ -37,4 +37,4 @@
   hosts: staging
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
-  sudo: yes
+  become: yes

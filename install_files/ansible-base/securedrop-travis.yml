@@ -12,4 +12,4 @@
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
 
-  sudo: yes
+  become: yes

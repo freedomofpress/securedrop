@@ -4,4 +4,4 @@
     - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-agent"], package_name: "securedrop-ossec-agent" }
-  sudo: yes
+  become: yes

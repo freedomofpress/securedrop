@@ -7,7 +7,7 @@
   poll: 0
   ignore_errors: true
   when: not running_grsec.stat.exists
-  sudo: yes
+  become: yes
   tags:
     - reboot
 
@@ -26,13 +26,13 @@
   # Local wait action, doesn't require sudo privileges,
   # `wait_for` essentially means "do nothing for a while."
   # Since the top-level playbook (e.g. securedrop-prod.yml)
-  # sets `sudo: true`, the sudo parameter must be explicitly
+  # sets `become: true`, the sudo parameter must be explicitly
   # overridden on a per-task basis. If sudo remains true
   # for this task, Ansible will prompt for the sudo password
   # of the host machine (i.e. the machine running the playbook)
   # in order to proceed. This would be annoying and is
   # completely unnecessary for a simple wait action.
-  sudo: false
+  become: false
   tags:
     - reboot
 
@@ -44,7 +44,7 @@
     state: present
     reload: yes
   with_items: grsec_sysctl_flags
-  sudo: yes
+  become: yes
   tags:
     - hardening
     - grsec
