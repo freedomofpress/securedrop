@@ -139,13 +139,6 @@ def getkey(name):
     return None
 
 
-def get_key_by_fingerprint(fingerprint):
-    matches = filter(
-        lambda k: k['fingerprint'] == fingerprint,
-        gpg.list_keys())
-    return matches[0] if matches else None
-
-
 def encrypt(plaintext, fingerprints, output=None):
     # Verify the output path
     if output:
