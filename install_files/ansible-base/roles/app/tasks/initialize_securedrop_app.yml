@@ -17,11 +17,12 @@
 - name: Import the SecureDrop Application GPG public key to the Application Server keyring.
   # multiline format for command module, since this is a long command
   command: >
-    su -s /bin/bash -c 'gpg
+    /bin/bash -c 'gpg
     --homedir {{ securedrop_data }}/keys
     --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}' {{ securedrop_user }}
   register: gpg_app_key_import
   changed_when: "'imported: 1' in gpg_app_key_import.stderr"
+  become: yes
   tags:
     - gpg
     - securedrop_config
