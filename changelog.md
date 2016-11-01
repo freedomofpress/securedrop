@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.10
+
+Creates new Debian package `securedrop-keyring` for managing the SecureDrop
+Release Signing Key. Rotates the signing key currently in use by setting
+a dependency on the other Debian packages, so that currently running deployments
+will have their apt keyrings updated via automatic nightly updates.
+
+* Installs securedrop-keyring package for managing apt signing key (#1416)
+
+Admins must manually update the Release Signing Key on Admin Workstations.
+See documentation on configuring the Admin Workstation.
+
+The issues for this release were tracked in the 0.3.10 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.10.
+
 ## 0.3.9
 
 Point release to fix some minor issues and update our Python dependencies.
@@ -10,7 +25,7 @@ Point release to fix some minor issues and update our Python dependencies.
 * Update Python dependencies of SD (#1379)
 * Fix a regression in the new install script (#1397)
 
-The issues for this release were tracked in the 0.3.9 milestone on Github: 
+The issues for this release were tracked in the 0.3.9 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.3.9.
 
 ## 0.3.8
@@ -19,7 +34,7 @@ https://github.com/freedomofpress/securedrop/milestones/0.3.9.
 * Switch to using bento boxes in Vagrantfile for more reproducible test environments
 * Minor fixes to update_version.sh
 
-The issues for this release were tracked in the 0.3.8 milestone on Github: 
+The issues for this release were tracked in the 0.3.8 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.3.8
 
 ## 0.3.7

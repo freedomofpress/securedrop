@@ -1,0 +1,10 @@
+Source: securedrop
+Section: web
+Priority: optional
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Homepage: https://freedom.press/securedrop
+Package: securedrop-keyring
+Version: 0.1.0+0.3.10
+Architecture: amd64
+Depends: gnupg
+Description: Provides an apt keyring for SecureDrop-related packages, so the master signing key used for SecureDrop packages can be updated via apt.

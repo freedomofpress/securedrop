@@ -3,6 +3,7 @@
   apt_key:
     state: present
     data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+    keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
   tags:
     - apt
     - fpf_repo
@@ -15,3 +16,8 @@
   tags:
     - apt
     - fpf_repo
+
+- name: Install the securedrop-keyring package for managing the apt gpg key.
+  apt:
+    pkg: securedrop-keyring
+    state: present

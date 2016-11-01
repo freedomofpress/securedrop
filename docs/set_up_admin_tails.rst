@@ -55,12 +55,11 @@ Start by running the following commands to download the git repository.
 Verify the Release Tag
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First, download and verify the *Freedom of the Press Foundation Master
-Signing Key*. 
+First, download and verify the **SecureDrop Release Signing Key**.
 
 .. code:: sh
 
-    gpg --recv-key "B89A 29DB 2128 160B 8E4B 1B4C BADD E0C7 FC9F 6818"
+    gpg --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
 
 .. note:: It is important you type this out correctly. If you are not
           copy-pasting this command, we recommend you double-check you have
@@ -75,17 +74,17 @@ argument passed.
              the installation. If this happens, please email us at
              securedrop@freedom.press.
 
-Verify that the current release tag was signed with the master signing
+Verify that the current release tag was signed with the release signing
 key:
 
 .. code:: sh
 
     cd securedrop/
-    git checkout 0.3.9
-    git tag -v 0.3.9
+    git checkout 0.3.10
+    git tag -v 0.3.10
 
-You should see ``Good signature from "Freedom of the Press Foundation
-Master Signing Key"`` in the output of that last command.
+You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
+output of that last command.
 
 .. caution:: If you do not, signature verification has failed and you
              *should not* proceed with the installation. If this
