@@ -99,6 +99,16 @@ following:
 -  The fingerprint of your SMTP relay (optional):
    ``smtp_relay_fingerprint``
 
+Optionally, you can also have custom notification text be displayed on the
+source interface. The source interface with a custom notification message is
+shown here (the custom notification appears after the bolded "Note:"):
+
+|Custom notification|
+
+This custom notification can be configured by providing the desired message in
+``custom_notification_text`` in ``prod-specific.yml``. For example, this can be
+used to notify potential sources that an instance is for testing purposes only.
+
 When you're done, save the file and quit the editor.
 
 .. _Run the Ansible playbook:
@@ -144,3 +154,5 @@ onion addresses from ``app-ssh-aths`` and ``mon-ssh-aths``. This will
 allow you to re-run the Ansible playbooks in the future, even though
 part of SecureDrop's hardening restricts SSH to only being over the
 specific authenticated Tor Hidden Services.
+
+.. |Custom notification| image:: images/install/custom-notification.png
