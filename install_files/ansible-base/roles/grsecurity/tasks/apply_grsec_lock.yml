@@ -43,7 +43,7 @@
     sysctl_set: yes
     state: present
     reload: yes
-  with_items: grsec_sysctl_flags
+  with_items: "{{ grsec_sysctl_flags }}"
   become: yes
   tags:
     - hardening

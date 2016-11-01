@@ -21,7 +21,7 @@
 
 - name: Adjust paxctl headers on grub binaries.
   command: paxctl -Cpm {{ item.item }}
-  with_items: paxctl_grub_header_check.results
+  with_items: "{{ paxctl_grub_header_check.results }}"
   # The desired flags should include:
   #   - p NOPAGEEXEC
   #   - m NOMPROTECT

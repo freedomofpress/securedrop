@@ -3,7 +3,7 @@
   modprobe:
     name: "{{ item }}"
     state: absent
-  with_items: disabled_kernel_modules
+  with_items: "{{ disabled_kernel_modules }}"
   tags:
     - kernel
     - hardening
@@ -13,7 +13,7 @@
     dest: /etc/modprobe.d/blacklist.conf
     line: "blacklist {{ item }}"
     insertafter: EOF
-  with_items: disabled_kernel_modules
+  with_items: "{{ disabled_kernel_modules }}"
   tags:
     - kernel
     - hardening

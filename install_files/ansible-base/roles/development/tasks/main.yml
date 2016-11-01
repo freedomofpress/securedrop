@@ -10,7 +10,7 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: development_dependencies
+  with_items: "{{ development_dependencies }}"
   tags:
     - apt
     - development

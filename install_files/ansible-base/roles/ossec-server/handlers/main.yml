@@ -7,7 +7,7 @@
     insertafter: "^:LOGNDROP"
     regexp: "{{ item }}"
     line: "{{ item }}"
-  with_items: authd_rules
+  with_items: "{{ authd_rules }}"
 
 - name: reload authd iptables
   shell: iptables-restore < /etc/network/iptables/rules_v4

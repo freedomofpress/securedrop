@@ -22,7 +22,7 @@
     regexp: "{{ item }}"
     line: "{{ item }}"
   notify: reload iptables rules
-  with_items: agent_auth_rules
+  with_items: "{{ agent_auth_rules }}"
   when: hostvars[groups.securedrop_monitor_server.0].ossec_agent_already_registered == false and
         iptables_rules_check_result.stat.exists == true
   tags:
@@ -49,7 +49,7 @@
   notify:
     - reload iptables rules
     - restart ossec
-  with_items: agent_auth_rules
+  with_items: "{{ agent_auth_rules }}"
   when: hostvars[groups.securedrop_monitor_server.0].ossec_agent_already_registered == false and
         iptables_rules_check_result.stat.exists == true
   tags:
