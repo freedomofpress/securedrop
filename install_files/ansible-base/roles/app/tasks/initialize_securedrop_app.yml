@@ -3,7 +3,7 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: appserver_dependencies
+  with_items: "{{ appserver_dependencies }}"
   tags:
     - apt
 

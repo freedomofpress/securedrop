@@ -3,7 +3,7 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: development_dependencies
+  with_items: "{{ development_dependencies }}"
   tags:
     - apt
 
@@ -81,7 +81,7 @@
   copy:
     src: "{{ item }}"
     dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
+  with_items: "{{ apparmor_profiles }}"
   tags:
     - build
     - apparmor

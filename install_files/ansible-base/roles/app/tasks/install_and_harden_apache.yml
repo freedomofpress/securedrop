@@ -5,7 +5,7 @@
     state: latest
     update_cache: yes
     cache_valid_time: 3600
-  with_items: apache_packages
+  with_items: "{{ apache_packages }}"
   tags:
     - apt
     - apache
@@ -16,7 +16,7 @@
     dest: /etc/apache2/{{ item }}
     owner: root
     mode: '0644'
-  with_items: apache_files
+  with_items: "{{ apache_files }}"
   tags:
     - apache
 
@@ -26,7 +26,7 @@
     dest: /etc/apache2/{{ item }}
     owner: root
     mode: '0644'
-  with_items: apache_templates
+  with_items: "{{ apache_templates }}"
   tags:
     - apache
 
@@ -34,7 +34,7 @@
   apache2_module:
     state: present
     name: "{{ item }}"
-  with_items: apache_modules
+  with_items: "{{ apache_modules }}"
   tags:
     - apache
 
@@ -42,7 +42,7 @@
   apache2_module:
     state: absent
     name: "{{ item }}"
-  with_items: apache_disabled_modules
+  with_items: "{{ apache_disabled_modules }}"
   tags:
     - apache
     - hardening

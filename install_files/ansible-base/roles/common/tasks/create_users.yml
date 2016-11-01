@@ -18,7 +18,7 @@
     name: "{{ item }}"
     shell: /bin/bash
     groups: sudo,ssh
-  with_items: ssh_users
+  with_items: "{{ ssh_users }}"
   tags:
     - users
     - sudoers
@@ -45,7 +45,7 @@
     dest: /home/{{ item }}/.bashrc
     line: '. /etc/bashrc.securedrop_additions'
     state: absent
-  with_items: ssh_users
+  with_items: "{{ ssh_users }}"
   tags:
     - users
     - environment
