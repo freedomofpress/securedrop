@@ -1,5 +1,5 @@
 ---
-- name: Install FPF apt repo GPG signing key.
+- name: Install SecureDrop apt repo GPG signing key.
   apt_key:
     state: present
     data: "{{ lookup('file', 'fpf-signing-key.pub') }}"

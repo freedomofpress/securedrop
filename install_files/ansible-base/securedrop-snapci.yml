@@ -3,4 +3,4 @@
   hosts: snapci
   roles:
     - { role: snapci, tags: snapci }
-  sudo: yes
+  become: yes

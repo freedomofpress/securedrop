@@ -8,14 +8,14 @@
     name: "{{ item }}"
     groups: securedrop,securedrop_application_server
   when: item.startswith('app')
-  with_items: play_hosts
+  with_items: "{{ play_hosts }}"
 
 - name: Configure role list for SecureDrop Monitor Server.
   add_host:
     name: "{{ item }}"
     groups: securedrop,securedrop_monitor_server
   when: item.startswith('mon')
-  with_items: play_hosts
+  with_items: "{{ play_hosts }}"
 
 # Failsafe to ensure that dynamic group population worked as expected.
 # Since we're adding the "app" and "mon" production hosts via the above

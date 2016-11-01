@@ -18,7 +18,7 @@
     - prod-specific.yml
   roles:
     - { role: validate, tags: validate }
-  sudo: yes
+  become: yes
 
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
@@ -28,7 +28,7 @@
     - { role: common, tags: common }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: tor-hidden-services, tags: tor }
-  sudo: yes
+  become: yes
 
 - name: Configure SecureDrop Monitor Server.
   hosts: securedrop_monitor_server
@@ -36,7 +36,7 @@
     - prod-specific.yml
   roles:
     - { role: ossec-server, tags: [ ossec, ossec_server ] }
-  sudo: yes
+  become: yes
 
 - name: Configure SecureDrop Application Server.
   hosts: securedrop_application_server
@@ -53,7 +53,7 @@
             (restore_file is defined and restore_file != '')
       tags: backup
 
-  sudo: yes
+  become: yes
 
   # This section will put the ssh and iptables rules in place
   # It will then add any staging exemptions required
@@ -67,7 +67,7 @@
     - prod-specific.yml
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
-  sudo: yes
+  become: yes
 
 - name: Reboot Application and Monitor Servers.
   hosts: securedrop
@@ -75,4 +75,4 @@
     - prod-specific.yml
   roles:
     - { role: reboot, tags: reboot }
-  sudo: yes
+  become: yes

@@ -94,6 +94,6 @@
       state=started
   when: reboot_required.stat.exists
   # Wait action runs on localhost, and does NOT require sudo.
-  sudo: false
+  become: false
   tags:
     - reboot
