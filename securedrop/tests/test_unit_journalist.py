@@ -12,7 +12,8 @@ from flask import url_for, escape
 import crypto_util
 import journalist
 import common
-from db import db_session, Source, Journalist, InvalidPasswordLength
+from db import (db_session, Source, Submission, Journalist,
+               InvalidPasswordLength)
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -22,6 +23,15 @@ class TestJournalist(TestCase):
 
     def create_app(self):
         return journalist.app
+
+    def add_source_and_submissions(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
+        filenames = common.setup_test_docs(sid, files)
+        return source, files
 
     def setUp(self):
         common.shared_setup()
@@ -415,18 +425,29 @@ class TestJournalist(TestCase):
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
 
+    def test_delete_source_deletes_submissions(self):
+        """Verify that when a source is deleted, the submissions that
+        correspond to them are also deleted."""
+
+        source, files = self.add_source_and_submissions()
+
+        journalist.delete_collection(source.filesystem_id)
+
+        # Source should be gone
+        results = db_session.query(Source).filter(Source.id == source.id).all()
+        self.assertEqual(results, [])
+
+        # Submissions should be gone
+        results = db_session.query(Submission.source_id == source.id).all()
+        self.assertEqual(results, [])
+
     def test_bulk_download(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
+        source, files = self.add_source_and_submissions()
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
             action='download',
-            sid=sid,
+            sid=source.filesystem_id,
             doc_names_selected=files
         ))
 
