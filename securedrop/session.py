@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
+import cPickle as pickle
+from Crypto.Cipher import AES
+from Crypto.Util import Counter
 from flask.helpers import total_seconds
 from flask.sessions import SessionInterface as FlaskSessionInterface
 from flask.sessions import SessionMixin
+import hashlib
+import hmac
 import os
+from redis import Redis
 import scrypt
+from uuid import uuid4
 from werkzeug.datastructures import CallbackDict
 
-from config import SCRYPT_PARAMS, SCRYPT_ID_PEPPER
-
-class MissingKeyPrefixError(Exception):
-    msg = "Must isolate Redis"
-
+from crypto_util import AES_then_HMAC
 
 class Session:
     def __init__(self, app):
@@ -19,70 +22,60 @@ class Session:
     def _get_interface(self, app):
         config = app.config.copy()
         config.setdefault('SESSION_REDIS', None)
-        config.setdefault('SESSION_KEY_PREFIX', None)
-        config.setdefault('SESSION_LIFETIME', 60 * 60 *24)
+        config.setdefault('REDIS_SESSION_LIFETIME', None)
         return RedisSessionInterface(config['SESSION_REDIS'],
-                                     config['SESSION_KEY_PREFIX'],
-                                     config['SESSION_LIFETIME'])
+                                     config['REDIS_SESSION_LIFETIME'])
 
 
 class RedisSession(CallbackDict, SessionMixin):
-    def __init__(self, initial=None, mask=None, mask_hash=None, permanent=None):
+    """Base class for all SecureDrop sessions."""
+
+    def __init__(self, initial=None, sid=None, key=None, permanent=None):
         def on_update(self):
             self.modified = True
         CallbackDict.__init__(self, initial, on_update)
-        self.mask = mask
-        self.mask_hash = mask_hash
+        self.sid = sid
+        self.key = key
         if permanent:
             self.permanent = permanent
         self.modified = False
 
 
 class SessionInterface(FlaskSessionInterface):
-    # 109 is the maximum possible bytes in a codename
-    max_codename_length = 109
-    salt = math.pi
 
-    def _generate_mask_and_mask_hash(self):
-        mask = os.urandom(max_codename_length)
-        mask_hash = scrypt(mask, **SCRYPT_PARAMS)
-        return mask, mask_hash
+    def _generate_sid_and_keys_string(self):
+        sid = str(uuid4())
+        keys_string = AES_then_HMAC.gen_keys_string()
+        return sid, keys_string
 
 
 class RedisSessionInterface(SessionInterface):
-    serializer = staticmethod(json)
+    serializer = pickle
     session_class = RedisSession
 
-    def __init__(self, redis, key_prefix, session_lifetime):
+    def __init__(self, session_lifetime):
         # Should we just have one shared redis.Redis object?
-        if redis is None:
-            from redis import Redis
-            redis = Redis()
         self.redis = redis
-        if key_prefix is None:
-            raise MissingKeyPrefixError
-        else:
-            self.key_prefix = key_prefix
+        self.key_prefix = key_prefix
         self.session_lifetime = session_lifetime
 
     def open_session(self, app, request):
         cookie_data = request.cookies.get(app.session_cookie_name)
         if not cookie_data:
-            mask, mask = self._generate_sid_and_mask()
-            return self.session_class(sid=sid, mask=mask,
+            sid, key = self._generate_sid_and_key()
+            return self.session_class(sid=sid, key=key,
                                       permanent=self.permanent)
 
         val = self.redis.get(self.key_prefix + sid)
         if val is not None:
             try:
                 data = self.serializer.loads(val)
-                return self.session_class(data, sid=sid, mask=mask)
+                return self.session_class(data, sid=sid, key=key)
             except:
-                return self.session_class(sid=sid, mask=mask, permanent=self.permanent)
-        return self.session_class(sid=sid, mask=mask, permanent=self.permanent)
+                return self.session_class(sid=sid, key=key, permanent=self.permanent)
+        return self.session_class(sid=sid, key=key, permanent=self.permanent)
 
     def save_session(self, app, session, response):
-        # Should come back to this fn.
         domain = self.get_cookie_domain(app)
         if not session:
             if session.modified:
@@ -102,9 +95,9 @@ class RedisSessionInterface(SessionInterface):
             return
 
         secure = self.get_cookie_secure(app)
-        val = self.serializer.dumps(dict(session))
-        self.redis.setex(name=self.key_prefix + session.mask, value=val,
-                         time=total_seconds(app.session_lifetime))
-        response.set_cookie(app.session_cookie_name, value=self.data,
+        client = self.serializer.dumps(dict(session))
+        self.redis.setex(name=self.key_prefix + session.sid, value=val,
+                         time=total_seconds(app.permanent_session_lifetime))
+        response.set_cookie(app.session_cookie_name, value=self.client_session,
                             httponly=True, domain=domain, path='/',
                             secure=secure)

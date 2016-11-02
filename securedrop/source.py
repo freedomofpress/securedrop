@@ -41,6 +41,7 @@ assets = Environment(app)
 app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
 CsrfProtect(app)
 
+
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
@@ -382,7 +383,8 @@ def valid_codename(codename):
 
 
 @app.route('/login', methods=('GET', 'POST'))
-
+def login():
+    if request.method == 'POST':
         codename = request.form['codename'].strip()
         if valid_codename(codename):
             session.update(codename=codename, logged_in=True)
