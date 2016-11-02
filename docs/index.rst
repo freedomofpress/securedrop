@@ -77,4 +77,5 @@ anonymous sources.
    development/getting_started
    development/virtual_environments
    development/tips_and_tricks
+   development/documentation_guidelines
    development/*
