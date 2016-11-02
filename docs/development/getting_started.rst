@@ -143,13 +143,3 @@ requests to ``develop``.
 .. todo:: The branching model should be documented separately, in a
 	  "Contributing guidelines" document. We are also going to move away
 	  from git-flow soon because it sucks.
-
-Architecture Diagrams
-~~~~~~~~~~~~~~~~~~~~~
-
-Some helpful diagrams for getting a sense of the SecureDrop application architecture are stored `here
-<https://github.com/freedomofpress/securedrop/tree/develop/docs/diagrams>`_, including a high-level view of the SecureDrop database structure:
-
-.. image:: ../diagrams/securedrop-database.png
-
-.. _Github issue #1381: https://github.com/freedomofpress/securedrop/issues/1381

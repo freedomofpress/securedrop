@@ -120,3 +120,12 @@ in the background, simply prepend it to the SSH command:
 
     torify ssh admin@examplenxu7x5ifm.onion
 
+Architecture Diagrams
+---------------------
+
+Some helpful diagrams for getting a sense of the SecureDrop application architecture are stored `here
+<https://github.com/freedomofpress/securedrop/tree/develop/docs/diagrams>`_, including a high-level view of the SecureDrop database structure:
+
+.. image:: ../diagrams/securedrop-database.png
+
+.. _Github issue #1381: https://github.com/freedomofpress/securedrop/issues/1381
