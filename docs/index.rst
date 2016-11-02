@@ -72,7 +72,12 @@ anonymous sources.
    :caption: Developer Documentation
    :name: devdocs
    :maxdepth: 2
-   :glob:
 
    development/getting_started
-   development/*
+   development/virtual_environments
+   development/tips_and_tricks
+   development/documentation_guidelines
+   development/spec_tests
+   development/apt_repo
+   development/apparmor_profiles
+   development/threat_model
