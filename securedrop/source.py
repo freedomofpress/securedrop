@@ -62,7 +62,7 @@ def shutdown_session(exception=None):
 
 
 def logged_in():
-    return 'logged_in' in session
+    return 'codename' in session
 
 
 def login_required(f):
@@ -105,7 +105,6 @@ def setup_g():
             app.logger.error(
                 "Found no Sources when one was expected: %s" %
                 (e,))
-            del session['logged_in']
             del session['codename']
             return redirect(url_for('index'))
         g.loc = store.path(g.sid)
@@ -189,7 +188,6 @@ def create():
     else:
         os.mkdir(store.path(sid))
 
-    session['logged_in'] = True
     return redirect(url_for('lookup'))
 
 
@@ -387,7 +385,7 @@ def login():
     if request.method == 'POST':
         codename = request.form['codename'].strip()
         if valid_codename(codename):
-            session.update(codename=codename, logged_in=True)
+            session["codename"] = codename
             return redirect(url_for('lookup', from_login='1'))
         else:
             app.logger.info(
