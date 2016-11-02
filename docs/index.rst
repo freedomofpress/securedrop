@@ -77,4 +77,5 @@ anonymous sources.
    development/getting_started
    development/virtual_environments
    development/ssh_over_tor
+   development/tips_and_tricks
    development/*
