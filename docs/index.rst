@@ -75,4 +75,5 @@ anonymous sources.
    :glob:
 
    development/getting_started
+   development/virtual_environments
    development/*
