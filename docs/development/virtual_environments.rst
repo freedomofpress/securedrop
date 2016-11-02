@@ -2,7 +2,9 @@ Virtual Environments
 ====================
 
 .. note:: If you have errors with mounting shared folders in the Vagrant guest
-          machine, you should look at `Github issue #1381`_.
+          machine, you should look at `GitHub #1381`_.
+
+.. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
 
 There are several predefined virtual environments in the Vagrantfile:
 development, staging, and prod (production).

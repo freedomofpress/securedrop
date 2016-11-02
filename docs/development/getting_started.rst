@@ -40,8 +40,8 @@ then install it.
 
 We *do not* recommend using a version of Vagrant older than 1.8.4. For instance,
 the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
-which is signficantly out of date and known not to work with SecureDrop (`Github
-#932`_, `Github #1381`_).
+which is signficantly out of date and known not to work with SecureDrop (`GitHub
+#932`_, `GitHub #1381`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
