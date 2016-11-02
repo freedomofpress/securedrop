@@ -17,7 +17,7 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
-- pip install ansible
+- pip install ansible==1.8.4
 - pip install coveralls
 script:
 - echo localhost > inventory
