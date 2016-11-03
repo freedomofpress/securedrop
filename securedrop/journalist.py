@@ -20,10 +20,12 @@ from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
                 LoginThrottledException, InvalidPasswordLength)
+from session import Session
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
+Session(app)
 CsrfProtect(app)
 
 assets = Environment(app)
