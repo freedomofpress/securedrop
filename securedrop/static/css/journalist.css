@@ -498,6 +498,11 @@ p#no-replies {
   font-size: 12px;
   color: #666666;
 }
+.submission .unread {
+  display: inline-block;
+  width: 3.5%;
+  color: #7985aa;
+}
 
 ul.plain {
   list-style: none;
