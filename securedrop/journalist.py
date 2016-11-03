@@ -439,8 +439,7 @@ def index():
 def col(sid):
     source = get_source(sid)
     source.has_key = crypto_util.getkey(sid)
-    unread_subs = [submission for submission in source.submissions if not submission.downloaded]
-    return render_template("col.html", sid=sid, source=source, unread_subs=unread_subs)
+    return render_template("col.html", sid=sid, source=source)
 
 
 def delete_collection(source_id):

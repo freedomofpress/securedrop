@@ -498,7 +498,7 @@ p#no-replies {
   font-size: 12px;
   color: #666666;
 }
-.submission .unread {
+.submission .icon {
   display: inline-block;
   width: 3.5%;
   color: #7985aa;
