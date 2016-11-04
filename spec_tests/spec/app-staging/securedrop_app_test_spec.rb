@@ -20,3 +20,21 @@ describe command('aa-status') do
 eos
   its(:stdout) { should contain(expected_output) }
 end
+
+# These pip dependencies are staging-specific; they may NOT match
+# what's specified in `securedrop/requirements/test-requirements.txt`,
+# since they're pulled in via the prod packages on apt.freedom.press.
+pip_dependencies = [
+  'Flask-Testing==0.5.0',
+  'mock==2.0.0',
+  'pytest==3.0.1',
+  'selenium==2.53.6',
+]
+# ensure pip depdendencies are installed in staging.
+# these are required for running unit and functional tests
+describe command('pip freeze') do
+  pip_dependencies.each do |pip_dependency|
+    its(:stdout) { should contain(pip_dependency) }
+  end
+end
+
