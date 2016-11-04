@@ -29,6 +29,7 @@
     # crutch anyway, I've just hardcoded /home/vagrant.
     dest: /home/vagrant/
     url: https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
+    sha256sum: 88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
   tags:
     - apt
 
