@@ -74,7 +74,7 @@ mon-prod
 
     Direct SSH access is not available in the prod environment.
     You will need to log in over Tor after initial provisioning. See
-    :doc:`Tips & Tricks` for more info.
+    :ref:`ssh_over_tor` for more info.
 
 If you plan to alter the configuration of any of these machines, make sure to
 review the :doc:`Development Guide for Serverspec Tests <spec_tests>`.
@@ -131,13 +131,13 @@ to fill out your local copy of
 Prod
 ----
 
-You will need to fill out the production configuration file:
-``./install_files/ansible_base/prod-specific.yml``.  Part of the
-production playbook validates that staging values are not used in
+You will need to fill out the production configuration file at
+``install_files/ansible_base/prod-specific.yml`` with custom secrets.
+The production playbook validates that staging values are not used in
 production. One of the values it verifies is that the user Ansible runs as is
 not ``vagrant`` To be able to run this playbook in a virtualized environment
 for testing, you will need to disable the ``validate`` role, which you can do
-by running ``export SECUREDROP_PROD_SKIP_TAGS=validate`` before provisioning.
+by running ``export ANSIBLE_ARGS="--skip-tags validate"`` before provisioning.
 
 To create only the prod servers, run:
 
@@ -150,6 +150,5 @@ To create only the prod servers, run:
    ./manage.py add-admin
 
 In order to access the servers after the install is completed you will need to
-install and configure a proxy tool to proxy your SSH connection over Tor.
-Torify and connect-proxy are two tools that can be used to proxy SSH
-connections over Tor.
+install and configure a proxy tool to
+:ref:`proxy your SSH connection over Tor<ssh_over_tor>`.
