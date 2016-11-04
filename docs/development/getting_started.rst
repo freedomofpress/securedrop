@@ -90,12 +90,16 @@ Install the dependencies for the development environment:
 #. VirtualBox_
 #. Ansible_.
 
-   There are several ways to install Ansible on a Mac. We recommend installing
-   from PyPi using ``pip`` so you will get the latest stable version:
+There are several ways to install Ansible on a Mac. We recommend installing
+from PyPi using ``pip`` so you will get the latest stable version:
 
-   .. code:: sh
+.. todo:: The pip install task under OS X uses `sudo`, which is not a good
+          idea. We should update the OS X install workflow to reference brew
+          and virtualenv, similar to the Linux setup docs.
 
-      sudo easy_install pip && sudo pip install -U ansible
+.. code:: sh
+
+    sudo easy_install pip && sudo pip install -U ansible==1.8.4
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
