@@ -1,15 +1,6 @@
 Documentation Guidelines
 ========================
 
-.. caution:: This is an early draft. Our documentation guidelines are
-             subject to change at any time until this notice is removed.
-
-.. warning:: We recently auto-converted the documentation from
-             Markdown to ReST, and are still cleaning up the output
-             from that auto-conversion. If you find style issues,
-             broken links or references, or any other similar issues,
-             pull requests are welcome!
-
 SecureDrop's documentation is written in `ReStructuredText`_ (ReST),
 and is built by and hosted on `Read the Docs`_ (RTD). The
 documentation files are stored in the primary SecureDrop git
@@ -37,13 +28,11 @@ To get started editing the docs:
 
    .. code:: sh
 
-      $ make html
-      $ open _build/html/index.html
+      $ sphinx-autobuild . _build/html
 
-   .. tip:: You can use ``sphinx-autobuild`` to automatically rebuild
-            and reload your docs as you work on them. Run
-            ``sphinx-autobuild . _build/html``.
-
+You can then can browse the documentation at http://127.0.0.1:8000/.
+As you make changes, the docs will automatically rebuild in the browser
+window, so you don't need to refresh the page manually.
 
 Occasionally, the docs get out of whack and rebuilding them doesn't
 work as it should. You can usually resolve this by clearing out the
@@ -51,8 +40,7 @@ build artifacts and re-building the docs from scratch:
 
 .. code:: sh
 
-   $ make clean && make html
-
+   $ make clean && sphinx-autobuild . _build/html
 
 Integration with Read the Docs
 ------------------------------
@@ -69,29 +57,33 @@ branch.
 Style Guide
 -----------
 
-* When specific elements from a user interface are mentioned by name or by label, **bold** it.
+When specific elements from a user interface are mentioned by name or by label, **bold** it.
 
     "Once you’re sure you have the right drive, click **Format Drive**."
 
-* When SecureDrop-specific :doc:`terminology <../terminology>` is used, *italicize* it.
+When SecureDrop-specific :doc:`terminology <../terminology>` is used, *italicize* it.
 
     "To get started, you’ll need two Tails drives: one for the *Admin Workstation* and one for the *Secure Viewing Station*."
 
   .. todo:: I don't love this convention for a couple of reasons:
 
-	    1. If there are a lot of references to terminology in the
-               same area of text, all of the short bursts of italics
-               makes it hard to read.
-	    2. The default style for document references is also
-               italicized, which is confusing when used near
-               references to the terminology.
+         1. If there are a lot of references to terminology in the
+            same area of text, all of the short bursts of italics
+            makes it hard to read.
+         2. The default style for document references is also
+            italicized, which is confusing when used near
+            references to the terminology.
 
-* Use absolute paths when referring to files outside the SecureDrop repository.
-  Exceptions made for when it's clear from the surrounding context what the
-  intended working directory is. For files inside the SecureDrop directory,
-  write them as `./some_dir/file`, where `.` is the top level directory of the
-  SecureDrop repo. Since by default the git repo will be cloned under the name
-  `securedrop` and it also contains a `securedrop` subdirectory this is intended
-  to avoid confusion.  Exceptions made for when it's clear from the context
-  we're outside of the SecureDrop repo, but would like to somehow interact with
-  it (e.g., we just cloned the repo and now we're going to `cd` into it).
+Try to keep your lines wrapped to near 80 characters when editing the docs.
+Some exceptions are warranted, such as complex code blocks showing example
+commands, or long URLs, but in general the docs should be tightly wrapped.
+
+Use absolute paths when referring to files outside the SecureDrop repository.
+Exceptions made for when it's clear from the surrounding context what the
+intended working directory is. For files inside the SecureDrop directory,
+write them as `./some_dir/file`, where `.` is the top level directory of the
+SecureDrop repo. Since by default the git repo will be cloned under the name
+`securedrop` and it also contains a `securedrop` subdirectory this is intended
+to avoid confusion.  Exceptions made for when it's clear from the context
+we're outside of the SecureDrop repo, but would like to somehow interact with
+it (e.g., we just cloned the repo and now we're going to `cd` into it).
