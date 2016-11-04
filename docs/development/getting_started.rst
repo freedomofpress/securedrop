@@ -72,26 +72,13 @@ The version of Ansible recommended to provision SecureDrop VMs may not be the
 same as the version in your distro's repos, or may at some point flux out of
 sync. For this reason, and also just as a good general development practice, we
 recommend using a Python virtual environment to install version 1.8.4 of
-Ansible. We provide instructions using `virtualenvwrapper
-<http://virtualenvwrapper.readthedocs.io/en/stable/>`_ and `virtualenv
-<https://virtualenv.readthedocs.io/en/latest/>`_.
-
-Using virtualenvwrapper:
+Ansible. Using `virtualenvwrapper
+<http://virtualenvwrapper.readthedocs.io/en/stable/>`_:
 
 .. code:: sh
 
     sudo apt-get install virtualenvwrapper
     mkvirtualenv -p python2.7 securedrop
-    pip install ansible==1.8.4
-
-Using virtualenv (we recommend you `cd` into the  base directory of the repo
-before running these commands):
-
-.. code:: sh
-
-    sudo apt-get install virtualenv
-    virtualenv -p python2.7 .
-    . bin/activate
     pip install ansible==1.8.4
 
 Mac OS X
