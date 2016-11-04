@@ -248,15 +248,11 @@ def tor_ssh_proxy_command
    def command?(command)
      system("which #{command} > /dev/null 2>&1")
    end
-  # prefer connect-proxy, fall back to netcat,
-  # for use in snapci centos box.
-  if command?("connect")
-    base_cmd = "connect -R remote -5 -S"
-  elsif command?("nc")
+  if command?("nc")
     base_cmd = "nc -x"
   else
     puts "Failed to build proxy command for SSH over Tor."
-    puts "Install 'connect-proxy' or 'netcat'."
+    puts "Install or 'netcat-openbsd'."
     exit(1)
   end
   return "#{base_cmd} 127.0.0.1:9050 %h %p"
