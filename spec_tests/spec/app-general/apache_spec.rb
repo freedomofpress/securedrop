@@ -71,10 +71,7 @@ end
 
 # declare desired apache headers for vhost configs
 apache2_common_headers = [
-  'Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"',
   'Header edit Set-Cookie ^(.*)$ $1;HttpOnly',
-  'Header set Pragma "no-cache"',
-  'Header set Expires "-1"',
   'Header always append X-Frame-Options: DENY',
   'Header set X-XSS-Protection: "1; mode=block"',
   'Header set X-Content-Type-Options: nosniff',
@@ -141,6 +138,7 @@ end
 
 # declare source-specific apache configs
 source_apache2_config_settings = [
+  'Header set Cache-Control "max-age=1800, must-revalidate"',
   "<VirtualHost #{property['apache_listening_address']}:80>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
@@ -171,6 +169,7 @@ end
 
 # declare document-specific apache configs
 document_apache2_config_settings = [
+  'Header set Cache-Control "max-age=1800"',
   "<VirtualHost #{property['apache_listening_address']}:8080>",
   "DocumentRoot #{property['securedrop_code']}/static",
   "Alias /static #{property['securedrop_code']}/static",
