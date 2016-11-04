@@ -29,7 +29,6 @@
 - name: Install dependencies for Firefox 46.0.1.
   apt:
     name: "{{ item }}"
-    state: present
   with_items:
     - libasound2
     - libcairo-gobject2
@@ -39,7 +38,8 @@
     - apt
 
 - name: Install Firefox 46.0.1 for compatibility with Selenium 2.53.6.
-  command: dpkg -i /home/vagrant/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
+  apt:
+    deb: /home/vagrant/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
   tags:
     - apt
 
