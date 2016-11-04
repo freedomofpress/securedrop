@@ -19,7 +19,7 @@
 # decided to play it as safe as possible by downgrading Firefox to the latest
 # version (46.0.1) that is compatible with the last 2.X series Selenium release
 # (2.53.6). After the Hackathon, we'll resolve the geckodriver business and
-# remove the following two tasks (as well as add firefox back to the
+# remove the following three tasks (as well as add firefox back to the
 # `test_apt_dependencies` list).
 - name: Download Firefox 46.0.1 for compatibility with Selenium 2.53.6.
   sudo: no
@@ -30,6 +30,18 @@
     dest: /home/vagrant/
     url: https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
     sha256sum: 88d25053306d33658580973b063cd459a56e3596a3a298c1fb8ab1d52171d860
+  tags:
+    - apt
+
+- name: Install dependencies for Firefox 46.0.1.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libasound2
+    - libcairo-gobject2
+    - libgtk-3-0
+    - libstartup-notification0
   tags:
     - apt
 
