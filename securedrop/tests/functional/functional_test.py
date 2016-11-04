@@ -26,8 +26,6 @@ from datetime import datetime
 import time
 import mock
 
-os.environ['SECUREDROP_ENV'] = 'test'
-
 
 class FunctionalTest():
 
