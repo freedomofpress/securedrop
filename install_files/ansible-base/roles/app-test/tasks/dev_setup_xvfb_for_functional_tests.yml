@@ -13,6 +13,30 @@
   tags:
     - apt
 
+# Selenium 3 makes breaking changes with the 2.X API, and requires the
+# installation of the Mozilla geckodriver. Since the Aaron Swartz Day Hackathon
+# is approaching, which will involve many new external contributors, we've
+# decided to play it as safe as possible by downgrading Firefox to the latest
+# version (46.0.1) that is compatible with the last 2.X series Selenium release
+# (2.53.6). After the Hackathon, we'll resolve the geckodriver business and
+# remove the following two tasks (as well as add firefox back to the
+# `test_apt_dependencies` list).
+- name: Download Firefox 46.0.1 for compatibility with Selenium 2.53.6.
+  sudo: no
+  get_url:
+    # Since the whole tasklisk is run as root, the ansible_env.HOME fact is
+    # /root. Since this command doesn't need to be run as root and is part of a
+    # crutch anyway, I've just hardcoded /home/vagrant.
+    dest: /home/vagrant/
+    url: https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/+build/9727836/+files/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
+  tags:
+    - apt
+
+- name: Install Firefox 46.0.1 for compatibility with Selenium 2.53.6.
+  command: dpkg -i /home/vagrant/firefox_46.0.1+build1-0ubuntu0.14.04.3_amd64.deb
+  tags:
+    - apt
+
 - name: Copy xvfb init script.
   copy:
     src: xvfb
