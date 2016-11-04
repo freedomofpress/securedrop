@@ -3,14 +3,13 @@
 import os
 import unittest
 import zipfile
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import store
 import common
 from db import db_session, Source
 import crypto_util
-
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestStore(unittest.TestCase):
@@ -50,13 +49,12 @@ class TestStore(unittest.TestCase):
     def test_rename_valid_submission(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
 
-        source_dir = os.path.join('/tmp/securedrop/store/', sid)
+        source_dir = os.path.join(config.STORE_DIR, sid)
         if not os.path.exists(source_dir):
             os.makedirs(source_dir)
 
         old_filename = '1-abc1-msg.gpg'
-        with open(os.path.join(source_dir, old_filename), 'w'):
-            pass
+        open(os.path.join(source_dir, old_filename), 'w').close()
 
         new_filestem = 'abc2'
         expected_filename = '1-abc2-msg.gpg'

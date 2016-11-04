@@ -57,7 +57,7 @@ class JournalistNavigationSteps():
 
         self._login_user(test_user_info['username'],
                          test_user_info['password'],
-                         test_user.totp.now())
+                         'mocked')
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         self.assertIn('Sources', headline.text)
@@ -78,7 +78,7 @@ class JournalistNavigationSteps():
 
         self._login_user(admin_user_info['username'],
                          admin_user_info['password'],
-                         admin_user.totp.now())
+                         'mocked')
 
         # Admin user should log in to the same interface as a normal user,
         # since there may be users who wish to be both journalists and admins.
@@ -149,7 +149,7 @@ class JournalistNavigationSteps():
         # Verify the two factor authentication
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
-        token_field.send_keys(self.new_user['orm_obj'].totp.now())
+        token_field.send_keys('mocked')
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
         submit_button.click()
@@ -179,19 +179,6 @@ class JournalistNavigationSteps():
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
 
-    def _check_login_with_skewed_otp(self):
-        interval = 30
-
-        # Client is behind server
-        otp = self.new_user['orm_obj'].totp.at(
-            datetime.datetime.now() - datetime.timedelta(seconds=interval))
-        self._check_login_with_otp(otp)
-
-        # Client is ahead of server
-        otp = self.new_user['orm_obj'].totp.at(
-            datetime.datetime.now() + datetime.timedelta(seconds=interval))
-        self._check_login_with_otp(otp)
-
     def _new_user_can_log_in(self):
         # Log the admin user out
         self._logout()
@@ -199,7 +186,7 @@ class JournalistNavigationSteps():
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
 
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
@@ -209,9 +196,6 @@ class JournalistNavigationSteps():
         self.assertRaises(NoSuchElementException,
                           self.driver.find_element_by_link_text,
                           'Admin')
-
-        # Check that the user can log in with slightly skewed OTP tokens
-        self._check_login_with_skewed_otp()
 
     def _edit_user(self, username):
         new_user_edit_links = filter(
@@ -226,7 +210,7 @@ class JournalistNavigationSteps():
 
         self._login_user(self.admin_user['username'],
                          self.admin_user['password'],
-                         self.admin_user['orm_obj'].totp.now())
+                         'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
@@ -266,7 +250,7 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
         )
@@ -275,7 +259,7 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.admin_user['username'],
                          self.admin_user['password'],
-                         self.admin_user['orm_obj'].totp.now())
+                         'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
@@ -308,7 +292,7 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
         )

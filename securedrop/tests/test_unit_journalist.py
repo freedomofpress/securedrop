@@ -49,13 +49,13 @@ class TestJournalist(TestCase):
 
     def test_index_should_redirect_to_login(self):
         res = self.client.get(url_for('index'))
-        self.assert_redirects(res, url_for('login'))
+        self.assertRedirects(res, url_for('login'))
 
     def test_invalid_user_login_should_fail(self):
         res = self.client.post(url_for('login'), data=dict(
             username='invalid',
             password='invalid',
-            token='123456'))
+            token='mocked'))
         self.assert200(res)
         self.assertIn("Login failed", res.data)
 
@@ -63,7 +63,7 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
         self.assert200(res)  # successful login redirects to index
@@ -75,20 +75,20 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()))
-        self.assert_redirects(res, url_for('index'))
+            token='mocked'))
+        self.assertRedirects(res, url_for('index'))
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()))
-        self.assert_redirects(res, url_for('index'))
+            token='mocked'))
+        self.assertRedirects(res, url_for('index'))
 
     def test_admin_user_has_admin_link_in_index(self):
         res = self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
         admin_link = '<a href="{}">{}</a>'.format(
             url_for('admin_index'),
@@ -99,7 +99,7 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
         edit_account_link = '<a href="{}">{}</a>'.format(
             url_for('edit_account'),
@@ -110,25 +110,25 @@ class TestJournalist(TestCase):
         self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
     def _login_admin(self):
         self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
     def test_user_logout(self):
         self._login_user()
         res = self.client.get(url_for('logout'))
-        self.assert_redirects(res, url_for('index'))
+        self.assertRedirects(res, url_for('index'))
 
     def test_admin_logout(self):
         self._login_admin()
         res = self.client.get(url_for('logout'))
-        self.assert_redirects(res, url_for('index'))
+        self.assertRedirects(res, url_for('index'))
 
     def test_admin_index(self):
         self._login_admin()
@@ -220,7 +220,7 @@ class TestJournalist(TestCase):
 
         self.assertNotEqual(old_hotp, new_hotp)
 
-        self.assert_redirects(res,
+        self.assertRedirects(res,
             url_for('admin_new_user_two_factor', uid=self.user.id))
 
     def test_admin_reset_hotp_empty(self):
@@ -244,7 +244,7 @@ class TestJournalist(TestCase):
 
         self.assertNotEqual(old_totp, new_totp)
 
-        self.assert_redirects(res,
+        self.assertRedirects(res,
             url_for('admin_new_user_two_factor', uid=self.user.id))
 
     def test_admin_new_user_2fa_success(self):
@@ -252,10 +252,10 @@ class TestJournalist(TestCase):
 
         res = self.client.post(
             url_for('admin_new_user_two_factor', uid=self.user.id),
-            data=dict(token=self.user.totp.now())
+            data=dict(token='mocked')
             )
 
-        self.assert_redirects(res, url_for('admin_index'))
+        self.assertRedirects(res, url_for('admin_index'))
 
     def test_admin_new_user_2fa_get_req(self):
         self._login_admin()
@@ -286,7 +286,7 @@ class TestJournalist(TestCase):
                       is_admin=False)
             )
 
-        self.assert_redirects(res, url_for('admin_new_user_two_factor', uid=3))
+        self.assertRedirects(res, url_for('admin_new_user_two_factor', uid=3))
 
     def test_admin_add_user_failure_no_username(self):
         self._login_admin()
@@ -326,7 +326,7 @@ class TestJournalist(TestCase):
         self._login_user()
         for admin_url in admin_urls:
             res = self.client.get(admin_url)
-            self.assert_status(res, 302)
+            self.assertStatus(res, 302)
 
     def test_admin_authorization_for_posts(self):
         admin_urls = [url_for('admin_reset_two_factor_totp'),
@@ -340,7 +340,7 @@ class TestJournalist(TestCase):
         self._login_user()
         for admin_url in admin_urls:
             res = self.client.post(admin_url)
-            self.assert_status(res, 302)
+            self.assertStatus(res, 302)
 
     def test_user_authorization_for_gets(self):
         urls = [url_for('index'), url_for('col', sid='1'),
@@ -348,7 +348,7 @@ class TestJournalist(TestCase):
 
         for url in urls:
             res = self.client.get(url)
-            self.assert_status(res, 302)
+            self.assertStatus(res, 302)
 
     def test_user_authorization_for_posts(self):
         urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
@@ -359,14 +359,14 @@ class TestJournalist(TestCase):
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
-            self.assert_status(res, 302)
+            self.assertStatus(res, 302)
 
     def test_invalid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('edit_account'), data=dict(
             password='not',
             password_again='thesame'))
-        self.assert_redirects(res, url_for('edit_account'))
+        self.assertRedirects(res, url_for('edit_account'))
 
     def test_too_long_user_password_change(self):
         self._login_user()
@@ -397,7 +397,7 @@ class TestJournalist(TestCase):
         self.assertNotEqual(oldTotp, newTotp)
 
         # should redirect to verification page
-        self.assert_redirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account_new_two_factor'))
 
     def test_edit_hotp(self):
         self._login_user()
@@ -413,7 +413,7 @@ class TestJournalist(TestCase):
         self.assertNotEqual(oldHotp, newHotp)
 
         # should redirect to verification page
-        self.assert_redirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account_new_two_factor'))
 
     def test_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
@@ -455,7 +455,7 @@ class TestJournalist(TestCase):
         db_session.commit()
 
         res = self.client.post(url_for('add_star', sid=sid))
-        self.assert_redirects(res, url_for('index'))
+        self.assertRedirects(res, url_for('index'))
 
 
 if __name__ == "__main__":

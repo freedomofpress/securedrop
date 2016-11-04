@@ -5,6 +5,8 @@ import subprocess
 
 import gnupg
 
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 import config
 from db import init_db, db_session, Source, Submission
 import crypto_util
