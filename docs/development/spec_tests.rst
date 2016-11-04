@@ -42,6 +42,14 @@ machines for faster testing:
     bundle exec rake --tasks # check output for desired machine
     bundle exec rake spec:development
 
+.. note:: If you run into an error regarding the version of ``bundler`` such as "Bundler could not find compatible versions", then you can install and run a particular version of ``bundler`` via:
+
+    .. code:: sh
+
+        gem install bundler -v 1.12.5
+        bundle _1.12.5_ install
+        bundle _1.12.5_ exec rake spec:development
+
 Updating the tests
 ------------------
 
