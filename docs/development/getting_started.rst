@@ -23,11 +23,12 @@ Ubuntu/Debian
 
    sudo apt-get install -y build-essential dpkg-dev git linux-headers-$(uname -r) virtualbox
 
-We recommend using the latest stable version of Vagrant (``1.8.5`` at the time
-of this writing), which might be newer than what is in your distro's package
-repositories. If ``apt-cache policy vagrant`` says your candidate version
-is not at least 1.8, you should download the current version from the
-`Vagrant Downloads page`_ and then install it.
+We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
+of this writing, which might be newer than what is in your distro's package
+repositories. Older versions of Vagrant has been known to cause problems
+(`GitHub #932`_, `GitHub #1381`_). If ``apt-cache policy vagrant`` says your
+candidate version is not at least 1.8, you should download the current version
+from the `Vagrant Downloads page`_ and then install it.
 
 .. code:: sh
 
@@ -36,10 +37,6 @@ is not at least 1.8, you should download the current version from the
     # OR this, if you downloaded the deb package.
     sudo dpkg -i vagrant.deb
 
-We *do not* recommend using a version of Vagrant older than 1.8.4. For instance,
-the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
-which is signficantly out of date and known not to work with SecureDrop (`GitHub
-#932`_, `GitHub #1381`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
@@ -59,6 +56,9 @@ which is signficantly out of date and known not to work with SecureDrop (`GitHub
           Build our own base boxes to dramatically cut down on provisioning
           times (ii) Remove this note as well as the commented vagrant-cachier
           lines from the Vagrantfile
+
+VirtualBox should be at least version 5.x. See `GitHub #1381`_ for documentation
+of incompatibility with the older VirtualBox 4.x release series.
 
 Finally, install Ansible so it can be used with Vagrant to automatically
 provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
