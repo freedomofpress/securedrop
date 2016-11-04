@@ -90,7 +90,8 @@ Install the dependencies for the development environment:
 #. VirtualBox_
 #. Ansible_.
 
-There are several ways to install Ansible on a Mac. We recommend setting up a virtualenv to install Ansible since we are currently using Ansible 1.8.4:
+There are several ways to install Ansible on a Mac. We recommend setting up a
+virtualenv to install Ansible since we are currently using Ansible 1.8.4:
 
 .. code:: sh
 
