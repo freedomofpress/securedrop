@@ -254,7 +254,12 @@ def admin_edit_user(user_id):
 
     if request.method == 'POST':
         if request.form['username'] != "":
-            user.username = request.form['username']
+            new_username = request.form['username']
+            if Journalist.query.filter_by(username=new_username).one_or_none():
+                flash("Username {} is already taken".format(new_username),
+                      "error")
+            else:
+                user.username = new_username
 
         if request.form['password'] != "":
             if request.form['password'] != request.form['password_again']:
@@ -262,6 +267,8 @@ def admin_edit_user(user_id):
                 return redirect(url_for("admin_edit_user", user_id=user_id))
             try:
                 user.set_password(request.form['password'])
+                flash("Password successfully changed for user {} ".format(
+                    user.username), "notification")
             except InvalidPasswordLength:
                 flash("Your password is too long "
                       "(maximum length {} characters)".format(
@@ -270,22 +277,8 @@ def admin_edit_user(user_id):
 
         user.is_admin = bool(request.form.get('is_admin'))
 
-        try:
-            db_session.add(user)
-            db_session.commit()
-            flash("Password successfully changed for user {} ".format(
-                  user.username),
-                  "notification"
-            )
-
-        except Exception as e:
-            db_session.rollback()
-            if "username is not unique" in str(e):
-                flash("That username is already in use", "notification")
-            else:
-                flash(
-                    "An unknown error occurred, please inform your administrator",
-                    "error")
+        db_session.add(user)
+        db_session.commit()
 
     return render_template("admin_edit_user.html", user=user)
 
@@ -294,8 +287,16 @@ def admin_edit_user(user_id):
 @admin_required
 def admin_delete_user(user_id):
     user = Journalist.query.get(user_id)
-    db_session.delete(user)
-    db_session.commit()
+    if user:
+        db_session.delete(user)
+        db_session.commit()
+        flash("Deleted user '{}'".format(user.username), "notification")
+    else:
+        app.logger.error(
+            "Admin {} tried to delete nonexistent user with pk={}".format(
+            g.user.username, user_id))
+        abort(404)
+
     return redirect(url_for('admin_index'))
 
 
