@@ -41,7 +41,7 @@ class TestIntegration(unittest.TestCase):
         self.journalist_app.post('/login', data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
     def _wait_for(self, function_with_assertion, timeout=5):
@@ -570,29 +570,7 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
             password='newpass',
-            token=self.user.totp.now(),
-            follow_redirects=True))
-        self.assertEqual(rv.status_code, 302)
-
-    def test_login_after_regenerate_totp(self):
-        """Test that journalists can login after resetting their Google Authenticator 2fa"""
-
-        # regenerate totp
-        self.journalist_app.post('/account/reset-2fa-totp')
-      
-        # successful verification should redirect to /account
-        rv = self.journalist_app.post('/account/2fa', data=dict(
-            token=self.user.totp.now()))
-        self.assertEqual(rv.status_code, 302)
-      
-        # log out
-        common.logout(self.journalist_app)
-
-        # login with new 2fa secret should redirect to index page
-        rv = self.journalist_app.post('/login', data=dict(
-            username=self.user.username,
-            password=self.user_pw,
-            token=self.user.totp.now(),
+            token='mocked',
             follow_redirects=True))
         self.assertEqual(rv.status_code, 302)
 

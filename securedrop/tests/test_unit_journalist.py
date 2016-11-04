@@ -55,7 +55,7 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username='invalid',
             password='invalid',
-            token='123456'))
+            token='mocked'))
         self.assert200(res)
         self.assertIn("Login failed", res.data)
 
@@ -63,7 +63,7 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
         self.assert200(res)  # successful login redirects to index
@@ -75,20 +75,20 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()))
+            token='mocked'))
         self.assertRedirects(res, url_for('index'))
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()))
+            token='mocked'))
         self.assertRedirects(res, url_for('index'))
 
     def test_admin_user_has_admin_link_in_index(self):
         res = self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
         admin_link = '<a href="{}">{}</a>'.format(
             url_for('admin_index'),
@@ -99,7 +99,7 @@ class TestJournalist(TestCase):
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
         edit_account_link = '<a href="{}">{}</a>'.format(
             url_for('edit_account'),
@@ -110,14 +110,14 @@ class TestJournalist(TestCase):
         self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
-            token=self.user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
     def _login_admin(self):
         self.client.post(url_for('login'), data=dict(
             username=self.admin_user.username,
             password=self.admin_user_pw,
-            token=self.admin_user.totp.now()),
+            token='mocked'),
             follow_redirects=True)
 
     def test_user_logout(self):
@@ -252,7 +252,7 @@ class TestJournalist(TestCase):
 
         res = self.client.post(
             url_for('admin_new_user_two_factor', uid=self.user.id),
-            data=dict(token=self.user.totp.now())
+            data=dict(token='mocked')
             )
 
         self.assertRedirects(res, url_for('admin_index'))
