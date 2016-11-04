@@ -17,26 +17,24 @@ your development workstation.
 Ubuntu/Debian
 ~~~~~~~~~~~~~
 
-.. note:: Tested on: Ubuntu 14.04 and Debian Stretch
+.. note:: Tested on: Ubuntu 16.04 and Debian Stretch
 
 .. code:: sh
 
-   sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
+   sudo apt-get install -y build-essential dpkg-dev git linux-headers-$(uname -r) virtualbox
 
 We recommend using the latest stable version of Vagrant (``1.8.5`` at the time
 of this writing), which might be newer than what is in your distro's package
-repositories.
-
-If ``apt-cache policy vagrant`` says your candidate version is not at least 1.7,
-you should download the current version from the `Vagrant Downloads page`_ and
-then install it.
+repositories. If ``apt-cache policy vagrant`` says your candidate version
+is not at least 1.8, you should download the current version from the
+`Vagrant Downloads page`_ and then install it.
 
 .. code:: sh
 
-    # If you downloaded vagrant.deb from vagrantup.com
-    sudo dpkg -i vagrant.deb
-    # OR this, if your OS vagrant is recent enough
+    # If your OS vagrant is recent enough
     sudo apt-get install vagrant
+    # OR this, if you downloaded the deb package.
+    sudo dpkg -i vagrant.deb
 
 We *do not* recommend using a version of Vagrant older than 1.8.4. For instance,
 the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
@@ -61,12 +59,6 @@ which is signficantly out of date and known not to work with SecureDrop (`GitHub
           Build our own base boxes to dramatically cut down on provisioning
           times (ii) Remove this note as well as the commented vagrant-cachier
           lines from the Vagrantfile
-
-Either way, once you've installed Vagrant you should run:
-
-.. code:: sh
-
-    sudo dpkg-reconfigure virtualbox-dkms
 
 Finally, install Ansible so it can be used with Vagrant to automatically
 provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
