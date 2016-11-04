@@ -417,6 +417,18 @@ input#show {
     height: auto;
 }
 
+.codename {
+    /* Attempt to prevent users from copying their code name to the system
+     * clipboard in the event they are using a non-amnesiac / hostile OS */
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
 input.codename {
   width: 400px;
   padding: 10px;
