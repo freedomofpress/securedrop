@@ -6,42 +6,75 @@ Virtual Environments
 
 .. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
 
+Overview
+--------
+
 There are several predefined virtual environments in the Vagrantfile:
 development, staging, and prod (production).
 
--  **development**: for working on the application code
+development
+    For working on the application code. Forwarded ports:
 
-   -  Source Interface: localhost:8080
-   -  Document Interface: localhost:8081
+    -  Source Interface: localhost:8080
+    -  Document Interface: localhost:8081
 
--  **app-staging**: for working on the environment and hardening
+app-staging
+    For working on the application code in a more realistic environment,
+    with most system hardening active.
+    The interfaces and SSH are also available over Tor.
+    A copy of the the Onion URLs for Source and Document Interfaces,
+    as well as SSH access, are written to the Vagrant host's
+    ``install_files/ansible-base`` directory, named:
 
-   -  Source Interface: localhost:8082
-   -  Document Interface: localhost:8083
-   -  The interfaces and SSH are also available over Tor.
-   -  A copy of the the onion URLs for source, document and SSH access
-      are written to the Vagrant host's ansible-base directory. The
-      files will be named: app-source-ths, app-document-aths,
-      app-ssh-aths
+    - ``app-source-ths``
+    - ``app-document-aths``
+    - ``app-ssh-aths``
 
--  **mon-staging**: for working on the environment and hardening
+    The AppArmor profiles run complain mode to aid in debugging.
 
-   -  OSSEC alert configuration is in
-      install\_files/ansible-base/staging-specific.yml
+    Forwarded ports:
 
--  **app-prod**: This is like a production installation with all of the
-   hardening applied but virtualized
+    -  Source Interface: localhost:8082
+    -  Document Interface: localhost:8083
 
-   -  A copy of the the onion URLs for source, document and SSH access
-      are written to the Vagrant host's ansible-base directory. The
-      files will be named: app-source-ths, app-document-aths,
-      app-ssh-aths
-   -  Putting the AppArmor profiles in complain mode (default) or
-      enforce mode can be done with the Ansible tags apparmor-complain
-      or apparmor-enforce.
+mon-staging
+    For working on OSSEC monitoring rules, with most system hardening active.
+    OSSEC alert configuration is in
+    ``install_files/ansible-base/staging-specific.yml``.
+    A copy of the the Onion URL for SSH acces is written to the Vagrant host's
+    ``install_files/ansible-base`` directory, named:
 
--  **mon-prod**: This is like a production installation with all of the
-   hardening applied but virtualized
+    - ``mon-ssh-aths``
+
+    Direct SSH access is still available via Vagrant for staging hosts, so you
+    can use ``vagrant ssh app-staging`` and ``vagrant ssh mon-staging``
+    to start an interactive session.
+
+app-prod
+    This is like a production installation with all of the system
+    hardening active, but virtualized, rather than running on hardware.
+    A copy of the the Onion URLs for Source and Document Interfaces,
+    as well as SSH access, are written to the Vagrant host's
+    ``install_files/ansible-base`` directory, named:
+
+    - ``app-source-ths``
+    - ``app-document-aths``
+    - ``app-ssh-aths``
+
+    There are no active forwarded ports for the Document and Source Interfaces
+    on ``app-prod``. You must use the Onion URLs to view the pages over Tor.
+
+mon-prod
+    This is like a production installation with all of the system
+    hardening active, but virtualized, rather than running on hardware.
+    You will need to configure prod-like secrets in 
+    ``install_files/ansible-base/prod-specific.yml``, or export
+    ``ANSIBLE_ARGS=="--skip-tags validate"`` to skip the tasks
+    that prevent the prod playbook from running with Vagrant-specific info.
+
+    Direct SSH access is not available in the prod environment.
+    You will need to log in over Tor after initial provisioning. See
+    :doc:`Tips & Tricks` for more info.
 
 If you plan to alter the configuration of any of these machines, make sure to
 review the :doc:`Development Guide for Serverspec Tests <spec_tests>`.
