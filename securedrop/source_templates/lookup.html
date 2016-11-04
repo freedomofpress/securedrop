@@ -8,6 +8,12 @@
   <p class="notification"> <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/info-circle.svg') }}" width="20px" height="20px">A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
 
+  <div class="code-reminder">
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
+    <div id="show" class="show pull-right"></div>
+    <span id="content"><p class="alert"><strong>{{ codename }}</strong></p></span>
+  </div>
+
   <h2 class="headline">Submit documents and messages</h2>
   <p>You can send a file, a message, or both.</p>
 
@@ -78,13 +84,4 @@
 </div>
 
 <hr class="no-line">
-
-
-<div class="code-reminder">
-
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
-  <div id="show" class="show pull-right"></div>
-  <span id="content"><p class="alert"><strong>{{ codename }}</strong></p></span>
-</div>
-
 {% endblock %}
