@@ -11,6 +11,8 @@ import urllib2
 import sys
 
 
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
 import config
 
 import source
