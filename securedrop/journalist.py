@@ -608,7 +608,7 @@ def bulk():
             flash("No collections selected to delete!", "error")
         return redirect(url_for('col', sid=g.sid))
 
-    if action == 'download' or action == 'download_all':
+    if action in ('download', 'download_all'):
         return bulk_download(g.sid, selected_docs)
     elif action == 'delete':
         return bulk_delete(g.sid, selected_docs)
