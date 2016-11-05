@@ -82,7 +82,7 @@ function github_process_prs(most_recent_pr_checked, pr_cb){
                 }
 
                 if(file.filename.match(/^securedrop\/tests\//) ||
-                  file.filename.match(/^securedrop\/source.py$/)){
+                  file.filename.match(/^securedrop\/test.sh$/)){
                   labels.add("tests");
                 }
 
