@@ -68,7 +68,28 @@ function github_process_prs(most_recent_pr_checked, pr_cb){
                   file.filename.match(/^securedrop\/source.py$/)){
                   labels.add("source_interface");
                 }
-                
+
+                if(file.filename.match(/^docs\//)){
+                  labels.add("docs");
+                }
+
+                if(file.filename.match(/^snap_ci\//)){
+                  labels.add("snap_ci");
+                }
+
+                if(file.filename.match(/^spec_tests\//)){
+                  labels.add("spec_tests");
+                }
+
+                if(file.filename.match(/^securedrop\/tests\//) ||
+                  file.filename.match(/^securedrop\/source.py$/)){
+                  labels.add("tests");
+                }
+
+                if(file.filename.match(/^securedrop\/tests\/functional\//)){
+                  labels.add("functional_tests");
+                }
+
               });
 
               fc_cb(null, {pr: pull_request.number, labels: labels});
