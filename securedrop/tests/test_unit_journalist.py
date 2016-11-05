@@ -423,7 +423,7 @@ class TestJournalist(TestCase):
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
         selected_files = files[:2]
         unselected_files = files[2:]
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
@@ -450,15 +450,13 @@ class TestJournalist(TestCase):
             else:
                 self.assertTrue(False)
 
-
-
     def test_download_all_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
