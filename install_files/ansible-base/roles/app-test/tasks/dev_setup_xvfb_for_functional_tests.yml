@@ -50,6 +50,13 @@
   tags:
     - apt
 
+- name: Set apt hold on Firefox version.
+  command: apt-mark hold firefox
+  register: apt_hold_firefox_result
+  # apt-mark will return output to report changed status; subsequent runs
+  # will report "firefox was already set on hold."
+  changed_when: "'firefox set on hold' in apt_hold_firefox_result.stdout"
+
 - name: Copy xvfb init script.
   copy:
     src: xvfb
