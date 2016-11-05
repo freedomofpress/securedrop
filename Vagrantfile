@@ -42,6 +42,11 @@ Vagrant.configure("2") do |config|
   # The staging hosts are just like production but allow non-tor access
   # for the web interfaces and ssh.
   config.vm.define 'mon-staging', autostart: false do |staging|
+    if ENV['SECUREDROP_SSH_OVER_TOR']
+      config.ssh.host = find_ssh_aths("mon-ssh-aths")
+      config.ssh.proxy_command = tor_ssh_proxy_command
+      config.ssh.port = 22
+    end
     staging.vm.hostname = "mon-staging"
     staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: true
@@ -52,6 +57,11 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'app-staging', autostart: false do |staging|
+    if ENV['SECUREDROP_SSH_OVER_TOR']
+      config.ssh.host = find_ssh_aths("app-ssh-aths")
+      config.ssh.proxy_command = tor_ssh_proxy_command
+      config.ssh.port = 22
+    end
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: true
@@ -238,15 +248,11 @@ def tor_ssh_proxy_command
    def command?(command)
      system("which #{command} > /dev/null 2>&1")
    end
-  # prefer connect-proxy, fall back to netcat,
-  # for use in snapci centos box.
-  if command?("connect")
-    base_cmd = "connect -R remote -5 -S"
-  elsif command?("nc")
+  if command?("nc")
     base_cmd = "nc -x"
   else
     puts "Failed to build proxy command for SSH over Tor."
-    puts "Install 'connect-proxy' or 'netcat'."
+    puts "Install or 'netcat-openbsd'."
     exit(1)
   end
   return "#{base_cmd} 127.0.0.1:9050 %h %p"

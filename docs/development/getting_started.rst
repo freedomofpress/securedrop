@@ -17,31 +17,26 @@ your development workstation.
 Ubuntu/Debian
 ~~~~~~~~~~~~~
 
-.. note:: Tested on: Ubuntu 14.04 and Debian Stretch
+.. note:: Tested on: Ubuntu 16.04 and Debian Stretch
 
 .. code:: sh
 
-   sudo apt-get install -y dpkg-dev virtualbox-dkms linux-headers-$(uname -r) build-essential git
+   sudo apt-get install -y build-essential dpkg-dev git linux-headers-$(uname -r) virtualbox
 
-We recommend using the latest stable version of Vagrant (``1.8.5`` at the time
-of this writing), which might be newer than what is in your distro's package
-repositories.
-
-If ``apt-cache policy vagrant`` says your candidate version is not at least 1.7,
-you should download the current version from the `Vagrant Downloads page`_ and
-then install it.
+We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
+of this writing, which might be newer than what is in your distro's package
+repositories. Older versions of Vagrant has been known to cause problems
+(`GitHub #932`_, `GitHub #1381`_). If ``apt-cache policy vagrant`` says your
+candidate version is not at least 1.8, you should download the current version
+from the `Vagrant Downloads page`_ and then install it.
 
 .. code:: sh
 
-    # If you downloaded vagrant.deb from vagrantup.com
-    sudo dpkg -i vagrant.deb
-    # OR this, if your OS vagrant is recent enough
+    # If your OS vagrant is recent enough
     sudo apt-get install vagrant
+    # OR this, if you downloaded the deb package.
+    sudo dpkg -i vagrant.deb
 
-We *do not* recommend using a version of Vagrant older than 1.8.4. For instance,
-the version of Vagrant currently in the Ubuntu Trusty repositories is 1.5.4,
-which is signficantly out of date and known not to work with SecureDrop (`GitHub
-#932`_, `GitHub #1381`_).
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
@@ -62,11 +57,8 @@ which is signficantly out of date and known not to work with SecureDrop (`GitHub
           times (ii) Remove this note as well as the commented vagrant-cachier
           lines from the Vagrantfile
 
-Either way, once you've installed Vagrant you should run:
-
-.. code:: sh
-
-    sudo dpkg-reconfigure virtualbox-dkms
+VirtualBox should be at least version 5.x. See `GitHub #1381`_ for documentation
+of incompatibility with the older VirtualBox 4.x release series.
 
 Finally, install Ansible so it can be used with Vagrant to automatically
 provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
@@ -80,26 +72,13 @@ The version of Ansible recommended to provision SecureDrop VMs may not be the
 same as the version in your distro's repos, or may at some point flux out of
 sync. For this reason, and also just as a good general development practice, we
 recommend using a Python virtual environment to install version 1.8.4 of
-Ansible. We provide instructions using `virtualenvwrapper
-<http://virtualenvwrapper.readthedocs.io/en/stable/>`_ and `virtualenv
-<https://virtualenv.readthedocs.io/en/latest/>`_.
-
-Using virtualenvwrapper:
+Ansible. Using `virtualenvwrapper
+<http://virtualenvwrapper.readthedocs.io/en/stable/>`_:
 
 .. code:: sh
 
     sudo apt-get install virtualenvwrapper
     mkvirtualenv -p python2.7 securedrop
-    pip install ansible==1.8.4
-
-Using virtualenv (we recommend you `cd` into the  base directory of the repo
-before running these commands):
-
-.. code:: sh
-
-    sudo apt-get install virtualenv
-    virtualenv -p python2.7 .
-    . bin/activate
     pip install ansible==1.8.4
 
 Mac OS X
@@ -111,12 +90,17 @@ Install the dependencies for the development environment:
 #. VirtualBox_
 #. Ansible_.
 
-   There are several ways to install Ansible on a Mac. We recommend installing
-   from PyPi using ``pip`` so you will get the latest stable version:
+There are several ways to install Ansible on a Mac. We recommend setting up a virtual environment to install Ansible since we are currently using Ansible 1.8.4:
 
-   .. code:: sh
+.. code:: sh
 
-      sudo easy_install pip && sudo pip install -U ansible
+    pip install virtualenvwrapper
+    mkvirtualenv -p python2.7 securedrop
+    pip install ansible==1.8.4
+
+.. note:: If you install ``virtualenvwrapper`` and get a ``mkvirtualenv: 
+          command not found`` error, make sure 
+          ``source /usr/local/bin/virtualenvwrapper.sh`` is in your ``~/.bashrc``.
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads

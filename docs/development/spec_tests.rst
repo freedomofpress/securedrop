@@ -7,7 +7,7 @@ spectest.
 
 .. _serverspec: http://serverspec.org
 
-Install directions (Ubuntu)
+Install directions (Ubuntu/Debian)
 ---------------------------
 
 .. code:: sh
@@ -16,20 +16,19 @@ Install directions (Ubuntu)
     cd spec_tests/
     bundle update
 
+.. note:: If you run into an error regarding the version of
+          ``bundler`` such as "Bundler could not find compatible versions",
+          then you can install and run a particular version of ``bundler`` via:
+
+          .. code:: sh
+
+              gem install bundler -v 1.12.5
+              bundle _1.12.5_ install
+              bundle _1.12.5_ exec rake spec:development
+
+
 Running the tests
 -----------------
-
-.. code:: sh
-
-    cd spec_tests/
-    bundle exec rake spec
-
-This will run the tests against all configured hosts, specifically:
-
--  development
--  app-staging
--  mon-staging
--  build
 
 In order to run the tests, each VM will be created and provisioned, if
 necessary.  Running all VMs concurrently may cause performance
@@ -38,17 +37,28 @@ machines for faster testing:
 
 .. code:: sh
 
-    cd spec_tests
-    bundle exec rake --tasks # check output for desired machine
-    bundle exec rake spec:development
+    $ cd spec_tests
+    $ bundle exec rake --tasks # check output for desired machine
+    rake spec:app-prod     # Run spectests against app-prod
+    rake spec:app-staging  # Run spectests against app-staging
+    rake spec:build        # Run spectests against build
+    rake spec:development  # Run spectests against development
+    rake spec:mon-prod     # Run spectests against mon-prod
+    rake spec:mon-staging  # Run spectests against mon-staging
 
-.. note:: If you run into an error regarding the version of ``bundler`` such as "Bundler could not find compatible versions", then you can install and run a particular version of ``bundler`` via:
+    $ bundle exec rake spec:staging
 
-    .. code:: sh
+The invocation above will run tests only against the ``staging`` VMs.
+You can run against multiple environments in a single invocation:
 
-        gem install bundler -v 1.12.5
-        bundle _1.12.5_ install
-        bundle _1.12.5_ exec rake spec:development
+.. code:: sh
+
+    $ cd spec_tests
+    $ bundle exec rake spec:development spec:staging
+
+Test failure against any host will cause Serverspec to exit, and stop
+executing tests against subsequent hosts. In order to run the ``spec:prod``
+task, you will need to configure :ref:`SSH access over Tor <ssh_over_tor>`.
 
 Updating the tests
 ------------------
