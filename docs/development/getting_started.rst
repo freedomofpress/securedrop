@@ -90,16 +90,17 @@ Install the dependencies for the development environment:
 #. VirtualBox_
 #. Ansible_.
 
-There are several ways to install Ansible on a Mac. We recommend setting up a
-virtualenv to install Ansible since we are currently using Ansible 1.8.4:
+There are several ways to install Ansible on a Mac. We recommend setting up a virtual environment to install Ansible since we are currently using Ansible 1.8.4:
 
 .. code:: sh
 
-    pip install virtualenv
-    # From the base directory of securedrop
-    virtualenv -p python2.7 .
-    . bin/activate
+    pip install virtualenvwrapper
+    mkvirtualenv -p python2.7 securedrop
     pip install ansible==1.8.4
+
+.. note:: If you install ``virtualenvwrapper`` and get a ``mkvirtualenv: 
+          command not found`` error, make sure 
+          ``source /usr/local/bin/virtualenvwrapper.sh`` is in your ``~/.bashrc``.
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
