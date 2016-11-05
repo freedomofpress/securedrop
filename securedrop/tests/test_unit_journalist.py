@@ -518,7 +518,7 @@ class TestJournalist(TestCase):
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
         selected_files = files[:2]
         unselected_files = files[2:]
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk',
@@ -543,15 +543,13 @@ class TestJournalist(TestCase):
             else:
                 self.assertTrue(False)
 
-
-
     def test_download_all_bulk_download(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
@@ -567,6 +565,50 @@ class TestJournalist(TestCase):
                  os.path.join(source.journalist_filename, file)
             ))
 
+    def test_download_bulk_download_nothing_selected(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='download',
+                sid=sid,
+                doc_names_selected = []
+        ))
+        self.assertRedirects(rv, url_for('col', sid=sid))
+
+    def test_download_bulk_download_all_no_submissions(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='download_all',
+                sid=sid,
+        ))
+        self.assertRedirects(rv, url_for('col', sid=sid))
+
+    def test_delete_bulk_delete_nothing_selected(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='delete',
+                sid=sid,
+                doc_names_selected = []
+        ))
+        self.assertRedirects(rv, url_for('col', sid=sid))
 
     def test_download_all(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
@@ -576,7 +618,7 @@ class TestJournalist(TestCase):
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
         selected_files = files[::2]
         unselected_files = files[1::2]
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(sid, files)
 
         self._login_user()
         rv = self.client.post('/bulk', data=dict(
@@ -591,8 +633,24 @@ class TestJournalist(TestCase):
                         len(unselected_files))
         for file in unselected_files:
             self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                os.path.join('all_unread_'+g.user.username, file
+                os.path.join('all_unread', file
             )))
+
+    def test_download_all_with_no_unread_submissions(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
+        source = Source(sid, crypto_util.display_id())
+        db_session.add(source)
+        db_session.commit()
+        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
+        common.setup_test_docs(sid, files)
+
+        self._login_user()
+        rv = self.client.post('/bulk', data=dict(
+                action='download_all',
+                sid=sid,
+        ))
+        rv = self.client.get('/download_all_unread')
+        self.assertRedirects(rv, url_for('index'))
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
