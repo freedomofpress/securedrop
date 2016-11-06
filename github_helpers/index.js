@@ -86,10 +86,6 @@ function github_process_prs(most_recent_pr_checked, pr_cb){
                   labels.add("tests");
                 }
 
-                if(file.filename.match(/^securedrop\/tests\/functional\//)){
-                  labels.add("functional_tests");
-                }
-
               });
 
               fc_cb(null, {pr: pull_request.number, labels: labels});
