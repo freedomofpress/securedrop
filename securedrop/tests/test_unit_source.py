@@ -204,6 +204,21 @@ class TestSource(TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Thanks! We received your message.", rv.data)
 
+    def test_submit_big_message(self):
+        '''
+        When the message is larger than 512KB it's written to disk instead of
+        just residing in memory. Make sure the different return type of
+        SecureTemporaryFile is handled as well as BytesIO.
+        '''
+        self._new_codename()
+        self._dummy_submission()
+        rv = self.client.post('/submit', data=dict(
+            msg="AA" * (1024 * 512),
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Thanks! We received your message.", rv.data)
+
     def test_submit_file(self):
         self._new_codename()
         self._dummy_submission()
