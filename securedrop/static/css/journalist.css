@@ -181,6 +181,12 @@ button.small, a.btn.small, .btn.small {
   padding: 3px 10px;
 }
 
+button.small-danger, a.btn.small-danger, .btn.small-danger {
+  background-color: #d55c5c;
+  font-size: small;
+  padding: 3px 10px;
+}
+
 .btn.primary {
   display: block;
   width: 50%;

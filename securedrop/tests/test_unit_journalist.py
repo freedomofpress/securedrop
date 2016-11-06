@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
-
 from cStringIO import StringIO
 import datetime
 from flask import url_for, escape
@@ -14,7 +11,11 @@ import time
 import unittest
 import zipfile
 
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
+
 import common
+import config
 import crypto_util
 import journalist
 from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
@@ -27,7 +28,7 @@ class TestJournalist(TestCase):
         return journalist.app
 
     def add_source_and_submissions(self):
-        sid = crypto_util.hashd_codename(crypto_util.genrandomid())
+        sid = crypto_util.hash_codename(crypto_util.genrandomid())
         codename = crypto_util.display_id()
         crypto_util.genkeypair(sid, codename)
         source = Source(sid, codename)
@@ -366,7 +367,8 @@ class TestJournalist(TestCase):
 
     def test_user_authorization_for_gets(self):
         urls = [url_for('index'), url_for('col', sid='1'),
-                url_for('doc', sid='1', fn='1'), url_for('edit_account')]
+                url_for('download_single_submission', sid='1', fn='1'),
+                url_for('edit_account')]
 
         for url in urls:
             res = self.client.get(url)
@@ -510,8 +512,8 @@ class TestJournalist(TestCase):
         dir_source_docs = os.path.join(config.STORE_DIR, source.filesystem_id)
         self.assertFalse(os.path.exists(dir_source_docs))
 
-    def test_selected_bulk_download(self):
-        sid = crypto_util.hashd_codename(crypto_util.genrandomid())
+    def test_download_selected_from_source(self):
+        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         source = Source(sid, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
@@ -530,9 +532,10 @@ class TestJournalist(TestCase):
         self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
 
         for file in selected_files:
-            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                 os.path.join(source.journalist_filename, file)
-            ))
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(rv.data)).getinfo(
+                    os.path.join(source.journalist_filename, file))
+                )
 
         for file in unselected_files:
             try:
@@ -543,114 +546,81 @@ class TestJournalist(TestCase):
             else:
                 self.assertTrue(False)
 
-    def test_download_all_bulk_download(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        common.setup_test_docs(sid, files)
-
-        self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-             action='download_all',
-             sid=sid
-        ))
-
-        self.assertEqual(rv.status_code, 200)
-        self.assertEqual(rv.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(rv.data)))
-        for file in files:
-            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                 os.path.join(source.journalist_filename, file)
-            ))
-
-    def test_download_bulk_download_nothing_selected(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        common.setup_test_docs(sid, files)
-
-        self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-                action='download',
-                sid=sid,
-                doc_names_selected = []
-        ))
-        self.assertRedirects(rv, url_for('col', sid=sid))
-
-    def test_download_bulk_download_all_no_submissions(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
+    def _setup_two_sources(self):
+        # Add two sources to the database
+        self.sid = crypto_util.hash_codename(crypto_util.genrandomid())
+        self.sid2 = crypto_util.hash_codename(crypto_util.genrandomid())
+        self.source = Source(self.sid, crypto_util.display_id())
+        self.source2 = Source(self.sid2, crypto_util.display_id())
+        db_session.add(self.source)
+        db_session.add(self.source2)
         db_session.commit()
 
-        self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-                action='download_all',
-                sid=sid,
-        ))
-        self.assertRedirects(rv, url_for('col', sid=sid))
+        # The sources have made two submissions each, both being messages
+        self.files = ['1-s1-msg.gpg', '2-s1-msg.gpg']
+        common.setup_test_docs(self.sid, self.files)
+        self.files2 = ['1-s2-msg.gpg', '2-s2-msg.gpg']
+        common.setup_test_docs(self.sid2, self.files2)
 
-    def test_delete_bulk_delete_nothing_selected(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
+        # Mark the first message for each of the two sources read
+        for fn in (self.files[0], self.files2[0]):
+            s = Submission.query.filter(Submission.filename == fn).one()
+            s.downloaded = True
         db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        common.setup_test_docs(sid, files)
 
+
+
+    def test_download_unread_selected_sources(self):
+        self._setup_two_sources()
         self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-                action='delete',
-                sid=sid,
-                doc_names_selected = []
-        ))
-        self.assertRedirects(rv, url_for('col', sid=sid))
+        resp = self.client.post('/col/process',
+                                data=dict(action='download-unread',
+                                          cols_selected=[self.sid, self.sid2]))
 
-    def test_download_all(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        selected_files = files[::2]
-        unselected_files = files[1::2]
-        common.setup_test_docs(sid, files)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
 
+        for file in (self.files[1], self.files2[1]):
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join('unread', file))
+                )
+
+        for file in (self.files[0], self.files2[0]):
+            try:
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join('unread', file))
+            except KeyError:
+                pass
+            else:
+                self.assertTrue(False)
+
+    def test_download_all_selected_sources(self):
+        self._setup_two_sources()
         self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-                action='download',
-                sid=sid,
-                doc_names_selected=selected_files
-        ))
-        rv = self.client.get('/download_all_unread')
-        self.assertEqual(rv.status_code, 200)
-        self.assertEqual(rv.content_type, 'application/zip')
-        self.assertTrue(len(zipfile.ZipFile(StringIO(rv.data)).namelist()) == \
-                        len(unselected_files))
-        for file in unselected_files:
-            self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                os.path.join('all_unread', file
-            )))
+        resp = self.client.post('/col/process',
+                                data=dict(action='download-all',
+                                          cols_selected=[self.sid2]))
 
-    def test_download_all_with_no_unread_submissions(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
-        db_session.add(source)
-        db_session.commit()
-        files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg', '3-abc3-msg.gpg', '4-abc4-msg.gpg']
-        common.setup_test_docs(sid, files)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
 
-        self._login_user()
-        rv = self.client.post('/bulk', data=dict(
-                action='download_all',
-                sid=sid,
-        ))
-        rv = self.client.get('/download_all_unread')
-        self.assertRedirects(rv, url_for('index'))
+        for file in self.files2:
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join('all', file))
+                )
+
+        for file in self.files:
+            try:
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join('all', file))
+            except KeyError:
+                pass
+            else:
+                self.assertTrue(False)
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the

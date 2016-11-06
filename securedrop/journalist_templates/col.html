@@ -23,9 +23,8 @@
     <form action="/bulk" method="post">
       <div class="document-actions">
         <div id='select-container'></div>
-        <button type="submit" name="action" value="download_all"><i class="fa fa-download"></i> Download all</button>
-        <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download selected</button>
-        <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-times"></i> Delete selected</button>
+        <button type="submit" name="action" value="download"><i class="fa fa-download"></i> Download</button>
+        <button type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected"><i class="fa fa-trash-o"></i> Delete</button>
       </div>
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
@@ -86,7 +85,7 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
     <input type="hidden" name="sid" value="{{ sid }}"/>
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}"/>
-    <button type="submit" class="danger"><i class="fa fa-times"></i> Delete collection</button>
+    <button type="submit" class="danger"><i class="fa fa-trash-o"></i> Delete Collection</button>
   </form>
 
 </div>
