@@ -599,10 +599,8 @@ class TestJournalist(TestCase):
         self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
 
         for file in (self.files[1], self.files2[1]):
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join('unread', file))
-                )
+            self.assertTrue(zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join('unread', file)))
 
         for file in (self.files[0], self.files2[0]):
             try:
