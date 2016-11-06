@@ -94,7 +94,7 @@ common_apache2_directory_declarations = <<eos
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
-    Require ip #{property['apache_allow_from']}
+    #{property['apache_allow_line']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Require all denied
@@ -105,7 +105,7 @@ common_apache2_directory_declarations = <<eos
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
-    Require ip #{property['apache_allow_from']}
+    #{property['apache_allow_line']}
   </Limit>
   <LimitExcept GET POST HEAD>
     Require all denied

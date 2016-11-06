@@ -2,3 +2,4 @@
 securedrop_user: vagrant
 securedrop_code: /vagrant/securedrop
 securedrop_data: /var/lib/securedrop
+apache_allow_line: "Require all granted"
