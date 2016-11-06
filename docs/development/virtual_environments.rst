@@ -117,7 +117,7 @@ across the full stack.
 
 If you want to receive OSSEC alerts or change any other settings, you will need
 to fill out your local copy of
-``./install_files/ansible_base/staging-specific.yml``.
+``./install_files/ansible-base/staging-specific.yml``.
 
 .. code:: sh
 
@@ -132,7 +132,7 @@ Prod
 ----
 
 You will need to fill out the production configuration file at
-``install_files/ansible_base/prod-specific.yml`` with custom secrets.
+``install_files/ansible-base/prod-specific.yml`` with custom secrets.
 The production playbook validates that staging values are not used in
 production. One of the values it verifies is that the user Ansible runs as is
 not ``vagrant`` To be able to run this playbook in a virtualized environment
