@@ -8,7 +8,7 @@ os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import store
 import common
-from db import db_session, Source
+from db import db_session, Source, Submission
 import crypto_util
 
 
@@ -36,8 +36,9 @@ class TestStore(unittest.TestCase):
 
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
         filenames = common.setup_test_docs(sid, files)
+        submissions = Submission.query.all()
 
-        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
+        archive = zipfile.ZipFile(store.get_bulk_archive(submissions))
 
         archivefile_contents = archive.namelist()
 
