@@ -293,7 +293,6 @@ class TestSource(TestCase):
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Disable JavaScript to Protect Your Anonymity", rv.data)
 
-
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
         """Attempting to login with an overly long codename should result in
