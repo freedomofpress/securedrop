@@ -540,7 +540,7 @@ class TestJournalist(TestCase):
                         len(unselected_files))
         for file in unselected_files:
             self.assertTrue(zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                os.path.join('all_unread_'+g.user.username, file
+                os.path.join('all_unread', file
             )))
 
     def test_download_all_with_no_unread_submissions(self):
