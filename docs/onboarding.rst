@@ -28,9 +28,9 @@ Determine access protocol for the Secure Viewing Station
 --------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
-public/private key pair - the *SecureDrop Application GPG Key*. As a
+public/private key pair - the *SecureDrop Submission Key*. As a
 result, each journalist needs a way to access the Secure Viewing
-Station with a Tails USB that includes the application private key.
+Station with a Tails USB that includes the submission private key.
 
 The access protocol for the Secure Viewing Station depends on the
 structure and distribution of your organization. If your organization
