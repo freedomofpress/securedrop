@@ -585,7 +585,7 @@ def download_all_unread():
     if docs == []:
         flash("No unread documents in collections!", "error")
         return redirect(url_for('index'))
-    return bulk_dl('all_unread_' + g.user.username, docs)
+    return bulk_dl('all_unread', docs)
 
 
 @app.route('/bulk', methods=('POST',))
@@ -642,6 +642,7 @@ def bulk_delete(sid, items_selected):
 def bulk_download(sid, items_selected):
     source = get_source(sid)
     return bulk_dl(source.journalist_filename, items_selected)
+
 
 def bulk_dl(zip_directory, items_selected):
     filenames = [store.path(item.source.filesystem_id, item.filename)
