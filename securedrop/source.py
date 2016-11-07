@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-import uuid
 from functools import wraps
-import zipfile
 from cStringIO import StringIO
 import subprocess
 from threading import Thread
@@ -347,6 +345,7 @@ def delete():
     flash("Reply deleted", "notification")
     return redirect(url_for('lookup'))
 
+
 @app.route('/delete-all', methods=('POST',))
 @login_required
 def batch_delete():
@@ -361,6 +360,7 @@ def batch_delete():
 
     flash("All replies have been deleted", "notification")
     return redirect(url_for('lookup'))
+
 
 def valid_codename(codename):
     # Ignore codenames that are too long to avoid DoS
@@ -408,7 +408,6 @@ def logout():
         flash(tor_msg, "error")
 
     return redirect(url_for('index'))
-        
 
 
 @app.route('/howto-disable-js')
