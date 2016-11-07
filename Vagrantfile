@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
     development.vm.box = "bento/ubuntu-14.04"
-    development.vm.network "forwarded_port", guest: 8080, host: 8080
-    development.vm.network "forwarded_port", guest: 8081, host: 8081
+    development.vm.network "forwarded_port", guest: 8080, host: 8080, auto_correct: true
+    development.vm.network "forwarded_port", guest: 8081, host: 8081, auto_correct: true
     development.vm.provision "ansible" do |ansible|
       # Hack to trick Vagrant into parsing the command-line args for
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
@@ -29,7 +29,6 @@ Vagrant.configure("2") do |config|
       }
     end
     development.vm.provider "virtualbox" do |v|
-      v.name = "development"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
       #
       # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
@@ -49,11 +48,8 @@ Vagrant.configure("2") do |config|
     end
     staging.vm.hostname = "mon-staging"
     staging.vm.box = "bento/ubuntu-14.04"
-    staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: true
+    staging.vm.network "private_network", ip: "10.0.1.3", virtualbox__intnet: internal_network_name
     staging.vm.synced_folder './', '/vagrant', disabled: true
-    staging.vm.provider "virtualbox" do |v|
-      v.name = "mon-staging"
-    end
   end
 
   config.vm.define 'app-staging', autostart: false do |staging|
@@ -64,12 +60,11 @@ Vagrant.configure("2") do |config|
     end
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-14.04"
-    staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: true
-    staging.vm.network "forwarded_port", guest: 80, host: 8082
-    staging.vm.network "forwarded_port", guest: 8080, host: 8083
+    staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: internal_network_name
+    staging.vm.network "forwarded_port", guest: 80, host: 8082, auto_correct: true
+    staging.vm.network "forwarded_port", guest: 8080, host: 8083, auto_correct: true
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
-      v.name = "app-staging"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
       #
       # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
@@ -103,11 +98,8 @@ Vagrant.configure("2") do |config|
     end
     prod.vm.hostname = "mon-prod"
     prod.vm.box = "bento/ubuntu-14.04"
-    prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
+    prod.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
-    prod.vm.provider "virtualbox" do |v|
-      v.name = "mon-prod"
-    end
   end
 
   config.vm.define 'app-prod', autostart: false do |prod|
@@ -118,10 +110,9 @@ Vagrant.configure("2") do |config|
     end
     prod.vm.hostname = "app-prod"
     prod.vm.box = "bento/ubuntu-14.04"
-    prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: true
+    prod.vm.network "private_network", ip: "10.0.1.4", virtualbox__intnet: internal_network_name
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
-      v.name = "app-prod"
       # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
       #
       # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
@@ -154,9 +145,6 @@ Vagrant.configure("2") do |config|
         'securedrop:children' => %w(development),
       }
     end
-    build.vm.provider "virtualbox" do |v|
-      v.name = "build"
-    end
   end
 
   # VM for testing Snap CI configuration changes.
@@ -170,9 +158,6 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
       ansible.verbose = 'v'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-    snapci.vm.provider "virtualbox" do |v|
-      v.name = "snapci"
     end
   end
 
@@ -256,4 +241,13 @@ def tor_ssh_proxy_command
     exit(1)
   end
   return "#{base_cmd} 127.0.0.1:9050 %h %p"
+end
+
+# Create a unique name for the VirtualBox internal network,
+# based on the directory name of the repo. This is to avoid
+# accidental IP collisions when running multiple instances
+# of the staging or prod environment concurrently.
+def internal_network_name
+  repo_root = File.expand_path(File.dirname(__FILE__))
+  return File.basename(repo_root)
 end
