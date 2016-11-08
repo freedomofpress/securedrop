@@ -23,9 +23,11 @@ Enter your GitHub token info into `config.json`.
 
 ### With Docker
 
-Set your `$GITHUB_TOKEN`, and run
+Run:
 
     docker run -it -v $(pwd)/state_dir:/opt/state_dir -e GITHUB_TOKEN=$GITHUB_TOKEN github_helpers
+
+replacing `$GITHUB_TOKEN` with your own GitHub token.
 
 ### Without Docker
 
