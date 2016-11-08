@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
       ansible.verbose = 'v'
       ansible.groups = {
-        'development' => %(development),
+        'development' => %w(development),
         'securedrop_application_server' => %w(development),
         'securedrop:children' => %w(development),
       }
@@ -83,8 +83,8 @@ Vagrant.configure("2") do |config|
       ansible.limit = 'all'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'securedrop_application_server' => %(app-staging),
-        'securedrop_monitor_server' => %(mon-staging),
+        'securedrop_application_server' => %w(app-staging),
+        'securedrop_monitor_server' => %w(mon-staging),
         'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
         'securedrop:children' => %w(staging),
       }
