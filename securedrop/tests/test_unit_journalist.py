@@ -6,6 +6,7 @@ import unittest
 import zipfile
 import mock
 import time
+import datetime
 
 from flask_testing import TestCase
 from flask import url_for, escape
@@ -496,8 +497,15 @@ class TestJournalist(TestCase):
 
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        journalist.delete_collection(source.filesystem_id)
-        time.sleep(1)  # Wait for Redis worker to delete docs
+        job = journalist.delete_collection(source.filesystem_id)
+
+        # Block for up to 5s to await asynchronous Redis job result
+        timeout = datetime.datetime.now() + datetime.timedelta(0,5)
+        while 1:
+            if job.result == "success":
+                break
+            elif datetime.datetime.now() > timeout:
+                self.assertTrue(False)
 
         # Encrypted documents no longer exist
         dir_source_docs = os.path.join(config.STORE_DIR, source.filesystem_id)

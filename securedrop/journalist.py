@@ -444,7 +444,7 @@ def col(sid):
 
 def delete_collection(source_id):
     # Delete the source's collection of submissions
-    worker.enqueue(store.delete_source_directory, source_id)
+    job = worker.enqueue(store.delete_source_directory, source_id)
 
     # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(source_id)
@@ -453,6 +453,7 @@ def delete_collection(source_id):
     source = get_source(source_id)
     db_session.delete(source)
     db_session.commit()
+    return job
 
 
 @app.route('/col/process', methods=('POST',))

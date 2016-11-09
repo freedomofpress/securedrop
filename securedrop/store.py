@@ -148,7 +148,9 @@ def secure_unlink(fn, recursive=False):
         command.append('-r')
     command.append(fn)
     subprocess.check_call(command)
+    return "success"
 
 
 def delete_source_directory(source_id):
     secure_unlink(path(source_id), recursive=True)
+    return "success"
