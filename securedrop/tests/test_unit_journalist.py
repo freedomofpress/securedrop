@@ -5,18 +5,20 @@ from cStringIO import StringIO
 import unittest
 import zipfile
 import mock
+import time
 
 from flask_testing import TestCase
 from flask import url_for, escape
+
+# Set environment variable so config.py uses a test environment
+os.environ['SECUREDROP_ENV'] = 'test'
+import config
 
 import crypto_util
 import journalist
 import common
 from db import (db_session, Source, Submission, Journalist, Reply,
                InvalidPasswordLength)
-
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
 
 
 class TestJournalist(TestCase):
@@ -26,7 +28,9 @@ class TestJournalist(TestCase):
 
     def add_source_and_submissions(self):
         sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
+        codename = crypto_util.display_id()
+        crypto_util.genkeypair(sid, codename)
+        source = Source(sid, codename)
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
@@ -449,7 +453,6 @@ class TestJournalist(TestCase):
         results = db_session.query(Submission.source_id == source.id).all()
         self.assertEqual(results, [])
 
-
     def test_delete_source_deletes_replies(self):
         """Verify that when a source is deleted, the replies that
         correspond to them are also deleted."""
@@ -466,6 +469,39 @@ class TestJournalist(TestCase):
         results = db_session.query(Reply.source_id == source.id).all()
         self.assertEqual(results, [])
 
+    def test_delete_source_deletes_source_key(self):
+        """Verify that when a source is deleted, the PGP key that corresponds
+        to them is also deleted."""
+
+        source, files = self.add_source_and_submissions()
+
+        # Source key exists
+        source_key = crypto_util.getkey(source.filesystem_id)
+        self.assertNotEqual(source_key, None)
+
+        journalist.delete_collection(source.filesystem_id)
+
+        # Source key no longer exists
+        source_key = crypto_util.getkey(source.filesystem_id)
+        self.assertEqual(source_key, None)
+
+    def test_delete_source_deletes_docs_on_disk(self):
+        """Verify that when a source is deleted, the encrypted documents that
+        exist on disk is also deleted."""
+
+        source, files = self.add_source_and_submissions()
+
+        # Encrypted documents exists
+        dir_source_docs = os.path.join(config.STORE_DIR, source.filesystem_id)
+
+        self.assertTrue(os.path.exists(dir_source_docs))
+
+        journalist.delete_collection(source.filesystem_id)
+        time.sleep(1)  # Wait for Redis worker to delete docs
+
+        # Encrypted documents no longer exist
+        dir_source_docs = os.path.join(config.STORE_DIR, source.filesystem_id)
+        self.assertFalse(os.path.exists(dir_source_docs))
 
     def test_bulk_download(self):
         source, files = self.add_source_and_submissions()
