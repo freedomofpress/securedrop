@@ -8,7 +8,7 @@ import gnupg
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
-from db import init_db, db_session, Source, Submission
+from db import init_db, db_session, Journalist, Reply, Source, Submission
 import crypto_util
 
 # TODO: the PID file for the redis worker is hard-coded below.
@@ -42,20 +42,40 @@ def init_gpg():
     return gpg
 
 
+def create_file(filename):
+    dirname = os.path.dirname(filename)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    with open(filename, 'w') as fp:
+        fp.write(str(uuid.uuid4()))
+
+
 def setup_test_docs(sid, files):
     filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]
 
     for filename in filenames:
-        dirname = os.path.dirname(filename)
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-        with open(filename, 'w') as fp:
-            fp.write(str(uuid.uuid4()))
+        create_file(filename)
 
         # Add Submission to the db
         source = Source.query.filter(Source.filesystem_id == sid).one()
         submission = Submission(source, os.path.basename(filename))
         db_session.add(submission)
+        db_session.commit()
+
+    return filenames
+
+
+def setup_test_replies(sid, journo_id, files):
+    filenames = [os.path.join(config.STORE_DIR, sid, file) for file in files]
+
+    for filename in filenames:
+        create_file(filename)
+
+        # Add Reply to the db
+        source = Source.query.filter(Source.filesystem_id == sid).one()
+        journalist = Journalist.query.filter(Journalist.id == journo_id).one()
+        reply = Reply(journalist, source, os.path.basename(filename))
+        db_session.add(reply)
         db_session.commit()
 
     return filenames

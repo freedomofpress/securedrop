@@ -11,4 +11,4 @@ q = Queue(name=queue_name, connection=Redis(), default_timeout=3600)
 
 
 def enqueue(*args, **kwargs):
-    q.enqueue(*args, **kwargs)
+    return q.enqueue(*args, **kwargs)
