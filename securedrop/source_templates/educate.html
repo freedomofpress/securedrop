@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="center">
+  <h2>Tips on using SecureDrop</h2>
+  <hr class="no-line"/>
+</div>
+
+<p>The complete documentation on how to use SecureDrop is provided by the Freedom of the Press Foundation.
+  It can be found at <a href="https://docs.securedrop.org/en/stable/source.html" target="_blank">this site</a>, but
+  for your convenience, there are a few important things here.</p>
+
+<p>SecureDrop is a Tor Hidden Service which means that we can't identify you by your web traffic, but this protection
+  only works while using our service. If you link to external documents or sites such as DropBox or Google Drive, it may
+  be possible for us or others to identify you. If you want to upload documents larger than the maximum size, you can
+  coordinate with one of the journalists to arrange for a second secure transfer method.</p>
+
+<a href="{{ url_for('lookup') }}">
+  <button type="submit" class="btn block pull-right" id="continue-button"><i class="fa fa-arrow-circle-o-right"></i> Got it!</button>
+</a>
+
+{% endblock %}

@@ -628,9 +628,9 @@ ul.plain {
 }
 
 a#already-have-codename {
-  float:right;
-  margin-right:12px;
-  margin-top:10px;
+  padding: 12px auto;
+  width: 100%;
+  text-align: right;
   color:#888;
   text-decoration:none;
 }
