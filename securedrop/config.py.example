@@ -76,6 +76,10 @@ GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
 # potential for exposing unintended files.
 TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 
+# Custom Notification Text
+# This is custom text that will appear on the source interface
+CUSTOM_NOTIFICATION = ''
+
 # Database configuration
 # TODO we currently use sqlite in production since it is sufficient and simple,
 # but in the future may want to be able to choose a different database

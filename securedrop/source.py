@@ -122,7 +122,8 @@ def check_tor2web():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',
+                           custom_notification=config.CUSTOM_NOTIFICATION)
 
 
 def generate_unique_codename(num_words):

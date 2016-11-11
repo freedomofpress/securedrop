@@ -45,6 +45,9 @@ local_deb_packages:
 
 ### Used by the app role ###
 
+# Custom text on source interface
+custom_notification_text: ""
+
 # Configuring the tor hidden services
 tor_instances:
   - service: ssh
