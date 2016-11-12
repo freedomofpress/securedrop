@@ -4,10 +4,8 @@ import re
 import config
 import zipfile
 import crypto_util
-import uuid
 import tempfile
 import subprocess
-from cStringIO import StringIO
 import gzip
 from werkzeug import secure_filename
 
@@ -17,7 +15,8 @@ import logging
 log = logging.getLogger(__name__)
 
 VALIDATE_FILENAME = re.compile(
-    "^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
+    "^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$"
+).match
 
 
 class PathException(Exception):
@@ -39,8 +38,8 @@ def verify(p):
 
     # os.path.abspath makes the path absolute and normalizes '/foo/../bar' to
     # '/bar', etc. We have to check that the path is normalized before checking
-    # that it starts with the `config.STORE_DIR` or else a malicious actor could
-    # append a bunch of '../../..' to access files outside of the store.
+    # that it starts with the `config.STORE_DIR` or else a malicious actor
+    # could append a bunch of '../../..' to access files outside of the store.
     if not p == os.path.abspath(p):
         raise PathException("The path is not absolute and/or normalized")
 
@@ -103,7 +102,11 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
         journalist_filename)
     encrypted_file_path = path(sid, encrypted_file_name)
     with SecureTemporaryFile("/tmp") as stf:
-        with gzip.GzipFile(filename=sanitized_filename, mode='wb', fileobj=stf) as gzf:
+        with gzip.GzipFile(
+            filename=sanitized_filename,
+            mode='wb',
+            fileobj=stf,
+        ) as gzf:
             # Buffer the stream into the gzip file to avoid excessive
             # memory consumption
             while True:

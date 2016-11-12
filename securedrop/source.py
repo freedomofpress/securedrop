@@ -72,7 +72,9 @@ def login_required(f):
 
 
 def ignore_static(f):
-    """Only executes the wrapped function if we're not loading a static resource."""
+    """
+    Only executes the wrapped function if we're not loading a static resource.
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if request.path.startswith('/static'):
@@ -111,8 +113,8 @@ def setup_g():
 @app.before_request
 @ignore_static
 def check_tor2web():
-        # ignore_static here so we only flash a single message warning about Tor2Web,
-        # corresponding to the intial page load.
+    # ignore_static here so we only flash a single message warning about
+    # Tor2Web, corresponding to the intial page load.
     if 'X-tor2web' in request.headers:
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
@@ -139,9 +141,10 @@ def generate_unique_codename(num_words):
         # the word list or the maximum codename length.
         if len(codename) > Source.MAX_CODENAME_LEN:
             app.logger.warning(
-                    "Generated a source codename that was too long, "
-                    "skipping it. This should not happen. "
-                    "(Codename='{}')".format(codename))
+                "Generated a source codename that was too long, "
+                "skipping it. This should not happen. "
+                "(Codename='{}')".format(codename)
+            )
             continue
 
         sid = crypto_util.hash_codename(codename)  # scrypt (slow)
@@ -154,8 +157,11 @@ def generate_unique_codename(num_words):
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. If you want "
-              "to create a new account, you should log out first.", "notification")
+        flash(
+            "You were redirected because you are already logged in. If you "
+            "want to create a new account, you should log out first.",
+            "notification"
+        )
         return redirect(url_for('lookup'))
 
     num_words = 7
@@ -262,8 +268,9 @@ def normalize_timestamps(sid):
         rc = subprocess.call(args)
         if rc != 0:
             app.logger.warning(
-                "Couldn't normalize submission timestamps (touch exited with %d)" %
-                rc)
+                "Couldn't normalize submission timestamps (touch exited "
+                "with %d)" % rc
+            )
 
 
 @app.route('/submit', methods=('POST',))
@@ -301,8 +308,10 @@ def submit():
 
     if first_submission:
         flash(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
-            "notification")
+            "Thanks for submitting something to SecureDrop! Please check back "
+            "later for replies.",
+            "notification",
+        )
     else:
         if msg:
             flash("Thanks! We received your message.", "notification")
@@ -367,15 +376,18 @@ def valid_codename(codename):
     # Ignore codenames that are too long to avoid DoS
     if len(codename) > Source.MAX_CODENAME_LEN:
         app.logger.info(
-                "Ignored attempted login because the codename was too long.")
+            "Ignored attempted login because the codename was too long."
+        )
         return False
 
     try:
         filesystem_id = crypto_util.hash_codename(codename)
     except crypto_util.CryptoException as e:
         app.logger.info(
-                "Could not compute filesystem ID for codename '{}': {}".format(
-                    codename, e))
+            "Could not compute filesystem ID for codename '{}': {}".format(
+                codename, e
+            )
+        )
         abort(500)
 
     source = Source.query.filter_by(filesystem_id=filesystem_id).first()
@@ -391,7 +403,8 @@ def login():
             return redirect(url_for('lookup', from_login='1'))
         else:
             app.logger.info(
-                    "Login failed for invalid codename".format(codename))
+                "Login failed for invalid codename".format(codename)
+            )
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
@@ -400,12 +413,14 @@ def login():
 def logout():
     if logged_in():
         session.clear()
-        tor_msg = Markup("""<strong>Important:</strong> Thank you for logging out.
-                         Please fully end your session by restarting
-                         Tor Browser: Click the <img src='static/i/toronion.png'
-                         alt='Tor icon' /> Tor onion icon in the toolbar above,
-                         click <strong>  New Identity</strong> and click
-                         <strong>Yes</strong> in the dialog box that appears.""")
+        tor_msg = Markup("""
+            <strong>Important:</strong> Thank you for logging out.
+            Please fully end your session by restarting
+            Tor Browser: Click the <img src='static/i/toronion.png'
+            alt='Tor icon' /> Tor onion icon in the toolbar above,
+            click <strong>  New Identity</strong> and click
+            <strong>Yes</strong> in the dialog box that appears.
+        """)
         flash(tor_msg, "error")
 
     return redirect(url_for('index'))

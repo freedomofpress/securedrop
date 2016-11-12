@@ -8,6 +8,7 @@ from Crypto.Util import Counter
 
 from gnupg._util import _STREAMLIKE_TYPES
 
+
 class SecureTemporaryFile(_TemporaryFileWrapper):
 
     """Temporary file that is ephemerally encrypted on the fly.
@@ -16,7 +17,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
     classes minimizes the chances of plaintext recovery through
     forensic disk analysis.
 
-    Adapted from Globaleaks' GLSecureTemporaryFile: https://github.com/globaleaks/GlobaLeaks/blob/master/backend/globaleaks/security.py#L35
+    Adapted from Globaleaks' GLSecureTemporaryFile:
+        https://github.com/globaleaks/GlobaLeaks/blob/master/backend/globaleaks/security.py#L35
 
     WARNING: you can't use this like a normal file object. It supports
     being written to exactly once, then read from exactly once.

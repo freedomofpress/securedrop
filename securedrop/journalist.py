@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 import os
 from datetime import datetime
 import functools
@@ -8,7 +7,7 @@ from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
@@ -17,9 +16,8 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, NoResultFound,
-                WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength)
+                SourceStar, get_one_or_else, LoginThrottledException,
+                InvalidPasswordLength)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -115,13 +113,17 @@ def login():
             login_flashed_msg = "Login failed."
 
             if isinstance(e, LoginThrottledException):
-                login_flashed_msg += " Please wait at least 60 seconds before logging in again."
+                login_flashed_msg += \
+                    " Please wait at least 60 seconds before logging in again."
             else:
                 try:
                     user = Journalist.query.filter_by(
                         username=request.form['username']).one()
                     if user.is_totp:
-                        login_flashed_msg += " Please wait for a new two-factor token before logging in again."
+                        login_flashed_msg += (
+                            " Please wait for a new "
+                            "two-factor token before logging in again."
+                        )
                 except:
                     pass
 
@@ -186,8 +188,13 @@ def admin_add_user():
                 db_session.commit()
             except InvalidPasswordLength:
                 form_valid = False
-                flash("Your password is too long (maximum length {} characters)".format(
-                        Journalist.MAX_PASSWORD_LEN), "error")
+                flash(
+                    "Your password is too long "
+                    "(maximum length {} characters)".format(
+                        Journalist.MAX_PASSWORD_LEN
+                    ),
+                    "error"
+                )
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
@@ -221,6 +228,7 @@ def admin_new_user_two_factor():
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
 
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
@@ -270,9 +278,13 @@ def admin_edit_user(user_id):
                 flash("Password successfully changed for user {} ".format(
                     user.username), "notification")
             except InvalidPasswordLength:
-                flash("Your password is too long "
-                      "(maximum length {} characters)".format(
-                      Journalist.MAX_PASSWORD_LEN), "error")
+                flash(
+                    "Your password is too long "
+                    "(maximum length {} characters)".format(
+                        Journalist.MAX_PASSWORD_LEN
+                    ),
+                    "error"
+                )
                 return redirect(url_for("admin_edit_user", user_id=user_id))
 
         user.is_admin = bool(request.form.get('is_admin'))
@@ -294,7 +306,9 @@ def admin_delete_user(user_id):
     else:
         app.logger.error(
             "Admin {} tried to delete nonexistent user with pk={}".format(
-            g.user.username, user_id))
+                g.user.username, user_id
+            )
+        )
         abort(404)
 
     return redirect(url_for('admin_index'))
@@ -313,9 +327,13 @@ def edit_account():
             try:
                 user.set_password(request.form['password'])
             except InvalidPasswordLength:
-                flash("Your password is too long "
-                      "(maximum length {} characters)".format(
-                      Journalist.MAX_PASSWORD_LEN), "error")
+                flash(
+                    "Your password is too long "
+                    "(maximum length {} characters)".format(
+                        Journalist.MAX_PASSWORD_LEN
+                    ),
+                    "error",
+                )
                 return redirect(url_for("edit_account"))
 
         try:
@@ -575,7 +593,8 @@ def download_unread(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     docs = Submission.query.filter(
         Submission.source_id == id,
-        Submission.downloaded == False).all()
+        Submission.downloaded is False,
+    ).all()
     return bulk_download(sid, docs)
 
 

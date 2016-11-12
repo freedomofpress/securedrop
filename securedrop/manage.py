@@ -95,7 +95,11 @@ def reset():
 
     # Erase the development db file
     assert hasattr(
-        config, 'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
+        config, 'DATABASE_FILE'
+    ), (
+        "TODO: ./manage.py doesn't know how "
+        "to clear the db if the backend is not sqlite"
+    )
     os.remove(config.DATABASE_FILE)
 
     # Regenerate the database
@@ -122,7 +126,7 @@ def add_admin():
         if len(password) > Journalist.MAX_PASSWORD_LEN:
             print ("Your password is too long (maximum length {} characters). "
                    "Please pick a shorter password.".format(
-                   Journalist.MAX_PASSWORD_LEN))
+                       Journalist.MAX_PASSWORD_LEN))
             continue
 
         if password == password_again:
@@ -149,7 +153,10 @@ def add_admin():
         if "username is not unique" in str(e):
             print "ERROR: That username is already taken!"
         else:
-            print "ERROR: An unexpected error occurred, traceback: \n{}".format(e)
+            print (
+                "ERROR: An unexpected error "
+                "occurred, traceback: \n{}".format(e)
+            )
     else:
         print "Admin '{}' successfully added".format(username)
         if not otp_secret:
@@ -164,10 +171,20 @@ def add_admin():
             qr.add_data(uri)
             qr.print_ascii(tty=sys.stdout.isatty())
             print
-            print "If the barcode does not render correctly, try changing your terminal's font, (Monospace for Linux, Menlo for OS X)."
-            print "If you are using iTerm on Mac OS X, you will need to change the \"Non-ASCII Font\", which is your profile's Text settings."
+            print (
+                "If the barcode does not render correctly, try changing your "
+                "terminal's font, (Monospace for Linux, Menlo for OS X)."
+            )
+            print (
+                "If you are using iTerm on Mac OS X, you will need to "
+                "change the \"Non-ASCII Font\", which is your profile's "
+                "Text settings."
+            )
             print
-            print "Can't scan the barcode? Enter following shared secret manually:"
+            print (
+                "Can't scan the barcode? Enter following shared secret "
+                "manually:"
+            )
             print admin.formatted_otp_secret
             print
 
@@ -208,27 +225,47 @@ def clean_tmp():
 
 
 def get_args():
-    parser = ArgumentParser(prog=__file__,
-                            description='A tool to help admins manage and devs hack')
+    parser = ArgumentParser(
+        prog=__file__,
+        description='A tool to help admins manage and devs hack'
+    )
 
     subparsers = parser.add_subparsers()
 
-    run_subparser = subparsers.add_parser('run', help='Run the dev webserver (source & journalist)')
+    run_subparser = subparsers.add_parser(
+        'run',
+        help='Run the dev webserver (source & journalist)',
+    )
     run_subparser.set_defaults(func=run)
 
-    unit_test_subparser = subparsers.add_parser('unit-test', help='Run the unit tests')
+    unit_test_subparser = subparsers.add_parser(
+        'unit-test',
+        help='Run the unit tests',
+    )
     unit_test_subparser.set_defaults(func=test_unit)
 
-    test_subparser = subparsers.add_parser('test', help='Run the full test suite')
+    test_subparser = subparsers.add_parser(
+        'test',
+        help='Run the full test suite',
+    )
     test_subparser.set_defaults(func=test)
 
-    reset_subparser = subparsers.add_parser('reset', help="DANGER!!! Clears the SecureDrop application's state")
+    reset_subparser = subparsers.add_parser(
+        'reset',
+        help="DANGER!!! Clears the SecureDrop application's state",
+    )
     reset_subparser.set_defaults(func=reset)
 
-    add_admin_subparser = subparsers.add_parser('add-admin', help='Add a new admin to the application')
+    add_admin_subparser = subparsers.add_parser(
+        'add-admin',
+        help='Add a new admin to the application',
+    )
     add_admin_subparser.set_defaults(func=add_admin)
 
-    clean_tmp_subparser = subparsers.add_parser('clean-tmp', help='Cleanup the SecureDrop temp directory')
+    clean_tmp_subparser = subparsers.add_parser(
+        'clean-tmp',
+        help='Cleanup the SecureDrop temp directory',
+    )
     clean_tmp_subparser.set_defaults(func=clean_tmp)
 
     return parser
