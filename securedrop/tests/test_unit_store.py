@@ -11,6 +11,11 @@ import common
 from db import db_session, Source
 import crypto_util
 
+SID = (
+    'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPN'
+    'ZMVIWDCJBBHMUDBGFHXCQ3R'
+)
+
 
 class TestStore(unittest.TestCase):
 
@@ -29,13 +34,12 @@ class TestStore(unittest.TestCase):
             store.verify(config.STORE_DIR + "_backup")
 
     def test_get_zip(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
+        source = Source(SID, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
 
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
+        filenames = common.setup_test_docs(SID, files)
 
         archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
 
@@ -47,9 +51,7 @@ class TestStore(unittest.TestCase):
             self.assertEquals(zipped_file_content, actual_file_content)
 
     def test_rename_valid_submission(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-
-        source_dir = os.path.join(config.STORE_DIR, sid)
+        source_dir = os.path.join(config.STORE_DIR, SID)
         if not os.path.exists(source_dir):
             os.makedirs(source_dir)
 
@@ -58,7 +60,7 @@ class TestStore(unittest.TestCase):
 
         new_filestem = 'abc2'
         expected_filename = '1-abc2-msg.gpg'
-        actual_filename = store.rename_submission(sid, old_filename,
+        actual_filename = store.rename_submission(SID, old_filename,
                                                   new_filestem)
         self.assertEquals(actual_filename, expected_filename)
 

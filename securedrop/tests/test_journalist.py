@@ -6,6 +6,7 @@ import journalist
 import common
 from db import Journalist, InvalidPasswordLength, db_session
 
+
 class TestJournalist(unittest.TestCase):
 
     def setUp(self):
@@ -93,15 +94,16 @@ class TestJournalistLogin(unittest.TestCase):
         self.username = "test user"
         self.password = "test password"
         self.user = Journalist(
-                username=self.username,
-                password=self.password)
+            username=self.username,
+            password=self.password,
+        )
         db_session.add(self.user)
         db_session.commit()
 
-        # Use a patched login function to avoid dealing with two-factor tokens
-        # (which are being ignored here anyway)
-        self.login = lambda username, password: \
-                Journalist.login(username, password, "")
+    # Use a patched login function to avoid dealing with two-factor tokens
+    # (which are being ignored here anyway)
+    def login(self, username, password):
+        Journalist.login(username, password, "")
 
     def tearDown(self):
         common.shared_teardown()
@@ -116,22 +118,25 @@ class TestJournalistLogin(unittest.TestCase):
     def test_login_with_valid_length_password_calls_scrypt(
             self, mock_scrypt_hash, mock_valid_password):
         self.login(self.username, self.password)
-        self.assertTrue(mock_scrypt_hash.called,
-                "Failed to call _scrypt_hash for password w/ valid length")
+        self.assertTrue(
+            mock_scrypt_hash.called,
+            "Failed to call _scrypt_hash for password w/ valid length",
+        )
 
     @patch('db.Journalist._scrypt_hash')
     def test_login_with_invalid_length_password_doesnt_call_scrypt(
             self, mock_scrypt_hash):
         print "test_login_with_invalid_length_password_calls_scrypt"
-        invalid_pw = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+        invalid_pw = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
         with self.assertRaises(InvalidPasswordLength):
             self.login(self.username, invalid_pw)
-        self.assertFalse(mock_scrypt_hash.called,
-                "Called _scrypt_hash for password w/ invalid length")
+        self.assertFalse(
+            mock_scrypt_hash.called,
+            "Called _scrypt_hash for password w/ invalid length",
+        )
 
     @classmethod
     def tearDownClass(cls):
         # Reset the module variables that were changed to mocks so we don't
         # break other tests
         reload(journalist)
-

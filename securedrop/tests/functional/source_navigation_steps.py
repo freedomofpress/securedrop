@@ -1,5 +1,6 @@
 import tempfile
 
+
 class SourceNavigationSteps():
 
     def _source_visits_source_homepage(self):

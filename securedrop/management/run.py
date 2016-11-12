@@ -52,10 +52,11 @@ class DevServerProcess(subprocess.Popen):
 
         super(DevServerProcess, self).__init__(
             self.cmd,
-            stdin  = subprocess.PIPE,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.STDOUT,
-            preexec_fn = os.setsid)
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            preexec_fn=os.setsid,
+        )
 
     def print_label(self, to):
         label = "\n => {} <= \n\n".format(self.label)
@@ -65,8 +66,8 @@ class DevServerProcess(subprocess.Popen):
 
     def fileno(self):
         """
-        Implement fileno() in order to use DevServerProcesses with select.select
-        directly.
+        Implement fileno() in order to use DevServerProcesses with
+        select.select directly.
 
         Note this method assumes we only want to select this process'
         stdout. This is a reasonable assumption for a DevServerProcess
@@ -147,7 +148,7 @@ def run():
     Ctrl-C will kill the servers and return you to the terminal.
 
     Useful resources:
-    * https://stackoverflow.com/questions/22565606/python-asynhronously-print-stdout-from-multiple-subprocesses
+    https://stackoverflow.com/questions/22565606/python-asynhronously-print-stdout-from-multiple-subprocesses
 
     """
     procs = [
