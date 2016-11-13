@@ -1,30 +1,30 @@
-import unittest
-from selenium import webdriver
-from selenium.webdriver.firefox import firefox_binary
-from selenium.common.exceptions import WebDriverException
-from multiprocessing import Process
-import socket
-import shutil
-import os
-import gnupg
-import urllib2
-import sys
+# -*- coding: utf-8 -*-
 
+from datetime import datetime
+import mock
+from multiprocessing import Process
+import os
+import shutil
+import signal
+import socket
+import sys
+import time
+import traceback
+import unittest
+import urllib2
+
+import gnupg
+from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.firefox import firefox_binary
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
-
-import source
+import db
 import journalist
-from tests import common
-import urllib2
-
-import signal
-import traceback
-from datetime import datetime
-import time
-import mock
+import source
+import tests.utils as utils
 
 
 class FunctionalTest():
@@ -54,9 +54,9 @@ class FunctionalTest():
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        common.create_directories()
-        self.gpg = common.init_gpg()
-        common.init_db()
+        utils.env.create_directories()
+        self.gpg = utils.env.init_gpg()
+        db.init_db()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()
@@ -94,7 +94,7 @@ class FunctionalTest():
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        common.clean_root()
+        utils.env.teardown()
         self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()

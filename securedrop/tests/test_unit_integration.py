@@ -1,38 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-import unittest
-import re
+
 from cStringIO import StringIO
-import zipfile
-from time import sleep
-import tempfile
-import shutil
-import time
 import gzip
-
 import mock
+import os
+import re
+import shutil
+import tempfile
+import time
+import unittest
+import zipfile
 
-import gnupg
-from flask import session, g, escape
 from bs4 import BeautifulSoup
+from flask import session, g, escape
+import gnupg
 
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import crypto_util
-import source
-import journalist
-import common
 from db import db_session, Journalist
+import journalist
+import source
 import store
-
-
-
-def _block_on_reply_keypair_gen(codename):
-    sid = crypto_util.hash_codename(codename)
-    while not crypto_util.getkey(sid):
-        sleep(0.1)
+import utils
 
 
 class TestIntegration(unittest.TestCase):
@@ -44,21 +36,8 @@ class TestIntegration(unittest.TestCase):
             token='mocked'),
             follow_redirects=True)
 
-    def _wait_for(self, function_with_assertion, timeout=5):
-        """Polling wait for an arbitrary assertion."""
-        # Thanks to
-        # http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
-        start_time = time.time()
-        while time.time() - start_time < timeout:
-            try:
-                return function_with_assertion()
-            except AssertionError:
-                time.sleep(0.1)
-        # one more try, which will raise any errors if they are outstanding
-        return function_with_assertion()
-
     def setUp(self):
-        common.shared_setup()
+        utils.env.setup()
 
         self.source_app = source.app.test_client()
         self.journalist_app = journalist.app.test_client()
@@ -81,24 +60,24 @@ class TestIntegration(unittest.TestCase):
         self._login_user()
 
     def tearDown(self):
-        common.shared_teardown()
+        utils.env.teardown()
 
     def test_submit_message(self):
         """When a source creates an account, test that a new entry appears in the journalist interface"""
         test_msg = "This is a test message."
 
         with self.source_app as source_app:
-            rv = source_app.get('/generate')
-            rv = source_app.post('/create', follow_redirects=True)
+            resp = source_app.get('/generate')
+            resp = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
             # redirected to submission form
-            rv = self.source_app.post('/submit', data=dict(
+            resp = self.source_app.post('/submit', data=dict(
                 msg=test_msg,
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            common.logout(source_app)
+            self.assertEqual(resp.status_code, 200)
+            source_app.get('/logout')
 
         # Request the Journalist Interface index
         rv = self.journalist_app.get('/')
@@ -112,58 +91,58 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("1 unread", unread_span.get_text())
 
         col_url = soup.select('ul#cols > li a')[0]['href']
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
         span = soup.select('ul#submissions li span.info span')[0]
         self.assertRegexpMatches(span['title'], "\d+ bytes")
 
-        rv = self.journalist_app.get(submission_url)
-        self.assertEqual(rv.status_code, 200)
-        decrypted_data = self.gpg.decrypt(rv.data)
+        resp = self.journalist_app.get(submission_url)
+        self.assertEqual(resp.status_code, 200)
+        decrypted_data = self.gpg.decrypt(resp.data)
         self.assertTrue(decrypted_data.ok)
         self.assertEqual(decrypted_data.data, test_msg)
 
         # delete submission
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             action='confirm_delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
 
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
-        self.assertIn("The following file has been selected for", rv.data)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
+        self.assertIn("The following file has been selected for", resp.data)
 
         # confirm delete submission
         doc_name = soup.select
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
             doc_names_selected=doc_name,
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
-        self.assertIn("Submission deleted.", rv.data)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
+        self.assertIn("Submission deleted.", resp.data)
 
         # confirm that submission deleted and absent in list of submissions
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("No documents to display.", rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("No documents to display.", resp.data)
 
         # the file should be deleted from the filesystem
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
-        self._wait_for(
+        utils.async.wait_for_assertion(
             lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
         )
 
@@ -173,22 +152,22 @@ class TestIntegration(unittest.TestCase):
         test_filename = "test.txt"
 
         with self.source_app as source_app:
-            rv = source_app.get('/generate')
-            rv = source_app.post('/create', follow_redirects=True)
+            resp = source_app.get('/generate')
+            resp = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
             # redirected to submission form
-            rv = self.source_app.post('/submit', data=dict(
+            resp = self.source_app.post('/submit', data=dict(
                 msg="",
                 fh=(StringIO(test_file_contents), test_filename),
             ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            common.logout(source_app)
+            self.assertEqual(resp.status_code, 200)
+            source_app.get('/logout')
 
-        rv = self.journalist_app.get('/')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Sources", rv.data)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get('/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Sources", resp.data)
+        soup = BeautifulSoup(resp.data)
 
         # The source should have a "download unread" link that says "1 unread"
         col = soup.select('ul#cols > li')[0]
@@ -196,17 +175,17 @@ class TestIntegration(unittest.TestCase):
         self.assertIn("1 unread", unread_span.get_text())
 
         col_url = soup.select('ul#cols > li a')[0]['href']
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
         span = soup.select('ul#submissions li span.info span')[0]
         self.assertRegexpMatches(span['title'], "\d+ bytes")
 
-        rv = self.journalist_app.get(submission_url)
-        self.assertEqual(rv.status_code, 200)
-        decrypted_data = self.gpg.decrypt(rv.data)
+        resp = self.journalist_app.get(submission_url)
+        self.assertEqual(resp.status_code, 200)
+        decrypted_data = self.gpg.decrypt(resp.data)
         self.assertTrue(decrypted_data.ok)
 
         sio = StringIO(decrypted_data.data)
@@ -215,43 +194,43 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(unzipped_decrypted_data, test_file_contents)
 
         # delete submission
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             action='confirm_delete',
             sid=sid,
             doc_names_selected=doc_name
         ))
 
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
-        self.assertIn("The following file has been selected for", rv.data)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
+        self.assertIn("The following file has been selected for", resp.data)
 
         # confirm delete submission
         doc_name = soup.select
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             action='delete',
             sid=sid,
             doc_names_selected=doc_name,
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
-        self.assertIn("Submission deleted.", rv.data)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
+        self.assertIn("Submission deleted.", resp.data)
 
         # confirm that submission deleted and absent in list of submissions
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("No documents to display.", rv.data)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("No documents to display.", resp.data)
 
         # the file should be deleted from the filesystem
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
-        self._wait_for(
+        utils.async.wait_for_assertion(
             lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
         )
 
@@ -312,85 +291,85 @@ class TestIntegration(unittest.TestCase):
         test_msg = "This is a test message."
 
         with self.source_app as source_app:
-            rv = source_app.get('/generate')
-            rv = source_app.post('/create', follow_redirects=True)
+            resp = source_app.get('/generate')
+            resp = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
             sid = g.sid
             # redirected to submission form
-            rv = source_app.post('/submit', data=dict(
+            resp = source_app.post('/submit', data=dict(
                 msg=test_msg,
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
             self.assertFalse(g.source.flagged)
-            common.logout(source_app)
+            source_app.get('/logout')
 
-        rv = self.journalist_app.get('/')
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Sources", rv.data)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get('/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Sources", resp.data)
+        soup = BeautifulSoup(resp.data)
         col_url = soup.select('ul#cols > li a')[0]['href']
 
-        rv = self.journalist_app.get(col_url)
-        self.assertEqual(rv.status_code, 200)
+        resp = self.journalist_app.get(col_url)
+        self.assertEqual(resp.status_code, 200)
 
         with self.source_app as source_app:
-            rv = source_app.post('/login', data=dict(
+            resp = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
             self.assertFalse(g.source.flagged)
-            common.logout(source_app)
+            source_app.get('/logout')
 
         with self.journalist_app as journalist_app:
-            rv = journalist_app.post('/flag', data=dict(
+            resp = journalist_app.post('/flag', data=dict(
                 sid=sid))
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
 
         with self.source_app as source_app:
-            rv = source_app.post('/login', data=dict(
+            resp = source_app.post('/login', data=dict(
                 codename=codename), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
             self.assertTrue(g.source.flagged)
             source_app.get('/lookup')
             self.assertTrue(g.source.flagged)
-            common.logout(source_app)
+            source_app.get('/logout')
 
-        # Block until the reply keypair has been generated, so we can test
-        # sending a reply
-        _block_on_reply_keypair_gen(codename)
+        # Block up to 15s for the reply keypair, so we can test sending a reply
+        utils.async.wait_for_assertion(
+            lambda: self.assertNotEqual(crypto_util.getkey(sid), None), 15)
 
         # Create 2 replies to test deleting on journalist and source interface
         for i in range(2):
-            rv = self.journalist_app.post('/reply', data=dict(
+            resp = self.journalist_app.post('/reply', data=dict(
                 sid=sid,
                 msg=test_reply
             ), follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
 
         if not expected_success:
             pass
         else:
-            self.assertIn("Thanks! Your reply has been stored.", rv.data)
+            self.assertIn("Thanks! Your reply has been stored.", resp.data)
 
         with self.journalist_app as journalist_app:
-            rv = journalist_app.get(col_url)
-            self.assertIn("reply-", rv.data)
+            resp = journalist_app.get(col_url)
+            self.assertIn("reply-", resp.data)
 
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(resp.data)
 
         # Download the reply and verify that it can be decrypted with the
         # journalist's key as well as the source's reply key
         sid = soup.select('input[name="sid"]')[0]['value']
         checkbox_values = [
             soup.select('input[name="doc_names_selected"]')[1]['value']]
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
             action='download',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
 
-        zf = zipfile.ZipFile(StringIO(rv.data), 'r')
+        zf = zipfile.ZipFile(StringIO(resp.data), 'r')
         data = zf.read(zf.namelist()[0])
         self._can_decrypt_with_key(data, config.JOURNALIST_KEY)
         self._can_decrypt_with_key(data, crypto_util.getkey(sid), codename)
@@ -401,39 +380,36 @@ class TestIntegration(unittest.TestCase):
         self.helper_filenames_delete(soup, last_reply_number)
 
         with self.source_app as source_app:
-            rv = source_app.post('/login', data=dict(codename=codename),
+            resp = source_app.post('/login', data=dict(codename=codename),
                                  follow_redirects=True)
-            self.assertEqual(rv.status_code, 200)
-            rv = source_app.get('/lookup')
-            self.assertEqual(rv.status_code, 200)
+            self.assertEqual(resp.status_code, 200)
+            resp = source_app.get('/lookup')
+            self.assertEqual(resp.status_code, 200)
 
             if not expected_success:
                 # there should be no reply
-                self.assertNotIn("You have received a reply.", rv.data)
+                self.assertNotIn("You have received a reply.", resp.data)
             else:
                 self.assertIn(
                     "You have received a reply. For your security, please delete all replies when you're done with them.",
-                    rv.data)
-                self.assertIn(test_reply, rv.data)
-                soup = BeautifulSoup(rv.data)
+                    resp.data)
+                self.assertIn(test_reply, resp.data)
+                soup = BeautifulSoup(resp.data)
                 msgid = soup.select(
                     'form.message > input[name="reply_filename"]')[0]['value']
-                rv = source_app.post('/delete', data=dict(
+                resp = source_app.post('/delete', data=dict(
                     sid=sid,
                     reply_filename=msgid
                 ), follow_redirects=True)
-                self.assertEqual(rv.status_code, 200)
-                self.assertIn("Reply deleted", rv.data)
+                self.assertEqual(resp.status_code, 200)
+                self.assertIn("Reply deleted", resp.data)
 
                 # Make sure the reply is deleted from the filesystem
-                self._wait_for(
-                    lambda: self.assertFalse(
-                        os.path.exists(
-                            store.path(
-                                sid,
-                                msgid))))
+                utils.async.wait_for_assertion(
+                    lambda: self.assertFalse(os.path.exists(
+                        store.path(sid, msgid))))
 
-                common.logout(source_app)
+            source_app.get('/logout')
 
     def test_delete_collection(self):
         """Test the "delete collection" button on each collection page"""
@@ -445,27 +421,27 @@ class TestIntegration(unittest.TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
 
-        rv = self.journalist_app.get('/')
+        resp = self.journalist_app.get('/')
         # navigate to the collection page
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(resp.data)
         first_col_url = soup.select('ul#cols > li a')[0]['href']
-        rv = self.journalist_app.get(first_col_url)
-        self.assertEqual(rv.status_code, 200)
+        resp = self.journalist_app.get(first_col_url)
+        self.assertEqual(resp.status_code, 200)
 
         # find the delete form and extract the post parameters
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(resp.data)
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        rv = self.journalist_app.post('/col/delete/' + sid,
+        resp = self.journalist_app.post('/col/delete/' + sid,
                                       follow_redirects=True)
-        self.assertEquals(rv.status_code, 200)
+        self.assertEquals(resp.status_code, 200)
 
-        self.assertIn(escape("%s's collection deleted" % (col_name,)), rv.data)
-        self.assertIn("No documents have been submitted!", rv.data)
+        self.assertIn(escape("%s's collection deleted" % (col_name,)), resp.data)
+        self.assertIn("No documents have been submitted!", resp.data)
 
         # Make sure the collection is deleted from the filesystem
-        self._wait_for(
+        utils.async.wait_for_assertion(
             lambda: self.assertFalse(os.path.exists(store.path(sid)))
         )
 
@@ -481,22 +457,22 @@ class TestIntegration(unittest.TestCase):
                 msg="This is a test " + str(i) + ".",
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
-            common.logout(self.source_app)
+            self.source_app.get('/logout')
 
-        rv = self.journalist_app.get('/')
+        resp = self.journalist_app.get('/')
         # get all the checkbox values
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(resp.data)
         checkbox_values = [checkbox['value'] for checkbox in
                            soup.select('input[name="cols_selected"]')]
-        rv = self.journalist_app.post('/col/process', data=dict(
+        resp = self.journalist_app.post('/col/process', data=dict(
             action='delete',
             cols_selected=checkbox_values
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("%s collections deleted" % (num_sources,), rv.data)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("%s collections deleted" % (num_sources,), resp.data)
 
         # Make sure the collections are deleted from the filesystem
-        self._wait_for(lambda: self.assertFalse(
+        utils.async.wait_for_assertion(lambda: self.assertFalse(
             any([os.path.exists(store.path(sid)) for sid in checkbox_values])))
 
     def test_filenames(self):
@@ -507,14 +483,14 @@ class TestIntegration(unittest.TestCase):
         self.helper_filenames_submit()
 
         # navigate to the collection page
-        rv = self.journalist_app.get('/')
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get('/')
+        soup = BeautifulSoup(resp.data)
         first_col_url = soup.select('ul#cols > li a')[0]['href']
-        rv = self.journalist_app.get(first_col_url)
-        self.assertEqual(rv.status_code, 200)
+        resp = self.journalist_app.get(first_col_url)
+        self.assertEqual(resp.status_code, 200)
 
         # test filenames and sort order
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(resp.data)
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         for i, submission_link in enumerate(
                 soup.select('ul#submissions li a .filename')):
@@ -530,17 +506,17 @@ class TestIntegration(unittest.TestCase):
         self.helper_filenames_submit()
 
         # navigate to the collection page
-        rv = self.journalist_app.get('/')
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get('/')
+        soup = BeautifulSoup(resp.data)
         first_col_url = soup.select('ul#cols > li a')[0]['href']
-        rv = self.journalist_app.get(first_col_url)
-        self.assertEqual(rv.status_code, 200)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(first_col_url)
+        self.assertEqual(resp.status_code, 200)
+        soup = BeautifulSoup(resp.data)
 
         # delete file #2
         self.helper_filenames_delete(soup, 1)
-        rv = self.journalist_app.get(first_col_url)
-        soup = BeautifulSoup(rv.data)
+        resp = self.journalist_app.get(first_col_url)
+        soup = BeautifulSoup(resp.data)
 
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
@@ -564,15 +540,15 @@ class TestIntegration(unittest.TestCase):
         ))
 
         # logout
-        common.logout(self.journalist_app)
+        self.journalist_app.get('/logout')
 
         # login with new credentials should redirect to index page
-        rv = self.journalist_app.post('/login', data=dict(
+        resp = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
             password='newpass',
             token='mocked',
             follow_redirects=True))
-        self.assertEqual(rv.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
 
     def test_login_after_regenerate_hotp(self):
         """Test that journalists can login after resetting their HOTP 2fa"""
@@ -582,20 +558,20 @@ class TestIntegration(unittest.TestCase):
             otp_secret=123456))
 
         # successful verificaton should redirect to /account
-        rv = self.journalist_app.post('/account/2fa', data=dict(
+        resp = self.journalist_app.post('/account/2fa', data=dict(
             token=self.user.hotp))
-        self.assertEqual(rv.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
 
         # log out
-        common.logout(self.journalist_app)
-
+        self.journalist_app.get('/logout')
+        
         # login with new 2fa secret should redirect to index page
-        rv = self.journalist_app.post('/login', data=dict(
+        resp = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
             password=self.user_pw,
             token=self.user.hotp,
             follow_redirects=True))
-        self.assertEqual(rv.status_code, 302)
+        self.assertEqual(resp.status_code, 302)
 
     def helper_filenames_submit(self):
         self.source_app.post('/submit', data=dict(
@@ -617,27 +593,27 @@ class TestIntegration(unittest.TestCase):
             soup.select('input[name="doc_names_selected"]')[i]['value']]
 
         # delete
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
             action='confirm_delete',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
+        self.assertEqual(resp.status_code, 200)
         self.assertIn(
             "The following file has been selected for <strong>permanent deletion</strong>",
-            rv.data)
+            resp.data)
 
         # confirm delete
-        rv = self.journalist_app.post('/bulk', data=dict(
+        resp = self.journalist_app.post('/bulk', data=dict(
             sid=sid,
             action='delete',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
-        self.assertEqual(rv.status_code, 200)
-        self.assertIn("Submission deleted.", rv.data)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Submission deleted.", resp.data)
 
         # Make sure the files were deleted from the filesystem
-        self._wait_for(lambda: self.assertFalse(
+        utils.async.wait_for_assertion(lambda: self.assertFalse(
             any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
 
 

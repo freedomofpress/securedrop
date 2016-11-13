@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os
 import unittest
+
 # Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
+
 import config
-import common
 import crypto_util
+import utils
 
 
 class TestCryptoUtil(unittest.TestCase):
@@ -14,10 +17,10 @@ class TestCryptoUtil(unittest.TestCase):
     """The set of tests for crypto_util.py."""
 
     def setUp(self):
-        common.shared_setup()
+        utils.env.setup()
 
     def tearDown(self):
-        common.shared_teardown()
+        utils.env.teardown()
 
     def test_clean(self):
         with self.assertRaises(crypto_util.CryptoException):
