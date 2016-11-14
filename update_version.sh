@@ -6,18 +6,23 @@ set -e
 
 # Only run this on the Vagrant build VM, with dch and git available
 if [[ "$(whoami)" != 'vagrant' ]]; then
-  echo 'Only run this on the Vagrant build VM'
+  echo 'Only run this on the Vagrant build VM!'
   exit 1
 fi
 
-sudo apt-get install devscripts git -qq
+# Since we're running in a VM, we won't have access to ~/.gitconfig. So the
+# repo-level git user config file must be set.
+$(grep -q '^\[user\]' /vagrant/.git/config) || echo 'Please set your git' \
+	'user config in /vagrant/.git/config and retry!'
 
-NEW_VERSION=$1
+readonly NEW_VERSION=$1
 
 if [ -z "$NEW_VERSION" ]; then
   echo "You must specify the new version!"
   exit 1
 fi
+
+sudo apt-get install devscripts git -qq
 
 # Get the old version from securedrop/version.py
 old_version_regex="^__version__ = '(.*)'$"
