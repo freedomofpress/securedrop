@@ -87,20 +87,17 @@ common_apache2_directory_declarations = <<eos
 <Directory />
   Options None
   AllowOverride None
-  Order deny,allow
-  Deny from all
+  Require all denied
 </Directory>
 
 <Directory /var/www/>
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
-    Order allow,deny
-    allow from #{property['apache_allow_from']}
+    #{property['apache_allow_line']}
   </Limit>
   <LimitExcept GET POST HEAD>
-    Order deny,allow
-    Deny from all
+    Require all denied
   </LimitExcept>
 </Directory>
 
@@ -108,12 +105,10 @@ common_apache2_directory_declarations = <<eos
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
-    Order allow,deny
-    allow from #{property['apache_allow_from']}
+    #{property['apache_allow_line']}
   </Limit>
   <LimitExcept GET POST HEAD>
-    Order deny,allow
-    Deny from all
+    Require all denied
   </LimitExcept>
 </Directory>
 eos
