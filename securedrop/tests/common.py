@@ -84,9 +84,9 @@ def setup_test_replies(sid, journo_id, files):
 def new_codename(client, session):
     """Helper function to go through the "generate codename" flow"""
     with client as c:
-        rv = c.get('/generate')
+        c.get('/generate')
         codename = session['codename']
-        rv = c.post('/create')
+        c.post('/create')
     return codename
 
 

@@ -37,7 +37,11 @@ class TestSource(TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_re = (
+            r'<p id="codename">'
+            r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)'
+            r'</p>'
+        )
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -100,7 +104,6 @@ class TestSource(TestCase):
     def test_create(self):
         with self.client as c:
             rv = c.get('/generate')
-            codename = session['codename']
             rv = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
@@ -151,7 +154,9 @@ class TestSource(TestCase):
             self.assertIn('Thank you for logging out.', rv.data)
 
     def test_login_with_whitespace(self):
-        """Test that codenames with leading or trailing whitespace still work"""
+        """
+        Test that codenames with leading or trailing whitespace still work
+        """
         def login_test(codename):
             rv = self.client.get('/login')
             self.assertEqual(rv.status_code, 200)
@@ -191,8 +196,12 @@ class TestSource(TestCase):
         rv = self._dummy_submission()
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
-            rv.data)
+            (
+                "Thanks for submitting something to SecureDrop! "
+                "Please check back later for replies."
+            ),
+            rv.data,
+        )
 
     def test_submit_message(self):
         self._new_codename()
@@ -210,7 +219,8 @@ class TestSource(TestCase):
             msg="",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-        self.assertIn("You must enter a message or choose a file to submit.", rv.data)
+        self.assertIn(
+            "You must enter a message or choose a file to submit.", rv.data)
 
     def test_submit_big_message(self):
         '''
@@ -300,13 +310,15 @@ class TestSource(TestCase):
         overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
         with self.client as client:
             rv = client.post(
-                    '/login',
-                    data=dict(codename=overly_long_codename),
-                    follow_redirects=True)
+                '/login',
+                data=dict(codename=overly_long_codename),
+                follow_redirects=True)
             self.assertEqual(rv.status_code, 200)
             self.assertIn("Sorry, that is not a recognized codename.", rv.data)
-            self.assertFalse(mock_hash_codename.called,
-                    "Called hash_codename for codename w/ invalid length")
+            self.assertFalse(
+                mock_hash_codename.called,
+                "Called hash_codename for codename w/ invalid length",
+            )
 
 
 if __name__ == "__main__":

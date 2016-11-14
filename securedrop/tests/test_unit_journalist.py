@@ -5,7 +5,6 @@ from cStringIO import StringIO
 import unittest
 import zipfile
 import mock
-import time
 import datetime
 
 from flask_testing import TestCase
@@ -18,8 +17,15 @@ import config
 import crypto_util
 import journalist
 import common
-from db import (db_session, Source, Submission, Journalist, Reply,
-               InvalidPasswordLength)
+from db import (
+    db_session, Source, Submission, Journalist, Reply,
+    InvalidPasswordLength
+)
+
+SID = (
+    'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPN'
+    'ZMVIWDCJBBHMUDBGFHXCQ3R'
+)
 
 
 class TestJournalist(TestCase):
@@ -28,22 +34,23 @@ class TestJournalist(TestCase):
         return journalist.app
 
     def add_source_and_submissions(self):
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
         codename = crypto_util.display_id()
-        crypto_util.genkeypair(sid, codename)
-        source = Source(sid, codename)
+        crypto_util.genkeypair(SID, codename)
+        source = Source(SID, codename)
         db_session.add(source)
         db_session.commit()
         files = ['1-abc1-msg.gpg', '2-abc2-msg.gpg']
-        filenames = common.setup_test_docs(sid, files)
+        common.setup_test_docs(SID, files)
         return source, files
 
     def add_source_and_replies(self):
         source, files = self.add_source_and_submissions()
         files = ['1-def-reply.gpg', '2-def-reply.gpg']
-        filenames = common.setup_test_replies(source.filesystem_id,
-                                              self.user.id,
-                                              files)
+        common.setup_test_replies(
+            source.filesystem_id,
+            self.user.id,
+            files
+        )
         return source, files
 
     def setUp(self):
@@ -94,7 +101,10 @@ class TestJournalist(TestCase):
         self.assertIn("No documents have been submitted!", res.data)
 
     def test_normal_and_admin_user_login_should_redirect_to_index(self):
-        """Normal users and admin users should both redirect to the index page after logging in successfully"""
+        """
+        Normal users and admin users should both redirect to the index page
+        after logging in successfully
+        """
         res = self.client.post(url_for('login'), data=dict(
             username=self.user.username,
             password=self.user_pw,
@@ -225,7 +235,7 @@ class TestJournalist(TestCase):
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=new_username, is_admin=False,
                       password='', password_again='')
-            )
+        )
 
         self.assertIn('Username {} is already taken'.format(new_username),
                       res.data)
@@ -237,21 +247,23 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('admin_reset_two_factor_hotp'),
             data=dict(uid=self.user.id, otp_secret=123456)
-            )
+        )
 
         new_hotp = self.user.hotp.secret
 
         self.assertNotEqual(old_hotp, new_hotp)
 
-        self.assertRedirects(res,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+        self.assertRedirects(
+            res,
+            url_for('admin_new_user_two_factor', uid=self.user.id)
+        )
 
     def test_admin_reset_hotp_empty(self):
         self._login_admin()
         res = self.client.post(
             url_for('admin_reset_two_factor_hotp'),
             data=dict(uid=self.user.id)
-            )
+        )
 
         self.assertIn('Change Secret', res.data)
 
@@ -262,13 +274,15 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('admin_reset_two_factor_totp'),
             data=dict(uid=self.user.id)
-            )
+        )
         new_totp = self.user.totp
 
         self.assertNotEqual(old_totp, new_totp)
 
-        self.assertRedirects(res,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+        self.assertRedirects(
+            res,
+            url_for('admin_new_user_two_factor', uid=self.user.id),
+        )
 
     def test_admin_new_user_2fa_success(self):
         self._login_admin()
@@ -276,7 +290,7 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('admin_new_user_two_factor', uid=self.user.id),
             data=dict(token='mocked')
-            )
+        )
 
         self.assertRedirects(res, url_for('admin_index'))
 
@@ -285,7 +299,7 @@ class TestJournalist(TestCase):
 
         res = self.client.get(
             url_for('admin_new_user_two_factor', uid=self.user.id)
-            )
+        )
 
         # any GET req should take a user to the admin_new_user_two_factor page
         self.assertIn('Authenticator', res.data)
@@ -307,7 +321,7 @@ class TestJournalist(TestCase):
                       password='pentagonpapers',
                       password_again='pentagonpapers',
                       is_admin=False)
-            )
+        )
 
         self.assertRedirects(res, url_for('admin_new_user_two_factor', uid=3))
 
@@ -343,8 +357,11 @@ class TestJournalist(TestCase):
         self.assertIn('password is too long', res.data)
 
     def test_admin_authorization_for_gets(self):
-        admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
-            url_for('admin_edit_user', user_id=self.user.id)]
+        admin_urls = [
+            url_for('admin_index'),
+            url_for('admin_add_user'),
+            url_for('admin_edit_user', user_id=self.user.id),
+        ]
 
         self._login_user()
         for admin_url in admin_urls:
@@ -352,14 +369,16 @@ class TestJournalist(TestCase):
             self.assertStatus(res, 302)
 
     def test_admin_authorization_for_posts(self):
-        admin_urls = [url_for('admin_reset_two_factor_totp'),
+        admin_urls = [
+            url_for('admin_reset_two_factor_totp'),
             url_for('admin_reset_two_factor_hotp'),
             url_for('admin_add_user', user_id=self.user.id),
             url_for('admin_new_user_two_factor'),
             url_for('admin_reset_two_factor_totp'),
             url_for('admin_reset_two_factor_hotp'),
             url_for('admin_edit_user', user_id=self.user.id),
-            url_for('admin_delete_user', user_id=self.user.id)]
+            url_for('admin_delete_user', user_id=self.user.id),
+        ]
         self._login_user()
         for admin_url in admin_urls:
             res = self.client.post(admin_url)
@@ -429,7 +448,7 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('account_reset_two_factor_hotp'),
             data=dict(otp_secret=123456)
-            )
+        )
         newHotp = self.user.hotp
 
         # check that hotp is different
@@ -500,7 +519,7 @@ class TestJournalist(TestCase):
         job = journalist.delete_collection(source.filesystem_id)
 
         # Block for up to 5s to await asynchronous Redis job result
-        timeout = datetime.datetime.now() + datetime.timedelta(0,5)
+        timeout = datetime.datetime.now() + datetime.timedelta(0, 5)
         while 1:
             if job.result == "success":
                 break
@@ -531,21 +550,21 @@ class TestJournalist(TestCase):
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
         maximum password length should raise an exception"""
-        overly_long_password = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
         with self.assertRaises(InvalidPasswordLength):
-            temp_journalist = Journalist(
-                    username="My Password is Too Big!",
-                    password=overly_long_password)
+            Journalist(
+                username="My Password is Too Big!",
+                password=overly_long_password
+            )
 
     def test_add_star(self):
         self._login_user()
 
-        sid = 'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZJPKJFECLS2NZ4G4U3QOZCFKTTPNZMVIWDCJBBHMUDBGFHXCQ3R'
-        source = Source(sid, crypto_util.display_id())
+        source = Source(SID, crypto_util.display_id())
         db_session.add(source)
         db_session.commit()
 
-        res = self.client.post(url_for('add_star', sid=sid))
+        res = self.client.post(url_for('add_star', sid=SID))
         self.assertRedirects(res, url_for('index'))
 
 

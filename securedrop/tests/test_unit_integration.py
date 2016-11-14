@@ -28,7 +28,6 @@ from db import db_session, Journalist
 import store
 
 
-
 def _block_on_reply_keypair_gen(codename):
     sid = crypto_util.hash_codename(codename)
     while not crypto_util.getkey(sid):
@@ -84,13 +83,15 @@ class TestIntegration(unittest.TestCase):
         common.shared_teardown()
 
     def test_submit_message(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """
+        When a source creates an account, test that a new entry appears in the
+        journalist interface
+        """
         test_msg = "This is a test message."
 
         with self.source_app as source_app:
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
-            codename = session['codename']
             sid = g.sid
             # redirected to submission form
             rv = self.source_app.post('/submit', data=dict(
@@ -168,14 +169,16 @@ class TestIntegration(unittest.TestCase):
         )
 
     def test_submit_file(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """
+        When a source creates an account, test that a new entry appears in the
+        journalist interface
+        """
         test_file_contents = "This is a test file."
         test_filename = "test.txt"
 
         with self.source_app as source_app:
             rv = source_app.get('/generate')
             rv = source_app.post('/create', follow_redirects=True)
-            codename = session['codename']
             sid = g.sid
             # redirected to submission form
             rv = self.source_app.post('/submit', data=dict(
@@ -412,8 +415,13 @@ class TestIntegration(unittest.TestCase):
                 self.assertNotIn("You have received a reply.", rv.data)
             else:
                 self.assertIn(
-                    "You have received a reply. For your security, please delete all replies when you're done with them.",
-                    rv.data)
+                    (
+                        "You have received a reply. For your security, "
+                        "please delete all replies when you're done "
+                        "with them."
+                    ),
+                    rv.data
+                )
                 self.assertIn(test_reply, rv.data)
                 soup = BeautifulSoup(rv.data)
                 msgid = soup.select(
@@ -500,7 +508,10 @@ class TestIntegration(unittest.TestCase):
             any([os.path.exists(store.path(sid)) for sid in checkbox_values])))
 
     def test_filenames(self):
-        """Test pretty, sequential filenames when source uploads messages and files"""
+        """
+        Test pretty, sequential filenames when source uploads messages
+        and files
+        """
         # add a source and submit stuff
         self.source_app.get('/generate')
         self.source_app.post('/create')
@@ -555,8 +566,11 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(re.match(submission_filename_re.format(4), filename))
 
     def test_user_change_password(self):
-        """Test that a journalist can successfully login after changing their password"""
-          
+        """
+        Test that a journalist can successfully login after changing their
+        password
+        """
+
         # change password
         self.journalist_app.post('/account', data=dict(
             password='newpass',
@@ -580,7 +594,7 @@ class TestIntegration(unittest.TestCase):
         # edit hotp
         self.journalist_app.post('/account/reset-2fa-hotp', data=dict(
             otp_secret=123456))
-      
+
         # successful verificaton should redirect to /account
         rv = self.journalist_app.post('/account/2fa', data=dict(
             token=self.user.hotp))
@@ -588,7 +602,7 @@ class TestIntegration(unittest.TestCase):
 
         # log out
         common.logout(self.journalist_app)
-        
+
         # login with new 2fa secret should redirect to index page
         rv = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
@@ -624,8 +638,12 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(rv.status_code, 200)
         self.assertIn(
-            "The following file has been selected for <strong>permanent deletion</strong>",
-            rv.data)
+            (
+                "The following file has been selected for <strong>permanent "
+                "deletion</strong>"
+            ),
+            rv.data,
+        )
 
         # confirm delete
         rv = self.journalist_app.post('/bulk', data=dict(
@@ -638,7 +656,13 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the files were deleted from the filesystem
         self._wait_for(lambda: self.assertFalse(
-            any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
+            any(
+                [
+                    os.path.exists(store.path(sid, doc_name)) for
+                    doc_name in checkbox_values
+                ]
+            )
+        ))
 
 
 if __name__ == "__main__":

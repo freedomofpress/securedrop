@@ -76,7 +76,10 @@ def clean(s, also=''):
     """
     # safe characters for every possible word in the wordlist includes capital
     # letters because codename hashes are base32-encoded with capital letters
-    ok = ' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    ok = (
+        ' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlo'
+        'nqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    )
     for c in s:
         if c not in ok and c not in also:
             raise CryptoException("invalid input: {0}".format(s))

@@ -1,17 +1,21 @@
 import os
 
+
 # Default values for production, may be overridden later based on environment
 class FlaskConfig(object):
     DEBUG = False
     TESTING = False
     WTF_CSRF_ENABLED = True
 
+
 # Use different secret keys for the two different applications so their
 # sessions can't be confused.
-# TODO consider using salts instead: http://pythonhosted.org//itsdangerous/#the-salt
+# TODO:
+# consider using salts instead: http://pythonhosted.org//itsdangerous/#the-salt
 class SourceInterfaceFlaskConfig(FlaskConfig):
     SECRET_KEY = '{{ source_secret_key.stdout }}'
     SESSION_COOKIE_NAME = "ss"
+
 
 class JournalistInterfaceFlaskConfig(FlaskConfig):
     SECRET_KEY = '{{ journalist_secret_key.stdout }}'
@@ -23,7 +27,9 @@ class JournalistInterfaceFlaskConfig(FlaskConfig):
 SECUREDROP_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 SOURCE_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'source_templates')
-JOURNALIST_TEMPLATES_DIR = os.path.join(SECUREDROP_ROOT, 'journalist_templates')
+JOURNALIST_TEMPLATES_DIR = os.path.join(
+    SECUREDROP_ROOT, 'journalist_templates'
+)
 WORD_LIST = os.path.join(SECUREDROP_ROOT, 'wordlist')
 NOUNS = os.path.join(SECUREDROP_ROOT, 'dictionaries/nouns.txt')
 ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
@@ -32,14 +38,17 @@ JOURNALIST_PIDFILE = "/tmp/journalist.pid"
 SOURCE_PIDFILE = "/tmp/source.pid"
 WORKER_PIDFILE = "/tmp/securedrop_worker.pid"
 
-# "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
+# "head -c 32 /dev/urandom | base64" for constructing public ID from
+# source codename
 SCRYPT_ID_PEPPER = '{{ scrypt_id_pepper.stdout }}'
-# "head -c 32 /dev/urandom | base64" for stretching source codename into GPG passphrase
+# "head -c 32 /dev/urandom | base64" for stretching source codename
+# into GPG passphrase
 SCRYPT_GPG_PEPPER = '{{ scrypt_gpg_pepper.stdout }}'
 SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
 
 # Fingerprint of the public key to use for encrypting submissions
-# Defaults to test_journalist_key.pub, which is used for development and testing
+# Defaults to test_journalist_key.pub, which is used for development
+# and testing
 JOURNALIST_KEY = '{{ securedrop_app_gpg_fingerprint }}'
 
 # Directory where SecureDrop stores the database file, GPG keyring, and
@@ -59,16 +68,17 @@ elif env == 'test':
     FlaskConfig.TESTING = True
     # Disable CSRF checks to make writing tests easier
     FlaskConfig.WTF_CSRF_ENABLED = False
-    # TODO use a unique temporary directory for each test so we can parallelize them
+    # TODO:
+    # use a unique temporary directory for each test so we can parallelize them
     SECUREDROP_DATA_ROOT = '/tmp/securedrop'
 
 # The following configuration is dependent on SECUREDROP_DATA_ROOT
 
 # Directory where encrypted submissions are stored
-STORE_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'store')
+STORE_DIR = os.path.join(SECUREDROP_DATA_ROOT, 'store')
 
 # Directory where GPG keyring is stored
-GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
+GPG_KEY_DIR = os.path.join(SECUREDROP_DATA_ROOT, 'keys')
 
 # Directory for temporary files
 # We use a directory under the SECUREDROP_DATA_ROOT instead of `/tmp` because

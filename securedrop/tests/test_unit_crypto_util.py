@@ -21,9 +21,9 @@ class TestCryptoUtil(unittest.TestCase):
 
     def test_clean(self):
         with self.assertRaises(crypto_util.CryptoException):
-            crypto_util.clean('foo bar`') # backtick is not currently allowed
+            crypto_util.clean('foo bar`')  # backtick is not currently allowed
         with self.assertRaises(crypto_util.CryptoException):
-            crypto_util.clean('bar baz~') # tilde is not currently allowed
+            crypto_util.clean('bar baz~')  # tilde is not currently allowed
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

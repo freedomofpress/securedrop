@@ -23,7 +23,6 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
 import store
 
 LOGIN_HARDENING = True
@@ -109,7 +108,8 @@ class Source(Base):
             for submission in self.submissions:
                 if submission.filename.endswith('msg.gpg'):
                     self.docs_msgs_count['messages'] += 1
-                elif submission.filename.endswith('doc.gz.gpg') or submission.filename.endswith('doc.zip.gpg'):
+                elif submission.filename.endswith('doc.gz.gpg') or \
+                        submission.filename.endswith('doc.zip.gpg'):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
@@ -131,7 +131,7 @@ class Submission(Base):
     source = relationship(
         "Source",
         backref=backref("submissions", order_by=id, cascade="delete")
-        )
+    )
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -161,7 +161,7 @@ class Reply(Base):
     source = relationship(
         "Source",
         backref=backref("replies", order_by=id, cascade="delete")
-        )
+    )
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -184,7 +184,8 @@ class SourceStar(Base):
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):
-            return self.source_id == other.source_id and self.id == other.id and self.starred == other.starred
+            return self.source_id == other.source_id and \
+                self.id == other.id and self.starred == other.starred
         return NotImplemented
 
     def __init__(self, source, starred=True):
@@ -193,28 +194,34 @@ class SourceStar(Base):
 
 
 class InvalidUsernameException(Exception):
-
-    """Raised when a user logs in with an invalid username"""
+    """
+    Raised when a user logs in with an invalid username
+    """
 
 
 class LoginThrottledException(Exception):
-
-    """Raised when a user attempts to log in too many times in a given time period"""
+    """
+    Raised when a user attempts to log in too many times in a given time period
+    """
 
 
 class WrongPasswordException(Exception):
-
-    """Raised when a user logs in with an incorrect password"""
+    """
+    Raised when a user logs in with an incorrect password
+    """
 
 
 class BadTokenException(Exception):
-
-    """Raised when a user logins in with an incorrect TOTP token"""
+    """
+    Raised when a user logins in with an incorrect TOTP token
+    """
 
 
 class InvalidPasswordLength(Exception):
-    """Raised when attempting to create a Journalist or log in with an invalid
-    password length"""
+    """
+    Raised when attempting to create a Journalist or log in with an invalid
+    password length
+    """
 
     def __init__(self, password):
         self.pw_len = len(password)
@@ -327,7 +334,10 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        """
+        Strips from authentication tokens the whitespace that many clients add
+        for readability
+        """
         return ''.join(token.split())
 
     def verify_token(self, token):
