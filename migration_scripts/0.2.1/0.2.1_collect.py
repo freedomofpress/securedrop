@@ -30,7 +30,7 @@ def collect_securedrop_root(backup):
 
 
 def collect_database(backup):
-    # Copy the db file, which is only present in the document interface's
+    # Copy the db file, which is only present in the journalist interface's
     # chroot jail in 0.2.1
     db_file = "/var/chroot/document/var/www/securedrop/db.sqlite"
     backup.add(db_file)

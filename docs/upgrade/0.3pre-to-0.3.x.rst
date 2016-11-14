@@ -13,11 +13,11 @@ substitute ``0.3.x`` with the current release's version number.
 Important Changes
 -----------------
 
-Document Interface Port Change
+Journalist Interface Port Change
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To make accessing the document interface easier for new users, the
-Document Interface port for the onion address has been changed from
+To make accessing the journalist interface easier for new users, the
+Journalist Interface port for the onion address has been changed from
 ``8080`` to ``80``. This means you will need to update existing
 Journalists' bookmarks in their tor browser and remove the ``:8080``
 from the end of the onion url.
@@ -27,7 +27,7 @@ Prerequisites
 
 -  An Admin networked Tails workstation with persistence enabled and an
    Admin password set during boot.
-   
+
 -  A filled out ``prod-specific.yml`` file
 
 Upgrade Procedure
@@ -91,7 +91,7 @@ use these commands: ::
 
 .. note:: If you encounter connection timeouts during the backup,
 	  make sure to remove unnecessary submissions from the
-	  Document Interface, then run the command again. If you
+	  Journalist Interface, then run the command again. If you
 	  still have problems, contact us at
 	  securedrop@freedom.press.
 
@@ -142,7 +142,7 @@ If you get an error from the upgrade script, see the list of potential errors an
   filled out, with the local IP address for each server specified.
 
 - ``Error: ssh_users is not defined in prod-specific.yml.``
-   
+
   Inside the production playbook, you must have ``ssh_users`` defined
   as the name of the user which you use to log in to the App and Mon
   servers. This is the non-root user account you created when you

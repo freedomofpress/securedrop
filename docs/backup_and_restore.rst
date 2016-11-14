@@ -25,8 +25,8 @@ Minimizing disk space
 Since the backup and restore operations both involve transferring *all* of
 your SecureDrop's stored submissions over Tor, the process can take a long time.
 To save time and improve reliability for the transfers, take a moment to clean up
-older submissions in the Document Interface. As a general practice, you should
-encourage your Journalists to delete submissions from the Document Interface
+older submissions in the Journalist Interface. As a general practice, you should
+encourage your Journalists to delete submissions from the Journalist Interface
 regularly.
 
 .. tip:: The throughput of a Tor Hidden Service seems to average around 150 kB/s,
@@ -37,7 +37,7 @@ currently on the *Application Server* by SSHing in and running
 ``sudo du -sh /var/lib/securedrop/store``.
 
 .. note:: Submissions are deleted asynchronously and one at a time, so if you
-          delete a lot of submissions through the Document Interface, it may
+          delete a lot of submissions through the Journalist Interface, it may
           take a while for all of the submissions to actually be deleted. This
           is especially true because SecureDrop uses ``srm`` to securely erase
           file submissions, which takes significantly more time than normal file
@@ -45,7 +45,7 @@ currently on the *Application Server* by SSHing in and running
           ``sudo tail -f /var/log/securedrop_worker/err.log``.
 
 If you find you cannot perform a backup or restore due to this
-constraint, and have already deleted old submissions from the Document Interface,
+constraint, and have already deleted old submissions from the Journalist Interface,
 contact us through the `SecureDrop Support Portal`_.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/

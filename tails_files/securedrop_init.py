@@ -44,4 +44,4 @@ except subprocess.CalledProcessError:
 # notify the user
 subprocess.call(['tails-notify-user',
                  'SecureDrop successfully auto-configured!',
-                 'You can now access the Document Interface.\nIf you are an admin, you can now SSH to the servers.'])
+                 'You can now access the Journalist Interface.\nIf you are an admin, you can now SSH to the servers.'])

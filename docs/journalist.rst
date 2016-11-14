@@ -2,7 +2,7 @@ Journalist Guide
 ================
 
 Journalists viewing documents on SecureDrop must connect to the
-respective Source or Document Interface using the `Tails operating
+respective Source or Journalist Interface using the `Tails operating
 system <https://tails.boum.org/>`__, which your administrator should
 have already set up for you.
 
@@ -36,31 +36,31 @@ instructions to set one up with GnuPG (GPG).
 -  `Mac OS
    X <https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin>`__
 
-Connect to the Document Interface
+Connect to the Journalist Interface
 ---------------------------------
 
 Each journalist has their own authenticated Tor hidden service URL to
-login to the ``Document Interface``. The journalist needs to use the
+login to the ``Journalist Interface``. The journalist needs to use the
 browser in the Tails operating system to connect to the
-``Document Interface``. This will take an extra few steps each time you
+``Journalist Interface``. This will take an extra few steps each time you
 want to login, but after practicing a few times, it will become
 automatic.
 
 See our guide on setting up :doc:`Tails for the Admin and Journalist
 Workstation <tails_guide>` before continuing. We recommend that you
-create bookmarks for the Source and Document Interfaces.
+create bookmarks for the Source and Journalist Interfaces.
 
-After clicking on the SecureDrop ``Document Interface`` link, you can
+After clicking on the SecureDrop ``Journalist Interface`` link, you can
 log in with your username, password, and two-factor authentication
 token, as shown in the first screenshot below.
 
-|Document Interface Login|
+|Journalist Interface Login|
 
 If any sources have uploaded documents or sent you message, they will be
 listed on the homepage by a codename. **Note: The codename the
 journalists see is different than the codename that sources see.**
 
-|Document Interface|
+|Journalist Interface|
 
 Move Documents to the Secure Viewing Station
 --------------------------------------------
@@ -256,8 +256,8 @@ encrypted documents to it. Decrypt them with ``gnupg``.
 Write articles and blog posts, edit video and audio, and publish. Expose
 crimes and corruption, and change the world.
 
-.. |Document Interface Login| image:: images/manual/document6.png
-.. |Document Interface| image:: images/manual/document1.png
+.. |Journalist Interface Login| image:: images/manual/document6.png
+.. |Journalist Interface| image:: images/manual/document1.png
 .. |Load external content| image:: images/manual/document4.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
 .. |Download to sandbox folder| image:: images/manual/tbb_Document6.png

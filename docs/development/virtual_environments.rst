@@ -16,18 +16,18 @@ development
     For working on the application code. Forwarded ports:
 
     -  Source Interface: localhost:8080
-    -  Document Interface: localhost:8081
+    -  Journalist Interface: localhost:8081
 
 app-staging
     For working on the application code in a more realistic environment,
     with most system hardening active.
     The interfaces and SSH are also available over Tor.
-    A copy of the the Onion URLs for Source and Document Interfaces,
+    A copy of the the Onion URLs for Source and Journalist Interfaces,
     as well as SSH access, are written to the Vagrant host's
     ``install_files/ansible-base`` directory, named:
 
     - ``app-source-ths``
-    - ``app-document-aths``
+    - ``app-journalist-aths``
     - ``app-ssh-aths``
 
     The AppArmor profiles run complain mode to aid in debugging.
@@ -35,7 +35,7 @@ app-staging
     Forwarded ports:
 
     -  Source Interface: localhost:8082
-    -  Document Interface: localhost:8083
+    -  Journalist Interface: localhost:8083
 
 mon-staging
     For working on OSSEC monitoring rules, with most system hardening active.
@@ -53,15 +53,15 @@ mon-staging
 app-prod
     This is like a production installation with all of the system
     hardening active, but virtualized, rather than running on hardware.
-    A copy of the the Onion URLs for Source and Document Interfaces,
+    A copy of the the Onion URLs for Source and Journalist Interfaces,
     as well as SSH access, are written to the Vagrant host's
     ``install_files/ansible-base`` directory, named:
 
     - ``app-source-ths``
-    - ``app-document-aths``
+    - ``app-journalist-aths``
     - ``app-ssh-aths``
 
-    There are no active forwarded ports for the Document and Source Interfaces
+    There are no active forwarded ports for the Journalist and Source Interfaces
     on ``app-prod``. You must use the Onion URLs to view the pages over Tor.
 
 mon-prod
@@ -99,10 +99,10 @@ course, you can specify the name if you want to.
    ./manage.py run         # run development servers
    ./manage.py test        # run the unit and functional tests
    ./manage.py reset       # resets the state of the development instance
-   ./manage.py add-admin   # create a user to use when logging in to the Document Interface
+   ./manage.py add-admin   # create a user to use when logging in to the Journalist Interface
 
 SecureDrop consists of two separate web appications (the Source Interface and
-the Document Interface) that run concurrently. The development servers will
+the Journalist Interface) that run concurrently. The development servers will
 detect code changes when they are saved and automatically reload.
 
 Staging

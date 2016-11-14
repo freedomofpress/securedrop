@@ -35,7 +35,7 @@ describe port(6379) do
   it { should be_listening.on('127.0.0.1').with('tcp') }
 end
 
-# The Flask runners for the source and document interfaces
+# The Flask runners for the source and journalist interfaces
 # aren't configured to run by default, e.g. on boot. Nor
 # do the app tests cause them to be run. So, we shouldn't
 # really expected them to be running.
@@ -44,7 +44,7 @@ end
 #  it { should be_listening.on('0.0.0.0').with('tcp') }
 #end
 #
-## check for document interface flask port listening
+## check for journalist interface flask port listening
 #describe port(8081) do
 #  it { should be_listening.on('0.0.0.0').with('tcp') }
 #end

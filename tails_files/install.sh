@@ -21,10 +21,10 @@ tails_live_dotfiles="${tails_live_persistence}/dotfiles"
 torrc_additions="${securedrop_dotfiles}/torrc_additions"
 
 # Declare globals. During initial provisioning, we may need to prompt
-# for ATHS info for the Document Interface, particularly on the
+# for ATHS info for the Journalist Interface, particularly on the
 # Journalist Workstation. In order to avoid reprompting, we'll store
 # the value in a reusable global var.
-document_aths_info_global=''
+journalist_aths_info_global=''
 source_ths_url_global=''
 
 function validate_tails_environment()
@@ -117,7 +117,7 @@ function copy_securedrop_dotfiles()
 
   # copy icon, launchers and scripts
   cp -f securedrop_icon.png $securedrop_dotfiles
-  cp -f document.desktop $securedrop_dotfiles
+  cp -f journalist.desktop $securedrop_dotfiles
   cp -f source.desktop $securedrop_dotfiles
   cp -f securedrop_init.py $securedrop_init_script
 
@@ -140,17 +140,17 @@ function set_permissions_on_securedrop_dotfiles()
   chmod 600 "${securedrop_dotfiles}/securedrop_icon.png"
 }
 
-function prompt_for_document_aths_info()
+function prompt_for_journalist_aths_info()
 {
   # Ad-hoc memoization via a global variable. If we've already prompted for
   # the ATHS info here, the global will be populated. Otherwise, we'll store it.
-  if [ -z $document_aths_info_global ] ; then
+  if [ -z $journalist_aths_info_global ] ; then
     # During initial provisioning of the Journalist Workstation, the ATHS file
-    # for the Document Interface may not be present. If not, prompt for the info.
+    # for the Journalist Interface may not be present. If not, prompt for the info.
     aths_regex="^(HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22})"
     # Loop while reading the input from a dialog box.
-    while [[ ! "$document_aths_info" =~ $aths_regex ]]; do
-      document_aths_info="$(zenity --entry \
+    while [[ ! "$journalist_aths_info" =~ $aths_regex ]]; do
+      journalist_aths_info="$(zenity --entry \
         --title='Hidden service authentication setup' \
         --width=600 \
         --window-icon=${securedrop_dotfiles}/securedrop_icon.png \
@@ -158,9 +158,9 @@ function prompt_for_document_aths_info()
     done
   # The global var is populated, so use it for the function var.
   else
-    document_aths_info="$document_aths_info_global"
+    journalist_aths_info="$journalist_aths_info_global"
   fi
-  echo "$document_aths_info"
+  echo "$journalist_aths_info"
 }
 
 function prompt_for_source_ths_url()
@@ -174,7 +174,7 @@ function prompt_for_source_ths_url()
   if [ -z $source_ths_url_global ] ; then
     ths_regex="^[a-z2-7]{16}\.onion"
     # Loop while reading the input from a dialog box.
-    while [[ ! "$document_aths_info" =~ $ths_regex ]]; do
+    while [[ ! "$journalist_aths_info" =~ $ths_regex ]]; do
       ths_url="$(zenity --entry \
         --title='Hidden service authentication setup' \
         --width=600 \
@@ -203,29 +203,29 @@ function lookup_mon_ssh_aths_url()
   echo "$mon_ssh_aths"
 }
 
-function lookup_document_aths_url()
+function lookup_journalist_aths_url()
 {
   # First look for the flat file containing the exact value we want.
   # The Admin Workstation will certainly have this file, and the Journalist
   # Workstation probably, but not definitely.
-  if [ -f "${securedrop_ansible_base}/app-document-aths" ] ; then
-    app_document_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-document-aths)"
+  if [ -f "${securedrop_ansible_base}/app-journalist-aths" ] ; then
+    app_journalist_aths="$(awk '{ print $2 }' ${securedrop_ansible_base}/app-journalist-aths)"
   # Failing that, check for ATHS info in the existing Tor config. A previously
   # configured Journalist Workstation will already have the value in torrc.
   # Since we know we're in a Journalist Workstation, assume there's only one
   # ATHS value in the torrc, and use the first.
   elif grep -q -P '^HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ; then
-    app_document_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
+    app_journalist_aths="$(grep ^HidServAuth /etc/tor/torrc | head -n 1 | awk '{ print $2 }')"
   # Last shot before prompting: check for an existing desktop icon specifically
-  # for the Document Interface. If found, we can extract the URL from there.
-  elif [ -e "${amnesia_desktop}/document.desktop" ] ; then
-    app_document_aths="$(grep ^Exec=/usr/local/bin/tor-browser "${amnesia_desktop}/document.desktop" | awk '{ print $2 }')"
+  # for the Journalist Interface. If found, we can extract the URL from there.
+  elif [ -e "${amnesia_desktop}/journalist.desktop" ] ; then
+    app_journalist_aths="$(grep ^Exec=/usr/local/bin/tor-browser "${amnesia_desktop}/journalist.desktop" | awk '{ print $2 }')"
   # Couldn't find it anywhere. We'll have to prompt!
   else
-    echo "Could not find Document Interface ATHS info, prompting interactively..." 1>&2
-    app_document_aths="$(prompt_for_document_aths_info | awk '{ print $2 }')"
+    echo "Could not find Journalist Interface ATHS info, prompting interactively..." 1>&2
+    app_journalist_aths="$(prompt_for_journalist_aths_info | awk '{ print $2 }')"
   fi
-  echo "$app_document_aths"
+  echo "$app_journalist_aths"
 }
 
 function lookup_source_ths_url()
@@ -305,47 +305,51 @@ function configure_torrc_additions()
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
       "${securedrop_ansible_base}/app-ssh-aths" \
       "${securedrop_ansible_base}/mon-ssh-aths" \
-      "${securedrop_ansible_base}/app-document-aths" > $torrc_additions
+      "${securedrop_ansible_base}/app-journalist-aths" > $torrc_additions
   else
     # Using a different approach for grabbing the Document ATHS info on the
     # Journalist Workstation, to avoid prompting Journalists unnecessarily on
     # subsequent runs of this script (to clean up legacy changes). First,
     # check existing HidServAuth values in torrc, and reuse if found.
     if grep -q -P '^HidServAuth [a-z2-7]{16}\.onion [A-Za-z0-9+/.]{22}' /etc/tor/torrc ; then
-      app_document_aths_info="$(grep ^HidServAuth /etc/tor/torrc | head -n 1)"
+      app_journalist_aths_info="$(grep ^HidServAuth /etc/tor/torrc | head -n 1)"
     # If HidServAuth info can't be found on system, prompt for it.
     # Generally this will only happen on a new installation.
     else
-      app_document_aths_info="$(prompt_for_document_aths_info)"
+      app_journalist_aths_info="$(prompt_for_journalist_aths_info)"
     fi
     cat - <<< "# HidServAuth lines for SecureDrop's authenticated hidden services" \
-          <<< "$app_document_aths_info" > "$torrc_additions"
+          <<< "$app_journalist_aths_info" > "$torrc_additions"
   fi
 }
 
 function create_desktop_shortcuts()
 {
   # Create user-friendly desktop icons, with the SecureDrop logo, for the
-  # Source and Document Interfaces. Double-clicking on the icons will
-  # open Tor Browser and navigate directly to the page. For the Document Interface,
+  # Source and Journalist Interfaces. Double-clicking on the icons will
+  # open Tor Browser and navigate directly to the page. For the Journalist Interface,
   # the ATHS value must be present in /etc/tor/torrc for the connection to resolve.
-  echo "Exec=/usr/local/bin/tor-browser $(lookup_document_aths_url)" >> "${securedrop_dotfiles}/document.desktop"
+  echo "Exec=/usr/local/bin/tor-browser $(lookup_journalist_aths_url)" >> "${securedrop_dotfiles}/journalist.desktop"
   echo "Exec=/usr/local/bin/tor-browser $(lookup_source_ths_url)" >> "${securedrop_dotfiles}/source.desktop"
 
   # Copy launchers to Desktop.
-  cp -f "${securedrop_dotfiles}/document.desktop" "${amnesia_desktop}"
+  cp -f "${securedrop_dotfiles}/journalist.desktop" "${amnesia_desktop}"
   cp -f "${securedrop_dotfiles}/source.desktop" "${amnesia_desktop}"
 
   # Copy icons to Applications menu.
-  cp -f "${securedrop_dotfiles}/document.desktop" "${amnesia_home}/.local/share/applications"
+  cp -f "${securedrop_dotfiles}/journalist.desktop" "${amnesia_home}/.local/share/applications"
   cp -f "${securedrop_dotfiles}/source.desktop" "${amnesia_home}/.local/share/applications"
+
+  # Remove historic launchers and icons
+  rm -f "${amnesia_desktop}/document.desktop" \
+        "${amnesia_home}/.local/share/applications/document.desktop
 
   # make it all persistent
   sudo -u amnesia mkdir -p "${tails_live_dotfiles}/Desktop"
   sudo -u amnesia mkdir -p "${tails_live_dotfiles}/.local/share/applications"
-  cp -f "${securedrop_dotfiles}/document.desktop" "${tails_live_dotfiles}/Desktop"
+  cp -f "${securedrop_dotfiles}/journalist.desktop" "${tails_live_dotfiles}/Desktop"
   cp -f "${securedrop_dotfiles}/source.desktop" "${tails_live_dotfiles}/Desktop"
-  cp -f "${securedrop_dotfiles}/document.desktop" "${tails_live_dotfiles}/.local/share/applications"
+  cp -f "${securedrop_dotfiles}/journalist.desktop" "${tails_live_dotfiles}/.local/share/applications"
   cp -f "${securedrop_dotfiles}/source.desktop" "${tails_live_dotfiles}/.local/share/applications"
 }
 
@@ -355,30 +359,30 @@ function set_permissions_on_desktop_shortcuts()
   # on desktop shortcuts for Document and Source Interfaces. Separated
   # into function to aid readability.
   chown amnesia:amnesia \
-    "${amnesia_desktop}/document.desktop" \
+    "${amnesia_desktop}/journalist.desktop" \
     "${amnesia_desktop}/source.desktop" \
-    "${amnesia_home}/.local/share/applications/document.desktop" \
+    "${amnesia_home}/.local/share/applications/journalist.desktop" \
     "${amnesia_home}/.local/share/applications/source.desktop" \
-    "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/journalist.desktop" \
     "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
-    "${tails_live_dotfiles}/Desktop/document.desktop" \
+    "${tails_live_dotfiles}/Desktop/journalist.desktop" \
     "${tails_live_dotfiles}/Desktop/source.desktop"
 
   chmod 700 \
-    "${amnesia_desktop}/document.desktop" \
+    "${amnesia_desktop}/journalist.desktop" \
     "${amnesia_desktop}/source.desktop" \
-    "${amnesia_home}/.local/share/applications/document.desktop" \
+    "${amnesia_home}/.local/share/applications/journalist.desktop" \
     "${amnesia_home}/.local/share/applications/source.desktop" \
-    "${tails_live_dotfiles}/.local/share/applications/document.desktop" \
+    "${tails_live_dotfiles}/.local/share/applications/journalist.desktop" \
     "${tails_live_dotfiles}/.local/share/applications/source.desktop" \
-    "${tails_live_dotfiles}/Desktop/document.desktop" \
+    "${tails_live_dotfiles}/Desktop/journalist.desktop" \
     "${tails_live_dotfiles}/Desktop/source.desktop"
 }
 
 function configure_network_manager_hook()
 {
   # Install a persistent NetworkManager hook to write ATHS values to the
-  # system /etc/tor/torrc, so the Document Interface can be accessed via
+  # system /etc/tor/torrc, so the Journalist Interface can be accessed via
   # Tor Browser. On the Admin Workstation, the SSH ATHS values will also
   # be added. The hook will run on "up" for any interface other than loopback,
   # and is carefully ordered to run AFTER the Tails Tor hook and BEFORE the
@@ -408,7 +412,7 @@ function print_success_message()
 Successfully configured Tor and set up desktop bookmarks for SecureDrop!
 You will see a notification appear on your screen when Tor is ready.
 
-The Document Interface's Tor onion URL is: http://$(lookup_document_aths_url)
+The Journalist Interface's Tor onion URL is: http://$(lookup_journalist_aths_url)
 The Source Interfaces's Tor onion URL is: http://$(lookup_source_ths_url)
 SD_COMPLETE_MSG1
 

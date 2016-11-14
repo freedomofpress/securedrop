@@ -11,14 +11,14 @@ In order to use SecureDrop, each journalist needs two things:
 
 1. A *Journalist Tails USB*.
 
-     The Document Interface is only accessible as an authenticated Tor
+     The Journalist Interface is only accessible as an authenticated Tor
      Hidden Service (ATHS). For ease of configuration and security, we
      require journalists to set up a Tails USB with persistence that
-     they are required to use to access the Document Interface.
+     they are required to use to access the Journalist Interface.
 
 2. Access to the *Secure Viewing Station*.
 
-     The Document Interface allows journalists to download submissions
+     The Journalist Interface allows journalists to download submissions
      from sources, but they are encrypted to the offline private key
      that is stored on the Secure Viewing Station Tails USB. In order
      for the journalist to decrypt and view submissions, they need
@@ -58,16 +58,16 @@ Once you're done, boot into the new Journalist Tails USB on the
 Journalist Workstation. Enable persistence and set an administrator
 password before continuing with the next section.
 
-Set up automatic access to the Document Interface
+Set up automatic access to the Journalist Interface
 -------------------------------------------------
 
-Since the Document Interface is an ATHS, we need to set up the
+Since the Journalist Interface is an ATHS, we need to set up the
 Journalist Tails USB to auto-configure Tor just as we did with the
 Admin Tails USB. The procedure is essentially identical, except the
 SSH configuration will be skipped, since only Administrators need
 to access the servers over SSH.
 
-.. tip:: Copy the files ``app-document-aths`` and ``app-source-ths`` from
+.. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
          the Admin Workstation via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
          Journalist Workstation, and the ``install.sh`` script will
@@ -87,24 +87,24 @@ repository <Download the SecureDrop repository>`, then return here to
 continue setting up the Journalist Workstation.
 
 Once you've done this, run the install script to configure the
-shortcuts for the Source and Document Interfaces: ::
+shortcuts for the Source and Journalist Interfaces: ::
 
   cd ~/Persistent/securedrop/tails_files/
   sudo ./install.sh
 
-If you did not copy over the ``app-source-ths`` and ``app-document-aths``
+If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
 files from the Admin Workstation, the script will prompt for the information.
 Make sure to type the information carefully, as any typos will break access
 for the Journalist Workstation.
 
 Once the ``install.sh`` script is finished, you should be able to access the
-Document Interface. Open the Tor Browser and navigate to the .onion address for
-the Document Interface. You should be able to connect, and will be
+Journalist Interface. Open the Tor Browser and navigate to the .onion address for
+the Journalist Interface. You should be able to connect, and will be
 automatically taken to a login page.
 
-Add an account on the Document Interface
+Add an account on the Journalist Interface
 ----------------------------------------
 
-Finally, you need to add an account on the Document Interface so the journalist
+Finally, you need to add an account on the Journalist Interface so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in
 the Administrator Guide.

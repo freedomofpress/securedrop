@@ -140,7 +140,7 @@ class DevServerProcessMonitor(object):
 def run():
     """
     Starts development servers for both the Source Interface and the
-    Document Interface concurrently. Their output is collected,
+    Journalist Interface concurrently. Their output is collected,
     labeled, and sent to stdout to present a unified view to the
     developer.
 
@@ -154,7 +154,7 @@ def run():
         DevServerProcess('Source Interface',
                          ['python', 'source.py'],
                          'blue'),
-        DevServerProcess('Document Interface',
+        DevServerProcess('Journalist Interface',
                          ['python', 'journalist.py'],
                          'cyan'),
     ]
