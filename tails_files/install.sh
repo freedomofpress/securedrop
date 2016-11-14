@@ -340,6 +340,10 @@ function create_desktop_shortcuts()
   cp -f "${securedrop_dotfiles}/journalist.desktop" "${amnesia_home}/.local/share/applications"
   cp -f "${securedrop_dotfiles}/source.desktop" "${amnesia_home}/.local/share/applications"
 
+  # Remove historic launchers and icons
+  rm -f "${amnesia_desktop}/document.desktop" \
+        "${amnesia_home}/.local/share/applications/document.desktop
+
   # make it all persistent
   sudo -u amnesia mkdir -p "${tails_live_dotfiles}/Desktop"
   sudo -u amnesia mkdir -p "${tails_live_dotfiles}/.local/share/applications"
