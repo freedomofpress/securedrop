@@ -459,8 +459,11 @@ def delete_collection(source_id):
 @app.route('/col/process', methods=('POST',))
 @login_required
 def col_process():
-    actions = {'delete': col_delete, 'star': col_star, 'un-star': col_un_star}
+    actions = {'download-unread': col_download_unread,
+               'download-all': col_download_all, 'star': col_star,
+               'un-star': col_un_star, 'delete': col_delete}
     if 'cols_selected' not in request.form:
+        flash('No collections selected!', 'error')
         return redirect(url_for('index'))
 
     # getlist is cgi.FieldStorage.getlist
@@ -472,6 +475,28 @@ def col_process():
 
     method = actions[action]
     return method(cols_selected)
+
+
+def col_download_unread(cols_selected):
+    """Download all unread submissions from all selected sources."""
+    submissions = []
+    for sid in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == sid).one().id
+        submissions += Submission.query.filter(Submission.downloaded == False,
+                                               Submission.source_id == id).all()
+    if submissions == []:
+        flash("No unread submissions in collections selected!", "error")
+        return redirect(url_for('index'))
+    return download("unread", submissions)
+
+
+def col_download_all(cols_selected):
+    """Download all submissions from all selected sources."""
+    submissions = []
+    for sid in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == sid).one().id
+        submissions += Submission.query.filter(Submission.source_id == id).all()
+    return download("all", submissions)
 
 
 def col_star(cols_selected):
@@ -519,15 +544,18 @@ def col_delete(cols_selected):
 
 @app.route('/col/<sid>/<fn>')
 @login_required
-def doc(sid, fn):
+def download_single_submission(sid, fn):
+    """Sends a client the contents of a single submission."""
     if '..' in fn or fn.startswith('/'):
         abort(404)
+
     try:
         Submission.query.filter(
             Submission.filename == fn).one().downloaded = True
+        db_session.commit()
     except NoResultFound as e:
         app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
-    db_session.commit()
+
     return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
 
 
@@ -571,12 +599,15 @@ def generate_code():
 
 @app.route('/download_unread/<sid>')
 @login_required
-def download_unread(sid):
+def download_unread_sid(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    docs = Submission.query.filter(
-        Submission.source_id == id,
-        Submission.downloaded == False).all()
-    return bulk_download(sid, docs)
+    submissions = Submission.query.filter(Submission.source_id == id,
+                                          Submission.downloaded == False).all()
+    if submissions == []:
+        flash("No unread submissions for this source!")
+        return redirect(url_for('col', sid=sid))
+    source = get_source(sid)
+    return download(source.journalist_filename, submissions)
 
 
 @app.route('/bulk', methods=('POST',))
@@ -587,16 +618,16 @@ def bulk():
     doc_names_selected = request.form.getlist('doc_names_selected')
     selected_docs = [doc for doc in g.source.collection
                      if doc.filename in doc_names_selected]
-
     if selected_docs == []:
         if action == 'download':
             flash("No collections selected to download!", "error")
-        elif action == 'delete' or action == 'confirm_delete':
+        elif action in ('delete', 'confirm_delete'):
             flash("No collections selected to delete!", "error")
         return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':
-        return bulk_download(g.sid, selected_docs)
+        source = get_source(g.sid)
+        return download(source.journalist_filename, selected_docs)
     elif action == 'delete':
         return bulk_delete(g.sid, selected_docs)
     elif action == 'confirm_delete':
@@ -626,22 +657,30 @@ def bulk_delete(sid, items_selected):
     return redirect(url_for('col', sid=sid))
 
 
-def bulk_download(sid, items_selected):
-    source = get_source(sid)
-    filenames = [store.path(sid, item.filename) for item in items_selected]
+def download(zip_basename, submissions):
+    """Send client contents of zipfile *zip_basename*-<timestamp>.zip
+    containing *submissions*. The zipfile, being a
+    :class:`tempfile.NamedTemporaryFile`, is stored on disk only
+    temporarily.
 
+    :param str zip_basename: The basename of the zipfile download.
+
+    :param list submissions: A list of :class:`db.Submission`s to 
+                             include in the zipfile.
+    """
     # Mark the submissions that are about to be downloaded as such
-    for item in items_selected:
-        if isinstance(item, Submission):
-            item.downloaded = True
+    for submission in submissions:
+        submission.downloaded = True
     db_session.commit()
 
-    zf = store.get_bulk_archive(
-        filenames,
-        zip_directory=source.journalist_filename)
+    filenames = [store.path(submission.source.filesystem_id,
+                            submission.filename)
+                 for submission in submissions]
+
+    zf = store.get_bulk_archive(filenames,
+                                zip_directory=zip_basename)
     attachment_filename = "{}--{}.zip".format(
-        source.journalist_filename,
-        datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)

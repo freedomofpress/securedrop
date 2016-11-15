@@ -8,9 +8,11 @@
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <p>
         <span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>
-        <button type="submit" id="delete_collections" name="action" value="delete" class="small"><i class="fa fa-minus-circle"></i> Delete selected</button>
-        <button type="submit" name="action" value="star" class="small"><i class="fa fa-minus-circle"></i> Star Selected</button>
-        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-minus-circle"></i> Un-star Selected</button>
+      <button type="submit" name="action" value="download-unread" class="small"><i class="fa fa-download"></i> Download Unread</button>
+      <button type="submit" name="action" value="download-all" class="small"><i class="fa fa-download"></i> Download All</button>
+        <button type="submit" name="action" value="star" class="small"><i class="fa fa-star"></i> Star</button>
+        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-star-half-full"></i> Un-star</button>
+        <button type="submit" id="delete_collections" name="action" value="delete" class="small-danger"><i class="fa fa-trash-o"></i> Delete</button>
       </p>
 
       {% if starred %}
