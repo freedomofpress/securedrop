@@ -37,7 +37,7 @@ continuing:
    can add more later)
 -  The username of the system administrator
 -  (Optional) An image to replace the SecureDrop logo on the *Source
-   Interface* and *Document Interface*
+   Interface* and *Journalist Interface*
 
    -  Recommended size: ``500px x 450px``
    -  Recommended format: PNG
@@ -140,8 +140,8 @@ Service will be available in the following files in
 
 -  ``app-source-ths``: This is the .onion address of the Source
    Interface
--  ``app-document-aths``: This is the ``HidServAuth`` configuration line
-   for the Document Interface. During a later step, this will be
+-  ``app-journalist-aths``: This is the ``HidServAuth`` configuration line
+   for the Journalist Interface. During a later step, this will be
    automatically added to your Tor configuration file in order to
    exclusively connect to the hidden service.
 -  ``app-ssh-aths``: Same as above, for SSH access to the Application

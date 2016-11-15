@@ -13,7 +13,7 @@ App Server
 
 The *Application Server* (or *App Server* for short) runs the SecureDrop
 application. This server hosts both the website that sources access
-(*Source Interface*) and the website that journalists access (*Document
+(*Source Interface*) and the website that journalists access (*Journalist
 Interface*). You may only connect to this server using Tor.
 
 Monitor Server
@@ -30,19 +30,21 @@ The *Source Interface* is the website that sources will access when
 submitting documents and communicating with journalists. This site is
 hosted on the *App Server* and can only be accessed over Tor.
 
-Document Interface
+Journalist Interface
 ------------------
 
-The *Document Interface* is the website that journalists will access
+The *Journalist Interface* is the website that journalists will access
 when downloading new documents and communicating with sources. This site
-is hosted on the *App Server* and can only be accessed over Tor.
+is hosted on the *App Server* and can only be accessed over Tor. In previous
+releases, this was called the *Document Interface*, but we have renamed it
+to avoid ambiguity.
 
 Journalist Workstation
 ----------------------
 
 The *Journalist Workstation* is a machine that is online and used
 together with the Tails operating system on the *online* USB stick. This
-machine will be used to connect to the *Document Interface*, download
+machine will be used to connect to the *Journalist Interface*, download
 documents, and move them to the *Secure Viewing Station* using the
 *Transfer Device*.
 

@@ -10,7 +10,8 @@ wheelhouse
 
 # ignore the ATHS/THS hostname file ansible places
 app-ssh-aths
-app-document-aths
+app-document-aths # leave this here for historic reasons
+app-journalist-aths
 app-source-ths
 mon-ssh-aths
 

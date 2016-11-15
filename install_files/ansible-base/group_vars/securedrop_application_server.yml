@@ -54,8 +54,8 @@ tor_instances:
     filename: app-ssh-aths
   - service: source
     filename: app-source-ths
-  - service: document
-    filename: app-document-aths
+  - service: journalist
+    filename: app-journalist-aths
 
 # Installing securedrop web application
 #securedrop_user: is defined in the site-specific.yml config file
@@ -75,7 +75,7 @@ apache_files:
 
 apache_templates:
   - 'ports.conf'
-  - 'sites-available/document.conf'
+  - 'sites-available/journalist.conf'
   - 'sites-available/source.conf'
 
 apache_modules:

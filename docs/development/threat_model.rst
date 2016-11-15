@@ -125,8 +125,8 @@ What the Application Server can achieve
    hours <https://github.com/freedomofpress/securedrop/pull/805>`__.
 -  The server stores sanitized Tor logs, created using the `SafeLogging
    option <https://www.torproject.org/docs/tor-manual.html.en>`__, for
-   the Source Interface, the Document Interface, and SSH.
--  The server stores both access and error logs for the Document
+   the Source Interface, the Journalist Interface, and SSH.
+-  The server stores both access and error logs for the Journalist
    Interface.
 -  The server stores connection history and audit logs for the admin.
 -  The server can connect to the Monitor server using an SSH key and a
@@ -161,9 +161,9 @@ What the Workstations can achieve
    Monitor Server will encrypt OSSEC alerts to.
 -  The **Journalist Workstation** requires Tails with a persistent
    volume, which stores information such as the Hidden Service value
-   required to connect to the Document Interface, as well as a :doc:`database
+   required to connect to the Journalist Interface, as well as a :doc:`database
    with passphrases <../passphrases>` for the
-   Document Interface and the journalist's personal GPG key.
+   Journalist Interface and the journalist's personal GPG key.
 -  The **Secure Viewing Station** requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
    GPG key, as well as a :doc:`database with the
@@ -227,12 +227,12 @@ What a physical seizure of the source's property can achieve
 
 -  A physical seizure of, and access to, the admin's Tails persistent
    volume, password database, and two-factor authentication device will
-   allow the attacker to access both servers and the Document Interface.
+   allow the attacker to access both servers and the Journalist Interface.
 
 What a compromise of the admin's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  To access the Document Interface, the Application Server, or the
+-  To access the Journalist Interface, the Application Server, or the
    Monitor Server, the attacker needs to obtain the admin's login
    credentials and the admin's two-factor authentication device. Unless
    the attacker has physical access to the servers, the attacker will
@@ -261,7 +261,7 @@ What a compromise of the admin's property can achieve
       to.
    -  Access the admin's personal GPG key.
 
--  An attacker with admin access to the **Document Interface** can:
+-  An attacker with admin access to the **Journalist Interface** can:
 
    -  Add, modify, and delete journalist users.
    -  Change the codenames associated with sources within the Interface.
@@ -314,12 +314,12 @@ What a physical seizure of the admin's property can achieve
    analyze any plaintext information that resides in RAM.
 -  A physical seizure of, and access to, the admin's Tails persistent
    volume, password database, and two-factor authentication device will
-   allow the attacker to access both servers and the Document Interface.
+   allow the attacker to access both servers and the Journalist Interface.
 
 What a compromise of the journalist's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  To access the Document Interface, the attacker needs to obtain the
+-  To access the Journalist Interface, the attacker needs to obtain the
    journalist's login credentials and the journalist's two-factor
    authentication device. Unless the attacker has physical access to the
    server, the attacker will also need to obtain the Hidden Service
@@ -337,12 +337,12 @@ What a compromise of the journalist's property can achieve
    journalist's Tails device can:
 
    -  Add, modify, and delete files on the volume.
-   -  Access the Hidden Service values used by the Document Interface.
+   -  Access the Hidden Service values used by the Journalist Interface.
    -  Access SSH keys and passphrases for the Application Server and the
       Monitor Server.
    -  Access the journalist's personal GPG key.
 
--  An attacker with journalist access to the **Document Interface** can:
+-  An attacker with journalist access to the **Journalist Interface** can:
 
    -  Change the codenames associated with sources within the Interface.
    -  Download, but not decrypt, submissions.
@@ -361,7 +361,7 @@ What a physical seizure of the journalist's property can achieve
    analyze any plaintext information that resides in RAM.
 -  A physical seizure of, and access to, the journalist's Tails
    persistent volume, password database, and two-factor authentication
-   device will allow the attacker to access the Document Interface.
+   device will allow the attacker to access the Journalist Interface.
 
 What a compromise of the Application Server can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -375,7 +375,7 @@ What a compromise of the Application Server can achieve
    -  View, modify, and delete all files owned by this user. This
       includes sanitized Tor logs, created using the `SafeLogging
       option <https://www.torproject.org/docs/tor-manual.html.en>`__,
-      for SSH, the Source Interface and the Document Interface.
+      for SSH, the Source Interface and the Journalist Interface.
    -  View, modify, and delete the Tor configuration file, root is
       required to reload the config.
 
@@ -392,7 +392,7 @@ What a compromise of the Application Server can achieve
       communications. The attacker needs root access to reload
       configuration files.
    -  View, modify, and delete both access and error logs for the
-      Document Interface.
+      Journalist Interface.
    -  View any HTTP requests made by the source, the admin, and the
       journalist in that moment. This includes seeing plaintext
       codenames, submissions, and communications.

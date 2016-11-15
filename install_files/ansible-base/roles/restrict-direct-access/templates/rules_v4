@@ -33,7 +33,7 @@
 # Rate limiting does not make sense here because src ip is always loopback address
 -A INPUT -i lo -p tcp --dport 80 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to source int"
 -A OUTPUT -o lo -p tcp --sport 80 -m owner --uid-owner www-data -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Restrict the apache user outbound connections"
--A INPUT -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to document int"
+-A INPUT -i lo -p tcp --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow tor connection from local loopback to connect to journalist int"
 -A OUTPUT -o lo -p tcp --sport 8080 -m owner --uid-owner www-data -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Restrict the apache user outbound connections"
 
 # For the redis worker allow the application user allow access for locahost to

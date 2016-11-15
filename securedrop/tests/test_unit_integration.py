@@ -100,7 +100,7 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(rv.status_code, 200)
             common.logout(source_app)
 
-        # Request the Document Interface index
+        # Request the Journalist Interface index
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Sources", rv.data)
@@ -556,7 +556,7 @@ class TestIntegration(unittest.TestCase):
 
     def test_user_change_password(self):
         """Test that a journalist can successfully login after changing their password"""
-          
+
         # change password
         self.journalist_app.post('/account', data=dict(
             password='newpass',
@@ -580,7 +580,7 @@ class TestIntegration(unittest.TestCase):
         # edit hotp
         self.journalist_app.post('/account/reset-2fa-hotp', data=dict(
             otp_secret=123456))
-      
+
         # successful verificaton should redirect to /account
         rv = self.journalist_app.post('/account/2fa', data=dict(
             token=self.user.hotp))
@@ -588,7 +588,7 @@ class TestIntegration(unittest.TestCase):
 
         # log out
         common.logout(self.journalist_app)
-        
+
         # login with new 2fa secret should redirect to index page
         rv = self.journalist_app.post('/login', data=dict(
             username=self.user.username,

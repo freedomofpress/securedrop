@@ -1,8 +1,8 @@
-Using YubiKey with the Document Interface
+Using YubiKey with the Journalist Interface
 =========================================
 
 This is a quick and dirty guide to using YubiKey for two-factor
-authentication on the Document Interface.
+authentication on the Journalist Interface.
 
 Download the YubiKey personalization tool
 -----------------------------------------
@@ -57,14 +57,14 @@ window.
 Set up a user with the OATH-HOTP secret key
 -------------------------------------------
 
-Now you will have to set up a new user for the Document Interface with
+Now you will have to set up a new user for the Journalist Interface with
 the secret key from the "Secret Key (20 bytes hex)" field.
 
 manage.py
 ~~~~~~~~~
 
 If you have just installed SecureDrop, you will need to add the first
-admin user to the Document Interface with ``manage.py``. ``cd`` to the
+admin user to the Journalist Interface with ``manage.py``. ``cd`` to the
 ``SECUREDROP_ROOT``, which is ``/vagrant/securedrop`` in development and
 ``/var/www/securedrop`` in production. Run ``./manage.py add-admin``.
 Fill in the username and password prompts. When it asks "Is this admin

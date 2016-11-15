@@ -69,13 +69,26 @@
     - apache
     - hardening
 
+  # because we no longer call the `journalist interface` the `document interface`
+- name: Remove old config files
+  file:
+    state: absent
+    path: '/etc/apache2/{{ item }}'
+  with_items:
+    - sites-available/document.conf
+    - sites-enabled/document.conf
+  notify:
+    - restart apache2
+  tags:
+    - apache
+
 - name: Enable SecureDrop Apache sites.
   file:
     state: link
     src: "/etc/apache2/sites-available/{{ item }}.conf"
     dest: "/etc/apache2/sites-enabled/{{ item }}.conf"
   with_items:
-    - document
+    - journalist
     - source
   notify:
     - restart apache2

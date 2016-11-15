@@ -91,7 +91,7 @@ end
 listening_ports = [
   22,     # ssh
   80,     # source interface
-  8080,   # document interface
+  8080,   # journalist interface
   6001,   # Xvfb
 ]
 # ensure ports are listening

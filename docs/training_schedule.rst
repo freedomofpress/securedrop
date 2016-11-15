@@ -33,7 +33,7 @@ recipients and anyone else interested
 -  Go over the SecureDrop :ref:`environment diagrams <securedrop_architecture_diagram>`
 -  Importance of the landing page security and Twitter feedback
 -  Demo the source submission process
--  Demo the journalist's processes for checking the Document Interface
+-  Demo the journalist's processes for checking the Journalist Interface
 -  Demo the journalist's processes for replies
 -  Demo working with submissions on the SVS
 -  Discuss scrubbing submitted documents prior to publication
@@ -41,12 +41,12 @@ recipients and anyone else interested
 -  Show example of an OSSEC alert, briefly cover what it does
 -  Show example of 'is it up?' Nagios monitoring alerts for Source
    Interface
--  Explain why the Document Interface does not have 'is it up?'
+-  Explain why the Journalist Interface does not have 'is it up?'
    monitoring
 -  Discuss vanity onion URLs with
    `Shallot <https://github.com/katmagic/Shallot>`__ and
    `Scallion <https://github.com/lachesis/scallion>`__
--  How to brand the Source and Document Interface
+-  How to brand the Source and Journalist Interface
 -  Physical security of servers and SVS
 -  How to securely publicize the organization's Source Interface Tor URL
 -  Distribute important info:
@@ -89,7 +89,7 @@ Participants: journalists and admins
 -  Generate personnel GPG keys
 -  Setup KeyPassX manager (one for SVS, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
-   Document Interface, FDE and password managers)
+   Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys
@@ -113,7 +113,7 @@ Participants: admins
 -  Generate personnel GPG keys
 -  Setup KeyPassX manager (one for SVS, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
-   Document Interface, FDE and password managers)
+   Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys

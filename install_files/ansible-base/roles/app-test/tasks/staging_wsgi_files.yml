@@ -1,5 +1,5 @@
 ---
-# In production, logging is enabled for the document interface
+# In production, logging is enabled for the journalist interface
 # but disabled for the source interface, to avoid leaking information
 # about the behavior of sources. In the staging environment, however,
 # logging for the source interface is useful for debugging,
