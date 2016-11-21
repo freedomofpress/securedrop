@@ -555,7 +555,6 @@ class TestJournalistApp(TestCase):
     def test_download_selected_submissions_from_source(self):
         source, _ = utils.db_helper.init_source()
         submissions = set(utils.db_helper.submit(source, 4))
-
         selected_submissions = random.sample(submissions, 2)
         selected_fnames = [submission.filename
                            for submission in selected_submissions]
@@ -565,14 +564,28 @@ class TestJournalistApp(TestCase):
             '/bulk', data=dict(action='download',
                                sid=source.filesystem_id,
                                doc_names_selected=selected_fnames))
+
+        for index, filename in enumerate(selected_fnames, start=1):
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join(
+                        source.journalist_filename,
+                        source.journalist_designation,
+                        "%s_%s" % (index, source.last_updated.date()),
+                        files[0],
+                    ))
+                )
+
         # The download request was succesful, and the app returned a zipfile
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
+
         # The submissions selected are in the zipfile
         for filename in selected_fnames:
             self.assertTrue(zipfile.ZipFile(StringIO(resp.data)).getinfo(
                 os.path.join(source.journalist_filename, filename)))
+
         # The submissions not selected are absent from the zipfile
         not_selected_submissions = submissions.difference(selected_submissions)
         not_selected_fnames = [submission.filename
@@ -605,6 +618,7 @@ class TestJournalistApp(TestCase):
     def test_download_unread_all_sources(self):
         self._bulk_download_setup()
         self._login_user()
+
         # Download all unread messages from all sources
         self.resp = self.client.post(
             '/col/process',
@@ -616,14 +630,37 @@ class TestJournalistApp(TestCase):
         self.assertEqual(self.resp.status_code, 200)
         self.assertEqual(self.resp.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(self.resp.data)))
+
         # All the not dowloaded submissions are in the zipfile
         for submission in self.not_downloaded0.union(self.not_downloaded1):
             self.assertTrue(
                 zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
                     os.path.join('unread', submission.filename))
                 )
+
         # All the downloaded submissions are absent from the zipfile
-        for submission in self.downloaded0 + self.downloaded1:
+        selected_files = self.downloaded0 + self.downloaded1
+        for index, filename in enumerate(selected_files, start=1):
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join(
+                        "unread",
+                        self.source0.journalist_designation,
+                        "%s_%s" % (index, self.source0.last_updated.date()),
+                        filename,
+                    ))
+                )
+            self.assertTrue(
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join(
+                        "unread",
+                        self.source1.journalist_designation,
+                        "%s_%s" % (index, self.source1.last_updated.date()),
+                        filename,
+                    ))
+                )
+
+        for filename in (self.files[0], self.files2[0]):
             try:
                 zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
                     os.path.join('unread', submission.filename))
@@ -635,23 +672,35 @@ class TestJournalistApp(TestCase):
     def test_download_all_selected_sources(self):
         self._bulk_download_setup()
         self._login_user()
+
         # Dowload all messages from self.source1
         self.resp = self.client.post(
             '/col/process',
             data=dict(action='download-all',
                       cols_selected=[self.source1.filesystem_id]))
 
+        resp = self.client.post('/col/process',
+                                data=dict(action='download-all',
+                                          cols_selected=[self.source1.filesystem_id]))
+
         # The download request was succesful, and the app returned a zipfile
-        self.assertEqual(self.resp.status_code, 200)
-        self.assertEqual(self.resp.content_type, 'application/zip')
-        self.assertTrue(zipfile.is_zipfile(StringIO(self.resp.data)))
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/zip')
+        self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
+
         # All messages from self.source1 are in the zipfile
-        for submission in self.submissions1:
+        for index, filename in enumerate(self.files1, start=1):
             self.assertTrue(
-                zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
-                    os.path.join('all', submission.filename))
+                zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                    os.path.join(
+                        "all",
+                        self.source1.journalist_designation,
+                        "%s_%s" % (index, self.source1.last_updated.date()),
+                        filename)
+                    )
                 )
-        # All messages from self.source2 are absent from the zipfile
+
+        # All messages from self.source1 are absent from the zipfile
         for submission in self.submissions0:
             try:
                 zipfile.ZipFile(StringIO(self.resp.data)).getinfo(
