@@ -5,7 +5,7 @@
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
-  <p class="notification"> <i class="fa fa-info-circle pull-left"></i> A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+  <p class="notification"> <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/info-circle.svg') }}" width="20px" height="20px">A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
 
   <h2 class="headline">Submit documents and messages</h2>
@@ -17,8 +17,9 @@
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
-    <div class="attachment grid-item">
-      <i class="fa fa-cloud-upload upload-icon"></i> <input type="file" name="fh" autocomplete="off">
+    <div class="attachment grid-item center">
+      <img class="center" src="{{ url_for('static', filename='i/font-awesome/upload.png') }}">
+      <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>
     <div class="message grid-item">
@@ -28,7 +29,9 @@
 
   <hr class="no-line">
 
-  <button type="submit" class="btn primary"><i class="fa fa-cloud-upload"></i> Submit</button>
+  <button type="submit" class="btn primary">
+  <img src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px">
+  Submit</button>
 </form>
 
 <p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
@@ -47,7 +50,8 @@
         <form id="delete" class="message" method="post" action="/delete" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
-          <a href="#confirm-delete-{{ reply.filename }}" class="delete"><i class="fa fa-trash-o"></i> Delete</a>
+          <a href="#confirm-delete-{{ reply.filename }}" class="delete">
+          <img src="{{ url_for('static', filename='i/font-awesome/black/trash.svg') }}" width="20px" height="20px">
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>Delete this reply?
               <a href="#delete">Cancel</a>
@@ -77,7 +81,8 @@
 
 
 <div class="code-reminder">
-  <i class="fa fa-lock pull-left"></i> Remember your codename is:
+
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
   <span id="content"><p class="alert"><strong>{{ codename }}</strong></p></span>
 </div>
