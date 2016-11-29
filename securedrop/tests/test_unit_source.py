@@ -220,10 +220,25 @@ class TestSource(TestCase):
                                     mode=ANY,
                                     fileobj=ANY)
 
-    def test_tor2web_warning(self):
+    def test_tor2web_warning_headers(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
+    def test_tor2web_warning(self):
+        rv = self.client.get('/tor2web-warning')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Why is there a warning about Tor2Web?", rv.data)
+
+    def test_why_journalist_key(self):
+        rv = self.client.get('/why-journalist-key')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Why download the journalist's public key?", rv.data)
+
+    def test_howto_disable_js(self):
+        rv = self.client.get('/howto-disable-js')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Turn the Security Slider to High to Protect Your Anonymity", rv.data)
 
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
