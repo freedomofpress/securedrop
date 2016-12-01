@@ -1,6 +1,9 @@
 # ignore the external config file that will contain digital ocean api tokens
 snap.rb
 
+# ignore ansible retry files
+*.retry
+
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
