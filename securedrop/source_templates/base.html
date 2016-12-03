@@ -4,10 +4,7 @@
     <meta charset="utf-8">
     <title>SecureDrop | Protecting Journalists and Sources</title>
 
-    {# TODO why doesn't a link to /static/source.css work? #}
-    {% assets filters="cssmin", output="gen/source.css", "css/source.css" %}
-      <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
+    <link rel="stylesheet" href="/static/css/source.css" />
     <link rel="icon" type="image/png" href="/static/i/favicon.png" >
     {% block extrahead %}{% endblock %}
   </head>
