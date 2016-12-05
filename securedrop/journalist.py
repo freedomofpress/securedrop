@@ -692,7 +692,7 @@ def download(zip_basename, submissions):
     attachment_filename = "{}--{}.zip".format(
         zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
-    # Mark the submissions that are about to be downloaded as such
+    # Mark the submissions that have been downloaded as such
     for submission in submissions:
         submission.downloaded = True
     db_session.commit()

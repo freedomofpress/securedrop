@@ -39,7 +39,7 @@ class TestStore(unittest.TestCase):
                                   submission.filename)
                      for submission in submissions]
 
-        archive = zipfile.ZipFile(store.get_bulk_archive(filenames))
+        archive = zipfile.ZipFile(store.get_bulk_archive(submissions))
         archivefile_contents = archive.namelist()
 
         for archived_file, actual_file in zip(archivefile_contents, filenames):
