@@ -15,7 +15,7 @@ app-journalist-aths
 app-source-ths
 mon-ssh-aths
 
-# ignore vagrant servet file
+# ignore vagrant secret file
 secrets.rb
 
 # ignore the auto generated vagrant ansible inventory files
