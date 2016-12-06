@@ -98,3 +98,6 @@ securedrop/static/.webassets-cache
 # Vagrant adding this directory is a bug, and should be fixed in Vagrant 1.8.1:
 # https://github.com/mitchellh/vagrant/issues/6705
 .bundle
+
+# ignore ansible retry files
+*.retry
