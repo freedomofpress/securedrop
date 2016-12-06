@@ -291,7 +291,7 @@ class TestSource(TestCase):
     def test_howto_disable_js(self):
         rv = self.client.get('/howto-disable-js')
         self.assertEqual(rv.status_code, 200)
-        self.assertIn("Disable JavaScript to Protect Your Anonymity", rv.data)
+        self.assertIn("Turn the Security Slider to High to Protect Your Anonymity", rv.data)
 
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):

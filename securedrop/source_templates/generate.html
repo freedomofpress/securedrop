@@ -7,7 +7,8 @@
 <hr class="no-line" />
 
 <div class="code">
-  <i class="fa fa-lock pull-left"></i><p id="codename">{{ codename }}</p>
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px">
+  <p id="codename">{{ codename }}</p>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -17,7 +18,7 @@
         {% endfor %}
       </select>
       <button type="submit" id="regenerate-submit" class="small">
-        <i class="fa fa-refresh"></i>
+        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/refresh.svg') }}" width="15px" height="15px">
       </button>
     </form>
   </div>
@@ -35,7 +36,9 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="btn block pull-right" id="continue-button"><i class="fa fa-arrow-circle-o-right"></i> Continue</button>
+  <button type="submit" class="btn block pull-right" id="continue-button">
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/arrow-circle-o-right.svg') }}" width="20px" height="20px">
+    Continue</button>
   <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
 {% endblock %}

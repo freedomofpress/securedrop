@@ -49,25 +49,49 @@ While using the Tor Browser on your personal computer helps hide your activity o
 Making your First Submission
 ----------------------------
 
-Open the Tor Browser and navigate to the .onion address for the SecureDrop Source Interface you wish to make a submission to. The page should look similar to the screenshot below, although it will probably have a logo specific to the organization you are submitting to.
+Open the Tor Browser and navigate to the .onion address for the SecureDrop
+Source Interface you wish to make a submission to. The page should look similar
+to the screenshot below, although it will probably have a logo specific to the
+organization you are submitting to.
 
 |Source Interface With Javascript Enabled|
 
-If this is the first time you're using the Tor browser, it's likely that you have Javascript enabled. If you do, there will be a red warning banner at the top of the page that encourages you to disable it.
+If this is the first time you're using the Tor browser, it's likely that you
+have Javascript enabled and that the Security Slider that Tor browser provides
+is set to "Low". If you do, there will be a red warning banner at the top of
+the page that encourages you to disable Javascript and turn up the Security
+Slider to "High".
 
-Click the ``Learn how to disable it`` link in the warning banner and a message bubble will pop up explaining how to disable Javascript. Follow the instructions and the page should refresh automatically. Note that this will disable Javascript for every page in your Tor Browser, and this setting will persist across browser sessions.
+|Security Slider|
+
+Click the ``Learn how to disable it`` link in the warning banner and a message
+bubble will pop up explaining how to disable Javascript and turn up the Slider.
+Follow the instructions and the page should refresh automatically. Note that
+this will change the slider and disable Javascript for every page in your Tor
+Browser, and this setting will persist across browser sessions.
 
 |Fix Javascript warning|
 
-The page should now look similar to the screenshot below. If this is the first time you are using SecureDrop, click the ``Submit Documents`` button.
+The page should now look similar to the screenshot below. If this is the first
+time you are using SecureDrop, click the ``Submit Documents`` button.
 
 |Source Interface with Javascript Disabled|
 
-You should now see a screen that shows the unique codename that SecureDrop has generated for you. In the example screenshot below the codename is ``sink los radium bcd nab privy nadir``, but yours will be different. It is extremely important that you both remember this code and keep it secret. After submitting documents, you will need to provide this code to log back in and check for responses.
+You should now see a screen that shows the unique codename that SecureDrop has
+generated for you. In the example screenshot below the codename is
+``sink los radium bcd nab privy nadir``, but yours will be different. It is
+extremely important that you both remember this code and keep it secret. After
+submitting documents, you will need to provide this code to log back in and
+check for responses.
 
-The best way to protect your codename is to memorize it. If you cannot memorize it right away, we recommend writing it down and keeping it in a safe place at first, and gradually working to memorize it over time. Once you have memorized it, you should destroy the written copy.
+The best way to protect your codename is to memorize it. If you cannot memorize
+it right away, we recommend writing it down and keeping it in a safe place at
+first, and gradually working to memorize it over time. Once you have memorized
+it, you should destroy the written copy.
 
-SecureDrop allows you to choose the length of your codename, in case you want to create a longer codename for extra security. Once you have generated a codename and put it somewhere safe, click ``Continue``.
+SecureDrop allows you to choose the length of your codename, in case you want
+to create a longer codename for extra security. Once you have generated a
+codename and put it somewhere safe, click ``Continue``.
 
 |Memorizing your codename|
 
@@ -145,6 +169,7 @@ Repeat these steps to continue communicating with the journalist.
 
 
 .. |Source Interface with Javascript Enabled| image:: images/manual/source-step1.png
+.. |Security Slider| image:: images/manual/security-slider-high.png
 .. |Fix Javascript warning| image:: images/manual/source-step2.png
 .. |Source Interface with Javascript Disabled| image:: images/manual/source-step3-and-step7.png
 .. |Memorizing your codename| image:: images/manual/source-step4.png

@@ -4,9 +4,9 @@
     {% if category != 'banner-warning' %}
       <p class="flash {{ category }}">
         {% if category == 'notification' %}
-        <i class="fa fa-info-circle pull-left"></i>
+        <img src="{{ url_for('static', filename='i/font-awesome/black/info.svg') }}" width="17px" height="17px">
         {% elif category == 'error' %}
-        <i class="fa fa-exclamation-triangle pull-left"></i>
+        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/exclamation-triangle.svg') }}" width="17px" height="17px">
         {% endif %}
         {{ message }}
       </p>
