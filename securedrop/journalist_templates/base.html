@@ -4,10 +4,7 @@
     <meta charset="utf-8">
     <title>SecureDrop</title>
 
-    {# TODO why doesn't a link to /static/journalist.css work? #}
-    {% assets filters="cssmin", output="gen/journalist.css", "css/journalist.css" %}
-      <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
+    <link rel="stylesheet" href="/static/css/journalist.css" />
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
