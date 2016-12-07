@@ -24,9 +24,9 @@ continuing:
 
 -  The *App Server* IP address
 -  The *Monitor Server* IP address
--  The SecureDrop application's GPG public key (from the *Transfer
+-  The SecureDrop Submission Key (from the *Transfer
    Device*)
--  The SecureDrop application's GPG key fingerprint
+-  The SecureDrop Submission Key fingerprint
 -  The email address that will receive alerts from OSSEC
 -  The GPG public key and fingerprint for the email address that will
    receive the alerts
@@ -50,11 +50,11 @@ directory: ::
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
--  SecureDrop Application GPG public key file
+-  SecureDrop Submission Key public key file
 -  Admin GPG public key file (for encrypting OSSEC alerts)
 -  (Optional) Custom header image file
 
-The SecureDrop application GPG key should be located on your *Transfer
+The SecureDrop Submission Key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
 is mounted, but for example, if you are already in the ansible-base
 directory, you can just run: ::
@@ -80,9 +80,9 @@ following:
 -  Hostname of the Monitor Server: ``monitor_hostname``
 -  Hostname of the Application Server: ``app_hostname``
 -  IP address of the Application Server: ``app_ip``
--  The SecureDrop application's GPG public key:
+-  The SecureDrop Submission Key public key file:
    ``securedrop_app_gpg_public_key``
--  The SecureDrop application's GPG key fingerprint:
+-  The SecureDrop Submission Key fingerprint:
    ``securedrop_app_gpg_fingerprint``
 -  GPG public key used when encrypting OSSEC alerts:
    ``ossec_alert_gpg_public_key``
