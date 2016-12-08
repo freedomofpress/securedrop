@@ -33,7 +33,15 @@
 
 # necessary for automated tests
 - name: Compile sass to css
-  shell: sass --update sass:static/css
+  shell: >
+    if [ -d /home/travis ]; then
+      /home/travis/.rvm/bin/rvm install 2.3.0 &&
+      /home/travis/.rvm/bin/rvm use 2.3.0 &&
+      gem install sass &&
+      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
+    else 
+      sass --update sass:static/css
+    fi
   args:
     chdir: '{{ securedrop_repo  }}/securedrop'
   tags:
