@@ -48,7 +48,7 @@
                 </div>
                 <div id="{{ source.filesystem_id }}-reassign" class="assign-select">
                   <p>Assign new journalist:</p>
-                  <select name="{{ source.filesystem_id }}-journalist">
+                  <select name="journalist">
                     <option value="none">nobody</option>
                     {% for journalist in journalists %}
                     <option value="{{ journalist.username }}">{{ journalist.username }}</option>
@@ -96,7 +96,7 @@
                 </div>
                 <div id="{{ source.filesystem_id }}-reassign" class="assign-select">
                   <p>Assign new journalist:</p>
-                  <select name="{{ source.filesystem_id }}-journalist">
+                  <select name="journalist">
                     <option value="none">nobody</option>
                     {% for journalist in journalists %}
                     <option value="{{ journalist.username }}">{{ journalist.username }}</option>

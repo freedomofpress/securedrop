@@ -440,12 +440,12 @@ def index():
 def change_assignment(sid):
     source = get_source(sid)
 
-    if request.form[sid + "-journalist"] == "none":
+    if request.form["journalist"] == "none":
         source.journalist = None
         db_session.commit()
         return redirect(url_for('index'))
 
-    journalist_query = Journalist.query.filter(Journalist.username == request.form[sid + "-journalist"])
+    journalist_query = Journalist.query.filter(Journalist.username == request.form["journalist"])
     journalist = get_one_or_else(journalist_query, app.logger, abort)
 
     source.journalist = journalist
