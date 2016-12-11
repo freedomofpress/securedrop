@@ -224,6 +224,10 @@ class InvalidPasswordLength(Exception):
             return "Password too long (len={})".format(self.pw_len)
 
 
+class WeakPasswordError(Exception):
+    """Raised when attempting to create a Journalist with a weak password"""
+
+
 class Journalist(Base):
     __tablename__ = "journalists"
     id = Column(Integer, primary_key=True)
@@ -271,6 +275,8 @@ class Journalist(Base):
         # Enforce a reasonable maximum length for passwords to avoid DoS
         if len(password) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
+        if not crypto_util.check_password_strength(password):
+            raise WeakPasswordError()
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
 

@@ -18,6 +18,7 @@ import common
 import config
 import crypto_util
 import journalist
+import random
 from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
 
@@ -56,10 +57,10 @@ class TestJournalist(TestCase):
         self.mock_journalist_verify_token.return_value = True
 
         # Set up test users
-        self.user_pw = "bar"
+        self.user_pw = "correct horse battery staple"
         self.user = Journalist(username="foo",
                                password=self.user_pw)
-        self.admin_user_pw = "admin"
+        self.admin_user_pw = "ADMIN! correct horse battery staple"
         self.admin_user = Journalist(username="admin",
                                      password=self.admin_user_pw,
                                      is_admin=True)
@@ -187,7 +188,8 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username='foo', is_admin=False,
-                      password='valid', password_again='valid'))
+                      password='correct horse battery staple',
+                      password_again='correct horse battery staple'))
 
         self.assertIn('Password successfully changed', res.data)
 
@@ -204,7 +206,9 @@ class TestJournalist(TestCase):
 
     def test_admin_edits_user_password_too_long(self):
         self._login_admin()
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password =  ''.join([random.choice(
+            'abcdefghijklmnopqrstuvxyz01234567890')
+            for _ in range(Journalist.MAX_PASSWORD_LEN + 1)])
 
         res = self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
@@ -304,8 +308,8 @@ class TestJournalist(TestCase):
         res = self.client.post(
             url_for('admin_add_user'),
             data=dict(username='dellsberg',
-                      password='pentagonpapers',
-                      password_again='pentagonpapers',
+                      password='correct horse battery staple',
+                      password_again='correct horse battery staple',
                       is_admin=False)
             )
 
@@ -316,8 +320,10 @@ class TestJournalist(TestCase):
 
         res = self.client.post(
             url_for('admin_add_user'),
-            data=dict(username='', password='pentagonpapers',
-                      password_again='pentagonpapers', is_admin=False))
+            data=dict(username='',
+                      password='correct horse battery staple',
+                      password_again='correct horse battery staple',
+                      is_admin=False))
 
         self.assertIn('Missing username', res.data)
 
@@ -334,7 +340,9 @@ class TestJournalist(TestCase):
     def test_admin_add_user_failure_password_too_long(self):
         self._login_admin()
 
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password =  ''.join([random.choice(
+            'abcdefghijklmnopqrstuvxyz01234567890')
+            for _ in range(Journalist.MAX_PASSWORD_LEN + 1)])
         res = self.client.post(
             url_for('admin_add_user'),
             data=dict(username='dellsberg', password=overly_long_password,
@@ -394,7 +402,9 @@ class TestJournalist(TestCase):
 
     def test_too_long_user_password_change(self):
         self._login_user()
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password =  ''.join([random.choice(
+            'abcdefghijklmnopqrstuvxyz01234567890')
+             for _ in range(Journalist.MAX_PASSWORD_LEN + 1)])
 
         res = self.client.post(url_for('edit_account'), data=dict(
             password=overly_long_password,
@@ -406,8 +416,8 @@ class TestJournalist(TestCase):
     def test_valid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('edit_account'), data=dict(
-            password='valid',
-            password_again='valid'))
+            password='correct horse battery staple',
+            password_again='correct horse battery staple'))
         self.assertIn("Password successfully changed", res.data)
 
     def test_regenerate_totp(self):
@@ -625,7 +635,9 @@ class TestJournalist(TestCase):
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
         maximum password length should raise an exception"""
-        overly_long_password = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password =  ''.join([random.choice(
+            'abcdefghijklmnopqrstuvxyz01234567890')
+            for _ in range(Journalist.MAX_PASSWORD_LEN + 1)])
         with self.assertRaises(InvalidPasswordLength):
             temp_journalist = Journalist(
                     username="My Password is Too Big!",

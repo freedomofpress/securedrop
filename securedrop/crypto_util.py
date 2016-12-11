@@ -10,6 +10,7 @@ import scrypt
 
 import config
 import store
+import zxcvbn
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
@@ -175,6 +176,16 @@ def decrypt(secret, ciphertext):
     """
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+
+
+def check_password_strength(password):
+    """
+    >>> check_password_strength('hunter2')
+    False
+    >>> check_password_strength('correct horse battery staple')
+    True
+    """
+    return zxcvbn.main.password_strength(password)['score'] >= 3
 
 if __name__ == "__main__":
     import doctest
