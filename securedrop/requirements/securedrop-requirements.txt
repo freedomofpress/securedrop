@@ -26,3 +26,4 @@ SQLAlchemy==1.0.15
 webassets==0.12.0         # via flask-assets
 Werkzeug==0.11.11         # via flask, flask-wtf
 WTForms==2.1              # via flask-wtf
+zxcvbn==1.0

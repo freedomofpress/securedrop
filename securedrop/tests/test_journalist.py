@@ -91,7 +91,7 @@ class TestJournalistLogin(unittest.TestCase):
         self.mock_journalist_verify_token.return_value = True
 
         self.username = "test user"
-        self.password = "test password"
+        self.password = "correct horse battery staple"
         self.user = Journalist(
                 username=self.username,
                 password=self.password)

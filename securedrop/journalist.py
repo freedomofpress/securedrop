@@ -19,7 +19,8 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength)
+                LoginThrottledException, InvalidPasswordLength,
+                WeakPasswordError)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -188,6 +189,9 @@ def admin_add_user():
                 form_valid = False
                 flash("Your password is too long (maximum length {} characters)".format(
                         Journalist.MAX_PASSWORD_LEN), "error")
+            except WeakPasswordError:
+                form_valid=  False
+                flash("Your password is too weak. Try adding more words." 'error')
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
@@ -274,6 +278,9 @@ def admin_edit_user(user_id):
                       "(maximum length {} characters)".format(
                       Journalist.MAX_PASSWORD_LEN), "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
+            except WeakPasswordError:
+                flash("Your password is too weak. Try adding more words.", 'error')
+                return redirect(url_for("admin_edit_user", user_id=user_id))
 
         user.is_admin = bool(request.form.get('is_admin'))
 
@@ -316,6 +323,10 @@ def edit_account():
                 flash("Your password is too long "
                       "(maximum length {} characters)".format(
                       Journalist.MAX_PASSWORD_LEN), "error")
+                return redirect(url_for("edit_account"))
+            except WeakPasswordError:
+                flash('Your password is too weak. Try adding more words',
+                      'error')
                 return redirect(url_for("edit_account"))
 
         try:

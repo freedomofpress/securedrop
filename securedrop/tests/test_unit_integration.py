@@ -73,7 +73,7 @@ class TestIntegration(unittest.TestCase):
 
         # Add a test user to the journalist interface and log them in
         # print Journalist.query.all()
-        self.user_pw = "bar"
+        self.user_pw = "correct horse battery staple"
         self.user = Journalist(username="foo",
                                password=self.user_pw)
         db_session.add(self.user)
@@ -559,8 +559,8 @@ class TestIntegration(unittest.TestCase):
 
         # change password
         self.journalist_app.post('/account', data=dict(
-            password='newpass',
-            password_again='newpass'
+            password='new correct horse battery staple',
+            password_again='new correct horse battery staple'
         ))
 
         # logout
@@ -569,7 +569,7 @@ class TestIntegration(unittest.TestCase):
         # login with new credentials should redirect to index page
         rv = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
-            password='newpass',
+            password='new correct horse battery staple',
             token='mocked',
             follow_redirects=True))
         self.assertEqual(rv.status_code, 302)

@@ -50,7 +50,7 @@ class JournalistNavigationSteps():
         # Create a test user for logging in
         test_user_info = dict(
             username='test',
-            password='test')
+            password='correct horse battery staple')
         test_user = Journalist(**test_user_info)
         db_session.add(test_user)
         db_session.commit()
@@ -66,7 +66,7 @@ class JournalistNavigationSteps():
         # Create a test admin user for logging in
         admin_user_info = dict(
             username='admin',
-            password='admin',
+            password='admin! correct horse battery staple',
             is_admin=True)
         admin_user = Journalist(**admin_user_info)
         db_session.add(admin_user)
@@ -132,7 +132,7 @@ class JournalistNavigationSteps():
 
         self.new_user = dict(
             username='dellsberg',
-            password='pentagonpapers')
+            password='correct horse battery staple')
 
         self._add_user(self.new_user['username'], self.new_user['password'])
 

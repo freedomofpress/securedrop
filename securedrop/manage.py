@@ -13,6 +13,7 @@ from getpass import getpass
 from argparse import ArgumentParser
 from db import db_session, Journalist
 from management import run
+from crypto_util import check_password_strength
 
 # We need to import config in each function because we're running the tests
 # directly, so it's important to set the environment correctly, depending on
@@ -118,13 +119,19 @@ def add_admin():
 
     while True:
         password = getpass("Password: ")
-        password_again = getpass("Confirm Password: ")
+
+        if not check_password_strength(password):
+            print('Your password is too weak. Try adding numbers, special '
+                  'characters, or more words. Diceware is a nice option.')
+            continue
 
         if len(password) > Journalist.MAX_PASSWORD_LEN:
             print ("Your password is too long (maximum length {} characters). "
                    "Please pick a shorter password.".format(
                    Journalist.MAX_PASSWORD_LEN))
             continue
+
+        password_again = getpass("Confirm Password: ")
 
         if password == password_again:
             break
