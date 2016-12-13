@@ -475,8 +475,44 @@ email alert every morning containing text similar to: ::
 
 This is a normal alert, and informs you that the system is working as expected.
 
+Similarly, your SecureDrop Application and Monitoring Servers will
+check for application updates on your servers. Should your servers require
+updates, OSSEC will alarm because the packages binaries will have changed
+Below is a sample alert, but you may see any number of these records in the
+logs. This will happen in batches so these emails might be longer than the
+below alert. You should also see them in an email named ``Daily Report:
+File Changes``. To verify this activity matches the package history, you
+can review the logs in ``/var/log/apt/history.log``. ::
+
+    Received From: (app)
+    Rule: 2902 fired (level 7) -> "New (Debian Package) installed."
+    Portion of the log(s):
+
+    status installed <package name> <version>
+
+This is a normal alert, it tells you your system is up-to-date and patched.
+
+Occassionally your SecureDrop Servers will send an alert for failing to connect
+to Tor relays. Since SecureDrop runs as a Tor Onion Service, it is possible
+for Tor connections to timeout or become overloaded. ::
+
+    Received From: (app)
+    Rule: 1002 fired (level 2) -> "Unknown problem somewhere in the system."
+    Portion of the log(s):
+
+    [warn] Your Guard <name> ($fingerprint) is failing a very large amount of
+    circuits. Most likely this means the Tor network is overloaded, but it
+    could also mean an attack against you or potentially the guard itself.
+
+This alert is common but if you see them for sustained periods of time (several
+times a day), please contact us at the `SecureDrop Support Portal`_ or at
+securedrop@freedom.press for help.
+
+.. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
+
 Uncommon OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~~~
 
 If you believe that the system is behaving abnormally, you should
-contact us at securedrop@freedom.press for help.
+contact us at the `SecureDrop Support Portal`_ or securedrop@freedom.press for
+help.
