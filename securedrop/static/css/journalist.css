@@ -405,6 +405,53 @@ p#codename {
 #cols li.source:last-child {
   border-bottom: none;
 }
+#cols li.source .assignment p {
+  margin: 0;
+  display: inline-block;
+}
+#cols li.source .assignment .assign-current {
+  margin-left: 7%;
+  font-size: 0.8em;
+}
+#cols li.source .assignment .assign-current a {
+  margin-left: 1%;
+}
+#cols li.source .assignment .btn {
+  padding: .3%;
+  width: 10%;
+  display: inline-block;
+}
+#cols li.source .assignment button {
+  margin-left: 3%;
+  padding: .3%;
+  width: 10%;
+}
+#cols li.source .assign-select {
+  height: 0;
+  overflow: hidden;
+}
+#cols li.source .assign-select:target {
+  height: auto;
+  overflow: visible;
+  margin-top: 1%;
+  text-align: center;
+}
+#cols li.source .assign-select p {
+  font-weight: bold;
+  font-style: italic;
+}
+#cols li.source .assign-select select {
+  margin-left: 2%;
+  width: 23%;
+}
+#cols li.source .assign-select .btn {
+  background-color: #999
+}
+#cols li.source .assign-select .btn:hover {
+  color: #999;
+  background-color: white;
+}
+
 #cols li.source .date {
   float: right;
   background-color: #999999;
