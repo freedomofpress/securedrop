@@ -534,7 +534,12 @@ class TestJournalist(TestCase):
         for file in selected_files:
             self.assertTrue(
                 zipfile.ZipFile(StringIO(rv.data)).getinfo(
-                    os.path.join(source.journalist_filename, file))
+                    os.path.join(
+                        source.journalist_filename,
+                        source.journalist_designation,
+                        "1_%s" % source.last_updated.date(),
+                        files[0],
+                    ))
                 )
 
         for file in unselected_files:
@@ -581,11 +586,27 @@ class TestJournalist(TestCase):
         self.assertEqual(resp.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
 
-        for file in (self.files[1], self.files2[1]):
-            self.assertTrue(
-                zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join('unread', file))
-                )
+        source = journalist.get_source(self.sid)
+        source2 = journalist.get_source(self.sid2)
+
+        self.assertTrue(
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    source.journalist_designation,
+                    "1_%s" % source.last_updated.date(),
+                    self.files[1],
+                ))
+            )
+        self.assertTrue(
+            zipfile.ZipFile(StringIO(resp.data)).getinfo(
+                os.path.join(
+                    "unread",
+                    source2.journalist_designation,
+                    "1_%s" % source2.last_updated.date(),
+                    self.files2[1],
+                ))
+            )
 
         for file in (self.files[0], self.files2[0]):
             try:
@@ -607,10 +628,17 @@ class TestJournalist(TestCase):
         self.assertEqual(resp.content_type, 'application/zip')
         self.assertTrue(zipfile.is_zipfile(StringIO(resp.data)))
 
-        for file in self.files2:
+        source2 = journalist.get_source(self.sid2)
+
+        for i, file in enumerate(self.files2):
             self.assertTrue(
                 zipfile.ZipFile(StringIO(resp.data)).getinfo(
-                    os.path.join('all', file))
+                    os.path.join(
+                        "all",
+                        source2.journalist_designation,
+                        "%s_%s" % (i+1, source2.last_updated.date()),
+                        file
+                    ))
                 )
 
         for file in self.files:

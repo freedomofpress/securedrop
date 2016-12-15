@@ -665,22 +665,19 @@ def download(zip_basename, submissions):
 
     :param str zip_basename: The basename of the zipfile download.
 
-    :param list submissions: A list of :class:`db.Submission`s to 
+    :param list submissions: A list of :class:`db.Submission`s to
                              include in the zipfile.
     """
+    zf = store.get_bulk_archive(submissions,
+                                zip_directory=zip_basename)
+    attachment_filename = "{}--{}.zip".format(
+        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+
     # Mark the submissions that are about to be downloaded as such
     for submission in submissions:
         submission.downloaded = True
     db_session.commit()
 
-    filenames = [store.path(submission.source.filesystem_id,
-                            submission.filename)
-                 for submission in submissions]
-
-    zf = store.get_bulk_archive(filenames,
-                                zip_directory=zip_basename)
-    attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)
