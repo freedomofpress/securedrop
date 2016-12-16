@@ -6,3 +6,4 @@ py
 pytest
 pytest-cov
 selenium < 3
+factory_boy
