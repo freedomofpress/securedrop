@@ -67,7 +67,7 @@ app-prod
 mon-prod
     This is like a production installation with all of the system
     hardening active, but virtualized, rather than running on hardware.
-    You will need to configure prod-like secrets in 
+    You will need to configure prod-like secrets in
     ``install_files/ansible-base/prod-specific.yml``, or export
     ``ANSIBLE_ARGS=="--skip-tags validate"`` to skip the tasks
     that prevent the prod playbook from running with Vagrant-specific info.
@@ -104,6 +104,27 @@ course, you can specify the name if you want to.
 SecureDrop consists of two separate web appications (the Source Interface and
 the Journalist Interface) that run concurrently. The development servers will
 detect code changes when they are saved and automatically reload.
+
+Test Accounts
+~~~~~~~~~~~~~
+
+The development VM has two test accounts preconfigured, along with test
+sources, submissions, and replies. If you want to instead start from an empty
+database, run ``./manage.py reset`` in ``/vagrant/securedrop``.
+
+Test Administrator Account
+  *  Username: ``test_admin``
+  *  Password: ``gravity defame``
+  *  OTP shared secret: ``xjk6 tluz rl62 7i6u``
+
+.. image:: ../images/test_admin.png
+
+Test Journalist Account
+  *  Username: ``test_journo``
+  *  Password: ``retread hash``
+  *  OTP shared secret: ``tipq kyzr tv7w 7zwb``
+
+.. image:: ../images/test_journo.png
 
 Staging
 -------
