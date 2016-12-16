@@ -7,6 +7,7 @@ import subprocess
 import signal
 import qrcode
 import psutil
+from sqlalchemy.orm.exc import NoResultFound
 
 from getpass import getpass
 from argparse import ArgumentParser
@@ -172,6 +173,24 @@ def add_admin():
             print
 
 
+def delete_user():
+    """
+    Deletes a journalist or administrator from the application.
+    """
+
+    while True:
+        username = raw_input("Username to delete: ")
+        try:
+            selected_user = Journalist.query.filter_by(username=username).one()
+            break
+        except NoResultFound:
+            print "ERROR: That user was not found!"
+
+    db_session.delete(selected_user)
+    db_session.commit()
+    print "User '{}' successfully deleted".format(username)
+
+
 def clean_tmp():
     """Cleanup the SecureDrop temp directory. This is intended to be run as an
     automated cron job. We skip files that are currently in use to avoid
@@ -227,6 +246,9 @@ def get_args():
 
     add_admin_subparser = subparsers.add_parser('add-admin', help='Add a new admin to the application')
     add_admin_subparser.set_defaults(func=add_admin)
+
+    delete_user_subparser = subparsers.add_parser('delete-user', help='Delete a user from the application')
+    delete_user_subparser.set_defaults(func=delete_user)
 
     clean_tmp_subparser = subparsers.add_parser('clean-tmp', help='Cleanup the SecureDrop temp directory')
     clean_tmp_subparser.set_defaults(func=clean_tmp)
