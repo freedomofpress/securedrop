@@ -431,8 +431,27 @@ def index():
             Submission.query.filter_by(source_id=source.id,
                                        downloaded=False).all())
 
-    return render_template('index.html', unstarred=unstarred, starred=starred)
+    journalists = Journalist.query.order_by(Journalist.username).all()
 
+    return render_template('index.html', unstarred=unstarred, starred=starred, journalists=journalists)
+
+@app.route('/change-assignment/<sid>', methods=('POST',))
+@login_required
+def change_assignment(sid):
+    source = get_source(sid)
+
+    if request.form["journalist"] == "none":
+        source.journalist = None
+        db_session.commit()
+        return redirect(url_for('index'))
+
+    journalist_query = Journalist.query.filter(Journalist.username == request.form["journalist"])
+    journalist = get_one_or_else(journalist_query, app.logger, abort)
+
+    source.journalist = journalist
+    db_session.commit()
+
+    return redirect(url_for('index'))
 
 @app.route('/col/<sid>')
 @login_required
