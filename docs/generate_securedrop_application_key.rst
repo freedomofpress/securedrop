@@ -10,6 +10,15 @@ only be decrypted and read on the *Secure Viewing Station*.
 We will now generate the *SecureDrop Submission Key* on the
 *Secure Viewing Station*.
 
+Configure Persistent Volume
+---------------------------
+
+The private key of the *SecureDrop Submission Key* needs to be permanently stored on the *Secure Viewing Station*. You need to configure the *Persistent Volume* on that station to include GnuPG keyrings and configuration first:
+
+#. Click Applications in the left upper corner of the screen
+#. Select *Configure Persistent Volume* from *System Tools*
+#. Make sure *GnuPG* is selected on the list of materials to be included in persistent storage.
+
 Correct the system time
 -----------------------
 
