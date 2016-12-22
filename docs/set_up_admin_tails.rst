@@ -16,6 +16,7 @@ should see a *Welcome to Tails* screen with two options. Select *Yes* to
 enable the persistent volume and enter your password, but do NOT click
 Login yet. Under 'More Options," select *Yes* and click *Forward*.
 
+
 Enter an *Administration password* for use with this specific Tails
 session and click *Login*.
 
@@ -28,6 +29,17 @@ Internet |Network| and that the Tor's Vidalia indicator onion
 
 .. |Network| image:: images/network-wired.png
 .. |Vidalia| image:: images/vidalia.png
+
+
+
+Verify SSH Client Peristence
+----------------------------
+
+Before creating the SSH key pair used for authenication to the servers, be sure SSH Client Persistence is enabled. This is necessary to retain SSH keys, client configuration and the known_hosts files.
+
+#. Click on Applications in the upper left corner of your screen
+#. Select *Configure Persistent Volume* from the *System Tools* menu item
+#. Ensure that *SSH Client* is selected - we recommend enabling all options.
 
 
 .. _Download the SecureDrop repository:
