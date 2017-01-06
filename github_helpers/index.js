@@ -73,6 +73,10 @@ function github_process_prs(most_recent_pr_checked, pr_cb){
                   labels.add("docs");
                 }
 
+                if(file.filename.match(/^install_files\//)){
+                  labels.add("ops");
+                }
+
                 if(file.filename.match(/^snap_ci\//)){
                   labels.add("snap_ci");
                 }
