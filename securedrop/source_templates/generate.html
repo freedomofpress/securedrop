@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block body %}
+
+{% include 'flashed.html' %}
+
 <h2>Remember this codename and keep it secret</h2>
 <p class="center">To protect your identity, we're assigning you a unique codename.</p>
 
@@ -8,7 +11,7 @@
 
 <div class="code">
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px">
-  <p id="codename">{{ codename }}</p>
+  <p id="codename" class="codename">{{ codename }}</p>
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -36,9 +39,13 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input type="text" name="codename" class="codename" placeholder="Please confirm your code name"/>
   <button type="submit" class="btn block pull-right" id="continue-button">
     <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/arrow-circle-o-right.svg') }}" width="20px" height="20px">
     Continue</button>
   <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
+
+<a id="already-have-codename" class="pull-right" href="/login">Already have a codename?</a>
+
 {% endblock %}

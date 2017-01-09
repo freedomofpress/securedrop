@@ -126,6 +126,11 @@ def index():
                            custom_notification=config.CUSTOM_NOTIFICATION)
 
 
+@app.route('/educate', methods=['GET'])
+def educate():
+    return render_template('educate.html')
+
+
 def generate_unique_codename(num_words):
     """Generate random codenames until we get an unused one"""
     while True:
@@ -158,13 +163,17 @@ def generate():
               "to create a new account, you should log out first.", "notification")
         return redirect(url_for('lookup'))
 
+    codename = session.get('codename')
+
     num_words = 7
     if request.method == 'POST':
         num_words = int(request.form['number-words'])
         if num_words not in range(7, 11):
             abort(403)
+        else:
+            session['codename'] = generate_unique_codename(num_words)
 
-    codename = generate_unique_codename(num_words)
+    codename = session.get('codename') or generate_unique_codename(num_words)
     session['codename'] = codename
     return render_template(
         'generate.html',
@@ -174,13 +183,19 @@ def generate():
 
 @app.route('/create', methods=['POST'])
 def create():
-    sid = crypto_util.hash_codename(session['codename'])
+    codename = session['codename']
+    if request.form.get('codename') != codename:
+        flash("Please confirm you code name before continuing", "error")
+        return redirect(url_for('generate'))
+
+    sid = crypto_util.hash_codename(codename)
 
     source = Source(sid, crypto_util.display_id())
     db_session.add(source)
     try:
         db_session.commit()
     except IntegrityError as e:
+        del session['codename']
         app.logger.error(
             "Attempt to create a source with duplicate codename: %s" %
             (e,))
@@ -188,7 +203,7 @@ def create():
         os.mkdir(store.path(sid))
 
     session['logged_in'] = True
-    return redirect(url_for('lookup'))
+    return redirect(url_for('educate'))
 
 
 def async(f):
@@ -398,15 +413,14 @@ def login():
 
 @app.route('/logout')
 def logout():
-    if logged_in():
-        session.clear()
-        tor_msg = Markup("""<strong>Important:</strong> Thank you for logging out.
-                         Please fully end your session by restarting
-                         Tor Browser: Click the <img src='static/i/toronion.png'
-                         alt='Tor icon' /> Tor onion icon in the toolbar above,
-                         click <strong>  New Identity</strong> and click
-                         <strong>Yes</strong> in the dialog box that appears.""")
-        flash(tor_msg, "error")
+    session.clear()
+    tor_msg = Markup("""<strong>Important:</strong> Thank you for logging out.
+                     Please fully end your session by restarting
+                     Tor Browser: Click the <img src='static/i/toronion.png'
+                     alt='Tor icon' /> Tor onion icon in the toolbar above,
+                     click <strong>  New Identity</strong> and click
+                     <strong>Yes</strong> in the dialog box that appears.""")
+    flash(tor_msg, "error")
 
     return redirect(url_for('index'))
 
