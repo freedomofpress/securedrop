@@ -450,7 +450,8 @@ def write_pidfile():
     with open(config.SOURCE_PIDFILE, 'w') as fp:
         fp.write(pid)
 
-if __name__ == "__main__":
+
+if __name__ == "__main__":  # pragma: no cover
     write_pidfile()
     debug = getattr(config, 'env', 'prod') != 'prod'
     app.run(debug=debug, host='0.0.0.0', port=8080)

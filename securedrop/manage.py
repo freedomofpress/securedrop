@@ -33,7 +33,7 @@ def get_pid_from_pidfile(pid_file_name):
         return int(fp.read())
 
 
-def _start_test_rqworker(config):
+def _start_test_rqworker(config):  # pragma: no cover
     # needed to determine the directory to run the worker in
     worker_running = False
     try:
@@ -54,11 +54,11 @@ def _start_test_rqworker(config):
             stderr=subprocess.STDOUT)
 
 
-def _stop_test_rqworker():
+def _stop_test_rqworker():  # pragma: no cover
     os.kill(get_pid_from_pidfile(TEST_WORKER_PIDFILE), signal.SIGTERM)
 
 
-def test():
+def test():  # pragma: no cover
     """
     Runs the test suite
     """
@@ -71,7 +71,7 @@ def test():
     sys.exit(test_rc)
 
 
-def test_unit():
+def test_unit():  # pragma: no cover
     """
     Runs the unit tests.
     """
@@ -226,7 +226,7 @@ def clean_tmp():
             os.remove(path)
 
 
-def get_args():
+def get_args():  # pragma: no cover
     parser = ArgumentParser(prog=__file__,
                             description='A tool to help admins manage and devs hack')
 

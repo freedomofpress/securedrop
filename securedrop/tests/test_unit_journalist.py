@@ -495,6 +495,7 @@ class TestJournalistApp(TestCase):
     def test_delete_source_deletes_submissions(self):
         """Verify that when a source is deleted, the submissions that
         correspond to them are also deleted."""
+
         self._delete_collection_setup()
         journalist.delete_collection(self.source.filesystem_id)
 
@@ -523,6 +524,7 @@ class TestJournalistApp(TestCase):
         """Verify that when a source is deleted, the PGP key that corresponds
         to them is also deleted."""
         self._delete_collection_setup()
+
         # Source key exists
         source_key = crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
@@ -537,6 +539,7 @@ class TestJournalistApp(TestCase):
         """Verify that when a source is deleted, the encrypted documents that
         exist on disk is also deleted."""
         self._delete_collection_setup()
+
         # Encrypted documents exists
         dir_source_docs = os.path.join(config.STORE_DIR, self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))

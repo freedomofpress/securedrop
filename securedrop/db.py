@@ -40,7 +40,7 @@ if config.DATABASE_ENGINE == "sqlite":
         config.DATABASE_ENGINE + ":///" +
         config.DATABASE_FILE
     )
-else:
+else:  # pragma: no cover
     engine = create_engine(
         config.DATABASE_ENGINE + '://' +
         config.DATABASE_USERNAME + ':' +

@@ -43,7 +43,7 @@ def colorize(s, color, bold=False):
     return '\x1b[{}m{}\x1b[0m'.format(';'.join(attrs), s)
 
 
-class DevServerProcess(subprocess.Popen):
+class DevServerProcess(subprocess.Popen):  # pragma: no cover
 
     def __init__(self, label, cmd, color):
         self.label = label
@@ -76,7 +76,7 @@ class DevServerProcess(subprocess.Popen):
         return self.stdout.fileno()
 
 
-class DevServerProcessMonitor(object):
+class DevServerProcessMonitor(object):  # pragma: no cover
 
     def __init__(self, procs):
         self.procs = procs
@@ -137,7 +137,7 @@ class DevServerProcessMonitor(object):
                 proc.terminate()
 
 
-def run():
+def run():  # pragma: no cover
     """
     Starts development servers for both the Source Interface and the
     Journalist Interface concurrently. Their output is collected,
