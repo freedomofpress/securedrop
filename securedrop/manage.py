@@ -58,29 +58,34 @@ def _stop_test_rqworker():  # pragma: no cover
     os.kill(get_pid_from_pidfile(TEST_WORKER_PIDFILE), signal.SIGTERM)
 
 
-def test():  # pragma: no cover
-    """
-    Runs the test suite
-    """
+def run_tests(test_commands):
     os.environ['SECUREDROP_ENV'] = 'test'
     import config
     _start_test_rqworker(config)
-    test_cmds = [["py.test", "--cov"], "./test.sh"]
-    test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
+    test_rc = int(any([subprocess.call(command) for command in test_commands]))
     _stop_test_rqworker()
     sys.exit(test_rc)
+
+
+def test():  # pragma: no cover
+    """
+    Run all tests (unit and functional).
+    """
+    run_tests([["py.test", "--cov"], "./test.sh"])
 
 
 def test_unit():  # pragma: no cover
     """
-    Runs the unit tests.
+    Run just the unit tests.
     """
-    os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_test_rqworker(config)
-    test_rc = int(subprocess.call(["py.test", "--cov"]))
-    _stop_test_rqworker()
-    sys.exit(test_rc)
+    run_tests([["py.test", "--cov"]])
+
+
+def test_functional():  # pragma: no cover
+    """
+    Run just the functional tests.
+    """
+    run_tests(["./test.sh"])
 
 
 def reset():
@@ -237,6 +242,9 @@ def get_args():  # pragma: no cover
 
     unit_test_subparser = subparsers.add_parser('unit-test', help='Run the unit tests')
     unit_test_subparser.set_defaults(func=test_unit)
+
+    functional_test_subparser = subparsers.add_parser('functional-test', help='Run the functional tests')
+    functional_test_subparser.set_defaults(func=test_functional)
 
     test_subparser = subparsers.add_parser('test', help='Run the full test suite')
     test_subparser.set_defaults(func=test)
