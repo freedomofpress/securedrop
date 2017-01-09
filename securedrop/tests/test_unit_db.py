@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import logging
 import os
 import unittest
 
@@ -13,9 +12,6 @@ import crypto_util
 from utils import db_helper, env
 from db import (db_session, Journalist, Submission, Source, Reply,
                 get_one_or_else)
-
-logging.basicConfig()
-logger = logging.getLogger(__name__)
 
 
 class TestDatabase(TestCase):
@@ -34,7 +30,8 @@ class TestDatabase(TestCase):
         new_journo, _ = db_helper.init_journalist()
 
         query = Journalist.query.filter(Journalist.username == new_journo.username)
-        selected_journo = get_one_or_else(query, logger, mock)
+        with mock.patch('logger') as mock_logger:
+            selected_journo = get_one_or_else(query, mock_logger, mock)
         self.assertEqual(new_journo, selected_journo)
 
     @mock.patch('flask.abort')
@@ -42,13 +39,21 @@ class TestDatabase(TestCase):
         journo_1, _ = db_helper.init_journalist()
         journo_2, _ = db_helper.init_journalist()
 
-        selected_journos = get_one_or_else(Journalist.query, logger, mock)
+        with mock.patch('logger') as mock_logger:
+            selected_journos = get_one_or_else(Journalist.query, mock_logger,
+                                               mock)
+        mock_logger.error.assert_called()  # Not specifying very long log line
         mock.assert_called_with(500)
 
     @mock.patch('flask.abort')
     def test_get_one_or_else_no_result_found(self, mock):
         query = Journalist.query.filter(Journalist.username == "alice")
-        selected_journos = get_one_or_else(query, logger, mock)
+
+        with mock.patch('logger') as mock_logger:
+            selected_journos = get_one_or_else(query, mock_logger,
+                                               mock)
+        log_line = 'Found none when one was expected: No row was found for one()'
+        mock_logger.error.assert_called_with(log_line)
         mock.assert_called_with(404)
 
     # Check __repr__ do not throw exceptions
