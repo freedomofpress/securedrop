@@ -5,11 +5,11 @@
   <div class="designation">
     {% if source.star.starred %}
       <button class="button-star starred" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
       <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
     {% else %}
       <button class="button-star un-starred" type="submit" formaction="/col/add_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
+      <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" />
       <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
     {% endif %}
   </div>
