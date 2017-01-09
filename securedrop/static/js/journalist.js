@@ -20,11 +20,11 @@ $(function () {
 
   var all = $("#select_all");
   var none = $("#select_none");
-  var unread = document.getElementById("select_unread");
+  var unread = $("#select_unread");
 
   all.css('cursor', 'pointer');
   none.css('cursor', 'pointer');
-  unread.style.cursor = "pointer";
+  unread.css('cursor', 'pointer');
 
   all.click(function() {
     var checkboxes = $(":checkbox").filter(":visible");
@@ -34,15 +34,15 @@ $(function () {
     var checkboxes = $(":checkbox").filter(":visible");
     checkboxes.prop('checked', false);
   });
-  unread.onclick = function() {
-    var checkboxes = document.querySelectorAll(".submission > [type='checkbox']");
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].className.includes("unread-cb"))
-            checkboxes[i].checked = true;
-        else
-            checkboxes[i].checked = false;
-    }
-  };
+  unread.click(function() {
+      var checkboxes = document.querySelectorAll(".submission > [type='checkbox']");
+      for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].className.includes("unread-cb"))
+              checkboxes[i].checked = true;
+          else
+              checkboxes[i].checked = false;
+      }
+    });
 
   $("#delete_collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
