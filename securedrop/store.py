@@ -68,17 +68,29 @@ def path(*s):
     return absolute
 
 
-def get_bulk_archive(filenames, zip_directory=''):
+def get_bulk_archive(selected_submissions, zip_directory=''):
+    """Generate a zip file from the selected submissions"""
     zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_',
                                            dir=config.TEMP_DIR,
                                            delete=False)
+    sources = set([i.source.journalist_designation for i in selected_submissions])
+    # The below nested for-loops are there to create a more usable
+    # folder structure per #383
     with zipfile.ZipFile(zip_file, 'w') as zip:
-        for filename in filenames:
-            verify(filename)
-            zip.write(filename, arcname=os.path.join(
-                zip_directory,
-                os.path.basename(filename)
-            ))
+        for source in sources:
+            submissions = [s for s in selected_submissions if s.source.journalist_designation == source]
+            for submission in submissions:
+                filename = path(submission.source.filesystem_id,
+                                submission.filename)
+                verify(filename)
+                document_number = submission.filename.split('-')[0]
+                zip.write(filename, arcname=os.path.join(
+                    zip_directory,
+                    source,
+                    "%s_%s" % (document_number,
+                               submission.source.last_updated.date()),
+                    os.path.basename(filename)
+                ))
     return zip_file
 
 
