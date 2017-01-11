@@ -412,7 +412,7 @@ def admin_delete_source_label_type(tag_id):
 @admin_required
 def admin_create_source_label_type():
     try:
-        create_source_label_type(request.form['text_to_display'])
+        create_source_label_type(request.form['label_text'])
     except IntegrityError:
         flash('Tag already exists!', 'source')
     return redirect(url_for('admin_index'))
@@ -422,7 +422,7 @@ def admin_create_source_label_type():
 @admin_required
 def admin_create_submission_label_type():
     try:
-        create_submission_label_type(request.form['text_to_display'])
+        create_submission_label_type(request.form['label_text'])
     except IntegrityError:
         flash('Tag already exists!', 'submission')
     return redirect(url_for('admin_index'))
