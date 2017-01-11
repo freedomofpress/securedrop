@@ -371,8 +371,7 @@ def get_all_defined_submission_tags():
     return submission_tags
 
 
-def get_source_tags(source_id):
-    source = Source.query.filter(Source.id == source_id).first()
+def get_source_tags(source):
     source_tags = db_session.query(SourceTag, SourceLabelType) \
                             .join(SourceLabelType) \
                             .filter(SourceTag.source_id == source.id) \
@@ -380,8 +379,7 @@ def get_source_tags(source_id):
     return source_tags
 
 
-def get_submission_tags(submission_id):
-    submission = Submission.query.filter(Submission.id == submission_id).first()
+def get_submission_tags(submission):
     submission_tags = db_session.query(SubmissionTag, SubmissionLabelType) \
                             .join(SubmissionLabelType) \
                             .filter(SubmissionTag.submission_id == submission.id) \
@@ -390,14 +388,14 @@ def get_submission_tags(submission_id):
 
 
 def delete_source_label(label_id):
-    matching_label = SourceLabelType.query.filter(SourceLabelType.id == label_id).all()
+    matching_label = SourceLabelType.query.filter_by(id=label_id).all()
     for label in matching_label:
         db_session.delete(label)
     db_session.commit()
 
 
 def delete_submission_label(label_id):
-    matching_label = SubmissionLabelType.query.filter(SubmissionLabelType.id == label_id).all()
+    matching_label = SubmissionLabelType.query.filter_by(id=label_id).all()
     for label in matching_label:
         db_session.delete(label)
     db_session.commit()
@@ -447,15 +445,13 @@ def create_source_label_type(text):
     db_session.commit()
 
 
-def create_source_tag(source_id, label_id):
-    source = Source.query.filter(Source.id == source_id).first()
+def create_source_tag(source, label_id):
     db_session.add(SourceTag(source_id=source.id,
                              label_id=label_id))
     db_session.commit()
 
 
-def delete_source_tag(source_id, label_id):
-    source = Source.query.filter(Source.id == source_id).first()
+def delete_source_tag(source, label_id):
     matching_tag = SourceTag.query.filter(and_(SourceTag.label_id == label_id,
                                                SourceTag.source_id == source.id)).all()
     for tag in matching_tag:
@@ -463,15 +459,13 @@ def delete_source_tag(source_id, label_id):
     db_session.commit()
 
 
-def create_submission_tag(submission_id, label_id):
-    submission = Submission.query.filter(Submission.id == submission_id).first()
+def create_submission_tag(submission, label_id):
     db_session.add(SubmissionTag(submission_id=submission.id,
                                  label_id=label_id))
     db_session.commit()
 
 
-def delete_submission_tag(submission_id, label_id):
-    submission = Submission.query.filter(Submission.id == submission_id).first()
+def delete_submission_tag(submission, label_id):
     matching_tag = SubmissionTag.query.filter(and_(SubmissionTag.label_id == label_id,
                                                    SubmissionTag.submission_id == submission.id)).all()
     for tag in matching_tag:
@@ -483,7 +477,7 @@ def delete_submission_tag(submission_id, label_id):
 @login_required
 def add_source_label(sid, label_id):
     source = get_source(sid)
-    create_source_tag(source.id, label_id)
+    create_source_tag(source, label_id)
     return redirect(url_for('col', sid=sid))
 
 
@@ -491,7 +485,7 @@ def add_source_label(sid, label_id):
 @login_required
 def remove_source_label(sid, label_id):
     source = get_source(sid)
-    delete_source_tag(source.id, label_id)
+    delete_source_tag(source, label_id)
     return redirect(url_for('col', sid=sid))
 
 
@@ -499,7 +493,7 @@ def remove_source_label(sid, label_id):
 @login_required
 def add_submission_label(sid, filename, label_id):
     submission = get_submission(filename)
-    create_submission_tag(submission.id, label_id)
+    create_submission_tag(submission, label_id)
     return redirect(url_for('col', sid=sid))
 
 
@@ -507,7 +501,7 @@ def add_submission_label(sid, filename, label_id):
 @login_required
 def remove_submission_label(sid, filename, label_id):
     submission = get_submission(filename)
-    delete_submission_tag(submission.id, label_id)
+    delete_submission_tag(submission, label_id)
     return redirect(url_for('col', sid=sid))
 
 
@@ -595,7 +589,7 @@ def get_stars_and_labels(sources):
 
     for source in sources:
         star = SourceStar.query.filter_by(source_id=source.id).first()
-        source_labels.update({source.id: get_source_tags(source.id)})
+        source_labels.update({source.id: get_source_tags(source)})
         if star and star.starred:
             starred.append(source)
         else:
@@ -668,7 +662,7 @@ def col(sid):
     source = get_source(sid)
 
     # Tags on source
-    source_labels = get_source_tags(source.id)
+    source_labels = get_source_tags(source)
     selected_source_labels = [x.SourceLabelType.label_text for x in source_labels]
     all_source_labels = get_all_defined_source_tags()
 
@@ -684,7 +678,7 @@ def col(sid):
         if doc.filename.endswith('-msg.gpg'):
             submission = get_submission(doc.filename)
 
-            temp_submission_labels = get_submission_tags(submission.id)
+            temp_submission_labels = get_submission_tags(submission)
             submission_labels.update({doc.filename: temp_submission_labels})
             if temp_submission_labels:
                 selected_submission_labels = [x.SubmissionLabelType.label_text for x in temp_submission_labels]
