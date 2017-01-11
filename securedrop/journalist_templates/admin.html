@@ -45,8 +45,8 @@ SecureDrop server.</p>
 <p>
   <form id="source_tag_creation" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
-    <input name="text_to_display" type="text" placeholder="Label Text" />
-    <button type="submit" class="btn" formaction="/admin/create_source_label_type/{{ text_to_display }}"><i class="fa fa-plus"></i> Add source label</button>
+    <input id="source_tag_creation_text" name="text_to_display" type="text" placeholder="Label Text" />
+    <button id="source_tag_creation_submit" type="submit" class="btn" formaction="/admin/create_source_label_type/{{ text_to_display }}"><i class="fa fa-plus"></i> Add source label</button>
     {% with errors = get_flashed_messages(category_filter=["source"]) %}{% if errors %}
       <div class="error">
         {% for error in errors %}
@@ -60,7 +60,7 @@ SecureDrop server.</p>
   {% for tag in source_tags %}
     <form id="source_tag_actions" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
-      <button type="submit" class="tag-label" formaction="/admin/delete_source_label_type/{{ tag.id }}">{{ tag.label_text }} <i class="fa fa-times" aria-hidden="true"></i></button>
+      <button id="source_tag_{{ tag.id }}" type="submit" class="tag-label" formaction="/admin/delete_source_label_type/{{ tag.id }}">{{ tag.label_text }} <i class="fa fa-times" aria-hidden="true"></i></button>
     </form>
   {% endfor %}
 </p>
@@ -68,8 +68,8 @@ SecureDrop server.</p>
 <p>
   <form id="submission_tag_creation" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
-    <input name="text_to_display" type="text" placeholder="Label Text" />
-    <button type="submit" class="btn" formaction="/admin/create_submission_label_type/{{ text_to_display }}"><i class="fa fa-plus"></i> Add submission label</button>
+    <input id="submission_tag_creation_text" name="text_to_display" type="text" placeholder="Label Text" />
+    <button id="submission_tag_creation_submit" type="submit" class="btn" formaction="/admin/create_submission_label_type/{{ text_to_display }}"><i class="fa fa-plus"></i> Add submission label</button>
     {% with errors = get_flashed_messages(category_filter=["submission"]) %}{% if errors %}
       <div class="error">
         {% for error in errors %}
@@ -83,7 +83,7 @@ SecureDrop server.</p>
   {% for tag in submission_tags %}
     <form id="submission_tag_actions" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
-      <button type="submit" class="tag-label" formaction="/admin/delete_submission_label_type/{{ tag.id }}">{{ tag.label_text }} <i class="fa fa-times" aria-hidden="true"></i></button>
+      <button id="submission_tag_{{ tag.id }}" type="submit" class="tag-label" formaction="/admin/delete_submission_label_type/{{ tag.id }}">{{ tag.label_text }} <i class="fa fa-times" aria-hidden="true"></i></button>
     </form>
   {% endfor %}
 </p>

@@ -297,6 +297,55 @@ class JournalistNavigationSteps():
             lambda: self.assertIn('Sources', self.driver.page_source)
         )
 
+    def _admin_can_add_source_label_type(self):
+        self.wait_for(
+            lambda: self.assertIn('source_tag_creation_submit',
+            self.driver.page_source)
+        )
+        text_field = self.driver.find_element_by_id('source_tag_creation_text')
+        tag_text = 'my_source_label'
+        text_field.send_keys(tag_text)
+        self.driver.find_element_by_id('source_tag_creation_submit').click()
+
+        self.assertIn(tag_text, self.driver.page_source)
+        tags = self.driver.find_elements_by_id('source_tag_1')
+        self.assertEquals(1, len(tags))
+
+    def _admin_can_remove_source_label_type(self):
+        self.wait_for(
+            lambda: self.assertIn('source_tag_1', self.driver.page_source)
+        )
+        self.driver.find_element_by_id('source_tag_1').click()
+
+        # Label should now be gone
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('source_tag_1')
+
+    def _admin_can_add_submission_label_type(self):
+        self.wait_for(
+            lambda: self.assertIn('submission_tag_creation_submit',
+            self.driver.page_source)
+        )
+        text_field = self.driver.find_element_by_id('submission_tag_creation_text')
+        tag_text = 'my_submission_label'
+        text_field.send_keys(tag_text)
+        self.driver.find_element_by_id('submission_tag_creation_submit').click()
+
+        # Yes the tag appears on the page
+        self.assertIn(tag_text, self.driver.page_source)
+        tags = self.driver.find_elements_by_id('submission_tag_1')
+        self.assertEquals(1, len(tags))
+
+    def _admin_can_remove_submission_label_type(self):
+        self.wait_for(
+            lambda: self.assertIn('submission_tag_1', self.driver.page_source)
+        )
+        self.driver.find_element_by_id('submission_tag_1').click()
+
+        # Label should now be gone
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('submission_tag_1')
+
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
@@ -366,3 +415,66 @@ class JournalistNavigationSteps():
         submission = self._get_submission_content(file_url,
                                                   decrypted_submission)
         self.assertEqual(self.secret_message, submission)
+
+    def _journalist_can_add_source_tag(self):
+        self.wait_for(
+            lambda: self.assertIn('add_source_label_1',
+            self.driver.page_source)
+        )
+
+        self.driver.find_element_by_id('add_source_label_1').click()
+
+        self.wait_for(
+            lambda: self.assertIn('remove_source_label_1',
+            self.driver.page_source)
+        )
+        tags = self.driver.find_elements_by_id('remove_source_label_1')
+        self.assertEquals(1, len(tags))
+
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('add_source_label_1')
+
+    def _journalist_can_add_and_remove_submission_tag(self):
+        self.wait_for(
+            lambda: self.assertIn('add_submission_label_1',
+            self.driver.page_source)
+        )
+
+        self.driver.find_element_by_id('add_submission_label_1').click()
+
+        tags = self.driver.find_elements_by_id('remove_submission_label_1')
+        self.assertEquals(1, len(tags))
+
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('add_submission_label_1')
+
+        self.driver.find_element_by_id('remove_submission_label_1').click()
+
+        to_tag = self.driver.find_elements_by_id('add_submission_label_1')
+        self.assertEquals(1, len(to_tag))
+
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('remove_submission_label_1')
+
+    def _journalist_can_filter_by_source_tag(self):
+        # Make sure we are on the index
+        self.driver.get(self.journalist_location)
+
+        self.driver.find_element_by_id('filter_by_label_1').click()
+
+        filtered = self.driver.find_elements_by_id('un-starred-source-link-1')
+        self.assertEquals(1, len(filtered))
+
+    def _journalist_can_remove_source_tag(self):
+        self.wait_for(
+            lambda: self.assertIn('remove_source_label_1',
+            self.driver.page_source)
+        )
+
+        self.driver.find_element_by_id('remove_source_label_1').click()
+
+        to_tag = self.driver.find_elements_by_id('add_source_label_1')
+        self.assertEquals(1, len(to_tag))
+
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('remove_source_label_1')

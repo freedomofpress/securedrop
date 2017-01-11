@@ -25,14 +25,14 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         {% if source_labels %}
         Current source label(s): {% for label in source_labels %}
-        <button type="submit" name="action" formaction="/col/remove_source_label/{{ sid }}/{{ label.SourceLabelType.id }}" class="tag-label">{{ label.SourceLabelType.label_text }} <i class="fa fa-times"></i></button>
+        <button id="remove_source_label_{{ label.SourceLabelType.id }}" type="submit" name="action" formaction="/col/remove_source_label/{{ sid }}/{{ label.SourceLabelType.id }}" class="tag-label">{{ label.SourceLabelType.label_text }} <i class="fa fa-times"></i></button>
       {% endfor %}
       {% endif %}
     </p>
     {% if unselected_source_labels %}
     <p>Add a new source label:
       {% for label in unselected_source_labels %}
-        <button type="submit" name="action" formaction="/col/add_source_label/{{ sid }}/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }} <i class="fa fa-plus"></i></button>
+        <button id="add_source_label_{{ label.id }}" type="submit" name="action" formaction="/col/add_source_label/{{ sid }}/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }} <i class="fa fa-plus"></i></button>
       {% endfor %}
     </p>
     </form>
@@ -68,10 +68,10 @@
             <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
             <input type="hidden" name="sid" value="{{ sid }}"/>
             {% for label in unselected_submission_labels[doc.filename] %}
-              <button type="submit" name="action"  formaction="/col/add_submission_label/{{ sid }}/{{ doc.filename }}/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }} <i class="fa fa-plus"></i></button>
+              <button id="add_submission_label_{{ label.id }}" type="submit" name="action"  formaction="/col/add_submission_label/{{ sid }}/{{ doc.filename }}/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }} <i class="fa fa-plus"></i></button>
             {% endfor %}
             {% for label in submission_labels[doc.filename] %}
-              <button type="submit" name="action"  formaction="/col/remove_submission_label/{{ sid }}/{{ doc.filename }}/{{ label.SubmissionLabelType.id }}" class="tag-label">{{ label.SubmissionLabelType.label_text }} <i class="fa fa-times"></i></button>
+              <button id="remove_submission_label_{{ label.SubmissionLabelType.id }}" type="submit" name="action"  formaction="/col/remove_submission_label/{{ sid }}/{{ doc.filename }}/{{ label.SubmissionLabelType.id }}" class="tag-label">{{ label.SubmissionLabelType.label_text }} <i class="fa fa-times"></i></button>
             {% endfor %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
               <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>

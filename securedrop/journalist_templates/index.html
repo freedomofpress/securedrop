@@ -51,7 +51,7 @@
           {% if label.SourceLabelType.id == filter_label %}
             <a href="/" class="tag-label">{{ label.SourceLabelType.label_text }} <i class="fa fa-times"></i></a>
           {% else %}
-            <button type="submit" name="action" formaction="/filter_by_label/{{ label.SourceLabelType.id }}" class="untagged-tag-label">{{ label.SourceLabelType.label_text }}</button>
+            <button id="filter_by_label_{{ label.SourceLabelType.id }}" type="submit" name="action" formaction="/filter_by_label/{{ label.SourceLabelType.id }}" class="untagged-tag-label">{{ label.SourceLabelType.label_text }}</button>
           {% endif %}
         {% endfor %}
     </form>
