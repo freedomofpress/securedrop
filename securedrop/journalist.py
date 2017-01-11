@@ -413,12 +413,9 @@ def admin_delete_source_label_type(tag_id):
 @app.route('/admin/create_source_label_type/', methods=('POST',))
 @admin_required
 def admin_create_source_label_type():
-    text_to_display = request.form['text_to_display']
-    all_labels = [x.label_text for x in get_all_defined_source_tags()]
-    if text_to_display not in all_labels:
-        db_session.add(SourceLabelType(label_text=text_to_display))
-        db_session.commit()
-    else:
+    try:
+        create_source_label_type(request.form['text_to_display'])
+    except IntegrityError:
         flash('Tag already exists!', 'source')
     return redirect(url_for('admin_index'))
 
@@ -426,12 +423,9 @@ def admin_create_source_label_type():
 @app.route('/admin/create_submission_label_type/', methods=('POST',))
 @admin_required
 def admin_create_submission_label_type():
-    text_to_display = request.form['text_to_display']
-    all_labels = [x.label_text for x in get_all_defined_submission_tags()]
-    if text_to_display not in all_labels:
-        db_session.add(SubmissionLabelType(label_text=text_to_display))
-        db_session.commit()
-    else:
+    try:
+        create_submission_label_type(request.form['text_to_display'])
+    except IntegrityError:
         flash('Tag already exists!', 'submission')
     return redirect(url_for('admin_index'))
 
@@ -441,6 +435,16 @@ def admin_create_submission_label_type():
 def admin_delete_submission_label_type(tag_id):
     delete_submission_label(tag_id)
     return redirect(url_for('admin_index'))
+
+
+def create_submission_label_type(text):
+    db_session.add(SubmissionLabelType(label_text=text))
+    db_session.commit()
+
+
+def create_source_label_type(text):
+    db_session.add(SourceLabelType(label_text=text))
+    db_session.commit()
 
 
 def create_source_tag(source_id, label_id):
