@@ -47,7 +47,7 @@ SecureDrop server.</p>
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <input id="source_tag_creation_text" name="label_text" type="text" placeholder="Label Text" />
     <button id="source_tag_creation_submit" type="submit" class="btn" formaction="/admin/create_source_label_type/{{ label_text }}"><i class="fa fa-plus"></i> Add source label</button>
-    {% with errors = get_flashed_messages(category_filter=["source"]) %}{% if errors %}
+    {% with errors = get_flashed_messages(category_filter=["source-label-error"]) %}{% if errors %}
       <div class="error">
         {% for error in errors %}
         {{ error }}
@@ -70,7 +70,7 @@ SecureDrop server.</p>
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <input id="submission_tag_creation_text" name="label_text" type="text" placeholder="Label Text" />
     <button id="submission_tag_creation_submit" type="submit" class="btn" formaction="/admin/create_submission_label_type/{{ label_text }}"><i class="fa fa-plus"></i> Add submission label</button>
-    {% with errors = get_flashed_messages(category_filter=["submission"]) %}{% if errors %}
+    {% with errors = get_flashed_messages(category_filter=["submission-label-error"]) %}{% if errors %}
       <div class="error">
         {% for error in errors %}
         {{ error }}

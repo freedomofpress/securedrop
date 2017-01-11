@@ -414,7 +414,7 @@ def admin_create_source_label_type():
     try:
         create_source_label_type(request.form['label_text'])
     except IntegrityError:
-        flash('Tag already exists!', 'source')
+        flash('Tag already exists!', 'source-label-error')
     return redirect(url_for('admin_index'))
 
 
@@ -424,7 +424,7 @@ def admin_create_submission_label_type():
     try:
         create_submission_label_type(request.form['label_text'])
     except IntegrityError:
-        flash('Tag already exists!', 'submission')
+        flash('Tag already exists!', 'submission-label-error')
     return redirect(url_for('admin_index'))
 
 
