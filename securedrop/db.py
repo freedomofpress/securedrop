@@ -433,23 +433,34 @@ class SubmissionLabelType(Base):
 class SourceTag(Base):
     __tablename__ = "source_tags"
     id = Column(Integer, primary_key=True)
-    source_id = Column(Integer, ForeignKey('sources.id', ondelete='CASCADE'), nullable=False)
-    label_id = Column(Integer, ForeignKey('source_label_type.id', ondelete='CASCADE'), nullable=False)
+    source_id = Column(Integer, ForeignKey('sources.id', ondelete='CASCADE'),
+                       nullable=False)
+    source = relationship("Source")
+    label_id = Column(Integer,
+                      ForeignKey('source_label_type.id', ondelete='CASCADE'),
+                      nullable=False)
+    label = relationship("SourceLabelType")
 
     def __repr__(self):
-        return "<Source tag ID={}: label_id={}>".format(self.source_id,
-                                                        self.label_id)
+        return "<Source tag {}: {}>".format(self.source.journalist_designation,
+                                            self.label.label_text)
 
 
 class SubmissionTag(Base):
     __tablename__ = "submission_tags"
     id = Column(Integer, primary_key=True)
-    submission_id = Column(Integer, ForeignKey('submissions.id', ondelete='CASCADE'), nullable=False)
-    label_id = Column(Integer, ForeignKey('submission_label_type.id', ondelete='CASCADE'), nullable=False)
+    submission_id = Column(Integer,
+                           ForeignKey('submissions.id', ondelete='CASCADE'),
+                           nullable=False)
+    submission = relationship("Submission")
+    label_id = Column(Integer,
+                      ForeignKey('submission_label_type.id', ondelete='CASCADE'),
+                      nullable=False)
+    label = relationship("SubmissionLabelType")
 
     def __repr__(self):
-        return "<Submission tag ID={}: label_id={}>".format(self.submission_id,
-                                                            self.label_id)
+        return "<Submission tag {}: {}>".format(self.submission.filename,
+                                                self.label.label_text)
 
 
 # Declare (or import) models before init_db
