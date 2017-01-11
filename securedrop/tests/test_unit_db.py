@@ -11,7 +11,8 @@ import journalist
 import crypto_util
 from utils import db_helper, env
 from db import (db_session, Journalist, Submission, Source, Reply,
-                get_one_or_else)
+                get_one_or_else, SourceTag, SubmissionTag, SourceLabelType,
+                SubmissionLabelType)
 
 
 class TestDatabase(TestCase):
@@ -79,6 +80,39 @@ class TestDatabase(TestCase):
     def test_source_string_representation(self):
         test_source, _ = db_helper.init_source()
         test_source.__repr__()
+
+    def test_submission_label_type_string_representation(self):
+        journalist.create_label(SubmissionLabelType, "test")
+        test_label = SubmissionLabelType.query.first()
+        test_label.__repr__()
+
+    def test_source_label_type_string_representation(self):
+        journalist.create_label(SourceLabelType, "test")
+        test_label = SourceLabelType.query.first()
+        test_label.__repr__()
+
+    def test_submission_tag_string_representation(self):
+        source, _ = db_helper.init_source()
+        submissions = db_helper.submit(source, 2)
+
+        test_submission = Submission.query.first()
+
+        journalist.create_label(SubmissionLabelType, "test")
+        test_label = SubmissionLabelType.query.first()
+
+        journalist.create_tag(test_submission, test_label.id)
+        test_submission_tag = SubmissionTag.query.first()
+        test_submission_tag.__repr__()
+
+    def test_source_tag_string_representation(self):
+        source, _ = db_helper.init_source()
+
+        journalist.create_label(SourceLabelType, "test")
+        test_label = SourceLabelType.query.first()
+
+        journalist.create_tag(source, test_label.id)
+        test_source_tag = SourceTag.query.first()
+        test_source_tag.__repr__()
 
 
 if __name__ == "__main__":
