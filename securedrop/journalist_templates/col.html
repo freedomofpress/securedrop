@@ -26,7 +26,7 @@
         {% if source.tags: %}
           Current source label(s):
           {% for tag in source.tags %}
-            <button id="remove_source_label_{{ tag.id }}" type="submit" name="action" formaction="/col/remove_source_label/{{ sid }}/{{ tag.id }}" class="tag-label">{{ tag.label.label_text }} <i class="fa fa-times"></i></button>
+            <button id="remove_source_label_{{ tag.label.id }}" type="submit" name="action" formaction="/col/remove_source_label/{{ sid }}/{{ tag.label.id }}" class="tag-label">{{ tag.label.label_text }} <i class="fa fa-times"></i></button>
           {% endfor %}
         {% endif %}
 

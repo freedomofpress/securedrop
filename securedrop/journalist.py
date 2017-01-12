@@ -365,13 +365,17 @@ def get_tag_object(object_to_label):
         return SubmissionTag, Submission, SubmissionLabelType
 
 
-def get_unselected_labels(object_to_label):
-    tag_object, object_to_label, label_type_object = get_tag_object(object_to_label)
+def get_unselected_labels(obj):
+    """For a given object (Source or Submission) return the tags that are
+    not currently assigned to that object
+    """
+    tag_object, object_to_label, label_type_object = get_tag_object(obj)
+
     query = db_session.query(label_type_object).join(tag_object)
     if tag_object is SubmissionTag:
-        selected_tags = query.filter(tag_object.submission_id==object_to_label.id).all()
+        selected_tags = query.filter(tag_object.submission_id==obj.id).all()
     elif tag_object is SourceTag:
-        selected_tags = query.filter(tag_object.source_id==object_to_label.id).all()
+        selected_tags = query.filter(tag_object.source_id==obj.id).all()
     all_tags = db_session.query(label_type_object).all()
     return list(set(all_tags) - set(selected_tags))
 
@@ -642,9 +646,8 @@ def col(sid):
     unselected_submission_labels = {}
     for doc in source.collection:
         if doc.filename.endswith('-msg.gpg'):
-            submission = get_submission(doc.filename)
             unselected_submission_labels.update(
-                 {doc.filename: get_unselected_labels(submission)}
+                 {doc.filename: get_unselected_labels(doc)}
             )
 
     source.has_key = crypto_util.getkey(sid)
