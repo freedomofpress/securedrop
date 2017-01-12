@@ -9,7 +9,7 @@ try:
 except:
     from StringIO import StringIO
 
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
@@ -90,6 +90,8 @@ class Source(Base):
     # Don't create or bother checking excessively long codenames to prevent DoS
     MAX_CODENAME_LEN = 128
 
+    tags = relationship("SourceTag", order_by="SourceTag.id")
+
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
@@ -117,7 +119,7 @@ class Source(Base):
 
     @property
     def collection(self):
-        """Return the list of submissions and replies for this source, sorted
+        """Return the list of submissions, replies, tags for this source, sorted
         in ascending order by the filename/interaction count."""
         collection = []
         collection.extend(self.submissions)
@@ -138,6 +140,8 @@ class Submission(Base):
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
+
+    tags = relationship("SubmissionTag", order_by="SubmissionTag.id")
 
     def __init__(self, source, filename):
         self.source_id = source.id
@@ -435,11 +439,21 @@ class SourceTag(Base):
     id = Column(Integer, primary_key=True)
     source_id = Column(Integer, ForeignKey('sources.id', ondelete='CASCADE'),
                        nullable=False)
-    source = relationship("Source")
+    source = relationship(
+        "Source",
+        backref=backref("source_tags", order_by=id, cascade="delete")
+        )
     label_id = Column(Integer,
                       ForeignKey('source_label_type.id', ondelete='CASCADE'),
                       nullable=False)
     label = relationship("SourceLabelType")
+    # Add unique constraint to table metadata so duplicate tags are not inserted
+    __table_args__ = (UniqueConstraint('source_id', 'label_id',
+                      name='source_tags'), )
+
+    def __init__(self, source, label_id):
+        self.source_id = source.id
+        self.label_id = label_id
 
     def __repr__(self):
         return "<Source tag {}: {}>".format(self.source.journalist_designation,
@@ -452,11 +466,21 @@ class SubmissionTag(Base):
     submission_id = Column(Integer,
                            ForeignKey('submissions.id', ondelete='CASCADE'),
                            nullable=False)
-    submission = relationship("Submission")
+    submission = relationship(
+        "Submission",
+        backref=backref("submission_tags", order_by=id, cascade="delete")
+        )
     label_id = Column(Integer,
                       ForeignKey('submission_label_type.id', ondelete='CASCADE'),
                       nullable=False)
     label = relationship("SubmissionLabelType")
+    # Add unique constraint to table metadata so duplicate tags are not inserted
+    __table_args__ = (UniqueConstraint('submission_id', 'label_id',
+                      name='submission_tags'), )
+
+    def __init__(self, submission, label_id):
+        self.submission_id = submission.id
+        self.label_id = label_id
 
     def __repr__(self):
         return "<Submission tag {}: {}>".format(self.submission.filename,
