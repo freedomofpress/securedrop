@@ -44,8 +44,8 @@
       <a class="btn" href="#{{ source.filesystem_id }}-assignment">Cancel</a>
     </div>
   <div>
-    {% for source_label in source_labels[source.id] %}
-      <a><span class="tagged tag-label">{{ source_label.SourceLabelType.label_text }}</span></a>
+    {% for tag in source.tags %}
+      <a><span class="tagged tag-label">{{ tag.label.label_text }}</span></a>
     {% endfor %}
   </div>
 </li>

@@ -42,16 +42,16 @@
     <p>No documents have been submitted!</p>
   {% endif %}
 </div>
-{% if all_labels %}
+{% if filter_labels %}
   <div>
     <form id="filter_by_label" method="post">
       Filter by label:
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-        {% for label in all_labels %}
-          {% if label.SourceLabelType.id == filter_label %}
-            <a href="/" class="tag-label">{{ label.SourceLabelType.label_text }} <i class="fa fa-times"></i></a>
+        {% for label in filter_labels %}
+          {% if label.id == filter_label %}
+            <a href="/" class="tag-label">{{ label.label_text }} <i class="fa fa-times"></i></a>
           {% else %}
-            <button id="filter_by_label_{{ label.SourceLabelType.id }}" type="submit" name="action" formaction="/filter_by_label/{{ label.SourceLabelType.id }}" class="untagged-tag-label">{{ label.SourceLabelType.label_text }}</button>
+            <button id="filter_by_label_{{ label.id }}" type="submit" name="action" formaction="/filter_by_label/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }}</button>
           {% endif %}
         {% endfor %}
     </form>
