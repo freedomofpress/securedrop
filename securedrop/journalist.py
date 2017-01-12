@@ -634,11 +634,9 @@ def index():
         labels = []
 
     if labels:
-        query = db_session.query(Source).filter_by(pending=False) \
-                          .from_self().join(SourceTag)
+        query = Source.query.filter_by(pending=False)
         for label in labels:
-            query = query.filter(SourceTag.label_id == label)
-            #import pdb; pdb.set_trace()
+            query = query.filter(Source.tags.any(SourceTag.label_id == label))
         sources = query.order_by(Source.last_updated.desc()).all()
     else:
         sources = Source.query.filter_by(pending=False) \
