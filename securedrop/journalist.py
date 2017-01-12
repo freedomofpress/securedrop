@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import copy
-import sys
 import os
 from datetime import datetime
 import functools
@@ -11,7 +10,6 @@ from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
-from sqlalchemy import and_
 
 import config
 import version
@@ -636,10 +634,12 @@ def index():
         labels = []
 
     if labels:
-        sources = db_session.query(Source).filter_by(pending=False) \
-                          .from_self().join(SourceTag) \
-                          .filter(SourceTag.label_id.in_(labels)) \
-                          .order_by(Source.last_updated.desc()).all()
+        query = db_session.query(Source).filter_by(pending=False) \
+                          .from_self().join(SourceTag)
+        for label in labels:
+            query = query.filter(SourceTag.label_id == label)
+            #import pdb; pdb.set_trace()
+        sources = query.order_by(Source.last_updated.desc()).all()
     else:
         sources = Source.query.filter_by(pending=False) \
                               .order_by(Source.last_updated.desc()) \

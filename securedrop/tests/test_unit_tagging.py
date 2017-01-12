@@ -1,22 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from cStringIO import StringIO
 import os
 import random
-import time
 import unittest
-import zipfile
 
-from flask import url_for, escape
+from flask import url_for
 from flask_testing import TestCase
 
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
-import config
-import crypto_util
-from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
-                Submission, SourceTag, SubmissionTag, SourceLabelType,
+from db import (Submission, SourceTag, SubmissionTag, SourceLabelType,
                 SubmissionLabelType)
 import journalist
 import utils

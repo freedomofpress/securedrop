@@ -58,29 +58,34 @@ def _stop_test_rqworker():  # pragma: no cover
     os.kill(get_pid_from_pidfile(TEST_WORKER_PIDFILE), signal.SIGTERM)
 
 
+def run_tests(test_commands):
+    os.environ['SECUREDROP_ENV'] = 'test'
+    import config
+    _start_test_rqworker(config)
+    test_rc = int(any([subprocess.call(command) for command in test_commands]))
+    _stop_test_rqworker()
+    sys.exit(test_rc)
+
+
 def test():  # pragma: no cover
     """
-    Runs the test suite
+    Run all tests (unit and functional).
     """
-    os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_test_rqworker(config)
-    test_cmds = [["py.test", "--cov"], "./test.sh"]
-    test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
-    _stop_test_rqworker()
-    sys.exit(test_rc)
+    run_tests([["py.test", "--cov"], "./test.sh"])
 
 
-def test_unit():  # pragma: no cover
+def test_unit(individual_test_or_file):  # pragma: no cover
     """
-    Runs the unit tests.
+    Run just the unit tests.
     """
-    os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_test_rqworker(config)
-    test_rc = int(subprocess.call(["py.test", "--cov"]))
-    _stop_test_rqworker()
-    sys.exit(test_rc)
+    run_tests([["py.test", individual_test_or_file, "--cov"]])
+
+
+def test_functional():  # pragma: no cover
+    """
+    Run just the functional tests.
+    """
+    run_tests(["./test.sh"])
 
 
 def reset():
@@ -229,14 +234,18 @@ def clean_tmp():
 def get_args():  # pragma: no cover
     parser = ArgumentParser(prog=__file__,
                             description='A tool to help admins manage and devs hack')
-
     subparsers = parser.add_subparsers()
 
     run_subparser = subparsers.add_parser('run', help='Run the dev webserver (source & journalist)')
     run_subparser.set_defaults(func=run)
 
     unit_test_subparser = subparsers.add_parser('unit-test', help='Run the unit tests')
+    unit_test_subparser.add_argument('-t', '--tests_to_run', type=str, default='',
+        help='Specify a single unit test or single file of unit tests to run')
     unit_test_subparser.set_defaults(func=test_unit)
+
+    functional_test_subparser = subparsers.add_parser('functional-test', help='Run the functional tests')
+    functional_test_subparser.set_defaults(func=test_functional)
 
     test_subparser = subparsers.add_parser('test', help='Run the full test suite')
     test_subparser.set_defaults(func=test)
@@ -259,8 +268,13 @@ def get_args():  # pragma: no cover
 if __name__ == "__main__":  # pragma: no cover
     try:
         args = get_args().parse_args()
-        # calling like this works because all functions take zero arguments
-        args.func()
+
+        # test_unit requires an argument, so let's call func with that argument
+        if vars(args)['func'].__name__ == 'test_unit':
+            args.func(args.tests_to_run)
+        else:
+            # For the remainder of the functions, there are no arguments
+            args.func()
     except KeyboardInterrupt:
         print  # So our prompt appears on a nice new line
         exit(1)

@@ -23,7 +23,6 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
 import store
 
 LOGIN_HARDENING = True

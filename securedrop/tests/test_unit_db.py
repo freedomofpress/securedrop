@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 import unittest
 
 from flask_testing import TestCase
 import mock
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import journalist
-import crypto_util
 from utils import db_helper, env
-from db import (db_session, Journalist, Submission, Source, Reply,
+from db import (Journalist, Submission, Reply,
                 get_one_or_else, SourceTag, SubmissionTag, SourceLabelType,
                 SubmissionLabelType)
 
