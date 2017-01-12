@@ -1,0 +1,2 @@
+pip_requirements_file: securedrop/requirements/securedrop-requirements.txt
+fail_on: low # Fail on low risk or vulnerable methods
