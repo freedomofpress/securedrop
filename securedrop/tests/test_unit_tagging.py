@@ -325,5 +325,15 @@ class TestTagging(TestCase):
         self.assertEqual(len(source1_unused_tags), 1)
         self.assertEqual(len(source2_unused_tags), 2)
 
+    def test_deleting_source_label_type_also_deletes_source_tags(self):
+        source1, _ = utils.db_helper.init_source()
+        journalist.create_label(SourceLabelType, "test 1")
+        label = SourceLabelType.query.first()
+        journalist.create_tag(source1, label.id)
+        journalist.delete_label(SourceLabelType, label.id)
+
+        self.assertEqual(len(source1.tags), 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
