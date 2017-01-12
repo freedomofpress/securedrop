@@ -309,6 +309,21 @@ class TestTagging(TestCase):
         self.assertIn(source1.journalist_designation, resp.data)
         self.assertNotIn(source2.journalist_designation, resp.data)
 
+    def test_get_unselected_labels(self):
+        source1, _ = utils.db_helper.init_source()
+        source2, _ = utils.db_helper.init_source()
+
+        journalist.create_label(SourceLabelType, "test 1")
+        journalist.create_label(SourceLabelType, "test 2")
+
+        label = SourceLabelType.query.first()
+        journalist.create_tag(source1, label.id)
+
+        source1_unused_tags = journalist.get_unselected_labels(source1)
+        source2_unused_tags = journalist.get_unselected_labels(source2)
+
+        self.assertEqual(len(source1_unused_tags), 1)
+        self.assertEqual(len(source2_unused_tags), 2)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
