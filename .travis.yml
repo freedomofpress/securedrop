@@ -24,9 +24,11 @@ script:
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
-notifications:
-  slack:
-    secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
+after_success:
+  cd securedrop && coveralls && cd ..  # cd back to repo root for srcclr run
 addons:
     srcclr:
         debug: true
+notifications:
+  slack:
+    secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
