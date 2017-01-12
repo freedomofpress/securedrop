@@ -420,6 +420,7 @@ class SourceLabelType(Base):
     __tablename__ = "source_label_type"
     id = Column(Integer, primary_key=True)
     label_text = Column(String(255), nullable=False, unique=True)
+    source_tags = relationship("SourceTag", order_by="SourceTag.id")
 
     def __repr__(self):
         return "<Source Label Type {}>".format(self.label_text)
@@ -429,6 +430,7 @@ class SubmissionLabelType(Base):
     __tablename__ = "submission_label_type"
     id = Column(Integer, primary_key=True)
     label_text = Column(String(255), nullable=False, unique=True)
+    submission_tags = relationship("SubmissionTag", order_by="SubmissionTag.id")
 
     def __repr__(self):
         return "<Submission Label Type {}>".format(self.label_text)
@@ -446,7 +448,10 @@ class SourceTag(Base):
     label_id = Column(Integer,
                       ForeignKey('source_label_type.id', ondelete='CASCADE'),
                       nullable=False)
-    label = relationship("SourceLabelType")
+    label = relationship(
+        "SourceLabelType",
+        backref=backref("source_labels", order_by=id, cascade="delete")
+        )
     # Add unique constraint to table metadata so duplicate tags are not inserted
     __table_args__ = (UniqueConstraint('source_id', 'label_id',
                       name='source_tags'), )
@@ -473,7 +478,10 @@ class SubmissionTag(Base):
     label_id = Column(Integer,
                       ForeignKey('submission_label_type.id', ondelete='CASCADE'),
                       nullable=False)
-    label = relationship("SubmissionLabelType")
+    label = relationship(
+        "SubmissionLabelType",
+        backref=backref("submission_labels", order_by=id, cascade="delete")
+        )
     # Add unique constraint to table metadata so duplicate tags are not inserted
     __table_args__ = (UniqueConstraint('submission_id', 'label_id',
                       name='submission_tags'), )
