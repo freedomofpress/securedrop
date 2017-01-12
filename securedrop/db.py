@@ -456,9 +456,9 @@ class SourceTag(Base):
     __table_args__ = (UniqueConstraint('source_id', 'label_id',
                       name='source_tags'), )
 
-    def __init__(self, source, label_id):
+    def __init__(self, source, label_type):
         self.source_id = source.id
-        self.label_id = label_id
+        self.label_id = label_type.id
 
     def __repr__(self):
         return "<Source tag {}: {}>".format(self.source.journalist_designation,
@@ -486,9 +486,9 @@ class SubmissionTag(Base):
     __table_args__ = (UniqueConstraint('submission_id', 'label_id',
                       name='submission_tags'), )
 
-    def __init__(self, submission, label_id):
+    def __init__(self, submission, label_type):
         self.submission_id = submission.id
-        self.label_id = label_id
+        self.label_id = label_type.id
 
     def __repr__(self):
         return "<Submission tag {}: {}>".format(self.submission.filename,

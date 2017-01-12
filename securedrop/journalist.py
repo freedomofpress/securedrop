@@ -365,6 +365,17 @@ def get_tag_object(object_to_label):
         return SubmissionTag, Submission, SubmissionLabelType
 
 
+def get_label(label_type, label_id):
+    """Return object for label primary key"""
+    matching_label = label_type.query.filter_by(id=label_id).one()
+    return matching_label
+
+
+def get_tag_objects_for_label(label_type, label):
+    matching_tags = label_type.query.filter_by(id=label.id).all()
+    return matching_tags
+
+
 def get_unselected_labels(obj):
     """For a given object (Source or Submission) return the tags that are
     not currently assigned to that object
@@ -380,17 +391,18 @@ def get_unselected_labels(obj):
     return list(set(all_tags) - set(selected_tags))
 
 
-def delete_label(label_type, label_id):
-    matching_label = label_type.query.filter_by(id=label_id).all()
-    for label in matching_label:
+def delete_label(label_type, label):
+    matching_labels = get_tag_objects_for_label(label_type, label)
+    for label in matching_labels:
         db_session.delete(label)
     db_session.commit()
 
 
-@app.route('/admin/delete_source_label_type/<int:tag_id>', methods=('POST',))
+@app.route('/admin/delete_source_label_type/<int:label_id>', methods=('POST',))
 @admin_required
-def admin_delete_source_label_type(tag_id):
-    delete_label(SourceLabelType, tag_id)
+def admin_delete_source_label_type(label_id):
+    label = get_label(SourceLabelType, label_id)
+    delete_label(SourceLabelType, label)
     return redirect(url_for('admin_index'))
 
 
@@ -424,10 +436,11 @@ def admin_create_submission_label_type():
     return redirect(url_for('admin_index'))
 
 
-@app.route('/admin/delete_submission_label_type/<int:tag_id>', methods=('POST',))
+@app.route('/admin/delete_submission_label_type/<int:label_id>', methods=('POST',))
 @admin_required
-def admin_delete_submission_label_type(tag_id):
-    delete_label(SubmissionLabelType, tag_id)
+def admin_delete_submission_label_type(label_id):
+    label = get_label(SubmissionLabelType, label_id)
+    delete_label(SubmissionLabelType, label)
     return redirect(url_for('admin_index'))
 
 
@@ -436,51 +449,55 @@ def create_label(label_type, text):
     db_session.commit()
 
 
-def create_tag(object_to_label, label_id):
+def create_tag(object_to_label, label):
     label_type, _, _ = get_tag_object(object_to_label)
-    db_session.add(label_type(object_to_label, label_id))
+    db_session.add(label_type(object_to_label, label))
     db_session.commit()
 
 
-def delete_tag(object_to_remove_tag, label_id):
+def delete_tag(object_to_remove_tag, label):
     label_type, _, _ = get_tag_object(object_to_remove_tag)
     if label_type is SubmissionTag:
         query = label_type.query.filter_by(submission_id=object_to_remove_tag.id)
     elif label_type is SourceTag:
         query = label_type.query.filter_by(source_id=object_to_remove_tag.id)
-    query.filter_by(label_id=label_id).delete()
+    query.filter_by(label_id=label.id).delete()
     db_session.commit()
 
 
-@app.route("/col/add_source_label/<sid>/<label_id>", methods=('POST',))
+@app.route("/col/add_source_label/<sid>/<int:label_id>", methods=('POST',))
 @login_required
 def add_source_label(sid, label_id):
     source = get_source(sid)
-    create_tag(source, label_id)
+    label = get_label(SourceLabelType, label_id)
+    create_tag(source, label)
     return redirect(url_for('col', sid=sid))
 
 
-@app.route("/col/remove_source_label/<sid>/<label_id>", methods=('POST',))
+@app.route("/col/remove_source_label/<sid>/<int:label_id>", methods=('POST',))
 @login_required
 def remove_source_label(sid, label_id):
     source = get_source(sid)
-    delete_tag(source, label_id)
+    label = get_label(SourceLabelType, label_id)
+    delete_tag(source, label)
     return redirect(url_for('col', sid=sid))
 
 
-@app.route("/col/add_submission_label/<sid>/<filename>/<label_id>", methods=('POST',))
+@app.route("/col/add_submission_label/<sid>/<filename>/<int:label_id>", methods=('POST',))
 @login_required
 def add_submission_label(sid, filename, label_id):
     submission = get_submission(filename)
-    create_tag(submission, label_id)
+    label = get_label(SubmissionLabelType, label_id)
+    create_tag(submission, label)
     return redirect(url_for('col', sid=sid))
 
 
-@app.route("/col/remove_submission_label/<sid>/<filename>/<label_id>", methods=('POST',))
+@app.route("/col/remove_submission_label/<sid>/<filename>/<int:label_id>", methods=('POST',))
 @login_required
 def remove_submission_label(sid, filename, label_id):
     submission = get_submission(filename)
-    delete_tag(submission, label_id)
+    label = get_label(SubmissionLabelType, label_id)
+    delete_tag(submission, label)
     return redirect(url_for('col', sid=sid))
 
 

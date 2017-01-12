@@ -100,7 +100,7 @@ class TestDatabase(TestCase):
         journalist.create_label(SubmissionLabelType, "test")
         test_label = SubmissionLabelType.query.first()
 
-        journalist.create_tag(test_submission, test_label.id)
+        journalist.create_tag(test_submission, test_label)
         test_submission_tag = SubmissionTag.query.first()
         test_submission_tag.__repr__()
 
@@ -110,7 +110,7 @@ class TestDatabase(TestCase):
         journalist.create_label(SourceLabelType, "test")
         test_label = SourceLabelType.query.first()
 
-        journalist.create_tag(source, test_label.id)
+        journalist.create_tag(source, test_label)
         test_source_tag = SourceTag.query.first()
         test_source_tag.__repr__()
 

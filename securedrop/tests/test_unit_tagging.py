@@ -144,7 +144,7 @@ class TestTagging(TestCase):
         journalist.create_label(SourceLabelType, "my test")
 
         resp = self.client.post(
-            url_for("admin_delete_source_label_type", tag_id=1),
+            url_for("admin_delete_source_label_type", label_id=1),
             follow_redirects=True
             )
 
@@ -158,7 +158,7 @@ class TestTagging(TestCase):
         journalist.create_label(SubmissionLabelType, "my test")
 
         resp = self.client.post(
-            url_for("admin_delete_submission_label_type", tag_id=1),
+            url_for("admin_delete_submission_label_type", label_id=1),
             follow_redirects=True
             )
 
@@ -189,7 +189,7 @@ class TestTagging(TestCase):
 
         journalist.create_label(SourceLabelType, "my label")
         test_label = SourceLabelType.query.first()
-        journalist.create_tag(source, 1)
+        journalist.create_tag(source, test_label)
 
         resp = self.client.post(
             url_for("remove_source_label", sid=source.filesystem_id,
@@ -229,7 +229,7 @@ class TestTagging(TestCase):
 
         journalist.create_label(SubmissionLabelType, "my label")
         test_label = SubmissionLabelType.query.first()
-        journalist.create_tag(submission, 1)
+        journalist.create_tag(submission, test_label)
 
         resp = self.client.post(
             url_for("remove_submission_label", sid=source.filesystem_id,
@@ -247,7 +247,7 @@ class TestTagging(TestCase):
 
         source, _ = utils.db_helper.init_source()
 
-        journalist.create_tag(source, test_label.id)
+        journalist.create_tag(source, test_label)
         test_source_tag = SourceTag.query.first()
 
         for tag in source.tags:
@@ -278,7 +278,7 @@ class TestTagging(TestCase):
         journalist.create_label(SourceLabelType, "test 2")
 
         label = SourceLabelType.query.first()
-        journalist.create_tag(source1, label.id)
+        journalist.create_tag(source1, label)
 
         resp = self.client.get(
             url_for('index', filter=[label.id] ),
@@ -299,7 +299,7 @@ class TestTagging(TestCase):
 
         labels = SourceLabelType.query.all()
         for label in labels:
-            journalist.create_tag(source1, label.id)
+            journalist.create_tag(source1, label)
 
         resp = self.client.get(
             url_for('index', filter=[x.id for x in labels] ),
@@ -317,7 +317,7 @@ class TestTagging(TestCase):
         journalist.create_label(SourceLabelType, "test 2")
 
         label = SourceLabelType.query.first()
-        journalist.create_tag(source1, label.id)
+        journalist.create_tag(source1, label)
 
         source1_unused_tags = journalist.get_unselected_labels(source1)
         source2_unused_tags = journalist.get_unselected_labels(source2)
@@ -329,8 +329,8 @@ class TestTagging(TestCase):
         source1, _ = utils.db_helper.init_source()
         journalist.create_label(SourceLabelType, "test 1")
         label = SourceLabelType.query.first()
-        journalist.create_tag(source1, label.id)
-        journalist.delete_label(SourceLabelType, label.id)
+        journalist.create_tag(source1, label)
+        journalist.delete_label(SourceLabelType, label)
 
         self.assertEqual(len(source1.tags), 0)
 
