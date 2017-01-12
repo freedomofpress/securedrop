@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import copy
+import sys
 import os
 from datetime import datetime
 import functools
@@ -599,9 +600,17 @@ def index():
     # the Pocoo style guide, IMHO:
     # http://www.pocoo.org/internal/styleguide/
 
+    unselect_dict = {}
     if "filter" in request.args:
         labels = request.args.getlist("filter")
         labels = map(int, labels)
+
+        # The following for loop constructs a dict that is used by the template
+        # to provide links to unfilter by one label at a time
+        for label in labels:
+            selected_labels = copy.copy(labels)
+            selected_labels.remove(label)
+            unselect_dict.update({label: selected_labels})
     else:
         labels = []
 
@@ -620,7 +629,8 @@ def index():
 
     return render_template('index.html', unstarred=unstarred, starred=starred,
                            filter_labels=filter_labels, journalists=journalists,
-                           selected_filter_labels=labels)
+                           selected_filter_labels=labels,
+                           unselect_dict=unselect_dict)
 
 
 @app.route('/col/<sid>')
