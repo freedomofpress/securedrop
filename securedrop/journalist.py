@@ -598,44 +598,37 @@ def index():
     # Long SQLAlchemy statements look best when formatted according to
     # the Pocoo style guide, IMHO:
     # http://www.pocoo.org/internal/styleguide/
-    sources = Source.query.filter_by(pending=False) \
-                          .order_by(Source.last_updated.desc()) \
-                          .all()
+
+    if "filter" in request.args:
+        labels = request.args.getlist("filter")
+        labels = map(int, labels)
+    else:
+        labels = []
+
+    if labels:
+        sources = db_session.query(Source).filter_by(pending=False) \
+                          .from_self().join(SourceTag) \
+                          .filter(SourceTag.label_id.in_(labels)) \
+                          .order_by(Source.last_updated.desc()).all()
+    else:
+        sources = Source.query.filter_by(pending=False) \
+                              .order_by(Source.last_updated.desc()) \
+                              .all()
 
     starred, unstarred, filter_labels = get_stars_and_labels(sources)
     journalists = Journalist.query.order_by(Journalist.username).all()
 
     return render_template('index.html', unstarred=unstarred, starred=starred,
-                           filter_labels=filter_labels, journalists=journalists)
-
-
-@app.route('/filter_by_label/<int:label_id>', methods=('POST',))
-@login_required
-def filter_index(label_id):
-    sources = db_session.query(Source, SourceTag) \
-                        .filter_by(pending=False) \
-                        .join(SourceTag) \
-                        .filter_by(label_id=label_id) \
-                        .order_by(Source.last_updated.desc()) \
-                        .all()
-
-    sources = [x.Source for x in sources]
-    starred, unstarred, filter_labels = get_stars_and_labels(sources)
-
-    return render_template('index.html', unstarred=unstarred, starred=starred,
-                           filter_labels=filter_labels,
-                           filter_label=label_id)
+                           filter_labels=filter_labels, journalists=journalists,
+                           selected_filter_labels=labels)
 
 
 @app.route('/col/<sid>')
 @login_required
 def col(sid):
     source = get_source(sid)
-
-    # Tags on source
     unselected_source_labels = get_unselected_labels(source)
 
-    # Tags on submissions
     unselected_submission_labels = {}
     for doc in source.collection:
         if doc.filename.endswith('-msg.gpg'):

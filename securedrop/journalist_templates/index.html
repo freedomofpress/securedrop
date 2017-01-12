@@ -39,22 +39,24 @@
 
     </form>
   {% else %}
-    <p>No documents have been submitted!</p>
+    {% if filter_labels %}
+      <p>No matching documents found!</p>
+    {% else %}
+      <p>No documents have been submitted!</p>
+    {% endif %}
   {% endif %}
 </div>
 {% if filter_labels %}
-  <div>
-    <form id="filter_by_label" method="post">
-      Filter by label:
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-        {% for label in filter_labels %}
-          {% if label.id == filter_label %}
-            <a href="/" class="tag-label">{{ label.label_text }} <i class="fa fa-times"></i></a>
-          {% else %}
-            <button id="filter_by_label_{{ label.id }}" type="submit" name="action" formaction="/filter_by_label/{{ label.id }}" class="untagged-tag-label">{{ label.label_text }}</button>
-          {% endif %}
-        {% endfor %}
-    </form>
+  <div>Filter by label:
+    {% for label in filter_labels %}
+      {% if label.id in selected_filter_labels %}
+        <a href="/" class="tag-label">{{ label.label_text }} <i class="fa fa-times"></i></a>
+      {% else %}
+        <a href="{{ url_for('index', filter=label.id) }}">
+        <button id="filter_by_label_{{ label.id }}" class="untagged-tag-label">{{ label.label_text }}
+        </button></a>
+      {% endif %}
+    {% endfor %}
   </div>
 {% endif %}
 {% endblock %}
