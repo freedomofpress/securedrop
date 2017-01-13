@@ -58,24 +58,6 @@ class TestSource(TestCase):
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))
 
-    def test_regenerate_valid_lengths(self):
-        """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(7, 11):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 200)
-            codename = self._find_codename(response.data)
-            self.assertEquals(len(codename.split()), codename_len)
-
-    def test_regenerate_invalid_lengths(self):
-        """If the codename length is invalid, it should return 403 Forbidden"""
-        for codename_len in (2, 999):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 403)
-
     def test_generate_has_login_link(self):
         """The generate page should have a link to remind people to login
            if they already have a codename, rather than create a new one.
