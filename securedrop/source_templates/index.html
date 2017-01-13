@@ -10,7 +10,7 @@
     <script type="text/javascript" src="/static/js/source.js"></script>
   </head>
   <body>
-    <div class="warning"><strong>We recommend disabling JavaScript and turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/white/times.svg') }}" width="12px" height="12px"></div>
+    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/white/times.svg') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -54,12 +54,12 @@
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. -->
     <div class="bubble">
-      <p>You appear to be using the Tor Browser. You can disable Javascript and turn the Security Slider to High in 4 easy steps!</p> 
+      <p>You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!</p>
       <ol>
         <li>Click the <img src="static/i/toronion.png" alt="Tor icon" />Tor icon in the toolbar above</li>
         <li>Click <strong>Privacy and Security Settings</strong></li>
         <li>Turn the Slider to <strong>High</strong></li>
-        <li>If the page does not refresh automatically, <a href="/">click here</a> to refresh the page</li> 
+        <li>If the page does not refresh automatically, <a href="/">click here</a> to refresh the page</li>
       </ol>
 
       <p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a></p>
