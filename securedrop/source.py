@@ -391,12 +391,16 @@ def login():
 def logout():
     if logged_in():
         session.clear()
-        tor_msg = Markup("""<strong>Important:</strong> Thank you for logging out.
+        tor_msg = Markup("""<strong>Important:</strong><br>
+                         Thank you for logging out!<br>
                          Please fully end your session by restarting
-                         Tor Browser: Click the <img src='static/i/toronion.png'
-                         alt='Tor icon' /> Tor onion icon in the toolbar above,
-                         click <strong>  New Identity</strong> and click
-                         <strong>Yes</strong> in the dialog box that appears.""")
+                         Tor Browser:<br>
+                         1. Click the
+                           <img src='static/i/toronion.png' alt='Tor icon' />
+                           Tor onion icon in the toolbar above.<br>
+                         2. Click <strong>  New Identity</strong>.<br>
+                         3. Click <strong>Yes</strong> in the dialog box
+                           that appears.""")
         flash(tor_msg, "error")
 
     return redirect(url_for('index'))
