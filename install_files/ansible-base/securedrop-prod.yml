@@ -49,7 +49,9 @@
       # By default backups will NOT run, since they can claim a substantial
       # amount of disk space. Enable backups explicitly via a backup var, or
       # implicitly if performing a restore.
-      when: (perform_backup is defined and perform_backup == true) or
+      # Due to ansible version in current Tails, we have to pipe to bool
+      # https://github.com/ansible/ansible/issues/9369
+      when: (perform_backup is defined and perform_backup|bool == true) or
             (restore_file is defined and restore_file != '')
       tags: backup
 
