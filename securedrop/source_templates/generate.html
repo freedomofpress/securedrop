@@ -12,11 +12,6 @@
   <div class="pull-right">
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <select name="number-words" id="number-words">
-        {% for n in range(7, 11) %}
-        <option value="{{ n }}"{% if n == num_words %} selected{% endif %}>{{ n }} words</option>
-        {% endfor %}
-      </select>
       <button type="submit" id="regenerate-submit" class="small">
         <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/refresh.svg') }}" width="15px" height="15px">
       </button>
