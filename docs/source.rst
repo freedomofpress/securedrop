@@ -6,7 +6,7 @@ Source Guide
           pages and Micah's Intercept article. For example: what
           computer should you use? what network should you be on? etc.
 
-	  
+
 Choose who to submit to
 -----------------------
 
@@ -89,9 +89,8 @@ it right away, we recommend writing it down and keeping it in a safe place at
 first, and gradually working to memorize it over time. Once you have memorized
 it, you should destroy the written copy.
 
-SecureDrop allows you to choose the length of your codename, in case you want
-to create a longer codename for extra security. Once you have generated a
-codename and put it somewhere safe, click ``Continue``.
+Once you have generated a codename and put it somewhere safe, click
+``Continue``.
 
 |Memorizing your codename|
 
