@@ -126,7 +126,7 @@ def index():
                            custom_notification=config.CUSTOM_NOTIFICATION)
 
 
-def generate_unique_codename(num_words):
+def generate_unique_codename(num_words=7):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(num_words)
@@ -158,18 +158,9 @@ def generate():
               "to create a new account, you should log out first.", "notification")
         return redirect(url_for('lookup'))
 
-    num_words = 7
-    if request.method == 'POST':
-        num_words = int(request.form['number-words'])
-        if num_words not in range(7, 11):
-            abort(403)
-
-    codename = generate_unique_codename(num_words)
+    codename = generate_unique_codename()
     session['codename'] = codename
-    return render_template(
-        'generate.html',
-        codename=codename,
-        num_words=num_words)
+    return render_template('generate.html', codename=codename)
 
 
 @app.route('/create', methods=['POST'])
