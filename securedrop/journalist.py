@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 import config
 import version
 import crypto_util
+import forms
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
@@ -27,6 +28,7 @@ app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CsrfProtect(app)
 
 assets = Environment(app)
+
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
@@ -407,6 +409,34 @@ def remove_star(sid):
     make_star_false(sid)
     db_session.commit()
     return redirect(url_for('index'))
+
+
+@app.route('/profile/<username>')
+@login_required
+def profile(username):
+    user = Journalist.query.filter_by(username=username).one()
+    sources = Source.query.filter_by(journalist_id=g.user.id).all()
+    return render_template("profile.html", user=user, sources=sources)
+
+
+@app.route('/edit-profile/', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = forms.EditProfileForm(request.form)
+    if request.method == 'GET':
+        # Populate the inputs with the existing values in the database
+        form.full_name.data = g.user.full_name
+        form.about.data = g.user.about
+        form.pgp_key.data = g.user.pgp_key
+    elif request.method == 'POST' and form.validate():
+        user = Journalist.query.filter_by(username=g.user.username).one()
+        user.full_name = form.full_name.data
+        user.about = form.about.data
+        user.pgp_key = form.pgp_key.data
+        db_session.commit()
+        flash('Successfully edited your profile!', 'notification')
+        return redirect(url_for('profile', username=g.user.username))
+    return render_template("edit_profile.html", form=form)
 
 
 @app.route('/')
