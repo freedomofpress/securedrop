@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Profile for user {{ user.username }}</h2>
+
+{% if user.username == g.user.username: %}
+<a href="{{ url_for('edit_profile') }}" id="edit-profile">
+  <button type="submit" class="center">Edit My Profile</button>
+</a>
+{% endif %}
+
+<p><b>Name:</b>
+{%  if user.full_name: %}
+{{ user.full_name }}
+{% else %}
+Not provided
+{% endif %}</p>
+
+<p><b>About this user:</b> {% if user.about: %}
+{{ user.about }}
+{% else %}
+Not provided
+{% endif %}</p>
+
+<p><b>Sources assigned to this journalist:</b></p>
+{% if sources %}
+  {% for source in sources %}
+  <p>
+    <div class="designation">
+      <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{loop.index}}">{{ source.journalist_designation }}</a></span>
+    </div>
+  </p>
+  {% endfor %}
+{% else %}
+<p>User is not currently assigned to any sources.</p>
+{% endif %}
+
+<p><b>PGP public key:</b></p>
+{% if user.pgp_key: %}
+<pre>{{ user.pgp_key }}</pre>
+{% else %}
+Not provided</p>
+{% endif %}
+
+<p><b>Last seen:</b> {{ user.last_access }} </p>
+
+{% endblock %}
