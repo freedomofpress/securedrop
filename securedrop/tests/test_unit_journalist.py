@@ -405,7 +405,9 @@ class TestJournalistApp(TestCase):
     def test_user_authorization_for_gets(self):
         urls = [url_for('index'), url_for('col', sid='1'),
                 url_for('download_single_submission', sid='1', fn='1'),
-                url_for('edit_account')]
+                url_for('edit_account'),
+                url_for('edit_profile'),
+                url_for('profile', username=self.user.username)]
 
         for url in urls:
             resp = self.client.get(url)
@@ -417,7 +419,8 @@ class TestJournalistApp(TestCase):
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
-                url_for('account_reset_two_factor_hotp')]
+                url_for('account_reset_two_factor_hotp'),
+                url_for('edit_profile')]
         for url in urls:
             res = self.client.post(url)
             self.assertStatus(res, 302)
