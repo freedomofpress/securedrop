@@ -7,7 +7,7 @@ import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file, Markup)
+                   flash, abort, g, send_file, Markup, make_response)
 from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
 
@@ -15,6 +15,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
+import json
 import version
 import crypto_util
 import store
@@ -428,6 +429,16 @@ def download_journalist_pubkey():
 @app.route('/why-journalist-key')
 def why_download_journalist_pubkey():
     return render_template("why-journalist-key.html")
+
+
+@app.route('/metadata')
+def metadata():
+    meta = {'gpg_fpr': config.JOURNALIST_KEY,
+            'sd_version': version.__version__,
+            }
+    resp = make_response(json.dumps(meta))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
 
 
 @app.errorhandler(404)
