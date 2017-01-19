@@ -24,4 +24,10 @@ class SubmitAndRetrieveFile(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_checks_messages()
+        self._journalist_stars_and_unstars_single_message()
+        self._journalist_selects_all_sources_then_selects_none()
         self._journalist_downloads_message()
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

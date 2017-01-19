@@ -308,6 +308,32 @@ class JournalistNavigationSteps():
         unread_span = self.driver.find_element_by_css_selector('span.unread')
         self.assertIn("1 unread", unread_span.text)
 
+    def _journalist_stars_and_unstars_single_message(self):
+        # Message begins unstarred
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('starred-source-link-1')
+
+        # Journalist stars the message
+        self.driver.find_element_by_class_name('button-star').click()
+        starred = self.driver.find_elements_by_id('starred-source-link-1')
+        self.assertEquals(1, len(starred))
+
+        # Journalist unstars the message
+        self.driver.find_element_by_class_name('button-star').click()
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('starred-source-link-1')
+
+    def _journalist_selects_all_sources_then_selects_none(self):
+        self.driver.find_element_by_id('select_all').click()
+        checkboxes = self.driver.find_elements_by_id('checkbox')
+        for checkbox in checkboxes:
+            self.assertTrue(checkbox.is_selected())
+
+        self.driver.find_element_by_id('select_none').click()
+        checkboxes = self.driver.find_elements_by_id('checkbox')
+        for checkbox in checkboxes:
+            self.assertFalse(checkbox.is_selected())
+
     def _journalist_downloads_message(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
