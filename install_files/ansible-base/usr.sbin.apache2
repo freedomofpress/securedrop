@@ -185,7 +185,6 @@
   /var/www/securedrop/static/i/tipbox/tipbox-hed-submit3.png r,
   /var/www/securedrop/static/i/tipbox/tipbox-logo.png r,
   /var/www/securedrop/static/js/journalist.js r,
-  /var/www/securedrop/static/js/libs/jquery-2.1.1.min.js r,
   /var/www/securedrop/static/js/source.js r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.eot r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.ttf r,
