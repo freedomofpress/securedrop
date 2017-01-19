@@ -12,7 +12,9 @@ from flask_testing import TestCase
 
 from db import Source
 import source
+import version
 import utils
+import json
 
 
 class TestSourceApp(TestCase):
@@ -275,6 +277,12 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Turn the Security Slider to High to Protect Your "
                       "Anonymity", resp.data)
+
+    def test_metadata_route(self):
+        resp = self.client.get('/metadata')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.headers.get('Content-Type'), 'application/json')
+        self.assertEqual(json.loads(resp.data.decode('utf-8')).get('sd_version'), version.__version__)
 
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
