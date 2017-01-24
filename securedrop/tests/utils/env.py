@@ -56,10 +56,11 @@ def setup():
 
 
 def teardown():
-    # As this same statement is run in manage::_run_in_test_environment, there
-    # is occasionally a race to remove the SECUREDROP_DATA_ROOT, that results
-    # in test failure during tearDown of fixtures. Keeping this same statement
-    # in both places guarantees cleanup happens in all test-running scenarios.
+    # As this same statement is run in :meth:`manage._run_in_test_environment`,
+    # there is occasionally a race to remove the SECUREDROP_DATA_ROOT, that
+    # results in test failure during tearDown of fixtures. Keeping this same
+    # statement in both places guarantees cleanup happens in all test-running
+    # scenarios.
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:

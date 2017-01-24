@@ -131,7 +131,7 @@ def _get_test_module_dict(test_type):
                        for test in tests]
         
     for file in os.listdir(test_dir):
-        if fnmatch.fnmatch(file, prefix + '*'):
+        if fnmatch.fnmatch(file, prefix + '*.py'):
             tests.append(file[len(prefix):-len('.py')])
             test_paths.append(os.path.join(test_dir, file))
 
