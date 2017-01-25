@@ -2,7 +2,13 @@
 {% block body %}
 <h2>Profile for user {{ user.username }}</h2>
 
-{% if user.username == g.user.username: %}
+
+
+{% if g.user.is_admin and user.username != g.user.username: %}
+<a href="{{ url_for('admin_edit_profile', user_id=user.id) }}" id="admin-edit-profile">
+  <button type="submit" class="center">Edit This Profile</button>
+</a>
+{% elif user.username == g.user.username: %}
 <a href="{{ url_for('edit_profile') }}" id="edit-profile">
   <button type="submit" class="center">Edit My Profile</button>
 </a>

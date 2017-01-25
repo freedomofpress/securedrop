@@ -415,7 +415,7 @@ def remove_star(sid):
 @login_required
 def profile(username):
     user = Journalist.query.filter_by(username=username).one()
-    sources = Source.query.filter_by(journalist_id=g.user.id).all()
+    sources = Source.query.filter_by(journalist_id=user.id).all()
     return render_template("profile.html", user=user, sources=sources)
 
 
@@ -436,7 +436,28 @@ def edit_profile():
         db_session.commit()
         flash('Successfully edited your profile!', 'notification')
         return redirect(url_for('profile', username=g.user.username))
-    return render_template("edit_profile.html", form=form)
+    return render_template("edit_profile.html", form=form, user=g.user)
+
+
+@app.route('/admin/edit-profile/<int:user_id>', methods=('GET', 'POST'))
+@admin_required
+def admin_edit_profile(user_id):
+    user = Journalist.query.get(user_id)
+    form = forms.EditProfileForm(request.form)
+    if request.method == 'GET':
+        # Populate the inputs with the existing values in the database
+        form.full_name.data = user.full_name
+        form.about.data = user.about
+        form.pgp_key.data = user.pgp_key
+    elif request.method == 'POST' and form.validate():
+        user.full_name = form.full_name.data
+        user.about = form.about.data
+        user.pgp_key = form.pgp_key.data
+        db_session.commit()
+        flash('Successfully edited the profile for {}!'.format(user.username),
+              'notification')
+        return redirect(url_for('profile', username=user.username))
+    return render_template("admin_edit_profile.html", form=form, user=user)
 
 
 @app.route('/')
