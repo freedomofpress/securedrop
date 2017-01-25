@@ -6,7 +6,7 @@ from wtforms.widgets import TextArea
 
 
 def validate_pgp_key(form, field):
-    if 'PGP PUBLIC KEY' not in field.data:
+    if field.data != u'' and 'PGP PUBLIC KEY' not in field.data:
         raise ValidationError('Please submit inline PGP key!')
 
 
