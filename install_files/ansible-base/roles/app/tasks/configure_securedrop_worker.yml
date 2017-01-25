@@ -24,3 +24,8 @@
     - supervisor
     - permissions
     - logging
+
+- name: Ensure supervisor service is running
+  service:
+    name: supervisor
+    state: started

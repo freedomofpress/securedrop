@@ -11,9 +11,24 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
-    development.vm.box = "bento/ubuntu-14.04"
     development.vm.network "forwarded_port", guest: 8080, host: 8080, auto_correct: true
     development.vm.network "forwarded_port", guest: 8081, host: 8081, auto_correct: true
+
+    development.vm.provider "virtualbox" do |v|
+      development.vm.box = "bento/ubuntu-14.04"
+      # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
+      #
+      # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
+      # 1. The new job queue backend (redis) is taking up a significant amount of memory. According to top, it is not (a couple MB on average).
+      # 2. Firefox 33 was released on October 13th: https://www.mozilla.org/en-US/firefox/33.0/releasenotes/ It may require more memory than the previous version did.
+      v.memory = 1024
+    end
+
+    development.vm.provider "docker" do |d|
+      d.image = "guilhem/vagrant-ubuntu:14.04"
+      d.has_ssh = true
+    end
+
     development.vm.provision "ansible" do |ansible|
       # Hack to trick Vagrant into parsing the command-line args for
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
@@ -27,14 +42,6 @@ Vagrant.configure("2") do |config|
         'securedrop_application_server' => %w(development),
         'securedrop:children' => %w(development),
       }
-    end
-    development.vm.provider "virtualbox" do |v|
-      # Running the functional tests with Selenium/Firefox has started causing out-of-memory errors.
-      #
-      # This started around October 14th and was first observed on the task-queue branch. There are two likely causes:
-      # 1. The new job queue backend (redis) is taking up a significant amount of memory. According to top, it is not (a couple MB on average).
-      # 2. Firefox 33 was released on October 13th: https://www.mozilla.org/en-US/firefox/33.0/releasenotes/ It may require more memory than the previous version did.
-      v.memory = 1024
     end
   end
 
