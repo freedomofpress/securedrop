@@ -8,8 +8,8 @@
   <p class="notification"> <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/info-circle.svg') }}" width="20px" height="20px">A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
   {% endif %}
 
-  <h2 class="headline">Submit documents and messages</h2>
-  <p>You can send a file, a message, or both.</p>
+  <h2 class="headline">Submit Materials</h2>
+  <p class="explanation">If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
   <hr class="no-line">
 </div>
@@ -18,7 +18,13 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
     <div class="attachment grid-item center">
-      <img class="center" src="{{ url_for('static', filename='i/font-awesome/upload.png') }}">
+      <svg width="73" height="62" viewBox="0 0 73 61.8">
+        <path d="M47.6 8.6c0 3.7-9.4 6.7-21 6.7 -11.6 0-21-3-21-6.7 0-3.7 9.4-6.7 21-6.7C38.2 2 47.6 4.9 47.6 8.6" class="icon"/>
+        <path d="M47.8 18.1c0 3.7-9.5 6.7-21.1 6.7 -11.7 0-21.1-3-21.1-6.7l0.1-5.6c2.5 2.8 11 4.9 21 4.9 10.1 0 18.6-2.1 21.1-5L47.8 18.1z" class="icon"/>
+        <path d="M30.7 34.4c-1.2 0.1-2.5 0.1-3.8 0.1 -11.7 0-21.1-3-21.1-6.7l0.1-5.6c2.5 2.8 11 4.9 21 4.9 3.5 0 6.8-0.2 9.7-0.7C34 28.5 31.9 31.3 30.7 34.4z" class="icon"/>
+        <path d="M29.3 43.9c-0.8 0-1.6 0-2.5 0 -11.7 0-21.1-3-21.1-6.7l0.1-5.6c2.5 2.8 11 4.9 21 4.9 1.1 0 2.1 0 3.1-0.1 -0.5 1.8-0.8 3.6-0.8 5.5C29.2 42.6 29.3 43.2 29.3 43.9z" class="icon"/>
+        <path d="M49.2 23.9c-9.9 0-17.9 8-17.9 17.9s8 17.9 17.9 17.9c9.9 0 17.9-8 17.9-17.9S59.1 23.9 49.2 23.9zM49.2 30.4c0.7-0.7 1.4 0.1 1.4 0.1s8.1 8.2 9.2 9.3c1.6 1.5-0.2 1.9-0.2 1.9h-6v10.5h-7.5v-10.6h-5.9c-1.3 0-0.4-1.7-0.4-1.7L49.2 30.4" class="icon"/>
+      </svg>
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>
@@ -28,17 +34,17 @@
   </div>
 
   <hr class="no-line">
-
-  <button type="submit" class="btn primary">
-  <img src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px">
-  Submit</button>
-</form>
-
-<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
+  <div class="center">
+    <a href="{{ url_for('lookup') }}" class="btn secondary">Cancel</a>
+    <button type="submit" class="btn primary">
+    <img src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px">
+    Submit</button>
+    </form>
+  </div>
 
 <hr class="no-line"/>
 
-<h2 class="headline">Replies</h2>
+<h2 class="headline">Get Replies</h2>
 
 <div id="replies">
   {% if replies %}
@@ -59,7 +65,7 @@
               </p>
           </div>
         </form>
-        <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
+        <blockquote><h5>From: {{ reply.journalist.username|title }}</h5> {{ reply.decrypted | nl2br }}</blockquote>
         <div class="clearfix"></div>
       </div>
     {% endfor %}
