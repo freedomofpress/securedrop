@@ -204,10 +204,12 @@ def _get_pytest_cmd_from_args(args, test_type):
     if getattr(args, 'all', False):
         if '--cov' not in cmd:
             cmd += '--cov '
+        cmd += '-- ' # end of pytest options
         cmd += ' '.join(_get_test_module_dict(test_type).values())
 
-    # Run unit tests related to a single module
+    # Run unittests related to a single module
     elif getattr(args, 'tests', False):
+        cmd += '-- ' # end of pytest options
         for test in args.tests:
             try:
                 module_path = _get_test_module_dict(test_type)[test]

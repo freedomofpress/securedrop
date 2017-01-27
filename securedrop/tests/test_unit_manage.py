@@ -38,7 +38,7 @@ class TestManagePy(unittest.TestCase):
         args = self.parser.parse_args('unit -t crypto_util'.split())
         cmd = manage._get_pytest_cmd_from_args(args, 'unit')
         self.assertRegexpMatches(
-            cmd, 'pytest /[a-z/]+/tests/test_unit_crypto_util.py')
+            cmd, 'pytest -- /[a-z/]+/tests/test_unit_crypto_util.py')
     
     def test_pytest_cmd(self):
         args = self.parser.parse_args(
@@ -51,25 +51,25 @@ class TestManagePy(unittest.TestCase):
     def test_pytest_parse_args_all_units(self):
         args = self.parser.parse_args('unit -a'.split())
         cmd = manage._get_pytest_cmd_from_args(args, 'unit')
-        self.assertRegexpMatches(cmd, 'pytest --cov [a-z/_]+.py')
+        self.assertRegexpMatches(cmd, 'pytest --cov -- [a-z/_]+.py')
         self.assertRegexpMatches(cmd, '/tests/test_unit')
 
     def test_pytest_parse_args_single_functional(self):
         args = self.parser.parse_args('functional -t admin_interface'.split())
         cmd = manage._get_pytest_cmd_from_args(args, 'functional')
         self.assertRegexpMatches(
-            cmd, 'pytest /[a-z/]+/tests/functional/test_admin_interface.py')
+            cmd, 'pytest -- /[a-z/]+/tests/functional/test_admin_interface.py')
 
     def test_pytest_parse_args_all_functionals(self):
         args = self.parser.parse_args('functional -a'.split())
         cmd = manage._get_pytest_cmd_from_args(args, 'functional')
-        self.assertRegexpMatches(cmd, 'pytest --cov [a-z/_]+.py')
+        self.assertRegexpMatches(cmd, 'pytest --cov -- [a-z/_]+.py')
         self.assertRegexpMatches(cmd, '/tests/functional/test_')
 
     def test_pytest_parse_args_all_tests(self):
         args = self.parser.parse_args('functional -a'.split())
         cmd = manage._get_pytest_cmd_from_args(args, 'functional')
-        self.assertRegexpMatches(cmd, 'pytest --cov [a-z/_]+.py')
+        self.assertRegexpMatches(cmd, 'pytest --cov -- [a-z/_]+.py')
 
     def test_get_test_module_dict_functional(self):
         output = manage._get_test_module_dict('functional')
