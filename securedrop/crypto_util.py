@@ -94,9 +94,11 @@ def display_id():
 
 
 def hash_codename(codename, salt=SCRYPT_ID_PEPPER):
-    """
-    >>> hash_codename('giggles')
-    'VPHZQBFGAABYXEC7RZEJAD2VXG57EY6YHAEDLZYJW5OO5EZBQAW24WE3BZQSEUUBX6K2MH3RLNDSOHPM4BUWN5BABEBISLKXKWNFHYY='
+    """Salts and hashes a codename using scrypt.
+
+    :param str codename: A source's codename.
+    :param str salt: The salt to mix with the codename when hashing.
+    :returns: A base32 encoded string; the salted codename hash.
     """
     return b32encode(scrypt.hash(clean(codename), salt, **SCRYPT_PARAMS))
 

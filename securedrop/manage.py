@@ -119,8 +119,25 @@ def _get_test_module_dict(test_type):
     tests, test_paths = [], []
 
     if test_type == 'functional':
-        test_dir = os.path.join(ABS_MODULE_DIR_PATH, 'tests', 'functional')
-        prefix = 'test_'
+        # test_dir = os.path.join(ABS_MODULE_DIR_PATH, 'tests', 'functional')
+        # prefix = 'test_'
+        # TODO: currently the functional tests only pass when run in a specific
+        # order. This is because the db module creates a connection to the
+        # test database upon import, but that test database is destroyed and
+        # re-created for each test. db, crypto_util, and/or the test suite
+        # should rewritten s.t. this is no longer an issue.
+        return {'admin_interface':
+                os.path.join(
+                    ABS_MODULE_DIR_PATH,
+                    'tests/functional/test_admin_interface.py'),
+                'submit_and_retrieve_file':
+                os.path.join(
+                    ABS_MODULE_DIR_PATH,
+                    'tests/functional/test_submit_and_retrieve_file.py'),
+                'submit_and_retrieve_message':
+                os.path.join(
+                    ABS_MODULE_DIR_PATH,
+                    'tests/functional/test_submit_and_retrieve_message.py')}
     elif test_type == 'unit':
         test_dir = os.path.join(ABS_MODULE_DIR_PATH, 'tests')
         prefix = 'test_unit_'
@@ -140,9 +157,20 @@ def _get_test_module_dict(test_type):
 
 def run_all_tests(): # pragma: no cover
     """Runs docstring, functional and unit tests."""
-    functional_and_unit_tests_rc = _run_in_test_environment('pytest --cov')
+    # functional_and_unit_tests_rc = _run_in_test_environment('pytest --cov')
+    # TODO: currently the functional tests only pass when run in a specific
+    # order. This is because the db module creates a connection to the
+    # test database upon import, but that test database is destroyed and
+    # re-created for each test. db, crypto_util, and/or the test suite
+    # should rewritten s.t. this is no longer an issue.
+    functional_tests_rc = _run_in_test_environment(
+        'pytest --cov -- {}'.format(' '.join(
+            _get_test_module_dict('functional').values())))
+    unit_tests_rc = _run_in_test_environment(
+        'pytest --cov -- {}'.format(' '.join(
+            _get_test_module_dict('unit').values())))
     doctring_tests_rc = run_docstring_tests()
-    return int(any([functional_and_unit_tests_rc, doctring_tests_rc]))
+    return int(any([functional_tests_rc, unit_tests_rc, doctring_tests_rc]))
 
 
 def run_docstring_tests(): # pragma: no cover
