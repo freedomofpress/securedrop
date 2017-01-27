@@ -34,4 +34,4 @@ See the [Development Guide](https://docs.securedrop.org/en/latest/development/ge
 
 SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE).
 
-The [wordlist](/securedrop/dictionaries/diceware.txt) we use to generate source passphrases is based off a new [Diceware wordlist](https://github.com/heartsucker/diceware), and is licensed under the MIT license thanks to [Heartsucker](https://heartsucker.com).
+The lists of [nouns](/securedrop/dictionaries/nouns.txt) and [adjectives](/securedrop/dictionaries/adjectives.txt) we use to generate source passphrases is based off a new [Diceware wordlist](https://github.com/heartsucker/diceware), and is licensed under the MIT license thanks to [Heartsucker](https://heartsucker.com).
