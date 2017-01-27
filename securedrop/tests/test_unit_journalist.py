@@ -203,6 +203,67 @@ class TestJournalistApp(TestCase):
 
         self.assertIn(escape("Passwords didn't match"), resp.data)
 
+    def test_admin_edits_user_profile_success_response(self):
+        self._login_admin()
+
+        resp = self.client.post(
+            url_for('admin_edit_profile', user_id=self.user.id),
+            data=dict(full_name='Alice', about='National Security',
+                      pgp_key="""-----BEGIN PGP PUBLIC KEY BLOCK-----
+                              blahblahblahblah
+                              -----END PGP PUBLIC KEY BLOCK-----"""),
+            follow_redirects=True)
+
+        self.assertIn('Successfully edited the profile', resp.data)
+        self.assertIn('Alice', resp.data)
+        self.assertIn('National Security', resp.data)
+
+    def test_admin_edits_user_profile_failure_to_submit_pgp_key(self):
+        self._login_admin()
+
+        resp = self.client.post(
+            url_for('admin_edit_profile', user_id=self.user.id),
+            data=dict(full_name='Alice', about='National Security',
+                      pgp_key='Not a PGP key'),
+            follow_redirects=False)
+
+        self.assertIn('Please submit inline PGP key!', resp.data)
+
+    def test_user_edits_profile_success_response(self):
+        self._login_user()
+
+        resp = self.client.post(
+            url_for('edit_profile'),
+            data=dict(full_name='Alice', about='National Security',
+                      pgp_key="""-----BEGIN PGP PUBLIC KEY BLOCK-----
+                              blahblahblahblah
+                              -----END PGP PUBLIC KEY BLOCK-----"""),
+            follow_redirects=True)
+
+        self.assertIn('Successfully edited your profile!', resp.data)
+        self.assertIn('Alice', resp.data)
+        self.assertIn('National Security', resp.data)
+
+    def test_user_edits_profile_failure_to_submit_pgp_key(self):
+        self._login_user()
+
+        resp = self.client.post(
+            url_for('edit_profile'),
+            data=dict(full_name='Alice', about='National Security',
+                      pgp_key='Not a PGP key'),
+            follow_redirects=False)
+
+        self.assertIn('Please submit inline PGP key!', resp.data)
+
+    def test_user_views_own_profile_edit_button_appears(self):
+        self._login_user()
+
+        resp = self.client.get(
+            url_for('profile', username=self.user.username))
+
+        # Verify button to edit profile appears
+        self.assertIn('Edit My Profile', resp.data)
+
     def test_user_edits_password_mismatch_redirect(self):
         self._login_user()
         resp = self.client.post(url_for('edit_account'), data=dict(
@@ -381,7 +442,8 @@ class TestJournalistApp(TestCase):
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
-            url_for('admin_edit_user', user_id=self.user.id)]
+            url_for('admin_edit_user', user_id=self.user.id),
+            url_for('admin_edit_profile', user_id=self.user.id)]
 
         self._login_user()
         for admin_url in admin_urls:
@@ -396,6 +458,7 @@ class TestJournalistApp(TestCase):
             url_for('admin_reset_two_factor_totp'),
             url_for('admin_reset_two_factor_hotp'),
             url_for('admin_edit_user', user_id=self.user.id),
+            url_for('admin_edit_profile', user_id=self.user.id),
             url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
         for admin_url in admin_urls:
@@ -405,7 +468,9 @@ class TestJournalistApp(TestCase):
     def test_user_authorization_for_gets(self):
         urls = [url_for('index'), url_for('col', sid='1'),
                 url_for('download_single_submission', sid='1', fn='1'),
-                url_for('edit_account')]
+                url_for('edit_account'),
+                url_for('edit_profile'),
+                url_for('profile', username=self.user.username)]
 
         for url in urls:
             resp = self.client.get(url)
@@ -417,7 +482,8 @@ class TestJournalistApp(TestCase):
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
-                url_for('account_reset_two_factor_hotp')]
+                url_for('account_reset_two_factor_hotp'),
+                url_for('edit_profile')]
         for url in urls:
             res = self.client.post(url)
             self.assertStatus(res, 302)

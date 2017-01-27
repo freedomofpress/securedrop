@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+{% from "_formhelpers.html" import render_textarea_field, render_string_field %}
+
+<h2>Edit profile for user {{ user.username }}</h2>
+<form method="post" action="{{ url_for('admin_edit_profile', user_id=user.id) }}">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <dl>
+    {{ render_string_field(form.full_name, 30) }}
+    {{ render_textarea_field(form.about, 70, 3) }}
+    {{ render_textarea_field(form.pgp_key, 85, 10) }}
+  </dl>
+  <button type="submit" value="Update user profile" id="admin-update-profile" name="submit-edit-profile">Update this profile</button>
+</form>
+
+{% endblock %}

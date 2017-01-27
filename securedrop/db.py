@@ -12,7 +12,7 @@ except:
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary, Text
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import scrypt
@@ -238,6 +238,10 @@ class Journalist(Base):
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
     last_token = Column(String(6))
+
+    full_name = Column(String(255), default='')
+    about = Column(String(1000), default='')
+    pgp_key = Column(String(4000), default='')
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)

@@ -200,7 +200,7 @@ class JournalistNavigationSteps():
     def _edit_user(self, username):
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == username,
-            self.driver.find_elements_by_tag_name('a'))
+            self.driver.find_elements_by_id('edit-user'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
 
@@ -220,7 +220,7 @@ class JournalistNavigationSteps():
         # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == self.new_user['username'],
-            self.driver.find_elements_by_tag_name('a'))
+            self.driver.find_elements_by_id('edit-user'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
         self.wait_for(

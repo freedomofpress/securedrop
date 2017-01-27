@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>SecureDrop</title>
-    
+
     {% assets filters="cssmin", output="gen/journalist.css",
       "css/normalize.css", "css/journalist.css", "css/font-awesome.css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}" />
@@ -22,9 +22,10 @@
 
     {% if g.user %}
     <div id="logout">
-      <a href="{{ url_for('edit_account') }}">Edit Account</a> | 
+      <a href="{{ url_for('profile', username=g.user.username) }}">Profile</a> |
+      <a href="{{ url_for('edit_account') }}">Edit Account</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}">Admin</a> | 
+      <a href="{{ url_for('admin_index') }}">Admin</a> |
       {% endif %}
       <a href="{{ url_for('logout') }}">Logout</a>
     </div>

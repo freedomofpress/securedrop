@@ -1,0 +1,30 @@
+{% macro render_string_field(field, size) %}
+  <p>
+  <dt><b>{{ field.label }}:</b>
+  </p>
+  <p>
+  <dd>{{ field(size=size)|safe }}<br>
+  {% if field.errors %}
+    {% for error in field.errors %}
+      {{ error }}
+    {% endfor %}
+  {% endif %}
+  </dd>
+  </p>
+{% endmacro %}
+
+
+{% macro render_textarea_field(field, ncols, nrows) %}
+  <p>
+  <dt><b>{{ field.label }}:</b>
+  </p>
+  <p>
+  <dd>{{ field(cols=ncols, rows=nrows)|safe }}<br>
+  {% if field.errors %}
+    {% for error in field.errors %}
+      {{ error }}
+    {% endfor %}
+  {% endif %}
+  </dd>
+  </p>
+{% endmacro %}

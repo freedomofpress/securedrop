@@ -14,7 +14,8 @@
   <table id="users">
     <tr>
       <th>Username</th>
-      <th>Edit</th>
+      <th>Change Credentials</th>
+      <th>Edit Profile</th>
       <th>Delete</th>
       <th>Created</th>
       <th>Last login</th>
@@ -22,7 +23,8 @@
     {% for user in users %}
       <tr class="user">
         <td>{{ user.username }}</td>
-        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="Edit user {{ user.username }}"></i></a></td>
+        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}" id="edit-user"><i class="fa fa-key" title="Edit user {{ user.username }}"></i></a></td>
+        <td><a href="/admin/edit-profile/{{ user.id }}" class="plain" data-username="{{ user.username }}" id="edit-profile"><i class="fa fa-edit" title="Edit profile {{ user.username }}"></i></a></td>
         <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="Delete user {{ user.username }}"></i></button></td>
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|datetimeformat(relative=True) }}</time></td>
         {% if user.last_access %}
