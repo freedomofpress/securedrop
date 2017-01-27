@@ -1,0 +1,206 @@
+@import base
+
++base_rules
+
+@keyframes fadein
+  from
+    opacity: 0
+
+  to
+    opacity: 1
+
+
+@-webkit-keyframes fadein
+  from
+    opacity: 0
+
+  to
+    opacity: 1
+
+
+@keyframes fadeout
+  0%
+    opacity: 1
+
+  98%
+    opacity: 1
+
+  100%
+    opacity: 0
+
+
+@-webkit-keyframes fadeout
+  0%
+    opacity: 1
+
+  98%
+    opacity: 1
+
+  100%
+    opacity: 0
+
+
+html
+  animation: fadeout 120s
+  -webkit-animation: fadeout 120s
+  opacity: 0
+
+  &:hover
+    animation: none
+    -webkit-animation: none
+    opacity: 1
+
+.grid
+  margin: 0 auto
+  width: 921px
+
+.option
+  a.btn.block
+    margin-bottom: 0px
+    width: 100%
+    display: block
+
+input#show
+  display: none
+
+#content
+  display: block
+  transition: opacity 1s ease-out
+  opacity: 0
+  height: 0
+  font-size: 0
+  overflow: hidden
+
+#show
+  &:before
+    color: blue
+    content: "Show"
+
+  &:hover
+    &.show:before
+      color: gray
+      content: "Hide"
+
+    ~ span#content
+      opacity: 1
+      font-size: 100%
+      height: auto
+
+input.codename
+  width: 400px
+  padding: 10px
+  font-weight: bold
+
+p#codename
+  font-weight: bold
+  /*
+   * HACK: Firefox likes to add non-existent leading and/or trailing whitespace
+   * to <span>s, but never does it to <p>s. This hack uses a <p> for the
+   * codename so we can get the right copy behavior, and uses inline-block plus
+   * tweaks the margin to make it look like a span
+  display: inline-block
+  margin: 0
+
+#filter
+  font-family: monospace
+  padding: 5px
+  width: 250px
+
+#delete-all
+  .btn:first-child
+    display: block
+    padding: 2%
+    margin: auto
+    width: 80%
+
+  .hidden-prompt
+    margin: 0
+    padding: 0
+    height: 0
+    overflow: hidden
+    text-align: center
+
+    &:target
+      margin: auto
+      padding: auto
+      height: auto
+      overflow: visible
+
+  .danger
+    display: inline-block
+    width: 30%
+
+  .cancel
+    display: inline-block
+    width: 30%
+    background-color: $color_grey_medium
+
+    &:hover
+      color: $color_grey_medium
+      background-color: white
+
+#replies
+  .reply
+    border: 1px solid $color_grey_medium
+    text-align: left
+    margin-bottom: 1em
+    border-radius: 5px
+    position: relative
+
+    .date
+      float: right
+      background-color: $color_grey_medium
+      color: #ffffff
+      font-size: 10px
+      font-weight: bold
+      padding: 5px
+
+    a.delete
+      float: right
+      padding: 5px
+      background-color: inherit
+      color: $color_warning_red_pale
+      font-size: 14px
+      clear: right
+      text-decoration: none
+
+      &:hover
+        color: #FA6E6E
+
+  p
+    color: #777
+    font-style: italic
+
+  .confirm-prompt
+    position: absolute
+    width: 300px
+    right: 5%
+    top: -9%
+    font-size: 14px
+
+    p
+      *
+        margin: 0 2%
+        font-style: normal
+        font-size: inherit
+
+      a
+        color: inherit
+
+      button
+        margin: 0 2%
+        padding: 5px 15px
+
+p#no-replies
+  text-align: center
+
+#replies blockquote
+  margin: 1em 1em
+
+p.breadcrumbs
+  text-align: left
+
+p#max-file-size
+  font-size: 10px
+  font-style: italic
+  margin-bottom: 0

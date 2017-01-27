@@ -29,6 +29,7 @@ development_dependencies:
   - python-pip
   - tmux
   - vim
+  - ruby # to ensure `gem` command is available
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"

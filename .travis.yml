@@ -21,8 +21,8 @@ install:
 - pip install coveralls
 script:
 - echo localhost > inventory
-- ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
-- ansible-playbook -i inventory --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
+- ansible-playbook -i inventory -vv --syntax-check install_files/ansible-base/securedrop-travis.yml
+- ansible-playbook -i inventory -vv --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
   # For some reason, redis-server does not start automatically when installed
   # on Travis. I believe Travis' service machinery may be interfering. See
   # http://docs.travis-ci.com/user/database-setup/#Redis

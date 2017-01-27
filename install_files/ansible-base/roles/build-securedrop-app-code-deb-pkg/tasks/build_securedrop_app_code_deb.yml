@@ -13,6 +13,15 @@
   tags:
     - pip
 
+- name: Install sass Ruby gem
+  gem:
+    name: sass
+    state: latest
+    user_install: no
+  sudo: yes
+  tags:
+    - build
+
 - name: Copy install_files/securedrop-app-code dir to build path
   command:  cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
   args:
@@ -45,6 +54,13 @@
   command: cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
   args:
     creates: /tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }}
+  tags:
+    - build
+
+- name: Compile sass to css
+  shell: sass --update sass:static/css --style compressed
+  args:
+    chdir: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/
   tags:
     - build
 

@@ -1,2 +1,6 @@
 # Don't version control config.py because it contains secret values
 config.py
+
+.sass-cache
+static/css/*
+

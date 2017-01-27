@@ -2,10 +2,8 @@
 <html>
   <head>
     <title>SecureDrop | Protecting Journalists and Sources</title>
-    {% assets filters="cssmin", output="gen/source.css",
-      "css/normalize.css", "css/source.css", "css/font-awesome.css" %}
-      <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
+
+    <link rel="stylesheet" href="/static/css/source.css" />
 
     {% assets filters="jsmin", output="gen/source.js",
       "js/libs/jquery-2.1.4.min.js", "js/source.js" %}

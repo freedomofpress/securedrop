@@ -78,10 +78,13 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
 
 class DevServerProcessMonitor(object):  # pragma: no cover
 
-    def __init__(self, procs):
-        self.procs = procs
+    def __init__(self, proc_funcs):
+        self.procs = []
         self.last_proc = None
         atexit.register(self.cleanup)
+
+        for pf in proc_funcs:
+            self.procs.append(pf())
 
     def monitor(self):
         while True:
@@ -151,12 +154,15 @@ def run():  # pragma: no cover
 
     """
     procs = [
-        DevServerProcess('Source Interface',
-                         ['python', 'source.py'],
-                         'blue'),
-        DevServerProcess('Journalist Interface',
-                         ['python', 'journalist.py'],
-                         'cyan'),
+        lambda: DevServerProcess('Source Interface',
+                                 ['python', 'source.py'],
+                                 'blue'),
+        lambda: DevServerProcess('Document Interface',
+                                 ['python', 'journalist.py'],
+                                 'cyan'),
+        lambda: DevServerProcess('SASS Compiler',
+                                 ['sass', '--watch', 'sass:static/css'],
+                                 'magenta'),
     ]
 
     monitor = DevServerProcessMonitor(procs)

@@ -1,0 +1,76 @@
+@import base
+
++base_rules
+
+.grid
+  letter-spacing: -0.31em
+
+#replies
+  .reply
+    border: 1px solid $color_grey_medium
+    text-align: left
+    margin-bottom: 1em
+    border-radius: 5px
+
+    .date
+      float: right
+      background-color: $color_grey_medium
+      color: #ffffff
+      font-size: 10px
+      font-weight: bold
+      padding: 5px
+
+    button
+      float: right
+      padding: 5px
+      background-color: inherit
+      color: $color_warning_red_pale
+      font-size: 14px
+      border: 0
+      clear: right
+
+      &:hover
+        border: 0
+        color: #FA6E6E
+
+  p
+    color: #777
+    font-style: italic
+
+p#no-replies
+  text-align: center
+
+#replies blockquote
+  margin: 1em 1em
+
+p.breadcrumbs
+  text-align: left
+  position: relative
+
+#regenerate-code .confirm-prompt
+  font-size: 14px
+  font-style: italic
+  text-align: left
+
+  button
+    padding: 5px 15px
+
+  *
+    margin: 0 1%
+    font-size: inherit
+    font-style: normal
+
+p#max-file-size
+  font-size: 10px
+  font-style: italic
+  margin-bottom: 0
+
+button.small-danger, a.btn.small-danger, .btn.small-danger
+  background-color: $color_warning_red_pale
+  font-size: small
+  padding: 3px 10px
+
+.submission .icon
+  display: inline-block
+  width: 3.5%
+  color: $color_purple_medium

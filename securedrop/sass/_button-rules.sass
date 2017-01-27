@@ -1,0 +1,95 @@
+@import variables
+
+=button_rules
+  button, a.btn, .btn
+    background: $color_purple_medium
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    padding: 10px 15px
+    border: 1px solid transparent
+    color: white
+    font-size: medium
+    cursor: pointer
+    text-align: center
+    text-decoration: none
+
+  button
+    &.starred
+      color: orange
+
+      &:hover
+        color: #FFC5AD
+        border: none
+        background-color: $color_purple_medium
+
+    &.un-starred
+      color: lightgray
+
+      &:hover
+        color: lightsalmon
+        border: none
+        background-color: $color_purple_medium
+
+    &.button-star:focus
+      outline: 0
+
+  button
+    &.plain
+      background: none
+      color: #333
+
+      &:hover
+        background: none
+        color: #333
+        border: 1px solid transparent
+
+    &:hover
+      background: white
+      color: $color_purple_medium
+      border: 1px solid $color_purple_medium
+
+  .btn
+    &.small
+      font-size: small
+      padding: 3px 10px
+
+    &.primary
+      display: block
+      width: 50%
+      margin: 0 auto
+
+  button.block, a.btn.block
+    text-decoration: none
+    min-width: 250px
+    margin-bottom: 20px
+
+  button.small, a.btn.small
+    font-size: small
+    padding: 3px 10px
+
+  a.btn:hover, .btn:hover
+    background: white
+    color: $color_purple_medium
+    border: 1px solid $color_purple_medium
+
+  button.alt, a.btn.alt, .btn.alt
+    background: transparent
+    border: 1px solid white
+
+  button.alt:hover, a.btn.alt:hover, .btn.alt:hover
+    background: white
+    color: $color_purple_medium
+
+  button.danger, a.danger, .btn.danger
+    background-color: $color_warning_red_pale
+
+  button.danger:hover, a.btn.danger:hover, .btn.danger:hover
+    background: white
+    border-color: $color_warning_red_pale
+    color: $color_warning_red_pale
+
+  .button-star
+    padding: 0
+    background-color: $color_purple_medium
+    color: orange
+    border: none
