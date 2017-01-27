@@ -175,18 +175,20 @@ def run_all_tests(): # pragma: no cover
 
 def run_docstring_tests(): # pragma: no cover
     """Runs the docstring tests."""
+    # Note: may want to replace this explicit list with a function that returns
+    # all app code module paths if we expand use of doctests in the future.
     modules_with_doctests = ['crypto_util']
     module_paths = [os.path.join(ABS_MODULE_DIR_PATH, module) + '.py'
                    for module in modules_with_doctests]
 
-    rc = 0
-    for module_path in module_paths:
-        try:
-            doctest.testfile(module_path, module_relative=False)
-        except:
-            failure = 1
+    try:
+        rc = _run_in_test_environment('python -m doctest '
+                                      '{}'.format(' '.join(module_paths)))
+    except:
+        return 1
+    else:
+        return rc
 
-    return rc
 
 def _get_pytest_cmd_from_args(args, test_type):
     """Takes a :class:`argparse.Namespace` and either returns a str that

@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+from base64 import b32encode
 import os
 import subprocess
-from base64 import b32encode
 
 from Crypto.Random import random
 import gnupg
