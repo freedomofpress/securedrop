@@ -126,9 +126,9 @@ class JournalistNavigationSteps():
             'button#add-user')
         add_user_btn.click()
 
-        # The add user page has a form with an "Add user" button
+        # The add user page has a form with an "ADD USER" button
         btns = self.driver.find_elements_by_tag_name('button')
-        self.assertIn('Add user', [el.text for el in btns])
+        self.assertIn('ADD USER', [el.text for el in btns])
 
         self.new_user = dict(
             username='dellsberg',

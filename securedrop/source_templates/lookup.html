@@ -35,10 +35,12 @@
 
   <hr class="no-line">
   <div class="center">
-    <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">Cancel</a>
-    <button type="submit" class="btn primary">Submit</button>
-    </form>
+    <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
+      <button type="submit" class="sd-button btn primary">
+      <img src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px">
+      SUBMIT</button>
   </div>
+</form>
 
 <hr class="no-line"/>
 
@@ -59,7 +61,7 @@
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>Delete this reply?
               <a href="#delete">Cancel</a>
-              <button type="submit" class="btn danger">Delete</button>
+              <button type="submit" class="sd-button btn danger">DELETE</button>
               </p>
           </div>
         </form>
@@ -68,12 +70,12 @@
       </div>
     {% endfor %}
     <form id="delete-all" method="post" action="/delete-all">
-      <a class="btn" href="#delete-all-confirm">Delete all replies</a>
+      <a class="sd-button btn" href="#delete-all-confirm">DELETE ALL REPLIES</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <div id="delete-all-confirm" class="hidden-prompt">
         <p>Are you finished with the replies?</p>
-        <button class="danger" type="submit">Yes, delete all replies</button>
-        <a class="btn cancel" href="#delete-all">No, not yet</a>
+        <button class="sd-button danger" type="submit">YES, DELETE ALL REPLIES</button>
+        <a class="sd-button btn cancel" href="#delete-all">NO, NOT YET</a>
       </div>
     </form>
   {% else %}

@@ -31,9 +31,9 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="btn block pull-right" id="continue-button">
+  <button type="submit" class="sd-button btn block pull-right" id="continue-button">
     <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/arrow-circle-o-right.svg') }}" width="20px" height="20px">
-    Continue</button>
+    CONTINUE</button>
   <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
 {% endblock %}

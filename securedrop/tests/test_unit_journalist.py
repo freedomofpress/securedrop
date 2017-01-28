@@ -355,7 +355,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         resp = self.client.get(url_for('admin_add_user'))
         # any GET req should take a user to the admin_add_user page
-        self.assertIn('Add user', resp.data)
+        self.assertIn('ADD USER', resp.data)
 
     def test_admin_add_user(self):
         self._login_admin()
