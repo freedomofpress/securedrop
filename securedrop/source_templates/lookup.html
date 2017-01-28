@@ -36,9 +36,7 @@
   <hr class="no-line">
   <div class="center">
     <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
-      <button type="submit" class="sd-button btn primary">
-      <img src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px">
-      SUBMIT</button>
+    <button type="submit" class="sd-button btn primary">SUBMIT</button>
   </div>
 </form>
 
@@ -85,9 +83,7 @@
 
 <hr class="no-line">
 
-
 <div class="code-reminder">
-
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
   <span id="content"><p class="alert"><strong>{{ codename }}</strong></p></span>

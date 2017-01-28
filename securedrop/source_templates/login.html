@@ -9,8 +9,9 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 <p class="center"><input id="login-with-existing-codename" type="password" name="codename" class="codename" autocomplete="off" placeholder="Enter your codename" autofocus /></p>
 <p class="center">
-    <a href="{{ url_for('index') }}" class="sd-button btn secondary" id="cancel">CANCEL</a>
-    <button type="submit" class="sd-button btn block"><img src="{{ url_for('static', filename='i/font-awesome/white/arrow-circle-o-right.svg') }}" width="20px" height="20px"> CONTINUE</button></p>
+  <p class="center"><input type="password" name="codename" class="codename" autocomplete="off" placeholder="Enter your codename" autofocus /></p>
+  <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
+  <p class="center"><button type="submit" class="sd-button btn block">CONTINUE</button></p>
 </p>
 </form>
 {% endblock %}
