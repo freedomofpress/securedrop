@@ -23,7 +23,7 @@ securedrop_header_image: ""
 securedrop_app_gpg_public_key: "test_journalist_key.pub"
 securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 # Custom text that will appear on the source interface
-custom_notification_text: "This is a SecureDrop Development VM for testing ONLY"
+custom_notification_text: "This is an insecure SecureDrop Development server for testing ONLY. Do NOT submit documents here."
 
 ### Used by the mon role ###
 # The OSSEC alert GPG public key has to be in the install_files/ansible-base/ or
