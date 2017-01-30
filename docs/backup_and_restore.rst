@@ -111,7 +111,7 @@ perform the backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -u <SSH username> -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real Admin Workstation
 
@@ -160,7 +160,7 @@ backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
