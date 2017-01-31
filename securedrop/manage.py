@@ -38,8 +38,7 @@ def _get_pid_from_file(pid_file_name): # pragma: no cover
     try:
         return int(open(pid_file_name).read())
     except IOError as exc:
-        if 'No such file or directory' not in exc:
-            raise
+        return None
 
 
 def _start_test_rqworker(config): # pragma: no cover
@@ -59,8 +58,7 @@ def _stop_test_rqworker(): # pragma: no cover
         try:
             os.remove(TEST_WORKER_PIDFILE)
         except OSError as exc:
-            if 'No such file or directory' not in exc:
-                raise
+            pass
 
 
 def _cleanup_test_securedrop_dataroot(config): # pragma: no cover
@@ -70,8 +68,7 @@ def _cleanup_test_securedrop_dataroot(config): # pragma: no cover
         try:
             shutil.rmtree(config.SECUREDROP_DATA_ROOT)
         except OSError as exc:
-            if 'No such file or directory' not in exc:
-                raise
+            pass
 
 
 def _cleanup_test_environment(config): # pragma: no cover
@@ -268,8 +265,7 @@ def reset(): # pragma: no cover
     try:
         os.remove(config.DATABASE_FILE)
     except OSError as exc:
-        if 'No such file or directory' not in exc:
-            raise
+        pass
 
     # Regenerate the database
     db.init_db()
@@ -278,16 +274,14 @@ def reset(): # pragma: no cover
     try:
         os.stat(config.STORE_DIR)
     except OSError as exc:
-        if 'No such file or directory' not in exc:
-            raise
+        pass
     else:
         for source_dir in os.listdir(config.STORE_DIR):
             try:
                 # Each entry in STORE_DIR is a directory corresponding to a source
                 shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
             except OSError as exc:
-                if 'No such file or directory' not in exc:
-                    raise
+                pass
     return 0
 
 
@@ -435,8 +429,7 @@ def clean_tmp(): # pragma: no cover
     try:
         os.stat(config.TEMP_DIR)
     except OSError as exc:
-        if 'No such file or directory' not in exc:
-            raise
+        pass
     else:
         for path in listdir_fullpath(config.TEMP_DIR):
             if not file_in_use(path):
