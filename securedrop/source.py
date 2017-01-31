@@ -460,4 +460,4 @@ def write_pidfile():
 if __name__ == "__main__":  # pragma: no cover
     write_pidfile()
     debug = getattr(config, 'env', 'prod') != 'prod'
-    app.run(debug=debug, host='0.0.0.0', port=8080)
+    app.run(debug=debug, host='0.0.0.0', port=8080, threaded=True)
