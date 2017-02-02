@@ -55,8 +55,15 @@
 
     &.primary
       display: block
-      width: 50%
       margin: 0 auto
+      width: 35%
+      display: inline-block
+
+    &.secondary
+      @extend .primary
+      background: white
+      color: $color_blue_medium
+      border: 1px solid $color_blue_medium
 
   button.block, a.btn.block
     text-decoration: none

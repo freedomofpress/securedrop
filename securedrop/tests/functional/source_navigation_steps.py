@@ -16,12 +16,33 @@ class SourceNavigationSteps():
         self.assertTrue(len(codename.text) > 0)
         self.source_name = codename.text
 
+    def _source_chooses_to_login(self):
+        self.driver.find_element_by_id('login-button').click()
+
+        logins = self.driver.find_elements_by_id('login-with-existing-codename')
+
+        self.assertTrue(len(logins) > 0)
+
+    def _source_hits_cancel_at_login_page(self):
+        self.driver.find_element_by_id('cancel').click()
+
+        self.driver.get(self.source_location)
+
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
+                         self.driver.title)
+
+    def _source_hits_cancel_at_submit_page(self):
+        self.driver.find_element_by_id('cancel').click()
+
+        headline = self.driver.find_element_by_class_name('headline')
+        self.assertEqual('Submit Materials', headline.text)
+
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
 
         continue_button.click()
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('Submit documents and messages', headline.text)
+        self.assertEqual('Submit Materials', headline.text)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:

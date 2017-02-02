@@ -88,7 +88,7 @@ class TestSourceApp(TestCase):
             resp = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
-            self.assertIn("Submit documents and messages", resp.data)
+            self.assertIn("Submit Materials", resp.data)
 
     def _new_codename(self):
         return utils.db_helper.new_codename(self.client, session)
@@ -107,14 +107,14 @@ class TestSourceApp(TestCase):
     def test_login_and_logout(self):
         resp = self.client.get('/login')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Login to check for responses", resp.data)
+        self.assertIn("Enter Codename", resp.data)
 
         codename = self._new_codename()
         with self.client as c:
             resp = c.post('/login', data=dict(codename=codename),
                           follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Submit documents and messages", resp.data)
+            self.assertIn("Submit Materials", resp.data)
             self.assertTrue(session['logged_in'])
             resp = c.get('/logout', follow_redirects=True)
 
@@ -139,13 +139,13 @@ class TestSourceApp(TestCase):
         def login_test(codename):
             resp = self.client.get('/login')
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Login to check for responses", resp.data)
+            self.assertIn("Enter Codename", resp.data)
 
             with self.client as c:
                 resp = c.post('/login', data=dict(codename=codename),
                             follow_redirects=True)
                 self.assertEqual(resp.status_code, 200)
-                self.assertIn("Submit documents and messages", resp.data)
+                self.assertIn("Submit Materials", resp.data)
                 self.assertTrue(session['logged_in'])
                 resp = c.get('/logout', follow_redirects=True)
 

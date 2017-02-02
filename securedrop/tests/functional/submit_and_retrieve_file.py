@@ -28,6 +28,16 @@ class SubmitAndRetrieveFile(
         self._journalist_selects_all_sources_then_selects_none()
         self._journalist_downloads_message()
 
+    def test_source_cancels_at_login_page(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_hits_cancel_at_login_page()
+
+    def test_source_cancels_at_submit_page(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_hits_cancel_at_submit_page()
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
