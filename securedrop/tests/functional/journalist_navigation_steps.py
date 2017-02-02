@@ -93,8 +93,8 @@ class JournalistNavigationSteps():
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
 
-        h2s = self.driver.find_elements_by_tag_name('h2')
-        self.assertIn("Admin Interface", [el.text for el in h2s])
+        h1s = self.driver.find_elements_by_tag_name('h1')
+        self.assertIn("Admin Interface", [el.text for el in h1s])
 
         users_table_rows = self.driver.find_elements_by_css_selector(
             'table#users tr.user')
