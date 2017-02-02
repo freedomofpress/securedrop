@@ -78,8 +78,14 @@ Ansible. Using `virtualenvwrapper
 .. code:: sh
 
     sudo apt-get install virtualenvwrapper
-    mkvirtualenv -p python2.7 securedrop
-    pip install ansible==1.8.4
+    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+    mkvirtualenv -p /usr/bin/python2 securedrop
+    pip install -U ansible==1.8.4
+
+.. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
+          to your ``~/.bashrc`` (or whatever your default shell configuration
+          file is) so that the command-line utilities ``virtualenvwrapper``
+          provides are automatically available in the future.
 
 Mac OS X
 ~~~~~~~~
@@ -90,17 +96,25 @@ Install the dependencies for the development environment:
 #. VirtualBox_
 #. Ansible_.
 
-There are several ways to install Ansible on a Mac. We recommend setting up a virtual environment to install Ansible since we are currently using Ansible 1.8.4:
+There are several ways to install Ansible on a Mac. We recommend installing it
+to a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
+install the older version we use system-wide. The following commands assume your
+default Python is the Python2 that ships with macOS. If you are using a
+different version, the path to ``virtualenvwrapper.sh`` will differ. Running
+``pip show virtualenvwrapper`` should help you find it.
 
 .. code:: sh
 
-    pip install virtualenvwrapper
-    mkvirtualenv -p python2.7 securedrop
-    pip install ansible==1.8.4
+    sudo easy_install pip # if you don't already have pip
+    pip install -U virtualenvwrapper
+    source /usr/local/bin/virtualenvwrapper.sh
+    mkvirtualenv -p python2 securedrop
+    pip install -U ansible==1.8.4
 
-.. note:: If you install ``virtualenvwrapper`` and get a ``mkvirtualenv: 
-          command not found`` error, make sure 
-          ``source /usr/local/bin/virtualenvwrapper.sh`` is in your ``~/.bashrc``.
+.. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
+          to your ``~/.bashrc`` (or whatever your default shell configuration
+          file is) so that the command-line utilities ``virtualenvwrapper``
+          provides are automatically available in the future.
 
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
