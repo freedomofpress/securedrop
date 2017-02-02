@@ -12,13 +12,8 @@
 <h1 class="headline">Submit Materials</h1>
 <p class="explanation">If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
-<h1 class="headline">Submit documents and messages</h1>
-
-<div class="center">
-  <p>You can send a file, a message, or both.</p>
-
-  <hr class="no-line">
-</div>
+<p>You can send a file, a message, or both.</p>
+<hr class="no-line">
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
@@ -40,7 +35,7 @@
   </div>
 
   <hr class="no-line">
-  <div class="center">
+  <div class="pull-right">
     <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
     <button type="submit" class="sd-button btn primary">SUBMIT</button>
   </div>

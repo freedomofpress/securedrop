@@ -2,7 +2,7 @@
 
 {% block body %}
 <h1>Remember this codename and keep it secret</h1>
-<p class="center">To protect your identity, we're assigning you a unique codename.</p>
+<p>To protect your identity, we're assigning you a unique codename.</p>
 
 <hr class="no-line" />
 
@@ -29,9 +29,9 @@
 
 <hr class="no-line" />
 
-<form id="create-form" method="post" action="/create" autocomplete="off">
+<form id="create-form" method="post" action="/create" autocomplete="off" class="pull-right">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="sd-button btn block pull-right" id="continue-button">CONTINUE</button>
-  <a id="already-have-codename" href="/login">Already have a codename?</a>
+  <a id="already-have-codename" href="/login" class="sd-button btn secondary">ALREADY HAVE A CODENAME?</a>
+  <button type="submit" class="sd-button btn primary" id="continue-button">CONTINUE</button>
 </form>
 {% endblock %}
