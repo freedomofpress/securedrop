@@ -49,10 +49,7 @@ class TestSourceApp(TestCase):
             resp = c.get('/generate')
             self.assertEqual(resp.status_code, 200)
             session_codename = session['codename']
-        self.assertIn("Remember this codename and keep it secret", resp.data)
-        self.assertIn(
-            "To protect your identity, we're assigning you a unique codename.",
-            resp.data)
+        self.assertIn("This codename is what you will use in future visits", resp.data)
         codename = self._find_codename(resp.data)
         # default codename length is 7 words
         self.assertEqual(len(codename.split()), 7)
