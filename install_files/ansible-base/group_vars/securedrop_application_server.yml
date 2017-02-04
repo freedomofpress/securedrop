@@ -140,6 +140,7 @@ agent_auth_rules:
   - "-A INPUT -s {{ monitor_ip }} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT"
 
 test_apt_dependencies:
+  - firefox
   - xvfb
 
 worker_logs_dir: "/var/log/securedrop_worker"

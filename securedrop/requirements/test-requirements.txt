@@ -4,22 +4,28 @@
 #
 #    pip-compile --output-file test-requirements.txt test-requirements.in
 #
-beautifulsoup4==4.5.1
-click==6.6                # via flask, pip-tools
-coverage==4.2             # via pytest-cov
+appdirs==1.4.0            # via setuptools
+beautifulsoup4==4.5.3
+click==6.7                # via flask, pip-tools
+coverage==4.3.4           # via pytest-cov
 first==2.0.1              # via pip-tools
 Flask-Testing==0.6.1
-Flask==0.11.1             # via flask-testing
+Flask==0.12               # via flask-testing
 funcsigs==1.0.2           # via mock
 itsdangerous==0.24        # via flask
-Jinja2==2.8               # via flask
+Jinja2==2.9.5             # via flask
 MarkupSafe==0.23          # via jinja2
 mock==2.0.0
+packaging==16.8           # via setuptools
 pbr==1.10.0               # via mock
-pip-tools==1.7.0
-py==1.4.31
+pip-tools==1.8.0
+py==1.4.32
+pyparsing==2.1.10         # via packaging
 pytest-cov==2.4.0
-pytest==3.0.3
-selenium==2.53.6
-six==1.10.0               # via mock, pip-tools
-Werkzeug==0.11.11         # via flask
+pytest==3.0.6
+selenium==3.0.2
+six==1.10.0               # via mock, packaging, pip-tools, setuptools
+Werkzeug==0.11.15         # via flask
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools                # via pytest
