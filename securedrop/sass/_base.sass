@@ -295,32 +295,47 @@
     display: block
     margin: 0 auto
 
-  .flash
+  $color_error_border: #F68E8E
+  $color_error_background: #FCE3E3
+
+  aside, .flash, .banner-warning
+    border-radius: 10px
+
+    i
+      font-size: 18pt
+
+  aside
+    background-color: #fffbe6
+    color: #82572d
+
+  aside, .flash
     padding: 10px
     margin: 10px
     text-align: left
     font-size: medium
 
-  .notification
-    border: 1px solid #8ed9f6
-    background-color: #e3f7fc
-    border-radius: 10px
-    padding: 9px
-    font-size: medium
-    font-weight: normal
+    &.notification
+      border: 1px solid #8ed9f6
+      background-color: #e3f7fc
+      font-size: medium
+      font-weight: normal
+
+      i
+        color: #4f7685
+
+    &.error
+      border: 1px solid $color_error_border
+      background-color: $color_error_background
+
+      i
+        color: #D62727
+
+  .banner-warning
+    border: 1px solid $color_error_border
+    background-color: $color_error_background
 
     i
-      color: #4f7685
-      font-size: 18pt
-
-  .error, .banner-warning
-    border: 1px solid #F68E8E
-    background-color: #FCE3E3
-    border-radius: 10px
-
-  .error i, .banner-warning i
-    color: #D62727
-    font-size: 18pt
+      color: #D62727
 
   div
     &#select-container
