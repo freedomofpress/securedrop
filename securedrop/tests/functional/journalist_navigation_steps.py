@@ -5,6 +5,7 @@ import gzip
 import datetime
 
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 
 from db import db_session, Journalist
 
@@ -40,7 +41,15 @@ class JournalistNavigationSteps():
 
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
+        # Issue in geckodriver requires hitting return on some clicks
+        # See: https://github.com/mozilla/geckodriver/issues/322
         submit_button.click()
+        submit_button.send_keys(Keys.RETURN)
+
+        self.wait_for(
+            lambda: self.assertIn("Sources",
+                                  self.driver.page_source)
+        )
 
         # Successful login should redirect to the index
         self.assertEquals(self.driver.current_url,
@@ -92,6 +101,11 @@ class JournalistNavigationSteps():
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
+
+        self.wait_for(
+            lambda: self.assertIn("Admin Interface",
+                                  self.driver.page_source)
+        )
 
         h2s = self.driver.find_elements_by_tag_name('h2')
         self.assertIn("Admin Interface", [el.text for el in h2s])
@@ -216,11 +230,17 @@ class JournalistNavigationSteps():
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
 
+        self.wait_for(
+            lambda: self.assertIn('Admin Interface',
+                                  self.driver.page_source)
+        )
+
         # Click the "edit user" link for the new user
-        # self._edit_user(self.new_user['username'])
+        #self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == self.new_user['username'],
             self.driver.find_elements_by_tag_name('a'))
+
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
         self.wait_for(
@@ -264,6 +284,11 @@ class JournalistNavigationSteps():
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
+
+        self.wait_for(
+            lambda: self.assertIn(self.new_user['username'],
+                                  self.driver.page_source)
+        )
         # Edit the new user's password
         self._edit_user(self.new_user['username'])
 
@@ -319,7 +344,13 @@ class JournalistNavigationSteps():
         self.assertEquals(1, len(starred))
 
         # Journalist unstars the message
-        self.driver.find_element_by_class_name('button-star').click()
+        star_icon = self.driver.find_element_by_class_name('button-star').click()
+
+        self.wait_for(
+            lambda: self.assertIn("un-starred-source-link-1",
+                                  self.driver.page_source)
+        )
+
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element_by_id('starred-source-link-1')
 

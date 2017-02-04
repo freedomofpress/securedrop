@@ -1,4 +1,5 @@
 import tempfile
+from selenium.webdriver.common.keys import Keys
 
 class SourceNavigationSteps():
 
@@ -41,6 +42,13 @@ class SourceNavigationSteps():
         continue_button = self.driver.find_element_by_id('continue-button')
 
         continue_button.click()
+        continue_button.send_keys(Keys.RETURN)
+
+        self.wait_for(
+            lambda: self.assertIn("Submit Materials",
+                                  self.driver.page_source)
+        )
+
         headline = self.driver.find_element_by_class_name('headline')
         self.assertEqual('Submit Materials', headline.text)
 
@@ -82,6 +90,11 @@ class SourceNavigationSteps():
                       notification.text)
 
     def _source_logs_out(self):
-        logout_button = self.driver.find_element_by_id('logout').click()
+        # Issue in geckodriver requires hitting return on some clicks
+        # See: https://github.com/mozilla/geckodriver/issues/322
+        logout_button = self.driver.find_element_by_id("logout")
+        logout_button.click()
+        logout_button.send_keys(Keys.RETURN)
+
         notification = self.driver.find_element_by_css_selector('p.error')
-        self.assertIn('Thank you for logging out!', notification.text)
+        self.assertIn('Thank you for logging out!', self.driver.page_source)
