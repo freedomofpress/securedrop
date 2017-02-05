@@ -307,12 +307,9 @@
     font-size: medium
 
   .flash
-    .icon
-      float: left
-
-    .notification, .error, .important
-      .message
-        float: right
+    display: flex
+    flex-flow: row nowrap
+    align-items: flex-start
 
     &.success
       border: 1px solid #E1F1E5

@@ -293,8 +293,7 @@ def submit():
                 fh.stream))
 
     if first_submission:
-        flash(Markup("""<div class="icon">{svg}</div>
-                     <div class="message"><strong>Success!</strong>
+        flash(Markup("""{svg}<div class="message"><strong>Success!</strong>
                      <p>Thank you for sourcing this information to us.
                      Please check-back later for replies. <a href="#codename-hint">
                      Forgot your codename?</a></p></div>
@@ -308,9 +307,8 @@ def submit():
         else:
             things = 'message and document'
 
-        flash(Markup("""<div class="icon"><{svg}</div>
-                     <div class="message"><p>Thanks! We received your {things}.
-                     </p></div>
+        flash(Markup("""{svg}<div class="message"><p>Thanks! We received your
+                     {things}.</p></div>
                      """.format(svg=util.svg('success_checkmark.svg'), things=things)),
               "success")
 
