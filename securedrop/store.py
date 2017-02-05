@@ -12,21 +12,13 @@ import gzip
 from werkzeug import secure_filename
 
 from secure_tempfile import SecureTemporaryFile
+from util import PathException
 
 import logging
 log = logging.getLogger(__name__)
 
 VALIDATE_FILENAME = re.compile(
     "^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
-
-
-class PathException(Exception):
-
-    """An exception raised by `store.verify` when it encounters a bad path. A path
-    can be bad when it is not absolute, not normalized, not within
-    `config.STORE_DIR`, or doesn't match the filename format.
-    """
-    pass
 
 
 def verify(p):
