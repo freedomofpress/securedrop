@@ -29,20 +29,20 @@
         </div>
 
         <div class="grid-item option alt">
-          <h2>
+          <h2 class="welcome-text">
             Submit documents for the first time
           </h2>
           <hr class="cut-out" />
           <p>If this is your first time submitting documents to journalists, start here.</p>
-          <a href="/generate" class="btn alt block" id="submit-documents-button"><img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/white/cloud-upload.svg') }}" width="17px" height="17px"> Submit Documents</a>
+          <a href="/generate" class="sd-button btn alt index" id="submit-documents-button">SUBMIT<br/>DOCUMENTS</a>
         </div>
         <div class="grid-item option">
-          <h2>
+          <h2 class="welcome-text">
             Already submitted something?
           </h2>
           <hr class="cut-out" />
           <p>If you have already submitted documents in the past, log in here to check for responses.</p>
-          <a href="/login" class="btn block" id="login-button"><img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/white/comments.svg') }}" width="17px" height="17px"> Check for a response</a>
+          <a href="/login" id="login-button" class="sd-button btn primary index">CHECK FOR A RESPONSE</a>
         </div>
       </div>
 

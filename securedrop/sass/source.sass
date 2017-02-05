@@ -86,13 +86,17 @@ input#show
       font-size: 100%
       height: auto
 
-input.codename
+input.codename-box
   width: 400px
   padding: 10px
   font-weight: bold
 
-p#codename
+.codename
   font-family: monospace
+  letter-spacing: 0.15em
+  font-weight: normal
+
+p#codename
   /*
    * HACK: Firefox likes to add non-existent leading and/or trailing whitespace
    * to <span>s, but never does it to <p>s. This hack uses a <p> for the

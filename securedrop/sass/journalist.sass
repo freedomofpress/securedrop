@@ -74,3 +74,54 @@ button.small-danger, a.btn.small-danger, .btn.small-danger
   display: inline-block
   width: 3.5%
   color: $color_purple_medium
+
+#cols li.source
+  .button-star
+    background-color: $color_grey_light
+
+  .assignment
+    p
+      margin: 0
+      display: inline-block
+
+    .assign-current
+      margin-left: 7%
+
+      font-size: 0.8em
+      a
+
+        margin-left: 1%
+    .btn
+      padding: .3%
+      width: 10%
+      display: inline-block
+
+    button
+      margin-left: 3%
+      padding: .3%
+      width: 10%
+
+  .assign-select
+    height: 0
+    overflow: hidden
+
+    &:target
+      height: auto
+      overflow: visible
+      margin-top: 1%
+      text-align: center
+
+    p
+      font-weight: bold
+      font-style: italic
+
+    select
+      margin-left: 2%
+      width: 23%
+
+    .btn
+      background-color: #999
+
+      &:hover
+        color: #999
+        background-color: white

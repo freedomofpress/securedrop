@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h2><span class="headline">Sources</span></h2>
+  <h1><span class="headline">Sources</span></h1>
   {% if unstarred or starred %}
     <div id='filter-container'></div>
     <form id="process_collections" action="/col/process" method="post">

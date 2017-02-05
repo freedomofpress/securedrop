@@ -39,7 +39,7 @@ class TestSourceApp(TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p id="codename">(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_re = r'<p [^>]*id="codename"[^>]*>(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -49,10 +49,7 @@ class TestSourceApp(TestCase):
             resp = c.get('/generate')
             self.assertEqual(resp.status_code, 200)
             session_codename = session['codename']
-        self.assertIn("Remember this codename and keep it secret", resp.data)
-        self.assertIn(
-            "To protect your identity, we're assigning you a unique codename.",
-            resp.data)
+        self.assertIn("This codename is what you will use in future visits", resp.data)
         codename = self._find_codename(resp.data)
         # default codename length is 7 words
         self.assertEqual(len(codename.split()), 7)
@@ -65,7 +62,7 @@ class TestSourceApp(TestCase):
            if they already have a codename, rather than create a new one.
         """
         resp = self.client.get('/generate')
-        self.assertIn("Already have a codename?", resp.data)
+        self.assertIn("ALREADY HAVE A CODENAME?", resp.data)
         soup = BeautifulSoup(resp.data)
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')

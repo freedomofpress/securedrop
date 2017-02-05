@@ -20,13 +20,23 @@
 
   h1, h2, h3
     font-weight: bold
-    text-align: center
+
+  h1, h2
+    color: #7985aa
 
   h1
+    text-align: left
     font-size: 30px
 
   h2
     font-size: 25px
+
+    &.welcome-text
+      color: inherit
+      text-align: center
+
+  h3
+    text-align: center
 
   .content
     position: relative
@@ -51,6 +61,10 @@
 
   a.text-link
     color: $color_purple_medium
+
+  .sd-button
+    font-weight: normal
+    letter-spacing: 0.15em
 
   .select
     border: 1px #C4C2C2 solid
@@ -226,14 +240,6 @@
       .file-options
         padding-top: 8px
 
-      .upload-icon
-        display: inline-block
-        width: 100%
-        text-align: center
-        font-size: 52pt
-        color: rgba(0, 0, 0, 0.5)
-        margin-bottom: 8px
-
       input[type="file"]
         background-color: rgba(0, 0, 0, 0.05)
         padding: 10px
@@ -281,32 +287,47 @@
     display: block
     margin: 0 auto
 
-  .flash
+  $color_error_border: #F68E8E
+  $color_error_background: #FCE3E3
+
+  aside, .flash, .banner-warning
+    border-radius: 10px
+
+    i
+      font-size: 18pt
+
+  aside
+    background-color: #fffbe6
+    color: #82572d
+
+  aside, .flash
     padding: 10px
     margin: 10px
     text-align: left
     font-size: medium
 
-  .notification
-    border: 1px solid #8ed9f6
-    background-color: #e3f7fc
-    border-radius: 10px
-    padding: 9px
-    font-size: medium
-    font-weight: normal
+    &.notification
+      border: 1px solid #8ed9f6
+      background-color: #e3f7fc
+      font-size: medium
+      font-weight: normal
+
+      i
+        color: #4f7685
+
+    &.error
+      border: 1px solid $color_error_border
+      background-color: $color_error_background
+
+      i
+        color: #D62727
+
+  .banner-warning
+    border: 1px solid $color_error_border
+    background-color: $color_error_background
 
     i
-      color: #4f7685
-      font-size: 18pt
-
-  .error, .banner-warning
-    border: 1px solid #F68E8E
-    background-color: #FCE3E3
-    border-radius: 10px
-
-  .error i, .banner-warning i
-    color: #D62727
-    font-size: 18pt
+      color: #D62727
 
   div
     &#select-container
@@ -324,7 +345,7 @@
     display: inline-block
     width: 30%
     min-width: 300px
-    min-height: 290px
+    min-height: 310px
     margin: 1%
     padding: 25px
     border: 1px solid #c3c3c3
@@ -375,17 +396,6 @@
   ul.plain
     list-style: none
 
-  a#already-have-codename
-    float: right
-    margin-right: 12px
-    margin-top: 10px
-    color: #888
-    text-decoration: none
-
-    &:hover
-      text-decoration: underline
-      color: #666
-
   ul.starred
     margin-bottom: 1.33em
 
@@ -427,10 +437,6 @@
 
   #regenerate-codename-btn-label
     font-size: 10px
-
-  .journalist-view-single
-    padding-top: 0px
-    text-align: center
 
   footer
     clear: both
