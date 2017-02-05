@@ -61,7 +61,7 @@ class SourceNavigationSteps():
             submit_button.click()
 
             notification = self.driver.find_element_by_css_selector(
-                'p.notification')
+                '.notification')
             expected_notification = ('Thanks for submitting something '
                                      'to SecureDrop! Please check back '
                                      'later for replies.')
@@ -76,12 +76,12 @@ class SourceNavigationSteps():
         submit_button.click()
 
         notification = self.driver.find_element_by_css_selector(
-            'p.notification')
+            '.notification')
         self.assertIn('Thanks for submitting something to SecureDrop!'
                       ' Please check back later for replies.',
                       notification.text)
 
     def _source_logs_out(self):
         logout_button = self.driver.find_element_by_id('logout').click()
-        notification = self.driver.find_element_by_css_selector('p.important')
+        notification = self.driver.find_element_by_css_selector('.important')
         self.assertIn('Thank you for exiting your session!', notification.text)

@@ -394,11 +394,11 @@ def logout():
     if logged_in():
         session.clear()
         msg = Markup("""<div class="icon">{svg}</div>
-                     <strong>Important!</strong><br>
+                     <div class="message"><strong>Important!</strong><br>
                      <p>Thank you for exiting your session! Please select "New
                      Identity" from the green Onion button in the Tor browser,
                      to clear all history of your SecureDrop usage from this
-                     device.</p>
+                     device.</p></div>
                      """.format(svg=util.svg('hand_with_fingerprint.svg')))
         flash(msg, "important")
 

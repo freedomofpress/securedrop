@@ -156,7 +156,7 @@ class JournalistNavigationSteps():
 
         # Successfully verifying the code should redirect to the admin
         # interface, and flash a message indicating success
-        flashed_msgs = self.driver.find_elements_by_css_selector('p.flash')
+        flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
         self.assertIn(("Two factor token successfully verified for user"
                        " {}!").format(self.new_user['username']),
                       [el.text for el in flashed_msgs])

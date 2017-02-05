@@ -306,6 +306,14 @@
     text-align: left
     font-size: medium
 
+  .flash
+    .icon
+      float: left
+
+    .notification, .error, .important
+      .message
+        float: right
+
     &.notification
       border: 1px solid #8ed9f6
       background-color: #e3f7fc
@@ -321,6 +329,15 @@
 
       i
         color: #D62727
+
+    &.important
+      border: 1px solid #EBDCEB
+      background: #FDFAFD
+
+      strong
+        color: #673466
+      p
+        color: #555555
 
   .banner-warning
     border: 1px solid $color_error_border
