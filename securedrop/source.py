@@ -20,6 +20,7 @@ import version
 import crypto_util
 import store
 import template_filters
+import util
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
@@ -392,17 +393,14 @@ def login():
 def logout():
     if logged_in():
         session.clear()
-        tor_msg = Markup("""<strong>Important:</strong><br>
-                         Thank you for logging out!<br>
-                         Please fully end your session by restarting
-                         Tor Browser:<br>
-                         1. Click the
-                           <img src='static/i/toronion.png' alt='Tor icon' />
-                           Tor onion icon in the toolbar above.<br>
-                         2. Click <strong>  New Identity</strong>.<br>
-                         3. Click <strong>Yes</strong> in the dialog box
-                           that appears.""")
-        flash(tor_msg, "error")
+        msg = Markup("""<div class="icon">{svg}</div>
+                     <strong>Important!</strong><br>
+                     <p>Thank you for exiting your session! Please select "New
+                     Identity" from the green Onion button in the Tor browser,
+                     to clear all history of your SecureDrop usage from this
+                     device.</p>
+                     """.format(svg=util.svg('hand_with_fingerprint.svg')))
+        flash(msg, "important")
 
     return redirect(url_for('index'))
 

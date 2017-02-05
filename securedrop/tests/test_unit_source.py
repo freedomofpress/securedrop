@@ -129,7 +129,7 @@ class TestSourceApp(TestCase):
             self.assertTrue(session['logged_in'])
             resp = c.get('/logout', follow_redirects=True)
             self.assertTrue(not session)
-            self.assertIn('Thank you for logging out!', resp.data)
+            self.assertIn('Thank you for exiting your session!', resp.data)
 
     def test_login_with_whitespace(self):
         """Test that codenames with leading or trailing whitespace still work"""
