@@ -293,9 +293,13 @@ def submit():
                 fh.stream))
 
     if first_submission:
-        flash(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
-            "notification")
+        flash(Markup("""<div class="icon">{svg}</div>
+                     <div class="message"><strong>Success!</strong>
+                     <p>Thank you for sourcing this information to us.
+                     Please check-back later for replies. <a href="#codename-hint">
+                     Forgot your codename?</a></p></div>
+                     """.format(svg=util.svg('success_checkmark.svg'))),
+              "success")
     else:
         if msg:
             flash("Thanks! We received your message.", "notification")
