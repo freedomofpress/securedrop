@@ -41,7 +41,11 @@
 
 <div id="replies">
   {% if replies %}
-    <p>You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message above.</p>
+    <aside>
+      <p>You have received a reply. To protect your identity in the unlikely event someone learns your codename,
+        please delete all replies when you're done with them. This also lets us know that you have received our reply.
+        You can respond by submitting a new message above.</p>
+    </aside>
     <hr class="no-line">
     {% for reply in replies %}
       <div class="reply">
@@ -66,7 +70,7 @@
       <a class="sd-button btn" href="#delete-all-confirm">DELETE ALL REPLIES</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
       <div id="delete-all-confirm" class="hidden-prompt">
-        <p>Are you finished with the replies?</p>
+        <p><strong>Are you finished with the replies?</strong></p>
         <button class="sd-button danger" type="submit">YES, DELETE ALL REPLIES</button>
         <a class="sd-button btn cancel" href="#delete-all">NO, NOT YET</a>
       </div>
