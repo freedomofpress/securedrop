@@ -301,14 +301,18 @@ def submit():
                      """.format(svg=util.svg('success_checkmark.svg'))),
               "success")
     else:
-        if msg:
-            flash("Thanks! We received your message.", "notification")
-        if fh:
-            flash(
-                '{} "{}".'.format(
-                    "Thanks! We received your document",
-                    fh.filename or '[unnamed]'),
-                "notification")
+        if msg and not fh:
+            things = 'message'
+        elif not msg and fh:
+            things = 'document'
+        else:
+            things = 'message and document'
+
+        flash(Markup("""<div class="icon"><{svg}</div>
+                     <div class="message"><p>Thanks! We received your {things}.
+                     </p></div>
+                     """.format(svg=util.svg('success_checkmark.svg'), things=things)),
+              "success")
 
     for fname in fnames:
         submission = Submission(g.source, fname)
