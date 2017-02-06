@@ -391,7 +391,7 @@ class TestIntegration(unittest.TestCase):
                 self.assertNotIn("You have received a reply.", resp.data)
             else:
                 self.assertIn(
-                    "You have received a reply. For your security, please delete all replies when you're done with them.",
+                    "You have received a reply. To protect your identity",
                     resp.data)
                 self.assertIn(test_reply, resp.data)
                 soup = BeautifulSoup(resp.data)

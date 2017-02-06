@@ -144,8 +144,10 @@ The next page will ask for your secret codename. Enter it and click
 
 If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
-another message to the journalist. Be sure to delete any messages here
-before navigating away.
+another message to the journalist. Before leaving the page, you should
+delete any replies. In the unlikely event that someone learns
+your codename, this will keep your identity secret as no one will be
+able to see the previous correspondences you had with journalists.
 
 |Check for a reply|
 
