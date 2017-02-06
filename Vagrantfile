@@ -39,6 +39,7 @@ Vagrant.configure("2") do |config|
     # more memory than the previous version did.
     development.vm.provider "virtualbox" do |v|
       v.memory = 1024
+      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     development.vm.provider "libvirt" do |lv|
       lv.memory = 1024
@@ -75,6 +76,7 @@ Vagrant.configure("2") do |config|
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
       v.memory = 1024
+      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
@@ -118,6 +120,7 @@ Vagrant.configure("2") do |config|
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
       v.memory = 1024
+      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     prod.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-prod.yml"
