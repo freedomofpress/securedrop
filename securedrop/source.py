@@ -294,8 +294,8 @@ def submit():
 
     if first_submission:
         flash(Markup("""{svg}<div class="message"><strong>Success!</strong>
-                     <p>Thank you for sourcing this information to us.
-                     Please check-back later for replies. <a href="#codename-hint">
+                     <p>Thank you for sending this information to us.
+                     Please check back later for replies. <a href="#codename-hint">
                      Forgot your codename?</a></p></div>
                      """.format(svg=util.svg('success_checkmark.svg'))),
               "success")
@@ -402,7 +402,7 @@ def logout():
         msg = Markup("""<div class="icon">{svg}</div>
                      <div class="message"><strong>Important!</strong><br>
                      <p>Thank you for exiting your session! Please select "New
-                     Identity" from the green Onion button in the Tor browser,
+                     Identity" from the green Onion button in the Tor browser
                      to clear all history of your SecureDrop usage from this
                      device.</p></div>
                      """.format(svg=util.svg('hand_with_fingerprint.svg')))

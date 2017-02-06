@@ -172,7 +172,7 @@ class TestSourceApp(TestCase):
         resp = self._dummy_submission()
         self.assertEqual(resp.status_code, 200)
         self.assertIn(
-            "Thank you for sourcing this information to us",
+            "Thank you for sending this information to us",
             resp.data)
 
     def test_submit_message(self):

@@ -62,7 +62,7 @@ class SourceNavigationSteps():
 
             notification = self.driver.find_element_by_css_selector(
                 '.success')
-            expected_notification = 'Thank you for sourcing this information to us'
+            expected_notification = 'Thank you for sending this information to us'
             self.assertIn(expected_notification, notification.text)
 
     def _source_submits_a_message(self):
@@ -75,7 +75,7 @@ class SourceNavigationSteps():
 
         notification = self.driver.find_element_by_css_selector(
             '.success')
-        self.assertIn('Thank you for sourcing this information to us',
+        self.assertIn('Thank you for sending this information to us',
                       notification.text)
 
     def _source_logs_out(self):
