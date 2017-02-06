@@ -5,7 +5,19 @@
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
-  <p class="notification"> <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/info-circle.svg') }}" width="20px" height="20px">A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+    <div class="flash notification">
+      <img src="{{ url_for('static', filename='i/relieved_face.svg')  }}" alt="relieved-face" class="icon">
+      <div class="message">
+        <strong>Whew, it’s you! Now, the embarrassing part...</strong></br>
+        <p>Our servers experienced an unusual surge of new activity, when you last visited. This could
+          have been human activity, an automated attack, or just some random blip. To err on the side
+          of caution, we put a hold on sending all documents from that day through to our journalists.</p>
+
+        <p>Now that we know you’re really a human, though, we’ll get your previous submission into the
+          hands of a journalist straight away. We’re sorry for the delay. Please do check back again
+          in a week or so.</p>
+      </div>
+    </div>
   {% endif %}
 </div>
 
@@ -82,7 +94,7 @@
 
 <hr class="no-line">
 
-<div class="code-reminder">
+<div class="code-reminder" id="codename-hint">
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
   <span id="content" class="codename"><p class="alert">{{ codename }}</p></span>

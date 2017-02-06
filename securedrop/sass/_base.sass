@@ -306,6 +306,18 @@
     text-align: left
     font-size: medium
 
+  .flash
+    display: flex
+    flex-flow: row nowrap
+    align-items: flex-start
+
+    &.success
+      border: 1px solid #E1F1E5
+      background-color: #E6FFEB
+
+      strong
+        color: #299549
+
     &.notification
       border: 1px solid #8ed9f6
       background-color: #e3f7fc
@@ -321,6 +333,15 @@
 
       i
         color: #D62727
+
+    &.important
+      border: 1px solid #EBDCEB
+      background: #FDFAFD
+
+      strong
+        color: #673466
+      p
+        color: #555555
 
   .banner-warning
     border: 1px solid $color_error_border

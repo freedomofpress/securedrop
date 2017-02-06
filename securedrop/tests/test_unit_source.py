@@ -129,7 +129,7 @@ class TestSourceApp(TestCase):
             self.assertTrue(session['logged_in'])
             resp = c.get('/logout', follow_redirects=True)
             self.assertTrue(not session)
-            self.assertIn('Thank you for logging out!', resp.data)
+            self.assertIn('Thank you for exiting your session!', resp.data)
 
     def test_login_with_whitespace(self):
         """Test that codenames with leading or trailing whitespace still work"""
@@ -172,7 +172,7 @@ class TestSourceApp(TestCase):
         resp = self._dummy_submission()
         self.assertEqual(resp.status_code, 200)
         self.assertIn(
-            "Thanks for submitting something to SecureDrop! Please check back later for replies.",
+            "Thank you for sending this information to us",
             resp.data)
 
     def test_submit_message(self):
@@ -183,7 +183,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message.", resp.data)
+        self.assertIn("Thanks! We received your", resp.data)
 
     def test_submit_empty_message(self):
         self._new_codename()
@@ -206,7 +206,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message.", resp.data)
+        self.assertIn("Thanks! We received your", resp.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -216,12 +216,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(
-            escape(
-                '{} "{}"'.format(
-                    "Thanks! We received your document",
-                    "test.txt")),
-            resp.data)
+        self.assertIn('Thanks! We received you', resp.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -231,13 +226,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message.", resp.data)
-        self.assertIn(
-            escape(
-                '{} "{}"'.format(
-                    "Thanks! We received your document",
-                    'test.txt')),
-            resp.data)
+        self.assertIn("Thanks! We received your", resp.data)
 
     @patch('gzip.GzipFile')
     def test_submit_sanitizes_filename(self, gzipfile):
