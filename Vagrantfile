@@ -39,11 +39,9 @@ Vagrant.configure("2") do |config|
     # more memory than the previous version did.
     development.vm.provider "virtualbox" do |v|
       v.memory = 1024
-      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     development.vm.provider "libvirt" do |lv|
       lv.memory = 1024
-      lv.cpus = available_vcpus
       config.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
     end
   end
@@ -76,7 +74,6 @@ Vagrant.configure("2") do |config|
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
       v.memory = 1024
-      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
@@ -120,7 +117,6 @@ Vagrant.configure("2") do |config|
     prod.vm.synced_folder './', '/vagrant', disabled: true
     prod.vm.provider "virtualbox" do |v|
       v.memory = 1024
-      v.customize ["modifyvm", :id, "--cpus", available_vcpus]
     end
     prod.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-prod.yml"
@@ -252,25 +248,4 @@ end
 def internal_network_name
   repo_root = File.expand_path(File.dirname(__FILE__))
   return File.basename(repo_root)
-end
-
-def available_vcpus
-  # Increase number of virtual CPUs in guest VM.
-  # Rather than blindly set it to "2" or similar,
-  # inspect the number of VCPUs on the host and use that,
-  # to minimize compile time.
-  available_vcpus = case RUBY_PLATFORM
-    when /linux/
-      `nproc`.to_i
-    when /darwin/
-      `sysctl -n hw.ncpu`.to_i
-    else
-      1
-    end
-  # If you want to restrict the resources available to the guest VM,
-  # uncomment the return line below, and Vagrant will use half the
-  # number available on the host, rounded down.
-  # (Ruby will correctly return the quotient as an integer.)
-  # return available_vcpus / 2
-  return available_vcpus
 end
