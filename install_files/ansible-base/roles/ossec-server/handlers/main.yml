@@ -18,6 +18,9 @@
 - name: update sasl_passwd db
   command: postmap /etc/postfix/sasl_passwd
 
+- name: update generic_maps
+  command: postmap /etc/postfix/generic
+
 - name: postmap_header_checks
   command: postmap /etc/postfix/header_checks
 
