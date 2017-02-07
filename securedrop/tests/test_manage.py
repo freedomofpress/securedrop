@@ -43,11 +43,24 @@ class TestManagementCommand(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    @mock.patch("__builtin__.raw_input", return_value='N')
-    @mock.patch("manage.getpass", return_value='testtesttest')
+    @mock.patch("__builtin__.raw_input", return_value='test')
+    def test_get_username(self, mock_stdin):
+        assert manage._get_username() == 'test'
+
+    @mock.patch("__builtin__.raw_input", return_value='y')
+    def test_get_yubikey_usage_yes(self, mock_stdin):
+        assert manage._get_yubikey_usage()
+
+    @mock.patch("__builtin__.raw_input", return_value='n')
+    def test_get_yubikey_usage_no(self, mock_stdin):
+        assert not manage._get_yubikey_usage()
+
+    @mock.patch("manage._get_username", return_value='foo-bar-baz')
+    @mock.patch("manage._get_yubikey_usage", return_value=False)
     @mock.patch("sys.stdout", new_callable=StringIO)
-    def test_exception_handling_when_duplicate_username(self, mock_raw_input,
-                                                        mock_getpass,
+    def test_exception_handling_when_duplicate_username(self,
+                                                        mock_username,
+                                                        mock_yubikey,
                                                         mock_stdout):
         """Regression test for duplicate username logic in manage.py"""
 

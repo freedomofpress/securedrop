@@ -216,9 +216,16 @@ class BadTokenException(Exception):
     """Raised when a user logins in with an incorrect TOTP token"""
 
 
-class InvalidPasswordLength(Exception):
+class PasswordError(Exception):
+
+    """Generic error for passwords that are invalid.
+    """
+
+
+class InvalidPasswordLength(PasswordError):
     """Raised when attempting to create a Journalist or log in with an invalid
-    password length"""
+       password length.
+    """
 
     def __init__(self, password):
         self.pw_len = len(password)
@@ -230,6 +237,12 @@ class InvalidPasswordLength(Exception):
             return "Password needs to be at least {} characters".format(
                 Journalist.MIN_PASSWORD_LEN
             )
+
+
+class NonDicewarePassword(PasswordError):
+
+    """Raised when attempting to validate a password that is not diceware-like
+    """
 
 
 class Journalist(Base):
@@ -274,20 +287,31 @@ class Journalist(Base):
         return scrypt.hash(str(password), salt, **params)
 
     MAX_PASSWORD_LEN = 128
-    MIN_PASSWORD_LEN = 12
+    MIN_PASSWORD_LEN = 14
 
     def set_password(self, password):
+        self.check_password_acceptable(password)
+
         # Don't do anything if user's password hasn't changed.
         if self.pw_hash and self.valid_password(password):
             return
-        # Enforce a reasonable maximum length for passwords to avoid DoS
-        if len(password) > self.MAX_PASSWORD_LEN:
-            raise InvalidPasswordLength(password)
-        # Enforce a reasonable minimum length for new passwords
-        if len(password) < self.MIN_PASSWORD_LEN:
-            raise InvalidPasswordLength(password)
+
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+
+    @classmethod
+    def check_password_acceptable(cls, password):
+        # Enforce a reasonable maximum length for passwords to avoid DoS
+        if len(password) > cls.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
+
+        # Enforce a reasonable minimum length for new passwords
+        if len(password) < cls.MIN_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
+
+        # Ensure all passwords are "diceware-like"
+        if len(password.split()) < 7:
+            raise NonDicewarePassword()
 
     def valid_password(self, password):
         # Avoid hashing passwords that are over the maximum length

@@ -111,18 +111,10 @@ class JournalistNavigationSteps():
             assert "Admin Interface" in [el.text for el in h1s]
 
     @screenshots
-    def _add_user(self, username, password, is_admin=False, hotp=None):
+    def _add_user(self, username, is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
         username_field.send_keys(username)
-
-        password_field = self.driver.find_element_by_css_selector(
-            'input[name="password"]')
-        password_field.send_keys(password)
-
-        password_again_field = self.driver.find_element_by_css_selector(
-            'input[name="password_again"]')
-        password_again_field.send_keys(password)
 
         if hotp:
             hotp_checkbox = self.driver.find_element_by_css_selector(
@@ -152,11 +144,14 @@ class JournalistNavigationSteps():
             btns = self.driver.find_elements_by_tag_name('button')
             assert 'ADD USER' in [el.text for el in btns]
 
-        self.new_user = dict(
-            username='dellsberg',
-            password='pentagonpapers')
+        password = self.driver.find_element_by_css_selector('#password') \
+            .text.strip()
 
-        self._add_user(self.new_user['username'], self.new_user['password'])
+        self.new_user = dict(
+                username='dellsberg',
+                password=password,
+            )
+        self._add_user(self.new_user['username'])
 
         if not hasattr(self, 'accept_languages'):
             # Clicking submit on the add user form should redirect to
@@ -359,26 +354,23 @@ class JournalistNavigationSteps():
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
+
         # Edit the new user's password
         self._edit_user(self.new_user['username'])
+        new_password = self.driver.find_element_by_css_selector('#password') \
+            .text.strip()
+        self.new_user['password'] = new_password
 
-        new_password = self.new_user['password'] + "2"
-        password_field = self.driver.find_element_by_css_selector(
-            'input[name="password"]')
-        password_field.send_keys(new_password)
-        password_again_field = self.driver.find_element_by_css_selector(
-            'input[name="password_again"]')
-        password_again_field.send_keys(new_password)
-        update_user_btn = self.driver.find_element_by_css_selector(
-            'button#update')
-        update_user_btn.click()
+        reset_pw_btn = self.driver.find_element_by_css_selector(
+            '#reset-password')
+        reset_pw_btn.click()
+
+        def update_password_success():
+            assert ('The password was successfully updated' in
+                    self.driver.page_source)
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
-        self.wait_for(can_edit_user)
-
-        # Update self.new_user with the new password
-        # TODO dry
-        self.new_user['password'] = new_password
+        self.wait_for(update_password_success)
 
         # Log the new user in with their new password
         self._logout()
