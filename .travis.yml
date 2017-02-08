@@ -11,7 +11,7 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
-- pip install ansible
+- pip install ansible==1.8.4
 script:
 - echo localhost > inventory
 - ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
