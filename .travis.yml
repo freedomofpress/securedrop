@@ -1,3 +1,8 @@
+# Use Ubuntu 14.04 LTS images, and explicitly require sudo.
+# Relevant docs: https://docs.travis-ci.com/user/trusty-ci-environment/
+sudo: required
+dist: trusty
+
 language: python
 python:
 - '2.7'
