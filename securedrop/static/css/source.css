@@ -195,6 +195,16 @@ button.small, a.btn.small, .btn.small {
   margin: 0 auto;
 }
 
+#onhover {
+  display: none;
+}
+#fa-icon:hover span[id="initial"] {
+  display: none;
+}
+#fa-icon:hover span[id="onhover"] {
+  display: block;
+}
+
 .select {
   border: 1px #C4C2C2 solid;
   padding: 3px 10px;

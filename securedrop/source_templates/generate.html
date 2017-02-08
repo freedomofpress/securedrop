@@ -7,14 +7,27 @@
 <hr class="no-line" />
 
 <div class="code">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px">
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20px" height="20px">
   <p id="codename">{{ codename }}</p>
   <div class="pull-right">
+
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <button type="submit" id="regenerate-submit" class="small">
-        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/refresh.svg') }}" width="15px" height="15px">
-      </button>
+
+      <span id="fa-icon">
+        <span id="initial">
+          <button type="submit" id="regenerate-submit" class="small">
+            <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20px" />
+          </button>
+        </span>
+
+        <span id="onhover">
+          <button type="submit" id="regenerate-submit" class="small">
+            <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20px" />
+          </button>
+        </span>
+      </span>
+
     </form>
   </div>
   <div class="clearfix"></div>
@@ -31,9 +44,19 @@
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="btn block pull-right" id="continue-button">
-    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/white/arrow-circle-o-right.svg') }}" width="20px" height="20px">
-    Continue</button>
+
+  <span id="fa-icon">
+    <span id="initial">
+      <button type="submit" class="btn block pull-right" id="continue-button">
+        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" /> Continue
+      </button>
+    </span>
+    <span id="onhover">
+      <button type="submit" class="btn block pull-right" id="continue-button">
+        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" /> Continue
+      </button>
+    </span>
+  </span>
   <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
 {% endblock %}

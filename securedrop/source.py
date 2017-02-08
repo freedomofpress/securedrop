@@ -9,7 +9,7 @@ import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file)
+                   flash, abort, g, send_file, Markup)
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -336,6 +336,7 @@ def login():
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
+
 @app.route('/logout')
 def logout():
     if logged_in():
@@ -345,14 +346,13 @@ def logout():
                          Please fully end your session by restarting
                          Tor Browser:<br>
                          1. Click the
-                           <img src='static/i/toronion.png' alt='Tor icon' />
+                           <img src="static/i/toronion.png" alt="Tor icon" />
                            Tor onion icon in the toolbar above.<br>
                          2. Click <strong>  New Identity</strong>.<br>
                          3. Click <strong>Yes</strong> in the dialog box
                            that appears.""")
         flash(tor_msg, "error")
     return redirect(url_for('index'))
-
 
 
 @app.route('/howto-disable-js')
