@@ -195,6 +195,10 @@ button.small, a.btn.small, .btn.small {
   margin: 0 auto;
 }
 
+.full-width {
+  width: 100%;
+}
+
 #onhover {
   display: none;
 }
@@ -203,6 +207,13 @@ button.small, a.btn.small, .btn.small {
 }
 #fa-icon:hover span[id="onhover"] {
   display: block;
+}
+
+.fa-icon-container {
+  display: block;
+  float: center;
+  padding-left: 25%;
+  padding-right: 25%;
 }
 
 .select {
