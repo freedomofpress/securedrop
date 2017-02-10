@@ -199,13 +199,13 @@ button.small, a.btn.small, .btn.small {
   width: 100%;
 }
 
-#onhover {
+.onhover-icon {
   display: none;
 }
-#fa-icon:hover span[id="initial"] {
+.fa-icon:hover span[class="initial-icon"] {
   display: none;
 }
-#fa-icon:hover span[id="onhover"] {
+.fa-icon:hover span[class="onhover-icon"] {
   display: block;
 }
 

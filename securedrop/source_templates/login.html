@@ -9,13 +9,13 @@
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 <p class="center"><input type="text" name="codename" class="codename" autocomplete="off" placeholder="Enter your codename" autofocus /></p>
 <p class="center">
-  <span id="fa-icon">
-    <span id="initial">
+  <span class="fa-icon">
+    <span class="initial-icon">
       <button type="submit" class="btn block">
         <img src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="18px" /> Continue
       </button>
     </span>
-    <span id="onhover">
+    <span class="onhover-icon">
       <button type="submit" class="btn block">
         <img src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="18px" /> Continue
       </button>
