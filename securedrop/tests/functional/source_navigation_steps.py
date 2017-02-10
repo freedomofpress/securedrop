@@ -10,9 +10,10 @@ class SourceNavigationSteps():
         self.assertEqual("SecureDrop | Protecting Journalists and Sources", self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
-        #element_to_hover_over = self.driver.find_element_by_id('submit-documents-button')
-        #hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
-        #hover.perform()
+        if self.driver.find_element(By.ID,'submit-documents-button').is_displayed():
+            element_to_hover_over = self.driver.find_element_by_id('submit-documents-button')
+            hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
+            hover.perform()
 
         self.wait_for(
              lambda: self.driver.find_element(By.ID,
