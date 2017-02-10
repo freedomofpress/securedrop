@@ -199,21 +199,16 @@ button.small, a.btn.small, .btn.small {
   width: 100%;
 }
 
-.onhover-icon {
+a > img.on-hover, button > img.on-hover {
   display: none;
-}
-.fa-icon:hover span[class="initial-icon"] {
-  display: none;
-}
-.fa-icon:hover span[class="onhover-icon"] {
-  display: block;
 }
 
-.fa-icon-container {
-  display: block;
-  float: center;
-  padding-left: 25%;
-  padding-right: 25%;
+a:hover > img.off-hover, button:hover > img.off-hover {
+  display: none;
+}
+
+a:hover > img.on-hover, button:hover > img.on-hover {
+  display: inline;
 }
 
 .select {

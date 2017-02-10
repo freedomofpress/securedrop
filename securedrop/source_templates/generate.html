@@ -13,21 +13,10 @@
 
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-
-      <span class="fa-icon">
-        <span class="initial-icon">
-          <button type="submit" id="regenerate-submit" class="small">
-            <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20px" />
-          </button>
-        </span>
-
-        <span class="onhover-icon">
-          <button type="submit" id="regenerate-submit" class="small">
-            <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20px" />
-          </button>
-        </span>
-      </span>
-
+      <button type="submit" id="regenerate-submit" class="small">
+        <img class="pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20px" />
+        <img class="pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20px" />
+      </button>
     </form>
   </div>
   <div class="clearfix"></div>
@@ -45,18 +34,12 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
-  <span class="fa-icon">
-    <span class="initial-icon">
-      <button type="submit" class="btn block pull-right" id="continue-button">
-        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" /> Continue
-      </button>
-    </span>
-    <span class="onhover-icon">
-      <button type="submit" class="btn block pull-right" id="continue-button-hover">
-        <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" /> Continue
-      </button>
-    </span>
-  </span>
+  <button type="submit" class="btn block pull-right" id="continue-button">
+    <img class="pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" />
+    <img class="pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" />
+    Continue
+  </button>
+
   <a id="already-have-codename" href="/login">Already have a codename?</a>
 </form>
 {% endblock %}
