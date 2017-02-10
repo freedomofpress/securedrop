@@ -10,16 +10,25 @@ class SourceNavigationSteps():
         self.assertEqual("SecureDrop | Protecting Journalists and Sources", self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
-        if self.driver.find_element(By.ID,'submit-documents-button').is_displayed():
-            element_to_hover_over = self.driver.find_element_by_id('submit-documents-button')
-            hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
-            hover.perform()
+        # It's the source's first time visiting this SecureDrop site, so they
+        # choose to "Submit Documents".
+        submit_button = self.driver.find_element_by_id('submit-documents-button')
 
-        self.wait_for(
-             lambda: self.driver.find_element(By.ID,
-                     'submit-documents-button-hover').is_displayed()
-        )
-        submit_button = self.driver.find_element_by_id('submit-documents-button-hover')
+        submit_button_icon = self.driver.find_element_by_css_selector(
+            'a#submit-documents-button > img.off-hover')
+        self.assertTrue(submit_button_icon.is_displayed())
+
+        # The source hovers their cursor over the button, and the visual style
+        # of the button changes to encourage them to click it.
+        ActionChains(self.driver).move_to_element(submit_button).perform()
+
+        ## Let's make sure toggling the icon image with the hover state is working.
+        self.assertFalse(submit_button_icon.is_displayed())
+        submit_button_hover_icon = self.driver.find_element_by_css_selector(
+            'a#submit-documents-button > img.on-hover')
+        self.assertTrue(submit_button_hover_icon.is_displayed())
+
+        # The source clicks the submit button.
         submit_button.click()
 
         codename = self.driver.find_element_by_css_selector('#codename')
@@ -28,15 +37,22 @@ class SourceNavigationSteps():
         self.source_name = codename.text
 
     def _source_continues_to_submit_page(self):
-        element_to_hover_over = self.driver.find_element_by_id('continue-button')
-        hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
-        hover.perform()
+        continue_button = self.driver.find_element_by_id('continue-button')
 
-        self.wait_for(
-             lambda: self.driver.find_element(By.ID,
-                     'continue-button-hover').is_displayed()
+        continue_button_icon = self.driver.find_element_by_css_selector(
+            'button#continue-button > img.off-hover')
+        self.assertTrue(continue_button_icon.is_displayed())
+
+        ## Hover over the continue button test toggle the icon images with the
+        ## hover state.
+        ActionChains(self.driver).move_to_element(continue_button).perform()
+        self.assertFalse(continue_button_icon.is_displayed())
+
+        continue_button_hover_icon = self.driver.find_element_by_css_selector(
+            'button#continue-button img.on-hover'
         )
-        continue_button = self.driver.find_element_by_id('continue-button-hover')
+        self.assertTrue(continue_button_hover_icon.is_displayed())
+
         continue_button.click()
 
         headline = self.driver.find_element_by_class_name('headline')
@@ -53,16 +69,14 @@ class SourceNavigationSteps():
             file_upload_box = self.driver.find_element_by_css_selector('[name=fh]')
             file_upload_box.send_keys(filename)
 
-            element_to_hover_over = self.driver.find_element_by_id('submit-doc-button')
-            hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
-            hover.perform()
+            submit_button = self.driver.find_element_by_id('submit-doc-button')
+            ActionChains(self.driver).move_to_element(submit_button).perform()
 
-            self.wait_for(
-                 lambda: self.driver.find_element(By.ID,
-                         'submit-doc-button-hover').is_displayed()
+            toggled_submit_button_icon = self.driver.find_element_by_css_selector(
+                'button#submit-doc-button img.on-hover'
             )
+            self.assertTrue(toggled_submit_button_icon.is_displayed())
 
-            submit_button = self.driver.find_element_by_id('submit-doc-button-hover')
             submit_button.click()
 
             notification = self.driver.find_element_by_css_selector('p.notification')
@@ -74,16 +88,7 @@ class SourceNavigationSteps():
 
         text_box.send_keys(self.secret_message)  # send_keys = type into text box
 
-        element_to_hover_over = self.driver.find_element_by_id('submit-doc-button')
-        hover = ActionChains(self.driver).move_to_element(element_to_hover_over)
-        hover.perform()
-
-        self.wait_for(
-             lambda: self.driver.find_element(By.ID,
-                     'submit-doc-button-hover').is_displayed()
-        )
-
-        submit_button = self.driver.find_element_by_id('submit-doc-button-hover')
+        submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
 
         notification = self.driver.find_element_by_css_selector(
