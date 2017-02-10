@@ -154,6 +154,7 @@
   /var/www/securedrop/source_templates/howto-disable-js.html r,
   /var/www/securedrop/source_templates/index.html r,
   /var/www/securedrop/source_templates/login.html r,
+  /var/www/securedrop/source_templates/logout_flashed_message.html r,
   /var/www/securedrop/source_templates/lookup.html r,
   /var/www/securedrop/source_templates/notfound.html r,
   /var/www/securedrop/source_templates/tor2web-warning.html r,
