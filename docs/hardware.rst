@@ -68,8 +68,19 @@ servers (for example, we do so to support our CI pipeline), doing so
 in order to run it on cloud servers is at your own risk and without
 our support or consent.
 
+.. _Workstations:
 Workstations
 ~~~~~~~~~~~~
+.. note:: SecureDrop depends on the Tails operating system for its bootable USB drives.
+	The upcoming version of Tails, Tails 3.0, will no longer support 32-bit computers.
+
+	The current targeted release date for Tails 3.0 is **June 13, 2017**.
+
+	 To see if you have a 64-bit machine, run ``uname -m`` from a terminal.
+
+	If you see ``x86_64``, then Tails should work on your current machine.
+	If, on the other hand, you see ``i686``, your current machine will not work with Tails 3.0.
+	For more details, see `the Tails website <https://tails.boum.org/news/Tails_3.0_will_require_a_64-bit_processor/index.en.html>`_.
 
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the airgapped workflow.
@@ -287,13 +298,7 @@ is impossible to physically remove.
 Tails USBs
 ~~~~~~~~~~
 .. note:: The upcoming version of Tails, Tails 3.0, will no longer support 32-bit computers.
-	  The current targeted release date for Tails 3.0 is **June 13, 2017**.
-
-	  To see if you have a 64-bit machine, run ``uname -m`` from a terminal.
-
-	  If you see ``x86_64``, then Tails should work on your current machine.
-	  If, on the other hand, you see ``i686``, your current machine will not work with Tails 3.0.
-	  For more details, see `the Tails website <https://tails.boum.org/news/Tails_3.0_will_require_a_64-bit_processor/index.en.html>`_.
+	Please see the note in the :ref:`Workstations <Workstations>` section for more details.
 
 We *strongly recommend* getting USB 3.0-compatible drives to run Tails
 from. The transfer speeds are significantly faster than USB 2.0, which
