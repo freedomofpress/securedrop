@@ -9,7 +9,7 @@ import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file)
+                   flash, abort, g, send_file, Markup)
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -336,14 +336,14 @@ def login():
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
 
+
 @app.route('/logout')
 def logout():
     if logged_in():
         session.clear()
-        flash("Thank you for logging out.", "notification")
-
+        tor_msg = render_template('logout_flashed_message.html')
+        flash(Markup(tor_msg), "error")
     return redirect(url_for('index'))
-
 
 
 @app.route('/howto-disable-js')
