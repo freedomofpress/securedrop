@@ -10,7 +10,7 @@
     <script type="text/javascript" src="/static/js/source.js"></script>
   </head>
   <body>
-    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="warning"><strong>We recommend changing your Tor browser's "Security Settings" slider to High, to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -62,7 +62,7 @@
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. -->
     <div class="bubble">
-      <p>You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!</p>
+      <p>You appear to be using the Tor Browser. In Tor's "Security Settings" pane (accessible from the toolbar's onion-button), we reccommend turning Security Slider to High—it's easy-peasy!</p>
       <ol>
         <li>Click the <img src="{{ url_for('static', filename='i/toronion.png') }}" alt="Tor icon" />Tor icon in the toolbar above</li>
         <li>Click <strong>Security Settings</strong></li>
