@@ -10,6 +10,11 @@ class SourceNavigationSteps():
         self.assertEqual("SecureDrop | Protecting Journalists and Sources", self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
+        # First move the cursor to a known position in case it happens to
+        # be hovering over one of the buttons we are testing below.
+        header_image = self.driver.find_element_by_id('header')
+        ActionChains(self.driver).move_to_element(header_image).perform()
+
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
         submit_button = self.driver.find_element_by_id('submit-documents-button')
