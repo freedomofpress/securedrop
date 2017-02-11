@@ -21,7 +21,8 @@ Ubuntu/Debian
 
 .. code:: sh
 
-   sudo apt-get install -y build-essential dpkg-dev git linux-headers-$(uname -r) virtualbox
+   sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev \
+       dpkg-dev git linux-headers-$(uname -r) virtualbox
 
 We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
 of this writing, which might be newer than what is in your distro's package
