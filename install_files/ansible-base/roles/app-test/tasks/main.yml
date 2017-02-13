@@ -21,3 +21,5 @@
 - include: disable_mprotect_ff_plugin_container.yml
 
 - include: modern_gettext.yml
+
+- include: install_tbb.yml
