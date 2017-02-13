@@ -19,6 +19,7 @@ install:
 - pip install coveralls
 - pip install ansible==1.8.4
 script:
+- 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
 - echo localhost > inventory
 - ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
 - ansible-playbook -i inventory --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
