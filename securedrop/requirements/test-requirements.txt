@@ -10,12 +10,12 @@ coverage==4.2             # via coveralls, pytest-cov
 coveralls==1.1
 docopt==0.6.2             # via coveralls
 first==2.0.1              # via pip-tools
-Flask-Testing==0.6.1
-Flask==0.11.1             # via flask-testing
+flask-testing==0.6.1
+flask==0.11.1             # via flask-testing
 funcsigs==1.0.2           # via mock
 itsdangerous==0.24        # via flask
-Jinja2==2.8               # via flask
-MarkupSafe==0.23          # via jinja2
+jinja2==2.8               # via flask
+markupsafe==0.23          # via jinja2
 mock==2.0.0
 pbr==1.10.0               # via mock
 pip-tools==1.7.0
@@ -23,6 +23,7 @@ py==1.4.31
 pytest-cov==2.4.0
 pytest==3.0.3
 requests==2.13.0          # via coveralls
-selenium==2.53.6
+selenium==2.53.6          # via tbselenium
 six==1.10.0               # via mock, pip-tools
-Werkzeug==0.11.11         # via flask
+tbselenium==0.2.1
+werkzeug==0.11.11         # via flask
