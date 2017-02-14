@@ -1,0 +1,51 @@
+---
+
+# path for installing tbb
+# system account to own it
+- name: Create tbb directory.
+  become: yes
+  file:
+    path: "{{ fpsd_tbb_directory }}"
+    state: directory
+    owner: "{{ fpsd_system_account }}"
+    group: "{{ fpsd_system_account }}"
+    mode: "0770"
+
+- block:
+# what release, what archictecture, what locale?
+# path for installing tbb
+  - name: Download TBB {{ fpsd_tbb_release }} tarball and signature.
+    get_url:
+      url: "{{ item }}"
+      dest: "{{ fpsd_tbb_directory }}/{{ item|basename }}"
+    with_items:
+      - https://dist.torproject.org/torbrowser/{{ fpsd_tbb_release }}/tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz
+      - https://dist.torproject.org/torbrowser/{{ fpsd_tbb_release }}/tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz.asc
+	
+# release, keyserver (?), signing key
+  - name: Download TBB {{ fpsd_tbb_release }} signing key.
+    become: yes
+    command: gpg --keyserver {{ fpsd_keyserver }} --recv-key {{ fpsd_tbb_signing_key }}
+    register: gpg_import_tor_browser_devs_key_result
+    changed_when: "'imported: 1' in gpg_import_tor_browser_devs_key_result.stderr"
+
+ # release, arch, locale, directory
+  - name: Verify TBB {{ fpsd_tbb_release }} signature.
+    command: >
+      gpg --verify
+      tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz.asc
+      tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz
+    register: gpg_verify_result
+    changed_when: false
+    args:
+      chdir: "{{ fpsd_tbb_directory }}"
+
+# release, directory, arch, locale, account
+  - name: Extract TBB {{ fpsd_tbb_release }} archive.
+    unarchive:
+      copy: no
+      src: "{{ fpsd_tbb_directory }}/tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz"
+      dest: "{{ fpsd_tbb_directory }}"
+
+  become: yes
+  become_user: "{{ fpsd_system_account }}"
