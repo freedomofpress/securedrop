@@ -14,3 +14,6 @@
 - include: dev_setup_xvfb_for_functional_tests.yml
 
 - include: disable_mprotect_ff_plugin_container.yml
+
+## Add the tbb install stuff here, use the "include" syntax
+- include: download_verify_tbb.yml
