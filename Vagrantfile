@@ -40,9 +40,9 @@ Vagrant.configure("2") do |config|
     development.vm.provider "virtualbox" do |v|
       v.memory = 1024
     end
-    development.vm.provider "libvirt" do |lv|
+    development.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
-      config.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
+      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
     end
   end
 
