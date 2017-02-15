@@ -11,7 +11,7 @@
     {% endassets %}
   </head>
   <body>
-    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/white/times.svg') }}" width="12px" height="12px"></div>
+    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to disable it</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -34,7 +34,11 @@
           </h2>
           <hr class="cut-out" />
           <p>If this is your first time submitting documents to journalists, start here.</p>
-          <a href="/generate" class="sd-button btn alt index" id="submit-documents-button">SUBMIT<br/>DOCUMENTS</a>
+          <a href="/generate" class="sd-button btn alt index" id="submit-documents-button">
+            <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" />
+            <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" />
+            SUBMIT<br/>DOCUMENTS
+          </a>
         </div>
         <div class="grid-item option">
           <h2 class="welcome-text">
@@ -42,7 +46,11 @@
           </h2>
           <hr class="cut-out" />
           <p>If you have already submitted documents in the past, log in here to check for responses.</p>
-          <a href="/login" id="login-button" class="sd-button btn primary index">CHECK FOR A RESPONSE</a>
+          <a href="/login" id="login-button" class="sd-button btn primary index">
+            <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20px" />
+            <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/comments-blue.png') }}" width="20px" />
+            CHECK FOR A RESPONSE
+          </a>
         </div>
       </div>
 
@@ -61,13 +69,11 @@
     <div class="bubble">
       <p>You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!</p>
       <ol>
-        <li>Click the <img src="static/i/toronion.png" alt="Tor icon" />Tor icon in the toolbar above</li>
-        <li>Click <strong>Privacy and Security Settings</strong></li>
+        <li>Click the <img src="{{ url_for('static', filename='i/toronion.png') }}" alt="Tor icon" />Tor icon in the toolbar above</li>
+        <li>Click <strong>Security Settings</strong></li>
         <li>Turn the Slider to <strong>High</strong></li>
         <li>If the page does not refresh automatically, <a href="/">click here</a> to refresh the page</li>
       </ol>
-
-      <p><a href="/howto-disable-js">Not using the Tor Browser Bundle?</a></p>
     </div>
 
   </body>

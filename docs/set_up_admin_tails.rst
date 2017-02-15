@@ -80,8 +80,8 @@ key:
 .. code:: sh
 
     cd securedrop/
-    git checkout 0.3.10
-    git tag -v 0.3.10
+    git checkout 0.3.11
+    git tag -v 0.3.11
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command.

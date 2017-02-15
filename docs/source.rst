@@ -58,7 +58,7 @@ organization you are submitting to.
 
 If this is the first time you're using the Tor browser, it's likely that you
 have Javascript enabled and that the Security Slider that Tor browser provides
-is set to "Low". If you do, there will be a red warning banner at the top of
+is set to "Low". If you do, there will be a purple warning banner at the top of
 the page that encourages you to disable Javascript and turn up the Security
 Slider to "High".
 
@@ -79,10 +79,10 @@ time you are using SecureDrop, click the ``Submit Documents`` button.
 
 You should now see a screen that shows the unique codename that SecureDrop has
 generated for you. In the example screenshot below the codename is
-``errant railway sappiness crying icky imitation operation``, but yours will be
-different. It is extremely important that you both remember this code and keep
-it secret. After submitting documents, you will need to provide this code to log
-back in and check for responses.
+``chute surge stuck chill wish agone inure``, but yours will be different. It is
+extremely important that you both remember this code and keep it secret. After
+submitting documents, you will need to provide this code to log back in and
+check for responses.
 
 The best way to protect your codename is to memorize it. If you cannot memorize
 it right away, we recommend writing it down and keeping it in a safe place at
