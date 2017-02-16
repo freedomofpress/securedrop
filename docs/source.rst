@@ -79,10 +79,10 @@ time you are using SecureDrop, click the ``Submit Documents`` button.
 
 You should now see a screen that shows the unique codename that SecureDrop has
 generated for you. In the example screenshot below the codename is
-``chute surge stuck chill wish agone inure``, but yours will be different. It is
-extremely important that you both remember this code and keep it secret. After
-submitting documents, you will need to provide this code to log back in and
-check for responses.
+``bagpipe aloof whiff borrowing overwrite datebook unadvised``, but yours will
+be different. It is extremely important that you both remember this code and
+keep it secret. After submitting documents, you will need to provide this code
+to log back in and check for responses.
 
 The best way to protect your codename is to memorize it. If you cannot memorize
 it right away, we recommend writing it down and keeping it in a safe place at
