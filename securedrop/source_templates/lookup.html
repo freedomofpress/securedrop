@@ -6,7 +6,7 @@
 
   {% if flagged and not haskey %}
     <div class="flash notification">
-      <img src="{{ url_for('static', filename='i/relieved_face.svg')  }}" alt="relieved-face" class="icon">
+      <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
         <strong>Whew, it’s you! Now, the embarrassing part...</strong></br>
         <p>Our servers experienced an unusual surge of new activity, when you last visited. This could
@@ -31,7 +31,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
     <div class="attachment grid-item center">
-      {% include 'svg/server_upload.svg' %}
+      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>

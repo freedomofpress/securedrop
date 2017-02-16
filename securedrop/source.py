@@ -293,11 +293,11 @@ def submit():
                 fh.stream))
 
     if first_submission:
-        flash(Markup("""{svg}<div class="message"><strong>Success!</strong>
+        flash(Markup("""<img src="{{ url_for('static', filename='i/success_checkmark.png') }}">
+                     <div class="message"><strong>Success!</strong>
                      <p>Thank you for sending this information to us.
                      Please check back later for replies. <a href="#codename-hint">
-                     Forgot your codename?</a></p></div>
-                     """.format(svg=util.svg('success_checkmark.svg'))),
+                     Forgot your codename?</a></p></div>"""),
               "success")
     else:
         if msg and not fh:
@@ -307,9 +307,10 @@ def submit():
         else:
             things = 'message and document'
 
-        flash(Markup("""{svg}<div class="message"><p>Thanks! We received your
+        flash(Markup("""<img src="{{ url_for('static', filename='i/success_checkmark.png') }}">
+                     <div class="message"><p>Thanks! We received your
                      {things}.</p></div>
-                     """.format(svg=util.svg('success_checkmark.svg'), things=things)),
+                     """.format(things=things)),
               "success")
 
     for fname in fnames:
@@ -399,8 +400,7 @@ def login():
 def logout():
     if logged_in():
         session.clear()
-        msg = render_template('logout_flashed_message.html',
-                              svg=util.svg('hand_with_fingerprint.svg'))
+        msg = render_template('logout_flashed_message.html')
         flash(Markup(msg), "important")
     return redirect(url_for('index'))
 
