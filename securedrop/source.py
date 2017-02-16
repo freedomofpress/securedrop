@@ -293,12 +293,9 @@ def submit():
                 fh.stream))
 
     if first_submission:
-        flash(Markup("""<img src="{{ url_for('static', filename='i/success_checkmark.png') }}">
-                     <div class="message"><strong>Success!</strong>
-                     <p>Thank you for sending this information to us.
-                     Please check back later for replies. <a href="#codename-hint">
-                     Forgot your codename?</a></p></div>"""),
-              "success")
+        msg = render_template('first_submission_flashed_message.html')
+        flash(Markup(msg), "success")
+
     else:
         if msg and not fh:
             things = 'message'
@@ -307,11 +304,9 @@ def submit():
         else:
             things = 'message and document'
 
-        flash(Markup("""<img src="{{ url_for('static', filename='i/success_checkmark.png') }}">
-                     <div class="message"><p>Thanks! We received your
-                     {things}.</p></div>
-                     """.format(things=things)),
-              "success")
+        msg = render_template('first_submission_flashed_message.html',
+                              things=things)
+        flash(Markup(msg), "success")
 
     for fname in fnames:
         submission = Submission(g.source, fname)

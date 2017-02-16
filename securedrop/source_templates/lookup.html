@@ -24,7 +24,7 @@
 <h1 class="headline">Submit Materials</h1>
 <p class="explanation">If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
-<p>You can send a file, a message, or both.</p>
+<p class="explanation">You can send a file, a message, or both.</p>
 <hr class="no-line">
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
@@ -92,7 +92,7 @@
       </div>
     </form>
   {% else %}
-    <p id="no-replies">There are no replies at this time.</p>
+    <p id="no-replies" class="explanation">There are no replies at this time.</p>
   {% endif %}
 </div>
 

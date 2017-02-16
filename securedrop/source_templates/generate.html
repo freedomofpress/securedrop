@@ -2,13 +2,13 @@
 
 {% block body %}
 <h1>Welcome</h1>
-<p>This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.</p>
+<p class="explanation">This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.</p>
 
 <hr class="no-line" />
 
 <div class="code">
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20px" height="20px">
-  <p id="codename">{{ codename }}</p>
+  <p id="codename" class="codename">{{ codename }}</p>
   <div class="pull-right">
 
     <form id="regenerate-form" method="post">
@@ -26,7 +26,7 @@
 
 <hr class="no-line">
 
-<p>Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
+<p class="explanation">Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
  service, using this codename with future visits is the  only way we have to communicate with you, should we have
  questions or are interested in additional documents. Unlike passwords, there is no way to retrieve a lost codename.
 </p>
@@ -41,9 +41,9 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <a id="already-have-codename" href="/login" class="sd-button btn secondary">ALREADY HAVE A CODENAME?</a>
   <button type="submit" class="sd-button btn primary" id="continue-button">
-    <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" />
-    <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" />
-    CONTINUE
+    <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" />
+    <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" />
+     CONTINUE
   </button>
 </form>
 </div>
