@@ -183,7 +183,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your", resp.data)
+        self.assertIn("Thank you for sending this information to us", resp.data)
 
     def test_submit_empty_message(self):
         self._new_codename()
@@ -206,7 +206,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your", resp.data)
+        self.assertIn("Thank you for sending this information to us", resp.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -216,7 +216,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn('Thanks! We received you', resp.data)
+        self.assertIn('Thank you for sending this information to us', resp.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -226,7 +226,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your", resp.data)
+        self.assertIn("Thank you for sending this information to us", resp.data)
 
     @patch('gzip.GzipFile')
     def test_submit_sanitizes_filename(self, gzipfile):
