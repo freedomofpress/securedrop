@@ -1,0 +1,18 @@
+---
+- name: Download Firefox 45.7.0.esr as a fallback if Tor Browser does not work
+  sudo: no
+  get_url:
+    dest: /home/vagrant/
+    url: https://ftp.mozilla.org/pub/firefox/releases/45.7.0esr/linux-x86_64/en-GB/firefox-45.7.0esr.tar.bz2
+    sha256sum: fbaa185abf9b7abc9d66ae037a34f192ced42f6e799d251253827cd0fbf3ae89
+
+# Hoping that we don't need dependencies because we've got them for FF 46
+
+# untar and move - the executable is `firefox` in the below folder
+- name: Extract Firefox 45.7.0esr
+  sudo: yes
+  unarchive:
+    copy: no
+    src: "/home/vagrant/firefox-45.7.0.esr.tar.bz2"
+    dest: "/usr/bin/firefox45/"
+
