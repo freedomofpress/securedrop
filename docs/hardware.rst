@@ -179,7 +179,7 @@ of it is still recommended.
    limited storage capacity since it's just a USB drive. For
    installations that expect to receive a large volume of submissions,
    we recommend buying an external hard drive that can be encrypted and
-   used to store submissions that have been been transferred from the
+   used to store submissions that have been transferred from the
    **Application Server** to the **SVS**.
 -  **Backup storage**: It's useful to run periodic backups of the
    servers in case of failure. We recommend buying an external hard
