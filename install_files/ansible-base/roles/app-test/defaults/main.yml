@@ -6,5 +6,4 @@ fpsd_tbb_directory: "/opt/tbb"
 fpsd_tbb_signing_key: EF6E286DDA85EA2A4BA7DE684E2C6E8793298290
 fpsd_keyserver: "hkps://keyserver.cns.vt.edu"
 
-# Username to own the installation
-fpsd_system_account: debian-tbb
+fpsd_system_account: vagrant
