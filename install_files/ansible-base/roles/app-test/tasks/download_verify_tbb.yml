@@ -16,6 +16,13 @@
     - https://dist.torproject.org/torbrowser/{{ fpsd_tbb_release }}/tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz
     - https://dist.torproject.org/torbrowser/{{ fpsd_tbb_release }}/tor-browser-linux{{ fpsd_tbb_arch }}-{{ fpsd_tbb_release }}_{{ fpsd_tbb_locale }}.tar.xz.asc
 
+- name: Install gnupg-curl
+  sudo: true
+  apt:
+    name: gnupg-curl
+    state: present
+
+
 - name: Download TBB {{ fpsd_tbb_release }} signing key.
   sudo: true
   command: gpg --keyserver {{ fpsd_keyserver }} --recv-key {{ fpsd_tbb_signing_key }}
