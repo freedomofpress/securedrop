@@ -8,7 +8,6 @@ class SourceNavigationSteps():
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
-
         self.assertEqual("SecureDrop | Protecting Journalists and Sources",
                          self.driver.title)
 

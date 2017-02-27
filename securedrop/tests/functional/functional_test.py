@@ -16,9 +16,9 @@ import urllib2
 
 from Crypto import Random
 import gnupg
-from selenium import webdriver
+# aha, I bet we need to work here.
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.firefox import firefox_binary
+from tbselenium.tbdriver import TorBrowserDriver
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -39,13 +39,13 @@ class FunctionalTest():
         return port
 
     def _create_webdriver(self):
-        log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
-        log_file.write(
-            '\n\n[%s] Running Functional Tests\n' % str(
-                datetime.now()))
+        log_file = open('tests/log/tbb.log', 'a')
+        log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
+        log_file.write(log_msg)
         log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+        ## hmm
+        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/")
+        return driver
 
     def setUp(self):
         # Patch the two-factor verification to avoid intermittent errors
@@ -63,8 +63,9 @@ class FunctionalTest():
         source_port = self._unused_port()
         journalist_port = self._unused_port()
 
-        self.source_location = "http://localhost:%d" % source_port
-        self.journalist_location = "http://localhost:%d" % journalist_port
+        self.source_location = "http://127.0.0.1:%d/" % source_port
+        self.journalist_location = "http://127.0.0.1:%d/" % journalist_port
+        print self.source_location
 
         def start_source_server():
             # We call Random.atfork() here because we fork the source and
@@ -93,7 +94,6 @@ class FunctionalTest():
 
         self.source_process.start()
         self.journalist_process.start()
-
         self.driver = self._create_webdriver()
 
         # Set window size and position explicitly to avoid potential bugs due
@@ -104,8 +104,8 @@ class FunctionalTest():
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)
-        self.driver.implicitly_wait(5)
 
+        self.driver.implicitly_wait(5)
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
