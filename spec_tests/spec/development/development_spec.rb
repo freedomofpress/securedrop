@@ -32,8 +32,8 @@ pip_requirements = [
   'pbr==1.10.0',
   'pip-tools==1.7.0',
   'py==1.4.31',
-  'pytest-cov==2.3.1',
-  'pytest==3.0.2',
+  'pytest-cov==2.4.0',
+  'pytest==3.0.3',
   'selenium==2.53.6',
   'six==1.10.0',
 ]
