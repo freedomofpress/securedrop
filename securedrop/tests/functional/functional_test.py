@@ -16,7 +16,6 @@ import urllib2
 
 from Crypto import Random
 import gnupg
-# aha, I bet we need to work here.
 from selenium.common.exceptions import WebDriverException
 from tbselenium.tbdriver import TorBrowserDriver
 
@@ -43,8 +42,10 @@ class FunctionalTest():
         log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
         log_file.write(log_msg)
         log_file.flush()
-        ## hmm
-        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/")
+        # Don't actually use Tor when reading from localhost!
+        # We need this to make functional tests work.
+        pref_dict = {'network.proxy.no_proxies_on': '127.0.0.1'}
+        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/", pref_dict=pref_dict)
         return driver
 
     def setUp(self):
@@ -63,9 +64,8 @@ class FunctionalTest():
         source_port = self._unused_port()
         journalist_port = self._unused_port()
 
-        self.source_location = "http://127.0.0.1:%d/" % source_port
-        self.journalist_location = "http://127.0.0.1:%d/" % journalist_port
-        print self.source_location
+        self.source_location = "http://127.0.0.1:%d" % source_port
+        self.journalist_location = "http://127.0.0.1:%d" % journalist_port
 
         def start_source_server():
             # We call Random.atfork() here because we fork the source and

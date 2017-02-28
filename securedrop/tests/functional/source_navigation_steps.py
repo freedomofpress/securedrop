@@ -1,4 +1,5 @@
 import tempfile
+import time
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -8,8 +9,8 @@ class SourceNavigationSteps():
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
-        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
-                         self.driver.title)
+        expected_title = "SecureDrop | Protecting Journalists and Sources"
+        self.assertEqual(expected_title, self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
         # First move the cursor to a known position in case it happens to
