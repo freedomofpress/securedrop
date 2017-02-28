@@ -1,23 +1,26 @@
-def test_development_lacks_deb_packages(Command):
+import pytest
+
+
+@pytest.mark.parametrize('package', [
+    "securedrop-app-code",
+    "apache2-mpm-worker",
+    "libapache2-mod-wsgi",
+    "libapache2-mod-xsendfile",
+])
+def test_development_lacks_deb_packages(Command, package):
     """
     The development machine does not use Apache, but rather the Flask runner,
     for standing up dev-friendly servers inside the VM. Therefore the
     app-code-related deb packages should be absent.
     """
-    unwanted_packages = [
-        "securedrop-app-code",
-        "apache2-mpm-worker",
-        "libapache2-mod-wsgi",
-        "libapache2-mod-xsendfile",
-    ]
     # The TestInfra `Package` module doesn't offer state=absent checks,
     # so let's call `dpkg -l` and inspect that output.
-    for unwanted_package in unwanted_packages:
-        c = Command("dpkg -l {}".format(unwanted_package))
-        assert c.rc == 1
-        assert c.stdout == ""
-        assert c.stderr == "dpkg-query: no packages found matching {}".format(
-                unwanted_package)
+    c = Command("dpkg -l {}".format(package))
+    assert c.rc == 1
+    assert c.stdout == ""
+    assert c.stderr == "dpkg-query: no packages found matching {}".format(
+            package)
+
 
 def test_development_apparmor_no_complain_mode(Command, Sudo):
     """
@@ -36,40 +39,38 @@ def test_development_apparmor_no_complain_mode(Command, Sudo):
         assert '0 profiles are in complain mode.' in c.stdout
 
 
-def test_development_apache_docroot_absent(File):
+@pytest.mark.parametrize('unwanted_file', [
+    "/var/www/html",
+    "/var/www/source.wsgi",
+    "/var/www/document.wsgi",
+])
+def test_development_apache_docroot_absent(File, unwanted_file):
     """
     Ensure the default HTML document root is missing.
     Development environment does not serve out of /var/www,
     since it uses the Flask dev server, not Apache.
     """
-    unwanted_files = [
-        "/var/www/html",
-        "/var/www/source.wsgi",
-        "/var/www/document.wsgi",
-    ]
-    for unwanted_file in unwanted_files:
-        f = File(unwanted_file)
-        assert not f.exists
+    f = File(unwanted_file)
+    assert not f.exists
 
 
-def test_development_data_directories_exist(File):
+@pytest.mark.parametrize('data_dir', [
+    "/var/lib/securedrop",
+    "/var/lib/securedrop/keys",
+    "/var/lib/securedrop/tmp",
+    "/var/lib/securedrop/store",
+])
+def test_development_data_directories_exist(File, data_dir):
     """
     Ensure that application code directories are created
     under /vagrant for the development environment, rather than
     /var/www as in staging and prod.
     """
-    securedrop_data_directories = [
-        "/var/lib/securedrop",
-        "/var/lib/securedrop/keys",
-        "/var/lib/securedrop/tmp",
-        "/var/lib/securedrop/store",
-    ]
-    for data_dir in securedrop_data_directories:
-        f = File(data_dir)
-        assert f.is_directory
-        assert f.user == "vagrant"
-        assert f.group == "vagrant"
-        assert oct(f.mode) == "0700"
+    f = File(data_dir)
+    assert f.is_directory
+    assert f.user == "vagrant"
+    assert f.group == "vagrant"
+    assert oct(f.mode) == "0700"
 
 
 def test_development_app_directories_exist(File):
