@@ -29,7 +29,7 @@
   # It's technically possible that pgrep will return more than one PID.
   # Let's be careful and kill each process, even though in most cases there
   # will be only one, if any.
-  with_items: ossec_authd_running_check.stdout_lines
+  with_items: "{{ ossec_authd_running_check.stdout_lines }}"
   delegate_to: "{{ groups.securedrop_monitor_server.0 }}"
   when: ossec_authd_running_check.rc == 0 and
         ossec_authd_running_check.stdout != ""

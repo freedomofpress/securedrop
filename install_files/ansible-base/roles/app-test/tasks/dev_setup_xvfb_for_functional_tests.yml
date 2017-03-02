@@ -9,7 +9,7 @@
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: test_apt_dependencies
+  with_items: "{{ test_apt_dependencies }}"
   tags:
     - apt
 

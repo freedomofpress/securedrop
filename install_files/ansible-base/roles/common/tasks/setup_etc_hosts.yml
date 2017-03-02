@@ -32,7 +32,7 @@
     regexp: "{{ item.hostname }}"
     line: "{{ item.ip }}  {{ item.hostname }}"
     backup: yes
-  with_items: ip_info
+  with_items: "{{ ip_info }}"
   tags:
     - host_aliases
     - static-hosts

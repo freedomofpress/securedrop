@@ -3,7 +3,7 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  with_items: ossec_postfix_dependencies
+  with_items: "{{ ossec_postfix_dependencies }}"
   tags:
     - apt
     - postfix

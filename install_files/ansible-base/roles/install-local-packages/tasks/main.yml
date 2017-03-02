@@ -6,7 +6,7 @@
   copy:
     src: ../../build/{{ item }}
     dest: /root/
-  with_items: local_deb_packages
+  with_items: "{{ local_deb_packages }}"
 
 # There's a known bug in Ansible that causes installing
 # .deb packages via the apt module to fail when invoked

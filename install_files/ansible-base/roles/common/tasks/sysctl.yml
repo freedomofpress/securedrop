@@ -8,7 +8,7 @@
     sysctl_set: yes
     state: present
     reload: yes
-  with_items: sysctl_flags
+  with_items: "{{ sysctl_flags }}"
   tags:
     - sysctl
     - hardening

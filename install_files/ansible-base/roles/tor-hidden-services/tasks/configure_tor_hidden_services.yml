@@ -16,7 +16,7 @@
     owner: "{{ tor_user }}"
     group: "{{ tor_user }}"
     mode: '0700'
-  with_items: tor_instances
+  with_items: "{{ tor_instances }}"
   tags:
     - tor
 
