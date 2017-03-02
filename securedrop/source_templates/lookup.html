@@ -6,7 +6,7 @@
 
   {% if flagged and not haskey %}
     <div class="flash notification">
-      <img src="{{ url_for('static', filename='i/relieved_face.svg')  }}" alt="relieved-face" class="icon">
+      <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
         <strong>Whew, it’s you! Now, the embarrassing part...</strong></br>
         <p>Our servers experienced an unusual surge of new activity, when you last visited. This could
@@ -24,14 +24,14 @@
 <h1 class="headline">Submit Materials</h1>
 <p class="explanation">If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
-<p>You can send a file, a message, or both.</p>
+<p class="explanation">You can send a file, a message, or both.</p>
 <hr class="no-line">
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
     <div class="attachment grid-item center">
-      {% include 'svg/server_upload.svg' %}
+      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>
@@ -43,7 +43,11 @@
   <hr class="no-line">
   <div class="pull-right">
     <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
-    <button type="submit" class="sd-button btn primary">SUBMIT</button>
+    <button type="submit" class="sd-button btn primary" id="submit-doc-button">
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" />
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" />
+      SUBMIT
+    </button>
   </div>
 </form>
 
@@ -66,7 +70,7 @@
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-          <img src="{{ url_for('static', filename='i/font-awesome/black/trash.svg') }}" width="20px" height="20px">
+          <img src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>Delete this reply?
               <a href="#delete">Cancel</a>
@@ -88,14 +92,14 @@
       </div>
     </form>
   {% else %}
-    <p id="no-replies">There are no replies at this time.</p>
+    <p id="no-replies" class="explanation">There are no replies at this time.</p>
   {% endif %}
 </div>
 
 <hr class="no-line">
 
 <div class="code-reminder" id="codename-hint">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/black/lock.svg') }}" width="20px" height="20px"> Remember your codename is:
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
   <span id="content" class="codename"><p class="alert">{{ codename }}</p></span>
 </div>

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.11
+
+* Instructs source to turn the Tor Browser security slider to High and to
+get a new Tor Browser identity after logout. Turning the security slider to
+high would disable the SVG icons so the icons and CSS on the source interface
+are updated to display properly using this setting (#1567, #1480, #1522)
+* Adds `/logout` route and button to base template (#1165)
+* Removes the choice of number of codename words from the source interface
+(#1521)
+* Adds SourceClear integration (#1520)
+* CSS fixes (#1186)
+* Adds coveragerc
+
+The issues for this release were tracked in the 0.3.11 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.11.
+
 ## 0.3.10
 
 Creates new Debian package `securedrop-keyring` for managing the SecureDrop
