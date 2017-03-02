@@ -304,7 +304,7 @@ def submit():
         else:
             things = 'message and document'
 
-        msg = render_template('first_submission_flashed_message.html',
+        msg = render_template('next_submission_flashed_message.html',
                               things=things)
         flash(Markup(msg), "success")
 

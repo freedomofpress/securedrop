@@ -14,8 +14,8 @@
     <form id="regenerate-form" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <button type="submit" id="regenerate-submit" class="small">
-        <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20px" />
-        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20px" />
+        <img class="icon pull-left off-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-white.png') }}" width="20px" height="20px" />
+        <img class="icon pull-left on-hover" src="{{ url_for('static', filename='i/font-awesome/refresh-blue.png') }}"  width="20px" height="20px" />
       </button>
     </form>
   </div>
@@ -41,8 +41,8 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <a id="already-have-codename" href="/login" class="sd-button btn secondary">ALREADY HAVE A CODENAME?</a>
   <button type="submit" class="sd-button btn primary" id="continue-button">
-    <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="20px" />
-    <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="20px" />
+    <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17px" height="17px" />
+    <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17px" height="17px" />
      CONTINUE
   </button>
 </form>

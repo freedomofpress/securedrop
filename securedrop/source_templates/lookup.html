@@ -31,7 +31,7 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
     <div class="attachment grid-item center">
-      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}">
+      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>

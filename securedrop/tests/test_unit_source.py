@@ -172,7 +172,7 @@ class TestSourceApp(TestCase):
         resp = self._dummy_submission()
         self.assertEqual(resp.status_code, 200)
         self.assertIn(
-            "Thank you for sending this information to us",
+            "Thank you for sending this information to us.",
             resp.data)
 
     def test_submit_message(self):
@@ -183,7 +183,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thank you for sending this information to us", resp.data)
+        self.assertIn("Thanks! We received your message", resp.data)
 
     def test_submit_empty_message(self):
         self._new_codename()
@@ -191,7 +191,8 @@ class TestSourceApp(TestCase):
             msg="",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
-        self.assertIn("You must enter a message or choose a file to submit.", resp.data)
+        self.assertIn("You must enter a message or choose a file to submit.",
+                      resp.data)
 
     def test_submit_big_message(self):
         '''
@@ -206,7 +207,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thank you for sending this information to us", resp.data)
+        self.assertIn("Thanks! We received your message", resp.data)
 
     def test_submit_file(self):
         self._new_codename()
@@ -216,7 +217,7 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn('Thank you for sending this information to us', resp.data)
+        self.assertIn('Thanks! We received your document', resp.data)
 
     def test_submit_both(self):
         self._new_codename()
@@ -226,7 +227,8 @@ class TestSourceApp(TestCase):
             fh=(StringIO('This is a test'), 'test.txt'),
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thank you for sending this information to us", resp.data)
+        self.assertIn("Thanks! We received your message and document",
+                      resp.data)
 
     @patch('gzip.GzipFile')
     def test_submit_sanitizes_filename(self, gzipfile):
