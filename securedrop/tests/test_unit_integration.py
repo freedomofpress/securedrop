@@ -30,6 +30,11 @@ import utils
 class TestIntegration(unittest.TestCase):
 
     def _login_user(self):
+        # See https://github.com/freedomofpress/securedrop/issues/1610
+        self.db_key = crypto_util.gen_db_key()
+        self.user, self.user_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key)
+
         self.journalist_app.post('/login', data=dict(
             username=self.user.username,
             password=self.user_pw,
@@ -52,11 +57,9 @@ class TestIntegration(unittest.TestCase):
 
         # Add a test user to the journalist interface and log them in
         # print Journalist.query.all()
-        self.user_pw = "bar"
-        self.user = Journalist(username="foo",
-                               password=self.user_pw)
-        db_session.add(self.user)
-        db_session.commit()
+        self.db_key = crypto_util.gen_db_key()
+        self.user, self.user_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key)
         self._login_user()
 
     def tearDown(self):

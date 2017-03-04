@@ -73,6 +73,7 @@ def setup_g():
     uid = session.get('uid', None)
     if uid:
         g.user = Journalist.query.get(uid)
+        g.db_key = session['db_key']
 
     if request.method == 'POST':
         sid = request.form.get('sid')
@@ -147,6 +148,7 @@ def login():
             db_session.commit()
 
             session['uid'] = user.id
+            session['db_key'] = user.decrypt_db_key(request.form['password'])
             return redirect(url_for('index'))
 
     return render_template("login.html")
@@ -164,7 +166,7 @@ def admin_index():
     users = Journalist.query.all()
     all_source_tags = get_all_defined_tags(SourceLabelType)
     all_submission_tags = get_all_defined_tags(SubmissionLabelType)
-    return render_template("admin.html", users=users,
+    return render_template("admin.html", users=users, db_key=g.db_key,
                            source_tags=all_source_tags,
                            submission_tags=all_submission_tags)
 
@@ -196,7 +198,8 @@ def admin_add_user():
                 new_user = Journalist(username=username,
                                       password=password,
                                       is_admin=is_admin,
-                                      otp_secret=otp_secret)
+                                      otp_secret=otp_secret,
+                                      db_key=g.db_key)
                 db_session.add(new_user)
                 db_session.commit()
             except InvalidPasswordLength:
@@ -282,7 +285,7 @@ def admin_edit_user(user_id):
                 flash("Passwords didn't match", "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
             try:
-                user.set_password(request.form['password'])
+                user.set_password(request.form['password'], g.db_key)
                 flash("Password successfully changed for user {} ".format(
                     user.username), "notification")
             except InvalidPasswordLength:
@@ -327,7 +330,7 @@ def edit_account():
                 flash("Passwords didn't match", "error")
                 return redirect(url_for("edit_account"))
             try:
-                user.set_password(request.form['password'])
+                user.set_password(request.form['password'], g.db_key)
             except InvalidPasswordLength:
                 flash("Your password is too long "
                       "(maximum length {} characters)".format(
@@ -410,8 +413,8 @@ def admin_create_source_label_type():
     label_text = request.form['label_text']
     if label_text:
         try:
-            create_label(SourceLabelType, request.form['label_text'])
-        except IntegrityError:
+            create_label(SourceLabelType, g.db_key, request.form['label_text'])
+        except SourceLabelType.LabelUniquenessError:
             flash('Tag already exists!', 'source-label-error')
             db_session.rollback()
     else:
@@ -425,8 +428,9 @@ def admin_create_submission_label_type():
     label_text = request.form['label_text']
     if label_text:
         try:
-            create_label(SubmissionLabelType, request.form['label_text'])
-        except IntegrityError:
+            create_label(SubmissionLabelType, g.db_key,
+                         request.form['label_text'])
+        except SubmissionLabelType.LabelUniquenessError:
             flash('Tag already exists!', 'submission-label-error')
             db_session.rollback()
     else:
@@ -442,14 +446,14 @@ def admin_delete_submission_label_type(label_id):
     return redirect(url_for('admin_index'))
 
 
-def create_label(label_type, text):
-    db_session.add(label_type(label_text=text))
+def create_label(label_type, db_key, label_text):
+    db_session.add(label_type(db_key, label_text))
     db_session.commit()
 
 
-def create_tag(object_to_label, label):
+def create_tag(object_to_label, db_key, label_text):
     label_type, _, _ = get_tag_object(object_to_label)
-    db_session.add(label_type(object_to_label, label))
+    db_session.add(label_type(object_to_label, label_text))
     db_session.commit()
 
 
@@ -468,7 +472,7 @@ def delete_tag(object_to_remove_tag, label):
 def add_source_label(sid, label_id):
     source = get_source(sid)
     label = get_label(SourceLabelType, label_id)
-    create_tag(source, label)
+    create_tag(source, g.db_key, label)
     return redirect(url_for('col', sid=sid))
 
 
@@ -486,7 +490,7 @@ def remove_source_label(sid, label_id):
 def add_submission_label(sid, filename, label_id):
     submission = get_submission(filename)
     label = get_label(SubmissionLabelType, label_id)
-    create_tag(submission, label)
+    create_tag(submission, g.db_key, label)
     return redirect(url_for('col', sid=sid))
 
 
@@ -648,7 +652,7 @@ def index():
 
     return render_template('index.html', unstarred=unstarred, starred=starred,
                            filter_labels=filter_labels, journalists=journalists,
-                           selected_filter_labels=labels,
+                           selected_filter_labels=labels, db_key=g.db_key,
                            unselect_dict=unselect_dict)
 
 
@@ -667,7 +671,7 @@ def col(sid):
 
     source.has_key = crypto_util.getkey(sid)
 
-    return render_template("col.html", sid=sid, source=source,
+    return render_template("col.html", sid=sid, source=source, db_key=g.db_key,
                            unselected_source_labels=unselected_source_labels,
                            unselected_submission_labels=unselected_submission_labels)
 

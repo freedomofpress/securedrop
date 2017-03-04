@@ -36,9 +36,12 @@ class TestJournalistApp(TestCase):
         utils.db_helper.mock_verify_token(self)
 
         # Setup test users: user & admin
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-        self.admin, self.admin_pw = utils.db_helper.init_journalist(
-            is_admin=True)
+        self.db_key = crypto_util.gen_db_key()
+        self.user, self.user_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key)
+        self.admin, self.admin_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key,
+                                                is_admin=True)
 
     def tearDown(self):
         utils.env.teardown()
@@ -133,9 +136,11 @@ class TestJournalistApp(TestCase):
     # aforementioned issue to fix the described problem.
     def _login_admin(self):
         self._ctx.g.user = self.admin
+        self._ctx.g.db_key = self.db_key
 
     def _login_user(self):
         self._ctx.g.user = self.user
+        self._ctx.g.db_key = self.db_key
 
     def test_admin_logout_redirects_to_index(self):
         self._login_admin()

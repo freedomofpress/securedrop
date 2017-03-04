@@ -147,6 +147,7 @@ def add_admin():
     try:
         admin = Journalist(username=username,
                            password=password,
+                           db_key=db_key,
                            is_admin=True,
                            otp_secret=otp_secret)
         db_session.add(admin)

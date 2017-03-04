@@ -51,10 +51,10 @@
     {% for label in filter_labels %}
       {% set filter_get_param=0 %}
       {% if label.id in selected_filter_labels %}
-        <a href="{{ url_for('index', filter=unselect_dict[label.id] ) }}" class="tag-label">{{ label.label_text }} <i class="fa fa-times"></i></a>
+        <a href="{{ url_for('index', filter=unselect_dict[label.id] ) }}" class="tag-label">{{ label.label_text_getter(db_key) }} <i class="fa fa-times"></i></a>
       {% else %}
         <a href="{{ url_for('index', filter=selected_filter_labels + [label.id]) }}">
-        <button id="filter_by_label_{{ label.id }}" class="untagged-tag-label">{{ label.label_text }}
+        <button id="filter_by_label_{{ label.id }}" class="untagged-tag-label">{{ label.label_text_getter(db_key) }}
         </button></a>
       {% endif %}
     {% endfor %}

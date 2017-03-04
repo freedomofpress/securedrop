@@ -4,12 +4,15 @@ import subprocess
 from base64 import b32encode
 
 from Crypto.Random import random
+from Crypto.Cipher import AES
+from Crypto.Util import Counter
 import gnupg
 from gnupg._util import _is_stream, _make_binary_stream
 import scrypt
 
 import config
 import store
+
 
 # to fix gpg error #78 on production
 os.environ['USERNAME'] = 'www-data'
@@ -18,11 +21,15 @@ GPG_KEY_TYPE = "RSA"
 if os.environ.get('SECUREDROP_ENV') == 'test':
     # Optimize crypto to speed up tests (at the expense of security - DO NOT
     # use these settings in production)
+    AES_KEY_LENGTH = 128
     GPG_KEY_LENGTH = 1024
     SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
 else:
+    AES_KEY_LENGTH = 256
     GPG_KEY_LENGTH = 4096
     SCRYPT_PARAMS = config.SCRYPT_PARAMS
+
+AES_BLOCK_SIZE = 128
 
 SCRYPT_ID_PEPPER = config.SCRYPT_ID_PEPPER
 SCRYPT_GPG_PEPPER = config.SCRYPT_GPG_PEPPER
@@ -41,6 +48,30 @@ def do_runtime_tests():
         pass
 
 do_runtime_tests()
+
+def db_key_encryptor(personal_key, db_key):
+    cipher = AES.new(personal_key)
+    return cipher.encrypt(db_key)
+
+def db_key_decryptor(personal_key, db_key):
+    cipher = AES.new(personal_key)
+    return cipher.decrypt(db_key)
+
+def gen_db_key():
+    return os.urandom(AES_KEY_LENGTH / 8)
+
+def gen_iv():
+    return random.getrandbits(AES_BLOCK_SIZE)
+
+def db_encryptor(key, iv, pt):
+    ctr = Counter.new(AES_BLOCK_SIZE, initial_value=iv)
+    cipher = AES.new(key, AES.MODE_CTR, counter=ctr)
+    return cipher.encrypt(pt)
+
+def db_decryptor(key, iv, ct):
+    ctr = Counter.new(AES_BLOCK_SIZE, initial_value=iv)
+    cipher = AES.new(key, AES.MODE_CTR, counter=ctr)
+    return cipher.decrypt(ct)
 
 # HACK: use_agent=True is used to avoid logging noise.
 #
