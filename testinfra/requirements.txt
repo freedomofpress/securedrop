@@ -1,0 +1,16 @@
+ansible==2.2.1.0
+beautifulsoup4==4.5.1
+Flask==0.11.1
+Flask-Assets==0.12
+Flask-Testing==0.5.0
+Flask-WTF==0.12
+gnupg==2.0.2
+Jinja2==2.8
+mock==2.0.0
+pip-tools==1.7.0
+pyotp==2.2.1
+scrypt==0.8.0
+selenium==3.0.2
+SQLAlchemy==1.0.14
+qrcode==5.3
+testinfra==1.5.3
