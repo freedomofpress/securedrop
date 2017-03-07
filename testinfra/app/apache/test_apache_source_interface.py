@@ -74,3 +74,18 @@ def test_apache_config_source_interface(File, apache_opt):
     assert oct(f.mode) == "0644"
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content, re.M)
+
+
+def test_apache_logging_source_interface(File, Sudo, SystemInfo):
+    """
+    Check that Source Interface logging is enabled in staging,
+    but disabled in prod.
+    """
+    # Sudo is required to traverse /var/log/apache2.
+    with Sudo():
+        f = File("/var/log/apache2/source-error.log")
+        # Logfile should not exist on prod, but should on staging.
+        if SystemInfo.hostname.endswith('-prod'):
+            assert not f.exists
+        else:
+            assert f.exists

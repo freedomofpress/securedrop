@@ -112,3 +112,20 @@ def test_apache_config_journalist_interface(File, apache_opt):
     assert oct(f.mode) == "0644"
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content, re.M)
+
+
+# Expect to fail pending fix for LogFormat declaration.
+@pytest.mark.xfail
+def test_apache_logging_journalist_interface(File):
+    """
+    Check that logging is configured correctly for the Journalist Interface.
+    The actions of Journalists are logged by the system, so that an Admin can
+    investigate incidents and track access.
+
+    Logs were broken for some period of time, logging only "combined" to the logfile,
+    rather than the combined LogFormat intended.
+    """
+    f = File("/var/log/apache2/journalist-access.log")
+    assert f.is_file
+    assert f.size > 0 # will fail if no journalist account used
+    assert not f.contains("^combined$")
