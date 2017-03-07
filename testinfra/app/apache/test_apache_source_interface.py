@@ -75,6 +75,54 @@ def test_apache_config_source_interface(File, apache_opt):
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content, re.M)
 
+# Block of directory declarations for Apache vhost is common
+# to both Source and Journalist interfaces. Hardcoding these values
+# across multiple test files to speed up development; they should be
+# written once and imported in a DRY manner.
+common_apache2_directory_declarations = """
+<Directory />
+  Options None
+  AllowOverride None
+  Order deny,allow
+  Deny from all
+</Directory>
+
+<Directory /var/www/>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from {apache_allow_from}
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+
+<Directory {securedrop_code}>
+  Options None
+  AllowOverride None
+  <Limit GET POST HEAD>
+    Order allow,deny
+    allow from {apache_allow_from}
+  </Limit>
+  <LimitExcept GET POST HEAD>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+""".lstrip().rstrip().format(**securedrop_test_vars)
+
+
+def test_apache_source_interface_vhost(File):
+    """
+    Ensure the document root is configured with correct access restrictions
+    for serving Source Interface application code.
+    """
+    f = File("/etc/apache2/sites-available/source.conf")
+    assert common_apache2_directory_declarations in f.content
+
 
 def test_apache_logging_source_interface(File, Sudo, SystemInfo):
     """

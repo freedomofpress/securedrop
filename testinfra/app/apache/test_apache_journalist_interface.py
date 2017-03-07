@@ -42,8 +42,10 @@ def test_apache_headers_journalist_interface(File, header):
     header_regex = "^{}$".format(re.escape(header))
     assert re.search(header_regex, f.content, re.M)
 
-# declare block of directory declarations common to both
-# source and journalist interfaces.
+# Block of directory declarations for Apache vhost is common
+# to both Source and Journalist interfaces. Hardcoding these values
+# across multiple test files to speed up development; they should be
+# written once and imported in a DRY manner.
 common_apache2_directory_declarations = """
 <Directory />
   Options None
@@ -57,7 +59,7 @@ common_apache2_directory_declarations = """
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from #{property['apache_allow_from']}
+    allow from {apache_allow_from}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow
@@ -65,19 +67,19 @@ common_apache2_directory_declarations = """
   </LimitExcept>
 </Directory>
 
-<Directory #{property['securedrop_code']}>
+<Directory {securedrop_code}>
   Options None
   AllowOverride None
   <Limit GET POST HEAD>
     Order allow,deny
-    allow from #{property['apache_allow_from']}
+    allow from {apache_allow_from}
   </Limit>
   <LimitExcept GET POST HEAD>
     Order deny,allow
     Deny from all
   </LimitExcept>
 </Directory>
-""".lstrip().rstrip()
+""".lstrip().rstrip().format(**securedrop_test_vars)
 
 
 # declare journalist-specific apache configs
@@ -112,6 +114,15 @@ def test_apache_config_journalist_interface(File, apache_opt):
     assert oct(f.mode) == "0644"
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content, re.M)
+
+
+def test_apache_journalist_interface_vhost(File):
+    """
+    Ensure the document root is configured with correct access restrictions
+    for serving Journalist Interface application code.
+    """
+    f = File("/etc/apache2/sites-available/journalist.conf")
+    assert common_apache2_directory_declarations in f.content
 
 
 # Expect to fail pending fix for LogFormat declaration.
