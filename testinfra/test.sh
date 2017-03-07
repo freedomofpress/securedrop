@@ -19,4 +19,5 @@ testinfra \
     --hosts "${target_host}" \
     testinfra/development \
     testinfra/app-code \
-    $@
+    testinfra/mon\
+    ${@:2}
