@@ -11,7 +11,7 @@ def determine_app_ip(SystemInfo, Command):
     """
     Dumb logic to determine environment and lookup relevant app IP address
     """
-    app_hostname = "app"
+    app_hostname = "app-prod"
     hostname = SystemInfo.hostname
     if "staging" in hostname:
         app_hostname = "app-staging"

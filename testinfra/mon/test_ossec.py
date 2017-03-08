@@ -199,21 +199,20 @@ def test_ossec_authd(Command, Sudo):
         assert c.stdout == ""
         assert c.rc != 0
 
-
-def test_hosts_files(File, Ansible, Command):
+def test_hosts_files(File, SystemInfo):
     """ Ensure host files mapping are in place """
     f = File('/etc/hosts')
 
-    # If tor isnt running, we are on staging
-    if Command("pgrep tor").rc != 0:
-        assert f.contains('^127.0.0.1')
-        assert f.contains('^127.0.0.1\t*mon-staging\t*mon-staging$')
-        assert f.contains('^10.0.1.2\s*app-staging$')
-    else:
-        # These might be useful later
-        #ansible_facts = Ansible("setup")["ansible_facts"]
-        #host_vars = Ansible("debug", "msg={{ hostvars }}")['invocation']['module_args']['msg']
-        pass
+    hostname = SystemInfo.hostname
+    env = "prod"
+    app_ip = "10.0.1.4"
+    if "staging" in hostname:
+        env = "staging"
+        app_ip = "10.0.1.2"
+
+    assert f.contains('^127.0.0.1')
+    assert f.contains('^127.0.0.1\t*mon-{0}\t*mon-{0}$'.format(env))
+    assert f.contains('^{}\s*app-{}$'.format(app_ip, env))
 
 def test_regression_hosts(Command):
     """ Regression test to check for duplicate entries. """
