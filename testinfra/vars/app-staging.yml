@@ -54,3 +54,14 @@ app_directories:
   - /var/lib/securedrop/store
   - /var/lib/securedrop/keys
   - /var/lib/securedrop/tmp
+
+tor_services:
+  - ssh
+  - source
+  - journalist
+
+tor_stealth_services:
+  - service: "HiddenServicePort 22 127.0.0.1:22"
+    stealth: admin
+  - service: "HiddenServicePort 80 127.0.0.1:8080"
+    stealth: journalist

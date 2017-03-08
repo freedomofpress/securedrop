@@ -1,0 +1,11 @@
+---
+dns_server: "8.8.8.8"
+
+app_hostname: app-prod
+
+tor_services:
+  - ssh
+
+tor_stealth_services:
+  - service: "HiddenServicePort 22 127.0.0.1:22"
+    stealth: admin

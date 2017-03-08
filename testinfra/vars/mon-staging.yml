@@ -50,3 +50,10 @@ iptables_complete_ruleset: |-
   -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -j DROP
+
+tor_services:
+  - ssh
+
+tor_stealth_services:
+  - service: "HiddenServicePort 22 127.0.0.1:22"
+    stealth: admin
