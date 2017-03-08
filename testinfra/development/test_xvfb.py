@@ -92,7 +92,7 @@ def test_xvfb_display_config(File):
     assert f.contains("export DISPLAY=:1\n")
 
 
-def test_xvfb_service_running(Process):
+def test_xvfb_service_running(Process, Sudo):
     """
     Ensure that xvfb service is running.
 
@@ -100,10 +100,14 @@ def test_xvfb_service_running(Process):
     subcommand for the init script, and our custom version doesn't have
     one. So let's make sure the process is running.
     """
-    p = Process.get(user="root", comm="Xvfb")
-    wanted_args = str('/usr/bin/Xvfb :1 -screen 0 1024x768x24 '
-                  '-ac +extension GLX +render -noreset')
-    assert p.args == wanted_args
-    # We only expect a single process, no children.
-    workers = Process.filter(ppid=p.pid)
-    assert len(workers) == 0
+    # Sudo isn't necessary to read out of /proc on development, but is
+    # required when running under Grsecurity, which app-staging does.
+    # So let's escalate privileges to ensure we can determine service state.
+    with Sudo():
+        p = Process.get(user="root", comm="Xvfb")
+        wanted_args = str('/usr/bin/Xvfb :1 -screen 0 1024x768x24 '
+                      '-ac +extension GLX +render -noreset')
+        assert p.args == wanted_args
+        # We only expect a single process, no children.
+        workers = Process.filter(ppid=p.pid)
+        assert len(workers) == 0

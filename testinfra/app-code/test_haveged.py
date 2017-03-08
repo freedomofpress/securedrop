@@ -22,10 +22,13 @@ def test_haveged_no_duplicate_lines(Command):
     assert c.stdout == ""
 
 
-def test_haveged_is_running(Service):
+def test_haveged_is_running(Service, Sudo):
     """
     Ensure haveged service is running, to provide additional entropy.
     """
-    s = Service("haveged")
-    assert s.is_running
-    assert s.is_enabled
+    # Sudo is necessary to read /proc when running under grsecurity,
+    # which the App hosts do. Not technically necessary under development.
+    with Sudo():
+        s = Service("haveged")
+        assert s.is_running
+        assert s.is_enabled
