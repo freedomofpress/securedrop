@@ -43,6 +43,11 @@ elif target_host == "mon-prod":
     target_roles = [
             'testinfra/mon',
             ]
+
+elif target_host == "build":
+    target_roles = [
+            'testinfra/build',
+            ]
 else:
     print("Unknown host '{}'! Exiting.".format(target_host))
     sys.exit(1)
