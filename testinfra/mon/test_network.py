@@ -2,7 +2,7 @@ import os
 import difflib
 import pytest
 from jinja2 import Template
-from .constants import *
+
 
 securedrop_test_vars = pytest.securedrop_test_vars
 

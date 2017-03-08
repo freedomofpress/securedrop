@@ -1,6 +1,5 @@
 import re
 import pytest
-from .constants import *
 
 
 securedrop_test_vars = pytest.securedrop_test_vars
