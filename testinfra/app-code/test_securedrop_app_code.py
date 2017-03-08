@@ -1,14 +1,7 @@
 import pytest
 
 
-# Hard-coding test vars for development during
-# transition from ServerSpec to TestInfra. Test vars
-# should be imported based on hostname.
-securedrop_test_vars = dict(
-    securedrop_user="vagrant",
-    securedrop_code="/vagrant/securedrop",
-    securedrop_data="/var/lib/securedrop",
-)
+securedrop_test_vars = pytest.securedrop_test_vars
 
 
 def test_apache_default_docroot_is_absent(File):
@@ -46,7 +39,7 @@ def test_securedrop_application_test_journalist_key(File):
     This is a test-only pubkey provided in the repository strictly for testing.
     """
     pubkey_file = File("{}/test_journalist_key.pub".format(
-        securedrop_test_vars['securedrop_data']))
+        securedrop_test_vars.securedrop_data))
     assert pubkey_file.is_file
     assert pubkey_file.user == "root"
     assert pubkey_file.group == "root"
@@ -56,10 +49,10 @@ def test_securedrop_application_test_journalist_key(File):
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
     securedrop_config = File("{}/config.py".format(
-        securedrop_test_vars['securedrop_code']))
+        securedrop_test_vars.securedrop_code))
     assert securedrop_config.is_file
-    assert securedrop_config.user == securedrop_test_vars['securedrop_user']
-    assert securedrop_config.group == securedrop_test_vars['securedrop_user']
+    assert securedrop_config.user == securedrop_test_vars.securedrop_user
+    assert securedrop_config.group == securedrop_test_vars.securedrop_user
     assert oct(securedrop_config.mode) == "0600"
     assert securedrop_config.contains(
             "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
@@ -71,8 +64,8 @@ def test_securedrop_application_sqlite_db(File):
     created by Ansible on first run.
     """
 
-    f = File("{}/db.sqlite".format(securedrop_test_vars['securedrop_data']))
+    f = File("{}/db.sqlite".format(securedrop_test_vars.securedrop_data))
     assert f.is_file
-    assert f.user == securedrop_test_vars['securedrop_user']
-    assert f.group == securedrop_test_vars['securedrop_user']
+    assert f.user == securedrop_test_vars.securedrop_user
+    assert f.group == securedrop_test_vars.securedrop_user
     assert oct(f.mode) == "0644"

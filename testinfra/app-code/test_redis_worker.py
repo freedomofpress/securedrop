@@ -2,25 +2,19 @@ import pytest
 import re
 
 
-# Hard-coding test vars for development during
-# transition from ServerSpec to TestInfra. Test vars
-# should be imported based on hostname.
-securedrop_test_vars = dict(
-    securedrop_user="vagrant",
-    securedrop_code="/vagrant/securedrop",
-    securedrop_data="/var/lib/securedrop",
-)
+securedrop_test_vars = pytest.securedrop_test_vars
+
 
 @pytest.mark.parametrize('config_line', [
   '[program:securedrop_worker]',
   'command=/usr/local/bin/rqworker',
-  "directory={}".format(securedrop_test_vars['securedrop_code']),
+  "directory={}".format(securedrop_test_vars.securedrop_code),
   'autostart=true',
   'autorestart=true',
   'startretries=3',
   'stderr_logfile=/var/log/securedrop_worker/err.log',
   'stdout_logfile=/var/log/securedrop_worker/out.log',
-  "user={}".format(securedrop_test_vars['securedrop_user']),
+  "user={}".format(securedrop_test_vars.securedrop_user),
   'environment=HOME="/tmp/python-gnupg"',
 ])
 def test_redis_worker_configuration(File, config_line):
