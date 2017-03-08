@@ -1,4 +1,5 @@
 import pytest
+import os
 import re
 
 
@@ -126,6 +127,11 @@ def test_grub_pc_marked_manual(Command):
     assert c.stdout == "grub-pc"
 
 
+# The app-staging host has an outdated version of Firefox installed manually,
+# for compatibility with Selenium. Let's skip only on that host.
+@pytest.mark.skipif(
+        os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] == "app-staging",
+        reason="app-staging uses old version of Firefox for Selenium")
 def test_apt_autoremove(Command):
     """
     Ensure old packages have been autoremoved.
