@@ -16,7 +16,12 @@ development*)
   target_roles=(testinfra/app-code testinfra/development)
   ;;
 app-staging*)
-  target_roles=(testinfra/app testinfra/app-code testinfra/common)
+  target_roles=(testinfra/app
+                testinfra/app-code
+                testinfra/app-test
+                testinfra/common
+                testinfra/development/test_xvfb.py
+                )
   ;;
 mon-staging*)
   target_roles=(testinfra/mon testinfra/common)
