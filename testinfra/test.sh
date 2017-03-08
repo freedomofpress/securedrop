@@ -12,6 +12,11 @@ set -x
 target_host=${1:development}
 #shift 1
 
+
+# Set env var so that `testinfra/conftest.py` can read in a YAML vars file
+# specific to the host being tested.
+export SECUREDROP_TESTINFRA_TARGET_HOST="${target_host}"
+
 testinfra \
     -v \
     --connection ansible \
