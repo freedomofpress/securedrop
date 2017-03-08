@@ -34,8 +34,8 @@ def test_postfix_headers(File, header):
     f = File("/etc/postfix/header_checks")
     assert f.is_file
     assert oct(f.mode) == "0644"
-    regex = re.escape(header)
-    assert f.contains('^{}$'.format(regex))
+    regex = '^{}$'.format(re.escape(header))
+    assert re.search(regex, f.content, re.M)
 
 
 @pytest.mark.parametrize('setting', [
@@ -76,7 +76,8 @@ def test_postfix_settings(File, setting):
     assert f.is_file
     assert f.user == 'root'
     assert oct(f.mode) == "0644"
-    assert f.contains('^{}$'.format(setting))
+    regex = '^{}$'.format(re.escape(setting))
+    assert re.search(regex, f.content, re.M)
 
 
 def test_ossec_connectivity(Command, Sudo, Ansible):
