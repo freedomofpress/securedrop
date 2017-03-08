@@ -135,9 +135,8 @@ def test_cron_apt_all_packages_updated(Command):
     c = Command('aptitude --simulate -y safe-upgrade')
     assert c.rc == 0
     # If planning to upgrade anything, make sure it's ONLY firefox.
-    if "Would download/install/remove packages." in c.stdout:
+    if "1 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout:
         assert "firefox" in c.stdout
-        assert "1 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout
     else:
         assert "No packages will be installed, upgraded, or removed." in c.stdout
         assert "0 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout
