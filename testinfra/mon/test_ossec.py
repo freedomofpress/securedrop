@@ -3,6 +3,8 @@ import pytest
 from .constants import *
 
 
+securedrop_test_vars = pytest.securedrop_test_vars
+
 @pytest.mark.parametrize('package', [
     'mailutils',
     'ossec-server',
@@ -80,18 +82,18 @@ def test_postfix_settings(File, setting):
     assert re.search(regex, f.content, re.M)
 
 
-def test_ossec_connectivity(Command, Sudo, Ansible):
-    """ Ensure ossec considers app-staging host available """
-    hostname = Command.check_output("hostname")
-
-    if "staging" in hostname:
-        app_hostname = "app-staging"
-    app_hostname = "app"
-    app_ip = Command.check_output("getent hosts %s | awk '{ print $1 }'" % 
-                                  (app_hostname))
+def test_ossec_connectivity(Command, Sudo):
+    """
+    Ensure ossec-server machine has active connection to the ossec-agent.
+    The ossec service will report all available agents, and we can inspect
+    that list to make sure it's the host we expect.
+    """
+    desired_output = "{}-{} is available.".format(securedrop_test_vars.app_hostname,
+            securedrop_test_vars.app_ip)
     with Sudo():
-        list_agents = Command.check_output("/var/ossec/bin/list_agents -a")
-        assert list_agents == "%s-%s is available" % (app_hostname, app_ip)
+        c = Command("/var/ossec/bin/list_agents -a")
+        assert c.stdout == desired_output
+        assert c.rc == 0
 
 def test_ossec_gnupg(File, Sudo):
     """ ensure ossec gpg homedir exists """
