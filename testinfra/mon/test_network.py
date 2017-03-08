@@ -4,8 +4,11 @@ import pytest
 from jinja2 import Template
 from .constants import *
 
+securedrop_test_vars = pytest.securedrop_test_vars
+
+
 def determine_app_ip(SystemInfo, Command):
-    """ 
+    """
     Dumb logic to determine environment and lookup relevant app IP address
     """
     app_hostname = "app"
@@ -14,6 +17,7 @@ def determine_app_ip(SystemInfo, Command):
         app_hostname = "app-staging"
     app_ip = Command.check_output("getent hosts "+app_hostname+" | awk '{ print $1 }'")
     return app_ip
+
 
 def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
     app_ip = determine_app_ip(SystemInfo, Command)
@@ -25,7 +29,7 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
         tor_user_id = Command.check_output("id -u debian-tor"),
         ssh_group_gid = Command.check_output("getent group ssh | cut -d: -f3"),
         postfix_user_id = Command.check_output("id -u postfix"),
-        dns_server = DNS_SERVER)
+        dns_server = securedrop_test_vars.dns_server)
 
     # Build iptables scrape cmd, purge comments + counters
     iptables = "iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
@@ -49,19 +53,34 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
         # ruleset
         assert iptables_expected == iptables
 
-@pytest.mark.parametrize('unwanted_rule', UNWANTED_IPTABLES_RULES)
-def test_ensure_absent_iptables_rules(Command, SystemInfo, Sudo, unwanted_rule):
-    """ Ensure that iptables rules defined do not exist on the server """
-    app_ip = determine_app_ip(SystemInfo, Command)
 
+@pytest.mark.parametrize('unwanted_rule', [
+    "-A INPUT -s {app_ip} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
+    "-A OUTPUT -d {app_ip} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
+    "-A INPUT -s {app_ip} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
+    "-A OUTPUT -d {app_ip} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT",
+])
+def test_ensure_absent_iptables_rules(Command, SystemInfo, Sudo, unwanted_rule):
+    """
+    Ensure that unwanted iptables rules defined do not exist on the server.
+    Mostly these are modified rules, so we're checking that the old versions have
+    been permanently removed between upgrades.
+    """
+    app_ip = determine_app_ip(SystemInfo, Command)
     with Sudo():
         rule = unwanted_rule.format(app_ip=app_ip)
         assert rule not in Command.check_output("iptables-save")
 
-
-@pytest.mark.parametrize('ossec_service', OSSEC_LISTENING_SERVICES)
+@pytest.mark.parametrize('ossec_service', [
+    dict(host="0.0.0.0", proto="tcp", port=22),
+    dict(host="127.0.0.1", proto="tcp", port=25),
+    dict(host="0.0.0.0", proto="udp", port=1514),
+])
 def test_listening_ports(Socket, Sudo, ossec_service):
-    print ossec_service
+    """
+    Ensure the OSSEC-related services are listening on the
+    expected sockets. Services to check include ossec, mail, and ssh.
+    """
     socket = "{proto}://{host}:{port}".format(**ossec_service)
     with Sudo():
         assert Socket(socket).is_listening
