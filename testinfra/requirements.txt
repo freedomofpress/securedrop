@@ -9,6 +9,7 @@ Jinja2==2.8
 mock==2.0.0
 pip-tools==1.7.0
 pyotp==2.2.1
+pytest-xdist==1.15.0
 scrypt==0.8.0
 selenium==3.0.2
 SQLAlchemy==1.0.14

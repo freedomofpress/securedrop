@@ -37,6 +37,7 @@ done
 # Execute config tests.
 testinfra \
     -vv \
+    -n auto \
     --connection ansible \
     --ansible-inventory .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory \
     --hosts "${target_host}" \
