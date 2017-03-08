@@ -21,6 +21,9 @@ app-staging*)
 mon-staging*)
   target_roles=(testinfra/mon testinfra/common)
   ;;
+mon-prod*)
+  target_roles=(testinfra/mon)
+  ;;
 *)
   echo "Unknown host '${target_host}'! Exiting."
   exit 1
