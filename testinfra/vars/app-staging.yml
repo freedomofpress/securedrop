@@ -40,6 +40,14 @@ apparmor_complain:
   - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
   - "/usr/sbin/tor"
 
+apparmor_enforce:
+  - "/sbin/dhclient"
+  - "/usr/lib/NetworkManager/nm-dhcp-client.action"
+  - "/usr/lib/connman/scripts/dhclient-script"
+  - "/usr/sbin/ntpd"
+  - "/usr/sbin/tcpdump"
+  - "system_tor"
+
 app_directories:
   - /var/www/securedrop
   - /var/lib/securedrop
