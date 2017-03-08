@@ -25,12 +25,27 @@ def extract_package_name_from_filepath(filepath):
     return package_name
 
 
-@pytest.mark.parametrize("deb", [
-  # Test will interpolate version in filepath.
-  "/vagrant/build/securedrop-app-code-{}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-agent-2.8.2+{}-amd64.deb",
-  "/vagrant/build/securedrop-ossec-server-2.8.2+{}-amd64.deb",
-])
+def get_deb_packages():
+    """
+    Helper function to retrieve module-namespace test vars and format
+    the strings to interpolate version info. Keeps the test vars DRY
+    in terms of version info, and required since we can't rely on
+    Jinja-based evaluation of the YAML files (so we can't trivially
+    reuse vars in other var values, as is the case with Ansible).
+    """
+    substitutions = dict(
+            securedrop_version=securedrop_test_vars.securedrop_version,
+            ossec_version=securedrop_test_vars.ossec_version,
+            keyring_version=securedrop_test_vars.keyring_version,
+            )
+
+    deb_packages = [d.format(**substitutions) for d in securedrop_test_vars.build_deb_packages]
+    return deb_packages
+
+
+deb_packages = get_deb_packages()
+
+@pytest.mark.parametrize("deb", deb_packages)
 def test_build_deb_packages(File, deb):
     """
     Sanity check the built Debian packages for Control field
@@ -41,12 +56,7 @@ def test_build_deb_packages(File, deb):
     assert deb_package.is_file
 
 
-@pytest.mark.parametrize("deb", [
-    # Test will interpolate version in filepath.
-    "/vagrant/build/securedrop-app-code-{}-amd64.deb",
-    "/vagrant/build/securedrop-ossec-agent-2.8.2+{}-amd64.deb",
-    "/vagrant/build/securedrop-ossec-server-2.8.2+{}-amd64.deb",
-])
+@pytest.mark.parametrize("deb", deb_packages)
 def test_deb_packages_appear_installable(File, Command, Sudo, deb):
     """
     Confirms that a dry-run of installation reports no errors.
@@ -74,12 +84,7 @@ def test_deb_packages_appear_installable(File, Command, Sudo, deb):
         assert c.rc == 0
 
 
-@pytest.mark.parametrize("deb", [
-    # Test will interpolate version in filepath.
-    "/vagrant/build/securedrop-app-code-{}-amd64.deb",
-    "/vagrant/build/securedrop-ossec-agent-2.8.2+{}-amd64.deb",
-    "/vagrant/build/securedrop-ossec-server-2.8.2+{}-amd64.deb",
-])
+@pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_control_fields(File, Command, deb):
     """
     Ensure Debian Control fields are populated as expected in the package.

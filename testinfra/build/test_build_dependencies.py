@@ -46,6 +46,18 @@ def test_pip_wheel_installed(Command):
     assert c.rc == 0
 
 
+def test_sass_gem_installed(Command):
+    """
+    Ensure the `sass` Ruby gem is installed, for compiling SASS to CSS.
+    """
+    # The Ansible config uses state=latest, so the version may change;
+    # intentionally tracking an explicit version here so we can track
+    # a specific version down the road.
+    c = Command("gem list")
+    assert "sass (3.4.23)" in c.stdout
+    assert c.rc == 0
+
+
 @pytest.mark.parametrize("directory", get_build_directories())
 def test_build_directories(File, directory):
     """
