@@ -214,6 +214,22 @@ def test_hosts_files(File, SystemInfo):
     assert f.contains('^127.0.0.1\t*mon-{0}\t*mon-{0}$'.format(env))
     assert f.contains('^{}\s*app-{}$'.format(app_ip, env))
 
+
+def test_ossec_log_contains_no_malformed_events(File, Sudo):
+    """
+    Ensure the OSSEC log reports no errors for incorrectly formatted
+    messages. These events indicate that the OSSEC server failed to decrypt
+    the event sent by the OSSEC agent, which implies a misconfiguration,
+    likely the IPv4 address or keypair differing from what's declared.
+
+    Documentation regarding this error message can be found at:
+    http://ossec-docs.readthedocs.io/en/latest/faq/unexpected.html#id4
+    """
+    with Sudo():
+        f = File("/var/ossec/logs/ossec.log")
+        assert not f.contains("ERROR: Incorrectly formated message from")
+
+
 def test_regression_hosts(Command):
     """ Regression test to check for duplicate entries. """
     assert Command.check_output("uniq --repeated /etc/hosts") == ""
