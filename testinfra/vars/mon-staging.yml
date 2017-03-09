@@ -52,8 +52,8 @@ iptables_complete_ruleset: |-
   -A LOGNDROP -j DROP
 
 tor_services:
-  - ssh
-
-tor_stealth_services:
-  - service: "HiddenServicePort 22 127.0.0.1:22"
-    stealth: admin
+  - name: ssh
+    ports:
+      - "22" # assumes remote and local ports are identical
+    authenticated: yes # value will automatically be coerced to boolean
+    client: admin

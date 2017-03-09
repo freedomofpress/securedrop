@@ -47,16 +47,13 @@ def test_tor_torrc_options(File, torrc_option):
     assert f.contains("^{}$".format(torrc_option))
 
 
-@pytest.mark.parametrize('tor_service_dir', [
-    '/var/lib/tor/services',
-    '/var/lib/tor/services/ssh',
-])
-def test_tor_service_directores(File, Sudo, tor_service_dir):
+@pytest.mark.parametrize('tor_service', sdvars.tor_services)
+def test_tor_service_directories(File, Sudo, tor_service):
     """
     Check mode and ownership on Tor service directories.
     """
     with Sudo():
-        f = File(tor_service_dir)
+        f = File("/var/lib/tor/services/{}".format(tor_service['name']))
         assert f.is_directory
         # TODO: tor might mark these dirs as setgid
         assert oct(f.mode) == "0700"
@@ -64,8 +61,36 @@ def test_tor_service_directores(File, Sudo, tor_service_dir):
         assert f.group == "debian-tor"
 
 
+@pytest.mark.parametrize('tor_service', sdvars.tor_services)
+def test_tor_service_hostnames(File, Sudo, tor_service):
+    """
+    Check contents of tor service hostname file. For normal Hidden Services,
+    the file should contain only hostname (.onion URL). For Authenticated
+    Hidden Services, it should also contain the HidServAuth cookie.
+    """
 
-def test_tor_service(Command, File, Sudo):
+    # Declare regex only for THS; we'll build regex for ATHS only if
+    # necessary, since we won't have the required values otherwise.
+    ths_hostname_regex = "[a-z0-9]{16}\.onion"
+
+    with Sudo():
+        f = File("/var/lib/tor/services/{}/hostname".format(tor_service['name']))
+        assert f.is_file
+        assert oct(f.mode) == "0600"
+        assert f.user == "debian-tor"
+        assert f.group == "debian-tor"
+
+        # All hostnames should contain at *least* the hostname.
+        assert re.search(ths_hostname_regex, f.content)
+
+        if tor_service['authenticated']:
+            aths_hostname_regex = ths_hostname_regex+" [a-zA-Z0-9/]{22} # client: "+tor_service['client']
+            assert re.search("^{}$".format(aths_hostname_regex), f.content)
+        else:
+            assert re.search("^{}$".format(ths_hostname_regex), f.content)
+
+
+def test_tor_service_running(Command, File, Sudo):
     """
     Ensure tor is running and enabled. Tor is required for SSH access,
     so it must be enabled to start on boot.
@@ -112,23 +137,29 @@ sub   2048R/219EC810 2009-09-04 [expires: 2018-08-30]"""
     assert tor_gpg_pub_key_info in c.stdout
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_settings(File, tor_service):
-    """ ensure torrc for contains appropriate services """
+def test_tor_services_config(File, tor_service):
+    """
+    Ensure torrc file contains relevant lines for Hidden Service declarations.
+    Must include at least `HiddenServiceDir`, and if authenticated, also
+    `HiddenServiceAuthorizeClient.
+    """
     f = File("/etc/tor/torrc")
-    assert f.contains("HiddenServiceDir /var/lib/tor/services/{}".format(
-                                                                tor_service))
 
-@pytest.mark.parametrize('tor_service', sdvars.tor_stealth_services)
-def test_tor_hidden_service_cfg(Command, tor_service):
-    c = Command("awk '/{}/{{getline; print}}' /etc/tor/torrc".format(
-                                                        tor_service['service']))
-    assert c.stdout == "HiddenServiceAuthorizeClient stealth {}".format(
-                                                        tor_service['stealth'])
+    dir_regex = "HiddenServiceDir /var/lib/tor/services/{}".format(
+                                                            tor_service['name'])
+    assert f.contains("^{}$".format(dir_regex))
+    if tor_service['authenticated']:
+        auth_regex = "HiddenServiceAuthorizeClient stealth {}".format(
+                                                        tor_service['client'])
+        assert f.contains("^{}$".format(auth_regex))
+
 
 @pytest.mark.parametrize('tor_service', sdvars.tor_services)
 def test_tor_dirs(File, Sudo, tor_service):
-    """ ensure tor service dirs are owned by tor user and mode 0700 """
-    f = File("/var/lib/tor/services/{}".format(tor_service))
+    """
+    Ensure tor service dirs are owned by tor user and mode 0700.
+    """
+    f = File("/var/lib/tor/services/{}".format(tor_service['name']))
     with Sudo():
         assert f.is_directory
         assert f.user == "debian-tor"

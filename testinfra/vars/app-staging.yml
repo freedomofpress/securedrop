@@ -56,12 +56,20 @@ app_directories:
   - /var/lib/securedrop/tmp
 
 tor_services:
-  - ssh
-  - source
-  - journalist
+  - name: ssh
+    ports: # remote versus local ports
+      - "22"
+    authenticated: yes # value will automatically be coerced to boolean
+    client: admin
 
-tor_stealth_services:
-  - service: "HiddenServicePort 22 127.0.0.1:22"
-    stealth: admin
-  - service: "HiddenServicePort 80 127.0.0.1:8080"
-    stealth: journalist
+  - name: source
+    ports:
+      - "80"
+    authenticated: no
+
+  - name: journalist
+    ports:
+      - "80"
+      - "8080"
+    authenticated: yes
+    client: journalist
