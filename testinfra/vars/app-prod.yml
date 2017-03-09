@@ -11,3 +11,28 @@ tor_stealth_services:
     stealth: admin
   - service: "HiddenServicePort 80 127.0.0.1:8080"
     stealth: journalist
+
+app_directories:
+  - /var/www/securedrop
+  - /var/lib/securedrop
+  - /var/lib/securedrop/store
+  - /var/lib/securedrop/keys
+  - /var/lib/securedrop/tmp
+
+tor_services:
+  - ssh
+  - source
+
+apparmor_enforce:
+  - "/sbin/dhclient"
+  - "/usr/lib/NetworkManager/nm-dhcp-client.action"
+  - "/usr/lib/connman/scripts/dhclient-script"
+  - "/usr/sbin/ntpd"
+  - "/usr/sbin/tcpdump"
+  - "system_tor"
+  - "/usr/sbin/apache2"
+  - "/usr/sbin/apache2//DEFAULT_URI"
+  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
+  - "/usr/sbin/tor"
+
+apparmor_complain: []

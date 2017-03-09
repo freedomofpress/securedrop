@@ -56,6 +56,23 @@ def test_apparmor_ensure_not_disabled(File, Sudo, profile):
     with Sudo():
         assert not f.exists
 
+@pytest.mark.skipif(os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] != 'app-staging',
+                    reason='only to be run on app-staging')
+@pytest.mark.parametrize('complain_pkg', sdvars.apparmor_complain)
+def test_app_apparmor_complain(Command, Sudo, complain_pkg):
+    """ Ensure app-armor profiles are in complain mode for staging """
+    with Sudo():
+        awk = "awk '/[0-9]+ profiles.*complain./{flag=1;next}/^[0-9]+.*/{flag=0}flag'"
+        c = Command.check_output("aa-status | {}".format(awk))
+        assert complain_pkg in c
+
+@pytest.mark.skipif(os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] != 'app-staging',
+                    reason='only to be run on app-staging')
+def test_app_apparmor_complain_count(Command, Sudo):
+    """ Ensure right number of app-armor profiles are in complain mode """
+    with Sudo():
+        c = Command.check_output("aa-status --complaining")
+        assert c == str(len(sdvars.apparmor_complain))
 
 @pytest.mark.parametrize('aa_enforced', sdvars.apparmor_enforce)
 def test_apparmor_enforced(Command, Sudo, aa_enforced):
@@ -71,7 +88,7 @@ def test_apparmor_total_profiles(Command, Sudo):
                         + len(sdvars.apparmor_complain)))
         assert Command.check_output("aa-status --profiled") == total_expected
 
-def test_aastatus_unconfied(Command, Sudo):
+def test_aastatus_unconfined(Command, Sudo):
     """ Ensure that there are no processes that are unconfined but have a profile """
     unconfined_chk = "0 processes are unconfined but have a profile defined"
     with Sudo():

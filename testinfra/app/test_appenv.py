@@ -21,24 +21,6 @@ def test_app_wsgi(File, Sudo):
         assert f.contains("^import logging$")
         assert f.contains("^logging\.basicConfig(stream=sys\.stderr)$")
 
-@pytest.mark.skipif(os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] != 'app-staging',
-                    reason='only to be run on app-staging')
-@pytest.mark.parametrize('complain_pkg', sdvars.apparmor_complain)
-def test_app_apparmor_complain(Command, Sudo, complain_pkg):
-    """ Ensure app-armor profiles are in complain mode for staging """
-    with Sudo():
-        awk = "awk '/[0-9]+ profiles.*complain./{flag=1;next}/^[0-9]+.*/{flag=0}flag'"
-        c = Command.check_output("aa-status | {}".format(awk))
-        assert complain_pkg in c
-
-@pytest.mark.skipif(os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] != 'app-staging',
-                    reason='only to be run on app-staging')
-def test_app_apparmor_complain_count(Command, Sudo):
-    """ Ensure right number of app-armor profiles are in complain mode """
-    with Sudo():
-        c = Command.check_output("aa-status --complaining")
-        assert c == str(len(sdvars.apparmor_complain))
-
 @pytest.mark.parametrize('app_dir', sdvars.app_directories)
 def test_app_directories(File, Sudo, app_dir):
     """ ensure securedrop app directories exist with correct permissions """
