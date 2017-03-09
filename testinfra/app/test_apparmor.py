@@ -1,7 +1,9 @@
+import os
 import pytest
 
 
 sdvars = pytest.securedrop_test_vars
+
 
 @pytest.mark.parametrize('pkg', ['apparmor', 'apparmor-utils'])
 def test_apparmor_pkg(Package, pkg):
