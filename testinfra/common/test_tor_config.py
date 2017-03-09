@@ -25,71 +25,6 @@ def test_tor_packages(Package, package):
     assert Package(package).is_installed
 
 
-@pytest.mark.parametrize('torrc_option', [
-    'SocksPort 0',
-    'SafeLogging 1',
-    'RunAsDaemon 1',
-    'Sandbox 1',
-    'HiddenServiceDir /var/lib/tor/services/ssh',
-    'HiddenServicePort 22 127.0.0.1:22',
-    'HiddenServiceAuthorizeClient stealth admin',
-])
-def test_tor_torrc_options(File, torrc_option):
-    """
-    Check for required options in the system Tor config file.
-    These options should be present regardless of machine role,
-    meaning both Application and Monitor server will have them.
-    """
-    f = File("/etc/tor/torrc")
-    assert f.is_file
-    assert f.user == "debian-tor"
-    assert oct(f.mode) == "0644"
-    assert f.contains("^{}$".format(torrc_option))
-
-
-@pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_service_directories(File, Sudo, tor_service):
-    """
-    Check mode and ownership on Tor service directories.
-    """
-    with Sudo():
-        f = File("/var/lib/tor/services/{}".format(tor_service['name']))
-        assert f.is_directory
-        # TODO: tor might mark these dirs as setgid
-        assert oct(f.mode) == "0700"
-        assert f.user == "debian-tor"
-        assert f.group == "debian-tor"
-
-
-@pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_service_hostnames(File, Sudo, tor_service):
-    """
-    Check contents of tor service hostname file. For normal Hidden Services,
-    the file should contain only hostname (.onion URL). For Authenticated
-    Hidden Services, it should also contain the HidServAuth cookie.
-    """
-
-    # Declare regex only for THS; we'll build regex for ATHS only if
-    # necessary, since we won't have the required values otherwise.
-    ths_hostname_regex = "[a-z0-9]{16}\.onion"
-
-    with Sudo():
-        f = File("/var/lib/tor/services/{}/hostname".format(tor_service['name']))
-        assert f.is_file
-        assert oct(f.mode) == "0600"
-        assert f.user == "debian-tor"
-        assert f.group == "debian-tor"
-
-        # All hostnames should contain at *least* the hostname.
-        assert re.search(ths_hostname_regex, f.content)
-
-        if tor_service['authenticated']:
-            aths_hostname_regex = ths_hostname_regex+" [a-zA-Z0-9/]{22} # client: "+tor_service['client']
-            assert re.search("^{}$".format(aths_hostname_regex), f.content)
-        else:
-            assert re.search("^{}$".format(ths_hostname_regex), f.content)
-
-
 def test_tor_service_running(Command, File, Sudo):
     """
     Ensure tor is running and enabled. Tor is required for SSH access,
@@ -118,6 +53,27 @@ def test_tor_service_running(Command, File, Sudo):
         assert t.linked_to == "/etc/init.d/tor"
 
 
+@pytest.mark.parametrize('torrc_option', [
+    'SocksPort 0',
+    'SafeLogging 1',
+    'RunAsDaemon 1',
+    'Sandbox 1',
+])
+def test_tor_torrc_options(File, torrc_option):
+    """
+    Check for required options in the system Tor config file.
+    These options should be present regardless of machine role,
+    meaning both Application and Monitor server will have them.
+
+    Separate tests will check for specific hidden services.
+    """
+    f = File("/etc/tor/torrc")
+    assert f.is_file
+    assert f.user == "debian-tor"
+    assert oct(f.mode) == "0644"
+    assert f.contains("^{}$".format(torrc_option))
+
+
 def test_tor_signing_key_fingerprint(Command):
     """
     The `deb.torproject.org-keyring` package manages the repo signing pubkey
@@ -135,33 +91,3 @@ sub   2048R/219EC810 2009-09-04 [expires: 2018-08-30]"""
 
     assert c.rc == 0
     assert tor_gpg_pub_key_info in c.stdout
-
-@pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_services_config(File, tor_service):
-    """
-    Ensure torrc file contains relevant lines for Hidden Service declarations.
-    Must include at least `HiddenServiceDir`, and if authenticated, also
-    `HiddenServiceAuthorizeClient.
-    """
-    f = File("/etc/tor/torrc")
-
-    dir_regex = "HiddenServiceDir /var/lib/tor/services/{}".format(
-                                                            tor_service['name'])
-    assert f.contains("^{}$".format(dir_regex))
-    if tor_service['authenticated']:
-        auth_regex = "HiddenServiceAuthorizeClient stealth {}".format(
-                                                        tor_service['client'])
-        assert f.contains("^{}$".format(auth_regex))
-
-
-@pytest.mark.parametrize('tor_service', sdvars.tor_services)
-def test_tor_dirs(File, Sudo, tor_service):
-    """
-    Ensure tor service dirs are owned by tor user and mode 0700.
-    """
-    f = File("/var/lib/tor/services/{}".format(tor_service['name']))
-    with Sudo():
-        assert f.is_directory
-        assert f.user == "debian-tor"
-        assert f.group == "debian-tor"
-        assert oct(f.mode) == "0700"
