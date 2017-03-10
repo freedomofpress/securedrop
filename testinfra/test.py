@@ -7,6 +7,7 @@ Script will handle building the list of tests to run, based on hostname.
 import os
 import subprocess
 import sys
+import tempfile
 
 # By default let's assume we're testing against the development VM.
 try:
@@ -59,13 +60,12 @@ def get_target_roles(target_host):
     return target_roles
 
 
-target_roles = get_target_roles(target_host)
-
 def run_testinfra(target_host, verbose=True):
     """
     Handler for executing testinfra against `target_host`.
     Queries list of roles via helper def `get_target_roles`.
     """
+    target_roles = get_target_roles(target_host)
     if verbose:
         # Print informative output prior to test run.
         print("Running Testinfra suite against '{}'...".format(target_host))
@@ -73,8 +73,35 @@ def run_testinfra(target_host, verbose=True):
         for role in target_roles:
             print("    - {}".format(role))
 
-    # Execute config tests.
-    testinfra_command_template = """
+    # Prod hosts host have SSH access over Tor. Let's use the SSH backend
+    # for Testinfra, rather than Ansible. When we write a dynamic inventory
+    # script for Ansible SSH-over-Tor, we can use the Ansible backend
+    # everywhere.
+    if target_host.endswith("-prod"):
+        os.environ['SECUREDROP_SSH_OVER_TOR'] = '1'
+        # Dump SSH config to tempfile so it can be passed as arg to testinfra.
+        ssh_config_output = subprocess.check_output(["vagrant", "ssh-config", target_host])
+        # Create temporary file to store ssh-config. Not deleting it automatically
+        # because there's no sensitive info (HidServAuth is required to connect),
+        # and we'll need it outside of the context-manager block that writes to it.
+        ssh_config_tmpfile = tempfile.NamedTemporaryFile(delete=False)
+        with ssh_config_tmpfile.file as f:
+            f.write(ssh_config_output)
+        ssh_config_path = ssh_config_tmpfile.name
+        testinfra_command_template = """
+testinfra \
+    -vv \
+    -n auto \
+    --connection ssh \
+    --ssh-config \
+    {ssh_config_path}\
+    --hosts {target_host} \
+    {target_roles}
+""".lstrip().rstrip()
+
+    else:
+        ssh_config_path = ""
+        testinfra_command_template = """
 testinfra \
     -vv \
     -n auto \
@@ -87,9 +114,11 @@ testinfra \
 
     testinfra_command = testinfra_command_template.format(
             target_host=target_host,
+            ssh_config_path=ssh_config_path,
             target_roles=" ".join(target_roles),
             ).split()
 
+    # Execute config tests.
     subprocess.check_call(testinfra_command)
 
 if __name__ == "__main__":
