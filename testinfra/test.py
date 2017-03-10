@@ -18,50 +18,63 @@ except IndexError:
 # specific to the host being tested.
 os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] = target_host
 
-# Assemble list of role tests to run. Hard-coded per host.
-if target_host == "development":
-    target_roles = [
-            'testinfra/app-code',
-            'testinfra/development',
-            ]
 
-elif target_host == "app-staging":
-    target_roles = [
-            'testinfra/app',
-            'testinfra/app-code',
-            'testinfra/common',
-            'testinfra/development/test_xvfb.py',
-            ]
+def get_target_roles(target_host):
+    """
+    Assemble list of role tests to run. Hard-coded per host.
+    """
+    if target_host == "development":
+        target_roles = [
+                'testinfra/app-code',
+                'testinfra/development',
+                ]
 
-elif target_host == "mon-staging":
-    target_roles = [
-            'testinfra/mon',
-            'testinfra/common',
-            ]
+    elif target_host == "app-staging":
+        target_roles = [
+                'testinfra/app',
+                'testinfra/app-code',
+                'testinfra/common',
+                'testinfra/development/test_xvfb.py',
+                ]
 
-elif target_host == "mon-prod":
-    target_roles = [
-            'testinfra/mon',
-            ]
+    elif target_host == "mon-staging":
+        target_roles = [
+                'testinfra/mon',
+                'testinfra/common',
+                ]
 
-elif target_host == "build":
-    target_roles = [
-            'testinfra/build',
-            ]
-else:
-    print("Unknown host '{}'! Exiting.".format(target_host))
-    sys.exit(1)
+    elif target_host == "mon-prod":
+        target_roles = [
+                'testinfra/mon',
+                ]
+
+    elif target_host == "build":
+        target_roles = [
+                'testinfra/build',
+                ]
+    else:
+        print("Unknown host '{}'! Exiting.".format(target_host))
+        sys.exit(1)
+
+    return target_roles
 
 
-# Print informative output prior to test run.
-print("Running Testinfra suite against '{}'...".format(target_host))
-print("Target roles:")
-for role in target_roles:
-    print("    - {}".format(role))
+target_roles = get_target_roles(target_host)
 
+def run_testinfra(target_host, verbose=True):
+    """
+    Handler for executing testinfra against `target_host`.
+    Queries list of roles via helper def `get_target_roles`.
+    """
+    if verbose:
+        # Print informative output prior to test run.
+        print("Running Testinfra suite against '{}'...".format(target_host))
+        print("Target roles:")
+        for role in target_roles:
+            print("    - {}".format(role))
 
-# Execute config tests.
-testinfra_command_template = """
+    # Execute config tests.
+    testinfra_command_template = """
 testinfra \
     -vv \
     -n auto \
@@ -72,9 +85,12 @@ testinfra \
     {target_roles}
 """.lstrip().rstrip()
 
-testinfra_command = testinfra_command_template.format(
-        target_host=target_host,
-        target_roles=" ".join(target_roles),
-        ).split()
+    testinfra_command = testinfra_command_template.format(
+            target_host=target_host,
+            target_roles=" ".join(target_roles),
+            ).split()
 
-subprocess.check_call(testinfra_command)
+    subprocess.check_call(testinfra_command)
+
+if __name__ == "__main__":
+    run_testinfra(target_host)
