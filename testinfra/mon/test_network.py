@@ -58,24 +58,6 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
         assert iptables_expected == iptables
 
 
-@pytest.mark.parametrize('unwanted_rule', [
-    "-A INPUT -s {app_ip} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -v ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
-    "-A OUTPUT -d {app_ip} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT -m comment --comment \"ossec authd rule only required for initial agent registration\"",
-    "-A INPUT -s {app_ip} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT",
-    "-A OUTPUT -d {app_ip} -p tcp --sport 1515 -m state --state ESTABLISHED,RELATED -j ACCEPT",
-])
-def test_ensure_absent_iptables_rules(Command, SystemInfo, Sudo, unwanted_rule):
-    """
-    Ensure that unwanted iptables rules defined do not exist on the server.
-    Mostly these are modified rules, so we're checking that the old versions have
-    been permanently removed between upgrades.
-    """
-    app_ip = determine_app_ip(SystemInfo, Command)
-    with Sudo():
-        rule = unwanted_rule.format(app_ip=app_ip)
-        assert rule not in Command.check_output("iptables-save")
-
-
 def test_iptables_rules(Command, Sudo):
     """
     Ensure the correct iptables rules are checked. Using a single string
