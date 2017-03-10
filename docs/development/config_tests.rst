@@ -8,7 +8,7 @@ spectest.
 .. _testinfra: https://testinfra.readthedocs.io/en/latest/
 
 Installation
-----------------------------------
+------------
 
 .. code:: sh
 
@@ -26,6 +26,12 @@ machines for faster testing:
 
     $ ./testinfra/test.py development
     $ ./testinfra/test.py app-staging
+    $ ./testinfra/test.py mon-staging
+
+.. note:: The config tests for the ``app-prod`` and ``mon-prod`` hosts are
+          incomplete. Further changes are necessary to run the tests via
+          SSH over Authenticated Tor Hidden Service (ATHS), for both local
+          testing via Vagrant and automated testing via CI.
 
 Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. The wrapper script
