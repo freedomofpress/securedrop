@@ -58,18 +58,6 @@ def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
         assert iptables_expected == iptables
 
 
-def test_iptables_rules(Command, Sudo):
-    """
-    Ensure the correct iptables rules are checked. Using a single string
-    equivalency check for the entirety of the iptables output, since
-    rule order is critical. Testinfra will provide diffed output on failure.
-    """
-    with Sudo():
-        c = Command("iptables -S")
-        assert c.stdout == securedrop_test_vars.iptables_complete_ruleset
-        assert c.rc == 0
-
-
 @pytest.mark.parametrize('ossec_service', [
     dict(host="0.0.0.0", proto="tcp", port=22),
     dict(host="127.0.0.1", proto="tcp", port=25),
