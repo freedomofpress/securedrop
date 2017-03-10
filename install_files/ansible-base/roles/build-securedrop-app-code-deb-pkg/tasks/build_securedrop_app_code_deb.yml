@@ -16,13 +16,16 @@
 - name: Install sass Ruby gem
   gem:
     name: sass
-    state: latest
+    # TODO: This version lock can be removed when if/when we can get Ruby>2
+    # installed on the machine that runs this task (see
+    # https://github.com/freedomofpress/securedrop/issues/1594).
+    version: "< 3.5"
     user_install: no
   sudo: yes
   tags:
     - build
 
-- name: Clean build path
+- name: Clean build path.
   file:
     path: /tmp/{{ securedrop_app_code_deb }}/
     state: absent
@@ -30,57 +33,25 @@
     - build
     - cleanup
 
-- name: Copy install_files/securedrop-app-code dir to build path
+- name: Clean Debian package from build machine.
+  file:
+    state: absent
+    dest: /tmp/{{ securedrop_app_code_deb }}.deb
+  tags:
+    - build
+    - cleanup
+
+- name: Copy install_files/securedrop-app-code dir to build path.
   command: cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
   args:
     creates: /tmp/{{ securedrop_app_code_deb }}/
   tags:
     - build
 
-- name: Create directories in build path.
-  file:
-    dest: '/tmp/{{ securedrop_app_code_deb }}/{{ item }}'
-    state: directory
-  with_items:
-    - /var
-    - /var/www
-    - /var/www/securedrop
-    - /var/www/securedrop/static
-    - /var/securedrop
-  tags:
-    - build
-
-- name: Copy securedrop to build path
-  shell: cp -R {{ build_app_code_dir }}/{{ item }} /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/{{ item }}
-  with_items:
-    - crypto_util.py
-    - db.py
-    - dictionaries/
-    - journalist.py
-    - journalist_templates/
-    - management/
-    - manage.py
-    - request_that_secures_file_uploads.py
-    - requirements/
-    - secure_tempfile.py
-    - source.py
-    - source_templates/
-    - static/css
-    - static/fonts
-    - static/i
-    - static/js
-    - store.py
-    - template_filters.py
-    - version.py
-    - wordlist
-    - worker.py
-  tags:
-    - build
-
-- name: Compile sass to css
-  shell: sass --update sass:static/css --style compressed
+- name: Copy app code to build directory.
+  script: copy_app_code_files.py {{ securedrop_code }} /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
   args:
-    chdir: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/
+    creates: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
   tags:
     - build
 
@@ -92,17 +63,24 @@
     - build
     - cleanup
 
+- name: Create CSS directory.
+  file:
+    state: directory
+    path: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css
+  tags:
+    - build
+
+- name: Compile SASS to CSS.
+  shell: sass --force --stop-on-error --update sass:/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css --style compressed
+  args:
+    chdir: "{{ securedrop_code }}"
+  tags:
+    - build
+
 - name: Create pip wheel archive for Debian package requirements.
   command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
   tags:
     - pip
-    - build
-
-- name: Create etc directory in build path.
-  file:
-    state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/etc/
-  tags:
     - build
 
 - name: Create apparmor.d directory in build path.
@@ -127,23 +105,7 @@
   tags:
     - build
 
-- name: move the deb to the Vagrant shared folder
+- name: Move the deb to the Vagrant shared folder.
   command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
   tags:
     - build
-
-- name: Remove the build path.
-  file:
-    state: absent
-    dest: /tmp/{{ securedrop_app_code_deb }}
-  tags:
-    - build
-    - cleanup
-
-- name: Remove newly built Debian package from build machine.
-  file:
-    state: absent
-    dest: /tmp/{{ securedrop_app_code_deb }}.deb
-  tags:
-    - build
-    - cleanup
