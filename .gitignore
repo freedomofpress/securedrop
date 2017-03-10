@@ -24,10 +24,6 @@ vagrant_ansible_inventory*
 # ignore ansible retry files
 *.retry
 
-# ignore some things for the rspec tests
-spec_tests/gems/*
-Gemfile.lock
-
 # ignore "external" Ansible configuration file
 secureDropConf.yml
 
@@ -122,9 +118,6 @@ ENV/
 
 # Emacs
 \#*#
-
-# ignore cached gems for serverspec tests
-spec_tests/gems/*
 
 # compiled assets
 securedrop/static/gen
