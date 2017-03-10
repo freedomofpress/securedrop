@@ -84,3 +84,14 @@ Ideally the config tests would be broken up according to roles,
 mirroring the Ansible configuration. Prior to the reorganization of
 the Ansible layout, the tests are rather tightly coupled to hosts. The
 layout of config tests is therefore subject to change.
+
+Testing strategy
+----------------
+
+The config tests currently emphasize testing implementation rather than
+functionality. This is a temporary measure to increase the current testing
+baseline for validating the Ansible provisioning flow, to aid in migrating
+to a current version of Ansible (v2+). After the Ansible version is current,
+the config tests can be improved to validate behavior, such as confirming
+ports are blocked via external network calls, rather than simply checking
+that the iptables rules are formatted as expected.
