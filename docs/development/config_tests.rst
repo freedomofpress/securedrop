@@ -1,0 +1,86 @@
+Configuration Tests
+===================
+
+testinfra_ tests verify the end state of the vagrant machines. Any
+changes to the Ansible configuration should have a corresponding
+spectest.
+
+.. _testinfra: https://testinfra.readthedocs.io/en/latest/
+
+Installation
+----------------------------------
+
+.. code:: sh
+
+    pip install -r testinfra/requirements.txt
+
+Running the tests
+-----------------
+
+In order to run the tests, each VM will be created and provisioned, if
+necessary.  Running all VMs concurrently may cause performance
+problems if you have less than 8GB of RAM. You can isolate specific
+machines for faster testing:
+
+.. code:: sh
+
+    $ ./testinfra/test.py development
+    $ ./testinfra/test.py app-staging
+
+Test failure against any host will generate a report with informative output
+about the specific test that triggered the error. The wrapper script
+will also exit with a non-zero status code.
+
+Updating the tests
+------------------
+
+Changes to the Ansible config should result in failing config tests, but
+only if an existing task was modified. If you add a new task, make
+sure to add a corresponding spectest to validate that state after a
+new provisioning run. Tests import variables from separate YAML files
+than the Ansible playbooks: ::
+
+    testinfra/vars/
+    ├── app-prod.yml
+    ├── app-staging.yml
+    ├── build.yml
+    ├── development.yml
+    ├── mon-prod.yml
+    └── mon-staging.yml
+
+Any variable changes in the Ansible config should have a corresponding
+entry in these vars files. These vars are dynamically loaded for each
+host via the ``testinfra/conftest.py`` file. Make sure to add your tests to
+relevant location for the host you plan to test: ::
+
+    testinfra/app/
+    ├── apache
+    │   ├── test_apache_journalist_interface.py
+    │   ├── test_apache_service.py
+    │   ├── test_apache_source_interface.py
+    │   └── test_apache_system_config.py
+    ├── test_apparmor.py
+    ├── test_appenv.py
+    └── test_ossec.py
+
+In the example above, to add a new test for the ``app-staging`` host,
+add a new file to the ``testinfra/spec/app-staging`` directory.
+
+Config test layout
+------------------
+
+The config tests are mostly broken up according to machines in the
+Vagrantfile: ::
+
+    testinfra/
+    ├── app
+    ├── app-code
+    ├── build
+    ├── common
+    ├── development
+    └── mon
+
+Ideally the config tests would be broken up according to roles,
+mirroring the Ansible configuration. Prior to the reorganization of
+the Ansible layout, the tests are rather tightly coupled to hosts. The
+layout of config tests is therefore subject to change.
