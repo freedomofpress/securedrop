@@ -33,10 +33,10 @@ script:
   # travis needs the config.py file ran owned by root in other environments it is the
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
-- sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
+- sudo sh -c "export DISPLAY=:1; cd tests/ && pytest"
 - ./testinfra/test.py
 after_success:
-  cd securedrop && coveralls && cd ..  # cd back to repo root for srcclr run
+  cd tests/ && coveralls && cd ..  # cd back to repo root for srcclr run
 addons:
     srcclr:
         debug: true

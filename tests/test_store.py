@@ -1,12 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import os
 import unittest
 import zipfile
 
 import crypto_util
-# Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 from db import db_session, Source
@@ -57,6 +54,3 @@ class TestStore(unittest.TestCase):
         actual_filename = store.rename_submission(source.filesystem_id, old_filename,
                                                   new_journalist_filename)
         self.assertEquals(actual_filename, expected_filename)
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

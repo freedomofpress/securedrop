@@ -38,6 +38,3 @@ class SubmitAndRetrieveFile(
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
         self._source_hits_cancel_at_submit_page()
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

@@ -6,7 +6,8 @@ import datetime
 
 from selenium.common.exceptions import NoSuchElementException
 
-from db import db_session, Journalist
+import tests.utils.db_helper as db_helper
+from db import Journalist
 
 
 class JournalistNavigationSteps():
@@ -48,37 +49,15 @@ class JournalistNavigationSteps():
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        test_user_info = dict(
-            username='test',
-            password='test')
-        test_user = Journalist(**test_user_info)
-        db_session.add(test_user)
-        db_session.commit()
-
-        self._login_user(test_user_info['username'],
-                         test_user_info['password'],
-                         'mocked')
+        self.user, self.user_pw = db_helper.init_journalist()
+        self._login_user(self.user.username, self.user_pw, 'mocked')
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         self.assertIn('Sources', headline.text)
 
     def _admin_logs_in(self):
-        # Create a test admin user for logging in
-        admin_user_info = dict(
-            username='admin',
-            password='admin',
-            is_admin=True)
-        admin_user = Journalist(**admin_user_info)
-        db_session.add(admin_user)
-        db_session.commit()
-
-        # Stash the admin user on self so we can use it in later tests
-        self.admin_user = admin_user_info
-        self.admin_user['orm_obj'] = admin_user
-
-        self._login_user(admin_user_info['username'],
-                         admin_user_info['password'],
-                         'mocked')
+        self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Admin user should log in to the same interface as a normal user,
         # since there may be users who wish to be both journalists and admins.
@@ -208,9 +187,7 @@ class JournalistNavigationSteps():
         # Log the new user out
         self._logout()
 
-        self._login_user(self.admin_user['username'],
-                         self.admin_user['password'],
-                         'mocked')
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
@@ -257,9 +234,7 @@ class JournalistNavigationSteps():
 
         # Log the admin user back in
         self._logout()
-        self._login_user(self.admin_user['username'],
-                         self.admin_user['password'],
-                         'mocked')
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
