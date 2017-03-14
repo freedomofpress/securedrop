@@ -1,31 +1,66 @@
 {% extends "base.html" %}
 {% block body %}
+{% if user %}
+<h1>Edit user "{{ user.username }}"</h1>
+<p><a href="/admin">&laquo; Back to admin interface</a></p>
+{% else %}
 <h1>Edit your account</h1>
+{% endif %}
 
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  {% if user %}
+  <p>
+    <label for="username">Change username</label>
+    <input name="username" id="username" type="text" placeholder="{{ user.username }}" />
+  </p>
+  {% endif %}
   <p>
     <label for="password">Change password</label>
     <input name="password" id="password" type="password" />
+    {% if user %}
+    <em class="light">Leave blank for no change</em>
+    {% endif %}
   </p>
   <p>
     <label for="password_again">Change password (confirm)</label>
     <input name="password_again" id="password_again" type="password" />
   </p>
+  {% if user %}
+  <p>
+    <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
+    <label for="is_admin">Is Administrator</label>
+  </p>
+  {% endif %}
+  {% if user %}
+  <button class="sd-button" type="submit" id="update-user">UPDATE USER</button>
+  {% else %}
   <button class="sd-button" type="submit" id="update">UPDATE</button>
+  {% endif %}
 </form>
 
 <hr class="no-line">
 
 <h2>Reset Two Factor Authentication</h2>
+{% if user %}
+<p>If a user's two factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two factor credentials. Otherwise, they will be locked out of their account.</em></p>
+<form method="post" action="{{ url_for('admin_reset_two_factor_totp') }}" id="reset-two-factor-totp">
+  <input name="uid" type="hidden" value="{{ user.id }}"/>
+{% else %}
 <p>If your two factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em></p>
 <form method="post" action="{{ url_for('account_reset_two_factor_totp') }}" id="reset-two-factor-totp">
+{% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (GOOGLE AUTHENTICATOR)</button>
+  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (APP)</button>
 </form>
 <br />
+{% if user %}
+<form method="post" action="{{ url_for('admin_reset_two_factor_hotp') }}" id="reset-two-factor-hotp">
+  <input name="uid" type="hidden" value="{{ user.id }}"/>
+{% else %}
 <form method="post" action="{{ url_for('account_reset_two_factor_hotp') }}" id="reset-two-factor-hotp">
+{% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (HOTP YUBIKEY)</button>
+  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (HARDWARE TOKEN)</button>
 </form>
 {% endblock %}

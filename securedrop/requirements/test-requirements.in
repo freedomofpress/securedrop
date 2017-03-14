@@ -1,4 +1,5 @@
 beautifulsoup4
+blinker
 coveralls
 Flask-Testing
 mock
