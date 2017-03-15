@@ -17,8 +17,20 @@ Installation
 Running the tests
 -----------------
 
-In order to run the tests, each VM will be created and provisioned, if
-necessary.  Running all VMs concurrently may cause performance
+In order to run the tests, first create and provision the VM you intend
+to test:
+
+.. code:: sh
+
+    vagrant up development
+    vagrant up /staging/
+
+.. note:: The staging machines must be rebooted via in order to finalize
+          the iptables config. You must manually reboot the machines via
+          ``vagrant reload /staging/`` prior to running the config tests
+          to ensure the config is valid.
+
+Running all VMs concurrently may cause performance
 problems if you have less than 8GB of RAM. You can isolate specific
 machines for faster testing:
 
