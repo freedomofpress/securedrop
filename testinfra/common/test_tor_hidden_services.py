@@ -42,7 +42,9 @@ def test_tor_service_hostnames(File, Sudo, tor_service):
         assert re.search(ths_hostname_regex, f.content)
 
         if tor_service['authenticated']:
-            aths_hostname_regex = ths_hostname_regex+" [a-zA-Z0-9/]{22} # client: "+tor_service['client']
+            # HidServAuth regex is approximately [a-zA-Z0-9/+], but validating
+            # the entire entry is sane, and we don't need to nitpick the charset.
+            aths_hostname_regex = ths_hostname_regex+" .{22} # client: "+tor_service['client']
             assert re.search("^{}$".format(aths_hostname_regex), f.content)
         else:
             assert re.search("^{}$".format(ths_hostname_regex), f.content)
