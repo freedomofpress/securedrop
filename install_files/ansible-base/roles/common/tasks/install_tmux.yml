@@ -1,11 +1,10 @@
 ---
-- name: Install ntp for ntpd.
+- name: Install tmux.
   apt:
-    pkg: ntp
+    pkg: tmux
     state: latest
     force: yes
     update_cache: yes
     cache_valid_time: 3600
   tags:
     - apt
-    - ntp

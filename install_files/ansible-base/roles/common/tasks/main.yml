@@ -5,6 +5,8 @@
 
 - include: harden_dns.yml
 
+- include: install_tmux.yml
+
 - include: install_ntp.yml
 
 - include: cron_apt.yml
