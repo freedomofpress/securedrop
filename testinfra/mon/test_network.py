@@ -19,10 +19,6 @@ def determine_app_ip(SystemInfo, Command):
     return app_ip
 
 
-# Skipping because the simpler string comparison check for entire output
-# check is sufficient for mon-staging. On other hosts, though, we may need
-# the more dynamic logic described below.
-@pytest.mark.skip
 def test_mon_iptables_rules(SystemInfo, Command, Sudo, Ansible):
     app_ip = determine_app_ip(SystemInfo, Command)
 
