@@ -86,7 +86,6 @@ def test_development_app_directories_exist(File):
     assert f.is_directory
     assert f.user == "vagrant"
     assert f.group == "vagrant"
-    assert oct(f.mode) == "0700"
 
   # Vagrant VirtualBox environments show /vagrant as 770,
   # but the Vagrant DigitalOcean droplet shows /vagrant as 775.
