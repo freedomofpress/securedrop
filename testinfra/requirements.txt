@@ -1,0 +1,5 @@
+ansible==1.8.4
+Jinja2==2.8
+pytest-xdist==1.15.0
+scrypt==0.8.0
+testinfra==1.5.4
