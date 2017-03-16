@@ -46,6 +46,17 @@ def test_sudoers_tmux_env(File):
     assert f.contains(tmux_check)
 
 
+def test_tmux_installed(Package):
+    """
+    Ensure the `tmux` package is present, since it's required for the user env.
+    When running an interactive SSH session over Tor, tmux should be started
+    automatically, to prevent problems if the connection is broken unexpectedly,
+    as sometimes happens over Tor. The Admin will be able to reconnect to the
+    running tmux session and review command output.
+    """
+    assert Package("tmux").is_installed
+
+
 def test_sudoers_tmux_env_deprecated(File):
     """
     Previous version of the Ansible config set the tmux config
