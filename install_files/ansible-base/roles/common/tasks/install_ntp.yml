@@ -1,3 +1,4 @@
+---
 - name: Install ntp for ntpd.
   apt:
     pkg: ntp
