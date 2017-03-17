@@ -51,6 +51,8 @@ def test_development_pip_dependencies(Command, pip_package, version):
     assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
 
 
+@pytest.mark.skipif(hostenv == 'travis',
+            reason="Bashrc tests dont make sense on Travis")
 def test_development_securedrop_env_var(File):
     """
     Ensure that the SECUREDROP_ENV var is set to "dev".

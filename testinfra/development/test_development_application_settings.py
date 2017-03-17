@@ -1,4 +1,7 @@
 import pytest
+import os
+
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
 sd_test_vars = pytest.securedrop_test_vars
 
@@ -36,8 +39,12 @@ def test_development_apparmor_no_complain_mode(Command, Sudo):
 
     with Sudo():
         c = Command("aa-status")
-        assert c.rc == 0
-        assert '0 profiles are in complain mode.' in c.stdout
+        if hostenv == "travis":
+            assert c.rc == 3
+            assert 'apparmor filesystem is not mounted' in c.stderr
+        else:
+            assert c.rc == 0
+            assert '0 profiles are in complain mode.' in c.stdout
 
 
 @pytest.mark.parametrize('unwanted_file', [
@@ -69,8 +76,8 @@ def test_development_data_directories_exist(File, data_dir):
     """
     f = File(data_dir)
     assert f.is_directory
-    assert f.user == "vagrant"
-    assert f.group == "vagrant"
+    assert f.user == sd_test_vars.securedrop_user
+    assert f.group == sd_test_vars.securedrop_user
     assert oct(f.mode) == "0700"
 
 
