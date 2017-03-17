@@ -100,6 +100,7 @@ testinfra \
 """.lstrip().rstrip()
 
     elif os.environ.get("TRAVIS", 'false') == 'true':
+        os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] = "travis"
         ssh_config_path = ""
         testinfra_command_template = "testinfra -vv {target_roles}"
     else:
