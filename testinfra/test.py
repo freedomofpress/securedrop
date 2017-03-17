@@ -99,6 +99,9 @@ testinfra \
     {target_roles}
 """.lstrip().rstrip()
 
+    elif os.environ.get("TRAVIS", 'false') == 'true':
+        ssh_config_path = ""
+        testinfra_command_template = "testinfra -vv {target_roles}"
     else:
         ssh_config_path = ""
         testinfra_command_template = """
