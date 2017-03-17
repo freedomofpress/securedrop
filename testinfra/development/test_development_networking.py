@@ -1,3 +1,10 @@
+import pytest
+import os
+
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
+
+@pytest.mark.skipif(hostenv == 'travis',
+                    reason="Custom networking in Travis")
 def test_development_iptables_rules(Command, Sudo):
     """
     Declare desired iptables rules
