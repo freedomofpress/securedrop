@@ -60,7 +60,7 @@ exit 0
         assert f.contains('^XVFB=/usr/bin/Xvfb$')
         assert f.contains('^XVFBARGS=":1 -screen 0 1024x768x24 '
                           '-ac +extension GLX +render -noreset"$')
-        assert f.content == xvfb_init_content
+        assert f.content.rstrip() == xvfb_init_content
 
 
 def test_xvfb_service_enabled(Command, Sudo):

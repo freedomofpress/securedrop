@@ -44,7 +44,7 @@ def test_development_pip_dependencies(Command, pip_package, version):
     Versions here are intentionally hardcoded to track changes.
     """
     c = Command('pip freeze')
-    assert "{}=={}".format(pip_package, version) in c.stdout
+    assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
 
 
 def test_development_securedrop_env_var(File):

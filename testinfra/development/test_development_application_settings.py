@@ -18,8 +18,8 @@ def test_development_lacks_deb_packages(Command, package):
     c = Command("dpkg -l {}".format(package))
     assert c.rc == 1
     assert c.stdout == ""
-    assert c.stderr == "dpkg-query: no packages found matching {}".format(
-            package)
+    stderr = c.stderr.rstrip()
+    assert stderr == "dpkg-query: no packages found matching {}".format(package)
 
 
 def test_development_apparmor_no_complain_mode(Command, Sudo):
@@ -105,12 +105,11 @@ def test_development_clean_tmp_cron_job(Command, Sudo):
     """
 
     with Sudo():
-        c = Command('crontab -l')
-    assert c.rc == 0
+        c = Command.check_output('crontab -l')
     # TODO: this should be using property, but the ansible role
     # doesn't use a var, it's hard-coded. update ansible, then fix test.
     # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean-tmp" }
-    assert "@daily /vagrant/securedrop/manage.py clean-tmp" in c.stdout
+    assert "@daily /vagrant/securedrop/manage.py clean-tmp" in c
 
 
 def test_development_default_logo_exists(File):
