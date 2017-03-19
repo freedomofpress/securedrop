@@ -1,5 +1,5 @@
 # Specify TBB version to download and install
-fpsd_tbb_release: 6.5
+fpsd_tbb_release: 6.5.1
 fpsd_tbb_locale: en-US
 fpsd_tbb_arch: 64
 fpsd_tbb_directory: "/opt/tbb"

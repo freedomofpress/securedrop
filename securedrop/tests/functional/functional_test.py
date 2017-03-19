@@ -32,7 +32,7 @@ class FunctionalTest():
 
     def _unused_port(self):
         s = socket.socket()
-        s.bind(("localhost", 0))
+        s.bind(('127.0.0.1', 0))
         port = s.getsockname()[1]
         s.close()
         return port
@@ -44,7 +44,10 @@ class FunctionalTest():
         log_file.flush()
         # Don't actually use Tor when reading from localhost!
         # We need this to make functional tests work.
-        pref_dict = {'network.proxy.no_proxies_on': '127.0.0.1'}
+        pref_dict = {
+                     'network.proxy.no_proxies_on': '127.0.0.1',
+                     'browser.privatebrowsing.autostart': False
+                    }
         driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/", pref_dict=pref_dict)
         return driver
 
