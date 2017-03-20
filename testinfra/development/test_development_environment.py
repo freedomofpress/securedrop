@@ -17,8 +17,6 @@ def test_development_app_dependencies(Package):
         assert p.is_installed
 
 
-@pytest.mark.skipif(hostenv == 'travis',
-                    reason="Custom networking in Travis")
 @pytest.mark.parametrize('pip_package,version', [
     ('Flask-Testing', '0.6.1'),
     ('Flask', '0.11.1'),
