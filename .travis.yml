@@ -8,7 +8,7 @@ python:
 - '2.7'
 
 virtualenv:
-  system_site_packages: false
+  system_site_packages: true
 before_install:
 - 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
 - sudo apt-get update -qq
@@ -18,8 +18,8 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
-- pip install -r testinfra/requirements.txt
 - pip install coveralls
+- pip install -r testinfra/requirements.txt
 script:
 - echo localhost > inventory
 - ansible-playbook -i inventory -vv --syntax-check install_files/ansible-base/securedrop-travis.yml
