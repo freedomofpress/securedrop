@@ -42,6 +42,11 @@ class FunctionalTest():
         log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
         log_file.write(log_msg)
         log_file.flush()
+
+        # Creating the TorBrowser driver changes the working directory,
+        # so we need to save and then restore the current one.
+        old_dir = os.getcwd()
+
         # Don't actually use Tor when reading from localhost!
         # We need this to make functional tests work.
         pref_dict = {
@@ -49,8 +54,8 @@ class FunctionalTest():
                      'browser.privatebrowsing.autostart': False
                     }
         driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/", pref_dict=pref_dict)
-        # Creating the driver changes the working directory, so we need to change it back.
-        os.chdir(config.SECUREDROP_TEST_ROOT)
+
+        os.chdir(old_dir)
         return driver
 
     def setUp(self):
