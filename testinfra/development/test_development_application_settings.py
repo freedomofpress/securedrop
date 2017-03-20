@@ -131,8 +131,4 @@ def test_development_default_logo_exists(File):
     assert f.is_file
     assert f.user == sd_test_vars.securedrop_user
     assert f.group == sd_test_vars.securedrop_user
-    assert oct(f.mode) == "0644"
-    # TODO: Ansible task declares mode 400 but not as string, needs to be fixed
-    # and tests updated. Also, not using "mode" in tests below because umask
-    # on snapci machines differs from the /vagrant folder in dev VM.
-    # Fixing Ansible task may fix differing perms.
+    assert oct(f.mode) == "0400"
