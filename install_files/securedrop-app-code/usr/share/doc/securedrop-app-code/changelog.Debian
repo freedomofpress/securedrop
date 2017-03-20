@@ -1,3 +1,9 @@
+securedrop-app-code (0.3.12) trusty; urgency=medium
+
+  * See changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Mon, 20 Mar 2017 11:27:34 -0700
+
 securedrop-app-code (0.3.11) trusty; urgency=medium
 
   * See changelog.md
