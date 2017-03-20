@@ -49,6 +49,8 @@ class FunctionalTest():
                      'browser.privatebrowsing.autostart': False
                     }
         driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/", pref_dict=pref_dict)
+        # Creating the driver changes the working directory, so we need to change it back.
+        os.chdir(config.SECUREDROP_TEST_ROOT)
         return driver
 
     def setUp(self):
