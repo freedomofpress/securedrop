@@ -1,4 +1,5 @@
 beautifulsoup4
+coveralls
 Flask-Testing
 mock
 pip-tools
