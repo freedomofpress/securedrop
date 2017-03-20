@@ -21,6 +21,9 @@ epoxy to physically disable it. If you have questions about repurposing
 hardware for the *Secure Viewing Station*, contact the `Freedom of the
 Press Foundation <https://securedrop.org/help>`__.
 
+We also recommend you remove all speakers from the device, instead using
+earphones to listen to audio submissions.
+
 You should have a Tails drive clearly labeled “SecureDrop Secure Viewing
 Station”. If it's not labeled, label it right now, then boot it on the
 *Secure Viewing Station*. After it loads, you should see a "Welcome to
