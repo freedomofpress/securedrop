@@ -18,6 +18,7 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
+- pip freeze -l
 - pip install -r testinfra/requirements.txt
 script:
 - echo localhost > inventory
