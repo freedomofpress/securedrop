@@ -310,7 +310,7 @@ class JournalistNavigationSteps():
             'input[name="password_again"]')
         password_again_field.send_keys(new_password)
         update_user_btn = self.driver.find_element_by_css_selector(
-            'button#update-user')
+            'button#update')
         update_user_btn.click()
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
