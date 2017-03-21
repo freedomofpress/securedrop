@@ -10,12 +10,12 @@ coverage==4.2             # via coveralls, pytest-cov
 coveralls==1.1
 docopt==0.6.2             # via coveralls
 first==2.0.1              # via pip-tools
-Flask-testing==0.6.1
+Flask-Testing==0.6.1
 Flask==0.11.1             # via flask-testing
 funcsigs==1.0.2           # via mock
 itsdangerous==0.24        # via flask
 Jinja2==2.8               # via flask
-Markupsafe==0.23          # via jinja2
+MarkupSafe==0.23          # via jinja2
 mock==2.0.0
 pbr==1.10.0               # via mock
 pip-tools==1.7.0
