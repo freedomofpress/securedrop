@@ -1,3 +1,10 @@
+import pytest
+import os
+
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
+
+@pytest.mark.skipif(hostenv == 'travis',
+                    reason="Custom networking in Travis")
 def test_development_iptables_rules(Command, Sudo):
     """
     Declare desired iptables rules
@@ -10,16 +17,15 @@ def test_development_iptables_rules(Command, Sudo):
       '-P OUTPUT ACCEPT',
     ]
     with Sudo():
-        c = Command('iptables -S')
-    assert c.rc == 0
+        c = Command.check_output('iptables -S')
     for rule in desired_iptables_rules:
-        assert rule in c.stdout
+        assert rule in c
 
     # If any iptables rules are ever added, this test will
     # fail, so tests can be written for the new rules.
     # Counting newlines in the output simply to avoid calling
     # `iptables -S` again and piping to `wc -l`.
-    assert c.stdout.count("\n") == len(desired_iptables_rules) - 1
+    assert c.count("\n") == len(desired_iptables_rules) - 1
 
 
 def test_development_ssh_listening(Socket):

@@ -1,5 +1,7 @@
 import pytest
+import os
 
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
 def test_development_app_dependencies(Package):
     """
@@ -44,9 +46,11 @@ def test_development_pip_dependencies(Command, pip_package, version):
     Versions here are intentionally hardcoded to track changes.
     """
     c = Command('pip freeze')
-    assert "{}=={}".format(pip_package, version) in c.stdout
+    assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
 
 
+@pytest.mark.skipif(hostenv == 'travis',
+            reason="Bashrc tests dont make sense on Travis")
 def test_development_securedrop_env_var(File):
     """
     Ensure that the SECUREDROP_ENV var is set to "dev".

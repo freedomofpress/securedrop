@@ -18,8 +18,10 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
-- pip install ansible==1.8.4
-- pip install coveralls
+- pip freeze -l
+# Preinstalled travis pytest is not tracked by us
+- pip uninstall pytest -y
+- pip install -r testinfra/requirements.txt
 script:
 - echo localhost > inventory
 - ansible-playbook -i inventory -vv --syntax-check install_files/ansible-base/securedrop-travis.yml
@@ -32,6 +34,7 @@ script:
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
+- ./testinfra/test.py
 after_success:
   cd securedrop && coveralls && cd ..  # cd back to repo root for srcclr run
 addons:

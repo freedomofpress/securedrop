@@ -1,0 +1,4 @@
+---
+securedrop_user: travis
+securedrop_code: {{ BUILD_DIR }}/securedrop
+securedrop_data: /var/lib/securedrop

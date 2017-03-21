@@ -1,5 +1,9 @@
 import pytest
+import os
 
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
+
+sd_test_vars = pytest.securedrop_test_vars
 
 @pytest.mark.parametrize('package', [
     "securedrop-app-code",
@@ -18,8 +22,8 @@ def test_development_lacks_deb_packages(Command, package):
     c = Command("dpkg -l {}".format(package))
     assert c.rc == 1
     assert c.stdout == ""
-    assert c.stderr == "dpkg-query: no packages found matching {}".format(
-            package)
+    stderr = c.stderr.rstrip()
+    assert stderr == "dpkg-query: no packages found matching {}".format(package)
 
 
 def test_development_apparmor_no_complain_mode(Command, Sudo):
@@ -35,8 +39,12 @@ def test_development_apparmor_no_complain_mode(Command, Sudo):
 
     with Sudo():
         c = Command("aa-status")
-        assert c.rc == 0
-        assert '0 profiles are in complain mode.' in c.stdout
+        if hostenv == "travis":
+            assert c.rc == 3
+            assert 'apparmor filesystem is not mounted' in c.stderr
+        else:
+            assert c.rc == 0
+            assert '0 profiles are in complain mode.' in c.stdout
 
 
 @pytest.mark.parametrize('unwanted_file', [
@@ -68,8 +76,8 @@ def test_development_data_directories_exist(File, data_dir):
     """
     f = File(data_dir)
     assert f.is_directory
-    assert f.user == "vagrant"
-    assert f.group == "vagrant"
+    assert f.user == sd_test_vars.securedrop_user
+    assert f.group == sd_test_vars.securedrop_user
     assert oct(f.mode) == "0700"
 
 
@@ -82,10 +90,10 @@ def test_development_app_directories_exist(File):
     Using a separate check from the data directories because /vagrant
     will be mounted with different mode.
     """
-    f = File("/vagrant/securedrop")
+    f = File(sd_test_vars.securedrop_code)
     assert f.is_directory
-    assert f.user == "vagrant"
-    assert f.group == "vagrant"
+    assert f.user == sd_test_vars.securedrop_user
+    assert f.group == sd_test_vars.securedrop_user
 
   # Vagrant VirtualBox environments show /vagrant as 770,
   # but the Vagrant DigitalOcean droplet shows /vagrant as 775.
@@ -105,12 +113,11 @@ def test_development_clean_tmp_cron_job(Command, Sudo):
     """
 
     with Sudo():
-        c = Command('crontab -l')
-    assert c.rc == 0
+        c = Command.check_output('crontab -l')
     # TODO: this should be using property, but the ansible role
     # doesn't use a var, it's hard-coded. update ansible, then fix test.
     # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean-tmp" }
-    assert "@daily /vagrant/securedrop/manage.py clean-tmp" in c.stdout
+    assert "@daily {}/manage.py clean-tmp".format(sd_test_vars.securedrop_code) in c
 
 
 def test_development_default_logo_exists(File):
@@ -120,12 +127,10 @@ def test_development_default_logo_exists(File):
     TODO: Add check for custom logo file.
     """
 
-    f = File("/vagrant/securedrop/static/i/logo.png")
+    f = File("{}/static/i/logo.png".format(sd_test_vars.securedrop_code))
     assert f.is_file
-    assert f.user == "vagrant"
-    assert f.group == "vagrant"
-    assert oct(f.mode) == "0644"
-    # TODO: Ansible task declares mode 400 but not as string, needs to be fixed
-    # and tests updated. Also, not using "mode" in tests below because umask
-    # on snapci machines differs from the /vagrant folder in dev VM.
-    # Fixing Ansible task may fix differing perms.
+    assert f.user == sd_test_vars.securedrop_user
+    assert f.group == sd_test_vars.securedrop_user
+    # check if logo is NOT the default securedrop png
+    if not f.md5sum == "92443946d5c9e05020a090f97b62d027":
+        assert oct(f.mode) == "0400"
