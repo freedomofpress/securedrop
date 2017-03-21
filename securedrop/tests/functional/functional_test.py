@@ -38,7 +38,9 @@ class FunctionalTest():
         return port
 
     def _create_webdriver(self):
-        log_file = open('tests/log/tbb.log', 'a')
+        log_file_path = 'tests/log/firefox.log'
+        abs_log_file_path = os.path.abspath(log_file_path)
+        log_file = open(abs_log_file_path, 'a')
         log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
         log_file.write(log_msg)
         log_file.flush()
@@ -53,8 +55,9 @@ class FunctionalTest():
                      'network.proxy.no_proxies_on': '127.0.0.1',
                      'browser.privatebrowsing.autostart': False
                     }
-        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/", pref_dict=pref_dict)
-
+        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/",
+                                  pref_dict=pref_dict,
+                                  tbb_logfile_path=abs_log_file_path)
         os.chdir(old_dir)
         return driver
 
