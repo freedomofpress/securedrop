@@ -131,8 +131,6 @@ def test_development_default_logo_exists(File):
     assert f.is_file
     assert f.user == sd_test_vars.securedrop_user
     assert f.group == sd_test_vars.securedrop_user
-    # check if logo is the default securedrop png
-    if f.md5sum == "92443946d5c9e05020a090f97b62d027":
-        assert oct(f.mode) == "0664"
-    else:
+    # check if logo is NOT the default securedrop png
+    if not f.md5sum == "92443946d5c9e05020a090f97b62d027":
         assert oct(f.mode) == "0400"
