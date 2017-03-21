@@ -22,7 +22,6 @@
     name: gnupg-curl
     state: present
 
-
 - name: Download TBB {{ fpsd_tbb_release }} signing key.
   sudo: true
   command: gpg --keyserver {{ fpsd_keyserver }} --recv-key {{ fpsd_tbb_signing_key }}

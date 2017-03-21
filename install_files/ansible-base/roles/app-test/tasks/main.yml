@@ -17,4 +17,4 @@
 
 - include: download_verify_tbb.yml
 
-- include: download_legacy_ff.yml
+- include: download_ff_esr.yml

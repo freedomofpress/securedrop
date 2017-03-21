@@ -7,13 +7,18 @@
     sha256sum: fbaa185abf9b7abc9d66ae037a34f192ced42f6e799d251253827cd0fbf3ae89
 
 - name: Make target directory.
-  sudo: yes
-  file: path=/usr/bin/firefox45 state=directory
+  file: 
+    path: "/opt/firefox45/"
+    state: directory
+    owner: "{{ fpsd_system_account }}"
+    group: "{{ fpsd_system_account }}"
+    mode: "0770"
+
+
 
 - name: Extract Firefox 45.7.0esr
-  sudo: yes
   unarchive:
     copy: no
     src: /home/vagrant/firefox-45.7.0esr.tar.bz2
-    dest: /usr/bin/firefox45/
+    dest: /opt/firefox45/
 

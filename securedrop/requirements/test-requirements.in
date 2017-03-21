@@ -6,4 +6,4 @@ pip-tools
 py
 pytest
 pytest-cov
-tbselenium==0.2.1
+tbselenium
