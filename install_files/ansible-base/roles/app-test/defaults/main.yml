@@ -1,9 +1,8 @@
 # Specify TBB version to download and install
-fpsd_tbb_release: 6.5.1
-fpsd_tbb_locale: en-US
-fpsd_tbb_arch: 64
-fpsd_tbb_directory: "/opt/tbb"
-fpsd_tbb_signing_key: EF6E286DDA85EA2A4BA7DE684E2C6E8793298290
-fpsd_keyserver: "hkps://keyserver.cns.vt.edu"
-
-fpsd_system_account: vagrant
+tbb_release: 6.5.1
+tbb_locale: en-US
+tbb_arch: 64
+tbb_directory: "/opt/tbb"
+tbb_signing_key: EF6E286DDA85EA2A4BA7DE684E2C6E8793298290
+keyserver: "hkps://keyserver.cns.vt.edu"
+system_account: vagrant

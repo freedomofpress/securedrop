@@ -10,8 +10,8 @@
   file: 
     path: "/opt/firefox45/"
     state: directory
-    owner: "{{ fpsd_system_account }}"
-    group: "{{ fpsd_system_account }}"
+    owner: "{{ system_account }}"
+    group: "{{ system_account }}"
     mode: "0770"
 
 
