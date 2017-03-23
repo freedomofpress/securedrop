@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 import unittest
 
 from flask_testing import TestCase
 import mock
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-import journalist
 import crypto_util
+from db import (Journalist, Submission, Reply, get_one_or_else, SourceTag,
+                SubmissionTag, SourceLabelType, SubmissionLabelType)
+import journalist
 from utils import db_helper, env
-from db import (db_session, Journalist, Submission, Source, Reply,
-                get_one_or_else)
 
 
 class TestDatabase(TestCase):
@@ -79,6 +77,85 @@ class TestDatabase(TestCase):
     def test_source_string_representation(self):
         test_source, _ = db_helper.init_source()
         test_source.__repr__()
+
+class TestTagStringRepresentations(unittest.TestCase):
+    def setUp(self):
+        env.setup()
+        self.db_key = crypto_util.gen_db_key()
+        self.admin, self.admin_pw = \
+                db_helper.init_journalist(is_admin=True, db_key=self.db_key)
+        self.source, _ = db_helper.init_source()
+
+    def tearDown(self):
+        env.teardown()
+
+    def test_submission_label_type_string(self):
+        journalist.create_label(SubmissionLabelType, self.db_key, "test")
+        test_label = SubmissionLabelType.query.first()
+        test_label.__str__()
+
+    def test_source_label_type_string(self):
+        journalist.create_label(SourceLabelType, self.db_key, "test")
+        test_label = SourceLabelType.query.first()
+        test_label.__str__()
+
+    def test_submission_tag_string(self):
+        submissions = db_helper.submit(self.source, 1)
+
+        test_submission = Submission.query.first()
+
+        journalist.create_label(SubmissionLabelType, self.db_key, "test")
+        test_label = SubmissionLabelType.query.first()
+
+        journalist.create_tag(test_submission, self.db_key, test_label)
+        test_submission_tag = SubmissionTag.query.first()
+        test_submission_tag.__str__()
+
+    def test_source_tag_string(self):
+        journalist.create_label(SourceLabelType, self.db_key, "test")
+        test_label = SourceLabelType.query.first()
+
+        journalist.create_tag(self.source, self.db_key, test_label)
+        test_source_tag = SourceTag.query.first()
+        test_source_tag.__str__()
+
+
+class TestDatabaseEncryption(unittest.TestCase):
+    def setUp(self):
+        env.setup()
+        self.db_key = crypto_util.gen_db_key()
+        self.admin, self.admin_pw = \
+                db_helper.init_journalist(is_admin=True, db_key=self.db_key)
+        self.source, _ = db_helper.init_source()
+
+    def tearDown(self):
+        env.teardown()
+
+    def test_decrypt_db_key(self):
+        # See https://github.com/freedomofpress/securedrop/issues/1610
+        self.db_key = crypto_util.gen_db_key()
+        self.admin, self.admin_pw = \
+                db_helper.init_journalist(is_admin=True, db_key=self.db_key)
+
+        self.assertEqual(self.admin.decrypt_db_key(self.admin_pw), self.db_key)
+
+    def test_decrypt_db_key_after_password_change(self):
+        # See https://github.com/freedomofpress/securedrop/issues/1610
+        self.db_key = crypto_util.gen_db_key()
+        self.admin, self.admin_pw = \
+                db_helper.init_journalist(is_admin=True, db_key=self.db_key)
+
+        old_salt = self.admin.db_key_salt
+        old_encrypted_db_key = self.admin.encrypted_db_key
+        new_pw = crypto_util.genrandomid()
+        self.admin.set_password(new_pw, db_key=self.db_key)
+        new_salt = self.admin.db_key_salt
+        new_encrypted_db_key = self.admin.encrypted_db_key
+
+        self.assertNotEqual(self.admin.decrypt_db_key(self.admin_pw), self.db_key)
+        self.assertEqual(self.admin.decrypt_db_key(new_pw), self.db_key)
+        self.assertNotEqual(old_salt, new_salt)
+        self.assertNotEqual(old_encrypted_db_key, new_encrypted_db_key)
 
 
 if __name__ == "__main__":

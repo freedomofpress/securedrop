@@ -9,9 +9,10 @@ try:
 except:
     from StringIO import StringIO
 
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method, Comparator
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
@@ -23,7 +24,8 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
+from crypto_util import (db_key_encryptor, db_key_decryptor, gen_db_key, gen_iv, db_encryptor,
+                         db_decryptor)
 import store
 
 LOGIN_HARDENING = True
@@ -90,6 +92,8 @@ class Source(Base):
     # Don't create or bother checking excessively long codenames to prevent DoS
     MAX_CODENAME_LEN = 128
 
+    tags = relationship("SourceTag", order_by="SourceTag.id")
+
     def __init__(self, filesystem_id=None, journalist_designation=None):
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
@@ -117,7 +121,7 @@ class Source(Base):
 
     @property
     def collection(self):
-        """Return the list of submissions and replies for this source, sorted
+        """Return the list of submissions, replies, tags for this source, sorted
         in ascending order by the filename/interaction count."""
         collection = []
         collection.extend(self.submissions)
@@ -138,6 +142,8 @@ class Submission(Base):
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
+
+    tags = relationship("SubmissionTag", order_by="SubmissionTag.id")
 
     def __init__(self, source, filename):
         self.source_id = source.id
@@ -233,6 +239,8 @@ class Journalist(Base):
     pw_salt = Column(Binary(32))
     pw_hash = Column(Binary(256))
     is_admin = Column(Boolean)
+    db_key_salt = Column(Binary(32))
+    encrypted_db_key = Column(Binary(32))
 
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
@@ -245,9 +253,10 @@ class Journalist(Base):
         "JournalistLoginAttempt",
         backref="journalist")
 
-    def __init__(self, username, password, is_admin=False, otp_secret=None):
+    def __init__(self, username, password, is_admin=False, otp_secret=None,
+                 db_key=None):
         self.username = username
-        self.set_password(password)
+        self.set_password(password, db_key)
         self.is_admin = is_admin
         if otp_secret:
             self.set_hotp_secret(otp_secret)
@@ -260,21 +269,35 @@ class Journalist(Base):
     def _gen_salt(self, salt_bytes=32):
         return os.urandom(salt_bytes)
 
-    _SCRYPT_PARAMS = dict(N=2**14, r=8, p=1)
-
-    def _scrypt_hash(self, password, salt, params=None):
-        if not params:
-            params = self._SCRYPT_PARAMS
+    def _scrypt_hash(self, password, salt, params=dict(N=2**14, r=8, p=1)):
         return scrypt.hash(str(password), salt, **params)
 
     MAX_PASSWORD_LEN = 128
 
-    def set_password(self, password):
+    def set_password(self, password, db_key=None):
         # Enforce a reasonable maximum length for passwords to avoid DoS
         if len(password) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+        self.encrypt_db_key(password, db_key)
+
+    def encrypt_db_key(self, password, db_key=None):
+        if not db_key:
+            # TODO: additional checks here to ensure there is only one database
+            # key in use.
+            db_key = gen_db_key()
+        self.db_key_salt = self._gen_salt()
+        personal_key = self._scrypt_hash(password, self.db_key_salt,
+                                         params=dict(N=2**14, r=8, p=1,
+                                                     buflen=32))
+        self.encrypted_db_key = db_key_encryptor(personal_key, db_key)
+
+    def decrypt_db_key(self, password):
+        personal_key = self._scrypt_hash(password, self.db_key_salt,
+                                         params=dict(N=2**14, r=8, p=1,
+                                                     buflen=32))
+        return db_key_decryptor(personal_key, self.encrypted_db_key)
 
     def valid_password(self, password):
         # Avoid hashing passwords that are over the maximum length
@@ -410,6 +433,136 @@ class JournalistLoginAttempt(Base):
 
     def __init__(self, journalist):
         self.journalist_id = journalist.id
+
+class EncryptedLabelTextMixin:
+    id = Column(Integer, primary_key=True)
+    _encrypted_label_text = Column(Binary(255), nullable=False, unique=True)
+    # >>> import math; int(math.ceil(math.log(2**128, 10)))
+    # 39
+    _encrypted_label_text_iv = Column(String(39), nullable=False, unique=True)
+
+    def __init__(self, db_key, label_text):
+        self.label_text = KeyedLabelText(db_key, label_text)
+
+    @hybrid_property
+    def label_text(self, key):
+        return NotImplementedError('Use :meth:`label_text_getter(key)`.')
+
+    @hybrid_method
+    def label_text_getter(self, key):
+        return db_decryptor(key, long(self._encrypted_label_text_iv),
+                            self._encrypted_label_text)
+
+    class LabelUniquenessError(Exception):
+        def __init__(self, label_text):
+            message = 'Label "{}" already in use.'.format(label_text)
+            super(self.__class__, self).__init__(message)
+        pass
+
+    @label_text.setter
+    def label_text(self, keyed_label_text):
+        # Ensure label text is unique
+        cls = self.__class__
+        q = cls.query.with_transformation(cls.label_text==keyed_label_text)
+        if q.one_or_none():
+            raise cls.LabelUniquenessError(keyed_label_text.label_text)
+
+        self._encrypted_label_text_iv = str(gen_iv())
+        self._encrypted_label_text= db_encryptor(keyed_label_text.db_key,
+                                                 self._encrypted_label_text_iv,
+                                                 keyed_label_text.label_text)
+
+    class encrypted_label_text_transformer(Comparator):
+        def __eq__(self, other):
+            def transform(q):
+                for row in q:
+                    if (row._encrypted_label_text
+                        == db_encryptor(other.db_key,
+                                        row._encrypted_label_text_iv,
+                                        other.label_text)):
+                        return q.filter_by(id=row.id)
+                return q.filter_by(id=-1)
+            return transform
+
+    @label_text.comparator
+    def label_text(cls):
+        return cls.encrypted_label_text_transformer(cls)
+
+
+class KeyedLabelText:
+    def __init__(self, db_key, label_text):
+        self.db_key = db_key
+        self.label_text = label_text
+
+
+class SourceLabelType(EncryptedLabelTextMixin, Base):
+    __tablename__ = "source_label_type"
+    source_tags = relationship("SourceTag", order_by="SourceTag.id")
+
+    def __str__(self):
+        return "<Source Label Type {}>".format(self._encrypted_label_text)
+
+
+class SubmissionLabelType(EncryptedLabelTextMixin, Base):
+    __tablename__ = "submission_label_type"
+    submission_tags = relationship("SubmissionTag", order_by="SubmissionTag.id")
+
+    def __str__(self):
+        return "<Submission Label Type {}>".format(self._encrypted_label_text)
+
+
+class SourceTag(Base):
+    __tablename__ = "source_tags"
+    id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, ForeignKey('sources.id', ondelete='CASCADE'),
+                       nullable=False)
+    source = relationship("Source", backref=backref("source_tags", order_by=id,
+                                                    cascade="delete"))
+    label_id = Column(Integer,
+                      ForeignKey('source_label_type.id', ondelete='CASCADE'),
+                      nullable=False)
+    label = relationship("SourceLabelType", backref=backref("source_labels",
+                                                            order_by=id,
+                                                            cascade="delete"))
+    # Add unique constraint to table metadata so duplicate tags are not inserted
+    __table_args__ = (UniqueConstraint('source_id', 'label_id',
+                      name='source_tags'), )
+
+    def __init__(self, source, label_type):
+        self.source_id = source.id
+        self.label_id = label_type.id
+
+    def __str__(self):
+        return "<Source tag {}: {}>".format(self.source.journalist_designation,
+                                            self.label._encrypted_label_text)
+
+
+class SubmissionTag(Base):
+    __tablename__ = "submission_tags"
+    id = Column(Integer, primary_key=True)
+    submission_id = Column(Integer,
+                           ForeignKey('submissions.id', ondelete='CASCADE'),
+                           nullable=False)
+    submission = relationship("Submission", backref=backref("submission_tags",
+                                                            order_by=id,
+                                                            cascade="delete"))
+    label_id = Column(Integer,
+                      ForeignKey('submission_label_type.id', ondelete='CASCADE'),
+                      nullable=False)
+    label = relationship("SubmissionLabelType", backref=backref("submission_labels",
+                                                                order_by=id,
+                                                                cascade="delete"))
+    # Add unique constraint to table metadata so duplicate tags are not inserted
+    __table_args__ = (UniqueConstraint('submission_id', 'label_id',
+                      name='submission_tags'), )
+
+    def __init__(self, submission, label_type):
+        self.submission_id = submission.id
+        self.label_id = label_type.id
+
+    def __str__(self):
+        return "<SubmissionTag {}: {}>".format(self.submission.filename,
+                                                self.label._encrypted_label_text)
 
 
 # Declare (or import) models before init_db

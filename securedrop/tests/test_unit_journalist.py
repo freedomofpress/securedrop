@@ -36,9 +36,12 @@ class TestJournalistApp(TestCase):
         utils.db_helper.mock_verify_token(self)
 
         # Setup test users: user & admin
-        self.user, self.user_pw = utils.db_helper.init_journalist()
-        self.admin, self.admin_pw = utils.db_helper.init_journalist(
-            is_admin=True)
+        self.db_key = crypto_util.gen_db_key()
+        self.user, self.user_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key)
+        self.admin, self.admin_pw = \
+                utils.db_helper.init_journalist(db_key=self.db_key,
+                                                is_admin=True)
 
     def tearDown(self):
         utils.env.teardown()
@@ -133,9 +136,11 @@ class TestJournalistApp(TestCase):
     # aforementioned issue to fix the described problem.
     def _login_admin(self):
         self._ctx.g.user = self.admin
+        self._ctx.g.db_key = self.db_key
 
     def _login_user(self):
         self._ctx.g.user = self.user
+        self._ctx.g.db_key = self.db_key
 
     def test_admin_logout_redirects_to_index(self):
         self._login_admin()
@@ -395,6 +400,11 @@ class TestJournalistApp(TestCase):
             url_for('admin_new_user_two_factor'),
             url_for('admin_reset_two_factor_totp'),
             url_for('admin_reset_two_factor_hotp'),
+            url_for('admin_delete_source_label_type',label_id=1),
+            url_for('admin_delete_submission_label_type', label_id=1),
+            url_for('admin_create_source_label_type'),
+            url_for('admin_create_submission_label_type'),
+            url_for('admin_index'),
             url_for('admin_edit_user', user_id=self.user.id),
             url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
@@ -416,6 +426,12 @@ class TestJournalistApp(TestCase):
                 url_for('col_process'), url_for('col_delete_single', sid='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
+                url_for('add_source_label', sid='1', label_id=1),
+                url_for('remove_source_label', sid='1', label_id=1),
+                url_for('add_submission_label', sid='1', label_id=1,
+                        filename='1'),
+                url_for('remove_submission_label', sid='1', label_id=1,
+                        filename='1'),
                 url_for('account_reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:

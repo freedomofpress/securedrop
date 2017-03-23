@@ -14,7 +14,7 @@ import store
 
 ## db.{Journalist, Reply}
 
-def init_journalist(is_admin=False):
+def init_journalist(is_admin=False, db_key=None):
     """Initialize a journalist into the database. Return their
     :class:`db.Journalist` object and password string.
 
@@ -26,7 +26,7 @@ def init_journalist(is_admin=False):
     """
     username = crypto_util.genrandomid()
     user_pw = crypto_util.genrandomid()
-    user = db.Journalist(username, user_pw, is_admin)
+    user = db.Journalist(username, user_pw, is_admin=is_admin, db_key=db_key)
     db.db_session.add(user)
     db.db_session.commit()
     return user, user_pw
@@ -105,6 +105,7 @@ def init_source():
     filesystem_id = crypto_util.hash_codename(codename)
     journalist_filename = crypto_util.display_id()
     source = db.Source(filesystem_id, journalist_filename)
+    source.pending = False
     db.db_session.add(source)
     db.db_session.commit()
     # Create the directory to store their submissions and replies
