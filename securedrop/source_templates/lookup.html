@@ -44,8 +44,8 @@
   <div class="pull-right">
     <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
     <button type="submit" class="sd-button btn primary" id="submit-doc-button">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" />
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" />
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px" />
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px" />
       SUBMIT
     </button>
   </div>
@@ -99,7 +99,7 @@
 <hr class="no-line">
 
 <div class="code-reminder" id="codename-hint">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20px" height="20px"> Remember your codename is:
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
   <span id="content" class="codename"><p class="alert">{{ codename }}</p></span>
 </div>
