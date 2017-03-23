@@ -342,7 +342,7 @@ function create_desktop_shortcuts()
 
   # Remove historic launchers and icons
   rm -f "${amnesia_desktop}/document.desktop" \
-        "${amnesia_home}/.local/share/applications/document.desktop
+        "${amnesia_home}/.local/share/applications/document.desktop"
 
   # make it all persistent
   sudo -u amnesia mkdir -p "${tails_live_dotfiles}/Desktop"
