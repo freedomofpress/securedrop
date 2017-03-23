@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import copy
 import os
 from datetime import datetime
 import functools
@@ -9,7 +9,7 @@ from flask import (Flask, request, render_template, send_file, redirect, flash,
 from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 import config
 import version
@@ -19,7 +19,9 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength)
+                LoginThrottledException, InvalidPasswordLength,
+                SourceTag, SubmissionTag, SourceLabelType,
+                SubmissionLabelType)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -52,8 +54,17 @@ def get_source(sid):
     source = None
     query = Source.query.filter(Source.filesystem_id == sid)
     source = get_one_or_else(query, app.logger, abort)
-
     return source
+
+
+def get_submission(filename):
+    """Return a Submission object, representing the database row, for the
+    submission with filename `filename`."""
+    submission = None
+    query = Submission.query.filter(Submission.filename == filename)
+    submission = get_one_or_else(query, app.logger, abort)
+
+    return submission
 
 
 @app.before_request
@@ -151,7 +162,11 @@ def logout():
 @admin_required
 def admin_index():
     users = Journalist.query.all()
-    return render_template("admin.html", users=users)
+    all_source_tags = get_all_defined_tags(SourceLabelType)
+    all_submission_tags = get_all_defined_tags(SubmissionLabelType)
+    return render_template("admin.html", users=users,
+                           source_tags=all_source_tags,
+                           submission_tags=all_submission_tags)
 
 
 @app.route('/admin/add', methods=('GET', 'POST'))
@@ -221,6 +236,7 @@ def admin_new_user_two_factor():
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
 
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
@@ -334,6 +350,155 @@ def edit_account():
     return render_template('edit_account.html')
 
 
+def get_all_defined_tags(label_type):
+    """Get all defined source or submission tags"""
+    return db_session.query(label_type).all()
+
+
+def get_tag_object(object_to_label):
+    """Enable the same tag functions to be used for Sources and Submissions"""
+    if isinstance(object_to_label, Source):
+        return SourceTag, Source, SourceLabelType
+    elif isinstance(object_to_label, Submission):
+        return SubmissionTag, Submission, SubmissionLabelType
+
+
+def get_label(label_type, label_id):
+    """Return object for label primary key"""
+    matching_label = label_type.query.filter_by(id=label_id).one()
+    return matching_label
+
+
+def get_tag_objects_for_label(label_type, label):
+    matching_tags = label_type.query.filter_by(id=label.id).all()
+    return matching_tags
+
+
+def get_unselected_labels(obj):
+    """For a given object (Source or Submission) return the tags that are
+    not currently assigned to that object
+    """
+    tag_object, object_to_label, label_type_object = get_tag_object(obj)
+
+    query = db_session.query(label_type_object).join(tag_object)
+    if tag_object is SubmissionTag:
+        selected_tags = query.filter(tag_object.submission_id==obj.id).all()
+    elif tag_object is SourceTag:
+        selected_tags = query.filter(tag_object.source_id==obj.id).all()
+    all_tags = db_session.query(label_type_object).all()
+    return list(set(all_tags) - set(selected_tags))
+
+
+def delete_label(label_type, label):
+    matching_labels = get_tag_objects_for_label(label_type, label)
+    for label in matching_labels:
+        db_session.delete(label)
+    db_session.commit()
+
+
+@app.route('/admin/delete_source_label_type/<int:label_id>', methods=('POST',))
+@admin_required
+def admin_delete_source_label_type(label_id):
+    label = get_label(SourceLabelType, label_id)
+    delete_label(SourceLabelType, label)
+    return redirect(url_for('admin_index'))
+
+
+@app.route('/admin/create_source_label_type/', methods=('POST',))
+@admin_required
+def admin_create_source_label_type():
+    label_text = request.form['label_text']
+    if label_text:
+        try:
+            create_label(SourceLabelType, request.form['label_text'])
+        except IntegrityError:
+            flash('Tag already exists!', 'source-label-error')
+            db_session.rollback()
+    else:
+        flash('Specify the text for this label!', 'source-label-error')
+    return redirect(url_for('admin_index'))
+
+
+@app.route('/admin/create_submission_label_type/', methods=('POST',))
+@admin_required
+def admin_create_submission_label_type():
+    label_text = request.form['label_text']
+    if label_text:
+        try:
+            create_label(SubmissionLabelType, request.form['label_text'])
+        except IntegrityError:
+            flash('Tag already exists!', 'submission-label-error')
+            db_session.rollback()
+    else:
+        flash('Specify the text for this label!', 'source-label-error')
+    return redirect(url_for('admin_index'))
+
+
+@app.route('/admin/delete_submission_label_type/<int:label_id>', methods=('POST',))
+@admin_required
+def admin_delete_submission_label_type(label_id):
+    label = get_label(SubmissionLabelType, label_id)
+    delete_label(SubmissionLabelType, label)
+    return redirect(url_for('admin_index'))
+
+
+def create_label(label_type, text):
+    db_session.add(label_type(label_text=text))
+    db_session.commit()
+
+
+def create_tag(object_to_label, label):
+    label_type, _, _ = get_tag_object(object_to_label)
+    db_session.add(label_type(object_to_label, label))
+    db_session.commit()
+
+
+def delete_tag(object_to_remove_tag, label):
+    label_type, _, _ = get_tag_object(object_to_remove_tag)
+    if label_type is SubmissionTag:
+        query = label_type.query.filter_by(submission_id=object_to_remove_tag.id)
+    elif label_type is SourceTag:
+        query = label_type.query.filter_by(source_id=object_to_remove_tag.id)
+    query.filter_by(label_id=label.id).delete()
+    db_session.commit()
+
+
+@app.route("/col/add_source_label/<sid>/<int:label_id>", methods=('POST',))
+@login_required
+def add_source_label(sid, label_id):
+    source = get_source(sid)
+    label = get_label(SourceLabelType, label_id)
+    create_tag(source, label)
+    return redirect(url_for('col', sid=sid))
+
+
+@app.route("/col/remove_source_label/<sid>/<int:label_id>", methods=('POST',))
+@login_required
+def remove_source_label(sid, label_id):
+    source = get_source(sid)
+    label = get_label(SourceLabelType, label_id)
+    delete_tag(source, label)
+    return redirect(url_for('col', sid=sid))
+
+
+@app.route("/col/add_submission_label/<sid>/<filename>/<int:label_id>", methods=('POST',))
+@login_required
+def add_submission_label(sid, filename, label_id):
+    submission = get_submission(filename)
+    label = get_label(SubmissionLabelType, label_id)
+    create_tag(submission, label)
+    return redirect(url_for('col', sid=sid))
+
+
+@app.route("/col/remove_submission_label/<sid>/<filename>/<int:label_id>", methods=('POST',))
+@login_required
+def remove_submission_label(sid, filename, label_id):
+    submission = get_submission(filename)
+    label = get_label(SubmissionLabelType, label_id)
+    delete_tag(submission, label)
+    return redirect(url_for('col', sid=sid))
+
+
 @app.route('/account/2fa', methods=('GET', 'POST'))
 @login_required
 def account_new_two_factor():
@@ -409,18 +574,12 @@ def remove_star(sid):
     return redirect(url_for('index'))
 
 
-@app.route('/')
-@login_required
-def index():
+def get_stars_and_labels(sources):
+    """Get the stars and labels for sources"""
     unstarred = []
     starred = []
+    all_source_labels = get_all_defined_tags(SourceLabelType)
 
-    # Long SQLAlchemy statements look best when formatted according to
-    # the Pocoo style guide, IMHO:
-    # http://www.pocoo.org/internal/styleguide/
-    sources = Source.query.filter_by(pending=False) \
-                          .order_by(Source.last_updated.desc()) \
-                          .all()
     for source in sources:
         star = SourceStar.query.filter_by(source_id=source.id).first()
         if star and star.starred:
@@ -431,9 +590,8 @@ def index():
             Submission.query.filter_by(source_id=source.id,
                                        downloaded=False).all())
 
-    journalists = Journalist.query.order_by(Journalist.username).all()
+    return starred, unstarred, all_source_labels
 
-    return render_template('index.html', unstarred=unstarred, starred=starred, journalists=journalists)
 
 @app.route('/change-assignment/<sid>', methods=('POST',))
 @login_required
@@ -453,12 +611,65 @@ def change_assignment(sid):
 
     return redirect(url_for('index'))
 
+
+@app.route('/')
+@login_required
+def index():
+    # Long SQLAlchemy statements look best when formatted according to
+    # the Pocoo style guide, IMHO:
+    # http://www.pocoo.org/internal/styleguide/
+
+    unselect_dict = {}
+    if "filter" in request.args:
+        labels = request.args.getlist("filter")
+        labels = map(int, labels)
+
+        # The following for loop constructs a dict that is used by the template
+        # to provide links to unfilter by one label at a time
+        for label in labels:
+            selected_labels = copy.copy(labels)
+            selected_labels.remove(label)
+            unselect_dict.update({label: selected_labels})
+    else:
+        labels = []
+
+    if labels:
+        query = Source.query.filter_by(pending=False)
+        for label in labels:
+            query = query.filter(Source.tags.any(SourceTag.label_id == label))
+        sources = query.order_by(Source.last_updated.desc()).all()
+    else:
+        sources = Source.query.filter_by(pending=False) \
+                              .order_by(Source.last_updated.desc()) \
+                              .all()
+
+    starred, unstarred, filter_labels = get_stars_and_labels(sources)
+    journalists = Journalist.query.order_by(Journalist.username).all()
+
+    return render_template('index.html', unstarred=unstarred, starred=starred,
+                           filter_labels=filter_labels, journalists=journalists,
+                           selected_filter_labels=labels,
+                           unselect_dict=unselect_dict)
+
+
 @app.route('/col/<sid>')
 @login_required
 def col(sid):
     source = get_source(sid)
+    unselected_source_labels = get_unselected_labels(source)
+
+    unselected_submission_labels = {}
+    for doc in source.collection:
+        if doc.filename.endswith('-msg.gpg'):
+            unselected_submission_labels.update(
+                 {doc.filename: get_unselected_labels(doc)}
+            )
+
     source.has_key = crypto_util.getkey(sid)
-    return render_template("col.html", sid=sid, source=source)
+
+    return render_template("col.html", sid=sid, source=source,
+                           unselected_source_labels=unselected_source_labels,
+                           unselected_submission_labels=unselected_submission_labels)
 
 
 def delete_collection(source_id):

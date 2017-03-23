@@ -105,6 +105,7 @@ def init_source():
     filesystem_id = crypto_util.hash_codename(codename)
     journalist_filename = crypto_util.display_id()
     source = db.Source(filesystem_id, journalist_filename)
+    source.pending = False
     db.db_session.add(source)
     db.db_session.commit()
     # Create the directory to store their submissions and replies

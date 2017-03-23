@@ -395,6 +395,11 @@ class TestJournalistApp(TestCase):
             url_for('admin_new_user_two_factor'),
             url_for('admin_reset_two_factor_totp'),
             url_for('admin_reset_two_factor_hotp'),
+            url_for('admin_delete_source_label_type',label_id=1),
+            url_for('admin_delete_submission_label_type', label_id=1),
+            url_for('admin_create_source_label_type'),
+            url_for('admin_create_submission_label_type'),
+            url_for('admin_index'),
             url_for('admin_edit_user', user_id=self.user.id),
             url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
@@ -416,6 +421,12 @@ class TestJournalistApp(TestCase):
                 url_for('col_process'), url_for('col_delete_single', sid='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
+                url_for('add_source_label', sid='1', label_id=1),
+                url_for('remove_source_label', sid='1', label_id=1),
+                url_for('add_submission_label', sid='1', label_id=1,
+                        filename='1'),
+                url_for('remove_submission_label', sid='1', label_id=1,
+                        filename='1'),
                 url_for('account_reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:
