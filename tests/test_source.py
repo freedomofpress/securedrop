@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
 from mock import patch, ANY
@@ -285,7 +284,3 @@ class TestSourceApp(TestCase):
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

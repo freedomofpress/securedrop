@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from cStringIO import StringIO
 import gzip
 import mock
@@ -16,7 +14,6 @@ from bs4 import BeautifulSoup
 from flask import session, g, escape
 import gnupg
 
-# Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import crypto_util
@@ -615,7 +612,3 @@ class TestIntegration(unittest.TestCase):
         # Make sure the files were deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
             any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

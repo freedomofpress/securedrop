@@ -20,6 +20,3 @@ class AdminInterface(
         self._admin_adds_a_user()
         self._new_user_can_log_in()
         self._admin_can_edit_new_user()
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

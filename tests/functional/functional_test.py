@@ -4,6 +4,7 @@ from datetime import datetime
 import mock
 from multiprocessing import Process
 import os
+from os.path import abspath, dirname, join, realpath
 import shutil
 import signal
 import socket
@@ -13,19 +14,20 @@ import traceback
 import unittest
 import urllib2
 
+from Crypto import Random
 import gnupg
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox import firefox_binary
 
-# Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import db
 import journalist
 import source
-import tests.utils as utils
+import tests.utils.env as env
 
+LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
 
 class FunctionalTest():
 
@@ -37,7 +39,7 @@ class FunctionalTest():
         return port
 
     def _create_webdriver(self):
-        log_file = open('tests/log/firefox.log', 'a')
+        log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
         log_file.write(
             '\n\n[%s] Running Functional Tests\n' % str(
                 datetime.now()))
@@ -54,8 +56,8 @@ class FunctionalTest():
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        utils.env.create_directories()
-        self.gpg = utils.env.init_gpg()
+        env.create_directories()
+        self.gpg = env.init_gpg()
         db.init_db()
 
         source_port = self._unused_port()
@@ -65,6 +67,13 @@ class FunctionalTest():
         self.journalist_location = "http://localhost:%d" % journalist_port
 
         def start_source_server():
+            # We call Random.atfork() here because we fork the source and
+            # journalist server from the main Python process we use to drive
+            # our browser with multiprocessing.Process() below. These child
+            # processes inherit the same RNG state as the parent process, which
+            # is a problem because they would produce identical output if we
+            # didn't re-seed them after forking.
+            Random.atfork()
             source.app.run(
                 port=source_port,
                 debug=True,
@@ -72,6 +81,7 @@ class FunctionalTest():
                 threaded=True)
 
         def start_journalist_server():
+            Random.atfork()
             journalist.app.run(
                 port=journalist_port,
                 debug=True,
@@ -99,7 +109,7 @@ class FunctionalTest():
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        utils.env.teardown()
+        env.teardown()
         self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
 import unittest
@@ -79,7 +78,3 @@ class TestDatabase(TestCase):
     def test_source_string_representation(self):
         test_source, _ = db_helper.init_source()
         test_source.__repr__()
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

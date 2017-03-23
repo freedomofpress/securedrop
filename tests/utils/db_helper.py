@@ -5,7 +5,6 @@ filesystem) interaction.
 import mock
 import os
 
-# Set environment variable so config.py uses a test environment
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 import crypto_util

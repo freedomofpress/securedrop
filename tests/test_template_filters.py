@@ -1,14 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 import os
 import unittest
 
 import template_filters
-
-# Set environment variable so config.py uses a test environment
-os.environ['SECUREDROP_ENV'] = 'test'
-
 
 class TestTemplateFilters(unittest.TestCase):
 
