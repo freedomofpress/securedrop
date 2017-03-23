@@ -67,6 +67,12 @@ class FunctionalTest():
         self.journalist_location = "http://localhost:%d" % journalist_port
 
         def start_source_server():
+            # We call Random.atfork() here because we fork the source and
+            # journalist server from the main Python process we use to drive
+            # our browser with multiprocessing.Process() below. These child
+            # processes inherit the same RNG state as the parent process, which
+            # is a problem because they would produce identical output if we
+            # didn't re-seed them after forking.
             Random.atfork()
             source.app.run(
                 port=source_port,
