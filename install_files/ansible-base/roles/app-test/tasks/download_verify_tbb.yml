@@ -38,8 +38,18 @@
   args:
     chdir: "{{ tbb_directory }}"
 
-- name: Extract TBB {{ tbb_release }} archive.
-  unarchive:
-    copy: no
-    src: "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz"
-    dest: "{{ tbb_directory }}"
+- name: Install the package "xz utils"
+  apt:
+    name: xz-utils
+    state: present
+
+- name: Un-xz the TBB archive
+  command: unxz "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz" 
+
+- name: Un-tar the TBB archive
+  command: tar -xf "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar" -C "{{ tbb_directory}}"
+
+- name:  Save TBB directory to be read later.
+  copy:
+    content: "{{ tbb_directory }}"
+    dest: "/opt/.tbb_path_file"

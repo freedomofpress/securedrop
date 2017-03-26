@@ -49,13 +49,20 @@ class FunctionalTest():
         # so we need to save and then restore the current one.
         old_dir = os.getcwd()
 
-        # Don't actually use Tor when reading from localhost!
-        # We need this to make functional tests work.
+        # Read the TorBrowser location from Ansible
+        with open('/opt/.tbb_path_file') as f:
+           path_to_tbb = f.readline().strip()
+        path_to_tbb = path_to_tbb + os.path.sep + "tor-browser_en-US"
+
+        # Don't use Tor when reading from localhost,
+        # and turn off private browsing.
+        # We need this to make functional tests work,
+        # but they should _not_ be used in any other circumstances
         pref_dict = {
                      'network.proxy.no_proxies_on': '127.0.0.1',
                      'browser.privatebrowsing.autostart': False
                     }
-        driver = TorBrowserDriver("/opt/tbb/tor-browser_en-US/",
+        driver = TorBrowserDriver(path_to_tbb,
                                   pref_dict=pref_dict,
                                   tbb_logfile_path=abs_log_file_path)
         os.chdir(old_dir)
