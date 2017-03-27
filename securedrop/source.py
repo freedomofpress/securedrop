@@ -6,6 +6,8 @@ from cStringIO import StringIO
 import subprocess
 from threading import Thread
 import operator
+
+from alpaca.morphing import morph_page
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 from flask_wtf.csrf import CsrfProtect
@@ -124,8 +126,10 @@ def check_tor2web():
 
 @app.route('/')
 def index():
-    return render_template('index.html',
-                           custom_notification=config.CUSTOM_NOTIFICATION)
+    original_html = render_template(
+        'index.html',
+        custom_notification=config.CUSTOM_NOTIFICATION)
+    return morph_page(original_html)
 
 
 def generate_unique_codename(num_words=7):
