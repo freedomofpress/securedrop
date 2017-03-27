@@ -6,6 +6,11 @@
     - apt
     - development
 
+- name: Install git (TO BE REMOVED WHEN PROPER ALPACA PACKAGING HAS BEEN IMPLEMENTED!!!)
+  apt:
+    name: git
+    state: present
+
 - name: Install apt package dependencies for Development environment.
   apt:
     pkg: "{{ item }}"
