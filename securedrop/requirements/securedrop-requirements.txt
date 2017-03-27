@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file securedrop-requirements.txt securedrop-requirements.in
 #
+-e git+git://github.com/camelids/alpaca.git@securedrop#egg=ALPaCA
 click==6.6                # via flask, rq
 cssmin==0.2.0
 Flask-Assets==0.12
