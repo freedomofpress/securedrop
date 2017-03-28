@@ -20,6 +20,10 @@
     - apt
     - development
 
+- name: Upgrade to the latest pip to support per-requirement overrides (TO BE REMOVED WHEN PROPER ALPACA PACKAGING HAS BEEN IMPLEMENTED!!!)
+  command: /usr/bin/pip install -U pip
+  sudo: yes
+
 - name: Install pip dependencies for SecureDrop.
   pip:
     requirements: "{{ securedrop_pip_requirements }}"
