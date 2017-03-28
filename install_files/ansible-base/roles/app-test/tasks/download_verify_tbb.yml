@@ -44,10 +44,10 @@
     state: present
 
 - name: Un-xz the TBB archive
-  command: unxz "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz" 
+  command: unxz -f "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz" 
 
 - name: Un-tar the TBB archive
-  command: tar -xf "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar" -C "{{ tbb_directory}}"
+  command: tar -xf "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar" -C "{{ tbb_directory}}" --overwrite
 
 - name:  Save TBB directory to be read later.
   copy:
