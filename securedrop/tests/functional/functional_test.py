@@ -37,14 +37,8 @@ class FunctionalTest():
         s.close()
         return port
 
-    def _create_webdriver(self):
-        log_file_path = 'tests/log/firefox.log'
-        abs_log_file_path = os.path.abspath(log_file_path)
-        log_file = open(abs_log_file_path, 'a')
-        log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
-        log_file.write(log_msg)
-        log_file.flush()
 
+    def _create_tor_browser_webdriver(self, abs_log_file_path):
         # Creating the TorBrowser driver changes the working directory,
         # so we need to save and then restore the current one.
         old_dir = os.getcwd()
@@ -65,7 +59,30 @@ class FunctionalTest():
         driver = TorBrowserDriver(path_to_tbb,
                                   pref_dict=pref_dict,
                                   tbb_logfile_path=abs_log_file_path)
+
+        # Restore the old directory
         os.chdir(old_dir)
+
+        return driver
+
+    def _create_firefox_webdriver(self, log_file):
+        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
+        return webdriver.Firefox(firefox_binary=firefox)
+
+    def _create_webdriver(self):
+        log_file_path = 'tests/log/firefox.log'
+        abs_log_file_path = os.path.abspath(log_file_path)
+        log_file = open(abs_log_file_path, 'a')
+        log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
+        log_file.write(log_msg)
+        log_file.flush()
+
+        
+        if 'SD_USE_FALLBACK_BROWSER' in os.environ:
+            driver = self._create_firefox_webdriver(log_file)
+        else:
+            driver = self._create_tor_browser_webdriver(abs_log_file_path)
+
         return driver
 
     def setUp(self):
