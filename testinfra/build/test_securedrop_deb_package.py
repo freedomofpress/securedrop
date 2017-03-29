@@ -117,10 +117,6 @@ def test_deb_package_control_fields_homepage(File, Command, deb):
     assert "Homepage: https://securedrop.org" in c.stdout
 
 
-# Marking as expected failure because the build process does not currently
-# programmatically enforce absence of these files; but it definitely should.
-# Right now, package building requires a manual step to clean up .pyc files.
-@pytest.mark.xfail
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_no_pyc_files(File, Command, deb):
     """
