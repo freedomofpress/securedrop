@@ -2,8 +2,9 @@ Threat Model
 ============
 
 This document outlines the threat model for SecureDrop 0.3 and is
-inspired by the `threat model document Adam Langley wrote for
-Pond <https://pond.imperialviolet.org/threat.html>`__. The threat model
+inspired by the `threat model document Adam Langley wrote for Pond
+<https://web-beta.archive.org/web/20150913065100/https://pond.imperialviolet.org/threat.html>`__.
+The threat model
 is defined in terms of what each possible adversary can achieve. This
 document is still a work in progress. If you have questions or comments,
 please open an issue on GitHub or send an email to
