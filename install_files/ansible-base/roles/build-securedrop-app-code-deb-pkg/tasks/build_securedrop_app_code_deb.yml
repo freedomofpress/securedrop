@@ -19,7 +19,7 @@
     # TODO: This version lock can be removed when if/when we can get Ruby>2
     # installed on the machine that runs this task (see
     # https://github.com/freedomofpress/securedrop/issues/1594).
-    version: "< 3.5"
+    version: "3.4.23"
     user_install: no
   sudo: yes
   tags:
