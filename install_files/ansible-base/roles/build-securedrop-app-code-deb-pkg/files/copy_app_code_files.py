@@ -15,7 +15,12 @@ GLOBS = {'.': ['*.py', 'COPYING', 'wordlist'],
          'requirements': ['securedrop-requirements.txt'],
          'source_templates': ['*.html'],
          'static/js': ['*.js'],
-         'static/js/libs': ['*.js']}
+         'static/js/libs': ['*.js'],
+         'tests': ['*.py'],
+         'tests/files': ['*.py'],
+         'tests/functional': ['*.py'],
+         'tests/utils': ['*.py'],
+         }
 PATHS = ['static/fonts', 'static/i']
 
 os.makedirs(BUILD_DIR)
