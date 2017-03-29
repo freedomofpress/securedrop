@@ -48,20 +48,18 @@
   tags:
     - build
 
-- name: Copy app code to build directory.
-  script: copy_app_code_files.py {{ securedrop_code }} /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
-  args:
-    creates: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
-  tags:
-    - build
+- name: Add rsync-filter for additively including files.
+  copy:
+    src: rsync-filter
+    dest: /tmp/rsync-filter
 
-- name: Remove config.py from build path.
-  file:
-    state: absent
-    dest: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py
+- name: Copy app code to build directory.
+  command: >
+    rsync -avPh {{ securedrop_code }}/ /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
+    --filter "merge /tmp/rsync-filter"
+    --chown root:root
   tags:
     - build
-    - cleanup
 
 - name: Create CSS directory.
   file:
