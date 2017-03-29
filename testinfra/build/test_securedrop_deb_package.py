@@ -128,3 +128,20 @@ def test_deb_package_contains_no_pyc_files(File, Command, deb):
     # would be cleaner. Will defer to adding lintian tests later.
     c = Command("dpkg-deb --contents {}".format(deb_package.path))
     assert not re.search("^.*\.pyc$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_no_config_file(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package does not ship a `config.py`
+    file. Doing so would clobber the site-specific changes made via Ansible.
+
+    Somewhat lazily checking all deb packages, rather than just the app-code
+    package, but it accomplishes the same in a DRY manner.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    # Using `dpkg-deb` but `lintian --tag package-installs-python-bytecode`
+    # would be cleaner. Will defer to adding lintian tests later.
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    assert not re.search("^.*config\.py$", c.stdout, re.M)
