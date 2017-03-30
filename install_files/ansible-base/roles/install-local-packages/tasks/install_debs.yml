@@ -5,7 +5,7 @@
   copy:
     src: ../../build/{{ item }}
     dest: /root/
-  with_items: local_deb_packages
+  with_items: "{{ local_deb_packages }}"
 
 # Using a two-pass approach for installing local deb packages.
 # The first pass uses `apt`, which will intelligently resolve dependencies;
@@ -17,7 +17,7 @@
     deb: /root/{{ item.1 }}
     force: yes
   ignore_errors: yes
-  with_indexed_items: local_deb_packages
+  with_indexed_items: "{{ local_deb_packages }}"
 
 # Using `dpkg` via `command` to ensure installation ensure installation
 # every time, regardless of whether packages changed. SecureDrop deb package 
@@ -26,4 +26,4 @@
 # `dpkg -i` calls will reinstall, ensuring the latest local code changes are used.
 - name: Install locally built deb packages (via dpkg).
   command: dpkg -i /root/{{ item }}
-  with_items: local_deb_packages
+  with_items: "{{ local_deb_packages }}"

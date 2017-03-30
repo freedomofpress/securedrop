@@ -1,0 +1,4 @@
+---
+# Declare empty list var by default; host-specific overrides will provide
+# appropriate package lists for Application and Monitor servers.
+local_deb_packages: []
