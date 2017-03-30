@@ -9,7 +9,7 @@ include journalist_templates/*.html
 include management/
 include management/*.py
 include requirements/
-include requirements/securedrop-requirements.txt
+include requirements/**.txt
 include source_templates/
 include source_templates/*.html
 include static/
