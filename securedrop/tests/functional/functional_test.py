@@ -16,7 +16,9 @@ import urllib2
 
 from Crypto import Random
 import gnupg
+from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.firefox import firefox_binary
 from tbselenium.tbdriver import TorBrowserDriver
 
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -77,7 +79,6 @@ class FunctionalTest():
         log_file.write(log_msg)
         log_file.flush()
 
-        
         if 'SD_USE_FALLBACK_BROWSER' in os.environ:
             driver = self._create_firefox_webdriver(log_file)
         else:
