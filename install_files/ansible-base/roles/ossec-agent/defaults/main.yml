@@ -1,8 +1,4 @@
 ---
-smtp_relay_cert_dir: /etc/ssl/certs
-smtp_relay_cert_override_dir: '/etc/ssl/certs_local'
-smtp_relay_cert_override_file: ''
-
 # Override capability for installing locally built deb packages in the staging
 # environment. By default, packages are installed via the FPF apt repo.
 install_local_packages: False
