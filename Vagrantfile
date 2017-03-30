@@ -143,6 +143,9 @@ Vagrant.configure("2") do |config|
         'securedrop:children' => %w(development),
       }
     end
+    build.vm.provider "libvirt" do |lv, override|
+      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
+    end
   end
 
   # VM for testing Snap CI configuration changes.
