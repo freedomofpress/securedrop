@@ -1,0 +1,16 @@
+---
+# The Ansible config runs an aptitude safe-upgrade on every playbook invocation,
+# which will clobber the locally built packages with prod packages from the apt
+# repo. Let's set the packages to "hold" so they don't auto-upgrade.
+
+- name: Read package names from deb packages.
+  command: dpkg-deb -f /root/{{ item }} Package
+  register: local_deb_packages_name_check
+  changed_when: false
+  with_items: "{{ local_deb_packages }}"
+
+- name: Mark packages as held, so they aren't upgraded automatically.
+  command: apt-mark hold {{ item.stdout }}
+  register: apt_mark_hold_result
+  changed_when: not apt_mark_hold_result.stdout.endswith('already set on hold.')
+  with_items: "{{ local_deb_packages_name_check.results }}"
