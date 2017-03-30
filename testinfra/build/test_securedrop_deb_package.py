@@ -103,11 +103,7 @@ def test_deb_package_control_fields(File, Command, deb):
     assert "Package: {}".format(package_name) in c.stdout
     assert c.rc == 0
 
-# Marking as expected failure because the securedrop-keyring package
-# uses the old "freedom.press/securedrop" URL as the Homepage. That should
-# be changed to securedrop.org, and the check folded into the other control
-# fields logic, above.
-@pytest.mark.xfail
+
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_control_fields_homepage(File, Command, deb):
     deb_package = File(deb.format(
