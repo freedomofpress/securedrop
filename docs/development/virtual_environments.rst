@@ -67,7 +67,7 @@ app-prod
 mon-prod
     This is like a production installation with all of the system
     hardening active, but virtualized, rather than running on hardware.
-    You will need to configure prod-like secrets in 
+    You will need to configure prod-like secrets in
     ``install_files/ansible-base/prod-specific.yml``, or export
     ``ANSIBLE_ARGS=="--skip-tags validate"`` to skip the tasks
     that prevent the prod playbook from running with Vagrant-specific info.
@@ -97,11 +97,11 @@ course, you can specify the name if you want to.
    vagrant ssh
    cd /vagrant/securedrop
    ./manage.py run         # run development servers
-   ./manage.py test        # run the unit and functional tests
    ./manage.py reset       # resets the state of the development instance
    ./manage.py add-admin   # create a user to use when logging in to the Journalist Interface
+   pytest -v tests/        # run the unit and functional tests
 
-SecureDrop consists of two separate web appications (the Source Interface and
+SecureDrop consists of two separate web applications (the Source Interface and
 the Journalist Interface) that run concurrently. The development servers will
 detect code changes when they are saved and automatically reload.
 
@@ -126,7 +126,7 @@ to fill out your local copy of
    sudo su
    cd /var/www/securedrop
    ./manage.py add-admin
-   ./manage.py test
+   pytest -v tests/
 
 Prod
 ----
