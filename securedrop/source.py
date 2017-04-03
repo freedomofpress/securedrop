@@ -1,32 +1,33 @@
 # -*- coding: utf-8 -*-
-import os
+from cStringIO import StringIO
 from datetime import datetime
 from functools import wraps
-from cStringIO import StringIO
+import json
+import logging
+import operator
+import os
 import subprocess
 from threading import Thread
-import operator
 
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
+# from flask_assets import Environment
 from flask_wtf.csrf import CsrfProtect
-from flask_assets import Environment
-
+from jinja2 import evalcontextfilter
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
+from werkzeug.routing import BaseConverter
 
 import config
-import json
-import version
 import crypto_util
+from db import db_session, Source, Submission, Reply, get_one_or_else
+from fp_defense import generate_random_object, pad_static_resource, render_morphed_template
+from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 import store
 import template_filters
 import util
-from db import db_session, Source, Submission, Reply, get_one_or_else
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from jinja2 import evalcontextfilter
+import version
 
-import logging
 # This module's logger is explicitly labeled so the correct logger is used,
 # even when this is run from the command line (e.g. during development)
 log = logging.getLogger('source')
@@ -35,7 +36,7 @@ app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 
-assets = Environment(app)
+# assets = Environment(app)
 
 # The default CSRF token expiration is 1 hour. Since large uploads can
 # take longer than an hour over Tor, we increase the valid window to 24h.
@@ -125,10 +126,21 @@ def check_tor2web():
 
 @app.route('/')
 def index():
-    original_html = render_template(
+    return render_morphed_template(
         'index.html',
         custom_notification=config.CUSTOM_NOTIFICATION)
-    return morph_page(original_html)
+
+
+@app.route('/morphed/<path:filename>')
+def morph_static_resource(filename):
+    return pad_static_resource(filename,
+                               request.args.get('type'),
+                               int(request.args.get('size')))
+
+
+@app.route('/rnd/<int:size>')
+def random_padding_object(size):
+    return generate_random_object(size)
 
 
 def generate_unique_codename(num_words=7):
