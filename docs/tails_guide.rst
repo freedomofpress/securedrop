@@ -129,7 +129,7 @@ To use the template:
 -  Save the database in the Tails Persistent folder
 
 Set up easy access to the Journalist Interface
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To complete setup of the *Admin Workstation* or Journalist Workstation, we
 recommend using the scripts in ``tails_files`` to easily configure Tor to
@@ -174,7 +174,7 @@ As long as Tails is booted with the persistent volume enabled then you can open
 the Tor Browser and connect to the Journalist Interface as normal.
 
 Create bookmarks for Source and Journalist Interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want, you can open the browser and create bookmarks for the Source and
 Journalist Interfaces. Navigate to the site you wish to bookmark, select

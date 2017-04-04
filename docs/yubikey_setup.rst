@@ -1,5 +1,5 @@
 Using YubiKey with the Journalist Interface
-=========================================
+===========================================
 
 This is a quick and dirty guide to using YubiKey for two-factor
 authentication on the Journalist Interface.

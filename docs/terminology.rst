@@ -31,7 +31,7 @@ submitting documents and communicating with journalists. This site is
 hosted on the *Application Server* and can only be accessed over Tor.
 
 Journalist Interface
-------------------
+--------------------
 
 The *Journalist Interface* is the website that journalists will access
 when downloading new documents and communicating with sources. This site

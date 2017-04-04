@@ -37,7 +37,7 @@ instructions to set one up with GnuPG (GPG).
    X <https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin>`__
 
 Connect to the Journalist Interface
----------------------------------
+-----------------------------------
 
 Each journalist has their own authenticated Tor hidden service URL to
 login to the ``Journalist Interface``. The journalist needs to use the

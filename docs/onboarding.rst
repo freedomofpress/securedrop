@@ -59,7 +59,7 @@ Journalist Workstation. Enable persistence and set an administrator
 password before continuing with the next section.
 
 Set up automatic access to the Journalist Interface
--------------------------------------------------
+---------------------------------------------------
 
 Since the Journalist Interface is an ATHS, we need to set up the
 Journalist Tails USB to auto-configure Tor just as we did with the
@@ -103,7 +103,7 @@ the Journalist Interface. You should be able to connect, and will be
 automatically taken to a login page.
 
 Add an account on the Journalist Interface
-----------------------------------------
+------------------------------------------
 
 Finally, you need to add an account on the Journalist Interface so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in

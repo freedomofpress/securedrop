@@ -182,7 +182,7 @@ unplugging and remounting the Tails device you're trying to upgrade.
 .. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
 
 5. Re-install the automatic Tails configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
           USBs. If you are upgrading the *Secure Viewing Station* Tails USB, you
