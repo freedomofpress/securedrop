@@ -77,7 +77,7 @@ mon-prod
     :ref:`ssh_over_tor` for more info.
 
 If you plan to alter the configuration of any of these machines, make sure to
-review the :doc:`Development Guide for Serverspec Tests <spec_tests>`.
+review the :doc:`Development Guide for Configuration Tests <config_tests>`.
 
 Development
 -----------
