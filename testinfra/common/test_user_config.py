@@ -1,7 +1,9 @@
-import re
 import os
+import pytest
+import re
 
 hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
+
 
 def test_sudoers_config(File, Sudo):
     """

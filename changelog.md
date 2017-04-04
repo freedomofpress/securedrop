@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.12
+
+* Disables swap on Application Server via preinst script on
+`securedrop-app-code` package hook. Swap was not previously disabled
+permanently, so this automatic update will deactivate it, shred the swap
+partition if it was in use, then disable swap entries in /etc/fstab.
+A separate change in future release will enforce this configuration
+via the Ansible config at install time (#1620)
+
 ## 0.3.11
 
 * Instructs source to turn the Tor Browser security slider to High and to

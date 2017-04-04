@@ -1,5 +1,8 @@
+import os
 import pytest
 import re
+
+hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
 
 @pytest.mark.parametrize('sysctl_opt', [
@@ -60,9 +63,8 @@ def test_blacklisted_kernel_modules(Command, File, Sudo, kernel_module):
     assert f.contains("^blacklist {}$".format(kernel_module))
 
 
-# Expecting failure here, since the Ansible config doesn't actually
-# disable swap, as intended. (It doesn't manage /etc/fstab.)
-@pytest.mark.xfail
+@pytest.mark.skipif(hostenv.startswith('mon'),
+        reason="Monitor Server does not have swap disabled yet.")
 def test_swap_disabled(Command):
     """
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
@@ -73,4 +75,4 @@ def test_swap_disabled(Command):
     # A leading slash will indicate full path to a swapfile.
     assert not re.search("^/", c.stdout, re.M)
     # Expect that ONLY the headers will be present in the output.
-    assert c.stdout == "Filename\t\t\t\tType\t\tSize\tUsed\tPriority\n"
+    assert c.stdout == "Filename\t\t\t\tType\t\tSize\tUsed\tPriority"
