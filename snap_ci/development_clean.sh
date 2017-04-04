@@ -34,4 +34,4 @@ cd "${repo_root}/spec_tests/"
 bundle exec rake spec:development
 
 # Run application tests
-vagrant ssh development --command "cd /vagrant/securedrop && ./manage.py test"
+vagrant ssh development --command "cd /vagrant/securedrop && pytest tests/"
