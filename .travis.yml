@@ -35,6 +35,7 @@ script:
 - sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
 - ./testinfra/test.py
+- cd docs && make clean && sphinx-build -Wn . _build/html && cd .. # docs linting
 after_success:
   cd securedrop/ && coveralls && cd ../  # cd back to repo root for srcclr run
 addons:
