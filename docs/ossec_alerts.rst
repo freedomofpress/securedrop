@@ -80,8 +80,8 @@ vary and you may require later edits to the Postfix configuration
 (mainly /etc/postfix/main.cf) on the *Monitor Server* in order to get
 alerts to work. You can consult `Postfix's official
 documentation <http://www.postfix.org/documentation.html>`__ for help,
-although we've described some common scenarios in the
-:ref:`troubleshooting section <Troubleshooting>` of this document.
+although we've described some common scenarios in the 
+:ref:`troubleshooting section <troubleshooting_ossec>` of this document.
 
 If you have your GPG public key handy, copy it to
 install\_files/ansible-base and then specify the filename in the
@@ -239,7 +239,7 @@ playbooks.) Save ``prod-specific.yml``, exit the editor and :ref:`proceed
 with the installation <Run the Ansible playbook>` by running the
 playbooks.
 
-.. _Troubleshooting:
+.. _troubleshooting_ossec:
 
 Troubleshooting
 ---------------

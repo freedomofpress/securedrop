@@ -192,7 +192,7 @@ Shut down the Tails USB on the airgapped computer and move it to the computer
 you normally use it on. Boot into each newly upgraded Tails USB, enabling
 persistence, and setting a root password. Confirm that the persistent files are
 present on the upgraded Tails USB. If they are not, or something else went
-wrong, see :ref:`Troubleshooting <troubleshooting>`.
+wrong, see :ref:`Troubleshooting <troubleshooting_tails_2x_upgrade>`.
 
 Now that you have successfully upgraded to Tails 2.x with your persistence
 intact, the final step is to re-install the Tails automatic configuration from
@@ -294,7 +294,7 @@ reformat it appropriately.
           smash the device with a hammer until the chips containing its flash
           memory are broken up, then dispose of the pieces in the garbage.
 
-.. _troubleshooting:
+.. _troubleshooting_tails_2x_upgrade:
 
 Troubleshooting
 ---------------
