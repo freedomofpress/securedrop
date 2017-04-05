@@ -37,3 +37,8 @@ smtp_relay_fingerprint: "6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:8
 sasl_username: "test"
 sasl_domain: "ossec.test"
 sasl_password: "password123"
+
+# Don't install app-code package from the FPF apt repo, since we want to run
+# the application code directly out of the local repo.
+securedrop_app_install_from_repo: False
+securedrop_app_configure_apache: False

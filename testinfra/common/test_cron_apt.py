@@ -134,9 +134,7 @@ def test_cron_apt_all_packages_updated(Command):
     """
     c = Command('aptitude --simulate -y safe-upgrade')
     assert c.rc == 0
-    # If planning to upgrade anything, make sure it's ONLY firefox.
-    if "1 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout:
-        assert "firefox" in c.stdout
-    else:
-        assert "No packages will be installed, upgraded, or removed." in c.stdout
-        assert "0 packages upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout
+    # Staging hosts will have locally built deb packages, marked as held.
+    # Staging and development will have a version-locked Firefox pinned for
+    # Selenium compatibility; if the holds are working, they shouldn't be upgraded.
+    assert "No packages will be installed, upgraded, or removed." in c.stdout

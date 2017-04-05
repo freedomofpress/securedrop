@@ -1,12 +1,18 @@
 ---
+  # Staging machines should be provisioned with local code,
+  # rather than pulling down stable releases from the app code.
+  # Therefore build the local debs before provisioning the staging hosts.
+- include: build-deb-pkgs.yml
+  when: install_local_packages == true
+
 - name: Add FPF apt repository and install base packages.
   hosts: staging
   roles:
     - { role: common, tags: common }
-    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
-    - { role: install-local-packages, tags: install_local_packages,
-        when: install_local_packages }
     - { role: tor-hidden-services, tags: tor }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: install-local-packages, tags: [install_local_packages, rebuild],
+        when: install_local_packages }
   sudo: yes
 
 - name: Configure OSSEC manager.

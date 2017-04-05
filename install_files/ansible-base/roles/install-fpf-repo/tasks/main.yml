@@ -21,3 +21,5 @@
   apt:
     pkg: securedrop-keyring
     state: present
+  # Skip installing the keyring package from the apt repo under staging.
+  when: not install_local_packages
