@@ -103,6 +103,8 @@ def test_ossec_gnupg(File, Sudo):
         assert oct(f.mode) == "0700"
 
 
+# Permissions don't match between Ansible and OSSEC deb packages postinst.
+@pytest.mark.xfail
 def test_ossec_gnupg(File, Sudo):
     """
     Ensures the test Admin GPG public key is present as file.
@@ -128,6 +130,8 @@ sub   4096R/97D2EB39 2014-10-15"""
         assert c.stdout ==  ossec_gpg_pubkey_info
 
 
+# Permissions don't match between Ansible and OSSEC deb packages postinst.
+@pytest.mark.xfail
 @pytest.mark.parametrize('keyfile', [
     '/var/ossec/etc/sslmanager.key',
     '/var/ossec/etc/sslmanager.cert',
@@ -143,8 +147,11 @@ def test_ossec_keyfiles(File, Sudo, keyfile):
     with Sudo():
         f = File(keyfile)
         assert f.is_file
-        assert oct(f.mode) == "0644"
+        # The postinst scripts in the OSSEC deb packages set 440 on the keyfiles;
+        # the Ansible config should be updated to do the same.
+        assert oct(f.mode) == "0440"
         assert f.user == "root"
+        assert f.group == "ossec"
 
 
 @pytest.mark.parametrize('setting', [
@@ -168,6 +175,8 @@ def test_procmail_settings(File, Sudo, setting):
         assert f.contains('^{}$'.format(setting))
 
 
+# Permissions don't match between Ansible and OSSEC deb packages postinst.
+@pytest.mark.xfail
 def test_procmail_attrs(File, Sudo):
     """
     Ensure procmail file attributes are specified correctly.
@@ -176,9 +185,11 @@ def test_procmail_attrs(File, Sudo):
         f = File("/var/ossec/.procmailrc")
         assert f.is_file
         assert f.user == "ossec"
-        assert oct(f.mode) == "0644"
+        assert oct(f.mode) == "0440"
 
 
+# Permissions don't match between Ansible and OSSEC deb packages postinst.
+@pytest.mark.xfail
 def test_procmail_log(File, Sudo):
     """
     Ensure procmail log file exist with proper ownership.

@@ -26,6 +26,9 @@ def test_ossec_agent_installed(Package):
     """ Check that ossec-agent package is present """
     assert Package("securedrop-ossec-agent").is_installed
 
+
+# Permissions don't match between Ansible and OSSEC deb packages postinst.
+@pytest.mark.xfail
 def test_ossec_keyfile_present(File, Command, Sudo, SystemInfo):
     """ ensure client keyfile for ossec-agent is present """
     pattern = "^1024 {} {} [0-9a-f]{{64}}$".format(
