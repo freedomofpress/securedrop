@@ -27,7 +27,7 @@ app_ip: 10.0.1.2
 
 pip_deps:
   - name: 'Flask-Testing'
-    version: '0.5.0'
+    version: '0.6.1'
   - name: 'mock'
     version: '2.0.0'
   - name: 'pytest'
