@@ -36,7 +36,7 @@ script:
 - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
 - ./testinfra/test.py
 after_success:
-  cd tests/ && coveralls && cd ..  # cd back to repo root for srcclr run
+  cd securedrop/ && coveralls && cd ../  # cd back to repo root for srcclr run
 addons:
     srcclr:
         debug: true
