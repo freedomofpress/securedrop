@@ -75,6 +75,9 @@ Vagrant.configure("2") do |config|
     staging.vm.provider "virtualbox" do |v|
       v.memory = 1024
     end
+    staging.vm.provider "libvirt" do |lv, override|
+      lv.memory = 1024
+    end
     staging.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/securedrop-staging.yml"
       ansible.verbose = 'v'
