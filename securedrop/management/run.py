@@ -174,7 +174,8 @@ def run():  # pragma: no cover
                                  ['python', 'journalist.py'],
                                  'cyan'),
         lambda: DevServerProcess('SASS Compiler',
-                                 ['sass', '--watch', 'sass:static/css'],
+                                 ['sass', '--watch', 'sass:static/css',
+                                  '--style', 'compressed'],
                                  'magenta'),
     ]
 
