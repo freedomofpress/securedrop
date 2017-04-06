@@ -18,12 +18,12 @@ adapters. If the machine has network ports you can't physically remove, you
 should clearly cover these ports with labels noting not to use them. For an even
 safer approach, fill a port with epoxy to physically disable it. We also
 recommend you remove the speakers from the device (or just cut the audio cables
-if that's easier) . This is to prevent exfiltration of data from the airgap via
-ultrasonic (i.e., above the range of human hearing) waves (for more read
-https://arstechnica.com/security/2013/12/scientist-developed-malware-covertly-jumps-air-gaps-using-inaudible-sound/).
-If you have questions about repurposing hardware for the *Secure Viewing
-Station*, contact the `Freedom of the Press Foundation
-<https://securedrop.org/help>`__.
+if that's easier). This is to prevent `exfiltration of data from the airgap via
+ultrasonic audio
+<https://arstechnica.com/security/2013/12/scientist-developed-malware-covertly-jumps-air-gaps-using-inaudible-sound/>`__,
+which cannot be heard by humans. If you have questions about repurposing
+hardware for the *Secure Viewing Station*, contact the `Freedom of the Press
+Foundation <https://securedrop.org/help>`__.
 
 You should have a Tails drive clearly labeled “SecureDrop Secure Viewing
 Station”. If it's not labeled, label it right now, then boot it on the
