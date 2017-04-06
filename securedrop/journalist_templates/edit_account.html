@@ -73,19 +73,20 @@ Yubikey, choose the second.</p>
   {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
 {% endif %}
 
-<form method="post" action="{{ totp_reset_url }}" id="reset-two-factor-totp">
-{% if user %}
+{% macro twofa_reset(user, reset_url, type, button_text) %}
+<form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}">
+  {% if user %}
   <input name="uid" type="hidden" value="{{ user.id }}"/>
-{% endif %}
+  {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (APP)</button>
+  <button class="sd-button" type="submit" class="pull-right">{{ button_text }}</button>
 </form>
+{%- endmacro %}
+
+{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO FACTOR AUTHENTICATION
+(APP)")}}
 <br />
-<form method="post" action="{{ hotp_reset_url}}" id="reset-two-factor-hotp">
-{% if user %}
-  <input name="uid" type="hidden" value="{{ user.id }}"/>
-{% endif %}
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <button class="sd-button" type="submit" class="pull-right">RESET TWO FACTOR AUTHENTICATION (HARDWARE TOKEN)</button>
-</form>
+{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO FACTOR AUTHENTICATION
+(HARDWARE TOKEN)")}}
+
 {% endblock %}
