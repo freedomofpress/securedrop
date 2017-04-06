@@ -17,6 +17,8 @@
     owner: root
     mode: '0644'
   with_items: "{{ apache_files }}"
+  notify:
+    - restart apache2
   tags:
     - apache
 
@@ -27,6 +29,8 @@
     owner: root
     mode: '0644'
   with_items: "{{ apache_templates }}"
+  notify:
+    - restart apache2
   tags:
     - apache
 
@@ -35,6 +39,8 @@
     state: present
     name: "{{ item }}"
   with_items: "{{ apache_modules }}"
+  notify:
+    - restart apache2
   tags:
     - apache
 
@@ -43,6 +49,8 @@
     state: absent
     name: "{{ item }}"
   with_items: "{{ apache_disabled_modules }}"
+  notify:
+    - restart apache2
   tags:
     - apache
     - hardening
@@ -55,6 +63,8 @@
     - 000-default.conf
     - default-ssl.conf
     - default.conf
+  notify:
+    - restart apache2
   tags:
     - apache
     - hardening
@@ -65,6 +75,8 @@
   file:
     state: absent
     dest: /var/www/html
+  notify:
+    - restart apache2
   tags:
     - apache
     - hardening

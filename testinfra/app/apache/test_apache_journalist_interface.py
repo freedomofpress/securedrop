@@ -125,9 +125,7 @@ def test_apache_journalist_interface_vhost(File):
     assert common_apache2_directory_declarations in f.content
 
 
-# Expect to fail pending fix for LogFormat declaration.
-@pytest.mark.xfail
-def test_apache_logging_journalist_interface(File):
+def test_apache_logging_journalist_interface(File, Command, Sudo):
     """
     Check that logging is configured correctly for the Journalist Interface.
     The actions of Journalists are logged by the system, so that an Admin can
@@ -136,7 +134,18 @@ def test_apache_logging_journalist_interface(File):
     Logs were broken for some period of time, logging only "combined" to the logfile,
     rather than the combined LogFormat intended.
     """
-    f = File("/var/log/apache2/journalist-access.log")
-    assert f.is_file
-    assert f.size > 0 # will fail if no journalist account used
-    assert not f.contains("^combined$")
+    # Sudo is necessary because /var/log/apache2 is mode 0750.
+    with Sudo():
+        f = File("/var/log/apache2/journalist-access.log")
+        assert f.is_file
+        if f.size == 0:
+            # If the file is empty, the Journalist Interface hasn't been used
+            # yet, so make a quick GET request local to the host so we can
+            # validate the log entry.
+            Command.check_output("curl http://127.0.0.1:8080")
+
+        assert f.size > 0 # Make sure something was logged.
+        # LogFormat declaration was missing, so track regressions that log
+        # just the string "combined" and nothing else.
+        assert not f.contains("^combined$")
+        assert f.contains("GET")
