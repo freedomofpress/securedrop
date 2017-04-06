@@ -23,8 +23,8 @@
     <form action="/bulk" method="post">
       <div class="document-actions">
         <div id='select-container'></div>
-        <button class="sd-button" type="submit" name="action" value="download"></i> DOWNLOAD</button>
-        <button class="sd-button" type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected">DELETE</button>
+        <button class="sd-button" type="submit" name="action" value="download"></i> DOWNLOAD SELECTED</button>
+        <button class="sd-button" type="submit" name="action" value="confirm_delete" class="danger" id="delete_selected">DELETE SELECTED</button>
       </div>
       <ul id="submissions" class="plain submissions">
         {% for doc in source.collection %}
