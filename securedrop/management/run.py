@@ -175,7 +175,7 @@ def run():  # pragma: no cover
                                  'cyan'),
         lambda: DevServerProcess('SASS Compiler',
                                  ['sass', '--watch', 'sass:static/css',
-                                  '--style', 'compressed'],
+                                  '--style', 'compressed', '--sourcemap=none'],
                                  'magenta'),
     ]
 
