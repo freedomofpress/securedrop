@@ -5,15 +5,15 @@
       <div class="flash {{ category }}">
         {% if category == 'notification' %}
         <img src="{{ url_for('static',
-        filename='i/font-awesome/info-circle-black.png') }}" height=18
-        width=24>
+        filename='i/font-awesome/info-circle-black.png') }}" height=16
+        width=20>
         {% elif category == 'success' %}
         <img src="{{ url_for('static', filename='i/success_checkmark.png') }}"
-        height=20.4 width=27.2>
+        height=17 width=20>
         {% elif category == 'error' %}
         <img src="{{ url_for('static',
-        filename='i/font-awesome/exclamation-triangle-black.png') }}" height=18
-        width=24>
+        filename='i/font-awesome/exclamation-triangle-black.png') }}" height=17
+        width=20>
         {% endif %}
         {{ message }}
       </div>
