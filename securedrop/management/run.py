@@ -1,5 +1,6 @@
 import atexit
 import os
+from os.path import abspath, dirname, join
 import select
 import signal
 import subprocess
@@ -166,6 +167,9 @@ def run():  # pragma: no cover
                                                                        \\/_/ 
 """
 
+    node_packer_watcher_file = abspath(join(dirname(__file__),
+                                            'node-packer-watch.js')
+                                      )
     procs = [
         lambda: DevServerProcess('Source Interface',
                                  ['python', 'source.py'],
@@ -177,6 +181,9 @@ def run():  # pragma: no cover
                                  ['sass', '--watch', 'sass:static/css',
                                  '--style', 'compressed', '--sourcemap=none'],
                                  'magenta'),
+        lambda: DevServerProcess('JS Packer',
+                                 [node_packer_watcher_file],
+                                 'crimson'),
     ]
 
     monitor = DevServerProcessMonitor(procs)
