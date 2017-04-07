@@ -12,8 +12,10 @@ fi
 
 # Since we're running in a VM, we won't have access to ~/.gitconfig. So the
 # repo-level git user config file must be set.
-$(grep -q '^\[user\]' /vagrant/.git/config) || echo 'Please set your git' \
-	'user config in /vagrant/.git/config and retry!'
+if ! grep -q '^\[user\]' /vagrant/.git/config; then
+    echo 'Please set your git user config in /vagrant/.git/config and retry!'
+    exit 1
+fi
 
 readonly NEW_VERSION=$1
 
