@@ -35,6 +35,12 @@
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
   pre_tasks:
+    - name: Ensure all packages are up to date.
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+
     # These packages are necessary for running the `update_version.sh` script.
     - name: Install required build tools.
       apt:
