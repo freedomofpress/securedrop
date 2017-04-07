@@ -38,9 +38,9 @@
       /home/travis/.rvm/bin/rvm install 2.3.0 &&
       /home/travis/.rvm/bin/rvm use 2.3.0 &&
       gem install sass &&
-      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
+      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css --style compressed --sourcemap=none
     else 
-      sass --update sass:static/css
+      sass --update sass:static/css --syle compressed --sourcemap=none
     fi
   args:
     chdir: '{{ securedrop_repo  }}/securedrop'

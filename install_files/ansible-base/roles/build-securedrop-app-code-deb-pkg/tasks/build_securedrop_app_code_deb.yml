@@ -69,7 +69,7 @@
     - build
 
 - name: Compile SASS to CSS.
-  shell: sass --force --stop-on-error --update sass:/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css --style compressed
+  shell: sass --force --stop-on-error --update sass:/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css --style compressed --sourcemap=none
   args:
     chdir: "{{ securedrop_code }}"
   tags:
