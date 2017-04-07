@@ -24,8 +24,6 @@ if [ -z "$NEW_VERSION" ]; then
   exit 1
 fi
 
-sudo apt-get install devscripts git -qq
-
 # Get the old version from securedrop/version.py
 old_version_regex="^__version__ = '(.*)'$"
 [[ `cat securedrop/version.py` =~ $old_version_regex ]]
