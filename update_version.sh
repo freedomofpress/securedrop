@@ -5,7 +5,7 @@
 set -e
 
 # Only run this on the Vagrant build VM, with dch and git available
-if [[ "$(whoami)" != 'vagrant' ]]; then
+if [[ "$USER" != 'vagrant' || "$(hostname)" != 'build' ]]; then
   echo 'Only run this on the Vagrant build VM!'
   exit 1
 fi

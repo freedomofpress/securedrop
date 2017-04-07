@@ -134,7 +134,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define 'build', autostart: false do |build|
-    build.vm.box = "build"
+    build.vm.hostname = "build"
     build.vm.box = "bento/ubuntu-14.04"
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
