@@ -33,6 +33,7 @@ script:
   # travis needs the config.py file ran owned by root in other environments it is the
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
+# replacing with my own stuff to try to get a log file written
 - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
 - ./testinfra/test.py
 after_success:

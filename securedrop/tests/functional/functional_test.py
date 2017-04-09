@@ -49,12 +49,24 @@ class FunctionalTest():
         with open('/opt/.tbb_path_file') as f:
            path_to_tbb = f.readline().strip()
         path_to_tbb = path_to_tbb + os.path.sep + "tor-browser_en-US"
+        path_to_tbb = os.path.abspath(path_to_tbb)
+
+
+        # Due to Travis having opinions, we need to chown the tor dir
+        # to be owned by root when we're running CI.
+        if '/home/travis/build' in path_to_tbb:
+            for root, dirs, files in os.walk(path_to_tbb):
+                for d in dirs:
+                    os.chown(os.path.join(root, d), 0, 0)
+                for f in files:
+                    os.chown(os.path.join(root, f), 0, 0)
 
         # Don't use Tor when reading from localhost,
         # and turn off private browsing.
         # We need this to make functional tests work,
         # but they should _not_ be used in any other circumstances
         pref_dict = {
+                     'marionette': False,
                      'network.proxy.no_proxies_on': '127.0.0.1',
                      'browser.privatebrowsing.autostart': False
                     }
@@ -73,7 +85,7 @@ class FunctionalTest():
 
     def _create_webdriver(self):
         log_file_path = 'tests/log/firefox.log'
-        abs_log_file_path = os.path.abspath(log_file_path)
+        abs_log_file_path = os.path.abspath(os.path.join(__file__, '../../log/firefox.log'))
         log_file = open(abs_log_file_path, 'a')
         log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
         log_file.write(log_msg)
