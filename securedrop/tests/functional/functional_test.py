@@ -65,7 +65,6 @@ class FunctionalTest():
         # Since we use session cookies in SD anyway (in private browsing mode all cookies are set as session cookies),
         # this should not affect session lifetime.
         pref_dict = {
-                     'marionette': False,
                      'network.proxy.no_proxies_on': '127.0.0.1',
                      'browser.privatebrowsing.autostart': False
                     }
