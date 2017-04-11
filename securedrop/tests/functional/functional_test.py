@@ -41,10 +41,6 @@ class FunctionalTest():
 
 
     def _create_tor_browser_webdriver(self, abs_log_file_path):
-        # Creating the TorBrowser driver changes the working directory,
-        # so we need to save and then restore the current one.
-        old_dir = os.getcwd()
-
         # Read the TorBrowser location from Ansible
         with open('/opt/.tbb_path_file') as f:
            path_to_tbb = f.readline().strip()
@@ -71,10 +67,6 @@ class FunctionalTest():
         driver = TorBrowserDriver(path_to_tbb,
                                   pref_dict=pref_dict,
                                   tbb_logfile_path=abs_log_file_path)
-
-        # Restore the old directory
-        os.chdir(old_dir)
-
         return driver
 
     def _create_firefox_webdriver(self, abs_log_file_path):
