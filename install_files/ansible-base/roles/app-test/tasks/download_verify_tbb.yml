@@ -63,3 +63,12 @@
   copy:
     content: "{{ tbb_directory }}"
     dest: "/opt/.tbb_path_file"
+
+# If we're on Travis, CI will fail unless the TBB dir is owned by root.
+- name: Chown TBB directory to root, if on Travis
+  file:
+    dest: "{{ tbb_directory }}"
+    owner: root
+    group: root
+    recurse: yes
+  when: non_default_securedrop_user == "travis"
