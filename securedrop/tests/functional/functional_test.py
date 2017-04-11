@@ -78,20 +78,20 @@ class FunctionalTest():
 
         return driver
 
-    def _create_firefox_webdriver(self, log_file):
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+    def _create_firefox_webdriver(self, abs_log_file_path):
+        with open(abs_log_file_path, 'a') as f:
+            firefox = firefox_binary.FirefoxBinary(log_file=f)
+            return webdriver.Firefox(firefox_binary=firefox)
 
     def _create_webdriver(self):
-        log_file_path = 'tests/log/firefox.log'
-        abs_log_file_path = os.path.abspath(os.path.join(__file__, '../../log/firefox.log'))
-        log_file = open(abs_log_file_path, 'a')
-        log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
-        log_file.write(log_msg)
-        log_file.flush()
+        abs_log_file_path = os.path.abspath(join(dirname(__file__), '../log/firefox.log'))
+        with open(abs_log_file_path, 'a') as f:
+            log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
+            f.write(log_msg)
+            f.flush()
 
         if 'SD_USE_FALLBACK_BROWSER' in os.environ:
-            driver = self._create_firefox_webdriver(log_file)
+            driver = self._create_firefox_webdriver(abs_log_file_path)
         else:
             driver = self._create_tor_browser_webdriver(abs_log_file_path)
 
