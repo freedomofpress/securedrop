@@ -70,7 +70,6 @@ class FunctionalTest():
         with open(abs_log_file_path, 'a') as f:
             log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
             f.write(log_msg)
-            f.flush()
 
         if 'SD_USE_FALLBACK_BROWSER' in os.environ:
             driver = self._create_firefox_webdriver(abs_log_file_path)
