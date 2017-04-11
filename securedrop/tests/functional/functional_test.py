@@ -60,10 +60,10 @@ class FunctionalTest():
                 for f in files:
                     os.chown(os.path.join(root, f), 0, 0)
 
-        # Don't use Tor when reading from localhost,
-        # and turn off private browsing.
-        # We need this to make functional tests work,
-        # but they should _not_ be used in any other circumstances
+        # Don't use Tor when reading from localhost, and turn off private browsing.
+        # We need to turn off private browsing because we won't be able to access the browser's cookies in private browsing mode.
+        # Since we use session cookies in SD anyway (in private browsing mode all cookies are set as session cookies),
+        # this should not affect session lifetime.
         pref_dict = {
                      'marionette': False,
                      'network.proxy.no_proxies_on': '127.0.0.1',
