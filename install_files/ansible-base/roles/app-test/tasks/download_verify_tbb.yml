@@ -1,15 +1,11 @@
 ---
-- name: Create system account user
-  user:
-    name: "{{ system_account}}"
-
 - name: Create tbb directory.
   sudo: true
   file:
     path: "{{ tbb_directory }}"
     state: directory
-    owner: "{{ system_account }}"
-    group: "{{ system_account }}"
+    owner: "{{ non_default_securedrop_user }}"
+    group: "{{ non_default_securedrop_user }}"
     mode: "0770"
 
 - name: Stat TBB tarball

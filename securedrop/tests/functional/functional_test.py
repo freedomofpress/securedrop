@@ -49,12 +49,12 @@ class FunctionalTest():
 
         # Due to Travis having opinions, we need to chown the tor dir
         # to be owned by root when we're running CI.
-        if '/home/travis/' in path_to_tbb:
-            for root, dirs, files in os.walk(path_to_tbb):
-                for d in dirs:
-                    os.chown(os.path.join(root, d), 0, 0)
-                for f in files:
-                    os.chown(os.path.join(root, f), 0, 0)
+        # if '/home/travis/' in path_to_tbb:
+        #     for root, dirs, files in os.walk(path_to_tbb):
+        #         for d in dirs:
+        #             os.chown(os.path.join(root, d), 0, 0)
+        #         for f in files:
+        #             os.chown(os.path.join(root, f), 0, 0)
 
         # Don't use Tor when reading from localhost, and turn off private browsing.
         # We need to turn off private browsing because we won't be able to access the browser's cookies in private browsing mode.
