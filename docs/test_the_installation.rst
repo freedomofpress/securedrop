@@ -7,7 +7,7 @@ Test connectivity
 SSH to both servers over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the Admin Workstation, you should be able to SSH to the App
+On the *Admin Workstation*, you should be able to SSH to the App
 Server and the Monitor Server. ::
 
    $ ssh app
@@ -27,7 +27,7 @@ Log in to both servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All access to the SecureDrop servers should be performed over SSH from the
-Admin Workstation. To aid in troubleshooting, physical logins via TTY are
+*Admin Workstation*. To aid in troubleshooting, physical logins via TTY are
 supported, but require 2FA to be configured. See the :doc:`2FA setup guide
 <google_authenticator>` for information how to enable console logins.
 

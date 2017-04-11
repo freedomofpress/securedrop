@@ -35,7 +35,7 @@ Upgrade Procedure
 
 The upgrade procedure can be performed entirely from the Admin
 Workstation that you set up when you installed 0.3pre. Start by
-booting the Admin Tails USB on the Admin Workstation. Make sure you
+booting the Admin Tails USB on the *Admin Workstation*. Make sure you
 set an *Adminstrator Password* in the *Tails Greeter*.
 
 #. Open a terminal (it is an icon on the top of the screen that looks

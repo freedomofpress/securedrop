@@ -32,7 +32,7 @@ Upgrade Procedure
    version. Throughout the rest of this document, substitute ``0.3.x`` with the
    current release's version number.
 
-#. Checkout and verify the current release on the Admin Workstation. ::
+#. Checkout and verify the current release on the *Admin Workstation*. ::
 
      cd /home/amnesia/Persistent/SecureDrop
      git pull
@@ -63,7 +63,7 @@ Upgrade Procedure
 #. Once you've successfully installed 0.3.x, copy ``sdbackup.tar.gz`` to any
    location on the 0.3.x app server. You will also need to copy the
    ``migration_scripts/0.2.1`` directory to the new app server. You can copy it
-   from the git repository on the Admin Workstation and transfer it to the app
+   from the git repository on the *Admin Workstation* and transfer it to the app
    server with a flash drive, or ``git clone`` the repo to your home directory
    on the app server.
 

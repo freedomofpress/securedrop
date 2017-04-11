@@ -68,18 +68,18 @@ SSH configuration will be skipped, since only Administrators need
 to access the servers over SSH.
 
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
-         the Admin Workstation via the Transfer Device. Place these files
+         the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
          Journalist Workstation, and the ``install.sh`` script will
          automatically use them.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
              to the Journalist Workstation. Those files grant access via SSH,
-             and only the Admin Workstation should have shell access to the
+             and only the *Admin Workstation* should have shell access to the
              servers.
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
-you used to :doc:`Configure the Admin Workstation Post-Install
+you used to :doc:`Configure the *Admin Workstation* Post-Install
 <configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
 repository on the Journalist Workstation, just like you did for the Admin
 Workstation. Refer to the docs for :ref:`cloning the SecureDrop
@@ -93,7 +93,7 @@ shortcuts for the Source and Journalist Interfaces: ::
   sudo ./install.sh
 
 If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
-files from the Admin Workstation, the script will prompt for the information.
+files from the *Admin Workstation*, the script will prompt for the information.
 Make sure to type the information carefully, as any typos will break access
 for the Journalist Workstation.
 

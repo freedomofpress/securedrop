@@ -55,7 +55,7 @@ Assumptions about the source's computer
 -  The computer correctly executes Tails or the Tor Browser.
 -  The computer is not compromised by malware.
 
-Assumptions about the Admin Workstation and the Journalist Workstation
+Assumptions about the *Admin Workstation* and the Journalist Workstation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer correctly executes Tails.
@@ -155,7 +155,7 @@ What the Monitor Server can achieve
 What the Workstations can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The **Admin Workstation** requires Tails with a persistent volume,
+-  The *Admin Workstation* requires Tails with a persistent volume,
    which stores information such as GPG and SSH keys, as well as a
    :doc:`database with passphrases <../passphrases>`
    for the Application Server, the Monitor Server, and the GPG key the

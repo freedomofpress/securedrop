@@ -58,7 +58,7 @@ SecureDrop git repository (usually ``~/Persistent/securedrop``). Ensure you have
 SecureDrop version 0.3.7 or later checked out (you can run ``git describe
 --exact-match`` to see what Git tag you've checked out).
 
-.. note:: The backups are stored in the Admin Workstation's persistent volume.
+.. note:: The backups are stored in the *Admin Workstation*'s persistent volume.
           **You should verify that you have enough space to store the backups
           before running the backup command.**
 
@@ -70,7 +70,7 @@ SecureDrop version 0.3.7 or later checked out (you can run ``git describe
 Check connectivity
 ''''''''''''''''''
 
-First, verify that your Admin Workstation is able to run Ansible and connect to
+First, verify that your *Admin Workstation* is able to run Ansible and connect to
 the SecureDrop servers.
 
 .. code:: sh
@@ -92,7 +92,7 @@ to debug your connectivity before proceeding further. Make sure:
     ``tails_files/install.sh``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
-* The Admin Workstation is connected to the Internet.
+* The *Admin Workstation* is connected to the Internet.
 * Tor started successfully.
 * The ``HidServAuth`` values from ``app-ssh-aths`` and ``mon-ssh-aths`` are in
   Tails' ``/etc/tor/torrc``.
@@ -113,7 +113,7 @@ perform the backup:
    cd install_files/ansible-base
    ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
 
-.. todo:: Test this on a real Admin Workstation
+.. todo:: Test this on a real *Admin Workstation*
 
 The backup role will print out the results of its tasks as it completes them.
 You can expect the ``fetch the backup file`` step to take a long time,
@@ -135,13 +135,13 @@ Prerequisites
 '''''''''''''
 
 The process for restoring a backup is very similar to the process of creating
-one. As before, to get started, boot the Admin Workstation, ``cd`` to the
+one. As before, to get started, boot the *Admin Workstation*, ``cd`` to the
 SecureDrop repository, and ensure that you have SecureDrop 0.3.7 or later
 checked out.
 
 The restore role expects to find a ``.tar.gz`` backup archive in
 ``install_files/ansible-base`` under the SecureDrop repository root directory.
-If you are using the same Admin Workstation to do a restore from a previous
+If you are using the same *Admin Workstation* to do a restore from a previous
 backup, it should already be there because it was placed there by the backup
 role. Otherwise, you should copy the backup archive that you wish to restore to
 ``install_files/ansible-base``.
@@ -168,7 +168,7 @@ case something goes wrong with the restore.
 
 Once the restore is done, the Ansible playbook will fetch the Tor HidServAuth
 credentials for the various Authenticated Tor Hidden Services (ATHS) back to the
-Admin Workstation. This synchronizes the state on the Admin Workstation with the
+*Admin Workstation*. This synchronizes the state on the *Admin Workstation* with the
 state of the restored server. You should re-run the Tails custom configuration
 script (``tails_files/install.sh``, see
 :doc:`configure_admin_workstation_post_install` for detailed instructions).

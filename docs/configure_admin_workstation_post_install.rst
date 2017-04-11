@@ -59,8 +59,8 @@ playbooks over Tor in the future, directs Tails to install Ansible at the
 beginning of every session, and sets up SSH host aliases for the servers.
 
 The only thing you need to remember to do is enable
-persistence when you boot the Admin Workstation. If you are
-using the Admin Workstation and are unable to connect to any
+persistence when you boot the *Admin Workstation*. If you are
+using the *Admin Workstation* and are unable to connect to any
 of the authenticated hidden services, restart Tails and make
 sure to enable persistence.
 

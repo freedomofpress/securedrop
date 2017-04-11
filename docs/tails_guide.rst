@@ -131,7 +131,7 @@ To use the template:
 Set up easy access to the Journalist Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To complete setup of the Admin Workstation or Journalist Workstation, we
+To complete setup of the *Admin Workstation* or Journalist Workstation, we
 recommend using the scripts in ``tails_files`` to easily configure Tor to
 access the *Journalist Interface*.
 

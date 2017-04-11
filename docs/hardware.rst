@@ -185,13 +185,13 @@ of it is still recommended.
    servers in case of failure. We recommend buying an external hard
    drive that can be encrypted and used to store server backups.
 
-   -  Since this drive will be connected to the **Admin Workstation** to
+   -  Since this drive will be connected to the *Admin Workstation* to
       perform backups, it should *not* be the same drive used for
       **Offline Storage**.
 
 -  **Network Switch**: If your firewall has fewer than **four** NIC's,
    you will need an additional Ethernet switch to perform installation
-   and maintenance tasks with the Admin Workstation. This switch is
+   and maintenance tasks with the *Admin Workstation*. This switch is
    generally useful because it allows you to connect the **Admin
    Workstation** to your firewall's LAN port without taking down either
    of the SecureDrop servers.

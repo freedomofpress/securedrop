@@ -6,7 +6,7 @@ Install Ansible
 
 SecureDrop uses the Ansible automation tool for installation and maintenance.
 
-To install Ansible on the Admin Workstation, first update the ``apt``
+To install Ansible on the *Admin Workstation*, first update the ``apt``
 package manager's package lists to make sure you get the latest and
 greatest version of Ansible. This usually takes a few minutes over
 Tor. Once that's done, you can install Ansible:

@@ -212,7 +212,7 @@ you've done that, you can re-install the Tails auto-configuration:
    sudo ./install.sh
 
 This is the same process as described in
-:doc:`configure_admin_workstation_post_install` (for the Admin Workstation) and
+:doc:`configure_admin_workstation_post_install` (for the *Admin Workstation*) and
 :doc:`onboarding` (for the Journalist Workstations). If you have questions,
 consult that documentation first.
 
@@ -238,7 +238,7 @@ Journalist Workstation, and finally decrypting it on the SVS.
 If you are able to decrypt the submission successfully, you have verified that
 the Journalist Workstation and SVS are working correctly after the upgrade.
 
-To test the Admin Workstation, make sure you can still SSH into the servers:
+To test the *Admin Workstation*, make sure you can still SSH into the servers:
 
 .. code:: sh
 
@@ -254,7 +254,7 @@ To test the Admin Workstation, make sure you can still SSH into the servers:
          ``install_files/ansible-base/mon-ssh-aths``, respectively.
 
 .. tip:: Consider retaining the encrypted backup drive as a disaster recovery
-         device. Document the passphrase in the Admin Workstation KeePassX
+         device. Document the passphrase in the *Admin Workstation* KeePassX
          database, and store the physical Backup Device in a locked safe or
          other secure location.
 
