@@ -8,11 +8,6 @@
     group: "{{ securedrop_user }}"
     mode: "0770"
 
-- name: Stat TBB tarball
-  stat:
-    path: "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz"
-  register: tbb_stat
-
 - name: Download TBB {{ tbb_release }} tarball and signature.
   get_url:
     url: "{{ item }}"
@@ -20,7 +15,6 @@
   with_items:
     - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz
     - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz.asc
-  when: not tbb_stat.stat.exists
 
 - name: Install gnupg-curl
   sudo: true
