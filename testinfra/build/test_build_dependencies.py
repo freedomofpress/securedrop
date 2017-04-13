@@ -25,6 +25,8 @@ build_directories = get_build_directories()
 
 
 @pytest.mark.parametrize("package", [
+    "devscripts",
+    "git",
     "libssl-dev",
     "python-dev",
     "python-pip",
@@ -32,6 +34,9 @@ build_directories = get_build_directories()
 def test_build_dependencies(Package, package):
     """
     Ensure development apt dependencies are installed.
+    The devscripts and git packages are required for running the
+    `update_version.sh` script, which should be executed inside the
+    build VM, so let's make sure they're present.
     """
     assert Package(package).is_installed
 
@@ -65,5 +70,6 @@ def test_build_directories(File, directory):
     if '{}' in directory:
         directory = directory.format(securedrop_test_vars.securedrop_version)
     assert File(directory).is_directory
+
 
 

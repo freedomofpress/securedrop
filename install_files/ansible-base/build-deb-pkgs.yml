@@ -34,6 +34,15 @@
     - group_vars/securedrop.yml
     - group_vars/securedrop_application_server.yml
     - group_vars/development.yml
+  pre_tasks:
+    # These packages are necessary for running the `update_version.sh` script.
+    - name: Install required build tools.
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - devscripts
+        - git
   roles:
     - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
     - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
