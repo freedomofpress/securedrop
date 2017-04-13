@@ -120,10 +120,10 @@ Most news websites, even those that are non-profits, use 3rd-party
 analytics tools or tracking bugs on their websites. It is vital that
 these are disabled for the SecureDrop landing page.
 
-Both the New Yorker and Forbes were heavily criticized when launching
-their version of SecureDrop because their landing page contained
-trackers. They were claiming they were going to great lengths to protect
-source's anonymity, but by having trackers on their landing page, also
+In the past, some news organizations were heavily criticized when launching
+their SecureDrop instances because their landing page contained
+trackers. They claimed they were going to great lengths to protect
+sources' anonymity, but by having trackers on their landing page, this also
 opened up multiple avenues for third parties to collect information on
 those sources. This information can potentially be accessed by law
 enforcement or intelligence agencies and could unduly expose a source.
