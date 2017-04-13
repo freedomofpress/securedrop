@@ -332,7 +332,7 @@ acceptable to leave the passphrase blank in this case.
 .. todo:: Not sure if we should encourage people to put a passphrase
           on this key. It's already on the encrypted persistence of a
           Tails USB, so by the same logic that we use to justify not
-          passphrase-protecting the GPG key on the SVS, this key
+          passphrase-protecting the GPG key on the *SVS*, this key
           should not be passphrase protected either. It also reduces
           credential juggling and is one less thing to
           forget/lose/actually be a bad passphrase because we're

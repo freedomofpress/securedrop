@@ -63,7 +63,7 @@ Assumptions about the *Admin Workstation* and the Journalist Workstation
 -  The two-factor authentication device used with the workstation are
    not compromised by malware.
 
-Assumptions about the Secure Viewing Station
+Assumptions about the *Secure Viewing Station*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer is airgapped.
@@ -165,7 +165,7 @@ What the Workstations can achieve
    required to connect to the Journalist Interface, as well as a :doc:`database
    with passphrases <../passphrases>` for the
    Journalist Interface and the journalist's personal GPG key.
--  The **Secure Viewing Station** requires Tails with a persistent
+-  The *Secure Viewing Station* requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
    GPG key, as well as a :doc:`database with the
    passphrase <../passphrases>` for that key.
@@ -454,16 +454,16 @@ What a physical seizure of the Monitor Server can achieve
    attacker can also analyze any plaintext information that resides in
    RAM. The attacker can also tamper with the hardware.
 
-What a compromise of the Secure Viewing Station can achieve
+What a compromise of the *Secure Viewing Station* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The Secure Viewing Station is only useful to an attacker while
+-  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
    may learn more if the Transfer device is in use at the time of
    compromise or seizure. A physical seizure of this machine, the Tails
    device or the Transfer device will also achieve nothing, assuming
    that Tails' implementation of full-disk encryption works as expected.
--  A compromise of the Secure Viewing Station allows the attacker to:
+-  A compromise of the *Secure Viewing Station* allows the attacker to:
 
    -  Run commands as the **amnesia** user.
    -  View, modify, and delete files owned by the **amnesia** user. This
@@ -472,16 +472,16 @@ What a compromise of the Secure Viewing Station can achieve
    -  View, modify, and delete encrypted--and possibly also decrypted
       submissions--if the Transfer device is in use.
 
-What a physical seizure of the Secure Viewing Station can achieve
+What a physical seizure of the *Secure Viewing Station* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The Secure Viewing Station is only useful to an attacker while
+-  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
    may learn more if the Transfer device is in use at the time of
    compromise or seizure. A physical seizure of this machine, the Tails
    device or the Transfer device will also achieve nothing, assuming
    that Tails' implementation of full-disk encryption works as expected.
--  A physical seizure of the Secure Viewing Station, while on and with
+-  A physical seizure of the *Secure Viewing Station*, while on and with
    the persistent volume decrypted and mounted, allows the attacker to:
 
    -  Tamper with the hardware.
@@ -528,7 +528,7 @@ What a random person on the Internet can achieve
    and uploading many large documents.
 -  A random person can submit empty, forged, or inaccurate documents.
 -  A random person can submit malicious documents, e.g. malware that
-   will attempt to compromise the Secure Viewing Station.
+   will attempt to compromise the *Secure Viewing Station*.
 -  A random person can attempt to get sensitive information from a
    SecureDrop user's browser session, such as the source's codename.
 -  A random person can attempt to compromise the SecureDrop server by

@@ -13,7 +13,7 @@ Technical Summary
 SecureDrop is a tool for sources to communicate securely with journalists. The
 SecureDrop application environment consists of three dedicated computers:
 
-- ``Secure Viewing Station``: An air-gapped laptop running the
+- *Secure Viewing Station*: An air-gapped laptop running the
    `Tails operating system`_ from a USB stick that journalists use to decrypt
    and view submitted documents.
 - ``Application Server``: Ubuntu server running two segmented Tor hidden
@@ -32,7 +32,7 @@ normal workstation computer:
 - ``Journalist Workstation``: The every-day laptop that the journalist uses for
    their work. The journalist will use this computer to connect to the
    ``Application Server`` to download encrypted documents that they will
-   transfer to the ``Secure Viewing Station``. The ``Journalist Workstation``
+   transfer to the *Secure Viewing Station*. The ``Journalist Workstation``
    is also used to respond to sources via the *Journalist Interface*.
 
 Depending on the news organizations's threat model, it is recommended that
@@ -92,8 +92,8 @@ SecureDrop. First, they use a *Journalist Workstation* running Tails to connect
 to the *Journalist Interface*, an authenticated Tor Hidden Service. Journalists
 download `GPG <https://www.gnupg.org/>`__-encrypted submissions and copy them
 to a *Transfer Device* (a thumb drive or DVD). Those submissions are then
-connected to the airgapped *Secure Viewing Station* (SVS) which holds the key
-to decrypt them. Journalists can then use the SVS to read, print, and
+connected to the airgapped *Secure Viewing Station* (*SVS*) which holds the key
+to decrypt them. Journalists can then use the *SVS* to read, print, and
 otherwise prepare documents for publication. Apart from those deliberately
 published, decrypted documents are never accessed on an Internet-connected
 computer.

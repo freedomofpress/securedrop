@@ -65,7 +65,7 @@ credential:
 -  The secret code for the Journalist Interface's two-factor
    authentication.
 
-Secure Viewing Station
+*Secure Viewing Station*
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The journalist will be using the *Secure Viewing Station* with Tails to

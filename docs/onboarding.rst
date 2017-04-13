@@ -20,11 +20,11 @@ In order to use SecureDrop, each journalist needs two things:
 
      The Journalist Interface allows journalists to download submissions
      from sources, but they are encrypted to the offline private key
-     that is stored on the Secure Viewing Station Tails USB. In order
+     that is stored on the *Secure Viewing Station* Tails USB. In order
      for the journalist to decrypt and view submissions, they need
-     access to a Secure Viewing Station.
+     access to a *Secure Viewing Station*.
 
-Determine access protocol for the Secure Viewing Station
+Determine access protocol for the *Secure Viewing Station*
 --------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
@@ -32,7 +32,7 @@ public/private key pair - the *SecureDrop Submission Key*. As a
 result, each journalist needs a way to access the Secure Viewing
 Station with a Tails USB that includes the submission private key.
 
-The access protocol for the Secure Viewing Station depends on the
+The access protocol for the *Secure Viewing Station* depends on the
 structure and distribution of your organization. If your organization
 is centralized and there are only a few journalists with access to
 SecureDrop, they should be fine with sharing a single Secure Viewing

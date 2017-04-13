@@ -59,7 +59,7 @@ device with the Google Authenticator app installed.
 Secure Viewing Station
 ----------------------
 
-The *Secure Viewing Station* (or *SVS* for short) is a machine that is
+The *Secure Viewing Station* (or **SVS** for short) is a machine that is
 kept offline and only ever used together with the Tails operating system
 on the *offline* USB stick. This machine will be used to generate GPG
 keys for all journalists with access to SecureDrop, as well as to
@@ -100,7 +100,7 @@ device at times, and this process takes longer for larger devices.
 
 Depending on your threat model, you may wish to only use one-time use
 media (such as CD-R or DVD-R) for transferring files to and from the
-SVS. While doing so is cumbersome, it reduces the risk of malware (that
+*SVS*. While doing so is cumbersome, it reduces the risk of malware (that
 could be run simply by opening a malicious submission) exfiltrating
 sensitive data, such as the private key used to decrypt submissions or
 the content of decrypted submissions.

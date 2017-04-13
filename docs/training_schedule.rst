@@ -15,7 +15,7 @@ Time: 30min
 Participants: all
 
 Required: projector, WiFi access, pre-configured demo SecureDrop
-instance and 2 laptops to act as the Journalist Workstation and SVS
+instance and 2 laptops to act as the Journalist Workstation and *SVS*
 
 -  The demo instance has multiple sources to try and give a feel of what
    it will look like at 2 weeks past being public with sources in
@@ -35,7 +35,7 @@ recipients and anyone else interested
 -  Demo the source submission process
 -  Demo the journalist's processes for checking the Journalist Interface
 -  Demo the journalist's processes for replies
--  Demo working with submissions on the SVS
+-  Demo working with submissions on the *SVS*
 -  Discuss scrubbing submitted documents prior to publication
 -  Options for distributing with other news organizations
 -  Show example of an OSSEC alert, briefly cover what it does
@@ -47,7 +47,7 @@ recipients and anyone else interested
    `Shallot <https://github.com/katmagic/Shallot>`__ and
    `Scallion <https://github.com/lachesis/scallion>`__
 -  How to brand the Source and Journalist Interface
--  Physical security of servers and SVS
+-  Physical security of servers and *SVS*
 -  How to securely publicize the organization's Source Interface Tor URL
 -  Distribute important info:
 
@@ -87,16 +87,16 @@ Participants: journalists and admins
 
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
--  Setup KeyPassX manager (one for SVS, one for personnel Tails)
+-  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
    Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys
 -  Updating Tails
--  Backing up the SVS
+-  Backing up the *SVS*
 -  If needed, process for distributing the Application's private GPG key
-   to a distant journalist's air-gapped SVS
+   to a distant journalist's air-gapped *SVS*
 -  Do complete journalist process walk through twice, either on
    different days or between morning/afternoon sessions
 -  Using MAT (Metadata Anonymisation Toolkit)
@@ -111,7 +111,7 @@ Participants: admins
 
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
--  Setup KeyPassX manager (one for SVS, one for personnel Tails)
+-  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
    Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
@@ -123,7 +123,7 @@ Participants: admins
    system
 -  Adding packages to Tails
 -  Go over common OSSEC alerts for security updates and daily reports
--  Disaster recovery for application, remote access and SVS
+-  Disaster recovery for application, remote access and *SVS*
 -  Common admin actions
 -  Adding/removing users
 -  Enabling logging
