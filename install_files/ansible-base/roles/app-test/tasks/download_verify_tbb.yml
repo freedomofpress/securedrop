@@ -4,8 +4,8 @@
   file:
     path: "{{ tbb_directory }}"
     state: directory
-    owner: "{{ non_default_securedrop_user }}"
-    group: "{{ non_default_securedrop_user }}"
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
     mode: "0770"
 
 - name: Stat TBB tarball
@@ -71,4 +71,4 @@
     owner: root
     group: root
     recurse: yes
-  when: non_default_securedrop_user == "travis"
+  when: securedrop_user == "travis"
