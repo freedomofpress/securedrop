@@ -53,11 +53,6 @@
   args:
     creates: "{{ tbb_directory }}/tor-browser_{{ tbb_locale }}"
 
-- name:  Save TBB directory to be read later.
-  copy:
-    content: "{{ tbb_directory }}"
-    dest: "/opt/.tbb_path_file"
-
 # If we're on Travis, CI will fail unless the TBB dir is owned by root.
 - name: Chown TBB directory to root, if on Travis
   file:

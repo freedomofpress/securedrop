@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+import getpass
 import mock
 from multiprocessing import Process
 import os
@@ -41,12 +42,6 @@ class FunctionalTest():
 
 
     def _create_tor_browser_webdriver(self, abs_log_file_path):
-        # Read the TorBrowser location from Ansible
-        with open('/opt/.tbb_path_file') as f:
-           path_to_tbb = f.readline().strip()
-        path_to_tbb = path_to_tbb + os.path.sep + "tor-browser_en-US"
-        path_to_tbb = os.path.abspath(path_to_tbb)
-
         # Don't use Tor when reading from localhost,
         # and turn off private browsing. We need to turn off private browsing
         # because we won't be able to access the browser's cookies in
@@ -57,6 +52,12 @@ class FunctionalTest():
                      'network.proxy.no_proxies_on': '127.0.0.1',
                      'browser.privatebrowsing.autostart': False
                     }
+
+        username = getpass.getuser()
+        user_path = join('/home', username)
+        path_to_tbb = '.local/tbb/tor-browser_en-US'
+        path_to_tbb = abspath(join(user_path, path_to_tbb))
+
         driver = TorBrowserDriver(path_to_tbb,
                                   pref_dict=pref_dict,
                                   tbb_logfile_path=abs_log_file_path)
