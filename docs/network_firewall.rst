@@ -65,7 +65,7 @@ network so it is working correctly.
 
 If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN,
 LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network
-firewall for each component of SecureDrop (Application Server, Monitor
+firewall for each component of SecureDrop (*Application Server*, Monitor
 Server, and *Admin Workstation*), so you do not need a switch like you do
 for the 3-NIC configuration.
 
@@ -83,7 +83,7 @@ chosen:
 
 -  Application Subnet: ``10.20.2.0/24``
 -  Application Gateway: ``10.20.2.1``
--  Application Server (OPT1): ``10.20.2.2``
+-  *Application Server* (OPT1): ``10.20.2.2``
 
 .. raw:: html
 
@@ -114,7 +114,7 @@ network firewall. Since there isn't another NIC to connect the Admin
 Workstation to, we recommend using a small switch on the LAN (the
 specific choice of interface doesn't matter, but we recommend using the
 LAN to stay consistent with the rest of this guide) so you can connect
-both the *Admin Workstation* and the Application Server.
+both the *Admin Workstation* and the *Application Server*.
 
 Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
@@ -122,7 +122,7 @@ chosen:
 
 -  Admin/Application Gateway: ``10.20.1.1``
 -  Admin/Application Subnet: ``10.20.1.0/24``
--  Application Server: ``10.20.1.2``
+-  *Application Server*: ``10.20.1.2``
 -  *Admin Workstation*: ``10.20.1.3``
 
 .. raw:: html
@@ -363,8 +363,8 @@ Set up OPT1
 ~~~~~~~~~~~
 
 We set up the LAN interface during the initial configuration. We now
-need to set up the OPT1 interface for the Application Server. Start by
-connecting the Application Server to the OPT1 port. Then use the WebGUI
+need to set up the OPT1 interface for the *Application Server*. Start by
+connecting the *Application Server* to the OPT1 port. Then use the WebGUI
 to configure the OPT1 interface. Go to **Interfaces ▸ OPT1**, and check
 the box to **Enable Interface**. Use these settings:
 

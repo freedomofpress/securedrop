@@ -14,9 +14,9 @@ Servers
 
 These are the core components of a SecureDrop instance.
 
--  **Application Server**: 1 physical server to run the SecureDrop web
+-  *Application Server*: 1 physical server to run the SecureDrop web
    services.
--  **Monitor Server**: 1 physical server which monitors activity on the
+-  *Monitor Server*: 1 physical server which monitors activity on the
    *Application Server* and sends email notifications to an
    administrator.
 -  **Network Firewall**: 1 physical computer that is used as a dedicated
@@ -31,7 +31,7 @@ desire for cost savings and/or convenience. However: we consider it
 organization for both technical and legal reasons:
 
 * While the documents are stored encrypted at rest (via PGP) on the
-  SecureDrop application server, the documents hit server memory
+  SecureDrop *Application Server*, the documents hit server memory
   unencrypted (unless the source used the GPG key provided to
   encrypt the documents first before submitting), and are then
   encrypted in server memory before being written to disk. If the
@@ -86,7 +86,7 @@ SecureDrop and to process submissions using the airgapped workflow.
 
 -  ***Secure Viewing Station* (*SVS*)**: 1 physical computer used as an
    airgap to decrypt and view submissions retrieved from the
-   **Application Server**.
+   *Application Server*.
 
    -  The chosen hardware should be solely used for this purpose and
       should have any wireless networking hardware removed before use.
@@ -180,7 +180,7 @@ of it is still recommended.
    installations that expect to receive a large volume of submissions,
    we recommend buying an external hard drive that can be encrypted and
    used to store submissions that have been transferred from the
-   **Application Server** to the *SVS*.
+   *Application Server* to the *SVS*.
 -  **Backup storage**: It's useful to run periodic backups of the
    servers in case of failure. We recommend buying an external hard
    drive that can be encrypted and used to store server backups.

@@ -16,28 +16,28 @@ SecureDrop application environment consists of three dedicated computers:
 - *Secure Viewing Station*: An air-gapped laptop running the
    `Tails operating system`_ from a USB stick that journalists use to decrypt
    and view submitted documents.
-- ``Application Server``: Ubuntu server running two segmented Tor hidden
+- *Application Server*: Ubuntu server running two segmented Tor hidden
    services. The source connects to the *Source Interface*, a public-facing Tor
    hidden service, to send messages and documents to the journalist. The
    journalist connects to the *Journalist Interface*, an `authenticated Tor
    hidden service
    <https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851>`__, to
    download encrypted documents and respond to sources.
-- ``Monitor server``: Ubuntu server that monitors the ``Application Server``
+- *Monitor Server*: Ubuntu server that monitors the *Application Server*
    with `OSSEC <http://www.ossec.net/>`__ and sends email alerts.
 
 In addition to these dedicated computers, the journalist will also use their
 normal workstation computer:
 
-- ``Journalist Workstation``: The every-day laptop that the journalist uses for
+- *Journalist Workstation*: The every-day laptop that the journalist uses for
    their work. The journalist will use this computer to connect to the
-   ``Application Server`` to download encrypted documents that they will
-   transfer to the *Secure Viewing Station*. The ``Journalist Workstation``
+   *Application Server* to download encrypted documents that they will
+   transfer to the *Secure Viewing Station*. The *Journalist Workstation*
    is also used to respond to sources via the *Journalist Interface*.
 
-Depending on the news organizations's threat model, it is recommended that
+Depending on the news organization's threat model, it is recommended that
 journalists always use the `Tails operating system`_ on their
-``Journalist Workstation`` when connecting to the ``Application Server``.
+*Journalist Workstation* when connecting to the *Application Server*.
 Alternatively, this can also be its own dedicated computer.
 
 These computers should all physically be in your organization's office.

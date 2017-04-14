@@ -143,7 +143,7 @@ these settings accordingly.
 
 **3 NIC Firewall**
 
--  **Application Server**:
+-  *Application Server*:
 
    -  Server IP address: 10.20.1.2
    -  Netmask (default is fine): 255.255.255.0
@@ -163,7 +163,7 @@ these settings accordingly.
 
 **4 NIC Firewall**
 
--  **Application Server**:
+-  *Application Server*:
 
   -  Server IP address: 10.20.2.2
   -  Netmask (default is fine): 255.255.255.0

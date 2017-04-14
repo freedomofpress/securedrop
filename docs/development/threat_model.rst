@@ -106,7 +106,7 @@ Assumptions about the world
 Attack Scenarios
 ----------------
 
-What the Application Server can achieve
+What the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The server sees the plaintext codename, used as the login identifier,
@@ -149,7 +149,7 @@ What the Monitor Server can achieve
    SSH.
 -  The server stores connection history and audit logs for the admin.
 -  The server stores OSSEC and Procmail logs on disk.
--  The server can connect to the Application Server using an SSH key and
+-  The server can connect to the *Application Server* using an SSH key and
    a passphrase.
 
 What the Workstations can achieve
@@ -158,7 +158,7 @@ What the Workstations can achieve
 -  The *Admin Workstation* requires Tails with a persistent volume,
    which stores information such as GPG and SSH keys, as well as a
    :doc:`database with passphrases <../passphrases>`
-   for the Application Server, the Monitor Server, and the GPG key the
+   for the *Application Server*, the Monitor Server, and the GPG key the
    Monitor Server will encrypt OSSEC alerts to.
 -  The **Journalist Workstation** requires Tails with a persistent
    volume, which stores information such as the Hidden Service value
@@ -233,7 +233,7 @@ What a physical seizure of the source's property can achieve
 What a compromise of the admin's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  To access the Journalist Interface, the Application Server, or the
+-  To access the Journalist Interface, the *Application Server*, or the
    Monitor Server, the attacker needs to obtain the admin's login
    credentials and the admin's two-factor authentication device. Unless
    the attacker has physical access to the servers, the attacker will
@@ -254,7 +254,7 @@ What a compromise of the admin's property can achieve
    -  Add, modify, and delete files on the volume.
    -  Access the Hidden Service values used by the Interfaces and the
       servers.
-   -  Access SSH keys and passphrases for the Application Server and the
+   -  Access SSH keys and passphrases for the *Application Server* and the
       Monitor Server.
    -  Access the GPG key and passphrase for the encrypted OSSEC email
       alerts.
@@ -273,7 +273,7 @@ What a compromise of the admin's property can achieve
       that source and prevents the source from ever logging back in with
       that codename.
 
--  An attacker with admin access to the **Application Server** can:
+-  An attacker with admin access to the *Application Server* can:
 
    -  Add, modify, and delete software, configurations, and other files.
    -  See all HTTP requests made by the source, the admin, and the
@@ -302,7 +302,7 @@ What a compromise of the admin's property can achieve
    -  Review logs stored on the system.
    -  Trigger arbitrary commands to be executed by the OSSEC agent user,
       which, assuming the attacker is able to escalate privileges, may
-      affect the Application Server.
+      affect the *Application Server*.
 
 What a physical seizure of the admin's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -339,7 +339,7 @@ What a compromise of the journalist's property can achieve
 
    -  Add, modify, and delete files on the volume.
    -  Access the Hidden Service values used by the Journalist Interface.
-   -  Access SSH keys and passphrases for the Application Server and the
+   -  Access SSH keys and passphrases for the *Application Server* and the
       Monitor Server.
    -  Access the journalist's personal GPG key.
 
@@ -364,10 +364,10 @@ What a physical seizure of the journalist's property can achieve
    persistent volume, password database, and two-factor authentication
    device will allow the attacker to access the Journalist Interface.
 
-What a compromise of the Application Server can achieve
+What a compromise of the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Application Server is compromised, the system user the
+-  If the *Application Server* is compromised, the system user the
    attacker has control over defines what kind of information the
    attacker will be able to view and what kind of actions the attacker
    can perform.
@@ -408,10 +408,10 @@ What a compromise of the Application Server can achieve
       not able to decrypt submissions or communications, unless the
       attacker has access to the encryption key required to do so.
 
-What a physical seizure of the Application Server can achieve
+What a physical seizure of the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Application Server is seized, the attacker will be able to
+-  If the *Application Server* is seized, the attacker will be able to
    view any and all unencrypted files on the server. This includes all
    files in use by the SecureDrop Application. If the server is seized
    while it is powered on, the attacker can also analyze any plaintext

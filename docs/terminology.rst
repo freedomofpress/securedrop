@@ -8,7 +8,7 @@ define these terms.
 
 .. todo:: Pictures would be good for many of the objects defined here
 
-App Server
+Application Server
 ----------
 
 The *Application Server* (or *App Server* for short) runs the SecureDrop
@@ -59,7 +59,7 @@ device with the Google Authenticator app installed.
 Secure Viewing Station
 ----------------------
 
-The *Secure Viewing Station* (or **SVS** for short) is a machine that is
+The *Secure Viewing Station* (or *SVS* for short) is a machine that is
 kept offline and only ever used together with the Tails operating system
 on the *offline* USB stick. This machine will be used to generate GPG
 keys for all journalists with access to SecureDrop, as well as to
