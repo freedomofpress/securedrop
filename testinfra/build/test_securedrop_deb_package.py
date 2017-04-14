@@ -141,3 +141,27 @@ def test_deb_package_contains_no_config_file(File, Command, deb):
     # would be cleaner. Will defer to adding lintian tests later.
     c = Command("dpkg-deb --contents {}".format(deb_package.path))
     assert not re.search("^.*config\.py$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_no_generated_assets(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package does not ship a minified
+    static assets, which are built automatically via Flask-Assets, and may be
+    present in the source directory used to build from.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        c = Command("dpkg-deb --contents {}".format(deb_package.path))
+        # static/gen/ directory should exist
+        assert re.search("^.*\./var/www/securedrop/static/gen/$", c.stdout, re.M)
+        # static/gen/ directory should be empty
+        assert not re.search("^.*\./var/www/securedrop/static/gen/.+$", c.stdout, re.M)
+
+        # static/.webassets-cache/ directory should exist
+        assert re.search("^.*\./var/www/securedrop/static/.webassets-cache/$", c.stdout, re.M)
+        # static/.webassets-cache/ directory should be empty
+        assert not re.search("^.*\./var/www/securedrop/static/.webassets-cache/.+$", c.stdout, re.M)
