@@ -72,4 +72,13 @@ def test_build_directories(File, directory):
     assert File(directory).is_directory
 
 
-
+def test_build_all_packages_updated(Command):
+    """
+    Ensure a dist-upgrade has already been run, by checking that no
+    packages are eligible for upgrade currently. This will ensure that
+    all upgrades, security and otherwise, have been applied to the VM
+    used to build packages.
+    """
+    c = Command('aptitude --simulate -y dist-upgrade')
+    assert c.rc == 0
+    assert "No packages will be installed, upgraded, or removed." in c.stdout
