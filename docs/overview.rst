@@ -72,7 +72,7 @@ Administrators
 The SecureDrop servers are managed by a systems administrator; for larger
 newsrooms, there may be a team of systems administrators. The administrator
 uses a dedicated *Admin Workstation* running `Tails <https://tails.boum.org>`__
-and connects to the App and Mon servers over authenticated `Tor Hidden Services
+and connects to the App and *Monitor Server*s over authenticated `Tor Hidden Services
 <https://www.torproject.org/docs/hidden-services.html>`__ and manages them
 using `Ansible <http://www.ansible.com/>`__.
 
@@ -82,7 +82,7 @@ Sources
 A source submits documents and messages by using `Tor Browser
 <https://www.torproject.org/projects/torbrowser.html>`__ (or Tails) to access
 the *Source Interface*: a public Tor Hidden Service. Submissions are encrypted
-in place on the App server as they are uploaded.
+in place on the *Application Server* as they are uploaded.
 
 Journalists
 ~~~~~~~~~~~

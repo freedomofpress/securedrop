@@ -65,8 +65,8 @@ network so it is working correctly.
 
 If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN,
 LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network
-firewall for each component of SecureDrop (*Application Server*, Monitor
-Server, and *Admin Workstation*), so you do not need a switch like you do
+firewall for each component of SecureDrop (*Application Server*, *Monitor
+Server*, and *Admin Workstation*), so you do not need a switch like you do
 for the 3-NIC configuration.
 
 Depending on your network configuration, you should define the following
@@ -75,7 +75,7 @@ chosen:
 
 -  Admin Subnet: ``10.20.1.0/24``
 -  Admin Gateway: ``10.20.1.1``
--  *Admin Workstation*: ``10.20.1.2``
+-  Admin Workstation: ``10.20.1.2``
 
 .. raw:: html
 
@@ -83,7 +83,7 @@ chosen:
 
 -  Application Subnet: ``10.20.2.0/24``
 -  Application Gateway: ``10.20.2.1``
--  *Application Server* (OPT1): ``10.20.2.2``
+-  Application Server (OPT1): ``10.20.2.2``
 
 .. raw:: html
 
@@ -91,14 +91,14 @@ chosen:
 
 -  Monitor Subnet: ``10.20.3.0/24``
 -  Monitor Gateway: ``10.20.3.1``
--  Monitor Server (OPT2) : ``10.20.3.2``
+-  *Monitor Server* (OPT2) : ``10.20.3.2``
 
 3 NIC configuration
 ~~~~~~~~~~~~~~~~~~~
 
 If your firewall has 3 NICs, we will refer to them as WAN, LAN, and
 OPT1. WAN is used to connect to the external network. LAN and OPT1 are
-used for the Application and Monitor Servers, respectively. Putting them
+used for the Application and *Monitor Server*s, respectively. Putting them
 on separate interfaces allows us to use the network firewall to filter
 and monitor the traffic *between* them.
 
@@ -108,7 +108,7 @@ installed, the only way to connect to the servers is via SSH over the
 local network, so the *Admin Workstation* needs to be directly connected.
 Once it is installed, SSH will be available remotely (as an
 authenticated Tor Hidden Servce) and you will not necessarily need to
-connect the *Admin Workstation* directly to adminster the servers -
+connect the *Admin Workstation* directly to administer the servers -
 although you will still need to connect it directly to administer the
 network firewall. Since there isn't another NIC to connect the Admin
 Workstation to, we recommend using a small switch on the LAN (the
@@ -131,7 +131,7 @@ chosen:
 
 -  Monitor Subnet: ``10.20.2.0/24``
 -  Monitor Gateway: ``10.20.2.1``
--  Monitor Server: ``10.20.2.2``
+-  *Monitor Server*: ``10.20.2.2``
 
 Initial Configuration
 ---------------------
@@ -270,10 +270,10 @@ SecureDrop uses the firewall to achieve two primary goals:
 #. Isolating SecureDrop from the existing network, which may be
    compromised (especially if it is a venerable network in a large
    organization like a newsroom).
-#. Isolating the app and the monitor servers from each other as much as
+#. Isolating the *Application Server* and the *Monitor Server* from each other as much as
    possible, to reduce attack surface.
 
-In order to use the firewall to isolate the app and monitor servers from
+In order to use the firewall to isolate the *Application Server* and the *Monitor Server* from
 each other, we need to connect them to separate interfaces, and then set
 up firewall rules that allow them to communicate.
 
@@ -417,7 +417,7 @@ Here are some general tips for setting up pfSense firewall rules:
    default in pfSense, so you don't need to add explicit rules (iptables
    ``LOGNDROP``) for that.
 #. Since some of the rules are almost identical except for whether they
-   allow traffic from the App Server or the Monitor Server, you can use
+   allow traffic from the *Application Server* or the *Monitor Server*, you can use
    the "add a new rule based on this one" button to save time creating a
    copy of the rule on the other interface.
 #. If you are troubleshooting connectivity, the firewall logs can be

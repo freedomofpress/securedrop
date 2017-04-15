@@ -115,7 +115,7 @@ If you get an error from the upgrade script, see the list of potential errors an
 
   When you installed SecureDrop, you generated an SSH key (and
   probably saved to the default location: ``~/.ssh/id_rsa``) for the
-  user 'amnesia' and copied it to both the App and Mon server. You
+  user 'amnesia' and copied it to both the App and *Monitor Server*. You
   should still have access to that key through the OpenSSH
   persistence in Tails. If you got this error, check if you lost the
   key or saved it to a different location. You won't be able to login
@@ -153,9 +153,9 @@ If you get an error from the upgrade script, see the list of potential errors an
   Our new provisioner, Ansible, must be run over Tor in order to
   reach the servers. Replace the IP addresses in
   ``/install_files/ansible-base/inventory`` with the .onion hostnames
-  for the App and Mon server's Tor hidden services for SSH.
+  for the App and *Monitor Server*'s Tor hidden services for SSH.
 
-- ``Error: can't connect to the Application or Monitor Server via SSH.``
+- ``Error: can't connect to the Application or *Monitor Server* via SSH.``
 
   Something's wrong and we can't connect. You can re-run the script
   to try again.

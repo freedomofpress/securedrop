@@ -152,7 +152,7 @@ these settings accordingly.
    -  Hostname: app
    -  Domain name should be left blank
 
--  **Monitor Server**:
+-  *Monitor Server*:
 
    -  Server IP address: 10.20.2.2
    -  Netmask (default is fine): 255.255.255.0
@@ -172,7 +172,7 @@ these settings accordingly.
   -  Hostname: app
   -  Domain name should be left blank
 
--  **Monitor Server**:
+-  *Monitor Server*:
 
   -  Server IP address: 10.20.3.2
   -  Netmask (default is fine): 255.255.255.0
@@ -277,8 +277,8 @@ Save the Configurations
 
 When you are done, make sure you save the following information:
 
--  The IP address of the App Server
--  The IP address of the Monitor Server
+-  The IP address of the *Application Server*
+-  The IP address of the *Monitor Server*
 -  The non-root user's name and password for the servers.
 
 Test Connectivity

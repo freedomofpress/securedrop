@@ -11,7 +11,7 @@ define these terms.
 Application Server
 ----------
 
-The *Application Server* (or *App Server* for short) runs the SecureDrop
+The *Application Server* (or *App Server*, for short) runs the SecureDrop
 application. This server hosts both the website that sources access
 (*Source Interface*) and the website that journalists access (*Journalist
 Interface*). You may only connect to this server using Tor.
@@ -19,7 +19,7 @@ Interface*). You may only connect to this server using Tor.
 Monitor Server
 --------------
 
-The *Monitor Server* keeps track of the *App Server* and sends out an
+The *Monitor Server* keeps track of the *Application Server* and sends out an
 email alert if something seems wrong. You may only connect to this
 server using Tor.
 
@@ -28,14 +28,14 @@ Source Interface
 
 The *Source Interface* is the website that sources will access when
 submitting documents and communicating with journalists. This site is
-hosted on the *App Server* and can only be accessed over Tor.
+hosted on the *Application Server* and can only be accessed over Tor.
 
 Journalist Interface
 ------------------
 
 The *Journalist Interface* is the website that journalists will access
 when downloading new documents and communicating with sources. This site
-is hosted on the *App Server* and can only be accessed over Tor. In previous
+is hosted on the *Application Server* and can only be accessed over Tor. In previous
 releases, this was called the *Document Interface*, but we have renamed it
 to avoid ambiguity.
 
@@ -52,7 +52,7 @@ Admin Workstation
 -----------------
 
 The *Admin Workstation* is a machine that the system administrator can
-use to connect to the *App Server* and the *Monitor Server* using Tor
+use to connect to the *Application Server* and the *Monitor Server* using Tor
 and SSH. The administrator will also need to have an Android or iOS
 device with the Google Authenticator app installed.
 

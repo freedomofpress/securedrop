@@ -22,7 +22,7 @@ Configure the Installation
 Make sure you have the following information and files before
 continuing:
 
--  The *App Server* IP address
+-  The *Application Server* IP address
 -  The *Monitor Server* IP address
 -  The SecureDrop Submission Key (from the *Transfer
    Device*)
@@ -76,8 +76,8 @@ match your environment. At a minimum, you will need to provide the
 following:
 
 -  User allowed to connect to both servers with SSH: ``ssh_users``
--  IP address of the Monitor Server: ``monitor_ip``
--  Hostname of the Monitor Server: ``monitor_hostname``
+-  IP address of the *Monitor Server*: ``monitor_ip``
+-  Hostname of the *Monitor Server*: ``monitor_hostname``
 -  Hostname of the *Application Server*: ``app_hostname``
 -  IP address of the *Application Server*: ``app_ip``
 -  The SecureDrop Submission Key public key file:

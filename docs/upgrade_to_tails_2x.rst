@@ -242,9 +242,9 @@ To test the *Admin Workstation*, make sure you can still SSH into the servers:
 
 .. code:: sh
 
-    $ ssh <username>@<app server .onion address> hostname
+    $ ssh <username>@<*Application Server* .onion address> hostname
     app
-    $ ssh <username>@<monitor server .onion address> hostname
+    $ ssh <username>@<*Monitor Server* .onion address> hostname
     mon
 
 .. tip:: If you forgot, your SSH username is in

@@ -13,7 +13,7 @@ protect access to the most sensitive assets in the SecureDrop system:
    they are encrypted to an offline key), and some metadata about sources and
    submissions.
 #. SSH on the *Application Server*
-#. SSH on the Monitor Server
+#. SSH on the *Monitor Server*
 
 The installation process blocks direct access to each of these assets, and sets
 up `Authenticated Tor Hidden Services`_ (ATHS) to provide authenticated access

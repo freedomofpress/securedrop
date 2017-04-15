@@ -138,7 +138,7 @@ SecureDrop and to process submissions using the airgapped workflow.
       your threat model and choose your transfer device accordingly.
 
 -  **Monitor, Keyboard, Mouse**: You will need these to do the initial
-   installation of Ubuntu on the Application and Monitor servers.
+   installation of Ubuntu on the Application and *Monitor Server*s.
 
    -  Depending on your setup, you may also need these to work on the
       *SVS*.
@@ -199,7 +199,7 @@ of it is still recommended.
 Specific Hardware Recommendations
 ---------------------------------
 
-Application/Monitor Servers
+Application/*Monitor Server*s
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Intel NUC (Next Unit of Computing) is a capable, cheap, quiet, and

@@ -16,7 +16,7 @@ Prerequisites
 
 - A networked Admin tails workstation configured with the SecureDrop repo
   cloned to the ``Persistent`` directory.
-- Physical/remote access to the app and monitor servers
+- Physical/remote access to the app and *Monitor Server*s
 
 Upgrade Procedure
 -----------------
@@ -39,19 +39,19 @@ Upgrade Procedure
      git tag -v 0.3.x # Make sure you get a "Good signature"
      git checkout 0.3.x
 
-#. Copy the 0.2.1 migration script to the app server using scp or physical
+#. Copy the 0.2.1 migration script to the *Application Server* using scp or physical
    media (usb). ::
 
      /home/amnesia/Persistent/securedrop/migration_scripts/0.2.1/0.2.1_collect.py
 
-#. On the app server, run ``0.2.1_collect.py`` as root and provide a name for
+#. On the *Application Server*, run ``0.2.1_collect.py`` as root and provide a name for
    the backup file (it will have a ``.tar.gz`` extension appended
    automatically). ::
 
      sudo ./0.2.1_collect.py sdbackup
 
 #. Copy ``sdbackup.tar.gz`` to removable media and transfer it to the new
-   instance's app server. If you are re-using the same hardware for your 0.3.x
+   instance's *Application Server*. If you are re-using the same hardware for your 0.3.x
    installation as you did for 0.2.1, make sure you copy this file to a
    external media before beginning the 0.3.x installation - otherwise you will
    lose your data!
@@ -61,11 +61,11 @@ Upgrade Procedure
    the Journalist Interface (with ``./manage.py add-admin``) before continuing.
 
 #. Once you've successfully installed 0.3.x, copy ``sdbackup.tar.gz`` to any
-   location on the 0.3.x app server. You will also need to copy the
-   ``migration_scripts/0.2.1`` directory to the new app server. You can copy it
+   location on the 0.3.x *Application Server*. You will also need to copy the
+   ``migration_scripts/0.2.1`` directory to the new *Application Server*. You can copy it
    from the git repository on the *Admin Workstation* and transfer it to the app
    server with a flash drive, or ``git clone`` the repo to your home directory
-   on the app server.
+   on the *Application Server*.
 
 #. ``cd`` into ``migration_scripts/0.2.1`` and run ``0.3_migrate.py`` as root,
    passing the path to the backup file from the 0.2.1 instance. ::

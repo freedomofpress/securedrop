@@ -8,7 +8,7 @@ SSH to both servers over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the *Admin Workstation*, you should be able to SSH to the App
-Server and the Monitor Server. ::
+Server and the *Monitor Server*. ::
 
    $ ssh app
    $ ssh mon
@@ -76,7 +76,7 @@ Test the web interfaces
      app-journalist-aths. Enter your password and two-factor
      authentication code to log in.
    - If you have problems logging in to the Admin/Journalist Interface,
-     SSH to the App Server and restart the ntp daemon to synchronize
+     SSH to the *Application Server* and restart the ntp daemon to synchronize
      the time: ``sudo service ntp restart``. Also check that your
      smartphone's time is accurate and set to network time in its
      device settings.
