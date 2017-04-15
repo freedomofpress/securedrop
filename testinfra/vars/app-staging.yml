@@ -35,11 +35,7 @@ pip_deps:
   - name: 'selenium'
     version: '2.53.6'
 
-apparmor_complain:
-  - "/usr/sbin/apache2"
-  - "/usr/sbin/apache2//DEFAULT_URI"
-  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
-  - "/usr/sbin/tor"
+apparmor_complain: []
 
 apparmor_enforce:
   - "/sbin/dhclient"
@@ -48,6 +44,10 @@ apparmor_enforce:
   - "/usr/sbin/ntpd"
   - "/usr/sbin/tcpdump"
   - "system_tor"
+  - "/usr/sbin/apache2"
+  - "/usr/sbin/apache2//DEFAULT_URI"
+  - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
+  - "/usr/sbin/tor"
 
 app_directories:
   - /var/www/securedrop

@@ -30,8 +30,6 @@ app-staging
     - ``app-journalist-aths``
     - ``app-ssh-aths``
 
-    The AppArmor profiles run complain mode to aid in debugging.
-
     Forwarded ports:
 
     -  Source Interface: localhost:8082
