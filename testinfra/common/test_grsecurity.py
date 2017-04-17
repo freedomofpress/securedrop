@@ -141,11 +141,6 @@ def test_apt_autoremove(Command):
     assert "0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded" in c.stdout
 
 
-# Expecting failure here, since the Ansible config doesn't set the same
-# flags in via the playbook as were recently declared in the securedrop-grsec
-# metapackage. The playbook in the SecureDrop install process should be updated
-# to match the PaX flags enforced via the metapackage.
-@pytest.mark.xfail
 @pytest.mark.parametrize("binary", [
     "/usr/sbin/grub-probe",
     "/usr/sbin/grub-mkdevicemap",
@@ -166,7 +161,9 @@ def test_pax_flags(Command, File, binary):
     c = Command("paxctl -v {}".format(binary))
     assert c.rc == 0
 
-    assert "- PaX flags: -p---m--E--- [{}]".format(binary) in c.stdout
-    assert "PAGEEXEC is disabled" in c.stdout
-    assert "MPROTECT is disabled" in c.stdout
+    assert "- PaX flags: --------E--- [{}]".format(binary) in c.stdout
     assert "EMUTRAMP is enabled" in c.stdout
+    # Tracking regressions; previous versions of the Ansible config set
+    # the "p" and "m" flags.
+    assert "PAGEEXEC is disabled" not in c.stdout
+    assert "MPROTECT is disabled" not in c.stdout
