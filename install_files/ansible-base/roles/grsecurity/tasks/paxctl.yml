@@ -23,15 +23,5 @@
 - name: Adjust paxctl headers on grub binaries.
   command: paxctl -zCE {{ item.item }}
   with_items: "{{ paxctl_grub_header_check.results }}"
-  # The desired flags should include:
-  #   - p NOPAGEEXEC
-  #   - m NOMPROTECT
-  #   - x NORANDEXEC
-  #   - e NOEMUTRAMP
-  # After running `paxctl -Cpm` in VirtualBox, all four of those flags are set.
-  # However, the current paxctl command only enforces p and m.
-  # The x and e flags are present by default, but can be removed via
-  # `paxctl -z <binary>`. TODO: We may want to update the command
-  # to set -Cpmxe explicitly. Warrants further testing on hardware.
-  when: "item.stdout != '- PaX flags: -p---m--E--- [{{ item.item }}]' or
+  when: "item.stdout != '- PaX flags: --------E--- [{{ item.item }}]' or
          item.rc != 0"
