@@ -5,6 +5,8 @@
   #include <abstractions/base>
   #include <abstractions/tor>
 
+  signal (send) set=("term") peer=unconfined,
+
   capability kill,
   capability net_bind_service,
   capability sys_ptrace,
