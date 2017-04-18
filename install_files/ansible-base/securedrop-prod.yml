@@ -1,4 +1,12 @@
 ---
+- name: Install server prerequesites
+  hosts: [ mon, app ]
+  vars_files:
+    - prod-specific.yml
+  roles:
+    - { role: prerequesites }
+  sudo: yes
+
 - name: Validate presence of Application and Monitor Servers.
   hosts: [ mon, app, mon-prod, app-prod ]
   # The manage-groups role dynamically adds hosts to groups,

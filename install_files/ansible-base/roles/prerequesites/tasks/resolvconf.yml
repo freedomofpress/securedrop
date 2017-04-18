@@ -1,0 +1,36 @@
+---
+- name: install expect
+  apt:
+    package: expect
+    state: latest
+    # don't do 'apt-get update' because if the system clock is too far off,
+    # the crypto for https repositories can fail
+    update_cache: no
+
+- name: get current gateway ip address
+  shell: /sbin/ip route | awk '/default/ { print $3 }'
+  changed_when: false
+  register: gateway_ip_address
+
+
+# NOTE: don't use notify because updating resolvconf MUST happen before other steps complete
+
+- name: add nameservers to /etc/resolvconf/resolv.conf.d/tail
+  lineinfile:
+    dest: /etc/resolvconf/resolv.conf.d/tail
+    regexp: '(^|(\s*))nameserver\s*{{ item }}($|\s)'
+    line: 'nameserver {{ item }}'
+    state: present
+    insertafter: EOF
+    create: yes
+    owner: root
+    group: root
+    mode: '0644'
+  register: set_dns_result
+  with_items:
+    - '{{ gateway_ip_address.stdout }}'
+    - '{{ dns_server }}'
+
+- name: update resolvconf
+  script: resolvconf-reconfigure.sh
+  when: set_dns_result.changed
