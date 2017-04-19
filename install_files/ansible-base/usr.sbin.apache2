@@ -128,6 +128,7 @@
   /var/www/securedrop/dictionaries/nouns.txt r,
   /var/www/securedrop/journalist.py r,
   /var/www/securedrop/journalist.pyc rw,
+  /var/www/securedrop/journalist_templates/_source_row.html r,
   /var/www/securedrop/journalist_templates/admin.html r,
   /var/www/securedrop/journalist_templates/admin_add_user.html r,
   /var/www/securedrop/journalist_templates/admin_edit_hotp_secret.html r,
