@@ -1,0 +1,63 @@
+---
+- name: Create tbb directory.
+  sudo: true
+  file:
+    path: "{{ tbb_directory }}"
+    state: directory
+    owner: "{{ securedrop_user }}"
+    group: "{{ securedrop_user }}"
+    mode: "0770"
+
+- name: Download TBB {{ tbb_release }} tarball and signature.
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ tbb_directory }}/{{ item|basename }}"
+  with_items:
+    - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz
+    - https://dist.torproject.org/torbrowser/{{ tbb_release }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz.asc
+
+- name: Install gnupg-curl
+  sudo: true
+  apt:
+    name: gnupg-curl
+    state: present
+
+- name: Download TBB {{ tbb_release }} signing key.
+  sudo: true
+  command: gpg --keyserver {{ keyserver }} --recv-key {{ tbb_signing_key }}
+  register: gpg_import_tor_browser_devs_key_result
+  changed_when: "'imported: 1' in gpg_import_tor_browser_devs_key_result.stderr"
+
+- name: Verify TBB {{ tbb_release }} signature.
+  command: >
+    gpg --verify
+    tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz.asc
+    tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz
+  register: gpg_verify_result
+  changed_when: false
+  args:
+    chdir: "{{ tbb_directory }}"
+
+- name: Install the package "xz utils"
+  apt:
+    name: xz-utils
+    state: present
+
+- name: Un-xz the TBB archive
+  command: unxz -fk "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar.xz"
+  args:
+    creates: "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar"
+
+- name: Un-tar the TBB archive
+  command: tar -xf "{{ tbb_directory }}/tor-browser-linux{{ tbb_arch }}-{{ tbb_release }}_{{ tbb_locale }}.tar" -C "{{ tbb_directory}}"
+  args:
+    creates: "{{ tbb_directory }}/tor-browser_{{ tbb_locale }}"
+
+# If we're on Travis, CI will fail unless the TBB dir is owned by root.
+- name: Chown TBB directory to root, if on Travis
+  file:
+    dest: "{{ tbb_directory }}"
+    owner: root
+    group: root
+    recurse: yes
+  when: securedrop_user == "travis"

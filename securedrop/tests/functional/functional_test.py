@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+import getpass
 import mock
 from multiprocessing import Process
 import os
@@ -19,6 +20,7 @@ import gnupg
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox import firefox_binary
+from tbselenium.tbdriver import TorBrowserDriver
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -33,19 +35,51 @@ class FunctionalTest():
 
     def _unused_port(self):
         s = socket.socket()
-        s.bind(("localhost", 0))
+        s.bind(('127.0.0.1', 0))
         port = s.getsockname()[1]
         s.close()
         return port
 
+
+    def _create_tor_browser_webdriver(self, abs_log_file_path):
+        # Don't use Tor when reading from localhost,
+        # and turn off private browsing. We need to turn off private browsing
+        # because we won't be able to access the browser's cookies in
+        # private browsing mode.  Since we use session cookies in SD anyway
+        # (in private browsing mode all cookies are set as session cookies),
+        # this should not affect session lifetime.
+        pref_dict = {
+                     'network.proxy.no_proxies_on': '127.0.0.1',
+                     'browser.privatebrowsing.autostart': False
+                    }
+
+        username = getpass.getuser()
+        user_path = join('/home', username)
+        path_to_tbb = '.local/tbb/tor-browser_en-US'
+        path_to_tbb = abspath(join(user_path, path_to_tbb))
+
+        driver = TorBrowserDriver(path_to_tbb,
+                                  pref_dict=pref_dict,
+                                  tbb_logfile_path=abs_log_file_path)
+        return driver
+
+    def _create_firefox_webdriver(self, abs_log_file_path):
+        with open(abs_log_file_path, 'a') as f:
+            firefox = firefox_binary.FirefoxBinary(log_file=f)
+            return webdriver.Firefox(firefox_binary=firefox)
+
     def _create_webdriver(self):
-        log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
-        log_file.write(
-            '\n\n[%s] Running Functional Tests\n' % str(
-                datetime.now()))
-        log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+        abs_log_file_path = os.path.abspath(join(dirname(__file__), '../log/firefox.log'))
+        with open(abs_log_file_path, 'a') as f:
+            log_msg = '\n\n[%s] Running Functional Tests\n' % str(datetime.now())
+            f.write(log_msg)
+
+        if 'SD_USE_FALLBACK_BROWSER' in os.environ:
+            driver = self._create_firefox_webdriver(abs_log_file_path)
+        else:
+            driver = self._create_tor_browser_webdriver(abs_log_file_path)
+
+        return driver
 
     def setUp(self):
         # Patch the two-factor verification to avoid intermittent errors
@@ -63,8 +97,8 @@ class FunctionalTest():
         source_port = self._unused_port()
         journalist_port = self._unused_port()
 
-        self.source_location = "http://localhost:%d" % source_port
-        self.journalist_location = "http://localhost:%d" % journalist_port
+        self.source_location = "http://127.0.0.1:%d" % source_port
+        self.journalist_location = "http://127.0.0.1:%d" % journalist_port
 
         def start_source_server():
             # We call Random.atfork() here because we fork the source and
@@ -93,7 +127,6 @@ class FunctionalTest():
 
         self.source_process.start()
         self.journalist_process.start()
-
         self.driver = self._create_webdriver()
 
         # Set window size and position explicitly to avoid potential bugs due
@@ -105,7 +138,6 @@ class FunctionalTest():
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)
         self.driver.implicitly_wait(5)
-
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):

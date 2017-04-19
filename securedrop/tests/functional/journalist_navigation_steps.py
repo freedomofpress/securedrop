@@ -331,10 +331,8 @@ class JournalistNavigationSteps():
             return ' '.join(cookie_strs)
 
         submission_req = urllib2.Request(file_url)
-        submission_req.add_header(
-            'Cookie',
-            cookie_string_from_selenium_cookies(
-                self.driver.get_cookies()))
+        cookie_string = cookie_string_from_selenium_cookies(self.driver.get_cookies())
+        submission_req.add_header('Cookie', cookie_string)
         raw_content = urllib2.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)

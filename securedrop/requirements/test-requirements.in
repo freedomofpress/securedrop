@@ -6,4 +6,4 @@ pip-tools
 py
 pytest
 pytest-cov
-selenium < 3
+tbselenium
