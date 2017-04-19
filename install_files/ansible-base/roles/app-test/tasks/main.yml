@@ -6,7 +6,7 @@
     - non-development
 
 - include: apparmor_complain.yml
-  when: "'staging' in group_names"
+  when: securedrop_app_test_apparmor_complain
   tags:
     - aa-complain
     - non-development

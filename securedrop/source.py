@@ -20,7 +20,6 @@ import version
 import crypto_util
 import store
 import template_filters
-import util
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
@@ -125,7 +124,8 @@ def check_tor2web():
 @app.route('/')
 def index():
     return render_template('index.html',
-                           custom_notification=config.CUSTOM_NOTIFICATION)
+                           custom_notification=getattr(config,
+                           'CUSTOM_NOTIFICATION', ''))
 
 
 def generate_unique_codename(num_words=7):
