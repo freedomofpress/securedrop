@@ -1,0 +1,4 @@
+---
+# Set the time at which the servers reboot to apply nightly updates
+# and aid in clearing memory. Only the hour is configurable.
+daily_reboot_time: 4 # An integer between 0 and 23
