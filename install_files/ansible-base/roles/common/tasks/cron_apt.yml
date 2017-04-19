@@ -8,8 +8,8 @@
     - cron-apt
 
 - name: Copy cron-apt config file.
-  template:
-    src: cron-apt
+  copy:
+    src: cron-apt-config
     dest: /etc/cron-apt/config
   tags:
     - apt
