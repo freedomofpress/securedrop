@@ -75,10 +75,6 @@ class JournalistNavigationSteps():
         h1s = self.driver.find_elements_by_tag_name('h1')
         self.assertIn("Admin Interface", [el.text for el in h1s])
 
-        users_table_rows = self.driver.find_elements_by_css_selector(
-            'table#users tr.user')
-        self.assertEquals(len(users_table_rows), 1)
-
     def _add_user(self, username, password, is_admin=False):
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -176,12 +172,76 @@ class JournalistNavigationSteps():
                           self.driver.find_element_by_link_text,
                           'Admin')
 
+    def _edit_account(self):
+        edit_account_link = self.driver.find_element_by_link_text(
+            'Edit Account')
+        edit_account_link.click()
+
+        # The header says "Edit your account"
+        h1s = self.driver.find_elements_by_tag_name('h1')[0]
+        self.assertEqual('Edit your account', h1s.text)
+        # There's no link back to the admin interface.
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_partial_link_text('Back to admin interface')
+        # There's no field to change your username.
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_css_selector('#username')
+        # There's no checkbox to change the administrator status of your
+        # account.
+        with self.assertRaises(NoSuchElementException):
+            username_field = self.driver.find_element_by_css_selector('#is_admin')
+        # 2FA reset buttons at the bottom point to the user URLs for reset.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        self.assertRegexpMatches(totp_reset_button.get_attribute('action'),
+                                 '/account/reset-2fa-totp')
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        self.assertRegexpMatches(hotp_reset_button.get_attribute('action'),
+                                 '/account/reset-2fa-hotp')
+
     def _edit_user(self, username):
+        user = Journalist.query.filter_by(username=username).one()
+
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == username,
             self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
+        # The header says "Edit user "username"".
+        h1s = self.driver.find_elements_by_tag_name('h1')[0]
+        self.assertEqual('Edit user "{}"'.format(username), h1s.text)
+        # There's a convenient link back to the admin interface.
+        admin_interface_link = self.driver.find_element_by_partial_link_text(
+            'Back to admin interface')
+        self.assertRegexpMatches(admin_interface_link.get_attribute('href'),
+                                 '/admin$')
+        # There's a field to change the user's username and it's already filled
+        # out with the user's username.
+        username_field = self.driver.find_element_by_css_selector('#username')
+        self.assertEqual(username_field.get_attribute('placeholder'), username)
+        # There's a checkbox to change the administrator status of the user and
+        # it's already checked appropriately to reflect the current status of
+        # our user.
+        username_field = self.driver.find_element_by_css_selector('#is_admin')
+        self.assertEqual(bool(username_field.get_attribute('checked')),
+                         user.is_admin)
+        # 2FA reset buttons at the bottom point to the admin URLs for
+        # resettting 2FA and include the correct user id in the hidden uid.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        self.assertRegexpMatches(totp_reset_button.get_attribute('action'),
+                                 '/admin/reset-2fa-totp')
+        totp_reset_uid = totp_reset_button.find_element_by_name('uid')
+        self.assertEqual(int(totp_reset_uid.get_attribute('value')), user.id)
+        self.assertFalse(totp_reset_uid.is_displayed())
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        self.assertRegexpMatches(hotp_reset_button.get_attribute('action'),
+                                 '/admin/reset-2fa-hotp')
+        hotp_reset_uid = hotp_reset_button.find_element_by_name('uid')
+        self.assertEqual(int(hotp_reset_uid.get_attribute('value')), user.id)
+        self.assertFalse(hotp_reset_uid.is_displayed())
 
     def _admin_can_edit_new_user(self):
         # Log the new user out
@@ -250,7 +310,7 @@ class JournalistNavigationSteps():
             'input[name="password_again"]')
         password_again_field.send_keys(new_password)
         update_user_btn = self.driver.find_element_by_css_selector(
-            'button#update-user')
+            'button#update')
         update_user_btn.click()
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)

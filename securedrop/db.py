@@ -270,6 +270,9 @@ class Journalist(Base):
     MAX_PASSWORD_LEN = 128
 
     def set_password(self, password):
+        # Don't do anything if user's password hasn't changed.
+        if self.pw_hash and self.valid_password(password):
+            return
         # Enforce a reasonable maximum length for passwords to avoid DoS
         if len(password) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
