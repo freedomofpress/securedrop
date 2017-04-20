@@ -27,39 +27,13 @@ def test_apache_apt_packages(Package, package):
     assert Package(package).is_installed
 
 
-@pytest.mark.parametrize("apache_opt", [
-    "ServerTokens Prod",
-    "ServerSignature Off",
-    "TraceEnable Off",
-])
-def test_apache_security_config(File, apache_opt):
-    """
-    Ensure required apache2 security config file is present.
-
-    Refer to #643, which states that /etc/apache2/security
-    is superfluous, and not even used in our config right now.
-    We should update the Ansible config to move the file
-    to /etc/apache2/conf-available/security.conf.
-    """
-    f = File("/etc/apache2/security")
-    assert f.is_file
-    assert f.user == "root"
-    assert f.group == "root"
-    assert oct(f.mode) == "0644"
-
-    assert f.contains("^{}$".format(apache_opt))
-
-
-# OK to fail here, pending updates to Ansible config.
-@pytest.mark.xfail
 def test_apache_security_config_deprecated(File):
     """
-    Ensure that /etc/apache2/security is absent. See #643 for discussion.
-    Tokens set in that file should be moved to
-    /etc/apache2/conf-available/security.conf.
+    Ensure that /etc/apache2/security is absent, since it was setting
+    redundant options already presentin /etc/apache2/apache2.conf.
+    See #643 for discussion.
     """
     assert not File("/etc/apache2/security").exists
-    assert File("/etc/apache2/config-available/security.conf").exists
 
 
 @pytest.mark.parametrize("apache_opt", [

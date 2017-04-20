@@ -71,10 +71,6 @@ apache_packages:
   - libapache2-mod-wsgi
   - libapache2-mod-xsendfile
 
-apache_files:
-  - 'apache2.conf'
-  - 'security'
-
 apache_templates:
   - 'ports.conf'
   - 'sites-available/journalist.conf'
