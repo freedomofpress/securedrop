@@ -76,6 +76,11 @@ class FunctionalTest():
 
         self.driver = self._create_webdriver()
 
+        # Set window size and position explicitly to avoid potential bugs due
+        # to discrepancies between environments.
+        self.driver.set_window_position(0, 0);
+        self.driver.set_window_size(1024, 768);
+
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
         # Firefox takes too long to render it (#399)

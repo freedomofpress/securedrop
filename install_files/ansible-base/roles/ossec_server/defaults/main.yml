@@ -1,0 +1,5 @@
+---
+smtp_relay_cert_dir: /etc/ssl/certs
+smtp_relay_cert_override_dir: '/etc/ssl/certs_local'
+smtp_relay_cert_override_file: ''
+

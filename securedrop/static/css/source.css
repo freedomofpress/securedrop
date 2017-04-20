@@ -125,6 +125,12 @@ a.text-link {
   height: auto;
 }
 
+.option a.btn.block {
+  margin-bottom: 0px;
+  width: 100%;
+  display: block;
+}
+
 button, a.btn, .btn {
   background: #7985aa;
   box-sizing: border-box;
@@ -189,6 +195,26 @@ button.small, a.btn.small, .btn.small {
   margin: 0 auto;
 }
 
+.full-width {
+  width: 100%;
+}
+
+a > img.on-hover, button > img.on-hover {
+  display: none;
+}
+
+a:hover > img.off-hover, button:hover > img.off-hover {
+  display: none;
+}
+
+a:hover > img.on-hover, button:hover > img.on-hover {
+  display: inline;
+}
+
+a > img.icon, button > img.icon {
+  vertical-align: middle;
+}
+
 .select {
   border: 1px #C4C2C2 solid;
   padding: 3px 10px;
@@ -203,7 +229,7 @@ button.small, a.btn.small, .btn.small {
 
 .warning {
   display: none;
-  background-color: #ae3840;
+  background-color: #813a81;
   color: white;
   padding: 10px 0;
   width: 100%;
@@ -291,11 +317,6 @@ p.serious {
 }
 .snippet .message textarea:focus {
   outline: none;
-}
-
-.pull-bottom {
-  position: absolute;
-  bottom: 0px;
 }
 
 .pull-left {

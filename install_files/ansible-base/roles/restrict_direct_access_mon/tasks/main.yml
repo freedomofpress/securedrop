@@ -1,5 +1,6 @@
 ---
 - include: mon_display_onions.yml
+  tags: backup
 
 - include: ssh.yml
 

@@ -1,0 +1,27 @@
+---
+- name: copy the backup script to the target server
+  copy:
+    src: backup.py
+    dest: /tmp/
+    owner: root
+    mode: "0770"
+
+- name: run the backup script
+  # Setting args inline (against project style conventions) to work around
+  # Ansible bug: https://github.com/ansible/ansible/issues/9693
+  command: /tmp/backup.py chdir=/tmp
+  # If there are a lot of submissions, this task could take a while.
+  async: 3600
+  register: backup_filename
+
+- name: fetch the backup file
+  fetch:
+    src: /tmp/{{ backup_filename.stdout }}
+    dest: ./{{ backup_filename.stdout }}
+    flat: yes
+    fail_on_missing: yes
+
+- name: delete backup file to save space
+  file:
+    path: /tmp/{{ backup_filename.stdout }}
+    state: absent

@@ -1,5 +1,98 @@
 # Changelog
 
+## 0.3.12
+
+* Disables swap on Application Server via preinst script on
+`securedrop-app-code` package hook. Swap was not previously disabled
+permanently, so this automatic update will deactivate it, shred the swap
+partition if it was in use, then disable swap entries in /etc/fstab.
+A separate change in future release will enforce this configuration
+via the Ansible config at install time (#1620)
+
+## 0.3.11
+
+* Instructs source to turn the Tor Browser security slider to High and to
+get a new Tor Browser identity after logout. Turning the security slider to
+high would disable the SVG icons so the icons and CSS on the source interface
+are updated to display properly using this setting (#1567, #1480, #1522)
+* Adds `/logout` route and button to base template (#1165)
+* Removes the choice of number of codename words from the source interface
+(#1521)
+* Adds SourceClear integration (#1520)
+* CSS fixes (#1186)
+* Adds coveragerc
+
+The issues for this release were tracked in the 0.3.11 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.11.
+
+## 0.3.10
+
+Creates new Debian package `securedrop-keyring` for managing the SecureDrop
+Release Signing Key. Rotates the signing key currently in use by setting
+a dependency on the other Debian packages, so that currently running deployments
+will have their apt keyrings updated via automatic nightly updates.
+
+* Installs securedrop-keyring package for managing apt signing key (#1416)
+
+Admins must manually update the Release Signing Key on Admin Workstations.
+See documentation on configuring the Admin Workstation.
+
+The issues for this release were tracked in the 0.3.10 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.3.10.
+
+## 0.3.9
+
+Point release to fix some minor issues and update our Python dependencies.
+
+* Fix Unicode support regression and implement better Unicode tests (#1370)
+* Add OSSEC rule to ignore futile port scanning (#1374)
+* Update Apache AppArmor profile to allow access to webfonts and to execute uname (#1332, #1373)
+* Update Python dependencies of SD (#1379)
+* Fix a regression in the new install script (#1397)
+
+The issues for this release were tracked in the 0.3.9 milestone on Github: 
+https://github.com/freedomofpress/securedrop/milestones/0.3.9.
+
+## 0.3.8
+
+* Re-include the pycrypto Python module to address the regression in 0.3.7 (#1344)
+* Switch to using bento boxes in Vagrantfile for more reproducible test environments
+* Minor fixes to update_version.sh
+
+The issues for this release were tracked in the 0.3.8 milestone on Github: 
+https://github.com/freedomofpress/securedrop/milestones/0.3.8
+
+## 0.3.7
+
+Point release to address some requests from SecureDrop administrators and
+upgrade various components on the SecureDrop architecture.
+
+* Improve backup and restore roles
+* Ensure SecureDrop-specific Tails configuration works on Tails 2.x
+* Document upgrading from Tails 1.x to Tails 2.x for current admins using 1.x
+* Upgrade SecureDrop's Python dependencies
+
+The issues for the release were tracked with the [0.3.7 milestone on
+GitHub](https://github.com/freedomofpress/securedrop/milestones/0.3.7).
+
+## 0.3.6
+
+This is an emergency release to update the copy of the FPF code signing public
+key in the repo because it expired on Oct 26. This fix is required for new
+installs to succeed; otherwise, the installation will fail because apt's
+package authentication fails if the corresponding key is expired.
+
+## 0.3.5
+
+The issues for this release were tracked with the 0.3.5 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.5
+
+* Use certificate verification instead of fingerprint verification by default for the OSSEC Postfix configuration (#1076)
+* Fix apache2 service failing to start on Digital Ocean (#1078)
+* Allow Apache to rotate its logs (#1074)
+* Prevent reboots during cron-apt upgrade (#1071)
+* Update documentation (#1107, #1112, #1113)
+* Blacklist additional kernel modules used for wireless networking (#1116)
+
 ## 0.3.4
 
 The issues for this release were tracked with the 0.3.4 milestone on Github: https://github.com/freedomofpress/securedrop/milestones/0.3.4
