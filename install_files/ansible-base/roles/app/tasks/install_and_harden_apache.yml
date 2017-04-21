@@ -15,7 +15,7 @@
     src: apache2.conf
     dest: /etc/apache2/apache2.conf
     owner: root
-    mode: '0644'
+    mode: "0644"
   notify:
     - restart apache2
   tags:
@@ -36,7 +36,7 @@
     src: "{{ item }}"
     dest: /etc/apache2/{{ item }}
     owner: root
-    mode: '0644'
+    mode: "0644"
   with_items: "{{ apache_templates }}"
   notify:
     - restart apache2

@@ -5,7 +5,7 @@
     dest: /etc/sudoers
     owner: root
     group: root
-    mode: '0440'
+    mode: "0440"
     backup: yes
     validate: "visudo -cf %s"
   register: sudoers_st
