@@ -14,7 +14,7 @@
     src: ssh_config
     dest: /etc/ssh/ssh_config
     owner: root
-    mode: '0644'
+    mode: "0644"
   tags:
     - ssh
     - 2fa
@@ -25,7 +25,7 @@
     src: sshd_config
     dest: /etc/ssh/sshd_config
     owner: root
-    mode: '0644'
+    mode: "0644"
   tags:
     - ssh
     - 2fa
@@ -36,7 +36,7 @@
     src: common-auth
     dest: /etc/pam.d/
     owner: root
-    mode: '0644'
+    mode: "0644"
   tags:
     - ssh
     - pam

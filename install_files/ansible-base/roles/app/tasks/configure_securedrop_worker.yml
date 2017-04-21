@@ -4,7 +4,7 @@
     src: "securedrop_worker.conf"
     dest: "/etc/supervisor/conf.d/securedrop_worker.conf"
     owner: root
-    mode: 0644
+    mode: "0644"
   notify:
     - reload supervisor
   tags:
@@ -19,7 +19,7 @@
     # should be the same user that the worker runs as
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - supervisor
     - permissions

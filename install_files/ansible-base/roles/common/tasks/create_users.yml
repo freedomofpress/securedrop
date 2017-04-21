@@ -5,7 +5,7 @@
     dest: /etc/sudoers
     owner: root
     group: root
-    mode: '0440'
+    mode: "0440"
     backup: yes
     validate: "visudo -cf %s"
   register: sudoers_st
@@ -29,7 +29,7 @@
     dest: /etc/profile.d/securedrop_additions.sh
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - users
     - environment

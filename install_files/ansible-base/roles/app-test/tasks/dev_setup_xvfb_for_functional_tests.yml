@@ -68,7 +68,7 @@
     src: xvfb
     dest: /etc/init.d/xvfb
     owner: root
-    mode: '700'
+    mode: "0700"
   tags:
     - xvfb
     - permissions
@@ -86,7 +86,7 @@
     src: xvfb_display.sh
     dest: /etc/profile.d/xvfb_display.sh
     owner: root
-    mode: '444'
+    mode: "0444"
   tags:
     - xvfb
     - environment

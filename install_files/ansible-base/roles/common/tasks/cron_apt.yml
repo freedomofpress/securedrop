@@ -53,7 +53,7 @@
   template:
     src: cron-apt-cron-job.j2
     dest: /etc/cron.d/cron-apt
-    mode: '644'
+    mode: "0644"
     owner: root
   tags:
     - apt

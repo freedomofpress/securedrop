@@ -2,7 +2,7 @@
 - name: Create SecureDrop app code directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_code }}"
@@ -12,7 +12,7 @@
 - name: Create SecureDrop data directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}"
@@ -22,7 +22,7 @@
 - name: Create SecureDrop data store directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/store"
@@ -32,7 +32,7 @@
 - name: Create SecureDrop keyring directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/keys"
@@ -42,7 +42,7 @@
 - name: Create SecureDrop temp directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/tmp"
