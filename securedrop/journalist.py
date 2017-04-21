@@ -186,8 +186,9 @@ def admin_add_user():
                 db_session.commit()
             except InvalidPasswordLength:
                 form_valid = False
-                flash("Your password is too long (maximum length {} characters)".format(
-                        Journalist.MAX_PASSWORD_LEN), "error")
+                flash("Your password must be between {} and {} characters.".format(
+                        Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
+                    ), "error")
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
@@ -259,8 +260,9 @@ def edit_account_password(user, password, password_again):
         try:
             user.set_password(password)
         except InvalidPasswordLength:
-            flash("Password must be less than {} characters!".format(
-                Journalist.MAX_PASSWORD_LEN), 'error')
+            flash("Your password must be between {} and {} characters.".format(
+                    Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
+                ), "error")
             raise
 
 
