@@ -182,7 +182,7 @@
     dest: "{{ securedrop_code }}/static/i/logo.png"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
-    mode: "400"
+    mode: "0400"
     backup: yes
   when: securedrop_header_image is defined and
         securedrop_header_image != ""
