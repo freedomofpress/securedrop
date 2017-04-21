@@ -179,15 +179,16 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
-                      password='valid', password_again='valid'))
+                      password='validlongpassword',
+                      password_again='validlongpassword'))
 
         self.assertMessageFlashed("Account successfully updated!", 'success')
 
     def test_user_edits_password_success_reponse(self):
         self._login_user()
         resp = self.client.post(url_for('edit_account'),
-                                data=dict(password='valid',
-                                          password_again='valid'))
+                                data=dict(password='validlongpassword',
+                                          password_again='validlongpassword'))
         self.assertMessageFlashed("Account successfully updated!", 'success')
 
     def test_admin_edits_user_password_mismatch_warning(self):
@@ -447,8 +448,8 @@ class TestJournalistApp(TestCase):
     def test_valid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('edit_account'), data=dict(
-            password='valid',
-            password_again='valid'))
+            password='validlongpassword',
+            password_again='validlongpassword'))
         self.assertMessageFlashed("Account successfully updated!", 'success')
 
     def test_regenerate_totp(self):

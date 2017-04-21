@@ -49,7 +49,7 @@ class TestIntegration(unittest.TestCase):
 
         # Add a test user to the journalist interface and log them in
         # print Journalist.query.all()
-        self.user_pw = "bar"
+        self.user_pw = "longpassword"
         self.user = Journalist(username="foo",
                                password=self.user_pw)
         db_session.add(self.user)
@@ -532,8 +532,8 @@ class TestIntegration(unittest.TestCase):
 
         # change password
         self.journalist_app.post('/account', data=dict(
-            password='newpass',
-            password_again='newpass'
+            password='newlongpassword',
+            password_again='newlongpassword'
         ))
 
         # logout
@@ -542,7 +542,7 @@ class TestIntegration(unittest.TestCase):
         # login with new credentials should redirect to index page
         resp = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
-            password='newpass',
+            password='newlongpassword',
             token='mocked',
             follow_redirects=True))
         self.assertEqual(resp.status_code, 302)
@@ -561,7 +561,7 @@ class TestIntegration(unittest.TestCase):
 
         # log out
         self.journalist_app.get('/logout')
-        
+
         # login with new 2fa secret should redirect to index page
         resp = self.journalist_app.post('/login', data=dict(
             username=self.user.username,
