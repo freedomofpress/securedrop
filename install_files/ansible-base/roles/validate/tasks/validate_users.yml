@@ -1,0 +1,8 @@
+---
+- name: Validate Admin username.
+  assert:
+    that:
+      - "ssh_users != item"
+      - "ssh_users != ''"
+      - "item not in ssh_users"
+  with_items: "{{ securedrop_validate_disallowed_users }}"
