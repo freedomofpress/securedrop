@@ -11,10 +11,10 @@ define these terms.
 Application Server
 ----------
 
-The *Application Server* (or *App Server*, for short) runs the SecureDrop
-application. This server hosts both the website that sources access
-(*Source Interface*) and the website that journalists access (*Journalist
-Interface*). You may only connect to this server using Tor.
+The *Application Server* runs the SecureDrop application. This server hosts both
+the website that sources access (*Source Interface*) and the website that
+journalists access (*Journalist Interface*). You may only connect to this server
+using Tor.
 
 Monitor Server
 --------------

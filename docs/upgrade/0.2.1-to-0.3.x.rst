@@ -16,7 +16,7 @@ Prerequisites
 
 - A networked Admin tails workstation configured with the SecureDrop repo
   cloned to the ``Persistent`` directory.
-- Physical/remote access to the app and *Monitor Server*s
+- Physical/remote access to the *Application* and *Monitor Servers*
 
 Upgrade Procedure
 -----------------
@@ -81,4 +81,3 @@ Finally, test your new installation and make sure that everything was
 successfully migrated.
 
 .. _SecureDrop website: https://securedrop.org/
-

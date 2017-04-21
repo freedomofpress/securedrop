@@ -80,7 +80,7 @@ vary and you may require later edits to the Postfix configuration
 (mainly /etc/postfix/main.cf) on the *Monitor Server* in order to get
 alerts to work. You can consult `Postfix's official
 documentation <http://www.postfix.org/documentation.html>`__ for help,
-although we've described some common scenarios in the 
+although we've described some common scenarios in the
 :ref:`troubleshooting section <Troubleshooting>` of this document.
 
 If you have your GPG public key handy, copy it to
@@ -462,7 +462,7 @@ particularly concerning messages with direct investigation.
 Common OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~
 
-The SecureDrop Application and *Monitor Server*s reboot every night, as part
+The SecureDrop *Application* and *Monitor Servers* reboot every night, as part
 of the unattended upgrades process. When the servers come back up, OSSEC will
 start again and report the change in status. Therefore you should receive an
 email alert every morning containing text similar to: ::

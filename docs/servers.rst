@@ -257,7 +257,7 @@ When you get to the software selection screen, only choose **OpenSSH
 server** by hitting the space bar.
 
 .. caution:: Hitting enter before the space bar will force you to start the
-             installation process over).
+             installation process over.
 
 Once **OpenSSH Server** is selected, hit *Continue*.
 

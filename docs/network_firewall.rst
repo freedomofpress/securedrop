@@ -98,7 +98,7 @@ chosen:
 
 If your firewall has 3 NICs, we will refer to them as WAN, LAN, and
 OPT1. WAN is used to connect to the external network. LAN and OPT1 are
-used for the Application and *Monitor Server*s, respectively. Putting them
+used for the *Application* and *Monitor Servers*, respectively. Putting them
 on separate interfaces allows us to use the network firewall to filter
 and monitor the traffic *between* them.
 
