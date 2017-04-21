@@ -79,6 +79,12 @@ def _add_user(is_admin=False): # pragma: no cover
                   'password.'.format(Journalist.MAX_PASSWORD_LEN))
             continue
 
+        if len(password) < Journalist.MIN_PASSWORD_LEN:
+            print('Error: Password needs to be at least {} characters.'.format(
+                Journalist.MIN_PASSWORD_LEN
+            ))
+            continue
+
         if password == password_again:
             break
         print("Passwords didn't match!")
@@ -159,9 +165,9 @@ def delete_user(): # pragma: no cover
             selected_user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
             pass
-        else: 
+        else:
             raise
-        
+
     print('User "{}" successfully deleted'.format(username))
     return 0
 
