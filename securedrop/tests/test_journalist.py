@@ -246,8 +246,9 @@ class TestJournalistApp(TestCase):
                       password_again=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('Password must be less than {} '
-                                  'characters!'.format(
+        self.assertMessageFlashed('Your password must be between {} and {} '
+                                  'characters.'.format(
+                                      Journalist.MIN_PASSWORD_LEN,
                                       Journalist.MAX_PASSWORD_LEN), 'error')
 
     def test_user_edits_password_too_long_warning(self):
@@ -259,8 +260,9 @@ class TestJournalistApp(TestCase):
                                           password_again=overly_long_password),
                                 follow_redirects=True)
 
-        self.assertMessageFlashed('Password must be less than {} '
-                                  'characters!'.format(
+        self.assertMessageFlashed('Your password must be between {} and {} '
+                                  'characters.'.format(
+                                      Journalist.MIN_PASSWORD_LEN,
                                       Journalist.MAX_PASSWORD_LEN), 'error')
 
     def test_admin_add_user_password_too_long_warning(self):
@@ -272,7 +274,7 @@ class TestJournalistApp(TestCase):
             data=dict(username='dellsberg', password=overly_long_password,
                       password_again=overly_long_password, is_admin=False))
 
-        self.assertIn('password is too long', resp.data)
+        self.assertIn('Your password must be between', resp.data)
 
     def test_admin_edits_user_invalid_username(self):
         """Test expected error message when admin attempts to change a user's
@@ -449,8 +451,9 @@ class TestJournalistApp(TestCase):
             password_again=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('Password must be less than {} '
-                                  'characters!'.format(
+        self.assertMessageFlashed('Your password must be between {} and {} '
+                                  'characters.'.format(
+                                      Journalist.MIN_PASSWORD_LEN,
                                       Journalist.MAX_PASSWORD_LEN), 'error')
 
     def test_valid_user_password_change(self):
