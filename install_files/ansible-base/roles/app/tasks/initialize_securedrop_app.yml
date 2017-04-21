@@ -51,7 +51,7 @@
     dest: "{{ securedrop_code }}/config.py"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
-    mode: 0600
+    mode: "0600"
   tags:
     - permissions
     - securedrop_config
