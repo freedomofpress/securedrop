@@ -314,6 +314,18 @@ Other log files that may contain useful information:
          security-related information about your organization's
          SecureDrop instance.
 
+Not receiving emails
+~~~~~~~~~~~~~~~~~~~~
+Some mail servers require that the sending email address match the account
+that authenticated to send mail. By default the *Monitor Server* will use
+``ossec@ossec.server`` for the from line, but your mail provider may not support
+the mismatch between the domain of that value and your real mail host.
+If the Admin email address (configured as ``ossec_alert_email`` in
+``prod-specific.yml``) does not start receiving OSSEC alerts updates shortly
+after the first playbook run, try setting ``ossec_from_address`` in
+``prod-specific.yml`` to the full email address used for sending the alerts,
+then run the playbook again.
+
 Troubleshooting SMTP TLS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

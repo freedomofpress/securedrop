@@ -244,3 +244,15 @@ def test_ossec_log_contains_no_malformed_events(File, Sudo):
 def test_regression_hosts(Command):
     """ Regression test to check for duplicate entries. """
     assert Command.check_output("uniq --repeated /etc/hosts") == ""
+
+
+def test_postfix_generic_maps(File):
+    """
+    Regression test to check that generic Postfix maps are not configured
+    by default. As of #1565 Admins can opt-in to overriding the FROM address
+    used for sending OSSEC alerts, but by default we're preserving the old
+    `ossec@ossec.server` behavior, to avoid breaking email for previously
+    existing instances.
+    """
+    assert not File("/etc/postfix/generic").exists
+    assert not File("/etc/postfix/main.cf").contains("^smtp_generic_maps")
