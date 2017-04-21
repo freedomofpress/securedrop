@@ -14,9 +14,9 @@ Servers
 
 These are the core components of a SecureDrop instance.
 
--  **Application Server**: 1 physical server to run the SecureDrop web
+-  *Application Server*: 1 physical server to run the SecureDrop web
    services.
--  **Monitor Server**: 1 physical server which monitors activity on the
+-  *Monitor Server*: 1 physical server which monitors activity on the
    *Application Server* and sends email notifications to an
    administrator.
 -  **Network Firewall**: 1 physical computer that is used as a dedicated
@@ -31,7 +31,7 @@ desire for cost savings and/or convenience. However: we consider it
 organization for both technical and legal reasons:
 
 * While the documents are stored encrypted at rest (via PGP) on the
-  SecureDrop application server, the documents hit server memory
+  SecureDrop *Application Server*, the documents hit server memory
   unencrypted (unless the source used the GPG key provided to
   encrypt the documents first before submitting), and are then
   encrypted in server memory before being written to disk. If the
@@ -84,9 +84,9 @@ Workstations
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the airgapped workflow.
 
--  **Secure Viewing Station (SVS)**: 1 physical computer used as an
+-  ***Secure Viewing Station* (*SVS*)**: 1 physical computer used as an
    airgap to decrypt and view submissions retrieved from the
-   **Application Server**.
+   *Application Server*.
 
    -  The chosen hardware should be solely used for this purpose and
       should have any wireless networking hardware removed before use.
@@ -104,14 +104,14 @@ SecureDrop and to process submissions using the airgapped workflow.
       requirements, geographic distribution, etc.
 
 -  **USB drive(s)**: *At least 2* USB drives to use as a bootable Tails
-   USB for the **SVS** and the **Admin Tails**/**Journalist Tails**.
+   USB for the *SVS* and the **Admin Tails**/**Journalist Tails**.
 
    -  If only one person is maintaining the system, you may use the same
       Tails instance as both the Admin Tails and the Journalist Tails;
       otherwise, we recommend buying 1 drive for each admin and each
       journalist.
    -  We also recommend buying two additional USBs to use as bootable
-      backups of the **SVS** and **Admin Tails**.
+      backups of the *SVS* and **Admin Tails**.
 
 -  **Two-factor authenticator**: Two-factor authentication is used when
    connecting to different parts of the SecureDrop system. Each admin
@@ -125,7 +125,7 @@ SecureDrop and to process submissions using the airgapped workflow.
       `YubiKey <https://www.yubico.com/products/yubikey-hardware/yubikey/>`__).
 
 -  **Transfer Device(s)**: You need a mechanism to transfer encrypted
-   submissions from the **Journalist Workstation** to the **SVS** to
+   submissions from the **Journalist Workstation** to the *SVS* to
    decrypt and view them. The most common transfer devices are DVD/CD-R
    discs and USB drives.
 
@@ -138,10 +138,10 @@ SecureDrop and to process submissions using the airgapped workflow.
       your threat model and choose your transfer device accordingly.
 
 -  **Monitor, Keyboard, Mouse**: You will need these to do the initial
-   installation of Ubuntu on the Application and Monitor servers.
+   installation of Ubuntu on the *Application* and *Monitor Servers*.
 
    -  Depending on your setup, you may also need these to work on the
-      **SVS**.
+      *SVS*.
 
 .. note:: If you cannot afford to purchase new hardware for your
 	  SecureDrop instance, we encourage you to consider
@@ -168,30 +168,30 @@ This hardware is not *required* to run a SecureDrop instance, but most
 of it is still recommended.
 
 -  **Offline Printer**: It is often useful to print submissions from the
-   **SVS** for review and annotation.
+   *SVS* for review and annotation.
 
    -  To maintain the integrity of the airgap, this printer should be
-      dedicated to use with the SVS, connected via a wired connection,
+      dedicated to use with the *SVS*, connected via a wired connection,
       and should not have any wireless communication capabilities.
 
--  **Offline Storage**: The **SVS** is booted from a Tails USB drive,
+-  **Offline Storage**: The *SVS* is booted from a Tails USB drive,
    which has an encrypted persistent volume but typically has a fairly
    limited storage capacity since it's just a USB drive. For
    installations that expect to receive a large volume of submissions,
    we recommend buying an external hard drive that can be encrypted and
    used to store submissions that have been transferred from the
-   **Application Server** to the **SVS**.
+   *Application Server* to the *SVS*.
 -  **Backup storage**: It's useful to run periodic backups of the
    servers in case of failure. We recommend buying an external hard
    drive that can be encrypted and used to store server backups.
 
-   -  Since this drive will be connected to the **Admin Workstation** to
+   -  Since this drive will be connected to the *Admin Workstation* to
       perform backups, it should *not* be the same drive used for
       **Offline Storage**.
 
 -  **Network Switch**: If your firewall has fewer than **four** NIC's,
    you will need an additional Ethernet switch to perform installation
-   and maintenance tasks with the Admin Workstation. This switch is
+   and maintenance tasks with the *Admin Workstation*. This switch is
    generally useful because it allows you to connect the **Admin
    Workstation** to your firewall's LAN port without taking down either
    of the SecureDrop servers.
@@ -199,7 +199,7 @@ of it is still recommended.
 Specific Hardware Recommendations
 ---------------------------------
 
-Application/Monitor Servers
+Application and Monitor Servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Intel NUC (Next Unit of Computing) is a capable, cheap, quiet, and
@@ -262,7 +262,7 @@ insert the cards into the NUC before it can be used. We recommend:
 	  the device attempts to suspend. Some suggestions include disabling
 	  suspend in the BIOS as well as OS options like "wake on LAN".
 
-Secure Viewing Station (SVS)
+*Secure Viewing Station* (*SVS*)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *Secure Viewing Station* is a machine that is kept offline and only
@@ -287,7 +287,7 @@ hardware by default, so you will not need to remove these components
 before using it. However, we do recommend taping over the IR receiver
 with some opaque masking tape.
 
-Note that if you do want to use a NUC for the SVS, you *should not* use
+Note that if you do want to use a NUC for the *SVS*, you *should not* use
 any of the new generation of NUCs, which have names starting with "NUC5"
 (e.g.
 `NUC5i5RYK <https://www-ssl.intel.com/content/www/us/en/nuc/nuc-kit-nuc5i5ryk.html>`__..
@@ -326,7 +326,7 @@ accordingly. Drives that are physically larger are often easier to label
 
 If you are using DVD/CD-R's for the transfer device, you will need *two*
 DVD/CD writers: one for burning DVDs from the **Journalist
-Workstation**, and one for reading the burned DVDs on the **SVS**. We
+Workstation**, and one for reading the burned DVDs on the *SVS*. We
 recommend using two separate drives instead of sharing the same drive to
 avoid the potential risk of malware exfiltrating data by compromising
 the drive's firmware. We've found the DVD/CD writers from Samsung and LG
@@ -353,7 +353,7 @@ Switch <http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000B
 Printers
 ~~~~~~~~
 
-Careful consideration should be given to the printer used with the SVS.
+Careful consideration should be given to the printer used with the *SVS*.
 Most printers today have wireless functionality (WiFi or Bluetooth
 connectivity) which should be **avoided** because it could be used to
 compromise the airgap.

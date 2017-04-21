@@ -17,14 +17,14 @@ Admin
 -----
 
 The admin will be using the *Admin Workstation* with Tails to connect to
-the App Server and the Monitor Server using Tor and SSH. The tasks
+the *Application Server* and the *Monitor Server* using Tor and SSH. The tasks
 performed by the admin will require the following set of passphrases:
 
 -  A password for the persistent volume on the Admin Live USB.
 -  A master password for the KeePassX password manager, which unlocks
    passphrases to:
 
-   -  The App Server and the Monitor Server (required to be the same).
+   -  The *Application Server* and the *Monitor Server* (required to be the same).
    -  The network firewall.
    -  The SSH private key and, if set, the key's passphrase.
    -  The GPG key that OSSEC will encrypt alerts to.
@@ -32,14 +32,14 @@ performed by the admin will require the following set of passphrases:
    -  The credentials for the email account that OSSEC will send alerts
       to.
    -  The Hidden Services values required to connect to the App and
-      Monitor Server.
+      *Monitor Server*.
 
 The admin will also need to have an Android or iOS device with the
 Google Authenticator app installed. This means the admin will also have
 the following two credentials:
 
--  The secret code for the App Server's two-factor authentication.
--  The secret code for the Monitor Server's two-factor authentication.
+-  The secret code for the *Application Server*'s two-factor authentication.
+-  The secret code for the *Monitor Server*'s two-factor authentication.
 
 Journalist
 ----------
@@ -65,7 +65,7 @@ credential:
 -  The secret code for the Journalist Interface's two-factor
    authentication.
 
-Secure Viewing Station
+*Secure Viewing Station*
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The journalist will be using the *Secure Viewing Station* with Tails to

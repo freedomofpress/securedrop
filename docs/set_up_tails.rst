@@ -44,8 +44,8 @@ You will need to create 3 Tails USBs to perform the SecureDrop installation:
    onto a USB drive, using one of the techniques outlined in the Tails
    documentation. This Tails USB is only used for creating other Tails
    USBs with the **Tails Installer**.
-#. The *Secure Viewing Station Tails USB*.
-#. The *Admin Workstation Tails USB*.
+#. The **Secure Viewing Station* Tails USB*.
+#. The **Admin Workstation* Tails USB*.
 
 .. tip:: This process will take some time, most of which will be spent
 	 waiting around. Once you have the "master" copy of Tails, you

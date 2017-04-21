@@ -6,7 +6,7 @@ Install Ansible
 
 SecureDrop uses the Ansible automation tool for installation and maintenance.
 
-To install Ansible on the Admin Workstation, first update the ``apt``
+To install Ansible on the *Admin Workstation*, first update the ``apt``
 package manager's package lists to make sure you get the latest and
 greatest version of Ansible. This usually takes a few minutes over
 Tor. Once that's done, you can install Ansible:
@@ -22,7 +22,7 @@ Configure the Installation
 Make sure you have the following information and files before
 continuing:
 
--  The *App Server* IP address
+-  The *Application Server* IP address
 -  The *Monitor Server* IP address
 -  The SecureDrop Submission Key (from the *Transfer
    Device*)
@@ -76,10 +76,10 @@ match your environment. At a minimum, you will need to provide the
 following:
 
 -  User allowed to connect to both servers with SSH: ``ssh_users``
--  IP address of the Monitor Server: ``monitor_ip``
--  Hostname of the Monitor Server: ``monitor_hostname``
--  Hostname of the Application Server: ``app_hostname``
--  IP address of the Application Server: ``app_ip``
+-  IP address of the *Monitor Server*: ``monitor_ip``
+-  Hostname of the *Monitor Server*: ``monitor_hostname``
+-  Hostname of the *Application Server*: ``app_hostname``
+-  IP address of the *Application Server*: ``app_ip``
 -  The SecureDrop Submission Key public key file:
    ``securedrop_app_gpg_public_key``
 -  The SecureDrop Submission Key fingerprint:

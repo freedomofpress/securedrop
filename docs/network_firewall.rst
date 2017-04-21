@@ -25,7 +25,7 @@ configuration, for existing installs that are still using it, and the
 4-NIC configuration recommended for new installs.
 
 If your firewall only has 3 NICs (WAN, LAN, and OPT1), you will need to
-use a switch on the OPT1 interface to connect the Admin Workstation for
+use a switch on the OPT1 interface to connect the *Admin Workstation* for
 the initial installation. If your firewall has 4 NICs (WAN, LAN, OPT1,
 and OPT2), a switch is not necessary.
 
@@ -63,10 +63,10 @@ network so it is working correctly.
 4 NIC configuration
 ~~~~~~~~~~~~~~~~~~~
 
-If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN, 
+If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN,
 LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network
-firewall for each component of SecureDrop (Application Server, Monitor
-Server, and Admin Workstation), so you do not need a switch like you do
+firewall for each component of SecureDrop (*Application Server*, *Monitor
+Server*, and *Admin Workstation*), so you do not need a switch like you do
 for the 3-NIC configuration.
 
 Depending on your network configuration, you should define the following
@@ -91,30 +91,30 @@ chosen:
 
 -  Monitor Subnet: ``10.20.3.0/24``
 -  Monitor Gateway: ``10.20.3.1``
--  Monitor Server (OPT2) : ``10.20.3.2``
+-  *Monitor Server* (OPT2) : ``10.20.3.2``
 
 3 NIC configuration
 ~~~~~~~~~~~~~~~~~~~
 
 If your firewall has 3 NICs, we will refer to them as WAN, LAN, and
 OPT1. WAN is used to connect to the external network. LAN and OPT1 are
-used for the Application and Monitor Servers, respectively. Putting them
+used for the *Application* and *Monitor Servers*, respectively. Putting them
 on separate interfaces allows us to use the network firewall to filter
 and monitor the traffic *between* them.
 
-In addition, you will need to be able to connect the Admin Workstation
+In addition, you will need to be able to connect the *Admin Workstation*
 to this setup for the initial installation. Before SecureDrop is
 installed, the only way to connect to the servers is via SSH over the
-local network, so the Admin Workstation needs to be directly connected.
+local network, so the *Admin Workstation* needs to be directly connected.
 Once it is installed, SSH will be available remotely (as an
 authenticated Tor Hidden Servce) and you will not necessarily need to
-connect the Admin Workstation directly to adminster the servers -
+connect the *Admin Workstation* directly to administer the servers -
 although you will still need to connect it directly to administer the
 network firewall. Since there isn't another NIC to connect the Admin
 Workstation to, we recommend using a small switch on the LAN (the
 specific choice of interface doesn't matter, but we recommend using the
 LAN to stay consistent with the rest of this guide) so you can connect
-both the Admin Workstation and the Application Server.
+both the *Admin Workstation* and the *Application Server*.
 
 Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
@@ -122,8 +122,8 @@ chosen:
 
 -  Admin/Application Gateway: ``10.20.1.1``
 -  Admin/Application Subnet: ``10.20.1.0/24``
--  Application Server: ``10.20.1.2``
--  Admin Workstation: ``10.20.1.3``
+-  *Application Server*: ``10.20.1.2``
+-  *Admin Workstation*: ``10.20.1.3``
 
 .. raw:: html
 
@@ -131,7 +131,7 @@ chosen:
 
 -  Monitor Subnet: ``10.20.2.0/24``
 -  Monitor Gateway: ``10.20.2.1``
--  Monitor Server: ``10.20.2.2``
+-  *Monitor Server*: ``10.20.2.2``
 
 Initial Configuration
 ---------------------
@@ -144,9 +144,9 @@ network firewall.
 Connect to the pfSense WebGUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. Boot the Admin Workstation into Tails from the Admin Live USB.
+#. Boot the *Admin Workstation* into Tails from the Admin Live USB.
 
-#. Connect the Admin Workstation to the LAN interface. You should see
+#. Connect the *Admin Workstation* to the LAN interface. You should see
    a popup notification in Tails that says "Connection Established".
 
    .. warning:: Make sure your *only* active connection is the one you
@@ -179,7 +179,7 @@ Connect to the pfSense WebGUI
    has a bright red border to remind you to be careful when using
    it. You should close it once you're done configuring the firewall
    and use the Tor Browser for any other web browsing you might do on
-   the Admin Workstation.
+   the *Admin Workstation*.
 
    |Unsafe Browser Homepage|
 
@@ -241,9 +241,9 @@ Workstation a static IP address that is known to be in the subnet to
 continue.
 
 Now the WebGUI will be available on the Admin Gateway address. Navigate
-to ``https://<Admin Gateway IP>`` in the *Unsafe Browser*, and login as 
-before except with the new passphrase you just set for the pfSense WebGUI. 
-Once you've logged in to the WebGUI, you are ready to continue configuring 
+to ``https://<Admin Gateway IP>`` in the *Unsafe Browser*, and login as
+before except with the new passphrase you just set for the pfSense WebGUI.
+Once you've logged in to the WebGUI, you are ready to continue configuring
 the firewall.
 
 Connect Interfaces and Test
@@ -270,10 +270,10 @@ SecureDrop uses the firewall to achieve two primary goals:
 #. Isolating SecureDrop from the existing network, which may be
    compromised (especially if it is a venerable network in a large
    organization like a newsroom).
-#. Isolating the app and the monitor servers from each other as much as
+#. Isolating the *Application Server* and the *Monitor Server* from each other as much as
    possible, to reduce attack surface.
 
-In order to use the firewall to isolate the app and monitor servers from
+In order to use the firewall to isolate the *Application Server* and the *Monitor Server* from
 each other, we need to connect them to separate interfaces, and then set
 up firewall rules that allow them to communicate.
 
@@ -281,7 +281,7 @@ Disable DHCP on the LAN
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 pfSense runs a DHCP server on the LAN interface by default. At this
-stage in the documentation, the Admin Workstation has an IP address
+stage in the documentation, the *Admin Workstation* has an IP address
 assigned via that DHCP server. You can easily check your current IP
 address by *right-clicking* the networking icon (a blue cable going in
 to a white jack) in the top right of the menu bar, and choosing
@@ -300,11 +300,11 @@ To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
 WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
 interface**, scroll down, and click the **Save** *and then* click Apply.
 
-Assign a static IP address to the Admin Workstation
+Assign a static IP address to the *Admin Workstation*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now you will need to assign a static IP to the Admin Workstation. Use
-the *Admin Workstation IP* that you selected earlier, and make sure you
+Now you will need to assign a static IP to the *Admin Workstation*. Use
+the *Admin Workstation* that you selected earlier, and make sure you
 use the same IP when setting up the firewall rules later.
 
 Start by *right-clicking* the networking icon in the top right of the
@@ -319,7 +319,7 @@ Select the name of the current connection from the list and click
 
 Change to the **IPv4 Settings** tab. Change **Method:** from
 **Automatic (DHCP)** to **Manual**. Click **Add** and fill in the
-static networking information for the Admin Workstation.
+static networking information for the *Admin Workstation*.
 
 .. note:: The Unsafe Browser will not launch when using a manual
 	  network configuration if it does not have DNS servers
@@ -363,8 +363,8 @@ Set up OPT1
 ~~~~~~~~~~~
 
 We set up the LAN interface during the initial configuration. We now
-need to set up the OPT1 interface for the Application Server. Start by
-connecting the Application Server to the OPT1 port. Then use the WebGUI
+need to set up the OPT1 interface for the *Application Server*. Start by
+connecting the *Application Server* to the OPT1 port. Then use the WebGUI
 to configure the OPT1 interface. Go to **Interfaces ▸ OPT1**, and check
 the box to **Enable Interface**. Use these settings:
 
@@ -417,7 +417,7 @@ Here are some general tips for setting up pfSense firewall rules:
    default in pfSense, so you don't need to add explicit rules (iptables
    ``LOGNDROP``) for that.
 #. Since some of the rules are almost identical except for whether they
-   allow traffic from the App Server or the Monitor Server, you can use
+   allow traffic from the *Application Server* or the *Monitor Server*, you can use
    the "add a new rule based on this one" button to save time creating a
    copy of the rule on the other interface.
 #. If you are troubleshooting connectivity, the firewall logs can be

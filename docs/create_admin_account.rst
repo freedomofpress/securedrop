@@ -25,11 +25,11 @@ accounts, but they are additionally allowed to manage (add, change,
 delete) other user accounts through the web interface.
 
 You must create the first admin account on the Journalist Interface by
-running a command on the App Server. After that, the Journalist
+running a command on the *Application Server*. After that, the Journalist
 Interface admin can create additional accounts through the web
 interface.
 
-To create the first admin account, SSH to the App Server, then:
+To create the first admin account, SSH to the *Application Server*, then:
 
 .. code:: sh
 

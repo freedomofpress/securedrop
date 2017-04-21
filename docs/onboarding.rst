@@ -20,11 +20,11 @@ In order to use SecureDrop, each journalist needs two things:
 
      The Journalist Interface allows journalists to download submissions
      from sources, but they are encrypted to the offline private key
-     that is stored on the Secure Viewing Station Tails USB. In order
+     that is stored on the *Secure Viewing Station* Tails USB. In order
      for the journalist to decrypt and view submissions, they need
-     access to a Secure Viewing Station.
+     access to a *Secure Viewing Station*.
 
-Determine access protocol for the Secure Viewing Station
+Determine access protocol for the *Secure Viewing Station*
 --------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
@@ -32,7 +32,7 @@ public/private key pair - the *SecureDrop Submission Key*. As a
 result, each journalist needs a way to access the Secure Viewing
 Station with a Tails USB that includes the submission private key.
 
-The access protocol for the Secure Viewing Station depends on the
+The access protocol for the *Secure Viewing Station* depends on the
 structure and distribution of your organization. If your organization
 is centralized and there are only a few journalists with access to
 SecureDrop, they should be fine with sharing a single Secure Viewing
@@ -68,18 +68,18 @@ SSH configuration will be skipped, since only Administrators need
 to access the servers over SSH.
 
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
-         the Admin Workstation via the Transfer Device. Place these files
+         the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
          Journalist Workstation, and the ``install.sh`` script will
          automatically use them.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
              to the Journalist Workstation. Those files grant access via SSH,
-             and only the Admin Workstation should have shell access to the
+             and only the *Admin Workstation* should have shell access to the
              servers.
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
-you used to :doc:`Configure the Admin Workstation Post-Install
+you used to :doc:`Configure the *Admin Workstation* Post-Install
 <configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
 repository on the Journalist Workstation, just like you did for the Admin
 Workstation. Refer to the docs for :ref:`cloning the SecureDrop
@@ -93,7 +93,7 @@ shortcuts for the Source and Journalist Interfaces: ::
   sudo ./install.sh
 
 If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
-files from the Admin Workstation, the script will prompt for the information.
+files from the *Admin Workstation*, the script will prompt for the information.
 Make sure to type the information carefully, as any typos will break access
 for the Journalist Workstation.
 

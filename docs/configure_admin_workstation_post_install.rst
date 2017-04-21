@@ -12,8 +12,8 @@ protect access to the most sensitive assets in the SecureDrop system:
 #. The Journalist Interface, because it provides access to submissions (although
    they are encrypted to an offline key), and some metadata about sources and
    submissions.
-#. SSH on the Application Server
-#. SSH on the Monitor Server
+#. SSH on the *Application Server*
+#. SSH on the *Monitor Server*
 
 The installation process blocks direct access to each of these assets, and sets
 up `Authenticated Tor Hidden Services`_ (ATHS) to provide authenticated access
@@ -59,8 +59,8 @@ playbooks over Tor in the future, directs Tails to install Ansible at the
 beginning of every session, and sets up SSH host aliases for the servers.
 
 The only thing you need to remember to do is enable
-persistence when you boot the Admin Workstation. If you are
-using the Admin Workstation and are unable to connect to any
+persistence when you boot the *Admin Workstation*. If you are
+using the *Admin Workstation* and are unable to connect to any
 of the authenticated hidden services, restart Tails and make
 sure to enable persistence.
 

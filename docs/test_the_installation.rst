@@ -7,8 +7,8 @@ Test connectivity
 SSH to both servers over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the Admin Workstation, you should be able to SSH to the App
-Server and the Monitor Server. ::
+On the *Admin Workstation*, you should be able to SSH to the App
+Server and the *Monitor Server*. ::
 
    $ ssh app
    $ ssh mon
@@ -27,7 +27,7 @@ Log in to both servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All access to the SecureDrop servers should be performed over SSH from the
-Admin Workstation. To aid in troubleshooting, physical logins via TTY are
+*Admin Workstation*. To aid in troubleshooting, physical logins via TTY are
 supported, but require 2FA to be configured. See the :doc:`2FA setup guide
 <google_authenticator>` for information how to enable console logins.
 
@@ -76,7 +76,7 @@ Test the web interfaces
      app-journalist-aths. Enter your password and two-factor
      authentication code to log in.
    - If you have problems logging in to the Admin/Journalist Interface,
-     SSH to the App Server and restart the ntp daemon to synchronize
+     SSH to the *Application Server* and restart the ntp daemon to synchronize
      the time: ``sudo service ntp restart``. Also check that your
      smartphone's time is accurate and set to network time in its
      device settings.

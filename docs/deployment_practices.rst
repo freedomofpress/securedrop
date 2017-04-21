@@ -278,7 +278,7 @@ the attack surface.
 Minimum requirements for the SecureDrop environment
 ---------------------------------------------------
 
--  The Application and Monitor servers should be dedicated physical
+-  The *Application* and *Monitor Servers* should be dedicated physical
    machines, not virtual machines.
 -  A trusted location to host the servers. The servers should be hosted
    in a location that is owned or occupied by the organization to ensure

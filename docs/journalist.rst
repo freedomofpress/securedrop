@@ -16,12 +16,12 @@ Create GPG key for the journalist
 ---------------------------------
 
 Each journalist must have a personal GPG key that they use for
-encrypting files transferred from the Secure Viewing Station to their
+encrypting files transferred from the *Secure Viewing Station* to their
 Journalist Workstation. The private key, used for decryption, stays on
 their Journalist Workstation. The public key, used for encryption, gets
-copied to the Secure Viewing Station.
+copied to the *Secure Viewing Station*.
 
-.. todo:: This document recommends transferring documents from the SVS
+.. todo:: This document recommends transferring documents from the *SVS*
           to the Journalist Workstation, without any discussion of the
           potential risks or mitigations that should be taken when
           doing so. A section needs to be added on why doing this
@@ -62,11 +62,11 @@ journalists see is different than the codename that sources see.**
 
 |Journalist Interface|
 
-Move Documents to the Secure Viewing Station
+Move Documents to the *Secure Viewing Station*
 --------------------------------------------
 
 You will only be able to view the documents the source has sent you on
-the ``Secure Viewing Station``. After clicking on an individual source
+the *Secure Viewing Station*. After clicking on an individual source
 you will see the page below with the messages that source has sent you.
 Click on a document or message name to save it, or select a number of
 documents and save them at once by clicking "Download Selected".
@@ -82,7 +82,7 @@ download documents to a special sandbox folder, located at
 
 Once downloaded to the sandbox folder, move the document to the
 designated USB stick you will use to transfer the documents from your
-Tails ``Journalist Workstation`` to the ``Secure Viewing Station``. This
+Tails ``Journalist Workstation`` to the *Secure Viewing Station*. This
 will be known as your ``Transfer Device``.
 
 | |Move to transfer device 1|
@@ -90,10 +90,10 @@ will be known as your ``Transfer Device``.
 
 Eject your ``Transfer Device`` from your ``Journalist Workstation``.
 
-Next, boot up the ``Secure Viewing Station`` using Tails (remember, you
+Next, boot up the *Secure Viewing Station* using Tails (remember, you
 must use a different Tails USB than you use your normal
 ``Journalist Workstation``) and enter the password for the
-``Secure Viewing Station`` the persistent volume. Once you have logged
+*Secure Viewing Station* the persistent volume. Once you have logged
 in, plug in the ``Transfer Device``.
 
 **Copy these documents to the Persistent folder before decrypting them.
@@ -109,7 +109,7 @@ Make sure to then return to your ``Transfer Device`` folder, right click
 on the file, and then click "Wipe" to securely wipe the file from your
 device.
 
-Decrypt and work on the Secure Viewing Station
+Decrypt and work on the *Secure Viewing Station*
 ----------------------------------------------
 
 To decrypt documents, return to your Persistent folder and double-click
@@ -148,7 +148,7 @@ current codename:
 
 Documents and messages are encrypted to the application's GPG public 
 key. In order to read the messages or look at the documents you 
-will need to transfer them to the ``Secure Viewing Station``.
+will need to transfer them to the *Secure Viewing Station*.
 
 But first, if you'd like to reply to the source, write your message 
 in the text field and click ``Submit``.
@@ -191,7 +191,7 @@ Work with Documents
 
 As long as you're using the latest version of Tails, you should be able
 to open any document that gets submitted to you without the risk of
-malicious documents compromising the ``Secure Viewing Station``.
+malicious documents compromising the *Secure Viewing Station*.
 However, if they do compromise it, Tails is designed so that the next
 time you reboot the malware will be gone.
 
@@ -227,7 +227,7 @@ Encrypt and move documents to Journalist Workstation
 
 Before you move documents back to the ``Transfer Device`` to copy them
 to your workstation you should encrypt them to your personal GPG public
-key that you imported when setting up the ``Secure Viewing Station`` to
+key that you imported when setting up the *Secure Viewing Station* to
 begin with.
 
 Right-click on the document you want to encrypt and choose

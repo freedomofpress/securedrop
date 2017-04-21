@@ -55,7 +55,7 @@ Assumptions about the source's computer
 -  The computer correctly executes Tails or the Tor Browser.
 -  The computer is not compromised by malware.
 
-Assumptions about the Admin Workstation and the Journalist Workstation
+Assumptions about the *Admin Workstation* and the Journalist Workstation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer correctly executes Tails.
@@ -63,7 +63,7 @@ Assumptions about the Admin Workstation and the Journalist Workstation
 -  The two-factor authentication device used with the workstation are
    not compromised by malware.
 
-Assumptions about the Secure Viewing Station
+Assumptions about the *Secure Viewing Station*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer is airgapped.
@@ -106,7 +106,7 @@ Assumptions about the world
 Attack Scenarios
 ----------------
 
-What the Application Server can achieve
+What the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The server sees the plaintext codename, used as the login identifier,
@@ -130,10 +130,10 @@ What the Application Server can achieve
 -  The server stores both access and error logs for the Journalist
    Interface.
 -  The server stores connection history and audit logs for the admin.
--  The server can connect to the Monitor server using an SSH key and a
+-  The server can connect to the *Monitor Server* using an SSH key and a
    passphrase.
 
-What the Monitor Server can achieve
+What the *Monitor Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The server stores the plaintext alerts on disk, data may also reside
@@ -149,23 +149,23 @@ What the Monitor Server can achieve
    SSH.
 -  The server stores connection history and audit logs for the admin.
 -  The server stores OSSEC and Procmail logs on disk.
--  The server can connect to the Application Server using an SSH key and
+-  The server can connect to the *Application Server* using an SSH key and
    a passphrase.
 
 What the Workstations can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The **Admin Workstation** requires Tails with a persistent volume,
+-  The *Admin Workstation* requires Tails with a persistent volume,
    which stores information such as GPG and SSH keys, as well as a
    :doc:`database with passphrases <../passphrases>`
-   for the Application Server, the Monitor Server, and the GPG key the
-   Monitor Server will encrypt OSSEC alerts to.
+   for the *Application Server*, the *Monitor Server*, and the GPG key the
+   *Monitor Server* will encrypt OSSEC alerts to.
 -  The **Journalist Workstation** requires Tails with a persistent
    volume, which stores information such as the Hidden Service value
    required to connect to the Journalist Interface, as well as a :doc:`database
    with passphrases <../passphrases>` for the
    Journalist Interface and the journalist's personal GPG key.
--  The **Secure Viewing Station** requires Tails with a persistent
+-  The *Secure Viewing Station* requires Tails with a persistent
    volume, which stores information such as the SecureDrop application's
    GPG key, as well as a :doc:`database with the
    passphrase <../passphrases>` for that key.
@@ -233,8 +233,8 @@ What a physical seizure of the source's property can achieve
 What a compromise of the admin's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  To access the Journalist Interface, the Application Server, or the
-   Monitor Server, the attacker needs to obtain the admin's login
+-  To access the Journalist Interface, the *Application Server*, or the
+   *Monitor Server*, the attacker needs to obtain the admin's login
    credentials and the admin's two-factor authentication device. Unless
    the attacker has physical access to the servers, the attacker will
    also need to obtain the Hidden Service values for the Interface and
@@ -254,8 +254,8 @@ What a compromise of the admin's property can achieve
    -  Add, modify, and delete files on the volume.
    -  Access the Hidden Service values used by the Interfaces and the
       servers.
-   -  Access SSH keys and passphrases for the Application Server and the
-      Monitor Server.
+   -  Access SSH keys and passphrases for the *Application Server* and the
+      *Monitor Server*.
    -  Access the GPG key and passphrase for the encrypted OSSEC email
       alerts.
    -  Access the credentials for the account the encrypt alerts are sent
@@ -273,7 +273,7 @@ What a compromise of the admin's property can achieve
       that source and prevents the source from ever logging back in with
       that codename.
 
--  An attacker with admin access to the **Application Server** can:
+-  An attacker with admin access to the *Application Server* can:
 
    -  Add, modify, and delete software, configurations, and other files.
    -  See all HTTP requests made by the source, the admin, and the
@@ -291,9 +291,9 @@ What a compromise of the admin's property can achieve
    -  Analyze any plaintext information that resides in RAM, which may
       include plaintext of submissions made within the past 24 hours.
    -  Review logs stored on the system.
-   -  Access the Monitor Server.
+   -  Access the *Monitor Server*.
 
--  An attacker with admin access to the **Monitor Server** can:
+-  An attacker with admin access to the *Monitor Server* can:
 
    -  Add, modify, and delete software, configurations, and other files.
    -  Change the SMTP relay, email address, and GPG key used for OSSEC
@@ -302,7 +302,7 @@ What a compromise of the admin's property can achieve
    -  Review logs stored on the system.
    -  Trigger arbitrary commands to be executed by the OSSEC agent user,
       which, assuming the attacker is able to escalate privileges, may
-      affect the Application Server.
+      affect the *Application Server*.
 
 What a physical seizure of the admin's property can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -339,8 +339,8 @@ What a compromise of the journalist's property can achieve
 
    -  Add, modify, and delete files on the volume.
    -  Access the Hidden Service values used by the Journalist Interface.
-   -  Access SSH keys and passphrases for the Application Server and the
-      Monitor Server.
+   -  Access SSH keys and passphrases for the *Application Server* and the
+      *Monitor Server*.
    -  Access the journalist's personal GPG key.
 
 -  An attacker with journalist access to the **Journalist Interface** can:
@@ -364,10 +364,10 @@ What a physical seizure of the journalist's property can achieve
    persistent volume, password database, and two-factor authentication
    device will allow the attacker to access the Journalist Interface.
 
-What a compromise of the Application Server can achieve
+What a compromise of the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Application Server is compromised, the system user the
+-  If the *Application Server* is compromised, the system user the
    attacker has control over defines what kind of information the
    attacker will be able to view and what kind of actions the attacker
    can perform.
@@ -383,7 +383,7 @@ What a compromise of the Application Server can achieve
 -  An attacker with access to the **ossec** user can:
 
    -  Add, view, modify, and delete the log files, and in doing so send
-      inaccurate information to the Monitor Server and the admin.
+      inaccurate information to the *Monitor Server* and the admin.
 
 -  An attacker with access to the **www-data** user can:
 
@@ -408,20 +408,20 @@ What a compromise of the Application Server can achieve
       not able to decrypt submissions or communications, unless the
       attacker has access to the encryption key required to do so.
 
-What a physical seizure of the Application Server can achieve
+What a physical seizure of the *Application Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Application Server is seized, the attacker will be able to
+-  If the *Application Server* is seized, the attacker will be able to
    view any and all unencrypted files on the server. This includes all
    files in use by the SecureDrop Application. If the server is seized
    while it is powered on, the attacker can also analyze any plaintext
    information that resides in RAM. The attacker can also tamper with
    the hardware.
 
-What a compromise of the Monitor Server can achieve
+What a compromise of the *Monitor Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Monitor Server is compromised, the system user the attacker
+-  If the *Monitor Server* is compromised, the system user the attacker
    has control over defines what kind of information the attacker will
    be able to view and what kind of actions the attacker can perform.
 -  An attacker with access to the **debian-tor** user can:
@@ -445,25 +445,25 @@ What a compromise of the Monitor Server can achieve
       to decrypt encrypted email alerts, unless the attacker has access
       to the encryption key required to do so.
 
-What a physical seizure of the Monitor Server can achieve
+What a physical seizure of the *Monitor Server* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  If the Monitor Server is seized, the attacker will be able to view
+-  If the *Monitor Server* is seized, the attacker will be able to view
    any and all unencrypted files on the server. This includes all files
    in use by OSSEC. If the server is seized while it is powered on, the
    attacker can also analyze any plaintext information that resides in
    RAM. The attacker can also tamper with the hardware.
 
-What a compromise of the Secure Viewing Station can achieve
+What a compromise of the *Secure Viewing Station* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The Secure Viewing Station is only useful to an attacker while
+-  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
    may learn more if the Transfer device is in use at the time of
    compromise or seizure. A physical seizure of this machine, the Tails
    device or the Transfer device will also achieve nothing, assuming
    that Tails' implementation of full-disk encryption works as expected.
--  A compromise of the Secure Viewing Station allows the attacker to:
+-  A compromise of the *Secure Viewing Station* allows the attacker to:
 
    -  Run commands as the **amnesia** user.
    -  View, modify, and delete files owned by the **amnesia** user. This
@@ -472,16 +472,16 @@ What a compromise of the Secure Viewing Station can achieve
    -  View, modify, and delete encrypted--and possibly also decrypted
       submissions--if the Transfer device is in use.
 
-What a physical seizure of the Secure Viewing Station can achieve
+What a physical seizure of the *Secure Viewing Station* can achieve
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The Secure Viewing Station is only useful to an attacker while
+-  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
    may learn more if the Transfer device is in use at the time of
    compromise or seizure. A physical seizure of this machine, the Tails
    device or the Transfer device will also achieve nothing, assuming
    that Tails' implementation of full-disk encryption works as expected.
--  A physical seizure of the Secure Viewing Station, while on and with
+-  A physical seizure of the *Secure Viewing Station*, while on and with
    the persistent volume decrypted and mounted, allows the attacker to:
 
    -  Tamper with the hardware.
@@ -528,7 +528,7 @@ What a random person on the Internet can achieve
    and uploading many large documents.
 -  A random person can submit empty, forged, or inaccurate documents.
 -  A random person can submit malicious documents, e.g. malware that
-   will attempt to compromise the Secure Viewing Station.
+   will attempt to compromise the *Secure Viewing Station*.
 -  A random person can attempt to get sensitive information from a
    SecureDrop user's browser session, such as the source's codename.
 -  A random person can attempt to compromise the SecureDrop server by
