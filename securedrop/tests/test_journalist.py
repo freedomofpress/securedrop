@@ -227,6 +227,14 @@ class TestJournalistApp(TestCase):
                     username="My Password is Too Big!",
                     password=overly_long_password)
 
+    def test_min_password_length(self):
+        """Creating a Journalist with a password that is smaller than the
+        minimum password length should raise an exception"""
+        with self.assertRaises(InvalidPasswordLength):
+            temp_journalist = Journalist(
+                    username="My Password is Too Small!",
+                    password='tiny')
+
     def test_admin_edits_user_password_too_long_warning(self):
         self._login_admin()
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
