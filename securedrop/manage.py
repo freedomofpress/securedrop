@@ -15,7 +15,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'
 import config
-from db import db_session, init_db, Journalist
+from db import db_session, init_db, InvalidPasswordLength, Journalist
 from management import run
 
 
@@ -73,16 +73,10 @@ def _add_user(is_admin=False): # pragma: no cover
         password = getpass('Password: ')
         password_again = getpass('Confirm Password: ')
 
-        if len(password) > Journalist.MAX_PASSWORD_LEN:
-            print('Your password is too long (maximum length {} characters). '
-                  'Please pick a shorter '
-                  'password.'.format(Journalist.MAX_PASSWORD_LEN))
-            continue
-
-        if len(password) < Journalist.MIN_PASSWORD_LEN:
-            print('Error: Password needs to be at least {} characters.'.format(
-                Journalist.MIN_PASSWORD_LEN
-            ))
+        try:
+            Journalist.check_password_length(password)
+        except InvalidPasswordLength as exc:
+            print(str(exc))
             continue
 
         if password == password_again:
