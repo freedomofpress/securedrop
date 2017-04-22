@@ -184,11 +184,9 @@ def admin_add_user():
                                       otp_secret=otp_secret)
                 db_session.add(new_user)
                 db_session.commit()
-            except InvalidPasswordLength:
+            except InvalidPasswordLength as exc:
                 form_valid = False
-                flash("Your password must be between {} and {} characters.".format(
-                        Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
-                    ), "error")
+                flash(str(exc), 'error')
             except IntegrityError as e:
                 form_valid = False
                 if "username is not unique" in str(e):
@@ -259,10 +257,8 @@ def edit_account_password(user, password, password_again):
             raise PasswordMismatchError
         try:
             user.set_password(password)
-        except InvalidPasswordLength:
-            flash("Your password must be between {} and {} characters.".format(
-                    Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
-                ), "error")
+        except InvalidPasswordLength as exc:
+            flash(str(exc), 'error')
             raise
 
 
