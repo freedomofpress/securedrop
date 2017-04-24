@@ -1,4 +1,27 @@
 ---
+# Really this is a check to see if we have to create the repo folder,
+# if thats the case we are not under a local vagrant box with a synced
+# root folder.
+- name: Create src path folder
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items:
+    - "{{ repo_src_path }}"
+    - "{{ build_path }}"
+  register: ossec_src_path_results
+
+- name: Conditional copy over current directory for repo build
+  synchronize:
+    src: ../../../../
+    dest: "{{ repo_src_path }}"
+    use_ssh_args: yes
+    recursive: yes
+    rsync_opts:
+      - "--exclude=*.git"
+      - "--exclude=*.deb"
+  when: ossec_src_path_results.changed
+
 - name: Include OSSEC download URLs.
   ossec_urls:
     ossec_version: "{{ ossec_version }}"
@@ -80,7 +103,7 @@
   command: cp -R /var/ossec /tmp/{{ ossec_build_dir }}/var/
 
 - name: copy OSSEC DEBIAN dir to build dir
-  command: cp -R /vagrant/ossec-{{ purpose }}/DEBIAN /tmp/{{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/DEBIAN /tmp/{{ ossec_build_dir }}
 
 - name: template the control file
   template:
@@ -88,10 +111,10 @@
     dest: /tmp/{{ ossec_build_dir }}/DEBIAN/control
 
 - name: copy OSSEC usr dir to build dir
-  command: cp -R /vagrant/ossec-{{ purpose }}/usr /tmp/{{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/usr /tmp/{{ ossec_build_dir }}
 
 - name: copy OSSEC etc dir to build dir
-  command: cp -R /vagrant/ossec-{{ purpose }}/etc /tmp/{{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/etc /tmp/{{ ossec_build_dir }}
 
 - name: build securedrop ossec deb package
   command: dpkg-deb --build /tmp/{{ ossec_build_dir }}

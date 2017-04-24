@@ -8,6 +8,7 @@
     download_name: "{{ ossec_version }}.tar.gz"
     archive_name: "ossec-hids-{{ download_name }}"
     build_path: "/vagrant/build"
+    repo_src_path: "/vagrant"
     arch: "amd64"
     ossec_build_dir: "ossec-{{ purpose }}-{{ ossec_version }}-{{ arch }}"
     build_ossec_deb_pkg_dependencies:
