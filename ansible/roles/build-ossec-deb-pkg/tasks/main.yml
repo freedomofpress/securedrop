@@ -68,7 +68,7 @@
 
 - name: install deb packages required to build ossec package
   apt: name="{{ item }}" state=latest
-  with_items: build_ossec_deb_pkg_dependencies
+  with_items: "{{ build_ossec_deb_pkg_dependencies }}"
 
 - name: extract OSSEC archive to /tmp
   unarchive:
