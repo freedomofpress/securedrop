@@ -1,0 +1,8 @@
+---
+# List of prohibited usernames for use in production contexts.
+# The Admin should set a unique username for the instance, to be
+# used in all subsequent tasks.
+securedrop_validate_disallowed_users:
+  - amnesia
+  - root
+  - vagrant
