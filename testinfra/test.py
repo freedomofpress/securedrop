@@ -24,40 +24,22 @@ def get_target_roles(target_host):
     """
     Assemble list of role tests to run. Hard-coded per host.
     """
-    if target_host == "development":
-        target_roles = [
-                'testinfra/app-code',
-                'testinfra/development',
-                ]
+    target_roles = {"development": ['testinfra/app-code',
+                                    'testinfra/development'],
+                    "app-staging": ['testinfra/app',
+                                    'testinfra/app-code',
+                                    'testinfra/common',
+                                    'testinfra/development/test_xvfb.py'],
+                    "mon-staging": ['testinfra/mon',
+                                    'testinfra/common'],
+                    "mon-prod":    ['testinfra/mon'],
+                    "build":       ['testinfra/build']}
 
-    elif target_host == "app-staging":
-        target_roles = [
-                'testinfra/app',
-                'testinfra/app-code',
-                'testinfra/common',
-                'testinfra/development/test_xvfb.py',
-                ]
-
-    elif target_host == "mon-staging":
-        target_roles = [
-                'testinfra/mon',
-                'testinfra/common',
-                ]
-
-    elif target_host == "mon-prod":
-        target_roles = [
-                'testinfra/mon',
-                ]
-
-    elif target_host == "build":
-        target_roles = [
-                'testinfra/build',
-                ]
-    else:
+    try:
+        return target_roles[target_host]
+    except KeyError:
         print("Unknown host '{}'! Exiting.".format(target_host))
         sys.exit(1)
-
-    return target_roles
 
 
 def run_testinfra(target_host, verbose=True):
