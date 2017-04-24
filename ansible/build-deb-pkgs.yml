@@ -11,6 +11,7 @@
     repo_src_path: "/vagrant"
     arch: "amd64"
     ossec_build_dir: "ossec-{{ purpose }}-{{ ossec_version }}-{{ arch }}"
+    local_build_path: ""
     build_ossec_deb_pkg_dependencies:
       - inotify-tools
       - libssl-dev
@@ -22,4 +23,19 @@
     - { role: build-ossec-deb-pkg, tags: [ "ossec-server" ], purpose: "server" }
     - { role: build-ossec-deb-pkg, tags: [ "ossec-agent" ], purpose: "agent" }
 
+  post_tasks:
+    - name: List debian files in build_dir
+      find:
+        paths: "{{ build_path }}"
+        patterns: "*.deb"
+      register: list_deb_pkgs_results
+      changed_when: false
+
+    - name: Fetch debians if local storage folder provided
+      fetch:
+        src: "{{ item.path }}"
+        dest: "{{ local_build_path }}"
+        flat: yes
+      with_items: "{{ list_deb_pkgs_results.files }}"
+      when: "local_build_path != ''"
   sudo: yes
