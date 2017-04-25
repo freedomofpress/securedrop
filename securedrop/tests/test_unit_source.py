@@ -58,24 +58,6 @@ class TestSource(TestCase):
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))
 
-    def test_regenerate_valid_lengths(self):
-        """Make sure we can regenerate all valid length codenames"""
-        for codename_len in xrange(7, 11):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 200)
-            codename = self._find_codename(response.data)
-            self.assertEquals(len(codename.split()), codename_len)
-
-    def test_regenerate_invalid_lengths(self):
-        """If the codename length is invalid, it should return 403 Forbidden"""
-        for codename_len in (2, 999):
-            response = self.client.post('/generate', data={
-                'number-words': str(codename_len),
-            })
-            self.assertEqual(response.status_code, 403)
-
     def test_generate_has_login_link(self):
         """The generate page should have a link to remind people to login
            if they already have a codename, rather than create a new one.
@@ -85,6 +67,17 @@ class TestSource(TestCase):
         soup = BeautifulSoup(rv.data)
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')
+
+    def test_generate_already_logged_in(self):
+        self._new_codename()
+        # Make sure it redirects to /lookup when logged in
+        rv = self.client.get('/generate')
+        self.assertEqual(rv.status_code, 302)
+        # Make sure it flashes the message on the lookup page
+        rv = self.client.get('/generate', follow_redirects=True)
+        # Should redirect to /lookup
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("because you are already logged in.", rv.data)
 
     def test_create(self):
         with self.client as c:
@@ -129,6 +122,15 @@ class TestSource(TestCase):
             self.assertEqual(rv.status_code, 200)
             self.assertIn('Sorry, that is not a recognized codename.', rv.data)
             self.assertNotIn('logged_in', session)
+
+        with self.client as c:
+            rv = c.post('/login', data=dict(codename=codename),
+                        follow_redirects=True)
+            self.assertEqual(rv.status_code, 200)
+            self.assertTrue(session['logged_in'])
+            rv = c.get('/logout', follow_redirects=True)
+            self.assertTrue(not session)
+            self.assertIn('Thank you for logging out!', rv.data)
 
     def test_login_with_whitespace(self):
         """Test that codenames with leading or trailing whitespace still work"""
@@ -218,10 +220,25 @@ class TestSource(TestCase):
                                     mode=ANY,
                                     fileobj=ANY)
 
-    def test_tor2web_warning(self):
+    def test_tor2web_warning_headers(self):
         rv = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
         self.assertEqual(rv.status_code, 200)
         self.assertIn("You appear to be using Tor2Web.", rv.data)
+
+    def test_tor2web_warning(self):
+        rv = self.client.get('/tor2web-warning')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Why is there a warning about Tor2Web?", rv.data)
+
+    def test_why_journalist_key(self):
+        rv = self.client.get('/why-journalist-key')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Why download the journalist's public key?", rv.data)
+
+    def test_howto_disable_js(self):
+        rv = self.client.get('/howto-disable-js')
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("Turn the Security Slider to High to Protect Your Anonymity", rv.data)
 
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):

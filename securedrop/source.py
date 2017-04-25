@@ -9,7 +9,7 @@ import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file)
+                   flash, abort, g, send_file, Markup)
 from flask_wtf.csrf import CsrfProtect
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -120,7 +120,7 @@ def index():
     return render_template('index.html')
 
 
-def generate_unique_codename(num_words):
+def generate_unique_codename(num_words=7):
     """Generate random codenames until we get an unused one"""
     while True:
         codename = crypto_util.genrandomid(num_words)
@@ -146,22 +146,14 @@ def generate_unique_codename(num_words):
 
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
-    # Popping this key prevents errors when a logged in user returns to /generate.
-    # TODO: is this the best experience? A logged in user will be automatically
-    # logged out if they navigate to /generate by accident, which could be
-    # confusing. It might be better to instead redirect them to the lookup
-    # page, or inform them that they're logged in.
-    session.pop('logged_in', None)
+    if logged_in():
+        flash("You were redirected because you are already logged in. If you want"
+              "to create a new account, you should log out first.", "notification")
+        return redirect(url_for('lookup'))
 
-    num_words = 7
-    if request.method == 'POST':
-        num_words = int(request.form['number-words'])
-        if num_words not in range(7, 11):
-            abort(403)
-
-    codename = generate_unique_codename(num_words)
+    codename = generate_unique_codename()
     session['codename'] = codename
-    return render_template('generate.html', codename=codename, num_words=num_words)
+    return render_template('generate.html', codename=codename)
 
 
 @app.route('/create', methods=['POST'])
@@ -343,6 +335,15 @@ def login():
                     "Login failed for invalid codename".format(codename))
             flash("Sorry, that is not a recognized codename.", "error")
     return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    if logged_in():
+        session.clear()
+        tor_msg = render_template('logout_flashed_message.html')
+        flash(Markup(tor_msg), "error")
+    return redirect(url_for('index'))
 
 
 @app.route('/howto-disable-js')

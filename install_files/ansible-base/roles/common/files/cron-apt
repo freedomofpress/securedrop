@@ -2,11 +2,10 @@
 # Regular cron jobs for the cron-apt package
 #
 
-# Every night at 4 o'clock run cron-apt
-0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt
-
-# Every night at 5 o'clock reboot (regardless of whether reboot is
-# required by the most recent package upgrade). This guarantees that
-# submission plaintext will be retained in memory for at most 24
-# hours.
-0 5 * * * root    /sbin/reboot
+# Every night at 4:00 AM run cron-apt, then reboot.
+# Note that cron-apt sleeps for 0-60 minutes when run
+# noninteractively (e.g. in this cronjob), so the actual
+# start time may be as late as 5:00 AM. Only reboot
+# if cron-apt exited successfully, so broken or partially
+# installed packages don't cause problems with booting.
+0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot

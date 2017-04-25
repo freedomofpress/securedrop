@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Categories=Network;
+Name[en_US]=SecureDrop Source Interface
+Icon[en_US]=/home/amnesia/Persistent/.securedrop/securedrop_icon.png
+Name=SecureDrop Source Interface
+Icon=/home/amnesia/Persistent/.securedrop/securedrop_icon.png

@@ -5,6 +5,7 @@ from base64 import b32encode
 
 from Crypto.Random import random
 import gnupg
+from gnupg._util import _is_stream, _make_binary_stream
 import scrypt
 
 import config
@@ -154,22 +155,21 @@ def encrypt(plaintext, fingerprints, output=None):
         fingerprints = [fingerprints, ]
     fingerprints = [fpr.replace(' ', '') for fpr in fingerprints]
 
-    if isinstance(plaintext, unicode):
-        plaintext = plaintext.encode('utf8')
+    if not _is_stream(plaintext):
+        plaintext = _make_binary_stream(plaintext, "utf_8")
 
-    encrypt_fn = gpg.encrypt if isinstance(plaintext, str) else gpg.encrypt_file
-    out = encrypt_fn(plaintext,
-                     *fingerprints,
-                     output=output,
-                     always_trust=True,
-                     armor=False)
+    out = gpg.encrypt(plaintext,
+                      *fingerprints,
+                      output=output,
+                      always_trust=True,
+                      armor=False)
     if out.ok:
         return out.data
     else:
         raise CryptoException(out.stderr)
 
 
-def decrypt(secret, plain_text):
+def decrypt(secret, ciphertext):
     """
     >>> key = genkeypair('randomid', 'randomid')
     >>> decrypt('randomid', 'randomid',
@@ -178,8 +178,7 @@ def decrypt(secret, plain_text):
     'Goodbye, cruel world!'
     """
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
-    return gpg.decrypt(plain_text, passphrase=hashed_codename).data
-
+    return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
 
 if __name__ == "__main__":
     import doctest

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # preinst script for securedrop-app-code
 #
 # see: dh_installdeb(1)
@@ -13,11 +13,47 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+
+function permanently_disable_swap() {
+    # Swap usage is prohibited in the context of SecureDrop, due to risk of
+    # forensic discovery recovering plaintext submissions that were written
+    # to disk prior to encrypting. If a swapfile is active, disable it,
+    # and disable all swap entries from /etc/fstab, to prevent mounting
+    # after reboots.
+
+    # Check if swapfile is currently enabled.
+    local swap_result
+    swap_result="$(swapon --summary)"
+
+    # Search for path format in output.
+    local swap_partition
+    swap_partition="$(grep '/' <<< "${swap_result}" | perl -ane 'print $F[0]')"
+
+    # If a filepath for swap was found, disable it.
+    if [[ -n "${swap_partition}" ]]; then
+        echo "Disabling swap..."
+        # Disable all active swap.
+        swapoff --all
+        # Securely erase swap partition.
+        shred "${swap_partition}"
+    fi
+
+    # Check that third field "fstype" is set to "swap",
+    # then check that the line is currently NOT commented out,
+    # then comment the line out, modifying the file in place.
+    # This will be done for all swap entries in fstab, regardless of active
+    # state, to ensure no swap is enabled on next boot.
+    perl -i -apne '$F[2] eq "swap" && /^[^\s#]+?/ && s/^/#/g' /etc/fstab
+}
+
 case "$1" in
     install)
+      permanently_disable_swap
    ;;
 
     upgrade)
+
+      permanently_disable_swap
 
       if [ -n "$2" ] && [ "$2" = "0.3" ] ; then
         # Copy the custom logo (workaround due to #911)
