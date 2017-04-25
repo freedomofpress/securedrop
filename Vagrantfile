@@ -13,6 +13,9 @@ Vagrant.configure("2") do |config|
     build.vm.provider "virtualbox" do |v|
       v.name = "ossec-build"
     end
+    build.vm.provider "libvirt" do |lv, override|
+      lv.memory = 1024
+      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
+    end
   end
-
 end
