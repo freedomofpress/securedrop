@@ -352,25 +352,29 @@ class Journalist(Base):
         # prevents some MITM attacks.
         if hmac.compare_digest(token, self.last_token) and LOGIN_HARDENING:
             raise BadTokenException("previously used token {}".format(token))
-        else:
-            self.last_token = token
-            db_session.commit()
 
         if self.is_totp:
             # Also check the given token against the previous and next
             # valid tokens, to compensate for potential time skew
             # between the client and the server. The total valid
             # window is 1:30s.
-            return self.totp.verify(token, valid_window=1)
+            verified = self.totp.verify(token, valid_window=1)
+
         else:
-            for counter_val in range(
-                    self.hotp_counter,
-                    self.hotp_counter + 20):
+            verified = False
+            for counter_val in range(self.hotp_counter,
+                                     self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
+                    verified = True
                     self.hotp_counter = counter_val + 1
-                    db_session.commit()
-                    return True
-            return False
+                    break
+
+        if verified:
+            self.last_token = token
+            db_session.commit()
+
+        return verified
+ 
 
     @classmethod
     def throttle_login(cls, user):
