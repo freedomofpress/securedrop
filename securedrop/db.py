@@ -2,6 +2,7 @@ import os
 import datetime
 import base64
 import binascii
+import hmac
 
 # Find the best implementation available on this platform
 try:
@@ -292,7 +293,8 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+        return hmac.compare_digest(self._scrypt_hash(password, self.pw_salt),
+                                   self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
