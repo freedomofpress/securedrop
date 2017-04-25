@@ -4,9 +4,8 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define 'build' do |build|
-    build.vm.box = "build"
-    build.vm.box = "trusty64"
-    build.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+    build.vm.hostname = "build"
+    build.vm.box = "bento/ubuntu-14.04"
     build.vm.provision "ansible" do |ansible|
       ansible.playbook = "ansible/build-deb-pkgs.yml"
       ansible.verbose = 'v'
