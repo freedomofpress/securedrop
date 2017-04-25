@@ -97,7 +97,7 @@ def test():
     os.environ['SECUREDROP_ENV'] = 'test'
     import config
     _start_test_rqworker(config)
-    test_cmds = ["py.test", "./test.sh"]
+    test_cmds = [["py.test", "--cov"], "./test.sh"]
     test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
     _stop_test_rqworker()
     sys.exit(test_rc)
@@ -110,7 +110,7 @@ def test_unit():
     os.environ['SECUREDROP_ENV'] = 'test'
     import config
     _start_test_rqworker(config)
-    test_rc = int(subprocess.call("py.test"))
+    test_rc = int(subprocess.call(["py.test", "--cov"]))
     _stop_test_rqworker()
     sys.exit(test_rc)
 
