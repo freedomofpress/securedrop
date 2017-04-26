@@ -1,9 +1,14 @@
 ---
-- hosts: [ 'build' ]
+- hosts: build
 
   roles:
-    - { role: build-ossec-deb-pkg, tags: [ "ossec-server" ], purpose: "server" }
-    - { role: build-ossec-deb-pkg, tags: [ "ossec-agent" ], purpose: "agent" }
+    - role: build-ossec-deb-pkg
+      purpose: server
+      tags: ossec-server
+
+    - role: build-ossec-deb-pkg
+      purpose: agent
+      tags: ossec-agent
 
   post_tasks:
     - name: List debian files in build_dir
