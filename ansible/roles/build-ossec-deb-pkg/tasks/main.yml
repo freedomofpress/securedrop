@@ -26,22 +26,12 @@
   ossec_urls:
     ossec_version: "{{ ossec_version }}"
 
-- name: check if ossec was already downloaded
-  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
-  register: ossec_download
-
-- debug: msg="OSSEC download exists will skip downloading again"
-  when: ossec_download.stat.exists
-
-- name: download OSSEC
+- name: Download OSSEC tarball.
   get_url:
     url: "{{ ossec_tarball_url }}"
     dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
-  when: not (ossec_download.stat.exists and
-             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
-             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
 
-- name: check if ossec was already downloaded
+- name: Gather checksum info for downloaded tarball.
   stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
   register: ossec_download
 
