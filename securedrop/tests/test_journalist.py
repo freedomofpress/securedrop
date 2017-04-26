@@ -507,17 +507,6 @@ class TestJournalistApp(TestCase):
                                                           source.filesystem_id).one()
         self.assertEqual(self.user.username, source_assigned.journalist.username)
 
-
-    def test_delete_source_deletes_submissions(self):
-        """Verify that when a source is deleted, the submissions that
-        correspond to them are also deleted."""
-
-        self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
-
-        # Source should be gone
-        results = db_session.query(Source).filter(Source.id == self.source.id).all()
-
     def _delete_collection_setup(self):
         self.source, _ = utils.db_helper.init_source()
         utils.db_helper.submit(self.source, 2)
@@ -530,10 +519,6 @@ class TestJournalistApp(TestCase):
         self._delete_collection_setup()
         journalist.delete_collection(self.source.filesystem_id)
         results = Source.query.filter(Source.id == self.source.id).all()
-        self.assertEqual(results, [])
-        results = db_session.query(Submission.source_id == self.source.id).all()
-        self.assertEqual(results, [])
-        results = db_session.query(Reply.source_id == self.source.id).all()
         self.assertEqual(results, [])
 
     def test_delete_source_deletes_source_key(self):
