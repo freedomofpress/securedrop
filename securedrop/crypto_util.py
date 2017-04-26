@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from base64 import b32encode
-import hmac
 import os
 import subprocess
 
@@ -192,7 +191,6 @@ def decrypt(secret, ciphertext):
     """
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
-
 
 if __name__ == "__main__":
     import doctest
