@@ -291,14 +291,9 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-<<<<<<< HEAD
         return pyotp.utils.compare_digest(
             self._scrypt_hash(password, self.pw_salt),
             self.pw_hash)
-=======
-        return constant_time_compare(self._scrypt_hash(password, self.pw_salt),
-                                     self.pw_hash)
->>>>>>> Use Python 2.7.6 friendly constant-time string comparator
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
@@ -361,7 +356,6 @@ class Journalist(Base):
         """
         token = self._format_token(token)
 
-<<<<<<< HEAD
         def verify_totp(token, for_time=None):
             """Check the given token against the previous, current, and
             next valid tokens to compensate for potential time skew
@@ -383,26 +377,6 @@ class Journalist(Base):
 
             for counter_val in range(self.hotp_counter,
                                      self.hotp_counter + 20):
-=======
-        # Only allow each authentication token to be used once. This
-        # prevents some MITM attacks.
-        if constant_time_compare(token, self.last_token) and LOGIN_HARDENING:
-            raise BadTokenException("previously used token {}".format(token))
-        else:
-            self.last_token = token
-            db_session.commit()
-
-        if self.is_totp:
-            # Also check the given token against the previous and next
-            # valid tokens, to compensate for potential time skew
-            # between the client and the server. The total valid
-            # window is 1:30s.
-            return self.totp.verify(token, valid_window=1)
-        else:
-            for counter_val in range(
-                    self.hotp_counter,
-                    self.hotp_counter + 20):
->>>>>>> Use Python 2.7.6 friendly constant-time string comparator
                 if self.hotp.verify(token, counter_val):
                     verified = True
                     self.hotp_counter = counter_val + 1
