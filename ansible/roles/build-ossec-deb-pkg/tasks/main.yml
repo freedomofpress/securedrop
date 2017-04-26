@@ -32,7 +32,9 @@
     dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
 
 - name: Gather checksum info for downloaded tarball.
-  stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
+  stat:
+    path: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    get_md5: yes
   register: ossec_download
 
 - name: Fail if MD5 and SHA1 checksums for tarball are not correct.
@@ -54,7 +56,11 @@
              ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
 
 - name: install deb packages required to build ossec package
-  apt: name="{{ item }}" state=present update_cache=yes cache_valid_time=3600
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
   with_items: "{{ build_ossec_deb_pkg_dependencies }}"
 
 - name: extract OSSEC archive to /tmp
