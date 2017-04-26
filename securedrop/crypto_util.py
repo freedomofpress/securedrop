@@ -194,23 +194,6 @@ def decrypt(secret, ciphertext):
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
 
 
-# Taken from Django Source Code (with some modification)
-def constant_time_compare(val1, val2):
-    """Returns True if the two strings are equal, False otherwise. Tries
-    to use :meth:`hmac.compare_digest()`, but falls back to an
-    implementation from Django if that's not available.
-    """
-    try:
-        hmac.compare_digest(val1, val2)
-    except AttributeError:
-        if len(val1) != len(val2):
-            return False
-        result = 0
-        for x, y in zip(val1, val2):
-            result |= ord(x) ^ ord(y)
-        return result == 0
-
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
