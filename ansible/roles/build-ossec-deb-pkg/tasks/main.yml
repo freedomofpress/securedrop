@@ -109,27 +109,17 @@
 - name: move securedrop ossec deb to repo
   command: mv /tmp/{{ ossec_build_dir }}.deb {{ build_path }}
 
-- name: delete tmp build paths
+# Running the `install.sh` script shipped with the OSSEC tarball populates the
+# build system with files that should only be included in the deb package.
+# Let's clean up at the end of the build, to prevent these files from being
+# included in the deb package for another purpose (i.e. agent vs. server).
+- name: Delete OSSEC build directories and config files.
   file:
     state: absent
-    dest: /tmp/{{ ossec_build_dir }}
-
-- name: delete tmp install paths
-  file:
-    state: absent
-    dest: /tmp/ossec-hids-{{ ossec_version }}
-
-- name: delete ossec install directory
-  file:
-    state: absent
-    dest: /var/ossec
-
-- name: delete ossec init conf file
-  file:
-    state: absent
-    dest: /etc/ossec-init.conf
-
-- name: delete init script
-  file:
-    state: absent
-    dest: /etc/init.d/ossec
+    dest: "{{ item }}"
+  with_items:
+    - /etc/init.d/ossec
+    - /etc/ossec-init.conf
+    - /tmp/ossec-hids-{{ ossec_version }}
+    - /tmp/{{ ossec_build_dir }}
+    - /var/ossec
