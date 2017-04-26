@@ -1,6 +1,4 @@
 ---
-- include: check_debs.yml
-
 - include: install_debs.yml
 
 - include: hold_debs.yml
