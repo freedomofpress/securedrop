@@ -26,9 +26,6 @@
   ossec_urls:
     ossec_version: "{{ ossec_version }}"
 
-- name: apt-get update
-  apt: update_cache=yes
-
 - name: check if ossec was already downloaded
   stat: path="{{ build_path }}/{{ ossec_tarball_filename }}" get_md5=yes
   register: ossec_download
@@ -67,7 +64,7 @@
              ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
 
 - name: install deb packages required to build ossec package
-  apt: name="{{ item }}" state=latest
+  apt: name="{{ item }}" state=present update_cache=yes cache_valid_time=3600
   with_items: "{{ build_ossec_deb_pkg_dependencies }}"
 
 - name: extract OSSEC archive to /tmp
