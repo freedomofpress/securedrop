@@ -14,7 +14,7 @@
   synchronize:
     # All Debian package source trees are located in `install_files/<package>`
     # in the root of the SecureDrop git repository.
-    src: ../../../../ossec-packages/ossec-{{ purpose }}/
+    src: ../../../../ossec-{{ purpose }}/
     dest: "{{ repo_src_path }}"
     # Ansible v1 does not support the `use_ssh_args`, which was added in 2.0.
     # When resolving #1146, to upgrade Ansible, this option should be
