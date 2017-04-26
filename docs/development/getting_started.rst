@@ -130,15 +130,3 @@ use git to clone the SecureDrop repo.
 .. code:: sh
 
    git clone https://github.com/freedomofpress/securedrop.git
-
-SecureDrop uses a branching model based on `git-flow
-<http://nvie.com/posts/a-successful-git-branching-model/>`__.  The ``master``
-branch always points to the latest stable release. Use this branch if you are
-interested in installing or auditing SecureDrop.  Development for the upcoming
-release of SecureDrop takes place on ``develop``, which is the default
-branch. If you want to contribute, you should branch from and submit pull
-requests to ``develop``.
-
-.. todo:: The branching model should be documented separately, in a
-	  "Contributing guidelines" document. We are also going to move away
-	  from git-flow soon because it sucks.
