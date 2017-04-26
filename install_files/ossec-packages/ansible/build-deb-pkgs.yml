@@ -10,19 +10,4 @@
       purpose: agent
       tags: ossec-agent
 
-  post_tasks:
-    - name: List debian files in build_dir
-      find:
-        paths: "{{ build_path }}"
-        patterns: "*.deb"
-      register: list_deb_pkgs_results
-      changed_when: false
-
-    - name: Fetch debians if local storage folder provided
-      fetch:
-        src: "{{ item.path }}"
-        dest: "{{ local_build_path }}"
-        flat: yes
-      with_items: "{{ list_deb_pkgs_results.files }}"
-      when: "local_build_path != ''"
   sudo: yes
