@@ -1,5 +1,6 @@
 import os
 import datetime
+from functools import partial
 import base64
 import binascii
 
@@ -241,7 +242,7 @@ class Journalist(Base):
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
-    last_token = Column(String(6))
+    last_token = Column(String(6)) # deprecated
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
@@ -346,37 +347,52 @@ class Journalist(Base):
         """Strips from authentication tokens the whitespace that many clients add for readability"""
         return ''.join(token.split())
 
-    def verify_token(self, token):
+    def verify_token(self, token, for_time=None):
+        """Verify a HOTP/TOTP token, allowing for client/ server skew.
+        For TOTP, you may specify a time to check the token for.
+
+        Args:
+            for_time: An optional :obj:`datetime.datetime` to
+                check the token for.
+        Returns: bool
+        """
         token = self._format_token(token)
 
-        # Only allow each authentication token to be used once. This
-        # prevents some MITM attacks.
-        if constant_time_compare(token, self.last_token) and LOGIN_HARDENING:
-            raise BadTokenException("previously used token {}".format(token))
+        def verify_totp(token, for_time=None):
+            """Check the given token against the previous, current, and
+            next valid tokens to compensate for potential time skew
+            between the client and the server. The total valid window is
+            1:30s.
 
-        if self.is_totp:
-            # Also check the given token against the previous and next
-            # valid tokens, to compensate for potential time skew
-            # between the client and the server. The total valid
-            # window is 1:30s.
-            verified = self.totp.verify(token, valid_window=1)
+            Args:
+                for_time: An optional :obj:`datetime.datetime` to
+                    check the token for.
+            Returns: bool
+            """
+            return self.totp.verify(token, for_time=for_time, valid_window=1)
 
-        else:
+        def verify_hotp(token):
+            """Check the given token against the current and next 20
+            tokens.
+            """
             verified = False
+
             for counter_val in range(self.hotp_counter,
                                      self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
                     verified = True
                     self.hotp_counter = counter_val + 1
+                    db_session.add(self)
+                    db_session.commit()
                     break
 
-        if verified:
-            self.last_token = token
-            db_session.commit()
+            return verified
 
-        return verified
+        verifier = (partial(verify_totp, for_time=for_time) if self.is_totp
+                    else verify_hotp)
+
+        return verifier(token)
  
-
     @classmethod
     def throttle_login(cls, user):
         _LOGIN_ATTEMPT_PERIOD = 60  # seconds
@@ -400,6 +416,23 @@ class Journalist(Base):
 
     @classmethod
     def login(cls, username, password, token):
+        """Takes a username, password, and OTP token (strings) and tries
+        to authenticate the user. Unless the SECUREDROP_ENV environment
+        variable is set to 'test' login attempts are rate-limited, and
+        OTP tokens that were just used, or precede/ proceed a token that
+        was just used are rejected.
+
+        Returns: :obj:`Journalist`
+
+        Raises:
+            InvalidUsernameException: If no user can be found with the
+                specified `username`.
+            LoginThrottledException: If the user has exceeded the login
+                rate-limiting threshold.
+            BadTokenException: If the `token` is invalid, was just used,
+                or precedes/proceeds a token that was just used.
+            WrongPasswordException: If the user's `password` is invalid.
+        """
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
@@ -408,11 +441,21 @@ class Journalist(Base):
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)
+            if (user.is_totp
+                and user.verify_token(token, for_time=user.last_access)):
+                raise BadTokenException(
+                    "Token valid, but was just used, or precedes/ proceeds "
+                    "a token that was just used.")
 
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
+
+        user.last_access = datetime.datetime.utcnow()
+        db_session.add(user)
+        db_session.commit()
+
         return user
 
 
