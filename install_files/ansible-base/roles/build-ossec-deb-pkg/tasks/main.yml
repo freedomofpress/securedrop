@@ -13,7 +13,9 @@
 
 - name: Conditional copy over current directory for repo build
   synchronize:
-    src: ../../../../
+    # All Debian package source trees are located in `install_files/<package>`
+    # in the root of the SecureDrop git repository.
+    src: ../../../../ossec-packages/ossec-{{ purpose }}/
     dest: "{{ repo_src_path }}"
     use_ssh_args: yes
     recursive: yes
@@ -94,7 +96,7 @@
   command: cp -R /var/ossec {{ ossec_build_dir }}/var/
 
 - name: Copy OSSEC DEBIAN package scripts to build directory.
-  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/DEBIAN {{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/DEBIAN {{ ossec_build_dir }}
 
 - name: Copy OSEC DEBIAN/control template to build directory.
   template:
@@ -102,7 +104,7 @@
     dest: "{{ ossec_build_dir }}/DEBIAN/control"
 
 - name: Copy OSSEC /usr and /etc directories to build directory.
-  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/{{ item }} {{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/{{ item }} {{ ossec_build_dir }}
   with_items:
     - etc
     - usr
