@@ -22,26 +22,4 @@
       </span>
     {% endif %}
   </div>
-  <div id="{{ source.filesystem_id }}-assignment" class="assignment">
-    <div class="assign-current">
-      <p>Assigned:</p>
-      {% if source.journalist %}
-        <p>{{ source.journalist.username }}</p>
-      {% else %}
-        <p>nobody</p>
-      {% endif %}
-      <a href="#{{ source.filesystem_id }}-reassign">Reassign</a>
-    </div>
-    <div id="{{ source.filesystem_id }}-reassign" class="assign-select">
-      <p>Assign new journalist:</p>
-      <select name="journalist">
-        <option value="none">nobody</option>
-        {% for journalist in journalists %}
-        <option value="{{ journalist.username }}">{{ journalist.username }}</option>
-        {% endfor %}
-      </select>
-      <button formaction="/change-assignment/{{ source.filesystem_id }}">Apply</button>
-      <a class="btn" href="#{{ source.filesystem_id }}-assignment">Cancel</a>
-    </div>
-  </div>
 </li>
