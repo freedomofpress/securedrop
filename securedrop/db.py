@@ -2,7 +2,6 @@ import os
 import datetime
 import base64
 import binascii
-import hmac
 
 # Find the best implementation available on this platform
 try:
@@ -24,7 +23,7 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
+from crypto_util import constant_time_compare
 import store
 
 LOGIN_HARDENING = True
@@ -294,8 +293,8 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-        return hmac.compare_digest(self._scrypt_hash(password, self.pw_salt),
-                                   self.pw_hash)
+        return constant_time_compare(self._scrypt_hash(password, self.pw_salt),
+                                     self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
@@ -352,7 +351,7 @@ class Journalist(Base):
 
         # Only allow each authentication token to be used once. This
         # prevents some MITM attacks.
-        if hmac.compare_digest(token, self.last_token) and LOGIN_HARDENING:
+        if constant_time_compare(token, self.last_token) and LOGIN_HARDENING:
             raise BadTokenException("previously used token {}".format(token))
 
         if self.is_totp:
