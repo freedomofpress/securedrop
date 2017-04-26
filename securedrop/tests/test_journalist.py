@@ -492,21 +492,6 @@ class TestJournalistApp(TestCase):
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
 
-    def test_change_assignment(self):
-        source, _ = utils.db_helper.init_source()
-        self._login_user()
-
-        resp = self.client.post(
-            url_for('change_assignment', sid=source.filesystem_id),
-            data=dict(journalist=self.user.username))
-
-        self.assertRedirects(resp, url_for('index'))
-        # Check that source is indeed assigned to self.user.username in the db
-        source_assigned = db_session.query(Source).filter(source.filesystem_id
-                                                          ==
-                                                          source.filesystem_id).one()
-        self.assertEqual(self.user.username, source_assigned.journalist.username)
-
 
     def test_delete_source_deletes_submissions(self):
         """Verify that when a source is deleted, the submissions that
