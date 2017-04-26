@@ -75,9 +75,9 @@ anonymous sources.
 
    development/getting_started
    development/virtual_environments
+   development/contributor_guidelines
    development/tips_and_tricks
    development/documentation_guidelines
-   development/contributor_guidelines
    development/config_tests
    development/apt_repo
    development/apparmor_profiles
