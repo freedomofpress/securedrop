@@ -14,4 +14,6 @@ build_path: /tmp/build
 
 repo_src_path: "{{ build_path }}/ossec-{{ purpose }}"
 ossec_build_dir: "{{ build_path }}/ossec-{{ purpose }}-{{ ossec_version }}-amd64"
-local_build_path: ""
+
+# Destination on Ansible controller where built deb packages will be placed.
+ossec_build_deb_package_local_dest_dir: "../../build/"

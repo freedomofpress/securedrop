@@ -9,7 +9,6 @@
   with_items:
     - "{{ repo_src_path }}"
     - "{{ build_path }}"
-  register: ossec_src_path_results
 
 - name: Conditional copy over current directory for repo build
   synchronize:
@@ -17,12 +16,14 @@
     # in the root of the SecureDrop git repository.
     src: ../../../../ossec-packages/ossec-{{ purpose }}/
     dest: "{{ repo_src_path }}"
-    use_ssh_args: yes
+    # Ansible v1 does not support the `use_ssh_args`, which was added in 2.0.
+    # When resolving #1146, to upgrade Ansible, this option should be
+    # activated to permit builds in CI.
+    #   use_ssh_args: yes
     recursive: yes
     rsync_opts:
       - "--exclude=*.git"
       - "--exclude=*.deb"
-  when: ossec_src_path_results.changed
 
 - name: Include OSSEC download URLs.
   ossec_urls:
@@ -112,9 +113,6 @@
 - name: Build SecureDrop OSSEC deb package.
   command: dpkg-deb --build {{ ossec_build_dir }}
 
-- name: Move SecureDrop OSSEC deb package to repo to output directory.
-  command: mv {{ ossec_build_dir }}.deb {{ build_path }}
-
 # Running the `install.sh` script shipped with the OSSEC tarball populates the
 # build system with files that should only be included in the deb package.
 # Let's clean up at the end of the build, to prevent these files from being
@@ -126,22 +124,15 @@
   with_items:
     - /etc/init.d/ossec
     - /etc/ossec-init.conf
-    - /tmp/ossec-hids-{{ ossec_version }}
-    - "{{ ossec_build_dir }}"
+    # Don't remove the build directory, since its files can be useful for
+    # config testing after the build is completed.
+    # - "{{ ossec_build_dir }}"
     - /var/ossec
 
-# Fetch back packages if necessary.
-- name: List debian files in build_dir
-  find:
-    paths: "{{ build_path }}"
-    patterns: "*.deb"
-  register: list_deb_pkgs_results
-  changed_when: false
-
-- name: Fetch debians if local storage folder provided
+- name: Fetch newly built Debian packages back to localhost.
   fetch:
-    src: "{{ item.path }}"
-    dest: "{{ local_build_path }}"
+    src: "{{ ossec_build_dir }}.deb"
+    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
     flat: yes
-  with_items: "{{ list_deb_pkgs_results.files }}"
-  when: "local_build_path != ''"
+    fail_on_missing: yes
+  when: "ossec_build_deb_package_local_dest_dir != ''"
