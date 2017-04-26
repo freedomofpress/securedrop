@@ -1,0 +1,9 @@
+---
+# By default the role should install the SD app-code package from the repo,
+# but staging hosts will override this setting to prefer locally-built
+# deb packages. Development will also skip entirely.
+securedrop_app_install_from_repo: True
+
+# Whether to configure the Apache service for the application. Required
+# in prod and staging, but not relevant for development.
+securedrop_app_configure_apache: True

@@ -1,0 +1,25 @@
+---
+- name: Install SecureDrop apt repo GPG signing key.
+  apt_key:
+    state: present
+    data: "{{ lookup('file', 'fpf-signing-key.pub') }}"
+    keyring: /etc/apt/trusted.gpg.d/securedrop-keyring.gpg
+  tags:
+    - apt
+    - fpf_repo
+
+- name: Setup FPF apt repo.
+  apt_repository:
+    repo: deb [arch=amd64] {{ apt_repo_url }} {{ ansible_lsb.codename }} main
+    state: present
+    update_cache: yes
+  tags:
+    - apt
+    - fpf_repo
+
+- name: Install the securedrop-keyring package for managing the apt gpg key.
+  apt:
+    pkg: securedrop-keyring
+    state: present
+  # Skip installing the keyring package from the apt repo under staging.
+  when: not install_local_packages

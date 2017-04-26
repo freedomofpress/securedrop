@@ -1,0 +1,6 @@
+---
+apt_repo_url: https://apt.freedom.press
+
+# By default, install packages from the apt-repo, but under
+# staging hosts we'll prefer locally-built deb packages
+install_local_packages: False

@@ -30,7 +30,7 @@ anonymous sources.
    hardware
    before_you_begin
    set_up_tails
-   set_up_svs
+   set_up_*SVS*
    set_up_dtd
    generate_securedrop_application_key
    set_up_admin_tails
@@ -72,7 +72,12 @@ anonymous sources.
    :caption: Developer Documentation
    :name: devdocs
    :maxdepth: 2
-   :glob:
 
    development/getting_started
-   development/*
+   development/virtual_environments
+   development/tips_and_tricks
+   development/documentation_guidelines
+   development/config_tests
+   development/apt_repo
+   development/apparmor_profiles
+   development/threat_model

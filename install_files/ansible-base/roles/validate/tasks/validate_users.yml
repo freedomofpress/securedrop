@@ -1,0 +1,22 @@
+---
+# Check the value of `ssh_users` in the prod-specific.yml file to ensure
+# we're using a unique username. If the playbook is running with a username
+# of e.g. `amnesia`, then the vars file has been configured incorrectly.
+- name: Validate Admin username (specified in vars).
+  assert:
+    that:
+      - "ssh_users != item"
+      - "ssh_users != ''"
+      - "item not in ssh_users"
+  with_items: "{{ securedrop_validate_disallowed_users }}"
+
+# Beyond checking what's declared in the vars file, we must validate the
+# username used to connect to the host. The SSH config forbids SSH connections,
+# so on first run we should not be connecting as root.
+- name: Validate Admin username (used in SSH connection).
+  assert:
+    that:
+      - "ansible_user|default('') != item"
+      - "ansible_ssh_user|default('') != item"
+      - "remote_user|default('') != item"
+  with_items: "{{ securedrop_validate_disallowed_users }}"

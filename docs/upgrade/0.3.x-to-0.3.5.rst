@@ -13,13 +13,13 @@ Important Changes
 
 OSSEC Postfix configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Postfix configuration on the Monitor Server previously used a hard-coded
+The Postfix configuration on the *Monitor Server* previously used a hard-coded
 fingerprint value, specified as ``smtp_relay_fingerprint`` in the 
 ``prod-specific.yml`` file, to verify the TLS certificate prior to sending 
 mail.Some mail providers use load balancing on the SMTP relay, which causes
 the fingerprint to change periodicially during normal use. With a hard-coded
 fingerprint, this caused OSSEC alerts to be delayed, so the default
-functionality is now to trust the system CAs on the Monitor Server.
+functionality is now to trust the system CAs on the *Monitor Server*.
 
 In order to upgrade to the new verification functionality, admins update the 
 ``prod-specific.yml`` file and run a special git command designed to merge
@@ -116,5 +116,5 @@ Greeter*.
     ansible-playbook -i inventory -s -u <user> securedrop-prod.yml
 
 During the playbook run, the Postfix TLS verification settings will be updated
-on the Monitor Server, and both servers will receive new logic for rebooting
+on the *Monitor Server*, and both servers will receive new logic for rebooting
 after unattended-upgrades.

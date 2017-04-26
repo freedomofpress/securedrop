@@ -1,5 +1,0 @@
-auth required pam_google_authenticator.so
-auth    [success=1 default=ignore]      pam_unix.so nullok_secure
-auth    requisite                       pam_deny.so
-auth    required                        pam_permit.so
-auth    optional                        pam_ecryptfs.so unwrap

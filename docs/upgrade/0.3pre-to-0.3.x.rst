@@ -13,11 +13,11 @@ substitute ``0.3.x`` with the current release's version number.
 Important Changes
 -----------------
 
-Document Interface Port Change
+Journalist Interface Port Change
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To make accessing the document interface easier for new users, the
-Document Interface port for the onion address has been changed from
+To make accessing the journalist interface easier for new users, the
+Journalist Interface port for the onion address has been changed from
 ``8080`` to ``80``. This means you will need to update existing
 Journalists' bookmarks in their tor browser and remove the ``:8080``
 from the end of the onion url.
@@ -27,7 +27,7 @@ Prerequisites
 
 -  An Admin networked Tails workstation with persistence enabled and an
    Admin password set during boot.
-   
+
 -  A filled out ``prod-specific.yml`` file
 
 Upgrade Procedure
@@ -35,7 +35,7 @@ Upgrade Procedure
 
 The upgrade procedure can be performed entirely from the Admin
 Workstation that you set up when you installed 0.3pre. Start by
-booting the Admin Tails USB on the Admin Workstation. Make sure you
+booting the Admin Tails USB on the *Admin Workstation*. Make sure you
 set an *Adminstrator Password* in the *Tails Greeter*.
 
 #. Open a terminal (it is an icon on the top of the screen that looks
@@ -91,7 +91,7 @@ use these commands: ::
 
 .. note:: If you encounter connection timeouts during the backup,
 	  make sure to remove unnecessary submissions from the
-	  Document Interface, then run the command again. If you
+	  Journalist Interface, then run the command again. If you
 	  still have problems, contact us at
 	  securedrop@freedom.press.
 
@@ -115,7 +115,7 @@ If you get an error from the upgrade script, see the list of potential errors an
 
   When you installed SecureDrop, you generated an SSH key (and
   probably saved to the default location: ``~/.ssh/id_rsa``) for the
-  user 'amnesia' and copied it to both the App and Mon server. You
+  user 'amnesia' and copied it to both the App and *Monitor Server*. You
   should still have access to that key through the OpenSSH
   persistence in Tails. If you got this error, check if you lost the
   key or saved it to a different location. You won't be able to login
@@ -142,7 +142,7 @@ If you get an error from the upgrade script, see the list of potential errors an
   filled out, with the local IP address for each server specified.
 
 - ``Error: ssh_users is not defined in prod-specific.yml.``
-   
+
   Inside the production playbook, you must have ``ssh_users`` defined
   as the name of the user which you use to log in to the App and Mon
   servers. This is the non-root user account you created when you
@@ -153,9 +153,9 @@ If you get an error from the upgrade script, see the list of potential errors an
   Our new provisioner, Ansible, must be run over Tor in order to
   reach the servers. Replace the IP addresses in
   ``/install_files/ansible-base/inventory`` with the .onion hostnames
-  for the App and Mon server's Tor hidden services for SSH.
+  for the App and *Monitor Server*'s Tor hidden services for SSH.
 
-- ``Error: can't connect to the Application or Monitor Server via SSH.``
+- ``Error: can't connect to the Application or *Monitor Server* via SSH.``
 
   Something's wrong and we can't connect. You can re-run the script
   to try again.

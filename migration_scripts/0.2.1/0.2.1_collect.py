@@ -10,13 +10,16 @@ import os
 import re
 import tarfile
 
+
 # Arbitrarily pick the source chroot jail (doesn't matter)
 securedrop_root = "/var/chroot/source/var/www/securedrop"
+
 
 def collect_config_file(backup):
     config_file = os.path.join(securedrop_root, "config.py")
     backup.add(config_file)
     return config_file
+
 
 def collect_securedrop_root(backup):
     # The store and key dirs are shared between the chroot jails in
@@ -25,12 +28,14 @@ def collect_securedrop_root(backup):
     backup.add(securedrop_root)
     return securedrop_root
 
+
 def collect_database(backup):
-    # Copy the db file, which is only present in the document interface's
+    # Copy the db file, which is only present in the journalist interface's
     # chroot jail in 0.2.1
     db_file = "/var/chroot/document/var/www/securedrop/db.sqlite"
     backup.add(db_file)
     return db_file
+
 
 def collect_custom_header_image(backup):
     # 0.2.1's deployment didn't actually use
@@ -39,6 +44,7 @@ def collect_custom_header_image(backup):
     header_image = os.path.join(securedrop_root, "static/i/securedrop.png")
     backup.add(header_image)
     return header_image
+
 
 def collect_tor_files(backup):
     tor_files = [

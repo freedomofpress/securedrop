@@ -79,10 +79,10 @@ time you are using SecureDrop, click the ``Submit Documents`` button.
 
 You should now see a screen that shows the unique codename that SecureDrop has
 generated for you. In the example screenshot below the codename is
-``chute surge stuck chill wish agone inure``, but yours will be different. It is
-extremely important that you both remember this code and keep it secret. After
-submitting documents, you will need to provide this code to log back in and
-check for responses.
+``bagpipe aloof whiff borrowing overwrite datebook unadvised``, but yours will
+be different. It is extremely important that you both remember this code and
+keep it secret. After submitting documents, you will need to provide this code
+to log back in and check for responses.
 
 The best way to protect your codename is to memorize it. If you cannot memorize
 it right away, we recommend writing it down and keeping it in a safe place at
@@ -114,6 +114,19 @@ messages.
 
 |Confirmation page|
 
+Once you are finished submitting documents, be certain you have saved your
+secret codename and then click the ``Logout`` button:
+
+|Logout|
+
+The final step to clearing your session is to restart Tor Browser for
+optimal security. You can either close the browser entirely or follow
+the notification: click on the Tor onion in the toolbar, click
+``New Identity`` and then click ``Yes`` in the dialog box that appears
+to confirm you'd like to restart Tor Browser:
+
+|Restart TBB|
+
 
 Continuing the Conversation
 ---------------------------
@@ -131,8 +144,10 @@ The next page will ask for your secret codename. Enter it and click
 
 If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
-another message to the journalist. Be sure to delete any messages here
-before navigating away.
+another message to the journalist. Before leaving the page, you should
+delete any replies. In the unlikely event that someone learns
+your codename, this will keep your identity secret as no one will be
+able to see the previous correspondences you had with journalists.
 
 |Check for a reply|
 
@@ -161,6 +176,8 @@ Repeat these steps to continue communicating with the journalist.
 .. |Memorizing your codename| image:: images/manual/source-step4.png
 .. |Submit a document| image:: images/manual/source-step5.png
 .. |Confirmation page| image:: images/manual/source-step6.png
+.. |Logout| image:: images/manual/logout-notification.png
+.. |Restart TBB| image:: images/manual/restart-tor-browser.png
 .. |Check for response| image:: images/manual/source-step8.png
 .. |Check for a reply| image:: images/manual/source-step9.png
 .. |Delete received messages| image:: images/manual/source-step10.png

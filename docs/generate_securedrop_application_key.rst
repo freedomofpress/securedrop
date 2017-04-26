@@ -1,18 +1,13 @@
-Generate the SecureDrop Application GPG Key
-===========================================
-
-.. todo:: Tom complained about the name "SecureDrop Application GPG
-          Key". It's verbose, and "application key" is kind of vague
-          (what is its function within the application?). "SecureDrop
-          Submission Key" might be a better name.
+Generate the SecureDrop Submission Key
+======================================
 
 When a document or message is submitted to SecureDrop by a source, it is
-automatically encrypted with the *SecureDrop Application GPG Key*. The
+automatically encrypted with the *SecureDrop Submission Key*. The
 private part of this key is only stored on the *Secure Viewing Station*
 which is never connected to the Internet. SecureDrop submissions can
 only be decrypted and read on the *Secure Viewing Station*.
 
-We will now generate the *SecureDrop Application GPG Key* on the
+We will now generate the *SecureDrop Submission Key* on the
 *Secure Viewing Station*.
 
 Correct the system time
@@ -20,7 +15,7 @@ Correct the system time
 
 After booting up Tails on the *Secure Viewing Station*, you will need to
 manually set the system time before you create the *SecureDrop
-Application GPG Key*. To set the system time:
+Submission Key*. To set the system time:
 
 #. Right-click the time in the top menu bar and select *Adjust Date &
    Time.*
@@ -45,7 +40,7 @@ Create the key
 -  For *Real name*, type: ``SecureDrop``
 -  For *Email address*, leave the field blank and press Enter
 -  For *Comment*, type
-   ``[Your Organization's Name] SecureDrop Application GPG Key``
+   ``[Your Organization's Name] SecureDrop Submission Key``
 -  Verify that everything is correct so far, then type ``o`` for
    ``(O)kay``
 -  It will pop up a box asking you to type a passphrase, but it's safe

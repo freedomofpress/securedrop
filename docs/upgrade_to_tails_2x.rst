@@ -13,7 +13,7 @@ before upgrading SecureDrop to 0.3.7 or later.
 
 Upgrading Tails from 1.x to 2.x must be done manually. Please follow this guide
 to updating each Tails USB stick used in your SecureDrop instance. Be sure to
-use the Secure Viewing Station computer so you benefit from its airgap while
+use the *Secure Viewing Station* computer so you benefit from its airgap while
 transfering sensitive data.
 
 .. note:: You will need:
@@ -25,9 +25,9 @@ transfering sensitive data.
     #. Your *existing SecureDrop Tails USB sticks* (Admin, Journalist, and Secure
        Viewing Station).
     #. An *airgapped machine* to perform the Tails upgrades. It is ok to reuse
-       the Secure Viewing Station for this task.
+       the *Secure Viewing Station* for this task.
 
-An airgapped machine (such as the SVS) is required in order to perform these
+An airgapped machine (such as the *SVS*) is required in order to perform these
 upgrades safely. By isolating the machine from all network access, you reduce
 the exposure of sensitive data to networked computers, thereby reducing the
 threat of compromise by adversaries who wish to gain access to your SecureDrop
@@ -147,7 +147,7 @@ completely copied.  Any loss of data from these folders could prevent users
 from accessing submissions.
 
 .. tip::
-    Create subdirectories for each USB drive (Admin, Journalist, and SVS)
+    Create subdirectories for each USB drive (Admin, Journalist, and *SVS*)
     within the Backup Device. Not only will doing so speed up the upgrade
     process, it will also provide you with long-term encrypted backups of the
     USB devices. In the event of a lost or stolen drive, you can restore access
@@ -162,7 +162,7 @@ Once data are correctly copied, unmount the TailsData partition.
 4. Upgrade a Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~
 
-With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to
+With the Admin/Journo/*SVS* Tails USB still insterted in the machine, navigate to
 **Applications ▸ Tails ▸ Tails Installer** and select the **Upgrade by
 cloning** option.
 
@@ -185,7 +185,7 @@ unplugging and remounting the Tails device you're trying to upgrade.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
-          USBs. If you are upgrading the Secure Viewing Station Tails USB, you
+          USBs. If you are upgrading the *Secure Viewing Station* Tails USB, you
           can skip this step.
 
 Shut down the Tails USB on the airgapped computer and move it to the computer
@@ -212,7 +212,7 @@ you've done that, you can re-install the Tails auto-configuration:
    sudo ./install.sh
 
 This is the same process as described in
-:doc:`configure_admin_workstation_post_install` (for the Admin Workstation) and
+:doc:`configure_admin_workstation_post_install` (for the *Admin Workstation*) and
 :doc:`onboarding` (for the Journalist Workstations). If you have questions,
 consult that documentation first.
 
@@ -234,17 +234,17 @@ persistence. Confirm that the persistent files are present and that your
 workflow is unaffected.
 
 As a test, consider submitting a test submission, downloading it on the
-Journalist Workstation, and finally decrypting it on the SVS.
+Journalist Workstation, and finally decrypting it on the *SVS*.
 If you are able to decrypt the submission successfully, you have verified that
-the Journalist Workstation and SVS are working correctly after the upgrade.
+the Journalist Workstation and *SVS* are working correctly after the upgrade.
 
-To test the Admin Workstation, make sure you can still SSH into the servers:
+To test the *Admin Workstation*, make sure you can still SSH into the servers:
 
 .. code:: sh
 
-    $ ssh <username>@<app server .onion address> hostname
+    $ ssh <username>@<*Application Server* .onion address> hostname
     app
-    $ ssh <username>@<monitor server .onion address> hostname
+    $ ssh <username>@<*Monitor Server* .onion address> hostname
     mon
 
 .. tip:: If you forgot, your SSH username is in
@@ -254,7 +254,7 @@ To test the Admin Workstation, make sure you can still SSH into the servers:
          ``install_files/ansible-base/mon-ssh-aths``, respectively.
 
 .. tip:: Consider retaining the encrypted backup drive as a disaster recovery
-         device. Document the passphrase in the Admin Workstation KeePassX
+         device. Document the passphrase in the *Admin Workstation* KeePassX
          database, and store the physical Backup Device in a locked safe or
          other secure location.
 

@@ -1,17 +1,61 @@
 ---
-- name: update apt package lists
-  apt: update_cache=yes
+- name: Update apt package lists.
+  apt:
+      update_cache: yes
+  tags:
+    - apt
+    - development
 
-- name: install apt package deps for dev environment
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
+- name: Install apt package dependencies for Development environment.
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ development_dependencies }}"
+  tags:
+    - apt
+    - development
 
-- name: install pip dependencies for securedrop
-  pip: requirements="{{ securedrop_pip_requirements }}"
+- name: Install pip dependencies for SecureDrop.
+  pip:
+    requirements: "{{ securedrop_pip_requirements }}"
+  tags:
+    - pip
+    - development
 
-- name: set SECUREDROP_ENV in bashrc
+- name: Install sass Ruby gem
+  gem:
+    name: sass
+    state: latest
+    user_install: no
+  sudo: yes
+  tags:
+    - development
+
+# necessary for automated tests
+- name: Compile sass to css
+  shell: >
+    if [ -d /home/travis ]; then
+      /home/travis/.rvm/bin/rvm install 2.3.0 &&
+      /home/travis/.rvm/bin/rvm use 2.3.0 &&
+      gem install sass &&
+      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
+    else 
+      sass --update sass:static/css
+    fi
+  args:
+    chdir: '{{ securedrop_repo  }}/securedrop'
+  tags:
+    - development
+
+# TODO: Probably better to set this env var in /etc/profile.d,
+# since it doesn't need to be set ONLY for the securedrop user.
+# Warrants further testing (e.g. Travis CI?), so leaving for now.
+- name: Set SECUREDROP_ENV in bashrc.
   lineinfile:
     dest: /home/{{ securedrop_user }}/.bashrc
     state: present
     insertafter: EOF
     line: "export SECUREDROP_ENV=dev"
+  tags:
+    - environment
+    - development

@@ -6,7 +6,7 @@ Install Ansible
 
 SecureDrop uses the Ansible automation tool for installation and maintenance.
 
-To install Ansible on the Admin Workstation, first update the ``apt``
+To install Ansible on the *Admin Workstation*, first update the ``apt``
 package manager's package lists to make sure you get the latest and
 greatest version of Ansible. This usually takes a few minutes over
 Tor. Once that's done, you can install Ansible:
@@ -22,11 +22,11 @@ Configure the Installation
 Make sure you have the following information and files before
 continuing:
 
--  The *App Server* IP address
+-  The *Application Server* IP address
 -  The *Monitor Server* IP address
--  The SecureDrop application's GPG public key (from the *Transfer
+-  The SecureDrop Submission Key (from the *Transfer
    Device*)
--  The SecureDrop application's GPG key fingerprint
+-  The SecureDrop Submission Key fingerprint
 -  The email address that will receive alerts from OSSEC
 -  The GPG public key and fingerprint for the email address that will
    receive the alerts
@@ -37,7 +37,7 @@ continuing:
    can add more later)
 -  The username of the system administrator
 -  (Optional) An image to replace the SecureDrop logo on the *Source
-   Interface* and *Document Interface*
+   Interface* and *Journalist Interface*
 
    -  Recommended size: ``500px x 450px``
    -  Recommended format: PNG
@@ -50,11 +50,11 @@ directory: ::
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
--  SecureDrop Application GPG public key file
+-  SecureDrop Submission Key public key file
 -  Admin GPG public key file (for encrypting OSSEC alerts)
 -  (Optional) Custom header image file
 
-The SecureDrop application GPG key should be located on your *Transfer
+The SecureDrop Submission Key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
 is mounted, but for example, if you are already in the ansible-base
 directory, you can just run: ::
@@ -76,13 +76,13 @@ match your environment. At a minimum, you will need to provide the
 following:
 
 -  User allowed to connect to both servers with SSH: ``ssh_users``
--  IP address of the Monitor Server: ``monitor_ip``
--  Hostname of the Monitor Server: ``monitor_hostname``
--  Hostname of the Application Server: ``app_hostname``
--  IP address of the Application Server: ``app_ip``
--  The SecureDrop application's GPG public key:
+-  IP address of the *Monitor Server*: ``monitor_ip``
+-  Hostname of the *Monitor Server*: ``monitor_hostname``
+-  Hostname of the *Application Server*: ``app_hostname``
+-  IP address of the *Application Server*: ``app_ip``
+-  The SecureDrop Submission Key public key file:
    ``securedrop_app_gpg_public_key``
--  The SecureDrop application's GPG key fingerprint:
+-  The SecureDrop Submission Key fingerprint:
    ``securedrop_app_gpg_fingerprint``
 -  GPG public key used when encrypting OSSEC alerts:
    ``ossec_alert_gpg_public_key``
@@ -98,6 +98,16 @@ following:
 -  Password of the email used to send OSSEC alerts: ``sasl_password``
 -  The fingerprint of your SMTP relay (optional):
    ``smtp_relay_fingerprint``
+
+Optionally, you can also have custom notification text be displayed on the
+source interface. The source interface with a custom notification message is
+shown here (the custom notification appears after the bolded "Note:"):
+
+|Custom notification|
+
+This custom notification can be configured by providing the desired message in
+``custom_notification_text`` in ``prod-specific.yml``. For example, this can be
+used to notify potential sources that an instance is for testing purposes only.
 
 When you're done, save the file and quit the editor.
 
@@ -130,8 +140,8 @@ Service will be available in the following files in
 
 -  ``app-source-ths``: This is the .onion address of the Source
    Interface
--  ``app-document-aths``: This is the ``HidServAuth`` configuration line
-   for the Document Interface. During a later step, this will be
+-  ``app-journalist-aths``: This is the ``HidServAuth`` configuration line
+   for the Journalist Interface. During a later step, this will be
    automatically added to your Tor configuration file in order to
    exclusively connect to the hidden service.
 -  ``app-ssh-aths``: Same as above, for SSH access to the Application
@@ -144,3 +154,5 @@ onion addresses from ``app-ssh-aths`` and ``mon-ssh-aths``. This will
 allow you to re-run the Ansible playbooks in the future, even though
 part of SecureDrop's hardening restricts SSH to only being over the
 specific authenticated Tor Hidden Services.
+
+.. |Custom notification| image:: images/install/custom-notification.png

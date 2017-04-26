@@ -44,8 +44,8 @@ You will need to create 3 Tails USBs to perform the SecureDrop installation:
    onto a USB drive, using one of the techniques outlined in the Tails
    documentation. This Tails USB is only used for creating other Tails
    USBs with the **Tails Installer**.
-#. The *Secure Viewing Station Tails USB*.
-#. The *Admin Workstation Tails USB*.
+#. The **Secure Viewing Station* Tails USB*.
+#. The **Admin Workstation* Tails USB*.
 
 .. tip:: This process will take some time, most of which will be spent
 	 waiting around. Once you have the "master" copy of Tails, you
@@ -86,14 +86,16 @@ Some other things to keep in mind:
 -  Each Tails persistent volume should have an unique and complex
    passphrase that's easy to write down or remember. We recommend using
    `Diceware
-   passphrases. <https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/>`__.
+   passphrases.
+   <https://theintercept.com/2015/03/26/passphrases-can-memorize-attackers-cant-guess/>`__
 
 -  Each journalist will need their own Tails drive with their own
    persistent volume secured with their own passphrase — but :doc:`that comes
    later <onboarding>`.
 
 -  Journalists and admins will eventually need to remember these
-   passphrases. We recommend using spaced-repetition to memorize
+   passphrases. We recommend using `spaced-repetition
+   <https://en.wikipedia.org/wiki/Spaced_repetition>`__  to memorize
    Diceware passphrases.
 
 .. warning:: Make sure that you never use the *Secure Viewing Station*

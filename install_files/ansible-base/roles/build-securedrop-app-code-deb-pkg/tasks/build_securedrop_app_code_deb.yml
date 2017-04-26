@@ -1,66 +1,109 @@
 ---
-- name: install deb packages required to build securedrop-app-code.deb
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
+- name: Install dependencies for building securedrop-app-code deb package.
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ development_dependencies }}"
+  tags:
+    - apt
 
-- name: install pip install wheel
-  pip: name=wheel
+- name: Install pip wheel.
+  pip:
+    name: wheel
+  tags:
+    - pip
 
-- name: copy install_files/securedrop-app-code dir to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/ cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+- name: Install sass Ruby gem
+  gem:
+    name: sass
+    # TODO: This version lock can be removed when if/when we can get Ruby>2
+    # installed on the machine that runs this task (see
+    # https://github.com/freedomofpress/securedrop/issues/1594).
+    version: "3.4.23"
+    user_install: no
+  sudo: yes
+  tags:
+    - build
 
-- name: ensure build path var structure exists
+- name: Clean build path.
   file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+    path: /tmp/{{ securedrop_app_code_deb }}/
+    state: absent
+  tags:
+    - build
+    - cleanup
 
-- name: ensure build path www structure exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
-
-- name: ensure build path directory for wheelhouse exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
-
-- name: copy securedrop to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }} cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
-
-- name: ensure config.py does not exist in the build path
+- name: Clean Debian package from build machine.
   file:
     state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
+    dest: /tmp/{{ securedrop_app_code_deb }}.deb
+  tags:
+    - build
+    - cleanup
 
-- name: make pip wheel archive for our debian package requirements
+- name: Copy install_files/securedrop-app-code dir to build path.
+  command: cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+  args:
+    creates: /tmp/{{ securedrop_app_code_deb }}/
+  tags:
+    - build
+
+- name: Add rsync-filter for additively including files.
+  copy:
+    src: rsync-filter
+    dest: /tmp/rsync-filter
+
+- name: Copy app code to build directory.
+  command: >
+    rsync -avPh {{ securedrop_code }}/ /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
+    --filter "merge /tmp/rsync-filter"
+    --chown root:root
+  tags:
+    - build
+
+- name: Create CSS directory.
+  file:
+    state: directory
+    path: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css
+  tags:
+    - build
+
+- name: Compile SASS to CSS.
+  shell: sass --force --stop-on-error --update sass:/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css --style compressed
+  args:
+    chdir: "{{ securedrop_code }}"
+  tags:
+    - build
+
+- name: Create pip wheel archive for Debian package requirements.
   command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
+  tags:
+    - pip
+    - build
 
-- name: ensure build dir /etc exists
+- name: Create apparmor.d directory in build path.
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
+  tags:
+    - build
+    - apparmor
 
-- name: ensure apparmor build dir exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
+- name: Copy AppArmor profiles to build path.
+  copy:
+    src: "{{ item }}"
+    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+  with_items: "{{ apparmor_profiles }}"
+  tags:
+    - build
+    - apparmor
 
-- name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
+- name: Build securedrop-app-code Debian package.
+  command: dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
+  tags:
+    - build
 
-- name: create the deb package
-  command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
-
-- name: move the deb to the Vagrant shared folder
+- name: Move the deb to the Vagrant shared folder.
   command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
-
-- name: remove the build temp dir
-  file:
-    state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}"
-
-- name: remove temp package
-  file:
-    state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
+  tags:
+    - build

@@ -2,6 +2,7 @@
 ### Used by the common role ###
 ssh_users: ""
 dns_server: "8.8.8.8"
+daily_reboot_time: 4 # An integer between 0 and 23
 
 # TODO Should use ansible to gather this info
 monitor_ip: ""
@@ -50,3 +51,6 @@ sasl_password: ""
 # To use uncomment the following line and enter the filename between the quotes.
 # e.g. restore_file: "sd-backup-2015-01-15--21-03-32.tar.gz"
 #restore_file: ""
+
+# Custom text that will appear on the source interface
+custom_notification_text: ""

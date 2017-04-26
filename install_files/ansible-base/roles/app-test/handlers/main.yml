@@ -1,7 +1,11 @@
 ---
 ## SecureDrop Interfaces
 - name: restart apache2
-  service: name=apache2 state=restarted
+  service:
+    name: apache2
+    state: restarted
 
 - name: start xvfb
-  service: name=xvfb state=started
+  service:
+    name: xvfb
+    state: started

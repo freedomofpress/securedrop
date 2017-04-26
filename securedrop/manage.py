@@ -1,220 +1,187 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import sys
+import argparse
+from getpass import getpass
 import os
 import shutil
-import subprocess
-import unittest
-import readline  # makes the add_admin prompt kick ass
-from getpass import getpass
 import signal
-from time import sleep
+import sys
+import traceback
 
-import qrcode
 import psutil
-
-from db import db_session, Journalist
-
-# We need to import config in each function because we're running the tests
-# directly, so it's important to set the environment correctly, depending on
-# development or testing, before importing config.
-#
-# TODO: do we need to store *_PIDFILE in the application config? It seems like
-# an implementation detail that is specifc to this management script.
+import qrcode
+from sqlalchemy.orm.exc import NoResultFound
 
 os.environ['SECUREDROP_ENV'] = 'dev'
-
-WORKER_PIDFILE = "/tmp/test_rqworker.pid"
-
-
-def get_pid_from_pidfile(pid_file_name):
-    with open(pid_file_name) as fp:
-        return int(fp.read())
+import config
+from db import db_session, init_db, Journalist
+from management import run
 
 
-def _start_test_rqworker(config):
-    # needed to determine the directory to run the worker in
-    worker_running = False
+def reset(): # pragma: no cover
+    """Clears the SecureDrop development applications' state, restoring them to
+    the way they were immediately after running `setup_dev.sh`. This command:
+    1. Erases the development sqlite database file.
+    2. Regenerates the database.
+    3. Erases stored submissions and replies from the store dir.
+    """
+    # Erase the development db file
+    assert hasattr(config, 'DATABASE_FILE'), ("TODO: ./manage.py doesn't know "
+                                              'how to clear the db if the '
+                                              'backend is not sqlite')
     try:
-        if psutil.pid_exists(get_pid_from_pidfile(WORKER_PIDFILE)):
-            worker_running = True
-    except IOError:
+        os.remove(config.DATABASE_FILE)
+    except OSError as exc:
         pass
 
-    if not worker_running:
-        tmp_logfile = open("/tmp/test_rqworker.log", "w")
-        subprocess.Popen(
-            [
-                "rqworker", "test",
-                "-P", config.SECUREDROP_ROOT,
-                "--pid", WORKER_PIDFILE,
-            ],
-            stdout=tmp_logfile,
-            stderr=subprocess.STDOUT)
-
-
-def _stop_test_rqworker():
-    os.kill(get_pid_from_pidfile(WORKER_PIDFILE), signal.SIGTERM)
-
-
-def start():
-    import config
-    source_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
-                                 config.SOURCE_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python source.py'])
-    journo_rc = subprocess.call(['start-stop-daemon', '--start', '-b', '--quiet', '--pidfile',
-                                 config.JOURNALIST_PIDFILE, '--startas', '/bin/bash', '--', '-c', 'cd /vagrant/securedrop && python journalist.py'])
-
-    if source_rc + journo_rc == 0:
-        print "The web application is running, and available on your Vagrant host at the following addresses:"
-        print "Source interface:     localhost:8080"
-        print "Journalist interface: localhost:8081"
-    else:
-        print "The web application is already running.  Please use './manage.py restart' to stop and start again."
-
-
-def stop():
-    import config
-    source_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.SOURCE_PIDFILE])
-    journo_rc = subprocess.call(
-        ['start-stop-daemon', '--stop', '--quiet', '--pidfile', config.JOURNALIST_PIDFILE])
-    if source_rc + journo_rc == 0:
-        print "The web application has been stopped."
-    else:
-        print "There was a problem stopping the web application."
-
-
-def restart():
-    stop()
-    sleep(0.1)
-    start()
-
-
-def test():
-    """
-    Runs the test suite
-    """
-    os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_test_rqworker(config)
-    test_cmds = [["py.test", "--cov"], "./test.sh"]
-    test_rc = int(any([subprocess.call(cmd) for cmd in test_cmds]))
-    _stop_test_rqworker()
-    sys.exit(test_rc)
-
-
-def test_unit():
-    """
-    Runs the unit tests.
-    """
-    os.environ['SECUREDROP_ENV'] = 'test'
-    import config
-    _start_test_rqworker(config)
-    test_rc = int(subprocess.call(["py.test", "--cov"]))
-    _stop_test_rqworker()
-    sys.exit(test_rc)
-
-
-def reset():
-    """
-    Clears the SecureDrop development application's state, restoring it to the
-    way it was immediately after running `setup_dev.sh`. This command:
-    1. Erases the development sqlite database file
-    2. Regenerates the database
-    3. Erases stored submissions and replies from the store dir
-    """
-    import config
-    import db
-
-    # Erase the development db file
-    assert hasattr(config,
-                   'DATABASE_FILE'), "TODO: ./manage.py doesn't know how to clear the db if the backend is not sqlite"
-    os.remove(config.DATABASE_FILE)
-
     # Regenerate the database
-    db.init_db()
+    init_db()
 
     # Clear submission/reply storage
-    for source_dir in os.listdir(config.STORE_DIR):
-        # Each entry in STORE_DIR is a directory corresponding to a source
-        shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+    try:
+        os.stat(config.STORE_DIR)
+    except OSError as exc:
+        pass
+    else:
+        for source_dir in os.listdir(config.STORE_DIR):
+            try:
+                # Each entry in STORE_DIR is a directory corresponding to a source
+                shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
+            except OSError as exc:
+                pass
+    return 0
 
 
-def add_admin():
+def add_admin(): # pragma: no cover
+    return _add_user(is_admin=True)
+
+
+def add_journalist(): # pragma: no cover
+    return _add_user()
+
+
+def _add_user(is_admin=False): # pragma: no cover
     while True:
-        username = raw_input("Username: ")
+        username = raw_input('Username: ')
         if Journalist.query.filter_by(username=username).first():
-            print "Sorry, that username is already in use."
+            print('Sorry, that username is already in use.')
         else:
             break
 
     while True:
-        password = getpass("Password: ")
-        password_again = getpass("Confirm Password: ")
+        password = getpass('Password: ')
+        password_again = getpass('Confirm Password: ')
 
         if len(password) > Journalist.MAX_PASSWORD_LEN:
-            print ("Your password is too long (maximum length {} characters). "
-                   "Please pick a shorter password.".format(
-                   Journalist.MAX_PASSWORD_LEN))
+            print('Your password is too long (maximum length {} characters). '
+                  'Please pick a shorter '
+                  'password.'.format(Journalist.MAX_PASSWORD_LEN))
+            continue
+
+        if len(password) < Journalist.MIN_PASSWORD_LEN:
+            print('Error: Password needs to be at least {} characters.'.format(
+                Journalist.MIN_PASSWORD_LEN
+            ))
             continue
 
         if password == password_again:
             break
-        print "Passwords didn't match!"
+        print("Passwords didn't match!")
 
-    hotp_input = raw_input("Is this admin using a YubiKey [HOTP]? (y/N): ")
+    hotp_input = raw_input('Will this user be using a YubiKey [HOTP]? (y/N): ')
     otp_secret = None
-    if hotp_input.lower() == "y" or hotp_input.lower() == "yes":
+    if hotp_input.lower() in ('y', 'yes'):
         while True:
-            otp_secret = raw_input("Please configure your YubiKey and enter the secret: ")
+            otp_secret = raw_input(
+                'Please configure your YubiKey and enter the secret: ')
             if otp_secret:
                 break
 
     try:
-        admin = Journalist(username=username,
-                           password=password,
-                           is_admin=True,
-                           otp_secret=otp_secret)
-        db_session.add(admin)
+        user = Journalist(username=username,
+                          password=password,
+                          is_admin=is_admin,
+                          otp_secret=otp_secret)
+        db_session.add(user)
         db_session.commit()
-    except Exception, e:
-        if "username is not unique" in str(e):
-            print "ERROR: That username is already taken!"
+    except Exception as exc:
+        if 'username is not unique' in exc:
+            print('ERROR: That username is already taken!')
         else:
-            print "ERROR: An unexpected error occurred, traceback: \n{}".format(e)
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            print(repr(traceback.format_exception(exc_type, exc_value,
+                                                  exc_traceback)))
+        return 1
     else:
-        print "Admin '{}' successfully added".format(username)
+        print('User "{}" successfully added'.format(username))
         if not otp_secret:
-            # Print the QR code for Google Authenticator
-            print
-            print "Scan the QR code below with Google Authenticator:"
-            print
-            uri = admin.totp.provisioning_uri(username, issuer_name="SecureDrop")
+            # Print the QR code for FreeOTP/ Google Authenticator
+            print('\nScan the QR code below with FreeOTP or Google '
+                  'Authenticator:\n')
+            uri = user.totp.provisioning_uri(username,
+                                             issuer_name='SecureDrop')
             qr = qrcode.QRCode()
             qr.add_data(uri)
             qr.print_ascii(tty=sys.stdout.isatty())
-            print
-            print "If the barcode does not render correctly, try changing your terminal's font, (Monospace for Linux, Menlo for OS X)."
-            print "If you are using iTerm on Mac OS X, you will need to change the \"Non-ASCII Font\", which is your profile's Text settings."
-            print
-            print "Can't scan the barcode? Enter the shared secret manually: {}".format(admin.formatted_otp_secret)
-            print
+            print('\nIf the barcode does not render correctly, try changing '
+                  "your terminal's font (Monospace for Linux, Menlo for OS "
+                  'X). If you are using iTerm on Mac OS X, you will need to '
+                  'change the "Non-ASCII Font", which is your profile\'s Text '
+                  "settings.\n\nCan't scan the barcode? Enter following "
+                  'shared secret '
+                  'manually:\n{}\n'.format(user.formatted_otp_secret))
+        return 0
 
 
-def clean_tmp():
-    """Cleanup the SecureDrop temp directory. This is intended to be run as an
-    automated cron job. We skip files that are currently in use to avoid
-    deleting files that are currently being downloaded."""
+def delete_user(): # pragma: no cover
+    """Deletes a journalist or administrator from the application."""
+    # Select user to delete
+    username = raw_input('Username to delete: ')
+    try:
+        selected_user = Journalist.query.filter_by(username=username).one()
+    except NoResultFound:
+        print('ERROR: That user was not found!')
+        return 0
+
+    # Confirm deletion if user is found
+    confirmation = raw_input('Are you sure you want to delete user '
+                             '{} (y/n)?'.format(selected_user))
+    if confirmation.lower() != 'y':
+        print('Confirmation not received: user "{}" was NOT '
+              'deleted'.format(username))
+        return 0
+
+    # Try to delete user from the database
+    try:
+        db_session.delete(selected_user)
+        db_session.commit()
+    except:
+        # If the user was deleted between the user selection and confirmation,
+        # (e.g., through the web app), we don't report any errors. If the user
+        # is still there, but there was a error deleting them from the
+        # database, we do report it.
+        try:
+            selected_user = Journalist.query.filter_by(username=username).one()
+        except NoResultFound:
+            pass
+        else:
+            raise
+
+    print('User "{}" successfully deleted'.format(username))
+    return 0
+
+
+def clean_tmp(): # pragma: no cover
+    """Cleanup the SecureDrop temp directory. This is intended to be run
+    as an automated cron job. We skip files that are currently in use to
+    avoid deleting files that are currently being downloaded."""
     # Inspired by http://stackoverflow.com/a/11115521/1093000
-    import config
-
     def file_in_use(fname):
-        in_use = False
-
         for proc in psutil.process_iter():
             try:
                 open_files = proc.open_files()
-                in_use = in_use or any([open_file.path == fname
+                in_use = False or any([open_file.path == fname
                                         for open_file in open_files])
                 # Early return for perf
                 if in_use:
@@ -231,26 +198,59 @@ def clean_tmp():
         # Thanks to http://stackoverflow.com/a/120948/1093000
         return [os.path.join(d, f) for f in os.listdir(d)]
 
-    for path in listdir_fullpath(config.TEMP_DIR):
-        if not file_in_use(path):
-            os.remove(path)
-
-
-def main():
-    valid_cmds = ["start", "stop", "test_unit", "test", "restart", "reset", "add_admin", "clean_tmp"]
-    help_str = "./manage.py {{{0}}}".format(','.join(valid_cmds))
-
-    if len(sys.argv) != 2 or sys.argv[1] not in valid_cmds:
-        print help_str
-        sys.exit(1)
-
-    cmd = sys.argv[1]
-
     try:
-        getattr(sys.modules[__name__], cmd)()
+        os.stat(config.TEMP_DIR)
+    except OSError as exc:
+        pass
+    else:
+        for path in listdir_fullpath(config.TEMP_DIR):
+            if not file_in_use(path):
+                os.remove(path)
+
+    return 0
+
+
+def get_args():
+    parser = argparse.ArgumentParser(prog=__file__, description='Management '
+                                     'and testing utility for SecureDrop.')
+    subps = parser.add_subparsers()
+    # Run WSGI app
+    run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
+                                'journalist WSGI apps. WARNING!!! For '
+                                'development only, not to be used in '
+                                'production.')
+    run_subp.set_defaults(func=run)
+    # Add/remove journalists + admins
+    admin_subp = subps.add_parser('add-admin', help='Add an admin to the '
+                                  'application.')
+    admin_subp.set_defaults(func=add_admin)
+    journalist_subp = subps.add_parser('add-journalist', help='Add a '
+                                       'journalist to the application.')
+    journalist_subp.set_defaults(func=add_journalist)
+    delete_user_subp = subps.add_parser('delete-user', help='Delete a user '
+                                        'from the application.')
+    delete_user_subp.set_defaults(func=delete_user)
+
+    # Reset application state
+    reset_subp = subps.add_parser('reset', help='DANGER!!! Clears the '
+                                  "SecureDrop application's state.")
+    reset_subp.set_defaults(func=reset)
+    # Cleanup the SD temp dir
+    clean_tmp_subp = subps.add_parser('clean-tmp', help='Cleanup the '
+                                      'SecureDrop temp directory.')
+    clean_tmp_subp.set_defaults(func=clean_tmp)
+
+    return parser
+
+
+def _run_from_commandline(): # pragma: no cover
+    try:
+        args = get_args().parse_args()
+        rc = args.func()
+        sys.exit(rc)
     except KeyboardInterrupt:
-        print  # So our prompt appears on a nice new line
+        sys.exit(signal.SIGINT)
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__': # pragma: no cover
+    _run_from_commandline()

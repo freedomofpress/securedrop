@@ -116,11 +116,11 @@
   <title>Journalist</title>
   <icon>5</icon>
   <entry>
-   <title>Document Interface</title>
+   <title>Journalist Interface</title>
    <username></username>
    <password></password>
    <url></url>
-   <comment>The .onion address for the Document Interface</comment>
+   <comment>The .onion address for the Journalist Interface</comment>
    <icon>5</icon>
    <creation>2014-12-04T18:37:57</creation>
    <lastaccess>2014-12-04T18:38:19</lastaccess>
@@ -128,11 +128,11 @@
    <expire>Never</expire>
   </entry>
   <entry>
-   <title>Document Interface Hidden Service</title>
+   <title>Journalist Interface Hidden Service</title>
    <username></username>
    <password></password>
    <url></url>
-   <comment>The Hidden Service values required to connect to the Document Interface.</comment>
+   <comment>The Hidden Service values required to connect to the Journalist Interface.</comment>
    <icon>5</icon>
    <creation>2014-12-04T18:37:21</creation>
    <lastaccess>2014-12-04T18:37:55</lastaccess>
@@ -208,7 +208,7 @@
    <expire>Never</expire>
   </entry>
   <entry>
-   <title>Document Interface Hidden Service</title>
+   <title>Journalist Interface Hidden Service</title>
    <username></username>
    <password></password>
    <url></url>
@@ -220,7 +220,7 @@
    <expire>Never</expire>
   </entry>
   <entry>
-   <title>Document Interface two-factor</title>
+   <title>Journalist Interface two-factor</title>
    <username></username>
    <password></password>
    <url></url>
@@ -232,11 +232,11 @@
    <expire>Never</expire>
   </entry>
   <entry>
-   <title>Document Interface two-factor</title>
+   <title>Journalist Interface two-factor</title>
    <username></username>
    <password></password>
    <url></url>
-   <comment>The secret code for the Document Interface's two-factor authentication.</comment>
+   <comment>The secret code for the Journalist Interface's two-factor authentication.</comment>
    <icon>5</icon>
    <creation>2014-12-04T18:38:58</creation>
    <lastaccess>2014-12-05T00:35:18</lastaccess>

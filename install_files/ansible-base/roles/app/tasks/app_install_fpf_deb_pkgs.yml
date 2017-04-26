@@ -1,3 +1,9 @@
 ---
-- name: ensure securedrop-app-code packages are installed from repo
-  apt: pkg=securedrop-app-code state=present
+- name: Install securedrop-app-code package from FPF repo.
+  apt:
+    pkg: securedrop-app-code
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - apt

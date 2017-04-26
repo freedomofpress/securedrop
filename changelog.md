@@ -50,7 +50,7 @@ Point release to fix some minor issues and update our Python dependencies.
 * Update Python dependencies of SD (#1379)
 * Fix a regression in the new install script (#1397)
 
-The issues for this release were tracked in the 0.3.9 milestone on Github: 
+The issues for this release were tracked in the 0.3.9 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.3.9.
 
 ## 0.3.8
@@ -59,7 +59,7 @@ https://github.com/freedomofpress/securedrop/milestones/0.3.9.
 * Switch to using bento boxes in Vagrantfile for more reproducible test environments
 * Minor fixes to update_version.sh
 
-The issues for this release were tracked in the 0.3.8 milestone on Github: 
+The issues for this release were tracked in the 0.3.8 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.3.8
 
 ## 0.3.7

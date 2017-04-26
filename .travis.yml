@@ -6,6 +6,7 @@ dist: trusty
 language: python
 python:
 - '2.7'
+
 virtualenv:
   system_site_packages: true
 before_install:
@@ -17,12 +18,14 @@ before_install:
 - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
 - sudo /etc/init.d/rng-tools restart
 install:
-- pip install coveralls
-- pip install ansible==1.8.4
+- pip freeze -l
+# Preinstalled travis pytest is not tracked by us
+- pip uninstall pytest -y
+- pip install -r testinfra/requirements.txt
 script:
-- echo localhost > inventory
-- ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
-- ansible-playbook -i inventory --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
+- printf "[development]\nlocalhost\n[travis]\n[development:children]\ntravis" > inventory
+- ansible-playbook -i inventory -vv --syntax-check install_files/ansible-base/securedrop-travis.yml
+- ansible-playbook -i inventory -vv --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
   # For some reason, redis-server does not start automatically when installed
   # on Travis. I believe Travis' service machinery may be interfering. See
   # http://docs.travis-ci.com/user/database-setup/#Redis
@@ -30,9 +33,10 @@ script:
   # travis needs the config.py file ran owned by root in other environments it is the
   # securedrop_user default www-data
 - sudo chown root:root securedrop/config.py
-- sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
+- sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
+- ./testinfra/test.py
 after_success:
-  cd securedrop && coveralls && cd ..  # cd back to repo root for srcclr run
+  cd securedrop/ && coveralls && cd ../  # cd back to repo root for srcclr run
 addons:
     srcclr:
         debug: true

@@ -28,7 +28,7 @@
   sudo: yes
 
   # This will update the App servers torrc config file for changing the
-  # document interface tor port from 8080 to 80. As of this release the prod
+  # journalist interface tor port from 8080 to 80. As of this release the prod
   # playbook restarts tor if the torrc config changes. This will break ansible
   # playbook runs that are over tor. Issue #940 will track modifying the prod
   # playbook to ensure that this isn't an issue going forward.
@@ -39,7 +39,7 @@
   # This will only replace/add the line when the old HiddenServicePort config
   # for port 8080 exists. This will not modify the torrc on the monitor server
   # which only has a HiddenServicePort 22 config.
-- name: change the document interface ATHS virtual port to lisen on port 80
+- name: change the journalist interface ATHS virtual port to lisen on port 80
   lineinfile:
     dest: /etc/tor/torrc
     regexp: '^HiddenServicePort 8080 127\.0\.0\.1\:8080'

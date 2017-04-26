@@ -1,0 +1,4 @@
+---
+securedrop_user: vagrant
+securedrop_code: /vagrant/securedrop
+securedrop_data: /var/lib/securedrop

@@ -2,14 +2,21 @@
 {% if messages %}
   {% for category, message in messages %}
     {% if category != 'banner-warning' %}
-      <p class="flash {{ category }}">
+      <div class="flash {{ category }}">
         {% if category == 'notification' %}
-        <i class="fa fa-info-circle pull-left"></i>
+        <img src="{{ url_for('static',
+        filename='i/font-awesome/info-circle-black.png') }}" height=16
+        width=20>
+        {% elif category == 'success' %}
+        <img src="{{ url_for('static', filename='i/success_checkmark.png') }}"
+        height=17 width=20>
         {% elif category == 'error' %}
-        <i class="fa fa-exclamation-triangle pull-left"></i>
+        <img src="{{ url_for('static',
+        filename='i/font-awesome/exclamation-triangle-black.png') }}" height=17
+        width=20>
         {% endif %}
         {{ message }}
-      </p>
+      </div>
     {% endif %}
   {% endfor %}
 {% endif %}

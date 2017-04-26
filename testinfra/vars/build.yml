@@ -1,0 +1,24 @@
+---
+securedrop_version: "0.3.12"
+ossec_version: "2.8.2"
+keyring_version: "0.1.0"
+
+# These values will be interpolated with values populated above
+# via helper functions in the tests.
+build_directories:
+  # The build scripts for securedrop-app-code run separate from the others,
+  # and the parent build directory is destroyed in between, so we can't
+  # expect the dir to be present. PRs are open to update the build logic,
+  # we can revisit the tests once those are merged.
+  #- /vagrant/build/securedrop-app-code-{securedrop_version}-amd64/
+  - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64/
+  - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64/
+  - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64/
+  - /vagrant/build
+  - /tmp/build
+
+build_deb_packages:
+  - /vagrant/build/securedrop-app-code-{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb

@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+from base64 import b32encode
 import os
 import subprocess
-from base64 import b32encode
 
 from Crypto.Random import random
 import gnupg
@@ -70,7 +72,7 @@ def clean(s, also=''):
     >>> clean("Hello, world!")
     Traceback (most recent call last):
       ...
-    CryptoException: invalid input
+    CryptoException: invalid input: Hello, world!
     >>> clean("Helloworld")
     'Helloworld'
     """
@@ -79,7 +81,7 @@ def clean(s, also=''):
     ok = ' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     for c in s:
         if c not in ok and c not in also:
-            raise CryptoException("invalid input: %s" % s)
+            raise CryptoException("invalid input: {0}".format(s))
     # scrypt.hash requires input of type str. Since the wordlist is all ASCII
     # characters, this conversion is not problematic
     return str(s)
@@ -94,20 +96,34 @@ def display_id():
 
 
 def hash_codename(codename, salt=SCRYPT_ID_PEPPER):
-    """
-    >>> hash_codename('Hello, world!')
-    'EQZGCJBRGISGOTC2NZVWG6LILJBHEV3CINNEWSCLLFTUWZLFHBTS6WLCHFHTOLRSGQXUQLRQHFMXKOKKOQ4WQ6SXGZXDAS3Z'
+    """Salts and hashes a codename using scrypt.
+
+    :param str codename: A source's codename.
+    :param str salt: The salt to mix with the codename when hashing.
+    :returns: A base32 encoded string; the salted codename hash.
     """
     return b32encode(scrypt.hash(clean(codename), salt, **SCRYPT_PARAMS))
 
 
 def genkeypair(name, secret):
-    """
+    """Generate a GPG key through batch file key generation. A source's
+    codename is salted with SCRYPT_GPG_PEPPER and hashed with scrypt to
+    provide the passphrase used to encrypt their private key. Their name
+    should be their filesystem id.
+
     >>> if not gpg.list_keys(hash_codename('randomid')):
     ...     genkeypair(hash_codename('randomid'), 'randomid').type
     ... else:
     ...     u'P'
     u'P'
+
+    :param str name: The source's filesystem id (their codename, salted
+                     with SCRYPT_ID_PEPPER, and hashed with scrypt).
+    :param str secret: The source's codename.
+    :returns: a :class:`GenKey <gnupg._parser.GenKey>` object, on which
+              the ``__str__()`` method may be called to return the
+              generated key's fingeprint.
+
     """
     name = clean(name)
     secret = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
@@ -120,7 +136,8 @@ def genkeypair(name, secret):
 
 def delete_reply_keypair(source_id):
     key = getkey(source_id)
-    # If this source was never flagged for review, they won't have a reply keypair
+    # If this source was never flagged for review, they won't have a reply
+    # keypair
     if not key:
         return
     # The private key needs to be deleted before the public key can be deleted
@@ -136,11 +153,6 @@ def getkey(name):
             if name in uid:
                 return key['fingerprint']
     return None
-
-
-def get_key_by_fingerprint(fingerprint):
-    matches = filter(lambda k: k['fingerprint'] == fingerprint, gpg.list_keys())
-    return matches[0] if matches else None
 
 
 def encrypt(plaintext, fingerprints, output=None):
@@ -172,8 +184,8 @@ def encrypt(plaintext, fingerprints, output=None):
 def decrypt(secret, ciphertext):
     """
     >>> key = genkeypair('randomid', 'randomid')
-    >>> decrypt('randomid', 'randomid',
-    ...   encrypt('randomid', 'Goodbye, cruel world!')
+    >>> decrypt('randomid',
+    ...   encrypt('Goodbye, cruel world!', str(key))
     ... )
     'Goodbye, cruel world!'
     """
