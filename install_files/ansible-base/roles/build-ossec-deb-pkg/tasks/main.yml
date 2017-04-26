@@ -87,31 +87,31 @@
     state: directory
     dest: "{{ item }}"
   with_items:
-    - /tmp/{{ ossec_build_dir }}
-    - /tmp/{{ ossec_build_dir }}/var
+    - "{{ ossec_build_dir }}"
+    - "{{ ossec_build_dir }}/var"
 
 - name: Copy /var/ossec/ to OSSEC build directory.
-  command: cp -R /var/ossec /tmp/{{ ossec_build_dir }}/var/
+  command: cp -R /var/ossec {{ ossec_build_dir }}/var/
 
 - name: Copy OSSEC DEBIAN package scripts to build directory.
-  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/DEBIAN /tmp/{{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/DEBIAN {{ ossec_build_dir }}
 
 - name: Copy OSEC DEBIAN/control template to build directory.
   template:
     src: "{{ purpose }}_control.j2"
-    dest: /tmp/{{ ossec_build_dir }}/DEBIAN/control
+    dest: "{{ ossec_build_dir }}/DEBIAN/control"
 
 - name: Copy OSSEC /usr and /etc directories to build directory.
-  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/{{ item }} /tmp/{{ ossec_build_dir }}
+  command: cp -R {{ repo_src_path }}/ossec-{{ purpose }}/{{ item }} {{ ossec_build_dir }}
   with_items:
     - etc
     - usr
 
 - name: Build SecureDrop OSSEC deb package.
-  command: dpkg-deb --build /tmp/{{ ossec_build_dir }}
+  command: dpkg-deb --build {{ ossec_build_dir }}
 
 - name: Move SecureDrop OSSEC deb package to repo to output directory.
-  command: mv /tmp/{{ ossec_build_dir }}.deb {{ build_path }}
+  command: mv {{ ossec_build_dir }}.deb {{ build_path }}
 
 # Running the `install.sh` script shipped with the OSSEC tarball populates the
 # build system with files that should only be included in the deb package.
@@ -125,7 +125,7 @@
     - /etc/init.d/ossec
     - /etc/ossec-init.conf
     - /tmp/ossec-hids-{{ ossec_version }}
-    - /tmp/{{ ossec_build_dir }}
+    - "{{ ossec_build_dir }}"
     - /var/ossec
 
 # Fetch back packages if necessary.
