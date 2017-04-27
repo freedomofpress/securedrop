@@ -24,6 +24,7 @@
     rsync_opts:
       - "--exclude=*.git"
       - "--exclude=*.deb"
+      - "--rsync-path='sudo rsync'"
 
 - name: Include OSSEC download URLs.
   ossec_urls:
