@@ -24,6 +24,7 @@ import qrcode
 import qrcode.image.svg
 
 import config
+from crypto_util import constant_time_compare
 import store
 
 LOGIN_HARDENING = True
@@ -290,9 +291,8 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-        return pyotp.utils.compare_digest(
-            self._scrypt_hash(password, self.pw_salt),
-            self.pw_hash)
+        return constant_time_compare(self._scrypt_hash(password, self.pw_salt),
+                                     self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
@@ -398,12 +398,9 @@ class Journalist(Base):
             verified = False
             for_time = datetime.datetime.now()
             for i in range(-1, 2):
-                verified = (
-                    self.pyotp.utils.strings_equal(
-                        str(token),
-                        str(self.at(for_time, i))
-                        )
-                    | verified)
+                verified = (constant_time_compare(str(token),
+                                                  str(self.at(for_time, i)))
+                            | verified)
             return verified
 
         verifier = verify_totp if self.is_totp else verify_hotp
@@ -424,9 +421,7 @@ class Journalist(Base):
         reused = False
         for timecode in range(timecode_last_access - 1,
                               timecode_last_access + 2):
-            reused = (pytop.utils.compare_digest(timecode_now,
-                                                 timecode)
-                      | reused)
+            reused = constant_time_compare(timecode_now, timecode) | reused
         return reused
 
     @classmethod

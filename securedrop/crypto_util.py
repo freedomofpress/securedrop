@@ -4,6 +4,7 @@
 from base64 import b32encode
 import os
 import subprocess
+import hmac
 
 from Crypto.Random import random
 import gnupg
@@ -191,6 +192,27 @@ def decrypt(secret, ciphertext):
     """
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
+
+
+if hasattr(hmac, "compare_digest"):
+    # Prefer the stdlib implementation, when available.
+    constant_time_compare = hmac.compare_digest
+else:
+    def constant_time_compare(val1, val2):
+        """Returns True if the two strings are equal, False otherwise.
+        The time taken is independent of the number of characters that
+        match. For the sake of simplicity, this function executes in
+        constant time only when the two strings have the same length.
+        Since we use it only to compare hashes and tokens of known
+        expected length, this is acceptable.
+        """
+        val1, val2 = str(val1), str(val2)
+        if len(val1) != len(val2):
+            return False
+        for x, y in zip(val1, val2):
+            result = ord(x) ^ ord(y) | result
+        return result == 0
+
 
 if __name__ == "__main__":
     import doctest
