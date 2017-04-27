@@ -366,25 +366,35 @@ class Journalist(Base):
                 "Token string should only contain digits.")
 
         def verify_hotp(token):
-            """Check if a HOTP `token` is valid using current value of
-            :attr:`self.hotp_counter`, as well as the next 19 tokens in
-            case of client skew.
+            """Constant-time check to determines if a HOTP `token` is
+            valid. The current value of :attr:`self.hotp_counter` is
+            used to generate the comparison token, as well as the next
+            19 tokens in case of client skew. The smallest counter value
+            for which the corresponding OTP is equal to the token (if 
+            such a value exists) will be incremented and set as the new
+            value of `self.hotp_counter`.
 
             Returns:
                 bool: `True` if the token is valid for the current
                     `self.hotp_counter` value, or any of the next 19.
             """
             verified = False
+            # In the tiny chance of collision, reverse the order so that
+            # verified ends up being the smallest matching `counter_val` and
+            # the user is not locked out.
             for counter_val in range(self.hotp_counter,
-                                     self.hotp_counter + 20):
-                if self.hotp.verify(token, counter_val):
-                    verified = True
-                    self.hotp_counter = counter_val + 1
-                    db_session.add(self)
-                    db_session.commit()
-                    break
-            return verified
+                                     self.hotp_counter + 20)[::-1]:
+                if constant_time_compare(token,
+                                         self.hotp.at(counter_val)):
+                    verified = counter_val
+
+            if verified:
+                self.hotp_counter = verified + 1
+                db_session.add(self)
+                db_session.commit()
         
+            return bool(verified)
+
         def verify_totp(token):
             """Constant-time check that a TOTP `token` is valid for the
             current timecode window, or either of the windows that
