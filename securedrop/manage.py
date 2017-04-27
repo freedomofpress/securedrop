@@ -224,12 +224,18 @@ def get_args():
     admin_subp = subps.add_parser('add-admin', help='Add an admin to the '
                                   'application.')
     admin_subp.set_defaults(func=add_admin)
+    admin_subp_a = subps.add_parser('add_admin', help='^')
+    admin_subp_a.set_defaults(func=add_admin)
     journalist_subp = subps.add_parser('add-journalist', help='Add a '
                                        'journalist to the application.')
     journalist_subp.set_defaults(func=add_journalist)
+    journalist_subp_a = subps.add_parser('add_journalist', help='^')
+    journalist_subp_a.set_defaults(func=add_journalist)
     delete_user_subp = subps.add_parser('delete-user', help='Delete a user '
                                         'from the application.')
     delete_user_subp.set_defaults(func=delete_user)
+    delete_user_subp_a = subps.add_parser('delete_user', help='^')
+    delete_user_subp_a.set_defaults(func=delete_user)
 
     # Reset application state
     reset_subp = subps.add_parser('reset', help='DANGER!!! Clears the '
@@ -239,6 +245,8 @@ def get_args():
     clean_tmp_subp = subps.add_parser('clean-tmp', help='Cleanup the '
                                       'SecureDrop temp directory.')
     clean_tmp_subp.set_defaults(func=clean_tmp)
+    clean_tmp_subp_a = subps.add_parser('clean_tmp', help='^')
+    clean_tmp_subp_a.set_defaults(func=clean_tmp)
 
     return parser
 
