@@ -345,36 +345,35 @@ class Journalist(Base):
         """Strips from authentication tokens the whitespace that many clients add for readability"""
         return ''.join(token.split())
 
-    def verify_token(self, token, for_time=None):
-        """Verify a HOTP/TOTP token, allowing for client/ server skew.
-        For TOTP, you may specify a time to check the token for.
+    def verify_token(self, token):
+        """Verify a HOTP/TOTP token (string), allowing for client-server
+        skew. If `LOGIN_HARDENING` TOTP tokens may not be re-used, nor
+        may the tokens preceding or proceeding a used token be used.
 
-        Args:
-            for_time: An optional :obj:`datetime.datetime` to
-                check the token for.
         Returns: bool
+        Raises:
+            BadTokenException: If `token` is not a six digit numeric string
+                or is not valid for the given time window.
         """
         token = self._format_token(token)
-
-        def verify_totp(token, for_time=None):
-            """Check the given token against the previous, current, and
-            next valid tokens to compensate for potential time skew
-            between the client and the server. The total valid window is
-            1:30s.
-
-            Args:
-                for_time: An optional :obj:`datetime.datetime` to
-                    check the token for.
-            Returns: bool
-            """
-            return self.totp.verify(token, for_time=for_time, valid_window=1)
+        if not isinstance(token, str):
+            raise BadTokenException("Token should be of type `str`.")
+        if not len(token) == 6:
+            raise BadTokenException("Token should be of `len` 6.")
+        try:
+            int(token)
+        except ValueError:
+            raise BadTokenException(
+                "Token string should only contain digits.")
 
         def verify_hotp(token):
-            """Check the given token against the current and next 20
-            tokens.
+            """Check if a HOTP `token` is valid using current value of
+            :attr:`self.hotp_counter`, as well as the next 19 tokens in
+            case of client skew.
+
+            Returns: bool
             """
             verified = False
-
             for counter_val in range(self.hotp_counter,
                                      self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
@@ -383,13 +382,37 @@ class Journalist(Base):
                     db_session.add(self)
                     db_session.commit()
                     break
-
             return verified
 
-        verifier = (partial(verify_totp, for_time=for_time) if self.is_totp
-                    else verify_hotp)
+        def check_token_reuse(token):
+            """Check if a TOTP `token` has been used before, or if
+            the `token` precedes or proceeds a token that has been used
+            before.
 
-        return verifier(token)
+            Returns: bool
+            """
+            timecode_last_access = self.totp.timecode(self.last_access)
+            timecode_now = self.totp.timecode(datetime.datetime.utcnow())
+            reused = False
+            for timecode in range(timecode_last_access - 1,
+                                  timecode_last_access + 2):
+                reused |= pytop.utils.compare_digest(timecode_now,
+                                                     timecode)
+            return reused
+
+        if self.is_totp:
+            # Accept the tokens preceding and proceeding the current
+            # token to account for client-server time skew.
+            verified = self.totp.verify(token, valid_window=1)
+            reused = check_token_reuse(token) if LOGIN_HARDENING else False
+            if verified and reused:
+                raise BadTokenException(
+                    "Token valid, but reused, or token precedes or "
+                    "proceeds a used token.")
+            else:
+                return verified and not reused
+        else:
+            return verify_hotp(token)
 
     @classmethod
     def throttle_login(cls, user):
@@ -412,26 +435,12 @@ class Journalist(Base):
                     len(attempts_within_period),
                     _LOGIN_ATTEMPT_PERIOD))
 
-        # Also reject it if they have are a TOTP user who has just succesfully
-        # logged in
-        if user.is_totp:
-            time_since_last_access = (datetime.datetime.utcnow()
-                                      - user.last_access)
-            if time_since_last_access.total_seconds() > 60:
-                raise LoginThrottledException(
-                    "Login was attempted within {_RE_LOGIN_WAIT_PERIOD} "
-                    "seconds of a successful login for a TOTP user. Access "
-                    "denied to mitigate success of MitM/ shoulder-surfing "
-                    "attacks against TOTP users".format(**locals()))
-
     @classmethod
     def login(cls, username, password, token):
         """Takes a username, password, and OTP token (strings) and tries
-        to authenticate the user. Unless the SECUREDROP_ENV environment
-        variable is set to 'test' login attempts are rate-limited, and
-        rejected for TOTP users who have successfully logged in the last
-        60 seconds as a defense against certain MitM and
-        shoulder-surfing attacks.
+        to authenticate the user. If `LOGIN_HARDENING` login attempts
+        are rate-limited, and TOTP tokens which have already been used,
+        or precede or proceed used tokens, are rejected.
 
         Returns: :obj:`Journalist`
 
@@ -454,7 +463,7 @@ class Journalist(Base):
             cls.throttle_login(user)
 
         if not user.verify_token(token):
-            raise BadTokenException("invalid token")
+            raise BadTokenException("Invalid token.")
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
 
