@@ -191,31 +191,30 @@ class SourceStar(Base):
         self.source_id = source.id
         self.starred = starred
 
+class LoginException(Exception):
+    """Generic exception for errors during login."""
 
-class InvalidUsernameException(Exception):
+class InvalidUsernameException(LoginException):
+    """Raised when a user logs in with an invalid username."""
 
-    """Raised when a user logs in with an invalid username"""
+class LoginThrottledException(LoginException):
+    """Raised when a user attempts to log in too many times in a given
+    time period."""
 
+class WrongPasswordException(LoginException):
+    """Raised when a user logs in with an incorrect password."""
 
-class LoginThrottledException(Exception):
+class BadTokenException(LoginException):
+    """Raised when a user logs in with an invalid TOTP token."""
 
-    """Raised when a user attempts to log in too many times in a given time period"""
-
-
-class WrongPasswordException(Exception):
-
-    """Raised when a user logs in with an incorrect password"""
-
-
-class BadTokenException(Exception):
-
-    """Raised when a user logins in with an incorrect TOTP token"""
-
+class TokenReuseException(LoginException):
+    """Raised when a user attempts to re-use a token, or to use a token
+    that preceds or proceeds a token that has been used."""
 
 class InvalidPasswordLength(Exception):
-    """Raised when attempting to create a Journalist or log in with an invalid
-    password length"""
-
+    """Raised when attempting to create a Journalist or log in with an
+    invalid password length.
+    """
     def __init__(self, password):
         self.pw_len = len(password)
 
@@ -354,6 +353,8 @@ class Journalist(Base):
         Raises:
             BadTokenException: If `token` is not a six digit numeric string
                 or is not valid for the given time window.
+            TokenReuseException: If the token has been reused or precedes or
+                proceeds a used token.
         """
         token = self._format_token(token)
         if not isinstance(token, str):
@@ -451,6 +452,8 @@ class Journalist(Base):
                 rate-limiting threshold, or if the user is a TOTP user
                 and has just successfully logged in within 60s.
             BadTokenException: If the `token` is invalid.
+            TokenReuseException: If the `token` is a TOTP token that has
+                already been used, or precedes or proceeds a used token.
             WrongPasswordException: If the user's `password` is invalid.
         """
         try:

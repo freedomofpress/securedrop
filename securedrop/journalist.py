@@ -19,7 +19,8 @@ import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
                 WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength)
+                LoginThrottledException, InvalidPasswordLength,
+                LoginException, TokenReuseException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -109,13 +110,13 @@ def login():
             user = Journalist.login(request.form['username'],
                                     request.form['password'],
                                     request.form['token'])
-        except Exception as exc:
+        except LoginException as exc:
             app.logger.error(
                 "Login attempt with username '{}' failed: {}".format(
                 request.form['username'], exc))
             login_flashed_msg = "Login failed."
 
-            if isinstance(exc, LoginThrottledException):
+            if isinstance(exc, (LoginThrottledException, TokenReuseException)):
                 login_flashed_msg += (" Please wait at least 60 seconds "
                                       "before logging in again.")
 
