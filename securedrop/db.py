@@ -345,16 +345,14 @@ class Journalist(Base):
         return ''.join(token.split())
 
     def verify_token(self, token):
-        """Verify a HOTP/TOTP token (string), allowing for client-server
-        skew. If `LOGIN_HARDENING` TOTP tokens may not be re-used, nor
-        may the tokens preceding or proceeding a used token be used.
+        """Verify a HOTP/TOTP `token` (string), allowing for reasonable
+        client-server skew.
 
-        Returns: bool
+        Returns:
+            bool: `True` if the token is valid, else `False`.
+
         Raises:
-            BadTokenException: If `token` is not a six digit numeric string
-                or is not valid for the given time window.
-            TokenReuseException: If the token has been reused or precedes or
-                proceeds a used token.
+            BadTokenException: If `token` is not a six digit string.
         """
         token = self._format_token(token)
         if not isinstance(token, str):
@@ -372,7 +370,9 @@ class Journalist(Base):
             :attr:`self.hotp_counter`, as well as the next 19 tokens in
             case of client skew.
 
-            Returns: bool
+            Returns:
+                bool: `True` if the token is valid for the current
+                    `self.hotp_counter` value, or any of the next 19.
             """
             verified = False
             for counter_val in range(self.hotp_counter,
@@ -391,7 +391,9 @@ class Journalist(Base):
             precede and proceed it. This accounts for client-server time
             skew of up to 30 seconds in either direction.
 
-            Returns: bool
+            Returns:
+                bool: `True` if the token is valid for current,
+                    previous, or next timecode windows, else `False`.
             """
             verified = False
             for_time = datetime.datetime.now()
@@ -404,33 +406,28 @@ class Journalist(Base):
                     | verified)
             return verified
 
-        def check_token_reuse(token):
-            """Check if a TOTP `token` has been used before, or if
-            the `token` precedes or proceeds a token that has been used
-            before.
+        verifier = verify_totp if self.is_totp else verify_hotp
 
-            Returns: bool
-            """
-            timecode_last_access = self.totp.timecode(self.last_access)
-            timecode_now = self.totp.timecode(datetime.datetime.utcnow())
-            reused = False
-            for timecode in range(timecode_last_access - 1,
-                                  timecode_last_access + 2):
-                reused |= pytop.utils.compare_digest(timecode_now,
-                                                     timecode)
-            return reused
+        return verifier(token)
 
-        if self.is_totp:
-            verified = verify_totp(token)
-            reused = check_token_reuse(token) if LOGIN_HARDENING else False
-            if verified and reused:
-                raise BadTokenException(
-                    "Token valid, but reused, or token precedes or "
-                    "proceeds a used token.")
-            else:
-                return verified and not reused
-        else:
-            return verify_hotp(token)
+    def check_token_reuse(self, token, now):
+        """Check if a TOTP `token` has been used before, or if
+        the `token` precedes or proceeds a token that has been used
+        before.
+
+        Returns:
+            bool: `True` if the token has already been used (or precedes
+                or proceeds a used token), else `False`.
+        """
+        timecode_last_access = self.totp.timecode(self.last_access)
+        timecode_now = self.totp.timecode(datetime.datetime.utcnow())
+        reused = False
+        for timecode in range(timecode_last_access - 1,
+                              timecode_last_access + 2):
+            reused = (pytop.utils.compare_digest(timecode_now,
+                                                 timecode)
+                      | reused)
+        return reused
 
     @classmethod
     def throttle_login(cls, user):
@@ -484,8 +481,13 @@ class Journalist(Base):
 
         if not user.verify_token(token):
             raise BadTokenException("Invalid token.")
+        if LOGIN_HARDENING and user.is_totp:
+            if user.check_token_reuse(token):
+                raise TokenReuseException(
+                    "Token valid, but reused. Or token precedes or proceeds a "
+                    "used token.")
         if not user.valid_password(password):
-            raise WrongPasswordException("invalid password")
+            raise WrongPasswordException("Invalid password.")
 
         user.last_access = datetime.datetime.utcnow()
         db_session.add(user)
