@@ -386,18 +386,22 @@ class Journalist(Base):
             return verified
         
         def verify_totp(token):
-            """Constant-time check that a TOTP `token` is valid for the current
-            timecode window, or the preceding or proceeding one (in order to
-            account for client-server time skew).
+            """Constant-time check that a TOTP `token` is valid for the
+            current timecode window, or either of the windows that
+            precede and proceed it. This accounts for client-server time
+            skew of up to 30 seconds in either direction.
 
             Returns: bool
             """
             verified = False
             for_time = datetime.datetime.now()
             for i in range(-1, 2):
-                verified |= self.pyotp.utils.strings_equal(
-                    str(token),
-                    str(self.at(for_time, i)))
+                verified = (
+                    self.pyotp.utils.strings_equal(
+                        str(token),
+                        str(self.at(for_time, i))
+                        )
+                    | verified)
             return verified
 
         def check_token_reuse(token):
