@@ -412,13 +412,26 @@ class Journalist(Base):
                     len(attempts_within_period),
                     _LOGIN_ATTEMPT_PERIOD))
 
+        # Also reject it if they have are a TOTP user who has just succesfully
+        # logged in
+        if user.is_totp:
+            time_since_last_access = (datetime.datetime.utcnow()
+                                      - user.last_access)
+            if time_since_last_access.total_seconds() > 60:
+                raise LoginThrottledException(
+                    "Login was attempted within {_RE_LOGIN_WAIT_PERIOD} "
+                    "seconds of a successful login for a TOTP user. Access "
+                    "denied to mitigate success of MitM/ shoulder-surfing "
+                    "attacks against TOTP users".format(**locals()))
+
     @classmethod
     def login(cls, username, password, token):
         """Takes a username, password, and OTP token (strings) and tries
         to authenticate the user. Unless the SECUREDROP_ENV environment
         variable is set to 'test' login attempts are rate-limited, and
-        OTP tokens that were just used, or precede/ proceed a token that
-        was just used are rejected.
+        rejected for TOTP users who have successfully logged in the last
+        60 seconds as a defense against certain MitM and
+        shoulder-surfing attacks.
 
         Returns: :obj:`Journalist`
 
@@ -426,9 +439,9 @@ class Journalist(Base):
             InvalidUsernameException: If no user can be found with the
                 specified `username`.
             LoginThrottledException: If the user has exceeded the login
-                rate-limiting threshold.
-            BadTokenException: If the `token` is invalid, was just used,
-                or precedes/proceeds a token that was just used.
+                rate-limiting threshold, or if the user is a TOTP user
+                and has just successfully logged in within 60s.
+            BadTokenException: If the `token` is invalid.
             WrongPasswordException: If the user's `password` is invalid.
         """
         try:
@@ -439,12 +452,6 @@ class Journalist(Base):
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)
-            if (user.is_totp
-                and user.last_access is not None
-                and user.verify_token(token, for_time=user.last_access)):
-                raise BadTokenException(
-                    "Token valid, but was just used, or precedes/ proceeds "
-                    "a token that was just used.")
 
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
