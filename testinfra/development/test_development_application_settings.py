@@ -109,15 +109,20 @@ def test_development_app_directories_exist(File):
 
 def test_development_clean_tmp_cron_job(Command, Sudo):
     """
-    Ensure cron job for cleaning the temporary directory for the app code exists.
+    Ensure cron job for cleaning the temporary directory for the app code
+    exists. Also, ensure that the older format for the cron job is absent,
+    since we updated manage.py subcommands to use hyphens instead of
+    underscores (e.g. `clean_tmp` -> `clean-tmp`).
     """
 
     with Sudo():
         c = Command.check_output('crontab -l')
-    # TODO: this should be using property, but the ansible role
-    # doesn't use a var, it's hard-coded. update ansible, then fix test.
-    # it { should have_entry "@daily #{property['securedrop_code']}/manage.py clean-tmp" }
     assert "@daily {}/manage.py clean-tmp".format(sd_test_vars.securedrop_code) in c
+    assert "@daily {}/manage.py clean_tmp".format(sd_test_vars.securedrop_code) not in c
+    assert "clean_tmp".format(sd_test_vars.securedrop_code) not in c
+    # Make sure that the only cron lines are a comment and the actual job.
+    # We don't want any duplicates.
+    assert len(c.split("\n")) == 2
 
 
 def test_development_default_logo_exists(File):
