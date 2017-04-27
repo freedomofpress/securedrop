@@ -110,7 +110,12 @@ def test_deb_package_control_fields_homepage(File, Command, deb):
         securedrop_test_vars.securedrop_version))
     # The `--field` option will display all fields if none are specified.
     c = Command("dpkg-deb --field {}".format(deb_package.path))
-    assert "Homepage: https://securedrop.org" in c.stdout
+    # The OSSEC source packages will have a different homepage;
+    # all other packages should set securedrop.org as homepage.
+    if os.path.basename(deb_package.path).startswith('ossec-'):
+        assert "Homepage: http://ossec.net" in c.stdout
+    else:
+        assert "Homepage: https://securedrop.org" in c.stdout
 
 
 @pytest.mark.parametrize("deb", deb_packages)
