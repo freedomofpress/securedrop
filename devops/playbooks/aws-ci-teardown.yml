@@ -1,0 +1,64 @@
+#!/usr/bin/env ansible-playbook
+
+- name: Tear-down CI boxes
+  hosts: localhost
+  become: no
+  gather_facts: true
+  tasks:
+    - block:
+      - set_fact:
+          job_id: "{{ aws_ec2_ci_tags.job_name }}-{{ aws_ec2_ci_tags.build_num }}"
+
+      - name: find ec2 instance with current build tags
+        ec2_remote_facts:
+          region: "{{ aws_ec2_ci_region }}"
+          filters:
+            instance-state-name: running
+            "tag:job_name": "{{ aws_ec2_ci_tags.job_name }}"
+            "tag:build_num": "{{ aws_ec2_ci_tags.build_num }}"
+        register: ec2_current_reg
+
+      - name: tear down instance
+        ec2:
+          region: "{{ aws_ec2_ci_region }}"
+          state: absent
+          instance_ids: "{{ ec2_current_reg.instances | map(attribute='id') | list  }}"
+        when: "ec2_current_reg.instances != []"
+
+      - name: delete server-side ssh key
+        ec2_key:
+          name: "sdci-{{ job_id }}"
+          state: absent
+          region: "{{ aws_ec2_ci_region }}"
+
+      - name: Rip out server-side security group
+        ec2_group:
+          name: "{{ job_id }}"
+          description: Temporary rules for CI
+          state: absent
+          region: "{{ aws_ec2_ci_region }}"
+        register: ec2_group_result
+        until: "'group_id' in ec2_group_result"
+        retries: 6
+        delay: 30
+
+      - name: destroy local tmp keys
+        file:
+          path: "{{ ansible_user_dir }}/.ssh/{{ item }}"
+          state: absent
+        with_items:
+          - "{{ job_id }}"
+          - "{{ job_id }}.pub"
+
+      - name: destroy local sshconfig
+        file:
+          path: "{{ ansible_user_dir }}/.ssh/sshconfig-{{ job_id }}"
+          state: absent
+
+      become_user: "{{ ansible_user_id }}"
+      delegate_to: localhost
+  vars:
+    aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
+    aws_ec2_ci_tags:
+      job_name: "securedrop-ci"
+      build_num: "{{ ansible_env.BUILD_NUM | mandatory }}"
