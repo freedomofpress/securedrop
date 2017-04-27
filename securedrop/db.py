@@ -440,6 +440,7 @@ class Journalist(Base):
         if LOGIN_HARDENING:
             cls.throttle_login(user)
             if (user.is_totp
+                and user.last_access is not None
                 and user.verify_token(token, for_time=user.last_access)):
                 raise BadTokenException(
                     "Token valid, but was just used, or precedes/ proceeds "
