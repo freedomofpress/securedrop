@@ -36,16 +36,12 @@ def test_tor_service_running(Command, File, Sudo):
     # script, so let's just shell out and verify the running and enabled
     # states explicitly.
     with Sudo():
-        tor_status = Command("service tor status")
-    assert tor_status.rc == 0
-    assert tor_status.stdout == " * tor is running"
+        assert Command.check_output("service tor status") == " * tor is running"
+        tor_enabled = Command.check_output("find /etc/rc?.d -name S??tor")
 
-    with Sudo():
-        tor_enabled = Command("find /etc/rc?.d -name S??tor")
-    assert tor_enabled.rc == 0
-    assert tor_enabled.stdout != ""
+    assert tor_enabled != ""
 
-    tor_targets = tor_enabled.stdout.split("\n")
+    tor_targets = tor_enabled.split("\n")
     assert len(tor_targets) == 4
     for target in tor_targets:
         t = File(target)

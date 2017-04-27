@@ -1,0 +1,5 @@
+ansible>=2.2,<2.3
+boto
+pip-tools
+pytest-xdist
+testinfra

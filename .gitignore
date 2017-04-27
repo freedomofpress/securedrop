@@ -130,3 +130,7 @@ securedrop/static/.webassets-cache
 
 # ignore ansible retry files
 *.retry
+
+# Skip over CI junit files
+junit/
+*results.xml

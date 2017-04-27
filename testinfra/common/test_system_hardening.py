@@ -70,9 +70,9 @@ def test_swap_disabled(Command):
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
     to reduce the threat of forensic analysis leaking any sensitive info.
     """
-    c = Command('swapon --summary')
-    assert c.rc == 0
+    c = Command.check_output('swapon --summary')
     # A leading slash will indicate full path to a swapfile.
-    assert not re.search("^/", c.stdout, re.M)
+    assert not re.search("^/", c, re.M)
     # Expect that ONLY the headers will be present in the output.
-    assert c.stdout == "Filename\t\t\t\tType\t\tSize\tUsed\tPriority"
+    rgx = re.compile("Filename\s*Type\s*Size\s*Used\s*Priority")
+    assert re.search(rgx, c)

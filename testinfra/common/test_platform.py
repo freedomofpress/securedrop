@@ -1,19 +1,17 @@
 import pytest
 
 
-def test_ansible_version(LocalCommand):
+def test_ansible_version(host):
     """
     Check that a supported version of Ansible is being used.
 
-    The project has long used the Ansible 1.x series, but aims
-    to upgrade to 2.x during the 0.4 release. Developers commonly
-    install a recent version of Ansible when developing SecureDrop,
-    which is not a good baseline for testing.
+    The project has long used the Ansible 1.x series, ans now
+    requires the 2.x series starting with the 0.4 release. Ensure
+    installation is not being performed with an outdated ansible version.
     """
-    c = LocalCommand("ansible --version")
-    assert c.stdout.startswith("ansible 1.")
-    assert "ansible 2" not in c.stdout
-
+    localhost = host.get_host("local://")
+    c = localhost.check_output("ansible --version")
+    assert c.startswith("ansible 2.")
 
 def test_platform(SystemInfo):
     """
