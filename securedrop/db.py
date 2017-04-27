@@ -384,6 +384,21 @@ class Journalist(Base):
                     db_session.commit()
                     break
             return verified
+        
+        def verify_totp(token):
+            """Constant-time check that a TOTP `token` is valid for the current
+            timecode window, or the preceding or proceeding one (in order to
+            account for client-server time skew).
+
+            Returns: bool
+            """
+            verified = False
+            for_time = datetime.datetime.now()
+            for i in range(-1, 2):
+                verified |= self.pyotp.utils.strings_equal(
+                    str(token),
+                    str(self.at(for_time, i)))
+            return verified
 
         def check_token_reuse(token):
             """Check if a TOTP `token` has been used before, or if
@@ -402,9 +417,7 @@ class Journalist(Base):
             return reused
 
         if self.is_totp:
-            # Accept the tokens preceding and proceeding the current
-            # token to account for client-server time skew.
-            verified = self.totp.verify(token, valid_window=1)
+            verified = verify_totp(token)
             reused = check_token_reuse(token) if LOGIN_HARDENING else False
             if verified and reused:
                 raise BadTokenException(
