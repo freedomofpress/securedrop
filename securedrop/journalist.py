@@ -115,9 +115,9 @@ def login():
                 request.form['username'], exc))
             login_flashed_msg = "Login failed."
 
-            if isinstance(exc, (BadTokenException, LoginThrottledException)):
-                login_flashed_msg += ("Please wait at least 60 seconds before "
-                                      "logging in again.")
+            if isinstance(exc, LoginThrottledException):
+                login_flashed_msg += (" Please wait at least 60 seconds "
+                                      "before logging in again.")
 
             flash(login_flashed_msg, "error")
         else:
