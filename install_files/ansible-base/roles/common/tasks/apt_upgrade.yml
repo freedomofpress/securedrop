@@ -18,7 +18,12 @@
 - name: Hold tor package to prevent upgrade breaking SSH connection.
   command: aptitude hold tor
   register: tor_hold_package_result
-  when: "'tor' in tor_upgradable_result.stdout_lines"
+  when:
+    - "'tor' in tor_upgradable_result.stdout_lines"
+    # We only want to prevent upgrades if we're connected over Tor; first-time
+    # installs will happen over direct access SSH (to local IPv4 address).
+    # If we're connecting to an Onion URL, then it's over Tor.
+    - (ansible_host|default(ansible_ssh_host)).endswith('.onion')
 
 - name: Perform safe upgrade to ensure all the packages are updated.
   apt:
