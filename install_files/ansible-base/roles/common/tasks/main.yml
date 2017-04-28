@@ -13,6 +13,8 @@
   tags:
     - reboot
 
+- include: apt_upgrade.yml
+
 - include: sysctl.yml
 
 - include: disable_swap.yml
