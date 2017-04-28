@@ -5,7 +5,7 @@ machine:
   environment:
     FPF_CI: true
     CI_SD_ENV: staging
-    CI_AWS_TYPE: t2.small
+    CI_AWS_TYPE: m3.medium
     FPF_GRSEC: false
 
 dependencies:
