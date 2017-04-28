@@ -5,6 +5,7 @@
 export RETRY_FILES_ENABLED="False"
 export ANSIBLE_INVENTORY="localhost"
 
+trap "make ci-teardown" ERR
 ./devops/playbooks/aws-ci-startup.yml --diff
 
 #testinfra --hosts=`cat jenkins-aws-instances` --junit-xml=junit.xml --sudo \
