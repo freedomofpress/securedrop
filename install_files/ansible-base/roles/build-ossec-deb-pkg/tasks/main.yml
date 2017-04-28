@@ -10,7 +10,7 @@
     - "{{ repo_src_path }}"
     - "{{ build_path }}"
 
-- name: Conditional copy over current directory for repo build
+- name: Copy over current directory for repo build
   synchronize:
     # All Debian package source trees are located in `install_files/<package>`
     # in the root of the SecureDrop git repository.
@@ -19,7 +19,7 @@
     # Ansible v1 does not support the `use_ssh_args`, which was added in 2.0.
     # When resolving #1146, to upgrade Ansible, this option should be
     # activated to permit builds in CI.
-    #   use_ssh_args: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     recursive: yes
     rsync_opts:
       - "--exclude=*.git"

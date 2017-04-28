@@ -56,14 +56,13 @@
     - reboot
 
 - name: Wait for server to come back.
-  local_action:
-    # action/local_action modules don't support
-    # dict-style arg declaration, so use 'key=value' syntax
-    module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port }}
-      delay=20
-      state=started
+  local_action: wait_for
+  args:
+    host: "{{ ansible_host if not amazon_builder else ansible_ec2_public_hostname }}"
+    port: "{{ ansible_port | default(22) }}"
+    delay: 20
+    search_regex: OpenSSH
+    state: started
   when: reboot_required.stat.exists
   # Wait action runs on localhost, and does NOT require sudo.
   sudo: false

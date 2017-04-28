@@ -7,10 +7,10 @@
 set -e
 set -x
 
-BUILD_PATH="/tmp/build"
+BUILD_PATH="/tmp/build-$PACKAGE_NAME"
 SD_ARCH=${2:-amd64}
 PACKAGE_NAME="$1"
-PACKAGE_PATH="/vagrant/install_files/$PACKAGE_NAME"
+PACKAGE_PATH="/tmp/src_install_files/$PACKAGE_NAME"
 
 umask 022
 
@@ -31,7 +31,7 @@ build_generic() {
 
     # Create the deb package
     dpkg-deb --build $BUILD_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /vagrant/build
+    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /tmp
 }
 
 build_generic $PACKAGENAME $PACKAGEPATH

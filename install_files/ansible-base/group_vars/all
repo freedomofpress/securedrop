@@ -1,0 +1,2 @@
+---
+amazon_builder: "{{ true if 'amazon' in ansible_product_version else false }}"

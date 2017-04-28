@@ -12,14 +12,14 @@
     - reboot
 
   # If grsec wasn't already running, wait for the host to come back up
-  # after rebooting. The Ansible variable {{ ansible_ssh_host }} refers
+  # after rebooting. The Ansible variable {{ ansible_host }} refers
   # to the host just rebooted, and this syntax will work in production,
   # vagrant/virtualbox, and snap-ci environments.
 - name: Wait for server to come back.
   local_action:
     module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port }}
+      host={{ ansible_host }}
+      port={{ ansible_port | default('22') }}
       delay=45
       state=started
   when: not running_grsec.stat.exists

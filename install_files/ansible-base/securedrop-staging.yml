@@ -3,13 +3,18 @@
   # rather than pulling down stable releases from the app code.
   # Therefore build the local debs before provisioning the staging hosts.
 - include: build-deb-pkgs.yml
-  when: install_local_packages == true
+  when: "install_local_packages"
 
 - name: Add FPF apt repository and install base packages.
   hosts: staging
+  pre_tasks:
+    - name: Extract ec2 vars when in AWS
+      ec2_facts:
+      when: amazon_builder
   roles:
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
+    - { role: install-fpf-repo, tags: [fpfrepo] }
     - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
     - { role: install-local-packages, tags: [install_local_packages, rebuild],
         when: install_local_packages }
