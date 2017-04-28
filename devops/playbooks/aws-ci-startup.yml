@@ -5,8 +5,12 @@
   become: no
   gather_facts: true
   tasks:
-    - fail:
-      when: 'ci_environment == "" or aws_ec2_ci_tags.build_num == "" or aws_ec2_vpc_id == ""'
+    - name: Ensure CI environment vars are declared.
+      assert:
+        that:
+          - ci_environment != ""
+          - aws_ec2_ci_tags.build_num != ""
+          - aws_ec2_vpc_id != ""
 
     - set_fact:
         job_id: "{{ aws_ec2_ci_tags.job_name }}-{{ aws_ec2_ci_tags.build_num }}"
