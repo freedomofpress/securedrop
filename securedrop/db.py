@@ -442,11 +442,13 @@ class Journalist(Base):
         """
         timecode_last_access = self.totp.timecode(self.last_access)
         timecode_now = self.totp.timecode(datetime.datetime.utcnow())
-        reused = 0
+        reused = False
         for timecode in range(timecode_last_access - 1,
                               timecode_last_access + 2):
-            reused |= ~(timecode ^ timecode)
-        return reused == -1
+            # Timecodes are `int`s representable in less than 32 bits, so
+            # comparison with `==` will be constant-time
+            reused |= timecode == timecode
+        return reused
 
     @classmethod
     def throttle_login(cls, user):
