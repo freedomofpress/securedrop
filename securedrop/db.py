@@ -433,10 +433,10 @@ class Journalist(Base):
         verifier = verify_totp if self.is_totp else verify_hotp
         return verifier(token)
 
-    def check_token_reuse(self, token, now):
-        """Check if a TOTP `token` has been used before, or if
-        the `token` precedes or proceeds a token that has been used
-        before.
+    def check_token_reuse(self, token):
+        """Constant-time check if a TOTP `token` has been used before,
+        or if the `token` precedes or proceeds a token that has been
+        used before.
 
         Returns:
             bool: `True` if the `token` has already been used (or precedes
@@ -502,6 +502,8 @@ class Journalist(Base):
                 valid. Or if the login throttling or token re-use
                 protections have been triggered.
         """
+        # Immediately exit function by not catching, or raising, exceptions if
+        # inputs are not sane, or username does not belong to a Journalist.
         cls.validate_login_inputs(username, password, token)
         try:
             user = Journalist.query.filter_by(username=username).one()
@@ -509,14 +511,21 @@ class Journalist(Base):
             raise InvalidUsernameException(
                 "invalid username '{}'".format(username))
 
+        # Immediately exit function by not catching LoginThrottledException.
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
+        # Run bi-modal (TOTP/HOTP) constant-time `verify_token()` and
+        # constant-time `valid_password` functions and record the results. Also
+        # run the constant-time `check_token_reuse()` function for TOTP logins
+        # if the user has logged in before and record the results. We always
+        # run both to keep timing near-constant for the rest of this functions
+        # execution.
         password_valid = user.valid_password(password)
         token_valid = user.verify_token(token)
 
         # Using the builtin & operator overloading of :class:`bool` to avoid
-        # short-circuiting
+        # short-circuiting.
         if LOGIN_HARDENING & user.is_totp & bool(user.last_access):
             token_reused = user.check_token_reuse(token)
         else:
