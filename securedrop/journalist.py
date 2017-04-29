@@ -17,9 +17,8 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply, SourceStar,
-                get_one_or_else, NoResultFound, WrongPasswordException,
-                LoginThrottledException, InvalidPasswordLength, LoginException,
-                TokenReuseException)
+                get_one_or_else, NoResultFound, LoginThrottledException,
+                InvalidPasswordLength, LoginException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -112,7 +111,7 @@ def login():
         except LoginException as exc:
             app.logger.error(
                 "Login attempt with username '{}' failed: {}".format(
-                request.form['username'], str(exc)))
+                request.form['username'], exc))
             login_flashed_msg = "Login failed."
 
             if isinstance(exc, LoginThrottledException):

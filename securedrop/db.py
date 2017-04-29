@@ -194,6 +194,9 @@ class SourceStar(Base):
 
 class LoginException(Exception):
     """Generic exception for errors during login."""
+
+class LoginFailedException(LoginException):
+    """Exception raised when valid username """
     def __init__(self, username, password_valid, token_valid, token_reused):
         self.username = username
         self.password_valid = password_valid
@@ -201,9 +204,9 @@ class LoginException(Exception):
         self.token_reused = token_reused
 
     def __str__(self):
-        return ("Journalist: {user.username}.\n"
-                "Password valid: {password_valid}.\n"
-                "Token valid: {token_valid}.\n"
+        return ("Journalist: {username}. "
+                "Password valid: {password_valid}. "
+                "Token valid: {token_valid}. "
                 "Token reused: {token_reused}.".format(**self.__dict__))
 
 class InvalidUsernameException(LoginException):
@@ -216,10 +219,6 @@ class LoginThrottledException(LoginException):
 class TokenFormatException(LoginException):
     """Raised when a user logs in with a token that is does not
     contain."""
-
-class TokenReuseException(LoginException):
-    """Raised when a user attempts to re-use a token, or to use a token
-    that preceds or proceeds a token that has been used."""
 
 class InvalidPasswordLength(LoginException):
     """Raised when attempting to create a Journalist or log in with an
@@ -350,7 +349,8 @@ class Journalist(Base):
         chunks = [sec[i:i + 4] for i in xrange(0, len(sec), 4)]
         return ' '.join(chunks).lower()
 
-    def _format_token(self, token):
+    @staticmethod
+    def _format_token(token):
         """Returns the token with whitespace stripped. TOTP clients
         sometimes add whitespace for readability.
 
@@ -364,7 +364,7 @@ class Journalist(Base):
                                        "whitespace) exceeds 12 characters, "
                                        "possibly indicating a DoS attempt.")
         token = ''.join(token.split())
-        if not re.search('^[0-9]$', token)
+        if not re.search('^[0-9]$', token):
             raise TokenFormatException("Token must be a 6 digit "
                                        "string!")
         return token
@@ -472,7 +472,7 @@ class Journalist(Base):
                     _LOGIN_ATTEMPT_PERIOD))
 
     @classmethod
-    def verify_login_inputs(cls, username, password, token):
+    def validate_login_inputs(cls, username, password, token):
         """Verify that the inputs given for login are possibly correct.
 
         Raises:
@@ -482,10 +482,11 @@ class Journalist(Base):
         """
         # Old versions of SecureDrop didn't enforce MIN_PASSWORD_LEN,
         # and currently we don't enforce a minimum username length.
-        if password > MAX_PASSWORD_LEN:
+        if len(password) > cls.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
 
-        self._format_token(token)
+        if LOGIN_HARDENING:
+            cls._format_token(token)
 
     @classmethod
     def login(cls, username, password, token):
@@ -516,7 +517,7 @@ class Journalist(Base):
 
         # Using the builtin & operator overloading of :class:`bool` to avoid
         # short-circuiting
-        if LOGIN_HARDENING & user.is_totp & user.last_access:
+        if LOGIN_HARDENING & user.is_totp & bool(user.last_access):
             token_reused = user.check_token_reuse(token)
         else:
             token_reused = False
@@ -526,8 +527,8 @@ class Journalist(Base):
             db_session.add(user)
             db_session.commit()
         else:
-            raise LoginException(username, password_valid, token_valid,
-                                 token_reused)
+            raise LoginFailedException(username, password_valid, token_valid,
+                                       token_reused)
 
         return user
 
