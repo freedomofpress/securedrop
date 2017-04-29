@@ -2,7 +2,6 @@ import os
 import datetime
 import base64
 import binascii
-import itertools
 import re
 
 # Find the best implementation available on this platform
@@ -418,13 +417,12 @@ class Journalist(Base):
                     previous, or next timecode windows, else `False`.
             """
             for_time = datetime.datetime.now()
-            verified = 0
+            valid = False
             for i in range(-1, 2):
-                differences = 0
-                for x, y in itertools.izip(token, self.totp.at(for_time, i)):
-                    differences |= ord(x) ^ ord(y)
-                verified |= ~differences
-            return verified == -1
+                valid |= pyotp.utils.strings_equal(
+                    token,
+                    str(self.totp.at(for_time, i)))
+            return valid
 
         try:
             token = self._format_token(token)
