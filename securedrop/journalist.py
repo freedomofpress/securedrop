@@ -16,11 +16,10 @@ import version
 import crypto_util
 import store
 import template_filters
-from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, NoResultFound,
-                WrongPasswordException, BadTokenException,
-                LoginThrottledException, InvalidPasswordLength,
-                LoginException, TokenReuseException)
+from db import (db_session, Source, Journalist, Submission, Reply, SourceStar,
+                get_one_or_else, NoResultFound, WrongPasswordException,
+                LoginThrottledException, InvalidPasswordLength, LoginException,
+                TokenReuseException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -113,12 +112,23 @@ def login():
         except LoginException as exc:
             app.logger.error(
                 "Login attempt with username '{}' failed: {}".format(
-                request.form['username'], exc))
+                request.form['username'], str(exc)))
             login_flashed_msg = "Login failed."
 
-            if isinstance(exc, (LoginThrottledException, TokenReuseException)):
+            if isinstance(exc, LoginThrottledException):
                 login_flashed_msg += (" Please wait at least 60 seconds "
                                       "before logging in again.")
+            try:
+                if exc.token_reused & exc.token_valid & exc.password_valid:
+                    login_flashed_msg += (
+                        " The token you entered either was already used to "
+                        "login to your account, or immediately proceeded a "
+                        "token used to login to your account. Please wait "
+                        "for the next token to try again, and immediately "
+                        "inform your administrator if this is an unexpected "
+                        "error.")
+            except AttributeError:
+                pass
 
             flash(login_flashed_msg, "error")
         else:

@@ -1,8 +1,9 @@
 import os
 import datetime
-from functools import partial
 import base64
 import binascii
+import itertools
+import re
 
 # Find the best implementation available on this platform
 try:
@@ -193,6 +194,17 @@ class SourceStar(Base):
 
 class LoginException(Exception):
     """Generic exception for errors during login."""
+    def __init__(self, username, password_valid, token_valid, token_reused):
+        self.username = username
+        self.password_valid = password_valid
+        self.token_valid = token_valid
+        self.token_reused = token_reused
+
+    def __str__(self):
+        return ("Journalist: {user.username}.\n"
+                "Password valid: {password_valid}.\n"
+                "Token valid: {token_valid}.\n"
+                "Token reused: {token_reused}.".format(**self.__dict__))
 
 class InvalidUsernameException(LoginException):
     """Raised when a user logs in with an invalid username."""
@@ -201,17 +213,15 @@ class LoginThrottledException(LoginException):
     """Raised when a user attempts to log in too many times in a given
     time period."""
 
-class WrongPasswordException(LoginException):
-    """Raised when a user logs in with an incorrect password."""
-
-class BadTokenException(LoginException):
-    """Raised when a user logs in with an invalid TOTP token."""
+class TokenFormatException(LoginException):
+    """Raised when a user logs in with a token that is does not
+    contain."""
 
 class TokenReuseException(LoginException):
     """Raised when a user attempts to re-use a token, or to use a token
     that preceds or proceeds a token that has been used."""
 
-class InvalidPasswordLength(Exception):
+class InvalidPasswordLength(LoginException):
     """Raised when attempting to create a Journalist or log in with an
     invalid password length.
     """
@@ -341,32 +351,33 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
-        return ''.join(token.split())
+        """Returns the token with whitespace stripped. TOTP clients
+        sometimes add whitespace for readability.
+
+        Raises:
+            TokenFormatException: if the `token` is more than
+                12 characters without whitespace (DoS prevention), or is
+                not a 6 digit string after stripping whitespace.
+        """
+        if len(token) > 12:
+            raise TokenFormatException("Token string (including "
+                                       "whitespace) exceeds 12 characters, "
+                                       "possibly indicating a DoS attempt.")
+        token = ''.join(token.split())
+        if not re.search('^[0-9]$', token)
+            raise TokenFormatException("Token must be a 6 digit "
+                                       "string!")
+        return token
 
     def verify_token(self, token):
         """Verify a HOTP/TOTP `token` (string), allowing for reasonable
-        client-server skew.
+        client-server skew. Runs in near-constant-time.
 
         Returns:
             bool: `True` if the token is valid, else `False`.
-
-        Raises:
-            BadTokenException: If `token` is not a six digit string.
         """
-        token = self._format_token(token)
-        if not isinstance(token, str):
-            raise BadTokenException("Token should be of type `str`.")
-        if not len(token) == 6:
-            raise BadTokenException("Token should be of `len` 6.")
-        try:
-            int(token)
-        except ValueError:
-            raise BadTokenException(
-                "Token string should only contain digits.")
-
         def verify_hotp(token):
-            """Constant-time check to determines if a HOTP `token` is
+            """Near constant-time check to determines if a HOTP `token` is
             valid. The current value of :attr:`self.hotp_counter` is
             used to generate the comparison token, as well as the next
             19 tokens in case of client skew. The smallest counter value
@@ -376,24 +387,25 @@ class Journalist(Base):
 
             Returns:
                 bool: `True` if the token is valid for the current
-                    `self.hotp_counter` value, or any of the next 19.
+                    `self.hotp_counter` value, or any of the next 19,
+                    else `False`.
             """
-            verified = False
+            counter = self.hotp_counter - 1
             # In the tiny chance of collision, reverse the order so that
             # verified ends up being the smallest matching `counter_val` and
             # the user is not locked out.
             for counter_val in range(self.hotp_counter,
                                      self.hotp_counter + 20)[::-1]:
-                if pyotp.utils.strings_equal(token,
-                                             self.hotp.at(counter_val)):
-                    verified = counter_val
+                if pyotp.utils.strings_equal(token, self.hotp.at(counter_val)):
+                    counter = counter_val
+                else:
+                    counter = counter
 
-            if verified:
-                self.hotp_counter = verified + 1
-                db_session.add(self)
-                db_session.commit()
+            self.hotp_counter = counter + 1
+            db_session.add(self)
+            db_session.commit()
         
-            return bool(verified)
+            return counter != self.hotp_counter
 
         def verify_totp(token):
             """Constant-time check that a TOTP `token` is valid for the
@@ -402,19 +414,23 @@ class Journalist(Base):
             skew of up to 30 seconds in either direction.
 
             Returns:
-                bool: `True` if the token is valid for current,
+                bool: `True` if the `token` is valid for current,
                     previous, or next timecode windows, else `False`.
             """
-            verified = False
             for_time = datetime.datetime.now()
+            verified = 0
             for i in range(-1, 2):
-                verified = (constant_time_compare(str(token),
-                                                  str(self.at(for_time, i)))
-                            | verified)
-            return verified
+                differences = 0
+                for x, y in itertools.izip(token, self.totp.at(for_time, i)):
+                    differences |= ord(x) ^ ord(y)
+                verified |= ~differences
+            return verified == -1
 
+        try:
+            token = self._format_token(token)
+        except TokenFormatException:
+            return False
         verifier = verify_totp if self.is_totp else verify_hotp
-
         return verifier(token)
 
     def check_token_reuse(self, token, now):
@@ -423,16 +439,16 @@ class Journalist(Base):
         before.
 
         Returns:
-            bool: `True` if the token has already been used (or precedes
+            bool: `True` if the `token` has already been used (or precedes
                 or proceeds a used token), else `False`.
         """
         timecode_last_access = self.totp.timecode(self.last_access)
         timecode_now = self.totp.timecode(datetime.datetime.utcnow())
-        reused = False
+        reused = 0
         for timecode in range(timecode_last_access - 1,
                               timecode_last_access + 2):
-            reused = constant_time_compare(timecode_now, timecode) | reused
-        return reused
+            reused |= ~(timecode ^ timecode)
+        return reused == -1
 
     @classmethod
     def throttle_login(cls, user):
@@ -456,6 +472,22 @@ class Journalist(Base):
                     _LOGIN_ATTEMPT_PERIOD))
 
     @classmethod
+    def verify_login_inputs(cls, username, password, token):
+        """Verify that the inputs given for login are possibly correct.
+
+        Raises:
+            InvalidPasswordLength: if `password` is greater than
+                `MAX_PASSWORD_LEN`.
+            TokenFormatException: if `token` is not a proper OTP.
+        """
+        # Old versions of SecureDrop didn't enforce MIN_PASSWORD_LEN,
+        # and currently we don't enforce a minimum username length.
+        if password > MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
+
+        self._format_token(token)
+
+    @classmethod
     def login(cls, username, password, token):
         """Takes a username, password, and OTP token (strings) and tries
         to authenticate the user. If `LOGIN_HARDENING` login attempts
@@ -465,16 +497,11 @@ class Journalist(Base):
         Returns: :obj:`Journalist`
 
         Raises:
-            InvalidUsernameException: If no user can be found with the
-                specified `username`.
-            LoginThrottledException: If the user has exceeded the login
-                rate-limiting threshold, or if the user is a TOTP user
-                and has just successfully logged in within 60s.
-            BadTokenException: If the `token` is invalid.
-            TokenReuseException: If the `token` is a TOTP token that has
-                already been used, or precedes or proceeds a used token.
-            WrongPasswordException: If the user's `password` is invalid.
+            LoginException: if the username, password, and token are not
+                valid. Or if the login throttling or token re-use
+                protections have been triggered.
         """
+        cls.validate_login_inputs(username, password, token)
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
@@ -484,19 +511,23 @@ class Journalist(Base):
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
-        if not user.verify_token(token):
-            raise BadTokenException("Invalid token.")
-        if LOGIN_HARDENING and user.is_totp:
-            if user.check_token_reuse(token):
-                raise TokenReuseException(
-                    "Token valid, but reused. Or token precedes or proceeds a "
-                    "used token.")
-        if not user.valid_password(password):
-            raise WrongPasswordException("Invalid password.")
+        password_valid = user.valid_password(password)
+        token_valid = user.verify_token(token)
 
-        user.last_access = datetime.datetime.utcnow()
-        db_session.add(user)
-        db_session.commit()
+        # Using the builtin & operator overloading of :class:`bool` to avoid
+        # short-circuiting
+        if LOGIN_HARDENING & user.is_totp & user.last_access:
+            token_reused = user.check_token_reuse(token)
+        else:
+            token_reused = False
+
+        if password_valid & token_valid & (not token_reused):
+            user.last_access = datetime.datetime.utcnow()
+            db_session.add(user)
+            db_session.commit()
+        else:
+            raise LoginException(username, password_valid, token_valid,
+                                 token_reused)
 
         return user
 
