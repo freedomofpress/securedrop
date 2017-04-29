@@ -1,13 +1,13 @@
 #!/usr/bin/env ansible-playbook
 ---
-- name: Do the reboot and wait dance
+- name: Do the reboot and wait dance.
   hosts: securedrop
   become: yes
   tasks:
-    - name: Gather ec2 facts to establish ansible_ec2_public_hostname
+    - name: Gather EC2 facts to establish ansible_ec2_public_hostname.
       ec2_facts:
 
-    - name: Reboot if required due to security updates.
+    - name: Reboot.
       command: reboot
 
     - name: Wait for server to come back.

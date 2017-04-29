@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Stand-up CI boxes
+- name: Create CI remote hosts for testing SecureDrop config.
   hosts: localhost
   become: no
   gather_facts: true
@@ -12,23 +12,24 @@
           - aws_ec2_ci_tags.build_num != ""
           - aws_ec2_vpc_id != ""
 
-    - set_fact:
+    - name: Store job_id (job name and build number) as host fact.
+      set_fact:
         job_id: "{{ aws_ec2_ci_tags.job_name }}-{{ aws_ec2_ci_tags.build_num }}"
 
-    - name: Generate temporary SSH key
+    - name: Generate temporary SSH key for logging into CI hosts.
       user:
         name: "{{ ansible_user_id }}"
         generate_ssh_key: yes
         ssh_key_bits: 4096
         ssh_key_file: "{{ ansible_user_dir }}/.ssh/{{ job_id }}"
 
-    - name: Add ssh key to region
+    - name: Add temporary SSH key to AWS region.
       ec2_key:
         name: "sdci-{{ job_id }}"
         region: "{{ aws_ec2_ci_region }}"
         key_material: "{{ lookup('file',ansible_user_dir+'/.ssh/{{ job_id }}.pub') }}"
 
-    - name: Find Ubuntu AMI
+    - name: Find Ubuntu AMI.
       ec2_ami_find:
         owner: 099720109477
         name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server*"
@@ -39,14 +40,14 @@
         virtualization_type: hvm
       register: ami_search_result
 
-    - name: Find VPC subnet
+    - name: Find VPC subnet.
       ec2_vpc_subnet_facts:
         region: "{{ aws_ec2_ci_region }}"
         filters:
           vpc-id: "{{ aws_ec2_vpc_id }}"
       register: vpc_subnet_result
 
-    - name: Create custom security_group
+    - name: Create custom temporary security_group for CI hosts.
       ec2_group:
         name: "{{ job_id }}"
         description: Temporary rules for CI
@@ -67,7 +68,7 @@
             cidr_ip: "{{ vpc_subnet_result.subnets[0].cidr_block }}"
       register: group_create_result
 
-    - name: Fire up instance(s)
+    - name: Create remote CI hosts on AWS.
       ec2:
         group_id: "{{ group_create_result.group_id }}"
         vpc_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
@@ -91,7 +92,7 @@
       register: reg_ec_instance
       with_items: "{{ aws_instance_tags }}"
 
-    - name: Wait for EC2 instance to come up
+    - name: Wait for EC2 instances to boot.
       wait_for:
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
@@ -100,7 +101,7 @@
       with_items: "{{ reg_ec_instance.results }}"
       when: "item.tagged_instances[0].tags['build_num'] == aws_ec2_ci_tags.build_num"
 
-    - name: Add AWS host(s) to temp ssh config
+    - name: Add AWS hosts to temporary local SSH config.
       template:
         dest: "{{ ansible_user_dir }}/.ssh/sshconfig-{{ job_id }}"
         src: ../templates/ssh_config
