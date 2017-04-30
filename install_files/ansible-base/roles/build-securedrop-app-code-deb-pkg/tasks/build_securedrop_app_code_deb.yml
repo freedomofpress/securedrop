@@ -34,14 +34,11 @@
 - name: Copy app code to build directory.
   synchronize:
     src: ../../securedrop/
-    dest: "{{ item.dest }}"
+    dest: "{{ securedrop_code_filtered }}"
     recursive: yes
     delete: yes
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
-    rsync_opts: "{{ item.opts }}"
-  with_items:
-    - dest: "{{ securedrop_code_filtered }}"
-      opts: "{{ securedrop_app_rsync_opts }}"
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
 - name: Create CSS directory.
   file:
