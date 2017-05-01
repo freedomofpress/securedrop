@@ -29,11 +29,6 @@
     recursive: yes
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
 
-- name: Add rsync-filter for additively including files.
-  copy:
-    src: rsync-filter
-    dest: /tmp/rsync-filter
-
 - debug: var=securedrop_code
 
 - name: Copy app code to build directory.
@@ -45,10 +40,8 @@
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     rsync_opts: "{{ item.opts }}"
   with_items:
-    - dest: "{{ securedrop_code_raw }}"
-      opts: "{{ securedrop_app_rsync_opts }}"
     - dest: "{{ securedrop_code_filtered }}"
-      opts: "{{ securedrop_app_rsync_opts+securedrop_app_rsync_filter }}"
+      opts: "{{ securedrop_app_rsync_opts }}"
 
 - name: Create CSS directory.
   file:
@@ -58,7 +51,7 @@
 - name: Compile SASS to CSS.
   shell: "/usr/local/bin/sass --force --stop-on-error --update sass:{{ securedrop_code }}/static/css --style compressed"
   args:
-    chdir: "{{ securedrop_code_raw }}"
+    chdir: "{{ securedrop_code }}"
 
 - name: Create pip wheel archive for Debian package requirements.
   command: pip wheel -r {{ securedrop_pip_requirements }} -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
