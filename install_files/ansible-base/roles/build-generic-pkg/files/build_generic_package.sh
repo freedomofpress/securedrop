@@ -4,12 +4,13 @@
 ##  ./build_package.sh securedrop-ossec-agent
 
 
+set -u
 set -e
 set -x
 
+PACKAGE_NAME="$1"
 BUILD_PATH="/tmp/build-$PACKAGE_NAME"
 SD_ARCH=${2:-amd64}
-PACKAGE_NAME="$1"
 PACKAGE_PATH="/tmp/src_install_files/$PACKAGE_NAME"
 
 umask 022
@@ -34,5 +35,5 @@ build_generic() {
     cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /tmp
 }
 
-build_generic $PACKAGENAME $PACKAGEPATH
+build_generic $PACKAGE_NAME $PACKAGE_PATH
 exit 0
