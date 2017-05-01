@@ -9,7 +9,7 @@ set -e
 set -x
 
 PACKAGE_NAME="$1"
-BUILD_PATH="/tmp/build-$PACKAGE_NAME"
+BUILD_PATH="/tmp/build"
 SD_ARCH=${2:-amd64}
 PACKAGE_PATH="/tmp/src_install_files/$PACKAGE_NAME"
 
