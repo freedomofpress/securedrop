@@ -11,16 +11,6 @@
     name: wheel
   tags: pip
 
-- name: Install sass Ruby gem
-  gem:
-    name: sass
-    # TODO: This version lock can be removed when if/when we can get Ruby>2
-    # installed on the machine that runs this task (see
-    # https://github.com/freedomofpress/securedrop/issues/1594).
-    version: "3.4.23"
-    user_install: no
-  sudo: yes
-
 - name: Copy install_files/securedrop-app-code dir to build path.
   synchronize:
     src: ../securedrop-app-code/
@@ -40,18 +30,13 @@
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
-- name: Create CSS directory.
-  file:
-    state: directory
-    path: "{{ securedrop_code }}/static/css"
-
-- name: Compile SASS to CSS.
-  shell: "/usr/local/bin/sass --force --stop-on-error --update sass:{{ securedrop_code }}/static/css --style compressed"
-  args:
-    chdir: "{{ securedrop_code }}"
+- include: sass.yml
 
 - name: Create pip wheel archive for Debian package requirements.
-  command: pip wheel -r {{ securedrop_pip_requirements }} -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
+  command: >
+    pip wheel
+    -r {{ securedrop_code_filtered }}/requirements/securedrop-requirements.txt
+    -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
   tags: pip
 
 - name: Create apparmor.d directory in build path.

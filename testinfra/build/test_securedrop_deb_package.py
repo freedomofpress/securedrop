@@ -170,3 +170,6 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
         assert re.search("^.*\./var/www/securedrop/static/.webassets-cache/$", c.stdout, re.M)
         # static/.webassets-cache/ directory should be empty
         assert not re.search("^.*\./var/www/securedrop/static/.webassets-cache/.+$", c.stdout, re.M)
+
+        # no SASS files should exist; only the generated CSS files.
+        assert not re.search("^.*sass.*$", c.stdout, re.M)
