@@ -11,7 +11,7 @@ set -x
 PACKAGE_NAME="$1"
 BUILD_PATH="/tmp/build"
 SD_ARCH=${2:-amd64}
-PACKAGE_PATH="/tmp/src_install_files/$PACKAGE_NAME"
+PACKAGE_PATH="$BUILD_PATH/$PACKAGE_NAME"
 
 umask 022
 

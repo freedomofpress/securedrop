@@ -1,13 +1,10 @@
 ---
-- name: Create storage package script folder
-  file:
-    state: directory
-    path: /tmp/src_install_files/
-
 - name: Copy app code to build directory.
   synchronize:
-    src: "../{{ package_name }}"
-    dest: "/tmp/src_install_files/"
+    # All Debian package control files for FPF-maintained packages reside in
+    # `install_files/<package_name>` in the SecureDrop git repository.
+    src: "../{{ package_name }}/"
+    dest: "/tmp/build/{{ package_name }}/"
     recursive: yes
     delete: yes
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
