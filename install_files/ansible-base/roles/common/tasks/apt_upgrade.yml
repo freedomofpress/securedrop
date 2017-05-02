@@ -58,8 +58,8 @@
 - name: Wait for server to come back.
   local_action: wait_for
   args:
-    host: "{{ ansible_host if not amazon_builder else ansible_ec2_public_hostname }}"
-    port: "{{ ansible_port | default(22) }}"
+    host: "{{ inventory_hostname|default(ansible_ssh_host) }}"
+    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
     delay: 20
     search_regex: OpenSSH
     state: started
