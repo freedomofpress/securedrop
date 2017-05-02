@@ -9,10 +9,15 @@
     user_install: no
   sudo: yes
 
-- name: Create CSS directory.
+- name: Create static asset directories.
   file:
     state: directory
-    path: "{{ securedrop_code_filtered }}/static/css"
+    path: "{{ item }}"
+  with_items:
+    # The "CSS" file is required for the SASS -> CSS compilation.
+    - "{{ securedrop_code_filtered }}/static/css"
+    # The "gen" file is required for Flask-Assets server-side generation.
+    - "{{ securedrop_code_filtered }}/static/gen"
 
 - name: Copy app code SASS files to build directory.
   synchronize:
