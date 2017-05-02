@@ -14,10 +14,12 @@
     state: directory
     path: "{{ item }}"
   with_items:
-    # The "CSS" file is required for the SASS -> CSS compilation.
+    # The "CSS" directory is required for the SASS -> CSS compilation.
     - "{{ securedrop_code_filtered }}/static/css"
-    # The "gen" file is required for Flask-Assets server-side generation.
+    # The "gen" and ".webassets-cache" directories are required for Flask-Assets
+    # server-side generation. Only the empty directories are included in deb.
     - "{{ securedrop_code_filtered }}/static/gen"
+    - "{{ securedrop_code_filtered }}/static/.webassets-cache"
 
 - name: Copy app code SASS files to build directory.
   synchronize:
