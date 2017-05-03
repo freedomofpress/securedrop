@@ -66,7 +66,7 @@ credential:
    authentication.
 
 *Secure Viewing Station*
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The journalist will be using the *Secure Viewing Station* with Tails to
 decrypt and view submitted documents. The tasks performed by the

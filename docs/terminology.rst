@@ -9,7 +9,7 @@ define these terms.
 .. todo:: Pictures would be good for many of the objects defined here
 
 Application Server
-----------
+------------------
 
 The *Application Server* runs the SecureDrop application. This server hosts both
 the website that sources access (*Source Interface*) and the website that
@@ -31,7 +31,7 @@ submitting documents and communicating with journalists. This site is
 hosted on the *Application Server* and can only be accessed over Tor.
 
 Journalist Interface
-------------------
+--------------------
 
 The *Journalist Interface* is the website that journalists will access
 when downloading new documents and communicating with sources. This site

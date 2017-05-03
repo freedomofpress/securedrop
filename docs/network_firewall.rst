@@ -301,7 +301,7 @@ WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
 interface**, scroll down, and click the **Save** *and then* click Apply.
 
 Assign a static IP address to the *Admin Workstation*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now you will need to assign a static IP to the *Admin Workstation*. Use
 the *Admin Workstation* that you selected earlier, and make sure you

@@ -14,7 +14,7 @@ Important Changes
 -----------------
 
 Journalist Interface Port Change
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To make accessing the journalist interface easier for new users, the
 Journalist Interface port for the onion address has been changed from

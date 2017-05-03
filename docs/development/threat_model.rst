@@ -56,7 +56,7 @@ Assumptions about the source's computer
 -  The computer is not compromised by malware.
 
 Assumptions about the *Admin Workstation* and the Journalist Workstation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer correctly executes Tails.
 -  The computer and the Tails device are not compromised by malware.
@@ -64,7 +64,7 @@ Assumptions about the *Admin Workstation* and the Journalist Workstation
    not compromised by malware.
 
 Assumptions about the *Secure Viewing Station*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The computer is airgapped.
 -  The computer correctly executes Tails.
@@ -107,7 +107,7 @@ Attack Scenarios
 ----------------
 
 What the *Application Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The server sees the plaintext codename, used as the login identifier,
    of every source.
@@ -134,7 +134,7 @@ What the *Application Server* can achieve
    passphrase.
 
 What the *Monitor Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The server stores the plaintext alerts on disk, data may also reside
    in RAM.
@@ -365,7 +365,7 @@ What a physical seizure of the journalist's property can achieve
    device will allow the attacker to access the Journalist Interface.
 
 What a compromise of the *Application Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  If the *Application Server* is compromised, the system user the
    attacker has control over defines what kind of information the
@@ -409,7 +409,7 @@ What a compromise of the *Application Server* can achieve
       attacker has access to the encryption key required to do so.
 
 What a physical seizure of the *Application Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  If the *Application Server* is seized, the attacker will be able to
    view any and all unencrypted files on the server. This includes all
@@ -419,7 +419,7 @@ What a physical seizure of the *Application Server* can achieve
    the hardware.
 
 What a compromise of the *Monitor Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  If the *Monitor Server* is compromised, the system user the attacker
    has control over defines what kind of information the attacker will
@@ -446,7 +446,7 @@ What a compromise of the *Monitor Server* can achieve
       to the encryption key required to do so.
 
 What a physical seizure of the *Monitor Server* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  If the *Monitor Server* is seized, the attacker will be able to view
    any and all unencrypted files on the server. This includes all files
@@ -455,7 +455,7 @@ What a physical seizure of the *Monitor Server* can achieve
    RAM. The attacker can also tamper with the hardware.
 
 What a compromise of the *Secure Viewing Station* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker
@@ -473,7 +473,7 @@ What a compromise of the *Secure Viewing Station* can achieve
       submissions--if the Transfer device is in use.
 
 What a physical seizure of the *Secure Viewing Station* can achieve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  The *Secure Viewing Station* is only useful to an attacker while
    powered on and with the Tails persistent volume mounted. The attacker

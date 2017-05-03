@@ -1,5 +1,5 @@
 Create an admin account on the Journalist Interface
-=================================================
+===================================================
 
 In order for any user (administrator or journalist) to access the
 Journalist Interface, they need:

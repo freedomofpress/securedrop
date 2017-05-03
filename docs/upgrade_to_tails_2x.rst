@@ -182,7 +182,7 @@ unplugging and remounting the Tails device you're trying to upgrade.
 .. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
 
 5. Re-install the automatic Tails configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
           USBs. If you are upgrading the *Secure Viewing Station* Tails USB, you
@@ -192,7 +192,7 @@ Shut down the Tails USB on the airgapped computer and move it to the computer
 you normally use it on. Boot into each newly upgraded Tails USB, enabling
 persistence, and setting a root password. Confirm that the persistent files are
 present on the upgraded Tails USB. If they are not, or something else went
-wrong, see :ref:`Troubleshooting <troubleshooting>`.
+wrong, see :ref:`Troubleshooting <troubleshooting_tails_2x_upgrade>`.
 
 Now that you have successfully upgraded to Tails 2.x with your persistence
 intact, the final step is to re-install the Tails automatic configuration from
@@ -294,7 +294,7 @@ reformat it appropriately.
           smash the device with a hammer until the chips containing its flash
           memory are broken up, then dispose of the pieces in the garbage.
 
-.. _troubleshooting:
+.. _troubleshooting_tails_2x_upgrade:
 
 Troubleshooting
 ---------------
