@@ -8,7 +8,7 @@ Both servers
 - iptables: ``/var/log/syslog``
 
 *Application Server*
-----------
+--------------------
 
 - Apache: ``/var/log/apache2/*``
 
@@ -16,7 +16,7 @@ If an event triggers it's in the SecureDrop application log:
 ``/var/www/securedrop/securedrop.log``
 
 *Monitor Server*
---------------
+----------------
 
 - OSSEC ::
 

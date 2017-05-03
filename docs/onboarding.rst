@@ -25,7 +25,7 @@ In order to use SecureDrop, each journalist needs two things:
      access to a *Secure Viewing Station*.
 
 Determine access protocol for the *Secure Viewing Station*
---------------------------------------------------------
+----------------------------------------------------------
 
 Currently, SecureDrop only supports encrypting submissions to a single
 public/private key pair - the *SecureDrop Submission Key*. As a

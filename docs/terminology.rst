@@ -9,7 +9,7 @@ define these terms.
 .. todo:: Pictures would be good for many of the objects defined here
 
 Application Server
-----------
+------------------
 
 The *Application Server* runs the SecureDrop application. This server hosts both
 the website that sources access (*Source Interface*) and the website that

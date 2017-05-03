@@ -200,7 +200,7 @@ Specific Hardware Recommendations
 ---------------------------------
 
 Application and Monitor Servers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Intel NUC (Next Unit of Computing) is a capable, cheap, quiet, and
 low-powered device that can be used for the SecureDrop servers. There
@@ -263,7 +263,7 @@ insert the cards into the NUC before it can be used. We recommend:
 	  suspend in the BIOS as well as OS options like "wake on LAN".
 
 *Secure Viewing Station* (*SVS*)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *Secure Viewing Station* is a machine that is kept offline and only
 ever used together with the Tails operating system. This machine will be

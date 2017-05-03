@@ -63,7 +63,7 @@ journalists see is different than the codename that sources see.**
 |Journalist Interface|
 
 Move Documents to the *Secure Viewing Station*
---------------------------------------------
+----------------------------------------------
 
 You will only be able to view the documents the source has sent you on
 the *Secure Viewing Station*. After clicking on an individual source
@@ -110,7 +110,7 @@ on the file, and then click "Wipe" to securely wipe the file from your
 device.
 
 Decrypt and work on the *Secure Viewing Station*
-----------------------------------------------
+------------------------------------------------
 
 To decrypt documents, return to your Persistent folder and double-click
 on zipped file folder. After you extract the files, click on each file
