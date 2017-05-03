@@ -17,6 +17,7 @@ Automated Testing
 
 When a pull request is submitted, we have Travis CI automatically run the
 SecureDrop test suites, which consist of:
+
   #. Unit tests of the Python SecureDrop application code.
   #. Functional tests that use Selenium to drive a web browser to verify the
      function of the application from the user's perspective.
