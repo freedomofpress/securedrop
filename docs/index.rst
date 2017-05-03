@@ -30,7 +30,7 @@ anonymous sources.
    hardware
    before_you_begin
    set_up_tails
-   set_up_*SVS*
+   set_up_svs
    set_up_dtd
    generate_securedrop_application_key
    set_up_admin_tails
