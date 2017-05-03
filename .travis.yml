@@ -35,7 +35,10 @@ script:
 - sudo chown root:root securedrop/config.py
 - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
 - ./testinfra/test.py
-- cd docs && make clean && sphinx-build -Wn . _build/html && cd .. # docs linting
+  # Docs linting. Performing this step *after* build VM tests pass, so as not
+  # to alter the pip requirements, which would cause config tests to fail.
+- pip install sphinx sphinx_rtd_theme
+- cd docs && make clean && sphinx-build -Wn . _build/html && cd -
 after_success:
   cd securedrop/ && coveralls && cd ../  # cd back to repo root for srcclr run
 addons:
