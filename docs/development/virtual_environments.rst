@@ -117,12 +117,12 @@ If you want to receive OSSEC alerts or change any other settings, you will need
 to fill out your local copy of
 ``./install_files/ansible-base/staging-specific.yml``.
 
-You should first provision the VM required for building the app code
+You should first bring up the VM required for building the app code
 Debian packages on the staging machines:
 
 .. code:: sh
 
-   vagrant up build
+   vagrant up --no-provision build
    vagrant up /staging/
    vagrant ssh app-staging
    sudo su
