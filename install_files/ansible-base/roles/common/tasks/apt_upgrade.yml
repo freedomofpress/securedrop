@@ -58,7 +58,7 @@
 - name: Wait for server to come back.
   local_action: wait_for
   args:
-    host: "{{ inventory_hostname|default(ansible_ssh_host) }}"
+    host: "{{ ansible_ssh_host|default(inventory_hostname) }}"
     port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
     delay: 20
     search_regex: OpenSSH
