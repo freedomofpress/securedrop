@@ -12,11 +12,11 @@ locked down, and able to accept updates to the app code.
 Configuration Tests
 -------------------
 
-testinfra_ tests verify the end state of the vagrant machines. Any
+Testinfra_ tests verify the end state of the Vagrant machines. Any
 changes to the Ansible configuration should have a corresponding
 spectest.
 
-.. _testinfra: https://testinfra.readthedocs.io/en/latest/
+.. _Testinfra: https://testinfra.readthedocs.io/en/latest/
 
 Installation
 ^^^^^^^^^^^^
