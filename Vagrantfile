@@ -151,21 +151,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # VM for testing Snap CI configuration changes.
-  # All SecureDrop instances use Ubuntu 64-bit LTS,
-  # but Snap CI uses CentOS. See here for more config info:
-  # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
-  config.vm.define 'snapci', autostart: false do |snapci|
-    snapci.vm.hostname = "snapci"
-    snapci.vm.box = "puppetlabs/centos-6.6-64-nocm"
-    snapci.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
-      ansible.verbose = 'v'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-  end
-
-
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")
   #  config.cache.scope = :box

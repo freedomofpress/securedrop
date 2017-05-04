@@ -1,3 +1,0 @@
----
-mon_ssh_aths: "{{ lookup('file', 'mon-ssh-aths')  }}"
-app_ssh_aths: "{{ lookup('file', 'app-ssh-aths')  }}"
