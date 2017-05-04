@@ -1,0 +1,8 @@
+ansible>=2.2,<2.3
+boto
+pip-tools
+pytest-xdist
+testinfra
+sphinx
+sphinx-autobuild
+sphinx_rtd_theme
