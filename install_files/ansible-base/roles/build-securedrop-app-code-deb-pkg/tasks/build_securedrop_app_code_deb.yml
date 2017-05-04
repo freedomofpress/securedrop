@@ -4,106 +4,60 @@
     pkg: "{{ item }}"
     state: latest
   with_items: "{{ development_dependencies }}"
-  tags:
-    - apt
+  tags: apt
 
 - name: Install pip wheel.
   pip:
     name: wheel
-  tags:
-    - pip
-
-- name: Install sass Ruby gem
-  gem:
-    name: sass
-    # TODO: This version lock can be removed when if/when we can get Ruby>2
-    # installed on the machine that runs this task (see
-    # https://github.com/freedomofpress/securedrop/issues/1594).
-    version: "3.4.23"
-    user_install: no
-  sudo: yes
-  tags:
-    - build
-
-- name: Clean build path.
-  file:
-    path: /tmp/{{ securedrop_app_code_deb }}/
-    state: absent
-  tags:
-    - build
-    - cleanup
-
-- name: Clean Debian package from build machine.
-  file:
-    state: absent
-    dest: /tmp/{{ securedrop_app_code_deb }}.deb
-  tags:
-    - build
-    - cleanup
+  tags: pip
 
 - name: Copy install_files/securedrop-app-code dir to build path.
-  command: cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
-  args:
-    creates: /tmp/{{ securedrop_app_code_deb }}/
-  tags:
-    - build
+  synchronize:
+    src: ../securedrop-app-code/
+    dest: "{{ securedrop_app_code_deb_dir }}"
+    delete: yes
+    recursive: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
 
-- name: Add rsync-filter for additively including files.
-  copy:
-    src: rsync-filter
-    dest: /tmp/rsync-filter
+- debug: var=securedrop_code
 
 - name: Copy app code to build directory.
-  command: >
-    rsync -avPh {{ securedrop_code }}/ /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop
-    --filter "merge /tmp/rsync-filter"
-    --chown root:root
-  tags:
-    - build
+  synchronize:
+    src: ../../securedrop/
+    dest: "{{ securedrop_code_filtered }}"
+    recursive: yes
+    delete: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
-- name: Create CSS directory.
-  file:
-    state: directory
-    path: /tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css
-  tags:
-    - build
-
-- name: Compile SASS to CSS.
-  shell: sass --force --stop-on-error --update sass:/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/static/css --style compressed
-  args:
-    chdir: "{{ securedrop_code }}"
-  tags:
-    - build
+- include: sass.yml
 
 - name: Create pip wheel archive for Debian package requirements.
-  command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
-  tags:
-    - pip
-    - build
+  command: >
+    pip wheel
+    -r {{ securedrop_code_filtered }}/requirements/securedrop-requirements.txt
+    -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
+  tags: pip
 
 - name: Create apparmor.d directory in build path.
   file:
     state: directory
-    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d
-  tags:
-    - build
-    - apparmor
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/apparmor.d"
+  tags: apparmor
 
 - name: Copy AppArmor profiles to build path.
   copy:
     src: "{{ item }}"
-    dest: /tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/apparmor.d/{{ item }}"
   with_items: "{{ apparmor_profiles }}"
-  tags:
-    - build
-    - apparmor
+  tags: apparmor
 
 - name: Build securedrop-app-code Debian package.
-  command: dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
-  tags:
-    - build
+  command: dpkg-deb --build {{ securedrop_app_code_deb_dir }}
 
-- name: Move the deb to the Vagrant shared folder.
-  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
-  tags:
-    - build
+- name: Fetch newly built Debian packages back to localhost.
+  fetch:
+    src: "{{ securedrop_app_code_deb_dir }}.deb"
+    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
+    flat: yes
+    fail_on_missing: yes

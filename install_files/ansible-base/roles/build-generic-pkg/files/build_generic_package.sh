@@ -4,13 +4,14 @@
 ##  ./build_package.sh securedrop-ossec-agent
 
 
+set -u
 set -e
 set -x
 
+PACKAGE_NAME="$1"
 BUILD_PATH="/tmp/build"
 SD_ARCH=${2:-amd64}
-PACKAGE_NAME="$1"
-PACKAGE_PATH="/vagrant/install_files/$PACKAGE_NAME"
+PACKAGE_PATH="$BUILD_PATH/$PACKAGE_NAME"
 
 umask 022
 
@@ -31,8 +32,8 @@ build_generic() {
 
     # Create the deb package
     dpkg-deb --build $BUILD_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /vagrant/build
+    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /tmp
 }
 
-build_generic $PACKAGENAME $PACKAGEPATH
+build_generic $PACKAGE_NAME $PACKAGE_PATH
 exit 0

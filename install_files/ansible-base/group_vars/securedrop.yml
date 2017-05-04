@@ -53,3 +53,6 @@ sysctl_flags:
 ossec_group: ossec
 grsecurity: true
 install_local_packages: false
+
+# Establish if we are in CI environment
+amazon_builder: "{{ true if 'amazon' in ansible_product_version else false }}"

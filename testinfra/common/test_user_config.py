@@ -71,5 +71,10 @@ def test_sudoers_tmux_env_deprecated(File):
     update that applies to all users. Let's make sure that the
     old setting isn't still active.
     """
-    f = File("/home/vagrant/.bashrc")
+
+    admin_user = "vagrant"
+    if os.environ.get("FPF_CI", None):
+        admin_user = os.environ["USER"]
+
+    f = File("/home/{}/.bashrc".format(admin_user))
     assert not f.contains("^. \/etc\/bashrc\.securedrop_additions$")

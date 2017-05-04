@@ -48,5 +48,6 @@
   async: 0
   poll: 0
   when: ossec_agent_already_registered == false
+  notify: restart ossec-server
   tags:
     - ossec_auth

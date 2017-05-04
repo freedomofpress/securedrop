@@ -7,12 +7,12 @@ from jinja2 import Template
 securedrop_test_vars = pytest.securedrop_test_vars
 
 
-def test_app_iptables_rules(SystemInfo, Command, Sudo, Ansible):
+def test_app_iptables_rules(SystemInfo, Command, Sudo):
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
         mon_ip=securedrop_test_vars.mon_ip,
-        default_interface = Ansible("setup")["ansible_facts"]["ansible_default_ipv4"]["interface"],
+        default_interface = Command.check_output("ip r | head -n 1 | awk '{ print $5 }'"),
         tor_user_id = Command.check_output("id -u debian-tor"),
         securedrop_user_id = Command.check_output("id -u www-data"),
         ssh_group_gid = Command.check_output("getent group ssh | cut -d: -f3"),
@@ -20,9 +20,10 @@ def test_app_iptables_rules(SystemInfo, Command, Sudo, Ansible):
 
     # Build iptables scrape cmd, purge comments + counters
     iptables = "iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
-    iptables_file = "{}/iptables-{}.j2".format(
+    environment = os.environ.get("CI_SD_ENV")
+    iptables_file = "{}/iptables-app-{}.j2".format(
                                       os.path.dirname(os.path.abspath(__file__)),
-                                      SystemInfo.hostname)
+                                      environment)
 
     # template out a local iptables jinja file
     jinja_iptables = Template(open(iptables_file,'r').read())

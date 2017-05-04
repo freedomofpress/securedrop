@@ -28,8 +28,8 @@ def test_apparmor_apache_capabilities(Command, cap):
 
 def test_apparmor_apache_exact_capabilities(Command):
     """ ensure no extra capabilities are defined for apache2 """
-    c = Command("grep -ic capability /etc/apparmor.d/usr.sbin.apache2")
-    assert str(len(apache2_capabilities)) == c.stdout
+    c = Command.check_output("grep -ic capability /etc/apparmor.d/usr.sbin.apache2")
+    assert str(len(apache2_capabilities)) == c
 
 tor_capabilities = ['setgid']
 @pytest.mark.parametrize('cap', tor_capabilities)
@@ -40,8 +40,8 @@ def test_apparmor_tor_capabilities(Command, cap):
 
 def test_apparmor_apache_exact_capabilities(Command):
     """ ensure no extra capabilities are defined for tor """
-    c = Command("grep -ic capability /etc/apparmor.d/usr.sbin.tor")
-    assert str(len(tor_capabilities)) == c.stdout
+    c = Command.check_output("grep -ic capability /etc/apparmor.d/usr.sbin.tor")
+    assert str(len(tor_capabilities)) == c
 
 enforced_profiles = [
         'ntpd',

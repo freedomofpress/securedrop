@@ -96,8 +96,8 @@
 - name: Wait for server to come back.
   local_action:
     module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port }}
+      host={{ ansible_host }}
+      port={{ ansible_port | default('22')}}
       delay=45
       state=started
   sudo: false

@@ -10,6 +10,5 @@ def test_ip6tables_drop_everything(Command, Sudo):
 """.lstrip().rstrip()
 
     with Sudo():
-        c = Command("ip6tables -S")
-        assert c.stdout == desired_ip6tables_output
-        assert c.rc == 0
+        c = Command.check_output("ip6tables -S")
+        assert c == desired_ip6tables_output

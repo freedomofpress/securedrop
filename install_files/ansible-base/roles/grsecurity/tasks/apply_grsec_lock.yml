@@ -11,27 +11,16 @@
   tags:
     - reboot
 
-  # If grsec wasn't already running, wait for the host to come back up
-  # after rebooting. The Ansible variable {{ ansible_ssh_host }} refers
-  # to the host just rebooted, and this syntax will work in production,
-  # vagrant/virtualbox, and snap-ci environments.
 - name: Wait for server to come back.
-  local_action:
-    module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port }}
-      delay=45
-      state=started
+  local_action: wait_for
+  args:
+    host: "{{ ansible_ssh_host|default(inventory_hostname) }}"
+    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
+    delay: 45
+    search_regex: OpenSSH
+    state: started
   when: not running_grsec.stat.exists
-  # Local wait action, doesn't require sudo privileges,
-  # `wait_for` essentially means "do nothing for a while."
-  # Since the top-level playbook (e.g. securedrop-prod.yml)
-  # sets `sudo: true`, the sudo parameter must be explicitly
-  # overridden on a per-task basis. If sudo remains true
-  # for this task, Ansible will prompt for the sudo password
-  # of the host machine (i.e. the machine running the playbook)
-  # in order to proceed. This would be annoying and is
-  # completely unnecessary for a simple wait action.
+  # Wait action runs on localhost, and does NOT require sudo.
   sudo: false
   tags:
     - reboot
