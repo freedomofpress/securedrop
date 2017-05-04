@@ -78,7 +78,7 @@ anonymous sources.
    development/contributor_guidelines
    development/tips_and_tricks
    development/documentation_guidelines
-   development/config_tests
+   development/testing_securedrop
    development/apt_repo
    development/apparmor_profiles
    development/threat_model
