@@ -36,9 +36,9 @@ machines for faster testing:
 
 .. code:: sh
 
-    $ ./testinfra/test.py development
-    $ ./testinfra/test.py app-staging
-    $ ./testinfra/test.py mon-staging
+    ./testinfra/test.py development
+    ./testinfra/test.py app-staging
+    ./testinfra/test.py mon-staging
 
 .. note:: The config tests for the ``app-prod`` and ``mon-prod`` hosts are
           incomplete. Further changes are necessary to run the tests via

@@ -15,20 +15,20 @@ To get started editing the docs:
 
    .. code:: sh
 
-      $ pip install -r securedrop/requirements/develop-requirements.txt
+      pip install -r securedrop/requirements/develop-requirements.txt
 
 #. Clone the SecureDrop repository:
 
    .. code:: sh
 
-      $ git clone https://github.com/freedomofpress/securedrop.git
-      $ cd securedrop/docs
+      git clone https://github.com/freedomofpress/securedrop.git
+      cd securedrop/docs
 
 #. Build the docs and open the index page in your web browser:
 
    .. code:: sh
 
-      $ sphinx-autobuild . _build/html
+      sphinx-autobuild . _build/html
 
 You can then can browse the documentation at http://127.0.0.1:8000/.
 As you make changes, the docs will automatically rebuild in the browser
@@ -40,7 +40,7 @@ build artifacts and re-building the docs from scratch:
 
 .. code:: sh
 
-   $ make clean && sphinx-autobuild . _build/html
+   make clean && sphinx-autobuild . _build/html
 
 Integration with Read the Docs
 ------------------------------

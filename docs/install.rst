@@ -13,8 +13,8 @@ Tor. Once that's done, you can install Ansible:
 
 .. code:: sh
 
-    $ sudo apt-get update
-    $ sudo apt-get install ansible
+    sudo apt-get update
+    sudo apt-get install ansible
 
 Configure the Installation
 --------------------------
@@ -45,7 +45,7 @@ continuing:
 From the base of the SecureDrop repo, change into the ``ansible-base``
 directory: ::
 
-    $ cd install_files/ansible-base
+    cd install_files/ansible-base
 
 You will have to copy the following required files to
 ``install_files/ansible-base``:
@@ -59,7 +59,7 @@ Device* from earlier. It will depend on the location where the USB stick
 is mounted, but for example, if you are already in the ansible-base
 directory, you can just run: ::
 
-    $ cp /media/[USB folder]/SecureDrop.asc .
+    cp /media/[USB folder]/SecureDrop.asc .
 
 Or you may use the copy and paste capabilities of the file manager.
 Repeat this step for the Admin GPG key and custom header image.
@@ -122,7 +122,7 @@ the servers and install SecureDrop and all of its dependencies.
 installation, and should be the same user you copied the SSH public keys
 to. ::
 
-    $ ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
+    ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
 
 You will be prompted to enter the sudo password for the app and monitor
 servers (which should be the same).
