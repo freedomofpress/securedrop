@@ -78,6 +78,23 @@ Try to keep your lines wrapped to near 80 characters when editing the docs.
 Some exceptions are warranted, such as complex code blocks showing example
 commands, or long URLs, but in general the docs should be tightly wrapped.
 
+Ensure that example commands in codeblocks are easily copy/pasteable.
+Do not prepend the ``$`` shell prompt indicator to example commands:
+
+  .. code::
+
+     echo hello
+
+In the context of a terminal session, with both typed commands and printed
+output text, then use ``$``, but only on the typed command lines:
+
+  .. code::
+
+     $ echo hello
+     hello
+     $ echo sunshine
+     sunshine
+
 Use absolute paths when referring to files outside the SecureDrop repository.
 Exceptions made for when it's clear from the surrounding context what the
 intended working directory is. For files inside the SecureDrop directory,
