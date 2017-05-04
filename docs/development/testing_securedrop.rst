@@ -1,5 +1,16 @@
+Testing SecureDrop
+==================
+
+The SecureDrop project ships both application code for running on servers
+hosted on-site at news organizations, as well as configuration scripts
+for provisioning the servers to accept updates to the application code,
+and to harden the system state. Therefore testing for the project includes
+**Application Tests** for validating that the app code behaves as expected,
+and **Configuration Tests** to ensure that the servers are appropriately
+locked down, and able to accept updates to the app code.
+
 Configuration Tests
-===================
+-------------------
 
 testinfra_ tests verify the end state of the vagrant machines. Any
 changes to the Ansible configuration should have a corresponding
@@ -8,14 +19,14 @@ spectest.
 .. _testinfra: https://testinfra.readthedocs.io/en/latest/
 
 Installation
-------------
+^^^^^^^^^^^^
 
 .. code:: sh
 
     pip install -r securedrop/requirements/develop-requirements.txt
 
-Running the tests
------------------
+Running the config tests
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to run the tests, first create and provision the VM you intend
 to test:
@@ -49,8 +60,8 @@ Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. The wrapper script
 will also exit with a non-zero status code.
 
-Updating the tests
-------------------
+Updating the config tests
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Changes to the Ansible config should result in failing config tests, but
 only if an existing task was modified. If you add a new task, make
@@ -85,7 +96,7 @@ In the example above, to add a new test for the ``app-staging`` host,
 add a new file to the ``testinfra/spec/app-staging`` directory.
 
 Config test layout
-------------------
+^^^^^^^^^^^^^^^^^^
 
 The config tests are mostly broken up according to machines in the
 Vagrantfile: ::
@@ -103,8 +114,8 @@ mirroring the Ansible configuration. Prior to the reorganization of
 the Ansible layout, the tests are rather tightly coupled to hosts. The
 layout of config tests is therefore subject to change.
 
-Testing strategy
-----------------
+Config testing strategy
+^^^^^^^^^^^^^^^^^^^^^^^
 
 The config tests currently emphasize testing implementation rather than
 functionality. This is a temporary measure to increase the current testing
