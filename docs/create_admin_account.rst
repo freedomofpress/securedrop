@@ -33,9 +33,9 @@ To create the first admin account, SSH to the *Application Server*, then:
 
 .. code:: sh
 
-   $ sudo su
-   $ cd /var/www/securedrop
-   $ ./manage.py add-admin
+   sudo su
+   cd /var/www/securedrop
+   ./manage.py add-admin
 
 Follow the prompts.
 
