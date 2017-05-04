@@ -15,7 +15,7 @@ To get started editing the docs:
 
    .. code:: sh
 
-      $ pip install sphinx sphinx-autobuild sphinx_rtd_theme
+      $ pip install -r securedrop/requirements/develop-requirements.txt
 
 #. Clone the SecureDrop repository:
 

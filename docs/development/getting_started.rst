@@ -81,7 +81,7 @@ Ansible. Using `virtualenvwrapper
     sudo apt-get install virtualenvwrapper
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
     mkvirtualenv -p /usr/bin/python2 securedrop
-    pip install -U ansible==1.8.4
+    pip install -r securedrop/requirements/develop-requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
@@ -110,7 +110,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
     pip install -U virtualenvwrapper
     source /usr/local/bin/virtualenvwrapper.sh
     mkvirtualenv -p python2 securedrop
-    pip install -U ansible==1.8.4
+    pip install -r securedrop/requirements/develop-requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
