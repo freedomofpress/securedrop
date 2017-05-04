@@ -22,3 +22,9 @@ ci-test:
 .PHONY: ci-debug
 ci-debug:
 	touch ${HOME}/.FPF_CI_DEBUG
+
+.PHONY: docs-lint
+docs-lint:
+# The `-W` option converts warnings to errors.
+# The `-n` option enables "nit-picky" mode.
+	make -C docs/ clean && sphinx-build -Wn docs/ docs/_build/html
