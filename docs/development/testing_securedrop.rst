@@ -9,6 +9,9 @@ and to harden the system state. Therefore testing for the project includes
 and **Configuration Tests** to ensure that the servers are appropriately
 locked down, and able to accept updates to the app code.
 
+
+.. _config_tests:
+
 Configuration Tests
 -------------------
 
