@@ -40,6 +40,14 @@ Tor Browser.
 .. _Selenium: http://docs.seleniumhq.org/docs/
 .. _Coveralls: https://github.com/coveralls-clients/coveralls-python
 
+Installation
+^^^^^^^^^^^^
+
+The application tests are installed automatically in the Development
+and App-Staging VMs, based on the contents of
+``securedrop/requirements/test-requirements.txt``.
+If you wish to change the dependencies, see :ref:`updating_pip_dependencies`.
+
 
 .. _config_tests:
 
