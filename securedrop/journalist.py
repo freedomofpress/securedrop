@@ -213,16 +213,20 @@ def admin_new_user_two_factor():
 
     if request.method == 'POST':
         token = request.form['token']
-        if user.verify_token(token):
-            flash(
-                "Two factor token successfully verified for user {}!".format(
-                    user.username),
-                "notification")
-            return redirect(url_for("admin_index"))
-        else:
+        try:
+            if user.verify_token(token):
+                flash(
+                    "Two factor token successfully verified for user {}!".format(
+                        user.username),
+                    "notification")
+                return redirect(url_for("admin_index"))
+            else:
+                flash("Two factor token failed to verify", "error")
+        except BadTokenException:
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
 
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
