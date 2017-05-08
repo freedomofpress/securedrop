@@ -190,8 +190,9 @@ def admin_add_user():
                         Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
                     ), "error")
             except IntegrityError as e:
+                db_session.rollback()
                 form_valid = False
-                if "username is not unique" in str(e):
+                if "UNIQUE constraint failed: journalists.username" in str(e):
                     flash("That username is already in use",
                           "error")
                 else:
