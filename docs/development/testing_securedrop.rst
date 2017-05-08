@@ -9,6 +9,37 @@ and to harden the system state. Therefore testing for the project includes
 and **Configuration Tests** to ensure that the servers are appropriately
 locked down, and able to accept updates to the app code.
 
+Application Tests
+-------------------
+
+The application test suite uses:
+
+  * Pytest_
+  * Selenium_
+  * Coveralls_
+
+The functional tests use an outdated version of Firefox chosen specifically
+for compatibility with Selenium, and a rough approximation of the most recent
+Tor Browser.
+
+.. note:: We're working on running the Selenium tests in Tor Browser.
+          See `GitHub #1629`_ for more info.
+
+.. _`GitHub #1629`: https://github.com/freedomofpress/securedrop/pull/1629
+
+.. todo:: Flesh out explanation of the application tests. Decide what's
+          important for devs to know; at a high-level, organization could be:
+
+            * Installation
+            * Running the application tests
+            * any relevant info on editing them
+
+          which matches the layout used for the Config tests.
+
+.. _Pytest: https://docs.pytest.org/en/latest/
+.. _Selenium: http://docs.seleniumhq.org/docs/
+.. _Coveralls: https://github.com/coveralls-clients/coveralls-python
+
 
 .. _config_tests:
 
