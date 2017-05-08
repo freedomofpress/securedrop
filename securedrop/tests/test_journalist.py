@@ -97,7 +97,6 @@ class TestJournalistApp(TestCase):
                                                          "Edit Account")
         self.assertIn(edit_account_link, resp.data)
 
-
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
         resp = self.client.post(url_for('login'),
                                data=dict(username=self.admin.username,
@@ -217,6 +216,15 @@ class TestJournalistApp(TestCase):
                                           password_again='thesame',
                                           is_admin=False))
         self.assertIn('Passwords didn', resp.data)
+
+    def test_admin_add_user_when_username_already_in_use(self):
+        self._login_admin()
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username=self.admin.username,
+                                          password='testtesttest',
+                                          password_again='testtesttest',
+                                          is_admin=False))
+        self.assertIn('That username is already in use', resp.data)
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
