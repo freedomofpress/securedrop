@@ -26,6 +26,7 @@ import config
 import crypto_util
 import store
 
+
 LOGIN_HARDENING = True
 # Unfortunately, the login hardening measures mess with the tests in
 # non-deterministic ways.  TODO rewrite the tests so we can more
@@ -348,7 +349,7 @@ class Journalist(Base):
 
         # Only allow each authentication token to be used once. This
         # prevents some MITM attacks.
-        if token == self.last_token and LOGIN_HARDENING:
+        if token == self.last_token:
             raise BadTokenException("previously used token {}".format(token))
         else:
             self.last_token = token
