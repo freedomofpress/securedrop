@@ -81,6 +81,7 @@ anonymous sources.
    development/testing_securedrop
    development/testing_application_tests
    development/testing_configuration_tests
+   development/testing_continuous_integration
    development/apt_repo
    development/apparmor_profiles
    development/threat_model
