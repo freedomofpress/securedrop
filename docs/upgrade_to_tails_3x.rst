@@ -4,30 +4,30 @@ Upgrade Tails from 2.x to 3.x
 Why you should upgrade
 ----------------------
 
-Starting with SecureDrop version 0.4, we require users update to Tails
-version 3.0 or later. Upgrading Tails from 2.x to 3.x must be done manually.
-Please follow this guide to updating each Tails USB stick used in your
-SecureDrop instance.
+Starting with SecureDrop version 0.4, we require users update to Tails version
+3.0 or later. Upgrading Tails from 2.x to 3.x must be done manually. This guide
+will show you how to upgrade each Tails USB stick used your SecureDrop instance.
 
 What you need
 -------------
 
-  #. Your *existing SecureDrop Tails USB sticks* (Admin, Journalist, and Secure
-     Viewing Station).
-  #. An *airgapped machine* to perform the Tails upgrades. It is ok to reuse
-     the *Secure Viewing Station* for this task.
+  #. Your *existing SecureDrop Tails USB sticks* (*Admin Workstation*,
+     *Journalist Workstation*, and *Secure Viewing Station*).
+  #. An *airgapped machine* to perform the Tails upgrades. The *Secure Viewing
+     Station* may be used for this task.
   #. Two USB drives: one to create a new master Tails 3.x USB and one to backup
      the data on your current SecureDrop Tails USB sticks.
 
   .. warning::
-             An airgapped machine (such as the *SVS*) is required in order to
-             perform these upgrades safely. By isolating the machine from all
-             network access, you reduce the exposure of sensitive data to
-             networked computers, thereby reducing the threat of compromise by
-             adversaries who wish to gain access to your SecureDrop instance.
+             An airgapped machine (such as the *Secure Viewing Station*) is
+             required in order to perform these upgrades safely. By isolating
+             the machine from all network access, you reduce the exposure of
+             sensitive data to networked computers, thereby reducing the threat
+             of compromise by adversaries who wish to gain access to your
+             SecureDrop instance.
 
 The airgapped machine should have 3 USB ports, so you can plug in the Tails
-drive you wish to upgrade, the *master Tails USB* drive, and the *Backup drive*
+drive you wish to upgrade, the *master Tails USB* drive, and the *backup drive*
 at the same time. If you don't have 3 USB ports available, you can use a USB
 hub, which may reduce transfer speeds.
 
@@ -52,18 +52,21 @@ In Tails 3.x, you do this by clicking the **+** button, then navigating to
 --------------------------
 
 .. note::
-        The steps in this section should be performed for each *Secure
-        Viewing Station*, *Journalist*, and *Admin* USB drive in your organization.
 
-First you should backup the data on the drive in case something goes wrong.
+        The steps in this section should be performed for each *Secure Viewing
+        Station*, *Journalist Workstation*, and *Admin Workstation* USB drive in
+        your organization.
+
+Before you upgrade your Tails drives, you should backup the data in case
+something goes wrong.
 
 Navigate to **Applications** ▸ **Utilities** ▸ **Disks**.
 
 |Applications Utilities Disks|
 
-Insert the USB you wish to use as a backup drive.
+Insert the USB drive you wish to use as a backup drive.
 
-Select the disk from the list of drives in the left column.
+Select the drive from the list of drives in the left column.
 
 |Select the Disk|
 
@@ -145,9 +148,9 @@ USB drive, unmount the Backup partition and store the drive somewhere safely.
 ---------------------------
 
 .. note::
-        The steps in this section should be performed for each *Secure
-        Viewing Station*, *Journalist*, and *Admin* USB drive in your
-        organization.
+        The steps in this section should be performed for each *Secure Viewing
+        Station*, *Journalist Workstation*, and *Admin Workstation* USB drive in
+        your organization.
 
 Next you will upgrade each drive.
 
@@ -188,8 +191,8 @@ Once complete, you should see a success message:
 4. Verify the Upgrades
 ----------------------
 
-Verify the Journalist and SVS USB Drives Successfully Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Verify the Journalist Workstation and SVS USB Drives Are Successfully Updated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To test these two drives, run through the following test procedure:
 
@@ -203,8 +206,8 @@ To test these two drives, run through the following test procedure:
 If you are able to successfully download and decrypt your test submission, then
 your upgrade was successful!
 
-Verify the Administrator USB Drive Successfully Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Verify the Administrator Workstation USB Drive Was Successfully Updated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ensure that you are able to SSH into both servers. Remember you can use the
 following shortcuts:
