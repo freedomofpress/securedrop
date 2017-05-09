@@ -47,7 +47,7 @@ The relevant files for configuring the CI tests are: ::
 
 The files under ``devops/`` are used to create a minimized staging environment
 on AWS EC2. The CircleCI host is used as the Ansible controller to provision
-the machines, then run the :ref:`config_tests` against them.
+the machines and run the :ref:`config_tests` against them.
 
 Running the CI staging environment
 ----------------------------------
@@ -85,5 +85,32 @@ The important attributes are whitelisting inter-machine communication on
 ports 1514 and 1515 to support OSSEC registration and monitoring.
 
 
+Use Makefile to provision hosts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Run ``make help`` to see the full list of CI commands in the Makefile:
 
+.. code:: sh
 
+    $ make help
+    Makefile for developing and testing SecureDrop.
+    Subcommands:
+        docs: Build project documentation in live reload for editing.
+        docs-lint: Check documentation for common syntax errors.
+        ci-spinup: Creates AWS EC2 hosts for testing staging environment.
+        ci-teardown: Destroy AWS EC2 hosts for testing staging environment.
+        ci-run: Provisions AWS EC2 hosts for testing staging environment.
+        ci-test: Tests AWS EC2 hosts for testing staging environment.
+        ci-go: Creates, provisions, tests, and destroys AWS EC2 hosts
+               for testing staging environment.
+        ci-debug: Prevents automatic destruction of AWS EC2 hosts on error.
+
+To run the tests locally:
+
+.. code:: sh
+
+    make ci-debug # hosts will not be destroyed automatically
+    make ci-go
+
+You can use ``make ci-run`` to provision the remote hosts while making changes,
+including rebuilding the Debian packages used in the Staging environment.
+See :doc:`virtual_environments` for more information.
