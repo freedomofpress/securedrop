@@ -48,6 +48,28 @@ and App-Staging VMs, based on the contents of
 ``securedrop/requirements/test-requirements.txt``.
 If you wish to change the dependencies, see :ref:`updating_pip_dependencies`.
 
+Running the application tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The tests can be run inside the development VM:
+
+.. code:: sh
+
+    vagrant ssh development
+    cd /vagrant/securedrop
+    pytest -v tests
+
+Or the app-staging VM:
+
+.. code:: sh
+
+    vagrant ssh app-staging
+    sudo su www-data -s /bin/bash
+    cd /var/www/securedrop
+    pytest -v tests
+
+For explanation of the difference between these machines, see
+:doc:`virtual_environments`.
 
 .. _config_tests:
 
