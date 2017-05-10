@@ -23,14 +23,10 @@ class TestJournalist2FA(TestCase):
 
         self.admin, self.admin_pw = utils.db_helper.init_journalist(
             is_admin=True)
+        self.user, self.user_pw = utils.db_helper.init_journalist()
 
     def tearDown(self):
         utils.env.teardown()
-        # TODO: figure out why this is necessary here, but unnecessary in all
-        # of the tests in `tests/test_unit_*.py`. Without this, the session
-        # continues to return values even if the underlying database is deleted
-        # (as in `shared_teardown`).
-        db_session.remove()
 
     def _login_admin(self):
         valid_token = self.admin.totp.now()
@@ -39,11 +35,18 @@ class TestJournalist2FA(TestCase):
                                           password=self.admin_pw,
                                           token=valid_token))
 
+    def _login_user(self):
+        valid_token = self.user.totp.now()
+        resp = self.client.post(url_for('login'),
+                                data=dict(username=self.user.username,
+                                          password=self.user_pw,
+                                          token=valid_token))
+
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
         self._login_admin()
 
         # Create and submit an invalid 2FA token
-        invalid_token = unicode(int(self.admin.totp.now()) + 1)
+        invalid_token = u'000000'
         resp = self.client.post(url_for('admin_new_user_two_factor',
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
@@ -56,6 +59,26 @@ class TestJournalist2FA(TestCase):
         # Submit the same invalid token again
         resp = self.client.post(url_for('admin_new_user_two_factor',
                                         uid=self.admin.id),
+                                data=dict(token=invalid_token))
+
+        # A flashed message should appear
+        self.assertIn('Two factor token failed to verify', resp.data)
+
+    def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
+        self._login_user()
+
+        # Create and submit an invalid 2FA token
+        invalid_token = u'000000'
+        resp = self.client.post(url_for('account_new_two_factor'),
+                                data=dict(token=invalid_token))
+
+        self.assertIn('Two factor token failed to verify', resp.data)
+
+        # last_token should be set to the invalid token we just tried to use
+        self.assertEqual(self.user.last_token, invalid_token)
+
+        # Submit the same invalid token again
+        resp = self.client.post(url_for('account_new_two_factor'),
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
