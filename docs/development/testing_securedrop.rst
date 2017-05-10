@@ -9,6 +9,6 @@ and to harden the system state. Therefore testing for the project includes
 as expected, and :ref:`Configuration Tests<config_tests>` to ensure that the
 servers are appropriately locked down, and able to accept updates to the app code.
 
-In addition, :ref:`Continuous Integration<ci_tests>`.the strategy automatically runs
-the above the Application and Configuration tests against cloud hosts,
+In addition, the :ref:`Continuous Integration<ci_tests>` automatically runs
+the above Application and Configuration tests against cloud hosts,
 to aid in PR review.
