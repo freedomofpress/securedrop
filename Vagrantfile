@@ -151,61 +151,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # VM for testing Snap CI configuration changes.
-  # All SecureDrop instances use Ubuntu 64-bit LTS,
-  # but Snap CI uses CentOS. See here for more config info:
-  # https://docs.snap-ci.com/the-ci-environment/complete-package-list/
-  config.vm.define 'snapci', autostart: false do |snapci|
-    snapci.vm.hostname = "snapci"
-    snapci.vm.box = "puppetlabs/centos-6.6-64-nocm"
-    snapci.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/securedrop-snapci.yml"
-      ansible.verbose = 'v'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-  end
-
-
   # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
   #if Vagrant.has_plugin?("vagrant-cachier")
   #  config.cache.scope = :box
   #end
 
-  # This is needed for Snap-CI to provision the DigitalOcean VPS.
-  # Check for presence of `vagrant-digitalocean` plugin, and required env var,
-  # and only configure this provider if both conditions are met. Otherwise,
-  # even running `vagrant status` throws an error.
-  if Vagrant.has_plugin?('vagrant-digitalocean') and ENV['DO_API_TOKEN']
-    config.vm.provider :digital_ocean do |provider, override|
-      # In snap-ci the contents of the ssh keyfile should be saved as a `Secure
-      # Files` to the default locations /var/snap-ci/repo/id_rsa and
-      # /var/snap-ci/repo/id_rsa.pub
-      override.ssh.private_key_path = ENV['DO_SSH_KEYFILE'] || '/var/snap-ci/repo/id_rsa'
-      override.vm.box = 'digital_ocean'
-      override.vm.box_url = 'https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box'
-
-      # Ansible playbooks will handle SecureDrop configuration,
-      # but DigitalOcean boxes don't have a default "vagrant" user configured.
-      # The below settings will allow the vagrant-digitalocean plugin to configure
-      # sudoers acccess for the user "vagrant"
-      provider.setup = true
-      override.ssh.username = 'vagrant'
-
-      # Ansible playbooks sudoers config will clobber the vagrant-digitalocean plugin config,
-      # so drop in a sudoers.d file to ensure that the vagrant user still has password-less sudo.
-      # This mimicks the admin typing in a sudo password during the first Ansible task in production.
-      override.vm.provision :shell,
-        inline: "echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/vagrant && chmod 0440 /etc/sudoers.d/vagrant"
-      # The shell provisioner will generate an error: "stdin: is not a tty" in Ubuntu,
-      # due to vagrant forcing "bash -l" as a login shell. See here for more info:
-      # https://github.com/mitchellh/vagrant/issues/1673
-
-      provider.token = ENV['DO_API_TOKEN']
-      provider.region = ENV['DO_REGION'] || 'sfo1'
-      provider.size = ENV['DO_SIZE'] || '512mb'
-      provider.image = ENV['DO_IMAGE_NAME'] || 'ubuntu-14-04-x64'
-    end
-  end
 end
 
 

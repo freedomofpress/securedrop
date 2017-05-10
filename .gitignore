@@ -1,6 +1,3 @@
-# ignore the external config file that will contain digital ocean api tokens
-snap.rb
-
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
@@ -14,12 +11,6 @@ app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
-
-# ignore vagrant secret file
-secrets.rb
-
-# ignore the auto generated vagrant ansible inventory files
-vagrant_ansible_inventory*
 
 # ignore ansible retry files
 *.retry

@@ -33,3 +33,16 @@ docs-lint:
 docs:
 # Spins up livereload environment for editing; blocks.
 	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
+
+help:
+	@echo Makefile for developing and testing SecureDrop.
+	@echo Subcommands:
+	@echo "\t docs: Build project documentation in live reload for editing."
+	@echo "\t docs-lint: Check documentation for common syntax errors."
+	@echo "\t ci-spinup: Creates AWS EC2 hosts for testing staging environment."
+	@echo "\t ci-teardown: Destroy AWS EC2 hosts for testing staging environment."
+	@echo "\t ci-run: Provisions AWS EC2 hosts for testing staging environment."
+	@echo "\t ci-test: Tests AWS EC2 hosts for testing staging environment."
+	@echo "\t ci-go: Creates, provisions, tests, and destroys AWS EC2 hosts"
+	@echo "\t        for testing staging environment."
+	@echo "\t ci-debug: Prevents automatic destruction of AWS EC2 hosts on error."

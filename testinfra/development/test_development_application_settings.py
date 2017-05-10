@@ -95,17 +95,6 @@ def test_development_app_directories_exist(File):
     assert f.user == sd_test_vars.securedrop_user
     assert f.group == sd_test_vars.securedrop_user
 
-  # Vagrant VirtualBox environments show /vagrant as 770,
-  # but the Vagrant DigitalOcean droplet shows /vagrant as 775.
-  # This appears to be a side-effect of the default umask
-  # in the snapci instances. (The rsync provisioner for the
-  # vagrant-digitalocean plugin preserves permissions from the host.)
-  # The spectests for 'staging' still check for an explicit mode,
-  # so it's OK to relax this test for now.
-  #it { should be_mode '700' }
-  # TODO: should be 700 in all environments; ansible task is
-  # straightforward about this.
-
 
 def test_development_clean_tmp_cron_job(Command, Sudo):
     """
