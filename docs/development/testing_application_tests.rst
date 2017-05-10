@@ -34,8 +34,8 @@ Tor Browser.
 Installation
 ------------
 
-The application tests are installed automatically in the Development
-and App-Staging VMs, based on the contents of
+The application tests are installed automatically in the development
+and app-staging VMs, based on the contents of
 ``securedrop/requirements/test-requirements.txt``.
 If you wish to change the dependencies, see :ref:`updating_pip_dependencies`.
 

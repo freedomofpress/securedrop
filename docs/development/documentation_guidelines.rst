@@ -81,6 +81,11 @@ Try to keep your lines wrapped to near 80 characters when editing the docs.
 Some exceptions are warranted, such as complex code blocks showing example
 commands, or long URLs, but in general the docs should be tightly wrapped.
 
+When referring to virtual machines in the development environment, use
+lowercase for the name:
+
+    app-staging VM
+
 Ensure that example commands in codeblocks are easily copy/pasteable.
 Do not prepend the ``$`` shell prompt indicator to example commands:
 
