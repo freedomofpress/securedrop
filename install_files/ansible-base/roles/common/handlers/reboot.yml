@@ -5,7 +5,10 @@
 # and `wait_for` together.
 - name: Register host name to wait for.
   set_fact:
-    _hostname_to_wait_for: "{{ ansible_ssh_host|default(ansible_host) }}"
+    # The `remote_host_ref` var is declared at the site-level,
+    # intended to make IPv4 resolution accurate across backend
+    # providers (i.e. mostly useful for testing).
+    _hostname_to_wait_for: "{{ remote_host_ref|default(ansible_ssh_host|default(ansible_host)) }}"
 
 - name: Reboot if required due to security updates.
   command: shutdown -r now

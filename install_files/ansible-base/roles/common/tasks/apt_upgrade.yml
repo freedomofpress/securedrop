@@ -40,31 +40,18 @@
   # will not install security patches.
   changed_when: tor_hold_package_result|changed
 
+
+  # Ansible doesn't support notifying handlers based on file existence, results,
+  # e.g. via registered `stat` results, only only on changed=true task results,
+  # so let's craft a task that returns changed=true if-and-only-if a file exists.
 - name: Check if reboot is required due to security updates.
-  stat:
-    path: /var/run/reboot-required
-  register: reboot_required
-  # Task is read-only, so don't mark changed.
-  changed_when: false
-  tags:
-    - reboot
-
-- name: Reboot if required due to security updates.
-  command: reboot
-  when: reboot_required.stat.exists
-  tags:
-    - reboot
-
-- name: Wait for server to come back.
-  local_action: wait_for
+  command: /bin/true
   args:
-    host: "{{ remote_host_ref }}"
-    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
-    delay: 20
-    search_regex: OpenSSH
-    state: started
-  when: reboot_required.stat.exists
-  # Wait action runs on localhost, and does NOT require sudo.
-  sudo: false
+    # This task won't actually remove anything, given the task is simply `true`,
+    # but leveraging the `removes` arg allows us to run the task conditionally,
+    # based on file existence, which is an accurate indicator of whether a reboot
+    # is required.
+    removes: /var/run/reboot-required
+  notify: reboot
   tags:
     - reboot
