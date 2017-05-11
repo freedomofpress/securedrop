@@ -1,0 +1,18 @@
+---
+
+- name: Validate GPG info.
+  assert:
+     that:
+       # Should not match the fingerprint for the TEST Journalist pubkey.
+       - item != "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+       # Should not match the fingerprint for the TEST Admin pubkey.
+       - item != "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+       # Should not contain whitespace.
+       - "' ' not in item"
+       # Must be a full-length fingerprint.
+       - item|length == 40
+       # Must contain only hex characters
+       - item == item|regex_replace('[^A-F0-9]', '')
+  tags:
+    - validate
+    - debug

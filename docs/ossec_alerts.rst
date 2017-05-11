@@ -326,6 +326,18 @@ after the first playbook run, try setting ``ossec_from_address`` in
 ``prod-specific.yml`` to the full email address used for sending the alerts,
 then run the playbook again.
 
+Message failed to encrypt
+~~~~~~~~~~~~~~~~~~~~~~~~~
+If OSSEC cannot encrypt the alert to the GPG public key for the Admin
+email address (configured as ``ossec_alert_email`` in ``prod-specific.yml``),
+the system will send a static message instead of the scheduled alert:
+
+  Failed to encrypt OSSEC alert. Investigate the mailing configuration on the Monitor Server.
+
+Check the GPG configuration vars in ``prod-specific.yml``. In particular,
+make sure the GPG fingerprint matches that of the public key file you
+exported.
+
 Troubleshooting SMTP TLS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
