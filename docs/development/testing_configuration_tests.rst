@@ -1,11 +1,13 @@
-Configuration Tests
-===================
+.. _config_tests:
 
-testinfra_ tests verify the end state of the vagrant machines. Any
+Testing: Configuration Tests
+============================
+
+Testinfra_ tests verify the end state of the Vagrant machines. Any
 changes to the Ansible configuration should have a corresponding
 spectest.
 
-.. _testinfra: https://testinfra.readthedocs.io/en/latest/
+.. _Testinfra: https://testinfra.readthedocs.io/en/latest/
 
 Installation
 ------------
@@ -14,8 +16,8 @@ Installation
 
     pip install -r securedrop/requirements/develop-requirements.txt
 
-Running the tests
------------------
+Running the config tests
+------------------------
 
 In order to run the tests, first create and provision the VM you intend
 to test:
@@ -49,8 +51,8 @@ Test failure against any host will generate a report with informative output
 about the specific test that triggered the error. The wrapper script
 will also exit with a non-zero status code.
 
-Updating the tests
-------------------
+Updating the config tests
+-------------------------
 
 Changes to the Ansible config should result in failing config tests, but
 only if an existing task was modified. If you add a new task, make
@@ -103,8 +105,8 @@ mirroring the Ansible configuration. Prior to the reorganization of
 the Ansible layout, the tests are rather tightly coupled to hosts. The
 layout of config tests is therefore subject to change.
 
-Testing strategy
-----------------
+Config testing strategy
+-----------------------
 
 The config tests currently emphasize testing implementation rather than
 functionality. This is a temporary measure to increase the current testing
