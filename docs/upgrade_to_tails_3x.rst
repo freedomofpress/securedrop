@@ -6,7 +6,8 @@ Why you should upgrade
 
 Starting with SecureDrop version 0.4, we require users update to Tails version
 3.0 or later. Upgrading Tails from 2.x to 3.x must be done manually. This guide
-will show you how to upgrade each Tails USB stick used your SecureDrop instance.
+will show you how to upgrade each Tails USB stick used in your SecureDrop
+instance.
 
 What you need
 -------------
