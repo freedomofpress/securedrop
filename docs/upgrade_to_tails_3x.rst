@@ -78,6 +78,10 @@ Fill out the form as follows:
 
 |Format Backup Drive|
 
+* **Erase**: `Don't overwrite existing data (Quick)`
+* **Type**: `Encrypted, compatible with Linux systems (LUKS + Ext4)`
+* **Name**: `Backup`
+
 .. warning::
             Make sure you use a strong passphrase if this is a long term backup
             drive.
@@ -91,17 +95,18 @@ Once completed, you will see two partitions appear:
 
 |Two Partitions Appear|
 
-Browse to **Places** ▸ **Computer**:
+Now that you made the backup device, plug in the device you want to backup.
+Then, browse to **Places** ▸ **Computer**:
 
 |Browse to Places Computer|
 
 Click on the disk on the left side column. Fill in the passphrase you usually
-use when enabling Persistence:
+use when you enable Persistence on that device:
 
 |Fill in Passphrase|
 
 You should now have both the Backup and TailsData partition to be backed up
-mounted.
+mounted and ready to access.
 
 |Backup and TailsData Mounted|
 
@@ -113,6 +118,10 @@ Open a Nautilus window with administrator privileges by going to
 Type ``nautilus`` at the terminal prompt and hit enter:
 
 |Start Nautilus|
+
+.. warning::
+            Make sure you use keep the `Terminal` window open while you perform
+            the backups. Otherwise, the `Nautilus` window will close.
 
 Make sure you create a directory on the backup drive to store the data from the
 drive you are backing up:
@@ -127,6 +136,9 @@ In particular, ensure ``gnupg`` and ``Persistent`` have been successfully
 copied over. These files are critical for decrypting submissions.
 
 Once complete, unmount the TailsData partition.
+
+Repeat these steps for every device, making a new folder on the backup device
+for each device you backup.
 
 Finally, once you have completed the steps described in this section for each
 USB drive, unmount the Backup partition and store the drive somewhere safely.
@@ -176,7 +188,8 @@ A dialog box will appear asking you to **Please confirm your device selection**.
 
 Click **Yes** to proceed with the installation.
 
-It may take a while for the Tails USB to upgrade.
+.. note::
+        The upgrade can take quite a bit of time, so please be patient!
 
 Once complete, you should see a success message:
 
@@ -194,7 +207,8 @@ Once complete, you should see a success message:
 Verify the Journalist Workstation and SVS USB Drives Are Successfully Updated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To test these two drives, run through the following test procedure:
+After you upgrade your `Journalist Workstation` and `Secure Viewing Station`,
+do the following to make sure they were upgraded successfully.
 
   #. Submit a test document to the source interface.
   #. Log in to the journalist interface.
@@ -206,11 +220,11 @@ To test these two drives, run through the following test procedure:
 If you are able to successfully download and decrypt your test submission, then
 your upgrade was successful!
 
-Verify the Administrator Workstation USB Drive Was Successfully Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Verify the Admin Workstation USB Drive Was Successfully Updated
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ensure that you are able to SSH into both servers. Remember you can use the
-following shortcuts:
+After you upgrade your `Admin Workstation`, ensure that you are able to SSH
+into both servers. Remember you can use the following shortcuts:
 
 .. code:: sh
 
@@ -220,9 +234,9 @@ following shortcuts:
 Destroy the Backup or Move It to a Safe Location
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At this point, you should move your backup drive to a safe location (if you used
-a strong passphrase). Else, you should destroy the backup drive following the
-instructions `here <upgrade_to_tails_2x.html#wipe-the-backup-device>`__.
+At this point, you should move your backup drive to a safe location (if you
+used a strong passphrase). Else, you should destroy the backup drive following
+the instructions `here <upgrade_to_tails_2x.html#wipe-the-backup-device>`__.
 
 If you encounter issues
 -----------------------
