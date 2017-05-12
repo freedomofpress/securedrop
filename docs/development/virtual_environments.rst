@@ -137,6 +137,48 @@ To rebuild the local packages for the app code: ::
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
 
+.. note:: If you are using Mac OS X and you run into errors from Ansible
+          such as ``OSError: [Errno 24] Too many open files``, you may need to
+          increase the maximum number of open files. Some guides online suggest
+          a procedure to do this that involves booting to recovery mode
+          and turning off System Integrity Protection (``csrutil disable``).
+          However this is a critical security feature and should not be
+          disabled. Instead follow this procedure to increase the file limit.
+
+          Set ``/Library/LaunchDaemons/limit.maxfiles.plist`` to the following:
+
+          .. code:: sh
+
+              <?xml version="1.0" encoding="UTF-8"?>
+              <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+                <plist version="1.0">
+                  <dict>
+                    <key>Label</key>
+                      <string>limit.maxfiles</string>
+                    <key>ProgramArguments</key>
+                      <array>
+                        <string>launchctl</string>
+                        <string>limit</string>
+                        <string>maxfiles</string>
+                        <string>65536</string>
+                        <string>65536</string>
+                      </array>
+                    <key>RunAtLoad</key>
+                      <true/>
+                    <key>ServiceIPC</key>
+                      <false/>
+                  </dict>
+                </plist>
+
+          The plist file should be owned by ``root:wheel``:
+
+          .. code:: sh
+
+            sudo chown root:wheel /Library/LaunchDaemons/limit.maxfiles.plist
+
+          This will increase the maximum open file limits system wide on Mac
+          OS X (last tested on 10.11.6).
+
 Prod
 ----
 
