@@ -1,0 +1,35 @@
+---
+# Meta handler to bounce tor service sanely. If the SSH connection
+# for the remote host is over Tor (i.e. host ends in `.onion`), then
+# bounce the tor service via fire-and-forget, wait, then reestablish
+# the connection after polling for the service to come back up.
+
+# Registering a concise variable for use in conditionals, essentially
+# deciding "Are we connected via SSH over Tor or not?"
+- name: Register host name to wait for.
+  set_fact:
+    _hostname_to_wait_for: "{{ ansible_ssh_host|default(ansible_host) }}"
+
+# If we're not connected over Tor, bounce the service as usual.
+- name: restart tor (simple)
+  service:
+    name: tor
+    state: restarted
+  when: not _hostname_to_wait_for.endswith('.onion')
+
+# As of Ansible v2.2, the `service` module is not compatible with the `async`
+# parameter. This was changed in 2.3.
+- name: restart tor (async)
+  shell: sleep 5 && service tor restart
+  async: 3000
+  poll: 0
+  when: _hostname_to_wait_for.endswith('.onion')
+
+# Hardcode a wait value and wait for the entire interval.
+# Cannot use `local_action/wait_for` because it's not smart
+# enough to find the SSH connection info required to connect
+# to the Onion URL.
+- name: Waiting for SSH connection (slow)...
+  pause:
+    seconds: 90
+  when: _hostname_to_wait_for.endswith('.onion')
