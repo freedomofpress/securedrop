@@ -24,7 +24,7 @@ SecureDrop application environment consists of three dedicated computers:
    <https://gitweb.torproject.org/torspec.git/tree/rend-spec.txt#n851>`__, to
    download encrypted documents and respond to sources.
 - *Monitor Server*: Ubuntu server that monitors the *Application Server*
-   with `OSSEC <http://www.ossec.net/>`__ and sends email alerts.
+   with `OSSEC <https://ossec.github.io/>`__ and sends email alerts.
 
 In addition to these dedicated computers, the journalist will also use their
 normal workstation computer:
@@ -123,7 +123,7 @@ using your existing websites, mailing lists, and social media.
 It is recommended that you have all of this planned out before you get started.
 If you need help, contact the `Freedom of the Press Foundation
 <https://securedrop.org/help>`__ who will be glad to help walk you through
-the process and make sure that you're ready to proceeed.
+the process and make sure that you're ready to proceed.
 
 Technical Setup
 ~~~~~~~~~~~~~~~

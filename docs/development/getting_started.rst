@@ -7,7 +7,7 @@ Prerequisites
 SecureDrop is a multi-machine design. To make development and testing easy, we
 provide a set of virtual environments, each tailored for a specific type of
 development task. We use Vagrant and VirtualBox to conveniently develop with a
-set of virtual environments, and our Ansible playbooks can provison these
+set of virtual environments, and our Ansible playbooks can provision these
 environments on either virtual machines or physical hardware.
 
 To get started, you will need to install Vagrant, VirtualBox, and Ansible on
