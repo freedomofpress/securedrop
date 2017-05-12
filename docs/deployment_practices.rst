@@ -228,7 +228,7 @@ landing page content**
 
 OSSEC is a free and open source host-based intrusion detection suite
 that includes a file integrity monitor. More information can be found
-`here. <https://ossec.net>`__
+`here. <https://ossec.github.io/>`__
 
 **Don't log access to the landing page in the webserver**
 
