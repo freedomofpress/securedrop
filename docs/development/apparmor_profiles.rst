@@ -45,5 +45,5 @@ your host machine to include them in the ``securedrop-app-code`` package.
 The AppArmor profiles are packaged with the ``securedrop-app-code``.
 The ``securedrop-app-code`` ``postinst`` puts the AppArmor profiles in enforce mode
 on production hosts. In the staging environment, the ``app-test`` Ansible role
-puts the AppArmor profiles in complain mode, to faciliate the development workflow
+puts the AppArmor profiles in complain mode, to facilitate the development workflow
 with ``aa-logprof`` outlined above.

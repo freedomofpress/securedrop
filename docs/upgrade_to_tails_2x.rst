@@ -14,7 +14,7 @@ before upgrading SecureDrop to 0.3.7 or later.
 Upgrading Tails from 1.x to 2.x must be done manually. Please follow this guide
 to updating each Tails USB stick used in your SecureDrop instance. Be sure to
 use the *Secure Viewing Station* computer so you benefit from its airgap while
-transfering sensitive data.
+transferring sensitive data.
 
 .. note:: You will need:
 
@@ -116,7 +116,7 @@ Mount it by navigating to **Places ▸ Computer**, and clicking on the
 encrypted disk. You will be prompted to enter the passphrase to unlock the disk
 (the same passphrase you normally use to log into Tails on that USB stick).
 
-Open a Nautilus window with admin priviledges by navigating to **Applications
+Open a Nautilus window with admin privileges by navigating to **Applications
 ▸ System Tools ▸ Root Terminal**. At the terminal prompt, simply type
 ``nautilus``.
 
@@ -151,7 +151,7 @@ from accessing submissions.
     within the Backup Device. Not only will doing so speed up the upgrade
     process, it will also provide you with long-term encrypted backups of the
     USB devices. In the event of a lost or stolen drive, you can restore access
-    via this encryped backup device.
+    via this encrypted backup device.
 
 Once data are correctly copied, unmount the TailsData partition.
 
@@ -162,7 +162,7 @@ Once data are correctly copied, unmount the TailsData partition.
 4. Upgrade a Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~
 
-With the Admin/Journo/*SVS* Tails USB still insterted in the machine, navigate to
+With the Admin/Journo/SVS Tails USB still inserted in the machine, navigate to
 **Applications ▸ Tails ▸ Tails Installer** and select the **Upgrade by
 cloning** option.
 
@@ -312,7 +312,7 @@ with both persistence and admin privileges. Insert your Backup Device into a
 free USB port, and mount it by navigating to **Places ▸ Computer**, and clicking
 on the encrypted disk. You will be prompted to enter its passphrase.
 
-Open a Nautilus window with admin priviledges by navigating to **Applications ▸
+Open a Nautilus window with admin privileges by navigating to **Applications ▸
 System Tools ▸ Root Terminal**. At the terminal prompt, simply type `nautilus`
 and hit Enter. Type ``ctrl`` + ``l``, type
 `/live/persistence/TailsData_unlocked`, and hit Enter to navigate there.

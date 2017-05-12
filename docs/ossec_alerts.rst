@@ -80,8 +80,8 @@ vary and you may require later edits to the Postfix configuration
 (mainly /etc/postfix/main.cf) on the *Monitor Server* in order to get
 alerts to work. You can consult `Postfix's official
 documentation <http://www.postfix.org/documentation.html>`__ for help,
-although we've described some common scenarios in the 
-:ref:`troubleshooting section <troubleshooting_ossec>` of this document.
+although we've described some common scenarios in the
+:ref:`troubleshooting section <troubleshooting_ossec>`.
 
 If you have your GPG public key handy, copy it to
 install\_files/ansible-base and then specify the filename in the
@@ -516,7 +516,7 @@ can review the logs in ``/var/log/apt/history.log``. ::
 
 This is a normal alert, it tells you your system is up-to-date and patched.
 
-Occassionally your SecureDrop Servers will send an alert for failing to connect
+Occasionally your SecureDrop Servers will send an alert for failing to connect
 to Tor relays. Since SecureDrop runs as a Tor Onion Service, it is possible
 for Tor connections to timeout or become overloaded. ::
 

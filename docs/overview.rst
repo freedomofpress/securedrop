@@ -123,7 +123,7 @@ using your existing websites, mailing lists, and social media.
 It is recommended that you have all of this planned out before you get started.
 If you need help, contact the `Freedom of the Press Foundation
 <https://securedrop.org/help>`__ who will be glad to help walk you through
-the process and make sure that you're ready to proceeed.
+the process and make sure that you're ready to proceed.
 
 Technical Setup
 ~~~~~~~~~~~~~~~
