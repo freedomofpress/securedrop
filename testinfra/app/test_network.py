@@ -40,6 +40,3 @@ def test_app_iptables_rules(SystemInfo, Command, Sudo):
         # Conduct the string comparison of the expected and actual iptables
         # ruleset
         assert iptables_expected == iptables
-
-def test_failnow():
-    assert False
