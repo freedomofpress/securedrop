@@ -64,12 +64,6 @@ def add_journalist(): # pragma: no cover
 def _add_user(is_admin=False): # pragma: no cover
     while True:
         username = raw_input('Username: ')
-        if Journalist.query.filter_by(username=username).first():
-            print('Sorry, that username is already in use.')
-        else:
-            break
-
-    while True:
         password = getpass('Password: ')
         password_again = getpass('Confirm Password: ')
 
@@ -106,7 +100,8 @@ def _add_user(is_admin=False): # pragma: no cover
         db_session.add(user)
         db_session.commit()
     except Exception as exc:
-        if 'username is not unique' in exc:
+        db_session.rollback()
+        if "UNIQUE constraint failed: journalists.username" in str(exc):
             print('ERROR: That username is already taken!')
         else:
             exc_type, exc_value, exc_traceback = sys.exc_info()
