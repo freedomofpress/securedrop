@@ -10,6 +10,12 @@
     - "{{ repo_src_path }}"
     - "{{ build_path }}"
 
+# This is a hack to continue support ansible v1. Ran into an issue when trying
+# to use this under docker though, so lets make sure we except that environment.
+- set_fact:
+    _rsync_opts: "{{ ossec_build_rsync_generic_opts | zip(ossec_build_rsync_ansible_hack_opt) }}"
+  when: "ansible_virtualization_type != 'docker'"
+
 - name: Copy over current directory for repo build
   synchronize:
     # All Debian package source trees are located in `install_files/<package>`
@@ -21,10 +27,7 @@
     # activated to permit builds in CI.
     use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
     recursive: yes
-    rsync_opts:
-      - "--exclude=*.git"
-      - "--exclude=*.deb"
-      - "--rsync-path='sudo rsync'"
+    rsync_opts: "{{ _rsync_opts | default(ossec_build_rsync_generic_opts) }}"
 
 - name: Include OSSEC download URLs.
   ossec_urls:
