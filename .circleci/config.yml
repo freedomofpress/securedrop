@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/sd
+    docker:
+      - image: msheiny/pressfreedomci:latest
+        environment:
+          FPF_CI: true
+          CI_SD_ENV: staging
+          CI_AWS_TYPE: t2.small
+          FPF_GRSEC: false
+          BUILD_NUM: {{ .BuildNum }}
+          TEST_REPORTS: /root/sd
+    steps:
+      # This is really dumb that Im doing this, basically
+      # I want to clone to ~/pressfreedom and work out of there
+      # the working_directory creates that directory first
+      - run: rm -r ~/sd
+      - checkout:
+          path: ~/sd
+      - run:
+          name: Installation pre-reqs
+          command: |
+            easy_install -U pip
+            pip install pip-tools
+            pip-sync testinfra/requirements.txt
+      - setup_remote_docker
+      - run:
+          name: Run molecule and manage tests
+          command: make ci-go
+      - run:
+          name: Teardown environment
+          command: make ci-teardown
+          when: always
