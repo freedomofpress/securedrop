@@ -1,4 +1,5 @@
 ansible>=2.2,<2.3
+docker-py
 boto
 pip-tools
 pytest-xdist
