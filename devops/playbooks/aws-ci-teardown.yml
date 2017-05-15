@@ -55,7 +55,7 @@
       register: ec2_group_result
       until: "'group_id' in ec2_group_result"
       retries: 6
-      delay: 30
+      delay: "{{ aws_ec2_teardown_timeout }}"
 
     - name: Clean up temporary local SSH config items.
       file:
@@ -70,3 +70,4 @@
     aws_ec2_ci_tags:
       job_name: "securedrop-ci"
       build_num: "{{ ansible_env.BUILD_NUM | mandatory }}"
+    aws_ec2_teardown_timeout: 50

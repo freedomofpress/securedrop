@@ -125,7 +125,7 @@
       wait_for:
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
-        timeout: 200
+        timeout: "{{ aws_ec2_boot_timeout }}"
         state: started
       with_items: "{{ reg_ec_instance.results }}"
       when: "item.tagged_instances[0].tags['build_num'] == aws_ec2_ci_tags.build_num"
@@ -138,6 +138,7 @@
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
     aws_ec2_vpc_id: "{{ ansible_env.CI_AWS_VPC_ID | mandatory }}"
+    aws_ec2_boot_timeout: "500"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
     aws_ec2_ci_tags:
