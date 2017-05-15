@@ -1,5 +1,20 @@
 #!/usr/bin/env ansible-playbook
 
+- name: Destroy docker CI containers
+  hosts: localhost
+  become: no
+  tasks:
+    - name: Destroy applicable containers
+      docker_container:
+        name: "{{ item }}"
+        state: absent
+      with_items: "{{ docker_containers }}"
+  vars:
+    docker_containers: "{{ docker_instances|default([]) }}"
+    ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
+  vars_files:
+    - "../vars/{{ ci_environment }}.yml"
+
 - name: Destroy temporary CI hosts.
   hosts: localhost
   become: no

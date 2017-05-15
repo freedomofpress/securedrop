@@ -18,4 +18,4 @@ mon-staging
 staging
 
 [build]
-build
+build ansible_connection=docker

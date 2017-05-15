@@ -1,9 +1,38 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Create CI remote hosts for testing SecureDrop config.
+- name: Provision build docker image
   hosts: localhost
   become: no
   gather_facts: true
+  tasks:
+    - name: Pull in systemd enabled docker image
+      docker_image:
+        name: "{{ docker_image_sd_build }}"
+      tags: docker
+      when: "{{ docker_containers != [] }}"
+
+    - name: Start build container
+      docker_container:
+        name: "{{ item }}"
+        hostname: "{{ item }}"
+        image: "{{ docker_image_sd_build }}"
+        command: /lib/systemd/systemd
+        devices:
+          - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+        privileged: true
+      tags: docker
+      with_items: "{{ docker_containers }}"
+  vars:
+    ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
+    docker_image_sd_build: "msheiny/debian-jessie-systemd"
+    docker_containers: "{{ docker_instances|default([]) }}"
+  vars_files:
+    - "../vars/{{ ci_environment }}.yml"
+
+- name: Create CI remote hosts for testing SecureDrop config.
+  hosts: localhost
+  become: no
+  gather_facts: false
   tasks:
     - name: Ensure CI environment vars are declared.
       assert:

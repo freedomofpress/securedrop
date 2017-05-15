@@ -47,6 +47,7 @@ def run_testinfra(target_host, verbose=True):
     Handler for executing testinfra against `target_host`.
     Queries list of roles via helper def `get_target_roles`.
     """
+    conn_type = "ssh"
     target_roles = get_target_roles(target_host)
     if verbose:
         # Print informative output prior to test run.
@@ -87,6 +88,8 @@ testinfra \
             ssh_config_path = ""
             testinfra_command_template = "testinfra -vv {target_roles}"
         else:
+            if target_host == "build":
+                conn_type = "docker"
             ssh_config_path = "{}/.ssh/sshconfig-securedrop-ci-{}".format(
                                             os.environ["HOME"],
                                             os.environ["BUILD_NUM"])
@@ -94,7 +97,7 @@ testinfra \
 testinfra \
     -vv \
     -n 8 \
-    --connection ssh \
+    --connection {connection_type} \
     --ssh-config \
     {ssh_config_path}\
     --junit-xml=./{target_host}-results.xml\
@@ -119,6 +122,7 @@ testinfra \
     testinfra_command = testinfra_command_template.format(
             target_host=target_host,
             ssh_config_path=ssh_config_path,
+            connection_type=conn_type,
             target_roles=" ".join(target_roles),
             ).split()
 
