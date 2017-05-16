@@ -31,7 +31,7 @@ if [ "$?" == "0" ]; then
     esac
 fi
 
-if [ -z "$TEST_REPORTS" ]; then
+if [ -z "$TEST_REPORTS" ] || [ "$TEST_REPORTS" == '${CIRCLE_TEST_REPORTS}' ]; then 
     export TEST_REPORTS=`pwd`
 fi
 
