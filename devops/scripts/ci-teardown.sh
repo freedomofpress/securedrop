@@ -2,6 +2,7 @@
 #
 #
 #
+. devops/ansible_env
 
 export ANSIBLE_INVENTORY="localhost"
 export RETRY_FILES_ENABLED=False

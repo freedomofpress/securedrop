@@ -1,2 +1,0 @@
----
-amazon_builder: "{{ true if ( 'amazon' in ansible_product_version and ansible_virtualization_type != 'docker' ) else false }}"

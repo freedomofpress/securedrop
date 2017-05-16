@@ -9,7 +9,6 @@ jobs:
           CI_SD_ENV: staging
           CI_AWS_TYPE: t2.small
           FPF_GRSEC: false
-          BUILD_NUM: {{ .BuildNum }}
           TEST_REPORTS: /root/sd
     steps:
       # This is really dumb that Im doing this, basically
