@@ -56,3 +56,6 @@ install_local_packages: false
 
 # Establish if we are in CI environment
 amazon_builder: "{{ true if 'amazon' in ansible_product_version else false }}"
+
+# Ansible v1 default reference to remote host
+remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"

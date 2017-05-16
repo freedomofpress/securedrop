@@ -96,7 +96,7 @@
 - name: Wait for server to come back.
   local_action:
     module: wait_for
-      host={{ ansible_host }}
+      host={{ remote_host_ref }}
       port={{ ansible_port | default('22')}}
       delay=45
       state=started
