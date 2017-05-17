@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# shellcheck disable=SC2162,SC2034
 #
 set -a
 FPF_CI=true
