@@ -1,7 +1,6 @@
 import pytest
 import os
-
-hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
+import getpass
 
 def test_development_app_dependencies(Package):
     """
@@ -49,8 +48,8 @@ def test_development_pip_dependencies(Command, pip_package, version):
     assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
 
 
-@pytest.mark.skipif(hostenv == 'travis',
-            reason="Bashrc tests dont make sense on Travis")
+@pytest.mark.skipif(getpass.getuser() != 'vagrant',
+            reason="vagrant bashrc checks dont make sense in CI")
 def test_development_securedrop_env_var(File):
     """
     Ensure that the SECUREDROP_ENV var is set to "dev".

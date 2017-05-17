@@ -1,9 +1,38 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Create CI remote hosts for testing SecureDrop config.
+- name: Provision build docker image
   hosts: localhost
   become: no
   gather_facts: true
+  tasks:
+    - name: Pull in systemd enabled docker image
+      docker_image:
+        name: "{{ docker_image_sd_build }}"
+      tags: docker
+      when: "{{ docker_containers != [] }}"
+
+    - name: Start build container
+      docker_container:
+        name: "{{ item }}"
+        hostname: "{{ item }}"
+        image: "{{ docker_image_sd_build }}"
+        command: /lib/systemd/systemd
+        devices:
+          - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+        privileged: true
+      tags: docker
+      with_items: "{{ docker_containers }}"
+  vars:
+    ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
+    docker_image_sd_build: "msheiny/debian-jessie-systemd"
+    docker_containers: "{{ docker_instances|default([]) }}"
+  vars_files:
+    - "../vars/{{ ci_environment }}.yml"
+
+- name: Create CI remote hosts for testing SecureDrop config.
+  hosts: localhost
+  become: no
+  gather_facts: false
   tasks:
     - name: Ensure CI environment vars are declared.
       assert:
@@ -96,7 +125,7 @@
       wait_for:
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
-        timeout: 200
+        timeout: "{{ aws_ec2_boot_timeout }}"
         state: started
       with_items: "{{ reg_ec_instance.results }}"
       when: "item.tagged_instances[0].tags['build_num'] == aws_ec2_ci_tags.build_num"
@@ -109,6 +138,7 @@
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
     aws_ec2_vpc_id: "{{ ansible_env.CI_AWS_VPC_ID | mandatory }}"
+    aws_ec2_boot_timeout: "500"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
     aws_ec2_ci_tags:

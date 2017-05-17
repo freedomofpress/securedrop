@@ -52,6 +52,7 @@
       with_items:
         - devscripts
         - git
+        - aptitude
   roles:
     - role: build-securedrop-app-code-deb-pkg
       tags: "app-deb"
