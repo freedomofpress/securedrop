@@ -93,6 +93,7 @@ common_apache2_directory_declarations = """
   'WSGIScriptAlias / /var/www/journalist.wsgi/',
   'AddType text/html .py',
   'XSendFile        On',
+  'LimitRequestBody 524288000',
   'XSendFilePath    /var/lib/securedrop/store/',
   'XSendFilePath    /var/lib/securedrop/tmp/',
   'ErrorLog /var/log/apache2/journalist-error.log',
