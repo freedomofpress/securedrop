@@ -16,17 +16,11 @@ For most installations, we recommend buying a dedicated firewall
 appliance with pfSense pre-installed, such as the one recommended in the
 Hardware Guide.
 
-We used to recommend the 3-NIC `Netgate APU 2
-<http://store.netgate.com/NetgateAPU2.aspx>`__, but it has since been
-discontinued. We currently recommend the `pfSense SG-2440
-<http://store.pfsense.org/SG-2440/>`__, which has 4 interfaces: WAN, LAN, OPT1,
-and OPT2. This guide covers the 4-NIC configuration recommended for new
-installs.
-
-If your firewall only has 3 NICs (WAN, LAN, and OPT1), you will need to
-use a switch on the OPT1 interface to connect the *Admin Workstation* for
-the initial installation. If your firewall has 4 NICs (WAN, LAN, OPT1,
-and OPT2), a switch is not necessary.
+We currently recommend the `pfSense SG-2440
+<http://store.pfsense.org/SG-2440/>`__, which has 4 interfaces: WAN,
+LAN, OPT1, and OPT2. If your firewall only has 3 NICs (WAN, LAN, and
+OPT1), you will need to use a switch on the OPT1 interface to connect
+the *Admin Workstation* for the initial installation.
 
 If you are new to pfSense or firewall management in general, we
 recommend the following resources:
