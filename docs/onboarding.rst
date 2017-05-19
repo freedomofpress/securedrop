@@ -108,3 +108,23 @@ Add an account on the Journalist Interface
 Finally, you need to add an account on the Journalist Interface so the journalist
 can log in and access submissions. See the section on :ref:`Adding Users` in
 the Administrator Guide.
+
+Import GPG keys for journalists with access to SecureDrop to the SVS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+While working on a story, journalists may need to transfer some documents or
+notes from the *Secure Viewing Station* to the journalist's work computer on
+the corporate network. To do this, the journalist should re-encrypt them with
+their own keys. If a journalist does not already have a personal GPG key,
+they can follow the same steps above to create one. The journalist should
+store the private key somewhere safe; the public key should be stored on the
+*Secure Viewing Station*.
+
+If the journalist does have a key, transfer their public key from wherever it
+is located to the *Secure Viewing Station*, using the *Transfer Device*. Open
+the file manager |Nautilus| and double-click on the public key to import it.
+
+|Importing Journalist GPG Keys|
+
+.. |Nautilus| image:: images/nautilus.png
+.. |Importing Journalist GPG Keys| image:: images/install/importkey.png
