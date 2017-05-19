@@ -56,11 +56,11 @@ network so it is working correctly.
 Configuring your firewall
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as
-WAN, LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the
-network firewall for each component of SecureDrop (*Application Server*,
-*Monitor Server*, and *Admin Workstation*), so you do not need a switch like you
-do for a 3-NIC configuration.
+If your firewall has 4 NICs, as the SG-2440 does, we will refer to the
+ports as WAN, LAN, OPT1, and OPT2. In this case, we can now use a
+dedicated port on the network firewall for each component of SecureDrop
+(*Application Server*, *Monitor Server*, and *Admin Workstation*), so
+you do not need a switch like you do for a 3-NIC configuration.
 
 Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
