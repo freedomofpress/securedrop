@@ -16,18 +16,11 @@ For most installations, we recommend buying a dedicated firewall
 appliance with pfSense pre-installed, such as the one recommended in the
 Hardware Guide.
 
-We used to recommend the 3-NIC `Netgate APU
-2 <http://store.netgate.com/NetgateAPU2.aspx>`__, but it has since been
-discontinued. We currently recommend the `pfSense
-SG-2440 <http://store.pfsense.org/SG-2440/>`__, which has 4 interfaces:
-WAN, LAN, OPT1, and OPT2. This guide covers both the old 3-NIC
-configuration, for existing installs that are still using it, and the
-4-NIC configuration recommended for new installs.
-
-If your firewall only has 3 NICs (WAN, LAN, and OPT1), you will need to
-use a switch on the OPT1 interface to connect the *Admin Workstation* for
-the initial installation. If your firewall has 4 NICs (WAN, LAN, OPT1,
-and OPT2), a switch is not necessary.
+We currently recommend the `pfSense SG-2440
+<http://store.pfsense.org/SG-2440/>`__, which has 4 interfaces: WAN,
+LAN, OPT1, and OPT2. If your firewall only has 3 NICs (WAN, LAN, and
+OPT1), you will need to use a switch on the OPT1 interface to connect
+the *Admin Workstation* for the initial installation.
 
 If you are new to pfSense or firewall management in general, we
 recommend the following resources:
@@ -60,14 +53,14 @@ you will be able to connect from the LAN to the pfSense WebGUI
 configuration wizard, and from there you will be able to configure the
 network so it is working correctly.
 
-4 NIC configuration
-~~~~~~~~~~~~~~~~~~~
+Configuring your firewall
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If your firewall has 4 NICs, as the SG-2440 does, we will refer to the ports as WAN,
-LAN, OPT1, and OPT2. In this case, we can now use a dedicated port on the network
-firewall for each component of SecureDrop (*Application Server*, *Monitor
-Server*, and *Admin Workstation*), so you do not need a switch like you do
-for the 3-NIC configuration.
+If your firewall has 4 NICs, as the SG-2440 does, we will refer to the
+ports as WAN, LAN, OPT1, and OPT2. In this case, we can now use a
+dedicated port on the network firewall for each component of SecureDrop
+(*Application Server*, *Monitor Server*, and *Admin Workstation*), so
+you do not need a switch like you do for a 3-NIC configuration.
 
 Depending on your network configuration, you should define the following
 values before continuing. For the examples in this guide, we have
@@ -92,46 +85,6 @@ chosen:
 -  Monitor Subnet: ``10.20.3.0/24``
 -  Monitor Gateway: ``10.20.3.1``
 -  *Monitor Server* (OPT2) : ``10.20.3.2``
-
-3 NIC configuration
-~~~~~~~~~~~~~~~~~~~
-
-If your firewall has 3 NICs, we will refer to them as WAN, LAN, and
-OPT1. WAN is used to connect to the external network. LAN and OPT1 are
-used for the *Application* and *Monitor Servers*, respectively. Putting them
-on separate interfaces allows us to use the network firewall to filter
-and monitor the traffic *between* them.
-
-In addition, you will need to be able to connect the *Admin Workstation*
-to this setup for the initial installation. Before SecureDrop is
-installed, the only way to connect to the servers is via SSH over the
-local network, so the *Admin Workstation* needs to be directly connected.
-Once it is installed, SSH will be available remotely (as an
-authenticated Tor Hidden Servce) and you will not necessarily need to
-connect the *Admin Workstation* directly to administer the servers -
-although you will still need to connect it directly to administer the
-network firewall. Since there isn't another NIC to connect the Admin
-Workstation to, we recommend using a small switch on the LAN (the
-specific choice of interface doesn't matter, but we recommend using the
-LAN to stay consistent with the rest of this guide) so you can connect
-both the *Admin Workstation* and the *Application Server*.
-
-Depending on your network configuration, you should define the following
-values before continuing. For the examples in this guide, we have
-chosen:
-
--  Admin/Application Gateway: ``10.20.1.1``
--  Admin/Application Subnet: ``10.20.1.0/24``
--  *Application Server*: ``10.20.1.2``
--  *Admin Workstation*: ``10.20.1.3``
-
-.. raw:: html
-
-   <!-- -->
-
--  Monitor Subnet: ``10.20.2.0/24``
--  Monitor Gateway: ``10.20.2.1``
--  *Monitor Server*: ``10.20.2.2``
 
 Initial Configuration
 ---------------------
@@ -441,28 +394,17 @@ main sections of the file that you should be interested in are
 ``interfaces``, ``filter`` (the firewall rules), and ``aliases``
 (necessary to parse the firewall rules).
 
-Example Screenshots
-^^^^^^^^^^^^^^^^^^^
+Example Screenshots of Firewall Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here are some example screenshots of a working pfSense firewall
 configuration.
-
-4 NICs Configuration
-''''''''''''''''''''
-
-|Firewall IP Aliases with OPT2|
-|Firewall Port Aliases|
-|Firewall LAN Rules with OPT2|
-|Firewall OPT1 Rules with OPT2|
-|Firewall OPT2 Rules|
-
-3 NICs Configuration
-''''''''''''''''''''
 
 |Firewall IP Aliases|
 |Firewall Port Aliases|
 |Firewall LAN Rules|
 |Firewall OPT1 Rules|
+|Firewall OPT2 Rules|
 
 Once you've set up the firewall, exit the Unsafe Browser, and continue
 with the next step of the installation instructions.
@@ -517,13 +459,10 @@ while depending on the speed of your network.
 .. |Edit Connections| image:: images/firewall/edit_connections.png
 .. |Edit Wired Connection| image:: images/firewall/edit_network_connection.png
 .. |Admin Wokstation Static IP Configuration| image:: images/firewall/admin_workstation_static_ip_configuration.png
-.. |Firewall IP Aliases| image:: images/firewall/ip_aliases.png
 .. |Firewall Port Aliases| image:: images/firewall/port_aliases.png
-.. |Firewall LAN Rules| image:: images/firewall/lan_rules.png
-.. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules.png
-.. |Firewall IP Aliases with OPT2| image:: images/firewall/ip_aliases_with_opt2.png
-.. |Firewall LAN Rules with OPT2| image:: images/firewall/lan_rules_with_opt2.png
-.. |Firewall OPT1 Rules with OPT2| image:: images/firewall/opt1_rules_with_opt2.png
+.. |Firewall IP Aliases| image:: images/firewall/ip_aliases_with_opt2.png
+.. |Firewall LAN Rules| image:: images/firewall/lan_rules_with_opt2.png
+.. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules_with_opt2.png
 .. |Firewall OPT2 Rules| image:: images/firewall/opt2_rules.png
 .. |Update available| image:: images/firewall/pfsense_update_available.png
 .. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png
