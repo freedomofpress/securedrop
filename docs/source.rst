@@ -64,11 +64,11 @@ Slider to "High".
 
 |Security Slider|
 
-Click the ``Learn how to disable it`` link in the warning banner and a message
-bubble will pop up explaining how to disable Javascript and turn up the Slider.
-Follow the instructions and the page should refresh automatically. Note that
-this will change the slider and disable Javascript for every page in your Tor
-Browser, and this setting will persist across browser sessions.
+Click the ``Learn how to set it to high`` link in the warning banner and a
+message bubble will pop up explaining how to disable Javascript and turn up the
+Slider. Follow the instructions and the page should refresh automatically. Note
+that this will change the slider and disable Javascript for every page in your
+Tor Browser, and this setting will persist across browser sessions.
 
 |Fix Javascript warning|
 
