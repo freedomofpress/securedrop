@@ -41,6 +41,24 @@ class TestJournalistApp(TestCase):
     def tearDown(self):
         utils.env.teardown()
 
+    def test_empty_replies_are_rejected(self):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        self._login_user()
+        resp = self.client.post(url_for('reply'),
+                                data={'sid': sid, 'msg': ''},
+                                follow_redirects=True)
+        self.assertIn("You cannot send an empty reply!", resp.data)
+
+    def test_nonempty_replies_are_accepted(self):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        self._login_user()
+        resp = self.client.post(url_for('reply'),
+                                data={'sid': sid, 'msg': '_'},
+                                follow_redirects=True)
+        self.assertNotIn("You cannot send an empty reply!", resp.data)
+
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))
         self.assertRedirects(resp, url_for('login'))

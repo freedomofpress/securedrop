@@ -576,18 +576,38 @@ def download_single_submission(sid, fn):
 @app.route('/reply', methods=('POST',))
 @login_required
 def reply():
+    msg = request.form['msg']
+
+    # Reject empty replies
+    if not msg:
+        flash("You cannot send an empty reply!", "error")
+        return redirect(url_for('col', sid=g.sid))
+
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
-    crypto_util.encrypt(request.form['msg'],
+    crypto_util.encrypt(msg,
                         [crypto_util.getkey(g.sid), config.JOURNALIST_KEY],
                         output=store.path(g.sid, filename))
     reply = Reply(g.user, g.source, filename)
-    db_session.add(reply)
-    db_session.commit()
 
-    flash("Thanks! Your reply has been stored.", "notification")
-    return redirect(url_for('col', sid=g.sid))
+    try:
+        db_session.add(g.source)
+        db_session.add(reply)
+        db_session.commit()
+    except:
+        flash("An unexpected error occurred! Please check the application "
+              "logs or inform your adminstrator.", "error")
+        # We take a cautious approach to logging here because we're dealing
+        # with responses to sources. TODO: It may be possible to provide more
+        # detailed/ informative log errors here, but we'll need to ensure no
+        # confidential or possibly deanonymizing information ends up there.
+        app.logger.error("Reply from '{}' failed: {}!".format(g.user,
+                                                              exc.__class__))
+        db_session.rollback()
+    else:
+        flash("Thanks! Your reply has been stored.", "notification")
+        return redirect(url_for('col', sid=g.sid))
 
 
 @app.route('/regenerate-code', methods=('POST',))
