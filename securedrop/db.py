@@ -347,13 +347,9 @@ class Journalist(Base):
     def verify_token(self, token):
         token = self._format_token(token)
 
-        # Only allow each authentication token to be used once. This
-        # prevents some MITM attacks.
-        if token == self.last_token:
-            raise BadTokenException("previously used token {}".format(token))
-        else:
-            self.last_token = token
-            db_session.commit()
+        # Store latest token to prevent OTP token reuse
+        self.last_token = token
+        db_session.commit()
 
         if self.is_totp:
             # Also check the given token against the previous and next
@@ -403,6 +399,8 @@ class Journalist(Base):
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
+        if token == user.last_token:  # Prevent OTP token reuse
+            raise BadTokenException("previously used token {}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):

@@ -6,7 +6,7 @@ from flask import url_for
 from flask_testing import TestCase
 
 os.environ['SECUREDROP_ENV'] = 'test'
-from db import (db_session, BadTokenException)
+from db import db_session
 import journalist
 import utils
 
@@ -43,6 +43,7 @@ class TestJournalist2FA(TestCase):
                                           token=valid_token))
 
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
+        # Regression test https://github.com/freedomofpress/securedrop/pull/1692
         self._login_admin()
 
         # Create and submit an invalid 2FA token
@@ -65,6 +66,7 @@ class TestJournalist2FA(TestCase):
         self.assertIn('Two factor token failed to verify', resp.data)
 
     def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
+        # Regression test https://github.com/freedomofpress/securedrop/pull/1692
         self._login_user()
 
         # Create and submit an invalid 2FA token
