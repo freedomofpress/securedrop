@@ -28,3 +28,6 @@ jobs:
           name: Teardown environment
           command: make ci-teardown
           when: always
+
+      - store_test_results:
+          path: /root/sd/junit

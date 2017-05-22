@@ -16,7 +16,7 @@
         host: "{{ ansible_ec2_public_hostname }}"
         port: "{{ ansible_port | default(22) }}"
         delay: 20
-        timeout: 400
+        timeout: 600
         search_regex: OpenSSH
         state: started
       # Wait action runs on localhost, and does NOT require sudo.
