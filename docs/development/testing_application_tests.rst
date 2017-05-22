@@ -72,7 +72,7 @@ file, class, and test name:
 
 
 Updating the application tests
-==============================
+------------------------------
 
 Unit tests are stored in the ``securedrop/tests/`` directory and functional
 tests are stored in the functional test directory::
