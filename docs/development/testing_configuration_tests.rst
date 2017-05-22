@@ -20,11 +20,17 @@ Running the config tests
 ------------------------
 
 In order to run the tests, first create and provision the VM you intend
-to test:
+to test. For the development VM:
 
 .. code:: sh
 
     vagrant up development
+
+For the staging VMs:
+
+.. code:: sh
+
+    vagrant up build --no-provision
     vagrant up /staging/
 
 .. note:: The staging machines must be rebooted via in order to finalize
