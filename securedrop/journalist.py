@@ -18,7 +18,7 @@ import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
-                WrongPasswordException, BadTokenException,
+                WrongPasswordException,
                 LoginThrottledException, InvalidPasswordLength)
 import worker
 
@@ -223,6 +223,7 @@ def admin_new_user_two_factor():
             flash("Two factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
+
 
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
