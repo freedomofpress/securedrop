@@ -594,6 +594,22 @@ def reply():
     try:
         db_session.add(reply)
         db_session.commit()
+
+    except StaleDataError:
+        db_session.rollback()
+        # This exception type may be indicative of the source's account being
+        # deleted. If so, flash a useful error message and return the user to
+        # the index view. Otherwise, re-raise the exception and let the general
+        # exception handling block handle it.
+        if not db_session.query \
+                   .filter(Source.filesystem_id == g.source.filesystem_id) \
+                   .one_or_none():
+            flash("The source you were trying to reply to no longer exists!",
+                  "error")
+            return redirect(url_for('index'))
+        else:
+            raise
+
     except Exception as exc:
         flash("An unexpected error occurred! Please check the application "
               "logs or inform your adminstrator.", "error")
