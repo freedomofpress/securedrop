@@ -173,3 +173,20 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
 
         # no SASS files should exist; only the generated CSS files.
         assert not re.search("^.*sass.*$", c.stdout, re.M)
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_css(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package contains files that
+    are generated during the `sass` build process.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        c = Command("dpkg-deb --contents {}".format(deb_package.path))
+
+        for css_type in ['journalist', 'source']:
+            assert re.search("^.*\./var/www/securedrop/static/css/{}.css$".format(css_type), c.stdout, re.M)
+            assert re.search("^.*\./var/www/securedrop/static/css/{}.css.map$".format(css_type), c.stdout, re.M)
