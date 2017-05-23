@@ -595,7 +595,7 @@ def reply():
         db_session.add(g.source)
         db_session.add(reply)
         db_session.commit()
-    except:
+    except Exception as exc:
         flash("An unexpected error occurred! Please check the application "
               "logs or inform your adminstrator.", "error")
         # We take a cautious approach to logging here because we're dealing
