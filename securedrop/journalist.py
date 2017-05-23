@@ -599,9 +599,7 @@ def reply():
         flash("An unexpected error occurred! Please check the application "
               "logs or inform your adminstrator.", "error")
         # We take a cautious approach to logging here because we're dealing
-        # with responses to sources. TODO: It may be possible to provide more
-        # detailed/ informative log errors here, but we'll need to ensure no
-        # confidential or possibly deanonymizing information ends up there.
+        # with responses to sources.
         app.logger.error("Reply from '{}' failed: {}!".format(g.user,
                                                               exc.__class__))
         db_session.rollback()
