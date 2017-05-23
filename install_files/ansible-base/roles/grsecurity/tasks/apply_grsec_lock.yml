@@ -1,29 +1,22 @@
 ---
-  # If the grsec package is installed (via common role) and the grsec_lock is
-  # not present reboot the system, to boot into the grsec kernel.
-- name: Restart machine if the grsec lock sysctl option does not exist.
-  shell: shutdown -r now "Ansible restart to boot into grsec kernel"
-  async: 0
-  poll: 0
-  ignore_errors: true
-  when: not running_grsec.stat.exists
-  sudo: yes
+  # Ansible doesn't support notifying handlers based on file existence results,
+  # e.g. via registered `stat` results, only only on changed=true task results,
+  # so let's craft a task that returns changed=true if-and-only-if a file exists.
+- name: Check if reboot is required due to inactive grsecurity lock.
+  command: /bin/true
+  args:
+    # This task won't actually create anything, given the task is simply `true`,
+    # but leveraging the `creates` arg allows us to run the task conditionally,
+    # based on file existence, which is an accurate indicator of whether a reboot
+    # is required.
+    creates: /proc/sys/kernel/grsecurity/grsec_lock
+  notify: reboot
   tags:
     - reboot
 
-- name: Wait for server to come back.
-  local_action: wait_for
-  args:
-    host: "{{ ansible_ssh_host|default(inventory_hostname) }}"
-    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
-    delay: 45
-    search_regex: OpenSSH
-    state: started
-  when: not running_grsec.stat.exists
-  # Wait action runs on localhost, and does NOT require sudo.
-  sudo: false
-  tags:
-    - reboot
+  # If we need to reboot, do it now, since a grsecurity-patched kernel
+  # must be running in order to modify the grsecurity-related sysctl settings.
+- meta: flush_handlers
 
 - name: Set sysctl flags for grsecurity.
   sysctl:

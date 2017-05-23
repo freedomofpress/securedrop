@@ -20,7 +20,7 @@ def test_app_iptables_rules(SystemInfo, Command, Sudo):
 
     # Build iptables scrape cmd, purge comments + counters
     iptables = "iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
-    environment = os.environ.get("CI_SD_ENV")
+    environment = os.environ.get("CI_SD_ENV", "staging")
     iptables_file = "{}/iptables-app-{}.j2".format(
                                       os.path.dirname(os.path.abspath(__file__)),
                                       environment)
