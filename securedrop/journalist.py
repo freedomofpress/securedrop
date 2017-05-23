@@ -607,7 +607,8 @@ def reply():
         db_session.rollback()
     else:
         flash("Thanks! Your reply has been stored.", "notification")
-        return redirect(url_for('col', sid=g.sid))
+
+    return redirect(url_for('col', sid=g.sid))
 
 
 @app.route('/regenerate-code', methods=('POST',))
