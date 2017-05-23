@@ -38,4 +38,6 @@ include tests/log/
 include tests/utils/
 include tests/utils/**.py
 include wordlist
+include sass/
+include sass/**.sass
 exclude *
