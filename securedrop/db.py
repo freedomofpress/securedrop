@@ -1,5 +1,6 @@
 import os
 import datetime
+from functools import partial
 import base64
 import binascii
 
@@ -23,7 +24,6 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
 import store
 
 LOGIN_HARDENING = True
@@ -191,31 +191,30 @@ class SourceStar(Base):
         self.source_id = source.id
         self.starred = starred
 
+class LoginException(Exception):
+    """Generic exception for errors during login."""
 
-class InvalidUsernameException(Exception):
+class InvalidUsernameException(LoginException):
+    """Raised when a user logs in with an invalid username."""
 
-    """Raised when a user logs in with an invalid username"""
+class LoginThrottledException(LoginException):
+    """Raised when a user attempts to log in too many times in a given
+    time period."""
 
+class WrongPasswordException(LoginException):
+    """Raised when a user logs in with an incorrect password."""
 
-class LoginThrottledException(Exception):
+class BadTokenException(LoginException):
+    """Raised when a user logs in with an invalid TOTP token."""
 
-    """Raised when a user attempts to log in too many times in a given time period"""
-
-
-class WrongPasswordException(Exception):
-
-    """Raised when a user logs in with an incorrect password"""
-
-
-class BadTokenException(Exception):
-
-    """Raised when a user logins in with an incorrect TOTP token"""
-
+class TokenReuseException(LoginException):
+    """Raised when a user attempts to re-use a token, or to use a token
+    that preceds or proceeds a token that has been used."""
 
 class InvalidPasswordLength(Exception):
-    """Raised when attempting to create a Journalist or log in with an invalid
-    password length"""
-
+    """Raised when attempting to create a Journalist or log in with an
+    invalid password length.
+    """
     def __init__(self, password):
         self.pw_len = len(password)
 
@@ -239,7 +238,7 @@ class Journalist(Base):
     otp_secret = Column(String(16), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
     hotp_counter = Column(Integer, default=0)
-    last_token = Column(String(6))
+    last_token = Column(String(6)) # deprecated
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
@@ -291,7 +290,9 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+        return pyotp.utils.compare_digest(self._scrypt_hash(password,
+                                                            self.pw_salt),
+                                          self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
@@ -344,31 +345,94 @@ class Journalist(Base):
         return ''.join(token.split())
 
     def verify_token(self, token):
+        """Verify a HOTP/TOTP `token` (string), allowing for reasonable
+        client-server skew.
+
+        Returns:
+            bool: `True` if the token is valid, else `False`.
+
+        Raises:
+            BadTokenException: If `token` is not a six digit string.
+        """
         token = self._format_token(token)
+        if not isinstance(token, str):
+            raise BadTokenException("Token should be of type `str`.")
+        if not len(token) == 6:
+            raise BadTokenException("Token should be of `len` 6.")
+        try:
+            int(token)
+        except ValueError:
+            raise BadTokenException(
+                "Token string should only contain digits.")
 
-        # Only allow each authentication token to be used once. This
-        # prevents some MITM attacks.
-        if token == self.last_token and LOGIN_HARDENING:
-            raise BadTokenException("previously used token {}".format(token))
-        else:
-            self.last_token = token
-            db_session.commit()
+        def verify_hotp(token):
+            """Constant-time check to determines if a HOTP `token` is
+            valid. The current value of :attr:`self.hotp_counter` is
+            used to generate the comparison token, as well as the next
+            19 tokens in case of client skew. The smallest counter value
+            for which the corresponding OTP is equal to the token (if 
+            such a value exists) will be incremented and set as the new
+            value of `self.hotp_counter`.
 
-        if self.is_totp:
-            # Also check the given token against the previous and next
-            # valid tokens, to compensate for potential time skew
-            # between the client and the server. The total valid
-            # window is 1:30s.
-            return self.totp.verify(token, valid_window=1)
-        else:
-            for counter_val in range(
-                    self.hotp_counter,
-                    self.hotp_counter + 20):
-                if self.hotp.verify(token, counter_val):
-                    self.hotp_counter = counter_val + 1
-                    db_session.commit()
-                    return True
-            return False
+            Returns:
+                bool: `True` if the token is valid for the current
+                    `self.hotp_counter` value, or any of the next 19.
+            """
+            verified = False
+            # In the tiny chance of collision, reverse the order so that
+            # verified ends up being the smallest matching `counter_val` and
+            # the user is not locked out.
+            for counter_val in range(self.hotp_counter,
+                                     self.hotp_counter + 20)[::-1]:
+                if pyotp.utils.strings_equal(token,
+                                             self.hotp.at(counter_val)):
+                    verified = counter_val
+
+            if verified:
+                self.hotp_counter = verified + 1
+                db_session.add(self)
+                db_session.commit()
+        
+            return bool(verified)
+
+        def verify_totp(token):
+            """Constant-time check that a TOTP `token` is valid for the
+            current timecode window, or either of the windows that
+            precede and proceed it. This accounts for client-server time
+            skew of up to 30 seconds in either direction.
+
+            Returns:
+                bool: `True` if the token is valid for current,
+                    previous, or next timecode windows, else `False`.
+            """
+            verified = False
+            for_time = datetime.datetime.now()
+            for i in range(-1, 2):
+                verified = (constant_time_compare(str(token),
+                                                  str(self.at(for_time, i)))
+                            | verified)
+            return verified
+
+        verifier = verify_totp if self.is_totp else verify_hotp
+
+        return verifier(token)
+
+    def check_token_reuse(self, token, now):
+        """Check if a TOTP `token` has been used before, or if
+        the `token` precedes or proceeds a token that has been used
+        before.
+
+        Returns:
+            bool: `True` if the token has already been used (or precedes
+                or proceeds a used token), else `False`.
+        """
+        timecode_last_access = self.totp.timecode(self.last_access)
+        timecode_now = self.totp.timecode(datetime.datetime.utcnow())
+        reused = False
+        for timecode in range(timecode_last_access - 1,
+                              timecode_last_access + 2):
+            reused = constant_time_compare(timecode_now, timecode) | reused
+        return reused
 
     @classmethod
     def throttle_login(cls, user):
@@ -393,6 +457,24 @@ class Journalist(Base):
 
     @classmethod
     def login(cls, username, password, token):
+        """Takes a username, password, and OTP token (strings) and tries
+        to authenticate the user. If `LOGIN_HARDENING` login attempts
+        are rate-limited, and TOTP tokens which have already been used,
+        or precede or proceed used tokens, are rejected.
+
+        Returns: :obj:`Journalist`
+
+        Raises:
+            InvalidUsernameException: If no user can be found with the
+                specified `username`.
+            LoginThrottledException: If the user has exceeded the login
+                rate-limiting threshold, or if the user is a TOTP user
+                and has just successfully logged in within 60s.
+            BadTokenException: If the `token` is invalid.
+            TokenReuseException: If the `token` is a TOTP token that has
+                already been used, or precedes or proceeds a used token.
+            WrongPasswordException: If the user's `password` is invalid.
+        """
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
@@ -403,9 +485,19 @@ class Journalist(Base):
             cls.throttle_login(user)
 
         if not user.verify_token(token):
-            raise BadTokenException("invalid token")
+            raise BadTokenException("Invalid token.")
+        if LOGIN_HARDENING and user.is_totp:
+            if user.check_token_reuse(token):
+                raise TokenReuseException(
+                    "Token valid, but reused. Or token precedes or proceeds a "
+                    "used token.")
         if not user.valid_password(password):
-            raise WrongPasswordException("invalid password")
+            raise WrongPasswordException("Invalid password.")
+
+        user.last_access = datetime.datetime.utcnow()
+        db_session.add(user)
+        db_session.commit()
+
         return user
 
 
