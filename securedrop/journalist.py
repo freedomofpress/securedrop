@@ -592,7 +592,6 @@ def reply():
     reply = Reply(g.user, g.source, filename)
 
     try:
-        db_session.add(g.source)
         db_session.add(reply)
         db_session.commit()
     except Exception as exc:
