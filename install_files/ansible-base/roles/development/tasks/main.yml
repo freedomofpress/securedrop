@@ -1,11 +1,4 @@
 ---
-- name: Update apt package lists.
-  apt:
-      update_cache: yes
-  tags:
-    - apt
-    - development
-
 - name: Install apt package dependencies for Development environment.
   apt:
     pkg: "{{ item }}"
