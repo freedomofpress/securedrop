@@ -47,15 +47,11 @@
   tags:
     - development
 
-# TODO: Probably better to set this env var in /etc/profile.d,
-# since it doesn't need to be set ONLY for the securedrop user.
-# Warrants further testing (e.g. Travis CI?), so leaving for now.
+# Setting at the system-wide level to apply to all users.
 - name: Set SECUREDROP_ENV in bashrc.
-  lineinfile:
-    dest: /home/{{ securedrop_user }}/.bashrc
-    state: present
-    insertafter: EOF
-    line: "export SECUREDROP_ENV=dev"
+  copy:
+    dest: /etc/profile.d/securedrop_env.sh
+    content: "export SECUREDROP_ENV=dev"
   tags:
     - environment
     - development
