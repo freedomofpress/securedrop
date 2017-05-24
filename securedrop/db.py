@@ -402,7 +402,7 @@ class Journalist(Base):
 
         # Prevent TOTP token reuse
         if user.last_token is not None:
-            if pytop.utils.compare_digest(token == user.last_token):
+            if pyotp.utils.compare_digest(token, user.last_token):
                 raise BadTokenException("previously used token "
                                         "{}".format(token))
         if not user.verify_token(token):

@@ -6,7 +6,7 @@ from flask import url_for
 from flask_testing import TestCase
 
 os.environ['SECUREDROP_ENV'] = 'test'
-from db import db_session
+from db import db_session, Journalist, BadTokenException
 import journalist
 import utils
 
@@ -41,6 +41,26 @@ class TestJournalist2FA(TestCase):
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token=valid_token))
+        return resp
+
+    def test_totp_reuse_protections(self):
+        """Ensure that logging in twice with the same TOTP token
+        fails."""
+        resp = self._login_user()
+        self.assertRedirects(resp, url_for('index'))
+
+        resp = self._login_user()
+        self.assert200(resp)
+        self.assertIn("Login failed", resp.data)
+
+    def test_totp_reuse_protections2(self):
+        """More granular than the preceeding test, we want to make sure
+        the right exception is being raised in the right place."""
+        valid_token = self.user.totp.now()
+        Journalist.login(self.user.username, self.user_pw, valid_token)
+        with self.assertRaises(BadTokenException):
+            Journalist.login(self.user.username, self.user_pw, valid_token)
+
 
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
         # Regression test https://github.com/freedomofpress/securedrop/pull/1692
