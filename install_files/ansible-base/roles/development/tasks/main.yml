@@ -37,6 +37,10 @@
     fi
   args:
     chdir: '{{ securedrop_repo  }}/securedrop'
+  register: dev_sass_compile_result
+  # Any changed files will be printed to stdout; use that to detect whether
+  # the files have changed.
+  changed_when: "'write ' in dev_sass_compile_result.stdout"
   tags:
     - development
 
