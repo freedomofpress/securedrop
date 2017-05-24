@@ -23,13 +23,14 @@ build_app_code_dir: "{{ securedrop_repo }}/securedrop"
 securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requirements.txt"
 test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
 development_dependencies:
-  - libssl-dev
   - ipython
+  - libssl-dev
+  - ntp
   - python-dev
   - python-pip
+  - ruby # to ensure `gem` command is available
   - tmux
   - vim
-  - ruby # to ensure `gem` command is available
 
 # Installing the securedrop-app-code.deb package
 securedrop_deb_path: "{{ securedrop_repo }}"
