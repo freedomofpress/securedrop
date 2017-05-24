@@ -8,10 +8,18 @@
     - name: Pull in systemd enabled docker image
       docker_image:
         name: "{{ docker_image_sd_build }}"
-      tags: docker
       when: "{{ docker_containers != [] }}"
+      tags: docker
 
-    - name: Start build container
+    - name: Tor docker proxy
+      docker_container:
+        name: tor
+        image: "hsaito/torbox"
+        state: started
+      when: "{{ docker_containers != [] }}"
+      tags: docker
+
+    - name: Start containers
       docker_container:
         name: "{{ item }}"
         hostname: "{{ item }}"
@@ -20,8 +28,10 @@
         devices:
           - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
         privileged: true
-      tags: docker
+        env:
+          TOR_PROXY: "{{ lookup('pipe', 'docker exec tor hostname -I') }}"
       with_items: "{{ docker_containers }}"
+      tags: docker
   vars:
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     docker_image_sd_build: "msheiny/debian-jessie-systemd"
