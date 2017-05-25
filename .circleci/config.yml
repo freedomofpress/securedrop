@@ -31,3 +31,6 @@ jobs:
 
       - store_test_results:
           path: /root/sd/junit
+
+      - store_artifacts:
+          path: /root/sd/junit
