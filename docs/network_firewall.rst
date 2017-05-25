@@ -421,10 +421,8 @@ section of the "Status: Dashboard" page (the home page of the WebGUI).
 
 If you see that an update is available, we recommend installing it. Most
 of these updates are for minor bugfixes, but occasionally they can
-contain important security fixes. If you are receiving support from
-Freedom of the Press Foundation, we will inform you when an important
-security update is available for your pfSense firewall. Alternatively,
-you can keep appraised of updates yourself by checking the `pfSense Blog posts with the "releases"
+contain important security fixes. You should keep appraised of updates
+yourself by checking the `pfSense Blog posts with the "releases"
 tag <https://blog.pfsense.org/?tag=releases>`__.
 
 .. note:: Protip: Subscribe to the `RSS feed`_.
