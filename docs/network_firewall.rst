@@ -28,12 +28,19 @@ recommend the following resources:
 -  `Official pfSense
    Wiki <https://doc.pfsense.org/index.php/Main_Page>`__
 -  `pfSense: The Definitive
-   Guide <http://www.amazon.com/pfSense-Definitive-Guide-Christopher-Buechler-ebook/dp/B004OYTMPC>`__
+   Guide <https://www.amazon.com/pfSense-Definitive-Christopher-M-Buechler/dp/0979034280>`__
 
    -  *Note:* This guide is now slightly out of date, although we found
-      it to be a useful reference approximately 1 year ago. To get the
-      latest version of this book, you need to become a `pfSense Gold
+      it to be a useful reference in the past. To get the latest version of
+      this book, you need to become a `pfSense Gold
       Member <https://www.pfsense.org/our-services/gold-membership.html>`__.
+
+If you're using the recommended SG-2440 firewall, then you may find the
+following resources useful:
+
+-  `SG-2440
+   Quick Start Guide <https://www.netgate.com/docs/sg-2440/quick-start-guide.html>`__
+-  `Factory Reset of the SG-2440 (video) <https://vimeo.com/143197016>`__
 
 Before you begin
 ----------------
@@ -89,7 +96,7 @@ chosen:
 Initial Configuration
 ---------------------
 
-Unpack the firewall, connect power, and power on.
+Unpack the firewall, connect the power, and power on the device.
 
 We will use the pfSense WebGUI to do the initial configuration of the
 network firewall.
@@ -423,11 +430,11 @@ If you see that an update is available, we recommend installing it. Most
 of these updates are for minor bugfixes, but occasionally they can
 contain important security fixes. You should keep appraised of updates
 yourself by checking the `pfSense Blog posts with the "releases"
-tag <https://blog.pfsense.org/?tag=releases>`__.
+tag <https://www.netgate.com/blog/category.html#releases>`__.
 
 .. note:: Protip: Subscribe to the `RSS feed`_.
 
-.. _RSS feed: https://blog.pfsense.org/?feed=rss2&tag=releases
+.. _RSS feed: https://www.netgate.com/feed.xml
 
 To install the update, click the "click here" link next to "Update
 available". We recommend checking the "perform full backup prior to
