@@ -50,7 +50,7 @@ will need to provision several unique subnets, which should not conflict
 with the network configuration on the WAN interface. If you are unsure,
 consult your local sysadmin.
 
-Note that many firewalls, including the recommended Netgate pfSense,
+Many firewalls, including the recommended Netgate pfSense,
 automatically set up the LAN interface on ``192.168.1.1/24``. This
 particular private network is also a very common choice for home and
 office routers. If you are connecting the firewall to a router with the
@@ -91,7 +91,7 @@ chosen:
 
 -  Monitor Subnet: ``10.20.3.0/24``
 -  Monitor Gateway: ``10.20.3.1``
--  *Monitor Server* (OPT2) : ``10.20.3.2``
+-  Monitor Server (OPT2) : ``10.20.3.2``
 
 Initial Configuration
 ---------------------
@@ -107,7 +107,11 @@ Connect to the pfSense WebGUI
 #. Boot the *Admin Workstation* into Tails from the Admin Live USB.
 
 #. Connect the *Admin Workstation* to the LAN interface. You should see
-   a popup notification in Tails that says "Connection Established".
+   a popup notification in Tails that says "Connection Established". If you click
+   on the network icon in the upper right of the Tails Desktop, you should see
+   "Wired Connected":
+
+   |Wired Connected|
 
    .. warning:: Make sure your *only* active connection is the one you
 		just established with the network firewall. If you are
@@ -115,8 +119,8 @@ Connect to the pfSense WebGUI
 		wireless network), you may encounter problems trying
 		to connect the pfSense WebGUI.
 
-#. Launch the **Unsafe Browser** from the menu bar: **Applications ▸ Internet ▸ Unsafe
-   Browser**.
+#. Launch the **Unsafe Browser** from the menu bar: **Applications ▸ Internet ▸
+   Unsafe Browser**.
 
    |Launching the Unsafe Browser|
 
@@ -146,48 +150,63 @@ Connect to the pfSense WebGUI
 #. Navigate to the pfSense WebGUI in the *Unsafe Browser*:
    ``https://192.168.1.1``
 
+   .. note:: If you have trouble connecting, go to your network settings and
+      make sure that you have an IPv4 address in the ``192.168.1.1/24`` range.
+      You may need to turn on DHCP, else you can manually configure a static
+      IPv4 address of ``192.168.1.x`` with a subnet mask of ``255.255.255.0``.
+      However, make sure not to configure your Tails device to have the same IP
+      as the firewall (``192.168.1.1``).
+
 #. The firewall uses a self-signed certificate, so you will see a "This
    Connection Is Untrusted" warning when you connect. This is expected.
-   You can safely continue by clicking **I Understand the Risks**, **Add
+   You can safely continue by clicking **Advanced**, **Add
    Exception...**, and **Confirm Security Exception**.
+
+   |Your Connection is Insecure|
 
 #. You should see the login page for the pfSense GUI. Log in with the
    default username and password (``admin`` / ``pfsense``).
+
+   |Default pfSense|
 
 .. _intentionally disables LAN access: https://labs.riseup.net/code/issues/7976
 
 Setup Wizard
 ~~~~~~~~~~~~
 
-If you're setting up a brand new (or recently factory reset) router,
-logging in to the pfSense WebGUI will automatically start the Setup
-Wizard. Click next, then next again. Don't sign up for a pfSense Gold
-subscription (unless you want to).
+#. If you're setting up a brand new (or recently factory reset) router,
+   logging in to the pfSense WebGUI will automatically start the Setup
+   Wizard. Click **Next**, then **Next** again. Don't sign up for a pfSense Gold
+   subscription (unless you want to).
 
-On the "General Information" page, we recommend leaving your hostname as
-the default (pfSense). There is no relevant domain for SecureDrop, so we
-recommend setting this to ``securedrop.local`` or something similar. Use
-your preferred DNS servers. If you don't know what DNS servers to use,
-we recommend using Google's DNS servers: ``8.8.8.8`` and ``8.8.4.4``.
-Click Next.
+#. On the "General Information" page, we recommend leaving your hostname as
+   the default (pfSense). There is no relevant domain for SecureDrop, so we
+   recommend setting this to ``securedrop.local`` or something similar. Use
+   your preferred DNS servers. If you don't know what DNS servers to use,
+   we recommend using Google's DNS servers: ``8.8.8.8`` and ``8.8.4.4``.
+   Click Next.
 
-Leave the defaults for "Time Server Information". Click Next.
+   |pfSense General Info|
 
-On "Configure WAN Interface", enter the appropriate configuration for
-your network. Consult your local sysadmin if you are unsure what to
-enter here. For many environments, the default of DHCP will work and the
-rest of the fields can be left blank. Click Next.
+#. Leave the defaults for "Time Server Information". Click Next.
 
-For "Configure LAN Interface", use the IP address and subnet mask of the
-*gateway* for the **Admin Subnet**. Click Next.
+#. On "Configure WAN Interface", enter the appropriate configuration for
+   your network. Consult your local sysadmin if you are unsure what to
+   enter here. For many environments, the default of DHCP will work and the
+   rest of the fields can be left blank. Click Next.
 
-Set a strong admin password. We recommend generating a strong password
-with KeePassX, and saving it in the Tails Persistent folder using the
-sprovided KeePassX database template. Click Next.
+#. For "Configure LAN Interface", use the IP address and subnet mask of the
+   *gateway* for the **Admin Subnet**. Click Next.
 
-Click Reload. Once the reload completes and the web page refreshes,
-click the corresponding "here" link to "continue on to the pfSense
-webConfigurator".
+   |Configure LAN Interface|
+
+#. Set a strong admin password. We recommend generating a strong password
+   with KeePassX, and saving it in the Tails Persistent folder using the
+   provided KeePassX database template. Click Next.
+
+#. Click Reload. Once the reload completes and the web page refreshes,
+   click the corresponding "here" link to "continue on to the pfSense
+   webConfigurator".
 
 At this point, since you (probably) changed the LAN subnet settings from
 their defaults, you will no longer be able to connect after reloading
@@ -456,10 +475,15 @@ while depending on the speed of your network.
 	  than expected or not showing any progress, try refreshing
 	  the page.
 
+.. |Wired Connected| image:: images/firewall/wired_connected.png
+.. |Your Connection is Insecure| image:: images/firewall/your_connection_is_insecure.png
 .. |Launching the Unsafe Browser| image:: images/firewall/launching_unsafe_browser.png
 .. |You really want to launch the Unsafe Browser| image:: images/firewall/unsafe_browser_confirmation_dialog.png
 .. |Pop-up notification| image:: images/firewall/starting_the_unsafe_browser.png
 .. |Unsafe Browser Homepage| image:: images/firewall/unsafe_browser.png
+.. |Default pfSense| image:: images/firewall/default_pfsense.png
+.. |Configure LAN Interface| image:: images/firewall/configure_lan_interface.png
+.. |pfSense General Info| image:: images/firewall/pfsense_general_information.png
 .. |Connection Information| image:: images/firewall/connection_information.png
 .. |Edit Connections| image:: images/firewall/edit_connections.png
 .. |Edit Wired Connection| image:: images/firewall/edit_network_connection.png
