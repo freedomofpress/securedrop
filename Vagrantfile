@@ -83,7 +83,7 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
-      ansible.limit = 'all'
+      ansible.limit = 'all,localhost'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
         'securedrop_application_server' => %w(app-staging),
