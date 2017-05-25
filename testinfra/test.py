@@ -33,6 +33,7 @@ def get_target_roles(target_host):
                     "mon-staging": ['testinfra/mon',
                                     'testinfra/common'],
                     "mon-prod":    ['testinfra/mon'],
+                    "test":       ['testinfra/functional'],
                     "build":       ['testinfra/build']}
 
     try:
@@ -88,7 +89,7 @@ testinfra \
             ssh_config_path = ""
             testinfra_command_template = "testinfra -vv {target_roles}"
         else:
-            if target_host == "build":
+            if target_host in ["build","test"]:
                 conn_type = "docker"
             ssh_config_path = "{}/.ssh/sshconfig-securedrop-ci-{}".format(
                                             os.environ["HOME"],
