@@ -2,6 +2,7 @@
 # shellcheck disable=SC2016
 #
 #
+. devops/ansible_env
 trap "make ci-teardown" ERR
 
 # Quick hack to pass IPs off to testinfra
@@ -30,6 +31,9 @@ if [ "$?" == "0" ]; then
         ;;
     esac
 fi
+
+# Run application tests
+./devops/playbooks/ci-app-tests.yml
 
 if [[ -z "${TEST_REPORTS}" ]] || [[ "${TEST_REPORTS}" == '${CIRCLE_TEST_REPORTS}' ]]; then
     TEST_REPORTS=$(pwd)

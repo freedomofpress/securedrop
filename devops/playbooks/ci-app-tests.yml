@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Run through and pull back application tests
+  hosts: "app-{{ ci_env }}"
+  become: yes
+  tasks:
+    - name: Run application script
+      script: ../scripts/app-tests.sh "{{ app_dir[ci_env] }}"
+      ignore_errors: true
+
+    - name: Pull back test results
+      fetch:
+        src: /tmp/apptest.xml
+        dest: ../../apptest-results.xml
+        flat: yes
+  vars:
+    ci_env: "{{ lookup('env', 'CI_SD_ENV') }}" 
+    app_dir:
+      staging: /var/www/securedrop
