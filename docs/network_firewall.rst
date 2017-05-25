@@ -190,21 +190,21 @@ Setup Wizard
 
    |pfSense General Info|
 
-#. Leave the defaults for "Time Server Information". Click Next.
+#. Leave the defaults for "Time Server Information". Click **Next**.
 
 #. On "Configure WAN Interface", enter the appropriate configuration for
    your network. Consult your local sysadmin if you are unsure what to
    enter here. For many environments, the default of DHCP will work and the
-   rest of the fields can be left blank. Click Next.
+   rest of the fields can be left blank. Click **Next**.
 
 #. For "Configure LAN Interface", use the IP address and subnet mask of the
-   *gateway* for the **Admin Subnet**. Click Next.
+   *gateway* for the **Admin Subnet**. Click **Next**.
 
    |Configure LAN Interface|
 
 #. Set a strong admin password. We recommend generating a strong password
    with KeePassX, and saving it in the Tails Persistent folder using the
-   provided KeePassX database template. Click Next.
+   provided KeePassX database template. Click **Next**.
 
 #. Click Reload. Once the reload completes and the web page refreshes,
    click the corresponding "here" link to "continue on to the pfSense
@@ -243,6 +243,8 @@ Internet through the WAN. The easiest way to do this is to use ping
 (Diagnostics → Ping in the WebGUI). Enter an external hostname or IP
 that you expect to be up (e.g. ``google.com``) and click "Ping".
 
+|Ping|
+
 SecureDrop Configuration
 ------------------------
 
@@ -262,45 +264,51 @@ Disable DHCP on the LAN
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 pfSense runs a DHCP server on the LAN interface by default. At this
-stage in the documentation, the *Admin Workstation* has an IP address
-assigned via that DHCP server. You can easily check your current IP
-address by *right-clicking* the networking icon (a blue cable going in
-to a white jack) in the top right of the menu bar, and choosing
-**Connection Information**.
-
-|Connection Information|
+stage in the documentation, the *Admin Workstation* likely has an IP address
+assigned via that DHCP server.
 
 In order to tighten the firewall rules as much as possible, we recommend
 disabling the DHCP server and assigning a static IP address to the Admin
 Workstation instead.
 
-Disable DHCP
-^^^^^^^^^^^^
+Disable DHCP Server On the Firewall
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
 WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
-interface**, scroll down, and click the **Save** *and then* click Apply.
+interface**, scroll down, and click the **Save** button.
+
+|Disable DHCP|
 
 Assign a static IP address to the *Admin Workstation*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now you will need to assign a static IP to the *Admin Workstation*. Use
-the *Admin Workstation* that you selected earlier, and make sure you
-use the same IP when setting up the firewall rules later.
+Now you will need to assign a static IP to the *Admin Workstation*.
 
-Start by *right-clicking* the networking icon in the top right of the
-menu bar, and choose **Edit Connections...**.
+You can easily check your current IP address by *clicking* the top right of
+the menu bar, clicking on the **Wired Connection** and then clicking **Wired
+Settings**.
 
-|Edit Connections|
+|Wired Settings|
 
-Select the name of the current connection from the list and click
-**Edit...**.
+From here you can click on the cog in the lower right of the panel:
 
-|Edit Wired Connection|
+|Tails Network Settings|
 
-Change to the **IPv4 Settings** tab. Change **Method:** from
-**Automatic (DHCP)** to **Manual**. Click **Add** and fill in the
-static networking information for the *Admin Workstation*.
+This will take you to the network settings, where you can click **IPv4** to see
+whether or not the **Automatic (DHCP)** or **Manual** (static IP) setting is
+turned on.
+
+Change to the **IPv4 Settings** tab. Change **Addresses** from
+**Automatic (DHCP)** to **Manual** (if it isn't already).
+
+Fill in the static networking information for the *Admin Workstation*:
+
+-  Address: ``10.20.1.2``
+-  Netmask: ``255.255.255.0``
+-  Gateway : ``10.20.1.1``
+
+|IPv4 Settings|
 
 .. note:: The Unsafe Browser will not launch when using a manual
 	  network configuration if it does not have DNS servers
@@ -315,9 +323,9 @@ static networking information for the *Admin Workstation*.
 	  servers that you used for the network firewall in the setup
 	  wizard.
 
-|Admin Wokstation Static IP Configuration|
+|Admin Workstation Static IP Configuration|
 
-Click **Save...**. If the network does not come up within 15 seconds or
+Click **Apply**. If the network does not come up within 15 seconds or
 so, try disconnecting and reconnecting your network cable to trigger the
 change. You will need you have succeeded in connecting with your new
 static IP when you see a pop-up notification that says "Tor is ready.
@@ -350,24 +358,28 @@ to configure the OPT1 interface. Go to **Interfaces ▸ OPT1**, and check
 the box to **Enable Interface**. Use these settings:
 
 -  IPv4 Configuration Type: Static IPv4
--  IPv4 Address: Application Gateway
+-  IPv4 Address: `10.20.2.1` (Application Gateway IP)
 
-Make sure that the CIDR routing prefix is correct. Leave everything else
+Make sure that the CIDR routing prefix is correct (`/24`). Leave everything else
 as the default. **Save** and **Apply Changes**.
+
+|OPT1|
 
 Set up OPT2
 ~~~~~~~~~~~
 
-If you have 4 NICs, you will have to enable the OPT2 interface. Go to
+Next, you will have to enable the OPT2 interface. Go to
 **Interfaces ▸ OPT2**, and check the box to **Enable Interface**. OPT2
 interface is set up similarly to how we set up OPT1 in the previous
 section. Use these settings:
 
 -  IPv4 Configuration Type: Static IPv4
--  IPv4 Address: Monitor Gateway
+-  IPv4 Address: `10.20.3.1` (Monitor Gateway IP)
 
-Make sure that the CIDR routing prefix is correct. Leave everything else
+Make sure that the CIDR routing prefix is correct (`/24`). Leave everything else
 as the default. **Save** and **Apply Changes**.
+
+|OPT2|
 
 Set up the Firewall Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -377,10 +389,80 @@ interfaces and underlying sets of software, we cannot provide a set of
 network firewall rules to match every use case.
 
 This document is currently geared towards pfSense configured using the
-WebGUI; as a result, the easiest way to set up your firewall rules is to
-look at the screenshots of a correctly configured firewall below and
+WebGUI. As a result, the easiest way to set up your firewall rules is to
+look at the screenshots of a correctly configured firewall and
 edit the interfaces, aliases, and firewall rules on your firewall to
 match them.
+
+Use Screenshots of Firewall Configuration (Basic)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here are some example screenshots of a working pfSense firewall
+configuration. You will add the firewall rules until they match what is
+shown on the screenshots.
+
+First, we will configure IP and port aliases. Navigate to **Firewall ▸ Aliases**
+to
+
+|Blank IP Aliases|
+
+Click add and add each IP alias. You should leave the **Type** as **Host**.
+Make aliases for the following:
+
+- ``admin_workstation``: ``10.20.1.2``
+- ``app_server``: ``10.20.2.2``
+- ``external_dns_servers``: ``8.8.8.8, 8.8.4.4``
+- ``local_servers``: ``app_server, monitor_server``
+- ``monitor_server``: ``10.20.3.2``
+
+|Add Firewall Alias|
+
+Click **Save** to add the alias.
+
+Keep adding aliases until the screenshot matches what is shown here:
+
+|Firewall IP Aliases Pre Save|
+
+Finally, hit **Apply Changes**. This will save your changes. You should see a
+message "The changes have been applied successfully":
+
+|Firewall IP Aliases Post Save|
+
+Next click "Ports" for the port aliases, and add the following ports:
+
+- OSSEC: ``1514``
+- ossec_agent_auth: ``1515``
+
+Your configuration should match this screenshot:
+
+|Port Aliases|
+
+Next we will configure firewall rules for each interface. Navigate to **Firewall ▸
+Rules** to add firewall rules for the LAN, OPT1, and OPT2 interfaces.
+
+.. warning:: Be sure not to delete the Anti-Lockout Rule on the LAN interface.
+    Deleting this rule will lock you out of the pfSense WebGUI.
+
+Add or remove rules until they match the following screenshots by clicking **Add**
+to add a rule.
+
+LAN interface:
+
+|Firewall LAN Rules|
+
+OPT1 interface:
+
+|Firewall OPT1 Rules|
+
+OPT2 interface:
+
+|Firewall OPT2 Rules|
+
+Once you've set up the firewall, exit the Unsafe Browser, and continue
+with the next step of the installation instructions.
+
+Tips for setting up pfSense Firewall Rules (Advanced)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here are some general tips for setting up pfSense firewall rules:
 
@@ -405,11 +487,8 @@ Here are some general tips for setting up pfSense firewall rules:
    very helpful. You can find them in the WebGUI in *Status → System
    Logs → Firewall*.
 
-We recognize that this process is cumbersome and may be difficult for
-people inexperienced in managing a firewall. We are working on
-automating much of this for an upcoming SecureDrop release. If you're
-unsure how to set up your firewall, use the screenshots in the next
-section as your guide.
+Using the Template
+^^^^^^^^^^^^^^^^^^
 
 For more experienced pfSense users, we have included a copy of the
 ``.xml`` backup from a correctly configured example firewall (SG-2440)
@@ -421,21 +500,6 @@ probably won't be able to import it directly (we haven't tried). The
 main sections of the file that you should be interested in are
 ``interfaces``, ``filter`` (the firewall rules), and ``aliases``
 (necessary to parse the firewall rules).
-
-Example Screenshots of Firewall Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Here are some example screenshots of a working pfSense firewall
-configuration.
-
-|Firewall IP Aliases|
-|Firewall Port Aliases|
-|Firewall LAN Rules|
-|Firewall OPT1 Rules|
-|Firewall OPT2 Rules|
-
-Once you've set up the firewall, exit the Unsafe Browser, and continue
-with the next step of the installation instructions.
 
 Keeping pfSense up to date
 --------------------------
@@ -449,7 +513,7 @@ section of the "Status: Dashboard" page (the home page of the WebGUI).
 
 If you see that an update is available, we recommend installing it. Most
 of these updates are for minor bugfixes, but occasionally they can
-contain important security fixes. You should keep appraised of updates
+contain important security fixes. You should keep apprised of updates
 yourself by checking the `pfSense Blog posts with the "releases"
 tag <https://www.netgate.com/blog/category.html#releases>`__.
 
@@ -486,14 +550,23 @@ while depending on the speed of your network.
 .. |Default pfSense| image:: images/firewall/default_pfsense.png
 .. |Configure LAN Interface| image:: images/firewall/configure_lan_interface.png
 .. |pfSense General Info| image:: images/firewall/pfsense_general_information.png
-.. |Connection Information| image:: images/firewall/connection_information.png
-.. |Edit Connections| image:: images/firewall/edit_connections.png
-.. |Edit Wired Connection| image:: images/firewall/edit_network_connection.png
-.. |Admin Wokstation Static IP Configuration| image:: images/firewall/admin_workstation_static_ip_configuration.png
+.. |Ping| image:: images/firewall/pfsense_diagnostics_ping.png
+.. |Admin Workstation Static IP Configuration| image:: images/firewall/admin_workstation_static_ip_configuration.png
 .. |Firewall Port Aliases| image:: images/firewall/port_aliases.png
 .. |Firewall IP Aliases| image:: images/firewall/ip_aliases_with_opt2.png
-.. |Firewall LAN Rules| image:: images/firewall/lan_rules_with_opt2.png
+.. |Firewall LAN Rules| image:: images/firewall/lan_rules.png
 .. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules_with_opt2.png
 .. |Firewall OPT2 Rules| image:: images/firewall/opt2_rules.png
 .. |Update available| image:: images/firewall/pfsense_update_available.png
+.. |Wired Settings| image:: images/firewall/wired_settings.png
+.. |Tails Network Settings| image:: images/firewall/tails_network_settings.png
+.. |IPv4 Settings| image:: images/firewall/IPv4_settings.png
+.. |Disable DHCP| image:: images/firewall/disable_DHCP.png
+.. |OPT1| image:: images/firewall/opt1.png
+.. |OPT2| image:: images/firewall/opt2.png
+.. |Blank IP Aliases| image:: images/firewall/pfsense_blank_ip_aliases.png
+.. |Add Firewall Alias| image:: images/firewall/add_firewall_alias.png
+.. |Firewall IP Aliases Pre Save| image:: images/firewall/ip_aliases_pre_save.png
+.. |Firewall IP Aliases Post Save| image:: images/firewall/ip_aliases_post_save.png
+.. |Port Aliases| image:: images/firewall/port_aliases.png
 .. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png
