@@ -95,7 +95,13 @@ Install the dependencies for the development environment:
 
 #. Vagrant_
 #. VirtualBox_
-#. Ansible_.
+#. Ansible_
+#. rsync >= 3.1.0
+
+.. note:: Note that the version of rsync installed by default on macOS is
+          extremely out-of-date, as is Apple's custom. We recommend using
+          Homebrew_ to install a modern version (3.1.0 or greater):
+          ``brew install rsync``.
 
 There are several ways to install Ansible on a Mac. We recommend installing it
 to a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
@@ -120,6 +126,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
 .. _Vagrant: http://www.vagrantup.com/downloads.html
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
 .. _Ansible: http://docs.ansible.com/intro_installation.html
+.. _Homebrew: https://brew.sh/
 
 Clone the repository
 --------------------
