@@ -41,6 +41,8 @@ following resources useful:
 -  `SG-2440
    Quick Start Guide <https://www.netgate.com/docs/sg-2440/quick-start-guide.html>`__
 -  `Factory Reset of the SG-2440 (video) <https://vimeo.com/143197016>`__
+-  `Connecting
+   to the SG-2440 Console <https://www.netgate.com/docs/sg-2440/connect-to-console.html>`__
 
 Before you begin
 ----------------
