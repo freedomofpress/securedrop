@@ -17,6 +17,8 @@
 - name: Remove remaining generic kernels.
   command: apt-get -y remove '^linux-image-.*generic$'
   register: linux_image_removal
+  # Output is extremely verbose, so let's just report changed status.
+  no_log: true
   changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_image_removal.stdout"
   tags:
     - apt
@@ -24,6 +26,8 @@
 - name: Remove remaining kernel headers.
   command: apt-get -y remove '^linux-headers-.*'
   register: linux_headers_removal
+  # Output is extremely verbose, so let's just report changed status.
+  no_log: true
   changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_headers_removal.stdout"
   tags:
     - apt
