@@ -2,11 +2,7 @@
 #
 #
 #
-export RETRY_FILES_ENABLED="False"
-export ANSIBLE_INVENTORY="localhost"
-
+. devops/ansible_env
 trap "make ci-teardown" ERR
-./devops/playbooks/aws-ci-startup.yml --diff
 
-#testinfra --hosts=`cat jenkins-aws-instances` --junit-xml=junit.xml --sudo \
-#    --ssh-config=/tmp/sshconfig-`echo $JOB_BASE_NAME | sed 's/\s//g'`$BUILD_NUMBER
+./devops/playbooks/aws-ci-startup.yml --diff
