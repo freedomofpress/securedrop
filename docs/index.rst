@@ -31,7 +31,7 @@ anonymous sources.
    before_you_begin
    set_up_tails
    set_up_svs
-   set_up_dtd
+   set_up_transfer_device
    generate_securedrop_application_key
    set_up_admin_tails
    network_firewall

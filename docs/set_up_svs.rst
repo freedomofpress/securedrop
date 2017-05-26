@@ -7,8 +7,8 @@ respond to SecureDrop submissions. Once submissions are encrypted on the
 decrypt them. The *Secure Viewing Station* is never connected to the
 internet or a local network, and only ever runs from a dedicated Tails
 drive. Journalists download encrypted submissions using their
-*Journalist Workstation*, copy them to a *Data Transfer Device* (a USB
-drive or a DVD) and physically transfer the *Data Transfer Device* to
+*Journalist Workstation*, copy them to a *Transfer Device* (a USB
+drive or a DVD) and physically transfer the *Transfer Device* to
 the *Secure Viewing Station*.
 
 Since the *Secure Viewing Station* never uses a network connection or an
