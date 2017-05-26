@@ -5,3 +5,4 @@ aws_instance_tags:
 
 docker_instances:
   - build
+  - apptestclient

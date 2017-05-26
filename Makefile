@@ -23,6 +23,10 @@ ci-test:
 ci-debug:
 	touch ${HOME}/.FPF_CI_DEBUG
 
+.PHONY: ci-build-only
+ci-build-only:
+	./devops/scripts/ci-build_only.sh
+
 .PHONY: docs-lint
 docs-lint:
 # The `-W` option converts warnings to errors.
@@ -45,4 +49,5 @@ help:
 	@echo "\t ci-test: Tests AWS EC2 hosts for testing staging environment."
 	@echo "\t ci-go: Creates, provisions, tests, and destroys AWS EC2 hosts"
 	@echo "\t        for testing staging environment."
+	@echo "\t ci-build-only: Kicks off build logic and pulls back deb files."
 	@echo "\t ci-debug: Prevents automatic destruction of AWS EC2 hosts on error."

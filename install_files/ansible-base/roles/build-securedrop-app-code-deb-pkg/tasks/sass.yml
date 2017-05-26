@@ -21,15 +21,6 @@
     - "{{ securedrop_code_filtered }}/static/gen"
     - "{{ securedrop_code_filtered }}/static/.webassets-cache"
 
-- name: Copy app code SASS files to build directory.
-  synchronize:
-    src: ../../securedrop/sass
-    dest: "{{ securedrop_code_filtered }}/sass"
-    recursive: yes
-    delete: yes
-    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
-    rsync_opts: "{{ securedrop_app_rsync_opts }}"
-
 - name: Compile SASS to CSS.
   shell: "/usr/local/bin/sass --force --stop-on-error --update sass:{{ securedrop_code_filtered }}/static/css --style compressed"
   args:
@@ -39,4 +30,7 @@
 - name: Remove temporary SASS directory from package build directory.
   file:
     state: absent
-    path: "{{ securedrop_code_filtered }}/sass"
+    path: "{{ securedrop_code_filtered }}/{{ item }}"
+  with_items:
+    - "sass"
+    - ".sass-cache"

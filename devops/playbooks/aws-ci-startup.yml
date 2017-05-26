@@ -1,17 +1,25 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Provision build docker image
+- name: Provision docker CI containers.
   hosts: localhost
   become: no
   gather_facts: true
   tasks:
-    - name: Pull in systemd enabled docker image
+    - name: Pull in systemd-enabled docker base image.
       docker_image:
         name: "{{ docker_image_sd_build }}"
+      when: "{{ docker_instances != [] }}"
       tags: docker
-      when: "{{ docker_containers != [] }}"
 
-    - name: Start build container
+    - name: Start Tor docker proxy for use in functional app tests.
+      docker_container:
+        name: tor
+        image: "hsaito/torbox"
+        state: started
+      when: "{{ docker_instances != [] }}"
+      tags: docker
+
+    - name: Start CI-specific build containers.
       docker_container:
         name: "{{ item }}"
         hostname: "{{ item }}"
@@ -20,12 +28,13 @@
         devices:
           - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
         privileged: true
+        env:
+          TOR_PROXY: "{{ lookup('pipe', 'docker exec tor hostname -I') }}"
+      with_items: "{{ docker_instances }}"
       tags: docker
-      with_items: "{{ docker_containers }}"
   vars:
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     docker_image_sd_build: "msheiny/debian-jessie-systemd"
-    docker_containers: "{{ docker_instances|default([]) }}"
   vars_files:
     - "../vars/{{ ci_environment }}.yml"
 
