@@ -8,9 +8,8 @@
       docker_container:
         name: "{{ item }}"
         state: absent
-      with_items: "{{ docker_containers }}"
+      with_items: "{{ docker_instances }}"
   vars:
-    docker_containers: "{{ docker_instances|default([]) }}"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
   vars_files:
     - "../vars/{{ ci_environment }}.yml"
