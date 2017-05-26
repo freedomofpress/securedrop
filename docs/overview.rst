@@ -102,7 +102,7 @@ computer.
 	  :doc:`Terminology Guide <terminology>` provides more-precise
           definitions of these and other terms. SecureDrop is designed against
           a comprehensive :doc:`development/threat_model`, and has a specific
-          notion of the :doc:`roles <passphrases>` that are involved in its
+          notion of the :doc:`roles <terminology>` that are involved in its
           operation.
 
 Operation
