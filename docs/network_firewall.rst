@@ -245,23 +245,12 @@ that you expect to be up (e.g. ``google.com``) and click "Ping".
 
 |Ping|
 
-SecureDrop Configuration
-------------------------
-
-SecureDrop uses the firewall to achieve two primary goals:
-
-#. Isolating SecureDrop from the existing network, which may be
-   compromised (especially if it is a venerable network in a large
-   organization like a newsroom).
-#. Isolating the *Application Server* and the *Monitor Server* from each other as much as
-   possible, to reduce attack surface.
-
-In order to use the firewall to isolate the *Application Server* and the *Monitor Server* from
-each other, we need to connect them to separate interfaces, and then set
-up firewall rules that allow them to communicate.
+At this stage, you can elect to manually set up your firewall, or use templates
+we provide. We recommend using the templates, and if you have trouble you can
+step through the manual configuration to configure the firewall.
 
 Disable DHCP on the LAN
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 pfSense runs a DHCP server on the LAN interface by default. At this
 stage in the documentation, the *Admin Workstation* likely has an IP address
@@ -272,7 +261,7 @@ disabling the DHCP server and assigning a static IP address to the Admin
 Workstation instead.
 
 Disable DHCP Server On the Firewall
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To disable DHCP, navigate to **Services ▸ DHCP Server** in the pfSense
 WebGUI. Uncheck the box labeled **Enable DHCP server on LAN
@@ -281,7 +270,7 @@ interface**, scroll down, and click the **Save** button.
 |Disable DHCP|
 
 Assign a static IP address to the *Admin Workstation*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now you will need to assign a static IP to the *Admin Workstation*.
 
@@ -348,6 +337,24 @@ reconnect. You should see a popup notification that says "Connection
 Established", followed several seconds later by the "Tor is ready"
 popup notification.
 
+For the next step, SecureDrop Configuration, you can elect to manually configure
+your firewall using the WebGUI, or you can load the templates we provide.
+
+SecureDrop Configuration (Manual)
+---------------------------------
+
+SecureDrop uses the firewall to achieve two primary goals:
+
+#. Isolating SecureDrop from the existing network, which may be
+   compromised (especially if it is a venerable network in a large
+   organization like a newsroom).
+#. Isolating the *Application Server* and the *Monitor Server* from each other
+   as much as possible, to reduce attack surface.
+
+In order to use the firewall to isolate the *Application Server* and the *Monitor
+Server* from each other, we need to connect them to separate interfaces, and then set
+up firewall rules that allow them to communicate.
+
 Set up OPT1
 ~~~~~~~~~~~
 
@@ -358,9 +365,9 @@ to configure the OPT1 interface. Go to **Interfaces ▸ OPT1**, and check
 the box to **Enable Interface**. Use these settings:
 
 -  IPv4 Configuration Type: Static IPv4
--  IPv4 Address: `10.20.2.1` (Application Gateway IP)
+-  IPv4 Address: ``10.20.2.1`` (Application Gateway IP)
 
-Make sure that the CIDR routing prefix is correct (`/24`). Leave everything else
+Make sure that the CIDR routing prefix is correct (``/24``). Leave everything else
 as the default. **Save** and **Apply Changes**.
 
 |OPT1|
@@ -374,9 +381,9 @@ interface is set up similarly to how we set up OPT1 in the previous
 section. Use these settings:
 
 -  IPv4 Configuration Type: Static IPv4
--  IPv4 Address: `10.20.3.1` (Monitor Gateway IP)
+-  IPv4 Address: ``10.20.3.1`` (Monitor Gateway IP)
 
-Make sure that the CIDR routing prefix is correct (`/24`). Leave everything else
+Make sure that the CIDR routing prefix is correct (``/24``). Leave everything else
 as the default. **Save** and **Apply Changes**.
 
 |OPT2|
@@ -388,25 +395,25 @@ Since there are a variety of firewalls with different configuration
 interfaces and underlying sets of software, we cannot provide a set of
 network firewall rules to match every use case.
 
-This document is currently geared towards pfSense configured using the
-WebGUI. As a result, the easiest way to set up your firewall rules is to
+The easiest way to set up your firewall rules is to
 look at the screenshots of a correctly configured firewall and
 edit the interfaces, aliases, and firewall rules on your firewall to
 match them.
 
-Use Screenshots of Firewall Configuration (Basic)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Use Screenshots of Firewall Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Here are some example screenshots of a working pfSense firewall
 configuration. You will add the firewall rules until they match what is
 shown on the screenshots.
 
 First, we will configure IP and port aliases. Navigate to **Firewall ▸ Aliases**
-to
+and you should see a screen with no currently defined IP aliases:
 
 |Blank IP Aliases|
 
-Click add and add each IP alias. You should leave the **Type** as **Host**.
+Next you will click **Add** to add each IP alias.
+You should leave the **Type** as **Host**.
 Make aliases for the following:
 
 - ``admin_workstation``: ``10.20.1.2``
@@ -446,23 +453,44 @@ Rules** to add firewall rules for the LAN, OPT1, and OPT2 interfaces.
 Add or remove rules until they match the following screenshots by clicking **Add**
 to add a rule.
 
-LAN interface:
+**LAN interface:**
 
 |Firewall LAN Rules|
 
-OPT1 interface:
+**OPT1 interface:**
 
 |Firewall OPT1 Rules|
 
-OPT2 interface:
+**OPT2 interface:**
 
 |Firewall OPT2 Rules|
 
 Once you've set up the firewall, exit the Unsafe Browser, and continue
-with the next step of the installation instructions.
+with the "Keeping pfSense up to date" section below.
 
-Tips for setting up pfSense Firewall Rules (Advanced)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SecureDrop Configuration (Templates)
+------------------------------------
+
+Alternatively, you can load the provided ``.xml`` templates.
+
+First navigate to **Diagnostics ▸ Backup & Restore**:
+
+|Backup & Restore|
+
+Scroll down to "Restore Backup" and install each one of the template files for
+**Restore Areas** Interfaces, Aliases, and Firewall Rules, in that order:
+
+- Interfaces config: ``install_files/network_firewall/interfaces-config-pfSense.xml``
+- Aliases: ``install_files/network_firewall/aliases-config-pfSense.xml``
+- Firewall rules: ``install_files/network_firewall/filter-config-pfSense.xml``
+
+Note that none of the template filters are encrypted. Click "Restore Configuration"
+to restore each file. After this is done, verify that the rules have taken
+by comparing your settings with the screenshots above. If so, proceed to the
+next section.
+
+Tips for setting up pfSense Firewall Rules
+------------------------------------------
 
 Here are some general tips for setting up pfSense firewall rules:
 
@@ -486,20 +514,6 @@ Here are some general tips for setting up pfSense firewall rules:
 #. If you are troubleshooting connectivity, the firewall logs can be
    very helpful. You can find them in the WebGUI in *Status → System
    Logs → Firewall*.
-
-Using the Template
-^^^^^^^^^^^^^^^^^^
-
-For more experienced pfSense users, we have included a copy of the
-``.xml`` backup from a correctly configured example firewall (SG-2440)
-in ``install_files/network_firewall/pfsense_full_backup.xml``. Note that
-this file has been edited by hand to remove potentially sensitive
-information (admin password hashes and the test server's TLS private
-key, among other things, were replaced with ``REDACTED``), so you
-probably won't be able to import it directly (we haven't tried). The
-main sections of the file that you should be interested in are
-``interfaces``, ``filter`` (the firewall rules), and ``aliases``
-(necessary to parse the firewall rules).
 
 Keeping pfSense up to date
 --------------------------
@@ -555,8 +569,8 @@ while depending on the speed of your network.
 .. |Firewall Port Aliases| image:: images/firewall/port_aliases.png
 .. |Firewall IP Aliases| image:: images/firewall/ip_aliases_with_opt2.png
 .. |Firewall LAN Rules| image:: images/firewall/lan_rules.png
-.. |Firewall OPT1 Rules| image:: images/firewall/opt1_rules_with_opt2.png
-.. |Firewall OPT2 Rules| image:: images/firewall/opt2_rules.png
+.. |Firewall OPT1 Rules| image:: images/firewall/opt1_firewall_rules.png
+.. |Firewall OPT2 Rules| image:: images/firewall/opt2_firewall_rules.png
 .. |Update available| image:: images/firewall/pfsense_update_available.png
 .. |Wired Settings| image:: images/firewall/wired_settings.png
 .. |Tails Network Settings| image:: images/firewall/tails_network_settings.png
@@ -570,3 +584,4 @@ while depending on the speed of your network.
 .. |Firewall IP Aliases Post Save| image:: images/firewall/ip_aliases_post_save.png
 .. |Port Aliases| image:: images/firewall/port_aliases.png
 .. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png
+.. |Backup & Restore| image:: images/firewall/backup_and_restore.png
