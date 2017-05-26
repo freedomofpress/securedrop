@@ -20,5 +20,5 @@ staging
 [build]
 build ansible_connection=docker
 
-[test]
-test ansible_connection=docker
+[apptestclient]
+apptestclient ansible_connection=docker
