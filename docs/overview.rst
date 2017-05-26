@@ -158,10 +158,9 @@ Going Public
 Once you have a SecureDrop instance and your team knows how to use it, you
 should test it thoroughly and then tell the world. The `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ are happy to help you check that
-your SecureDrop setup is up-to-code and properly grounded. After that, you'll
-need to use your existing tools to announce and promote your SecureDrop. There
-are some :doc:`best practices <deployment_practices>` for ways to show off and
-communicate your SecureDrop address, but more is better. Create a
-promotion/advocacy plan and go wild.
+your SecureDrop setup is up-to-code and properly grounded. After that you'll want
+to check out the :doc:`best practices <deployment_practices>` for your
+SecureDrop landing page and our guide to
+:doc:`promoting your SecureDrop instance <getting_the_most_out_of_securedrop>`.
 
 .. |SecureDrop architecture overview diagram| image:: ./diagrams/SecureDrop.png

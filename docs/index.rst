@@ -48,6 +48,7 @@ anonymous sources.
    :maxdepth: 2
 
    deployment_practices
+   getting_the_most_out_of_securedrop
    google_authenticator
    logging
    ossec_alerts
