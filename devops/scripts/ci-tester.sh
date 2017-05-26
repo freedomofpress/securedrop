@@ -25,7 +25,7 @@ if [ "$?" == "0" ]; then
         ./testinfra/test.py build
         ./testinfra/test.py "app-$CI_SD_ENV"
         ./testinfra/test.py "mon-$CI_SD_ENV"
-        ./testinfra/test.py test
+        ./testinfra/test.py apptestclient
         ;;
     "development")
         ./testinfra/test.py development
