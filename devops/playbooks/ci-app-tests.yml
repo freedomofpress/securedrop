@@ -5,7 +5,7 @@
   become: yes
   tasks:
     - name: Execute wrapper script for application test suite.
-      script: ../scripts/app-tests.sh "{{ app_dir.ci_env }}"
+      script: ../scripts/app-tests.sh "{{ app_dir[ci_env] }}"
       ignore_errors: true
 
       # The test results file will be posted as an artifact for the CI run,
