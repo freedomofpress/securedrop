@@ -101,7 +101,7 @@ Initial Configuration
 Unpack the firewall, connect the power, and power on the device.
 
 We will use the pfSense WebGUI to do the initial configuration of the
-network firewall.
+network firewall. [#]_
 
 Connect to the pfSense WebGUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -197,8 +197,9 @@ Setup Wizard
    enter here. For many environments, the default of DHCP will work and the
    rest of the fields can be left blank. Click **Next**.
 
-#. For "Configure LAN Interface", use the IP address and subnet mask of the
-   *gateway* for the **Admin Subnet**. Click **Next**.
+#. For "Configure LAN Interface", use the IP address of the *Admin Gateway*
+   (``10.20.1.1``) and the subnet mask (``/24``) of the *Admin Subnet*.
+   Click **Next**.
 
    |Configure LAN Interface|
 
@@ -430,7 +431,7 @@ Keep adding aliases until the screenshot matches what is shown here:
 
 |Firewall IP Aliases Pre Save|
 
-Finally, hit **Apply Changes**. This will save your changes. You should see a
+Finally, click **Apply Changes**. This will save your changes. You should see a
 message "The changes have been applied successfully":
 
 |Firewall IP Aliases Post Save|
@@ -485,9 +486,9 @@ Scroll down to "Restore Backup" and install each one of the template files for
 - Firewall rules: ``install_files/network_firewall/filter-config-pfSense.xml``
 
 Note that none of the template filters are encrypted. Click "Restore Configuration"
-to restore each file. After this is done, verify that the rules have taken
-by comparing your settings with the screenshots above. If so, proceed to the
-next section.
+to restore each file. After this is done, verify that the rules have been configured
+properly by comparing your settings with the screenshots above. If so, proceed to
+the next section.
 
 Tips for setting up pfSense Firewall Rules
 ------------------------------------------
@@ -585,3 +586,7 @@ while depending on the speed of your network.
 .. |Port Aliases| image:: images/firewall/port_aliases.png
 .. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png
 .. |Backup & Restore| image:: images/firewall/backup_and_restore.png
+
+.. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
+       GitHub if you are using the most recent version of Tails and the
+       interface is different from what you see here.
