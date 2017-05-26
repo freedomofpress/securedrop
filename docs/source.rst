@@ -64,7 +64,7 @@ Slider to "High".
 
 |Security Slider|
 
-Click the ``Learn how to set it to high`` link in the warning banner and a
+Click the **Learn how to set it to high** link in the warning banner and a
 message bubble will pop up explaining how to disable Javascript and turn up the
 Slider. Follow the instructions and the page should refresh automatically. Note
 that this will change the slider and disable Javascript for every page in your
@@ -73,7 +73,7 @@ Tor Browser, and this setting will persist across browser sessions.
 |Fix Javascript warning|
 
 The page should now look similar to the screenshot below. If this is the first
-time you are using SecureDrop, click the ``Submit Documents`` button.
+time you are using SecureDrop, click the **Submit Documents** button.
 
 |Source Interface with Javascript Disabled|
 
@@ -90,7 +90,7 @@ first, and gradually working to memorize it over time. Once you have memorized
 it, you should destroy the written copy.
 
 Once you have generated a codename and put it somewhere safe, click
-``Continue``.
+**Continue**.
 
 |Memorizing your codename|
 
@@ -103,11 +103,11 @@ limit, we recommend that you send a message to the journalist explaining
 this, so that they can set up another method for transferring the
 documents.
 
-When your submission is ready, click ``Submit``.
+When your submission is ready, click **Submit**.
 
 |Submit a document|
 
-After clicking ``Submit``, a confirmation page should appear, showing
+After clicking **Submit**, a confirmation page should appear, showing
 that your message and/or documents have been sent successfully. On this
 page you can make another submission or view responses to your previous
 messages.
@@ -115,14 +115,14 @@ messages.
 |Confirmation page|
 
 Once you are finished submitting documents, be certain you have saved your
-secret codename and then click the ``Logout`` button:
+secret codename and then click the **Logout** button:
 
 |Logout|
 
 The final step to clearing your session is to restart Tor Browser for
 optimal security. You can either close the browser entirely or follow
 the notification: click on the Tor onion in the toolbar, click
-``New Identity`` and then click ``Yes`` in the dialog box that appears
+**New Identity** and then click **Yes** in the dialog box that appears
 to confirm you'd like to restart Tor Browser:
 
 |Restart TBB|
@@ -132,13 +132,13 @@ Continuing the Conversation
 ---------------------------
 
 If you have already submitted a document and would like to check for
-responses, click the ``Check for a Response`` button on the media
+responses, click the **Check for a Response** button on the media
 organization's SecureDrop homepage.
 
 |Source Interface with Javascript Disabled|
 
 The next page will ask for your secret codename. Enter it and click
-``Continue``.
+**Continue**.
 
 |Check for response|
 
@@ -161,7 +161,7 @@ once and is overloaded with submissions, the journalist will flag your
 message on their end and you will see the message below. They can't
 write a reply to you until you've seen this message for security
 reasons. This will only happen the first time a journalist replies and
-with subsequent replies you will skip this step. Click ``Refresh`` or
+with subsequent replies you will skip this step. Click **Refresh** or
 log in again to see if a journalist has responded.
 
 |Check for an initial response|
