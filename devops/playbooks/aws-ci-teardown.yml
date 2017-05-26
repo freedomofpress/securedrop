@@ -1,10 +1,10 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Destroy docker CI containers
+- name: Destroy docker CI containers.
   hosts: localhost
   become: no
   tasks:
-    - name: Destroy applicable containers
+    - name: Destroy applicable containers.
       docker_container:
         name: "{{ item }}"
         state: absent
