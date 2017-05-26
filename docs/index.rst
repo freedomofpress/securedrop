@@ -56,6 +56,7 @@ anonymous sources.
    training_schedule
    yubikey_setup
    backup_and_restore
+   backup_workstations
 
 .. toctree::
    :caption: Upgrade SecureDrop
