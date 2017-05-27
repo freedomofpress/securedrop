@@ -198,7 +198,7 @@ server backups.
 
 .. warning:: Since this drive will be connected to the *Admin Workstation* to
              perform backups, it should *not* be the same drive used for
-             **Offline Storage**.
+             *Offline Storage*.
 
 Network Switch
 ~~~~~~~~~~~~~~
@@ -206,7 +206,7 @@ Network Switch
 If your firewall has fewer than **four** NIC's, you will need an additional
 Ethernet switch to perform installation and maintenance tasks with the *Admin
 Workstation*. This switch is generally useful because it allows you to connect
-the **Admin Workstation** to your firewall's LAN port without taking down either
+the *Admin Workstation* to your firewall's LAN port without taking down either
 of the SecureDrop servers.
 
 Labeling Equipment
