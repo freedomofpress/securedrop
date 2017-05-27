@@ -41,9 +41,9 @@
   template:
     src: send_encrypted_alarm.sh
     dest: /var/ossec/send_encrypted_alarm.sh
-    mode: "0750"
-    owner: ossec
-    group: root
+    mode: "0550"
+    owner: root
+    group: ossec
   tags:
     - procmail
     - permissions
@@ -83,7 +83,7 @@
   copy:
     src: procmailrc
     dest: /var/ossec/.procmailrc
-    owner: ossec
-    group: root
+    owner: root
+    group: ossec
   tags:
     - procmail
