@@ -18,6 +18,7 @@ anonymous sources.
    source
    journalist
    admin
+   passphrase_best_practices
 
 .. toctree::
    :caption: Install SecureDrop
