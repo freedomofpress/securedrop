@@ -1,8 +1,8 @@
 ---
 - name: Install apt package dependencies for Development environment.
   apt:
-    pkg: "{{ item }}"
-    state: latest
+    name: "{{ item }}"
+    state: present
   with_items: "{{ development_dependencies }}"
   tags:
     - apt
