@@ -196,15 +196,14 @@ wrong, see :ref:`Troubleshooting <troubleshooting_tails_2x_upgrade>`.
 
 Now that you have successfully upgraded to Tails 2.x with your persistence
 intact, the final step is to re-install the Tails automatic configuration from
-the latest version of SecureDrop (0.3.7 or above). The Tails auto-configuration
+the latest version of SecureDrop (0.3.7 or later). The Tails auto-configuration
 was originally set up during installation in
 :doc:`configure_admin_workstation_post_install` and :doc:`onboarding`. There
 were enough changes in Tails 2.x that we had to update various aspects of the
 auto-configuration to work properly on it, which is why you need to re-install.
 
-First, you need to update your local copy of SecureDrop to the latest version
-(0.3.7 or later). This is documented in :doc:`upgrade/0.3.6-to-0.3.7`. Once
-you've done that, you can re-install the Tails auto-configuration:
+Once you've ensured that you're running SecureDrop 0.3.7 or later, you can 
+re-install the Tails auto-configuration:
 
 .. code:: sh
 
