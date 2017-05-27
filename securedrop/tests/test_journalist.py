@@ -254,10 +254,8 @@ class TestJournalistApp(TestCase):
                       password_again=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        self.assertMessageFlashed(
+            str(InvalidPasswordLength(overly_long_password)), 'error')
 
     def test_user_edits_password_too_long_warning(self):
         self._login_user()
@@ -268,10 +266,8 @@ class TestJournalistApp(TestCase):
                                           password_again=overly_long_password),
                                 follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        self.assertMessageFlashed(
+            str(InvalidPasswordLength(overly_long_password)), 'error')
 
     def test_admin_add_user_password_too_long_warning(self):
         self._login_admin()
@@ -282,7 +278,8 @@ class TestJournalistApp(TestCase):
             data=dict(username='dellsberg', password=overly_long_password,
                       password_again=overly_long_password, is_admin=False))
 
-        self.assertIn('Your password must be between', resp.data)
+        self.assertIn(str(InvalidPasswordLength(overly_long_password)),
+                      resp.data)
 
     def test_admin_edits_user_invalid_username(self):
         """Test expected error message when admin attempts to change a user's
@@ -459,10 +456,8 @@ class TestJournalistApp(TestCase):
             password_again=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        self.assertMessageFlashed(str(InvalidPasswordLength(overly_long_password)),
+                                  'error')
 
     def test_valid_user_password_change(self):
         self._login_user()

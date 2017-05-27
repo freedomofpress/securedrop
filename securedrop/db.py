@@ -219,14 +219,23 @@ class InvalidPasswordLength(Exception):
 
     def __init__(self, password):
         self.pw_len = len(password)
+        # Defend against inconsistencies in when this exception should be
+        # raised.
+        if (Journalist.MIN_PASSWORD_LEN <= self.pw_len
+            <= Journalist.MAX_PASSWORD_LEN):
+            raise ValueError("The InvalidPasswordLength exception should only "
+                             "be raised when password length is not between "
+                             "{Journalist.MIN_PASSWORD_LEN} and "
+                             "{Journalist.MAX_PASSWORD_LEN} "
+                             "characters.".format(**globals()))
 
     def __str__(self):
         if self.pw_len > Journalist.MAX_PASSWORD_LEN:
-            return "Password too long (len={})".format(self.pw_len)
-        if self.pw_len < Journalist.MIN_PASSWORD_LEN:
-            return "Password needs to be at least {} characters".format(
-                Journalist.MIN_PASSWORD_LEN
-            )
+            return "Password cannot exceed {} characters!".format(
+                Journalist.MAX_PASSWORD_LEN)
+        else:
+            return "Password needs to be at least {} characters!".format(
+                Journalist.MIN_PASSWORD_LEN)
 
 
 class Journalist(Base):
@@ -273,21 +282,23 @@ class Journalist(Base):
     MAX_PASSWORD_LEN = 128
     MIN_PASSWORD_LEN = 12
 
+    @classmethod
+    def check_password_length(cls, password):
+        # Enforce a reasonable maximum length for passwords to avoid DoS and a
+        # minimum length as a basic security measure.
+        if not cls.MIN_PASSWORD_LEN <= len(password) <= cls.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
+
     def set_password(self, password):
+        self.check_password_length(password)
         # Don't do anything if user's password hasn't changed.
         if self.pw_hash and self.valid_password(password):
             return
-        # Enforce a reasonable maximum length for passwords to avoid DoS
-        if len(password) > self.MAX_PASSWORD_LEN:
-            raise InvalidPasswordLength(password)
-        # Enforce a reasonable minimum length for new passwords
-        if len(password) < self.MIN_PASSWORD_LEN:
-            raise InvalidPasswordLength(password)
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
 
     def valid_password(self, password):
-        # Avoid hashing passwords that are over the maximum length
+        # Avoid hashing passwords that are over the maximum length.
         if len(password) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
