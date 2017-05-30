@@ -8,6 +8,7 @@ jsmin
 psutil
 pycrypto
 pyotp
+PyYAML
 qrcode
 redis
 rq
