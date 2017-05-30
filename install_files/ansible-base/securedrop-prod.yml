@@ -1,4 +1,17 @@
 ---
+- name: Migrate site-specific information in vars files.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Copy deprecated prod-specific.yml vars file.
+      command: >
+        cp "{{ playbook_dir }}/prod-specific.yml"
+        "{{ playbook_dir }}/group_vars/all/site-specific"
+      # Don't clobber new vars file with old, just create it.
+      args:
+        creates: "{{ playbook_dir }}/group_vars/all/site-specific"
+
 - name: Validate presence of Application and Monitor Servers.
   hosts: [ mon, app, mon-prod, app-prod ]
   # The manage-groups role dynamically adds hosts to groups,
