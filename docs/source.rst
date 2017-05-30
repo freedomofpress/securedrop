@@ -89,6 +89,9 @@ it right away, we recommend writing it down and keeping it in a safe place at
 first, and gradually working to memorize it over time. Once you have memorized
 it, you should destroy the written copy.
 
+.. tip:: For detailed recommendations on best practices for managing your
+   passphrase, check out :doc:`passphrase_best_practices`.
+
 Once you have generated a codename and put it somewhere safe, click
 **Continue**.
 

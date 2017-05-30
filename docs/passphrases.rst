@@ -13,6 +13,9 @@ each role in a SecureDrop installation.
           password database that you can use to get started. For more
           information, see the :doc:`tails_guide`.
 
+.. tip:: For best practices on managing passphrases, see
+   :doc:`passphrase_best_practices`.
+
 Admin
 -----
 
