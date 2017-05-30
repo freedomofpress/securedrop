@@ -5,4 +5,3 @@
 securedrop_validate_disallowed_users:
   - amnesia
   - root
-  - vagrant
