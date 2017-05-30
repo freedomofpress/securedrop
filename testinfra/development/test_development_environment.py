@@ -8,6 +8,7 @@ def test_development_app_dependencies(Package):
     """
     development_apt_dependencies = [
       'libssl-dev',
+      'ntp',
       'python-dev',
       'python-pip',
     ]

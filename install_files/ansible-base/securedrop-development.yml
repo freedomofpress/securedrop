@@ -1,18 +1,18 @@
 ---
 - name: Configure SecureDrop Development machine.
   hosts: development
+  pre_tasks:
+    # Ensure all upgrades are applied. Also updates the apt cache,
+    # which will remain sufficiently fresh to prevent repeated cache updates
+    # in subsequent roles.
+    - name: Update all packages.
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+
   roles:
     - { role: development, tags: development }
     - { role: app, tags: app }
     - { role: app-test, tags: app-test }
   sudo: yes
-# This is a quick fix for the purpose of having everything working for
-# contributors at the Aaron Swartz day hackathon. In both my own and another
-# contributors laptop, we realized we were experiencing time skew in our
-# Virtualbox VMs, which was preventing login access to the Document Interface
-# due to TOTP tokens being out of sink. TODO: resolve this issue properly.
-  tasks:
-    - name: Install NTP.
-      apt:
-        name: ntp
-        state: latest

@@ -1,15 +1,8 @@
 ---
-- name: Update apt package lists.
-  apt:
-      update_cache: yes
-  tags:
-    - apt
-    - development
-
 - name: Install apt package dependencies for Development environment.
   apt:
-    pkg: "{{ item }}"
-    state: latest
+    name: "{{ item }}"
+    state: present
   with_items: "{{ development_dependencies }}"
   tags:
     - apt
@@ -44,18 +37,18 @@
     fi
   args:
     chdir: '{{ securedrop_repo  }}/securedrop'
+  register: dev_sass_compile_result
+  # Any changed files will be printed to stdout; use that to detect whether
+  # the files have changed.
+  changed_when: "'write ' in dev_sass_compile_result.stdout"
   tags:
     - development
 
-# TODO: Probably better to set this env var in /etc/profile.d,
-# since it doesn't need to be set ONLY for the securedrop user.
-# Warrants further testing (e.g. Travis CI?), so leaving for now.
+# Setting at the system-wide level to apply to all users.
 - name: Set SECUREDROP_ENV in bashrc.
-  lineinfile:
-    dest: /home/{{ securedrop_user }}/.bashrc
-    state: present
-    insertafter: EOF
-    line: "export SECUREDROP_ENV=dev"
+  copy:
+    dest: /etc/profile.d/securedrop_env.sh
+    content: "export SECUREDROP_ENV=dev"
   tags:
     - environment
     - development
