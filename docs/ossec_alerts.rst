@@ -17,8 +17,8 @@ settings to Ansible in the playbook for your environment. If you don't
 already have a working mail server or don't know what to do, then see
 the section below about using Gmail as a fallback option. We assume that
 you're working out of the 'securedrop' directory you cloned the code
-into, and editing install\_files/ansible-base/prod-specific.yml prior to
-installing SecureDrop.
+into, and editing ``install_files/ansible-base/group_vars/all/site-specific``
+prior to installing SecureDrop.
 
 What you need:
 
@@ -47,7 +47,10 @@ The SMTP relay that you use should support SASL authentication and SMTP
 TLS protocols TLSv1.2, TLSv1.1, and TLSv1. Most enterprise email
 solutions should be able to meet those requirements.
 
-These are the values you must specify in ``prod-specific.yml``:
+Below are the values you must specify in to configure OSSEC correctly.
+For first-time installs, you can use the
+:ref:`configuration playbook<configure_securedrop>`, or edit
+``install_files/ansible-base/group_vars/all/site-specific`` manually.
 
 - GPG public key used to encrypt OSSEC alerts:
   ``ossec_alert_gpg_public_key``
@@ -84,8 +87,9 @@ although we've described some common scenarios in the
 :ref:`troubleshooting section <troubleshooting_ossec>`.
 
 If you have your GPG public key handy, copy it to
-install\_files/ansible-base and then specify the filename in the
-``ossec_alert_gpg_public_key`` line of prod-specific.yml.
+``install_files/ansible-base`` and then specify the filename, e.g.
+``ossec.pub``, in the ``ossec_alert_gpg_public_key`` line of
+``group_vars/all/site-specific``.
 
 If you don't have your GPG key ready, you can run GnuPG on the command line in
 order to find, import, and export your public key. It's best to copy the key
@@ -151,7 +155,7 @@ requires both a valid certificate and STARTTLS support on the SMTP
 relay. By default the system CAs will be used for validating the relay
 certificate. If you need to provide a custom CA to perform the
 validation, copy the cert file to ``install_files/ansible-base`` add a
-new variable to ``prod-specific.yml``: ::
+new variable to ``group_vars/all/site-specific``: ::
 
     smtp_relay_cert_override_file: MyOrg.crt
 
@@ -159,7 +163,7 @@ where ``MyOrg.crt`` is the filename. The file will be copied to the
 server in ``/etc/ssl/certs_local`` and the system CAs will be ignored
 when validating the SMTP relay TLS certificate.
 
-Save ``prod-specific.yml``, exit the editor and :ref:`proceed with the
+Save ``group_vars/all/site-specific``, exit the editor and :ref:`proceed with the
 installation <Run the Ansible playbook>` by running the playbooks.
 
 Using Gmail for OSSEC alerts
@@ -227,7 +231,7 @@ following:
 
     6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29
 
-Finally, add a new variable to ``prod-specific.yml`` as
+Finally, add a new variable to ``group_vars/all/site-specific`` as
 ``smtp_relay_fingerprint``, like so: ::
 
     smtp_relay_fingerprint: "6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29"
@@ -235,8 +239,8 @@ Finally, add a new variable to ``prod-specific.yml`` as
 Specifying the fingerprint will configure Postfix to use it for
 verification on the next playbook run. (To disable fingerprint
 verification, simply delete the variable line you added, and rerun the
-playbooks.) Save ``prod-specific.yml``, exit the editor and :ref:`proceed
-with the installation <Run the Ansible playbook>` by running the
+playbooks.) Save ``group_vars/all/site-specific``, exit the editor and
+:ref:`proceed with the installation <Run the Ansible playbook>` by running the
 playbooks.
 
 .. _troubleshooting_ossec:
@@ -286,7 +290,7 @@ OSSEC service.
 
 .. tip:: If you change the SMTP relay port after installation for any
          reason, you must update the ``smtp_relay_port`` variable in the
-         ``prod-specific.yml`` file, then rerun the Ansible playbook.
+         ``group_vars/all/site-specific`` file, then rerun the Ansible playbook.
          As a general best practice, we recommend modifying and
          rerunning the Ansible playbook instead of manually editing
          the files live on the servers, since values like ``smtp_relay_port``
@@ -321,20 +325,20 @@ that authenticated to send mail. By default the *Monitor Server* will use
 ``ossec@ossec.server`` for the from line, but your mail provider may not support
 the mismatch between the domain of that value and your real mail host.
 If the Admin email address (configured as ``ossec_alert_email`` in
-``prod-specific.yml``) does not start receiving OSSEC alerts updates shortly
+``group_vars/all/site-specific``) does not start receiving OSSEC alerts updates shortly
 after the first playbook run, try setting ``ossec_from_address`` in
-``prod-specific.yml`` to the full email address used for sending the alerts,
+``group_vars/all/site-specific`` to the full email address used for sending the alerts,
 then run the playbook again.
 
 Message failed to encrypt
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 If OSSEC cannot encrypt the alert to the GPG public key for the Admin
-email address (configured as ``ossec_alert_email`` in ``prod-specific.yml``),
+email address (configured as ``ossec_alert_email`` in ``group_vars/all/site-specific``),
 the system will send a static message instead of the scheduled alert:
 
   Failed to encrypt OSSEC alert. Investigate the mailing configuration on the Monitor Server.
 
-Check the GPG configuration vars in ``prod-specific.yml``. In particular,
+Check the GPG configuration vars in ``group_vars/all/site-specific``. In particular,
 make sure the GPG fingerprint matches that of the public key file you
 exported.
 
@@ -356,7 +360,7 @@ email send failures.
 
 In either case, start by attempting to make a STARTTLS connection to
 your chosen ``smtp_relay:smtp_relay_port`` (get the values from your
-``prod-specific.yml`` file). On a machine running Ubuntu, run the
+``group_vars/all/site-specific`` file). On a machine running Ubuntu, run the
 following ``openssl`` command, replacing ``smtp_relay`` and
 ``smtp_relay_port`` with your specific values: ::
 
@@ -413,7 +417,7 @@ intentionally do not want to use a certificate signed by one of the
 default CA's in Ubuntu, you can still use ``openssl`` to test whether
 you can successfully negotiate a secure connection. Begin by copying
 your certificate file (``smtp_relay_cert_override_file`` from
-``prod-specific.yml``) to the computer you are using for testing. You
+``group_vars/all/site-specific``) to the computer you are using for testing. You
 can use ``-CAfile`` to test if your connection will succeed using your
 custom root certificate: ::
 

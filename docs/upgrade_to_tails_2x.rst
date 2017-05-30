@@ -247,7 +247,7 @@ To test the *Admin Workstation*, make sure you can still SSH into the servers:
     mon
 
 .. tip:: If you forgot, your SSH username is in
-         ``install_files/ansible-base/prod-specific.yml`` as the value of the
+         ``install_files/ansible-base/group_vars/all/site-specific`` as the value of the
          ``ssh_users`` variable. The .onion addresses for SSH for each server
          are in ``install_files/ansible-base/app-ssh-aths`` and
          ``install_files/ansible-base/mon-ssh-aths``, respectively.

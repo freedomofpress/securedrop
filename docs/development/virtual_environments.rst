@@ -66,7 +66,7 @@ mon-prod
     This is like a production installation with all of the system
     hardening active, but virtualized, rather than running on hardware.
     You will need to configure prod-like secrets in
-    ``install_files/ansible-base/prod-specific.yml``, or export
+    ``install_files/ansible-base/group_vars/all/site-specific``, or export
     ``ANSIBLE_ARGS=="--skip-tags validate"`` to skip the tasks
     that prevent the prod playbook from running with Vagrant-specific info.
 
@@ -183,7 +183,7 @@ Prod
 ----
 
 You will need to fill out the production configuration file at
-``install_files/ansible-base/prod-specific.yml`` with custom secrets.
+``install_files/ansible-base/group_vars/all/site-specific`` with custom secrets.
 The production playbook validates that staging values are not used in
 production. One of the values it verifies is that the user Ansible runs as is
 not ``vagrant`` To be able to run this playbook in a virtualized environment

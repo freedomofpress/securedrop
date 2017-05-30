@@ -8,7 +8,7 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 {% if smtp_relay_fingerprint is defined and
       smtp_relay_fingerprint != '' %}
 # Retain support for 'fingerprint' security level.
-# `smtp_relay_fingerprint` must be set (e.g. in `prod-specific.yml`),
+# `smtp_relay_fingerprint` must be set (e.g. in `group-vars/all/site-specific`),
 # otherwise this block is skipped. Providing a fingerprint overrides
 # the default SMTP TLS security level of 'secure', set below.
 smtp_tls_security_level = fingerprint

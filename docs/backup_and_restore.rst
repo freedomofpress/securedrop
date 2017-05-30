@@ -79,7 +79,7 @@ the SecureDrop servers.
    ansible -i inventory -u <SSH username> -m ping all
 
 .. tip:: If you forgot your SSH username, it is the value of the ``ssh_users``
-         variable in ``prod-specific.yml``.
+         variable in ``group_vars/all/site-specific``.
 
 If this command fails (usually with an error like "SSH Error: data could not be
 sent to the remote host. Make sure this host can be reached over ssh"), you need
