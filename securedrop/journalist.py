@@ -13,8 +13,8 @@ from sqlalchemy.exc import IntegrityError
 
 import config
 import version
-import crypto_util
-import store
+import crypto_util as crypto_util
+import store as store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, NoResultFound,
@@ -24,6 +24,8 @@ import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
+from securedrop.api_v1 import api as api_v1_blueprint
+app.register_blueprint(api_v1_blueprint, url_prefix='/api/v1')
 CsrfProtect(app)
 
 assets = Environment(app)

@@ -17,8 +17,8 @@ from sqlalchemy.exc import IntegrityError
 import config
 import json
 import version
-import crypto_util
-import store
+import crypto_util as crypto_util
+import store as store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
