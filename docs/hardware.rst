@@ -161,40 +161,75 @@ SecureDrop and to process submissions using the airgapped workflow.
 	  consider whether or not it is trustworthy; making that
 	  determination is outside the scope of this document.
 
+
 Optional Hardware
 -----------------
 
 This hardware is not *required* to run a SecureDrop instance, but most
 of it is still recommended.
 
--  **Offline Printer**: It is often useful to print submissions from the
-   *SVS* for review and annotation.
+Offline Printer
+~~~~~~~~~~~~~~~
 
-   -  To maintain the integrity of the airgap, this printer should be
-      dedicated to use with the *SVS*, connected via a wired connection,
-      and should not have any wireless communication capabilities.
+It is often useful to print submissions from the *Secure Viewing Station* for
+review and annotation.
 
--  **Offline Storage**: The *SVS* is booted from a Tails USB drive,
-   which has an encrypted persistent volume but typically has a fairly
-   limited storage capacity since it's just a USB drive. For
-   installations that expect to receive a large volume of submissions,
-   we recommend buying an external hard drive that can be encrypted and
-   used to store submissions that have been transferred from the
-   *Application Server* to the *SVS*.
--  **Backup storage**: It's useful to run periodic backups of the
-   servers in case of failure. We recommend buying an external hard
-   drive that can be encrypted and used to store server backups.
+.. warning:: To maintain the integrity of the airgap, this printer should be
+             dedicated to use with the *Secure Viewing Station*, connected via
+             a wired connection, and should not have any wireless communication
+             capabilities.
 
-   -  Since this drive will be connected to the *Admin Workstation* to
-      perform backups, it should *not* be the same drive used for
-      **Offline Storage**.
+Offline Storage
+~~~~~~~~~~~~~~~
 
--  **Network Switch**: If your firewall has fewer than **four** NIC's,
-   you will need an additional Ethernet switch to perform installation
-   and maintenance tasks with the *Admin Workstation*. This switch is
-   generally useful because it allows you to connect the **Admin
-   Workstation** to your firewall's LAN port without taking down either
-   of the SecureDrop servers.
+The *SVS* is booted from a Tails USB drive, which has an encrypted persistent
+volume but typically has a fairly limited storage capacity since it's just a USB
+drive. For installations that expect to receive a large volume of submissions,
+we recommend buying an external hard drive that can be encrypted and used to
+store submissions that have been transferred from the *Application Server* to
+the *SVS*.
+
+Backup Storage
+~~~~~~~~~~~~~~
+
+It's useful to run periodic backups of the servers in case of failure. We
+recommend buying an external hard drive that can be encrypted and used to store
+server backups.
+
+.. warning:: Since this drive will be connected to the *Admin Workstation* to
+             perform backups, it should *not* be the same drive used for
+             *Offline Storage*.
+
+Network Switch
+~~~~~~~~~~~~~~
+
+If your firewall has fewer than **four** NIC's, you will need an additional
+Ethernet switch to perform installation and maintenance tasks with the *Admin
+Workstation*. This switch is generally useful because it allows you to connect
+the *Admin Workstation* to your firewall's LAN port without taking down either
+of the SecureDrop servers.
+
+Labeling Equipment
+~~~~~~~~~~~~~~~~~~
+
+As you have probably noticed by now, a SecureDrop installation has a plethora of
+components. Some of these components can be hard to tell apart; for example, if
+you buy 3 of the same brand of USB sticks to use for the Admin Workstation,
+Journalist Workstation, and Secure Viewing Station, they will be
+indistinguishable from each other unless you label them. We recommend buying
+some labeling equipment up front so you can label each component as you
+provision it during the installation process.
+
+There is a multitude of options for labeling equipment. We've had good results
+with small portable labelmakers, such as the `Brother P-Touch PT-210`_ or the
+`Epson LabelWorks LW-300`_. We like them because they produce crisp,
+easy-to-read labels, and it's easy to customize the size of the label's text,
+which is great for clearly labeling both large components (like computers) and
+small components (like USB sticks).
+
+.. _`Brother P-Touch PT-210`: https://www.amazon.com/Brother-P-Touch-PT-D210-Label-Maker/dp/B01BTMEKRQ/ref=zg_bs_226180_1
+.. _`Epson LabelWorks LW-300`: https://www.amazon.com/Epson-LabelWorks-LW-300-Label-Maker/dp/B005J7Y6HW/ref=pd_sbs_229_7
+
 
 Specific Hardware Recommendations
 ---------------------------------
