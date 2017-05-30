@@ -5,7 +5,7 @@ from datetime import datetime
 import functools
 
 from flask import (Flask, request, render_template, send_file, redirect, flash,
-                   url_for, g, abort, session)
+                   url_for, g, abort, session, jsonify)
 from flask_wtf.csrf import CsrfProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -39,6 +39,42 @@ else:
     app.jinja_env.globals['use_custom_header_image'] = False
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+
+
+@app.errorhandler(404)
+def not_found(message):
+    if request.headers['Content-Type'] == 'application/json':
+        response = jsonify({'error': 'not found', 'message': 'we could not find that resource'})
+        return response, 404
+    else:
+        return render_template('404.html')
+
+
+@app.errorhandler(403)
+def forbidden(message):
+    if request.headers['Content-Type'] == 'application/json':
+        response = jsonify({'error': 'forbidden', 'message': 'Not authorized'})
+        return response, 403
+    else:
+        return render_template('403.html')
+
+
+@app.errorhandler(405)
+def method_not_allowed(message):
+    if request.headers['Content-Type'] == 'application/json':
+        response = jsonify({'error': 'method not allowed', 'message': 'Not allowed'})
+        return response, 405
+    else:
+        return render_template('405.html')
+
+
+@app.errorhandler(400)
+def bad_request(message):
+    if request.headers['Content-Type'] == 'application/json':
+        response = jsonify({'error': 'bad request', 'message': 'We could not understand'})
+        return response, 400
+    else:
+        return render_template('400.html')
 
 
 @app.teardown_appcontext
