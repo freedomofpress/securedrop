@@ -165,12 +165,12 @@ class TestJournalistApp(TestCase):
         # Verify journalist is no longer in the database
         self.assertEqual(Journalist.query.get(self.user.id), None)
 
-    def test_admin_deletes_invalid_user_404(self):
+    def user_404(self):
         self._login_admin()
         invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
         resp = self.client.post(url_for('admin_delete_user',
-                                       user_id=invalid_user_pk))
-        self.assert404(resp)
+                                        user_id=invalid_user_pk))
+        self.assertIn('Not Found', resp.data)
 
     def test_admin_edits_user_password_success_response(self):
         self._login_admin()
