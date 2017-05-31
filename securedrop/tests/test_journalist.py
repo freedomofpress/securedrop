@@ -9,6 +9,7 @@ import zipfile
 from flask import url_for, escape
 from flask_testing import TestCase
 from mock import patch, ANY, MagicMock
+from sqlalchemy.orm.exc import StaleDataError
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -40,6 +41,42 @@ class TestJournalistApp(TestCase):
 
     def tearDown(self):
         utils.env.teardown()
+
+    @patch('journalist.app.logger.error')
+    def test_reply_error_logging(self, mocked_error_logger):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        self._login_user()
+
+        exception_class = StaleDataError
+        exception_msg = 'Potentially sensitive content!'
+
+        with patch('db.db_session.commit',
+                   side_effect=exception_class(exception_msg)):
+            resp = self.client.post(url_for('reply'),
+                                    data={'sid': sid, 'msg': '_'})
+
+        # Notice the "potentially sensitive" exception_msg is not present in
+        # the log event.
+        mocked_error_logger.assert_called_once_with(
+            "Reply from '{}' (id {}) failed: {}!".format(self.user.username,
+                                                         self.user.id,
+                                                         exception_class))
+
+    def test_reply_error_flashed_message(self):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        self._login_user()
+
+        exception_class = StaleDataError
+
+        with patch('db.db_session.commit', side_effect=exception_class()):
+            resp = self.client.post(url_for('reply'),
+                                    data={'sid': sid, 'msg': '_'})
+
+        self.assertMessageFlashed('An unexpected error occurred! Please check '
+                'the application logs or inform your adminstrator.', 'error')
+
 
     def test_empty_replies_are_rejected(self):
         source, _ = utils.db_helper.init_source()

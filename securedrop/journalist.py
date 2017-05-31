@@ -578,7 +578,16 @@ def download_single_submission(sid, fn):
 def reply():
     """Attempt to send a Reply from a Journalist to a Source. Empty
     messages are rejected, and an informative error message is flashed
-    on the client.
+    on the client. In the case of unexpected errors involving database
+    transactions (potentially caused by racing request threads that
+    modify the same the database object) logging is done in such a way
+    so as not to write potentially sensitive information to disk, and a
+    generic error message is flashed on the client.
+
+    Returns:
+       flask.Response: The user is redirected to the same Source
+           collection view, regardless if the Reply is created
+           successfully.
     """
     msg = request.form['msg']
     # Reject empty replies
@@ -593,11 +602,24 @@ def reply():
                         [crypto_util.getkey(g.sid), config.JOURNALIST_KEY],
                         output=store.path(g.sid, filename))
     reply = Reply(g.user, g.source, filename)
-    db_session.add(reply)
-    db_session.commit()
 
-    flash("Thanks! Your reply has been stored.", "notification")
-    return redirect(url_for('col', sid=g.sid))
+    try:
+        db_session.add(reply)
+        db_session.commit()
+    except Exception as exc:
+        flash("An unexpected error occurred! Please check the application "
+              "logs or inform your adminstrator.", "error")
+        # We take a cautious approach to logging here because we're dealing
+        # with responses to sources. It's possible the exception message could
+        # contain information we don't want to write to disk.
+        app.logger.error(
+            "Reply from '{}' (id {}) failed: {}!".format(g.user.username,
+                                                         g.user.id,
+                                                         exc.__class__))
+    else:
+        flash("Thanks! Your reply has been stored.", "notification")
+    finally:
+        return redirect(url_for('col', sid=g.sid))
 
 
 @app.route('/regenerate-code', methods=('POST',))
