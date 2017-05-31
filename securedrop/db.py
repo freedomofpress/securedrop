@@ -23,7 +23,6 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
 import store
 
 
@@ -292,7 +291,9 @@ class Journalist(Base):
             raise InvalidPasswordLength(password)
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the minimum password length.
-        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+        return pyotp.utils.compare_digest(
+            self._scrypt_hash(password, self.pw_salt),
+            self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
@@ -399,8 +400,11 @@ class Journalist(Base):
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
-        if token == user.last_token:  # Prevent OTP token reuse
-            raise BadTokenException("previously used token {}".format(token))
+        # Prevent TOTP token reuse
+        if user.last_token is not None:
+            if pyotp.utils.compare_digest(token, user.last_token):
+                raise BadTokenException("previously used token "
+                                        "{}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):
