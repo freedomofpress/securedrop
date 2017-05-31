@@ -49,11 +49,11 @@ class TestDatabase(TestCase):
         query = Journalist.query.filter(Journalist.username == "alice")
 
         with mock.patch('logger') as mock_logger:
-            selected_journos = get_one_or_else(query, mock_logger,
-                                               mock)
+            with self.assertRaises(NoResultFound):
+                selected_journos = get_one_or_else(query, mock_logger, mock)
+
         log_line = 'Found none when one was expected: No row was found for one()'
         mock_logger.error.assert_called_with(log_line)
-        mock.assert_called_with(404)
 
     # Check __repr__ do not throw exceptions
 
