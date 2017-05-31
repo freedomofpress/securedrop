@@ -24,7 +24,7 @@ import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
-from securedrop.api_v1 import api as api_v1_blueprint
+from api_v1 import api as api_v1_blueprint
 app.register_blueprint(api_v1_blueprint, url_prefix='/api/v1')
 CsrfProtect(app)
 
