@@ -59,6 +59,27 @@ class TestJournalistApp(TestCase):
                                 follow_redirects=True)
         self.assertNotIn("You cannot send an empty reply!", resp.data)
 
+    def test_replying_to_deleted_source_error_message(self):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        # Ensure the source exists by succesfully loading their /col/<sid>
+        # view.
+        self._login_user()
+        resp = self.client.get('/col/{}'.format(sid))
+        self.assert200(resp)
+        # Meanwhile another journo logs in and deletes the source.
+        self._login_admin()
+        resp = self.client.post('col/delete/{}'.format(sid))
+        self.assertRedirects(resp, url_for('index'))
+        # Finally the original journo tries to send a reply to the now-deleted
+        # source.
+        self._login_user()
+        resp = self.client.post(url_for('reply'),
+                                data={'sid': sid, 'msg': '_'},
+                               follow_redirects=True)
+        self.assertIn('The source you were trying to reply to no longer '
+                      'exists!', resp.data)
+
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))
         self.assertRedirects(resp, url_for('login'))
