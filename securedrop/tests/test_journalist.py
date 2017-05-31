@@ -9,7 +9,7 @@ import zipfile
 from flask import url_for, escape
 from flask_testing import TestCase
 from mock import patch, ANY, MagicMock
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound, StaleDataError
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -46,9 +46,11 @@ class TestJournalistApp(TestCase):
         source, _ = utils.db_helper.init_source()
         sid = source.filesystem_id
         self._login_user()
+
         resp = self.client.post(url_for('reply'),
                                 data={'sid': sid, 'msg': ''},
                                 follow_redirects=True)
+
         self.assertIn("You cannot send an empty reply!", resp.data)
 
     def test_nonempty_replies_are_accepted(self):
@@ -59,6 +61,24 @@ class TestJournalistApp(TestCase):
                                 data={'sid': sid, 'msg': '_'},
                                 follow_redirects=True)
         self.assertNotIn("You cannot send an empty reply!", resp.data)
+
+    @patch('journalist.app.logger.error')
+    def test_reply_error_logging(self, mocked_error_logger):
+        source, _ = utils.db_helper.init_source()
+        sid = source.filesystem_id
+        exception_class = StaleDataError
+        self._login_user()
+
+        with patch('db.db_session.commit',
+                   side_effect=exception_class('Potentially sensitive message!')):
+            resp = self.client.post(url_for('reply'),
+                                    data={'sid': sid, 'msg': '_'},
+                                    follow_redirects=True)
+
+        mocked_error_logger.assert_called_once_with(
+            "Reply from '{}' (id {}) failed: {}!".format(self.user.username,
+                                                         self.user.id,
+                                                         exception_class))
 
     def test_POST_from_authenticated_users_involving_deleted_source_error_message(self):
         """Tests that POST requests from authenticated users which
@@ -93,25 +113,22 @@ class TestJournalistApp(TestCase):
         queries and irregular errors could potentially be exploited to
         enumerate Source filesystem IDs.
         """
-        journalist.get_source = MagicMock(side_effect=NoResultFound())
-
-        resp = self.client.post(url_for('reply'),
-                                data={'sid': '_', 'msg': '_'},
-                               follow_redirects=True)
-
-        assert not journalist.get_source.called
+        with patch('journalist.get_source', side_effect=NoResultFound()) as fn:
+            resp = self.client.post(url_for('reply'),
+                                    data={'sid': '_', 'msg': '_'},
+                                   follow_redirects=True)
+            assert not fn.called
 
 
     def test_POST_with_sid_from_authenticated_user(self):
-        journalist.get_source = MagicMock(side_effect=NoResultFound())
         sid = '_'
         self._login_user()
 
-        resp = self.client.post(url_for('reply'),
-                                data={'sid': sid, 'msg': '_'},
-                                follow_redirects=True)
-
-        journalist.get_source.assert_called_once_with(sid)
+        with patch('journalist.get_source', side_effect=NoResultFound()) as fn:
+            resp = self.client.post(url_for('reply'),
+                                    data={'sid': sid, 'msg': '_'},
+                                    follow_redirects=True)
+            fn.assert_called_once_with(sid)
 
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))

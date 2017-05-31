@@ -628,14 +628,15 @@ def reply():
     try:
         db_session.add(reply)
         db_session.commit()
-
     except Exception as exc:
         flash("An unexpected error occurred! Please check the application "
               "logs or inform your adminstrator.", "error")
         # We take a cautious approach to logging here because we're dealing
         # with responses to sources.
-        app.logger.error("Reply from '{}' failed: {}!".format(g.user,
-                                                              exc.__class__))
+        app.logger.error(
+            "Reply from '{}' (id {}) failed: {}!".format(g.user.username,
+                                                         g.user.id,
+                                                         exc.__class__))
         db_session.rollback()
     else:
         flash("Thanks! Your reply has been stored.", "notification")
