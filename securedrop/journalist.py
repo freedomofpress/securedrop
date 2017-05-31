@@ -576,10 +576,20 @@ def download_single_submission(sid, fn):
 @app.route('/reply', methods=('POST',))
 @login_required
 def reply():
+    """Attempt to send a Reply from a Journalist to a Source. Empty
+    messages are rejected, and an informative error message is flashed
+    on the client.
+    """
+    msg = request.form['msg']
+    # Reject empty replies
+    if not msg:
+        flash("You cannot send an empty reply!", "error")
+        return redirect(url_for('col', sid=g.sid))
+
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
-    crypto_util.encrypt(request.form['msg'],
+    crypto_util.encrypt(msg,
                         [crypto_util.getkey(g.sid), config.JOURNALIST_KEY],
                         output=store.path(g.sid, filename))
     reply = Reply(g.user, g.source, filename)
