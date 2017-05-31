@@ -57,6 +57,25 @@ Base.query = db_session.query_property()
 
 
 def get_one_or_else(query, logger, failure_method):
+    """Takes a query object, logger, and failure method. If the query
+    object contains exactly one object, that object is returned. If it
+    contains multiple objects, an error is logged and the server returns
+    a 500 error. If it is empty, an error is logged and the exception is
+    re-raised for handling elsewhere.
+
+    Args:
+        query (sqlalchemy.orm.query.Query): The query object.
+        logger (logging.Logger): The logger.
+        failure_method: Any Flask app object method that returns a
+            response.
+
+    Returns:
+        Base: an instance belonging to a child class of Base
+            is returned only when the query contains exactly one object.
+
+    Raises:
+        NoResultFound: when the query object is empty.
+    """
     try:
         return query.one()
     except MultipleResultsFound as e:
@@ -66,7 +85,7 @@ def get_one_or_else(query, logger, failure_method):
         failure_method(500)
     except NoResultFound as e:
         logger.error("Found none when one was expected: %s" % (e,))
-        failure_method(404)
+        raise
 
 
 class Source(Base):

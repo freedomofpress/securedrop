@@ -47,8 +47,22 @@ def shutdown_session(exception=None):
 
 
 def get_source(sid):
-    """Return a Source object, representing the database row, for the source
-    with id `sid`"""
+    """Return a Source object, representing the database row, when there
+    is a a single source with filesystem identifier `sid`.
+    `get_one_or_else()` takes care of logging errors, and handles the
+    case when more than one object is returned. A `NoResultsFound`
+    exception is raised (and not caught here) if there are no sources
+    with id `sid`.
+
+    Args:
+        sid (str): a filesystem identifier string.
+
+    Returns:
+        Source: when there is exactly one Source with id `sid`.
+
+    Raises:
+        NoResultFound: when there are no Sources with id `sid`.
+    """
     source = None
     query = Source.query.filter(Source.filesystem_id == sid)
     source = get_one_or_else(query, app.logger, abort)
@@ -58,16 +72,35 @@ def get_source(sid):
 
 @app.before_request
 def setup_g():
-    """Store commonly used values in Flask's special g object"""
+    """Take commonly used values from a request (specifically, from the
+    signed client-side session and form data) and store them in Flask's
+    thread-local g object (or use them to perform queries, the results
+    of which are stored). Values stored may include the Journalist
+    object under `g.user`, a Source filesysem identifier under `g.sid`,
+    and the corresponding Source object under `g.source`.
+
+    Catch and handle the case when a POST request from an authenticated
+    user includes a Source filesystem identifier that does not
+    correspond to any Sources in the database.
+    """
     uid = session.get('uid', None)
     if uid:
         g.user = Journalist.query.get(uid)
 
     if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
+        # Don't call functions on `sid` string unless the user is
+        # authenticated. Timing and error messages have the potential to leak
+        # information.
+        if logged_in():
+            sid = request.form.get('sid')
+            if sid:
+                g.sid = sid
+                try:
+                    g.source = get_source(sid)
+                except NoResultFound:
+                    flash('The source you were trying to reply to no longer '
+                          'exists!', 'error')
+                    return redirect(url_for('index'))
 
 
 def logged_in():
@@ -576,6 +609,7 @@ def download_single_submission(sid, fn):
 @app.route('/reply', methods=('POST',))
 @login_required
 def reply():
+    """Attempt to send a Reply from a Journalist to a Source."""
     msg = request.form['msg']
 
     # Reject empty replies
@@ -594,21 +628,6 @@ def reply():
     try:
         db_session.add(reply)
         db_session.commit()
-
-    except StaleDataError:
-        db_session.rollback()
-        # This exception type may be indicative of the source's account being
-        # deleted. If so, flash a useful error message and return the user to
-        # the index view. Otherwise, re-raise the exception and let the general
-        # exception handling block handle it.
-        if not db_session.query \
-                   .filter(Source.filesystem_id == g.source.filesystem_id) \
-                   .one_or_none():
-            flash("The source you were trying to reply to no longer exists!",
-                  "error")
-            return redirect(url_for('index'))
-        else:
-            raise
 
     except Exception as exc:
         flash("An unexpected error occurred! Please check the application "
