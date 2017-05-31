@@ -50,6 +50,7 @@ anonymous sources.
 
    deployment_practices
    getting_the_most_out_of_securedrop
+   what_makes_securedrop_unique
    google_authenticator
    logging
    ossec_alerts
