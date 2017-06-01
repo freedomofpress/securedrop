@@ -7,6 +7,10 @@ anonymous sources. It was originally created by the late Aaron Swartz and is
 currently managed by `Freedom of the Press Foundation
 <https://freedom.press>`__.
 
+.. tip:: Check out
+          :doc:`What makes SecureDrop Unique <what_makes_securedrop_unique>`
+          to read more about SecureDrop's approach to keeping sources safe.
+
 Technical Summary
 -----------------
 

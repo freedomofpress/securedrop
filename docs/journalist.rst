@@ -138,19 +138,19 @@ give it a file extension.
 Interact With Sources
 ---------------------
 
-Click on the codename to see the page specifically for that source. 
-You will see all of the messages that they have written and documents 
-that they have uploaded. If the name of a source is difficult to say 
-or remember, you can rename a source using the button next to their 
-current codename: 
+Click on the codename to see the page specifically for that source.
+You will see all of the messages that they have written and documents
+that they have uploaded. If the name of a source is difficult to say
+or remember, you can rename a source using the button next to their
+current codename:
 
 |Cycle source codename|
 
-Documents and messages are encrypted to the application's GPG public 
-key. In order to read the messages or look at the documents you 
+Documents and messages are encrypted to the application's GPG public
+key. In order to read the messages or look at the documents you
 will need to transfer them to the *Secure Viewing Station*.
 
-But first, if you'd like to reply to the source, write your message 
+But first, if you'd like to reply to the source, write your message
 in the text field and click ``Submit``.
 
 |Sent reply|
@@ -197,11 +197,11 @@ time you reboot the malware will be gone.
 
 Tails comes with lots of applications that will help you securely work
 with documents, including `The Tor Browser Bundle <https://www.torproject.org/>`__
-, an office suite, graphics tools, desktop publishing tools, audio 
-tools, and printing and scanning tools. Journalists should take care 
-to research submissions using the Tor Browser, ideally in a new 
-Tails session for highly sensitive submissions. For more information, 
-visit `Work on sensitive 
+, an office suite, graphics tools, desktop publishing tools, audio
+tools, and printing and scanning tools. Journalists should take care
+to research submissions using the Tor Browser, ideally in a new
+Tails session for highly sensitive submissions. For more information,
+visit `Work on sensitive
 documents <https://tails.boum.org/doc/sensitive_documents/index.en.html>`__
 on the Tails website.
 
@@ -255,6 +255,10 @@ encrypted documents to it. Decrypt them with ``gnupg``.
 
 Write articles and blog posts, edit video and audio, and publish. Expose
 crimes and corruption, and change the world.
+
+.. tip:: Check out our SecureDrop
+          :doc:`Promotion Guide <getting_the_most_out_of_securedrop>`
+          to read more about how to encourage sources to use SecureDrop.
 
 .. |Journalist Interface Login| image:: images/manual/document6.png
 .. |Journalist Interface| image:: images/manual/document1.png
