@@ -105,10 +105,6 @@
         msg: >-
           Validating user-entered variables...
 
-  roles:
-    - role: validate
-      tags: validate
-
   tasks:
     - name: Initialize site-specific vars file.
       copy:
@@ -162,3 +158,11 @@
           var_value: "{{ sasl_username }}"
         - var_name: sasl_password
           var_value: "{{ sasl_password }}"
+
+- name: Validate site-specific information.
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  roles:
+    - role: validate
+      tags: validate
