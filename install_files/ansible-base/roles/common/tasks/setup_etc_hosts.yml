@@ -18,7 +18,7 @@
     dest: /etc/hosts
     # Appending newline is necessary for idempotence,
     # since the `lineinfile` task below will add it if not found.
-    content: "{{ etc_hosts_no_duplicates_result.stdout }}\\n"
+    content: "{{ etc_hosts_no_duplicates_result.stdout }}\n"
     owner: root
     group: root
     mode: "0644"

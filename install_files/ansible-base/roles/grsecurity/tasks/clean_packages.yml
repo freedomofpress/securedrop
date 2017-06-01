@@ -2,29 +2,17 @@
 # After installing securedrop-grsec, remove
 # old generic kernels to avoid accidental
 # boots into a less secure environment.
-- name: Remove generic kernel metapackages.
+- name: Remove generic kernel packages.
   apt:
-    name: "{{item}}"
+    name: "{{ item }}"
     state: absent
   with_items:
     - linux-signed-generic
     - linux-signed-generic-lts-utopic
     - linux-signed-image-generic
     - linux-signed-image-generic-lts-utopic
-  tags:
-    - apt
-
-- name: Remove remaining generic kernels.
-  command: apt-get -y remove '^linux-image-.*generic$'
-  register: linux_image_removal
-  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_image_removal.stdout"
-  tags:
-    - apt
-
-- name: Remove remaining kernel headers.
-  command: apt-get -y remove '^linux-headers-.*'
-  register: linux_headers_removal
-  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in linux_headers_removal.stdout"
+    - 'linux-image-*generic'
+    - 'linux-headers-*'
   tags:
     - apt
 
@@ -40,6 +28,6 @@
 - name: Clean old apt packages.
   command: apt-get -y autoremove
   register: apt_autoremove_all
-  changed_when: "'0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.' not in apt_autoremove_all.stdout"
+  changed_when: "'The following packages will be REMOVED' in apt_autoremove_all.stdout"
   tags:
     - apt
