@@ -110,6 +110,12 @@
       tags: validate
 
   tasks:
+    - name: Initialize site-specific vars file.
+      copy:
+        content: "---"
+        force: no
+        dest: "{{ playbook_dir }}/group_vars/all/site-specific"
+
     - name: Save site-specific information as local vars file.
       lineinfile:
         regexp: "^{{ item.var_name }}:"
