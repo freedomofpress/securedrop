@@ -1,0 +1,18 @@
+---
+- debug: msg="verifying ossec_alert_email is not the test value"
+  failed_when: ossec_alert_email == "ossec@ossec.test"
+  tags:
+    - validate
+    - debug
+
+- debug: msg="verifying sasl_username is not test value"
+  failed_when: sasl_username == "test"
+  tags:
+    - validate
+    - debug
+
+- debug: msg="verifying sasl_password is not the insane test value"
+  failed_when: sasl_password == "password123"
+  tags:
+    - validate
+    - debug
