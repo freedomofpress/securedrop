@@ -1,18 +1,25 @@
 ---
-- debug: msg="verifying ossec_alert_email is not the test value"
-  failed_when: ossec_alert_email == "ossec@ossec.test"
-  tags:
-    - validate
-    - debug
+- name: Validate OSSEC Admin email address.
+  assert:
+    that:
+      - "'@' in ossec_alert_email"
+      - ossec_alert_email != "ossec@ossec.test"
+    msg: >-
+      OSSEC Admin email address must be valid.
+      This address is used to receive OSSEC notifications.
 
-- debug: msg="verifying sasl_username is not test value"
-  failed_when: sasl_username == "test"
-  tags:
-    - validate
-    - debug
+- name: Validate SASL username for OSSEC config.
+  assert:
+    that:
+      # Ensure not the dummy value specified in example vars file.
+      - sasl_username != "test"
+      - "'@' not in sasl_username"
 
-- debug: msg="verifying sasl_password is not the insane test value"
-  failed_when: sasl_password == "password123"
-  tags:
-    - validate
-    - debug
+- name: Validate SASL password for OSSEC config.
+  assert:
+    that:
+      # Ensure not the dummy value specified in example vars file.
+      - sasl_password != "password123"
+      - sasl_password|length >= 8
+    msg: >-
+      Password for OSSEC email account must be strong.
