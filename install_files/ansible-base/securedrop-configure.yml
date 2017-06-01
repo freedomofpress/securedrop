@@ -163,6 +163,13 @@
   hosts: localhost
   connection: local
   gather_facts: yes
+  pre_tasks:
+    # Use a first-found loop to avoid erroring out if the vars file doesn't
+    # exist when the playbook is invoked, which is true on first run.
+    - name: Include site-specific vars.
+      include_vars: "{{ item }}"
+      with_first_found:
+        - group_vars/all/site-specific
   roles:
     - role: validate
       tags: validate
