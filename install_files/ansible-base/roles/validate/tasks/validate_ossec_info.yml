@@ -23,3 +23,25 @@
       - sasl_password|length >= 8
     msg: >-
       Password for OSSEC email account must be strong.
+
+- name: Validate SASL domain.
+  assert:
+    that:
+      - sasl_domain is defined
+      # The pipe lookup will fail if command returns non-zero.
+      - lookup('pipe', 'host '+sasl_domain)
+    msg: >-
+      The SASL domain failed during lookup. This is typically the
+      portion of the email address after the '@' symbol, although
+      configurations may vary.
+
+- name: Validate SMTP relay.
+  assert:
+    that:
+      - smtp_relay is defined
+      # The pipe lookup will fail if command returns non-zero.
+      - lookup('pipe', 'host '+smtp_relay)
+    msg: >-
+      The SMTP relay domain failed during lookup. This domain
+      is the server contacted for authentication in order to send
+      OSSEC email notifications.
