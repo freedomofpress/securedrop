@@ -2,8 +2,8 @@ Administrator Guide
 =====================
 
 You (the administrator) should have your own username and password, plus
-two-factor authentication through either the Google Authenticator app on
-your smartphone or a YubiKey.
+two-factor authentication through either the Google Authenticator app
+on your smartphone or a YubiKey.
 
 .. _Responsibilities:
 
@@ -27,9 +27,9 @@ subscribing to the `SecureDrop RSS Feed`_ to stay apprised of new updates.
 
 Most often, the SecureDrop server will automatically update via apt. However,
 occasionally you will need to run the Ansible playbooks. We will inform you in
-the release blog when this is the case. If you are onboarded to our support portal,
-we will let you know in advance of major releases if manual intervention will be
-required.
+the release blog when this is the case. If you are onboarded to our `SecureDrop
+Support Portal`_, we will let you know in advance of major releases if manual
+intervention will be required.
 
 .. _`SecureDrop Release Blog`: https://securedrop.org/news
 .. _`SecureDrop RSS Feed`: https://securedrop.org/news/feed
@@ -43,9 +43,12 @@ network, you will want to ensure that critical security patches are applied.
 Be informed of potential updates to your network firewall. If you're using the
 suggested network firewall by FPF you can subscribe to the `Netgate RSS Feed`_
 to be alerted when releases occur. If critical security updates need to be
-applied, you can do so through the firewall's pfSense WebGUI.
+applied, you can do so through the firewall's pfSense WebGUI. Refer to our
+:ref:`Keeping pfSense up to date` documentation or the official `pfSense
+Upgrade Docs`_ for further details on how to update the suggested firewall.
 
 .. _`Netgate RSS Feed`: https://www.netgate.com/feed.xml
+.. _`pfSense Upgrade Docs`: https://doc.pfsense.org/index.php/Upgrade_Guide
 
 Keep your Tails Drives Updated
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,8 +67,14 @@ Monitor OSSEC alerts for Unusual Activity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should decrypt and read your OSSEC alerts. Report any suspicious events to
-FPF through the support portal. See the :doc:`OSSEC Guide <ossec_alerts>` for
-more information on common OSSEC alerts.
+FPF through the `SecureDrop Support Portal`_. See the :doc:`OSSEC Guide <ossec_alerts>`
+for more information on common OSSEC alerts.
+
+.. warning:: Do not post logs or alerts to public forums without first carefully
+    examining and redacting any sensitive information.
+
+.. _`SecureDrop Support Portal`: https://securedrop-support.readthedocs.io/en/latest/
+
 
 .. _Adding Users:
 
@@ -96,6 +105,11 @@ username and password for themselves, select whether you would like them
 to also be an administrator (this allows them to add or delete other
 journalist accounts), and whether they will be using Google
 Authenticator or a YubiKey for two-factor authentication.
+
+.. tip:: Consider using the alternative `FreeOTP`_ application for mobile
+   two-factor authentication.
+
+.. _`FreeOTP`: https://freeotp.github.io/
 
 Google Authenticator
 ~~~~~~~~~~~~~~~~~~~~
