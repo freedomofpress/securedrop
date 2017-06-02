@@ -69,8 +69,6 @@ Vagrant.configure("2") do |config|
     staging.vm.hostname = "app-staging"
     staging.vm.box = "bento/ubuntu-14.04"
     staging.vm.network "private_network", ip: "10.0.1.2", virtualbox__intnet: internal_network_name
-    staging.vm.network "forwarded_port", guest: 80, host: 8082, auto_correct: true
-    staging.vm.network "forwarded_port", guest: 8080, host: 8083, auto_correct: true
     staging.vm.synced_folder './', '/vagrant', disabled: true
     staging.vm.provider "virtualbox" do |v|
       v.memory = 1024
