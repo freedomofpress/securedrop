@@ -2,8 +2,7 @@
 - name: Migrate site-specific information in vars files.
   hosts: localhost
   connection: local
-  gather_facts: no
-  tasks:
+  pre_tasks:
     - name: Copy deprecated prod-specific.yml vars file.
       command: >
         cp "{{ playbook_dir }}/prod-specific.yml"
@@ -11,6 +10,8 @@
       # Don't clobber new vars file with old, just create it.
       args:
         creates: "{{ playbook_dir }}/group_vars/all/site-specific"
+  roles:
+    - { role: validate, tags: validate }
 
 - name: Validate presence of Application and Monitor Servers.
   hosts: [ mon, app, mon-prod, app-prod ]
@@ -21,12 +22,6 @@
   # running the playbook against production servers.
   roles:
     - { role: manage-groups, tags: manage-groups }
-
-- name: Validate instance-specific variables before provisioning.
-  hosts: securedrop
-  roles:
-    - { role: validate, tags: validate }
-  sudo: yes
 
 - name: Add FPF apt repository and install base packages.
   hosts: securedrop
