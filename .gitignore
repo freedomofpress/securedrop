@@ -2,6 +2,9 @@
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
 
+# ignore site-specific vars file, since we can't predict contents
+install_files/ansible-base/group_vars/all/site-specific
+
 # ignore securedrop-app-code wheelhouse archive
 wheelhouse
 

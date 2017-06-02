@@ -16,6 +16,8 @@ Tor. Once that's done, you can install Ansible:
     sudo apt-get update
     sudo apt-get install ansible
 
+.. _configure_securedrop:
+
 Configure the Installation
 --------------------------
 
@@ -71,43 +73,26 @@ Edit the inventory file, ``inventory``, and update the default IP
 addresses with the ones you chose for app and mon. When you're done,
 save the file.
 
-Edit the file ``prod-specific.yml`` and fill it out with values that
-match your environment. At a minimum, you will need to provide the
-following:
+Run the configuration playbook and answer the prompts with values that
+match your environment: ::
 
--  User allowed to connect to both servers with SSH: ``ssh_users``
--  IP address of the *Monitor Server*: ``monitor_ip``
--  Hostname of the *Monitor Server*: ``monitor_hostname``
--  Hostname of the *Application Server*: ``app_hostname``
--  IP address of the *Application Server*: ``app_ip``
--  The SecureDrop Submission Key public key file:
-   ``securedrop_app_gpg_public_key``
--  The SecureDrop Submission Key fingerprint:
-   ``securedrop_app_gpg_fingerprint``
--  GPG public key used when encrypting OSSEC alerts:
-   ``ossec_alert_gpg_public_key``
--  Fingerprint for key used when encrypting OSSEC alerts:
-   ``ossec_gpg_fpr``
--  The email address that will receive alerts from OSSEC:
-   ``ossec_alert_email``
--  The reachable hostname of your SMTP relay: ``smtp_relay``
--  The secure SMTP port of your SMTP relay: ``smtp_relay_port``
-   (typically 25, 587, or 465. Must support TLS encryption)
--  Email username to authenticate to the SMTP relay: ``sasl_username``
--  Domain name of the email used to send OSSEC alerts: ``sasl_domain``
--  Password of the email used to send OSSEC alerts: ``sasl_password``
--  The fingerprint of your SMTP relay (optional):
-   ``smtp_relay_fingerprint``
+    ansible-playbook securedrop-configure.yml
 
-Optionally, you can also have custom notification text be displayed on the
+The script will automatically validate the answers you provided, and display
+error messages if any problems were detected. The answers you provided will be
+written to the file ``group_vars/all/site-specific``, which you can edit
+manually to provide further customization.
+
+For example, you can have custom notification text be displayed on the
 source interface. The source interface with a custom notification message is
 shown here (the custom notification appears after the bolded "Note:"):
 
 |Custom notification|
 
 This custom notification can be configured by providing the desired message in
-``custom_notification_text`` in ``prod-specific.yml``. For example, this can be
-used to notify potential sources that an instance is for testing purposes only.
+``custom_notification_text`` in ``group_vars/all/site-specific``. For example,
+this can be used to notify potential sources that an instance is for
+testing purposes only.
 
 When you're done, save the file and quit the editor.
 
