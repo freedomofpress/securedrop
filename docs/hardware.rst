@@ -233,16 +233,16 @@ small components (like USB sticks).
 If you do not have a label maker available but have an inkjet printer available to you, it may 
 also be possible to print and cut out labels using adhesive-backed paper and some scissors. These are some labels designed by our team which may be used for labeling:
 
--  `Admin Workstation <images/labels/admin_workstation.png>`__
--  `Journalist Workstation <images/labels/journalist_workstation.png>`__
--  `Secure Viewing Station <images/labels/secure_viewing_station_offline_warning.png>`__
--  `Firewall <images/labels/firewall.png>`__
--  `Application Server <images/labels/app_server.png>`__
--  `Monitor Server <images/labels/mon_server.png>`__
--  `Admin TAILS USB Drive <images/labels/usb_admin.png>`__
--  `Journalist TAILS USB Drive <images/labels/usb_journalist.png>`__
--  `Secure Viewing Station TAILS USB Drive <images/labels/usb_svs.png>`__
--  `File Transfer USB Drive <images/labels/usb_file_transfer.png>`__
+-  :download:`Admin Workstation Label <./images/labels/admin_workstation.png>`
+-  :download:`Journalist Workstation Label <images/labels/journalist_workstation.png>`
+-  :download:`Secure Viewing Station Label <images/labels/secure_viewing_station_offline_warning.png>`
+-  :download:`Firewall Label <images/labels/firewall.png>`
+-  :download:`Application Server Label <images/labels/app_server.png>`
+-  :download:`Monitor Server Label <images/labels/mon_server.png>`
+-  :download:`Admin TAILS USB Drive Label <images/labels/usb_admin.png>`
+-  :download:`Journalist TAILS USB Drive Label <images/labels/usb_journalist.png>`
+-  :download:`Secure Viewing Station TAILS USB Drive Label <images/labels/usb_svs.png>`
+-  :download:`File Transfer USB Drive Label <images/labels/usb_file_transfer.png>`
 
 
 Specific Hardware Recommendations
