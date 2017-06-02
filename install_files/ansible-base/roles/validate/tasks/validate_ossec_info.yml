@@ -24,24 +24,46 @@
     msg: >-
       Password for OSSEC email account must be strong.
 
-- name: Validate SASL domain.
-  assert:
-    that:
-      - sasl_domain is defined
-      # The pipe lookup will fail if command returns non-zero.
-      - lookup('pipe', 'host '+sasl_domain)
-    msg: >-
-      The SASL domain failed during lookup. This is typically the
-      portion of the email address after the '@' symbol, although
-      configurations may vary.
+
+# We can't simply call `host <domain>` under Tails, we need to support
+# the tor-only config and specify a nameserver to use for the call
+# (since Tails defaults to localhost as nameserver).
+- name: Determine SMTP relay query strategy.
+  set_fact:
+    _smtp_hostname_query_command: >-
+      {% if ansible_lsb.id == "Tails" %}
+      torify host -T -4 {{ smtp_relay }} 8.8.8.8
+      {% else %}
+      host {{ smtp_relay }}
+      {% endif %}
+
+- name: Determine SASL domain query strategy.
+  set_fact:
+    _sasl_hostname_query_command: >-
+      {% if ansible_lsb.id == "Tails" %}
+      torify host -T -4 {{ sasl_domain }} 8.8.8.8
+      {% else %}
+      host {{ smtp_relay }}
+      {% endif %}
 
 - name: Validate SMTP relay.
   assert:
     that:
       - smtp_relay is defined
       # The pipe lookup will fail if command returns non-zero.
-      - lookup('pipe', 'host '+smtp_relay)
+      - lookup('pipe', _smtp_hostname_query_command)
     msg: >-
       The SMTP relay domain failed during lookup. This domain
       is the server contacted for authentication in order to send
       OSSEC email notifications.
+
+- name: Validate SASL domain.
+  assert:
+    that:
+      - sasl_domain is defined
+      # The pipe lookup will fail if command returns non-zero.
+      - lookup('pipe', _sasl_hostname_query_command)
+    msg: >-
+      The SASL domain failed during lookup. This is typically the
+      portion of the email address after the '@' symbol, although
+      configurations may vary.
