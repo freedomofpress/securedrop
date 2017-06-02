@@ -45,8 +45,8 @@ they are configured to detect code changes and automatically reload whenever a
 file is saved. They are made available on your host machine by forwarding the
 following ports:
 
-* Source Interface: ``localhost:8080``
-* Journalist Interface: ``localhost::8081``
+* Source Interface: `localhost:8080 <http://localhost:8080>`__
+* Journalist Interface: `localhost:8081 <http://localhost:8081>`__
 
 Staging
 -------
