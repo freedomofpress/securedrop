@@ -230,6 +230,20 @@ small components (like USB sticks).
 .. _`Brother P-Touch PT-210`: https://www.amazon.com/Brother-P-Touch-PT-D210-Label-Maker/dp/B01BTMEKRQ/ref=zg_bs_226180_1
 .. _`Epson LabelWorks LW-300`: https://www.amazon.com/Epson-LabelWorks-LW-300-Label-Maker/dp/B005J7Y6HW/ref=pd_sbs_229_7
 
+If you do not have a label maker available but have an inkjet printer available to you, it may 
+also be possible to print and cut out labels using adhesive-backed paper and some scissors. These are some labels designed by our team which may be used for labeling:
+
+-  :download:`Admin Workstation Label <./images/labels/admin_workstation.png>`
+-  :download:`Journalist Workstation Label <images/labels/journalist_workstation.png>`
+-  :download:`Secure Viewing Station Label <images/labels/secure_viewing_station_offline_warning.png>`
+-  :download:`Firewall Label <images/labels/firewall.png>`
+-  :download:`Application Server Label <images/labels/app_server.png>`
+-  :download:`Monitor Server Label <images/labels/mon_server.png>`
+-  :download:`Admin TAILS USB Drive Label <images/labels/usb_admin.png>`
+-  :download:`Journalist TAILS USB Drive Label <images/labels/usb_journalist.png>`
+-  :download:`Secure Viewing Station TAILS USB Drive Label <images/labels/usb_svs.png>`
+-  :download:`File Transfer USB Drive Label <images/labels/usb_file_transfer.png>`
+
 
 Specific Hardware Recommendations
 ---------------------------------
@@ -357,7 +371,7 @@ recommendations for the Tails USBs also apply. One thing to consider is
 that you are going to have *a lot* of USB drives to keep track of, so
 you should consider how you will label or identify them and buy drives
 accordingly. Drives that are physically larger are often easier to label
-(e.g. with tape or a label from a labelmaker).
+(e.g. with tape, printed sticker or a label from a labelmaker).
 
 If you are using DVD/CD-R's for the transfer device, you will need *two*
 DVD/CD writers: one for burning DVDs from the **Journalist
