@@ -10,17 +10,17 @@ Required Hardware
 -----------------
 
 Servers
-~~~~~~~
+^^^^^^^
 
 These are the core components of a SecureDrop instance.
 
--  *Application Server*: 1 physical server to run the SecureDrop web
-   services.
--  *Monitor Server*: 1 physical server which monitors activity on the
-   *Application Server* and sends email notifications to an
-   administrator.
--  **Network Firewall**: 1 physical computer that is used as a dedicated
-   firewall for the SecureDrop servers.
+* *Application Server*: 1 physical server to run the SecureDrop web services.
+
+* *Monitor Server*: 1 physical server which monitors activity on the
+  *Application Server* and sends email notifications to an administrator.
+
+* **Network Firewall**: 1 physical computer that is used as a dedicated firewall
+  for the SecureDrop servers.
 
 We are often asked if it is acceptable to run SecureDrop on
 cloud servers (e.g. Amazon EC2, DigitalOcean, etc.) or on dedicated
@@ -69,7 +69,7 @@ in order to run it on cloud servers is at your own risk and without
 our support or consent.
 
 Workstations
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 .. note:: SecureDrop depends on the Tails operating system for its bootable USB
   drives.  The upcoming version of Tails, Tails 3.0, will no longer support
   32-bit computers. The current targeted release date for Tails 3.0 is **June
@@ -84,64 +84,68 @@ Workstations
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the airgapped workflow.
 
--  ***Secure Viewing Station* (*SVS*)**: 1 physical computer used as an
-   airgap to decrypt and view submissions retrieved from the
-   *Application Server*.
+Secure Viewing Station (SVS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   -  The chosen hardware should be solely used for this purpose and
-      should have any wireless networking hardware removed before use.
+1 physical computer used as an airgap to decrypt and view submissions retrieved
+from the *Application Server*.
 
--  **Admin/Journalist Workstation(s)**: *At least 1* physical computer
-   that is used as a workstation for SecureDrop admins and/or
-   journalists.
+The chosen hardware should be solely used for this purpose and should have any
+wireless networking hardware removed before use.
 
-   -  Each Admin and Journalist will have their own bootable Tails USB
-      with an encrypted persistent partition that they will use to
-      access SecureDrop. You will need at least one *workstation* to
-      boot the Tails USBs, and may need more depending on: the number of
-      admins/journalists you wish to grant access to SecureDrop, whether
-      they can share the same workstation due to availability
-      requirements, geographic distribution, etc.
+Admin/Journalist Workstation(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  **USB drive(s)**: *At least 2* USB drives to use as a bootable Tails
-   USB for the *SVS* and the **Admin Tails**/**Journalist Tails**.
+*At least 1* physical computer that is used as a workstation for SecureDrop
+admins and/or journalists.
 
-   -  If only one person is maintaining the system, you may use the same
-      Tails instance as both the Admin Tails and the Journalist Tails;
-      otherwise, we recommend buying 1 drive for each admin and each
-      journalist.
-   -  We also recommend buying two additional USBs to use as bootable
-      backups of the *SVS* and **Admin Tails**.
+Each Admin and Journalist will have their own bootable Tails USB with an
+encrypted persistent partition that they will use to access SecureDrop. You will
+need at least one *workstation* to boot the Tails USBs, and may need more
+depending on: the number of admins/journalists you wish to grant access to
+SecureDrop, whether they can share the same workstation due to availability
+requirements, geographic distribution, etc.
 
--  **Two-factor authenticator**: Two-factor authentication is used when
-   connecting to different parts of the SecureDrop system. Each admin
-   and each journalist needs a two-factor authenticator. We currently
-   support two options for two-factor authentication:
+USB drive(s)
+~~~~~~~~~~~~~~~~
 
-   -  Your existing smartphone with an app that computes TOTP codes
-      (e.g. `Google
-      Authenticator <https://support.google.com/accounts/answer/1066447?hl=en>`__)
-   -  A dedicated hardware dongle that computes HOTP codes (e.g. a
-      `YubiKey <https://www.yubico.com/products/yubikey-hardware/yubikey/>`__).
+*At least 2* USB drives to use as a bootable Tails USB for the *SVS* and the
+**Admin Tails**/**Journalist Tails**.
 
--  **Transfer Device(s)**: You need a mechanism to transfer encrypted
-   submissions from the **Journalist Workstation** to the *SVS* to
-   decrypt and view them. The most common transfer devices are DVD/CD-R
-   discs and USB drives.
+If only one person is maintaining the system, you may use the same Tails
+instance as both the Admin Tails and the Journalist Tails; otherwise, we
+recommend buying 1 drive for each admin and each journalist.
 
-   -  From a security perspective, it is preferable to use write-once
-      media such as DVD/CD-R discs because it eliminates the risk of
-      exfiltration by malware that persists on the Transfer Device (e.g.
-      `BadUSB <https://srlabs.de/badusb/>`__).
-   -  On the other hand, using write-once media to transfer data is
-      typically inconvenient and time-consuming. You should consider
-      your threat model and choose your transfer device accordingly.
+We also recommend buying two additional USBs to use as bootable backups of the
+*SVS* and **Admin Tails**.
 
--  **Monitor, Keyboard, Mouse**: You will need these to do the initial
-   installation of Ubuntu on the *Application* and *Monitor Servers*.
+**Two-factor authenticator**: Two-factor authentication is used when connecting
+to different parts of the SecureDrop system. Each admin and each journalist
+needs a two-factor authenticator. We currently support two options for t
+wo-factor authentication:
 
-   -  Depending on your setup, you may also need these to work on the
-      *SVS*.
+* Your existing smartphone with an app that computes TOTP codes
+  (e.g. `Google Authenticator <https://support.google.com/accounts/answer/1066447?hl=en>`__).
+
+* A dedicated hardware dongle that computes HOTP codes (e.g. a
+  `YubiKey <https://www.yubico.com/products/yubikey-hardware/yubikey/>`__).
+
+**Transfer Device(s)**: You need a mechanism to transfer encrypted submissions
+from the **Journalist Workstation** to the *SVS* to decrypt and view them. The
+most common transfer devices are DVD/CD-R discs and USB drives.
+
+From a security perspective, it is preferable to use write-once media such as
+DVD/CD-R discs because it eliminates the risk of exfiltration by malware that
+persists on the Transfer Device (e.g. `BadUSB <https://srlabs.de/badusb/>`__).
+
+On the other hand, using write-once media to transfer data is typically
+inconvenient and time-consuming. You should consider your threat model and
+choose your transfer device accordingly.
+
+**Monitor, Keyboard, Mouse**: You will need these to do the initial installation
+of Ubuntu on the *Application* and *Monitor Servers*.
+
+Depending on your setup, you may also need these to work on the *SVS*.
 
 .. note:: If you cannot afford to purchase new hardware for your
 	  SecureDrop instance, we encourage you to consider
@@ -154,16 +158,15 @@ SecureDrop and to process submissions using the airgapped workflow.
 	  top of the line hardware for any of the servers or the
 	  firewall. In our experience, relatively recent recycled Dell
 	  desktops or servers are adequate for the SecureDrop servers,
-	  and recycled Thinkpad laptops work well for the
+	  and recycled ThinkPad laptops work well for the
 	  Admin/Journalist workstations.
 
 	  If you choose to use recycled hardware, you should of course
 	  consider whether or not it is trustworthy; making that
 	  determination is outside the scope of this document.
 
-
 Optional Hardware
------------------
+^^^^^^^^^^^^^^^^^
 
 This hardware is not *required* to run a SecureDrop instance, but most
 of it is still recommended.
@@ -203,7 +206,7 @@ server backups.
 Network Switch
 ~~~~~~~~~~~~~~
 
-If your firewall has fewer than **four** NIC's, you will need an additional
+If your firewall has fewer than **four** NICs, you will need an additional
 Ethernet switch to perform installation and maintenance tasks with the *Admin
 Workstation*. This switch is generally useful because it allows you to connect
 the *Admin Workstation* to your firewall's LAN port without taking down either
@@ -230,7 +233,7 @@ small components (like USB sticks).
 .. _`Brother P-Touch PT-210`: https://www.amazon.com/Brother-P-Touch-PT-D210-Label-Maker/dp/B01BTMEKRQ/ref=zg_bs_226180_1
 .. _`Epson LabelWorks LW-300`: https://www.amazon.com/Epson-LabelWorks-LW-300-Label-Maker/dp/B005J7Y6HW/ref=pd_sbs_229_7
 
-If you do not have a label maker available but have an inkjet printer available to you, it may 
+If you do not have a label maker available but have an inkjet printer available to you, it may
 also be possible to print and cut out labels using adhesive-backed paper and some scissors. These are some labels designed by our team which may be used for labeling:
 
 -  :download:`Admin Workstation Label <./images/labels/admin_workstation.png>`
@@ -244,9 +247,8 @@ also be possible to print and cut out labels using adhesive-backed paper and som
 -  :download:`Secure Viewing Station TAILS USB Drive Label <images/labels/usb_svs.png>`
 -  :download:`File Transfer USB Drive Label <images/labels/usb_file_transfer.png>`
 
-
 Specific Hardware Recommendations
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Application and Monitor Servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,7 +313,7 @@ insert the cards into the NUC before it can be used. We recommend:
 	  the device attempts to suspend. Some suggestions include disabling
 	  suspend in the BIOS as well as OS options like "wake on LAN".
 
-*Secure Viewing Station* (*SVS*)
+Secure Viewing Station (SVS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *Secure Viewing Station* is a machine that is kept offline and only
@@ -322,26 +324,25 @@ touch the Internet or run an operating system other than Tails, it does
 not need a hard drive or network device; in fact, we recommend removing
 these components if they are already present.
 
-One option is to buy a Linux-compatible laptop such as a `Lenovo
-Thinkpad <http://shop.lenovo.com/us/en/laptops/thinkpad/t-series/t540p/>`__.
-You can also repurpose an old laptop if you have one available.
+One option is to buy a Linux-compatible laptop such as a
+`Lenovo ThinkPad <http://www3.lenovo.com/us/en/laptops/thinkpad/thinkpad-t-series/c/thinkpadt>`__;
+we've tested the T420 and successfully removed the wireless components with ease.
+It's possible to repurpose old laptops from other manufacturers, as long as the
+wireless components are removable.
 
-Another option is to buy an `Intel NUC
-D54250WYK <http://www.amazon.com/Intel-D54250WYK-DisplayPort-Graphics-i5-4250U/dp/B00F3F38O2/>`__
-(same model as the servers) with a power cord and `4 GB of
-memory <http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/>`__,
-but note that you will also need to get a monitor and a wired keyboard
-and mouse. It does not come with a hard drive or wireless networking
-hardware by default, so you will not need to remove these components
-before using it. However, we do recommend taping over the IR receiver
-with some opaque masking tape.
+Just as with the servers, you can also use an Intel NUC for the *SVS*. As noted
+before, NUCs do not ship with a hard drive, and can be configured without any
+wireless components, so you'll save time by not having to remove these, since
+they won't be present. However, NUCs *do* contain an IR receiver, which we
+recommend taping over with opaque masking tape.
 
-Note that if you do want to use a NUC for the *SVS*, you *should not* use
-any of the new generation of NUCs, which have names starting with "NUC5"
-(e.g.
-`NUC5i5RYK <https://www-ssl.intel.com/content/www/us/en/nuc/nuc-kit-nuc5i5ryk.html>`__..
-These NUCs have wireless networking built into the motherboard, and it
-is impossible to physically remove.
+If you choose to use an Intel NUC that differs from our recommended
+model, make sure you use one that offers wireless as an **option**. If the model
+is advertised as having "integrated wireless", such as the `NUC5i5RYK`, this
+means it's built into the motherboard, making it physically irremovable, and
+attempting to do so would risk damaging the unit; instead, look for attributes like
+`M.2 22×30 slot and wireless antenna pre-assembled (for wireless card support)`,
+as advertised by the `NUC5i5MYHE` that we recommend.
 
 Tails USBs
 ~~~~~~~~~~
@@ -357,11 +358,6 @@ You will need *at least* an 8GB drive to run Tails with an encrypted
 persistent partition. We recommend getting something in the 16-64GB
 range so you can handle large amounts of submissions without hassle.
 Anything more than that is probably overkill.
-
-Other than that, the choice of USB drive depends on capacity, form
-factor, cost, and a host of other factors. One option that we like is
-the `Leef
-Supra <http://www.amazon.com/Leef-Supra-PrimeGrade-Memory-Silver/dp/B00FWQMKA0>`__.
 
 Transfer Device
 ~~~~~~~~~~~~~~~
@@ -388,8 +384,7 @@ anywhere.
 Network Firewall
 ~~~~~~~~~~~~~~~~
 
-We recommend the `pfSense
-SG-2440 <http://store.pfsense.org/SG-2440/>`__.
+We recommend the `pfSense SG-2440 <http://store.pfsense.org/SG-2440/>`__.
 
 Network Switch
 ~~~~~~~~~~~~~~
