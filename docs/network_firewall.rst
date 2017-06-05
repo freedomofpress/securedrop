@@ -516,6 +516,8 @@ Here are some general tips for setting up pfSense firewall rules:
    very helpful. You can find them in the WebGUI in *Status → System
    Logs → Firewall*.
 
+.. _Keeping pfSense up to date:
+
 Keeping pfSense up to date
 --------------------------
 
