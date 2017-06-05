@@ -166,13 +166,13 @@ Depending on your setup, you may also need these to work on the *SVS*.
 	  determination is outside the scope of this document.
 
 Optional Hardware
-^^^^^^^^^^^^^^^^^
+-----------------
 
 This hardware is not *required* to run a SecureDrop instance, but most
 of it is still recommended.
 
 Offline Printer
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 It is often useful to print submissions from the *Secure Viewing Station* for
 review and annotation.
@@ -183,7 +183,7 @@ review and annotation.
              capabilities.
 
 Offline Storage
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 The *SVS* is booted from a Tails USB drive, which has an encrypted persistent
 volume but typically has a fairly limited storage capacity since it's just a USB
@@ -193,7 +193,7 @@ store submissions that have been transferred from the *Application Server* to
 the *SVS*.
 
 Backup Storage
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 It's useful to run periodic backups of the servers in case of failure. We
 recommend buying an external hard drive that can be encrypted and used to store
@@ -204,7 +204,7 @@ server backups.
              *Offline Storage*.
 
 Network Switch
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 If your firewall has fewer than **four** NICs, you will need an additional
 Ethernet switch to perform installation and maintenance tasks with the *Admin
@@ -213,7 +213,7 @@ the *Admin Workstation* to your firewall's LAN port without taking down either
 of the SecureDrop servers.
 
 Labeling Equipment
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 As you have probably noticed by now, a SecureDrop installation has a plethora of
 components. Some of these components can be hard to tell apart; for example, if
@@ -248,10 +248,10 @@ also be possible to print and cut out labels using adhesive-backed paper and som
 -  :download:`File Transfer USB Drive Label <images/labels/usb_file_transfer.png>`
 
 Specific Hardware Recommendations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------
 
 Application and Monitor Servers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Intel NUC (Next Unit of Computing) is a capable, cheap, quiet, and
 low-powered device that can be used for the SecureDrop servers. There
@@ -314,7 +314,7 @@ insert the cards into the NUC before it can be used. We recommend:
 	  suspend in the BIOS as well as OS options like "wake on LAN".
 
 Secure Viewing Station (SVS)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The *Secure Viewing Station* is a machine that is kept offline and only
 ever used together with the Tails operating system. This machine will be
@@ -345,7 +345,8 @@ attempting to do so would risk damaging the unit; instead, look for attributes l
 as advertised by the `NUC5i5MYHE` that we recommend.
 
 Tails USBs
-~~~~~~~~~~
+^^^^^^^^^^
+
 .. note:: The upcoming version of Tails, Tails 3.0, will no longer support 32-bit computers.
 	Please see the note in the `Workstations`_ section for more details.
 
@@ -360,7 +361,7 @@ range so you can handle large amounts of submissions without hassle.
 Anything more than that is probably overkill.
 
 Transfer Device
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 If you are using USBs for the transfer device, the same general
 recommendations for the Tails USBs also apply. One thing to consider is
@@ -382,12 +383,12 @@ Finally, you will need a stack of blank DVD/CD-R's, which you can buy
 anywhere.
 
 Network Firewall
-~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^
 
 We recommend the `pfSense SG-2440 <http://store.pfsense.org/SG-2440/>`__.
 
 Network Switch
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 This is optional, for people who are using a firewall with less than 4
 ports (the recommended firewall has 4 ports). Any old switch with more
@@ -395,7 +396,7 @@ than 3 ports will do, such as the `5-port Netgear ProSafe Ethernet
 Switch <http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/>`__.
 
 Printers
-~~~~~~~~
+^^^^^^^^
 
 Careful consideration should be given to the printer used with the *SVS*.
 Most printers today have wireless functionality (WiFi or Bluetooth
@@ -420,7 +421,7 @@ If you know of another model of printer that fits our requirements and
 works with Tails, please submit a pull request to add it to this list.
 
 Monitor, Keyboard, Mouse
-~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 We don't have anything specific to recommend when it comes to displays.
 You should make sure you know what monitor cable you need for the
