@@ -405,6 +405,11 @@ def tor2web_warning():
     return render_template("tor2web-warning.html")
 
 
+@app.route('/use-tor')
+def not_using_tor_browser_warning():
+    return render_template("use-tor-browser.html")
+
+
 @app.route('/journalist-key')
 def download_journalist_pubkey():
     journalist_pubkey = crypto_util.gpg.export_keys(config.JOURNALIST_KEY)

@@ -277,6 +277,11 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Why is there a warning about Tor2Web?", resp.data)
 
+    def test_why_use_tor_browser(self):
+        resp = self.client.get('/use-tor')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("You Should Use Tor Browser", resp.data)
+
     def test_why_journalist_key(self):
         resp = self.client.get('/why-journalist-key')
         self.assertEqual(resp.status_code, 200)
