@@ -282,12 +282,6 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Why download the journalist's public key?", resp.data)
 
-    def test_howto_disable_js(self):
-        resp = self.client.get('/howto-disable-js')
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Turn the Security Slider to High to Protect Your "
-                      "Anonymity", resp.data)
-
     def test_metadata_route(self):
         resp = self.client.get('/metadata')
         self.assertEqual(resp.status_code, 200)
