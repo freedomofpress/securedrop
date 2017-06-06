@@ -146,6 +146,17 @@ Vagrant.configure("2") do |config|
         'securedrop:children' => %w(development),
       }
     end
+
+    # TODO: For some reason, the build VM is defaulting to using 1GB of RAM.
+    # It does not need this much RAM, and the staging environment has been
+    # causing issues (hangs and crashes) on developer machines that have <= 8GB
+    # RAM, so hopefully setting this to a smaller value will help with that
+    # issue. We should look into why this is being automatically allocated 1GB
+    # of RAM instead of the expected 512MB default.
+    build.vm.provider "virtualbox" do |v|
+      v.memory = 512
+    end
+
     build.vm.provider "libvirt" do |lv, override|
       override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
     end
