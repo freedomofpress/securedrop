@@ -84,14 +84,20 @@ common_apache2_directory_declarations = """
 
 # declare journalist-specific apache configs
 @pytest.mark.parametrize("apache_opt", [
-  'Header set Cache-Control "max-age=1800"',
   "<VirtualHost {}:8080>".format(securedrop_test_vars['apache_listening_address']),
-  "DocumentRoot {}/static".format(securedrop_test_vars['securedrop_code']),
-  "Alias /static {}/static".format(securedrop_test_vars['securedrop_code']),
-  "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{GROUP}"+" python-path={}".format(securedrop_test_vars['securedrop_code']),
+  "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(securedrop_test_vars['securedrop_code']),
   'WSGIProcessGroup journalist',
-  'WSGIScriptAlias / /var/www/journalist.wsgi/',
-  'AddType text/html .py',
+  'WSGIScriptAlias / /var/www/journalist.wsgi',
+  'Header set Cache-Control "no-store"',
+  "Alias /static {}/static".format(securedrop_test_vars['securedrop_code']),
+  """
+<Directory {}/static>
+  Order allow,deny
+  Allow from all
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars['securedrop_code']),
   'XSendFile        On',
   'LimitRequestBody 524288000',
   'XSendFilePath    /var/lib/securedrop/store/',
