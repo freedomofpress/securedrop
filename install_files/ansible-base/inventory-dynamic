@@ -14,18 +14,14 @@ import yaml
 # per-host vars.
 SSH_COMMON_ARGS = "-o ProxyCommand='nc -x 127.0.0.1:9050 %h %p'"
 
-SECUREDROP_SITE_VARS = "group_vars/all/site-specific"
+# Find absolute path to ansible-base directory.
+SECUREDROP_ANSIBLE_DIRECTORY = os.path.abspath(os.path.join(__file__,
+                                                            os.path.pardir))
+SECUREDROP_SITE_VARS = os.path.join(SECUREDROP_ANSIBLE_DIRECTORY,
+                                    "group_vars",
+                                    "all",
+                                    "site-specific")
 SECUREDROP_SUPPORTED_HOSTNAMES = ['app', 'mon']
-
-try:
-    with open(SECUREDROP_SITE_VARS, 'r') as f:
-        site_vars = yaml.load(f)
-        app_ip = site_vars['app_ip']
-        monitor_ip = site_vars['monitor_ip']
-
-except IOError:
-    msg = "You must run the configure playbook."
-    raise Exception(msg)
 
 
 def lookup_local_ipv4_address(hostname):
@@ -34,6 +30,16 @@ def lookup_local_ipv4_address(hostname):
     After running the playbooks, SSH access is restricted to Authenticated
     Tor Hidden Services.
     """
+    try:
+        with open(SECUREDROP_SITE_VARS, 'r') as f:
+            site_vars = yaml.load(f)
+            app_ip = site_vars['app_ip']
+            monitor_ip = site_vars['monitor_ip']
+
+    except (IOError, KeyError):
+        msg = "You must run the configure playbook."
+        raise Exception(msg)
+
     if hostname == "app":
         return app_ip
     elif hostname == "mon":
@@ -44,9 +50,12 @@ def lookup_local_ipv4_address(hostname):
 
 
 def lookup_tor_hostname(hostname):
-    """Open local hostname file based on inventory name, return Onion URL."""
-
-    aths_path = os.path.join('.', "{}-ssh-aths".format(hostname))
+    """
+    Extract Onion URL from HidServAuth file that was fetched back locally.
+    Returns Onion URL for given inventory hostname.
+    """
+    aths_path = os.path.join(SECUREDROP_ANSIBLE_DIRECTORY,
+                             "{}-ssh-aths".format(hostname))
     with open(aths_path, 'r') as f:
         tor_config = f.readline().rstrip().split()
         try:
@@ -93,31 +102,33 @@ def host_is_tails():
     return lookup_host_distro_id() == "Tails"
 
 
-inventory = {
-    "_meta": {
-        "hostvars": {
-            h: {
-                "ansible_ssh_host": lookup_ssh_address(h)
-            } for h in SECUREDROP_SUPPORTED_HOSTNAMES
-        },
-        'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
-        'securedrop_application_server': ['app'],
-        'securedrop_monitor_server': ['mon'],
+def build_inventory():
+    """
+    Construct JSON dict of host information for use as inventory.
+    """
+    inventory = {
+        "_meta": {
+            "hostvars": {
+                h: {
+                    "ansible_ssh_host": lookup_ssh_address(h)
+                } for h in SECUREDROP_SUPPORTED_HOSTNAMES
+            },
+            'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
+            'securedrop_application_server': ['app'],
+            'securedrop_monitor_server': ['mon'],
+        }
     }
-}
 
-if not host_is_tails():
-    for host, hostvars in inventory["_meta"]["hostvars"].iteritems():
-        (inventory["_meta"]
-                  ["hostvars"]
-                  [host]
-                  ["ansible_ssh_common_args"]) = SSH_COMMON_ARGS
+    # Append SSH extra args if NOT under Tails. Necessary for testing.
+    if not host_is_tails():
+        for host, hostvars in inventory["_meta"]["hostvars"].iteritems():
+            (inventory["_meta"]
+                      ["hostvars"]
+                      [host]
+                      ["ansible_ssh_common_args"]) = SSH_COMMON_ARGS
+    return inventory
 
 
-if os.environ.get('ANSIBLE_SSH_OVER_TOR', None) in ('0',
-                                                    'no',
-                                                    'off',
-                                                    'disabled'):
-    inventory = {}
-
-print(json.dumps(inventory, indent=2))
+if __name__ == "__main__":
+    inventory = build_inventory()
+    print(json.dumps(inventory, indent=2))
