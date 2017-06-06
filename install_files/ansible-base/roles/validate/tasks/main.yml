@@ -7,7 +7,10 @@
 
 - include: validate_gpg_info.yml
   with_items:
-    - "{{ securedrop_app_gpg_fingerprint }}"
-    - "{{ ossec_gpg_fpr }}"
+    - keyfile: "{{ ossec_alert_gpg_public_key }}"
+      fingerprint: "{{ ossec_gpg_fpr }}"
+
+    - keyfile: "{{ securedrop_app_gpg_public_key }}"
+      fingerprint: "{{ securedrop_app_gpg_fingerprint }}"
 
 - include: validate_ossec_info.yml

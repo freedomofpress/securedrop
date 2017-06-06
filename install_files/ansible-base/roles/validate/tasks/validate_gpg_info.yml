@@ -1,20 +1,24 @@
 ---
 
-- name: Validate GPG info.
+- name: Validate GPG fingerprints.
   assert:
     that:
       # Should not match the fingerprint for the TEST Journalist pubkey.
-      - item != "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+      - item.fingerprint != "65A1B5FF195B56353CC63DFFCC40EF1228271441"
       # Should not match the fingerprint for the TEST Admin pubkey.
-      - item != "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+      - item.fingerprint != "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
       # Should not contain whitespace.
-      - "' ' not in item"
+      - "' ' not in item.fingerprint"
       # Must be a full-length fingerprint.
-      - item|length == 40
+      - item.fingerprint|length == 40
       # Must contain only hex characters
-      - item == item|regex_replace('[^A-F0-9]', '')
+      - item.fingerprint == item.fingerprint|regex_replace('[^A-F0-9]', '')
     msg: >-
       GPG fingerprints must be full-length (40 characters), with no whitespace.
   tags:
     - validate
     - debug
+
+- name: Confirm public key file and fingerprint match.
+  script: validate-gpg-key.sh "{{ item.keyfile }}" "{{ item.fingerprint }}"
+  changed_when: false
