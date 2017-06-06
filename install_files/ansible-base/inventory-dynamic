@@ -5,6 +5,7 @@ for SSH. The THS must already be provisioned on the target host.
 """
 import json
 import os
+import subprocess
 import yaml
 
 
@@ -66,18 +67,37 @@ def lookup_ssh_address(hostname):
     ssh_address = lookup_local_ipv4_address(hostname)
     try:
         ssh_address = lookup_tor_hostname(hostname)
+    # Don't assume ATHS files are present; they won't be on first run.
     except IndexError:
         pass
 
     return ssh_address
 
 
+def lookup_host_distro_id():
+    """
+    Returns output of `lsb_release --id --short`, to check
+    whether host machine is Tails.
+    """
+    cmd = ["lsb_release", "--id", "--short"]
+    p = subprocess.check_output(cmd)
+    distro_id = p.rstrip()
+    return distro_id
+
+
+def host_is_tails():
+    """
+    Wrapper return True/False for whether script is executed
+    within Tails. We don't want to add SSH extra args if True.
+    """
+    return lookup_host_distro_id() == "Tails"
+
+
 inventory = {
     "_meta": {
         "hostvars": {
             h: {
-                "ansible_ssh_host": lookup_ssh_address(h),
-                "ansible_ssh_common_args": SSH_COMMON_ARGS,
+                "ansible_ssh_host": lookup_ssh_address(h)
             } for h in SECUREDROP_SUPPORTED_HOSTNAMES
         },
         'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
@@ -85,6 +105,14 @@ inventory = {
         'securedrop_monitor_server': ['mon'],
     }
 }
+
+if not host_is_tails():
+    for host, hostvars in inventory["_meta"]["hostvars"].iteritems():
+        (inventory["_meta"]
+                  ["hostvars"]
+                  [host]
+                  ["ansible_ssh_common_args"]) = SSH_COMMON_ARGS
+
 
 if os.environ.get('ANSIBLE_SSH_OVER_TOR', None) in ('0',
                                                     'no',
