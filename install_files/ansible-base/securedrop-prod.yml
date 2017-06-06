@@ -1,3 +1,4 @@
+#!/usr/bin/env ansible-playbook
 ---
 - name: Migrate site-specific information in vars files.
   hosts: localhost

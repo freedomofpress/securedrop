@@ -277,14 +277,6 @@ EOL
   fi
 }
 
-function configure_ansible_apt_persistence()
-{
-  # set ansible to auto-install
-  if ! grep -q 'ansible' "${tails_live_persistence}/live-additional-software.conf"; then
-    echo "ansible" >> "${tails_live_persistence}/live-additional-software.conf"
-  fi
-}
-
 function update_ansible_inventory()
 {
   # The local IPv4 addresses for the Application and Monitor servers are only
@@ -444,7 +436,6 @@ function main()
   configure_network_manager_hook
 
   if is_admin_workstation; then
-    configure_ansible_apt_persistence
     configure_ssh_aliases
     update_ansible_inventory
   fi

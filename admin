@@ -1,0 +1,97 @@
+#!/usr/bin/env python2
+"""
+    SecureDrop Admin Toolkit.
+    
+    For use by administrators to install, maintain, and manage their SD
+    instances.
+"""
+
+
+import argparse
+import subprocess
+import os
+import sys
+import getpass
+
+ANSIBLE_PATH = "./install_files/ansible-base"
+SITE_CONFIG = "group_vars/all/site-specific"
+VENV_DIR = ".venv"
+
+def error(msg, level='warning', exit=True):
+    """ Stupid wrapper function to normalize warnings """
+    print("{} - {}".format(level.upper(), msg))
+    if exit:
+        sys.exit(1)
+
+def activate_venv():
+    """Use to activate the local virtualenv"""
+    activate = os.path.join(VENV_DIR, 'bin/activate_this.py')
+    try:
+        exec(open(activate).read())
+    except FileNotFoundError:
+        error("Pre-requisites not in place, re-run command with 'setup'",
+                level='error')
+
+def sdconfig(args):
+    """Configure SD site settings"""
+
+    activate_venv()
+    subprocess.call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
+
+def envsetup(args):
+    """Install SD pre-reqs"""
+    update = "update" if args.update else "" 
+    subprocess.call(['tails_files/install-ansible.sh', update])
+
+def install_securedrop(args):
+    """Install/Update SecureDrop"""
+
+    activate_venv()
+    # Yaml library cannot be imported until virtualenv is activated
+    # (hence the yaml library is not imported up-top)
+    import yaml
+
+    try:
+        site_config_path = os.path.join(ANSIBLE_PATH, SITE_CONFIG)
+        site_config_vars = yaml.load(open(site_config_path, 'ro').read())
+
+        ansible_user = args.user if args.user else site_config_vars['ssh_users']
+
+        sudo_prompt = getpass.getpass(prompt="Sudo Pass [Blank if not needed]:")
+        subprocess.call(['./securedrop-prod.yml',
+                '-u '+ansible_user,
+                "-e ansible_become_pass={}".format(sudo_prompt if sudo_prompt else ""),
+                ],
+                cwd=ANSIBLE_PATH)
+    except IOError:
+        error("Config file missing, re-run with sdconfig", level='error')
+
+def run_tails_config(args):
+    """Configure Tails environment post SD install"""
+    subprocess.call(['sudo','./tails_files/install.sh'])
+
+if __name__ == "__main__":
+    # Processing argument parsing logic -- yuck
+    parser = argparse.ArgumentParser(description = __doc__)
+    subparsers = parser.add_subparsers()
+
+    parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
+    parse_setup.add_argument('--update', action='store_true', default=False,
+                            help="Force refresh of existing dependencies")
+    parse_setup.set_defaults(func=envsetup)
+
+    parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
+    parse_sdconfig.set_defaults(func=sdconfig)
+
+    parse_install = subparsers.add_parser('install',
+                                            help=install_securedrop.__doc__)
+    parse_install.add_argument('--user', type=str, default='',
+                            help="Over-ride user defined in vars")
+    parse_install.set_defaults(func=install_securedrop)
+
+    parse_tailsconfig = subparsers.add_parser('tailsconfig',
+                                                help=run_tails_config.__doc__)
+    parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    args = parser.parse_args()
+    args.func(args)

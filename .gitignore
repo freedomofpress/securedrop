@@ -128,3 +128,6 @@ securedrop/static/.webassets-cache
 # Skip over CI junit files
 junit/
 *results.xml
+
+# Virtualenv on tails
+.venv
