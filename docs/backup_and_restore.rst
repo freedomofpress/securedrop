@@ -76,7 +76,7 @@ the SecureDrop servers.
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible -i inventory -u <SSH username> -m ping all
+   ansible -u <SSH username> -m ping all
 
 .. tip:: If you forgot your SSH username, it is the value of the ``ssh_users``
          variable in ``group_vars/all/site-specific``.
@@ -111,7 +111,7 @@ perform the backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real *Admin Workstation*
 
@@ -160,7 +160,7 @@ backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
