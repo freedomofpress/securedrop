@@ -140,8 +140,7 @@ by typing these commands into the terminal:
 
 ::
 
-    cd securedrop/tails_files/
-    sudo ./install.sh
+    ./admin tailsconfig
 
 Type the administration password that you selected when starting Tails and hit
 enter. This installation script does the following:
@@ -169,9 +168,9 @@ Journalist Interface even if there is a security vulnerability in the web
 application, or if the journalist's username, password, and two-factor token
 are stolen. The extra configuration that is required is handled by this script.
 
-Our ``install.sh`` sets up Tails to work with SecureDrop every time you login.
-As long as Tails is booted with the persistent volume enabled then you can open
-the Tor Browser and connect to the Journalist Interface as normal.
+Our ``./admin tailsconfig`` tool sets up Tails to work with SecureDrop every time
+you login. As long as Tails is booted with the persistent volume enabled then you
+can open the Tor Browser and connect to the Journalist Interface as normal.
 
 Create bookmarks for Source and Journalist Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

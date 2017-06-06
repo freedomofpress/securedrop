@@ -89,7 +89,7 @@ to debug your connectivity before proceeding further. Make sure:
 
   * Ansible should be automatically installed by the Tails auto-configuration
     for SecureDrop. If it is not, you probably need to re-run
-    ``tails_files/install.sh``. See
+    ``./admin tailsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
 * The *Admin Workstation* is connected to the Internet.
@@ -99,7 +99,7 @@ to debug your connectivity before proceeding further. Make sure:
 
   * Tor should be automatically configured to connect to the authenticated Tor
     Hidden Services by the Tails auto-configuration for SecureDrop. If it is
-    not, you probably need to re-run ``tails_files/install.sh``. See
+    not, you probably need to re-run ``./admin talsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
 Run the backup Ansible role
@@ -170,5 +170,5 @@ Once the restore is done, the Ansible playbook will fetch the Tor HidServAuth
 credentials for the various Authenticated Tor Hidden Services (ATHS) back to the
 *Admin Workstation*. This synchronizes the state on the *Admin Workstation* with the
 state of the restored server. You should re-run the Tails custom configuration
-script (``tails_files/install.sh``, see
+script (``./admin tailsconfig``, see
 :doc:`configure_admin_workstation_post_install` for detailed instructions).

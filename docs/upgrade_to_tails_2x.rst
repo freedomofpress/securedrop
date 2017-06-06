@@ -207,8 +207,7 @@ re-install the Tails auto-configuration:
 
 .. code:: sh
 
-   cd tails_files # from ~/Persistent/securedrop
-   sudo ./install.sh
+   ./admin tailsconfig
 
 This is the same process as described in
 :doc:`configure_admin_workstation_post_install` (for the *Admin Workstation*) and
