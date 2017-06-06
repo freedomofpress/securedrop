@@ -79,7 +79,10 @@ inventory = {
                 "ansible_ssh_host": lookup_ssh_address(h),
                 "ansible_ssh_common_args": SSH_COMMON_ARGS,
             } for h in SECUREDROP_SUPPORTED_HOSTNAMES
-        }
+        },
+        'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
+        'securedrop_application_server': ['app'],
+        'securedrop_monitor_server': ['mon'],
     }
 }
 
