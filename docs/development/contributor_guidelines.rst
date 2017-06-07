@@ -28,3 +28,29 @@ application code, you should verify the tests pass locally before submitting
 your PR. If you modify the server configuration, you should run the
 testinfra tests. Please denote in the checklist when you submit the PR that
 you have performed these checks locally.
+
+Git History
+-----------
+
+We currently use an explicit merge strategy to merge feature branches into
+``develop``. In order to keep our git history as clean as possible, please squash
+your commits to package up your changes into a clear history. If you have
+many unnecessary commits that do not add information to aid in review, they
+should be removed. If you are unfamiliar with how to squash commits with rebase,
+check out this
+`blog post <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`__.
+
+Other Tips
+----------
+
+* To aid in review, please write
+  `clear commit messages <https://chris.beams.io/posts/git-commit/>`__
+  and include a descriptive PR summary. We have a PR template that specifies the
+  type of information you should include.
+
+* To maximize the chance that your PR is merged, please include the minimal
+  changes to implement the feature or fix the bug.
+
+* If there is not an existing issue for the PR you are interested in submitting,
+  you should submit an issue first or comment on an existing issue outlining how
+  you intend to approach the problem.
