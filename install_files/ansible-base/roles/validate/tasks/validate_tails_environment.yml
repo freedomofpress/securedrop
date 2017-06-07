@@ -11,30 +11,15 @@
   stat:
     path: /live/persistence/TailsData_unlocked/persistence.conf
   register: tails_persistence_check_result
+  with_items:
+    - /live/persistence/TailsData_unlocked/persistence.conf
+    - /live/persistence/TailsData_unlocked/openssh-client
 
 - name: Confirm persistence volume is configured.
   assert:
     that:
-      - tails_persistence_check_result.stat.exists
+      - item.stat.exists
     msg: >-
       Persistence must configured on the Tails device for the Admin
-      Workstation.
-
-- name: Check for SSH config option in persistence settings.
-  command: >
-    grep -Pq '^/home/amnesia/\.ssh'
-    /live/persistence/TailsData_unlocked/persistence.conf
-  register: tails_ssh_persistence_check_result
-  changed_when: false
-  # Don't error on failure, since we'll inspect and report a more informative
-  # message in subsequent assert task.
-  failed_when: false
-
-- name: Confirm SSH config option is enabled in persistence settings.
-  assert:
-    that:
-      - tails_ssh_persistence_check_result.rc == 0
-    msg: >-
-      The Admin Workstation must have SSH persistence enabled, otherwise
-      SSH keys will be lost, locking the Admin out of the instance after
-      initial installation.
+      Workstation, and the SSH option for persistent dotfiles must be enabled.
+  with_items: "{{ tails_persistence_check_result.results }}"
