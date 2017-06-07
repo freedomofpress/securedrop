@@ -1,9 +1,17 @@
 // Warn about using Javascript
 $(function(){
-  $('.warning').show();
-  $('#warning-close').click(function(){
-    $('.warning').hide(200);
-  });
+  if (is_likely_tor_browser()) {
+    $('.js-warning').show();
+    $('#js-warning-close').click(function(){
+      $('.js-warning').hide(200);
+    });
+  }
+  else {
+    $('.tor-warning').show();
+    $('#tor-warning-close').click(function(){
+      $('.tor-warning').hide(200);
+    });
+  }
 });
 
 // Customized, super-easy instructions for disabling JS in TBB

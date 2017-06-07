@@ -12,7 +12,8 @@
     {% endassets %}
   </head>
   <body>
-    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="{{ url_for('not_using_tor_browser_warning') }}">Learn how to set it to high</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="js-warning warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to high</a>, or ignore this warning to continue. <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="tor-warning warning"><strong>We strongly recommend using Tor Browser to access SecureDrop:</strong> <a id="disable-js" href="{{ url_for('not_using_tor_browser_warning') }}">Learn how to install it</a>, or ignore this warning to continue. <img id="tor-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
