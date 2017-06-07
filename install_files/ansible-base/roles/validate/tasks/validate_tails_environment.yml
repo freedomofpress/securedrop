@@ -1,0 +1,40 @@
+---
+- name: Confirm host OS is Tails.
+  assert:
+    that:
+      - ansible_lsb.id == "Tails"
+      - ansible_lsb.major_release >= 9
+    msg: >-
+      SecureDrop requires Tails 3 or greater for workstation environments.
+
+- name: Check for persistence volume.
+  stat:
+    path: /live/persistence/TailsData_unlocked/persistence.conf
+  register: tails_persistence_check_result
+
+- name: Confirm persistence volume is configured.
+  assert:
+    that:
+      - tails_persistence_check_result.stat.exists
+    msg: >-
+      Persistence must configured on the Tails device for the Admin
+      Workstation.
+
+- name: Check for SSH config option in persistence settings.
+  command: >
+    grep -Pq '^/home/amnesia/\.ssh'
+    /live/persistence/TailsData_unlocked/persistence.conf
+  register: tails_ssh_persistence_check_result
+  changed_when: false
+  # Don't error on failure, since we'll inspect and report a more informative
+  # message in subsequent assert task.
+  failed_when: false
+
+- name: Confirm SSH config option is enabled in persistence settings.
+  assert:
+    that:
+      - tails_ssh_persistence_check_result.rc == 0
+    msg: >-
+      The Admin Workstation must have SSH persistence enabled, otherwise
+      SSH keys will be lost, locking the Admin out of the instance after
+      initial installation.

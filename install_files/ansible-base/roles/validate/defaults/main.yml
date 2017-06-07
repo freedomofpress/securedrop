@@ -5,3 +5,7 @@
 securedrop_validate_disallowed_users:
   - amnesia
   - root
+
+# Whether to expect a persistence-enabled Tails environment. Defaults to true,
+# for prod contexts, but override capability is provided for testing.
+securedrop_validate_tails_environment: true
