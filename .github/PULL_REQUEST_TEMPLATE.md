@@ -11,6 +11,7 @@ Changes proposed in this pull request:
 ## Testing
 
 How should the reviewer test this PR?
+Write out any special testing steps here.
 
 ## Deployment
 
@@ -27,5 +28,8 @@ Any special considerations for deployment? Consider both:
 
 ### If you made changes to the system configuration:
 
-- [ ] Testinfra tests pass on the development VM
+- [ ] [Configuration tests](https://docs.securedrop.org/en/latest/development/testing_configuration_tests.html) pass
 
+### If you made changes to documentation:
+
+- [ ] Doc linting passed locally
