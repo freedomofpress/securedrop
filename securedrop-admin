@@ -17,6 +17,7 @@ SD_DIR = os.path.dirname(os.path.realpath(__file__))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
 SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
 VENV_DIR = os.path.join(SD_DIR, ".venv")
+VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
 def error(msg, level='warning', exit=True):
     """ Stupid wrapper function to normalize warnings """
@@ -26,9 +27,8 @@ def error(msg, level='warning', exit=True):
 
 def activate_venv():
     """Use to activate the local virtualenv"""
-    activate = os.path.join(VENV_DIR, 'bin/activate_this.py')
     try:
-        execfile(activate, dict(__file__=activate))
+        execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
     except FileNotFoundError:
         error("Pre-requisites not in place, re-run command with 'setup'",
                 level='error')
@@ -41,8 +41,34 @@ def sdconfig(args):
 
 def envsetup(args):
     """Install SD pre-reqs"""
-    update = "update" if args.update else ""
-    subprocess.call(['tails_files/install-ansible.sh', update])
+    
+    # virtualenv doesnt exist? Install dependencies and create
+    if not os.path.exists(VENV_ACTIVATION):
+        subprocess.call(['sudo', 'su', '-c', 
+                        "apt-get update && \
+                        apt-get install -y \
+                        python-virtualenv \
+                        python-pip \
+                        ccontrol \
+                        virtualenv \
+                        libffi-dev \
+                        libssl-dev \
+                        libpython2.7-dev"])
+
+        # Technically you can create a virtualenv from within python
+        # but pip can only be run over tor on tails, and debugging that
+        # along with instaling a third-party dependency is not worth
+        # the effort here.
+        subprocess.call(['torify', 'virtualenv', VENV_DIR])
+
+    pip_install_cmd = ['torify', os.path.join(VENV_DIR, 'bin', 'pip'), 'install']
+    requirements_cmd = ['-r', os.path.join(ANSIBLE_PATH, 'requirements.txt'),
+                        '--require-hashes']
+
+    if args.update:
+        subprocess.call(pip_install_cmd+['-U']+requirements_cmd)
+    else:
+        subprocess.call(pip_install_cmd+requirements_cmd)
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
