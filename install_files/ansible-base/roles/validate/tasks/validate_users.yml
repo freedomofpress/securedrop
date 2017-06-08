@@ -8,4 +8,10 @@
       - "ssh_users != item"
       - "ssh_users != ''"
       - "item not in ssh_users"
+    msg: >-
+      The Admin username for SSH connections to the servers failed
+      to validate. {{ securedrop_validate_error_msg_start }} the
+      `ssh_users` var is set to the username configured during OS
+      installation on the servers. Additionally, the var should be
+      a string, rather than a list of multiple usernames.
   with_items: "{{ securedrop_validate_disallowed_users }}"

@@ -15,6 +15,9 @@
       - item.fingerprint == item.fingerprint|regex_replace('[^A-F0-9]', '')
     msg: >-
       GPG fingerprints must be full-length (40 characters), with no whitespace.
+      {{ securedrop_validate_error_msg_start }}
+      the fingerprints in vars `ossec_gpg_fpr` and
+      `securedrop_app_gpg_fingerprint` are specified correctly.
   tags:
     - validate
     - debug
