@@ -37,7 +37,7 @@ with these scripts, and run the install script:
 
 .. code:: sh
 
-    ./admin tailsconfig
+    ./securedrop-admin tailsconfig
 
 Type the Administration Password that you selected when starting Tails and hit
 **Enter**. This script installs a persistent script that runs every time you
@@ -49,7 +49,7 @@ collected from files in
 
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` to
          the Transfer Device in preparation for setting up the Journalist
-         Workstation. Then you can use the ``admin`` tool to configure
+         Workstation. Then you can use the ``securedrop-admin`` tool to configure
          access for Journalists as well.
 
 In addition, the script creates desktop and menu shortcuts for the Source

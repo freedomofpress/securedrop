@@ -11,7 +11,7 @@ following commands:
 
 .. code:: sh
 
-    ./admin setup
+    ./securedrop-admin setup
 
 This will take around ~10 minutes depending on network speed and computing power.
 
@@ -70,7 +70,7 @@ save the file.
 Run the configuration playbook and answer the prompts with values that
 match your environment: ::
 
-    ./admin sdconfig
+    ./securedrop-admin sdconfig
 
 The script will automatically validate the answers you provided, and display
 error messages if any problems were detected. The answers you provided will be
@@ -99,7 +99,7 @@ Now you are ready to install! This process will configure
 the servers and install SecureDrop and all of its dependencies on
 the remote servers. ::
 
-    ./admin install
+    ./securedrop-admin install
 
 You will be prompted to enter the sudo password for the app and monitor
 servers (which should be the same).

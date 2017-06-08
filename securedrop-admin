@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 """
     SecureDrop Admin Toolkit.
-    
+
     For use by administrators to install, maintain, and manage their SD
     instances.
 """
@@ -40,7 +40,7 @@ def sdconfig(args):
 
 def envsetup(args):
     """Install SD pre-reqs"""
-    update = "update" if args.update else "" 
+    update = "update" if args.update else ""
     subprocess.call(['tails_files/install-ansible.sh', update])
 
 def install_securedrop(args):
