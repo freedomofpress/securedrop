@@ -8,15 +8,10 @@
       - "ssh_users != item"
       - "ssh_users != ''"
       - "item not in ssh_users"
-  with_items: "{{ securedrop_validate_disallowed_users }}"
-
-# Beyond checking what's declared in the vars file, we must validate the
-# username used to connect to the host. The SSH config forbids SSH connections,
-# so on first run we should not be connecting as root.
-- name: Validate Admin username (used in SSH connection).
-  assert:
-    that:
-      - "ansible_user|default('') != item"
-      - "ansible_ssh_user|default('') != item"
-      - "remote_user|default('') != item"
+    msg: >-
+      The Admin username for SSH connections to the servers failed
+      to validate. {{ securedrop_validate_error_msg_start }} the
+      `ssh_users` var is set to the username configured during OS
+      installation on the servers. Additionally, the var should be
+      a string, rather than a list of multiple usernames.
   with_items: "{{ securedrop_validate_disallowed_users }}"
