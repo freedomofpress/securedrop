@@ -20,14 +20,20 @@ def test_apache_headers_source_interface(File, header):
 
 
 @pytest.mark.parametrize("apache_opt", [
-    'Header set Cache-Control "max-age=1800, must-revalidate"',
     "<VirtualHost {}:80>".format(securedrop_test_vars.apache_listening_address),
-    "DocumentRoot {}/static".format(securedrop_test_vars.securedrop_code),
-    "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
-    "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{GROUP}"+" python-path={}".format(securedrop_test_vars.securedrop_code),
+    "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(securedrop_test_vars.securedrop_code),
     'WSGIProcessGroup source',
-    'WSGIScriptAlias / /var/www/source.wsgi/',
-    'AddType text/html .py',
+    'WSGIScriptAlias / /var/www/source.wsgi',
+    'Header set Cache-Control "no-store"',
+    "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
+    """
+<Directory {}/static>
+  Order allow,deny
+  Allow from all
+  # Cache static resources for 1 hour
+  Header set Cache-Control "max-age=3600"
+</Directory>
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
     'XSendFile        Off',
     'LimitRequestBody 524288000',
     'ErrorDocument 400 /notfound',
@@ -53,4 +59,3 @@ def test_apache_config_source_interface(File, apache_opt):
     assert oct(f.mode) == "0644"
     regex = "^{}$".format(re.escape(apache_opt))
     assert re.search(regex, f.content, re.M)
-
