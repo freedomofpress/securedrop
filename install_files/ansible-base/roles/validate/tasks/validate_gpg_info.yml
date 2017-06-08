@@ -22,6 +22,27 @@
     - validate
     - debug
 
+# Using a block to catch an exception in the lookup, otherwise
+# the lookup error will halt playbook execution before the `msg` parameter
+# is displayed as part of the assert task.
+- block:
+    - name: Confirm GPG public key files exist locally.
+      assert:
+        that:
+          # The local file lookup will fail if file is not found.
+          # We don't need to inspect the contents; the validation script
+          # in the next task will handle that.
+          - lookup('file', item.keyfile)
+  rescue:
+    - name: GPG public key file validation failed.
+      fail:
+        msg: >-
+          Failed to find the public key file '{{ item.keyfile }}' on the Admin
+          Workstation. {{ securedrop_validate_error_msg_start }} the public
+          key filenames are set correctly in vars `ossec_alert_gpg_public_key`
+          and `securedrop_app_gpg_public_key`. The public key files should exist
+          in the `install_files/ansible-base/` directory.
+
 - name: Confirm public key file and fingerprint match.
   script: validate-gpg-key.sh "{{ item.keyfile }}" "{{ item.fingerprint }}"
   changed_when: false
