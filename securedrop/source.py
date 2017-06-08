@@ -406,7 +406,7 @@ def tor2web_warning():
 
 
 @app.route('/use-tor')
-def not_using_tor_browser_warning():
+def recommend_tor_browser():
     return render_template("use-tor-browser.html")
 
 

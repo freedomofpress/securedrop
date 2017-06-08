@@ -1,4 +1,4 @@
-// Warn about using Javascript
+// Warn about using Javascript and not using Tor Browser
 $(function(){
   if (is_likely_tor_browser()) {
     $('.js-warning').show();
@@ -7,19 +7,12 @@ $(function(){
     });
   }
   else {
-    $('.tor-warning').show();
-    $('#tor-warning-close').click(function(){
-      $('.tor-warning').hide(200);
+    $('.use-tor-browser').show();
+    $('#use-tor-browser-close').click(function(){
+      $('.use-tor-browser').hide(200);
     });
   }
 });
-
-// Customized, super-easy instructions for disabling JS in TBB
-var TBB_UAS = [
-  "Mozilla/5.0 (Windows NT 6.1; rv:10.0) Gecko/20100101 Firefox/10.0",
-  "Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0",
-  "Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0",
-];
 
 var TBB_UA_REGEX = /Mozilla\/5\.0 \(Windows NT 6\.1; rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
 
@@ -35,6 +28,8 @@ function tbb_version() {
   return Number(major_version);
 }
 
+// Display a friendly bubble to explain how to turn the security slider to High
+// if the source is using Tor Browser with JS enabled
 $(function() {
   if (is_likely_tor_browser()) {
     $("a#disable-js").click(function() {
