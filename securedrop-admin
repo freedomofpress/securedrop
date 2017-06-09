@@ -31,7 +31,7 @@ def activate_venv():
     """Use to activate the local virtualenv"""
     try:
         execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
-    except FileNotFoundError:
+    except IOError:
         error("Pre-requisites not in place, re-run command with 'setup'",
               level='error')
 
