@@ -61,6 +61,23 @@ when changes are submitted by Freedom of the Press Foundation staff
 
 .. _AWS Getting Started Guide: https://aws.amazon.com/ec2/getting-started/
 
+In addition to an EC2 account, you will need a working `Docker installation`_ in
+order to run the container that builds the deb packages.
+
+You can verify that your Docker installation is working by running
+``docker run hello-world`` and confirming you see "Hello from Docker" in the
+output as shown below:
+
+.. code:: sh
+
+    $ docker run hello-world
+
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+    ...
+
+.. _Docker installation: https://www.docker.com/community-edition#/download
+
 Create AWS EC2 config script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
