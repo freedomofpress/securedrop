@@ -6,12 +6,12 @@ For use by administrators to install, maintain, and manage their SD
 instances.
 """
 
-
 import argparse
 import subprocess
 import os
 import sys
 import getpass
+
 
 SD_DIR = os.path.dirname(os.path.realpath(__file__))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
@@ -19,11 +19,13 @@ SITE_CONFIG = os.path.join(ANSIBLE_PATH, "group_vars/all/site-specific")
 VENV_DIR = os.path.join(SD_DIR, ".venv")
 VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
+
 def error(msg, level='warning', exit=True):
     """ Stupid wrapper function to normalize warnings """
     print("{} - {}".format(level.upper(), msg))
     if exit:
         sys.exit(1)
+
 
 def activate_venv():
     """Use to activate the local virtualenv"""
@@ -31,18 +33,20 @@ def activate_venv():
         execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
     except FileNotFoundError:
         error("Pre-requisites not in place, re-run command with 'setup'",
-                level='error')
+              level='error')
+
 
 def sdconfig(args):
     """Configure SD site settings"""
     activate_venv()
     subprocess.call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
 
+
 def envsetup(args):
     """Install SD pre-reqs"""
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_ACTIVATION):
-        subprocess.call(['sudo', 'su', '-c', 
+        subprocess.call(['sudo', 'su', '-c',
                         "apt-get update && \
                         apt-get install -y \
                         python-virtualenv \
@@ -59,7 +63,11 @@ def envsetup(args):
         # the effort here.
         subprocess.call(['torify', 'virtualenv', VENV_DIR])
 
-    pip_install_cmd = ['torify', os.path.join(VENV_DIR, 'bin', 'pip'), 'install']
+    pip_install_cmd = [
+            'torify',
+            os.path.join(VENV_DIR, 'bin', 'pip'),
+            'install',
+            ]
     requirements_cmd = ['-r', os.path.join(ANSIBLE_PATH, 'requirements.txt'),
                         '--require-hashes']
 
@@ -67,6 +75,7 @@ def envsetup(args):
         subprocess.call(pip_install_cmd+['-U']+requirements_cmd)
     else:
         subprocess.call(pip_install_cmd+requirements_cmd)
+
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
@@ -78,42 +87,50 @@ def install_securedrop(args):
     try:
         site_config_vars = yaml.safe_load(open(SITE_CONFIG, 'ro').read())
 
-        ansible_user = args.user if args.user else site_config_vars['ssh_users']
+        # Username may have been provided as `--user`, but try to fall back
+        # to YAML vars files if not.
+        ansible_user = ""
+        if args.user:
+            ansible_user = args.user
+        else:
+            ansible_user = site_config_vars['ssh_users']
 
         sudo_prompt = getpass.getpass(prompt="Sudo Pass [Blank if not needed]:")
         subprocess.call(['./securedrop-prod.yml',
-                '-u '+ansible_user,
-                "-e ansible_become_pass={}".format(sudo_prompt if sudo_prompt else ""),
-                ],
-                cwd=ANSIBLE_PATH)
+                         '-u '+ansible_user,
+                         "-e ansible_become_pass={}".format(sudo_prompt if sudo_prompt else ""),
+                         ],
+                        cwd=ANSIBLE_PATH)
     except IOError:
         error("Config file missing, re-run with sdconfig", level='error')
 
+
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    subprocess.call(['sudo','./tails_files/install.sh'])
+    subprocess.call(['sudo', './tails_files/install.sh'])
+
 
 if __name__ == "__main__":
     # Processing argument parsing logic -- yuck
-    parser = argparse.ArgumentParser(description = __doc__)
+    parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers()
 
     parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
     parse_setup.add_argument('--update', action='store_true', default=False,
-                            help="Force refresh of existing dependencies")
+                             help="Force refresh of existing dependencies")
     parse_setup.set_defaults(func=envsetup)
 
     parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
 
     parse_install = subparsers.add_parser('install',
-                                            help=install_securedrop.__doc__)
+                                          help=install_securedrop.__doc__)
     parse_install.add_argument('--user', type=str, default='',
-                            help="Over-ride user defined in vars")
+                               help="Over-ride user defined in vars")
     parse_install.set_defaults(func=install_securedrop)
 
     parse_tailsconfig = subparsers.add_parser('tailsconfig',
-                                                help=run_tails_config.__doc__)
+                                              help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
 
     args = parser.parse_args()
