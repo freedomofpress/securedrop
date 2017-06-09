@@ -214,3 +214,33 @@ p#max-file-size
   font-size: 10px
   font-style: italic
   margin-bottom: 0
+
+
+div.bubble
+  width: 415px
+  position: absolute
+  background-color: #ffffff
+  left: 28px
+  top: 58px
+  border-radius: 10px
+  border: 3px solid #666
+  padding: 10px 25px
+  display: none
+
+  &:before, &:after
+    content: ''
+    position: absolute
+    border-width: 25px
+    border-style: solid
+    width: 0px
+    height: 0px
+
+  &:before
+    border-color: transparent transparent #666 #666
+    top: -50px
+    left: 30px
+
+  &:after
+    border-color: transparent transparent #fff #fff
+    left: 33px
+    top: -43px
