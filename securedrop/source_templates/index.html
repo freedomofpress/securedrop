@@ -12,7 +12,8 @@
     {% endassets %}
   </head>
   <body>
-    <div class="warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="/howto-disable-js">Learn how to set it to high</a>, or ignore this warning to continue. <img id="warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="js-warning warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to high</a>, or ignore this warning to continue. <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="use-tor-browser warning"><strong>We recommend using Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{{ url_for('recommend_tor_browser') }}">Learn how to install it</a>, or ignore this warning to continue. <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -67,13 +68,13 @@
     <!-- Warning bubble to help TB users disable Javascript with NoScript.
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. -->
-    <div class="bubble">
+    <div class="bubble" id="security-slider-info-bubble">
       <p>You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!</p>
       <ol>
         <li>Click the <img src="{{ url_for('static', filename='i/toronion.png') }}" alt="Tor icon" />Tor icon in the toolbar above</li>
-        <li>Click <strong>Security Settings</strong></li>
-        <li>Turn the Slider to <strong>High</strong></li>
-        <li>If the page does not refresh automatically, <a href="/">click here</a> to refresh the page</li>
+        <li>Click <strong>Security Settings...</strong></li>
+        <li>Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong></li>
+        <li><a href="/">Click here</a> to refresh the page</li>
       </ol>
     </div>
 

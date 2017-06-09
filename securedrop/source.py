@@ -400,14 +400,14 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/howto-disable-js')
-def howto_disable_js():
-    return render_template("howto-disable-js.html")
-
-
 @app.route('/tor2web-warning')
 def tor2web_warning():
     return render_template("tor2web-warning.html")
+
+
+@app.route('/use-tor')
+def recommend_tor_browser():
+    return render_template("use-tor-browser.html")
 
 
 @app.route('/journalist-key')

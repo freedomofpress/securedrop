@@ -277,16 +277,15 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Why is there a warning about Tor2Web?", resp.data)
 
+    def test_why_use_tor_browser(self):
+        resp = self.client.get('/use-tor')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("You Should Use Tor Browser", resp.data)
+
     def test_why_journalist_key(self):
         resp = self.client.get('/why-journalist-key')
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Why download the journalist's public key?", resp.data)
-
-    def test_howto_disable_js(self):
-        resp = self.client.get('/howto-disable-js')
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Turn the Security Slider to High to Protect Your "
-                      "Anonymity", resp.data)
 
     def test_metadata_route(self):
         resp = self.client.get('/metadata')
