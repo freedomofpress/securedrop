@@ -14,7 +14,8 @@ following commands:
 
     ./securedrop-admin setup
 
-This will take around ~10 minutes depending on network speed and computing power.
+The package installation will complete in approximately 10 minutes, depending
+on network speed and computing power.
 
 .. _configure_securedrop:
 
@@ -102,8 +103,8 @@ the remote servers. ::
 
     ./securedrop-admin install
 
-You will be prompted to enter the sudo password for the app and monitor
-servers (which should be the same).
+You will be prompted to enter the sudo password for the *Application* and
+*Monitor Servers* (which should be the same).
 
 The install process will take some time, and it will return
 the terminal to you when it is complete. If an error occurs while
