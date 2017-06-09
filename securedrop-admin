@@ -95,14 +95,18 @@ def install_securedrop(args):
         else:
             ansible_user = site_config_vars['ssh_users']
 
-        sudo_prompt = getpass.getpass(prompt="Sudo Pass [Blank if not needed]:")
-        subprocess.call(['./securedrop-prod.yml',
-                         '-u '+ansible_user,
-                         "-e ansible_become_pass={}".format(sudo_prompt if sudo_prompt else ""),
-                         ],
-                        cwd=ANSIBLE_PATH)
     except IOError:
         error("Config file missing, re-run with sdconfig", level='error')
+
+    sudo_prompt = "Sudo password for servers [blank if not needed]: "
+    ansible_password = getpass.getpass(prompt=sudo_prompt)
+    subprocess.call(['./securedrop-prod.yml',
+                     '-u '+ansible_user,
+                     "-e ansible_become_pass={}".format(ansible_password if
+                                                        ansible_password else
+                                                        ""),
+                     ],
+                    cwd=ANSIBLE_PATH)
 
 
 def run_tails_config(args):
