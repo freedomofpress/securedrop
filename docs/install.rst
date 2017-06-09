@@ -4,7 +4,8 @@ Install SecureDrop
 Install Pre-Requisites
 ----------------------
 
-SecureDrop has some dependencies that need to be loaded onto the admin Tails stick prior to the installation of the server.
+SecureDrop has some dependencies that need to be loaded onto the admin tails
+stick prior to the installation of the server.
 
 To load these dependencies, from the base of the SecureDrop repo run the
 following commands:

@@ -35,13 +35,11 @@ def activate_venv():
 
 def sdconfig(args):
     """Configure SD site settings"""
-
     activate_venv()
     subprocess.call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 def envsetup(args):
     """Install SD pre-reqs"""
-    
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_ACTIVATION):
         subprocess.call(['sudo', 'su', '-c', 
@@ -72,7 +70,6 @@ def envsetup(args):
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
-
     activate_venv()
     # Yaml library cannot be imported until virtualenv is activated
     # (hence the yaml library is not imported up-top)
