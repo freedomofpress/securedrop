@@ -119,6 +119,20 @@ def test_deb_package_control_fields_homepage(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_no_update_dependencies_file(File, Command, deb):
+    """
+    Ensures the update_python_dependencies script is not shipped via the
+    Debian packages.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    # Using `dpkg-deb` but `lintian --tag package-installs-python-bytecode`
+    # would be cleaner. Will defer to adding lintian tests later.
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    assert not re.search("^.*update_python_dependencies$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_no_pyc_files(File, Command, deb):
     """
     Ensures no .pyc files are shipped via the Debian packages.
