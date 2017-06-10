@@ -25,25 +25,15 @@ CI test layout
 
 The relevant files for configuring the CI tests are: ::
 
-    ├── circle.yml
+    ├── .circleci <--- folder contains config for CircleCI
     ├── devops
-    │   ├── ansible_env
-    │   ├── inventory
-    │   │   └── staging
-    │   ├── playbooks
-    │   │   ├── aws-ci-startup.yml
-    │   │   ├── aws-ci-teardown.yml
-    │   │   └── reboot_and_wait.yml
-    │   ├── scripts
-    │   │   ├── ci-runner.sh
-    │   │   ├── ci-spinup.sh
-    │   │   ├── ci-teardown.sh
-    │   │   └── spin-run-test.sh
-    │   ├── templates
-    │   │   └── ssh_config
-    │   └── vars
-    │       └── staging.yml
-    └── .travis.yml
+    │   ├── inventory <-- environment specific inventory
+    │   ├── playbooks <-- playbooks to start CI boxes
+    │   ├── scripts   <-- shell wrapper scripts 
+    │   ├── templates <-- contains templates for ansible tasks
+    │   └── vars <-- environment specific variables
+    ├── .travis.yml  <--- config for development tests on travis
+    └── Makefile  <-- defines make task shortcuts
 
 The files under ``devops/`` are used to create a minimized staging environment
 on AWS EC2. The CircleCI host is used as the Ansible controller to provision
@@ -61,28 +51,35 @@ when changes are submitted by Freedom of the Press Foundation staff
 
 .. _AWS Getting Started Guide: https://aws.amazon.com/ec2/getting-started/
 
-Create AWS EC2 config script
+In addition to an EC2 account, you will need a working `Docker installation`_ in
+order to run the container that builds the deb packages.
+
+You can verify that your Docker installation is working by running
+``docker run hello-world`` and confirming you see "Hello from Docker" in the
+output as shown below:
+
+.. code:: sh
+
+    $ docker run hello-world
+
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+    ...
+
+.. _Docker installation: https://www.docker.com/community-edition#/download
+
+Setup environment parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a file ``aws-env.sh`` with contents: ::
+Source the setup script using the following command:
 
-    # The BUILD_NUM string must be unique, otherwise users with the same
-    # creds will clobber CI runs. In CircleCI this value maps to the UID of
-    # the build, so that multiple builds can run in parallel.
-    export BUILD_NUM="$USER"
-    export CI_AWS_REGION=us-west-1
-    export CI_AWS_TYPE=t2.small
-    # The VPC ID below is invalid.
-    export CI_AWS_VPC_ID=vpc-12345678
-    export CI_SD_ENV=staging
-    export FPF_CI=true
-    export FPF_GRSEC=false
+.. code:: sh
 
-Then run ``source aws-env.sh`` to populate the environment variables.
-Note you'll need to create a value for ``CI_AWS_VPC_ID`` if you do not
-have access to the FPF credentials used for the SecureDrop CI pipeline.
-The important attributes are whitelisting inter-machine communication on
-ports 1514 and 1515 to support OSSEC registration and monitoring.
+    $ source ./devops/scripts/local-setup.sh
+
+You will be prompted for the values of the required environment variables. There
+are some defaults set that you may want to change. You will need to determine
+the value of your VPC ID to use which is outside the scope of this guide.
 
 
 Use Makefile to provision hosts
@@ -114,3 +111,8 @@ To run the tests locally:
 You can use ``make ci-run`` to provision the remote hosts while making changes,
 including rebuilding the Debian packages used in the Staging environment.
 See :doc:`virtual_environments` for more information.
+
+Note that if you typed ``make ci-debug`` above, you will have to manually remove
+a blank file in ``${HOME}/.FPF_CI_DEBUG`` and then run ``make ci-teardown`` to
+bring down the CI environment. Otherwise, specifically for AWS, you will be
+charged hourly charges until those machines are terminated.
