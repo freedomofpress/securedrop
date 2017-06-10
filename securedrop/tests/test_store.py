@@ -22,11 +22,23 @@ class TestStore(unittest.TestCase):
         utils.env.teardown()
         db_session.remove()
 
-    def test_verify(self):
+    def test_verify_path_not_absolute(self):
         with self.assertRaises(store.PathException):
             store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
-        with self.assertRaises(store.PathException):
+
+    def test_verify_in_store_dir(self):
+        with self.assertRaisesRegexp(store.PathException, 'Invalid directory'):
             store.verify(config.STORE_DIR + "_backup")
+
+    def test_verify_store_dir_not_absolute(self):
+        STORE_DIR = config.STORE_DIR
+        try:
+            with self.assertRaisesRegexp(store.PathException,
+                                         'config.STORE_DIR\(\S*\) is not absolute'):
+                config.STORE_DIR = '.'
+                store.verify('something')
+        finally:
+            config.STORE_DIR = STORE_DIR
 
     def test_get_zip(self):
         source, _ = utils.db_helper.init_source()
