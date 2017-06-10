@@ -61,7 +61,7 @@ def reply(journalist, source, num_replies):
         db.db_session.add(reply)
 
         db.db_session.commit()
-        return replies
+    return replies
 
 
 def mock_verify_token(testcase):
