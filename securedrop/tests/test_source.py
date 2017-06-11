@@ -230,6 +230,18 @@ class TestSourceApp(TestCase):
         self.assertIn("Thanks! We received your message and document",
                       resp.data)
 
+    def test_delete_all(self):
+        journalist, _ = utils.db_helper.init_journalist()
+        source, codename = utils.db_helper.init_source()
+        replies = utils.db_helper.reply(journalist, source, 1)
+        with self.client as c:
+            resp = c.post('/login', data=dict(codename=codename),
+                          follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            resp = c.post('/delete-all', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("All replies have been deleted", resp.data)
+
     @patch('gzip.GzipFile')
     def test_submit_sanitizes_filename(self, gzipfile):
         """Test that upload file name is sanitized"""
