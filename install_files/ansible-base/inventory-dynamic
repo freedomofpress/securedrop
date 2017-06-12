@@ -77,7 +77,7 @@ def lookup_ssh_address(hostname):
     try:
         ssh_address = lookup_tor_hostname(hostname)
     # Don't assume ATHS files are present; they won't be on first run.
-    except IndexError:
+    except (IndexError, EnvironmentError):
         pass
 
     return ssh_address
