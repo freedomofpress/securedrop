@@ -27,6 +27,9 @@ tails_config_desktop_icon_directories:
 # Path for storing site-specific ATHS info for connecting to Journalist Interface.
 tails_config_torrc_additions: "{{ tails_config_securedrop_dotfiles }}/torrc_additions"
 
+# Location for NetworkManager hooks, used to activate ATHS info.
+tails_config_network_manager_dispatcher: /etc/NetworkManager/dispatcher.d
+
 # Parent directories for joining with the config_files below,
 # to ensure absence from all locations succinctly.
 tails_config_deprecated_directories:

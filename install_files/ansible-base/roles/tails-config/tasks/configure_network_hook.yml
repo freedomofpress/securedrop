@@ -1,0 +1,22 @@
+---
+- name: Enable persistence for NetworkManager hooks.
+  # Elevated privileges are required for writing to persistence config.
+  become: yes
+  lineinfile:
+    dest: "{{ tails_config_live_persistence }}/persistence.conf"
+    regexp: '^/etc/NetworkManager'
+    line: "{{ tails_config_network_manager_dispatcher }}	source=custom-nm-hooks,link"
+
+- name: Copy NetworkManager hook for managing SecureDrop interfaces.
+  become: yes
+  copy:
+    src: 65-configure-tor-for-securedrop.sh
+    dest: "{{ item }}/"
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{ tails_config_live_persistence }}/custom-nm-hooks"
+    - "{{ tails_config_network_manager_dispatcher }}"
+  notify: run securedrop network hook
+

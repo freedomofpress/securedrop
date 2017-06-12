@@ -9,3 +9,5 @@
 - include: configure_torrc_additions.yml
 
 - include: create_desktop_shortcuts.yml
+
+- include: configure_network_hook.yml
