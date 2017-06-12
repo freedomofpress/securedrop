@@ -1,0 +1,3 @@
+---
+# Reuse validation logic.
+- include: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
