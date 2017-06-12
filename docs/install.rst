@@ -1,7 +1,7 @@
 Install SecureDrop
 ==================
 
-Install Pre-Requisites
+Install Prerequisites
 ----------------------
 
 SecureDrop has some dependencies that need to be loaded onto the admin tails
