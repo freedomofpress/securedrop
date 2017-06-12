@@ -6,7 +6,7 @@ import functools
 
 from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -24,7 +24,7 @@ import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
-CsrfProtect(app)
+CSRFProtect(app)
 
 assets = Environment(app)
 
