@@ -10,6 +10,20 @@ tails_config_ansible_base: "{{ tails_config_amnesia_persistent }}/securedrop/ins
 # on every login under Tails.
 tails_config_securedrop_dotfiles: "{{ tails_config_amnesia_persistent }}/.securedrop"
 
+# Locations for Tails persistence settings, used to bootstrap SecureDrop config
+tails_config_live_persistence: /live/persistence/TailsData_unlocked
+tails_config_live_dotfiles: "{{ tails_config_live_persistence }}/dotfiles"
+
+# Destination directories for storing the SecureDrop desktop icons, which
+# provide a user-friendly method of accessing the Onion URLs in a browser.
+tails_config_desktop_icon_directories:
+  - "{{ tails_config_securedrop_dotfiles }}"
+  - "{{ tails_config_live_dotfiles }}"
+  - "{{ tails_config_amnesia_home }}/Desktop"
+  - "{{ tails_config_live_dotfiles }}/Desktop"
+  - "{{ tails_config_amnesia_home }}/.local/share/applications"
+  - "{{ tails_config_live_dotfiles }}/.local/share/applications"
+
 # Path for storing site-specific ATHS info for connecting to Journalist Interface.
 tails_config_torrc_additions: "{{ tails_config_securedrop_dotfiles }}/torrc_additions"
 

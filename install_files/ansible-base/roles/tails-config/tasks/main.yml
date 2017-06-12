@@ -7,3 +7,5 @@
 - include: copy_dotfiles.yml
 
 - include: configure_torrc_additions.yml
+
+- include: create_desktop_shortcuts.yml
