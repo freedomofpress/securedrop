@@ -39,14 +39,14 @@ def activate_venv():
 def sdconfig(args):
     """Configure SD site settings"""
     activate_venv()
-    subprocess.call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
+    subprocess.check_call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 
 def envsetup(args):
     """Install SD pre-reqs"""
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_ACTIVATION):
-        subprocess.call(['sudo', 'su', '-c',
+        subprocess.check_call(['sudo', 'su', '-c',
                         "apt-get update && \
                         apt-get install -y \
                         python-virtualenv \
@@ -61,7 +61,7 @@ def envsetup(args):
         # but pip can only be run over tor on tails, and debugging that
         # along with instaling a third-party dependency is not worth
         # the effort here.
-        subprocess.call(['torify', 'virtualenv', VENV_DIR])
+        subprocess.check_call(['torify', 'virtualenv', VENV_DIR])
 
     pip_install_cmd = [
             'torify',
@@ -72,9 +72,9 @@ def envsetup(args):
                         '--require-hashes']
 
     if args.update:
-        subprocess.call(pip_install_cmd+['-U']+requirements_cmd)
+        subprocess.check_call(pip_install_cmd+['-U']+requirements_cmd)
     else:
-        subprocess.call(pip_install_cmd+requirements_cmd)
+        subprocess.check_call(pip_install_cmd+requirements_cmd)
 
 
 def install_securedrop(args):
@@ -100,7 +100,7 @@ def install_securedrop(args):
 
     sudo_prompt = "Sudo password for servers [blank if not needed]: "
     ansible_password = getpass.getpass(prompt=sudo_prompt)
-    subprocess.call(['./securedrop-prod.yml',
+    subprocess.check_call(['./securedrop-prod.yml',
                      '-u '+ansible_user,
                      "-e ansible_become_pass={}".format(ansible_password if
                                                         ansible_password else
@@ -111,7 +111,7 @@ def install_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    subprocess.call(['sudo', './tails_files/install.sh'])
+    subprocess.check_call(['sudo', './tails_files/install.sh'])
 
 
 if __name__ == "__main__":
