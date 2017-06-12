@@ -3,10 +3,15 @@
 tails_config_amnesia_home: /home/amnesia
 tails_config_amnesia_persistent: "{{ tails_config_amnesia_home }}/Persistent"
 
+# Directory containing Ansible config, including site-specific customizations.
+tails_config_ansible_base: "{{ tails_config_amnesia_persistent }}/securedrop/install_files/ansible-base"
 
 # Custom persistence directory whence site-specific configs will be copied
 # on every login under Tails.
 tails_config_securedrop_dotfiles: "{{ tails_config_amnesia_persistent }}/.securedrop"
+
+# Path for storing site-specific ATHS info for connecting to Journalist Interface.
+tails_config_torrc_additions: "{{ tails_config_securedrop_dotfiles }}/torrc_additions"
 
 # Parent directories for joining with the config_files below,
 # to ensure absence from all locations succinctly.

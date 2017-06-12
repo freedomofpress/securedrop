@@ -5,3 +5,5 @@
 - include: cleanup_legacy_artifacts.yml
 
 - include: copy_dotfiles.yml
+
+- include: configure_torrc_additions.yml
