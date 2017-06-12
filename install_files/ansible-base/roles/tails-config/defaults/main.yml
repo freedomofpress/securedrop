@@ -3,6 +3,11 @@
 tails_config_amnesia_home: /home/amnesia
 tails_config_amnesia_persistent: "{{ tails_config_amnesia_home }}/Persistent"
 
+
+# Custom persistence directory whence site-specific configs will be copied
+# on every login under Tails.
+tails_config_securedrop_dotfiles: "{{ tails_config_amnesia_persistent }}/.securedrop"
+
 # Parent directories for joining with the config_files below,
 # to ensure absence from all locations succinctly.
 tails_config_deprecated_directories:

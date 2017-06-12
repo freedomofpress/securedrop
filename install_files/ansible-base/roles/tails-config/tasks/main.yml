@@ -3,3 +3,5 @@
 - include: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
 
 - include: cleanup_legacy_artifacts.yml
+
+- include: copy_dotfiles.yml
