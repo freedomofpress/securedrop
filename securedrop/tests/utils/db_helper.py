@@ -60,7 +60,7 @@ def reply(journalist, source, num_replies):
         replies.append(reply)
         db.db_session.add(reply)
 
-        db.db_session.commit()
+    db.db_session.commit()
     return replies
 
 
