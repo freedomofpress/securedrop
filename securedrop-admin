@@ -39,7 +39,8 @@ def activate_venv():
 def sdconfig(args):
     """Configure SD site settings"""
     activate_venv()
-    subprocess.check_call(['./configure'], cwd=ANSIBLE_PATH, env=os.environ.copy())
+    subprocess.check_call([os.path.join(ANSIBLE_PATH,'configure')],
+                            cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 
 def envsetup(args):
@@ -111,7 +112,8 @@ def install_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    subprocess.check_call(['sudo', './tails_files/install.sh'])
+    subprocess.check_call(['sudo',
+                            os.path.join(SD_DIR, 'tails_files/install.sh')])
 
 
 if __name__ == "__main__":
