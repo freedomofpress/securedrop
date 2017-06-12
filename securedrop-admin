@@ -86,28 +86,25 @@ def install_securedrop(args):
     import yaml
 
     try:
-        site_config_vars = yaml.safe_load(open(SITE_CONFIG, 'ro').read())
+        with open(SITE_CONFIG) as site_config_file:
+            site_config_vars = yaml.safe_load(site_config_file.read())
 
         # Username may have been provided as `--user`, but try to fall back
         # to YAML vars files if not.
-        ansible_user = ""
-        if args.user:
-            ansible_user = args.user
-        else:
-            ansible_user = site_config_vars['ssh_users']
-
+        ansible_user = args.user or site_config_vars['ssh_users']
     except IOError:
         error("Config file missing, re-run with sdconfig", level='error')
+    except yaml.YAMLError:
+        error("There was an issue processing {}".format(SITE_CONFIG), level="error")
 
-    sudo_prompt = "Sudo password for servers [blank if not needed]: "
-    ansible_password = getpass.getpass(prompt=sudo_prompt)
-    subprocess.check_call(['./securedrop-prod.yml',
-                     '-u '+ansible_user,
-                     "-e ansible_become_pass={}".format(ansible_password if
-                                                        ansible_password else
-                                                        ""),
-                     ],
-                    cwd=ANSIBLE_PATH)
+    else:
+        sudo_prompt = "Sudo password for servers [blank if not needed]: "
+        ansible_password = getpass.getpass(prompt=sudo_prompt)
+        subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
+                         '-u '+ansible_user,
+                         "-e ansible_become_pass={}".format(ansible_password),
+                         ],
+                        cwd=ANSIBLE_PATH)
 
 
 def run_tails_config(args):
@@ -131,7 +128,7 @@ if __name__ == "__main__":
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)
-    parse_install.add_argument('--user', type=str, default='',
+    parse_install.add_argument('--user', type=str, default=None,
                                help="Over-ride user defined in vars")
     parse_install.set_defaults(func=install_securedrop)
 
