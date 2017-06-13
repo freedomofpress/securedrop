@@ -24,7 +24,7 @@ session and click *Login*.
 
 After Tails finishes booting, make sure you're connected to the
 Internet |Network| and that the Tor's Vidalia indicator onion
-|Vidalia| is green, using the icons in the upper right corner.
+has no cross |Vidalia|, using the icons in the upper right corner.
 
 .. |Network| image:: images/network-wired.png
 .. |Vidalia| image:: images/vidalia.png
