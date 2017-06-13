@@ -7,13 +7,13 @@ instances.
 """
 
 import argparse
-import subprocess
-import os
-import sys
 import getpass
 import logging
+import os
+import subprocess
+import sys
 
-sdlog = logging.getLogger('SD')
+sdlog = logging.getLogger(__name__)
 
 SD_DIR = os.path.dirname(os.path.realpath(__file__))
 ANSIBLE_PATH = os.path.join(SD_DIR, "./install_files/ansible-base")
@@ -22,7 +22,7 @@ VENV_DIR = os.path.join(SD_DIR, ".venv")
 VENV_ACTIVATION = os.path.join(VENV_DIR, 'bin/activate_this.py')
 
 
-def logger_setup(verbose=False):
+def setup_logger(verbose=False):
     """ Configure logging handler """
     # Set default level on parent
     sdlog.setLevel(logging.DEBUG)
@@ -32,6 +32,7 @@ def logger_setup(verbose=False):
     stdout.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
     stdout.setLevel(level)
     sdlog.addHandler(stdout)
+
 
 def activate_venv():
     """Use to activate the local virtualenv"""
@@ -53,7 +54,7 @@ def envsetup(args):
     """Install SD pre-reqs"""
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_ACTIVATION):
-        sdlog.info("Installing dependencies. You'll be prompted for the "+\
+        sdlog.info("Installing dependencies. You'll be prompted for the "
             "temporary Tails root credentials. This was set on boot-up screen")
         sdlog.debug(subprocess.check_output(['sudo', 'su', '-c',
                                             "apt-get update && \
@@ -83,14 +84,15 @@ def envsetup(args):
                         '--require-hashes']
     upgrade = ['-U', '--upgrade-strategy', 'only-if-needed']
 
-    sdlog.info("Checking pip dependencies")
+    sdlog.info("Checking Python dependencies for securedrop-admin")
     pip_output = subprocess.check_output(pip_install_cmd+upgrade+requirements_cmd)
 
+    sdlog.debug(pip_output)
     if "Successfully installed" in pip_output:
-        sdlog.info(pip_output)
+        sdlog.info("Python dependencies for securedrop-admin upgraded")
     else:
-        sdlog.info("pip depdencies up-to-date")
-        sdlog.debug(pip_output)
+        sdlog.info("Python dependencies for securedrop-admin are up-to-date")
+
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
@@ -155,5 +157,5 @@ if __name__ == "__main__":
     parse_tailsconfig.set_defaults(func=run_tails_config)
 
     args = parser.parse_args()
-    logger_setup(args.v)
+    setup_logger(args.v)
     args.func(args)
