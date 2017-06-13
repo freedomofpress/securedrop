@@ -53,8 +53,7 @@ collected from files in
          access for Journalists as well.
 
 In addition, the script creates desktop and menu shortcuts for the Source
-and Journalist Interfaces, updates the Ansible inventory file to access the servers
-playbooks over Tor in the future, directs Tails to install Ansible at the
+and Journalist Interfaces, directs Tails to install Ansible at the
 beginning of every session, and sets up SSH host aliases for the servers.
 
 The only thing you need to remember to do is enable

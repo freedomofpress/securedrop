@@ -277,18 +277,6 @@ EOL
   fi
 }
 
-function update_ansible_inventory()
-{
-  # The local IPv4 addresses for the Application and Monitor servers are only
-  # used during initial provisioning. Thereafter the SSH connections must be
-  # made over Tor. Update the static inventory file so the Admin doesn't
-  # have to copy/paste the values.
-  if ! grep -v "^#.*onion" "${securedrop_ansible_base}/inventory" | grep -q onion; then
-    sed -i "s/app ansible_ssh_host=.* /app ansible_ssh_host=${lookup_app_ssh_aths_url}/" "${securedrop_ansible_base}/inventory"
-    sed -i "s/mon ansible_ssh_host=.* /mon ansible_ssh_host=${lookup_mon_ssh_aths_url}/" "${securedrop_ansible_base}/inventory"
-  fi
-}
-
 function configure_torrc_additions()
 {
   if is_admin_workstation; then
@@ -437,7 +425,6 @@ function main()
 
   if is_admin_workstation; then
     configure_ssh_aliases
-    update_ansible_inventory
   fi
 
   print_success_message

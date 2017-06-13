@@ -152,8 +152,6 @@ enter. This installation script does the following:
 * Sets up desktop and main menu shortcuts for the *Journalist Interface* and
   *Source Interface*
 * Sets up SSH host aliases for ``mon`` and ``app``
-* Updates your Ansible inventory file to run the playbooks over Tor in the
-  future
 * Makes it so that Tails installs Ansible at the beginning of every session
 
 If you are missing any files, the script will exit with an error. If you're
