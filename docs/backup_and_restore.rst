@@ -76,7 +76,7 @@ the SecureDrop servers.
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible -i inventory -u <SSH username> -m ping all
+   ansible -u <SSH username> -m ping all
 
 .. tip:: If you forgot your SSH username, it is the value of the ``ssh_users``
          variable in ``group_vars/all/site-specific``.
@@ -89,7 +89,7 @@ to debug your connectivity before proceeding further. Make sure:
 
   * Ansible should be automatically installed by the Tails auto-configuration
     for SecureDrop. If it is not, you probably need to re-run
-    ``tails_files/install.sh``. See
+    ``./securedrop-admin tailsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
 * The *Admin Workstation* is connected to the Internet.
@@ -99,7 +99,7 @@ to debug your connectivity before proceeding further. Make sure:
 
   * Tor should be automatically configured to connect to the authenticated Tor
     Hidden Services by the Tails auto-configuration for SecureDrop. If it is
-    not, you probably need to re-run ``tails_files/install.sh``. See
+    not, you probably need to re-run ``./securedrop-admin tailsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
 Run the backup Ansible role
@@ -111,7 +111,7 @@ perform the backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real *Admin Workstation*
 
@@ -160,7 +160,7 @@ backup:
 .. code:: sh
 
    cd install_files/ansible-base
-   ansible-playbook -i inventory -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
@@ -170,5 +170,5 @@ Once the restore is done, the Ansible playbook will fetch the Tor HidServAuth
 credentials for the various Authenticated Tor Hidden Services (ATHS) back to the
 *Admin Workstation*. This synchronizes the state on the *Admin Workstation* with the
 state of the restored server. You should re-run the Tails custom configuration
-script (``tails_files/install.sh``, see
+script (``./securedrop-admin tailsconfig``, see
 :doc:`configure_admin_workstation_post_install` for detailed instructions).

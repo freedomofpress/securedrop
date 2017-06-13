@@ -70,8 +70,8 @@ to access the servers over SSH.
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
          the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
-         Journalist Workstation, and the ``install.sh`` script will
-         automatically use them.
+         Journalist Workstation, and the ``./securedrop-admin tailsconfig``
+         tool will automatically use them.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
              to the Journalist Workstation. Those files grant access via SSH,
@@ -89,15 +89,14 @@ continue setting up the Journalist Workstation.
 Once you've done this, run the install script to configure the
 shortcuts for the Source and Journalist Interfaces: ::
 
-  cd ~/Persistent/securedrop/tails_files/
-  sudo ./install.sh
+  ./securedrop-admin tailsconfig
 
 If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
 files from the *Admin Workstation*, the script will prompt for the information.
 Make sure to type the information carefully, as any typos will break access
 for the Journalist Workstation.
 
-Once the ``install.sh`` script is finished, you should be able to access the
+Once the script is finished, you should be able to access the
 Journalist Interface. Open the Tor Browser and navigate to the .onion address for
 the Journalist Interface. You should be able to connect, and will be
 automatically taken to a login page.

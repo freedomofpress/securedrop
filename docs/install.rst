@@ -1,20 +1,21 @@
 Install SecureDrop
 ==================
 
-Install Ansible
----------------
+Install Prerequisites
+----------------------
 
-SecureDrop uses the Ansible automation tool for installation and maintenance.
+SecureDrop has some dependencies that need to be loaded onto the admin tails
+stick prior to the installation of the server.
 
-To install Ansible on the *Admin Workstation*, first update the ``apt``
-package manager's package lists to make sure you get the latest and
-greatest version of Ansible. This usually takes a few minutes over
-Tor. Once that's done, you can install Ansible:
+To load these dependencies, from the base of the SecureDrop repo run the
+following commands:
 
 .. code:: sh
 
-    sudo apt-get update
-    sudo apt-get install ansible
+    ./securedrop-admin setup
+
+The package installation will complete in approximately 10 minutes, depending
+on network speed and computing power.
 
 .. _configure_securedrop:
 
@@ -44,11 +45,6 @@ continuing:
    -  Recommended size: ``500px x 450px``
    -  Recommended format: PNG
 
-From the base of the SecureDrop repo, change into the ``ansible-base``
-directory: ::
-
-    cd install_files/ansible-base
-
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
@@ -61,7 +57,7 @@ Device* from earlier. It will depend on the location where the USB stick
 is mounted, but for example, if you are already in the ansible-base
 directory, you can just run: ::
 
-    cp /media/[USB folder]/SecureDrop.asc .
+    cp /media/[USB folder]/SecureDrop.asc install_files/ansible-base
 
 Or you may use the copy and paste capabilities of the file manager.
 Repeat this step for the Admin GPG key and custom header image.
@@ -69,19 +65,19 @@ Repeat this step for the Admin GPG key and custom header image.
 Now you must edit a couple configuration files. You can do so using
 gedit, vim, or nano. Double-clicking will suffice to open them.
 
-Edit the inventory file, ``inventory``, and update the default IP
-addresses with the ones you chose for app and mon. When you're done,
+Edit the inventory file, ``install_files/ansible-base/inventory``, and update
+the default IP addresses with the ones you chose for app and mon. When you're done,
 save the file.
 
 Run the configuration playbook and answer the prompts with values that
 match your environment: ::
 
-    ansible-playbook securedrop-configure.yml
+    ./securedrop-admin sdconfig
 
 The script will automatically validate the answers you provided, and display
 error messages if any problems were detected. The answers you provided will be
-written to the file ``group_vars/all/site-specific``, which you can edit
-manually to provide further customization.
+written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
+which you can edit manually to provide further customization.
 
 For example, you can have custom notification text be displayed on the
 source interface. The source interface with a custom notification message is
@@ -90,37 +86,34 @@ shown here (the custom notification appears after the bolded "Note:"):
 |Custom notification|
 
 This custom notification can be configured by providing the desired message in
-``custom_notification_text`` in ``group_vars/all/site-specific``. For example,
-this can be used to notify potential sources that an instance is for
+``custom_notification_text`` in ``install_files/ansible-base/group_vars/all/site-specific``.
+For example, this can be used to notify potential sources that an instance is for
 testing purposes only.
 
 When you're done, save the file and quit the editor.
 
-.. _Run the Ansible playbook:
+.. _Install SecureDrop Servers:
 
-Run the Ansible playbook
-------------------------
+Install SecureDrop Servers
+--------------------------
 
-Now you are ready to run the playbook! This will automatically configure
-the servers and install SecureDrop and all of its dependencies.
-``<username>`` below is the user you created during the Ubuntu
-installation, and should be the same user you copied the SSH public keys
-to. ::
+Now you are ready to install! This process will configure
+the servers and install SecureDrop and all of its dependencies on
+the remote servers. ::
 
-    ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
+    ./securedrop-admin install
 
-You will be prompted to enter the sudo password for the app and monitor
-servers (which should be the same).
+You will be prompted to enter the sudo password for the *Application* and
+*Monitor Servers* (which should be the same).
 
-The Ansible playbook will run, installing SecureDrop plus configuring
-and hardening the servers. This will take some time, and it will return
+The install process will take some time, and it will return
 the terminal to you when it is complete. If an error occurs while
-running the playbook, please submit a detailed `GitHub
+running the install, please submit a detailed `GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/new>`__ or
 send an email to securedrop@freedom.press.
 
 Once the installation is complete, the addresses for each Tor Hidden
-Service will be available in the following files in
+Service will be available in the following files under
 ``install_files/ansible-base``:
 
 -  ``app-source-ths``: This is the .onion address of the Source

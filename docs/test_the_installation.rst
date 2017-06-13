@@ -14,7 +14,7 @@ Server and the *Monitor Server*. ::
    $ ssh mon
 
 The SSH aliases should have been configured automatically by running
-the ``install.sh`` script. If you're unable to connect via aliases,
+the ``./securedrop-admin tailsconfig`` tool. If you're unable to connect via aliases,
 try using the verbose command format to troubleshoot: ::
 
    $ ssh <username>@<app .onion>

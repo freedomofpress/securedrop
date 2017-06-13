@@ -163,8 +163,8 @@ where ``MyOrg.crt`` is the filename. The file will be copied to the
 server in ``/etc/ssl/certs_local`` and the system CAs will be ignored
 when validating the SMTP relay TLS certificate.
 
-Save ``group_vars/all/site-specific``, exit the editor and :ref:`proceed with the
-installation <Run the Ansible playbook>` by running the playbooks.
+Save ``group_vars/all/site-specific``, exit the editor and :ref:`proceed with
+the installation <Install SecureDrop Servers>` by running the playbooks.
 
 Using Gmail for OSSEC alerts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -240,7 +240,7 @@ Specifying the fingerprint will configure Postfix to use it for
 verification on the next playbook run. (To disable fingerprint
 verification, simply delete the variable line you added, and rerun the
 playbooks.) Save ``group_vars/all/site-specific``, exit the editor and
-:ref:`proceed with the installation <Run the Ansible playbook>` by running the
+:ref:`proceed with the installation <Install SecureDrop Servers>` by running the
 playbooks.
 
 .. _troubleshooting_ossec:
