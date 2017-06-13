@@ -105,6 +105,7 @@ def host_is_tails():
 def build_inventory():
     """
     Construct JSON dict of host information for use as inventory.
+    http://docs.ansible.com/ansible/dev_guide/developing_inventory.html
     """
     inventory = {
         "_meta": {
