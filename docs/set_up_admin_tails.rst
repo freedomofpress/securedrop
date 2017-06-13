@@ -22,12 +22,13 @@ session and click *Login*.
 .. note:: The *Administration password* is a one-time password. It
 	  will reset every time you shut down Tails.
 
-After Tails finishes booting, make sure you're connected to the
-Internet |Network| and that the Tor's Vidalia indicator onion
-has no cross |Vidalia|, using the icons in the upper right corner.
+After Tails finishes booting, make sure you're connected to the Internet
+|Network| and that the Tor status onion icon is not crossed out
+|TorStatus|, consulting the icons in the upper right corner of the
+screen.
 
 .. |Network| image:: images/network-wired.png
-.. |Vidalia| image:: images/vidalia.png
+.. |TorStatus| image:: images/tor-status-indicator.png
 
 
 .. _Download the SecureDrop repository:
