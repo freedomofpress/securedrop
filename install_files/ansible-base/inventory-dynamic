@@ -114,9 +114,9 @@ def build_inventory():
                 } for h in SECUREDROP_SUPPORTED_HOSTNAMES
             },
         },
-        'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
-        'securedrop_application_server': ['app'],
-        'securedrop_monitor_server': ['mon'],
+        'securedrop': {'hosts': SECUREDROP_SUPPORTED_HOSTNAMES},
+        'securedrop_application_server': {'hosts': ['app']},
+        'securedrop_monitor_server': {'hosts': ['mon']},
     }
 
     # Append SSH extra args if NOT under Tails. Necessary for testing.
