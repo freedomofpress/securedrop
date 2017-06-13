@@ -8,7 +8,7 @@ import zipfile
 
 from flask import url_for, escape
 from flask_testing import TestCase
-from mock import patch, ANY, MagicMock
+from mock import patch, MagicMock
 from sqlalchemy.orm.exc import StaleDataError
 
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -21,6 +21,17 @@ import utils
 
 # Smugly seed the RNG for deterministic testing
 random.seed('¯\_(ツ)_/¯')
+
+# TODO:
+# Test that:
+# * All rules which include <source> include error handling for when the source is deleted.
+# * No processing is done on user-provided input (outside of login form data)
+#   unless the user is authenticated.
+    # * g.user cannot be set to None.
+# * All routes require authentication to access besides /login.
+# * All routes beginning with /admin require an administrator account to access.
+# * All routes that use SidLookupConverter use the ensure_source_exists
+#   decorator.
 
 class TestJournalistApp(TestCase):
 
@@ -483,8 +494,9 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('index'), url_for('col', sid='1'),
-                url_for('download_single_submission', sid='1', fn='1'),
+        source, _ = utils.db_helper.init_source()
+        urls = [url_for('index'), url_for('col', source=source),
+                url_for('download_single_submission', source=source, fn='1'),
                 url_for('edit_account')]
 
         for url in urls:
@@ -492,12 +504,19 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
-        urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
-                url_for('col_process'), url_for('col_delete_single', sid='1'),
-                url_for('reply'), url_for('generate_code'), url_for('bulk'),
+        source, _ = utils.db_helper.init_source()
+        urls = [url_for('add_star', source=source),
+                url_for('remove_star', source=source),
+                url_for('col_process'),
+                url_for('col_delete_single', source=source),
+                url_for('reply'),
+                url_for('generate_code'),
+                url_for('bulk'),
                 url_for('account_new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
+
+
         for url in urls:
             res = self.client.post(url)
             self.assertStatus(res, 302)
@@ -565,7 +584,7 @@ class TestJournalistApp(TestCase):
         correspond to them are also deleted."""
 
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist.delete_collection(self.source)
 
         # Source should be gone
         results = db_session.query(Source).filter(Source.id == self.source.id).all()
@@ -580,7 +599,7 @@ class TestJournalistApp(TestCase):
         record, as well as Reply & Submission records associated with
         that record are purged from the database."""
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist.delete_collection(self.source)
         results = Source.query.filter(Source.id == self.source.id).all()
         self.assertEqual(results, [])
         results = db_session.query(Submission.source_id == self.source.id).all()
@@ -597,7 +616,7 @@ class TestJournalistApp(TestCase):
         source_key = crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
 
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist.delete_collection(self.source)
 
         # Source key no longer exists
         source_key = crypto_util.getkey(self.source.filesystem_id)
@@ -612,7 +631,7 @@ class TestJournalistApp(TestCase):
         dir_source_docs = os.path.join(config.STORE_DIR, self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        job = journalist.delete_collection(self.source.filesystem_id)
+        job = journalist.delete_collection(self.source)
 
         # Wait up to 5s to wait for Redis worker `srm` operation to complete
         utils.async.wait_for_redis_worker(job)
@@ -796,75 +815,74 @@ class TestJournalistApp(TestCase):
     def test_add_star_redirects_to_index(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
-        resp = self.client.post(url_for('add_star', sid=source.filesystem_id))
+        resp = self.client.post(url_for('add_star', source=source))
         self.assertRedirects(resp, url_for('index'))
 
 
-class TestJournalistAppTwo(unittest.TestCase):
-
+class TestJournalistColProcess(unittest.TestCase):
+    """Tests the `journalist.col_process()` function and some of the
+    functionality of the functions it calls.
+    """
     def setUp(self):
-        journalist.logged_in = MagicMock()
         journalist.request = MagicMock()
         journalist.url_for = MagicMock()
         journalist.redirect = MagicMock()
         journalist.abort = MagicMock()
         journalist.db_session = MagicMock()
-        journalist.get_docs = MagicMock()
         journalist.get_or_else = MagicMock()
 
-    def _set_up_request(self, cols_selected, action):
-        journalist.request.form.__contains__.return_value = True
-        journalist.request.form.getlist = MagicMock(return_value=cols_selected)
+    def _set_up_request(self, action):
+        journalist.request.form.getlist = MagicMock(return_value='covfefe')
+        Source.query = MagicMock(return_value='covfefe')
+        Source.query.one = MagicMock(return_value='covfefe')
         journalist.request.form.__getitem__.return_value = action
 
     @patch("journalist.col_delete")
     def test_col_process_delegates_to_col_delete(self, col_delete):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'delete')
+        self._set_up_request('delete')
 
         journalist.col_process()
 
-        col_delete.assert_called_with(cols_selected)
+        col_delete.assert_called_once_with('covfefe')
 
     @patch("journalist.col_star")
     def test_col_process_delegates_to_col_star(self, col_star):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'star')
+        self._set_up_request('star')
 
         journalist.col_process()
 
-        col_star.assert_called_with(cols_selected)
+        col_star.assert_called_once_with('covfefe')
 
     @patch("journalist.col_un_star")
     def test_col_process_delegates_to_col_un_star(self, col_un_star):
         cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'un-star')
+        self._set_up_request('un-star')
 
         journalist.col_process()
 
-        col_un_star.assert_called_with(cols_selected)
+        col_un_star.assert_called_once_with('covfefe')
 
     @patch("journalist.abort")
-    def test_col_process_returns_404_with_bad_action(self, abort):
+    def test_col_process_returns_400_with_bad_action(self, abort):
         cols_selected = ['source_id']
         self._set_up_request(cols_selected, 'something-random')
 
         journalist.col_process()
 
-        abort.assert_called_with(ANY)
+        abort.assert_called_once_with(400)
 
     @patch("journalist.make_star_true")
     @patch("journalist.db_session")
     def test_col_star_call_db_(self, db_session, make_star_true):
         journalist.col_star(['sid'])
 
-        make_star_true.assert_called_with('sid')
+        make_star_true.assert_called_once_with('sid')
 
     @patch("journalist.db_session")
     def test_col_un_star_call_db(self, db_session):
         journalist.col_un_star([])
 
-        db_session.commit.assert_called_with()
+        db_session.commit.assert_called_once_with()
 
 
     @classmethod
@@ -917,7 +935,6 @@ class TestJournalistLogin(unittest.TestCase):
 class TestJournalist(unittest.TestCase):
 
     def setUp(self):
-        journalist.logged_in = MagicMock()
         journalist.make_star_true = MagicMock()
         journalist.db_session = MagicMock()
         journalist.url_for = MagicMock()

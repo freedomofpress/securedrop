@@ -162,6 +162,21 @@ def secure_unlink(fn, recursive=False):
     return "success"
 
 
-def delete_source_directory(source_id):
-    secure_unlink(path(source_id), recursive=True)
+def delete_source_directory(source_filesystem_id):
+    """Intended to be run asynchronously via a call to
+    `worker.enqueue()`, this function shells out to the the `srm`
+    command-line tool to delete the filesystem directory for a
+    particular Source.
+
+    Args:
+        source_filesystem_id (unicode): The value of
+            :attr:`filesystem_id` for the :obj:`db.Source` you wish to
+            delete the filesystem directory of.
+
+    Returns: The string "success" if the operation succeeded. This value
+        is only checked in tests right now, but in the future the
+        application should check up on asynchronous tasks to ensure
+        success or retry/ notification of admin(s) upon failure.
+    """
+    secure_unlink(path(source_filesystem_id), recursive=True)
     return "success"

@@ -10,6 +10,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
+from werkzeug.routing import BaseConverter
 
 import config
 import version
@@ -38,6 +39,35 @@ else:
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 
+class SidLookupConverter(BaseConverter):
+    """A URL converter used for converting between Source filesystem
+    identifier strings and corresponding Source objects.
+    """
+    def to_python(self, sid):
+        return Source.query.filter(Source.filesystem_id == sid).one_or_none()
+
+    def to_url(self, source):
+        return source.filesystem_id
+
+app.url_map.converters['sid'] = SidLookupConverter
+
+
+def ensure_source_exists(func):
+    """A wrapper to be placed above routes that use the
+    :class:`SidLookupConverter`, this function provides user-friendly error
+    handling of POST requests involving a single Source that no longer
+    exists.
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if not kwargs.get('source'):
+            flash('The source you were trying to reply to no longer '
+                  'exists!', 'error')
+            return redirect(url_for('index'))
+        else:
+            return func(*args, **kwargs)
+    return wrapper
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -46,60 +76,78 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
-def get_source(sid):
-    """Return a Source object, representing the database row, for the source
-    with id `sid`"""
-    source = None
-    query = Source.query.filter(Source.filesystem_id == sid)
-    source = get_one_or_else(query, app.logger, abort)
-
-    return source
-
-
 @app.before_request
-def setup_g():
-    """Store commonly used values in Flask's special g object"""
-    uid = session.get('uid', None)
-    if uid:
-        g.user = Journalist.query.get(uid)
+def pre_process_request():
+    """The first function run on all incoming requests to the Journalist
+    Interface application.
+ 
+    First, the authentication and privilege status of the client are
+    checked. If they are trying to access a page they are not authorized
+    to access, the request is immediately redirected to either the login
+    page (for unauthenticated clients), or the index page (for
+    authenticated clients trying to access admin pages they are not
+    permitted to).
+
+    Next, for POST requests containing `sid` strings coming from
+    authnenticate users, we attempt to find the corresponding Source and
+    store some commonly-used values in the thread-local g object for our
+    later convenience in the next function(s) that will be called on the
+    request. When such a corresponding Source object cannot be found, we
+    redirect users to the index page, and flash an appropriate message.
+
+    Returns:
+        flask.Response: a redirect to the login page when an
+            unauthenticated user makes a request besides to login; a
+            redirect to the index page when an authenticated, but
+            non-admin user requests an admin page; and a redirect to the
+            home page when a user makes a POST request including a 'sid'
+            string with no corresponding Source. If none of these cases
+            apply to the request, this function does not return a
+            response and instead execution of the next function in the
+            request processing process begins.
+    """
+    # Only set g.user if the client provides a valid primary key corresponding
+    # to a currently-existing Journalist object in their server-signed session.
+    user = Journalist.query.get(session.get('uid', -1))
+    if user:
+        g.user = user
+
+    # Instead of blacklisting URLs which only authenticated users can access,
+    # we take a more cautious whitelisting approach. Authentication
+    # verification is performed before doing any processing of request
+    # parameters (such as form data) to prevent leaking information (e.g.,
+    # timing leaks of lookups of Source objects by "sid" strings such as is
+    # done by the :class:`SidLookupConverter` URL converter).
+    rule = request.url_rule.rule
+    if rule != '/login':
+        if not hasattr(g, 'user'):
+            flash("You must be logged in to access that page!",
+                  "notification")
+            return redirect(url_for('login'))
+    if rule.startswith('/admin'):
+        if not hasattr(g, 'user') or not g.user.is_admin:
+            flash("You must be an administrator to access that page!",
+                  "notification")
+            return redirect(url_for('index'))
 
     if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
-
-
-def logged_in():
-    # When a user is logged in, we push their user id (database primary key)
-    # into the session. setup_g checks for this value, and if it finds it,
-    # stores a reference to the user's Journalist object in g.
-    #
-    # This check is good for the edge case where a user is deleted but still
-    # has an active session - we will not authenticate a user if they are not
-    # in the database.
-    return bool(g.get('user', None))
-
-
-def login_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('login'))
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def admin_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if logged_in() and g.user.is_admin:
-            return func(*args, **kwargs)
-        # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash("You must be an administrator to access that page",
-              "notification")
-        return redirect(url_for('index'))
-    return wrapper
+        # We must first ensure the client is authenticated before it's safe to
+        # perform database lookups using input they've provided (note that
+        # absent the `hasattr` check below, a user could make a malformed
+        # POST request to the login page that contains a 'sid' string in the
+        # form data).
+        if hasattr(g, 'user'):
+            sid = request.form.get('sid')
+            if sid:
+                try:
+                    query = Source.query.filter(Source.filesystem_id == sid)
+                    source = query.one()
+                except NoResultFound:
+                    flash('Sorry, this source no longer exists!', 'error')
+                    return redirect(url_for('index'))
+                else:
+                    g.sid = sid
+                    g.source = source
 
 
 @app.route('/login', methods=('GET', 'POST'))
@@ -148,14 +196,12 @@ def logout():
 
 
 @app.route('/admin', methods=('GET', 'POST'))
-@admin_required
 def admin_index():
     users = Journalist.query.all()
     return render_template("admin.html", users=users)
 
 
 @app.route('/admin/add', methods=('GET', 'POST'))
-@admin_required
 def admin_add_user():
     if request.method == 'POST':
         form_valid = True
@@ -207,7 +253,6 @@ def admin_add_user():
 
 
 @app.route('/admin/2fa', methods=('GET', 'POST'))
-@admin_required
 def admin_new_user_two_factor():
     user = Journalist.query.get(request.args['uid'])
 
@@ -226,7 +271,6 @@ def admin_new_user_two_factor():
 
 
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
-@admin_required
 def admin_reset_two_factor_totp():
     uid = request.form['uid']
     user = Journalist.query.get(uid)
@@ -237,7 +281,6 @@ def admin_reset_two_factor_totp():
 
 
 @app.route('/admin/reset-2fa-hotp', methods=['POST'])
-@admin_required
 def admin_reset_two_factor_hotp():
     uid = request.form['uid']
     otp_secret = request.form.get('otp_secret', None)
@@ -284,7 +327,6 @@ def commit_account_changes(user):
 
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
-@admin_required
 def admin_edit_user(user_id):
     user = Journalist.query.get(user_id)
 
@@ -315,24 +357,21 @@ def admin_edit_user(user_id):
 
 
 @app.route('/admin/delete/<int:user_id>', methods=('POST',))
-@admin_required
 def admin_delete_user(user_id):
     user = Journalist.query.get(user_id)
     if user:
         db_session.delete(user)
         db_session.commit()
         flash("Deleted user '{}'".format(user.username), "notification")
+        return redirect(url_for('admin_index'))
     else:
         app.logger.error(
             "Admin {} tried to delete nonexistent user with pk={}".format(
             g.user.username, user_id))
         abort(404)
 
-    return redirect(url_for('admin_index'))
-
 
 @app.route('/account', methods=('GET', 'POST'))
-@login_required
 def edit_account():
     user = g.user
 
@@ -349,7 +388,6 @@ def edit_account():
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))
-@login_required
 def account_new_two_factor():
     user = g.user
 
@@ -367,7 +405,6 @@ def account_new_two_factor():
 
 
 @app.route('/account/reset-2fa-totp', methods=['POST'])
-@login_required
 def account_reset_two_factor_totp():
     user = g.user
     user.is_totp = True
@@ -377,7 +414,6 @@ def account_reset_two_factor_totp():
 
 
 @app.route('/account/reset-2fa-hotp', methods=['POST'])
-@login_required
 def account_reset_two_factor_hotp():
     user = g.user
     otp_secret = request.form.get('otp_secret', None)
@@ -389,8 +425,7 @@ def account_reset_two_factor_hotp():
         return render_template('account_edit_hotp_secret.html')
 
 
-def make_star_true(sid):
-    source = get_source(sid)
+def make_star_true(source):
     if source.star:
         source.star.starred = True
     else:
@@ -398,8 +433,7 @@ def make_star_true(sid):
         db_session.add(source_star)
 
 
-def make_star_false(sid):
-    source = get_source(sid)
+def make_star_false(source):
     if not source.star:
         source_star = SourceStar(source)
         db_session.add(source_star)
@@ -407,24 +441,23 @@ def make_star_false(sid):
     source.star.starred = False
 
 
-@app.route('/col/add_star/<sid>', methods=('POST',))
-@login_required
-def add_star(sid):
-    make_star_true(sid)
+@app.route('/col/add_star/<sid:source>', methods=('POST',))
+@ensure_source_exists
+def add_star(source):
+    make_star_true(source)
     db_session.commit()
     return redirect(url_for('index'))
 
 
-@app.route("/col/remove_star/<sid>", methods=('POST',))
-@login_required
-def remove_star(sid):
-    make_star_false(sid)
+@app.route("/col/remove_star/<sid:source>", methods=('POST',))
+@ensure_source_exists
+def remove_star(source):
+    make_star_false(source)
     db_session.commit()
     return redirect(url_for('index'))
 
 
 @app.route('/')
-@login_required
 def index():
     unstarred = []
     starred = []
@@ -448,117 +481,131 @@ def index():
     return render_template('index.html', unstarred=unstarred, starred=starred)
 
 
-@app.route('/col/<sid>')
-@login_required
-def col(sid):
-    source = get_source(sid)
-    source.has_key = crypto_util.getkey(sid)
-    return render_template("col.html", sid=sid, source=source)
+@app.route('/col/<sid:source>')
+@ensure_source_exists
+def col(source):
+    source.has_key = crypto_util.getkey(source.filesystem_id)
+    return render_template("col.html", sid=source.filesystem_id, source=source)
 
 
-def delete_collection(source_id):
+def delete_collection(source):
     # Delete the source's collection of submissions
-    job = worker.enqueue(store.delete_source_directory, source_id)
-
+    job = worker.enqueue(store.delete_source_directory, source.filesystem_id)
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(source_id)
-
+    crypto_util.delete_reply_keypair(source.filesystem_id)
     # Delete their entry in the db
-    source = get_source(source_id)
     db_session.delete(source)
     db_session.commit()
     return job
 
 
 @app.route('/col/process', methods=('POST',))
-@login_required
 def col_process():
-    actions = {'download-unread': col_download_unread,
-               'download-all': col_download_all, 'star': col_star,
-               'un-star': col_un_star, 'delete': col_delete}
-    if 'cols_selected' not in request.form:
-        flash('No collections selected!', 'error')
-        return redirect(url_for('index'))
+    """Perform actions on multiple Source collections simultaneously:
+    download unread, download all, star, un-star, and delete.
 
-    # getlist is cgi.FieldStorage.getlist
+    Returns:
+        flask.Response: returns a redirect to the homepage and flashes
+            an appropriate error message if the request either did not
+            specify any sources, or if any of the selected Sources no
+            longer exist. Returns a 500 error if the action form field
+            is invalid (indicates a malformed request). Returns the
+            response from the subroutine indicated by the `action` form
+            data field if none of the errors above are encountered
+            during earlier processing of the request.
+    """
     cols_selected = request.form.getlist('cols_selected')
-    action = request.form['action']
+    if not cols_selected:
+        flash('No sources selected!', 'error')
+        return redirect(url_for('index'))
+    else:
+        try:
+            sources = [Source.query.filter(Source.filesystem_id == sid).one()
+                       for sid in cols_selected]
+        except NoResultFound:
+            flash('Sorry, one or more of the selected sources no longer '
+                  'exists!', 'error')
+            return redirect(url_for('index'))
 
-    if action not in actions:
-        return abort(500)
+    actions = {'download-unread': col_download_unread,
+               'download-all': col_download_all,
+               'star': col_star,
+               'un-star': col_un_star,
+               'delete': col_delete}
 
-    method = actions[action]
-    return method(cols_selected)
+    try:
+        return actions[request.form['action']](sources)
+    except KeyError:
+        return abort(400)
 
 
-def col_download_unread(cols_selected):
-    """Download all unread submissions from all selected sources."""
+def col_download_unread(sources):
+    """Downloads all unread submissions from all selected sources.
+    """
     submissions = []
-    for sid in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == sid).one().id
-        submissions += Submission.query.filter(Submission.downloaded == False,
-                                               Submission.source_id == id).all()
-    if submissions == []:
+    for source in sources:
+        submissions += Submission.query \
+                .filter(Submission.downloaded == False,
+                        Submission.source_id == source.id) \
+                .all()
+    if not submissions:
         flash("No unread submissions in collections selected!", "error")
         return redirect(url_for('index'))
-    return download("unread", submissions)
+    else:
+        return download("unread", submissions)
 
 
-def col_download_all(cols_selected):
-    """Download all submissions from all selected sources."""
+def col_download_all(sources):
+    """Downloads all submissions from all selected sources.
+    """
     submissions = []
-    for sid in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == sid).one().id
-        submissions += Submission.query.filter(Submission.source_id == id).all()
+    for source in sources:
+        submissions += Submission.query \
+                .filter(Submission.source_id == source.id) \
+                .all()
     return download("all", submissions)
 
 
-def col_star(cols_selected):
-    for sid in cols_selected:
-        make_star_true(sid)
-
+def col_star(sources):
+    for source in sources:
+        make_star_true(source)
     db_session.commit()
     return redirect(url_for('index'))
 
 
-def col_un_star(cols_selected):
-    for source_id in cols_selected:
-        make_star_false(source_id)
-
+def col_un_star(sources):
+    for source in sources:
+        make_star_false(source)
     db_session.commit()
     return redirect(url_for('index'))
 
 
-@app.route('/col/delete/<sid>', methods=('POST',))
-@login_required
-def col_delete_single(sid):
+def col_delete(sources):
+    """Deletes multiple Source collections from the index.
+    """
+    for source in sources:
+        delete_collection(source)
+    num_sources = len(sources)
+    flash('{} source collection{} deleted!'.format(
+        num_sources, '' if num_sources == 1 else 's'),
+        'notification')
+    return redirect(url_for('index'))
+
+
+@app.route('/col/delete/<sid:source>', methods=('POST',))
+@ensure_source_exists
+def col_delete_single(source):
     """deleting a single collection from its /col page"""
-    source = get_source(sid)
-    delete_collection(sid)
+    delete_collection(source)
     flash(
         "%s's collection deleted" %
         (source.journalist_designation,), "notification")
     return redirect(url_for('index'))
 
 
-def col_delete(cols_selected):
-    """deleting multiple collections from the index"""
-    if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "error")
-    else:
-        for source_id in cols_selected:
-            delete_collection(source_id)
-        flash("%s %s deleted" % (
-            len(cols_selected),
-            "collection" if len(cols_selected) == 1 else "collections"
-        ), "notification")
-
-    return redirect(url_for('index'))
-
-
-@app.route('/col/<sid>/<fn>')
-@login_required
-def download_single_submission(sid, fn):
+@app.route('/col/<sid:source>/<fn>')
+@ensure_source_exists
+def download_single_submission(source, fn):
     """Sends a client the contents of a single submission."""
     if '..' in fn or fn.startswith('/'):
         abort(404)
@@ -570,11 +617,11 @@ def download_single_submission(sid, fn):
     except NoResultFound as e:
         app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
 
-    return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
+    return send_file(store.path(source.filesystem_id, fn),
+                     mimetype="application/pgp-encrypted")
 
 
 @app.route('/reply', methods=('POST',))
-@login_required
 def reply():
     """Attempt to send a Reply from a Journalist to a Source. Empty
     messages are rejected, and an informative error message is flashed
@@ -593,7 +640,7 @@ def reply():
     # Reject empty replies
     if not msg:
         flash("You cannot send an empty reply!", "error")
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', source=g.source))
 
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
@@ -619,11 +666,10 @@ def reply():
     else:
         flash("Thanks! Your reply has been stored.", "notification")
     finally:
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', source=g.source))
 
 
 @app.route('/regenerate-code', methods=('POST',))
-@login_required
 def generate_code():
     original_journalist_designation = g.source.journalist_designation
     g.source.journalist_designation = crypto_util.display_id()
@@ -643,21 +689,19 @@ def generate_code():
     return redirect('/col/' + g.sid)
 
 
-@app.route('/download_unread/<sid>')
-@login_required
-def download_unread_sid(sid):
-    id = Source.query.filter(Source.filesystem_id == sid).one().id
-    submissions = Submission.query.filter(Submission.source_id == id,
+@app.route('/download_unread/<sid:source>')
+@ensure_source_exists
+def download_unread_sid(source):
+    submissions = Submission.query.filter(Submission.source_id == source.id,
                                           Submission.downloaded == False).all()
-    if submissions == []:
+    if not submissions:
         flash("No unread submissions for this source!")
-        return redirect(url_for('col', sid=sid))
-    source = get_source(sid)
-    return download(source.journalist_filename, submissions)
+        return redirect(url_for('col', source=source))
+    else:
+        return download(source.journalist_filename, submissions)
 
 
 @app.route('/bulk', methods=('POST',))
-@login_required
 def bulk():
     action = request.form['action']
 
@@ -669,11 +713,10 @@ def bulk():
             flash("No collections selected to download!", "error")
         elif action in ('delete', 'confirm_delete'):
             flash("No collections selected to delete!", "error")
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', source=g.source))
 
     if action == 'download':
-        source = get_source(g.sid)
-        return download(source.journalist_filename, selected_docs)
+        return download(g.source.journalist_filename, selected_docs)
     elif action == 'delete':
         return bulk_delete(g.sid, selected_docs)
     elif action == 'confirm_delete':
@@ -700,7 +743,7 @@ def bulk_delete(sid, items_selected):
         "Submission{} deleted.".format(
             "s" if len(items_selected) > 1 else ""),
         "notification")
-    return redirect(url_for('col', sid=sid))
+    return redirect(url_for('col', source=source))
 
 
 def download(zip_basename, submissions):
@@ -730,11 +773,10 @@ def download(zip_basename, submissions):
 
 
 @app.route('/flag', methods=('POST',))
-@login_required
 def flag():
     g.source.flagged = True
     db_session.commit()
-    return render_template('flag.html', sid=g.sid,
+    return render_template('flag.html', source=g.source,
                            codename=g.source.journalist_designation)
 
 
