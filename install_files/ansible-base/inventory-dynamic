@@ -113,10 +113,10 @@ def build_inventory():
                     "ansible_ssh_host": lookup_ssh_address(h)
                 } for h in SECUREDROP_SUPPORTED_HOSTNAMES
             },
-            'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
-            'securedrop_application_server': ['app'],
-            'securedrop_monitor_server': ['mon'],
-        }
+        },
+        'securedrop': [SECUREDROP_SUPPORTED_HOSTNAMES],
+        'securedrop_application_server': ['app'],
+        'securedrop_monitor_server': ['mon'],
     }
 
     # Append SSH extra args if NOT under Tails. Necessary for testing.
