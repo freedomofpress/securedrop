@@ -23,7 +23,6 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/securedrop-development.yml"
       ansible.verbose = 'v'
       ansible.groups = {
-        'development' => %w(development),
         'securedrop_application_server' => %w(development),
         'securedrop:children' => %w(development),
       }
@@ -139,7 +138,6 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       ansible.groups = {
-        'development' => %w(build),
         'securedrop_application_server' => %w(build),
         'securedrop:children' => %w(development),
       }
