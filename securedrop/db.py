@@ -368,11 +368,11 @@ class Journalist(Base):
                     return True
             return False
 
+    _LOGIN_ATTEMPT_PERIOD = 60  # seconds
+    _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
+
     @classmethod
     def throttle_login(cls, user):
-        _LOGIN_ATTEMPT_PERIOD = 60  # seconds
-        _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
-
         # Record the login attempt...
         login_attempt = JournalistLoginAttempt(user)
         db_session.add(login_attempt)
@@ -380,14 +380,14 @@ class Journalist(Base):
 
         # ...and reject it if they have exceeded the threshold
         login_attempt_period = datetime.datetime.utcnow() - \
-            datetime.timedelta(seconds=_LOGIN_ATTEMPT_PERIOD)
+            datetime.timedelta(seconds=cls._LOGIN_ATTEMPT_PERIOD)
         attempts_within_period = JournalistLoginAttempt.query.filter(
             JournalistLoginAttempt.timestamp > login_attempt_period).all()
-        if len(attempts_within_period) > _MAX_LOGIN_ATTEMPTS_PER_PERIOD:
+        if len(attempts_within_period) > cls._MAX_LOGIN_ATTEMPTS_PER_PERIOD:
             raise LoginThrottledException(
                 "throttled ({} attempts in last {} seconds)".format(
                     len(attempts_within_period),
-                    _LOGIN_ATTEMPT_PERIOD))
+                    cls._LOGIN_ATTEMPT_PERIOD))
 
     @classmethod
     def login(cls, username, password, token):
