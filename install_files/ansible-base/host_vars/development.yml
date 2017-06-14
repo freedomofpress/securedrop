@@ -1,6 +1,6 @@
 ---
 securedrop_repo: "/vagrant"
-non_default_securedrop_user: "vagrant"
+securedrop_user: vagrant
 securedrop_code: "/vagrant/securedrop"
 
 securedrop_app_gpg_public_key: "test_journalist_key.pub"

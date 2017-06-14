@@ -1,6 +1,6 @@
 ---
 ### General (used by more than one role) ###
-non_default_securedrop_user: "travis"
+securedrop_user: travis
 securedrop_repo: "{{ lookup('env', 'TRAVIS_BUILD_DIR') }}"
 
 ### Used by the app role ###
