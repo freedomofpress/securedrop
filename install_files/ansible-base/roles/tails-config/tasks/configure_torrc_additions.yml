@@ -1,0 +1,33 @@
+---
+- name: Find Tor ATHS info for SecureDrop interfaces.
+  find:
+    paths:
+      - "{{ tails_config_ansible_base }}"
+    patterns:
+      # Collect all files that end in `-aths`, since only ATHS services
+      # contain HidServAuth info that must be added to torrc.
+      - '*-aths'
+  register: find_aths_info_result
+
+# We need at least one ATHS value, for the Journalist Interface.
+# Admin Workstations will have three, including the two SSH interfaces.
+# This task simply validates that at least one suitable file was found;
+# if not, then the playbooks haven't been run, so fail with instructions.
+- name: Confirm ATHS info was found.
+  assert:
+    that:
+      - find_aths_info_result.matched >= 1
+    msg: >-
+      Failed to find ATHS info locally. Make sure you've installed SecureDrop
+      on the servers, and that the `-aths` files are located in:
+      `{{ tails_config_ansible_base }}/`.
+
+- name: Assemble ATHS info into torrc additions.
+  become: yes
+  assemble:
+    src: "{{ tails_config_ansible_base }}"
+    regexp: '.*-aths$'
+    dest: "{{ tails_config_torrc_additions }}"
+    owner: root
+    group: root
+    mode: "0400"

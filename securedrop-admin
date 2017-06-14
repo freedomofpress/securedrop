@@ -128,8 +128,11 @@ def install_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    subprocess.check_call(['sudo',
-                            os.path.join(SD_DIR, 'tails_files/install.sh')])
+    activate_venv()
+    subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
+                           "--ask-become-pass",
+                           ],
+                          cwd=ANSIBLE_PATH)
 
 
 if __name__ == "__main__":
