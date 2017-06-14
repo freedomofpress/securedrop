@@ -10,7 +10,7 @@ import journalist
 import crypto_util
 from utils import db_helper, env
 from db import (db_session, Journalist, Submission, Source, Reply,
-                get_one_or_else)
+                get_one_or_else, LoginThrottledException)
 
 
 class TestDatabase(TestCase):
@@ -78,3 +78,10 @@ class TestDatabase(TestCase):
     def test_source_string_representation(self):
         test_source, _ = db_helper.init_source()
         test_source.__repr__()
+
+    def test_throttle_login(self):
+        journalist, _ = db_helper.init_journalist()
+        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+            Journalist.throttle_login(journalist)
+        with self.assertRaises(LoginThrottledException):
+            Journalist.throttle_login(journalist)
