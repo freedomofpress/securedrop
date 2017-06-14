@@ -7,3 +7,7 @@ ssh_listening_address: 127.0.0.1
 
 allow_direct_access: false
 
+# This var is defined in the tor-hidden-services role, but won't be available
+# in separate plays, so declaring it within the context of iptables role, so
+# the hostname files can be fetched back to the Admin Workstation.
+tor_hidden_services_parent_dir: /var/lib/tor/services

@@ -1,6 +1,6 @@
 ---
 securedrop_repo: "/vagrant"
-non_default_securedrop_user: "vagrant"
+securedrop_user: vagrant
 securedrop_code: "/vagrant/securedrop"
 
 # Don't install app-code package from the FPF apt repo, since we want to run

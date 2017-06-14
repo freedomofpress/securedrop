@@ -5,7 +5,6 @@
 # allows us not to define these two variables in the site-specific and
 # staging-specific yml configs.
 securedrop_code: "{{ non_default_securedrop_code | default('/var/www/securedrop') }}"
-securedrop_user: "{{ non_default_securedrop_user | default('www-data') }}"
 
 ### Used by the common role ###
 # ssh_users is defined in the site-specific.yml config
@@ -36,9 +35,6 @@ development_dependencies:
 securedrop_deb_path: "{{ securedrop_repo }}"
 securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
 
-# Installing the securedrop-ossec-agent.deb package
-securedrop_ossec_agent_deb: "{{ securedrop_repo }}/securedrop-ossec-agent-2.8.2-amd64" # do not include .deb extension
-
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
   - "securedrop-ossec-agent-2.8.2+{{ securedrop_app_code_version }}-amd64.deb"
@@ -61,7 +57,6 @@ tor_instances:
     filename: app-journalist-aths
 
 # Installing securedrop web application
-#securedrop_user: is defined in the site-specific.yml config file
 #securedrop-code is defined in the site-specific.yml config file
 securedrop_data: "/var/lib/securedrop"
 

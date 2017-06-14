@@ -11,3 +11,5 @@ ossec_from_address: ''
 # Override capability for installing locally built deb packages in the staging
 # environment. By default, packages are installed via the FPF apt repo.
 install_local_packages: False
+
+ossec_group: ossec
