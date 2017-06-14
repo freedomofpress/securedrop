@@ -66,6 +66,15 @@ First, download and verify the **SecureDrop Release Signing Key**.
           copy-pasting this command, we recommend you double-check you have
           entered it correctly before pressing enter.
 
+.. note:: If the command hangs and evenutally fails with a timeout, it
+          could indicate the default GPG key server is down or
+          unreachable. As a workaround, another keyserver can be
+          specified by adding the --keyserver option to the
+          gpg --recv-key command. In our experience, the SKS keyserver
+          pool is usually a reliable alternative, so try re-running
+          the command with ``--keyserver
+          hkp://pool.sks-keyservers.net``.
+
 When passing the full public key fingerprint to the ``--recv-key`` command, GPG
 will implicitly verify that the fingerprint of the key received matches the
 argument passed.
