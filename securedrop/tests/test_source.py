@@ -318,3 +318,20 @@ class TestSourceApp(TestCase):
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")
+
+    @patch('source.app.logger.warning')
+    def test_generate_unique_codename(self, mock_warning):
+        codename = source.generate_unique_codename()
+        self.assertGreater(len(codename), 0)
+        mock_warning.assert_not_called()
+
+    @patch('source.crypto_util.genrandomid')
+    @patch('source.app.logger.warning')
+    def test_generate_unique_codename_too_long(self, mock_warning, mock_genrandomid):
+        mock_genrandomid.side_effect = [
+            'O' * Source.MAX_CODENAME_LEN * 2,
+            'not so random',
+        ]
+        codename = source.generate_unique_codename()
+        mock_warning.assert_called()
+        self.assertEqual(codename, 'not so random')
