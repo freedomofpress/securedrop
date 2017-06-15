@@ -22,7 +22,8 @@ before_install:
 install:
   - pip freeze -l
   # Preinstalled travis pytest is not tracked by us
-  - pip uninstall pytest -y
+  # Preinstalled travis pbr is not tracked by us
+  - pip uninstall pytest pbr -y
   - pip install -r testinfra/requirements.txt
   - pip freeze -l
 script:
