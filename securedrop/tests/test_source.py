@@ -241,21 +241,6 @@ class TestSourceApp(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("All replies have been deleted", resp.data)
 
-    @patch('gzip.GzipFile')
-    def test_submit_sanitizes_filename(self, gzipfile):
-        """Test that upload file name is sanitized"""
-        insecure_filename = '../../bin/gpg'
-        sanitized_filename = 'bin_gpg'
-
-        self._new_codename()
-        self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), insecure_filename),
-        ), follow_redirects=True)
-        gzipfile.assert_called_with(filename=sanitized_filename,
-                                    mode=ANY,
-                                    fileobj=ANY)
-
     def test_custom_notification(self):
         """Test that `CUSTOM_NOTIFICATION` string in config file
         is rendered on the Source Interface page. We cannot assume
