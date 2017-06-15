@@ -52,7 +52,4 @@ script:
   - pip install -r securedrop/requirements/develop-requirements.txt
   - make docs-lint
 after_success:
-  cd securedrop/ && coveralls && cd ../  # cd back to repo root for srcclr run
-addons:
-  srcclr:
-    debug: true
+  cd securedrop/ && coveralls
