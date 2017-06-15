@@ -44,19 +44,7 @@ def do_runtime_tests():
 
 do_runtime_tests()
 
-# HACK: use_agent=True is used to avoid logging noise.
-#
-# --use-agent is a dummy option in gpg2, which is the only version of
-# gpg used by SecureDrop. If use_agent=False, gpg2 prints a warning
-# message every time it runs because the option is deprecated and has
-# no effect. This message cannot be silenced even if you change the
-# --debug-level (controlled via the verbose= keyword argument to the
-# gnupg.GPG constructor), and creates a lot of logging noise.
-#
-# The best solution here would be to avoid passing either --use-agent
-# or --no-use-agent to gpg2, and I have filed an issue upstream to
-# address this: https://github.com/isislovecruft/python-gnupg/issues/96
-gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR, use_agent=True)
+gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
 words = file(config.WORD_LIST).read().split('\n')
 nouns = file(config.NOUNS).read().split('\n')
@@ -78,7 +66,8 @@ def clean(s, also=''):
     """
     # safe characters for every possible word in the wordlist includes capital
     # letters because codename hashes are base32-encoded with capital letters
-    ok = ' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
+          'KLMNOPQRSTUVWXYZ')
     for c in s:
         if c not in ok and c not in also:
             raise CryptoException("invalid input: {0}".format(s))
@@ -134,8 +123,8 @@ def genkeypair(name, secret):
     ))
 
 
-def delete_reply_keypair(source_id):
-    key = getkey(source_id)
+def delete_reply_keypair(source_filesystem_id):
+    key = getkey(source_filesystem_id)
     # If this source was never flagged for review, they won't have a reply
     # keypair
     if not key:
@@ -160,11 +149,11 @@ def encrypt(plaintext, fingerprints, output=None):
     if output:
         store.verify(output)
 
-    # Remove any spaces from provided fingerprints
-    # GPG outputs fingerprints with spaces for readability, but requires the
-    # spaces to be removed when using fingerprints to specify recipients.
     if not isinstance(fingerprints, (list, tuple)):
         fingerprints = [fingerprints, ]
+    # Remove any spaces from provided fingerprints GPG outputs fingerprints
+    # with spaces for readability, but requires the spaces to be removed when
+    # using fingerprints to specify recipients.
     fingerprints = [fpr.replace(' ', '') for fpr in fingerprints]
 
     if not _is_stream(plaintext):
