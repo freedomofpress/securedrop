@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
 import os
-import random
 
 from flask import url_for
-from flask_testing import TestCase
+import flask_testing
 
 os.environ['SECUREDROP_ENV'] = 'test'
-from db import db_session, Journalist, BadTokenException
+from db import Journalist, BadTokenException
 import journalist
 import utils
 
-# Smugly seed the RNG for deterministic testing
-random.seed('¯\_(ツ)_/¯')
 
-
-class TestJournalist2FA(TestCase):
+class TestJournalist2FA(flask_testing.TestCase):
     def create_app(self):
         return journalist.app
 
     def setUp(self):
         utils.env.setup()
-
         self.admin, self.admin_pw = utils.db_helper.init_journalist(
             is_admin=True)
         self.user, self.user_pw = utils.db_helper.init_journalist()
@@ -28,34 +23,48 @@ class TestJournalist2FA(TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    def _login_admin(self):
-        valid_token = self.admin.totp.now()
+    def _login_admin(self, token=None):
+        """Login to the Journalist Interface as an admin user with the
+        Werkzeug client.
+
+        Args:
+            token (str): The TOTP token to attempt login with. Defaults
+                to the correct token for the current time window.
+        """
+        if token is None:
+            token = self.admin.totp.now()
         resp = self.client.post(url_for('login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
-                                          token=valid_token))
+                                          token=token))
 
-    def _login_user(self):
-        valid_token = self.user.totp.now()
+    def _login_user(self, token=None):
+        """Analagous to `_login_admin()` except for a non-admin user.
+        """
+        if token is None:
+            token = self.user.totp.now()
         resp = self.client.post(url_for('login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
-                                          token=valid_token))
+                                          token=token))
         return resp
 
     def test_totp_reuse_protections(self):
         """Ensure that logging in twice with the same TOTP token
-        fails."""
-        resp = self._login_user()
+        fails.
+        """
+        token = self.user.totp.now()
+        resp = self._login_user(token)
         self.assertRedirects(resp, url_for('index'))
 
-        resp = self._login_user()
+        resp = self._login_user(token)
         self.assert200(resp)
         self.assertIn("Login failed", resp.data)
 
     def test_totp_reuse_protections2(self):
         """More granular than the preceeding test, we want to make sure
-        the right exception is being raised in the right place."""
+        the right exception is being raised in the right place.
+        """
         valid_token = self.user.totp.now()
         Journalist.login(self.user.username, self.user_pw, valid_token)
         with self.assertRaises(BadTokenException):
@@ -72,8 +81,8 @@ class TestJournalist2FA(TestCase):
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
 
-        self.assertIn('Two factor token failed to verify', resp.data)
-
+        self.assert200(resp)
+        self.assertMessageFlashed('Two factor token failed to verify', 'error')
         # last_token should be set to the invalid token we just tried to use
         self.assertEqual(self.admin.last_token, invalid_token)
 
@@ -83,7 +92,7 @@ class TestJournalist2FA(TestCase):
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
-        self.assertIn('Two factor token failed to verify', resp.data)
+        self.assertMessageFlashed('Two factor token failed to verify', 'error')
 
     def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
         # Regression test https://github.com/freedomofpress/securedrop/pull/1692
@@ -94,8 +103,8 @@ class TestJournalist2FA(TestCase):
         resp = self.client.post(url_for('account_new_two_factor'),
                                 data=dict(token=invalid_token))
 
-        self.assertIn('Two factor token failed to verify', resp.data)
-
+        self.assert200(resp)
+        self.assertMessageFlashed('Two factor token failed to verify', 'error')
         # last_token should be set to the invalid token we just tried to use
         self.assertEqual(self.user.last_token, invalid_token)
 
@@ -104,7 +113,7 @@ class TestJournalist2FA(TestCase):
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
-        self.assertIn('Two factor token failed to verify', resp.data)
+        self.assertMessageFlashed('Two factor token failed to verify', 'error')
 
     @classmethod
     def tearDownClass(cls):
