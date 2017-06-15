@@ -51,8 +51,7 @@ class TestSourceApp(TestCase):
             session_codename = session['codename']
         self.assertIn("This codename is what you will use in future visits", resp.data)
         codename = self._find_codename(resp.data)
-        # default codename length is 7 words
-        self.assertEqual(len(codename.split()), 7)
+        self.assertEqual(len(codename.split()), Source.NUM_WORDS)
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))

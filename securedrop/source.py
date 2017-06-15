@@ -128,13 +128,13 @@ def index():
                            'CUSTOM_NOTIFICATION', ''))
 
 
-def generate_unique_codename(num_words=7):
+def generate_unique_codename():
     """Generate random codenames until we get an unused one"""
     while True:
-        codename = crypto_util.genrandomid(num_words)
+        codename = crypto_util.genrandomid(Source.NUM_WORDS)
 
-        # The maximum length of a word in the wordlist is 6 letters and the
-        # maximum codename length is 10 words, so it is currently impossible to
+        # The maximum length of a word in the wordlist is 9 letters and the
+        # codename length is 7 words, so it is currently impossible to
         # generate a codename that is longer than the maximum codename length
         # (currently 128 characters). This code is meant to be defense in depth
         # to guard against potential future changes, such as modifications to
