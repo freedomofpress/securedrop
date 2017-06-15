@@ -1,11 +1,4 @@
 ---
-#securedop_repo is defined in site-specific.yml config
-
-### Used by the common role ###
-# ssh_users is defined in the site-specific.yml config
-# app_ip is defined in the site-specific.yml config
-# app_hostname is defined in the site-specific.yml config
-
 # For setting the etc hosts entries
 ip_info:
   - ip: "{{ app_ip }}"

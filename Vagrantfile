@@ -24,7 +24,6 @@ Vagrant.configure("2") do |config|
       ansible.verbose = 'v'
       ansible.groups = {
         'securedrop_application_server' => %w(development),
-        'securedrop:children' => %w(development),
       }
     end
     # Running the functional tests with Selenium/Firefox has started causing
@@ -86,7 +85,6 @@ Vagrant.configure("2") do |config|
         'securedrop_application_server' => %w(app-staging),
         'securedrop_monitor_server' => %w(mon-staging),
         'staging:children' => %w(securedrop_application_server securedrop_monitor_server),
-        'securedrop:children' => %w(staging),
       }
     end
   end
@@ -127,6 +125,10 @@ Vagrant.configure("2") do |config|
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
       ansible.limit = 'all'
+      ansible.groups = {
+        'securedrop_application_server' => %w(app-prod),
+        'securedrop_monitor_server' => %w(mon-prod),
+      }
     end
   end
 
@@ -137,10 +139,6 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
       ansible.verbose = 'v'
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-      ansible.groups = {
-        'securedrop_application_server' => %w(build),
-        'securedrop:children' => %w(development),
-      }
     end
 
     # TODO: For some reason, the build VM is defaulting to using 1GB of RAM.

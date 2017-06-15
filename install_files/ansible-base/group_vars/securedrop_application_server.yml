@@ -1,29 +1,8 @@
 ---
-### Used by the common role ###
-# ssh_users is defined in the site-specific.yml config
-# monitor_ip is defined in the site-specific.yml config
-# monitor_hostname is defined in the site-specific.yml config
-
 # For setting the etc hosts entries
 ip_info:
   - ip: "{{ monitor_ip }}"
     hostname: "{{ monitor_hostname }} securedrop-monitor-server-alias"
-
-# Building the securedrop-app-code deb package
-securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requirements.txt"
-test_pip_requirements: "{{ securedrop_code }}/requirements/test-requirements.txt"
-development_dependencies:
-  - ipython
-  - libssl-dev
-  - ntp
-  - python-dev
-  - python-pip
-  - ruby # to ensure `gem` command is available
-  - tmux
-  - vim
-
-# Installing the securedrop-app-code.deb package
-securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
 
 ### Used by the install_local_deb_pkgs role ###
 local_deb_packages:
@@ -40,10 +19,6 @@ tor_instances:
     filename: app-source-ths
   - service: journalist
     filename: app-journalist-aths
-
-apparmor_profiles:
-  - usr.sbin.tor
-  - usr.sbin.apache2
 
 agent_auth_rules:
   - "-A OUTPUT -d {{ monitor_ip  }} -p tcp --dport 1515 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT"

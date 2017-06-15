@@ -1,0 +1,36 @@
+---
+# Variables that apply to both the app and monitor server go in this file
+# If the monitor or app server need different values define the variable in
+# hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
+securedrop_app_code_version: "0.3.12"
+
+grsecurity: true
+install_local_packages: false
+
+# Establish if we are in CI environment
+amazon_builder: "{{ true if ( 'amazon' in ansible_product_version and ansible_virtualization_type != 'docker' ) else false }}"
+
+# Ansible v1 default reference to remote host
+remote_host_ref: "{{ ansible_ssh_host|default(inventory_hostname) }}"
+
+# Packages required for working on SecureDrop within development VM. Same list
+# is used on the build VM to pull in required packages.
+development_dependencies:
+  - ipython
+  - libssl-dev
+  - ntp
+  - python-dev
+  - python-pip
+  - ruby # to ensure `gem` command is available
+  - tmux
+  - vim
+
+# These profiles are referenced by multiple machines, such as Application Server
+# for direct copying at install time, and the build machine for including them
+# in the deb packages.
+apparmor_profiles:
+  - usr.sbin.tor
+  - usr.sbin.apache2
+
+# Installing the securedrop-app-code.deb package
+securedrop_app_code_deb: "securedrop-app-code-{{ securedrop_app_code_version }}-amd64" # do not enter .deb extension
