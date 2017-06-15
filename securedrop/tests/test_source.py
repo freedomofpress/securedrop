@@ -318,3 +318,10 @@ class TestSourceApp(TestCase):
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")
+
+    def test_write_pidfile(self):
+        if os.path.exists(config.SOURCE_PIDFILE):
+            os.unlink(config.SOURCE_PIDFILE)
+        source.write_pidfile()
+        self.assertTrue(os.path.exists(config.SOURCE_PIDFILE))
+        os.unlink(config.SOURCE_PIDFILE)
