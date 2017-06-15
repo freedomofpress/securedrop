@@ -86,7 +86,6 @@ class Source(Base):
     interaction_count = Column(Integer, default=0, nullable=False)
 
     # Don't create or bother checking excessively long codenames to prevent DoS
-    NUM_WORDS = 7
     MAX_CODENAME_LEN = 128
 
     def __init__(self, filesystem_id=None, journalist_designation=None):

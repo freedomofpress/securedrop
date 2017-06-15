@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from base64 import b32encode
 import os
 import subprocess
@@ -11,6 +10,7 @@ from gnupg._util import _is_stream, _make_binary_stream
 import scrypt
 
 import config
+import db
 import store
 
 # to fix gpg error #78 on production
@@ -29,26 +29,26 @@ else: # pragma: no cover
 SCRYPT_ID_PEPPER = config.SCRYPT_ID_PEPPER
 SCRYPT_GPG_PEPPER = config.SCRYPT_GPG_PEPPER
 
-DEFAULT_WORDS_IN_RANDOM_ID = 8
+gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
+NUM_CODENAME_WORDS = 7
 
-# Make sure these pass before the app can run
-# TODO: Add more tests
+words = file(config.WORD_LIST).read().rstrip('\n').split('\n')
+nouns = file(config.NOUNS).read().rstrip('\n').split('\n')
+adjectives = file(config.ADJECTIVES).read().rstrip('\n').split('\n')
+
 def do_runtime_tests():
     assert(config.SCRYPT_ID_PEPPER != config.SCRYPT_GPG_PEPPER)
     # crash if we don't have srm:
     try:
         subprocess.check_call(['srm'], stdout=subprocess.PIPE)
     except subprocess.CalledProcessError:
+        # Calling `srm` with no arguments exits with return code 1. This
+        # raises a `subprocess.CalledProcessError` exception, which is what we
+        # want to see. If `srm` is absent a different exception will be raised.
         pass
 
 do_runtime_tests()
-
-gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
-
-words = file(config.WORD_LIST).read().split('\n')
-nouns = file(config.NOUNS).read().split('\n')
-adjectives = file(config.ADJECTIVES).read().split('\n')
 
 
 class CryptoException(Exception):
@@ -76,8 +76,11 @@ def clean(s, also=''):
     return str(s)
 
 
-def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
-    return ' '.join(random.choice(words) for x in range(words_in_random_id))
+def genrandomid(num_words=NUM_CODENAME_WORDS):
+    """Generate a random identifier consisting of `num_words` space-delimited
+    words from our wordlist.
+    """
+    return ' '.join(random.choice(words) for _ in xrange(num_words))
 
 
 def display_id():

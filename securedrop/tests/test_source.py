@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from flask import session, escape
 from flask_testing import TestCase
 
+import crypto_util
 from db import Source
 import source
 import version
@@ -51,7 +52,7 @@ class TestSourceApp(TestCase):
             session_codename = session['codename']
         self.assertIn("This codename is what you will use in future visits", resp.data)
         codename = self._find_codename(resp.data)
-        self.assertEqual(len(codename.split()), Source.NUM_WORDS)
+        self.assertEqual(len(codename.split()), crypto_util.NUM_CODENAME_WORDS)
         # codename is also stored in the session - make sure it matches the
         # codename displayed to the source
         self.assertEqual(codename, escape(session_codename))

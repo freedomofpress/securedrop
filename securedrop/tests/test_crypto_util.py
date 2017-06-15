@@ -10,14 +10,39 @@ import store
 import utils
 
 class TestCryptoUtil(unittest.TestCase):
-
-    """The set of tests for crypto_util.py."""
+    """The set of tests for crypto_util.py.
+    """
 
     def setUp(self):
         utils.env.setup()
 
     def tearDown(self):
         utils.env.teardown()
+
+    def test_word_lists_imports(self):
+        """Make sure word count for each list is correct and Guard
+        against regressions regarding not stripping file contents
+        correctly.
+        """
+        words = crypto_util.words
+        nouns = crypto_util.nouns
+        adjectives = crypto_util.adjectives
+        self.assertEqual(len(words), 7603)
+        self.assertEqual(len(adjectives), 8222)
+        self.assertEqual(len(nouns), 17949)
+        self.assertNotIn('', words + nouns + adjectives)
+
+    def test_genrandomid_result_cannot_exceed_max_codename_len(self):
+        """It should be impossible to generate an id longer than
+        :attr:`db.Source.MAX_CODENAME_LENGTH` using the default number
+        of words `crypto_util.NUM_CODENAME_WORDS`.
+        """
+        longest_word_len = max([len(word) for word in crypto_util.words])
+        longest_codename_len = len(' '.join(
+            ['_' * longest_word_len
+             for _ in xrange(crypto_util.NUM_CODENAME_WORDS)]))
+        self.assertLessEqual(longest_codename_len,
+                             db.Source.MAX_CODENAME_LEN)
 
     def test_clean(self):
         ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
@@ -132,7 +157,7 @@ class TestCryptoUtil(unittest.TestCase):
         id_words = id.split()
 
         self.assertEqual(id, crypto_util.clean(id))
-        self.assertEqual(len(id_words), crypto_util.DEFAULT_WORDS_IN_RANDOM_ID)
+        self.assertEqual(len(id_words), crypto_util.NUM_CODENAME_WORDS)
         for word in id_words:
             self.assertIn(word, crypto_util.words)
 
