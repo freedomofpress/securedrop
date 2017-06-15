@@ -10,7 +10,6 @@ import os
 import sys
 import yaml
 import pytest
-from jinja2 import Template
 
 
 target_host = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
@@ -26,18 +25,16 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     Vars must be stored in `testinfra/vars/<hostname>.yml`.
     """
     filepath = os.path.join(os.path.dirname(__file__), "vars", hostname+".yml")
-    file_load = open(filepath, 'r')
+    hostvars = yaml.load(open(filepath, 'r'))
+    # The directory Travis runs builds in varies by PR, so we cannot hardcode
+    # it in the YAML testvars. Read it from env var and concatenate.
     if hostname.lower() == 'travis':
         build_env = os.environ["TRAVIS_BUILD_DIR"]
-        file_load = Template(file_load.read()).render(BUILD_DIR=build_env)
-    hostvars = yaml.load(file_load)
-    
+        hostvars['securedrop_code'] = build_env+"/securedrop"
+
     if with_header:
         hostvars = dict(securedrop_test_vars=hostvars)
     return hostvars
-
-
-
 
 
 def pytest_namespace():
