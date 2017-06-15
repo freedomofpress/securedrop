@@ -28,8 +28,6 @@ WORD_LIST = os.path.join(SECUREDROP_ROOT, 'wordlist')
 NOUNS = os.path.join(SECUREDROP_ROOT, 'dictionaries/nouns.txt')
 ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
 
-JOURNALIST_PIDFILE = "/tmp/journalist.pid"
-SOURCE_PIDFILE = "/tmp/source.pid"
 WORKER_PIDFILE = "/tmp/securedrop_worker.pid"
 
 # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename

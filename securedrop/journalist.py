@@ -738,13 +738,6 @@ def flag():
                            codename=g.source.journalist_designation)
 
 
-def write_pidfile():
-    pid = str(os.getpid())
-    with open(config.JOURNALIST_PIDFILE, 'w') as fp:
-        fp.write(pid)
-
-
 if __name__ == "__main__":  # pragma: no cover
-    write_pidfile()
     debug = getattr(config, 'env', 'prod') != 'prod'
     app.run(debug=debug, host='0.0.0.0', port=8081)

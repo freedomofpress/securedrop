@@ -21,6 +21,11 @@ def test_app_wsgi(File, Sudo):
         assert f.contains("^import logging$")
         assert f.contains("^logging\.basicConfig(stream=sys\.stderr)$")
 
+def test_pidfile(File):
+    """ ensure there are no pid files """
+    assert not File('/tmp/journalist.pid').exists
+    assert not File('/tmp/source.pid').exists
+
 @pytest.mark.parametrize('app_dir', sdvars.app_directories)
 def test_app_directories(File, Sudo, app_dir):
     """ ensure securedrop app directories exist with correct permissions """
