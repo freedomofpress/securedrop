@@ -261,28 +261,28 @@ class TestIntegration(unittest.TestCase):
         # to use it to test whether a message is decryptable with a specific
         # key.
         gpg_tmp_dir = tempfile.mkdtemp()
-        gpg = gnupg.GPG(homedir=gpg_tmp_dir)
+        try:
+            gpg = gnupg.GPG(homedir=gpg_tmp_dir)
 
-        # Export the key of interest from the application's keyring
-        pubkey = self.gpg.export_keys(key_fpr)
-        seckey = self.gpg.export_keys(key_fpr, secret=True)
-        # Import it into our isolated temporary GPG directory
-        for key in (pubkey, seckey):
-            gpg.import_keys(key)
+            # Export the key of interest from the application's keyring
+            pubkey = self.gpg.export_keys(key_fpr)
+            seckey = self.gpg.export_keys(key_fpr, secret=True)
+            # Import it into our isolated temporary GPG directory
+            for key in (pubkey, seckey):
+                gpg.import_keys(key)
 
-        # Attempt decryption with the given key
-        if passphrase:
-            passphrase = crypto_util.hash_codename(
-                passphrase,
-                salt=crypto_util.SCRYPT_GPG_PEPPER)
-        decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
-        self.assertTrue(
-            decrypted_data.ok,
-            "Could not decrypt msg with key, gpg says: {}".format(
-                decrypted_data.stderr))
-
-        # We have to clean up the temporary GPG dir
-        shutil.rmtree(gpg_tmp_dir)
+            # Attempt decryption with the given key
+            if passphrase:
+                passphrase = crypto_util.hash_codename(
+                    passphrase,
+                    salt=crypto_util.SCRYPT_GPG_PEPPER)
+            decrypted_data = gpg.decrypt(msg, passphrase=passphrase)
+            self.assertTrue(
+                decrypted_data.ok,
+                "Could not decrypt msg with key, gpg says: {}".format(
+                    decrypted_data.stderr))
+        finally:
+            shutil.rmtree(gpg_tmp_dir, ignore_errors=True)
 
     def helper_test_reply(self, test_reply, expected_success=True):
         test_msg = "This is a test message."

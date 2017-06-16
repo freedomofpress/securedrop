@@ -45,11 +45,9 @@ def reset(): # pragma: no cover
         pass
     else:
         for source_dir in os.listdir(config.STORE_DIR):
-            try:
-                # Each entry in STORE_DIR is a directory corresponding to a source
-                shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
-            except OSError as exc:
-                pass
+            # Each entry in STORE_DIR is a directory corresponding to a source
+            shutil.rmtree(os.path.join(config.STORE_DIR, source_dir),
+                          ignore_errors=True)
     return 0
 
 

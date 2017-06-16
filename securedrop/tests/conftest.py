@@ -54,7 +54,4 @@ def _get_pid_from_file(pid_file_name):
 def _cleanup_test_securedrop_dataroot(config):
     # Keyboard interrupts or dropping to pdb after a test failure sometimes
     # result in the temporary test SecureDrop data root not being deleted.
-    try:
-        shutil.rmtree(config.SECUREDROP_DATA_ROOT)
-    except OSError:
-        pass
+    shutil.rmtree(config.SECUREDROP_DATA_ROOT, ignore_errors=True)
