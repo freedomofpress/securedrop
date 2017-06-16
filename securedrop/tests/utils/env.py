@@ -60,8 +60,4 @@ def setup():
 
 def teardown():
     db_session.remove()
-    try:
-        shutil.rmtree(config.SECUREDROP_DATA_ROOT)
-    except OSError as exc:
-        if 'No such file or directory' not in exc:
-            raise
+    shutil.rmtree(config.SECUREDROP_DATA_ROOT, ignore_errors=True)
