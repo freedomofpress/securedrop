@@ -54,8 +54,8 @@ You will have to copy the following required files to
 
 The SecureDrop Submission Key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
-is mounted, but for example, if you are already in the ansible-base
-directory, you can just run: ::
+is mounted, but for example, if you are already at the root of the SecureDrop
+repository, you can just run: ::
 
     cp /media/[USB folder]/SecureDrop.asc install_files/ansible-base
 
