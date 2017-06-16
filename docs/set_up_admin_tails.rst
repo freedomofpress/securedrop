@@ -66,14 +66,20 @@ First, download and verify the **SecureDrop Release Signing Key**.
           copy-pasting this command, we recommend you double-check you have
           entered it correctly before pressing enter.
 
-.. note:: If the command hangs and evenutally fails with a timeout, it
-          could indicate the default GPG key server is down or
-          unreachable. As a workaround, another keyserver can be
-          specified by adding the --keyserver option to the
-          gpg --recv-key command. In our experience, the SKS keyserver
-          pool is usually a reliable alternative, so try re-running
-          the command with ``--keyserver
-          hkp://pool.sks-keyservers.net``.
+.. tip:: If the ``--recv-key`` command fails, first double-check that
+   `Tails is connected to Tor`_.
+
+   If you're connected to Tor but ``gpg --recv-key`` is failing, it could
+   indicate the default GPG key servers are down or unreachable. As a
+   workaround, another keyserver can be specified by adding the ``--keyserver``
+   option to the ``gpg --recv-key`` command. In our experience, the SKS HKPS
+   keyserver pool is usually a reliable alternative, so try:
+
+   .. code:: sh
+
+      gpg --keyserver hkps://hkps.pool.sks-keyservers.net --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+
+.. _Tails is connected to Tor: https://tails.boum.org/doc/anonymous_internet/tor_status/index.en.html
 
 When passing the full public key fingerprint to the ``--recv-key`` command, GPG
 will implicitly verify that the fingerprint of the key received matches the
