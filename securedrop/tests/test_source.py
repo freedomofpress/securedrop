@@ -28,6 +28,12 @@ class TestSourceApp(TestCase):
     def tearDown(self):
         utils.env.teardown()
 
+    def test_page_not_found(self):
+        """Verify the page not found condition returns the intended template"""
+        response = self.client.get('/UNKNOWN')
+        self.assert404(response)
+        self.assertTemplateUsed('notfound.html')
+
     def test_index(self):
         """Test that the landing page loads and looks how we expect"""
         response = self.client.get('/')
