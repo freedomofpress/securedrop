@@ -52,6 +52,9 @@
         Local filepath to your organization's logo,
         to be displayed on the Source Interface
       private: no
+      # Default must be empty string, since "None" will be interpreted
+      # as filepath, causing app role to fail.
+      default: ""
 
     - name: securedrop_app_gpg_public_key
       prompt: Local filepath to public key for SecureDrop Application GPG public key

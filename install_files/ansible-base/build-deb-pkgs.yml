@@ -34,9 +34,7 @@
     # include overrides vars in the previous files. Ordinarily we'd
     # use group memberships to manage the variable resolution order, but
     # since we're using Vagrant with Ansible, group management becomes tricky.
-    - group_vars/securedrop.yml
     - group_vars/securedrop_application_server.yml
-    - group_vars/development.yml
   pre_tasks:
     - name: Ensure all packages are up to date.
       apt:

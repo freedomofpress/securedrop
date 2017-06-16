@@ -1,0 +1,4 @@
+---
+# The Python dependencies are packaged into the deb package via pip-wheel, but
+# in the development VM, the dependences will be installed directly via pip.
+securedrop_pip_requirements: "{{ securedrop_code }}/requirements/securedrop-requirements.txt"
