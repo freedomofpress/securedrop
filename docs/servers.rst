@@ -56,13 +56,13 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
 The next and final step is to verify the Ubuntu image. ::
 
-    sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
+    sha256sum -c <(grep ubuntu-14.04.5-server-amd64.iso SHA256SUMS)
 
 
 If the final verification step is successful, you should see the
 following output in your terminal. ::
 
-    ubuntu-14.04.2-server-amd64.iso: OK
+    ubuntu-14.04.5-server-amd64.iso: OK
 
 .. caution:: If you do not see the line above it is not safe to proceed with the
              installation. If this happens, please contact us at
@@ -90,7 +90,7 @@ Ubuntu installer.
 If your USB is mapped to /dev/sdX and you are currently in the directory that
 contains the Ubuntu ISO, you would use dd like so: ::
 
-   sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdX
+   sudo dd conv=fdatasync if=ubuntu-14.04.5-server-amd64.iso of=/dev/sdX
 
 
 Perform the Installation
