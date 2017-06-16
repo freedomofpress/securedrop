@@ -45,7 +45,7 @@ script:
   # Travis needs the config.py file to be owned by root. In other environments
   # it's the `securedrop_user` var.
   - sudo chown root:root securedrop/config.py
-  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest tests/"
+  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v tests/"
   - ./testinfra/test.py
   # Docs linting. Performing this step *after* build VM tests pass, so as not
   # to alter the pip requirements, which would cause config tests to fail.
