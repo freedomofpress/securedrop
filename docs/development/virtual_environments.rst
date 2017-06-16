@@ -69,7 +69,7 @@ Debian packages on the staging machines:
 .. code:: sh
 
    vagrant up --no-provision build
-   vagrant up /staging/
+   vagrant up app-staging
    vagrant ssh app-staging
    sudo su
    cd /var/www/securedrop
