@@ -3,7 +3,6 @@
   hosts: localhost
 
   vars_files:
-    - group_vars/securedrop.yml
     - group_vars/securedrop_application_server.yml
     - group_vars/travis.yml
 
