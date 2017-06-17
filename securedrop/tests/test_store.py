@@ -73,3 +73,9 @@ class TestStore(unittest.TestCase):
         path = os.path.join(config.STORE_DIR, 'FILENAME')
         self.assertEqual(store.secure_unlink(path), "success")
         mock_check_call.assert_called_with(['srm', path])
+
+    @mock.patch('store.subprocess.check_call')
+    def test_delete_source_directory(self, mock_check_call):
+        path = os.path.join(config.STORE_DIR, 'DIRNAME')
+        self.assertEqual(store.delete_source_directory('DIRNAME'), "success")
+        mock_check_call.assert_called_with(['srm', '-r', path])
