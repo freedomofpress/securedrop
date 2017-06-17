@@ -38,8 +38,8 @@ is centralized and there are only a few journalists with access to
 SecureDrop, they should be fine with sharing a single Secure Viewing
 Station. On the other hand, if your organization is distributed, or if
 you have a lot of journalists who wish to access SecureDrop
-concurrently, you will need to provision multiple Secure Viewing
-Stations.
+concurrently, you will need to provision multiple *Secure Viewing
+Stations*.
 
 .. todo:: Describe best practices for provisioning multiple Secure
           Viewing Stations.
@@ -55,7 +55,7 @@ used to create a Tails USB with persistence for the Admin Tails USB,
 as documented in the :doc:`Tails Setup Guide <set_up_tails>`.
 
 Once you're done, boot into the new Journalist Tails USB on the
-Journalist Workstation. Enable persistence and set an administrator
+*Journalist Workstation*. Enable persistence and set an administrator
 password before continuing with the next section.
 
 Set up automatic access to the Journalist Interface
@@ -70,21 +70,21 @@ to access the servers over SSH.
 .. tip:: Copy the files ``app-journalist-aths`` and ``app-source-ths`` from
          the *Admin Workstation* via the Transfer Device. Place these files
          in ``~/Persistent/securedrop/install_files/ansible-base`` on the
-         Journalist Workstation, and the ``./securedrop-admin tailsconfig``
+         *Journalist Workstation*, and the ``./securedrop-admin tailsconfig``
          tool will automatically use them.
 
 .. warning:: Do **not** copy the files ``app-ssh-aths`` and ``mon-ssh-aths``
-             to the Journalist Workstation. Those files grant access via SSH,
+             to the *Journalist Workstation*. Those files grant access via SSH,
              and only the *Admin Workstation* should have shell access to the
              servers.
 
 Since you need will the Tails setup scripts (``securedrop/tails_files``) that
 you used to :doc:`Configure the *Admin Workstation* Post-Install
 <configure_admin_workstation_post_install>`, clone (and verify) the SecureDrop
-repository on the Journalist Workstation, just like you did for the Admin
+repository on the *Journalist Workstation*, just like you did for the Admin
 Workstation. Refer to the docs for :ref:`cloning the SecureDrop
 repository <Download the SecureDrop repository>`, then return here to
-continue setting up the Journalist Workstation.
+continue setting up the *Journalist Workstation*.
 
 Once you've done this, run the install script to configure the
 shortcuts for the Source and Journalist Interfaces: ::
@@ -94,7 +94,7 @@ shortcuts for the Source and Journalist Interfaces: ::
 If you did not copy over the ``app-source-ths`` and ``app-journalist-aths``
 files from the *Admin Workstation*, the script will prompt for the information.
 Make sure to type the information carefully, as any typos will break access
-for the Journalist Workstation.
+for the *Journalist Workstation*.
 
 Once the script is finished, you should be able to access the
 Journalist Interface. Open the Tor Browser and navigate to the .onion address for
