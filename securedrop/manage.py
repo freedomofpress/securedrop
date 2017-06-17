@@ -8,6 +8,7 @@ import os
 import shutil
 import signal
 import sys
+import time
 import traceback
 
 import qrcode
@@ -173,14 +174,21 @@ def delete_user(args):  # pragma: no cover
 
 def clean_tmp(args):
     """Cleanup the SecureDrop temp directory. """
-    try:
-        os.stat(config.TEMP_DIR)
-    except OSError:
-        pass
-    else:
-        for path in listdir_fullpath(config.TEMP_DIR):
-            if not file_in_use(path):
-                os.remove(path)
+    if not os.path.exists(args.directory):
+        log.debug('{} does not exist, do nothing'.format(args.directory))
+        return 0
+
+    def listdir_fullpath(d):
+        return [os.path.join(d, f) for f in os.listdir(d)]
+
+    too_old = args.days * 24 * 60 * 60
+    for path in listdir_fullpath(args.directory):
+        if time.time() - os.stat(path).st_mtime > too_old:
+            os.remove(path)
+            log.debug('{} removed'.format(path))
+        else:
+            log.debug('{} modified less than {} days ago'.format(
+                path, args.days))
 
     return 0
 
@@ -218,13 +226,27 @@ def get_args():
                                   "SecureDrop application's state.")
     reset_subp.set_defaults(func=reset)
     # Cleanup the SD temp dir
-    clean_tmp_subp = subps.add_parser('clean-tmp', help='Cleanup the '
-                                      'SecureDrop temp directory.')
-    clean_tmp_subp.set_defaults(func=clean_tmp)
-    clean_tmp_subp_a = subps.add_parser('clean_tmp', help='^')
-    clean_tmp_subp_a.set_defaults(func=clean_tmp)
-
+    set_clean_tmp_parser(subps, 'clean-tmp')
+    set_clean_tmp_parser(subps, 'clean_tmp')
     return parser
+
+
+def set_clean_tmp_parser(subps, name):
+    parser = subps.add_parser(name, help='Cleanup the '
+                              'SecureDrop temp directory.')
+    default_days = 7
+    parser.add_argument(
+        '--days',
+        default=default_days,
+        type=int,
+        help=('remove files not modified in a given number of DAYS '
+              '(default {} days)'.format(default_days)))
+    parser.add_argument(
+        '--directory',
+        default=config.TEMP_DIR,
+        help=('remove old files from DIRECTORY '
+              '(default {})'.format(config.TEMP_DIR)))
+    parser.set_defaults(func=clean_tmp)
 
 
 def setup_verbosity(args):
