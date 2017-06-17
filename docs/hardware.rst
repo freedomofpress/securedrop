@@ -71,15 +71,14 @@ our support or consent.
 Workstations
 ^^^^^^^^^^^^
 .. note:: SecureDrop depends on the Tails operating system for its bootable USB
-  drives.  The upcoming version of Tails, Tails 3.0, will no longer support
-  32-bit computers. The current targeted release date for Tails 3.0 is **June
-  13, 2017**.
+  drives.  The current stable version of Tails, Tails 3.0, no longer supports
+  32-bit computers.
 
   To see if you have a 64-bit machine, run ``uname -m`` from a terminal.  If you
   see ``x86_64``, then Tails should work on your current machine.  If, on the
   other hand, you see ``i686``, your current machine will not work with Tails
   3.0.  For more details, see `the Tails website
-  <https://tails.boum.org/news/Tails_3.0_will_require_a_64-bit_processor/index.en.html>`_.
+  <https://tails.boum.org/news/version_3.0/index.en.html#index3h3>`_.
 
 These components are necessary to do the initial installation of
 SecureDrop and to process submissions using the airgapped workflow.
