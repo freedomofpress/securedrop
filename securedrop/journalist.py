@@ -17,8 +17,7 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, NoResultFound,
-                WrongPasswordException,
+                SourceStar, get_one_or_else, WrongPasswordException,
                 LoginThrottledException, InvalidPasswordLength)
 import worker
 
