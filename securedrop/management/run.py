@@ -140,7 +140,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
                 proc.terminate()
 
 
-def run():  # pragma: no cover
+def run(args):  # pragma: no cover
     """
     Starts development servers for both the Source Interface and the
     Journalist Interface concurrently. Their output is collected,
