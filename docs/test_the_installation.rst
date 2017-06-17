@@ -10,15 +10,15 @@ SSH to both servers over Tor
 On the *Admin Workstation*, you should be able to SSH to the App
 Server and the *Monitor Server*. ::
 
-   $ ssh app
-   $ ssh mon
+   ssh app
+   ssh mon
 
 The SSH aliases should have been configured automatically by running
 the ``./securedrop-admin tailsconfig`` tool. If you're unable to connect via aliases,
 try using the verbose command format to troubleshoot: ::
 
-   $ ssh <username>@<app .onion>
-   $ ssh <username>@<mon .onion>
+   ssh <username>@<app .onion>
+   ssh <username>@<mon .onion>
 
 .. tip:: You can find the Onion URLs for SSH in ``app-ssh-aths`` and
          ``mon-ssh-aths`` inside the ``install_files/ansible-base`` directory.
