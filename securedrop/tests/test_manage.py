@@ -237,6 +237,35 @@ class TestManage(object):
         assert 'code hello i18n' in mo
         assert 'template hello i18n' not in mo
 
+    def test_clean_tmp_do_nothing(self, caplog):
+        args = argparse.Namespace(days=0,
+                                  directory=' UNLIKELY ',
+                                  verbose=logging.DEBUG)
+        manage.setup_verbosity(args)
+        manage.clean_tmp(args)
+        assert 'does not exist, do nothing' in caplog.text()
+
+    def test_clean_tmp_too_young(self, caplog):
+        args = argparse.Namespace(days=24*60*60,
+                                  directory=config.TEMP_DIR,
+                                  verbose=logging.DEBUG)
+        open(os.path.join(config.TEMP_DIR, 'FILE'), 'a').close()
+        manage.setup_verbosity(args)
+        manage.clean_tmp(args)
+        assert 'modified less than' in caplog.text()
+
+    def test_clean_tmp_removed(self, caplog):
+        args = argparse.Namespace(days=0,
+                                  directory=config.TEMP_DIR,
+                                  verbose=logging.DEBUG)
+        fname = os.path.join(config.TEMP_DIR, 'FILE')
+        with open(fname, 'a'):
+            old = time.time() - 24*60*60
+            os.utime(fname, (old, old))
+        manage.setup_verbosity(args)
+        manage.clean_tmp(args)
+        assert 'FILE removed' in caplog.text()
+
 
 class TestSh(object):
 
