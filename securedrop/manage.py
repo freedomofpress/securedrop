@@ -22,7 +22,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
 
-def reset():  # pragma: no cover
+def reset(args):  # pragma: no cover
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -57,11 +57,11 @@ def reset():  # pragma: no cover
     return 0
 
 
-def add_admin():  # pragma: no cover
+def add_admin(args):  # pragma: no cover
     return _add_user(is_admin=True)
 
 
-def add_journalist():  # pragma: no cover
+def add_journalist(args):  # pragma: no cover
     return _add_user()
 
 
@@ -133,7 +133,7 @@ def _add_user(is_admin=False):  # pragma: no cover
         return 0
 
 
-def delete_user():  # pragma: no cover
+def delete_user(args):  # pragma: no cover
     """Deletes a journalist or administrator from the application."""
     # Select user to delete
     username = raw_input('Username to delete: ')
@@ -171,7 +171,7 @@ def delete_user():  # pragma: no cover
     return 0
 
 
-def clean_tmp():
+def clean_tmp(args):
     """Cleanup the SecureDrop temp directory. """
     try:
         os.stat(config.TEMP_DIR)
@@ -237,8 +237,8 @@ def setup_verbosity(args):
 def _run_from_commandline():  # pragma: no cover
     try:
         args = get_args().parse_args()
-        rc = args.func()
         setup_verbosity(args)
+        rc = args.func(args)
         sys.exit(rc)
     except KeyboardInterrupt:
         sys.exit(signal.SIGINT)
