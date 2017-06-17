@@ -10,7 +10,6 @@ import signal
 import sys
 import traceback
 
-import psutil
 import qrcode
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -172,32 +171,8 @@ def delete_user():  # pragma: no cover
     return 0
 
 
-def clean_tmp():  # pragma: no cover
-    """Cleanup the SecureDrop temp directory. This is intended to be run
-    as an automated cron job. We skip files that are currently in use to
-    avoid deleting files that are currently being downloaded."""
-    # Inspired by http://stackoverflow.com/a/11115521/1093000
-    def file_in_use(fname):
-        for proc in psutil.process_iter():
-            try:
-                open_files = proc.open_files()
-                in_use = False or any([open_file.path == fname
-                                       for open_file in open_files])
-                # Early return for perf
-                if in_use:
-                    break
-            except psutil.NoSuchProcess:
-                # This catches a race condition where a process ends before we
-                # can examine its files. Ignore this - if the process ended, it
-                # can't be using fname, so this won't cause an error.
-                pass
-
-        return in_use
-
-    def listdir_fullpath(d):
-        # Thanks to http://stackoverflow.com/a/120948/1093000
-        return [os.path.join(d, f) for f in os.listdir(d)]
-
+def clean_tmp():
+    """Cleanup the SecureDrop temp directory. """
     try:
         os.stat(config.TEMP_DIR)
     except OSError:
