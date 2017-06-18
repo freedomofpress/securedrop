@@ -28,7 +28,7 @@ We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
 of this writing, which might be newer than what is in your distro's package
 repositories. Older versions of Vagrant has been known to cause problems
 (`GitHub #932`_, `GitHub #1381`_). If ``apt-cache policy vagrant`` says your
-candidate version is not at least 1.8, you should download the current version
+candidate version is not at least 1.8.5, you should download the current version
 from the `Vagrant Downloads page`_ and then install it.
 
 .. code:: sh
