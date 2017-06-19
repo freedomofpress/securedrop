@@ -1,6 +1,14 @@
 Getting Started
 ===============
 
+.. note:: SecureDrop maintains two branches of documentation, ``stable`` and
+          ``latest``, the former being the default on our Read the Docs powered
+          site. ``stable`` is built from our latest signed git tag, while
+          ``latest`` is built from the head of the ``development`` git branch.
+          In almost all cases involving development work, you'll want to make
+          sure you have the ``latest`` version selected via the menu in the
+          bottom left corner of this page.
+
 Prerequisites
 -------------
 
