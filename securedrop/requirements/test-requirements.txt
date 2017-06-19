@@ -16,18 +16,20 @@ first==2.0.1              # via pip-tools
 flask-testing==0.6.2
 flask==0.12.2             # via flask-testing
 funcsigs==1.0.2           # via mock
+html5lib==0.999999999
 idna==2.5                 # via requests
 itsdangerous==0.24        # via flask
 jinja2==2.9.6             # via flask
 markupsafe==1.0           # via jinja2
 mock==2.0.0
-pbr==3.0.1                # via mock
+pbr==3.1.1                # via mock
 pip-tools==1.9.0
 py==1.4.34
 pytest-cov==2.5.1
-pytest==3.1.1
-requests==2.17.3          # via coveralls
+pytest==3.1.2
+requests==2.18.1          # via coveralls
 selenium==2.53.6
-six==1.10.0               # via mock, pip-tools
+six==1.10.0               # via html5lib, mock, pip-tools
 urllib3==1.21.1           # via requests
+webencodings==0.5.1       # via html5lib
 werkzeug==0.12.2          # via flask

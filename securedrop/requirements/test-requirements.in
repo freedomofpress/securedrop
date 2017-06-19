@@ -2,6 +2,7 @@ beautifulsoup4
 blinker
 coveralls
 Flask-Testing
+html5lib
 mock
 pip-tools
 py
