@@ -69,8 +69,13 @@ First, download and verify the **SecureDrop Release Signing Key**.
 .. tip:: If the ``--recv-key`` command fails, first double-check that
    `Tails is connected to Tor`_.
 
-   If you're connected to Tor but ``gpg --recv-key`` is failing, it could
-   indicate the default GPG key servers are down or unreachable. As a
+   Once you've confirmed that you're successfully connected to Tor, try
+   re-running the ``--recv-key`` command a few times. The default GPG
+   configuration on Tails uses a keyserver pool, which may occasionally return
+   a malfunctioning keyserver, causing the ``--recv-key`` command to fail.
+
+   If the command is consistently failing after a few tries, it could
+   indicate that the default GPG key servers are down or unreachable. As a
    workaround, another keyserver can be specified by adding the ``--keyserver``
    option to the ``gpg --recv-key`` command. In our experience, the SKS HKPS
    keyserver pool is usually a reliable alternative, so try:
@@ -78,6 +83,9 @@ First, download and verify the **SecureDrop Release Signing Key**.
    .. code:: sh
 
       gpg --keyserver hkps://hkps.pool.sks-keyservers.net --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+
+   Again, this is a keyserver pool, so you may need to retry the command a
+   couple of times before it succeeds.
 
 .. _Tails is connected to Tor: https://tails.boum.org/doc/anonymous_internet/tor_status/index.en.html
 
