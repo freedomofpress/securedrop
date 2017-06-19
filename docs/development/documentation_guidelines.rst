@@ -11,17 +11,17 @@ repository under the ``docs/`` directory.
 
 To get started editing the docs:
 
-#. Install the dependencies:
-
-   .. code:: sh
-
-      pip install -r securedrop/requirements/develop-requirements.txt
-
 #. Clone the SecureDrop repository:
 
    .. code:: sh
 
       git clone https://github.com/freedomofpress/securedrop.git
+
+#. Install the dependencies:
+
+   .. code:: sh
+
+      pip install -r securedrop/requirements/develop-requirements.txt
 
 #. Build the docs and open the index page in your web browser:
 
