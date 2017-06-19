@@ -21,10 +21,7 @@ before_install:
   - sudo /etc/init.d/rng-tools restart
 install:
   - pip freeze -l
-  # Preinstalled travis pytest is not tracked by us
-  # Preinstalled travis pbr is not tracked by us
-  - pip uninstall pytest pbr -y
-  - pip install -r testinfra/requirements.txt
+  - pip install -U -r testinfra/requirements.txt
   - pip freeze -l
 script:
   # Using YAML folding operator '>' to aid in readability and avoid
@@ -52,7 +49,7 @@ script:
   - pip freeze -l
   # Docs linting. Performing this step *after* build VM tests pass, so as not
   # to alter the pip requirements, which would cause config tests to fail.
-  - pip install -r securedrop/requirements/develop-requirements.txt
+  - pip install -U -r securedrop/requirements/develop-requirements.txt
   - make docs-lint
 after_success:
   cd securedrop/ && coveralls
