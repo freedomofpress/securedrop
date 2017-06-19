@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from cStringIO import StringIO
 import os
 import unittest
 import zipfile
+
+from mock import patch, ANY
 
 import crypto_util
 os.environ['SECUREDROP_ENV'] = 'test'
@@ -66,3 +69,34 @@ class TestStore(unittest.TestCase):
         actual_filename = store.rename_submission(source.filesystem_id, old_filename,
                                                   new_journalist_filename)
         self.assertEquals(actual_filename, expected_filename)
+
+    @patch('gzip.GzipFile')
+    def test_save_file_submission_sanitizes_filename(self, gzipfile):
+        """Test that upload file name is sanitized.
+        """
+        insecure_filename = '../../bin/gpg'
+        sanitized_filename = 'bin_gpg'
+        source, _ = utils.db_helper.init_source()
+        journalist, _ = utils.db_helper.init_journalist()
+
+        # Since we mock gzip.Gzipfile, calling :meth:`write()` on the object
+        # returned does not in turn call :meth:`write()` on the
+        # SecureTemporaryFile object. So :attr:`last_action` of the
+        # SecureTemporaryFile object is not updated, and we run into errors
+        # when python-gnupg tries to read from the SecureTemporaryFile object,
+        # as the :attr:`last_action` is still `'init'`, so an
+        # :exc:`AssertionError` will be raised. To further complicate things,
+        # since python-gnupg uses daemon threads, this exception will not
+        # rise up the call stack back to our app code, and the call to
+        # `crypto_util.encrypt()` in `store.save_file_submission()` will hang
+        # indefinitely. To fix this, we mock `crypto_util.encrypt()` as well.
+        with patch('crypto_util.encrypt'):
+            store.save_file_submission(source.filesystem_id,
+                                       source.interaction_count + 1,
+                                       journalist,
+                                       insecure_filename,
+                                       StringIO('_'))
+
+        gzipfile.assert_called_with(filename=sanitized_filename,
+                                    mode='wb',
+                                    fileobj=ANY)
