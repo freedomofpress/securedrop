@@ -1,0 +1,12 @@
+---
+securedrop_repo: "/vagrant"
+securedrop_user: vagrant
+securedrop_code: "/vagrant/securedrop"
+
+securedrop_app_gpg_public_key: "test_journalist_key.pub"
+securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+
+# Don't install app-code package from the FPF apt repo, since we want to run
+# the application code directly out of the local repo.
+securedrop_app_install_from_repo: False
+securedrop_app_configure_apache: False

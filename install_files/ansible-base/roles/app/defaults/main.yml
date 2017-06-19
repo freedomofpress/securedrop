@@ -7,3 +7,76 @@ securedrop_app_install_from_repo: True
 # Whether to configure the Apache service for the application. Required
 # in prod and staging, but not relevant for development.
 securedrop_app_configure_apache: True
+
+# The securedrop_header_image must be in the install_files/ansible-base/
+# directory. Leave set to empty to use the SecureDrop logo.
+securedrop_header_image: ""
+
+# Username for ownership of the app code document root. Permitting override
+# for the development environment, e.g. "vagrant" or "travis".
+securedrop_user: www-data
+
+# Location of the application code on disk. Defaults to Apache-friendly path,
+# but will be overridden in testing and dev environments.
+securedrop_code: /var/www/securedrop
+
+# Location of the application storage on disk, including database.
+securedrop_data: /var/lib/securedrop
+
+# Custom text to be displayed on the Source Interface page.
+custom_notification_text: ""
+
+# Apt packages for configuring Apache service.
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_templates:
+  - ports.conf
+  - sites-available/journalist.conf
+  - sites-available/source.conf
+
+# Apache modules required for the SecureDrop application. Will be enabled.
+apache_modules:
+  - access_compat
+  - authn_core
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - wsgi
+  - xsendfile
+
+# Apache modules prohibited for use with SecureDrop. Will be disabled.
+apache_disabled_modules:
+  - auth_basic
+  - authn_file
+  - autoindex
+  - env
+  - setenvif
+  - status
+
+# Apt package dependencies for running the SecureDrop application.
+appserver_dependencies:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils
+  - redis-server
+  - supervisor
+
+# Log file location for worker service, used in supervisor template.
+worker_logs_dir: /var/log/securedrop_worker

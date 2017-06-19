@@ -1,6 +1,5 @@
 ---
 ### General (used by more than one role) ###
-securedrop_repo: "/vagrant"
 dns_server: "8.8.8.8"
 
 ### Used by the common role ###
@@ -15,10 +14,6 @@ app_ip: "{{ hostvars['app-staging']['ansible_'+primary_network_iface].ipv4.addre
 app_hostname: "{{ hostvars['app-staging'].ansible_hostname }}"
 
 ### Used by the app role ###
-# The securedrop_header_image has to be in the install_files/ansible-base/ or
-# the install_files/ansible-base/roles/app/files/ directory
-# Leave set to empty to use the SecureDrop logo.
-securedrop_header_image: ""
 # The app GPG public key has to be in the install_files/ansible-base/ or
 # install_files/ansible-base/roles/app/files/ directory
 #
