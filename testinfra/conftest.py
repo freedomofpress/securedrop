@@ -25,7 +25,8 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
     Vars must be stored in `testinfra/vars/<hostname>.yml`.
     """
     filepath = os.path.join(os.path.dirname(__file__), "vars", hostname+".yml")
-    hostvars = yaml.load(open(filepath, 'r'))
+    with open(filepath, 'r') as f:
+        hostvars = yaml.safe_load(f)
     # The directory Travis runs builds in varies by PR, so we cannot hardcode
     # it in the YAML testvars. Read it from env var and concatenate.
     if hostname.lower() == 'travis':
