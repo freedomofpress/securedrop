@@ -42,7 +42,7 @@ def lookup_local_ipv4_address(hostname):
     """
     try:
         with open(SECUREDROP_SITE_VARS, 'r') as f:
-            site_vars = yaml.load(f)
+            site_vars = yaml.safe_load(f)
             app_ip = site_vars['app_ip']
             monitor_ip = site_vars['monitor_ip']
 
