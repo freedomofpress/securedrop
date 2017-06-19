@@ -334,16 +334,14 @@ def admin_delete_user(user_id):
 @app.route('/account', methods=('GET', 'POST'))
 @login_required
 def edit_account():
-    user = g.user
-
     if request.method == 'POST':
         try:
-            edit_account_password(user, request.form['password'],
+            edit_account_password(g.user, request.form['password'],
                                   request.form['password_again'])
         except (PasswordMismatchError, InvalidPasswordLength):
             return redirect(url_for('edit_account'))
 
-        commit_account_changes(user)
+        commit_account_changes(g.user)
 
     return render_template('edit_account.html')
 
@@ -351,27 +349,22 @@ def edit_account():
 @app.route('/account/2fa', methods=('GET', 'POST'))
 @login_required
 def account_new_two_factor():
-    user = g.user
-
     if request.method == 'POST':
         token = request.form['token']
-        if user.verify_token(token):
-            flash(
-                "Two factor token successfully verified!",
-                "notification")
+        if g.user.verify_token(token):
+            flash("Two factor token successfully verified!", "notification")
             return redirect(url_for('edit_account'))
         else:
             flash("Two factor token failed to verify", "error")
 
-    return render_template('account_new_two_factor.html', user=user)
+    return render_template('account_new_two_factor.html', user=g.user)
 
 
 @app.route('/account/reset-2fa-totp', methods=['POST'])
 @login_required
 def account_reset_two_factor_totp():
-    user = g.user
-    user.is_totp = True
-    user.regenerate_totp_shared_secret()
+    g.user.is_totp = True
+    g.user.regenerate_totp_shared_secret()
     db_session.commit()
     return redirect(url_for('account_new_two_factor'))
 
@@ -379,10 +372,9 @@ def account_reset_two_factor_totp():
 @app.route('/account/reset-2fa-hotp', methods=['POST'])
 @login_required
 def account_reset_two_factor_hotp():
-    user = g.user
     otp_secret = request.form.get('otp_secret', None)
     if otp_secret:
-        user.set_hotp_secret(otp_secret)
+        g.user.set_hotp_secret(otp_secret)
         db_session.commit()
         return redirect(url_for('account_new_two_factor'))
     else:
