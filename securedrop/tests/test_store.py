@@ -7,6 +7,7 @@ import crypto_util
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
 from db import db_session, Source
+import mock
 import store
 import utils
 
@@ -66,3 +67,15 @@ class TestStore(unittest.TestCase):
         actual_filename = store.rename_submission(source.filesystem_id, old_filename,
                                                   new_journalist_filename)
         self.assertEquals(actual_filename, expected_filename)
+
+    @mock.patch('store.subprocess.check_call')
+    def test_secure_unlink(self, mock_check_call):
+        path = os.path.join(config.STORE_DIR, 'FILENAME')
+        self.assertEqual(store.secure_unlink(path), "success")
+        mock_check_call.assert_called_with(['srm', path])
+
+    @mock.patch('store.subprocess.check_call')
+    def test_delete_source_directory(self, mock_check_call):
+        path = os.path.join(config.STORE_DIR, 'DIRNAME')
+        self.assertEqual(store.delete_source_directory('DIRNAME'), "success")
+        mock_check_call.assert_called_with(['srm', '-r', path])
