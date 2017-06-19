@@ -34,8 +34,10 @@ site_specific_vars="$(realpath "$(dirname "${BASH_SOURCE[0]}")")/group_vars/all/
 
 # If vars file already exists, let's prepopulate the prompts with those values.
 if [[ -e "${site_specific_vars}" && "${override_previous_vars}" != "yes" ]]; then
-    ansible-playbook securedrop-configure.yml --extra-vars "@${site_specific_vars}"
+    # Passing an empty inventory file to override the automatic dynamic inventory script,
+    # which fails if no site vars are configured.
+    ansible-playbook -i /dev/null securedrop-configure.yml --extra-vars "@${site_specific_vars}"
 # Otherwise we'll run the playbook from scratch and fill in the values.
 else
-    ansible-playbook securedrop-configure.yml
+    ansible-playbook -i /dev/null securedrop-configure.yml
 fi
