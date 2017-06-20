@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
+import gzip
 from mock import patch, ANY
 import os
 import re
@@ -247,7 +248,7 @@ class TestSourceApp(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("All replies have been deleted", resp.data)
 
-    @patch('gzip.GzipFile')
+    @patch('gzip.GzipFile', wraps=gzip.GzipFile)
     def test_submit_sanitizes_filename(self, gzipfile):
         """Test that upload file name is sanitized"""
         insecure_filename = '../../bin/gpg'
