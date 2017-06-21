@@ -371,6 +371,44 @@ class TestJournalistApp(TestCase):
         self.assertRedirects(resp,
             url_for('admin_new_user_two_factor', uid=self.user.id))
 
+    def test_admin_resets_user_hotp_format_non_hexa(self):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                data=dict(uid=self.user.id, otp_secret='ZZ'))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+        self.assertMessageFlashed('Invalid secret format: '
+                                  'Non-hexadecimal digit found', 'error')
+
+    def test_admin_resets_user_hotp_format_odd(self):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                data=dict(uid=self.user.id, otp_secret='Z'))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+        self.assertMessageFlashed('Invalid secret format: '
+                                  'Odd-length string', 'error')
+
+    @patch('db.Journalist.set_hotp_secret')
+    def test_admin_resets_user_hotp_error(self, mock_set_hotp_secret):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        error_message = 'SOMETHING WRONG!'
+        mock_set_hotp_secret.side_effect = TypeError(error_message)
+        with self.assertRaisesRegexp(TypeError, error_message):
+            resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                    data=dict(uid=self.user.id, otp_secret=1234))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+
     def test_user_resets_hotp(self):
         self._login_user()
         oldHotp = self.user.hotp

@@ -242,9 +242,17 @@ def admin_reset_two_factor_hotp():
     otp_secret = request.form.get('otp_secret', None)
     if otp_secret:
         user = Journalist.query.get(uid)
-        user.set_hotp_secret(otp_secret)
-        db_session.commit()
-        return redirect(url_for('admin_new_user_two_factor', uid=uid))
+        try:
+            user.set_hotp_secret(otp_secret)
+            db_session.commit()
+            return redirect(url_for('admin_new_user_two_factor', uid=uid))
+        except TypeError as e:
+            if ("Non-hexadecimal digit found" not in str(e) and
+                "Odd-length string" not in str(e)):
+                raise
+            flash("Invalid secret format: {}".format(e), "error")
+            db_session.rollback()
+            return render_template('admin_edit_hotp_secret.html', uid=uid)
     else:
         return render_template('admin_edit_hotp_secret.html', uid=uid)
 
