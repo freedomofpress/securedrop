@@ -371,6 +371,56 @@ class TestJournalistApp(TestCase):
         self.assertRedirects(resp,
             url_for('admin_new_user_two_factor', uid=self.user.id))
 
+    def test_admin_resets_user_hotp_format_non_hexa(self):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                data=dict(uid=self.user.id, otp_secret='ZZ'))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+        self.assertMessageFlashed(
+            "Invalid secret format: "
+            "please only submit letters A-F and numbers 0-9.", "error")
+
+    def test_admin_resets_user_hotp_format_odd(self):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                data=dict(uid=self.user.id, otp_secret='Z'))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+        self.assertMessageFlashed(
+            "Invalid secret format: "
+            "odd-length secret. Did you mistype the secret?", "error")
+
+    @patch('db.Journalist.set_hotp_secret')
+    @patch('journalist.app.logger.error')
+    def test_admin_resets_user_hotp_error(self,
+                                          mocked_error_logger,
+                                          mock_set_hotp_secret):
+        self._login_admin()
+        old_hotp = self.user.hotp.secret
+
+        error_message = 'SOMETHING WRONG!'
+        mock_set_hotp_secret.side_effect = TypeError(error_message)
+
+        otp_secret = '1234'
+        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+                                data=dict(uid=self.user.id, otp_secret=otp_secret))
+        new_hotp = self.user.hotp.secret
+
+        self.assertEqual(old_hotp, new_hotp)
+        self.assertMessageFlashed("An unexpected error occurred! "
+                                  "Please check the application "
+                                  "logs or inform your adminstrator.", "error")
+        mocked_error_logger.assert_called_once_with(
+            "set_hotp_secret '{}' (id {}) failed: {}".format(
+                otp_secret, self.user.id, error_message))
+
     def test_user_resets_hotp(self):
         self._login_user()
         oldHotp = self.user.hotp
