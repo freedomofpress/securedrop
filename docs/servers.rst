@@ -319,7 +319,7 @@ First, generate the new SSH keypair:
 
 ::
 
-    $ ssh-keygen -t rsa -b 4096
+    ssh-keygen -t rsa -b 4096
 
 You'll be asked to "enter file in which to save the key." Type
 **Enter** to use the default location.
@@ -348,8 +348,8 @@ server, authenticating with your password:
 
 .. code:: sh
 
-    $ ssh-copy-id <username>@<App IP address>
-    $ ssh-copy-id <username>@<Mon IP address>
+    ssh-copy-id <username>@<App IP address>
+    ssh-copy-id <username>@<Mon IP address>
 
 Verify that you are able to authenticate to both servers by running
 the below commands. You should not be prompted for a passphrase
