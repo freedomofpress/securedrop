@@ -55,8 +55,8 @@ Backing Up
 
 Open a **Terminal** on the *Admin Workstation* and ``cd`` to your clone of the
 SecureDrop git repository (usually ``~/Persistent/securedrop``). Ensure you have
-SecureDrop version 0.3.7 or later checked out (you can run ``git describe
---exact-match`` to see what Git tag you've checked out).
+SecureDrop version 0.3.7 or later checked out (you can run ``git describe``
+to see what Git tag you've checked out).
 
 .. note:: The backups are stored in the *Admin Workstation*'s persistent volume.
           **You should verify that you have enough space to store the backups
