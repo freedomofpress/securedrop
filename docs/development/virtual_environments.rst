@@ -153,7 +153,7 @@ Production
 This is a production installation with all of the system hardening active, but
 virtualized, rather than running on hardware. You will need to
 :ref:`configure prod-like secrets<configure_securedrop>`, or export
-``ANSIBLE_ARGS=="--skip-tags validate"`` to skip the tasks that prevent the prod
+``ANSIBLE_ARGS="--skip-tags validate"`` to skip the tasks that prevent the prod
 playbook from running with Vagrant-specific info.
 
 To create only the prod servers, run:
