@@ -48,20 +48,20 @@
 
 <hr class="no-line">
 
-<h2>Reset Two Factor Authentication</h2>
+<h2>Reset Two-Factor Authentication</h2>
 
 {% if user %}
-<p>If a user's two factor authentication credentials have been lost or
+<p>If a user's two-factor authentication credentials have been lost or
 compromised, you can reset them here. <em>If you do this, make sure the user is
-present and ready to set up their device with the new two factor credentials.
+present and ready to set up their device with the new two-factor credentials.
 Otherwise, they will be locked out of their account.</em></p>
 {% else %}
-<p>If your two factor authentication credentials have been lost or compromised,
+<p>If your two-factor authentication credentials have been lost or compromised,
 or you got a new device, you can reset your credentials here. <em>If you do
 this, make sure you are ready to set up your new device, otherwise you will be
 locked out of your account.</em></p>
 {% endif %}
-<p>To reset two factor authentication for mobile apps such as Google
+<p>To reset two-factor authentication for mobile apps such as Google
 Authenticator or FreeOTP, choose the first option. For hardware tokens like the
 Yubikey, choose the second.</p>
 
@@ -83,10 +83,10 @@ Yubikey, choose the second.</p>
 </form>
 {%- endmacro %}
 
-{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO FACTOR AUTHENTICATION
+{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO-FACTOR AUTHENTICATION
 (APP)")}}
 <br />
-{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO FACTOR AUTHENTICATION
+{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO-FACTOR AUTHENTICATION
 (HARDWARE TOKEN)")}}
 
 {% endblock %}

@@ -121,7 +121,7 @@ class JournalistNavigationSteps():
         self.new_user['orm_obj'] = Journalist.query.filter(
             Journalist.username == self.new_user['username']).one()
 
-        # Verify the two factor authentication
+        # Verify the two-factor authentication
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
         token_field.send_keys('mocked')
@@ -132,7 +132,7 @@ class JournalistNavigationSteps():
         # Successfully verifying the code should redirect to the admin
         # interface, and flash a message indicating success
         flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
-        self.assertIn(("Two factor token successfully verified for user"
+        self.assertIn(("Two-factor token successfully verified for user"
                        " {}!").format(self.new_user['username']),
                       [el.text for el in flashed_msgs])
 

@@ -113,7 +113,7 @@ Two-Factor Authenticator
 There are several places in the SecureDrop architecture where two-factor
 authentication is used to protect access to sensitive information or
 systems. These instances use the standard TOTP and/or HOTP algorithms,
-and so a variety of devices can be used to provide two factor
+and so a variety of devices can be used to provide two-factor
 authentication for devices. We recommend using one of:
 
 -  An Android or iOS device with `Google
