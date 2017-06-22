@@ -6,4 +6,8 @@ grsec_sysctl_flags:
     # rest will not be applied
   - name: "kernel.grsecurity.grsec_lock"
     value: "1"
-
+    # Stack clash mitigation, increasing main stack gap to 1MB.
+    # Storing as part of grsecurity vars, because sysctl option won't
+    # exist otherwise.
+  - name: "vm.heap_stack_gap"
+    value: "1048576"

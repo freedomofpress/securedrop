@@ -84,6 +84,7 @@ def test_grsecurity_kernel_is_running(Command):
 @pytest.mark.parametrize('sysctl_opt', [
   ('kernel.grsecurity.grsec_lock', 1),
   ('kernel.grsecurity.rwxmap_logging', 0),
+  ('vm.heap_stack_gap', 1048576),
 ])
 def test_grsecurity_sysctl_options(Sysctl, Sudo, sysctl_opt):
     """
