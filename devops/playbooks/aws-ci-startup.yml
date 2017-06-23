@@ -5,12 +5,6 @@
   become: no
   gather_facts: true
   tasks:
-    - name: Pull in systemd-enabled docker base image.
-      docker_image:
-        name: "{{ docker_image_sd_build }}"
-      when: "{{ docker_instances != [] }}"
-      tags: docker
-
     - name: Start Tor docker proxy for use in functional app tests.
       docker_container:
         name: tor
@@ -19,11 +13,12 @@
       when: "{{ docker_instances != [] }}"
       tags: docker
 
-    - name: Start CI-specific build containers.
+    - name: Start CI containers.
       docker_container:
         name: "{{ item }}"
         hostname: "{{ item }}"
-        image: "{{ docker_image_sd_build }}"
+        image: "{{ docker_image_ci }}@{{ docker_image_ci_version }}"
+        pull: true
         command: /lib/systemd/systemd
         devices:
           - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
@@ -34,7 +29,8 @@
       tags: docker
   vars:
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
-    docker_image_sd_build: "msheiny/debian-jessie-systemd"
+    docker_image_ci_version: "sha256:540e74955e3491b16c6345da1a848ddb9d2503cce4358813b864494fff9464d0"
+    docker_image_ci: "quay.io/freedomofpress/debian-jessie-systemd"
   vars_files:
     - "../vars/{{ ci_environment }}.yml"
 
