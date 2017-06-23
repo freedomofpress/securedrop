@@ -3,6 +3,10 @@
 # Relevant docs: https://docs.travis-ci.com/user/trusty-ci-environment/
 sudo: required
 dist: trusty
+# Use old Trusty images, since new ones are failing Selenium tests.
+# Must be updated by 2017-09-01. More info:
+# https://blog.travis-ci.com/2017-06-21-trusty-updates-2017-Q2-launch
+group: deprecated-2017Q2
 
 language: python
 python:
