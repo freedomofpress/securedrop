@@ -87,6 +87,7 @@ relevant location for the host you plan to test: ::
     │   └── test_apache_system_config.py
     ├── test_apparmor.py
     ├── test_appenv.py
+    ├── test_network.py
     └── test_ossec.py
 
 In the example above, to add a new test for the ``app-staging`` host,
