@@ -20,6 +20,7 @@ development_dependencies:
   - libssl-dev
   - ntp
   - python-dev
+  - python-ipdb
   - python-pip
   - ruby # to ensure `gem` command is available
   - tmux
