@@ -214,12 +214,12 @@ def admin_new_user_two_factor():
         token = request.form['token']
         if user.verify_token(token):
             flash(
-                "Two factor token successfully verified for user {}!".format(
+                "Two-factor token successfully verified for user {}!".format(
                     user.username),
                 "notification")
             return redirect(url_for("admin_index"))
         else:
-            flash("Two factor token failed to verify", "error")
+            flash("Two-factor token failed to verify", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
 
@@ -351,10 +351,10 @@ def account_new_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if g.user.verify_token(token):
-            flash("Two factor token successfully verified!", "notification")
+            flash("Two-factor token successfully verified!", "notification")
             return redirect(url_for('edit_account'))
         else:
-            flash("Two factor token failed to verify", "error")
+            flash("Two-factor token failed to verify", "error")
 
     return render_template('account_new_two_factor.html', user=g.user)
 

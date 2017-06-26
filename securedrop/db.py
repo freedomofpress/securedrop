@@ -417,7 +417,7 @@ class JournalistLoginAttempt(Base):
 
     """This model keeps track of journalist's login attempts so we can
     rate limit them in order to prevent attackers from brute forcing
-    passwords or two factor tokens."""
+    passwords or two-factor tokens."""
     __tablename__ = "journalist_login_attempt"
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
