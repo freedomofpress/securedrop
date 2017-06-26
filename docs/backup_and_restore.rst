@@ -75,11 +75,9 @@ the SecureDrop servers.
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible -u <SSH username> -m ping all
-
-.. tip:: If you forgot your SSH username, it is the value of the ``ssh_users``
-         variable in ``group_vars/all/site-specific``.
+   ansible -m ping all
 
 If this command fails (usually with an error like "SSH Error: data could not be
 sent to the remote host. Make sure this host can be reached over ssh"), you need
@@ -110,8 +108,9 @@ perform the backup:
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -t backup securedrop-prod.yml -e perform_backup=true
 
 .. todo:: Test this on a real *Admin Workstation*
 
@@ -159,8 +158,9 @@ backup:
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible-playbook -u <SSH username> -K -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ansible-playbook -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
