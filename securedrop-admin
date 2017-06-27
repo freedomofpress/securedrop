@@ -63,22 +63,48 @@ def sdconfig(args):
     subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 
+def run_command(command):
+    """
+    Wrapper function to display stdout for running command,
+    similar to how shelling out in a Bash script displays rolling output.
+
+    Yields a list of the stdout from the `command`, and raises a
+    CalledProcessError if `command` returns non-zero.
+    """
+    popen = subprocess.Popen(command, stdout=subprocess.PIPE)
+    for stdout_line in iter(popen.stdout.readline, ""):
+        yield stdout_line
+    popen.stdout.close()
+    return_code = popen.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, command)
+
+
 def envsetup(args):
     """Install SD pre-reqs"""
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(VENV_ACTIVATION):
-        sdlog.info("Installing dependencies. You'll be prompted for the "
-            "temporary Tails root credentials. This was set on boot-up screen")
-        sdlog.debug(subprocess.check_output(['sudo', 'su', '-c',
-                                            "apt-get update && \
-                                            apt-get install -y \
-                                            python-virtualenv \
-                                            python-pip \
-                                            ccontrol \
-                                            virtualenv \
-                                            libffi-dev \
-                                            libssl-dev \
-                                            libpython2.7-dev"]))
+
+        sdlog.info(("Installing dependencies. You'll be prompted for the"
+                    " temporary Tails admin password,"
+                    " which was set on Tails login screen."))
+
+        apt_command = ['sudo', 'su', '-c',
+                       "apt-get update && \
+                       apt-get install -y \
+                       python-virtualenv \
+                       python-pip \
+                       ccontrol \
+                       virtualenv \
+                       libffi-dev \
+                       libssl-dev \
+                       libpython2.7-dev",
+                       ]
+
+        # Print command results in real-time, to keep Admin apprised
+        # of progress during long-running command.
+        for output_line in run_command(apt_command):
+            sdlog.info(output_line.rstrip())
 
         # Technically you can create a virtualenv from within python
         # but pip can only be run over tor on tails, and debugging that
