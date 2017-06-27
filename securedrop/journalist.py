@@ -242,9 +242,28 @@ def admin_reset_two_factor_hotp():
     otp_secret = request.form.get('otp_secret', None)
     if otp_secret:
         user = Journalist.query.get(uid)
-        user.set_hotp_secret(otp_secret)
-        db_session.commit()
-        return redirect(url_for('admin_new_user_two_factor', uid=uid))
+        try:
+            user.set_hotp_secret(otp_secret)
+        except TypeError as e:
+            if "Non-hexadecimal digit found" in str(e):
+                flash("Invalid secret format: "
+                      "please only submit letters A-F and numbers 0-9.",
+                      "error")
+            elif "Odd-length string" in str(e):
+                flash("Invalid secret format: "
+                      "odd-length secret. Did you mistype the secret?",
+                      "error")
+            else:
+                flash("An unexpected error occurred! "
+                      "Please check the application "
+                      "logs or inform your adminstrator.", "error")
+                app.logger.error(
+                    "set_hotp_secret '{}' (id {}) failed: {}".format(
+                        otp_secret, uid, e))
+            return render_template('admin_edit_hotp_secret.html', uid=uid)
+        else:
+            db_session.commit()
+            return redirect(url_for('admin_new_user_two_factor', uid=uid))
     else:
         return render_template('admin_edit_hotp_secret.html', uid=uid)
 
