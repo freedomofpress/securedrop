@@ -60,6 +60,7 @@ def sdconfig(args):
         ansible_cmd.append('--extra-vars')
         ansible_cmd.append("@{}".format(SITE_CONFIG))
 
+    sdlog.info("Configuring SecureDrop site-specific information")
     subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 
@@ -85,9 +86,9 @@ def install_apt_dependencies(args):
     Install apt dependencies in Tails. In order to install Ansible in
     a virtualenv, first there are a number of Python prerequisites.
     """
-    sdlog.info(("Installing dependencies. You'll be prompted for the"
-                " temporary Tails admin password,"
-                " which was set on Tails login screen."))
+    sdlog.info("Installing SecureDrop Admin dependencies")
+    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
+                " which was set on Tails login screen"))
 
     apt_command = ['sudo', 'su', '-c',
                    "apt-get update && \
@@ -146,8 +147,12 @@ def envsetup(args):
             sdlog.error(("Unable to create virtualenv. Check network settings"
                          " and try again."))
             sys.exit(1)
+    else:
+        sdlog.info("Virtualenv already exists, not creating")
 
     install_pip_dependencies(args)
+
+    sdlog.info("Finished installing SecureDrop dependencies")
 
 
 def install_pip_dependencies(args):
@@ -213,6 +218,7 @@ def install_securedrop(args):
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
     activate_venv()
+    sdlog.info("Configuring Tails workstation environment")
     subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
                            "--ask-become-pass",
                            ],
