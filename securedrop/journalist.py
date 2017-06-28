@@ -114,7 +114,10 @@ def login():
             login_flashed_msg = "Login failed."
 
             if isinstance(e, LoginThrottledException):
-                login_flashed_msg += " Please wait at least 60 seconds before logging in again."
+                login_flashed_msg += (
+                    " Please wait at least {} seconds "
+                    "before logging in again.".format(
+                        Journalist._LOGIN_ATTEMPT_PERIOD))
             else:
                 try:
                     user = Journalist.query.filter_by(
