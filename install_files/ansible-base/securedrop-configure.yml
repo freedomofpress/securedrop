@@ -61,6 +61,11 @@
       default: SecureDrop.asc
       private: no
 
+    - name: securedrop_app_https_on_source_interface
+      prompt: Whether HTTPS should be enabled on Source Interface (requires EV cert)
+      default: no
+      private: no
+
     - name: securedrop_app_gpg_fingerprint
       prompt: Full fingerprint for the SecureDrop Application GPG Key
       default: ' '

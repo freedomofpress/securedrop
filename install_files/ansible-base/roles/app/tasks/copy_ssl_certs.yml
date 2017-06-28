@@ -1,0 +1,21 @@
+---
+- name: Create SSL certificates directory for HTTPS.
+  file:
+    state: directory
+    # Directory is hardcoded in the apache2 AppArmor profile.
+    path: /var/lib/ssl
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy SSL certificate files.
+  copy:
+    src: "{{ item }}"
+    dest: "/var/lib/ssl/{{ item|basename }}"
+    owner: root
+    group: root
+    mode: "0400"
+  with_items:
+    - "{{ securedrop_app_https_certificate_cert_src }}"
+    - "{{ securedrop_app_https_certificate_key_src }}"
+    - "{{ securedrop_app_https_certificate_chain_src }}"

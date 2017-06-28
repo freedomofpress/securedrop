@@ -26,6 +26,17 @@ securedrop_data: /var/lib/securedrop
 # Custom text to be displayed on the Source Interface page.
 custom_notification_text: ""
 
+# Whether to enable HTTPS on the Source Interface Onion URL. Off by default,
+# because it requires an organization to procure an EV certificate for HTTPS.
+securedrop_app_https_on_source_interface: no
+
+# Default values for looking up the certificate files on Admin Workstation.
+# Can be overridden, of course, but simplest if the files are saved
+# with the names below.
+securedrop_app_https_certificate_cert_src: securedrop_source_onion.crt
+securedrop_app_https_certificate_key_src: securedrop_source_onion.key
+securedrop_app_https_certificate_chain_src: DigiCertCA.crt
+
 # Apt packages for configuring Apache service.
 apache_packages:
   - apache2-mpm-worker
