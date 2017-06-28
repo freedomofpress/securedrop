@@ -215,7 +215,7 @@ def lookup():
         try:
             reply.decrypted = crypto_util.decrypt(
                 g.codename,
-                file(reply_path).read()).decode('utf-8')
+                open(reply_path).read()).decode('utf-8')
         except UnicodeDecodeError:
             app.logger.error("Could not decode reply %s" % reply.filename)
         else:
