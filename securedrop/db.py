@@ -110,7 +110,8 @@ class Source(Base):
             for submission in self.submissions:
                 if submission.filename.endswith('msg.gpg'):
                     self.docs_msgs_count['messages'] += 1
-                elif submission.filename.endswith('doc.gz.gpg') or submission.filename.endswith('doc.zip.gpg'):
+                elif (submission.filename.endswith('doc.gz.gpg') or
+                      submission.filename.endswith('doc.zip.gpg')):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
@@ -185,7 +186,8 @@ class SourceStar(Base):
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):
-            return self.source_id == other.source_id and self.id == other.id and self.starred == other.starred
+            return (self.source_id == other.source_id and
+                    self.id == other.id and self.starred == other.starred)
         return NotImplemented
 
     def __init__(self, source, starred=True):
@@ -200,7 +202,8 @@ class InvalidUsernameException(Exception):
 
 class LoginThrottledException(Exception):
 
-    """Raised when a user attempts to log in too many times in a given time period"""
+    """Raised when a user attempts to log in
+    too many times in a given time period"""
 
 
 class WrongPasswordException(Exception):
@@ -343,7 +346,8 @@ class Journalist(Base):
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        """Strips from authentication tokens the whitespace
+        that many clients add for readability"""
         return ''.join(token.split())
 
     def verify_token(self, token):
