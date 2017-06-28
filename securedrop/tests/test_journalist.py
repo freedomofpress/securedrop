@@ -470,6 +470,30 @@ class TestJournalistApp(TestCase):
             resp,
             url_for('admin_new_user_two_factor', uid=self.user.id))
 
+    @patch('db.Journalist.regenerate_totp_shared_secret',
+           side_effect=Exception('ERROR'))
+    @patch('journalist.app.logger.error')
+    def test_admin_resets_user_totp_error(
+            self,
+            mocked_error_logger,
+            mocked_regenerate_totp_shared_secret):
+        self._login_admin()
+        old_totp = self.user.totp
+
+        resp = self.client.post(
+            url_for('admin_reset_two_factor_totp'),
+            data=dict(uid=self.user.id))
+        new_totp = self.user.totp
+
+        mocked_error_logger.assert_called_once_with(
+            "Reset TOTP for '{}' failed: {}".format(self.user.id, 'ERROR'))
+        self.assertRedirects(resp,
+                             url_for("admin_edit_user", user_id=self.user.id))
+        self.assertEqual(old_totp.secret, new_totp.secret)
+        self.assertMessageFlashed(
+            "An unexpected error occurred! Please check the application "
+            "logs or inform your adminstrator.", "error")
+
     def test_user_resets_totp(self):
         self._login_user()
         old_totp = self.user.totp
