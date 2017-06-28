@@ -549,6 +549,10 @@ class TestJournalistApp(TestCase):
         mocked_error_logger.assert_called_once_with(
             "Adding user 'username' failed: (__builtin__.NoneType) "
             "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']")
+        self.assertMessageFlashed(
+            "An error occurred saving this user to the database."
+            " Please check the application logs.",
+            "error")
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
