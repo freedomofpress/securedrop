@@ -20,6 +20,11 @@ class TestCryptoUtil(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
+    def test_word_list_does_not_contain_empty_strings(self):
+        self.assertNotIn('', (crypto_util.words
+                              + crypto_util.nouns
+                              + crypto_util.adjectives))
+
     def test_clean(self):
         ok = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzABCDEFGHIJ'
               'KLMNOPQRSTUVWXYZ')
