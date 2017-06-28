@@ -104,7 +104,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.get(url_for('index'))
         self.assertRedirects(resp, url_for('login'))
 
-    def test_invalid_credentials(self):
+    def test_login_invalid_credentials(self):
         resp = self.client.post(url_for('login'),
                                 data=dict(username=self.user.username,
                                           password='invalid',
@@ -112,7 +112,7 @@ class TestJournalistApp(TestCase):
         self.assert200(resp)
         self.assertIn("Login failed", resp.data)
 
-    def test_valid_credentials(self):
+    def test_login_valid_credentials(self):
         resp = self.client.post(url_for('login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
