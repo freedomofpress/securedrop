@@ -73,7 +73,8 @@ def login_required(f):
 
 
 def ignore_static(f):
-    """Only executes the wrapped function if we're not loading a static resource."""
+    """Only executes the wrapped function if we're not loading
+    a static resource."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if request.path.startswith('/static'):
@@ -112,8 +113,8 @@ def setup_g():
 @app.before_request
 @ignore_static
 def check_tor2web():
-        # ignore_static here so we only flash a single message warning about Tor2Web,
-        # corresponding to the intial page load.
+    # ignore_static here so we only flash a single message warning
+    # about Tor2Web, corresponding to the intial page load.
     if 'X-tor2web' in request.headers:
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
@@ -124,8 +125,8 @@ def check_tor2web():
 @app.route('/')
 def index():
     return render_template('index.html',
-                           custom_notification=getattr(config,
-                           'CUSTOM_NOTIFICATION', ''))
+                           custom_notification=getattr(
+                               config, 'CUSTOM_NOTIFICATION', ''))
 
 
 def generate_unique_codename():
@@ -156,8 +157,9 @@ def generate_unique_codename():
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. If you want "
-              "to create a new account, you should log out first.", "notification")
+        flash("You were redirected because you are already logged in. "
+              "If you want to create a new account, you should log out first.",
+              "notification")
         return redirect(url_for('lookup'))
 
     codename = generate_unique_codename()
@@ -255,7 +257,8 @@ def normalize_timestamps(sid):
         rc = subprocess.call(args)
         if rc != 0:
             app.logger.warning(
-                "Couldn't normalize submission timestamps (touch exited with %d)" %
+                "Couldn't normalize submission "
+                "timestamps (touch exited with %d)" %
                 rc)
 
 
