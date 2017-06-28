@@ -4,10 +4,8 @@ import re
 import config
 import zipfile
 import crypto_util
-import uuid
 import tempfile
 import subprocess
-from cStringIO import StringIO
 import gzip
 from werkzeug import secure_filename
 
