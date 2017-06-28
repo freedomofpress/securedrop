@@ -202,7 +202,35 @@ Once complete, you should see a success message:
 .. |Confirm Upgrade| image:: images/upgrade_to_tails_3x/confirm_upgrade.png
 .. |Installation Complete| image:: images/upgrade_to_tails_3x/installation_complete.png
 
-4. Verify the Upgrades
+4. Upgrade the Tails Persistence Configuration
+----------------------------------------------
+
+Due to changes in Tails 3.x it is essential you upgrade the custom persistence
+configuration previously set up for your *Admin Workstation* and *Journalist
+Workstation* drives:
+
+  #. Boot into each Tails volume.
+  #. Open a terminal |Terminal| and navigate to the root of the SecureDrop git
+     directory: ``cd ~/Persistent/securedrop``.
+  #. Fetch the latest SecureDrop sources ``git fetch --all``.
+  #. Check out and verify the latest release tag following the instructions in
+     :ref:`Set up the Admin Workstation <Checkout and Verify the Current Release
+     Tag>`. You should already have the **SecureDrop Release Signing Key**
+     stored by Tails persistence, so you won't need to download it again.
+     Additionally, you skip the ``cd securedrop/`` step in those instructions,
+     as your terminal will already be open to the root SecureDrop directory,
+     which is necessary to execute the next step.
+  #. Run the command ``./securedrop-admin tailsconfig``. If you working on a
+     *Journalist Workstation* and did not previously copy the the
+     ``app-journalist-aths`` and ``app-source-ths`` from the *Admin Workstation*
+     via the *Transfer Device* to
+     ``~/Persistent/securedrop/install_files/ansible-base`` expect to be
+     prompted for this information.
+
+
+.. |Terminal| image:: images/terminal.png
+
+5. Verify the Upgrades
 ----------------------
 
 Verify the Journalist Workstation and SVS USB Drives Are Successfully Updated

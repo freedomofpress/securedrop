@@ -98,6 +98,8 @@ argument passed.
              the installation. If this happens, please email us at
              securedrop@freedom.press.
 
+.. _Checkout and Verify the Current Release Tag:
+
 Verify that the current release tag was signed with the release signing
 key:
 
