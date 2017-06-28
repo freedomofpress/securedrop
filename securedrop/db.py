@@ -339,7 +339,7 @@ class Journalist(Base):
         lowercase and split into four groups of four characters. The secret is
         base32-encoded, so it is case insensitive."""
         sec = self.otp_secret
-        chunks = [sec[i:i + 4] for i in xrange(0, len(sec), 4)]
+        chunks = [sec[i:i + 4] for i in range(0, len(sec), 4)]
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
