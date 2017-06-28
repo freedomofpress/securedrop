@@ -58,5 +58,6 @@ script:
   # to alter the pip requirements, which would cause config tests to fail.
   - pip install -r securedrop/requirements/develop-requirements.txt
   - make docs-lint
+  - pushd securedrop; flake8 store.py; popd
 after_success:
   cd securedrop/ && coveralls
