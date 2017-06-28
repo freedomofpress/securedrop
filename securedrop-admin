@@ -111,8 +111,8 @@ def install_apt_dependencies(args):
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
         # on with more apt requests.
-        sdlog.error(("Cannot lock apt. Tails may be performing automatic"
-                     " updates. Please try again in a few minutes."))
+        sdlog.error(("Failed to install apt dependencies. Check network"
+                     " connection and try again."))
         sys.exit(1)
 
 
