@@ -359,14 +359,14 @@ class TestJournalistApp(TestCase):
 
     def test_admin_resets_user_hotp(self):
         self._login_admin()
-        old_hotp = self.user.hotp.secret
+        old_hotp = self.user.hotp
 
         resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
                                 data=dict(uid=self.user.id, otp_secret=123456))
-        new_hotp = self.user.hotp.secret
+        new_hotp = self.user.hotp
 
         # check that hotp is different
-        self.assertNotEqual(old_hotp, new_hotp)
+        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
         # Redirect to admin 2FA view
         self.assertRedirects(resp,
             url_for('admin_new_user_two_factor', uid=self.user.id))
@@ -430,7 +430,7 @@ class TestJournalistApp(TestCase):
         newHotp = self.user.hotp
 
         # check that hotp is different
-        self.assertNotEqual(oldHotp, newHotp)
+        self.assertNotEqual(oldHotp.secret, newHotp.secret)
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account_new_two_factor'))
 
@@ -443,7 +443,7 @@ class TestJournalistApp(TestCase):
             data=dict(uid=self.user.id))
         new_totp = self.user.totp
 
-        self.assertNotEqual(old_totp, new_totp)
+        self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         self.assertRedirects(resp,
             url_for('admin_new_user_two_factor', uid=self.user.id))
@@ -456,7 +456,7 @@ class TestJournalistApp(TestCase):
         newTotp = self.user.totp
 
         # check that totp is different
-        self.assertNotEqual(oldTotp, newTotp)
+        self.assertNotEqual(oldTotp.secret, newTotp.secret)
 
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account_new_two_factor'))
@@ -588,7 +588,7 @@ class TestJournalistApp(TestCase):
         newTotp = self.user.totp
 
         # check that totp is different
-        self.assertNotEqual(oldTotp, newTotp)
+        self.assertNotEqual(oldTotp.secret, newTotp.secret)
 
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
@@ -604,7 +604,7 @@ class TestJournalistApp(TestCase):
         newHotp = self.user.hotp
 
         # check that hotp is different
-        self.assertNotEqual(oldHotp, newHotp)
+        self.assertNotEqual(oldHotp.secret, newHotp.secret)
 
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
