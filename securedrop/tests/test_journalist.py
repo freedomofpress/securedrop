@@ -423,14 +423,14 @@ class TestJournalistApp(TestCase):
 
     def test_user_resets_hotp(self):
         self._login_user()
-        oldHotp = self.user.hotp
+        old_hotp = self.user.hotp
 
         resp = self.client.post(url_for('account_reset_two_factor_hotp'),
                                data=dict(otp_secret=123456))
-        newHotp = self.user.hotp
+        new_hotp = self.user.hotp
 
         # check that hotp is different
-        self.assertNotEqual(oldHotp.secret, newHotp.secret)
+        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account_new_two_factor'))
 
@@ -450,13 +450,13 @@ class TestJournalistApp(TestCase):
 
     def test_user_resets_totp(self):
         self._login_user()
-        oldTotp = self.user.totp
+        old_totp = self.user.totp
 
         resp = self.client.post(url_for('account_reset_two_factor_totp'))
-        newTotp = self.user.totp
+        new_totp = self.user.totp
 
         # check that totp is different
-        self.assertNotEqual(oldTotp.secret, newTotp.secret)
+        self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account_new_two_factor'))
@@ -582,29 +582,29 @@ class TestJournalistApp(TestCase):
 
     def test_regenerate_totp(self):
         self._login_user()
-        oldTotp = self.user.totp
+        old_totp = self.user.totp
 
         res = self.client.post(url_for('account_reset_two_factor_totp'))
-        newTotp = self.user.totp
+        new_totp = self.user.totp
 
         # check that totp is different
-        self.assertNotEqual(oldTotp.secret, newTotp.secret)
+        self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
 
     def test_edit_hotp(self):
         self._login_user()
-        oldHotp = self.user.hotp
+        old_hotp = self.user.hotp
 
         res = self.client.post(
             url_for('account_reset_two_factor_hotp'),
             data=dict(otp_secret=123456)
             )
-        newHotp = self.user.hotp
+        new_hotp = self.user.hotp
 
         # check that hotp is different
-        self.assertNotEqual(oldHotp.secret, newHotp.secret)
+        self.assertNotEqual(old_hotp.secret, new_hotp.secret)
 
         # should redirect to verification page
         self.assertRedirects(res, url_for('account_new_two_factor'))
