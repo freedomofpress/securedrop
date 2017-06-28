@@ -401,3 +401,11 @@ class JournalistNavigationSteps():
         submission = self._get_submission_content(file_url,
                                                   decrypted_submission)
         self.assertEqual(self.secret_message, submission)
+
+    def _journalist_sends_reply_to_source(self):
+        self.driver.find_element_by_id('reply-text-field').send_keys('Nice docs')
+
+        self.driver.find_element_by_id('reply-button').click()
+
+        self.assertIn("Thanks! Your reply has been stored.",
+                      self.driver.page_source)
