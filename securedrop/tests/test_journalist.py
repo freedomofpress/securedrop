@@ -16,6 +16,7 @@ import config
 import crypto_util
 from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
+import db
 import journalist
 import utils
 
@@ -103,6 +104,27 @@ class TestJournalistApp(TestCase):
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))
         self.assertRedirects(resp, url_for('login'))
+
+    def test_login_throttle(self):
+        db.LOGIN_HARDENING = True
+        try:
+            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
+                resp = self.client.post(url_for('login'),
+                                        data=dict(username=self.user.username,
+                                                  password='invalid',
+                                                  token='mocked'))
+                self.assert200(resp)
+                self.assertIn("Login failed", resp.data)
+
+            resp = self.client.post(url_for('login'),
+                                    data=dict(username=self.user.username,
+                                              password='invalid',
+                                              token='mocked'))
+            self.assert200(resp)
+            self.assertIn("Please wait at least {} seconds".format(
+                Journalist._LOGIN_ATTEMPT_PERIOD), resp.data)
+        finally:
+            db.LOGIN_HARDENING = False
 
     def test_login_invalid_credentials(self):
         resp = self.client.post(url_for('login'),
