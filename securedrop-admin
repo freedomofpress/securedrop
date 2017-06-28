@@ -161,8 +161,7 @@ if __name__ == "__main__":
 
     parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
-    parse_sdconfig.add_argument('--force', action='store_const', default=False,
-                                const=True,
+    parse_sdconfig.add_argument('-f', '--force', action='store_true',
                                 help="Clobber site-specific vars for reconfiguration")
 
     parse_install = subparsers.add_parser('install',
