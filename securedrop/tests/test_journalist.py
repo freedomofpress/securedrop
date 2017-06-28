@@ -507,6 +507,26 @@ class TestJournalistApp(TestCase):
         # should redirect to verification page
         self.assertRedirects(resp, url_for('account_new_two_factor'))
 
+    @patch('db.Journalist.regenerate_totp_shared_secret',
+           side_effect=Exception('ERROR'))
+    @patch('journalist.app.logger.error')
+    def test_user_resets_totp_error(self,
+                                    mocked_error_logger,
+                                    mocked_regenerate_totp_shared_secret):
+        self._login_user()
+        old_totp = self.user.totp
+
+        resp = self.client.post(url_for('account_reset_two_factor_totp'))
+        new_totp = self.user.totp
+
+        mocked_error_logger.assert_called_once_with(
+            "Reset TOTP for '{}' failed: {}".format(self.user.id, 'ERROR'))
+        self.assertRedirects(resp, url_for("edit_account"))
+        self.assertEqual(old_totp.secret, new_totp.secret)
+        self.assertMessageFlashed(
+            "An unexpected error occurred! Please check the application "
+            "logs or inform your adminstrator.", "error")
+
     def test_admin_resets_hotp_with_missing_otp_secret_key(self):
         self._login_admin()
         resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
