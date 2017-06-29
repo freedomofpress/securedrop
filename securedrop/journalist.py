@@ -9,6 +9,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_assets import Environment
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.sql.expression import false
 
 import config
 import version
@@ -511,7 +512,7 @@ def col_download_unread(cols_selected):
     submissions = []
     for sid in cols_selected:
         id = Source.query.filter(Source.filesystem_id == sid).one().id
-        submissions += Submission.query.filter(Submission.downloaded == False,
+        submissions += Submission.query.filter(Submission.downloaded == false(),
                                                Submission.source_id == id).all()
     if submissions == []:
         flash("No unread submissions in collections selected!", "error")
@@ -663,7 +664,7 @@ def generate_code():
 def download_unread_sid(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
     submissions = Submission.query.filter(Submission.source_id == id,
-                                          Submission.downloaded == False).all()
+                                          Submission.downloaded == false()).all()
     if submissions == []:
         flash("No unread submissions for this source!")
         return redirect(url_for('col', sid=sid))
