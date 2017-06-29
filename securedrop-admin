@@ -115,12 +115,11 @@ def install_securedrop(args):
     import yaml
 
     try:
+        # Attempt to read site-specific vars file, specifically
+        # for informative messaging via exception handling.
         with open(SITE_CONFIG) as site_config_file:
             site_config_vars = yaml.safe_load(site_config_file.read())
 
-        # Username may have been provided as `--user`, but try to fall back
-        # to YAML vars files if not.
-        ansible_user = args.user or site_config_vars['ssh_users']
     except IOError:
         sdlog.error("Config file missing, re-run with sdconfig")
         sys.exit(1)
@@ -133,7 +132,6 @@ def install_securedrop(args):
         sudo_prompt = "Sudo password for servers [blank if not needed]: "
         ansible_password = getpass.getpass(prompt=sudo_prompt)
         subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
-                         '-u '+ansible_user,
                          "-e ansible_become_pass={}".format(ansible_password),
                          ],
                         cwd=ANSIBLE_PATH)
@@ -166,8 +164,6 @@ if __name__ == "__main__":
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)
-    parse_install.add_argument('--user', type=str, default=None,
-                               help="Over-ride user defined in vars")
     parse_install.set_defaults(func=install_securedrop)
 
     parse_tailsconfig = subparsers.add_parser('tailsconfig',

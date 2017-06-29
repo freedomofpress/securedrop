@@ -8,6 +8,8 @@
       - "ssh_users != item"
       - "ssh_users != ''"
       - "item not in ssh_users"
+      # Make sure we have a string, not a list.
+      - "ssh_users|list != ssh_users"
     msg: >-
       The Admin username for SSH connections to the servers failed
       to validate. {{ securedrop_validate_error_msg_start }} the

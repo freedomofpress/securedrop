@@ -37,7 +37,7 @@ def lookup_local_ipv4_address(hostname):
             monitor_ip = site_vars['monitor_ip']
 
     except (IOError, KeyError):
-        msg = "You must run the configure playbook."
+        msg = "You must run 'secure-admin sdconfig' from root securedrop dir."
         raise Exception(msg)
 
     if hostname == "app":
@@ -47,6 +47,36 @@ def lookup_local_ipv4_address(hostname):
     else:
         msg = "Unsupported hostname: '{}'".format(hostname)
         raise Exception(msg)
+
+
+def lookup_admin_username():
+    """
+    Read the username for the Admin account on the SecureDrop servers
+    from the site-specific YAML vars file. Prior to SecureDrop 0.4,
+    the `ssh_users` var could have been a list, so handle the transition
+    gracefully and provide an informative error message if the site-specific
+    vars file contains a list for this value.
+    """
+    try:
+        with open(SECUREDROP_SITE_VARS, 'r') as f:
+            site_vars = yaml.safe_load(f)
+            admin_username = site_vars['ssh_users']
+
+    except (IOError, KeyError):
+        msg = "You must run the configure playbook."
+        raise Exception(msg)
+
+    try:
+        # Strong typing in Python is generally a bad idea, but simply checking
+        # for "not list" doesn't include other edge cases, such as dict.
+        assert type(admin_username) is str
+    except AssertionError:
+        msg = ("The value of `ssh_users` must be a single username,"
+               " not a list of usernames. Please update"
+               " `{}` and try again.".format(SECUREDROP_SITE_VARS))
+        raise Exception(msg)
+
+    return admin_username
 
 
 def lookup_tor_hostname(hostname):
@@ -115,7 +145,8 @@ def build_inventory():
         "_meta": {
             "hostvars": {
                 h: {
-                    "ansible_ssh_host": lookup_ssh_address(h)
+                    "ansible_ssh_host": lookup_ssh_address(h),
+                    "ansible_ssh_user": lookup_admin_username(),
                 } for h in SECUREDROP_SUPPORTED_HOSTNAMES
             },
         },
