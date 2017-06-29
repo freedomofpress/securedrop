@@ -123,7 +123,9 @@ def login():
                     user = Journalist.query.filter_by(
                         username=request.form['username']).one()
                     if user.is_totp:
-                        login_flashed_msg += " Please wait for a new two-factor token before logging in again."
+                        login_flashed_msg += (
+                            " Please wait for a new two-factor token"
+                            " before logging in again.")
                 except:
                     pass
 
@@ -188,9 +190,11 @@ def admin_add_user():
                 db_session.commit()
             except InvalidPasswordLength:
                 form_valid = False
-                flash("Your password must be between {} and {} characters.".format(
-                        Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
-                    ), "error")
+                flash("Your password must be "
+                      "between {} and {} characters.".format(
+                          Journalist.MIN_PASSWORD_LEN,
+                          Journalist.MAX_PASSWORD_LEN
+                      ), "error")
             except IntegrityError as e:
                 db_session.rollback()
                 form_valid = False
@@ -318,7 +322,7 @@ def admin_edit_user(user_id):
             if new_username == user.username:
                 pass
             elif Journalist.query.filter_by(
-                username=new_username).one_or_none():
+                    username=new_username).one_or_none():
                 flash('Username "{}" is already taken!'.format(new_username),
                       "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
@@ -349,7 +353,7 @@ def admin_delete_user(user_id):
     else:
         app.logger.error(
             "Admin {} tried to delete nonexistent user with pk={}".format(
-            g.user.username, user_id))
+                g.user.username, user_id))
         abort(404)
 
     return redirect(url_for('admin_index'))
@@ -512,8 +516,9 @@ def col_download_unread(cols_selected):
     submissions = []
     for sid in cols_selected:
         id = Source.query.filter(Source.filesystem_id == sid).one().id
-        submissions += Submission.query.filter(Submission.downloaded == false(),
-                                               Submission.source_id == id).all()
+        submissions += Submission.query.filter(
+            Submission.downloaded == false(),
+            Submission.source_id == id).all()
     if submissions == []:
         flash("No unread submissions in collections selected!", "error")
         return redirect(url_for('index'))
@@ -525,7 +530,8 @@ def col_download_all(cols_selected):
     submissions = []
     for sid in cols_selected:
         id = Source.query.filter(Source.filesystem_id == sid).one().id
-        submissions += Submission.query.filter(Submission.source_id == id).all()
+        submissions += Submission.query.filter(
+            Submission.source_id == id).all()
     return download("all", submissions)
 
 
@@ -663,8 +669,9 @@ def generate_code():
 @login_required
 def download_unread_sid(sid):
     id = Source.query.filter(Source.filesystem_id == sid).one().id
-    submissions = Submission.query.filter(Submission.source_id == id,
-                                          Submission.downloaded == false()).all()
+    submissions = Submission.query.filter(
+        Submission.source_id == id,
+        Submission.downloaded == false()).all()
     if submissions == []:
         flash("No unread submissions for this source!")
         return redirect(url_for('col', sid=sid))
