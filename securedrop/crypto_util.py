@@ -46,9 +46,9 @@ do_runtime_tests()
 
 gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
-words = file(config.WORD_LIST).read().split('\n')
-nouns = file(config.NOUNS).read().split('\n')
-adjectives = file(config.ADJECTIVES).read().split('\n')
+words = open(config.WORD_LIST).read().split('\n')
+nouns = open(config.NOUNS).read().split('\n')
+adjectives = open(config.ADJECTIVES).read().split('\n')
 
 
 class CryptoException(Exception):
