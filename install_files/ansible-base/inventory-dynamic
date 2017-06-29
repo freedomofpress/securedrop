@@ -37,7 +37,7 @@ def lookup_local_ipv4_address(hostname):
             monitor_ip = site_vars['monitor_ip']
 
     except (IOError, KeyError):
-        msg = "You must run the configure playbook."
+        msg = "You must run 'secure-admin sdconfig' from root securedrop dir."
         raise Exception(msg)
 
     if hostname == "app":
