@@ -132,7 +132,6 @@ def test_apache_modules_present(Command, Sudo, apache_module):
   'authn_file',
   'autoindex',
   'env',
-  'setenvif',
   'status',
 ])
 def test_apache_modules_absent(Command, Sudo, apache_module):

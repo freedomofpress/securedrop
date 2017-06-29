@@ -65,6 +65,7 @@ apache_modules:
   - negotiation
   - reqtimeout
   - rewrite
+  - ssl
   - wsgi
   - xsendfile
 
@@ -74,7 +75,6 @@ apache_disabled_modules:
   - authn_file
   - autoindex
   - env
-  - setenvif
   - status
 
 # Apt package dependencies for running the SecureDrop application.
