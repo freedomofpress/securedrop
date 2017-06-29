@@ -22,7 +22,7 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
     # use these settings in production)
     GPG_KEY_LENGTH = 1024
     SCRYPT_PARAMS = dict(N=2**1, r=1, p=1)
-else: # pragma: no cover
+else:  # pragma: no cover
     GPG_KEY_LENGTH = 4096
     SCRYPT_PARAMS = config.SCRYPT_PARAMS
 
@@ -181,6 +181,6 @@ def decrypt(secret, ciphertext):
     hashed_codename = hash_codename(secret, salt=SCRYPT_GPG_PEPPER)
     return gpg.decrypt(ciphertext, passphrase=hashed_codename).data
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     import doctest
     doctest.testmod()
