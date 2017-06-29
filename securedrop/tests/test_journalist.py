@@ -640,7 +640,9 @@ class TestJournalistApp(TestCase):
         journalist.delete_collection(self.source.filesystem_id)
 
         # Source should be gone
-        results = db_session.query(Source).filter(Source.id == self.source.id).all()
+        results = db_session.query(Source).filter(
+            Source.id == self.source.id).all()
+        self.assertEqual(results, [])
 
     def _delete_collection_setup(self):
         self.source, _ = utils.db_helper.init_source()
