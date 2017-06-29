@@ -10,6 +10,7 @@ from flask import url_for, escape
 from flask_testing import TestCase
 from mock import patch, ANY, MagicMock
 from sqlalchemy.orm.exc import StaleDataError
+from sqlalchemy.exc import IntegrityError
 
 os.environ['SECUREDROP_ENV'] = 'test'
 import config
@@ -530,6 +531,28 @@ class TestJournalistApp(TestCase):
                                           password_again='pentagonpapers',
                                           is_admin=False))
         self.assertIn('Missing username', resp.data)
+
+    @patch('journalist.app.logger.error')
+    @patch('journalist.Journalist',
+           side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
+    def test_admin_add_user_integrity_error(self,
+                                            mock_journalist,
+                                            mocked_error_logger):
+        self._login_admin()
+
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username='username',
+                                          password='pentagonpapers',
+                                          password_again='pentagonpapers',
+                                          is_admin=False))
+
+        mocked_error_logger.assert_called_once_with(
+            "Adding user 'username' failed: (__builtin__.NoneType) "
+            "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']")
+        self.assertMessageFlashed(
+            "An error occurred saving this user to the database."
+            " Please check the application logs.",
+            "error")
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin_index'), url_for('admin_add_user'),

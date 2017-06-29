@@ -198,8 +198,11 @@ def admin_add_user():
                     flash("That username is already in use",
                           "error")
                 else:
-                    flash("An error occurred saving this user to the database",
+                    flash("An error occurred saving this user to the database."
+                          " Please check the application logs.",
                           "error")
+                    app.logger.error("Adding user '{}' failed: {}".format(
+                        username, e))
 
         if form_valid:
             return redirect(url_for('admin_new_user_two_factor',
