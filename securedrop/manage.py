@@ -32,7 +32,7 @@ def reset(): # pragma: no cover
                                               'backend is not sqlite')
     try:
         os.remove(config.DATABASE_FILE)
-    except OSError as exc:
+    except OSError:
         pass
 
     # Regenerate the database
@@ -41,14 +41,14 @@ def reset(): # pragma: no cover
     # Clear submission/reply storage
     try:
         os.stat(config.STORE_DIR)
-    except OSError as exc:
+    except OSError:
         pass
     else:
         for source_dir in os.listdir(config.STORE_DIR):
             try:
                 # Each entry in STORE_DIR is a directory corresponding to a source
                 shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
-            except OSError as exc:
+            except OSError:
                 pass
     return 0
 
@@ -195,7 +195,7 @@ def clean_tmp(): # pragma: no cover
 
     try:
         os.stat(config.TEMP_DIR)
-    except OSError as exc:
+    except OSError:
         pass
     else:
         for path in listdir_fullpath(config.TEMP_DIR):
