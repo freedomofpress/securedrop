@@ -55,8 +55,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
-            resp = self.client.post(url_for('reply'),
-                                    data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
 
         # Notice the "potentially sensitive" exception_msg is not present in
         # the log event.
@@ -73,8 +72,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
 
         with patch('db.db_session.commit', side_effect=exception_class()):
-            resp = self.client.post(url_for('reply'),
-                                    data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
 
         self.assertMessageFlashed('An unexpected error occurred! Please check '
                 'the application logs or inform your adminstrator.', 'error')
@@ -257,7 +255,7 @@ class TestJournalistApp(TestCase):
     def test_admin_edits_user_password_success_response(self):
         self._login_admin()
 
-        resp = self.client.post(
+        self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
                       password='validlongpassword',
@@ -267,15 +265,15 @@ class TestJournalistApp(TestCase):
 
     def test_user_edits_password_success_reponse(self):
         self._login_user()
-        resp = self.client.post(url_for('edit_account'),
-                                data=dict(password='validlongpassword',
-                                          password_again='validlongpassword'))
+        self.client.post(url_for('edit_account'),
+                         data=dict(password='validlongpassword',
+                                   password_again='validlongpassword'))
         self.assertMessageFlashed("Account successfully updated!", 'success')
 
     def test_admin_edits_user_password_mismatch_warning(self):
         self._login_admin()
 
-        resp = self.client.post(
+        self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
                       password='not', password_again='thesame'),
@@ -313,23 +311,21 @@ class TestJournalistApp(TestCase):
         maximum password length should raise an exception"""
         overly_long_password = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
         with self.assertRaises(InvalidPasswordLength):
-            temp_journalist = Journalist(
-                    username="My Password is Too Big!",
-                    password=overly_long_password)
+            Journalist(username="My Password is Too Big!",
+                       password=overly_long_password)
 
     def test_min_password_length(self):
         """Creating a Journalist with a password that is smaller than the
         minimum password length should raise an exception"""
         with self.assertRaises(InvalidPasswordLength):
-            temp_journalist = Journalist(
-                    username="My Password is Too Small!",
-                    password='tiny')
+            Journalist(username="My Password is Too Small!",
+                       password='tiny')
 
     def test_admin_edits_user_password_too_long_warning(self):
         self._login_admin()
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
 
-        resp = self.client.post(
+        self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
                       password=overly_long_password,
@@ -345,10 +341,10 @@ class TestJournalistApp(TestCase):
         self._login_user()
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
 
-        resp = self.client.post(url_for('edit_account'),
-                                data=dict(password=overly_long_password,
-                                          password_again=overly_long_password),
-                                follow_redirects=True)
+        self.client.post(url_for('edit_account'),
+                         data=dict(password=overly_long_password,
+                                   password_again=overly_long_password),
+                         follow_redirects=True)
 
         self.assertMessageFlashed('Your password must be between {} and {} '
                                   'characters.'.format(
@@ -372,7 +368,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         new_username = self.admin.username
 
-        resp = self.client.post(
+        self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=new_username, is_admin=False,
                       password='', password_again=''))
@@ -398,8 +394,8 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id, otp_secret='ZZ'))
+        self.client.post(url_for('admin_reset_two_factor_hotp'),
+                         data=dict(uid=self.user.id, otp_secret='ZZ'))
         new_hotp = self.user.hotp.secret
 
         self.assertEqual(old_hotp, new_hotp)
@@ -411,8 +407,8 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id, otp_secret='Z'))
+        self.client.post(url_for('admin_reset_two_factor_hotp'),
+                         data=dict(uid=self.user.id, otp_secret='Z'))
         new_hotp = self.user.hotp.secret
 
         self.assertEqual(old_hotp, new_hotp)
@@ -432,8 +428,8 @@ class TestJournalistApp(TestCase):
         mock_set_hotp_secret.side_effect = TypeError(error_message)
 
         otp_secret = '1234'
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
-                                data=dict(uid=self.user.id, otp_secret=otp_secret))
+        self.client.post(url_for('admin_reset_two_factor_hotp'),
+                         data=dict(uid=self.user.id, otp_secret=otp_secret))
         new_hotp = self.user.hotp.secret
 
         self.assertEqual(old_hotp, new_hotp)
@@ -540,11 +536,11 @@ class TestJournalistApp(TestCase):
                                             mocked_error_logger):
         self._login_admin()
 
-        resp = self.client.post(url_for('admin_add_user'),
-                                data=dict(username='username',
-                                          password='pentagonpapers',
-                                          password_again='pentagonpapers',
-                                          is_admin=False))
+        self.client.post(url_for('admin_add_user'),
+                         data=dict(username='username',
+                                   password='pentagonpapers',
+                                   password_again='pentagonpapers',
+                                   is_admin=False))
 
         mocked_error_logger.assert_called_once_with(
             "Adding user 'username' failed: (__builtin__.NoneType) "
@@ -608,7 +604,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
 
-        res = self.client.post(url_for('edit_account'), data=dict(
+        self.client.post(url_for('edit_account'), data=dict(
             password=overly_long_password,
             password_again=overly_long_password),
             follow_redirects=True)
@@ -620,7 +616,7 @@ class TestJournalistApp(TestCase):
 
     def test_valid_user_password_change(self):
         self._login_user()
-        res = self.client.post(url_for('edit_account'), data=dict(
+        self.client.post(url_for('edit_account'), data=dict(
             password='validlongpassword',
             password_again='validlongpassword'))
         self.assertMessageFlashed("Account successfully updated!", 'success')
