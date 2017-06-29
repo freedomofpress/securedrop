@@ -2,12 +2,13 @@
 import os
 import unittest
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 import db
 import store
 import utils
+
 
 class TestCryptoUtil(unittest.TestCase):
 
@@ -27,10 +28,10 @@ class TestCryptoUtil(unittest.TestCase):
 
         self.assertEqual(ok, crypto_util.clean(ok))
         with self.assertRaisesRegexp(crypto_util.CryptoException,
-                                   'invalid input: {}'.format(invalid_1)):
+                                     'invalid input: {}'.format(invalid_1)):
             crypto_util.clean(invalid_1)
         with self.assertRaisesRegexp(crypto_util.CryptoException,
-                                   'invalid input: {}'.format(invalid_2)):
+                                     'invalid input: {}'.format(invalid_2)):
             crypto_util.clean(invalid_2)
 
     def test_encrypt_success(self):
