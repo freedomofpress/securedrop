@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 from datetime import datetime
 import functools
 
@@ -8,7 +7,7 @@ from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CSRFProtect
 from flask_assets import Environment
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
@@ -17,8 +16,8 @@ import crypto_util
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, WrongPasswordException,
-                LoginThrottledException, InvalidPasswordLength)
+                SourceStar, get_one_or_else, LoginThrottledException,
+                InvalidPasswordLength)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
