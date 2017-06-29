@@ -46,8 +46,21 @@ def activate_venv():
 def sdconfig(args):
     """Configure SD site settings"""
     activate_venv()
-    subprocess.check_call([os.path.join(ANSIBLE_PATH,'configure')],
-                            cwd=ANSIBLE_PATH, env=os.environ.copy())
+
+    ansible_cmd = [
+        'ansible-playbook',
+        # Passing an empty inventory file to override the automatic dynamic
+        # inventory script, which fails if no site vars are configured.
+        '-i', '/dev/null',
+        os.path.join(ANSIBLE_PATH, 'securedrop-configure.yml'),
+    ]
+    # Honor `--force` flag to clobber existing (misconfigured) vars,
+    # otherwise read in the existing vars to supply defaults.
+    if os.path.exists(SITE_CONFIG) and args.force is False:
+        ansible_cmd.append('--extra-vars')
+        ansible_cmd.append("@{}".format(SITE_CONFIG))
+
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH, env=os.environ.copy())
 
 
 def envsetup(args):
@@ -148,6 +161,8 @@ if __name__ == "__main__":
 
     parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
+    parse_sdconfig.add_argument('-f', '--force', action='store_true',
+                                help="Clobber site-specific vars for reconfiguration")
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)
