@@ -56,6 +56,7 @@ anonymous sources.
    ossec_alerts
    tails_guide
    tails_printing_guide
+   https_source_interface
    training_schedule
    yubikey_setup
    backup_and_restore
