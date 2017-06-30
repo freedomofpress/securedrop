@@ -1,6 +1,11 @@
 import pytest
 import os
 import getpass
+import string
+
+working_dir = os.path.dirname(os.path.realpath(__file__))
+app_reqs_dir = os.path.realpath(os.path.join(working_dir,
+                                             '../../securedrop/requirements'))
 
 def test_development_app_dependencies(Package):
     """
@@ -16,38 +21,43 @@ def test_development_app_dependencies(Package):
         p = Package(dependency)
         assert p.is_installed
 
-
-@pytest.mark.parametrize('pip_package,version', [
-    ('Flask-Testing', '0.6.2'),
-    ('Flask', '0.12.2'),
-    ('Jinja2', '2.9.6'),
-    ('MarkupSafe', '1.0'),
-    ('Werkzeug', '0.12.2'),
-    ('beautifulsoup4', '4.6.0'),
-    ('click', '6.7'),
-    ('coverage', '4.4.1'),
-    ('first', '2.0.1'),
-    ('funcsigs', '1.0.2'),
-    ('itsdangerous', '0.24'),
-    ('mock', '2.0.0'),
-    ('pbr', '3.0.1'),
-    ('pip-tools', '1.9.0'),
-    ('py', '1.4.34'),
-    ('pytest-cov', '2.5.1'),
-    ('pytest', '3.1.1'),
-    ('selenium', '2.53.6'),
-    ('six', '1.10.0'),
-])
-def test_development_pip_dependencies(Command, pip_package, version):
+def create_reqs_list(file):
+    """Parses a requirements.txt file in our app code requirements
+    directory and returns a list of (dependency, version) tuples.
     """
-    Declare SecureDrop app pip requirements. On the development VM,
+    reqs = []
+    with open(os.path.join(app_reqs_dir, file)) as fh:
+        for line in fh:
+            if line[0] in string.ascii_letters:
+                name, version = line.rstrip('\n').split('==')
+                name = name.lower()
+                version = version.split(' ')[0]
+                reqs.append((name, version))
+    return reqs
+
+@pytest.mark.parametrize('pip_package,version',
+                         create_reqs_list('securedrop-requirements.txt'))
+def test_development_pip_dependencies(Command, pip_package, version):
+    """ Declare SecureDrop app pip requirements. On the development VM,
     the pip dependencies should be installed directly via pip, rather
     than relying on the deb packages with pip-wheel inclusions.
-    Versions here are intentionally hardcoded to track changes.
     """
     c = Command('pip freeze')
-    assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
+    assert "{}=={}".format(pip_package, version) in \
+            c.stdout.rstrip().lower()
 
+@pytest.mark.parametrize('pip_package,version',
+                         create_reqs_list('test-requirements.txt'))
+def test_development_pip_dependencies(Command, pip_package, version):
+    """Declare SecureDrop app test pip requirements. These are only
+    installed to the development VM. The `update_python_dependencies.py`
+    utility in the SecureDrop root directory ensures these app and test
+    requirements files do not conflict, so we can safely install both.
+    This and the previous test together ensure this lack of conflict.
+    """
+    c = Command('pip freeze')
+    assert "{}=={}".format(pip_package, version) in \
+            c.stdout.rstrip().lower()
 
 @pytest.mark.skipif(getpass.getuser() != 'vagrant',
             reason="vagrant bashrc checks dont make sense in CI")
