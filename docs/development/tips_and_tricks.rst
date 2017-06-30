@@ -40,21 +40,21 @@ Browser by navigating to ``127.0.0.1:8080`` and ``127.0.0.1:8081``.
 Upgrading or Adding Python Dependencies
 ---------------------------------------
 
-We use a `pip-compile <http://nvie.com/posts/better-package-management/>`_
-based workflow for adding Python dependencies. If you would like to add a Python
-dependency, instead of editing the ``securedrop/requirements/*.txt`` files
-directly, please:
+SecureDrop uses a custom Python utility to manage it's numerous requirements
+file and avoid conflicts between them. If you would like to add a Python
+dependency, instead of editing the ``securedrop/requirements/*.txt`` file or
+``testinfra/requirements.txt`` directly, please:
 
-  #. Edit the relevant ``*.in`` file in ``securedrop/requirements/``
-  #. Use the following shell script to generate
-     ``securedrop/requirements/*.txt`` files:
-
-     .. code:: sh
-
-        securedrop/requirements/update_python_dependencies
-
+  #. Edit the relevant ``*.in`` file in ``securedrop/requirements/`` or
+     ``testinfra/requirements.in``.
+  #. Run the apprioprate ``make`` command for the file you updated from the root
+     of the git repository. Options include
+     ``update-python-dependencies-securedrop``,
+     ``update-python-dependencies-test``,
+     ``update-python-dependencies-testinfra``, and
+     ``update-python-dependencies-develop``.
   #. Commit both the ``securedrop/requirements/*.in`` and
-     ``securedrop/requirements/*.txt`` files
+     ``securedrop/requirements/*.txt`` files.
 
 .. _ssh_over_tor:
 

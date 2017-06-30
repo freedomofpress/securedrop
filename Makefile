@@ -1,3 +1,23 @@
+.PHONY: update-python-dependencies-securedrop
+update-python-dependencies-securedrop:
+	./update_python_dependencies.py
+
+.PHONY: update-python-dependencies-test
+update-python-dependencies-test:
+	./update_python_dependencies.py --file test
+
+.PHONY: update-python-dependencies-testinfra
+update-python-dependencies-testinfra:
+	./update_python_dependencies.py --file testinfra
+
+.PHONY: update-python-dependencies-develop
+update-python-dependencies-develop:
+	./update_python_dependencies.py --file develop
+
+.PHONY: upgrade-python-dependencies
+upgrade-python-dependencies:
+	./update_python_dependencies.py --upgrade
+
 .PHONY: ci-spinup
 ci-spinup:
 	./devops/scripts/ci-spinup.sh
