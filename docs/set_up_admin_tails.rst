@@ -123,24 +123,55 @@ store them securely. Once you have set up Tails with persistence and
 have cloned the repo, you can set up your personal password database
 using this template.
 
-You can find the template in ``tails_files/securedrop-keepassx.xml``
+You can find the template in ``tails_files/securedrop-keepassx.kdbx``
 in the SecureDrop repository that you just cloned.
-
-.. warning:: You will not be able to access your passwords if you
-	     forget the master password or the location of the key
-	     file used to protect the database.
 
 To use the template:
 
 -  Open the KeePassX program |KeePassX| which is already installed on
    Tails
--  Select **File**, **Import from...**, and **KeePassX XML (*.xml)**
--  Navigate to the location of **securedrop-keepassx.xml**, select it,
-   and click **Open**
--  Set a strong master password to protect the password database (you
-   will have to write this down/memorize it)
+-  Select **Database**, **Open database**, and navigate to the location of
+   **securedrop-keepassx.kdbx**, select it, and click **Open**
+-  Check the **password** box and hit **OK**
 -  Click **File** and **Save Database As**
 -  Save the database in the Persistent folder
+
+.. tip:: If you would like to add a master password, navigate to **File** and
+   **Change master key**. Note that since each KeePassX database is stored
+   on the encrypted persistent volume, this additional passphrase is not necessary.
+
+.. warning:: You will not be able to access your passwords if you
+	     forget the master password or the location of the key
+	     file used to protect the database.
+
+In case you wish to manually create a database, the suggested password fields in
+the administrator template are:
+
+**Administrator**:
+
+- Admin account username
+- App Server SSH Onion URL
+- Email account for sending OSSEC alerts
+- Monitor Server SSH Onion URL
+- Network Firewall Admin Credentials
+- OSSEC GPG Key
+- SecureDrop Login Credentials
+
+**Journalist**:
+
+- Auth Value: Journalist Interface
+- Onion URL: Journalist Interface
+- Personal GPG Key
+- SecureDrop Login Credentials
+
+**Secure Viewing Station**:
+
+- SecureDrop GPG Key
+
+**Backup**:
+
+- This section contains clones of the above entries in case a user
+  accidentally overwrites an entry.
 
 .. |Terminal| image:: images/terminal.png
 .. |KeePassX| image:: images/keepassx.png
