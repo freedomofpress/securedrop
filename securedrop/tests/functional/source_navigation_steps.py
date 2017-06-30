@@ -59,6 +59,16 @@ class SourceNavigationSteps():
         self.assertEqual("SecureDrop | Protecting Journalists and Sources",
                          self.driver.title)
 
+    def _source_proceeds_to_login(self):
+        codename_input = self.driver.find_element_by_id('login-with-existing-codename')
+        codename_input.send_keys(self.source_name)
+
+        continue_button = self.driver.find_element_by_id('login')
+        continue_button.click()
+
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
+                         self.driver.title)
+
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
 
@@ -125,6 +135,23 @@ class SourceNavigationSteps():
             '.success')
         self.assertIn('Thank you for sending this information to us',
                       notification.text)
+
+    def _source_deletes_a_journalist_reply(self):
+        # Get the reply filename so we can use IDs to select the delete buttons
+        reply_filename_element = self.driver.find_element_by_name('reply_filename')
+        reply_filename = reply_filename_element.get_attribute('value')
+
+        delete_button_id = 'delete-reply-{}'.format(reply_filename)
+        delete_button = self.driver.find_element_by_id(delete_button_id)
+        delete_button.click()
+
+        confirm_button_id = 'confirm-delete-reply-button-{}'.format(reply_filename)
+        confirm_button = self.driver.find_element_by_id(confirm_button_id)
+        self.assertTrue(confirm_button.is_displayed())
+        confirm_button.click()
+
+        notification = self.driver.find_element_by_class_name('notification')
+        self.assertIn('Reply deleted', notification.text)
 
     def _source_logs_out(self):
         logout_button = self.driver.find_element_by_id('logout').click()
