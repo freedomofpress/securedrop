@@ -25,9 +25,9 @@ before_install:
   - sudo /etc/init.d/rng-tools restart
 install:
   - pip freeze -l
-  # Preinstalled travis pytest is not tracked by us
-  # Preinstalled travis pbr is not tracked by us
-  - pip uninstall pytest pbr -y
+  # Remove all pre-installed Python packages
+  - pip freeze | xargs pip uninstall -y
+  - pip freeze -l
   - pip install -r testinfra/requirements.txt
   - pip freeze -l
 script:
