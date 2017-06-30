@@ -70,7 +70,8 @@
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-          <img src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
+            <img src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
+          </a>
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>Delete this reply?
               <a href="#delete">Cancel</a>

@@ -69,7 +69,7 @@ class TestSourceApp(TestCase):
         """
         resp = self.client.get('/generate')
         self.assertIn("ALREADY HAVE A CODENAME?", resp.data)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')
 

@@ -80,7 +80,7 @@ class TestIntegration(unittest.TestCase):
         rv = self.journalist_app.get('/')
         self.assertEqual(rv.status_code, 200)
         self.assertIn("Sources", rv.data)
-        soup = BeautifulSoup(rv.data)
+        soup = BeautifulSoup(rv.data, 'html5lib')
 
         # The source should have a "download unread" link that says "1 unread"
         col = soup.select('ul#cols > li')[0]
@@ -90,7 +90,7 @@ class TestIntegration(unittest.TestCase):
         col_url = soup.select('ul#cols > li a')[0]['href']
         resp = self.journalist_app.get(col_url)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-msg", submission_url)
         span = soup.select('ul#submissions li span.info span')[0]
@@ -105,7 +105,7 @@ class TestIntegration(unittest.TestCase):
         # delete submission
         resp = self.journalist_app.get(col_url)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
@@ -115,7 +115,7 @@ class TestIntegration(unittest.TestCase):
         ))
 
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         self.assertIn("The following file has been selected for", resp.data)
 
         # confirm delete submission
@@ -128,7 +128,7 @@ class TestIntegration(unittest.TestCase):
             doc_names_selected=doc_name,
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         self.assertIn("Submission deleted.", resp.data)
 
         # confirm that submission deleted and absent in list of submissions
@@ -164,7 +164,7 @@ class TestIntegration(unittest.TestCase):
         resp = self.journalist_app.get('/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Sources", resp.data)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
 
         # The source should have a "download unread" link that says "1 unread"
         col = soup.select('ul#cols > li')[0]
@@ -174,7 +174,7 @@ class TestIntegration(unittest.TestCase):
         col_url = soup.select('ul#cols > li a')[0]['href']
         resp = self.journalist_app.get(col_url)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         submission_url = soup.select('ul#submissions li a')[0]['href']
         self.assertIn("-doc", submission_url)
         span = soup.select('ul#submissions li span.info span')[0]
@@ -193,7 +193,7 @@ class TestIntegration(unittest.TestCase):
         # delete submission
         resp = self.journalist_app.get(col_url)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         doc_name = soup.select(
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
@@ -203,7 +203,7 @@ class TestIntegration(unittest.TestCase):
         ))
 
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         self.assertIn("The following file has been selected for", resp.data)
 
         # confirm delete submission
@@ -216,7 +216,7 @@ class TestIntegration(unittest.TestCase):
             doc_names_selected=doc_name,
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         self.assertIn("Submission deleted.", resp.data)
 
         # confirm that submission deleted and absent in list of submissions
@@ -304,7 +304,7 @@ class TestIntegration(unittest.TestCase):
         resp = self.journalist_app.get('/')
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Sources", resp.data)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         col_url = soup.select('ul#cols > li a')[0]['href']
 
         resp = self.journalist_app.get(col_url)
@@ -352,7 +352,7 @@ class TestIntegration(unittest.TestCase):
             resp = journalist_app.get(col_url)
             self.assertIn("reply-", resp.data)
 
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
 
         # Download the reply and verify that it can be decrypted with the
         # journalist's key as well as the source's reply key
@@ -391,7 +391,8 @@ class TestIntegration(unittest.TestCase):
                     "You have received a reply. To protect your identity",
                     resp.data)
                 self.assertIn(test_reply, resp.data)
-                soup = BeautifulSoup(resp.data)
+                soup = BeautifulSoup(resp.data, 'html5lib')
+                # import pdb; pdb.set_trace()
                 msgid = soup.select(
                     'form.message > input[name="reply_filename"]')[0]['value']
                 resp = source_app.post('/delete', data=dict(
@@ -420,13 +421,13 @@ class TestIntegration(unittest.TestCase):
 
         resp = self.journalist_app.get('/')
         # navigate to the collection page
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         first_col_url = soup.select('ul#cols > li a')[0]['href']
         resp = self.journalist_app.get(first_col_url)
         self.assertEqual(resp.status_code, 200)
 
         # find the delete form and extract the post parameters
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         delete_form_inputs = soup.select('form#delete_collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
@@ -458,7 +459,7 @@ class TestIntegration(unittest.TestCase):
 
         resp = self.journalist_app.get('/')
         # get all the checkbox values
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         checkbox_values = [checkbox['value'] for checkbox in
                            soup.select('input[name="cols_selected"]')]
         resp = self.journalist_app.post('/col/process', data=dict(
@@ -481,13 +482,13 @@ class TestIntegration(unittest.TestCase):
 
         # navigate to the collection page
         resp = self.journalist_app.get('/')
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         first_col_url = soup.select('ul#cols > li a')[0]['href']
         resp = self.journalist_app.get(first_col_url)
         self.assertEqual(resp.status_code, 200)
 
         # test filenames and sort order
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         for i, submission_link in enumerate(
                 soup.select('ul#submissions li a .filename')):
@@ -504,16 +505,16 @@ class TestIntegration(unittest.TestCase):
 
         # navigate to the collection page
         resp = self.journalist_app.get('/')
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
         first_col_url = soup.select('ul#cols > li a')[0]['href']
         resp = self.journalist_app.get(first_col_url)
         self.assertEqual(resp.status_code, 200)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
 
         # delete file #2
         self.helper_filenames_delete(soup, 1)
         resp = self.journalist_app.get(first_col_url)
-        soup = BeautifulSoup(resp.data)
+        soup = BeautifulSoup(resp.data, 'html5lib')
 
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
