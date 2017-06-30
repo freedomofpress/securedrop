@@ -4,7 +4,7 @@ import os
 from flask import url_for
 import flask_testing
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from db import Journalist, BadTokenException
 import journalist
 import utils
@@ -33,10 +33,10 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         if token is None:
             token = self.admin.totp.now()
-        resp = self.client.post(url_for('login'),
-                                data=dict(username=self.admin.username,
-                                          password=self.admin_pw,
-                                          token=token))
+        self.client.post(url_for('login'),
+                         data=dict(username=self.admin.username,
+                                   password=self.admin_pw,
+                                   token=token))
 
     def _login_user(self, token=None):
         """Analagous to `_login_admin()` except for a non-admin user.
@@ -70,9 +70,9 @@ class TestJournalist2FA(flask_testing.TestCase):
         with self.assertRaises(BadTokenException):
             Journalist.login(self.user.username, self.user_pw, valid_token)
 
-
     def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(self):
-        # Regression test https://github.com/freedomofpress/securedrop/pull/1692
+        # Regression test
+        # https://github.com/freedomofpress/securedrop/pull/1692
         self._login_admin()
 
         # Create and submit an invalid 2FA token
@@ -95,7 +95,8 @@ class TestJournalist2FA(flask_testing.TestCase):
         self.assertMessageFlashed('Two-factor token failed to verify', 'error')
 
     def test_bad_token_fails_to_verify_on_new_user_two_factor_page(self):
-        # Regression test https://github.com/freedomofpress/securedrop/pull/1692
+        # Regression test
+        # https://github.com/freedomofpress/securedrop/pull/1692
         self._login_user()
 
         # Create and submit an invalid 2FA token
