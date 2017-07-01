@@ -7,6 +7,7 @@ import logging
 import os
 import shutil
 import signal
+import subprocess
 import sys
 import traceback
 
@@ -21,6 +22,36 @@ from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
+
+
+def sh(command, input=None):
+    log.debug(":sh: " + command)
+    if input is None:
+        stdin = None
+    else:
+        stdin = subprocess.PIPE
+    proc = subprocess.Popen(
+        args=command,
+        stdin=stdin,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        shell=True,
+        bufsize=1)
+    if stdin is not None:
+        proc.stdin.write(input)
+        proc.stdin.close()
+    lines = []
+    with proc.stdout:
+        for line in iter(proc.stdout.readline, b''):
+            line = line.decode('utf-8')
+            lines.append(line)
+            log.debug(line.strip().encode('ascii', 'ignore'))
+    if proc.wait() != 0:
+        raise subprocess.CalledProcessError(
+            returncode=proc.returncode,
+            cmd=command
+        )
+    return "".join(lines)
 
 
 def reset(args):  # pragma: no cover
