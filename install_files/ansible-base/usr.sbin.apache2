@@ -232,6 +232,7 @@
   /etc/apache2/mods-available/socache_shmcb.load r,
   /run/lock/apache2/ssl-cache.* rwk,
   /var/lib/ssl/* r,
+  /etc/timezone r,
 
   ^DEFAULT_URI {
   }
