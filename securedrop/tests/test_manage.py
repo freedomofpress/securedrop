@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import argparse
+import os
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+import config
+import logging
 import manage
 import mock
 import pytest
 from StringIO import StringIO
 import subprocess
 import sys
+import time
 import unittest
+import version
 
 import utils
 
@@ -54,6 +61,116 @@ class TestManagementCommand(unittest.TestCase):
         self.assertEqual(return_value, 1)
         self.assertIn('ERROR: That username is already taken!',
                       sys.stdout.getvalue())
+
+
+class TestManage(object):
+
+    def setup(self):
+        utils.env.setup()
+
+    def teardown(self):
+        utils.env.teardown()
+
+    def test_translate_compile_code_and_template(self):
+        source = [
+            'tests/i18n/code.py',
+            'tests/i18n/template.html',
+        ]
+        kwargs = {
+            'translations_dir': config.TEMP_DIR,
+            'mapping': 'tests/i18n/babel.cfg',
+            'source': source,
+            'extract_update': True,
+            'compile': True,
+            'verbose': logging.DEBUG,
+            'version': version.__version__,
+        }
+        args = argparse.Namespace(**kwargs)
+        manage.setup_verbosity(args)
+        manage.translate(args)
+        messages_file = os.path.join(config.TEMP_DIR, 'messages.pot')
+        assert os.path.exists(messages_file)
+        pot = open(messages_file).read()
+        assert 'code hello i18n' in pot
+        assert 'template hello i18n' in pot
+
+        locale = 'en_US'
+        locale_dir = os.path.join(config.TEMP_DIR, locale)
+        manage.sh("pybabel init -i {} -d {} -l {}".format(
+            messages_file,
+            config.TEMP_DIR,
+            locale,
+        ))
+        mo_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.mo')
+        assert not os.path.exists(mo_file)
+        manage.translate(args)
+        assert os.path.exists(mo_file)
+        mo = open(mo_file).read()
+        assert 'code hello i18n' in mo
+        assert 'template hello i18n' in mo
+
+    def test_translate_compile_arg(self):
+        source = [
+            'tests/i18n/code.py',
+        ]
+        kwargs = {
+            'translations_dir': config.TEMP_DIR,
+            'mapping': 'tests/i18n/babel.cfg',
+            'source': source,
+            'extract_update': True,
+            'compile': False,
+            'verbose': logging.DEBUG,
+            'version': version.__version__,
+        }
+        args = argparse.Namespace(**kwargs)
+        manage.setup_verbosity(args)
+        manage.translate(args)
+        messages_file = os.path.join(config.TEMP_DIR, 'messages.pot')
+        assert os.path.exists(messages_file)
+        pot = open(messages_file).read()
+        assert 'code hello i18n' in pot
+
+        locale = 'en_US'
+        locale_dir = os.path.join(config.TEMP_DIR, locale)
+        po_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.po')
+        manage.sh("pybabel init -i {} -d {} -l {}".format(
+            messages_file,
+            config.TEMP_DIR,
+            locale,
+        ))
+        assert os.path.exists(po_file)
+        # pretend this happened a few seconds ago
+        few_seconds_ago = time.time() - 60
+        os.utime(po_file, (few_seconds_ago, few_seconds_ago))
+
+        mo_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.mo')
+
+        #
+        # Extract+update but do not compile
+        #
+        old_po_mtime = os.path.getmtime(po_file)
+        assert not os.path.exists(mo_file)
+        manage.translate(args)
+        assert not os.path.exists(mo_file)
+        current_po_mtime = os.path.getmtime(po_file)
+        assert old_po_mtime < current_po_mtime
+
+        #
+        # Compile but do not extract+update
+        #
+        source = [
+            'tests/i18n/code.py',
+            'tests/i18n/template.html',
+        ]
+        kwargs['extract_update'] = False
+        kwargs['compile'] = True
+        args = argparse.Namespace(**kwargs)
+        old_po_mtime = current_po_mtime
+        manage.translate(args)
+        assert old_po_mtime == current_po_mtime
+        mo = open(mo_file).read()
+        assert 'code hello i18n' in mo
+        assert 'template hello i18n' not in mo
 
 
 class TestSh(object):
