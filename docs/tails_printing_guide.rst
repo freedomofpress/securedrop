@@ -105,7 +105,7 @@ Click **Add**.
 
 |add new printer|
 
-Immediately, Tails will recongize the plugged-in printer, and make the
+Immediately, Tails will recognize the plugged-in printer, and make the
 best suggestion from its on-board database of printer drivers.
 
 |searching for drivers...|
@@ -165,6 +165,36 @@ a process of trial-and-error.
 
 |perfect test print|
 
+Printing from the Command Line
+------------------------------
+
+You  can also easily print from the command line using the ``lp`` command; if
+you haven't already set your installed printer as default in the GUI, you can
+quickly do so by adding this line to your ``~/.bashrc`` file, or entering it
+directly into the terminal:
+
+.. code:: sh
+
+   export PRINTER=Printer-Name-Here
+
+If you need to find the name of the printer, you can use ``lpstat`` to get a
+list of installed printers, as such:
+
+.. code:: sh
+
+   lpstat -a
+
+Once you've set your default printer, you can easily print from the terminal by
+using the following syntax:
+
+.. code:: sh
+
+   lp filename.extension
+
+While printing from the GUI is much easier, once you've got everything set up,
+it's equally straightforward from the command line, if you prefer that
+environment.
+
 .. |no network connection required| image:: images/printer_setup_guide/tails_desktop_no_network.png
 .. |navigate to Printing| image:: images/printer_setup_guide/path_to_printer_settings.png
 .. |add new printer| image:: images/printer_setup_guide/printer_list.png
@@ -180,3 +210,8 @@ a process of trial-and-error.
 .. |change make and model| image:: images/printer_setup_guide/change_make_and_model.png
 .. |custom choice for make and model| image:: images/printer_setup_guide/driver_search_results_custom.png
 .. |perfect test print| image:: images/printer_setup_guide/good_test_page.png
+.. |select printer to add| image:: images/printer_setup_guide/select_printer_to_add.png
+.. |select printer from settings| image:: images/printer_setup_guide/select_printer_from_settings.png
+.. |printer ready| image:: images/printer_setup_guide/printer_ready.png
+.. |printer installing| image:: images/printer_setup_guide/printer_installing.png
+.. |add printer| image:: images/printer_setup_guide/add_printer.png
