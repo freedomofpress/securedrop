@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SecureDrop | Protecting Journalists and Sources</title>
 
-    <link rel="stylesheet" href="/static/css/source.css">
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    {% assets "source_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='i/favicon.png') }}" >
     {% block extrahead %}{% endblock %}
   </head>
   <body>
@@ -16,12 +18,12 @@
       {% block header %}
       <div id="header">
         <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}">
-          <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
+          <img src="{{ url_for('static', filename='i/'+header_image ) }}" class="logo small" alt="SecureDrop" width="250px">
         </a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          <img src="{{ url_for('static', filename='i/securedrop_small.png') }}" alt="SecureDrop">
         </div>
         {% endif %}
       </div>

@@ -9,7 +9,7 @@ import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 from flask_wtf.csrf import CSRFProtect
-from flask_assets import Environment
+from flask_assets import Bundle, Environment
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -37,7 +37,20 @@ app.config.from_object(config.SourceInterfaceFlaskConfig)
 
 i18n.setup_app(app)
 
+bundles = {
+    'source_js': Bundle(
+        "js/libs/jquery-2.1.4.min.js",
+        'js/source.js',
+        output='gen/source.js',
+        filters='jsmin'),
+    'source_css': Bundle(
+        '../sass/source.sass',
+        output='gen/source.css',
+        filters='sass'),
+}
+
 assets = Environment(app)
+assets.register(bundles)
 
 # The default CSRF token expiration is 1 hour. Since large uploads can
 # take longer than an hour over Tor, we increase the valid window to 24h.
