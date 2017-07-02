@@ -6,7 +6,7 @@ import functools
 from flask import (Flask, request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CSRFProtect
-from flask_assets import Environment
+from flask_assets import Bundle, Environment
 from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -30,7 +30,20 @@ CSRFProtect(app)
 
 i18n.setup_app(app)
 
+bundles = {
+    'journalist_js': Bundle(
+        "js/libs/jquery-2.1.4.min.js",
+        'js/journalist.js',
+        output='gen/journalist.js',
+        filters='jsmin'),
+    'journalist_css': Bundle(
+        '../sass/journalist.sass',
+        output='gen/journalist.css',
+        filters='sass'),
+}
+
 assets = Environment(app)
+assets.register(bundles)
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):

@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SecureDrop</title>
 
-    <link rel="stylesheet" href="/static/css/journalist.css">
+    {% assets "journalist_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
 
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='i/favicon.png') }}">
 
-    {% assets filters="jsmin", output="gen/journalist.js",
-      "js/libs/jquery-2.1.4.min.js", "js/journalist.js" %}
+    {% assets "journalist_js" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
     {% block extrahead %}{% endblock %}
@@ -31,11 +32,11 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='i/'+header_image) }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% if use_custom_header_image %}
         <div class="powered">
           Powered by<br>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          <img src="{{ url_for('static', filename='i/securedrop_small.png') }}" alt="SecureDrop">
         </div>
         {% endif %}
       </div>
