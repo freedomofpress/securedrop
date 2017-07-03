@@ -30,6 +30,11 @@ custom_notification_text: ""
 # because it requires an organization to procure an EV certificate for HTTPS.
 securedrop_app_https_on_source_interface: no
 
+# Interface for Apache to listen on. Since the vhosts are served over Tor
+# as Onion URLs, bind to localhost.
+securedrop_app_apache_listening_address: 127.0.0.1
+securedrop_app_apache_allow_from: 127.0.0.1
+
 # Default values for looking up the certificate files on Admin Workstation.
 # Can be overridden, of course, but simplest if the files are saved
 # with the names below.

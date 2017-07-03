@@ -2,18 +2,7 @@ import pytest
 import re
 
 
-# Hard-coding test vars for development during
-# transition from ServerSpec to TestInfra. Test vars
-# should be imported based on hostname.
-securedrop_test_vars = dict(
-    securedrop_user="vagrant",
-    securedrop_code="/var/www/securedrop",
-    securedrop_data="/var/lib/securedrop",
-    apache_allow_from="all",
-    apache_listening_address="0.0.0.0",
-    apache_source_log="/var/log/apache2/source-error.log",
-)
-
+securedrop_test_vars = pytest.securedrop_test_vars
 
 # Setting once so it can be reused in multiple tests.
 wanted_apache_headers = [
@@ -79,17 +68,19 @@ common_apache2_directory_declarations = """
     Deny from all
   </LimitExcept>
 </Directory>
-""".lstrip().rstrip().format(**securedrop_test_vars)
+""".lstrip().rstrip().format(
+        apache_allow_from=securedrop_test_vars.apache_allow_from,
+        securedrop_code=securedrop_test_vars.securedrop_code)
 
 
 # declare journalist-specific apache configs
 @pytest.mark.parametrize("apache_opt", [
-  "<VirtualHost {}:8080>".format(securedrop_test_vars['apache_listening_address']),
-  "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(securedrop_test_vars['securedrop_code']),
+  "<VirtualHost {}:8080>".format(securedrop_test_vars.apache_listening_address),
+  "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(securedrop_test_vars.securedrop_code),
   'WSGIProcessGroup journalist',
   'WSGIScriptAlias / /var/www/journalist.wsgi',
   'Header set Cache-Control "no-store"',
-  "Alias /static {}/static".format(securedrop_test_vars['securedrop_code']),
+  "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
   """
 <Directory {}/static>
   Order allow,deny
@@ -97,7 +88,7 @@ common_apache2_directory_declarations = """
   # Cache static resources for 1 hour
   Header set Cache-Control "max-age=3600"
 </Directory>
-""".strip('\n').format(securedrop_test_vars['securedrop_code']),
+""".strip('\n').format(securedrop_test_vars.securedrop_code),
   'XSendFile        On',
   'LimitRequestBody 524288000',
   'XSendFilePath    /var/lib/securedrop/store/',

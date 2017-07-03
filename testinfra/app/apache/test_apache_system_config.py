@@ -2,18 +2,7 @@ import pytest
 import re
 
 
-# Hard-coding test vars for development during
-# transition from ServerSpec to TestInfra. Test vars
-# should be imported based on hostname.
-securedrop_test_vars = dict(
-    securedrop_user="vagrant",
-    securedrop_code="/var/www/securedrop",
-    securedrop_data="/var/lib/securedrop",
-    apache_allow_from="all",
-    apache_listening_address="0.0.0.0",
-    apache_source_log="/var/log/apache2/source-error.log",
-)
-
+securedrop_test_vars = pytest.securedrop_test_vars
 
 @pytest.mark.parametrize("package", [
     "apache2-mpm-worker",
@@ -92,7 +81,7 @@ def test_apache_ports_config(File, SystemInfo, port):
     assert oct(f.mode) == "0644"
 
     listening_regex = "^Listen {}:{}$".format(re.escape(
-            securedrop_test_vars['apache_listening_address']), port)
+            securedrop_test_vars.apache_listening_address), port)
     assert f.contains(listening_regex)
 
 
