@@ -80,7 +80,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         assert self.last_action != 'read', 'You cannot write after reading!'
         self.last_action = 'write'
 
-        if isinstance(data, unicode):
+        if isinstance(data, unicode):  # noqa
             data = data.encode('utf-8')
 
         self.file.write(self.encryptor.encrypt(data))
@@ -90,7 +90,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         be called any number of times following instance initialization
         and once :meth:`write has been called at least once, but not
         before.
-        
+
         Before the first read operation, `seek(0, 0)` is called. So
         while you can call this method any number of times, the full
         contents of the file can only be read once. Additional calls to
