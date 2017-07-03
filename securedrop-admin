@@ -189,7 +189,7 @@ def install_pip_dependencies(args):
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
-    activate_venv()
+    activate_venv(args)
     # Yaml library cannot be imported until virtualenv is activated
     # (hence the yaml library is not imported up-top)
     import yaml
@@ -219,7 +219,7 @@ def install_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    activate_venv()
+    activate_venv(args)
     sdlog.info("Configuring Tails workstation environment")
     subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
                            "--ask-become-pass",
