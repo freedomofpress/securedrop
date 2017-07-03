@@ -6,7 +6,6 @@ import os
 import re
 import shutil
 import tempfile
-import time
 import unittest
 import zipfile
 
@@ -14,7 +13,7 @@ from bs4 import BeautifulSoup
 from flask import session, g, escape
 import gnupg
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 from db import db_session, Journalist
@@ -60,13 +59,13 @@ class TestIntegration(unittest.TestCase):
         utils.env.teardown()
 
     def test_submit_message(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """When a source creates an account, test that a new entry appears
+        in the journalist interface"""
         test_msg = "This is a test message."
 
         with self.source_app as source_app:
             resp = source_app.get('/generate')
             resp = source_app.post('/create', follow_redirects=True)
-            codename = session['codename']
             sid = g.sid
             # redirected to submission form
             resp = self.source_app.post('/submit', data=dict(
@@ -144,14 +143,14 @@ class TestIntegration(unittest.TestCase):
         )
 
     def test_submit_file(self):
-        """When a source creates an account, test that a new entry appears in the journalist interface"""
+        """When a source creates an account, test that a new entry appears
+        in the journalist interface"""
         test_file_contents = "This is a test file."
         test_filename = "test.txt"
 
         with self.source_app as source_app:
             resp = source_app.get('/generate')
             resp = source_app.post('/create', follow_redirects=True)
-            codename = session['codename']
             sid = g.sid
             # redirected to submission form
             resp = self.source_app.post('/submit', data=dict(
@@ -378,7 +377,7 @@ class TestIntegration(unittest.TestCase):
 
         with self.source_app as source_app:
             resp = source_app.post('/login', data=dict(codename=codename),
-                                 follow_redirects=True)
+                                   follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             resp = source_app.get('/lookup')
             self.assertEqual(resp.status_code, 200)
@@ -431,10 +430,11 @@ class TestIntegration(unittest.TestCase):
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
         resp = self.journalist_app.post('/col/delete/' + sid,
-                                      follow_redirects=True)
+                                        follow_redirects=True)
         self.assertEquals(resp.status_code, 200)
 
-        self.assertIn(escape("%s's collection deleted" % (col_name,)), resp.data)
+        self.assertIn(escape("%s's collection deleted" % (col_name,)),
+                      resp.data)
         self.assertIn("No documents have been submitted!", resp.data)
 
         # Make sure the collection is deleted from the filesystem
@@ -473,7 +473,8 @@ class TestIntegration(unittest.TestCase):
             any([os.path.exists(store.path(sid)) for sid in checkbox_values])))
 
     def test_filenames(self):
-        """Test pretty, sequential filenames when source uploads messages and files"""
+        """Test pretty, sequential filenames when source uploads messages
+        and files"""
         # add a source and submit stuff
         self.source_app.get('/generate')
         self.source_app.post('/create')
@@ -528,7 +529,8 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(re.match(submission_filename_re.format(4), filename))
 
     def test_user_change_password(self):
-        """Test that a journalist can successfully login after changing their password"""
+        """Test that a journalist can successfully login after changing
+        their password"""
 
         # change password
         self.journalist_app.post('/account', data=dict(
@@ -597,7 +599,8 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertIn(
-            "The following file has been selected for <strong>permanent deletion</strong>",
+            "The following file has been selected for"
+            " <strong>permanent deletion</strong>",
             resp.data)
 
         # confirm delete
@@ -611,4 +614,5 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the files were deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
-            any([os.path.exists(store.path(sid, doc_name)) for doc_name in checkbox_values])))
+            any([os.path.exists(store.path(sid, doc_name))
+                 for doc_name in checkbox_values])))
