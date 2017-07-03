@@ -219,6 +219,7 @@
   /var/www/securedrop/store/** rw,
   /var/www/securedrop/template_filters.py r,
   /var/www/securedrop/template_filters.pyc rw,
+  /var/www/securedrop/translations/*/LC_MESSAGES/messages.mo r,
   /var/www/securedrop/version.py r,
   /var/www/securedrop/version.pyc rw,
   /var/www/securedrop/wordlist r,
