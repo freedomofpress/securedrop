@@ -217,10 +217,7 @@ Workstation* drives:
      :ref:`Set up the Admin Workstation <Checkout and Verify the Current Release
      Tag>`. You should already have the **SecureDrop Release Signing Key**
      stored by Tails persistence, so you won't need to download it again.
-     Additionally, you skip the ``cd securedrop/`` step in those instructions,
-     as your terminal will already be open to the root SecureDrop directory,
-     which is necessary to execute the next step.
-  #. Run the command ``./securedrop-admin tailsconfig``. If you working on a
+  #. Run the command ``./securedrop-admin tailsconfig``. If you are working on a
      *Journalist Workstation* and did not previously copy the the
      ``app-journalist-aths`` and ``app-source-ths`` from the *Admin Workstation*
      via the *Transfer Device* to

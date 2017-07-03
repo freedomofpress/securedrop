@@ -105,7 +105,7 @@ key:
 
 .. code:: sh
 
-    cd securedrop/
+    cd ~/Persistent/securedrop/
     git checkout 0.3.12
     git tag -v 0.3.12
 

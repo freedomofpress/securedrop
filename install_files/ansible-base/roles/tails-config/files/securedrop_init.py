@@ -42,7 +42,7 @@ except subprocess.CalledProcessError:
     sys.exit('Error reloading Tor')
 
 # Turn off "automatic-decompression" in Nautilus to ensure the original
-# submission filename is restore (see
+# submission filename is restored (see
 # https://github.com/freedomofpress/securedrop/issues/1862#issuecomment-311519750).
 subprocess.call(['/usr/bin/dconf', 'write',
                  '/org/gnome/nautilus/preferences/automatic-decompression',
