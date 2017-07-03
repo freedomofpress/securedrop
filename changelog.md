@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.4
+
+The issues for this release were tracked in the 0.4 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.4.
+
+This changelog shows major changes below. Please diff the tags to see the full list of changes. 
+
+### Deployment
+
+* Enable optional HTTPS on the source interface (#1605).
+* Allow admin to set custom text to appear on the source interface (#774).
+* Standardize SecureDrop server installation on a single username (#1796). 
+* Add `securedrop-admin` script and update version of Ansible running in the workstation (#1146, #1885).
+* Add validation of user-provided values during SecureDrop installation (#1663, #749, #1257).
+* Removes `prod-specific.yml` configuration file (#1758).
+* Allow an administrator to set a custom daily reboot time (#1515).
+* Renames "document interface" to "journalist interface" (#1384, #1614).
+* Adds "Email from" option to OSSEC (#894, #1220).
+* Updated template for Firewall and adds instructions on how to use it (#1122, #1648)
+* Bugfix: Re-enable logging on journalist interface (#1606).
+
+### Developer Workflow
+
+* Reconciles divergent master and develop branches (#1559).
+* Increases unit test coverage to from 65% to 92%. 
+* Adds testinfra system configuration test suite (#1580). 
+* Removes unnecessary test wrappers (#1412).
+* Major improvements to SecureDrop CI and testing flow including adding the staging environment to CI (#1067). 
+
+### Web App: Source
+
+* Mask codename on source interface (#525).
+* Replace confusing text on source interface landing bar (#1713).
+* Refresh of source UI (#1536, #1895, #1604).
+* Add metadata endpoint to source webapp for monitoring (#972).
+* Begin using EFF wordlist (#1361).
+
+### Web App: Journalist
+
+* Feature: Add unread submission icon and select all unread button to submission view (#1353).
+* Refresh of journalist UI (#1604).
+* Adds minimum password length requirements for new journalist accounts (#980).
+* Delete submissions that have had their sources deleted (#1188).
+* Bugfix: Empty replies can no longer be sent to a source (#1715).
+* Bugfix: Handle non hexadecimal digits for the 2FA secret (#1869). 
+* Bugfix: Handle token reuse for the 2FA secret on /admin/2fa (#1687).
+* Bugfix: Handle attempts to make duplicate user accounts (#1693). 
+* Bugfix: Fix confusing UI on message/reply icons (#1258). 
+
+### Tails Environment
+
+* Improve folder structure for SecureDrop documents (#383).
+* Bugfix: Update provided KeePassX template to kdbx format (#1831).
+* Bugfix: Ensure the filename is restored when uncompressing an archive (#1862).
+
+### Documentation
+
+* Adds "What makes SecureDrop unique?" guide (#469).
+* Adds passphrase best practices guide (#1136).
+* Adds SecureDrop promotion guide (#1134).
+* Adds Administrator responsibilities guide (#1727).
+* Other minor miscelleanous documentation improvements.
+
 ## 0.3.12
 
 * Disables swap on Application Server via preinst script on
