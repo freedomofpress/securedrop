@@ -63,7 +63,7 @@
 
     - name: securedrop_app_https_on_source_interface
       prompt: Whether HTTPS should be enabled on Source Interface (requires EV cert)
-      default: no
+      default: "no"
       private: no
 
     - name: securedrop_app_gpg_fingerprint
@@ -173,6 +173,8 @@
           var_value: "{{ sasl_username }}"
         - var_name: sasl_password
           var_value: "{{ sasl_password }}"
+        - var_name: securedrop_app_https_on_source_interface
+          var_value: "{{ securedrop_app_https_on_source_interface | bool}}"
 
 - name: Validate site-specific information.
   hosts: localhost
