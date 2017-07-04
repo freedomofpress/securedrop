@@ -2,17 +2,7 @@ import pytest
 import re
 
 
-# Hard-coding test vars for development during
-# transition from ServerSpec to TestInfra. Test vars
-# should be imported based on hostname.
-securedrop_test_vars = dict(
-    securedrop_user="vagrant",
-    securedrop_code="/var/www/securedrop",
-    securedrop_data="/var/lib/securedrop",
-    apache_allow_from="all",
-    apache_listening_address="0.0.0.0",
-    apache_source_log="/var/log/apache2/source-error.log",
-)
+securedrop_test_vars = pytest.securedrop_test_vars
 
 
 @pytest.mark.parametrize("apache_site", [
@@ -75,5 +65,5 @@ def test_apache_listening(Socket, Sudo, port):
     """
     # Sudo is necessary to read from /proc/net/tcp.
     with Sudo():
-        s = Socket("tcp://{}:{}".format(securedrop_test_vars['apache_listening_address'], port))
+        s = Socket("tcp://{}:{}".format(securedrop_test_vars.apache_listening_address, port))
         assert s.is_listening

@@ -17,9 +17,9 @@ securedrop_user: www-data
 app_hostname: app-staging
 monitor_hostname: mon-staging
 
-apache_listening_address: 0.0.0.0
+apache_listening_address: 127.0.0.1
 apache_source_log: /var/log/apache2/source-error.log
-apache_allow_from: all
+apache_allow_from: 127.0.0.1
 
 dns_server: "8.8.8.8"
 mon_ip: 10.0.1.3

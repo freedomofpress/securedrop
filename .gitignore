@@ -14,6 +14,10 @@ app-document-aths # leave this here for historic reasons
 app-journalist-aths
 app-source-ths
 mon-ssh-aths
+*.key
+*.csr
+*.pem
+*.crt
 
 # ignore ansible retry files
 *.retry

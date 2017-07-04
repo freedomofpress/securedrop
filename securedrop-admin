@@ -34,10 +34,12 @@ def setup_logger(verbose=False):
     sdlog.addHandler(stdout)
 
 
-def activate_venv():
+def activate_venv(args):
     """Use to activate the local virtualenv"""
     try:
-        execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
+        # If developer mode enabled, no need to enable virtualenv
+        if not args.d:
+            execfile(VENV_ACTIVATION, dict(__file__=VENV_ACTIVATION))
     except IOError:
         sdlog.error("Pre-requisites not in place, re-run command with 'setup'")
         sys.exit(1)
@@ -45,7 +47,7 @@ def activate_venv():
 
 def sdconfig(args):
     """Configure SD site settings"""
-    activate_venv()
+    activate_venv(args)
 
     ansible_cmd = [
         'ansible-playbook',
@@ -187,7 +189,7 @@ def install_pip_dependencies(args):
 
 def install_securedrop(args):
     """Install/Update SecureDrop"""
-    activate_venv()
+    activate_venv(args)
     # Yaml library cannot be imported until virtualenv is activated
     # (hence the yaml library is not imported up-top)
     import yaml
@@ -217,7 +219,7 @@ def install_securedrop(args):
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
-    activate_venv()
+    activate_venv(args)
     sdlog.info("Configuring Tails workstation environment")
     subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
                            "--ask-become-pass",
@@ -231,6 +233,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-v', action='store_true', default=False,
                             help="Increase verbosity on output")
+    parser.add_argument('-d', action='store_true', default=False,
+                            help="Developer mode. Not to be used in production.")
     subparsers = parser.add_subparsers()
 
     parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
