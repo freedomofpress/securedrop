@@ -35,6 +35,18 @@ def test_securedrop_application_apt_dependencies(Package, package):
     assert Package(package).is_installed
 
 
+def test_securedrop_application_test_locale(File, Sudo):
+    """
+    Ensure SecureDrop DEFAULT_LOCALE is present.
+    """
+    securedrop_config = File("{}/config.py".format(
+        securedrop_test_vars.securedrop_code))
+    with Sudo():
+        assert securedrop_config.is_file
+        assert securedrop_config.contains("^DEFAULT_LOCALE")
+        assert securedrop_config.content.count("DEFAULT_LOCALE") == 1
+
+
 def test_securedrop_application_test_journalist_key(File, Sudo):
     """
     Ensure the SecureDrop Application GPG public key file is present.

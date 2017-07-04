@@ -180,3 +180,12 @@
   tags:
     - logo
     - securedrop_config
+
+- name: Add DEFAULT_LOCALE to config.py if missing.
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    line: "DEFAULT_LOCALE = '{{ securedrop_default_locale }}'"
+    regexp: "^DEFAULT_LOCALE"
+  when: db.stat.exists
+  tags:
+    - securedrop_config
