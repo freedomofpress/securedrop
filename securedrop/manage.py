@@ -13,13 +13,13 @@ import psutil
 import qrcode
 from sqlalchemy.orm.exc import NoResultFound
 
-os.environ['SECUREDROP_ENV'] = 'dev'
+os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 from db import db_session, init_db, Journalist
 from management import run
 
 
-def reset(): # pragma: no cover
+def reset():  # pragma: no cover
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -32,7 +32,7 @@ def reset(): # pragma: no cover
                                               'backend is not sqlite')
     try:
         os.remove(config.DATABASE_FILE)
-    except OSError as exc:
+    except OSError:
         pass
 
     # Regenerate the database
@@ -41,27 +41,28 @@ def reset(): # pragma: no cover
     # Clear submission/reply storage
     try:
         os.stat(config.STORE_DIR)
-    except OSError as exc:
+    except OSError:
         pass
     else:
         for source_dir in os.listdir(config.STORE_DIR):
             try:
-                # Each entry in STORE_DIR is a directory corresponding to a source
+                # Each entry in STORE_DIR is a directory corresponding
+                # to a source
                 shutil.rmtree(os.path.join(config.STORE_DIR, source_dir))
-            except OSError as exc:
+            except OSError:
                 pass
     return 0
 
 
-def add_admin(): # pragma: no cover
+def add_admin():  # pragma: no cover
     return _add_user(is_admin=True)
 
 
-def add_journalist(): # pragma: no cover
+def add_journalist():  # pragma: no cover
     return _add_user()
 
 
-def _add_user(is_admin=False): # pragma: no cover
+def _add_user(is_admin=False):  # pragma: no cover
     while True:
         username = raw_input('Username: ')
         password = getpass('Password: ')
@@ -129,7 +130,7 @@ def _add_user(is_admin=False): # pragma: no cover
         return 0
 
 
-def delete_user(): # pragma: no cover
+def delete_user():  # pragma: no cover
     """Deletes a journalist or administrator from the application."""
     # Select user to delete
     username = raw_input('Username to delete: ')
@@ -167,7 +168,7 @@ def delete_user(): # pragma: no cover
     return 0
 
 
-def clean_tmp(): # pragma: no cover
+def clean_tmp():  # pragma: no cover
     """Cleanup the SecureDrop temp directory. This is intended to be run
     as an automated cron job. We skip files that are currently in use to
     avoid deleting files that are currently being downloaded."""
@@ -177,7 +178,7 @@ def clean_tmp(): # pragma: no cover
             try:
                 open_files = proc.open_files()
                 in_use = False or any([open_file.path == fname
-                                        for open_file in open_files])
+                                       for open_file in open_files])
                 # Early return for perf
                 if in_use:
                     break
@@ -195,7 +196,7 @@ def clean_tmp(): # pragma: no cover
 
     try:
         os.stat(config.TEMP_DIR)
-    except OSError as exc:
+    except OSError:
         pass
     else:
         for path in listdir_fullpath(config.TEMP_DIR):
@@ -246,7 +247,7 @@ def get_args():
     return parser
 
 
-def _run_from_commandline(): # pragma: no cover
+def _run_from_commandline():  # pragma: no cover
     try:
         args = get_args().parse_args()
         rc = args.func()
@@ -255,5 +256,5 @@ def _run_from_commandline(): # pragma: no cover
         sys.exit(signal.SIGINT)
 
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
     _run_from_commandline()
