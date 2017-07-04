@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-import os
-import unittest
-
 from flask_testing import TestCase
 import mock
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import journalist
-import crypto_util
 from utils import db_helper, env
-from db import (db_session, Journalist, Submission, Source, Reply,
-                get_one_or_else, LoginThrottledException)
+from db import (Journalist, Submission, Reply, get_one_or_else,
+                LoginThrottledException)
 
 
 class TestDatabase(TestCase):
@@ -28,7 +23,8 @@ class TestDatabase(TestCase):
     def test_get_one_or_else_returns_one(self, mock):
         new_journo, _ = db_helper.init_journalist()
 
-        query = Journalist.query.filter(Journalist.username == new_journo.username)
+        query = Journalist.query.filter(
+            Journalist.username == new_journo.username)
         with mock.patch('logger') as mock_logger:
             selected_journo = get_one_or_else(query, mock_logger, mock)
         self.assertEqual(new_journo, selected_journo)
@@ -39,8 +35,7 @@ class TestDatabase(TestCase):
         journo_2, _ = db_helper.init_journalist()
 
         with mock.patch('logger') as mock_logger:
-            selected_journos = get_one_or_else(Journalist.query, mock_logger,
-                                               mock)
+            get_one_or_else(Journalist.query, mock_logger, mock)
         mock_logger.error.assert_called()  # Not specifying very long log line
         mock.assert_called_with(500)
 
@@ -49,9 +44,9 @@ class TestDatabase(TestCase):
         query = Journalist.query.filter(Journalist.username == "alice")
 
         with mock.patch('logger') as mock_logger:
-            selected_journos = get_one_or_else(query, mock_logger,
-                                               mock)
-        log_line = 'Found none when one was expected: No row was found for one()'
+            get_one_or_else(query, mock_logger, mock)
+        log_line = ('Found none when one was expected: '
+                    'No row was found for one()')
         mock_logger.error.assert_called_with(log_line)
         mock.assert_called_with(404)
 
@@ -59,7 +54,7 @@ class TestDatabase(TestCase):
 
     def test_submission_string_representation(self):
         source, _ = db_helper.init_source()
-        submissions = db_helper.submit(source, 2)
+        db_helper.submit(source, 2)
 
         test_submission = Submission.query.first()
         test_submission.__repr__()
@@ -67,7 +62,7 @@ class TestDatabase(TestCase):
     def test_reply_string_representation(self):
         journalist, _ = db_helper.init_journalist()
         source, _ = db_helper.init_source()
-        replies = db_helper.reply(journalist, source, 2)
+        db_helper.reply(journalist, source, 2)
         test_reply = Reply.query.first()
         test_reply.__repr__()
 
