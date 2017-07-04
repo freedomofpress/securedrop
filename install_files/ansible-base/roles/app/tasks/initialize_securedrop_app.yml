@@ -180,3 +180,11 @@
   tags:
     - logo
     - securedrop_config
+
+- name: Add default LOCALE to config.py if missing.
+  shell: >
+    grep -q LOCALE {{ securedrop_code }}/config.py ||
+    echo "LOCALE = 'en_US'" | tee -a {{ securedrop_code }}/config.py
+  when: db.stat.exists
+  tags:
+    - securedrop_config
