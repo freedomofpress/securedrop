@@ -58,6 +58,6 @@ script:
   # to alter the pip requirements, which would cause config tests to fail.
   - pip install -r securedrop/requirements/develop-requirements.txt
   - make docs-lint
-  - pushd securedrop; flake8 db.py crypto_util.py manage.py store.py secure_tempfile.py source.py template_filters.py tests/test_2fa.py tests/conftest.py tests/test_db.py tests/test_manage.py tests/test_crypto_util.py tests/test_journalist.py tests/test_integration.py; popd
+  - pushd securedrop; flake8 db.py crypto_util.py manage.py store.py secure_tempfile.py source.py template_filters.py tests/test_2fa.py tests/conftest.py tests/test_db.py tests/test_manage.py tests/test_crypto_util.py tests/test_journalist.py tests/test_integration.py && popd
 after_success:
   cd securedrop/ && coveralls

@@ -7,7 +7,7 @@ import subprocess
 import psutil
 import pytest
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 
 # TODO: the PID file for the redis worker is hard-coded below.

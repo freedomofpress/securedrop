@@ -5,7 +5,6 @@ import mock
 from StringIO import StringIO
 import sys
 import unittest
-import __builtin__
 
 import utils
 

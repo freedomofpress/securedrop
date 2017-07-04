@@ -113,6 +113,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         else:
             return self.decryptor.decrypt(self.file.read())
 
+
 # python-gnupg will not recognize our SecureTemporaryFile as a stream-like type
 # and will attempt to call encode on it, thinking it's a string-like type. To
 # avoid this we append it the list of stream-like types.
