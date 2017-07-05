@@ -18,6 +18,7 @@ import config
 import json
 import version
 import crypto_util
+import i18n
 import store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
@@ -32,6 +33,8 @@ log = logging.getLogger('source')
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
