@@ -16,6 +16,7 @@ import config
 import version
 import crypto_util
 from rm import srm
+import i18n
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
@@ -26,6 +27,8 @@ import worker
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CSRFProtect(app)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
@@ -63,6 +66,8 @@ def setup_g():
     uid = session.get('uid', None)
     if uid:
         g.user = Journalist.query.get(uid)
+
+    g.locale = i18n.get_locale()
 
     if request.method == 'POST':
         filesystem_id = request.form.get('filesystem_id')
