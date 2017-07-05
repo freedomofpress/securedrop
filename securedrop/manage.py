@@ -16,7 +16,7 @@ from sqlalchemy.orm.exc import NoResultFound
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 from db import db_session, init_db, Journalist
-from management import run
+from management.run import run
 
 
 def reset():  # pragma: no cover
