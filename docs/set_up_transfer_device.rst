@@ -69,7 +69,7 @@ application|
 You won't need to memorize this passphrase or type it more than a few
 times, so feel free to make a good long one. Then click **Format** to continue.
 The Disks utility will ask you if you are sure: click **Format** to continue.
-After a few seconds, you new *Transfer Device* should be ready for use.
+After a few seconds, your new *Transfer Device* should be ready for use.
 If you haven't already, make sure to label it.
 
 Set up the USB Transfer Device on each workstation
