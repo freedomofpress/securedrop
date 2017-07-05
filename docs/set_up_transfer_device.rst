@@ -99,6 +99,6 @@ Device* with, you're good to go!
 .. |screenshot of passphrase selection prompt in the Disk Utility application| image:: images/screenshots/create-passphrase.png
 .. |image of the disk unlock prompt on Tails| image:: images/screenshots/passphrase-keyring.png
 
-.. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
+.. [#] Tails screenshots were taken on Tails 3.0.1. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
        interface is different from what you see here.
