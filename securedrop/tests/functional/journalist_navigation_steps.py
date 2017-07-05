@@ -6,7 +6,8 @@ import datetime
 
 from selenium.common.exceptions import NoSuchElementException
 
-from db import db_session, Journalist
+import tests.utils.db_helper as db_helper
+from db import Journalist
 
 
 class JournalistNavigationSteps():
@@ -26,54 +27,37 @@ class JournalistNavigationSteps():
 
     def _login_user(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field = self.driver.find_element_by_css_selector(
+            'input[name="username"]')
         username_field.send_keys(username)
 
-        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field = self.driver.find_element_by_css_selector(
+            'input[name="password"]')
         password_field.send_keys(password)
 
-        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
+        token_field = self.driver.find_element_by_css_selector(
+            'input[name="token"]')
         token_field.send_keys(token)
 
-        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
         submit_button.click()
 
         # Successful login should redirect to the index
-        self.assertEquals(self.driver.current_url, self.journalist_location + '/')
+        self.assertEquals(self.driver.current_url,
+                          self.journalist_location + '/')
 
     def _journalist_logs_in(self):
         # Create a test user for logging in
-        test_user_info = dict(
-            username='test',
-            password='test')
-        test_user = Journalist(**test_user_info)
-        db_session.add(test_user)
-        db_session.commit()
-
-        self._login_user(test_user_info['username'],
-                         test_user_info['password'],
-                         test_user.totp.now())
+        self.user, self.user_pw = db_helper.init_journalist()
+        self._login_user(self.user.username, self.user_pw, 'mocked')
 
         headline = self.driver.find_element_by_css_selector('span.headline')
         self.assertIn('Sources', headline.text)
 
     def _admin_logs_in(self):
-        # Create a test admin user for logging in
-        admin_user_info = dict(
-            username='admin',
-            password='admin',
-            is_admin=True)
-        admin_user = Journalist(**admin_user_info)
-        db_session.add(admin_user)
-        db_session.commit()
-
-        # Stash the admin user on self so we can use it in later tests
-        self.admin_user = admin_user_info
-        self.admin_user['orm_obj'] = admin_user
-
-        self._login_user(admin_user_info['username'],
-                         admin_user_info['password'],
-                         admin_user.totp.now())
+        self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Admin user should log in to the same interface as a normal user,
         # since there may be users who wish to be both journalists and admins.
@@ -88,36 +72,38 @@ class JournalistNavigationSteps():
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
 
-        h2s = self.driver.find_elements_by_tag_name('h2')
-        self.assertIn("Admin Interface", [el.text for el in h2s])
-
-        users_table_rows = self.driver.find_elements_by_css_selector('table#users tr.user')
-        self.assertEquals(len(users_table_rows), 1)
+        h1s = self.driver.find_elements_by_tag_name('h1')
+        self.assertIn("Admin Interface", [el.text for el in h1s])
 
     def _add_user(self, username, password, is_admin=False):
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field = self.driver.find_element_by_css_selector(
+            'input[name="username"]')
         username_field.send_keys(username)
 
-        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field = self.driver.find_element_by_css_selector(
+            'input[name="password"]')
         password_field.send_keys(password)
 
-        password_again_field = self.driver.find_element_by_css_selector('input[name="password_again"]')
+        password_again_field = self.driver.find_element_by_css_selector(
+            'input[name="password_again"]')
         password_again_field.send_keys(password)
 
         if is_admin:
             # TODO implement (checkbox is unchecked by default)
             pass
 
-        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
         submit_button.click()
 
     def _admin_adds_a_user(self):
-        add_user_btn = self.driver.find_element_by_css_selector('button#add-user')
+        add_user_btn = self.driver.find_element_by_css_selector(
+            'button#add-user')
         add_user_btn.click()
 
-        # The add user page has a form with an "Add user" button
+        # The add user page has a form with an "ADD USER" button
         btns = self.driver.find_elements_by_tag_name('button')
-        self.assertIn('Add user', [el.text for el in btns])
+        self.assertIn('ADD USER', [el.text for el in btns])
 
         self.new_user = dict(
             username='dellsberg',
@@ -135,16 +121,20 @@ class JournalistNavigationSteps():
         self.new_user['orm_obj'] = Journalist.query.filter(
             Journalist.username == self.new_user['username']).one()
 
-        # Verify the two factor authentication
-        token_field = self.driver.find_element_by_css_selector('input[name="token"]')
-        token_field.send_keys(self.new_user['orm_obj'].totp.now())
-        submit_button = self.driver.find_element_by_css_selector('button[type=submit]')
+        # Verify the two-factor authentication
+        token_field = self.driver.find_element_by_css_selector(
+            'input[name="token"]')
+        token_field.send_keys('mocked')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
         submit_button.click()
 
         # Successfully verifying the code should redirect to the admin
         # interface, and flash a message indicating success
-        flashed_msgs = self.driver.find_elements_by_css_selector('p.flash')
-        self.assertIn("Two factor token successfully verified for user {}!".format(self.new_user['username']), [el.text for el in flashed_msgs])
+        flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
+        self.assertIn(("Two-factor token successfully verified for user"
+                       " {}!").format(self.new_user['username']),
+                      [el.text for el in flashed_msgs])
 
     def _logout(self):
         # Click the logout link
@@ -159,22 +149,10 @@ class JournalistNavigationSteps():
 
     def _check_login_with_otp(self, otp):
         self._logout()
-        self._login_user(self.new_user['username'], self.new_user['password'], otp)
+        self._login_user(self.new_user['username'],
+                         self.new_user['password'], otp)
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
-
-    def _check_login_with_skewed_otp(self):
-        interval = 30
-
-        # Client is behind server
-        otp = self.new_user['orm_obj'].totp.at(
-            datetime.datetime.now() - datetime.timedelta(seconds=interval))
-        self._check_login_with_otp(otp)
-
-        # Client is ahead of server
-        otp = self.new_user['orm_obj'].totp.at(
-            datetime.datetime.now() + datetime.timedelta(seconds=interval))
-        self._check_login_with_otp(otp)
 
     def _new_user_can_log_in(self):
         # Log the admin user out
@@ -183,7 +161,7 @@ class JournalistNavigationSteps():
         # Log the new user in
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
 
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
@@ -194,23 +172,82 @@ class JournalistNavigationSteps():
                           self.driver.find_element_by_link_text,
                           'Admin')
 
-        # Check that the user can log in with slightly skewed OTP tokens
-        self._check_login_with_skewed_otp()
+    def _edit_account(self):
+        edit_account_link = self.driver.find_element_by_link_text(
+            'Edit Account')
+        edit_account_link.click()
+
+        # The header says "Edit your account"
+        h1s = self.driver.find_elements_by_tag_name('h1')[0]
+        self.assertEqual('Edit your account', h1s.text)
+        # There's no link back to the admin interface.
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_partial_link_text('Back to admin interface')
+        # There's no field to change your username.
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_css_selector('#username')
+        # There's no checkbox to change the administrator status of your
+        # account.
+        with self.assertRaises(NoSuchElementException):
+            username_field = self.driver.find_element_by_css_selector('#is_admin')
+        # 2FA reset buttons at the bottom point to the user URLs for reset.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        self.assertRegexpMatches(totp_reset_button.get_attribute('action'),
+                                 '/account/reset-2fa-totp')
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        self.assertRegexpMatches(hotp_reset_button.get_attribute('action'),
+                                 '/account/reset-2fa-hotp')
 
     def _edit_user(self, username):
+        user = Journalist.query.filter_by(username=username).one()
+
         new_user_edit_links = filter(
             lambda el: el.get_attribute('data-username') == username,
             self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
+        # The header says "Edit user "username"".
+        h1s = self.driver.find_elements_by_tag_name('h1')[0]
+        self.assertEqual('Edit user "{}"'.format(username), h1s.text)
+        # There's a convenient link back to the admin interface.
+        admin_interface_link = self.driver.find_element_by_partial_link_text(
+            'Back to admin interface')
+        self.assertRegexpMatches(admin_interface_link.get_attribute('href'),
+                                 '/admin$')
+        # There's a field to change the user's username and it's already filled
+        # out with the user's username.
+        username_field = self.driver.find_element_by_css_selector('#username')
+        self.assertEqual(username_field.get_attribute('placeholder'), username)
+        # There's a checkbox to change the administrator status of the user and
+        # it's already checked appropriately to reflect the current status of
+        # our user.
+        username_field = self.driver.find_element_by_css_selector('#is_admin')
+        self.assertEqual(bool(username_field.get_attribute('checked')),
+                         user.is_admin)
+        # 2FA reset buttons at the bottom point to the admin URLs for
+        # resettting 2FA and include the correct user id in the hidden uid.
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        self.assertRegexpMatches(totp_reset_button.get_attribute('action'),
+                                 '/admin/reset-2fa-totp')
+        totp_reset_uid = totp_reset_button.find_element_by_name('uid')
+        self.assertEqual(int(totp_reset_uid.get_attribute('value')), user.id)
+        self.assertFalse(totp_reset_uid.is_displayed())
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        self.assertRegexpMatches(hotp_reset_button.get_attribute('action'),
+                                 '/admin/reset-2fa-hotp')
+        hotp_reset_uid = hotp_reset_button.find_element_by_name('uid')
+        self.assertEqual(int(hotp_reset_uid.get_attribute('value')), user.id)
+        self.assertFalse(hotp_reset_uid.is_displayed())
 
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
 
-        self._login_user(self.admin_user['username'],
-                         self.admin_user['password'],
-                         self.admin_user['orm_obj'].totp.now())
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
@@ -231,9 +268,11 @@ class JournalistNavigationSteps():
 
         new_username = self.new_user['username'] + "2"
 
-        username_field = self.driver.find_element_by_css_selector('input[name="username"]')
+        username_field = self.driver.find_element_by_css_selector(
+            'input[name="username"]')
         username_field.send_keys(new_username)
-        update_user_btn = self.driver.find_element_by_css_selector('button[type=submit]')
+        update_user_btn = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
         update_user_btn.click()
 
         self.wait_for(
@@ -248,16 +287,14 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
         )
 
         # Log the admin user back in
         self._logout()
-        self._login_user(self.admin_user['username'],
-                         self.admin_user['password'],
-                         self.admin_user['orm_obj'].totp.now())
+        self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
@@ -266,11 +303,14 @@ class JournalistNavigationSteps():
         self._edit_user(self.new_user['username'])
 
         new_password = self.new_user['password'] + "2"
-        password_field = self.driver.find_element_by_css_selector('input[name="password"]')
+        password_field = self.driver.find_element_by_css_selector(
+            'input[name="password"]')
         password_field.send_keys(new_password)
-        password_again_field = self.driver.find_element_by_css_selector('input[name="password_again"]')
+        password_again_field = self.driver.find_element_by_css_selector(
+            'input[name="password_again"]')
         password_again_field.send_keys(new_password)
-        update_user_btn = self.driver.find_element_by_css_selector('button#update-user')
+        update_user_btn = self.driver.find_element_by_css_selector(
+            'button#update')
         update_user_btn.click()
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
@@ -287,7 +327,7 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
-                         self.new_user['orm_obj'].totp.now())
+                         'mocked')
         self.wait_for(
             lambda: self.assertIn('Sources', self.driver.page_source)
         )
@@ -303,10 +343,38 @@ class JournalistNavigationSteps():
         unread_span = self.driver.find_element_by_css_selector('span.unread')
         self.assertIn("1 unread", unread_span.text)
 
-    def _journalist_downloads_message(self):
-        self.driver.find_element_by_css_selector('#un-starred-source-link-1').click()
+    def _journalist_stars_and_unstars_single_message(self):
+        # Message begins unstarred
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('starred-source-link-1')
 
-        submissions = self.driver.find_elements_by_css_selector('#submissions a')
+        # Journalist stars the message
+        self.driver.find_element_by_class_name('button-star').click()
+        starred = self.driver.find_elements_by_id('starred-source-link-1')
+        self.assertEquals(1, len(starred))
+
+        # Journalist unstars the message
+        self.driver.find_element_by_class_name('button-star').click()
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_id('starred-source-link-1')
+
+    def _journalist_selects_all_sources_then_selects_none(self):
+        self.driver.find_element_by_id('select_all').click()
+        checkboxes = self.driver.find_elements_by_id('checkbox')
+        for checkbox in checkboxes:
+            self.assertTrue(checkbox.is_selected())
+
+        self.driver.find_element_by_id('select_none').click()
+        checkboxes = self.driver.find_elements_by_id('checkbox')
+        for checkbox in checkboxes:
+            self.assertFalse(checkbox.is_selected())
+
+    def _journalist_downloads_message(self):
+        self.driver.find_element_by_css_selector(
+            '#un-starred-source-link-1').click()
+
+        submissions = self.driver.find_elements_by_css_selector(
+            '#submissions a')
         self.assertEqual(1, len(submissions))
 
         file_url = submissions[0].get_attribute('href')
@@ -323,10 +391,21 @@ class JournalistNavigationSteps():
             return ' '.join(cookie_strs)
 
         submission_req = urllib2.Request(file_url)
-        submission_req.add_header('Cookie',
-                                  cookie_string_from_selenium_cookies(self.driver.get_cookies()))
+        submission_req.add_header(
+            'Cookie',
+            cookie_string_from_selenium_cookies(
+                self.driver.get_cookies()))
         raw_content = urllib2.urlopen(submission_req).read()
 
         decrypted_submission = self.gpg.decrypt(raw_content)
-        submission = self._get_submission_content(file_url, decrypted_submission)
+        submission = self._get_submission_content(file_url,
+                                                  decrypted_submission)
         self.assertEqual(self.secret_message, submission)
+
+    def _journalist_sends_reply_to_source(self):
+        self.driver.find_element_by_id('reply-text-field').send_keys('Nice docs')
+
+        self.driver.find_element_by_id('reply-button').click()
+
+        self.assertIn("Thanks! Your reply has been stored.",
+                      self.driver.page_source)

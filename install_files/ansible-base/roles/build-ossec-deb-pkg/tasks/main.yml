@@ -1,0 +1,136 @@
+---
+# Really this is a check to see if we have to create the repo folder,
+# if thats the case we are not under a local vagrant box with a synced
+# root folder.
+- name: Create src path folder
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items:
+    - "{{ repo_src_path }}"
+    - "{{ build_path }}"
+
+- name: Copy over current directory for repo build
+  synchronize:
+    # All Debian package source trees are located in `install_files/<package>`
+    # in the root of the SecureDrop git repository.
+    src: ../../../../ossec-{{ purpose }}/
+    dest: "{{ repo_src_path }}"
+    # Ansible v1 does not support the `use_ssh_args`, which was added in 2.0.
+    # When resolving #1146, to upgrade Ansible, this option should be
+    # activated to permit builds in CI.
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
+    recursive: yes
+    rsync_opts: "{{ _rsync_opts | default(ossec_build_rsync_generic_opts) }}"
+
+- name: Include OSSEC download URLs.
+  ossec_urls:
+    ossec_version: "{{ ossec_version }}"
+
+- name: Download OSSEC tarball.
+  get_url:
+    url: "{{ ossec_tarball_url }}"
+    dest: "{{ build_path }}/{{ ossec_tarball_filename }}"
+
+- name: Gather checksum info for downloaded tarball.
+  stat:
+    path: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    get_md5: yes
+  register: ossec_download
+
+- name: Fail if MD5 and SHA1 checksums for tarball are not correct.
+  fail:
+    msg: >
+      The checksums for {{ ossec_tarball_filename }} do not match.
+      Both MD5 and SHA1 checksums were inspected. The checksums
+      used for the inspection where:
+        MD5: {{ ossec_md5_checksum }}
+        SHA1: {{ ossec_sha1_checksum }}
+
+      The checksums found were:
+        MD5: {{ ossec_download.stat.md5 }}
+        SHA1: {{ ossec_download.stat.checksum }}
+
+      Try rerunning the playbook to download the files again.
+  when: not (ossec_download.stat.exists and
+             ossec_download.stat.md5 == "{{ ossec_md5_checksum }}" and
+             ossec_download.stat.checksum == "{{ ossec_sha1_checksum }}")
+
+- name: Install apt dependencies for building OSSEC packages.
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: "{{ build_ossec_deb_pkg_dependencies }}"
+
+- name: Extract OSSEC source tarball.
+  unarchive:
+    copy: no
+    src: "{{ build_path }}/{{ ossec_tarball_filename }}"
+    dest: /tmp
+
+- name: Create /etc directory within source directory.
+  file:
+    state: directory
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc
+
+- name: Copy OSSEC preloaded vars template.
+  template:
+    src: "{{ purpose }}-preloaded-vars.conf"
+    dest: /tmp/ossec-hids-{{ ossec_version }}/etc/preloaded-vars.conf
+
+- name: Run OSSEC installer script on extracted source.
+  command: /tmp/ossec-hids-{{ ossec_version }}/install.sh
+
+- name: Create OSSEC build directory.
+  file:
+    state: directory
+    dest: "{{ item }}"
+  with_items:
+    - "{{ ossec_build_dir }}"
+    - "{{ ossec_build_dir }}/var"
+
+- name: Copy /var/ossec/ to OSSEC build directory.
+  command: cp -R /var/ossec {{ ossec_build_dir }}/var/
+
+- name: Copy OSSEC DEBIAN package scripts to build directory.
+  command: cp -R {{ repo_src_path }}/DEBIAN {{ ossec_build_dir }}
+
+- name: Copy OSEC DEBIAN/control template to build directory.
+  template:
+    src: "{{ purpose }}_control.j2"
+    dest: "{{ ossec_build_dir }}/DEBIAN/control"
+
+- name: Copy OSSEC /usr and /etc directories to build directory.
+  command: cp -R {{ repo_src_path }}/{{ item }} {{ ossec_build_dir }}
+  with_items:
+    - etc
+    - usr
+
+- name: Build SecureDrop OSSEC deb package.
+  command: dpkg-deb --build {{ ossec_build_dir }}
+
+# Running the `install.sh` script shipped with the OSSEC tarball populates the
+# build system with files that should only be included in the deb package.
+# Let's clean up at the end of the build, to prevent these files from being
+# included in the deb package for another purpose (i.e. agent vs. server).
+- name: Delete OSSEC build directories and config files.
+  file:
+    state: absent
+    dest: "{{ item }}"
+  with_items:
+    - /etc/init.d/ossec
+    - /etc/ossec-init.conf
+    # Don't remove the build directory, since its files can be useful for
+    # config testing after the build is completed.
+    # - "{{ ossec_build_dir }}"
+    - /var/ossec
+
+- name: Fetch newly built Debian packages back to localhost.
+  fetch:
+    src: "{{ ossec_build_dir }}.deb"
+    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
+    flat: yes
+    fail_on_missing: yes
+  when: "ossec_build_deb_package_local_dest_dir != ''"

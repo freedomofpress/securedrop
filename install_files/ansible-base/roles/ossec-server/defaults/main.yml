@@ -1,0 +1,24 @@
+---
+smtp_relay_cert_dir: /etc/ssl/certs
+smtp_relay_cert_override_dir: '/etc/ssl/certs_local'
+smtp_relay_cert_override_file: ''
+
+# Email address listed in the FROM line when sending OSSEc email alerts.
+# Some mail servers require that this match the account that authenticated
+# to send mail.
+ossec_from_address: ''
+
+# Override capability for installing locally built deb packages in the staging
+# environment. By default, packages are installed via the FPF apt repo.
+install_local_packages: False
+
+ossec_group: ossec
+
+# Apt dependencies for the ossec server package
+ossec_postfix_dependencies:
+  - procmail
+  - postfix
+  - mailutils
+
+# Configuration info for procmail and postfix
+postfix_hostname: ossec.server

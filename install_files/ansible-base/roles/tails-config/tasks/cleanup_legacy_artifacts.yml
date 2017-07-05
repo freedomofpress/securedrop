@@ -1,0 +1,25 @@
+---
+# Legacy changes handler to ensure backwards-compatibility. If an Admin runs
+# this config after already having set up SecureDrop before, any outdated
+# items will be handled and updated accordingly.
+
+- name: Remove deprecated network hook config files.
+  file:
+    path: "{{ item.0 }}/{{ item.1 }}"
+    state: absent
+  with_nested:
+    - "{{ tails_config_deprecated_directories }}"
+    - "{{ tails_config_deprecated_config_files }}"
+
+- name: Remove deprecated xsessionrc file.
+  file:
+    path: "{{ tails_config_live_persistence }}/dotfiles/.xsessionrc"
+    state: absent
+
+- name: Remove deprecated Document Interface desktop icons.
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ tails_config_amnesia_home }}/Desktop/document.desktop"
+    - "{{ tails_config_amnesia_home }}/.local/share/applications/document.desktop"

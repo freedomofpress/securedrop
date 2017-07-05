@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: msheiny/pressfreedomci:latest
+        environment:
+          FPF_CI: true
+          CI_SD_ENV: staging
+          CI_AWS_TYPE: t2.small
+          FPF_GRSEC: false
+          TEST_REPORTS: /root/sd
+    working_directory: /root/sd
+
+    steps:
+      - checkout
+
+      - run:
+          name: Installation pre-reqs
+          command: pip install -U -r ./testinfra/requirements.txt
+
+      - setup_remote_docker
+
+      - run:
+          name: Run molecule and manage tests
+          command: make ci-go
+
+      - run:
+          name: Teardown environment
+          command: make ci-teardown
+          when: always
+
+      - store_test_results:
+          path: /root/sd/junit
+
+      - store_artifacts:
+          path: /root/sd/junit

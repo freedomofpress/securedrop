@@ -13,18 +13,21 @@ each role in a SecureDrop installation.
           password database that you can use to get started. For more
           information, see the :doc:`tails_guide`.
 
+.. tip:: For best practices on managing passphrases, see
+   :doc:`passphrase_best_practices`.
+
 Admin
 -----
 
 The admin will be using the *Admin Workstation* with Tails to connect to
-the App Server and the Monitor Server using Tor and SSH. The tasks
+the *Application Server* and the *Monitor Server* using Tor and SSH. The tasks
 performed by the admin will require the following set of passphrases:
 
 -  A password for the persistent volume on the Admin Live USB.
 -  A master password for the KeePassX password manager, which unlocks
    passphrases to:
 
-   -  The App Server and the Monitor Server (required to be the same).
+   -  The *Application Server* and the *Monitor Server* (required to be the same).
    -  The network firewall.
    -  The SSH private key and, if set, the key's passphrase.
    -  The GPG key that OSSEC will encrypt alerts to.
@@ -32,29 +35,29 @@ performed by the admin will require the following set of passphrases:
    -  The credentials for the email account that OSSEC will send alerts
       to.
    -  The Hidden Services values required to connect to the App and
-      Monitor Server.
+      *Monitor Server*.
 
 The admin will also need to have an Android or iOS device with the
 Google Authenticator app installed. This means the admin will also have
 the following two credentials:
 
--  The secret code for the App Server's two-factor authentication.
--  The secret code for the Monitor Server's two-factor authentication.
+-  The secret code for the *Application Server*'s two-factor authentication.
+-  The secret code for the *Monitor Server*'s two-factor authentication.
 
 Journalist
 ----------
 
 The journalist will be using the *Journalist Workstation* with Tails to
-connect to the Document Interface. The tasks performed by the journalist
+connect to the Journalist Interface. The tasks performed by the journalist
 will require the following set of passphrases:
 
 -  A master password for the persistent volume on the Tails device.
 -  A master password for the KeePassX password manager, which unlocks
    passphrases to:
 
-   -  The Hidden Service value required to connect to the Document
+   -  The Hidden Service value required to connect to the Journalist
       Interface.
-   -  The Document Interface.
+   -  The Journalist Interface.
    -  The journalist's personal GPG key.
 
 The journalist will also need to have a two-factor authenticator, such
@@ -62,11 +65,11 @@ as an Android or iOS device with Google Authenticator installed, or a
 YubiKey. This means the journalist will also have the following
 credential:
 
--  The secret code for the Document Interface's two-factor
+-  The secret code for the Journalist Interface's two-factor
    authentication.
 
-Secure Viewing Station
-~~~~~~~~~~~~~~~~~~~~~~
+*Secure Viewing Station*
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The journalist will be using the *Secure Viewing Station* with Tails to
 decrypt and view submitted documents. The tasks performed by the

@@ -1,0 +1,19 @@
+---
+# Check the value of `ssh_users` in site-specific vars to ensure
+# we're using a unique username. If the playbook is running with a username
+# of e.g. `amnesia`, then the vars file has been configured incorrectly.
+- name: Validate Admin username (specified in vars).
+  assert:
+    that:
+      - "ssh_users != item"
+      - "ssh_users != ''"
+      - "item not in ssh_users"
+      # Make sure we have a string, not a list.
+      - "ssh_users|list != ssh_users"
+    msg: >-
+      The Admin username for SSH connections to the servers failed
+      to validate. {{ securedrop_validate_error_msg_start }} the
+      `ssh_users` var is set to the username configured during OS
+      installation on the servers. Additionally, the var should be
+      a string, rather than a list of multiple usernames.
+  with_items: "{{ securedrop_validate_disallowed_users }}"

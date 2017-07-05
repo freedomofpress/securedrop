@@ -15,7 +15,7 @@ Time: 30min
 Participants: all
 
 Required: projector, WiFi access, pre-configured demo SecureDrop
-instance and 2 laptops to act as the Journalist Workstation and SVS
+instance and 2 laptops to act as the Journalist Workstation and *SVS*
 
 -  The demo instance has multiple sources to try and give a feel of what
    it will look like at 2 weeks past being public with sources in
@@ -30,37 +30,38 @@ Participants: journalists, editors, SecureDrop admins, OSSEC alert
 recipients and anyone else interested
 
 -  Go over the SecureDrop `FAQs <https://securedrop.org/faq>`__
--  Go over the SecureDrop environment diagrams
+-  Go over the SecureDrop :ref:`environment diagrams <securedrop_architecture_diagram>`
 -  Importance of the landing page security and Twitter feedback
 -  Demo the source submission process
--  Demo the journalist's processes for checking the Document Interface
+-  Demo the journalist's processes for checking the Journalist Interface
 -  Demo the journalist's processes for replies
--  Demo working with submissions on the SVS
+-  Demo working with submissions on the *SVS*
 -  Discuss scrubbing submitted documents prior to publication
 -  Options for distributing with other news organizations
 -  Show example of an OSSEC alert, briefly cover what it does
 -  Show example of 'is it up?' Nagios monitoring alerts for Source
    Interface
--  Explain why the Document Interface does not have 'is it up?'
+-  Explain why the Journalist Interface does not have 'is it up?'
    monitoring
 -  Discuss vanity onion URLs with
    `Shallot <https://github.com/katmagic/Shallot>`__ and
    `Scallion <https://github.com/lachesis/scallion>`__
--  How to brand the Source and Document Interface
--  Physical security of servers and SVS
+-  How to brand the Source and Journalist Interface
+-  Physical security of servers and *SVS*
 -  How to securely publicize the organization's Source Interface Tor URL
 -  Distribute important info:
--  Third-party security mailing lists to subscribe to
--  https://freedom.press/about/staff
--  https://securedrop.org
--  Hardware for SecureDrop
--  SecureDrop Deployment Best Practices
--  Source Best Practice Guide
--  Journalist Best Practice Guide
+
+   -  Third-party security mailing lists to subscribe to
+   -  https://freedom.press/about/staff
+   -  https://securedrop.org
+   -  https://docs.securedrop.org
+   -  :doc:`Hardware for SecureDrop <hardware>`
+   -  :doc:`SecureDrop Deployment Best Practices <deployment_practices>`
+   -  :doc:`Source Best Practice Guide <source>`
+   -  :doc:`Journalist Best Practice Guide <journalist>`
+   -  :doc:`Admin Best Practice Guide <admin>`
 -  Answering the client vs. server side crypto debate
 -  Link to security audits
--  Bunch of other in-progress docs are on securedrop.hackpad.com, many
-   are still in draft form
 
 Questions
 ~~~~~~~~~
@@ -86,16 +87,16 @@ Participants: journalists and admins
 
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
--  Setup KeyPassX manager (one for SVS, one for personnel Tails)
+-  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
-   Document Interface, FDE and password managers)
+   Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys
 -  Updating Tails
--  Backing up the SVS
+-  Backing up the *SVS*
 -  If needed, process for distributing the Application's private GPG key
-   to a distant journalist's air-gapped SVS
+   to a distant journalist's air-gapped *SVS*
 -  Do complete journalist process walk through twice, either on
    different days or between morning/afternoon sessions
 -  Using MAT (Metadata Anonymisation Toolkit)
@@ -110,9 +111,9 @@ Participants: admins
 
 -  Check access to previously created Tails USB
 -  Generate personnel GPG keys
--  Setup KeyPassX manager (one for SVS, one for personnel Tails)
+-  Setup KeyPassX manager (one for *SVS*, one for personnel Tails)
 -  Options between YubiKey/Google Authenticator app for 2FA (SSH,
-   Document Interface, FDE and password managers)
+   Journalist Interface, FDE and password managers)
 -  Secure-deleting and difference between wipe and erase free space on
    Tails, and when to use each
 -  Disaster recovery for 2FA and password manager, personnel GPG keys
@@ -122,7 +123,7 @@ Participants: admins
    system
 -  Adding packages to Tails
 -  Go over common OSSEC alerts for security updates and daily reports
--  Disaster recovery for application, remote access and SVS
+-  Disaster recovery for application, remote access and *SVS*
 -  Common admin actions
 -  Adding/removing users
 -  Enabling logging

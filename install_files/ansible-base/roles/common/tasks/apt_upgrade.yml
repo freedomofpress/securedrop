@@ -1,0 +1,57 @@
+---
+# Update the apt cache as a discrete action, since we will conditionally
+# hold the `tor` package if it's slated for upgrade. Since production
+# instances use SSH over Tor, an upgrade to the tor package will break
+# the SSH connection and halt execution of the playbook.
+- name: Update apt cache.
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - apt
+
+- name: Check whether tor will be upgraded.
+  command: aptitude search '~U' --display-format '%p' --disable-columns
+  register: tor_upgradable_result
+  changed_when: false
+
+- name: Hold tor package to prevent upgrade breaking SSH connection.
+  command: aptitude hold tor
+  register: tor_hold_package_result
+  when:
+    - "'tor' in tor_upgradable_result.stdout_lines"
+    # We only want to prevent upgrades if we're connected over Tor; first-time
+    # installs will happen over direct access SSH (to local IPv4 address).
+    # If we're connecting to an Onion URL, then it's over Tor.
+    - (ansible_host|default(ansible_ssh_host)).endswith('.onion')
+
+- name: Perform safe upgrade to ensure all the packages are updated.
+  apt:
+    upgrade: safe
+  tags:
+    - apt
+    - apt-upgrade
+
+- name: Remove hold on tor package, to permit automatic upgrades.
+  command: aptitude unhold tor
+  # Report changed status if we marked the package as held previously.
+  # Not using a conditional `when` to control task execution because
+  # we want to ensure the hold is removed, otherwise nightly upgrades
+  # will not install security patches.
+  changed_when: tor_hold_package_result|changed
+
+
+  # Ansible doesn't support notifying handlers based on file existence, results,
+  # e.g. via registered `stat` results, only only on changed=true task results,
+  # so let's craft a task that returns changed=true if-and-only-if a file exists.
+- name: Check if reboot is required due to security updates.
+  command: /bin/true
+  args:
+    # This task won't actually remove anything, given the task is simply `true`,
+    # but leveraging the `removes` arg allows us to run the task conditionally,
+    # based on file existence, which is an accurate indicator of whether a reboot
+    # is required.
+    removes: /var/run/reboot-required
+  notify: reboot
+  tags:
+    - reboot

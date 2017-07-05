@@ -1,0 +1,6 @@
+Host app
+  User {{ ssh_users }}
+  Hostname {{ app_ssh_lookup_result.stdout }}
+Host mon
+  User {{ ssh_users }}
+  Hostname {{ mon_ssh_lookup_result.stdout }}

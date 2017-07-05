@@ -1,14 +1,20 @@
 ---
-- hosts: [ 'development' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - development-specific.yml
+- name: Configure SecureDrop Development machine.
+  hosts: development
+  pre_tasks:
+    # Ensure all upgrades are applied. Also updates the apt cache,
+    # which will remain sufficiently fresh to prevent repeated cache updates
+    # in subsequent roles.
+    - name: Update all packages.
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+      # Travis builds don't like the dist-upgrade. Only run in local VMs.
+      when: "'TRAVIS' not in ansible_env"
 
   roles:
-    - development
-    - app
-    - app-test
-
+    - { role: development, tags: development }
+    - { role: app, tags: app }
+    - { role: app-test, tags: app-test }
   sudo: yes

@@ -4,10 +4,8 @@ import re
 import config
 import zipfile
 import crypto_util
-import uuid
 import tempfile
 import subprocess
-from cStringIO import StringIO
 import gzip
 from werkzeug import secure_filename
 
@@ -16,13 +14,15 @@ from secure_tempfile import SecureTemporaryFile
 import logging
 log = logging.getLogger(__name__)
 
-VALIDATE_FILENAME = re.compile("^(?P<index>\d+)\-[a-z0-9-_]*(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
+VALIDATE_FILENAME = re.compile(
+    "^(?P<index>\d+)\-[a-z0-9-_]*"
+    "(?P<file_type>msg|doc\.(gz|zip)|reply)\.gpg$").match
 
 
 class PathException(Exception):
-    """An exception raised by `store.verify` when it encounters a bad path. A path
-    can be bad when it is not absolute, not normalized, not within
-    `config.STORE_DIR`, or doesn't match the filename format.
+
+    """An exception raised by `util.verify` when it encounters a bad path. A path
+    can be bad when it is not absolute or not normalized.
     """
     pass
 
@@ -35,10 +35,11 @@ def verify(p):
         raise PathException("config.STORE_DIR(%s) is not absolute" % (
             config.STORE_DIR, ))
 
-    # os.path.abspath makes the path absolute and normalizes '/foo/../bar' to
-    # '/bar', etc. We have to check that the path is normalized before checking
-    # that it starts with the `config.STORE_DIR` or else a malicious actor could
-    # append a bunch of '../../..' to access files outside of the store.
+    # os.path.abspath makes the path absolute and normalizes
+    # '/foo/../bar' to '/bar', etc. We have to check that the path is
+    # normalized before checking that it starts with the
+    # `config.STORE_DIR` or else a malicious actor could append a
+    # bunch of '../../..' to access files outside of the store.
     if not p == os.path.abspath(p):
         raise PathException("The path is not absolute and/or normalized")
 
@@ -66,17 +67,31 @@ def path(*s):
     return absolute
 
 
-def get_bulk_archive(filenames, zip_directory=''):
+def get_bulk_archive(selected_submissions, zip_directory=''):
+    """Generate a zip file from the selected submissions"""
     zip_file = tempfile.NamedTemporaryFile(prefix='tmp_securedrop_bulk_dl_',
                                            dir=config.TEMP_DIR,
                                            delete=False)
+    sources = set([i.source.journalist_designation
+                   for i in selected_submissions])
+    # The below nested for-loops are there to create a more usable
+    # folder structure per #383
     with zipfile.ZipFile(zip_file, 'w') as zip:
-        for filename in filenames:
-            verify(filename)
-            zip.write(filename, arcname=os.path.join(
-                zip_directory,
-                os.path.basename(filename)
-            ))
+        for source in sources:
+            submissions = [s for s in selected_submissions
+                           if s.source.journalist_designation == source]
+            for submission in submissions:
+                filename = path(submission.source.filesystem_id,
+                                submission.filename)
+                verify(filename)
+                document_number = submission.filename.split('-')[0]
+                zip.write(filename, arcname=os.path.join(
+                    zip_directory,
+                    source,
+                    "%s_%s" % (document_number,
+                               submission.source.last_updated.date()),
+                    os.path.basename(filename)
+                ))
     return zip_file
 
 
@@ -96,10 +111,13 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
     # file. Given various usability constraints in GPG and Tails, this
     # is the most user-friendly way we have found to do this.
 
-    encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(count, journalist_filename)
+    encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(
+        count,
+        journalist_filename)
     encrypted_file_path = path(sid, encrypted_file_name)
     with SecureTemporaryFile("/tmp") as stf:
-        with gzip.GzipFile(filename=sanitized_filename, mode='wb', fileobj=stf) as gzf:
+        with gzip.GzipFile(filename=sanitized_filename,
+                           mode='wb', fileobj=stf) as gzf:
             # Buffer the stream into the gzip file to avoid excessive
             # memory consumption
             while True:
@@ -144,7 +162,9 @@ def secure_unlink(fn, recursive=False):
         command.append('-r')
     command.append(fn)
     subprocess.check_call(command)
+    return "success"
 
 
 def delete_source_directory(source_id):
     secure_unlink(path(source_id), recursive=True)
+    return "success"

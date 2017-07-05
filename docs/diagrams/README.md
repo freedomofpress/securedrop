@@ -17,6 +17,8 @@ an entry here:
   `SecureDrop-visio.png`. For context, see [#274][].
 - `SecureDrop-0.3-DFD.png`: A WIP DFD (data flow diagram) created for
   SecureDrop 0.3. WIP.
+- `securedrop-database.png`: A diagram of the tables and columns in the securedrop app's SQLite database.
+- `securedrop-database.tex`: TeX used to generate the `securedrop-database.png` figure.
 
 [SecureDrop website FAQ]: https://securedrop.org/faq#how_works
 [#274]: https://github.com/freedomofpress/securedrop/issues/274

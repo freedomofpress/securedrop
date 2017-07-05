@@ -1,41 +1,63 @@
+---
 # Use Ubuntu 14.04 LTS images, and explicitly require sudo.
 # Relevant docs: https://docs.travis-ci.com/user/trusty-ci-environment/
 sudo: required
 dist: trusty
+# Use old Trusty images, since new ones are failing Selenium tests.
+# Must be updated by 2017-09-01. More info:
+# https://blog.travis-ci.com/2017-06-21-trusty-updates-2017-Q2-launch
+group: deprecated-2017Q2
 
 language: python
 python:
-- '2.7'
+  - '2.7'
+
 virtualenv:
   system_site_packages: true
 before_install:
-- 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
-- sudo apt-get update -qq
-- sudo apt-get install --yes rng-tools
-- sudo rm -f /dev/random
-- sudo mknod -m 0666 /dev/random c 1 9
-- echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
-- sudo /etc/init.d/rng-tools restart
+  - 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
+  - printenv | sort # dump Travis environment for debugging
+  - sudo apt-get update -qq
+  - sudo apt-get install --yes rng-tools
+  - sudo rm -f /dev/random
+  - sudo mknod -m 0666 /dev/random c 1 9
+  - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
+  - sudo /etc/init.d/rng-tools restart
 install:
-- pip install coveralls
-- pip install ansible==1.8.4
+  - pip freeze -l
+  # Preinstalled travis pytest is not tracked by us
+  # Preinstalled travis pbr is not tracked by us
+  - pip uninstall pytest pbr -y
+  - pip install -r testinfra/requirements.txt
+  - pip freeze -l
 script:
-- echo localhost > inventory
-- ansible-playbook -i inventory --syntax-check install_files/ansible-base/securedrop-travis.yml
-- ansible-playbook -i inventory --connection=local --sudo --skip-tags=non-development install_files/ansible-base/securedrop-travis.yml
+  # Using YAML folding operator '>' to aid in readability and avoid
+  # extremely long lines.
+  - >
+      printf
+      "[development]\nlocalhost ansible_connection=local\n[travis]\nlocalhost"
+      > inventory
+  - >
+      ansible-playbook -i inventory -vv --syntax-check
+      install_files/ansible-base/securedrop-development.yml
+  - >
+      ansible-playbook -i inventory -vv --connection=local
+      install_files/ansible-base/securedrop-development.yml
+
   # For some reason, redis-server does not start automatically when installed
   # on Travis. I believe Travis' service machinery may be interfering. See
   # http://docs.travis-ci.com/user/database-setup/#Redis
-- sudo service redis-server start
-  # travis needs the config.py file ran owned by root in other environments it is the
-  # securedrop_user default www-data
-- sudo chown root:root securedrop/config.py
-- sudo sh -c "export DISPLAY=:1; cd securedrop && ./manage.py test"
+  - sudo service redis-server start
+  # Travis needs the config.py file to be owned by root. In other environments
+  # it's the `securedrop_user` var.
+  - sudo chown root:root securedrop/config.py
+  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v tests/"
+  - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
+  - pip freeze -l
+  # Docs linting. Performing this step *after* build VM tests pass, so as not
+  # to alter the pip requirements, which would cause config tests to fail.
+  - pip install -r securedrop/requirements/develop-requirements.txt
+  - make docs-lint
+  - pushd securedrop; flake8 db.py crypto_util.py manage.py store.py secure_tempfile.py source.py template_filters.py tests/test_2fa.py tests/conftest.py tests/test_db.py tests/test_manage.py tests/test_crypto_util.py tests/test_journalist.py tests/test_integration.py && popd
 after_success:
-  cd securedrop && coveralls && cd ..  # cd back to repo root for srcclr run
-addons:
-    srcclr:
-        debug: true
-notifications:
-  slack:
-    secure: jmEgJkFg6IVLl78dbLPBUpWkVuHkQ+HtXHNoY4cdgx2Gq5kVDuLtBIuMK5ubbj3zsp99JIJZ9DFQlunCkoLYZ7PAKQ7fhfwLEWNFJiAajMTZF/nNKV2J4i0NyMBHeFQ5eagAe3wrGiY5sblTbnExY4zERcdGoC1S2UImWX0xMRw=
+  cd securedrop/ && coveralls

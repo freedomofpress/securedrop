@@ -1,0 +1,24 @@
+---
+- name: Create SecureDrop-specific dotfiles directory for Tails persistence.
+  file:
+    path: "{{ tails_config_securedrop_dotfiles }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy SecureDrop logo for desktop icons to dotfiles directory.
+  copy:
+    src: securedrop_icon.png
+    dest: "{{ tails_config_securedrop_dotfiles }}/"
+
+# Script used to append torrc additions. Triggered by NetworkManager hook.
+# Resides in dotfiles in order to achieve persistence.
+- name: Copy SecureDrop network hook for Tor config.
+  # Elevated privileges for root:root ownership, so only the system can
+  # execute, in the context of the NetworkManager hook, which calls it.
+  become: yes
+  copy:
+    src: securedrop_init.py
+    dest: "{{ tails_config_securedrop_dotfiles }}/"
+    owner: root
+    group: root
+    mode: "0700"

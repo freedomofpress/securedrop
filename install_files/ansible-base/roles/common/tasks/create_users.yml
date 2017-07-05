@@ -1,35 +1,51 @@
 ---
-- name: ensure latest sudoers file is copied to sudoers.tmp
+- name: Copy sudoers file.
   copy:
-    src="sudoers"
-    dest=/etc/sudoers.tmp
-    owner=root
-    group=root
-    mode=0440
-  register: sudoers_st
-
-- name: ensure sudoers file is installed if syntax check passes
-  shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
-  when: sudoers_st.changed
-
-- name: ensure secureDrop admin user accounts exist
-  user:
-    name="{{ item }}"
-    shell=/bin/bash
-    groups=sudo,ssh
-  with_items: ssh_users
-
-- name: copy SecureDrop bashrc additions
-  copy:
-    src: bashrc_securedrop_additions
-    dest: /etc/bashrc.securedrop_additions
+    src: sudoers
+    dest: /etc/sudoers
     owner: root
     group: root
-    mode: 0644
+    mode: "0440"
+    backup: yes
+    validate: "visudo -cf %s"
+  register: sudoers_st
+  tags:
+    - users
+    - sudoers
 
-- name: add line to each users bashrc to source the SecureDrop additions
+- name: Create shell accounts for SecureDrop admins.
+  user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    groups: sudo,ssh
+  with_items: "{{ ssh_users }}"
+  tags:
+    - users
+    - sudoers
+
+- name: Set SecureDrop bash profile additions.
+  copy:
+    src: bashrc_securedrop_additions
+    dest: /etc/profile.d/securedrop_additions.sh
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - users
+    - environment
+
+# TODO: Backwards-compatibility. Previously, the SecureDrop bashrc additions
+# for forcing a terminal multiplexer during interactive login sessions were
+# added to ~/.bashrc for each admin user account. It's cleaner to add the
+# config lines to /etc/profile.d, so all accounts get them by default.
+# Post 0.4, we can remove this task, which is here to clean up the local
+# bashrc files so that the additions are only sourced once.
+- name: Clean up local bashrc config for admin accounts.
   lineinfile:
-    dest: "/home/{{ item }}/.bashrc"
-    line: ". /etc/bashrc.securedrop_additions"
-    insertbefore: BOF
-  with_items: ssh_users
+    dest: /home/{{ item }}/.bashrc
+    line: '. /etc/bashrc.securedrop_additions'
+    state: absent
+  with_items: "{{ ssh_users }}"
+  tags:
+    - users
+    - environment

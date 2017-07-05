@@ -22,12 +22,13 @@ session and click *Login*.
 .. note:: The *Administration password* is a one-time password. It
 	  will reset every time you shut down Tails.
 
-After Tails finishes booting, make sure you're connected to the
-Internet |Network| and that the Tor's Vidalia indicator onion
-|Vidalia| is green, using the icons in the upper right corner.
+After Tails finishes booting, make sure you're connected to the Internet
+|Network| and that the Tor status onion icon is not crossed out
+|TorStatus|, consulting the icons in the upper right corner of the
+screen.
 
 .. |Network| image:: images/network-wired.png
-.. |Vidalia| image:: images/vidalia.png
+.. |TorStatus| image:: images/tor-status-indicator.png
 
 
 .. _Download the SecureDrop repository:
@@ -65,6 +66,29 @@ First, download and verify the **SecureDrop Release Signing Key**.
           copy-pasting this command, we recommend you double-check you have
           entered it correctly before pressing enter.
 
+.. tip:: If the ``--recv-key`` command fails, first double-check that
+   `Tails is connected to Tor`_.
+
+   Once you've confirmed that you're successfully connected to Tor, try
+   re-running the ``--recv-key`` command a few times. The default GPG
+   configuration on Tails uses a keyserver pool, which may occasionally return
+   a malfunctioning keyserver, causing the ``--recv-key`` command to fail.
+
+   If the command is consistently failing after a few tries, it could
+   indicate that the default GPG key servers are down or unreachable. As a
+   workaround, another keyserver can be specified by adding the ``--keyserver``
+   option to the ``gpg --recv-key`` command. In our experience, the SKS HKPS
+   keyserver pool is usually a reliable alternative, so try:
+
+   .. code:: sh
+
+      gpg --keyserver hkps://hkps.pool.sks-keyservers.net --recv-key "2224 5C81 E3BA EB41 38B3 6061 310F 5612 00F4 AD77"
+
+   Again, this is a keyserver pool, so you may need to retry the command a
+   couple of times before it succeeds.
+
+.. _Tails is connected to Tor: https://tails.boum.org/doc/anonymous_internet/tor_status/index.en.html
+
 When passing the full public key fingerprint to the ``--recv-key`` command, GPG
 will implicitly verify that the fingerprint of the key received matches the
 argument passed.
@@ -74,12 +98,14 @@ argument passed.
              the installation. If this happens, please email us at
              securedrop@freedom.press.
 
+.. _Checkout and Verify the Current Release Tag:
+
 Verify that the current release tag was signed with the release signing
 key:
 
 .. code:: sh
 
-    cd securedrop/
+    cd ~/Persistent/securedrop/
     git checkout 0.3.12
     git tag -v 0.3.12
 
@@ -99,24 +125,55 @@ store them securely. Once you have set up Tails with persistence and
 have cloned the repo, you can set up your personal password database
 using this template.
 
-You can find the template in ``tails_files/securedrop-keepassx.xml``
+You can find the template in ``tails_files/securedrop-keepassx.kdbx``
 in the SecureDrop repository that you just cloned.
-
-.. warning:: You will not be able to access your passwords if you
-	     forget the master password or the location of the key
-	     file used to protect the database.
 
 To use the template:
 
 -  Open the KeePassX program |KeePassX| which is already installed on
    Tails
--  Select **File**, **Import from...**, and **KeePassX XML (*.xml)**
--  Navigate to the location of **securedrop-keepassx.xml**, select it,
-   and click **Open**
--  Set a strong master password to protect the password database (you
-   will have to write this down/memorize it)
+-  Select **Database**, **Open database**, and navigate to the location of
+   **securedrop-keepassx.kdbx**, select it, and click **Open**
+-  Check the **password** box and hit **OK**
 -  Click **File** and **Save Database As**
 -  Save the database in the Persistent folder
+
+.. tip:: If you would like to add a master password, navigate to **File** and
+   **Change master key**. Note that since each KeePassX database is stored
+   on the encrypted persistent volume, this additional passphrase is not necessary.
+
+.. warning:: You will not be able to access your passwords if you
+	     forget the master password or the location of the key
+	     file used to protect the database.
+
+In case you wish to manually create a database, the suggested password fields in
+the administrator template are:
+
+**Administrator**:
+
+- Admin account username
+- App Server SSH Onion URL
+- Email account for sending OSSEC alerts
+- Monitor Server SSH Onion URL
+- Network Firewall Admin Credentials
+- OSSEC GPG Key
+- SecureDrop Login Credentials
+
+**Journalist**:
+
+- Auth Value: Journalist Interface
+- Onion URL: Journalist Interface
+- Personal GPG Key
+- SecureDrop Login Credentials
+
+**Secure Viewing Station**:
+
+- SecureDrop GPG Key
+
+**Backup**:
+
+- This section contains clones of the above entries in case a user
+  accidentally overwrites an entry.
 
 .. |Terminal| image:: images/terminal.png
 .. |KeePassX| image:: images/keepassx.png

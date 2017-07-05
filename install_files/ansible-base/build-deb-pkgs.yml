@@ -1,15 +1,71 @@
 ---
-- hosts: [ 'build' ]
+# Ensure that the build machine is present. If it hasn't been created,
+# then Vagrant will not add it to the generated inventory file. Since
+# the build machine is required for staging runs, error out with a helpful
+# message, pointing the developer to the docs.
+- name: Ensure Build VM is available.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  sudo: no
+  tasks:
+    - name: Check for "build" machine in inventory.
+      fail:
+        msg: >-
+          The "build" VM is not reachable, but is required for building the
+          app code Debian packages on the staging machines. Run `vagrant up build`,
+          then `vagrant provision /staging/`. Thereafter you can run
+          `ANSIBLE_ARGS="--tags rebuild" vagrant provision /staging/` to rebuild
+          and reinstall the application code.
+      when: "'build' not in groups.all"
+  tags:
+    - rebuild
+    - local_build
 
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - development-specific.yml
-
-  roles:
-    - { role: build-securedrop-app-code-deb-pkg, tags: [ "app-deb" ] }
-    - { role: build-generic-pkg, tags: ["securedrop-ossec-server"], package_name: "securedrop-ossec-server" }
-    - { role: build-generic-pkg, tags: ["securedrop-ossec-agent"], package_name: "securedrop-ossec-agent" }
-    - { role: build-generic-pkg, tags: ["securedrop-keyring"], package_name: "securedrop-keyring" }
-
+# All plays in this playbook target the build host, but most be invoked separately,
+# since we're using wrapper roles for the build. If you add multiple child roles with
+# the same parent in the same play, Ansible conflates the dependencies, and only the
+# last wrapper role will run. This is a known bug and will be fixed in v2.0.
+- name: Build SecureDrop application Debian package from local repository.
+  hosts: build
   sudo: yes
+  pre_tasks:
+    - name: Ensure all packages are up to date.
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+
+    # These packages are necessary for running the `update_version.sh` script.
+    - name: Install required build tools.
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - devscripts
+        - git
+        - aptitude
+  roles:
+    - role: build-securedrop-app-code-deb-pkg
+      tags: "app-deb"
+
+    - role: build-ossec-deb-pkg
+      tags: "ossec-server"
+      purpose: server
+
+    - role: build-ossec-deb-pkg
+      tags: "ossec-agent"
+      purpose: agent
+
+    - role: build-generic-pkg
+      tags: "securedrop-ossec-server"
+      package_name: "securedrop-ossec-server"
+
+    - role: build-generic-pkg
+      tags: "securedrop-ossec-agent"
+      package_name: "securedrop-ossec-agent"
+
+    - role: build-generic-pkg
+      tags: "securedrop-keyring"
+      package_name: "securedrop-keyring"
+  tags: rebuild

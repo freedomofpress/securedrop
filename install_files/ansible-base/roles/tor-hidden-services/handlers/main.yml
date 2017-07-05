@@ -1,0 +1,3 @@
+---
+- name: restart tor
+  include: restart-tor-carefully.yml

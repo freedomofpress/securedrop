@@ -1,0 +1,10 @@
+# Temporary peg until issue #1146 is resolved
+ansible==2.2.1
+boto
+flake8
+pip-tools
+pytest-xdist
+testinfra
+sphinx
+sphinx-autobuild
+sphinx_rtd_theme

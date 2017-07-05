@@ -1,3 +1,28 @@
 ---
+- name: Copy app code to build directory.
+  synchronize:
+    # All Debian package control files for FPF-maintained packages reside in
+    # `install_files/<package_name>` in the SecureDrop git repository.
+    src: "../{{ package_name }}/"
+    dest: "/tmp/build/{{ package_name }}/"
+    recursive: yes
+    delete: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
+
 - name: run bash script to build generic packages
-  command: "{{ securedrop_repo }}/build/build_generic_package.sh {{ package_name }}"
+  script: "build_generic_package.sh {{ package_name }}"
+
+- name: Track down package
+  find:
+    path: /tmp
+    patterns: "*{{ package_name }}*.deb"
+  register: list_deb_pkg_results
+  changed_when: false
+
+- name: Fetch back package
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ securedrop_local_build }}/"
+    flat: yes
+  with_items: "{{ list_deb_pkg_results.files }}"

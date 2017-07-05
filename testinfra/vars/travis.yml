@@ -1,0 +1,7 @@
+---
+securedrop_user: travis
+# The directory Travis runs builds in varies by PR, so we cannot hardcode it
+# in testvars. See `conftest.py`, where the `securedrop_data` var is read from
+# a Travis-specific environment variable.
+# securedrop_code: /home/travis/build/freedomofpress/securedrop
+securedrop_data: /var/lib/securedrop

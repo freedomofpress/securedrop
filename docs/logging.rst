@@ -7,16 +7,16 @@ Both servers
 - AppArmor and grsec errors: ``/var/log/kern.log``
 - iptables: ``/var/log/syslog``
 
-App Server
-----------
+*Application Server*
+--------------------
 
 - Apache: ``/var/log/apache2/*``
 
 If an event triggers it's in the SecureDrop application log:
 ``/var/www/securedrop/securedrop.log``
 
-Monitor Server
---------------
+*Monitor Server*
+----------------
 
 - OSSEC ::
 

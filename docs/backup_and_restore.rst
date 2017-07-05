@@ -25,8 +25,8 @@ Minimizing disk space
 Since the backup and restore operations both involve transferring *all* of
 your SecureDrop's stored submissions over Tor, the process can take a long time.
 To save time and improve reliability for the transfers, take a moment to clean up
-older submissions in the Document Interface. As a general practice, you should
-encourage your Journalists to delete submissions from the Document Interface
+older submissions in the Journalist Interface. As a general practice, you should
+encourage your Journalists to delete submissions from the Journalist Interface
 regularly.
 
 .. tip:: The throughput of a Tor Hidden Service seems to average around 150 kB/s,
@@ -37,7 +37,7 @@ currently on the *Application Server* by SSHing in and running
 ``sudo du -sh /var/lib/securedrop/store``.
 
 .. note:: Submissions are deleted asynchronously and one at a time, so if you
-          delete a lot of submissions through the Document Interface, it may
+          delete a lot of submissions through the Journalist Interface, it may
           take a while for all of the submissions to actually be deleted. This
           is especially true because SecureDrop uses ``srm`` to securely erase
           file submissions, which takes significantly more time than normal file
@@ -45,7 +45,7 @@ currently on the *Application Server* by SSHing in and running
           ``sudo tail -f /var/log/securedrop_worker/err.log``.
 
 If you find you cannot perform a backup or restore due to this
-constraint, and have already deleted old submissions from the Document Interface,
+constraint, and have already deleted old submissions from the Journalist Interface,
 contact us through the `SecureDrop Support Portal`_.
 
 .. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
@@ -58,7 +58,7 @@ SecureDrop git repository (usually ``~/Persistent/securedrop``). Ensure you have
 SecureDrop version 0.3.7 or later checked out (you can run ``git describe
 --exact-match`` to see what Git tag you've checked out).
 
-.. note:: The backups are stored in the Admin Workstation's persistent volume.
+.. note:: The backups are stored in the *Admin Workstation*'s persistent volume.
           **You should verify that you have enough space to store the backups
           before running the backup command.**
 
@@ -70,16 +70,14 @@ SecureDrop version 0.3.7 or later checked out (you can run ``git describe
 Check connectivity
 ''''''''''''''''''
 
-First, verify that your Admin Workstation is able to run Ansible and connect to
+First, verify that your *Admin Workstation* is able to run Ansible and connect to
 the SecureDrop servers.
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible -i inventory -u <SSH username> -m ping all
-
-.. tip:: If you forgot your SSH username, it is the value of the ``ssh_users``
-         variable in ``prod-specific.yml``.
+   ansible -m ping all
 
 If this command fails (usually with an error like "SSH Error: data could not be
 sent to the remote host. Make sure this host can be reached over ssh"), you need
@@ -89,17 +87,17 @@ to debug your connectivity before proceeding further. Make sure:
 
   * Ansible should be automatically installed by the Tails auto-configuration
     for SecureDrop. If it is not, you probably need to re-run
-    ``tails_files/install.sh``. See
+    ``./securedrop-admin tailsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
-* The Admin Workstation is connected to the Internet.
+* The *Admin Workstation* is connected to the Internet.
 * Tor started successfully.
 * The ``HidServAuth`` values from ``app-ssh-aths`` and ``mon-ssh-aths`` are in
   Tails' ``/etc/tor/torrc``.
 
   * Tor should be automatically configured to connect to the authenticated Tor
     Hidden Services by the Tails auto-configuration for SecureDrop. If it is
-    not, you probably need to re-run ``tails_files/install.sh``. See
+    not, you probably need to re-run ``./securedrop-admin tailsconfig``. See
     :doc:`configure_admin_workstation_post_install` for detailed instructions).
 
 Run the backup Ansible role
@@ -110,10 +108,11 @@ perform the backup:
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml -e perform_backup=true
+   ansible-playbook -t backup securedrop-prod.yml -e perform_backup=true
 
-.. todo:: Test this on a real Admin Workstation
+.. todo:: Test this on a real *Admin Workstation*
 
 The backup role will print out the results of its tasks as it completes them.
 You can expect the ``fetch the backup file`` step to take a long time,
@@ -135,13 +134,13 @@ Prerequisites
 '''''''''''''
 
 The process for restoring a backup is very similar to the process of creating
-one. As before, to get started, boot the Admin Workstation, ``cd`` to the
+one. As before, to get started, boot the *Admin Workstation*, ``cd`` to the
 SecureDrop repository, and ensure that you have SecureDrop 0.3.7 or later
 checked out.
 
 The restore role expects to find a ``.tar.gz`` backup archive in
 ``install_files/ansible-base`` under the SecureDrop repository root directory.
-If you are using the same Admin Workstation to do a restore from a previous
+If you are using the same *Admin Workstation* to do a restore from a previous
 backup, it should already be there because it was placed there by the backup
 role. Otherwise, you should copy the backup archive that you wish to restore to
 ``install_files/ansible-base``.
@@ -159,8 +158,9 @@ backup:
 
 .. code:: sh
 
+   source .venv/bin/activate
    cd install_files/ansible-base
-   ansible-playbook -i inventory -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ansible-playbook -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
 
 This actually performs a backup, followed by a restore. A backup is done before
 the restore as an emergency precaution, to ensure you can recover the server in
@@ -168,7 +168,7 @@ case something goes wrong with the restore.
 
 Once the restore is done, the Ansible playbook will fetch the Tor HidServAuth
 credentials for the various Authenticated Tor Hidden Services (ATHS) back to the
-Admin Workstation. This synchronizes the state on the Admin Workstation with the
+*Admin Workstation*. This synchronizes the state on the *Admin Workstation* with the
 state of the restored server. You should re-run the Tails custom configuration
-script (``tails_files/install.sh``, see
+script (``./securedrop-admin tailsconfig``, see
 :doc:`configure_admin_workstation_post_install` for detailed instructions).

@@ -1,0 +1,19 @@
+---
+# List of prohibited usernames for use in production contexts.
+# The Admin should set a unique username for the instance, to be
+# used in all subsequent tasks.
+securedrop_validate_disallowed_users:
+  - amnesia
+  - root
+
+# Whether to expect a persistence-enabled Tails environment. Defaults to true,
+# for prod contexts, but override capability is provided for testing.
+securedrop_validate_tails_environment: true
+
+# Reusable template for informative error messaging. Any validation failures
+# should explicitly state which var should be edited in the site-specific
+# file. Each var name will be different, and require customization at the task
+# level, but the general guidance text we can reuse to keep the config DRY.
+securedrop_validate_error_msg_start: >-
+  You should manually edit the file `group_vars/all/site-specific` and
+  confirm that

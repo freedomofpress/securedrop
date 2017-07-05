@@ -1,0 +1,46 @@
+---
+# Set the time at which the servers reboot to apply nightly updates
+# and aid in clearing memory. Only the hour is configurable.
+daily_reboot_time: 4 # An integer between 0 and 23
+
+disabled_kernel_modules:
+  - btusb
+  - bluetooth
+  - iwlmvm
+  - iwlwifi
+
+sysctl_flags:
+  - name: "net.ipv4.tcp_max_syn_backlog"
+    value: "4096"
+  - name: "net.ipv4.tcp_syncookies"
+    value: "1"
+  - name: "net.ipv4.conf.all.rp_filter"
+    value: "1"
+  - name: "net.ipv4.conf.all.accept_source_route"
+    value: "0"
+  - name: "net.ipv4.conf.all.accept_redirects"
+    value: "0"
+  - name: "net.ipv4.conf.all.secure_redirects"
+    value: "0"
+  - name: "net.ipv4.conf.default.rp_filter"
+    value: "1"
+  - name: "net.ipv4.conf.default.accept_source_route"
+    value: "0"
+  - name: "net.ipv4.conf.default.accept_redirects"
+    value: "0"
+  - name: "net.ipv4.conf.default.secure_redirects"
+    value: "0"
+  - name: "net.ipv4.icmp_echo_ignore_broadcasts"
+    value: "1"
+  - name: "net.ipv4.ip_forward"
+    value: "0"
+  - name: "net.ipv4.conf.all.send_redirects"
+    value: "0"
+  - name: "net.ipv4.conf.default.send_redirects"
+    value: "0"
+  - name: "net.ipv6.conf.all.disable_ipv6"
+    value: "1"
+  - name: "net.ipv6.conf.default.disable_ipv6"
+    value: "1"
+  - name: "net.ipv6.conf.lo.disable_ipv6"
+    value: "1"

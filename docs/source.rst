@@ -64,33 +64,36 @@ Slider to "High".
 
 |Security Slider|
 
-Click the ``Learn how to disable it`` link in the warning banner and a message
-bubble will pop up explaining how to disable Javascript and turn up the Slider.
-Follow the instructions and the page should refresh automatically. Note that
-this will change the slider and disable Javascript for every page in your Tor
-Browser, and this setting will persist across browser sessions.
+Click the **Learn how to set it to high** link in the warning banner and a
+message bubble will pop up explaining how to disable Javascript and turn up the
+Slider. Follow the instructions and the page should refresh automatically. Note
+that this will change the slider and disable Javascript for every page in your
+Tor Browser, and this setting will persist across browser sessions.
 
 |Fix Javascript warning|
 
 The page should now look similar to the screenshot below. If this is the first
-time you are using SecureDrop, click the ``Submit Documents`` button.
+time you are using SecureDrop, click the **Submit Documents** button.
 
 |Source Interface with Javascript Disabled|
 
 You should now see a screen that shows the unique codename that SecureDrop has
 generated for you. In the example screenshot below the codename is
-``chute surge stuck chill wish agone inure``, but yours will be different. It is
-extremely important that you both remember this code and keep it secret. After
-submitting documents, you will need to provide this code to log back in and
-check for responses.
+``bagpipe aloof whiff borrowing overwrite datebook unadvised``, but yours will
+be different. It is extremely important that you both remember this code and
+keep it secret. After submitting documents, you will need to provide this code
+to log back in and check for responses.
 
 The best way to protect your codename is to memorize it. If you cannot memorize
 it right away, we recommend writing it down and keeping it in a safe place at
 first, and gradually working to memorize it over time. Once you have memorized
 it, you should destroy the written copy.
 
+.. tip:: For detailed recommendations on best practices for managing your
+   passphrase, check out :doc:`passphrase_best_practices`.
+
 Once you have generated a codename and put it somewhere safe, click
-``Continue``.
+**Continue**.
 
 |Memorizing your codename|
 
@@ -103,36 +106,51 @@ limit, we recommend that you send a message to the journalist explaining
 this, so that they can set up another method for transferring the
 documents.
 
-When your submission is ready, click ``Submit``.
+When your submission is ready, click **Submit**.
 
 |Submit a document|
 
-After clicking ``Submit``, a confirmation page should appear, showing
+After clicking **Submit**, a confirmation page should appear, showing
 that your message and/or documents have been sent successfully. On this
 page you can make another submission or view responses to your previous
 messages.
 
 |Confirmation page|
 
+Once you are finished submitting documents, be certain you have saved your
+secret codename and then click the **Logout** button:
+
+|Logout|
+
+The final step to clearing your session is to restart Tor Browser for
+optimal security. You can either close the browser entirely or follow
+the notification: click on the Tor onion in the toolbar, click
+**New Identity** and then click **Yes** in the dialog box that appears
+to confirm you'd like to restart Tor Browser:
+
+|Restart TBB|
+
 
 Continuing the Conversation
 ---------------------------
 
 If you have already submitted a document and would like to check for
-responses, click the ``Check for a Response`` button on the media
+responses, click the **Check for a Response** button on the media
 organization's SecureDrop homepage.
 
 |Source Interface with Javascript Disabled|
 
 The next page will ask for your secret codename. Enter it and click
-``Continue``.
+**Continue**.
 
 |Check for response|
 
 If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
-another message to the journalist. Be sure to delete any messages here
-before navigating away.
+another message to the journalist. Before leaving the page, you should
+delete any replies. In the unlikely event that someone learns
+your codename, this will keep your identity secret as no one will be
+able to see the previous correspondences you had with journalists.
 
 |Check for a reply|
 
@@ -146,7 +164,7 @@ once and is overloaded with submissions, the journalist will flag your
 message on their end and you will see the message below. They can't
 write a reply to you until you've seen this message for security
 reasons. This will only happen the first time a journalist replies and
-with subsequent replies you will skip this step. Click ``Refresh`` or
+with subsequent replies you will skip this step. Click **Refresh** or
 log in again to see if a journalist has responded.
 
 |Check for an initial response|
@@ -161,6 +179,8 @@ Repeat these steps to continue communicating with the journalist.
 .. |Memorizing your codename| image:: images/manual/source-step4.png
 .. |Submit a document| image:: images/manual/source-step5.png
 .. |Confirmation page| image:: images/manual/source-step6.png
+.. |Logout| image:: images/manual/logout-notification.png
+.. |Restart TBB| image:: images/manual/restart-tor-browser.png
 .. |Check for response| image:: images/manual/source-step8.png
 .. |Check for a reply| image:: images/manual/source-step9.png
 .. |Delete received messages| image:: images/manual/source-step10.png

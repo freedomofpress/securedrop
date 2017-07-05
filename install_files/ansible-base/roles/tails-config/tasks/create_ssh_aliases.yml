@@ -1,0 +1,30 @@
+---
+# Read the Onion URL from the Tor info files that were fetched back during
+# installation. On the Admin Workstation, these files will be present
+# after running the playbooks, but on the Journalist Workstation, they must
+# be copied manually by the Admin.
+
+- name: Look up Application Server SSH Onion URL.
+  command: grep -Po '.{16}\.onion' app-ssh-aths
+  changed_when: false
+  register: app_ssh_lookup_result
+
+- name: Look up Monitor Server SSH Onion URL.
+  command: grep -Po '.{16}\.onion' mon-ssh-aths
+  changed_when: false
+  register: mon_ssh_lookup_result
+
+- name: Create SSH config directory.
+  file:
+    state: directory
+    path: "{{ tails_config_amnesia_home }}/.ssh"
+    mode: "0700"
+
+- name: Create SSH alias
+  template:
+    src: ssh_config.j2
+    dest: "{{ item }}"
+    mode: "0600"
+  with_items:
+    - "{{ tails_config_securedrop_dotfiles }}/ssh_config"
+    - "{{ tails_config_amnesia_home }}/.ssh/config"

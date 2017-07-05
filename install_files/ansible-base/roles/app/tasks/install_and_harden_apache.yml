@@ -1,44 +1,117 @@
 ---
-- name: install apache packages
-  apt: pkg="{{ item }}" state=latest
-  with_items: apache_packages
+- name: Install apache packages.
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: "{{ apache_packages }}"
+  tags:
+    - apt
+    - apache
 
-- name: ensure apache configuration files are present
-  copy: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
-  with_items: apache_files
+- name: Copy Apache configuration file.
+  copy:
+    src: apache2.conf
+    dest: /etc/apache2/apache2.conf
+    owner: root
+    mode: "0644"
+  notify:
+    - restart apache2
+  tags:
+    - apache
 
-- name: ensure templatized apache configs are present
-  template: src={{ item }} dest=/etc/apache2/{{ item }} owner=root mode=0644
-  with_items: apache_templates
+  # Previous versions of the Ansible config (prior to 0.4) created this
+  # unnecessary file, so let's clean it up.
+- name: Remove deprecated Apache configuration file.
+  file:
+    path: /etc/apache2/security
+    state: absent
+  # Not notifying a handler since the config file was never included.
+  tags:
+    - apache
 
-- name: ensure required apache modules are present
-  apache2_module: state=present name={{ item }}
-  with_items: apache_modules
+- name: Copy Apache ports and site configs.
+  template:
+    src: "{{ item }}"
+    dest: /etc/apache2/{{ item }}
+    owner: root
+    mode: "0644"
+  with_items: "{{ apache_templates }}"
+  notify:
+    - restart apache2
+  tags:
+    - apache
 
-- name: ensure non-required apache modules are disabled
-  apache2_module: state=absent name={{ item }}
-  with_items: apache_disabled_modules
+- name: Enable required Apache modules.
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items: "{{ apache_modules }}"
+  notify:
+    - restart apache2
+  tags:
+    - apache
 
-- name: ensure 000-default site is disabled
+- name: Disable blacklisted Apache modules.
+  apache2_module:
+    state: absent
+    name: "{{ item }}"
+  with_items: "{{ apache_disabled_modules }}"
+  notify:
+    - restart apache2
+  tags:
+    - apache
+    - hardening
+
+- name: Disable default Apache sites.
   file:
     state: absent
-    dest: /etc/apache2/sites-enabled/000-default.conf
+    dest: /etc/apache2/sites-enabled/{{ item }}
+  with_items:
+    - 000-default.conf
+    - default-ssl.conf
+    - default.conf
+  notify:
+    - restart apache2
+  tags:
+    - apache
+    - hardening
 
-- name: ensure default-ssl site is disabled
+  # The default html directory gets created during installation
+  # of the apache package, so this task must run after installing.
+- name: Remove default Apache site directory /var/www/html/.
   file:
     state: absent
-    dest: /etc/apache2/sites-enabled/default-ssl.conf
+    dest: /var/www/html
+  notify:
+    - restart apache2
+  tags:
+    - apache
+    - hardening
 
-- name: ensure default site is disabled
+  # because we no longer call the `journalist interface` the `document interface`
+- name: Remove old config files
   file:
     state: absent
-    dest: /etc/apache2/sites-enabled/default.conf
+    path: '/etc/apache2/{{ item }}'
+  with_items:
+    - sites-available/document.conf
+    - sites-enabled/document.conf
+  notify:
+    - restart apache2
+  tags:
+    - apache
 
-- name: ensure securedrop sites are enabled
+- name: Enable SecureDrop Apache sites.
   file:
     state: link
     src: "/etc/apache2/sites-available/{{ item }}.conf"
     dest: "/etc/apache2/sites-enabled/{{ item }}.conf"
-  with_items: apache_sites
+  with_items:
+    - journalist
+    - source
   notify:
     - restart apache2
+  tags:
+    - apache

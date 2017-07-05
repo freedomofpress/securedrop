@@ -1,66 +1,63 @@
 ---
-- name: install deb packages required to build securedrop-app-code.deb
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
+- name: Install dependencies for building securedrop-app-code deb package.
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ development_dependencies }}"
+  tags: apt
 
-- name: install pip install wheel
-  pip: name=wheel
+- name: Install pip wheel.
+  pip:
+    name: wheel
+  tags: pip
 
-- name: copy install_files/securedrop-app-code dir to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/ cp -R {{ securedrop_app_code_deb_config }} /tmp/{{ securedrop_app_code_deb }}/
+- name: Copy install_files/securedrop-app-code dir to build path.
+  synchronize:
+    src: ../securedrop-app-code/
+    dest: "{{ securedrop_app_code_deb_dir }}"
+    delete: yes
+    recursive: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
 
-- name: ensure build path var structure exists
+- debug: var=securedrop_code
+
+- name: Copy app code to build directory.
+  synchronize:
+    src: ../../securedrop/
+    dest: "{{ securedrop_code_filtered }}"
+    recursive: yes
+    delete: yes
+    use_ssh_args: "{{ 'yes' if amazon_builder else omit }}"
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
+
+- include: sass.yml
+
+- name: Create pip wheel archive for Debian package requirements.
+  command: >
+    pip wheel
+    -r {{ securedrop_code_filtered }}/requirements/securedrop-requirements.txt
+    -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
+  tags: pip
+
+- name: Create apparmor.d directory in build path.
   file:
     state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/"
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/apparmor.d"
+  tags: apparmor
 
-- name: ensure build path www structure exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www"
+- name: Copy AppArmor profiles to build path.
+  copy:
+    src: "{{ item }}"
+    dest: "{{ securedrop_app_code_deb_dir }}/etc/apparmor.d/{{ item }}"
+  with_items: "{{ apparmor_profiles }}"
+  tags: apparmor
 
-- name: ensure build path directory for wheelhouse exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/securedrop"
+- name: Build securedrop-app-code Debian package.
+  command: dpkg-deb --build {{ securedrop_app_code_deb_dir }}
 
-- name: copy securedrop to build path
-  command: creates=/tmp/{{ securedrop_app_code_deb }}/var/www/{{ build_app_code_dir }} cp -R {{ build_app_code_dir }} /tmp/{{ securedrop_app_code_deb }}/var/www/
-
-- name: ensure config.py does not exist in the build path
-  file:
-    state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}/var/www/securedrop/config.py"
-
-- name: make pip wheel archive for our debian package requirements
-  command: pip wheel -r {{ securedrop_pip_requirements }} -w /tmp/{{ securedrop_app_code_deb }}/var/securedrop/wheelhouse
-
-- name: ensure build dir /etc exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/"
-
-- name: ensure apparmor build dir exists
-  file:
-    state: directory
-    dest: "/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d"
-
-- name: copy apparmor profiles to build path
-  copy: src={{ item }} dest=/tmp/{{ securedrop_app_code_deb }}/etc/apparmor.d/{{ item }}
-  with_items: apparmor_profiles
-
-- name: create the deb package
-  command: creates=/tmp/{{ securedrop_app_code_deb }}.deb dpkg-deb --build /tmp/{{ securedrop_app_code_deb }}
-
-- name: move the deb to the Vagrant shared folder
-  command: cp /tmp/{{ securedrop_app_code_deb }}.deb {{ securedrop_repo }}/build
-
-- name: remove the build temp dir
-  file:
-    state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}"
-
-- name: remove temp package
-  file:
-    state: absent
-    dest: "/tmp/{{ securedrop_app_code_deb }}.deb"
+- name: Fetch newly built Debian packages back to localhost.
+  fetch:
+    src: "{{ securedrop_app_code_deb_dir }}.deb"
+    dest: "{{ ossec_build_deb_package_local_dest_dir }}"
+    flat: yes
+    fail_on_missing: yes
