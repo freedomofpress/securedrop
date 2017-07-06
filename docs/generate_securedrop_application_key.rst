@@ -61,7 +61,7 @@ Create the key
 
    |OK to generate|
 
-#. A box will pop up asking you to type a passphrase. Since the key is
+#. A box will pop up (twice) asking you to type a passphrase. Since the key is
    protected by the encryption on the Tails persistent volume, it is safe to
    simply click **OK** without entering a passphrase.
 #. The software will ask you if you are sure. Click **Yes, protection is not
