@@ -67,15 +67,16 @@
       <div class="reply">
         <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
         <form id="delete" class="message" method="post" action="/delete" autocomplete="off">
-          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
-          <img id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
+            <img id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
+          </a>
           <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
             <p>Delete this reply?
               <a href="#delete">Cancel</a>
               <button type="submit" class="sd-button btn danger" id="confirm-delete-reply-button-{{ reply.filename }}">DELETE</button>
-              </p>
+            </p>
           </div>
         </form>
         <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
