@@ -64,7 +64,7 @@ SecureDrop configuration.
 While the `CAB forum`_ has specified that ``.onion`` certificates may have a
 maximum lifetime of 15 months, we have heard that some folks have run into
 issues with such certificates, and currently it seems safest to give the
-certificte a validity period of 12 months.
+certificate a validity period of 12 months.
 
 .. tip:: Be patient! HTTPS certificates for ``.onions`` are a recent and fairly
    niche development, so you may run into various issues while trying to obtain
