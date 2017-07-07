@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4
+## 0.4-rc1
 
 The issues for this release were tracked in the 0.4 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.4.
