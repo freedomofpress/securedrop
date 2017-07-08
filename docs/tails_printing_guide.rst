@@ -79,6 +79,29 @@ which indicates that the printer is "ready" for printing.
 
 |printer ready|
 
+For instances where your printer does *not* work out of the box, most difficulties
+stem from not selecting the right driver (extra software needed for the printer
+and computer to communicate). Luckily, Tails has a large number of drivers for
+just about any popularly manufactured printer on hand, without even having to
+download new drivers from the web.
+
+Click "Add a Printer". By doing so, you'll now get a list of printers that Tails
+has auto-detected. You should now see this:
+
+|select printer to add|
+
+In this example, we've connected an HP Deskjet F4200. Clicking on this printer
+will select it for installation, which, if successful, will display the
+following:
+
+|printer installing|
+
+This indicates the Tails is attempting to install the USB printer; assuming you
+receive no errors in this process, you will then see the following screen,
+which indicates that the printer is "ready" for printing.
+
+|printer ready|
+
 Troubleshooting
 ---------------
 
@@ -168,9 +191,9 @@ a process of trial-and-error.
 Printing from the Command Line
 ------------------------------
 
-You  can also easily print from the command line using the ``lp`` command; if
+You can also easily print from the command line using the ``lp`` command; if
 you haven't already set your installed printer as default in the GUI, you can
-quickly do so by adding this line to your ``~/.bashrc`` file, or entering it
+quickly do so by adding this line to your ``~/.bashrc`` file, or entering this
 directly into the terminal:
 
 .. code:: sh
