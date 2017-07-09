@@ -1,16 +1,19 @@
 import tempfile
 
 from selenium.webdriver.common.action_chains import ActionChains
+from step_helpers import screenshots
 
 
 class SourceNavigationSteps():
 
+    @screenshots
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
 
         assert ("SecureDrop | Protecting Journalists and Sources" ==
                 self.driver.title)
 
+    @screenshots
     def _source_chooses_to_submit_documents(self):
         # First move the cursor to a known position in case it happens to
         # be hovering over one of the buttons we are testing below.
@@ -45,6 +48,7 @@ class SourceNavigationSteps():
         assert len(codename.text) > 0
         self.source_name = codename.text
 
+    @screenshots
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
 
@@ -53,6 +57,7 @@ class SourceNavigationSteps():
 
         assert len(logins) > 0
 
+    @screenshots
     def _source_hits_cancel_at_login_page(self):
         self.driver.find_element_by_id('cancel').click()
 
@@ -61,6 +66,7 @@ class SourceNavigationSteps():
         assert ("SecureDrop | Protecting Journalists and Sources" ==
                 self.driver.title)
 
+    @screenshots
     def _source_proceeds_to_login(self):
         codename_input = self.driver.find_element_by_id(
             'login-with-existing-codename')
@@ -72,12 +78,14 @@ class SourceNavigationSteps():
         assert ("SecureDrop | Protecting Journalists and Sources" ==
                 self.driver.title)
 
+    @screenshots
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
 
         headline = self.driver.find_element_by_class_name('headline')
         assert 'Submit Materials' == headline.text
 
+    @screenshots
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
 
@@ -100,6 +108,7 @@ class SourceNavigationSteps():
         headline = self.driver.find_element_by_class_name('headline')
         assert 'Submit Materials' == headline.text
 
+    @screenshots
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message)
@@ -127,6 +136,7 @@ class SourceNavigationSteps():
                 'Thank you for sending this information to us')
             assert expected_notification in notification.text
 
+    @screenshots
     def _source_submits_a_message(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
         # send_keys = type into text box
@@ -140,6 +150,7 @@ class SourceNavigationSteps():
         assert ('Thank you for sending this information to us' in
                 notification.text)
 
+    @screenshots
     def _source_deletes_a_journalist_reply(self):
         # Get the reply filename so we can use IDs to select the delete buttons
         reply_filename_element = self.driver.find_element_by_name(
@@ -159,6 +170,7 @@ class SourceNavigationSteps():
         notification = self.driver.find_element_by_class_name('notification')
         assert 'Reply deleted' in notification.text
 
+    @screenshots
     def _source_logs_out(self):
         self.driver.find_element_by_id('logout').click()
         assert self.driver.find_element_by_css_selector('.important')
