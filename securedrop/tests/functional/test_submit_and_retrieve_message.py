@@ -3,6 +3,7 @@ import source_navigation_steps
 import journalist_navigation_steps
 import unittest
 import urllib2
+from step_helpers import screenshots
 
 
 class SubmitAndRetrieveMessage(
@@ -17,6 +18,7 @@ class SubmitAndRetrieveMessage(
     def tearDown(self):
         functional_test.FunctionalTest.tearDown(self)
 
+    @screenshots
     def test_submit_and_retrieve_happy_path(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

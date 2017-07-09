@@ -8,10 +8,12 @@ from selenium.common.exceptions import NoSuchElementException
 
 import tests.utils.db_helper as db_helper
 from db import Journalist
+from step_helpers import screenshots
 
 
 class JournalistNavigationSteps():
 
+    @screenshots
     def _get_submission_content(self, file_url, raw_content):
         if not file_url.endswith(".gz.gpg"):
             return str(raw_content)
@@ -25,6 +27,7 @@ class JournalistNavigationSteps():
 
             return content
 
+    @screenshots
     def _login_user(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
         username_field = self.driver.find_element_by_css_selector(
@@ -47,6 +50,7 @@ class JournalistNavigationSteps():
         self.assertEquals(self.driver.current_url,
                           self.journalist_location + '/')
 
+    @screenshots
     def _journalist_logs_in(self):
         # Create a test user for logging in
         self.user, self.user_pw = db_helper.init_journalist()
@@ -55,6 +59,7 @@ class JournalistNavigationSteps():
         headline = self.driver.find_element_by_css_selector('span.headline')
         self.assertIn('Sources', headline.text)
 
+    @screenshots
     def _admin_logs_in(self):
         self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
@@ -68,6 +73,7 @@ class JournalistNavigationSteps():
         links = self.driver.find_elements_by_tag_name('a')
         self.assertIn('Admin', [el.text for el in links])
 
+    @screenshots
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_link_text('Admin')
         admin_interface_link.click()
@@ -75,6 +81,7 @@ class JournalistNavigationSteps():
         h1s = self.driver.find_elements_by_tag_name('h1')
         self.assertIn("Admin Interface", [el.text for el in h1s])
 
+    @screenshots
     def _add_user(self, username, password, is_admin=False):
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -96,6 +103,7 @@ class JournalistNavigationSteps():
             'button[type=submit]')
         submit_button.click()
 
+    @screenshots
     def _admin_adds_a_user(self):
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
@@ -136,6 +144,7 @@ class JournalistNavigationSteps():
                        " {}!").format(self.new_user['username']),
                       [el.text for el in flashed_msgs])
 
+    @screenshots
     def _logout(self):
         # Click the logout link
         logout_link = self.driver.find_element_by_link_text('Logout')
@@ -147,6 +156,7 @@ class JournalistNavigationSteps():
                                   self.driver.page_source)
         )
 
+    @screenshots
     def _check_login_with_otp(self, otp):
         self._logout()
         self._login_user(self.new_user['username'],
@@ -154,6 +164,7 @@ class JournalistNavigationSteps():
         # Test that the new user was logged in successfully
         self.assertIn('Sources', self.driver.page_source)
 
+    @screenshots
     def _new_user_can_log_in(self):
         # Log the admin user out
         self._logout()
@@ -172,6 +183,7 @@ class JournalistNavigationSteps():
                           self.driver.find_element_by_link_text,
                           'Admin')
 
+    @screenshots
     def _edit_account(self):
         edit_account_link = self.driver.find_element_by_link_text(
             'Edit Account')
@@ -200,6 +212,7 @@ class JournalistNavigationSteps():
         self.assertRegexpMatches(hotp_reset_button.get_attribute('action'),
                                  '/account/reset-2fa-hotp')
 
+    @screenshots
     def _edit_user(self, username):
         user = Journalist.query.filter_by(username=username).one()
 
@@ -243,6 +256,7 @@ class JournalistNavigationSteps():
         self.assertEqual(int(hotp_reset_uid.get_attribute('value')), user.id)
         self.assertFalse(hotp_reset_uid.is_displayed())
 
+    @screenshots
     def _admin_can_edit_new_user(self):
         # Log the new user out
         self._logout()
@@ -332,6 +346,7 @@ class JournalistNavigationSteps():
             lambda: self.assertIn('Sources', self.driver.page_source)
         )
 
+    @screenshots
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
 
@@ -343,6 +358,7 @@ class JournalistNavigationSteps():
         unread_span = self.driver.find_element_by_css_selector('span.unread')
         self.assertIn("1 unread", unread_span.text)
 
+    @screenshots
     def _journalist_stars_and_unstars_single_message(self):
         # Message begins unstarred
         with self.assertRaises(NoSuchElementException):
@@ -358,6 +374,7 @@ class JournalistNavigationSteps():
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element_by_id('starred-source-link-1')
 
+    @screenshots
     def _journalist_selects_all_sources_then_selects_none(self):
         self.driver.find_element_by_id('select_all').click()
         checkboxes = self.driver.find_elements_by_id('checkbox')
@@ -369,6 +386,7 @@ class JournalistNavigationSteps():
         for checkbox in checkboxes:
             self.assertFalse(checkbox.is_selected())
 
+    @screenshots
     def _journalist_downloads_message(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
