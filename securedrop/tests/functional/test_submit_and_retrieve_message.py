@@ -1,6 +1,7 @@
 import functional_test
 import source_navigation_steps
 import journalist_navigation_steps
+from step_helpers import screenshots
 
 
 class TestSubmitAndRetrieveMessage(
@@ -8,6 +9,7 @@ class TestSubmitAndRetrieveMessage(
         source_navigation_steps.SourceNavigationSteps,
         journalist_navigation_steps.JournalistNavigationSteps):
 
+    @screenshots
     def test_submit_and_retrieve_happy_path(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
