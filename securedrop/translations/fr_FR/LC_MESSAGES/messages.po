@@ -7,96 +7,240 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-07-09 08:55+0000\n"
+"POT-Creation-Date: 2017-07-10 22:44+0000\n"
 "PO-Revision-Date: 2017-07-09 09:34+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
-"Language-Team: French "
-"<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
+"Language-Team: French <http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
+"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
+#: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
 msgstr "Modifier le Secret"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
+#: journalist_templates/admin_add_user.html:19
+#: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
 msgstr "Secret HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
+#: journalist_templates/admin_edit_hotp_secret.html:10
 msgid "CONTINUE"
 msgstr "CONTINUER"
 
 #: journalist_templates/account_new_two_factor.html:4
+#: journalist_templates/admin_new_user_two_factor.html:4
 msgid "Enable Google Authenticator"
 msgstr "Activer Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:5
-msgid ""
-"You're almost done! To finish resetting your two-factor authentication, "
-"follow the instructions below to set up Google Authenticator. Once you've"
-" added the entry for your account in the app, enter one of the 6-digit "
-"codes from the app to confirm that two factor authentication is set up "
-"correctly."
-msgstr ""
-"Vous avez presque terminé! Pour finaliser la ré-initialisation de votre "
-"authentification à deux facteurs, suivez les instructions ci-dessous pour "
-"mettre en place Google Authenticator. Après avoir ajouté votre compte dans "
-"l'app, recopiez l'un des codes a 6 chiffres pour confirmer que "
-"l'authentification à deux facteurs fonctionne correctement."
+msgid "You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up Google Authenticator. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly."
+msgstr "Vous avez presque terminé! Pour finaliser la ré-initialisation de votre authentification à deux facteurs, suivez les instructions ci-dessous pour mettre en place Google Authenticator. Après avoir ajouté votre compte dans l'app, recopiez l'un des codes a 6 chiffres pour confirmer que l'authentification à deux facteurs fonctionne correctement."
 
 #: journalist_templates/account_new_two_factor.html:8
+#: journalist_templates/admin_new_user_two_factor.html:7
 msgid "Install Google Authenticator on your phone"
 msgstr "Installez Google Authenticator sur votre téléphone"
 
 #: journalist_templates/account_new_two_factor.html:9
+#: journalist_templates/admin_new_user_two_factor.html:8
 msgid "Open the Google Authenticator app"
 msgstr "Ouvrez l'app Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:10
+#: journalist_templates/admin_new_user_two_factor.html:9
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
-msgstr ""
-"Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-barres\""
+msgstr "Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-barres\""
 
 #: journalist_templates/account_new_two_factor.html:11
-msgid ""
-"Your phone will now be in \"scanning\" mode. When you are in this mode, "
-"scan the barcode below:"
-msgstr ""
-"Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode, "
-"scannez le code-barres ci-dessous:"
+#: journalist_templates/admin_new_user_two_factor.html:10
+msgid "Your phone will now be in \"scanning\" mode. When you are in this mode, scan the barcode below:"
+msgstr "Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode, scannez le code-barres ci-dessous:"
 
 #: journalist_templates/account_new_two_factor.html:14
+#: journalist_templates/admin_new_user_two_factor.html:13
 msgid "Can't scan the barcode? Enter the following code manually:"
-msgstr ""
-"Vous ne parvenez pas à scanner le code-barres ? Tapez le code suivant "
-"manuellement:"
+msgstr "Vous ne parvenez pas à scanner le code-barres ? Tapez le code suivant manuellement:"
 
 #: journalist_templates/account_new_two_factor.html:15
+#: journalist_templates/admin_new_user_two_factor.html:14
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
-msgstr ""
-"Lorsque vous avez scanné le code-barres, tapez le code à six chiffres ci-"
-"dessous:"
+msgstr "Lorsque vous avez scanné le code-barres, tapez le code à six chiffres ci-dessous:"
 
 #: journalist_templates/account_new_two_factor.html:17
+#: journalist_templates/admin_new_user_two_factor.html:16
 msgid "Enable Yubikey (OATH-HOTP)"
 msgstr "Activation de Yubikey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
+#: journalist_templates/admin_new_user_two_factor.html:17
 msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
-msgstr ""
-"Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres ci-"
-"dessous:"
+msgstr "Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres ci-dessous:"
 
 #: journalist_templates/account_new_two_factor.html:22
+#: journalist_templates/admin_new_user_two_factor.html:21
 msgid "Verification code"
 msgstr "Code de vérification"
 
 #: journalist_templates/account_new_two_factor.html:24
+#: journalist_templates/admin_new_user_two_factor.html:23
+#: journalist_templates/col.html:80
 msgid "SUBMIT"
 msgstr "SOUMETTRE"
+
+#: journalist_templates/admin.html:3
+msgid "Admin Interface"
+msgstr ""
+
+#: journalist_templates/admin.html:6
+#: journalist_templates/admin_add_user.html:21
+msgid "ADD USER"
+msgstr ""
+
+#: journalist_templates/admin.html:16
+#: journalist_templates/admin_add_user.html:9
+msgid "Username"
+msgstr ""
+
+#: journalist_templates/admin.html:17
+msgid "Edit"
+msgstr ""
+
+#: journalist_templates/admin.html:18
+msgid "Delete"
+msgstr ""
+
+#: journalist_templates/admin.html:19
+msgid "Created"
+msgstr ""
+
+#: journalist_templates/admin.html:20
+msgid "Last login"
+msgstr ""
+
+#: journalist_templates/admin.html:25
+msgid "Edit user {username}"
+msgstr ""
+
+#: journalist_templates/admin.html:26
+msgid "Delete user {username}"
+msgstr ""
+
+#: journalist_templates/admin.html:31
+msgid "Never"
+msgstr ""
+
+#: journalist_templates/admin.html:38
+msgid "No users to display"
+msgstr ""
+
+#: journalist_templates/admin_add_user.html:4
+msgid "Back to admin interface"
+msgstr ""
+
+#: journalist_templates/admin_add_user.html:10
+msgid "Password"
+msgstr ""
+
+#: journalist_templates/admin_add_user.html:11
+msgid "Password (again)"
+msgstr ""
+
+#: journalist_templates/admin_add_user.html:14
+msgid "Is Administrator"
+msgstr ""
+
+#: journalist_templates/admin_add_user.html:18
+msgid "I'm using a Yubikey"
+msgstr ""
+
+#: journalist_templates/admin_new_user_two_factor.html:5
+msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly."
+msgstr ""
+
+#: journalist_templates/col.html:10
+msgid "All Sources"
+msgstr ""
+
+#: journalist_templates/col.html:13
+msgid "Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like."
+msgstr ""
+
+#: journalist_templates/col.html:13
+msgid "Change codename"
+msgstr ""
+
+#: journalist_templates/col.html:14
+msgid "Are you sure you want to generate a new codename?"
+msgstr ""
+
+#: journalist_templates/col.html:15
+msgid "Cancel"
+msgstr ""
+
+#: journalist_templates/col.html:16
+msgid "CONFIRM"
+msgstr ""
+
+#: journalist_templates/col.html:22
+msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
+msgstr ""
+
+#: journalist_templates/col.html:26
+msgid "Download Selected"
+msgstr ""
+
+#: journalist_templates/col.html:27
+msgid "Delete Selected"
+msgstr ""
+
+#: journalist_templates/col.html:53
+msgid "Uploaded Document"
+msgstr ""
+
+#: journalist_templates/col.html:55
+msgid "Reply"
+msgstr ""
+
+#: journalist_templates/col.html:57
+msgid "Message"
+msgstr ""
+
+#: journalist_templates/col.html:67
+msgid "No documents to display."
+msgstr ""
+
+#: journalist_templates/col.html:74
+msgid "You can write a secure reply to the person who submitted these documents:"
+msgstr ""
+
+#: journalist_templates/col.html:83
+msgid "You've flagged this source for reply."
+msgstr ""
+
+#: journalist_templates/col.html:84
+msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
+msgstr ""
+
+#: journalist_templates/col.html:86
+msgid "Click below if you would like to write a reply to this source."
+msgstr ""
+
+#: journalist_templates/col.html:90
+msgid "FLAG THIS SOURCE FOR REPLY"
+msgstr ""
+
+#: journalist_templates/col.html:95
+msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
+msgstr ""
+
+#: journalist_templates/col.html:101
+msgid "DELETE COLLECTION"
+msgstr ""
+
