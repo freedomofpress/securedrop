@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-10 22:44+0000\n"
-"PO-Revision-Date: 2017-07-09 09:34+0000\n"
+"PO-Revision-Date: 2017-07-10 23:04+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
+"Language-Team: French "
+"<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
-"Language-Team: French <http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -96,151 +98,169 @@ msgstr "SOUMETTRE"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr ""
+msgstr "Interface d'administration"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "AJOUTER UN UTILISATEUR"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:9
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
-msgstr ""
+msgstr "Edition"
 
 #: journalist_templates/admin.html:18
 msgid "Delete"
-msgstr ""
+msgstr "Suppression"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
-msgstr ""
+msgstr "Créé"
 
 #: journalist_templates/admin.html:20
 msgid "Last login"
-msgstr ""
+msgstr "Dernière connexion"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Editer l'utilisateur {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Supprimer l'utilisateur {username}"
 
 #: journalist_templates/admin.html:31
 msgid "Never"
-msgstr ""
+msgstr "Jamais"
 
 #: journalist_templates/admin.html:38
 msgid "No users to display"
-msgstr ""
+msgstr "Aucun utilisateur à afficher"
 
 #: journalist_templates/admin_add_user.html:4
 msgid "Back to admin interface"
-msgstr ""
+msgstr "Retour a l'interface d'administration"
 
 #: journalist_templates/admin_add_user.html:10
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "Password (again)"
-msgstr ""
+msgstr "Mot de passe (vérification)"
 
 #: journalist_templates/admin_add_user.html:14
 msgid "Is Administrator"
-msgstr ""
+msgstr "Droits d'administration"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "I'm using a Yubikey"
-msgstr ""
+msgstr "J'utilise une Yubikey"
 
 #: journalist_templates/admin_new_user_two_factor.html:5
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
+"Vous avez presque terminé! Pour finaliser l'ajout de ce nouvel utilisateur, "
+"faites leur suivre les instructions qui suivent pour mettre en place "
+"l'authentification a deux facteurs avec Google Authenticator. Lorsqu'ils "
+"auront ajouté une nouvelle entrée pour ce compte dans l'app, demandez leur "
+"de taper le code a 6 chiffres fourni par l'app pour confirmer que "
+"l'authentification a deux facteurs est correctement mise en place."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
-msgstr ""
+msgstr "Toutes les sources"
 
 #: journalist_templates/col.html:13
 msgid "Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like."
 msgstr ""
+"Générez un nouveau code aléatoire pour cette source. Il est recommandé de le "
+"faire si le premier code aléatoire est difficile a prononcer ou a mémoriser. "
+"Vous pouvez généré autant de codes aléatoires que vous souhaitez."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr ""
+msgstr "Modifier le nom de code"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr ""
+msgstr "Etes vous certain de vouloir générer un nouveau nom de code ?"
 
 #: journalist_templates/col.html:15
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: journalist_templates/col.html:16
 msgid "CONFIRM"
-msgstr ""
+msgstr "CONFIRMER"
 
 #: journalist_templates/col.html:22
 msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
 msgstr ""
+"Les documents sont stockés sous forme chiffrée pour des raisons de sécurité. "
+"Pour les lire vous aurez besoin de les déchiffrer avec GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr ""
+msgstr "Télécharger la sélection"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr ""
+msgstr "Supprimer la sélection"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr ""
+msgstr "Envoyer le document"
 
 #: journalist_templates/col.html:55
 msgid "Reply"
-msgstr ""
+msgstr "Répondre"
 
 #: journalist_templates/col.html:57
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: journalist_templates/col.html:67
 msgid "No documents to display."
-msgstr ""
+msgstr "Aucun document à afficher."
 
 #: journalist_templates/col.html:74
 msgid "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
+"Vous pouvez écrire une réponse sécurisée à la personne qui a soumis ces "
+"documents:"
 
 #: journalist_templates/col.html:83
 msgid "You've flagged this source for reply."
-msgstr ""
+msgstr "Vous avez marqué cette source pour lui répondre."
 
 #: journalist_templates/col.html:84
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
 msgstr ""
+"Une clé de chiffrement sera générée pour la source la prochaine fois qu'elle "
+"se connecte, après quoi vous serez en mesure de lui répondre ici."
 
 #: journalist_templates/col.html:86
 msgid "Click below if you would like to write a reply to this source."
-msgstr ""
+msgstr "Cliquez ci dessous si vous souhaitez écrire une réponse à cette source."
 
 #: journalist_templates/col.html:90
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "MARQUEZ CETTE SOURCE POUR Y REPONDRE"
 
 #: journalist_templates/col.html:95
 msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
 msgstr ""
+"Cliquez ci dessous pour supprimer la collection de documents de cette "
+"source. <em>Attention: Si vous faites cela, les fichiers visible ici ne "
+"pourront être récupéré et la source ne sera plus capable de se connecter en "
+"utilisant leur nom de code.</em>"
 
 #: journalist_templates/col.html:101
 msgid "DELETE COLLECTION"
-msgstr ""
-
+msgstr "SUPPRIMER LA COLLECTION"
