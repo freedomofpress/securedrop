@@ -119,8 +119,7 @@ def install_apt_dependencies(args):
 
 
 def envsetup(args):
-    """
-    Installs all Admin tooling required for managing SecureDrop. Specifically:
+    """Installs Admin tooling required for managing SecureDrop. Specifically:
 
         * updates apt-cache
         * installs apt packages for Python virtualenv
@@ -228,9 +227,14 @@ def run_tails_config(args):
 
 
 if __name__ == "__main__":
+    class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
+                                 argparse.RawTextHelpFormatter):
+        """Needed to combine formatting classes for help output"""
+        pass
 
     # Processing argument parsing logic -- yuck
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=ArgParseFormatterCombo)
     parser.add_argument('-v', action='store_true', default=False,
                             help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
