@@ -8,8 +8,8 @@ class SourceNavigationSteps():
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
 
-        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
-                         self.driver.title)
+        assert ("SecureDrop | Protecting Journalists and Sources" ==
+                self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
         # First move the cursor to a known position in case it happens to
@@ -24,7 +24,7 @@ class SourceNavigationSteps():
 
         submit_button_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.off-hover')
-        self.assertTrue(submit_button_icon.is_displayed())
+        assert submit_button_icon.is_displayed()
 
         # The source hovers their cursor over the button, and the visual style
         # of the button changes to encourage them to click it.
@@ -32,17 +32,17 @@ class SourceNavigationSteps():
 
         # Let's make sure toggling the icon image with the hover state
         # is working.
-        self.assertFalse(submit_button_icon.is_displayed())
+        assert submit_button_icon.is_displayed() is False
         submit_button_hover_icon = self.driver.find_element_by_css_selector(
             'a#submit-documents-button > img.on-hover')
-        self.assertTrue(submit_button_hover_icon.is_displayed())
+        assert submit_button_hover_icon.is_displayed()
 
         # The source clicks the submit button.
         submit_button.click()
 
         codename = self.driver.find_element_by_css_selector('#codename')
 
-        self.assertTrue(len(codename.text) > 0)
+        assert len(codename.text) > 0
         self.source_name = codename.text
 
     def _source_chooses_to_login(self):
@@ -51,15 +51,15 @@ class SourceNavigationSteps():
         logins = self.driver.find_elements_by_id(
             'login-with-existing-codename')
 
-        self.assertTrue(len(logins) > 0)
+        assert len(logins) > 0
 
     def _source_hits_cancel_at_login_page(self):
         self.driver.find_element_by_id('cancel').click()
 
         self.driver.get(self.source_location)
 
-        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
-                         self.driver.title)
+        assert ("SecureDrop | Protecting Journalists and Sources" ==
+                self.driver.title)
 
     def _source_proceeds_to_login(self):
         codename_input = self.driver.find_element_by_id(
@@ -69,36 +69,36 @@ class SourceNavigationSteps():
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
 
-        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
-                         self.driver.title)
+        assert ("SecureDrop | Protecting Journalists and Sources" ==
+                self.driver.title)
 
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
 
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('Submit Materials', headline.text)
+        assert 'Submit Materials' == headline.text
 
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
 
         continue_button_icon = self.driver.find_element_by_css_selector(
             'button#continue-button > img.off-hover')
-        self.assertTrue(continue_button_icon.is_displayed())
+        assert continue_button_icon.is_displayed()
 
         # Hover over the continue button test toggle the icon images
         # with the hover state.
         ActionChains(self.driver).move_to_element(continue_button).perform()
-        self.assertFalse(continue_button_icon.is_displayed())
+        assert continue_button_icon.is_displayed() is False
 
         continue_button_hover_icon = self.driver.find_element_by_css_selector(
             'button#continue-button img.on-hover'
         )
-        self.assertTrue(continue_button_hover_icon.is_displayed())
+        assert continue_button_hover_icon.is_displayed()
 
         continue_button.click()
 
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('Submit Materials', headline.text)
+        assert 'Submit Materials' == headline.text
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
@@ -117,7 +117,7 @@ class SourceNavigationSteps():
             toggled_submit_button_icon = (
                 self.driver.find_element_by_css_selector(
                     'button#submit-doc-button img.on-hover'))
-            self.assertTrue(toggled_submit_button_icon.is_displayed())
+            assert toggled_submit_button_icon.is_displayed()
 
             submit_button.click()
 
@@ -125,7 +125,7 @@ class SourceNavigationSteps():
                 '.success')
             expected_notification = (
                 'Thank you for sending this information to us')
-            self.assertIn(expected_notification, notification.text)
+            assert expected_notification in notification.text
 
     def _source_submits_a_message(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
@@ -137,8 +137,8 @@ class SourceNavigationSteps():
 
         notification = self.driver.find_element_by_css_selector(
             '.success')
-        self.assertIn('Thank you for sending this information to us',
-                      notification.text)
+        assert ('Thank you for sending this information to us' in
+                notification.text)
 
     def _source_deletes_a_journalist_reply(self):
         # Get the reply filename so we can use IDs to select the delete buttons
@@ -153,13 +153,13 @@ class SourceNavigationSteps():
         confirm_button_id = 'confirm-delete-reply-button-{}'.format(
             reply_filename)
         confirm_button = self.driver.find_element_by_id(confirm_button_id)
-        self.assertTrue(confirm_button.is_displayed())
+        assert confirm_button.is_displayed()
         confirm_button.click()
 
         notification = self.driver.find_element_by_class_name('notification')
-        self.assertIn('Reply deleted', notification.text)
+        assert 'Reply deleted' in notification.text
 
     def _source_logs_out(self):
         self.driver.find_element_by_id('logout').click()
         notification = self.driver.find_element_by_css_selector('.important')
-        self.assertIn('Thank you for exiting your session!', notification.text)
+        assert 'Thank you for exiting your session!' in notification.text
