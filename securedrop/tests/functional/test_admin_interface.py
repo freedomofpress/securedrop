@@ -1,18 +1,10 @@
 import functional_test
 import journalist_navigation_steps
-import unittest
 
 
-class AdminInterface(
-        unittest.TestCase,
+class TestAdminInterface(
         functional_test.FunctionalTest,
         journalist_navigation_steps.JournalistNavigationSteps):
-
-    def setUp(self):
-        functional_test.FunctionalTest.setUp(self)
-
-    def tearDown(self):
-        functional_test.FunctionalTest.tearDown(self)
 
     def test_admin_interface(self):
         self._admin_logs_in()
