@@ -1,22 +1,11 @@
 HTTPS on the Source Interface
 ======================================
 
-The *Source Interface* for SecureDrop is automatically served over
-as a Tor Hidden Service, requiring a ``*.onion`` URL to access it.
-While Tor Hidden Services provide end-to-end encryption by default, as well
-as strong anonymity, there are several reasons why you might want to consider
-deploying an additional layer of encryption and authentication via HTTPS:
-
-* The cryptographic primitives used by Tor Hidden Services are considered to be
-  outdated, and while there are no known compromises of the security of Tor
-  Hidden Services due to this issue, it may be wise to provide an additional
-  layer of transport encryption using stronger cryptographic primitives, which
-  is most easily achieved by setting up HTTPS on the Source Interface.
-
-  .. note:: This issue is being addressed by the Tor Project with their Next
-     Generation Onion Services design, but that design is still a work in
-     progress and is not expected to be deployed until December 2017 at the
-     soonest.
+The SecureDrop *Source Interface* is served over a Tor Hidden Service,
+requiring a ``*.onion`` URL to access it. While Tor Hidden Services provide
+end-to-end encryption by default, as well as strong anonymity, there are
+several reasons why you might want to consider deploying an additional layer of
+encryption and authentication via HTTPS:
 
 * Extended Validation (EV) certificates, which are currently the only type of
   certificates that may be issued for ``*.onion`` addresses, are intended to
@@ -25,6 +14,17 @@ deploying an additional layer of encryption and authentication via HTTPS:
   *Landing Page* and the `SecureDrop Directory`_) to help assure sources that
   they are communicating with the intended organization when they access a
   given Source Interface.
+
+* The cryptographic primitives used by Tor Hidden Services are considered to be
+  outdated, and while there are no known compromises of the security of Tor
+  Hidden Services due to this issue, you may wish to provide an additional
+  layer of transport encryption using stronger cryptographic primitives, which
+  is most easily achieved by setting up HTTPS on the Source Interface.
+
+  .. note:: This issue is being addressed by the Tor Project with their Next
+     Generation Onion Services design, but the implementation of the new design
+     is still a work in progress and is not expected to be deployed until
+     December 2017 at the earliest.
 
 .. _`SecureDrop Directory`: https://securedrop.org/directory/
 
