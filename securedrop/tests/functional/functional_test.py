@@ -42,11 +42,10 @@ class FunctionalTest():
         firefox = firefox_binary.FirefoxBinary(log_file=log_file)
         return webdriver.Firefox(firefox_binary=firefox)
 
-    def setUp(self):
+    def setup(self):
         # Patch the two-factor verification to avoid intermittent errors
-        patcher = mock.patch('journalist.Journalist.verify_token')
-        self.addCleanup(patcher.stop)
-        self.mock_journalist_verify_token = patcher.start()
+        self.patcher = mock.patch('journalist.Journalist.verify_token')
+        self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
@@ -103,7 +102,8 @@ class FunctionalTest():
 
         self.secret_message = 'blah blah blah'
 
-    def tearDown(self):
+    def teardown(self):
+        self.patcher.stop()
         env.teardown()
         self.driver.quit()
         self.source_process.terminate()
