@@ -7,17 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-07-12 09:03+0000\n"
+"POT-Creation-Date: 2017-07-12 13:29+0000\n"
 "PO-Revision-Date: 2017-07-12 09:09+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
+"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -42,8 +41,18 @@ msgid "Enable Google Authenticator"
 msgstr "Activer Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:5
-msgid "You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up Google Authenticator. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly."
-msgstr "Vous avez presque terminé! Pour finaliser la ré-initialisation de votre authentification à deux facteurs, suivez les instructions ci-dessous pour mettre en place Google Authenticator. Après avoir ajouté votre compte dans l'app, recopiez l'un des codes a 6 chiffres pour confirmer que l'authentification à deux facteurs fonctionne correctement."
+msgid ""
+"You're almost done! To finish resetting your two-factor authentication, "
+"follow the instructions below to set up Google Authenticator. Once you've"
+" added the entry for your account in the app, enter one of the 6-digit "
+"codes from the app to confirm that two factor authentication is set up "
+"correctly."
+msgstr ""
+"Vous avez presque terminé! Pour finaliser la ré-initialisation de votre "
+"authentification à deux facteurs, suivez les instructions ci-dessous pour"
+" mettre en place Google Authenticator. Après avoir ajouté votre compte "
+"dans l'app, recopiez l'un des codes a 6 chiffres pour confirmer que "
+"l'authentification à deux facteurs fonctionne correctement."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:7
@@ -58,22 +67,32 @@ msgstr "Ouvrez l'app Google Authenticator"
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:9
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
-msgstr "Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-barres\""
+msgstr ""
+"Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-"
+"barres\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:10
-msgid "Your phone will now be in \"scanning\" mode. When you are in this mode, scan the barcode below:"
-msgstr "Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode, scannez le code-barres ci-dessous :"
+msgid ""
+"Your phone will now be in \"scanning\" mode. When you are in this mode, "
+"scan the barcode below:"
+msgstr ""
+"Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode,"
+" scannez le code-barres ci-dessous :"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:13
 msgid "Can't scan the barcode? Enter the following code manually:"
-msgstr "Vous ne parvenez pas à scanner le code-barres ? Tapez le code suivant manuellement :"
+msgstr ""
+"Vous ne parvenez pas à scanner le code-barres ? Tapez le code suivant "
+"manuellement :"
 
 #: journalist_templates/account_new_two_factor.html:15
 #: journalist_templates/admin_new_user_two_factor.html:14
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
-msgstr "Lorsque vous avez scanné le code-barres, tapez le code à six chiffres ci-dessous :"
+msgstr ""
+"Lorsque vous avez scanné le code-barres, tapez le code à six chiffres ci-"
+"dessous :"
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:16
@@ -83,7 +102,9 @@ msgstr "Activation de Yubikey (OATH-HOTP)"
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:17
 msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
-msgstr "Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres ci-dessous :"
+msgstr ""
+"Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres "
+"ci-dessous :"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:21
@@ -143,6 +164,7 @@ msgid "No users to display"
 msgstr "Aucun utilisateur à afficher"
 
 #: journalist_templates/admin_add_user.html:4
+#: journalist_templates/edit_account.html:6
 msgid "Back to admin interface"
 msgstr "Retour a l'interface d'administration"
 
@@ -155,6 +177,7 @@ msgid "Password (again)"
 msgstr "Mot de passe (vérification)"
 
 #: journalist_templates/admin_add_user.html:14
+#: journalist_templates/edit_account.html:42
 msgid "Is Administrator"
 msgstr "Droits d'administration"
 
@@ -163,16 +186,35 @@ msgid "I'm using a Yubikey"
 msgstr "J'utilise une Yubikey"
 
 #: journalist_templates/admin_new_user_two_factor.html:5
-msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly."
-msgstr "Vous avez presque terminé! Pour finaliser l'ajout de ce nouvel utilisateur, faites leur suivre les instructions qui suivent pour mettre en place l'authentification a deux facteurs avec Google Authenticator. Lorsqu'ils auront ajouté une nouvelle entrée pour ce compte dans l'app, demandez leur de taper le code a 6 chiffres fourni par l'app pour confirmer que l'authentification a deux facteurs est correctement mise en place."
+msgid ""
+"You're almost done! To finish adding this new user, have them follow the "
+"instructions below to set up two-factor authentication with Google "
+"Authenticator. Once they've added an entry for this account in the app, "
+"have them enter one of the 6-digit codes from the app to confirm that two"
+" factor authentication is set up correctly."
+msgstr ""
+"Vous avez presque terminé! Pour finaliser l'ajout de ce nouvel "
+"utilisateur, faites leur suivre les instructions qui suivent pour mettre "
+"en place l'authentification a deux facteurs avec Google Authenticator. "
+"Lorsqu'ils auront ajouté une nouvelle entrée pour ce compte dans l'app, "
+"demandez leur de taper le code a 6 chiffres fourni par l'app pour "
+"confirmer que l'authentification a deux facteurs est correctement mise en"
+" place."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
 msgstr "Toutes les sources"
 
 #: journalist_templates/col.html:13
-msgid "Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like."
-msgstr "Générez un nouveau code aléatoire pour cette source. Il est recommandé de le faire si le premier code aléatoire est difficile a prononcer ou a mémoriser. Vous pouvez généré autant de codes aléatoires que vous souhaitez."
+msgid ""
+"Generate a new random codename for this source. We recommend doing this "
+"if the first random codename is difficult to say or remember. You can "
+"generate new random codenames as many times as you like."
+msgstr ""
+"Générez un nouveau code aléatoire pour cette source. Il est recommandé de"
+" le faire si le premier code aléatoire est difficile a prononcer ou a "
+"mémoriser. Vous pouvez généré autant de codes aléatoires que vous "
+"souhaitez."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
@@ -191,8 +233,12 @@ msgid "CONFIRM"
 msgstr "CONFIRMER"
 
 #: journalist_templates/col.html:22
-msgid "The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG."
-msgstr "Les documents sont stockés sous forme chiffrée pour des raisons de sécurité. Pour les lire vous aurez besoin de les déchiffrer avec GPG."
+msgid ""
+"The documents are stored encrypted for security. To read them, you will "
+"need to decrypt them using GPG."
+msgstr ""
+"Les documents sont stockés sous forme chiffrée pour des raisons de "
+"sécurité. Pour les lire vous aurez besoin de les déchiffrer avec GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
@@ -220,15 +266,21 @@ msgstr "Aucun document à afficher."
 
 #: journalist_templates/col.html:74
 msgid "You can write a secure reply to the person who submitted these documents:"
-msgstr "Vous pouvez écrire une réponse sécurisée à la personne qui a soumis ces documents :"
+msgstr ""
+"Vous pouvez écrire une réponse sécurisée à la personne qui a soumis ces "
+"documents :"
 
 #: journalist_templates/col.html:83
 msgid "You've flagged this source for reply."
 msgstr "Vous avez marqué cette source pour lui répondre."
 
 #: journalist_templates/col.html:84
-msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
-msgstr "Une clé de chiffrement sera générée pour la source la prochaine fois qu'elle se connecte, après quoi vous serez en mesure de lui répondre ici."
+msgid ""
+"An encryption key will be generated for the source the next time they log"
+" in, after which you will be able to reply to the source here."
+msgstr ""
+"Une clé de chiffrement sera générée pour la source la prochaine fois "
+"qu'elle se connecte, après quoi vous serez en mesure de lui répondre ici."
 
 #: journalist_templates/col.html:86
 msgid "Click below if you would like to write a reply to this source."
@@ -239,18 +291,28 @@ msgid "FLAG THIS SOURCE FOR REPLY"
 msgstr "MARQUEZ CETTE SOURCE POUR Y REPONDRE"
 
 #: journalist_templates/col.html:95
-msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-msgstr "Cliquez ci dessous pour supprimer la collection de documents de cette source. <em>Attention: Si vous faites cela, les fichiers visible ici ne pourront être récupéré et la source ne sera plus capable de se connecter en utilisant leur nom de code.</em>"
+msgid ""
+"Click below to delete this source's collection. <em>Warning: If you do "
+"this, the files seen here will be unrecoverable and the source will no "
+"longer be able to login using their previous codename.</em>"
+msgstr ""
+"Cliquez ci dessous pour supprimer la collection de documents de cette "
+"source. <em>Attention: Si vous faites cela, les fichiers visible ici ne "
+"pourront être récupéré et la source ne sera plus capable de se connecter "
+"en utilisant leur nom de code.</em>"
 
 #: journalist_templates/col.html:101
 msgid "DELETE COLLECTION"
 msgstr "SUPPRIMER LA COLLECTION"
 
 #: journalist_templates/delete.html:5
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {files} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] ""
-"Le fichier suivant va être <strong>supprimé de façon permanente</strong> :"
+msgid ""
+"The following file has been selected for <strong>permanent "
+"deletion</strong>:"
+msgid_plural ""
+"The following {files} files have been selected for <strong>permanent "
+"deletion</strong>:"
+msgstr[0] "Le fichier suivant va être <strong>supprimé de façon permanente</strong> :"
 msgstr[1] ""
 "Les {files} fichiers suivants vont être <strong>supprimés de façon "
 "permanente</strong> :"
@@ -262,6 +324,65 @@ msgstr "SUPPRESSION PERMANENTE DES FICHIERS"
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
 msgstr "Retour à la liste des documents pour {source_journalist_designation}..."
+
+#: journalist_templates/edit_account.html:5
+msgid "Edit user"
+msgstr ""
+
+#: journalist_templates/edit_account.html:8
+msgid "Edit your account"
+msgstr ""
+
+#: journalist_templates/edit_account.html:17
+msgid "Change username"
+msgstr ""
+
+#: journalist_templates/edit_account.html:29
+msgid "Leave blank for no change"
+msgstr ""
+
+#: journalist_templates/edit_account.html:34
+msgid "Change password (confirm)"
+msgstr ""
+
+#: journalist_templates/edit_account.html:46
+msgid "UPDATE"
+msgstr ""
+
+#: journalist_templates/edit_account.html:51
+msgid "Reset Two-Factor Authentication"
+msgstr ""
+
+#: journalist_templates/edit_account.html:54
+msgid ""
+"If a user's two-factor authentication credentials have been lost or "
+"compromised, you can reset them here. <em>If you do this, make sure the "
+"user is present and ready to set up their device with the new two-factor "
+"credentials. Otherwise, they will be locked out of their account."
+msgstr ""
+
+#: journalist_templates/edit_account.html:56
+msgid ""
+"If your two-factor authentication credentials have been lost or "
+"compromised, or you got a new device, you can reset your credentials "
+"here. <em>If you do this, make sure you are ready to set up your new "
+"device, otherwise you will be locked out of your account.</em>"
+msgstr ""
+
+#: journalist_templates/edit_account.html:58
+msgid ""
+"To reset two-factor authentication for mobile apps such as Google "
+"Authenticator or FreeOTP, choose the first option. For hardware tokens "
+"like the Yubikey, choose the second."
+msgstr ""
+
+#: journalist_templates/edit_account.html:78
+msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
+msgstr ""
+
+#: journalist_templates/edit_account.html:80
+msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
+msgstr ""
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
@@ -286,12 +407,14 @@ msgstr "Etes vous certain de vouloir supprimer cette collection ?"
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
 msgstr ""
-"Etes vous certain de vouloir supprimer les {size} collections sélectionnées ?"
+"Etes vous certain de vouloir supprimer les {size} collections "
+"sélectionnées ?"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
 msgstr ""
-"Etes vous certain de vouloir supprimer les {size} soumissions sélectionnées ?"
+"Etes vous certain de vouloir supprimer les {size} soumissions "
+"sélectionnées ?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
@@ -302,3 +425,4 @@ msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
 "Etes vous certain de vouloir réinitialiser l'authentification à deux "
 "facteurs pour {username} ?"
+
