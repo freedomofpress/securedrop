@@ -127,3 +127,47 @@ the file manager |Nautilus| and double-click on the public key to import it.
 
 .. |Nautilus| image:: images/nautilus.png
 .. |Importing Journalist GPG Keys| image:: images/install/importkey.png
+
+Verify Journalist Setup
+-----------------------
+
+Once the journalist device and account have been provisioned, then the
+administrator should run through the following steps with *each journalist* to
+verify the journalist is set up for SecureDrop.
+
+The journalist should verify that they:
+
+1. Have their own *Journalist Tails USB* that they have verified they are able
+   to boot on the *Journalist Workstation*.
+
+.. note:: It is important that they test on the same *Journalist Tails USB* and
+   the same *Journalist Workstation* they will be using on a day to day basis.
+   Issues may arise due to differences in USB drives or laptop models.
+
+2. Verify they are able to decrypt the persistent volume on the *Journalist
+   Tails USB*.
+
+3. Ensure that they can connect to and login to the *Journalist Interface*.
+
+4. Ensure that they have a *Data Transfer Device* with a saved passphrase.
+
+5. Verify they have access to the *Secure Viewing Station* they will be using by
+   plugging in the *SVS USB*, booting, and verifying they can decrypt the
+   persistent volume.
+
+.. note:: Again, it is important that they test on the same *SVS Tails USB* and
+   the same *Secure Viewing Station* they will be using on a day to day basis.
+
+6. Verify the submission private key is present in the *Secure Viewing Station*
+   persistent volume by clicking the clipboard icon |gpgApplet| in the top right
+   corner of the Tails desktop and selecting “Manage Keys”. When clicking
+   “GnuPG keys” the key should be present.
+
+.. tip:: The journalist should have all the credentials used in this checklist
+   saved in the KeePassX database stored in the persistent volume of the *Journalist
+   Workstation*.
+
+At this point, the journalist has verified they have the devices and credentials
+they need and can proceed to a walkthrough of the entire SecureDrop workflow.
+
+.. |gpgApplet| image:: images/gpgapplet.png
