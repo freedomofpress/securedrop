@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-12 14:29+0000\n"
-"PO-Revision-Date: 2017-07-12 13:42+0000\n"
+"PO-Revision-Date: 2017-07-12 14:32+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
-"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -339,7 +340,7 @@ msgstr "Changer de nom d'utilisateur"
 
 #: journalist_templates/edit_account.html:23
 msgid "Change password"
-msgstr ""
+msgstr "Modifier le mot de passe"
 
 #: journalist_templates/edit_account.html:29
 msgid "Leave blank for no change"
@@ -443,4 +444,3 @@ msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
 "Etes vous certain de vouloir réinitialiser l'authentification à deux "
 "facteurs pour {username} ?"
-
