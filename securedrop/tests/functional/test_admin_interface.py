@@ -1,6 +1,7 @@
 import functional_test
 import journalist_navigation_steps
 import unittest
+from step_helpers import screenshots
 
 
 class AdminInterface(
