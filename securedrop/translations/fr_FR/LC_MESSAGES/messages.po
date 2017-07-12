@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-12 13:29+0000\n"
-"PO-Revision-Date: 2017-07-12 09:09+0000\n"
+"PO-Revision-Date: 2017-07-12 13:42+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
-"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
@@ -327,31 +328,31 @@ msgstr "Retour à la liste des documents pour {source_journalist_designation}...
 
 #: journalist_templates/edit_account.html:5
 msgid "Edit user"
-msgstr ""
+msgstr "Modifier l'utilisateur"
 
 #: journalist_templates/edit_account.html:8
 msgid "Edit your account"
-msgstr ""
+msgstr "Modifier votre compte"
 
 #: journalist_templates/edit_account.html:17
 msgid "Change username"
-msgstr ""
+msgstr "Changer de nom d'utilisateur"
 
 #: journalist_templates/edit_account.html:29
 msgid "Leave blank for no change"
-msgstr ""
+msgstr "Laisser vide pour ne rien changer"
 
 #: journalist_templates/edit_account.html:34
 msgid "Change password (confirm)"
-msgstr ""
+msgstr "Nouveau mot de passe (confirmation)"
 
 #: journalist_templates/edit_account.html:46
 msgid "UPDATE"
-msgstr ""
+msgstr "MISE A JOUR"
 
 #: journalist_templates/edit_account.html:51
 msgid "Reset Two-Factor Authentication"
-msgstr ""
+msgstr "Réinitialisation de l'authentification à deux facteurs"
 
 #: journalist_templates/edit_account.html:54
 msgid ""
@@ -360,6 +361,11 @@ msgid ""
 "user is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
+"Si l'identification à deux facteurs d'un utilisateur a été perdue ou "
+"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faite assurez "
+"vous que l'utilisateur est présent et prêt à mettre en place la nouvelle "
+"identification à deux facteurs sur sa machine. A défaut de cela ils ne "
+"pourront plus accéder à leur compte."
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -368,6 +374,10 @@ msgid ""
 "here. <em>If you do this, make sure you are ready to set up your new "
 "device, otherwise you will be locked out of your account.</em>"
 msgstr ""
+"Si votre identification à deux facteurs a été perdue ou compromise, si vous "
+"avez une nouvelle machine, vous pouvez la réinitialiser ici. <em>Si vous "
+"faites cela, assurez vous d'être en mesure d'initialiser votre nouvelle "
+"machine sans quoi vous ne pourrez plus accéder à votre compte.</em>"
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -375,14 +385,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens "
 "like the Yubikey, choose the second."
 msgstr ""
+"Pour réinitialiser l'identification à deux facteurs pour des applications "
+"mobiles telles que Google Authenticator ou FreeOTP, choisissez la première "
+"option. Pour les tokens matériels tels que Yubikey, choisissez la seconde."
 
 #: journalist_templates/edit_account.html:78
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr ""
+msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (APP)"
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr ""
+msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (TOKEN MATERIEL)"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
@@ -425,4 +438,3 @@ msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
 "Etes vous certain de vouloir réinitialiser l'authentification à deux "
 "facteurs pour {username} ?"
-
