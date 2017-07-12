@@ -9,6 +9,8 @@
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
+    {% include 'js-strings.html' %}
+
     {% assets filters="jsmin", output="gen/journalist.js",
       "js/libs/jquery-2.1.4.min.js", "js/journalist.js" %}
       <script src="{{ ASSET_URL }}"></script>
