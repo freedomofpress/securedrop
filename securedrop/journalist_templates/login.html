@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
 
-<h1>Login to access the journalist interface</h1>
+<h1>{{ gettext('Login to access the journalist interface') }}</h1>
 
 <form method="post" action="/login" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p class="center"><input type="text" name="username" autocomplete="off" placeholder="Username" autofocus></p>
-  <p class="center"><input type="password" name="password" placeholder="Password"></p>
-  <p class="center"><input name="token" id="token" type="text" placeholder="Two-factor Code"></p>
-  <p class="pull-right"><button class="sd-button" type="submit"><i class="fa fa-arrow-circle-o-right"></i> LOG IN</button></p>
+  <p class="center"><input type="text" name="username" autocomplete="off" placeholder="{{ gettext('Username') }}" autofocus></p>
+  <p class="center"><input type="password" name="password" placeholder="{{ gettext('Password') }}"></p>
+  <p class="center"><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
+  <p class="pull-right"><button class="sd-button" type="submit"><i class="fa fa-arrow-circle-o-right"></i> {{ gettext('LOG IN') }}</button></p>
 </form>
 
 {% endblock %}
