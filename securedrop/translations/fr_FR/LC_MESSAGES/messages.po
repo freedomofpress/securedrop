@@ -7,18 +7,135 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-07-12 23:42+0000\n"
+"POT-Creation-Date: 2017-07-13 16:26+0000\n"
 "PO-Revision-Date: 2017-07-12 23:46+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
+"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
+
+#: journalist.py:102
+msgid "You must be an administrator to access that page"
+msgstr ""
+
+#: journalist.py:118
+msgid "Login failed."
+msgstr ""
+
+#: journalist.py:122
+msgid "Please wait at least {seconds} seconds before logging in again."
+msgstr ""
+
+#: journalist.py:132
+msgid "Please wait for a new two-factor token before logging in again."
+msgstr ""
+
+#: journalist.py:176
+msgid "Missing username"
+msgstr ""
+
+#: journalist.py:182
+msgid "Passwords didn't match"
+msgstr ""
+
+#: journalist.py:200 journalist.py:304
+msgid "Your password must be between {min} and {max} characters."
+msgstr ""
+
+#: journalist.py:208
+msgid "That username is already in use"
+msgstr ""
+
+#: journalist.py:211
+msgid ""
+"An error occurred saving this user to the database. Please check the "
+"application logs."
+msgstr ""
+
+#: journalist.py:233
+msgid "Two-factor token successfully verified for user {user}!"
+msgstr ""
+
+#: journalist.py:240 journalist.py:404
+msgid "Two-factor token failed to verify"
+msgstr ""
+
+#: journalist.py:267
+msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
+msgstr ""
+
+#: journalist.py:272
+msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
+msgstr ""
+
+#: journalist.py:277 journalist.py:318
+msgid ""
+"An unexpected error occurred! Please check the application logs or inform"
+" your adminstrator."
+msgstr ""
+
+#: journalist.py:299
+msgid "Passwords didn't match!"
+msgstr ""
+
+#: journalist.py:325
+msgid "Account successfully updated!"
+msgstr ""
+
+#: journalist.py:340
+msgid "Username \"{user}\" is already taken!"
+msgstr ""
+
+#: journalist.py:368
+msgid "Deleted user '{user}'"
+msgstr ""
+
+#: journalist.py:400
+msgid "Two-factor token successfully verified!"
+msgstr ""
+
+#: journalist.py:519
+msgid "No collections selected!"
+msgstr ""
+
+#: journalist.py:542
+msgid "No unread submissions in collections selected!"
+msgstr ""
+
+#: journalist.py:580
+msgid "{source_journalist_designation}'s collection deleted"
+msgstr ""
+
+#: journalist.py:589 journalist.py:715
+msgid "No collections selected to delete!"
+msgstr ""
+
+#: journalist.py:594
+msgid "{num} collection deleted"
+msgid_plural "{num} collections deleted"
+msgstr[0] ""
+msgstr[1] ""
+
+#: journalist.py:662
+msgid "Thanks! Your reply has been stored."
+msgstr ""
+
+#: journalist.py:681
+msgid "The source '{original_source}' has been renamed to '{new_source}'"
+msgstr ""
+
+#: journalist.py:697
+msgid "No unread submissions for this source!"
+msgstr ""
+
+#: journalist.py:713
+msgid "No collections selected to download!"
+msgstr ""
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -493,3 +610,4 @@ msgstr "Code à deux facteurs"
 #: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "IDENTIFICATION"
+
