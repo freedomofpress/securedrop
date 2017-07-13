@@ -25,11 +25,26 @@
   poll: 0
   when: _hostname_to_wait_for.endswith('.onion')
 
-# Hardcode a wait value and wait for the entire interval.
-# Cannot use `local_action/wait_for` because it's not smart
-# enough to find the SSH connection info required to connect
-# to the Onion URL.
-- name: Waiting for SSH connection (slow)...
-  pause:
-    seconds: 90
+# It's critical that we eliminate existing SSH connections, otherwise Ansible
+# will try to reuse the stale ControlPersist files, which no longer have an
+# active socket, causing a connection timeout, and halting execution of the
+# playbook with a cryptic message.
+- name: Clear out SSH sessions, to prevent reuse of stale ControlPersist file.
+  local_action:
+    module: file
+    args:
+      path: /home/amnesia/.ansible/cp
+      state: absent
+  run_once: yes
+  sudo: no
   when: _hostname_to_wait_for.endswith('.onion')
+
+- name: Waiting for SSH connection (slow)...
+  local_action: wait_for
+  args:
+    host: "{{ _hostname_to_wait_for }}"
+    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
+    delay: 30
+    search_regex: OpenSSH
+    state: started
+  sudo: no
