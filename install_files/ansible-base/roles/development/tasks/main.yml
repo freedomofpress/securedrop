@@ -18,7 +18,7 @@
 - name: Install sass Ruby gem
   gem:
     name: sass
-    state: latest
+    version: "{{ securedrop_sass_ver }}"
     user_install: no
   sudo: yes
   tags:
@@ -28,11 +28,11 @@
 - name: Compile sass to css
   shell: >
     if [ -d /home/travis ]; then
-      /home/travis/.rvm/bin/rvm install 2.3.0 &&
-      /home/travis/.rvm/bin/rvm use 2.3.0 &&
-      gem install sass &&
+      /home/travis/.rvm/bin/rvm install {{ securedrop_rvm_ver }} &&
+      /home/travis/.rvm/bin/rvm use {{ securedrop_rvm_ver }} &&
+      gem install sass -v {{ securedrop_sass_ver }} &&
       $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
-    else 
+    else
       sass --update sass:static/css
     fi
   args:
