@@ -18,7 +18,7 @@
 - name: Install sass Ruby gem
   gem:
     name: sass
-    state: latest
+    version: "3.4.23"
     user_install: no
   sudo: yes
   tags:
@@ -30,9 +30,9 @@
     if [ -d /home/travis ]; then
       /home/travis/.rvm/bin/rvm install 2.3.0 &&
       /home/travis/.rvm/bin/rvm use 2.3.0 &&
-      gem install sass &&
+      gem install sass -v 3.4.23 &&
       $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
-    else 
+    else
       sass --update sass:static/css
     fi
   args:
