@@ -41,3 +41,7 @@ tails_config_deprecated_directories:
 tails_config_deprecated_config_files:
   - 70-tor-reload.sh
   - 99-tor-reload.sh
+
+# Exclude deprecated document-aths file leftover from SD versions <0.3.12
+# but continue to find all other aths files
+tails_config_aths_pattern: ".*(?<!document)-aths$"
