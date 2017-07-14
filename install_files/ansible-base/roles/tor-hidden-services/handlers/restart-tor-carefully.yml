@@ -43,7 +43,7 @@
   local_action: wait_for
   args:
     host: "{{ _hostname_to_wait_for }}"
-    port: "{{ ansible_port|default(22) }}"
+    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
     delay: 30
     search_regex: OpenSSH
     state: started
