@@ -7,17 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-07-13 16:26+0000\n"
+"POT-Creation-Date: 2017-07-14 16:29+0000\n"
 "PO-Revision-Date: 2017-07-13 16:45+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
+"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:102
@@ -31,14 +30,14 @@ msgstr "Echec de connection."
 #: journalist.py:122
 msgid "Please wait at least {seconds} seconds before logging in again."
 msgstr ""
-"Vous êtes prié d'attendre {seconds} secondes avant de tenter une nouvelle "
-"connexion."
+"Vous êtes prié d'attendre {seconds} secondes avant de tenter une nouvelle"
+" connexion."
 
 #: journalist.py:132
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
-"Vous êtes prié d'attendre un nouveau token d'identification à deux facteurs "
-"avant de vous connecter de nouveau."
+"Vous êtes prié d'attendre un nouveau token d'identification à deux "
+"facteurs avant de vous connecter de nouveau."
 
 #: journalist.py:176
 msgid "Missing username"
@@ -61,8 +60,9 @@ msgid ""
 "An error occurred saving this user to the database. Please check the "
 "application logs."
 msgstr ""
-"Une erreur s'est produite lors de la sauvegarde de cet utilisateur dans la "
-"base de données. Vous êtes prié de consulter les logs de l'application."
+"Une erreur s'est produite lors de la sauvegarde de cet utilisateur dans "
+"la base de données. Vous êtes prié de consulter les logs de "
+"l'application."
 
 #: journalist.py:233
 msgid "Two-factor token successfully verified for user {user}!"
@@ -77,22 +77,22 @@ msgstr "L'identification à deux facteurs n'a pu être vérifiée"
 #: journalist.py:267
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
-"Le format du secret est incorrect: vous êtes prié d'utiliser uniquement les "
-"lettres de A à F et les chiffres de 0 à 9."
+"Le format du secret est incorrect: vous êtes prié d'utiliser uniquement "
+"les lettres de A à F et les chiffres de 0 à 9."
 
 #: journalist.py:272
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
-"Format de secret incorrect: le nombre de caractères est impair. Avez vous "
-"fait une typo ?"
+"Format de secret incorrect: le nombre de caractères est impair. Avez vous"
+" fait une typo ?"
 
 #: journalist.py:277 journalist.py:318
 msgid ""
 "An unexpected error occurred! Please check the application logs or inform"
 " your adminstrator."
 msgstr ""
-"Une erreur inattendue s'est produite ! Vous êtes prié de consulter les logs "
-"de l'application ou d'informer votre administrateur."
+"Une erreur inattendue s'est produite ! Vous êtes prié de consulter les "
+"logs de l'application ou d'informer votre administrateur."
 
 #: journalist.py:299
 msgid "Passwords didn't match!"
@@ -346,6 +346,28 @@ msgstr ""
 "demandez leur de taper le code a 6 chiffres fourni par l'app pour "
 "confirmer que l'authentification a deux facteurs est correctement mise en"
 " place."
+
+#: journalist_templates/base.html:24
+msgid "Edit Account"
+msgstr ""
+
+#: journalist_templates/base.html:26
+msgid "Admin"
+msgstr ""
+
+#: journalist_templates/base.html:28
+msgid "Logout"
+msgstr ""
+
+#: journalist_templates/base.html:39
+msgid ""
+"Powered by <br/> <img src=\"/static/i/securedrop_small.png\" "
+"alt=\"SecureDrop\">"
+msgstr ""
+
+#: journalist_templates/base.html:53
+msgid "Powered by <em>SecureDrop {version}</em>."
+msgstr ""
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -625,3 +647,103 @@ msgstr "Code à deux facteurs"
 #: journalist_templates/login.html:11
 msgid "LOG IN"
 msgstr "IDENTIFICATION"
+
+#: source_templates/base.html:5 source_templates/index.html:4
+msgid "Protecting Journalists and Sources"
+msgstr ""
+
+#: source_templates/base.html:20 source_templates/base.html:39
+#: source_templates/index.html:27 source_templates/index.html:64
+msgid "Powered by"
+msgstr ""
+
+#: source_templates/base.html:29
+msgid "EXIT"
+msgstr ""
+
+#: source_templates/base.html:39 source_templates/index.html:64
+msgid ""
+"Like all software, SecureDrop may contain security bugs. Use at your own "
+"risk."
+msgstr ""
+
+#: source_templates/index.html:15
+msgid ""
+"<strong>We recommend turning the Security Slider to High to protect your "
+"anonymity:</strong>"
+msgstr ""
+
+#: source_templates/index.html:15
+msgid "Learn how to set it to high"
+msgstr ""
+
+#: source_templates/index.html:15 source_templates/index.html:16
+msgid ", or ignore this warning to continue."
+msgstr ""
+
+#: source_templates/index.html:16
+msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
+msgstr ""
+
+#: source_templates/index.html:16
+msgid "Learn how to install it"
+msgstr ""
+
+#: source_templates/index.html:35
+msgid "Submit documents for the first time"
+msgstr ""
+
+#: source_templates/index.html:38
+msgid ""
+"If this is your first time submitting documents to journalists, start "
+"here."
+msgstr ""
+
+#: source_templates/index.html:42
+msgid "SUBMIT DOCUMENTS"
+msgstr ""
+
+#: source_templates/index.html:47
+msgid "Already submitted something?"
+msgstr ""
+
+#: source_templates/index.html:50
+msgid ""
+"If you have already submitted documents in the past, log in here to check"
+" for responses."
+msgstr ""
+
+#: source_templates/index.html:54
+msgid "CHECK FOR A RESPONSE"
+msgstr ""
+
+#: source_templates/index.html:60
+msgid "Note:"
+msgstr ""
+
+#: source_templates/index.html:72
+msgid ""
+"You appear to be using the Tor Browser. You can turn the Security Slider "
+"to High in 4 easy steps!"
+msgstr ""
+
+#: source_templates/index.html:74
+msgid "Click the"
+msgstr ""
+
+#: source_templates/index.html:74
+msgid "Tor icon in the toolbar above"
+msgstr ""
+
+#: source_templates/index.html:75
+msgid "Click <strong>Security Settings...</strong>"
+msgstr ""
+
+#: source_templates/index.html:76
+msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
+msgstr ""
+
+#: source_templates/index.html:77
+msgid "<a href=\"/\">Click here</a>to refresh the page"
+msgstr ""
+
