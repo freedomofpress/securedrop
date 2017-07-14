@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block body %}
-<h1>Welcome</h1>
-<p class="explanation">This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.</p>
+<h1>{{ gettext('Welcome') }}</h1>
+<p class="explanation">{{ gettext('This codename is what you will use in future visits to receive messages from our journalists in response to what you submit on the next screen.') }}</p>
 
 <hr class="no-line">
 
@@ -26,24 +26,24 @@
 
 <hr class="no-line">
 
-<p class="explanation">Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
+<p class="explanation">{{ gettext('Because we use none of the traditional means to track users of our <strong>SecureDrop</strong>
  service, using this codename with future visits is the  only way we have to communicate with you, should we have
- questions or are interested in additional documents. Unlike passwords, there is no way to retrieve a lost codename.
+ questions or are interested in additional documents. Unlike passwords, there is no way to retrieve a lost codename.') }}
 </p>
 
 <hr class="no-line">
 <aside class="center">
-  <p>Please either write this codename down and keep it in a safe place, or memorize it.</p>
+  <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
 </aside>
 
 <div class="pull-right">
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <a id="already-have-codename" href="/login" class="sd-button btn secondary">ALREADY HAVE A CODENAME?</a>
+  <a id="already-have-codename" href="/login" class="sd-button btn secondary">{{ gettext('ALREADY HAVE A CODENAME?') }}</a>
   <button type="submit" class="sd-button btn primary" id="continue-button">
     <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17px" height="17px">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17px" height="17px">
-     CONTINUE
+     {{ gettext('CONTINUE') }}
   </button>
 </form>
 </div>
