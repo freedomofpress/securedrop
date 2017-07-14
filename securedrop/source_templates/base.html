@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <title>SecureDrop | {{ gettext('Protecting Journalists and Sources') }}</title>
 
     <link rel="stylesheet" href="/static/css/source.css">
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
@@ -19,7 +19,7 @@
         </a>
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br>
+          {{ gettext('Powered by') }}<br>
           <img src="/static/i/securedrop_small.png" alt="SecureDrop">
         </div>
         {% endif %}
@@ -28,7 +28,7 @@
 
       <div class="panel selected">
       {% if 'logged_in' in session %}
-        <a href="{{ url_for('logout') }}" class="sd-button btn pull-right" id="logout">EXIT</a>
+        <a href="{{ url_for('logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('EXIT') }}</a>
       {% endif %}
         <hr class="no-line">
 
@@ -38,7 +38,7 @@
 
       {% block footer %}
       <footer>
-        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+        {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
       </footer>
       {% endblock %}
     </div>
