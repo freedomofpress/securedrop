@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SecureDrop | Protecting Journalists and Sources</title>
+    <title>SecureDrop | {{ gettext('Protecting Journalists and Sources') }}</title>
 
     <link rel="stylesheet" href="/static/css/source.css">
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
@@ -14,8 +14,8 @@
     {% endassets %}
   </head>
   <body>
-    <div class="js-warning warning"><strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to high</a>, or ignore this warning to continue. <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
-    <div class="use-tor-browser warning"><strong>We recommend using Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{{ url_for('recommend_tor_browser') }}">Learn how to install it</a>, or ignore this warning to continue. <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="js-warning warning">{{ gettext('<strong>We recommend turning the Security Slider to High to protect your anonymity:</strong>') }} <a id="disable-js" href="">{{ gettext('Learn how to set it to high') }}</a>{{ gettext(', or ignore this warning to continue.') }} <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="use-tor-browser warning">{{ gettext('<strong>We recommend using Tor Browser to access SecureDrop:</strong>') }} <a id="recommend-tor" href="{{ url_for("recommend_tor_browser") }}">{{ gettext('Learn how to install it') }}</a>{{ gettext(', or ignore this warning to continue.') }} <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -29,7 +29,7 @@
             <img src="/static/i/{{ header_image }}" alt="SecureDrop">
             {% if use_custom_header_image %}
             <div class="powered">
-              Powered by<br>
+              {{ gettext('Powered by') }}<br>
               <img src="/static/i/securedrop_small.png" alt="SecureDrop">
             </div>
             {% endif %}
@@ -38,31 +38,31 @@
           <div class="index-row">
             <div class="index-column index-left index-top">
               <h2 class="welcome-text">
-                Submit documents for the first time
+                {{ gettext('Submit documents for the first time') }}
               </h2>
               <hr class="cut-out">
             </div>
 
             <div class="index-column index-top">
               <h2 class="welcome-text">
-                Already submitted something?
+                {{ gettext('Already submitted something?') }}
               </h2>
               <hr class="cut-out">
             </div>
 
             <div class="index-column index-left">
-              <p>If this is your first time submitting documents to journalists, start here.</p>
+              <p>{{ gettext('If this is your first time submitting documents to journalists, start here.') }}</p>
             </div>
 
             <div class="index-column">
-              <p>If you have already submitted documents in the past, log in here to check for responses.</p>
+              <p>{{ gettext('If you have already submitted documents in the past, log in here to check for responses.') }}</p>
             </div>
 
             <div class="index-column index-left index-bottom">
               <a href="/generate" id="submit-documents-button" class="sd-button btn alt">
                 <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px">
                 <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px">
-                SUBMIT DOCUMENTS
+                {{ gettext('SUBMIT DOCUMENTS') }}
               </a>
             </div>
 
@@ -70,7 +70,7 @@
               <a href="/login" id="login-button" class="sd-button btn primary">
                 <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20px" height="16px">
                 <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/comments-blue.png') }}" width="20px" height="16px">
-                CHECK FOR A RESPONSE
+                {{ gettext('CHECK FOR A RESPONSE') }}
               </a>
             </div>
           </div>
@@ -78,7 +78,7 @@
       </div>
 
       <footer>
-        Like all software, SecureDrop may contain security bugs. Use at your own risk. Powered by SecureDrop {{ version }}.
+        {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
       </footer>
     </div>
 
@@ -86,12 +86,12 @@
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
     <div class="bubble" id="security-slider-info-bubble">
-      <p>You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!</p>
+      <p>{{ gettext('You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!') }}</p>
       <ol>
-        <li>Click the <img src="{{ url_for('static', filename='i/toronion.png') }}" alt="Tor icon">Tor icon in the toolbar above</li>
-        <li>Click <strong>Security Settings...</strong></li>
-        <li>Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong></li>
-        <li><a href="/">Click here</a> to refresh the page</li>
+        <li>{{ gettext('Click the') }} <img src="{{ url_for("static", filename="i/toronion.png") }}" alt="Tor icon">{{ gettext('Tor icon in the toolbar above') }}</li>
+        <li>{{ gettext('Click <strong>Security Settings...</strong>') }}</li>
+        <li>{{ gettext('Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>') }}</li>
+        <li>{{ gettext('<a href="/">Click here</a>to refresh the page') }}</li>
       </ol>
     </div>
 
