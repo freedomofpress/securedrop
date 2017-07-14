@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Server error</h1>
+<h1>{{ gettext('Server error') }}</h1>
 
-<p>Sorry, the website encountered an error and was unable to complete your request.</p>
+<p>{{ gettext('Sorry, the website encountered an error and was unable to complete your request.') }}</p>
 
-<p><a href="/login">Look up a codename...</a></p>
+<p><a href="/login">{{ gettext('Look up a codename...') }}</a></p>
 {% endblock %}
