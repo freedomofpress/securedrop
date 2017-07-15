@@ -7,17 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-07-14 16:29+0000\n"
+"POT-Creation-Date: 2017-07-15 09:04+0000\n"
 "PO-Revision-Date: 2017-07-14 17:20+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
+"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:102
@@ -178,6 +177,7 @@ msgstr "Secret HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
+#: source_templates/generate.html:46 source_templates/login.html:17
 msgid "CONTINUE"
 msgstr "CONTINUER"
 
@@ -259,7 +259,7 @@ msgstr "Code de vérification"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:23
-#: journalist_templates/col.html:80
+#: journalist_templates/col.html:80 source_templates/lookup.html:49
 msgid "SUBMIT"
 msgstr "SOUMETTRE"
 
@@ -365,8 +365,8 @@ msgid ""
 "Powered by <br/> <img src=\"/static/i/securedrop_small.png\" "
 "alt=\"SecureDrop\">"
 msgstr ""
-"Propulsé par <br/> <img src=\"/static/i/securedrop_small.png\" alt=\""
-"SecureDrop\">"
+"Propulsé par <br/> <img src=\"/static/i/securedrop_small.png\" "
+"alt=\"SecureDrop\">"
 
 #: journalist_templates/base.html:53
 msgid "Powered by <em>SecureDrop {version}</em>."
@@ -395,7 +395,7 @@ msgstr "Modifier le nom de code"
 msgid "Are you sure you want to generate a new codename?"
 msgstr "Etes vous certain de vouloir générer un nouveau nom de code ?"
 
-#: journalist_templates/col.html:15
+#: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -669,8 +669,66 @@ msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
-"Comme tout logiciel, SecureDrop peut contenir des bugs. Ayez-en conscience "
-"lorsque vous l'utilisez."
+"Comme tout logiciel, SecureDrop peut contenir des bugs. Ayez-en "
+"conscience lorsque vous l'utilisez."
+
+#: source_templates/error.html:5
+msgid "Server error"
+msgstr ""
+
+#: source_templates/error.html:7
+msgid ""
+"Sorry, the website encountered an error and was unable to complete your "
+"request."
+msgstr ""
+
+#: source_templates/error.html:9 source_templates/notfound.html:9
+msgid "Look up a codename..."
+msgstr ""
+
+#: source_templates/first_submission_flashed_message.html:2
+msgid "Success!"
+msgstr ""
+
+#: source_templates/first_submission_flashed_message.html:3
+msgid ""
+"Thank you for sending this information to us. Please check back later for"
+" replies."
+msgstr ""
+
+#: source_templates/first_submission_flashed_message.html:5
+msgid "Forgot your codename?"
+msgstr ""
+
+#: source_templates/generate.html:4
+msgid "Welcome"
+msgstr ""
+
+#: source_templates/generate.html:5
+msgid ""
+"This codename is what you will use in future visits to receive messages "
+"from our journalists in response to what you submit on the next screen."
+msgstr ""
+
+#: source_templates/generate.html:29
+msgid ""
+"Because we use none of the traditional means to track users of our "
+"<strong>SecureDrop</strong>\n"
+" service, using this codename with future visits is the  only way we have"
+" to communicate with you, should we have\n"
+" questions or are interested in additional documents. Unlike passwords, "
+"there is no way to retrieve a lost codename."
+msgstr ""
+
+#: source_templates/generate.html:36
+msgid ""
+"Please either write this codename down and keep it in a safe place, or "
+"memorize it."
+msgstr ""
+
+#: source_templates/generate.html:42
+msgid "ALREADY HAVE A CODENAME?"
+msgstr ""
 
 #: source_templates/index.html:15
 msgid ""
@@ -707,8 +765,8 @@ msgid ""
 "If this is your first time submitting documents to journalists, start "
 "here."
 msgstr ""
-"Si vous soumettez des documents à des journalistes pour la première fois, "
-"démarrez ici."
+"Si vous soumettez des documents à des journalistes pour la première fois,"
+" démarrez ici."
 
 #: source_templates/index.html:42
 msgid "SUBMIT DOCUMENTS"
@@ -739,8 +797,8 @@ msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider "
 "to High in 4 easy steps!"
 msgstr ""
-"Il semble que vous utilisez le navigateur Tor. Vous pouvez régler le niveau "
-"de sécurité au plus haut en quatre étapes faciles !"
+"Il semble que vous utilisez le navigateur Tor. Vous pouvez régler le "
+"niveau de sécurité au plus haut en quatre étapes faciles !"
 
 #: source_templates/index.html:74
 msgid "Click the"
@@ -763,3 +821,260 @@ msgstr ""
 #: source_templates/index.html:77
 msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgstr "<a href=\"/\">Cliquez ici</a> pour rafraîchir la page"
+
+#: source_templates/login.html:4
+msgid "Enter Codename"
+msgstr ""
+
+#: source_templates/login.html:11
+msgid "Enter your codename"
+msgstr ""
+
+#: source_templates/login.html:13 source_templates/lookup.html:45
+msgid "CANCEL"
+msgstr ""
+
+#: source_templates/logout_flashed_message.html:4
+msgid "Important!"
+msgstr ""
+
+#: source_templates/logout_flashed_message.html:5
+msgid ""
+"Thank you for exiting your session! Please select \"New\n"
+"   Identity\" from the green Onion button in the Tor browser\n"
+"   to clear all history of your SecureDrop usage from this\n"
+"   device."
+msgstr ""
+
+#: source_templates/lookup.html:11
+msgid "Whew, it’s you! Now, the embarrassing part..."
+msgstr ""
+
+#: source_templates/lookup.html:12
+msgid ""
+"Our servers experienced an unusual surge of new activity, when you last "
+"visited. This could\n"
+"          have been human activity, an automated attack, or just some "
+"random blip. To err on the side\n"
+"          of caution, we put a hold on sending all documents from that "
+"day through to our journalists."
+msgstr ""
+
+#: source_templates/lookup.html:16
+msgid ""
+"Now that we know you’re really a human, though, we’ll get your previous "
+"submission into the\n"
+"          hands of a journalist straight away. We’re sorry for the delay."
+" Please do check back again\n"
+"          in a week or so."
+msgstr ""
+
+#: source_templates/lookup.html:24
+msgid "Submit Materials"
+msgstr ""
+
+#: source_templates/lookup.html:25
+msgid ""
+"If you are already familiar with GPG, you can optionally encrypt your "
+"files and messages with our <a href=\"/journalist-key\" class=\"text-"
+"link\">public key</a> before submission. Files are encrypted as they are "
+"received by SecureDrop."
+msgstr ""
+
+#: source_templates/lookup.html:25
+msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
+msgstr ""
+
+#: source_templates/lookup.html:27
+msgid "You can send a file, a message, or both."
+msgstr ""
+
+#: source_templates/lookup.html:36
+msgid "Maximum upload size: 500 MB"
+msgstr ""
+
+#: source_templates/lookup.html:56
+msgid "Get Replies"
+msgstr ""
+
+#: source_templates/lookup.html:61
+msgid ""
+"You have received a reply. To protect your identity in the unlikely event"
+" someone learns your codename,\n"
+"        please delete all replies when you're done with them. This also "
+"lets us know that you have received our reply.\n"
+"        You can respond by submitting a new message above."
+msgstr ""
+
+#: source_templates/lookup.html:76
+msgid "Delete this reply?"
+msgstr ""
+
+#: source_templates/lookup.html:78
+msgid "DELETE"
+msgstr ""
+
+#: source_templates/lookup.html:87
+msgid "DELETE ALL REPLIES"
+msgstr ""
+
+#: source_templates/lookup.html:90
+msgid "Are you finished with the replies?"
+msgstr ""
+
+#: source_templates/lookup.html:91
+msgid "YES, DELETE ALL REPLIES"
+msgstr ""
+
+#: source_templates/lookup.html:92
+msgid "NO, NOT YET"
+msgstr ""
+
+#: source_templates/lookup.html:96
+msgid "There are no replies at this time."
+msgstr ""
+
+#: source_templates/lookup.html:103
+msgid "Remember your codename is:"
+msgstr ""
+
+#: source_templates/next_submission_flashed_message.html:2
+msgid "Thanks! We received your {things}."
+msgstr ""
+
+#: source_templates/notfound.html:5
+msgid "Page not found"
+msgstr ""
+
+#: source_templates/notfound.html:7
+msgid "Sorry, we couldn't locate what you requested."
+msgstr ""
+
+#: source_templates/tor2web-warning.html:3
+msgid "Why is there a warning about Tor2Web?"
+msgstr ""
+
+#: source_templates/tor2web-warning.html:4
+msgid ""
+"<a href=\"https://tor2web.org\">Tor2Web</a> is a proxy service that lets "
+"you browse Tor Hidden Services (.onion sites) without installing Tor. It "
+"was designed to facilitate anonymous publishing."
+msgstr ""
+
+#: source_templates/tor2web-warning.html:5
+msgid ""
+"Tor2Web only protects publishers, not readers. If you upload documents to"
+" us using Tor2Web, you are <strong>not anonymous</strong> and could be "
+"identified by your ISP or the Tor2Web proxy operators. Additionally, "
+"since Tor2Web sites typically use HTTPS, it is possible that your "
+"connection could be MITM'ed by a capable adversary."
+msgstr ""
+
+#: source_templates/tor2web-warning.html:6
+msgid ""
+"If you want to submit information, we <strong>strongly advise "
+"you</strong> to install <a "
+"href=\"https://www.torproject.org/download.html.en\">Tor</a> and use it "
+"to access our site safely and anonymously."
+msgstr ""
+
+#: source_templates/use-tor-browser.html:3
+msgid "You Should Use Tor Browser"
+msgstr ""
+
+#: source_templates/use-tor-browser.html:4
+msgid ""
+"If you are not using Tor Browser, you <strong>may not be "
+"anonymous</strong>."
+msgstr ""
+
+#: source_templates/use-tor-browser.html:5
+msgid ""
+"If you want to submit information to SecureDrop, we <strong>strongly "
+"advise you</strong> to install Tor Browser and use it to access our site "
+"safely and anonymously."
+msgstr ""
+
+#: source_templates/use-tor-browser.html:6
+msgid ""
+"Copy and paste the following address into your browser and follow the "
+"instructions to download and install Tor Browser:"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:3
+msgid "Why download the journalist's public key?"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:4
+msgid ""
+"SecureDrop encrypts files and messages after they are submitted. "
+"Encrypting messages and files before submission can provide an extra "
+"layer of security before your data reaches the SecureDrop server."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:5
+msgid ""
+"If you are already familiar with the GPG encryption software, you may "
+"wish to encrypt your submissions yourself. To do so:"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:7
+msgid ""
+"<a href=\"/journalist-key\">Download</a> the public key. The public key "
+"is a text file with the extension <code>.asc</code>"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:8
+msgid "Import it into your GPG keyring."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:10
+msgid ""
+"If you are using Tails (https://tails.boum.org/), you can double-click "
+"the <code>.asc</code> file you just downloaded and it will be "
+"automatically imported to your keyring."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:11
+msgid ""
+"If you are using Mac/Linux, open the Terminal. You can import the key "
+"with <code>gpg --import /path/to/key.asc</code>."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:14
+msgid "Encrypt your submission."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:16
+msgid ""
+"You will need to be able to identify the key (this is called the \"user "
+"ID\" or uid). Since the public key's filename is the key's fingerprint "
+"(with .asc at the end), you can just copy and paste that. (don't include "
+"the <code>.asc</code>!)"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:17
+msgid ""
+"On all systems, open the Terminal and use this gpg command: <code>gpg "
+"--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:20
+msgid ""
+"Upload your encrypted submission. It will have the same filename as the "
+"unencrypted file, with .gpg at the end (e.g. "
+"<code>roswell_photos.pdf.gpg</code>)"
+msgstr ""
+
+#: source_templates/why-journalist-key.html:23
+msgid ""
+"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do "
+"not</strong> use GPG to sign the encrypted file (with the "
+"<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
+" identity to us."
+msgstr ""
+
+#: source_templates/why-journalist-key.html:25
+msgid "Back to submission page"
+msgstr ""
+
