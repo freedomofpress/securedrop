@@ -1,4 +1,4 @@
 <img src="{{ url_for('static', filename='i/success_checkmark.png') }}">
 <div class="message">
-  <p>Thanks! We received your {{ things }}.</p>
+  <p>{{ gettext('Thanks! We received your {things}.').format(things=things) }}</p>
 </div>
