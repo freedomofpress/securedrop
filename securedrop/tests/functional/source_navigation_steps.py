@@ -157,3 +157,8 @@ class SourceNavigationSteps():
         logout_button = self.driver.find_element_by_id('logout').click()
         notification = self.driver.find_element_by_css_selector('.important')
         self.assertIn('Thank you for exiting your session!', notification.text)
+
+    def _source_not_found(self):
+        self.driver.get(self.source_location + "/unlikely")
+        message = self.driver.find_element_by_id('page_not_found')
+        self.assertTrue(message.is_displayed())
