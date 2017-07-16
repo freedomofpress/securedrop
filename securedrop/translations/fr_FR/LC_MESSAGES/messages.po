@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 08:24+0000\n"
-"PO-Revision-Date: 2017-07-16 08:26+0000\n"
+"PO-Revision-Date: 2017-07-16 09:07+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -84,8 +84,8 @@ msgstr ""
 #: journalist.py:272
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
-"Format de secret incorrect: le nombre de caractères est impair. Avez vous"
-" fait une typo ?"
+"Format de secret incorrect: le nombre de caractères est impair. Avez vous "
+"laissé une coquille ?"
 
 #: journalist.py:277 journalist.py:318 journalist.py:652
 msgid ""
@@ -170,8 +170,8 @@ msgid ""
 "warning\">Why is this dangerous?</a>"
 msgstr ""
 "<strong>ATTENTION:</strong> Il semble que vous utilisez Tor2Web. Cela "
-"<strong>ne garantie pas</strong> votre anonymat. <a href=\"/tor2web-"
-"warning\">Pourquoi cela représente-t-il un danger ?</a>"
+"<strong>ne garantit pas</strong> votre anonymat. <a href=\"/tor2web-warning\""
+">Pourquoi cela représente-t-il un danger ?</a>"
 
 #: source.py:166
 msgid ""
@@ -504,7 +504,7 @@ msgstr "Cliquez ci dessous si vous souhaitez écrire une réponse à cette sourc
 
 #: journalist_templates/col.html:90
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARQUEZ CETTE SOURCE POUR Y REPONDRE"
+msgstr "MARQUEZ CETTE SOURCE POUR PENSER A LUI REPONDRE"
 
 #: journalist_templates/col.html:95
 msgid ""
@@ -571,7 +571,7 @@ msgstr "MISE A JOUR"
 
 #: journalist_templates/edit_account.html:51
 msgid "Reset Two-Factor Authentication"
-msgstr "Réinitialisation de l'authentification à deux facteurs"
+msgstr "Réinitialisation de l'identification à deux facteurs"
 
 #: journalist_templates/edit_account.html:54
 msgid ""
@@ -581,10 +581,10 @@ msgid ""
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
 "Si l'identification à deux facteurs d'un utilisateur a été perdue ou "
-"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faite "
-"assurez vous que l'utilisateur est présent et prêt à mettre en place la "
-"nouvelle identification à deux facteurs sur sa machine. A défaut de cela "
-"ils ne pourront plus accéder à leur compte."
+"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faites assurez "
+"vous que l'utilisateur est présent et prêt à mettre en place la nouvelle "
+"identification à deux facteurs sur sa machine. A défaut de cela il ne pourra "
+"plus accéder à son compte."
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -796,7 +796,7 @@ msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong>"
 msgstr ""
-"<strong>Nous recommandons de régler le Niveau de Sécurité à Haut pour "
+"<strong>Nous recommandons de régler le Niveau de Sécurité sur \"Elevé\" pour "
 "protéger votre anonymat:</strong>"
 
 #: source_templates/index.html:15
@@ -859,7 +859,7 @@ msgid ""
 "to High in 4 easy steps!"
 msgstr ""
 "Il semble que vous utilisez le navigateur Tor. Vous pouvez régler le "
-"niveau de sécurité au plus haut en quatre étapes faciles !"
+"sécurité au niveau le plus élevé en quatre étapes faciles !"
 
 #: source_templates/index.html:74
 msgid "Click the"
@@ -871,13 +871,13 @@ msgstr "icône Tor dans la barre d'outil ci dessus"
 
 #: source_templates/index.html:75
 msgid "Click <strong>Security Settings...</strong>"
-msgstr "Cliquez <strong>Réglage de la sécurité...</strong>"
+msgstr "Cliquez <strong>Paramètres de sécurité...</strong>"
 
 #: source_templates/index.html:76
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
-"Déplacez le curseur sur <strong>Haut</strong>, puis cliquez "
-"<strong>Valider</strong>"
+"Déplacez le curseur sur <strong>Elevé</strong>, puis cliquez "
+"<strong>OK</strong>"
 
 #: source_templates/index.html:77
 msgid "<a href=\"/\">Click here</a>to refresh the page"
@@ -924,11 +924,11 @@ msgid ""
 "          of caution, we put a hold on sending all documents from that "
 "day through to our journalists."
 msgstr ""
-"Nos serveurs ont été sollicités de façon inhabituelle la dernière fois "
-"que vous les avez visité. Cela peut être du à un grand nombre "
-"d'utilisateurs, une attaque automatisée ou simplement un problème "
-"temporaire. Pour plus de prudence, nous avons mis de coté tout les "
-"documents envoyés à nos journalistes ce jour la."
+"Nos serveurs ont été sollicités de façon inhabituelle la dernière fois que "
+"vous les avez visité. Cela peut être du à un grand nombre d'utilisateurs, "
+"une attaque automatisée ou simplement un problème temporaire. Pour plus de "
+"prudence, nous avons mis de coté tout les documents envoyés à nos "
+"journalistes ce jour-là."
 
 #: source_templates/lookup.html:16
 msgid ""
@@ -991,7 +991,7 @@ msgstr ""
 
 #: source_templates/lookup.html:76
 msgid "Delete this reply?"
-msgstr "Supprimez cette réponse ?"
+msgstr "Supprimer cette réponse ?"
 
 #: source_templates/lookup.html:78
 msgid "DELETE"
@@ -1003,7 +1003,7 @@ msgstr "SUPPRIMER TOUTES LES REPONSES"
 
 #: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
-msgstr "Avez-vous terminé de consulter ces réponses ?"
+msgstr "Avez-vous terminé de consulter les réponses ?"
 
 #: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
@@ -1043,10 +1043,10 @@ msgid ""
 "you browse Tor Hidden Services (.onion sites) without installing Tor. It "
 "was designed to facilitate anonymous publishing."
 msgstr ""
-"<a href=\"https://tor2web.org\">Tor2Web</a> est un service de proxy qui "
-"vous permet de consulter les Tor Hidden Services (les sites se terminant "
-"par .onion) sans installer Tor. Il a été conçu pour faciliter la "
-"publication anonyme."
+"<a href=\"https://tor2web.org\">Tor2Web</a> est un service de proxy qui vous "
+"permet de consulter les \"Tor Hidden Services\" (les sites se terminant par "
+".onion) sans installer Tor. Il a été conçu pour faciliter la publication "
+"anonyme."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
