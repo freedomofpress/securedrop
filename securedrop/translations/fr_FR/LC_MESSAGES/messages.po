@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 07:57+0000\n"
-"PO-Revision-Date: 2017-07-15 09:59+0000\n"
+"PO-Revision-Date: 2017-07-16 08:03+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
-"Language: fr_FR\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:102
@@ -158,28 +159,33 @@ msgid ""
 "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-"
 "warning\">Why is this dangerous?</a>"
 msgstr ""
+"<strong>ATTENTION:</strong> Il semble que vous utilisez Tor2Web. Cela "
+"<strong>ne garantie pas</strong> votre anonymat. <a href=\"/tor2web-warning\""
+">Pourquoi cela représente-t-il un danger ?</a>"
 
 #: source.py:166
 msgid ""
 "You were redirected because you are already logged in. If you want to "
 "create a new account, you should log out first."
 msgstr ""
+"Vous avez été redirigé ici parce que vous êtes déjà connecté. Si vous "
+"souhaitez créer un nouveau compte, vous devez vous déconnecter."
 
 #: source.py:280
 msgid "You must enter a message or choose a file to submit."
-msgstr ""
+msgstr "Vous devez taper un message ou sélectionner un fichier à soumettre."
 
 #: source.py:353
 msgid "Reply deleted"
-msgstr ""
+msgstr "Réponse supprimée"
 
 #: source.py:369
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "Toutes les réponses ont été supprimées"
 
 #: source.py:402
 msgid "Sorry, that is not a recognized codename."
-msgstr ""
+msgstr "Désolé, ce nom de code n'existe pas."
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -1193,4 +1199,3 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Retour à la page de soumission"
-
