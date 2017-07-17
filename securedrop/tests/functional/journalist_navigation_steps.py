@@ -1,8 +1,6 @@
 import urllib2
 import tempfile
-import zipfile
 import gzip
-import datetime
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -182,14 +180,15 @@ class JournalistNavigationSteps():
         self.assertEqual('Edit your account', h1s.text)
         # There's no link back to the admin interface.
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element_by_partial_link_text('Back to admin interface')
+            self.driver.find_element_by_partial_link_text(
+                'Back to admin interface')
         # There's no field to change your username.
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element_by_css_selector('#username')
         # There's no checkbox to change the administrator status of your
         # account.
         with self.assertRaises(NoSuchElementException):
-            username_field = self.driver.find_element_by_css_selector('#is_admin')
+            self.driver.find_element_by_css_selector('#is_admin')
         # 2FA reset buttons at the bottom point to the user URLs for reset.
         totp_reset_button = self.driver.find_elements_by_css_selector(
             '#reset-two-factor-totp')[0]
@@ -256,7 +255,8 @@ class JournalistNavigationSteps():
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
         new_user_edit_links = filter(
-            lambda el: el.get_attribute('data-username') == self.new_user['username'],
+            lambda el: (el.get_attribute('data-username') ==
+                        self.new_user['username']),
             self.driver.find_elements_by_tag_name('a'))
         self.assertEquals(len(new_user_edit_links), 1)
         new_user_edit_links[0].click()
@@ -403,7 +403,8 @@ class JournalistNavigationSteps():
         self.assertEqual(self.secret_message, submission)
 
     def _journalist_sends_reply_to_source(self):
-        self.driver.find_element_by_id('reply-text-field').send_keys('Nice docs')
+        self.driver.find_element_by_id('reply-text-field').send_keys(
+            'Nice docs')
 
         self.driver.find_element_by_id('reply-button').click()
 
