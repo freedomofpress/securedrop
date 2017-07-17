@@ -70,7 +70,8 @@ class JournalistNavigationSteps():
         assert 'Admin' in [el.text for el in links]
 
     def _admin_visits_admin_interface(self):
-        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link = self.driver.find_element_by_id(
+            'link_admin_index')
         admin_interface_link.click()
 
         h1s = self.driver.find_elements_by_tag_name('h1')
@@ -139,7 +140,7 @@ class JournalistNavigationSteps():
 
     def _logout(self):
         # Click the logout link
-        logout_link = self.driver.find_element_by_link_text('Logout')
+        logout_link = self.driver.find_element_by_id('link_logout')
         logout_link.click()
 
         # Logging out should redirect back to the login page
@@ -170,11 +171,11 @@ class JournalistNavigationSteps():
         # The new user was not an admin, so they should not have the admin
         # interface link available
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_link_text('Admin')
+            self.driver.find_element_by_id('link_admin_index')
 
     def _edit_account(self):
-        edit_account_link = self.driver.find_element_by_link_text(
-            'Edit Account')
+        edit_account_link = self.driver.find_element_by_id(
+            'link_edit_account')
         edit_account_link.click()
 
         # The header says "Edit your account"
@@ -251,7 +252,8 @@ class JournalistNavigationSteps():
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
-        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link = self.driver.find_element_by_id(
+            'link_admin_index')
         admin_interface_link.click()
 
         # Click the "edit user" link for the new user
@@ -300,7 +302,8 @@ class JournalistNavigationSteps():
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
         # Go to the admin interface
-        admin_interface_link = self.driver.find_element_by_link_text('Admin')
+        admin_interface_link = self.driver.find_element_by_id(
+            'link_admin_index')
         admin_interface_link.click()
         # Edit the new user's password
         self._edit_user(self.new_user['username'])
