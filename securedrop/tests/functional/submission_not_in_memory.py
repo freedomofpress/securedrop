@@ -46,7 +46,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
         secrets_in_memory = self._num_strings_in(self.secret_message,
                                                  memory_dump)
 
-        self.assertLess(secrets_in_memory, 1)
+        assert secrets_in_memory < 1
 
     def test_file_upload_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
@@ -60,4 +60,4 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
         secrets_in_memory = self._num_strings_in(self.secret_message,
                                                  memory_dump)
 
-        self.assertLess(secrets_in_memory, 1)
+        assert secrets_in_memory < 1
