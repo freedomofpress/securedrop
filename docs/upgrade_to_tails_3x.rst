@@ -227,7 +227,21 @@ Workstation* drives:
 
 .. |Terminal| image:: images/terminal.png
 
-5. Verify the Upgrades
+5. Upgrade KeePassX Database
+----------------------------
+
+Your password databases will be in KeePass 1 database format (a file that ends
+in ``.kdb``). You should upgrade them to the new format by following these steps:
+
+   #. Open KeePassX.
+   #. Navigate to **Database** and then **Import KeePass 1 database**.
+   #. Select your password database and click **Open**.
+   #. Put in a master password if necessary to open the database.
+   #. Then navigate to **Database** and then **Save database as** to save the
+      database in its new format (a file ending in ``.kdbx``) in the same folder
+      as the previous database.
+
+6. Verify the Upgrades
 ----------------------
 
 Verify the Journalist Workstation and SVS USB Drives Are Successfully Updated
