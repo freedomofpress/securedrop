@@ -136,10 +136,10 @@ To use the template:
 -  Select **Database**, **Open database**, and navigate to the location of
    **securedrop-keepassx.kdbx**, select it, and click **Open**
 -  Check the **password** box and hit **OK**
--  Click **File** and **Save Database As**
+-  Click **Database** and **Save Database As**
 -  Save the database in the Persistent folder
 
-.. tip:: If you would like to add a master password, navigate to **File** and
+.. tip:: If you would like to add a master password, navigate to **Database** and
    **Change master key**. Note that since each KeePassX database is stored
    on the encrypted persistent volume, this additional passphrase is not necessary.
 
