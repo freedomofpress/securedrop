@@ -50,6 +50,7 @@ $(function(){
   } else {
     // If the user is not using Tor Browser, we want to encourage them to do so.
     $('.use-tor-browser').show();
+    $('.hide-if-not-tor-browser').hide();
     $('#use-tor-browser-close').click(function(){
       $('.use-tor-browser').hide(200);
     });
