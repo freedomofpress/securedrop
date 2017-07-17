@@ -5,29 +5,24 @@ import mock
 from multiprocessing import Process
 import os
 from os.path import abspath, dirname, join, realpath
-import shutil
 import signal
 import socket
-import sys
 import time
 import traceback
-import unittest
-import urllib2
 
 from Crypto import Random
-import gnupg
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox import firefox_binary
 
-os.environ['SECUREDROP_ENV'] = 'test'
-import config
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import db
 import journalist
 import source
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
+
 
 class FunctionalTest():
 
@@ -98,8 +93,8 @@ class FunctionalTest():
 
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
-        self.driver.set_window_position(0, 0);
-        self.driver.set_window_size(1024, 768);
+        self.driver.set_window_position(0, 0)
+        self.driver.set_window_size(1024, 768)
 
         # Poll the DOM briefly to wait for elements. It appears .click() does
         # not always do a good job waiting for the page to load, or perhaps
