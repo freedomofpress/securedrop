@@ -12,12 +12,13 @@ Start Tails with Persistence Enabled
 ------------------------------------
 
 After you boot the *admin Tails USB* on your normal workstation, you
-should see a *Welcome to Tails* screen with two options. Select *Yes* to
-enable the persistent volume and enter your password, but do NOT click
-Login yet. Under 'More Options," select *Yes* and click *Forward*.
+should see a *Welcome to Tails* screen with *Encrypted Persistent
+Storage*.  Enter your password and click *Unlock*. Do NOT click *Start
+Tails* yet. Under *Additional Settings* click the *plus* sign.
 
-Enter an *Administration password* for use with this specific Tails
-session and click *Login*.
+Click *Administration password*, enter a password for use with this
+specific Tails session and click *Add*. And finally click *Start
+Tails*.
 
 .. note:: The *Administration password* is a one-time password. It
 	  will reset every time you shut down Tails.
