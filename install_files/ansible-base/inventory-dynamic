@@ -24,6 +24,16 @@ SECUREDROP_SITE_VARS = os.path.join(SECUREDROP_ANSIBLE_DIRECTORY,
 SECUREDROP_SUPPORTED_HOSTNAMES = ['app', 'mon']
 
 
+class ConfigurationError(Exception):
+    """
+    Custom exception for aborting execution if the site-specific
+    vars are not present. The inventory script will look for
+    site-specific info such as SSH username and local IPv4 addresses
+    for the SecureDrop servers.
+    """
+    pass
+
+
 def lookup_local_ipv4_address(hostname):
     """
     Extract local IPv4 addresses from site vars for first-run config.
@@ -37,8 +47,9 @@ def lookup_local_ipv4_address(hostname):
             monitor_ip = site_vars['monitor_ip']
 
     except (IOError, KeyError):
-        msg = "You must run 'secure-admin sdconfig' from root securedrop dir."
-        raise Exception(msg)
+        msg = ("Run `./securedrop-admin sdconfig` to configure"
+               " site-specific information.")
+        raise ConfigurationError(msg)
 
     if hostname == "app":
         return app_ip
@@ -46,7 +57,7 @@ def lookup_local_ipv4_address(hostname):
         return monitor_ip
     else:
         msg = "Unsupported hostname: '{}'".format(hostname)
-        raise Exception(msg)
+        raise ConfigurationError(msg)
 
 
 def lookup_admin_username():
@@ -63,7 +74,8 @@ def lookup_admin_username():
             admin_username = site_vars['ssh_users']
 
     except (IOError, KeyError):
-        msg = "You must run the configure playbook."
+        msg = ("Run `./securedrop-admin sdconfig` to configure"
+               " site-specific information.")
         raise Exception(msg)
 
     try:
@@ -74,7 +86,7 @@ def lookup_admin_username():
         msg = ("The value of `ssh_users` must be a single username,"
                " not a list of usernames. Please update"
                " `{}` and try again.".format(SECUREDROP_SITE_VARS))
-        raise Exception(msg)
+        raise ConfigurationError(msg)
 
     return admin_username
 
