@@ -161,5 +161,4 @@ class SourceNavigationSteps():
 
     def _source_logs_out(self):
         self.driver.find_element_by_id('logout').click()
-        notification = self.driver.find_element_by_css_selector('.important')
-        assert 'Thank you for exiting your session!' in notification.text
+        assert self.driver.find_element_by_css_selector('.important')
