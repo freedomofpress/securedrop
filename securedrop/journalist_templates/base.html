@@ -19,11 +19,11 @@
 
     {% if g.user %}
     <div id="logout">
-      <a href="{{ url_for('edit_account') }}" id="link-edit-account">Edit Account</a> |
+      <a href="{{ url_for('edit_account') }}" id="link-edit-account">{{ gettext('Edit Account') }}</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}" id="link-admin-index">Admin</a> |
+      <a href="{{ url_for('admin_index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}" id="link-logout">Logout</a>
+      <a href="{{ url_for('logout') }}" id="link-logout">{{ gettext('Logout') }}</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
@@ -34,8 +34,7 @@
         <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br>
-          <img src="/static/i/securedrop_small.png" alt="SecureDrop">
+          {{ gettext('Powered by <br> <img src="/static/i/securedrop_small.png" alt="SecureDrop">') }}
         </div>
         {% endif %}
       </div>
@@ -49,7 +48,7 @@
 
       {% block footer %}
       <footer>
-        Powered by <em>SecureDrop {{ version }}</em>.
+        {{ gettext("Powered by <em>SecureDrop {version}</em>.").format(version=version)|safe }}
       </footer>
       {% endblock %}
     </div>
