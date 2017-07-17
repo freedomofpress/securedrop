@@ -1,7 +1,6 @@
 from unittest import TestCase
 from functional_test import FunctionalTest
 import subprocess
-import tempfile
 from source_navigation_steps import SourceNavigationSteps
 import os
 import getpass
