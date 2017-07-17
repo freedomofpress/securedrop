@@ -23,9 +23,6 @@ securedrop_code: /var/www/securedrop
 # Location of the application storage on disk, including database.
 securedrop_data: /var/lib/securedrop
 
-# Custom text to be displayed on the Source Interface page.
-custom_notification_text: ""
-
 # Whether to enable HTTPS on the Source Interface Onion URL. Off by default,
 # because it requires an organization to procure an EV certificate for HTTPS.
 securedrop_app_https_on_source_interface: no
