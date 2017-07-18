@@ -9,6 +9,7 @@ import signal
 import socket
 import time
 import traceback
+import requests
 
 from Crypto import Random
 from selenium import webdriver
@@ -89,6 +90,15 @@ class FunctionalTest():
         self.journalist_process.start()
 
         self.driver = self._create_webdriver()
+
+        for tick in range(30):
+            try:
+                requests.get(self.source_location)
+                requests.get(self.journalist_location)
+            except:
+                time.sleep(1)
+            else:
+                break
 
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
