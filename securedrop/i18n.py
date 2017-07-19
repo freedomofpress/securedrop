@@ -19,6 +19,7 @@ from flask import request, session
 from flask_babel import Babel
 from babel import core
 
+import collections
 import config
 import os
 
@@ -76,3 +77,11 @@ def get_locale():
 
 def get_text_direction(locale):
     return core.Locale.parse(locale).text_direction
+
+
+def get_locale2name():
+    locale2name = collections.OrderedDict()
+    for l in sorted(LOCALES):
+        locale = core.Locale.parse(l)
+        locale2name[l] = locale.languages[locale.language]
+    return locale2name
