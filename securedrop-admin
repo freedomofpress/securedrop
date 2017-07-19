@@ -220,9 +220,16 @@ def run_tails_config(args):
     """Configure Tails environment post SD install"""
     activate_venv(args)
     sdlog.info("Configuring Tails workstation environment")
-    subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
-                           "--ask-become-pass",
-                           ],
+    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
+                " which was set on Tails login screen"))
+    ansible_cmd = [
+        os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
+        "--ask-become-pass",
+        # Passing an empty inventory file to override the automatic dynamic
+        # inventory script, which fails if no site vars are configured.
+        '-i', '/dev/null',
+    ]
+    subprocess.check_call(ansible_cmd,
                           cwd=ANSIBLE_PATH)
 
 
