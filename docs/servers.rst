@@ -127,7 +127,7 @@ manually*.
 If network autoconfiguration completes before you can do this, the next
 window will ask for your hostname. To get back to the choice of
 configuring the network manually, **Cancel** the step that asks you to
-set a hostname and choose the manu option that says **Configure the
+set a hostname and choose the menu option that says **Configure the
 network manually** instead.
 
 For a production install with a pfSense network firewall in place, the
