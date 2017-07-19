@@ -77,7 +77,6 @@ coverage.xml
 
 # Translations
 *.mo
-*.pot
 
 # Flask stuff:
 instance/
