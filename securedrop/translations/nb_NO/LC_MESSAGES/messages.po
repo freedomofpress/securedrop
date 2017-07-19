@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-19 12:47+0000\n"
+"PO-Revision-Date: 2017-07-19 18:47+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -30,7 +30,7 @@ msgstr "Innlogging mislyktes."
 
 #: journalist.py:122
 msgid "Please wait at least {seconds} seconds before logging in again."
-msgstr "Vent i minst {seconds} før du forsøker å logge inn igjen."
+msgstr "Vent i minst {seconds} sekunder før du forsøker å logge inn igjen."
 
 #: journalist.py:132
 msgid "Please wait for a new two-factor token before logging in again."
