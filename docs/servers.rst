@@ -324,23 +324,10 @@ First, generate the new SSH keypair:
 You'll be asked to "enter file in which to save the key." Type
 **Enter** to use the default location.
 
-If you choose to passphrase-protect this key, you must use a strong,
-diceword-generated, passphrase that you can manually type (as Tails'
-pinentry will not allow you to copy and paste a passphrase). It is also
-acceptable to leave the passphrase blank in this case.
-
-.. todo:: Not sure if we should encourage people to put a passphrase
-          on this key. It's already on the encrypted persistence of a
-          Tails USB, so by the same logic that we use to justify not
-          passphrase-protecting the GPG key on the *SVS*, this key
-          should not be passphrase protected either. It also reduces
-          credential juggling and is one less thing to
-          forget/lose/actually be a bad passphrase because we're
-          asking people to keep track of so many of them.
-
-	  I also tend to agree with Joanna Rutkowska that encrypted
-	  private keys are security theater
-	  (http://blog.invisiblethings.org/keys/).
+Given that this key is on the encrypted persistence of a Tails USB,
+you do not need to add an additional passphrase to protect the key.
+If you do elect to use a passphrase, note that you will need to manually
+type it (Tails' pinentry will not allow you to copy and paste a passphrase).
 
 Once the key has finished generating, you need to copy the public key
 to both servers. Use ``ssh-copy-id`` to copy the public key to each
