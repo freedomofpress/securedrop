@@ -1,0 +1,12 @@
+---
+# Between 0.3.12 and 0.4, the "Document Interface" was renamed to
+# "Journalist Interface". Since multiple scripts expect to readfrom this file,
+# we'll rename the old file to handle the transition gracefully.
+- name: Migrate Document Interface ATHS file (upgrade only).
+  command: >-
+    mv --no-clobber
+    "{{ tails_config_ansible_base }}/app-document-aths"
+    "{{ tails_config_ansible_base }}/app-journalist-aths"
+  args:
+    # Only run this command if the deprecated file is present.
+    removes: "{{ tails_config_ansible_base }}/app-document-aths"
