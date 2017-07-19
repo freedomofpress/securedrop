@@ -72,17 +72,6 @@ error messages if any problems were detected. The answers you provided will be
 written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
 which you can edit manually to provide further customization.
 
-For example, you can have custom notification text be displayed on the
-source interface. The source interface with a custom notification message is
-shown here (the custom notification appears after the bolded "Note:"):
-
-|Custom notification|
-
-This custom notification can be configured by providing the desired message in
-``custom_notification_text`` in ``install_files/ansible-base/group_vars/all/site-specific``.
-For example, this can be used to notify potential sources that an instance is for
-testing purposes only.
-
 When you're done, save the file and quit the editor.
 
 .. _Install SecureDrop Servers:
@@ -123,5 +112,3 @@ Service will be available in the following files under
 The dynamic inventory file will automatically read the Onion URLs for SSH
 from the ``app-ssh-aths`` and ``mon-ssh-aths`` files, and use them to connect
 to the servers during subsequent playbook runs.
-
-.. |Custom notification| image:: images/install/custom-notification.png
