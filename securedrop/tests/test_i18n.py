@@ -19,7 +19,7 @@ import argparse
 import logging
 import os
 
-from flask import request, session, render_template_string
+from flask import request, session, render_template, render_template_string
 from flask_babel import gettext
 from werkzeug.datastructures import Headers
 
@@ -106,6 +106,15 @@ class TestI18N(object):
             c.get('/?l=YY_ZZ')
             assert session.get('locale') is None
             assert not_translated == gettext(not_translated)
+
+        with app.test_request_context():
+            assert '' == render_template('locales.html')
+
+        with app.test_client() as c:
+            c.get('/')
+            locales = render_template('locales.html')
+            assert 'fr_FR' in locales
+            assert 'en_US' not in locales
 
     def test_i18n(self):
         sources = [
