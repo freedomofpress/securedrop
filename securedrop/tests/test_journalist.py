@@ -163,8 +163,8 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}">{}</a>'.format(
-            url_for('edit_account'), "Edit Account")
+        edit_account_link = '<a href="{}" id="link_edit_account">'.format(
+            url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_user_has_link_to_edit_account_page_in_index_page(self):
@@ -173,8 +173,8 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}">{}</a>'.format(
-            url_for('edit_account'), "Edit Account")
+        edit_account_link = '<a href="{}" id="link_edit_account">'.format(
+            url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
@@ -183,8 +183,8 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(
-            url_for('admin_index'), "Admin")
+        admin_link = '<a href="{}" id="link_admin_index">'.format(
+            url_for('admin_index'))
         self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
@@ -193,8 +193,8 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(
-            url_for('admin_index'), "Admin")
+        admin_link = '<a href="{}" id="link_admin_index">'.format(
+            url_for('admin_index'))
         self.assertNotIn(admin_link, resp.data)
 
     # WARNING: we are purposely doing something that would not work in
