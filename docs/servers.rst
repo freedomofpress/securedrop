@@ -119,7 +119,7 @@ Configure the network manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Ubuntu installer will try to autoconfigure networking for the server
-you are setting up; however, SecureDrop 0.3 requires manual network
+you are setting up; however, SecureDrop requires manual network
 configuration. You can hit **Cancel** at any point during network
 autoconfiguration to be given the choice to *Configure the network
 manually*.
