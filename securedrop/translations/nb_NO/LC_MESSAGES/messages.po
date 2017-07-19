@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-19 09:31+0000\n"
+"PO-Revision-Date: 2017-07-19 12:47+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -35,6 +35,8 @@ msgstr "Vent i minst {seconds} før du forsøker å logge inn igjen."
 #: journalist.py:132
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
+"Vennligst vent til du har fått en ny tofaktor-kode før du forsøker å logge "
+"inn igjen."
 
 #: journalist.py:176
 msgid "Missing username"
@@ -42,29 +44,31 @@ msgstr ""
 
 #: journalist.py:182
 msgid "Passwords didn't match"
-msgstr ""
+msgstr "Passordet stemmer ikke"
 
 #: journalist.py:200 journalist.py:304
 msgid "Your password must be between {min} and {max} characters."
-msgstr ""
+msgstr "Passordet ditt må være på mellom {min} og {max} tegn."
 
 #: journalist.py:208
 msgid "That username is already in use"
-msgstr ""
+msgstr "Brukernavnet du valgte er allerede i bruk"
 
 #: journalist.py:211
 msgid ""
 "An error occurred saving this user to the database. Please check the "
 "application logs."
 msgstr ""
+"En feil oppstod ved forsøk på lagring av brukeren i databasen. Be "
+"administrator sjekke loggene."
 
 #: journalist.py:233
 msgid "Two-factor token successfully verified for user {user}!"
-msgstr ""
+msgstr "Vellykket kontroll av tofaktor-kode for brukeren {user}!"
 
 #: journalist.py:240 journalist.py:404
 msgid "Two-factor token failed to verify"
-msgstr ""
+msgstr "Kontroll av tofaktor-kode mislyktes"
 
 #: journalist.py:267
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -79,26 +83,28 @@ msgid ""
 "An unexpected error occurred! Please check the application logs or inform"
 " your adminstrator."
 msgstr ""
+"En uventet feil oppstod! Sjekk loggene eller ta kontakt med din "
+"administrator."
 
 #: journalist.py:299
 msgid "Passwords didn't match!"
-msgstr ""
+msgstr "Passordene er ikke like!"
 
 #: journalist.py:325
 msgid "Account successfully updated!"
-msgstr ""
+msgstr "Vellykket oppdatering av konto!"
 
 #: journalist.py:340
 msgid "Username \"{user}\" is already taken!"
-msgstr ""
+msgstr "Brukernavnet \"{user}\" er allerede i bruk!"
 
 #: journalist.py:368
 msgid "Deleted user '{user}'"
-msgstr ""
+msgstr "Slettet brukeren '{user}'"
 
 #: journalist.py:400
 msgid "Two-factor token successfully verified!"
-msgstr ""
+msgstr "Vellykket kontroll av tofaktor-kode!"
 
 #: journalist.py:519
 msgid "No collections selected!"
