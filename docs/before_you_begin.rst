@@ -2,7 +2,7 @@ Before you begin
 ================
 
 Before you get started, you should familiarize yourself with the
-:doc:`overview`, :doc:`terminology`, and the :doc:`Roles
+:doc:`overview`, :doc:`terminology`, and the :doc:`Passphrases
 <passphrases>` involved in SecureDrop's operations. You may wish to
 leave these documents open in other tabs for reference as you work.
 
@@ -32,5 +32,3 @@ make sure you use the appropriate values for your instance.
 Once you're familiar with SecureDrop, you've made your plan, your
 organization is ready to follow-through and you have the required
 hardware assembled before you, you're ready to begin.
-
-
