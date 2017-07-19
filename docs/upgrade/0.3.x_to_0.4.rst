@@ -1,0 +1,44 @@
+Upgrade from 0.3.x to 0.4
+=========================
+
+SecureDrop 0.4 requires the use of Tails 3. It includes substantial
+changes to the Admin tooling used for managing the configuration
+for the Application and Monitor Servers.
+
+.. _0.4-upgrade-procedure:
+
+Upgrade Procedure
+------------------
+
+All Admin and Journalist Workstations must be upgraded to Tails 3 for use with
+SecureDrop 0.4. Follow the :doc:`/upgrade_to_tails_3x` guide for detailed
+instructions.
+
+Open a **Terminal** and navigate to your SecureDrop directory.
+
+.. code:: sh
+
+   cd ~/Persistent/securedrop
+
+Stash your local configuration, fetch the latest code, and verify the tag for the
+latest release (0.4),
+
+.. code:: sh
+
+   git stash save "site specific configs"
+   git fetch
+   git tag -v 0.4
+
+The output of ``git tag -v`` should include ``Good signature from
+"Freedom of the Press Foundation Master Signing Key"``. If it does
+not, please contact us immediately at support@freedom.press.
+
+Once you've verified the latest release, check it out, then pop your local
+configuration back into place:
+
+.. code:: sh
+
+   git checkout 0.4
+   git stash pop
+
+- Upgrading to Tails 3.x: :doc:`/upgrade_to_tails_3x`
