@@ -119,7 +119,14 @@ class TestI18N(object):
             assert session.get('locale') is None
             assert not_translated == gettext(not_translated)
 
+        with app.test_request_context():
+            assert '' == render_template('locales.html')
+
         with app.test_client() as c:
+            c.get('/')
+            locales = render_template('locales.html')
+            assert 'fr_FR' in locales
+            assert 'en_US' not in locales
             c.get('/?l=ar')
             base = render_template('base.html')
             assert 'dir="rtl"' in base
