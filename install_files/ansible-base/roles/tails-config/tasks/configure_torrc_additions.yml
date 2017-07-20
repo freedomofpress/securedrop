@@ -4,9 +4,8 @@
     paths:
       - "{{ tails_config_ansible_base }}"
     patterns:
-      # Collect all files that end in `-aths`, since only ATHS services
-      # contain HidServAuth info that must be added to torrc.
-      - '*-aths'
+      - '{{ tails_config_aths_pattern }}'
+    use_regex: true
   register: find_aths_info_result
 
 # We need at least one ATHS value, for the Journalist Interface.
@@ -24,10 +23,11 @@
 
 - name: Assemble ATHS info into torrc additions.
   become: yes
-  assemble:
-    src: "{{ tails_config_ansible_base }}"
-    regexp: '.*-aths$'
+  lineinfile:
+    line: "{{ lookup('file', item) }}"
     dest: "{{ tails_config_torrc_additions }}"
     owner: root
     group: root
     mode: "0400"
+  # Create list of file-paths from find task at top
+  with_items: "{{ find_aths_info_result.files | map(attribute='path') | list }}"
