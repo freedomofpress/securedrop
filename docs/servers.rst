@@ -318,7 +318,7 @@ First, generate the new SSH keypair:
 
     ssh-keygen -t rsa -b 4096
 
-You'll be asked to "enter file in which to save the key." Type
+You'll be asked to "Enter file in which to save the key" Type
 **Enter** to use the default location.
 
 If you choose to passphrase-protect this key, you must use a strong,
