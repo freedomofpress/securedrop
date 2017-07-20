@@ -66,7 +66,7 @@ $(function () {
           return $(this).prop('checked')
       });
       if (checked.length > 0) {
-          return confirmed = confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
+          return confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
       }
       // Don't submit the form if no submissions are selected
       return false;
