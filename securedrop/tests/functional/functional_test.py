@@ -30,7 +30,7 @@ LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
 
 # https://stackoverflow.com/a/34795883/837471
 class alert_is_not_present(object):
-    """ Expect an alert to not to be present."""
+    """ Expect an alert to not be present."""
     def __call__(self, driver):
         try:
             alert = driver.switch_to.alert
