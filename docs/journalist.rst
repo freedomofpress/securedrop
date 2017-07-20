@@ -172,13 +172,13 @@ once and is overloaded with submissions, you will need to flag sources
 for reply before you can communicate with them. Click the
 ``Flag this source for reply`` button.
 
-|Read documents|
+|Flag for reply button|
 
 After clicking the ``Flag this source for reply`` button, you'll see
 this confirmation page. Click through to get back to the page that
 displays that source's documents and replies.
 
-|Flag source for reply|
+|Flag for reply notification|
 
 You will not be able to reply until after the source logs in again and
 sees that you would like to talk to him or her. So you may have to sit
@@ -273,8 +273,8 @@ crimes and corruption, and change the world.
 .. |Opened document| image:: images/manual/viewing4.png
 .. |Cycle source codename| image:: images/manual/change-codename.png
 .. |Sent reply| image:: images/manual/document2.png
-.. |Read documents| image:: images/manual/document4.png
-.. |Flag source for reply| image:: images/manual/document3.png
+.. |Flag for reply button| image:: images/manual/document_flag_for_reply_button.png
+.. |Flag for reply notification| image:: images/manual/document_flagged_for_reply_notification.png
 .. |Wiping documents| image:: images/manual/viewing5.png
 .. |Encrypting 1| image:: images/manual/viewing6.png
 .. |Encrypting 2| image:: images/manual/viewing7.png
