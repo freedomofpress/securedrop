@@ -551,13 +551,6 @@ with a progress bar at the top that will periodically update as the
 upgrade progresses. Wait for the upgrade to complete, which may take a
 while depending on the speed of your network.
 
-.. note:: In a recent test, the progress page did not successfully
-	  update itself as the upgraded progressed. After waiting for
-	  some time, we refreshed the page and found that the upgrade
-	  had completed successfully. If your upgrade is taking longer
-	  than expected or not showing any progress, try refreshing
-	  the page.
-
 .. |Wired Connected| image:: images/firewall/wired_connected.png
 .. |Your Connection is Insecure| image:: images/firewall/your_connection_is_insecure.png
 .. |Launching the Unsafe Browser| image:: images/firewall/launching_unsafe_browser.png
