@@ -9,6 +9,10 @@ potentially untrusted network. This is why **we strongly recommend using
 a printer that does not have WiFi or Bluetooth**, and hooking up to it
 using a regular USB cable to print.
 
+Finding a printer that works with Tails can be challenging because Tails is
+based on the Linux operating system, which often has second-class hardware
+support in comparison to operating systems such as Windows or macOS.
+
 We :ref:`maintain a list of printers <printers_tested_by_fpf>` that we have
 personally tested and gotten to work with Tails, in the Hardware guide; if
 possible, we recommend using one of those printers. The Linux Foundation also
@@ -61,29 +65,6 @@ In this example, we'll assume that this is the first time we've tried to install
 a printer, which will show the following:
 
 |add printer|
-
-Click "Add a Printer". By doing so, you'll now get a list of printers that Tails
-has auto-detected. You should now see this:
-
-|select printer to add|
-
-In this example, we've connected an HP Deskjet F4200. Clicking on this printer
-will select it for installation, which, if successful, will display the
-following:
-
-|printer installing|
-
-This indicates the Tails is attempting to install the USB printer; assuming you
-receive no errors in this process, you will then see the following screen,
-which indicates that the printer is "ready" for printing.
-
-|printer ready|
-
-For instances where your printer does *not* work out of the box, most difficulties
-stem from not selecting the right driver (extra software needed for the printer
-and computer to communicate). Luckily, Tails has a large number of drivers for
-just about any popularly manufactured printer on hand, without even having to
-download new drivers from the web.
 
 Click "Add a Printer". By doing so, you'll now get a list of printers that Tails
 has auto-detected. You should now see this:

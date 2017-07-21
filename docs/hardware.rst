@@ -423,12 +423,11 @@ Tails:
 +-------------------------+--------------+----------------+--------------------+
 
 .. note:: We've documented both the HP Deskjet F4200 and HP LaserJet 400 M401n
-         with screenshots of the installation process, in our section on
-         `setting up printers in Tails
-         <https://docs.securedrop.org/en/stable/tails_printing_guide.html>`_.
-         While the F4200 installed automatically, the 400 M401n required that we
-         set "Make and model" to "HP LaserJet 400 CUPS+Gutenprint v5.2.9" when
-         manually configuring the drivers.
+          with screenshots of the installation process, in our section on
+          :ref:`printer_setup_in_tails`. While the F4200 installed
+          automatically, the 400 M401n required that we set "Make and model" to
+          "HP LaserJet 400 CUPS+Gutenprint v5.2.9" when manually configuring the
+          drivers.
 
 If you know of another model of printer that fits our requirements and
 works with Tails, please submit a pull request to add it to this list.
