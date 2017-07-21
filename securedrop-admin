@@ -211,7 +211,7 @@ def install_securedrop(args):
         sudo_prompt = "Sudo password for servers [blank if not needed]: "
         ansible_password = getpass.getpass(prompt=sudo_prompt)
         subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
-                         "-e ansible_become_pass={}".format(ansible_password),
+                         "-e ansible_become_pass='{}'".format(ansible_password),
                          ],
                         cwd=ANSIBLE_PATH)
 
