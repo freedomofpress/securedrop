@@ -208,10 +208,10 @@ def install_securedrop(args):
 
     else:
         sdlog.info("Now installing SecureDrop on remote servers.")
-        sudo_prompt = "Sudo password for servers [blank if not needed]: "
-        ansible_password = getpass.getpass(prompt=sudo_prompt)
+        sdlog.info("You will be prompted for the sudo password on the servers.")
+        sdlog.info("The sudo password is only necessary during initial installation.")
         subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
-                         "-e ansible_become_pass={}".format(ansible_password),
+                         '--ask-become-pass',
                          ],
                         cwd=ANSIBLE_PATH)
 
