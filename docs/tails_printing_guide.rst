@@ -1,5 +1,7 @@
-Setting up a printer with Tails
-===============================
+.. _printer_setup_in_tails:
+
+Setting up a Printer in Tails
+=============================
 
 Because Tails is supposed to be as "amnesiac" as possible, you want to
 shield your Tails stick from any extra inputs from, and outputs to, a
@@ -7,31 +9,97 @@ potentially untrusted network. This is why **we strongly recommend using
 a printer that does not have WiFi or Bluetooth**, and hooking up to it
 using a regular USB cable to print.
 
-Normally, any printer should work with Tails "out of the box." Most
-difficulties stem from not selecting the right driver (extra software
-needed for the printer and computer to communicate). Luckily, Tails has
-a large number of drivers for just about any popularly manufactured
-printer on hand, without even having to download new drivers from the
-web.
+We :ref:`maintain a list of printers <printers_tested_by_fpf>` that we have
+personally tested and gotten to work with Tails, in the Hardware guide; if
+possible, we recommend using one of those printers. The Linux Foundation also
+maintains the `OpenPrinting database <https://www.openprinting.org/printers>`_,
+which documents the compatibility, or lack thereof, of numerous printers from
+most every manufacturer.
 
-Boot up Tails with both your persistent volume, and set an admin passphrase.
+.. note:: The latest generations of printers might or might not be represented
+          by the OpenPrinting database; also, the database does not document
+          whether or not a printer is wireless, so this will involve manually
+          checking models of interest, if you wish to use this resource as a
+          guide for purchasing a non-wireless printer suitable for use with
+          SecureDrop.
 
-.. todo:: Consider adding images of enabling persistence and setting an admin
-          passphrase when starting Tails.
+With that in mind, this database is arguably the best resource for researching
+the compatibility of printers with Linux. As a tip for narrowing down your
+search, look for printers that are compatible with Debian, or Debian-based
+distributions like Ubuntu, since Tails itself is also Debian-based. This might
+increase the chances for a successfully seamless installation experience in
+Tails.
 
-Make sure your computer is NOT connected to the internet. This will make
-sure that your printer set-up is never influenced by a network
-connection.
+In any case, this document outlines the usual set of steps that we follow when
+attempting to use a new printer with Tails, and provides some troubleshooting
+tips that you may find useful if you are trying to use a different printer.
+
+.. note:: While, as of Tails 3, it's no longer necessary to have admin
+   privileges in order to install or configure printers, we recommend that you
+   set an admin passphrase along with
+   :ref:`enabling persistence <enable_persistence_in_tails>`; this ensures that
+   the printer's installation and configuration settings persist after every
+   reboot, so you don't have to reinstall it each time you start Tails.
+
+Installing and Printing via the Tails GUI
+-----------------------------------------
+
+Let's look at Tails 3.0's typical flow for installing a USB-connected printer.
+
+If you've enabled persistence, boot with your persistent volume, and set an
+admin passphrase.
+
+Connect the printer to your Tails-booted computer via USB, then turn the
+printer on.
+
+Now, you'll want to single-click your way through **Applications** ▸
+**System Tools** ▸ **Settings** ▸ **Printers**.
+
+|select printer from settings|
+
+In this example, we'll assume that this is the first time we've tried to install
+a printer, which will show the following:
+
+|add printer|
+
+Click "Add a Printer". By doing so, you'll now get a list of printers that Tails
+has auto-detected. You should now see this:
+
+|select printer to add|
+
+In this example, we've connected an HP Deskjet F4200. Clicking on this printer
+will select it for installation, which, if successful, will display the
+following:
+
+|printer installing|
+
+This indicates the Tails is attempting to install the USB printer; assuming you
+receive no errors in this process, you will then see the following screen,
+which indicates that the printer is "ready" for printing.
+
+|printer ready|
+
+Troubleshooting
+---------------
+
+For instances where your printer does *not* work out of the box, most difficulties
+stem from not selecting the right driver (extra software needed for the printer
+and computer to communicate). Luckily, Tails has a large number of drivers for
+just about any popularly manufactured printer on hand, without even having to
+download new drivers from the web.
+
+Just as before, if you've enabled persistence, boot with your persistent
+volume, and set an admin passphrase.
+
+Make sure your computer is NOT connected to the Internet. This will make
+sure that your printer set-up is never influenced by a network connection.
 
 |no network connection required|
 
-Plug in your printer and navigate to Printing. "Applications -> System
-Tools -> Administration -> Printing". You will need to authenticate this
-action with the admin passphrase you set when booting up Tails.
+Plug in your printer and navigate to Printing. **Applications** ▸ **System
+Tools** ▸ **Settings** ▸ **Printing**.
 
 |navigate to Printing|
-
-|grant admin|
 
 Click **Add**.
 
@@ -99,7 +167,6 @@ a process of trial-and-error.
 
 .. |no network connection required| image:: images/printer_setup_guide/tails_desktop_no_network.png
 .. |navigate to Printing| image:: images/printer_setup_guide/path_to_printer_settings.png
-.. |grant admin| image:: images/printer_setup_guide/grant_admin.png
 .. |add new printer| image:: images/printer_setup_guide/printer_list.png
 .. |searching for drivers...| image:: images/printer_setup_guide/searching_for_drivers.png
 .. |default set up 1| image:: images/printer_setup_guide/driver_search_result_default_1.png
