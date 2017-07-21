@@ -10,7 +10,7 @@ Source Guide
 Choose who to submit to
 -----------------------
 
-There are currently over 20 organizations running SecureDrop. Each instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
+Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
 
 All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
 
