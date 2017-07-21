@@ -60,8 +60,26 @@ instance.
    ./securedrop-admin setup
    ./securedrop-admin tailsconfig
 
-After both commands have completed successfully, you can continue to verifying
-the upgrade worked on all drives.
+Clean up old version-controlled site config
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``tailsconfig`` task copied the site-specific configuration for your
+SecureDrop instance to a new location: ``install_files/ansible-base/group_vars/all/site-specific``.
+You should open this file and confirm that the information there matches the
+contents of ``install_files/ansible-base/prod-specific.yml``.
+
+.. warning::
+   The ``git checkout prod-specific.yml`` command will effectively delete the
+   old configuration file. Make sure the contents of that file were copied
+   to the new location before proceeding.
+
+Once you have confirmed the config exists in the new location, run: ::
+
+   git checkout prod-specific.yml
+
+During subsequent upgrades to the SecureDrop Admin configuration, you will no longer need to perform
+``git stash`` and ``git pop`` as described above. The site-specific configuration for your instance
+will continue to persist in the new file location.
 
 Verify the Upgrades
 ----------------------
