@@ -7,8 +7,23 @@ of this key is only stored on the *Secure Viewing Station* which is never
 connected to the Internet. SecureDrop submissions can only be decrypted and
 read on the *Secure Viewing Station*.
 
-We will now generate the *SecureDrop Submission Key* on the *Secure Viewing
-Station*.
+We will now prepare the *Secure Viewing Station* and generate the *SecureDrop
+Submission Key*.
+
+Ensure Filenames are Preserved
+------------------------------
+
+In order to preserve filenames when you decrypt submissions, on each *Secure
+Viewing Station*, you should open a **Terminal** and type the following commands:
+
+.. code:: sh
+
+  cd /live/persistence/TailsData_unlocked/dotfiles
+  cp ~/.bashrc .
+  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
+
+.. note:: This only needs to be done once on each *Secure Viewing Station*.
+          After a reboot it will persist.
 
 Correct the system time
 -----------------------
