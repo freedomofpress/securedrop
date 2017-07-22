@@ -14,10 +14,10 @@ In the event of hardware failure on the SecureDrop servers, having a recent back
 will enable you to redeploy the system without changing Onion URLs, recreating
 Journalist accounts, or losing historical submissions from sources.
 
-.. note:: The backup and restore functionality described in this guide was introduced
-          in SecureDrop 0.3.7. Prior versions of SecureDrop included a less featureful
-          backup process. Make sure you have upgraded to SecureDrop 0.3.7 or greater
-          before continuing.
+.. note:: Currently only the Application Server is backed up and restored,
+          including historical submissions and Source and Journalist Interface URLs.
+          The Monitor Server will be configured from scratch in the event of a
+          hardware migration.
 
 Minimizing disk space
 ---------------------
@@ -55,7 +55,7 @@ Backing Up
 
 Open a **Terminal** on the *Admin Workstation* and ``cd`` to your clone of the
 SecureDrop git repository (usually ``~/Persistent/securedrop``). Ensure you have
-SecureDrop version 0.3.7 or later checked out (you can run ``git describe
+SecureDrop version 0.4 or later checked out (you can run ``git describe
 --exact-match`` to see what Git tag you've checked out).
 
 .. note:: The backups are stored in the *Admin Workstation*'s persistent volume.
@@ -75,57 +75,42 @@ the SecureDrop servers.
 
 .. code:: sh
 
-   source .venv/bin/activate
-   cd install_files/ansible-base
-   ansible -m ping all
+   ssh app uptime
 
 If this command fails (usually with an error like "SSH Error: data could not be
 sent to the remote host. Make sure this host can be reached over ssh"), you need
 to debug your connectivity before proceeding further. Make sure:
 
-* Ansible is installed (``which ansible`` should return a path instead of "not found").
-
-  * Ansible should be automatically installed by the Tails auto-configuration
-    for SecureDrop. If it is not, you probably need to re-run
-    ``./securedrop-admin tailsconfig``. See
-    :doc:`configure_admin_workstation_post_install` for detailed instructions).
+* Ansible is installed. If it is not, see
+  :doc:`configure_admin_workstation_post_install` for detailed instructions.
 
 * The *Admin Workstation* is connected to the Internet.
 * Tor started successfully.
 * The ``HidServAuth`` values from ``app-ssh-aths`` and ``mon-ssh-aths`` are in
-  Tails' ``/etc/tor/torrc``.
+  Tails' ``/etc/tor/torrc``. If they are not, again, see 
+  :doc:`configure_admin_workstation_post_install` for detailed instructions.
 
-  * Tor should be automatically configured to connect to the authenticated Tor
-    Hidden Services by the Tails auto-configuration for SecureDrop. If it is
-    not, you probably need to re-run ``./securedrop-admin tailsconfig``. See
-    :doc:`configure_admin_workstation_post_install` for detailed instructions).
+Create the backup
+'''''''''''''''''
 
-Run the backup Ansible role
-'''''''''''''''''''''''''''
-
-Now you can run the production Ansible playbook with special flags tag to
-perform the backup:
+Run:
 
 .. code:: sh
 
-   source .venv/bin/activate
-   cd install_files/ansible-base
-   ansible-playbook -t backup securedrop-prod.yml -e perform_backup=true
+   ./securedrop-admin backup
 
-.. todo:: Test this on a real *Admin Workstation*
+The backup action will display itemized progress as the backup is created.
+Run time will vary depending on the number of submissions saved on
+the *Application Server*.
 
-The backup role will print out the results of its tasks as it completes them.
-You can expect the ``fetch the backup file`` step to take a long time,
-especially if you have a lot of saved submissions.
+When the backup action is complete, the backup will be stored as a tar archive in
+``install_files/ansible-base``. The filename will start with ``sd-backup``, have
+a timestamp of when the backup was initiated, and end with ``.tar.gz``. You can
+find the full path to the backup archive in the output of backup action.
 
-When the backup role is complete, the backup will be stored as a tar archive in
-``ansible-base``. The filename will start with ``sd-backup``, have a timestamp
-of when the backup was initiated, and end with ``.tar.gz``. You can find the
-full path to the backup archive in the output of the ``fetch the backup file``
-task, as the value of the variable ``"dest"`` in the results dictionary.
-
-.. warning:: The backup file contains sensitive information! Be careful where you
-             copy it.
+.. warning:: The backup file contains sensitive information! It should only
+             be stored on the *Admin Workstation*, or on a
+             :doc:`dedicated encrypted backup USB <backup_workstations>`.
 
 Restoring
 ---------
@@ -135,7 +120,7 @@ Prerequisites
 
 The process for restoring a backup is very similar to the process of creating
 one. As before, to get started, boot the *Admin Workstation*, ``cd`` to the
-SecureDrop repository, and ensure that you have SecureDrop 0.3.7 or later
+SecureDrop repository, and ensure that you have SecureDrop 0.4 or later
 checked out.
 
 The restore role expects to find a ``.tar.gz`` backup archive in
@@ -150,25 +135,30 @@ role. Otherwise, you should copy the backup archive that you wish to restore to
           You can safely remove those files once you've created the ``.tar.gz``
           backup archive described in this guide.
 
-Run the restore Ansible role
+Restoring from a backup file
 ''''''''''''''''''''''''''''
 
-To perform a restore, simply run the *same* command that you ran to perform a
-backup:
+To perform a restore, you must already have a backup archive. Provide its
+filename in the following command:
 
 .. code:: sh
 
-   source .venv/bin/activate
-   cd install_files/ansible-base
-   ansible-playbook -t backup securedrop-prod.yml -e restore_file="<your backup archive filename>"
+   ./securedrop-admin restore sd-backup-2017-07-22--01-06-25.tar.gz
 
-This actually performs a backup, followed by a restore. A backup is done before
-the restore as an emergency precaution, to ensure you can recover the server in
-case something goes wrong with the restore.
+Make sure to replace ``sd-backup-2017-07-22--01-06-25.tar.gz`` with the filename
+for your backup archive. The backup archives are located in
+``install_files/ansible-base``.
 
-Once the restore is done, the Ansible playbook will fetch the Tor HidServAuth
-credentials for the various Authenticated Tor Hidden Services (ATHS) back to the
-*Admin Workstation*. This synchronizes the state on the *Admin Workstation* with the
-state of the restored server. You should re-run the Tails custom configuration
-script (``./securedrop-admin tailsconfig``, see
-:doc:`configure_admin_workstation_post_install` for detailed instructions).
+Once the restore is done, the Application Server will use the original Source and
+Journalist Interface Onion URLs. You will need to update the corresponding
+files on the Admin Workstation:
+
+.. todo:: We really should automate this process for Admins.
+
+* ``app-source-ths``
+* ``app-journalist-aths``
+* ``app-ssh-aths``
+
+Then rerun ``./securedrop-admin tailsconfig`` to update the Admin Workstation
+to use the restored Onion URLs again. See :doc:`configure_admin_workstation_post_install`
+for detailed instructions.

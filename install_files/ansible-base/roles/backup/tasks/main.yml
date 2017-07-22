@@ -1,6 +1,2 @@
 ---
 - include: backup.yml
-
-  # Perform a restoration if a restore file is specified
-- include: restore.yml
-  when: restore_file is defined
