@@ -216,6 +216,20 @@ def install_securedrop(args):
                         cwd=ANSIBLE_PATH)
 
 
+def backup_securedrop(args):
+    """Perform backup of the SecureDrop Application Server.
+    Creates a tarball of submissions and server config, and fetches
+    back to the Admin Workstation. Future `restore` actions can be performed
+    with the backup tarball."""
+    activate_venv(args)
+    sdlog.info("Backing up the SecureDrop Application Server")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-backup.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
     activate_venv(args)
@@ -263,6 +277,10 @@ if __name__ == "__main__":
     parse_tailsconfig = subparsers.add_parser('tailsconfig',
                                               help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    parse_backup = subparsers.add_parser('backup',
+                                         help=backup_securedrop.__doc__)
+    parse_backup.set_defaults(func=backup_securedrop)
 
     args = parser.parse_args()
     setup_logger(args.v)

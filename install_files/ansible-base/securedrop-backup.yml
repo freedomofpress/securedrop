@@ -1,0 +1,7 @@
+---
+- name: Back up SecureDrop Application Server submissions.
+  hosts: securedrop_application_server
+  roles:
+    - role: backup
+      tags: backup
+  become: yes
