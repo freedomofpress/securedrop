@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: msheiny/pressfreedomci:latest
+      - image: quay.io/freedomofpress/circleci-docker@sha256:3919aa22af019f6a5db04ecd7320841401652b0ed93a1c3834cd604685242ce7
         environment:
           FPF_CI: true
           CI_SD_ENV: staging
