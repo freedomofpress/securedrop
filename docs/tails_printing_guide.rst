@@ -31,8 +31,7 @@ With that in mind, this database is arguably the best resource for researching
 the compatibility of printers with Linux. As a tip for narrowing down your
 search, look for printers that are compatible with Debian, or Debian-based
 distributions like Ubuntu, since Tails itself is also Debian-based. This might
-increase the chances for a successfully seamless installation experience in
-Tails.
+increase the chances for a seamless installation experience in Tails.
 
 In any case, this document outlines the usual set of steps that we follow when
 attempting to use a new printer with Tails, and provides some troubleshooting
@@ -49,12 +48,9 @@ Installing and Printing via the Tails GUI
 -----------------------------------------
 
 Let's look at Tails 3.0's typical flow for installing a USB-connected printer.
-
 If you've enabled persistence, boot with your persistent volume, and set an
-admin passphrase.
-
-Connect the printer to your Tails-booted computer via USB, then turn the
-printer on.
+admin passphrase. Connect the printer to your Tails-booted computer via USB,
+then turn the printer on.
 
 Now, you'll want to single-click your way through **Applications** ▸
 **System Tools** ▸ **Settings** ▸ **Printers**.
