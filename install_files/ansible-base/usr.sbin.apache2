@@ -212,6 +212,7 @@
   /var/www/securedrop/static/fonts/fontawesome-webfont.eot r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.ttf r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.woff r,
+  /var/www/securedrop/static/fonts/fontawesome-webfont.woff2 r,
   /var/www/securedrop/store.py r,
   /var/www/securedrop/store.pyc rw,
   /var/www/securedrop/store/** rw,
