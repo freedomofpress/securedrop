@@ -137,31 +137,9 @@ the settings you choose are unique on the firewall's network and
 remember to propagate your choices through the rest of the installation
 process.
 
-Below are two configurations you should enter, assuming you used the
-network settings from the network firewall guide. If you did not, adjust
-these settings accordingly.
-
-**3 NIC Firewall**
-
--  *Application Server*:
-
-   -  Server IP address: 10.20.1.2
-   -  Netmask (default is fine): 255.255.255.0
-   -  Gateway: 10.20.1.1
-   -  For DNS, use Google's name servers: 8.8.8.8 and 8.8.4.4
-   -  Hostname: app
-   -  Domain name should be left blank
-
--  *Monitor Server*:
-
-   -  Server IP address: 10.20.2.2
-   -  Netmask (default is fine): 255.255.255.0
-   -  Gateway: 10.20.2.1
-   -  For DNS, use Google's name servers: 8.8.8.8 and 8.8.4.4
-   -  Hostname: mon
-   -  Domain name should be left blank
-
-**4 NIC Firewall**
+Below are the configurations you should enter, assuming you used the
+network settings from the network firewall guide for the recommended 4 NIC
+firewall. If you did not, adjust these settings accordingly.
 
 -  *Application Server*:
 
