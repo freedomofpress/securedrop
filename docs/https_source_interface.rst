@@ -87,6 +87,12 @@ Activating HTTPS in SecureDrop
 
 Make sure you have :doc:`installed SecureDrop already <install>`.
 
+First, on the *Admin Workstation*:
+
+.. code:: sh
+
+  cd ~/Persistent/securedrop
+
 Make note of the Source Interface Onion URL. Edit the site-specific variables
 for your organization in
 ``install_files/ansible-base/group_vars/all/site-specific`` to include the
