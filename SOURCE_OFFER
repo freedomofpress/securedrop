@@ -3,7 +3,7 @@ kernel images for use in SecureDrop. The kernel source has been patched
 with the grsecurity modifications, and only binaries are available in the
 FPF apt repository.
 
-Under the terms of the GPL, any user with access to the binaries has a right
+Under the terms of the GPL, any user in possession of this offer has a right
 to request the source code used to compile those binaries.
 You may submit a written request to:
 
