@@ -94,6 +94,13 @@ running the install, please submit a detailed `GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/new>`__ or
 send an email to securedrop@freedom.press.
 
+.. note::
+   The SecureDrop install process configures a custom Linux kernel hardened
+   with the grsecurity patch set. Only binary images are hosted in the apt
+   repo. For source packages, see the `Source Offer`_.
+
+.. _`Source Offer`: https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
+
 Once the installation is complete, the addresses for each Tor Hidden
 Service will be available in the following files under
 ``install_files/ansible-base``:

@@ -20,6 +20,11 @@
     - motd
     - grsecurity
 
+# The `securedrop-grsec` package named below is a metapackage that depends
+# on a custom-compiled linux-image binary package hosted in the FPF repo.
+# To request the source package for the grsecurity-patched kernel, see:
+#
+#   https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
 - name: Install the grsecurity-patched kernel from the FPF repo.
   apt:
     pkg: securedrop-grsec
