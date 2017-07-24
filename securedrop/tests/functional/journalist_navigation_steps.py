@@ -25,7 +25,7 @@ class JournalistNavigationSteps():
 
             return content
 
-    def _login_user(self, username, password, token):
+    def _try_login_user(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -43,6 +43,8 @@ class JournalistNavigationSteps():
             'button[type=submit]')
         submit_button.click()
 
+    def _login_user(self, username, password, token):
+        self._try_login_user(username, password, token)
         # Successful login should redirect to the index
         assert self.driver.current_url == self.journalist_location + '/'
 
