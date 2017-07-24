@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4-rc2
+
+Second release candidate. Changes largely the same as 0.4-rc1,
+in terms of app code, but many changes have landed to the Tails
+workstation environments (the result of vigorous QA on hardware).
+
 ## 0.4-rc1
 
 The issues for this release were tracked in the 0.4 milestone on Github:
