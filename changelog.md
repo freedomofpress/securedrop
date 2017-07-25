@@ -1,12 +1,6 @@
 # Changelog
 
-## 0.4-rc2
-
-Second release candidate. Changes largely the same as 0.4-rc1,
-in terms of app code, but many changes have landed to the Tails
-workstation environments (the result of vigorous QA on hardware).
-
-## 0.4-rc1
+## 0.4
 
 The issues for this release were tracked in the 0.4 milestone on Github:
 https://github.com/freedomofpress/securedrop/milestones/0.4.
@@ -16,7 +10,6 @@ This changelog shows major changes below. Please diff the tags to see the full l
 ### Deployment
 
 * Enable optional HTTPS on the source interface (#1605).
-* Allow admin to set custom text to appear on the source interface (#774).
 * Standardize SecureDrop server installation on a single username (#1796). 
 * Add `securedrop-admin` script and update version of Ansible running in the workstation (#1146, #1885).
 * Add validation of user-provided values during SecureDrop installation (#1663, #749, #1257).
