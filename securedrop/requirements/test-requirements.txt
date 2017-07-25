@@ -24,6 +24,7 @@ mock==2.0.0
 pbr==3.0.1                # via mock
 pip-tools==1.9.0
 py==1.4.34
+pytest-capturelog==0.7
 pytest-cov==2.5.1
 pytest==3.1.1
 requests==2.17.3          # via coveralls

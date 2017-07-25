@@ -3,6 +3,7 @@
 
 import argparse
 from getpass import getpass
+import logging
 import os
 import shutil
 import signal
@@ -17,6 +18,9 @@ os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 from db import db_session, init_db, Journalist
 from management.run import run
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
+log = logging.getLogger(__name__)
 
 
 def reset():  # pragma: no cover
@@ -209,6 +213,7 @@ def clean_tmp():  # pragma: no cover
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
+    parser.add_argument('-v', '--verbose', action='store_true')
     subps = parser.add_subparsers()
     # Run WSGI app
     run_subp = subps.add_parser('run', help='Run the Werkzeug source & '
@@ -247,10 +252,18 @@ def get_args():
     return parser
 
 
+def setup_verbosity(args):
+    if args.verbose:
+        logging.getLogger(__name__).setLevel(logging.DEBUG)
+    else:
+        logging.getLogger(__name__).setLevel(logging.INFO)
+
+
 def _run_from_commandline():  # pragma: no cover
     try:
         args = get_args().parse_args()
         rc = args.func()
+        setup_verbosity(args)
         sys.exit(rc)
     except KeyboardInterrupt:
         sys.exit(signal.SIGINT)

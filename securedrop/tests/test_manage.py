@@ -9,10 +9,22 @@ import unittest
 import utils
 
 
-class TestManagePy(unittest.TestCase):
+class TestManagePy(object):
     def test_parse_args(self):
         # just test that the arg parser is stable
         manage.get_args()
+
+    def test_not_verbose(self, caplog):
+        args = manage.get_args().parse_args(['run'])
+        manage.setup_verbosity(args)
+        manage.log.debug('INVISIBLE')
+        assert 'INVISIBLE' not in caplog.text()
+
+    def test_verbose(self, caplog):
+        args = manage.get_args().parse_args(['--verbose', 'run'])
+        manage.setup_verbosity(args)
+        manage.log.debug('VISIBLE')
+        assert 'VISIBLE' in caplog.text()
 
 
 class TestManagementCommand(unittest.TestCase):
