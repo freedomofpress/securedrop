@@ -28,7 +28,7 @@ See the [Installation Guide](https://docs.securedrop.org/en/latest/#installtoc).
 
 ## How to Contribute to SecureDrop
 
-See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html).
+See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html) and the [Contributing Guidelines](https://docs.securedrop.org/en/latest/development/contributor_guidelines.html).
 
 ## License
 
