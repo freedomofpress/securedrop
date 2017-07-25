@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-19 18:47+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-07-25 19:58+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: journalist.py:176
 msgid "Missing username"
-msgstr ""
+msgstr "Manglende brukernavn"
 
 #: journalist.py:182
 msgid "Passwords didn't match"
@@ -72,11 +72,13 @@ msgstr "Kontroll av tofaktor-kode mislyktes"
 
 #: journalist.py:267
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
-msgstr ""
+msgstr "Ugyldig hemmelighetsformat: Bare bruk bokstavene A-F og tall 0-9."
 
 #: journalist.py:272
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
+"Ugyldig hemmelighetsformat: Feilaktig lengde på hemmelighet. Skrev du den "
+"inn feil?"
 
 #: journalist.py:277 journalist.py:318 journalist.py:652
 msgid ""
@@ -108,7 +110,7 @@ msgstr "Vellykket kontroll av tofaktor-kode!"
 
 #: journalist.py:519
 msgid "No collections selected!"
-msgstr ""
+msgstr "Ingen samlinger valgt!"
 
 #: journalist.py:542
 msgid "No unread submissions in collections selected!"
@@ -169,19 +171,19 @@ msgstr ""
 
 #: source.py:281
 msgid "You must enter a message or choose a file to submit."
-msgstr ""
+msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
 #: source.py:354
 msgid "Reply deleted"
-msgstr ""
+msgstr "Svar slettet"
 
 #: source.py:370
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "Alle svar har blitt slettet"
 
 #: source.py:403
 msgid "Sorry, that is not a recognized codename."
-msgstr ""
+msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -198,19 +200,19 @@ msgstr ""
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr ""
+msgstr "Endre hemmelighet"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
-msgstr ""
+msgstr "HOTP-hemmelighet"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:17
 msgid "CONTINUE"
-msgstr ""
+msgstr "FORTSETT"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:4
@@ -346,7 +348,7 @@ msgstr ""
 
 #: journalist_templates/admin_add_user.html:18
 msgid "I'm using a Yubikey"
-msgstr ""
+msgstr "Jeg bruker en Yubikey"
 
 #: journalist_templates/admin_new_user_two_factor.html:5
 msgid ""
@@ -359,7 +361,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Edit Account"
-msgstr ""
+msgstr "Rediger konto"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -418,7 +420,7 @@ msgstr ""
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr ""
+msgstr "Slett valgte"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
@@ -552,7 +554,7 @@ msgstr ""
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
-msgstr ""
+msgstr "Takk."
 
 #: journalist_templates/flag.html:8
 msgid ""
