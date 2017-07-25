@@ -40,7 +40,7 @@ Alternatively, you can use the command line:
 .. code:: sh
 
    cd ~/Persistent
-   torify curl -O http://releases.ubuntu.com/14.04.5/{ubuntu-14.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
+   torify curl -OOO http://releases.ubuntu.com/14.04.5/{ubuntu-14.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
 
 .. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
    because Tails does everything over Tor, and Tor is typically slow relative
