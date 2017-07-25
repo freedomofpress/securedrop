@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-25 19:58+0000\n"
+"PO-Revision-Date: 2017-07-25 20:03+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -428,15 +428,15 @@ msgstr ""
 
 #: journalist_templates/col.html:55
 msgid "Reply"
-msgstr ""
+msgstr "Svar"
 
 #: journalist_templates/col.html:57
 msgid "Message"
-msgstr ""
+msgstr "Melding"
 
 #: journalist_templates/col.html:67
 msgid "No documents to display."
-msgstr ""
+msgstr "Ingen dokumenter å vise."
 
 #: journalist_templates/col.html:74
 msgid "You can write a secure reply to the person who submitted these documents:"
@@ -491,23 +491,23 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:5
 msgid "Edit user"
-msgstr ""
+msgstr "Rediger bruker"
 
 #: journalist_templates/edit_account.html:8
 msgid "Edit your account"
-msgstr ""
+msgstr "Rediger kontoen din"
 
 #: journalist_templates/edit_account.html:17
 msgid "Change username"
-msgstr ""
+msgstr "Endre brukernavn"
 
 #: journalist_templates/edit_account.html:23
 msgid "Change password"
-msgstr ""
+msgstr "Endre passord"
 
 #: journalist_templates/edit_account.html:29
 msgid "Leave blank for no change"
-msgstr ""
+msgstr "La stå tom for ingen endring"
 
 #: journalist_templates/edit_account.html:34
 msgid "Change password (confirm)"
@@ -570,39 +570,39 @@ msgstr ""
 
 #: journalist_templates/index.html:4
 msgid "Sources"
-msgstr ""
+msgstr "Kilder"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr ""
+msgstr "Last ned uleste"
 
 #: journalist_templates/index.html:12
 msgid "Download All"
-msgstr ""
+msgstr "Last ned alle"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr ""
+msgstr "Stjernemerk"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr ""
+msgstr "Fjern stjernemerking"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
-msgstr ""
+msgstr "Ingen dokumenter har blitt sendt!"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
-msgstr ""
+msgstr "filtrer etter kodenavn"
 
 #: journalist_templates/js-strings.html:4
 msgid "select all"
-msgstr ""
+msgstr "velg alle"
 
 #: journalist_templates/js-strings.html:5
 msgid "select unread"
-msgstr ""
+msgstr "velg uleste"
 
 #: journalist_templates/js-strings.html:6
 msgid "select none"
@@ -807,11 +807,11 @@ msgstr ""
 
 #: source_templates/login.html:13 source_templates/lookup.html:45
 msgid "CANCEL"
-msgstr ""
+msgstr "AVBRYT"
 
 #: source_templates/logout_flashed_message.html:4
 msgid "Important!"
-msgstr ""
+msgstr "Viktig!"
 
 #: source_templates/logout_flashed_message.html:5
 msgid ""
@@ -883,27 +883,27 @@ msgstr ""
 
 #: source_templates/lookup.html:76
 msgid "Delete this reply?"
-msgstr ""
+msgstr "Slett dette svaret?"
 
 #: source_templates/lookup.html:78
 msgid "DELETE"
-msgstr ""
+msgstr "SLETT"
 
 #: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
-msgstr ""
+msgstr "SLETT ALLE SVAR"
 
 #: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
-msgstr ""
+msgstr "Er du ferdig med svarene?"
 
 #: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
-msgstr ""
+msgstr "JA, SLETT ALLE SVAR"
 
 #: source_templates/lookup.html:92
 msgid "NO, NOT YET"
-msgstr ""
+msgstr "NEI, IKKE ENDA"
 
 #: source_templates/lookup.html:96
 msgid "There are no replies at this time."
@@ -919,7 +919,7 @@ msgstr ""
 
 #: source_templates/notfound.html:5
 msgid "Page not found"
-msgstr ""
+msgstr "Fant ikke siden"
 
 #: source_templates/notfound.html:7
 msgid "Sorry, we couldn't locate what you requested."
@@ -955,7 +955,7 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
-msgstr ""
+msgstr "Du burde bruke Tor-nettleseren"
 
 #: source_templates/use-tor-browser.html:4
 msgid ""
@@ -1051,4 +1051,4 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr ""
+msgstr "Tilbake til innsendelsesside"
