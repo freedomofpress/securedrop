@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-25 20:03+0000\n"
+"PO-Revision-Date: 2017-07-25 22:49+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: journalist.py:663
 msgid "Thanks! Your reply has been stored."
-msgstr ""
+msgstr "Takk! Svaret ditt har blitt lagret."
 
 #: journalist.py:682
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
@@ -148,13 +148,13 @@ msgstr ""
 
 #: journalist.py:714
 msgid "No collections selected to download!"
-msgstr ""
+msgstr "Ingen samlinger valgt for nedlasting!"
 
 #: journalist.py:746
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Innsendelse slettet."
+msgstr[1] "Innsendelser slettet."
 
 #: source.py:125
 msgid ""
@@ -195,7 +195,7 @@ msgstr ""
 
 #: journalist_templates/_source_row.html:21
 msgid "{num_unread} unread"
-msgstr ""
+msgstr "{num_unread} uleste"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -309,42 +309,42 @@ msgstr ""
 
 #: journalist_templates/admin.html:20
 msgid "Last login"
-msgstr ""
+msgstr "Siste innlogging"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Rediger brukeren {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Slett brukeren {username}"
 
 #: journalist_templates/admin.html:31
 msgid "Never"
-msgstr ""
+msgstr "Aldri"
 
 #: journalist_templates/admin.html:38
 msgid "No users to display"
-msgstr ""
+msgstr "Ingen brukere å vise"
 
 #: journalist_templates/admin_add_user.html:4
 #: journalist_templates/edit_account.html:6
 msgid "Back to admin interface"
-msgstr ""
+msgstr "Tilbake til administrasjonsgrensesnitt"
 
 #: journalist_templates/admin_add_user.html:10
 #: journalist_templates/login.html:9
 msgid "Password"
-msgstr ""
+msgstr "Passord"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "Password (again)"
-msgstr ""
+msgstr "Passord (igjen)"
 
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:42
 msgid "Is Administrator"
-msgstr ""
+msgstr "Er administrator"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "I'm using a Yubikey"
@@ -365,7 +365,7 @@ msgstr "Rediger konto"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
-msgstr ""
+msgstr "Administrator"
 
 #: journalist_templates/base.html:28
 msgid "Logout"
@@ -383,7 +383,7 @@ msgstr ""
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
-msgstr ""
+msgstr "Alle kilder"
 
 #: journalist_templates/col.html:13
 msgid ""
@@ -394,29 +394,31 @@ msgstr ""
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr ""
+msgstr "Endre kodenavn"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr ""
+msgstr "Er du sikker på at du vil generere et nytt kodenavn?"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:77
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: journalist_templates/col.html:16
 msgid "CONFIRM"
-msgstr ""
+msgstr "BEKREFT"
 
 #: journalist_templates/col.html:22
 msgid ""
 "The documents are stored encrypted for security. To read them, you will "
 "need to decrypt them using GPG."
 msgstr ""
+"Dokumentene er krypterte av hensyn til sikkerhet. For å lese dem, må du "
+"dekryptere dem med GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr ""
+msgstr "Last ned valgte"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
@@ -424,7 +426,7 @@ msgstr "Slett valgte"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr ""
+msgstr "Opplastet dokument"
 
 #: journalist_templates/col.html:55
 msgid "Reply"
@@ -729,7 +731,7 @@ msgstr ""
 
 #: source_templates/index.html:15 source_templates/index.html:16
 msgid ", or ignore this warning to continue."
-msgstr ""
+msgstr ", eller ignorer denne advarselen for å fortsette."
 
 #: source_templates/index.html:16
 msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
@@ -737,25 +739,26 @@ msgstr ""
 
 #: source_templates/index.html:16
 msgid "Learn how to install it"
-msgstr ""
+msgstr "Lær hvordan du installerer den"
 
 #: source_templates/index.html:35
 msgid "Submit documents for the first time"
-msgstr ""
+msgstr "Send inn dokumenter for første gang"
 
 #: source_templates/index.html:38
 msgid ""
 "If this is your first time submitting documents to journalists, start "
 "here."
 msgstr ""
+"Hvis dette er første gang du sender dokumenter til journalister, start her."
 
 #: source_templates/index.html:42
 msgid "SUBMIT DOCUMENTS"
-msgstr ""
+msgstr "SEND INN DOKUMENTER"
 
 #: source_templates/index.html:47
 msgid "Already submitted something?"
-msgstr ""
+msgstr "Har du allerede sendt inn noe?"
 
 #: source_templates/index.html:50
 msgid ""
@@ -765,25 +768,27 @@ msgstr ""
 
 #: source_templates/index.html:54
 msgid "CHECK FOR A RESPONSE"
-msgstr ""
+msgstr "SE ETTER SVAR"
 
 #: source_templates/index.html:60
 msgid "Note:"
-msgstr ""
+msgstr "Merknad:"
 
 #: source_templates/index.html:72
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider "
 "to High in 4 easy steps!"
 msgstr ""
+"Du later til å bruke Tor-nettleseren. Du kan stille inn "
+"sikkerhetsglidebryteren i 4 enkle steg!"
 
 #: source_templates/index.html:74
 msgid "Click the"
-msgstr ""
+msgstr "Klikk på"
 
 #: source_templates/index.html:74
 msgid "Tor icon in the toolbar above"
-msgstr ""
+msgstr "Tor-ikonet i verktøylinjen ovenfor"
 
 #: source_templates/index.html:75
 msgid "Click <strong>Security Settings...</strong>"
@@ -792,18 +797,19 @@ msgstr ""
 #: source_templates/index.html:76
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
+"Beveg glidebryteren til <strong>Høyt</strong>, klikk så <strong>OK</strong>"
 
 #: source_templates/index.html:77
 msgid "<a href=\"/\">Click here</a>to refresh the page"
-msgstr ""
+msgstr "<a href=\"/\">Klikk her</a>for å oppdatere siden"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr ""
+msgstr "Skriv inn kodenavn"
 
 #: source_templates/login.html:11
 msgid "Enter your codename"
-msgstr ""
+msgstr "Skriv inn ditt kodenavn"
 
 #: source_templates/login.html:13 source_templates/lookup.html:45
 msgid "CANCEL"
@@ -846,7 +852,7 @@ msgstr ""
 
 #: source_templates/lookup.html:24
 msgid "Submit Materials"
-msgstr ""
+msgstr "Send inn materiale"
 
 #: source_templates/lookup.html:25
 msgid ""
@@ -858,19 +864,19 @@ msgstr ""
 
 #: source_templates/lookup.html:25
 msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
-msgstr ""
+msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">Lær mer</a>."
 
 #: source_templates/lookup.html:27
 msgid "You can send a file, a message, or both."
-msgstr ""
+msgstr "Du kan sende ei fil, melding, eller begge."
 
 #: source_templates/lookup.html:36
 msgid "Maximum upload size: 500 MB"
-msgstr ""
+msgstr "Maksimal opplastningsstørrelse: 500MB"
 
 #: source_templates/lookup.html:56
 msgid "Get Replies"
-msgstr ""
+msgstr "Hent svar"
 
 #: source_templates/lookup.html:61
 msgid ""
@@ -907,7 +913,7 @@ msgstr "NEI, IKKE ENDA"
 
 #: source_templates/lookup.html:96
 msgid "There are no replies at this time."
-msgstr ""
+msgstr "Ingen svar til nå."
 
 #: source_templates/lookup.html:103
 msgid "Remember your codename is:"
@@ -915,7 +921,7 @@ msgstr ""
 
 #: source_templates/next_submission_flashed_message.html:2
 msgid "Thanks! We received your {things}."
-msgstr ""
+msgstr "Takk! Vi mottok dine {things}."
 
 #: source_templates/notfound.html:5
 msgid "Page not found"
@@ -927,7 +933,7 @@ msgstr ""
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
-msgstr ""
+msgstr "Hvorfor er det en advarsel om Tor2Web?"
 
 #: source_templates/tor2web-warning.html:4
 msgid ""
@@ -978,7 +984,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
-msgstr ""
+msgstr "Hvorfor laste ned journalistens nøkkel?"
 
 #: source_templates/why-journalist-key.html:4
 msgid ""
@@ -1001,7 +1007,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
-msgstr ""
+msgstr "Importer den til din GPG-nøkkelring."
 
 #: source_templates/why-journalist-key.html:10
 msgid ""
@@ -1018,7 +1024,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr ""
+msgstr "Krypter din innsendelse."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
