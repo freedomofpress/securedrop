@@ -19,12 +19,12 @@ If you're here because you want to report an issue in SecureDrop, please observe
 
 ## How to Install SecureDrop
 
-See the [Installation Guide](https://docs.securedrop.org/en/latest/#installtoc).
+See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 ## How to Use SecureDrop
 
-* [As a source](https://docs.securedrop.org/en/latest/source.html)
-* [As a journalist](https://docs.securedrop.org/en/latest/journalist.html)
+* [As a source](https://docs.securedrop.org/en/stable/source.html)
+* [As a journalist](https://docs.securedrop.org/en/stable/journalist.html)
 
 ## How to Contribute to SecureDrop
 
