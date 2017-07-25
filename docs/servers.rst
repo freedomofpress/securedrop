@@ -13,26 +13,53 @@ Install Ubuntu
   with, but we **strongly** encourage you to read and follow this documentation
   exactly as there are some "gotchas" that may cause your SecureDrop set up to break.
 
-The *Admin Workstation*, running Tails, should be used to download and verify
-Ubuntu Server.  The *Application Server* and the *Monitor Server* specifically
-require the 64-bit version of `Ubuntu Server 14.04.5 LTS (Trusty Tahr)
-<http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso>`__. The image you want to get
-is named ``ubuntu-14.04.5-server-amd64.iso``. In order to verify the
-installation media, you should also download the files named ``SHA256SUMS`` and
-``SHA256SUMS.gpg``.
+The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
+14.04.5 LTS (Trusty Tahr)**. To install Ubuntu on the servers, you must first
+download and verify the Ubuntu installation media. You should use the *Admin
+Workstation* to download and verify the Ubuntu installation media.
 
-.. note:: Downloading Ubuntu over Tails may take a very long time because it's
-          being done over Tor.
+Download the Ubuntu installation media
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The installation media and the files required to verify it are available on the
+`Ubuntu Releases page`_. You will need to download the following files:
+
+* `ubuntu-14.04.5-server-amd64.iso`_
+* `SHA256SUMS`_
+* `SHA256SUMS.gpg`_
+
+If you're reading this documentation in the Tor Browser on the *Admin
+Workstation*, you can just click the links above and follow the prompts to save
+them to your Admin Workstation. We recommend saving them to the
+``/home/amnesia/Persistent/Tor Browser`` directory on the *Admin Workstation*,
+because it can be useful to have a copy of the installation media readily
+available.
+
+Alternatively, you can use the command line:
+
+.. code:: sh
+
+   cd ~/Persistent
+   torify curl -OOO http://releases.ubuntu.com/14.04.5/{ubuntu-14.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
+
+.. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
+   because Tails does everything over Tor, and Tor is typically slow relative
+   to the speed of your upstream Internet conenction.
+
+.. _Ubuntu Releases page: http://releases.ubuntu.com/
+.. _ubuntu-14.04.5-server-amd64.iso: http://releases.ubuntu.com/14.04.5/ubuntu-14.04.5-server-amd64.iso
+.. _SHA256SUMS: http://releases.ubuntu.com/14.04.5/SHA256SUMS
+.. _SHA256SUMS.gpg: http://releases.ubuntu.com/14.04.5/SHA256SUMS.gpg
 
 Verify the Ubuntu installation media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, you should verify the Ubuntu image you downloaded hasn't been modified by
+You should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
 integrity with cryptographic signatures and hashes.
 
 First, we will download *Ubuntu Image Signing Key* and verify its
-*fingerprint*. ::
+fingerprint. ::
 
     gpg --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
