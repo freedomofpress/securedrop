@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-25 22:49+0000\n"
+"PO-Revision-Date: 2017-07-26 22:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -132,7 +132,7 @@ msgstr[1] ""
 
 #: journalist.py:637
 msgid "You cannot send an empty reply!"
-msgstr ""
+msgstr "Du kan ikke sende et tomt svar!"
 
 #: journalist.py:663
 msgid "Thanks! Your reply has been stored."
@@ -191,7 +191,7 @@ msgstr ""
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
-msgstr ""
+msgstr "meldinger {msg_num}"
 
 #: journalist_templates/_source_row.html:21
 msgid "{num_unread} unread"
@@ -263,12 +263,13 @@ msgstr ""
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:16
 msgid "Enable Yubikey (OATH-HOTP)"
-msgstr ""
+msgstr "Skru på Yubikey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:17
 msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
 msgstr ""
+"Når du har satt opp din Yubikey, skriv inn den 6 tegn lange koden nedenfor:"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:21
@@ -279,21 +280,21 @@ msgstr ""
 #: journalist_templates/admin_new_user_two_factor.html:23
 #: journalist_templates/col.html:80 source_templates/lookup.html:49
 msgid "SUBMIT"
-msgstr ""
+msgstr "SEND INN"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr ""
+msgstr "Administrasjonsgrensesnitt"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "LEGG TIL BRUKER"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:9 journalist_templates/login.html:8
 msgid "Username"
-msgstr ""
+msgstr "Brukernavn"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
@@ -301,11 +302,11 @@ msgstr ""
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
-msgstr ""
+msgstr "Slett"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
-msgstr ""
+msgstr "Opprettet"
 
 #: journalist_templates/admin.html:20
 msgid "Last login"
@@ -379,7 +380,7 @@ msgstr ""
 
 #: journalist_templates/base.html:53
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr ""
+msgstr "Drevet av <em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
