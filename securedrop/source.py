@@ -399,7 +399,7 @@ def logout():
     if logged_in():
         session.clear()
         msg = render_template('logout_flashed_message.html')
-        flash(Markup(msg), "important")
+        flash(Markup(msg), "important hide-if-not-tor-browser")
     return redirect(url_for('index'))
 
 
