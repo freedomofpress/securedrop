@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-07-26 15:25+0000\n"
+"PO-Revision-Date: 2017-07-29 15:23+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -599,7 +599,6 @@ msgstr ""
 "compte.</em>"
 
 #: journalist_templates/edit_account.html:58
-#, fuzzy
 msgid ""
 "To reset two-factor authentication for mobile apps such as Google "
 "Authenticator or FreeOTP, choose the first option. For hardware tokens "
