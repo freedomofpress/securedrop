@@ -394,6 +394,8 @@ ports (the recommended firewall has 4 ports). Any old switch with more
 than 3 ports will do, such as the `5-port Netgear ProSafe Ethernet
 Switch <http://www.amazon.com/NETGEAR-ProSafe-Gigabit-Ethernet-Desktop/dp/B0000BVYT3/>`__.
 
+.. _printers_tested_by_fpf:
+
 Printers
 ^^^^^^^^
 
@@ -408,13 +410,24 @@ To assist you, we have compiled the following partial list of
 airgap-safe printers that have been tested and are known to work with
 Tails:
 
-+-------------------------+----------------+------------------+--------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Model                   | Testing Date   | Tails Versions   | Price (new)        | Price (used)       | Notes                                                                                                                                                       |
-+=========================+================+==================+====================+====================+=============================================================================================================================================================+
-| HP LaserJet 400 M401n   | 06/2015        | 1.4              | $178.60 (Amazon)   | $115.00 (Amazon)   | Monochrome laser printer. Heavy (10 lbs.) When adding the printer in Tails, you need to set "Make and model" to "HP LaserJet 400 CUPS+Gutenprint v5.2.9".   |
-+-------------------------+----------------+------------------+--------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| HP Deskjet 6940         | 04/2015        | 1.3.2            | $639.99 (Amazon)   | $196.99 (Amazon)   | Monochrome Inkjet printer                                                                                                                                   |
-+-------------------------+----------------+------------------+--------------------+--------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-------------------------+--------------+----------------+--------------------+
+| Printer Model           | Testing Date | Tails Versions | Printer Type       |
++=========================+==============+================+====================+
+| HP Deskjet F4200        | 06/2017      | 3.0            | Color Inkjet       |
++-------------------------+--------------+----------------+--------------------+
+| HP Deskjet 1112         | 06/2017      | 3.0            | Color Inkjet       |
++-------------------------+--------------+----------------+--------------------+
+| HP LaserJet 400 M401n   | 06/2015      | 1.4            | Monochrome Laser   |
++-------------------------+--------------+----------------+--------------------+
+| HP Deskjet 6940         | 04/2015      | 1.3.2          | Monochrome Injket  |
++-------------------------+--------------+----------------+--------------------+
+
+.. note:: We've documented both the HP Deskjet F4200 and HP LaserJet 400 M401n
+          with screenshots of the installation process, in our section on
+          :ref:`printer_setup_in_tails`. While the F4200 installed
+          automatically, the 400 M401n required that we set "Make and model" to
+          "HP LaserJet 400 CUPS+Gutenprint v5.2.9" when manually configuring the
+          drivers.
 
 If you know of another model of printer that fits our requirements and
 works with Tails, please submit a pull request to add it to this list.

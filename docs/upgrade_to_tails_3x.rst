@@ -202,65 +202,45 @@ Once complete, you should see a success message:
 .. |Confirm Upgrade| image:: images/upgrade_to_tails_3x/confirm_upgrade.png
 .. |Installation Complete| image:: images/upgrade_to_tails_3x/installation_complete.png
 
-4. Upgrade the Tails Persistence Configuration
-----------------------------------------------
+4. Upgrade KeePassX Database
+----------------------------
 
-Due to changes in Tails 3.x it is essential you upgrade the custom persistence
-configuration previously set up for your *Admin Workstation* and *Journalist
-Workstation* drives:
+Your password databases will be in KeePass 1 database format (a file that ends
+in ``.kdb``). You should upgrade them to the new format by following these steps:
 
-  #. Boot into each Tails volume.
-  #. Open a terminal |Terminal| and navigate to the root of the SecureDrop git
-     directory: ``cd ~/Persistent/securedrop``.
-  #. Fetch the latest SecureDrop sources ``git fetch --all``.
-  #. Check out and verify the latest release tag following the instructions in
-     :ref:`Set up the Admin Workstation <Checkout and Verify the Current Release
-     Tag>`. You should already have the **SecureDrop Release Signing Key**
-     stored by Tails persistence, so you won't need to download it again.
-  #. Run the command ``./securedrop-admin tailsconfig``. If you are working on a
-     *Journalist Workstation* and did not previously copy the the
-     ``app-journalist-aths`` and ``app-source-ths`` from the *Admin Workstation*
-     via the *Transfer Device* to
-     ``~/Persistent/securedrop/install_files/ansible-base`` expect to be
-     prompted for this information.
+   #. Open KeePassX.
+   #. Navigate to **Database** and then **Import KeePass 1 database**.
+   #. Select your password database and click **Open**.
+   #. Put in a master password if necessary to open the database.
+   #. Then navigate to **Database** and then **Save database as** to save the
+      database in its new format (a file ending in ``.kdbx``) in the same folder
+      as the previous database.
 
+5. Upgrade Secure Viewing Stations
+----------------------------------
 
-.. |Terminal| image:: images/terminal.png
-
-5. Verify the Upgrades
-----------------------
-
-Verify the Journalist Workstation and SVS USB Drives Are Successfully Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-After you upgrade your `Journalist Workstation` and `Secure Viewing Station`,
-do the following to make sure they were upgraded successfully.
-
-  #. Submit a test document to the source interface.
-  #. Log in to the journalist interface.
-  #. Download the test document.
-  #. Transfer the test document over to the SVS.
-  #. Decrypt the test document.
-  #. Delete the submission.
-
-If you are able to successfully download and decrypt your test submission, then
-your upgrade was successful!
-
-Verify the Admin Workstation USB Drive Was Successfully Updated
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-After you upgrade your `Admin Workstation`, ensure that you are able to SSH
-into both servers. Remember you can use the following shortcuts:
+Due to a change in Tails 3, if you wish to preserve the names of files when
+decrypting, you'll need to apply the following fix by opening a **Terminal** on
+the *Secure Viewing Station* and typing the following commands:
 
 .. code:: sh
 
-   ssh mon
-   ssh app
+  cd /live/persistence/TailsData_unlocked/dotfiles
+  cp ~/.bashrc .
+  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
 
-Destroy the Backup or Move It to a Safe Location
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. note:: This only needs to be done once on each *Secure Viewing Station*.
+          After a reboot it will persist.
 
-At this point, you should move your backup drive to a safe location (if you
+6. Upgrade SecureDrop to 0.4
+----------------------------
+
+Now that you've upgraded the Tails workstation to Tails 3, follow the
+:doc:`0.4 Upgrade Guide <upgrade/0.3.x_to_0.4>` to configure the Tails
+environment to access your SecureDrop instance. You will need to perform
+further upgrade steps for the *Admin* and *Journalist Workstations*.
+
+After upgrading to 0.4, you should move your backup drive to a safe location (if you
 used a strong passphrase). Else, you should destroy the backup drive following
 the instructions `here <upgrade_to_tails_2x.html#wipe-the-backup-device>`__.
 

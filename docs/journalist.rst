@@ -56,6 +56,35 @@ token, as shown in the first screenshot below.
 
 |Journalist Interface Login|
 
+.. attention::
+
+   At the time of this writing, the current version of Tor Browser (7.0.2)
+   shows a warning on the **Password** input field when you focus it that says
+   "This connection is not secure. Logins entered here could be compromised."
+   It looks like this:
+
+   |Insecure login warning|
+
+   This warning seems alarming, *but there is actually no cause for concern*.
+   The warning is the result of a relatively new Mozilla Firefox feature that
+   is intended to protect users from submitting potentially sensitive
+   information on web sites that do not use HTTPS to encrypt the connection
+   between the user and the site. While some SecureDrop sites use HTTPS, most
+   do not; however, this is acceptable because SecureDrop uses Tor Hidden
+   Services, which encrypt the connection without having to use HTTPS.
+   
+   Unfortunately, this new Firefox feature is unaware of the special properties
+   of hidden services, and so it mistakenly shows these warnings on any hidden
+   service that isn't also using HTTPS. This issue is being addressed upstream
+   by the Tor Browser developers, and we hope it will be resolved in a new
+   version of Tor Browser soon. In the meantime, you can safely ignore these
+   warnings and continue to use SecureDrop. 
+   
+   For the latest on this issue, and how it affects SecureDrop users, see the
+   `GitHub issue`_.
+
+.. _GitHub issue: https://github.com/freedomofpress/securedrop/issues/1882
+
 If any sources have uploaded documents or sent you message, they will be
 listed on the homepage by a codename. **Note: The codename the
 journalists see is different than the codename that sources see.**
@@ -172,13 +201,13 @@ once and is overloaded with submissions, you will need to flag sources
 for reply before you can communicate with them. Click the
 ``Flag this source for reply`` button.
 
-|Read documents|
+|Flag for reply button|
 
 After clicking the ``Flag this source for reply`` button, you'll see
 this confirmation page. Click through to get back to the page that
 displays that source's documents and replies.
 
-|Flag source for reply|
+|Flag for reply notification|
 
 You will not be able to reply until after the source logs in again and
 sees that you would like to talk to him or her. So you may have to sit
@@ -261,6 +290,7 @@ crimes and corruption, and change the world.
           to read more about how to encourage sources to use SecureDrop.
 
 .. |Journalist Interface Login| image:: images/manual/document6.png
+.. |Insecure login warning| image:: images/manual/insecure-login-warning-journalist-interface.png
 .. |Journalist Interface| image:: images/manual/document1.png
 .. |Load external content| image:: images/manual/document4.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
@@ -273,8 +303,8 @@ crimes and corruption, and change the world.
 .. |Opened document| image:: images/manual/viewing4.png
 .. |Cycle source codename| image:: images/manual/change-codename.png
 .. |Sent reply| image:: images/manual/document2.png
-.. |Read documents| image:: images/manual/document4.png
-.. |Flag source for reply| image:: images/manual/document3.png
+.. |Flag for reply button| image:: images/manual/document_flag_for_reply_button.png
+.. |Flag for reply notification| image:: images/manual/document_flagged_for_reply_notification.png
 .. |Wiping documents| image:: images/manual/viewing5.png
 .. |Encrypting 1| image:: images/manual/viewing6.png
 .. |Encrypting 2| image:: images/manual/viewing7.png

@@ -12,7 +12,7 @@ drive or a DVD) and physically transfer the *Transfer Device* to
 the *Secure Viewing Station*.
 
 Since the *Secure Viewing Station* never uses a network connection or an
-internal hard drive, we recommend that you physically remove any any internal
+internal hard drive, we recommend that you physically remove any internal
 storage devices or networking hardware such as wireless cards or Bluetooth
 adapters. If the machine has network ports you can't physically remove, you
 should clearly cover these ports with labels noting not to use them. For an even

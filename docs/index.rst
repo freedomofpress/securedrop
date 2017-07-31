@@ -63,10 +63,11 @@ anonymous sources.
    backup_workstations
 
 .. toctree::
-   :caption: Upgrade Guides
+   :caption: Upgrade SecureDrop
    :name: upgradetoc
    :maxdepth: 2
 
+   upgrade/0.3.x_to_0.4.rst
    upgrade_to_tails_2x.rst
    upgrade_to_tails_3x.rst
 

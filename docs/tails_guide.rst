@@ -71,6 +71,8 @@ minutes for us.
 Configure Tails for use with SecureDrop
 ---------------------------------------
 
+.. _enable_persistence_in_tails:
+
 Persistence
 ~~~~~~~~~~~
 
@@ -166,7 +168,7 @@ Journalist Interface even if there is a security vulnerability in the web
 application, or if the journalist's username, password, and two-factor token
 are stolen. The extra configuration that is required is handled by this script.
 
-Our ``./securedrop-admin tailsconfig`` tool sets up Tails to work with SecureDrop 
+Our ``./securedrop-admin tailsconfig`` tool sets up Tails to work with SecureDrop
 every time you login. As long as Tails is booted with the persistent volume enabled
 then you can open the Tor Browser and connect to the Journalist Interface as normal.
 

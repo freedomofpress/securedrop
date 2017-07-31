@@ -1,0 +1,19 @@
+Freedom of the Press Foundation (FPF) maintains custom-compiled Linux
+kernel images for use in SecureDrop. The kernel source has been patched
+with the grsecurity modifications, and only binaries are available in the
+FPF apt repository.
+
+Under the terms of the GPL, any user in possession of this offer has a right
+to request the source code used to compile those binaries.
+You may submit a written request to:
+
+    Freedom of the Press Foundation
+    601 Van Ness Ave., Suite E371
+    San Francisco, CA 94102
+
+Or via email to:
+
+    source-offer@freedom.press
+
+A full copy of this message can be found online at
+https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER

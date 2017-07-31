@@ -10,7 +10,7 @@ Source Guide
 Choose who to submit to
 -----------------------
 
-There are currently over 20 organizations running SecureDrop. Each instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
+Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
 
 All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
 
@@ -79,7 +79,7 @@ time you are using SecureDrop, click the **Submit Documents** button.
 
 You should now see a screen that shows the unique codename that SecureDrop has
 generated for you. In the example screenshot below the codename is
-``bagpipe aloof whiff borrowing overwrite datebook unadvised``, but yours will
+``catering zit isotope consonant tiny shriek provider``, but yours will
 be different. It is extremely important that you both remember this code and
 keep it secret. After submitting documents, you will need to provide this code
 to log back in and check for responses.
@@ -118,7 +118,7 @@ messages.
 |Confirmation page|
 
 Once you are finished submitting documents, be certain you have saved your
-secret codename and then click the **Logout** button:
+secret codename and then click the **Exit** button:
 
 |Logout|
 
@@ -144,6 +144,35 @@ The next page will ask for your secret codename. Enter it and click
 **Continue**.
 
 |Check for response|
+
+.. attention::
+
+   At the time of this writing, the current version of Tor Browser (7.0.2)
+   shows a warning on the **Enter your codename** password input field when you
+   focus it that says "This connection is not secure. Logins entered here could
+   be compromised." It looks like this:
+
+   |Insecure login warning|
+
+   This warning seems alarming, *but there is actually no cause for concern*.
+   The warning is the result of a relatively new Mozilla Firefox feature that
+   is intended to protect users from submitting potentially sensitive
+   information on web sites that do not use HTTPS to encrypt the connection
+   between the user and the site. While some SecureDrop sites use HTTPS, most
+   do not; however, this is acceptable because SecureDrop uses Tor Hidden
+   Services, which encrypt the connection without having to use HTTPS.
+   
+   Unfortunately, this new Firefox feature is unaware of the special properties
+   of hidden services, and so it mistakenly shows these warnings on any hidden
+   service that isn't also using HTTPS. This issue is being addressed upstream
+   by the Tor Browser developers, and we hope it will be resolved in a new
+   version of Tor Browser soon. In the meantime, you can safely ignore these
+   warnings and continue to use SecureDrop. 
+   
+   For the latest on this issue, and how it affects SecureDrop users, see the
+   `GitHub issue`_.
+
+.. _GitHub issue: https://github.com/freedomofpress/securedrop/issues/1882
 
 If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
@@ -182,6 +211,7 @@ Repeat these steps to continue communicating with the journalist.
 .. |Logout| image:: images/manual/logout-notification.png
 .. |Restart TBB| image:: images/manual/restart-tor-browser.png
 .. |Check for response| image:: images/manual/source-step8.png
+.. |Insecure login warning| image:: images/manual/insecure-login-warning-source-interface.png
 .. |Check for a reply| image:: images/manual/source-step9.png
 .. |Delete received messages| image:: images/manual/source-step10.png
 .. |Check for an initial response| image:: images/manual/source_flagged_for_reply.png

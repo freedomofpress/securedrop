@@ -94,7 +94,7 @@ def install_apt_dependencies(args):
 
     apt_command = ['sudo', 'su', '-c',
                    "apt-get update && \
-                   apt-get install -y \
+                   apt-get -q -o=Dpkg::Use-Pty=0 install -y \
                    python-virtualenv \
                    python-pip \
                    ccontrol \
@@ -119,8 +119,7 @@ def install_apt_dependencies(args):
 
 
 def envsetup(args):
-    """
-    Installs all Admin tooling required for managing SecureDrop. Specifically:
+    """Installs Admin tooling required for managing SecureDrop. Specifically:
 
         * updates apt-cache
         * installs apt packages for Python virtualenv
@@ -209,28 +208,73 @@ def install_securedrop(args):
 
     else:
         sdlog.info("Now installing SecureDrop on remote servers.")
-        sudo_prompt = "Sudo password for servers [blank if not needed]: "
-        ansible_password = getpass.getpass(prompt=sudo_prompt)
+        sdlog.info("You will be prompted for the sudo password on the servers.")
+        sdlog.info("The sudo password is only necessary during initial installation.")
         subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
-                         "-e ansible_become_pass={}".format(ansible_password),
+                         '--ask-become-pass',
                          ],
                         cwd=ANSIBLE_PATH)
+
+
+def backup_securedrop(args):
+    """Perform backup of the SecureDrop Application Server.
+    Creates a tarball of submissions and server config, and fetches
+    back to the Admin Workstation. Future `restore` actions can be performed
+    with the backup tarball."""
+    activate_venv(args)
+    sdlog.info("Backing up the SecureDrop Application Server")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-backup.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
+def restore_securedrop(args):
+    """Perform restore of the SecureDrop Application Server.
+    Requires a tarball of submissions and server config, created via
+    the `backup` action."""
+    activate_venv(args)
+    sdlog.info("Restoring the SecureDrop Application Server from backup")
+    # Canonicalize filepath to backup tarball, so Ansible sees only the
+    # basename. The files must live in ANSIBLE_PATH, but the securedrop-admin
+    # script will be invoked from the repo root, so preceding dirs are likely.
+    restore_file_basename = os.path.basename(args.restore_file)
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-restore.yml'),
+        '-e',
+        "restore_file='{}'".format(restore_file_basename),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
 
 
 def run_tails_config(args):
     """Configure Tails environment post SD install"""
     activate_venv(args)
     sdlog.info("Configuring Tails workstation environment")
-    subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
-                           "--ask-become-pass",
-                           ],
+    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
+                " which was set on Tails login screen"))
+    ansible_cmd = [
+        os.path.join(ANSIBLE_PATH, 'securedrop-tails.yml'),
+        "--ask-become-pass",
+        # Passing an empty inventory file to override the automatic dynamic
+        # inventory script, which fails if no site vars are configured.
+        '-i', '/dev/null',
+    ]
+    subprocess.check_call(ansible_cmd,
                           cwd=ANSIBLE_PATH)
 
 
 if __name__ == "__main__":
+    class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
+                                 argparse.RawTextHelpFormatter):
+        """Needed to combine formatting classes for help output"""
+        pass
 
     # Processing argument parsing logic -- yuck
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=ArgParseFormatterCombo)
     parser.add_argument('-v', action='store_true', default=False,
                             help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
@@ -252,6 +296,15 @@ if __name__ == "__main__":
     parse_tailsconfig = subparsers.add_parser('tailsconfig',
                                               help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
+
+    parse_backup = subparsers.add_parser('backup',
+                                         help=backup_securedrop.__doc__)
+    parse_backup.set_defaults(func=backup_securedrop)
+
+    parse_restore = subparsers.add_parser('restore',
+                                          help=restore_securedrop.__doc__)
+    parse_restore.set_defaults(func=restore_securedrop)
+    parse_restore.add_argument("restore_file")
 
     args = parser.parse_args()
     setup_logger(args.v)

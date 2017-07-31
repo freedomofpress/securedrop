@@ -1,27 +1,34 @@
 ---
-- name: copy the backup script to the target server
+- name: Copy the backup script to the target server.
   copy:
     src: backup.py
     dest: /tmp/
     owner: root
     mode: "0770"
 
-- name: run the backup script
+- name: Run the backup script (can take a while).
   # Setting args inline (against project style conventions) to work around
   # Ansible bug: https://github.com/ansible/ansible/issues/9693
   command: /tmp/backup.py chdir=/tmp
   # If there are a lot of submissions, this task could take a while.
   async: 3600
-  register: backup_filename
+  poll: 10
+  register: backup_script_result
 
-- name: fetch the backup file
+# The backup script emits the filename of the created tarball on stdout,
+# so we'll store it for use in subsequent tasks.
+- name: Store backup filename as host fact.
+  set_fact:
+    backup_filename: "{{ backup_script_result.stdout }}"
+
+- name: Fetch the backup tarball back to the Admin Workstation.
   fetch:
-    src: /tmp/{{ backup_filename.stdout }}
-    dest: ./{{ backup_filename.stdout }}
+    src: /tmp/{{ backup_filename }}
+    dest: ./{{ backup_filename }}
     flat: yes
     fail_on_missing: yes
 
-- name: delete backup file to save space
+- name: Delete backup tarball from Application Server (to save disk space).
   file:
-    path: /tmp/{{ backup_filename.stdout }}
+    path: /tmp/{{ backup_filename }}
     state: absent

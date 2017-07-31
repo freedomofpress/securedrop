@@ -12,12 +12,13 @@ Start Tails with Persistence Enabled
 ------------------------------------
 
 After you boot the *admin Tails USB* on your normal workstation, you
-should see a *Welcome to Tails* screen with two options. Select *Yes* to
-enable the persistent volume and enter your password, but do NOT click
-Login yet. Under 'More Options," select *Yes* and click *Forward*.
+should see a *Welcome to Tails* screen with *Encrypted Persistent
+Storage*.  Enter your password and click *Unlock*. Do NOT click *Start
+Tails* yet. Under *Additional Settings* click the *plus* sign.
 
-Enter an *Administration password* for use with this specific Tails
-session and click *Login*.
+Click *Administration password*, enter a password for use with this
+specific Tails session and click *Add*. And finally click *Start
+Tails*.
 
 .. note:: The *Administration password* is a one-time password. It
 	  will reset every time you shut down Tails.
@@ -106,8 +107,8 @@ key:
 .. code:: sh
 
     cd ~/Persistent/securedrop/
-    git checkout 0.3.12
-    git tag -v 0.3.12
+    git checkout 0.4
+    git tag -v 0.4
 
 You should see ``Good signature from "SecureDrop Release Signing Key"`` in the
 output of that last command.
@@ -135,10 +136,10 @@ To use the template:
 -  Select **Database**, **Open database**, and navigate to the location of
    **securedrop-keepassx.kdbx**, select it, and click **Open**
 -  Check the **password** box and hit **OK**
--  Click **File** and **Save Database As**
+-  Click **Database** and **Save Database As**
 -  Save the database in the Persistent folder
 
-.. tip:: If you would like to add a master password, navigate to **File** and
+.. tip:: If you would like to add a master password, navigate to **Database** and
    **Change master key**. Note that since each KeePassX database is stored
    on the encrypted persistent volume, this additional passphrase is not necessary.
 

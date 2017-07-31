@@ -10,6 +10,3 @@ securedrop_app_gpg_fingerprint: "65A1B5FF195B56353CC63DFFCC40EF1228271441"
 # the application code directly out of the local repo.
 securedrop_app_install_from_repo: False
 securedrop_app_configure_apache: False
-
-# Custom text on source interface
-custom_notification_text: "This is an insecure SecureDrop Development server for testing ONLY. Do NOT submit documents here."

@@ -39,7 +39,10 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-os
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-keyring/DEBIAN/control
 
 # Update the version used by Ansible for the filename of the output of the deb building role
-sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/securedrop.yml
+sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
+
+# Update the version in testinfra vars
+sed -i "s/$OLD_VERSION/$NEW_VERSION/" testinfra/vars/build.yml
 
 # Update the version that we tell people to check out in the install doc
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst

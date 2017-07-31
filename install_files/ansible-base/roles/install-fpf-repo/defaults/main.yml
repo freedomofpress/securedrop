@@ -1,4 +1,15 @@
 ---
+# The FPF apt repository hosts Debian packages for use with SecureDrop.
+# For a full list of the packages, see:
+#
+#   https://docs.securedrop.org/en/stable/development/apt_repo.html
+#
+# To request source packages for the grsecurity-patched kernels, see:
+#
+#   https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
+#
+# For testing/QA, set this URL to another apt server. You must also update
+# the associated public key for the apt repo for testing/QA.
 apt_repo_url: https://apt.freedom.press
 
 # By default, install packages from the apt-repo, but under

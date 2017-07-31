@@ -1,0 +1,7 @@
+---
+- name: Restore SecureDrop Application Server from previous config.
+  hosts: securedrop_application_server
+  roles:
+    - role: restore
+      tags: restore
+  become: yes

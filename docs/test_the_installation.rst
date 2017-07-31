@@ -48,13 +48,16 @@ On each server:
 #. Check that you can execute privileged commands by running ``sudo su``.
 #. Verify that you are booted into a grsec kernel: run ``uname -r``
    and verify that the name of the running kernel ends with ``-grsec``.
-#. Check the AppArmor status with ``sudo aa-status``. On a production
-   instance all profiles should be in enforce mode.
 #. Check the current applied iptables rules with ``iptables-save``. It
    should output *approximately* 50 lines.
 #. You should have received an email alert from OSSEC when it first
    started. If not, review our :doc:`OSSEC Alerts
    Guide <ossec_alerts>`.
+
+On the *Application Server*:
+
+#. Check the AppArmor status with ``sudo aa-status``. On a production
+   instance all profiles should be in enforce mode.
 
 Test the web interfaces
 -----------------------

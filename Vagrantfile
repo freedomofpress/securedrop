@@ -124,10 +124,11 @@ Vagrant.configure("2") do |config|
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
       # Taken from the parallel execution tips and tricks
       # https://docs.vagrantup.com/v2/provisioning/ansible.html
-      ansible.limit = 'all'
+      ansible.limit = 'all,localhost'
       ansible.groups = {
         'securedrop_application_server' => %w(app-prod),
         'securedrop_monitor_server' => %w(mon-prod),
+        'securedrop' => %w(app-prod mon-prod)
       }
     end
   end
