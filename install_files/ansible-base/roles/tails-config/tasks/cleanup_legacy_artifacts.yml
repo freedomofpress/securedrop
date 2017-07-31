@@ -23,3 +23,8 @@
   with_items:
     - "{{ tails_config_amnesia_home }}/Desktop/document.desktop"
     - "{{ tails_config_amnesia_home }}/.local/share/applications/document.desktop"
+    - "{{ tails_config_amnesia_home }}/.securedrop/document.desktop"
+    - "{{ tails_config_live_persistence }}/Desktop/document.desktop"
+    - "{{ tails_config_live_persistence }}/dotfiles/Desktop/document.desktop"
+    - "{{ tails_config_live_persistence }}/dotfiles/.local/share/applications/document.desktop"
+    - "{{ tails_config_live_persistence }}/Persistent/.securedrop/document.desktop"

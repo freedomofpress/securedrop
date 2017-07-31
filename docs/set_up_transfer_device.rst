@@ -69,7 +69,7 @@ application|
 You won't need to memorize this passphrase or type it more than a few
 times, so feel free to make a good long one. Then click **Format** to continue.
 The Disks utility will ask you if you are sure: click **Format** to continue.
-After a few seconds, you new *Transfer Device* should be ready for use.
+After a few seconds, your new *Transfer Device* should be ready for use.
 If you haven't already, make sure to label it.
 
 Set up the USB Transfer Device on each workstation
@@ -99,6 +99,6 @@ Device* with, you're good to go!
 .. |screenshot of passphrase selection prompt in the Disk Utility application| image:: images/screenshots/create-passphrase.png
 .. |image of the disk unlock prompt on Tails| image:: images/screenshots/passphrase-keyring.png
 
-.. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
+.. [#] Tails screenshots were taken on Tails 3.0.1. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
        interface is different from what you see here.

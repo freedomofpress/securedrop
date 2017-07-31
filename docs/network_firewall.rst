@@ -523,7 +523,7 @@ Keeping pfSense up to date
 
 Periodically, the pfSense project maintainers release an update to the
 pfSense software running on your firewall. You will be notified by the
-appearance of bold red text saying "Update available" in the **Version**
+appearance of text saying that there is a new version in the **Version**
 section of the "Status: Dashboard" page (the home page of the WebGUI).
 
 |Update available|
@@ -538,25 +538,20 @@ tag <https://www.netgate.com/blog/category.html#releases>`__.
 
 .. _RSS feed: https://www.netgate.com/feed.xml
 
-To install the update, click the "click here" link next to "Update
-available". We recommend checking the "perform full backup prior to
-upgrade" box in case something goes wrong. Click "Invoke auto upgrade".
+To install the update, click the Download icon next to the update then click
+the "Confirm" button:
 
-|Invoke auto upgrade|
+|Firewall Update Confirmation|
 
-You will see a blank page with a spinning progress indicator in the
-browser tab while pfSense performs the backup prior to upgrade. This
-typically takes a few minutes. Once that's done, you will see a page
-with a progress bar at the top that will periodically update as the
-upgrade progresses. Wait for the upgrade to complete, which may take a
-while depending on the speed of your network.
+You will see a page with a progress bar while pfSense performs the upgrade:
 
-.. note:: In a recent test, the progress page did not successfully
-	  update itself as the upgraded progressed. After waiting for
-	  some time, we refreshed the page and found that the upgrade
-	  had completed successfully. If your upgrade is taking longer
-	  than expected or not showing any progress, try refreshing
-	  the page.
+|Firewall Update Progress|
+
+.. note:: This may take a while, so be patient!
+
+Once it is complete, you will see a notification of successful upgrade:
+
+|Firewall Update Complete|
 
 .. |Wired Connected| image:: images/firewall/wired_connected.png
 .. |Your Connection is Insecure| image:: images/firewall/your_connection_is_insecure.png
@@ -586,7 +581,9 @@ while depending on the speed of your network.
 .. |Firewall IP Aliases Pre Save| image:: images/firewall/ip_aliases_pre_save.png
 .. |Firewall IP Aliases Post Save| image:: images/firewall/ip_aliases_post_save.png
 .. |Port Aliases| image:: images/firewall/port_aliases.png
-.. |Invoke auto upgrade| image:: images/firewall/invoke_auto_upgrade.png
+.. |Firewall Update Confirmation| image:: images/firewall/system_update.png
+.. |Firewall Update Progress| image:: images/firewall/system_is_updating.png
+.. |Firewall Update Complete| image:: images/firewall/system_update_complete.png
 .. |Backup & Restore| image:: images/firewall/backup_and_restore.png
 
 .. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on

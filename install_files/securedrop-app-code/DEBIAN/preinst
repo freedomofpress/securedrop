@@ -46,6 +46,7 @@ function permanently_disable_swap() {
     perl -i -apne '$F[2] eq "swap" && /^[^\s#]+?/ && s/^/#/g' /etc/fstab
 }
 
+
 function convert_document_to_journalist_interface() {
     # Helper function to migrate the old "Document Interface" config files
     # to the new "Journalist Interface" naming scheme. Affects tor and apache.

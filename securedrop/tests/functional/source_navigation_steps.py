@@ -162,3 +162,8 @@ class SourceNavigationSteps():
     def _source_logs_out(self):
         self.driver.find_element_by_id('logout').click()
         assert self.driver.find_element_by_css_selector('.important')
+
+    def _source_not_found(self):
+        self.driver.get(self.source_location + "/unlikely")
+        message = self.driver.find_element_by_id('page_not_found')
+        assert message.is_displayed()

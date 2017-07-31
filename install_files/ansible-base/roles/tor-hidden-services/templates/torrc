@@ -1,7 +1,6 @@
 SocksPort 0
 SafeLogging 1
 RunAsDaemon 1
-Sandbox 1
 
 {% if 'securedrop_application_server' in group_names %}
 HiddenServiceDir /var/lib/tor/services/source

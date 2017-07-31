@@ -13,7 +13,6 @@ import source
 import version
 import utils
 import json
-import config
 
 
 class TestSourceApp(TestCase):
@@ -263,28 +262,6 @@ class TestSourceApp(TestCase):
         gzipfile.assert_called_with(filename=sanitized_filename,
                                     mode=ANY,
                                     fileobj=ANY)
-
-    def test_custom_notification(self):
-        """Test that `CUSTOM_NOTIFICATION` string in config file
-        is rendered on the Source Interface page. We cannot assume
-        it will be present in production instances, since it is added
-        via the Ansible config, not the Debian package scripts."""
-        custom_msg = config.CUSTOM_NOTIFICATION
-
-        dev_msg = ("This is an insecure SecureDrop Development server "
-                   "for testing ONLY. Do NOT submit documents here.")
-        staging_msg = "This is a SecureDrop Staging VM for testing ONLY"
-
-        self.assertTrue(custom_msg in (dev_msg, staging_msg))
-        resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 200)
-        # The app-tests aren't host-aware, so we can't accurately predict
-        # which custom notification message we want. Let's check for both,
-        # and fail only if both are not found.
-        try:
-            self.assertIn(dev_msg, resp.data)
-        except AssertionError:
-            self.assertIn(staging_msg, resp.data)
 
     def test_tor2web_warning_headers(self):
         resp = self.client.get('/', headers=[('X-tor2web', 'encrypted')])

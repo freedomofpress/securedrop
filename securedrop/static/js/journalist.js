@@ -9,6 +9,8 @@ function enhance_ui() {
   // Add the "select {all,none}" buttons
   $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> select unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
 
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
   // deleting submissions

@@ -8,7 +8,7 @@
 # deciding "Are we connected via SSH over Tor or not?"
 - name: Register host name to wait for.
   set_fact:
-    _hostname_to_wait_for: "{{ ansible_ssh_host|default(ansible_host) }}"
+    _hostname_to_wait_for: "{{ remote_host_ref|default(ansible_host) }}"
 
 # If we're not connected over Tor, bounce the service as usual.
 - name: restart tor (simple)
@@ -25,11 +25,26 @@
   poll: 0
   when: _hostname_to_wait_for.endswith('.onion')
 
-# Hardcode a wait value and wait for the entire interval.
-# Cannot use `local_action/wait_for` because it's not smart
-# enough to find the SSH connection info required to connect
-# to the Onion URL.
-- name: Waiting for SSH connection (slow)...
-  pause:
-    seconds: 90
+# It's critical that we eliminate existing SSH connections, otherwise Ansible
+# will try to reuse the stale ControlPersist files, which no longer have an
+# active socket, causing a connection timeout, and halting execution of the
+# playbook with a cryptic message.
+- name: Clear out SSH sessions, to prevent reuse of stale ControlPersist file.
+  local_action:
+    module: file
+    args:
+      path: /home/amnesia/.ansible/cp
+      state: absent
+  run_once: yes
+  become: no
   when: _hostname_to_wait_for.endswith('.onion')
+
+- name: Waiting for SSH connection (slow)...
+  local_action: wait_for
+  args:
+    host: "{{ _hostname_to_wait_for }}"
+    port: "{{ ansible_ssh_port|default(ansible_port|default(22)) }}"
+    delay: 30
+    search_regex: OpenSSH
+    state: started
+  become: no
