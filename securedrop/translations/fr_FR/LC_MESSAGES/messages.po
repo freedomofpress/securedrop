@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-07-29 15:23+0000\n"
-"Last-Translator: admin <admin@securedrop.club>\n"
+"PO-Revision-Date: 2017-07-31 14:19+0000\n"
+"Last-Translator: manhack <weblatesecuredrop@rewriting.net>\n"
 "Language-Team: French "
 "<http://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
@@ -26,7 +26,7 @@ msgstr "Vous devez être administrateur pour accéder à cette page"
 
 #: journalist.py:118
 msgid "Login failed."
-msgstr "Echec de connection."
+msgstr "Echec de connexion."
 
 #: journalist.py:122
 msgid "Please wait at least {seconds} seconds before logging in again."
@@ -50,7 +50,7 @@ msgstr "Les mots de passe ne correspondent pas"
 
 #: journalist.py:200 journalist.py:304
 msgid "Your password must be between {min} and {max} characters."
-msgstr "Votre mot de passe doit être entre {min} et {max} caractères."
+msgstr "Votre mot de passe doit comporter de {min} à {max} caractères."
 
 #: journalist.py:208
 msgid "That username is already in use"
@@ -105,7 +105,7 @@ msgstr "Le compte a été mis à jour avec succès !"
 
 #: journalist.py:340
 msgid "Username \"{user}\" is already taken!"
-msgstr "L'utilisateur \"{user}\" est existe déjà !"
+msgstr "Le nom d'utilisateur \"{user}\" est déjà pris !"
 
 #: journalist.py:368
 msgid "Deleted user '{user}'"
@@ -139,7 +139,7 @@ msgstr[1] "{num} collections ont été supprimées"
 
 #: journalist.py:637
 msgid "You cannot send an empty reply!"
-msgstr "Vous ne pouvez pas envoyer une réponse vide !"
+msgstr "Vous ne pouvez pas envoyer de réponse vide !"
 
 #: journalist.py:663
 msgid "Thanks! Your reply has been stored."
@@ -494,8 +494,8 @@ msgid ""
 "An encryption key will be generated for the source the next time they log"
 " in, after which you will be able to reply to the source here."
 msgstr ""
-"Une clé de chiffrement sera générée pour la source la prochaine fois "
-"qu'elle se connecte, après quoi vous serez en mesure de lui répondre ici."
+"Une clé de chiffrement sera générée pour la source la prochaine fois qu'elle "
+"se connectera, après quoi vous serez en mesure de lui répondre ici."
 
 #: journalist_templates/col.html:86
 msgid "Click below if you would like to write a reply to this source."
@@ -512,9 +512,9 @@ msgid ""
 "longer be able to login using their previous codename.</em>"
 msgstr ""
 "Cliquez ci dessous pour supprimer la collection de documents de cette "
-"source. <em>Attention: Si vous faites cela, les fichiers visible ici ne "
-"pourront être récupéré et la source ne sera plus capable de se connecter "
-"en utilisant leur nom de code.</em>"
+"source. <em>Attention: Si vous faites cela, les fichiers visibles ici ne "
+"pourront être récupérés et la source ne sera plus capable de se connecter en "
+"utilisant son nom de code.</em>"
 
 #: journalist_templates/col.html:101
 msgid "DELETE COLLECTION"
