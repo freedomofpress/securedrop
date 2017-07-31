@@ -13,7 +13,6 @@ import source
 import version
 import utils
 import json
-import config
 
 
 class TestSourceApp(TestCase):
