@@ -17,6 +17,7 @@
     state: absent
 
 - name: Remove deprecated Document Interface desktop icons.
+  become: yes
   file:
     state: absent
     path: "{{ item }}"
