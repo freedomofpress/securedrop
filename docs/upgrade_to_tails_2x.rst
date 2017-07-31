@@ -13,8 +13,8 @@ before upgrading SecureDrop to 0.3.7 or later.
 
 Upgrading Tails from 1.x to 2.x must be done manually. Please follow this guide
 to updating each Tails USB stick used in your SecureDrop instance. Be sure to
-use the Secure Viewing Station computer so you benefit from its airgap while
-transfering sensitive data.
+use the *Secure Viewing Station* computer so you benefit from its airgap while
+transferring sensitive data.
 
 .. note:: You will need:
 
@@ -25,9 +25,9 @@ transfering sensitive data.
     #. Your *existing SecureDrop Tails USB sticks* (Admin, Journalist, and Secure
        Viewing Station).
     #. An *airgapped machine* to perform the Tails upgrades. It is ok to reuse
-       the Secure Viewing Station for this task.
+       the *Secure Viewing Station* for this task.
 
-An airgapped machine (such as the SVS) is required in order to perform these
+An airgapped machine (such as the *SVS*) is required in order to perform these
 upgrades safely. By isolating the machine from all network access, you reduce
 the exposure of sensitive data to networked computers, thereby reducing the
 threat of compromise by adversaries who wish to gain access to your SecureDrop
@@ -116,7 +116,7 @@ Mount it by navigating to **Places ▸ Computer**, and clicking on the
 encrypted disk. You will be prompted to enter the passphrase to unlock the disk
 (the same passphrase you normally use to log into Tails on that USB stick).
 
-Open a Nautilus window with admin priviledges by navigating to **Applications
+Open a Nautilus window with admin privileges by navigating to **Applications
 ▸ System Tools ▸ Root Terminal**. At the terminal prompt, simply type
 ``nautilus``.
 
@@ -147,11 +147,11 @@ completely copied.  Any loss of data from these folders could prevent users
 from accessing submissions.
 
 .. tip::
-    Create subdirectories for each USB drive (Admin, Journalist, and SVS)
+    Create subdirectories for each USB drive (Admin, Journalist, and *SVS*)
     within the Backup Device. Not only will doing so speed up the upgrade
     process, it will also provide you with long-term encrypted backups of the
     USB devices. In the event of a lost or stolen drive, you can restore access
-    via this encryped backup device.
+    via this encrypted backup device.
 
 Once data are correctly copied, unmount the TailsData partition.
 
@@ -162,7 +162,7 @@ Once data are correctly copied, unmount the TailsData partition.
 4. Upgrade a Tails USB
 ~~~~~~~~~~~~~~~~~~~~~~
 
-With the Admin/Journo/SVS Tails USB still insterted in the machine, navigate to
+With the Admin/Journo/SVS Tails USB still inserted in the machine, navigate to
 **Applications ▸ Tails ▸ Tails Installer** and select the **Upgrade by
 cloning** option.
 
@@ -182,37 +182,35 @@ unplugging and remounting the Tails device you're trying to upgrade.
 .. |Select Target Device| image:: images/upgrade_to_tails_2x/select_target_device.png
 
 5. Re-install the automatic Tails configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: This step is only applicable to Admin Tails USBs and Journalist Tails
-          USBs. If you are upgrading the Secure Viewing Station Tails USB, you
+          USBs. If you are upgrading the *Secure Viewing Station* Tails USB, you
           can skip this step.
 
 Shut down the Tails USB on the airgapped computer and move it to the computer
 you normally use it on. Boot into each newly upgraded Tails USB, enabling
 persistence, and setting a root password. Confirm that the persistent files are
 present on the upgraded Tails USB. If they are not, or something else went
-wrong, see :ref:`Troubleshooting <troubleshooting>`.
+wrong, see :ref:`Troubleshooting <troubleshooting_tails_2x_upgrade>`.
 
 Now that you have successfully upgraded to Tails 2.x with your persistence
 intact, the final step is to re-install the Tails automatic configuration from
-the latest version of SecureDrop (0.3.7 or above). The Tails auto-configuration
+the latest version of SecureDrop (0.3.7 or later). The Tails auto-configuration
 was originally set up during installation in
 :doc:`configure_admin_workstation_post_install` and :doc:`onboarding`. There
 were enough changes in Tails 2.x that we had to update various aspects of the
 auto-configuration to work properly on it, which is why you need to re-install.
 
-First, you need to update your local copy of SecureDrop to the latest version
-(0.3.7 or later). This is documented in :doc:`upgrade/0.3.6-to-0.3.7`. Once
-you've done that, you can re-install the Tails auto-configuration:
+Once you've ensured that you're running SecureDrop 0.3.7 or later, you can 
+re-install the Tails auto-configuration:
 
 .. code:: sh
 
-   cd tails_files # from ~/Persistent/securedrop
-   sudo ./install.sh
+   ./securedrop-admin tailsconfig
 
 This is the same process as described in
-:doc:`configure_admin_workstation_post_install` (for the Admin Workstation) and
+:doc:`configure_admin_workstation_post_install` (for the *Admin Workstation*) and
 :doc:`onboarding` (for the Journalist Workstations). If you have questions,
 consult that documentation first.
 
@@ -234,27 +232,27 @@ persistence. Confirm that the persistent files are present and that your
 workflow is unaffected.
 
 As a test, consider submitting a test submission, downloading it on the
-Journalist Workstation, and finally decrypting it on the SVS.
+Journalist Workstation, and finally decrypting it on the *SVS*.
 If you are able to decrypt the submission successfully, you have verified that
-the Journalist Workstation and SVS are working correctly after the upgrade.
+the Journalist Workstation and *SVS* are working correctly after the upgrade.
 
-To test the Admin Workstation, make sure you can still SSH into the servers:
+To test the *Admin Workstation*, make sure you can still SSH into the servers:
 
 .. code:: sh
 
-    $ ssh <username>@<app server .onion address> hostname
+    $ ssh <username>@<*Application Server* .onion address> hostname
     app
-    $ ssh <username>@<monitor server .onion address> hostname
+    $ ssh <username>@<*Monitor Server* .onion address> hostname
     mon
 
 .. tip:: If you forgot, your SSH username is in
-         ``install_files/ansible-base/prod-specific.yml`` as the value of the
+         ``install_files/ansible-base/group_vars/all/site-specific`` as the value of the
          ``ssh_users`` variable. The .onion addresses for SSH for each server
          are in ``install_files/ansible-base/app-ssh-aths`` and
          ``install_files/ansible-base/mon-ssh-aths``, respectively.
 
 .. tip:: Consider retaining the encrypted backup drive as a disaster recovery
-         device. Document the passphrase in the Admin Workstation KeePassX
+         device. Document the passphrase in the *Admin Workstation* KeePassX
          database, and store the physical Backup Device in a locked safe or
          other secure location.
 
@@ -294,7 +292,7 @@ reformat it appropriately.
           smash the device with a hammer until the chips containing its flash
           memory are broken up, then dispose of the pieces in the garbage.
 
-.. _troubleshooting:
+.. _troubleshooting_tails_2x_upgrade:
 
 Troubleshooting
 ---------------
@@ -312,7 +310,7 @@ with both persistence and admin privileges. Insert your Backup Device into a
 free USB port, and mount it by navigating to **Places ▸ Computer**, and clicking
 on the encrypted disk. You will be prompted to enter its passphrase.
 
-Open a Nautilus window with admin priviledges by navigating to **Applications ▸
+Open a Nautilus window with admin privileges by navigating to **Applications ▸
 System Tools ▸ Root Terminal**. At the terminal prompt, simply type `nautilus`
 and hit Enter. Type ``ctrl`` + ``l``, type
 `/live/persistence/TailsData_unlocked`, and hit Enter to navigate there.

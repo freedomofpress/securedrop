@@ -1,0 +1,22 @@
+---
+- name: Copy restore script to Application Server.
+  copy:
+    src: restore.py
+    dest: /tmp/
+    owner: root
+    mode: "0770"
+
+- name: Copy backup tarball of config info to Application Server.
+  copy:
+    src: "{{ restore_file }}"
+    dest: /tmp/{{ restore_file }}
+
+- name: Run the restore script (can be slow).
+  command: /tmp/restore.py /tmp/{{ restore_file }}
+  async: 3600
+  poll: 10
+
+- name: Delete the restore file to save disk space.
+  file:
+    path: /tmp/{{ restore_file }}
+    state: absent

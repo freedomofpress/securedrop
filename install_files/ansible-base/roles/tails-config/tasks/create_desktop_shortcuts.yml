@@ -1,0 +1,51 @@
+---
+# Read the Onion URL from the Tor info files that were fetched back during
+# installation. On the Admin Workstation, these files will be present
+# after running the playbooks, but on the Journalist Workstation, they must
+# be copied manually by the Admin.
+- name: Look up Source Interface URL.
+  command: grep -Po '.{16}\.onion' app-source-ths
+  changed_when: false
+  register: source_interface_lookup_result
+
+- name: Look up Journalist Interface URL.
+  command: grep -Po '.{16}\.onion' app-journalist-aths
+  changed_when: false
+  register: journalist_interface_lookup_result
+
+- name: Create desktop shortcut parent directories.
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items: "{{ tails_config_desktop_icon_directories }}"
+
+- name: Set normal user ownership on subset of directories.
+  become: yes
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: amnesia
+    group: amnesia
+  # Only set normal user ownership for files in ~amnesia.
+  when: item.startswith(tails_config_amnesia_home)
+  with_items: "{{ tails_config_desktop_icon_directories }}"
+
+# Storing as host fact so we can loop over the data in one task.
+- name: Assemble desktop icon info.
+  set_fact:
+    _securedrop_desktop_icon_info:
+      - name: SecureDrop Source Interface
+        filename: source.desktop
+        onion_url: "{{ source_interface_lookup_result.stdout }}"
+      - name: SecureDrop Journalist Interface
+        filename: journalist.desktop
+        onion_url: "{{ journalist_interface_lookup_result.stdout }}"
+
+- name: Create SecureDrop interface desktop icons.
+  template:
+    src: desktop-icon.j2
+    dest: "{{ item.1 }}/{{ item.0.filename }}"
+    mode: "0700"
+  with_nested:
+    - "{{ _securedrop_desktop_icon_info }}"
+    - "{{ tails_config_desktop_icon_directories }}"

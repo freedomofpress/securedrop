@@ -1,0 +1,43 @@
+---
+# Locations for SecureDrop-specific dotfiles, for Tails persistence.
+tails_config_amnesia_home: /home/amnesia
+tails_config_amnesia_persistent: "{{ tails_config_amnesia_home }}/Persistent"
+
+# Directory containing Ansible config, including site-specific customizations.
+tails_config_ansible_base: "{{ tails_config_amnesia_persistent }}/securedrop/install_files/ansible-base"
+
+# Custom persistence directory whence site-specific configs will be copied
+# on every login under Tails.
+tails_config_securedrop_dotfiles: "{{ tails_config_amnesia_persistent }}/.securedrop"
+
+# Locations for Tails persistence settings, used to bootstrap SecureDrop config
+tails_config_live_persistence: /live/persistence/TailsData_unlocked
+tails_config_live_dotfiles: "{{ tails_config_live_persistence }}/dotfiles"
+
+# Destination directories for storing the SecureDrop desktop icons, which
+# provide a user-friendly method of accessing the Onion URLs in a browser.
+tails_config_desktop_icon_directories:
+  - "{{ tails_config_securedrop_dotfiles }}"
+  - "{{ tails_config_live_dotfiles }}"
+  - "{{ tails_config_amnesia_home }}/Desktop"
+  - "{{ tails_config_live_dotfiles }}/Desktop"
+  - "{{ tails_config_amnesia_home }}/.local/share/applications"
+  - "{{ tails_config_live_dotfiles }}/.local/share/applications"
+
+# Path for storing site-specific ATHS info for connecting to Journalist Interface.
+tails_config_torrc_additions: "{{ tails_config_securedrop_dotfiles }}/torrc_additions"
+
+# Location for NetworkManager hooks, used to activate ATHS info.
+tails_config_network_manager_dispatcher: /etc/NetworkManager/dispatcher.d
+
+# Parent directories for joining with the config_files below,
+# to ensure absence from all locations succinctly.
+tails_config_deprecated_directories:
+  - "{{ tails_config_live_persistence }}"
+  - "{{ tails_config_securedrop_dotfiles }}"
+  - "{{ tails_config_network_manager_dispatcher }}"
+  - "{{ tails_config_network_manager_dispatcher }}/custom-nm-hooks"
+
+tails_config_deprecated_config_files:
+  - 70-tor-reload.sh
+  - 99-tor-reload.sh

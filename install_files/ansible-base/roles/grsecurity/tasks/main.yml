@@ -1,0 +1,23 @@
+---
+  # Check whether grsecurity is already configured,
+  # since that fact will be used in multiple includes.
+- include: check_installation.yml
+
+- include: paxctl.yml
+  tags:
+    - paxctl
+    - kernel
+    - hardening
+
+  # Install the grsec kernel prior to running unattended-upgrades to avoid
+  # reboots
+- include: from_fpf_repo_install_grsec.yml
+  tags:
+    - grsec
+
+- include: clean_packages.yml
+
+- include: apply_grsec_lock.yml
+  tags:
+    - reboot
+    - grsec

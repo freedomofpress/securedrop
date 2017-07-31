@@ -1,0 +1,12 @@
+---
+# Installing via `dpkg -i` wipes hold state, so look it up prior to installing
+# in order to show "changed" status accurately. The `hold_debs` logic will
+# reference the registered variable.
+- name: Look up packages already marked as held.
+  command: apt-mark showhold
+  register: apt_mark_showhold_result
+  changed_when: false
+
+- include: install_debs.yml
+
+- include: hold_debs.yml

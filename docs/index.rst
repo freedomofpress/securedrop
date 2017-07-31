@@ -18,6 +18,7 @@ anonymous sources.
    source
    journalist
    admin
+   passphrase_best_practices
 
 .. toctree::
    :caption: Install SecureDrop
@@ -31,7 +32,7 @@ anonymous sources.
    before_you_begin
    set_up_tails
    set_up_svs
-   set_up_dtd
+   set_up_transfer_device
    generate_securedrop_application_key
    set_up_admin_tails
    network_firewall
@@ -48,31 +49,42 @@ anonymous sources.
    :maxdepth: 2
 
    deployment_practices
+   getting_the_most_out_of_securedrop
+   what_makes_securedrop_unique
    google_authenticator
    logging
    ossec_alerts
    tails_guide
    tails_printing_guide
+   https_source_interface
    training_schedule
    yubikey_setup
    backup_and_restore
+   backup_workstations
 
 .. toctree::
    :caption: Upgrade SecureDrop
    :name: upgradetoc
    :maxdepth: 2
 
-   upgrade/upgrade-0.3.x.rst
-   upgrade/0.3.x-to-0.3.5.rst
-   upgrade/0.3.5-to-0.3.6.rst
-   upgrade/0.3.6-to-0.3.7.rst
+   upgrade/0.3.x_to_0.4.rst
    upgrade_to_tails_2x.rst
+   upgrade_to_tails_3x.rst
 
 .. toctree::
    :caption: Developer Documentation
    :name: devdocs
    :maxdepth: 2
-   :glob:
 
    development/getting_started
-   development/*
+   development/virtual_environments
+   development/contributor_guidelines
+   development/tips_and_tricks
+   development/documentation_guidelines
+   development/testing_securedrop
+   development/testing_application_tests
+   development/testing_configuration_tests
+   development/testing_continuous_integration
+   development/apt_repo
+   development/apparmor_profiles
+   development/threat_model

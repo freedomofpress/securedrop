@@ -1,13 +1,16 @@
 import tempfile
+
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+
 
 class SourceNavigationSteps():
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
 
-        self.assertEqual("SecureDrop | Protecting Journalists and Sources", self.driver.title)
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
+                         self.driver.title)
 
     def _source_chooses_to_submit_documents(self):
         # First move the cursor to a known position in case it happens to
@@ -41,6 +44,37 @@ class SourceNavigationSteps():
         self.assertTrue(len(codename.text) > 0)
         self.source_name = codename.text
 
+    def _source_chooses_to_login(self):
+        self.driver.find_element_by_id('login-button').click()
+
+        logins = self.driver.find_elements_by_id('login-with-existing-codename')
+
+        self.assertTrue(len(logins) > 0)
+
+    def _source_hits_cancel_at_login_page(self):
+        self.driver.find_element_by_id('cancel').click()
+
+        self.driver.get(self.source_location)
+
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
+                         self.driver.title)
+
+    def _source_proceeds_to_login(self):
+        codename_input = self.driver.find_element_by_id('login-with-existing-codename')
+        codename_input.send_keys(self.source_name)
+
+        continue_button = self.driver.find_element_by_id('login')
+        continue_button.click()
+
+        self.assertEqual("SecureDrop | Protecting Journalists and Sources",
+                         self.driver.title)
+
+    def _source_hits_cancel_at_submit_page(self):
+        self.driver.find_element_by_id('cancel').click()
+
+        headline = self.driver.find_element_by_class_name('headline')
+        self.assertEqual('Submit Materials', headline.text)
+
     def _source_continues_to_submit_page(self):
         continue_button = self.driver.find_element_by_id('continue-button')
 
@@ -61,7 +95,7 @@ class SourceNavigationSteps():
         continue_button.click()
 
         headline = self.driver.find_element_by_class_name('headline')
-        self.assertEqual('Submit documents and messages', headline.text)
+        self.assertEqual('Submit Materials', headline.text)
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
@@ -71,7 +105,8 @@ class SourceNavigationSteps():
             filename = file.name
             filebasename = filename.split('/')[-1]
 
-            file_upload_box = self.driver.find_element_by_css_selector('[name=fh]')
+            file_upload_box = self.driver.find_element_by_css_selector(
+                '[name=fh]')
             file_upload_box.send_keys(filename)
 
             submit_button = self.driver.find_element_by_id('submit-doc-button')
@@ -84,25 +119,46 @@ class SourceNavigationSteps():
 
             submit_button.click()
 
-            notification = self.driver.find_element_by_css_selector('p.notification')
-            expected_notification = 'Thanks for submitting something to SecureDrop! Please check back later for replies.'
+            notification = self.driver.find_element_by_css_selector(
+                '.success')
+            expected_notification = 'Thank you for sending this information to us'
             self.assertIn(expected_notification, notification.text)
 
     def _source_submits_a_message(self):
         text_box = self.driver.find_element_by_css_selector('[name=msg]')
-
         text_box.send_keys(self.secret_message)  # send_keys = type into text box
 
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
 
         notification = self.driver.find_element_by_css_selector(
-            'p.notification')
-        self.assertIn('Thanks for submitting something to SecureDrop!'
-                      ' Please check back later for replies.',
+            '.success')
+        self.assertIn('Thank you for sending this information to us',
                       notification.text)
+
+    def _source_deletes_a_journalist_reply(self):
+        # Get the reply filename so we can use IDs to select the delete buttons
+        reply_filename_element = self.driver.find_element_by_name('reply_filename')
+        reply_filename = reply_filename_element.get_attribute('value')
+
+        delete_button_id = 'delete-reply-{}'.format(reply_filename)
+        delete_button = self.driver.find_element_by_id(delete_button_id)
+        delete_button.click()
+
+        confirm_button_id = 'confirm-delete-reply-button-{}'.format(reply_filename)
+        confirm_button = self.driver.find_element_by_id(confirm_button_id)
+        self.assertTrue(confirm_button.is_displayed())
+        confirm_button.click()
+
+        notification = self.driver.find_element_by_class_name('notification')
+        self.assertIn('Reply deleted', notification.text)
 
     def _source_logs_out(self):
         logout_button = self.driver.find_element_by_id('logout').click()
-        notification = self.driver.find_element_by_css_selector('p.error')
-        self.assertIn('Thank you for logging out!', notification.text)
+        notification = self.driver.find_element_by_css_selector('.important')
+        self.assertIn('Thank you for exiting your session!', notification.text)
+
+    def _source_not_found(self):
+        self.driver.get(self.source_location + "/unlikely")
+        message = self.driver.find_element_by_id('page_not_found')
+        self.assertTrue(message.is_displayed())

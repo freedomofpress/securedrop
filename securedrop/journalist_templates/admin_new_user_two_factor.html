@@ -2,7 +2,7 @@
 {% block body %}
 {% if user.is_totp %}
 <h1>Enable Google Authenticator</h1>
-<p>You're almost done! To finish adding this new user, have them follow the instructions below to set up two factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.</p>
+<p>You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with Google Authenticator. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two factor authentication is set up correctly.</p>
 <ol>
   <li>Install Google Authenticator on your phone</li>
   <li>Open the Google Authenticator app</li>
@@ -20,6 +20,6 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <label for="token">Verification code</label>
   <input name="token" id="token" type="text" placeholder="123456" />
-  <button type="submit">Submit</button>
+  <button class "sd-button" type="submit">SUBMIT</button>
 </form>
 {% endblock %}

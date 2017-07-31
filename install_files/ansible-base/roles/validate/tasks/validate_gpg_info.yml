@@ -1,0 +1,48 @@
+---
+
+- name: Validate GPG fingerprints.
+  assert:
+    that:
+      # Should not match the fingerprint for the TEST Journalist pubkey.
+      - item.fingerprint != "65A1B5FF195B56353CC63DFFCC40EF1228271441"
+      # Should not match the fingerprint for the TEST Admin pubkey.
+      - item.fingerprint != "600BC6D5142C68F35DDBCEA87B597104EDDDC102"
+      # Should not contain whitespace.
+      - "' ' not in item.fingerprint"
+      # Must be a full-length fingerprint.
+      - item.fingerprint|length == 40
+      # Must contain only hex characters
+      - item.fingerprint == item.fingerprint|regex_replace('[^A-F0-9]', '')
+    msg: >-
+      GPG fingerprints must be full-length (40 characters), with no whitespace.
+      {{ securedrop_validate_error_msg_start }}
+      the fingerprints in vars `ossec_gpg_fpr` and
+      `securedrop_app_gpg_fingerprint` are specified correctly.
+  tags:
+    - validate
+    - debug
+
+# Using a block to catch an exception in the lookup, otherwise
+# the lookup error will halt playbook execution before the `msg` parameter
+# is displayed as part of the assert task.
+- block:
+    - name: Confirm GPG public key files exist locally.
+      assert:
+        that:
+          # The local file lookup will fail if file is not found.
+          # We don't need to inspect the contents; the validation script
+          # in the next task will handle that.
+          - lookup('file', item.keyfile)
+  rescue:
+    - name: GPG public key file validation failed.
+      fail:
+        msg: >-
+          Failed to find the public key file '{{ item.keyfile }}' on the Admin
+          Workstation. {{ securedrop_validate_error_msg_start }} the public
+          key filenames are set correctly in vars `ossec_alert_gpg_public_key`
+          and `securedrop_app_gpg_public_key`. The public key files should exist
+          in the `install_files/ansible-base/` directory.
+
+- name: Confirm public key file and fingerprint match.
+  script: validate-gpg-key.sh "{{ item.keyfile }}" "{{ item.fingerprint }}"
+  changed_when: false

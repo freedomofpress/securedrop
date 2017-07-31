@@ -1,5 +1,4 @@
 [run]
 branch = True
-source = .
+source = ../securedrop
 omit = tests/*
-

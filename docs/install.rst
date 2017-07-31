@@ -1,20 +1,23 @@
 Install SecureDrop
 ==================
 
-Install Ansible
----------------
+Install Prerequisites
+----------------------
 
-SecureDrop uses the Ansible automation tool for installation and maintenance.
+SecureDrop has some dependencies that need to be loaded onto the admin tails
+stick prior to the installation of the server.
 
-To install Ansible on the Admin Workstation, first update the ``apt``
-package manager's package lists to make sure you get the latest and
-greatest version of Ansible. This usually takes a few minutes over
-Tor. Once that's done, you can install Ansible:
+To load these dependencies, from the base of the SecureDrop repo run the
+following commands:
 
 .. code:: sh
 
-    $ sudo apt-get update
-    $ sudo apt-get install ansible
+    ./securedrop-admin setup
+
+The package installation will complete in approximately 10 minutes, depending
+on network speed and computing power.
+
+.. _configure_securedrop:
 
 Configure the Installation
 --------------------------
@@ -22,11 +25,11 @@ Configure the Installation
 Make sure you have the following information and files before
 continuing:
 
--  The *App Server* IP address
+-  The *Application Server* IP address
 -  The *Monitor Server* IP address
--  The SecureDrop application's GPG public key (from the *Transfer
+-  The SecureDrop Submission Key (from the *Transfer
    Device*)
--  The SecureDrop application's GPG key fingerprint
+-  The SecureDrop Submission Key fingerprint
 -  The email address that will receive alerts from OSSEC
 -  The GPG public key and fingerprint for the email address that will
    receive the alerts
@@ -37,101 +40,75 @@ continuing:
    can add more later)
 -  The username of the system administrator
 -  (Optional) An image to replace the SecureDrop logo on the *Source
-   Interface* and *Document Interface*
+   Interface* and *Journalist Interface*
 
    -  Recommended size: ``500px x 450px``
    -  Recommended format: PNG
 
-From the base of the SecureDrop repo, change into the ``ansible-base``
-directory: ::
-
-    $ cd install_files/ansible-base
-
 You will have to copy the following required files to
 ``install_files/ansible-base``:
 
--  SecureDrop Application GPG public key file
+-  SecureDrop Submission Key public key file
 -  Admin GPG public key file (for encrypting OSSEC alerts)
 -  (Optional) Custom header image file
 
-The SecureDrop application GPG key should be located on your *Transfer
+The SecureDrop Submission Key should be located on your *Transfer
 Device* from earlier. It will depend on the location where the USB stick
-is mounted, but for example, if you are already in the ansible-base
-directory, you can just run: ::
+is mounted, but for example, if you are already at the root of the SecureDrop
+repository, you can just run: ::
 
-    $ cp /media/[USB folder]/SecureDrop.asc .
+    cp /media/[USB folder]/SecureDrop.asc install_files/ansible-base
 
 Or you may use the copy and paste capabilities of the file manager.
 Repeat this step for the Admin GPG key and custom header image.
 
-Now you must edit a couple configuration files. You can do so using
-gedit, vim, or nano. Double-clicking will suffice to open them.
+Run the configuration playbook and answer the prompts with values that
+match your environment: ::
 
-Edit the inventory file, ``inventory``, and update the default IP
-addresses with the ones you chose for app and mon. When you're done,
-save the file.
+    ./securedrop-admin sdconfig
 
-Edit the file ``prod-specific.yml`` and fill it out with values that
-match your environment. At a minimum, you will need to provide the
-following:
-
--  User allowed to connect to both servers with SSH: ``ssh_users``
--  IP address of the Monitor Server: ``monitor_ip``
--  Hostname of the Monitor Server: ``monitor_hostname``
--  Hostname of the Application Server: ``app_hostname``
--  IP address of the Application Server: ``app_ip``
--  The SecureDrop application's GPG public key:
-   ``securedrop_app_gpg_public_key``
--  The SecureDrop application's GPG key fingerprint:
-   ``securedrop_app_gpg_fingerprint``
--  GPG public key used when encrypting OSSEC alerts:
-   ``ossec_alert_gpg_public_key``
--  Fingerprint for key used when encrypting OSSEC alerts:
-   ``ossec_gpg_fpr``
--  The email address that will receive alerts from OSSEC:
-   ``ossec_alert_email``
--  The reachable hostname of your SMTP relay: ``smtp_relay``
--  The secure SMTP port of your SMTP relay: ``smtp_relay_port``
-   (typically 25, 587, or 465. Must support TLS encryption)
--  Email username to authenticate to the SMTP relay: ``sasl_username``
--  Domain name of the email used to send OSSEC alerts: ``sasl_domain``
--  Password of the email used to send OSSEC alerts: ``sasl_password``
--  The fingerprint of your SMTP relay (optional):
-   ``smtp_relay_fingerprint``
+The script will automatically validate the answers you provided, and display
+error messages if any problems were detected. The answers you provided will be
+written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
+which you can edit manually to provide further customization.
 
 When you're done, save the file and quit the editor.
 
-.. _Run the Ansible playbook:
+.. _Install SecureDrop Servers:
 
-Run the Ansible playbook
-------------------------
+Install SecureDrop Servers
+--------------------------
 
-Now you are ready to run the playbook! This will automatically configure
-the servers and install SecureDrop and all of its dependencies.
-``<username>`` below is the user you created during the Ubuntu
-installation, and should be the same user you copied the SSH public keys
-to. ::
+Now you are ready to install! This process will configure
+the servers and install SecureDrop and all of its dependencies on
+the remote servers. ::
 
-    $ ansible-playbook -i inventory -u <username> -K --sudo securedrop-prod.yml
+    ./securedrop-admin install
 
-You will be prompted to enter the sudo password for the app and monitor
-servers (which should be the same).
+You will be prompted to enter the sudo password for the *Application* and
+*Monitor Servers* (which should be the same).
 
-The Ansible playbook will run, installing SecureDrop plus configuring
-and hardening the servers. This will take some time, and it will return
+The install process will take some time, and it will return
 the terminal to you when it is complete. If an error occurs while
-running the playbook, please submit a detailed `GitHub
+running the install, please submit a detailed `GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/new>`__ or
 send an email to securedrop@freedom.press.
 
+.. note::
+   The SecureDrop install process configures a custom Linux kernel hardened
+   with the grsecurity patch set. Only binary images are hosted in the apt
+   repo. For source packages, see the `Source Offer`_.
+
+.. _`Source Offer`: https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
+
 Once the installation is complete, the addresses for each Tor Hidden
-Service will be available in the following files in
+Service will be available in the following files under
 ``install_files/ansible-base``:
 
 -  ``app-source-ths``: This is the .onion address of the Source
    Interface
--  ``app-document-aths``: This is the ``HidServAuth`` configuration line
-   for the Document Interface. During a later step, this will be
+-  ``app-journalist-aths``: This is the ``HidServAuth`` configuration line
+   for the Journalist Interface. During a later step, this will be
    automatically added to your Tor configuration file in order to
    exclusively connect to the hidden service.
 -  ``app-ssh-aths``: Same as above, for SSH access to the Application
@@ -139,8 +116,6 @@ Service will be available in the following files in
 -  ``mon-ssh-aths``: Same as above, for SSH access to the Monitor
    Server.
 
-Update the inventory, replacing the IP addresses with the corresponding
-onion addresses from ``app-ssh-aths`` and ``mon-ssh-aths``. This will
-allow you to re-run the Ansible playbooks in the future, even though
-part of SecureDrop's hardening restricts SSH to only being over the
-specific authenticated Tor Hidden Services.
+The dynamic inventory file will automatically read the Onion URLs for SSH
+from the ``app-ssh-aths`` and ``mon-ssh-aths`` files, and use them to connect
+to the servers during subsequent playbook runs.

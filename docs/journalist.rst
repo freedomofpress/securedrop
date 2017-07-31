@@ -2,7 +2,7 @@ Journalist Guide
 ================
 
 Journalists viewing documents on SecureDrop must connect to the
-respective Source or Document Interface using the `Tails operating
+respective Source or Journalist Interface using the `Tails operating
 system <https://tails.boum.org/>`__, which your administrator should
 have already set up for you.
 
@@ -16,12 +16,12 @@ Create GPG key for the journalist
 ---------------------------------
 
 Each journalist must have a personal GPG key that they use for
-encrypting files transferred from the Secure Viewing Station to their
+encrypting files transferred from the *Secure Viewing Station* to their
 Journalist Workstation. The private key, used for decryption, stays on
 their Journalist Workstation. The public key, used for encryption, gets
-copied to the Secure Viewing Station.
+copied to the *Secure Viewing Station*.
 
-.. todo:: This document recommends transferring documents from the SVS
+.. todo:: This document recommends transferring documents from the *SVS*
           to the Journalist Workstation, without any discussion of the
           potential risks or mitigations that should be taken when
           doing so. A section needs to be added on why doing this
@@ -36,37 +36,66 @@ instructions to set one up with GnuPG (GPG).
 -  `Mac OS
    X <https://support.gpgtools.org/kb/how-to/first-steps-where-do-i-start-where-do-i-begin>`__
 
-Connect to the Document Interface
----------------------------------
+Connect to the Journalist Interface
+-----------------------------------
 
 Each journalist has their own authenticated Tor hidden service URL to
-login to the ``Document Interface``. The journalist needs to use the
+login to the ``Journalist Interface``. The journalist needs to use the
 browser in the Tails operating system to connect to the
-``Document Interface``. This will take an extra few steps each time you
+``Journalist Interface``. This will take an extra few steps each time you
 want to login, but after practicing a few times, it will become
 automatic.
 
 See our guide on setting up :doc:`Tails for the Admin and Journalist
 Workstation <tails_guide>` before continuing. We recommend that you
-create bookmarks for the Source and Document Interfaces.
+create bookmarks for the Source and Journalist Interfaces.
 
-After clicking on the SecureDrop ``Document Interface`` link, you can
+After clicking on the SecureDrop ``Journalist Interface`` link, you can
 log in with your username, password, and two-factor authentication
 token, as shown in the first screenshot below.
 
-|Document Interface Login|
+|Journalist Interface Login|
+
+.. attention::
+
+   At the time of this writing, the current version of Tor Browser (7.0.2)
+   shows a warning on the **Password** input field when you focus it that says
+   "This connection is not secure. Logins entered here could be compromised."
+   It looks like this:
+
+   |Insecure login warning|
+
+   This warning seems alarming, *but there is actually no cause for concern*.
+   The warning is the result of a relatively new Mozilla Firefox feature that
+   is intended to protect users from submitting potentially sensitive
+   information on web sites that do not use HTTPS to encrypt the connection
+   between the user and the site. While some SecureDrop sites use HTTPS, most
+   do not; however, this is acceptable because SecureDrop uses Tor Hidden
+   Services, which encrypt the connection without having to use HTTPS.
+   
+   Unfortunately, this new Firefox feature is unaware of the special properties
+   of hidden services, and so it mistakenly shows these warnings on any hidden
+   service that isn't also using HTTPS. This issue is being addressed upstream
+   by the Tor Browser developers, and we hope it will be resolved in a new
+   version of Tor Browser soon. In the meantime, you can safely ignore these
+   warnings and continue to use SecureDrop. 
+   
+   For the latest on this issue, and how it affects SecureDrop users, see the
+   `GitHub issue`_.
+
+.. _GitHub issue: https://github.com/freedomofpress/securedrop/issues/1882
 
 If any sources have uploaded documents or sent you message, they will be
 listed on the homepage by a codename. **Note: The codename the
 journalists see is different than the codename that sources see.**
 
-|Document Interface|
+|Journalist Interface|
 
-Move Documents to the Secure Viewing Station
---------------------------------------------
+Move Documents to the *Secure Viewing Station*
+----------------------------------------------
 
 You will only be able to view the documents the source has sent you on
-the ``Secure Viewing Station``. After clicking on an individual source
+the *Secure Viewing Station*. After clicking on an individual source
 you will see the page below with the messages that source has sent you.
 Click on a document or message name to save it, or select a number of
 documents and save them at once by clicking "Download Selected".
@@ -82,7 +111,7 @@ download documents to a special sandbox folder, located at
 
 Once downloaded to the sandbox folder, move the document to the
 designated USB stick you will use to transfer the documents from your
-Tails ``Journalist Workstation`` to the ``Secure Viewing Station``. This
+Tails ``Journalist Workstation`` to the *Secure Viewing Station*. This
 will be known as your ``Transfer Device``.
 
 | |Move to transfer device 1|
@@ -90,10 +119,10 @@ will be known as your ``Transfer Device``.
 
 Eject your ``Transfer Device`` from your ``Journalist Workstation``.
 
-Next, boot up the ``Secure Viewing Station`` using Tails (remember, you
+Next, boot up the *Secure Viewing Station* using Tails (remember, you
 must use a different Tails USB than you use your normal
 ``Journalist Workstation``) and enter the password for the
-``Secure Viewing Station`` the persistent volume. Once you have logged
+*Secure Viewing Station* the persistent volume. Once you have logged
 in, plug in the ``Transfer Device``.
 
 **Copy these documents to the Persistent folder before decrypting them.
@@ -109,8 +138,8 @@ Make sure to then return to your ``Transfer Device`` folder, right click
 on the file, and then click "Wipe" to securely wipe the file from your
 device.
 
-Decrypt and work on the Secure Viewing Station
-----------------------------------------------
+Decrypt and work on the *Secure Viewing Station*
+------------------------------------------------
 
 To decrypt documents, return to your Persistent folder and double-click
 on zipped file folder. After you extract the files, click on each file
@@ -138,14 +167,20 @@ give it a file extension.
 Interact With Sources
 ---------------------
 
-| Click on the codename to see the page specifically for that source.
-  You will see all of the messages that they have written and documents
-  that they have uploaded. Documents and messages are encrypted to the
-  application's GPG public key. In order to read the messages or look at
-  the documents you will need to transfer them to the
-  ``Secure Viewing Station``.
-| But first, if you'd like to reply to the source, write your message in
-  the text field and click ``Submit``.
+Click on the codename to see the page specifically for that source.
+You will see all of the messages that they have written and documents
+that they have uploaded. If the name of a source is difficult to say
+or remember, you can rename a source using the button next to their
+current codename:
+
+|Cycle source codename|
+
+Documents and messages are encrypted to the application's GPG public
+key. In order to read the messages or look at the documents you
+will need to transfer them to the *Secure Viewing Station*.
+
+But first, if you'd like to reply to the source, write your message
+in the text field and click ``Submit``.
 
 |Sent reply|
 
@@ -166,13 +201,13 @@ once and is overloaded with submissions, you will need to flag sources
 for reply before you can communicate with them. Click the
 ``Flag this source for reply`` button.
 
-|Read documents|
+|Flag for reply button|
 
 After clicking the ``Flag this source for reply`` button, you'll see
 this confirmation page. Click through to get back to the page that
 displays that source's documents and replies.
 
-|Flag source for reply|
+|Flag for reply notification|
 
 You will not be able to reply until after the source logs in again and
 sees that you would like to talk to him or her. So you may have to sit
@@ -185,14 +220,17 @@ Work with Documents
 
 As long as you're using the latest version of Tails, you should be able
 to open any document that gets submitted to you without the risk of
-malicious documents compromising the ``Secure Viewing Station``.
+malicious documents compromising the *Secure Viewing Station*.
 However, if they do compromise it, Tails is designed so that the next
 time you reboot the malware will be gone.
 
 Tails comes with lots of applications that will help you securely work
-with documents, including an office suite, graphics tools, desktop
-publishing tools, audio tools, and printing and scanning tools. For more
-information, visit `Work on sensitive
+with documents, including `The Tor Browser Bundle <https://www.torproject.org/>`__
+, an office suite, graphics tools, desktop publishing tools, audio
+tools, and printing and scanning tools. Journalists should take care
+to research submissions using the Tor Browser, ideally in a new
+Tails session for highly sensitive submissions. For more information,
+visit `Work on sensitive
 documents <https://tails.boum.org/doc/sensitive_documents/index.en.html>`__
 on the Tails website.
 
@@ -218,7 +256,7 @@ Encrypt and move documents to Journalist Workstation
 
 Before you move documents back to the ``Transfer Device`` to copy them
 to your workstation you should encrypt them to your personal GPG public
-key that you imported when setting up the ``Secure Viewing Station`` to
+key that you imported when setting up the *Secure Viewing Station* to
 begin with.
 
 Right-click on the document you want to encrypt and choose
@@ -247,8 +285,13 @@ encrypted documents to it. Decrypt them with ``gnupg``.
 Write articles and blog posts, edit video and audio, and publish. Expose
 crimes and corruption, and change the world.
 
-.. |Document Interface Login| image:: images/manual/document6.png
-.. |Document Interface| image:: images/manual/document1.png
+.. tip:: Check out our SecureDrop
+          :doc:`Promotion Guide <getting_the_most_out_of_securedrop>`
+          to read more about how to encourage sources to use SecureDrop.
+
+.. |Journalist Interface Login| image:: images/manual/document6.png
+.. |Insecure login warning| image:: images/manual/insecure-login-warning-journalist-interface.png
+.. |Journalist Interface| image:: images/manual/document1.png
 .. |Load external content| image:: images/manual/document4.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
 .. |Download to sandbox folder| image:: images/manual/tbb_Document6.png
@@ -258,9 +301,10 @@ crimes and corruption, and change the world.
 .. |Decrypting| image:: images/manual/viewing2.png
 .. |Decrypted documents| image:: images/manual/viewing3.png
 .. |Opened document| image:: images/manual/viewing4.png
+.. |Cycle source codename| image:: images/manual/change-codename.png
 .. |Sent reply| image:: images/manual/document2.png
-.. |Read documents| image:: images/manual/document4.png
-.. |Flag source for reply| image:: images/manual/document3.png
+.. |Flag for reply button| image:: images/manual/document_flag_for_reply_button.png
+.. |Flag for reply notification| image:: images/manual/document_flagged_for_reply_notification.png
 .. |Wiping documents| image:: images/manual/viewing5.png
 .. |Encrypting 1| image:: images/manual/viewing6.png
 .. |Encrypting 2| image:: images/manual/viewing7.png

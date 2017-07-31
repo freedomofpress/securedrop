@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-import uuid
 from functools import wraps
-import zipfile
 from cStringIO import StringIO
 import subprocess
 from threading import Thread
 import operator
 from flask import (Flask, request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file, Markup)
-from flask_wtf.csrf import CsrfProtect
+                   flash, abort, g, send_file, Markup, make_response)
+from flask_wtf.csrf import CSRFProtect
+from flask_assets import Environment
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
+import json
 import version
 import crypto_util
 import store
@@ -33,10 +33,12 @@ app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
 
+assets = Environment(app)
+
 # The default CSRF token expiration is 1 hour. Since large uploads can
 # take longer than an hour over Tor, we increase the valid window to 24h.
 app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
-CsrfProtect(app)
+CSRFProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
@@ -71,7 +73,8 @@ def login_required(f):
 
 
 def ignore_static(f):
-    """Only executes the wrapped function if we're not loading a static resource."""
+    """Only executes the wrapped function if we're not loading
+    a static resource."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if request.path.startswith('/static'):
@@ -93,10 +96,14 @@ def setup_g():
         try:
             g.source = Source.query.filter(Source.filesystem_id == g.sid).one()
         except MultipleResultsFound as e:
-            app.logger.error("Found multiple Sources when one was expected: %s" % (e,))
+            app.logger.error(
+                "Found multiple Sources when one was expected: %s" %
+                (e,))
             abort(500)
         except NoResultFound as e:
-            app.logger.error("Found no Sources when one was expected: %s" % (e,))
+            app.logger.error(
+                "Found no Sources when one was expected: %s" %
+                (e,))
             del session['logged_in']
             del session['codename']
             return redirect(url_for('index'))
@@ -106,8 +113,8 @@ def setup_g():
 @app.before_request
 @ignore_static
 def check_tor2web():
-        # ignore_static here so we only flash a single message warning about Tor2Web,
-        # corresponding to the intial page load.
+    # ignore_static here so we only flash a single message warning
+    # about Tor2Web, corresponding to the initial page load.
     if 'X-tor2web' in request.headers:
         flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
               'This <strong>does not</strong> provide anonymity. '
@@ -120,13 +127,13 @@ def index():
     return render_template('index.html')
 
 
-def generate_unique_codename(num_words=7):
+def generate_unique_codename():
     """Generate random codenames until we get an unused one"""
     while True:
-        codename = crypto_util.genrandomid(num_words)
+        codename = crypto_util.genrandomid(Source.NUM_WORDS)
 
-        # The maximum length of a word in the wordlist is 6 letters and the
-        # maximum codename length is 10 words, so it is currently impossible to
+        # The maximum length of a word in the wordlist is 9 letters and the
+        # codename length is 7 words, so it is currently impossible to
         # generate a codename that is longer than the maximum codename length
         # (currently 128 characters). This code is meant to be defense in depth
         # to guard against potential future changes, such as modifications to
@@ -139,7 +146,8 @@ def generate_unique_codename(num_words=7):
             continue
 
         sid = crypto_util.hash_codename(codename)  # scrypt (slow)
-        matching_sources = Source.query.filter(Source.filesystem_id == sid).all()
+        matching_sources = Source.query.filter(
+            Source.filesystem_id == sid).all()
         if len(matching_sources) == 0:
             return codename
 
@@ -147,8 +155,9 @@ def generate_unique_codename(num_words=7):
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. If you want"
-              "to create a new account, you should log out first.", "notification")
+        flash("You were redirected because you are already logged in. "
+              "If you want to create a new account, you should log out first.",
+              "notification")
         return redirect(url_for('lookup'))
 
     codename = generate_unique_codename()
@@ -165,7 +174,9 @@ def create():
     try:
         db_session.commit()
     except IntegrityError as e:
-        app.logger.error("Attempt to create a source with duplicate codename: %s" % (e,))
+        app.logger.error(
+            "Attempt to create a source with duplicate codename: %s" %
+            (e,))
     else:
         os.mkdir(store.path(sid))
 
@@ -185,7 +196,7 @@ def async_genkey(sid, codename):
     crypto_util.genkeypair(sid, codename)
 
     # Register key generation as update to the source, so sources will
-    # filter to the top of the list in the document interface if a
+    # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
     try:
         source = Source.query.filter(Source.filesystem_id == sid).one()
@@ -202,11 +213,14 @@ def lookup():
     for reply in g.source.replies:
         reply_path = store.path(g.sid, reply.filename)
         try:
-            reply.decrypted = crypto_util.decrypt(g.codename, file(reply_path).read()).decode('utf-8')
+            reply.decrypted = crypto_util.decrypt(
+                g.codename,
+                open(reply_path).read()).decode('utf-8')
         except UnicodeDecodeError:
             app.logger.error("Could not decode reply %s" % reply.filename)
         else:
-            reply.date = datetime.utcfromtimestamp(os.stat(reply_path).st_mtime)
+            reply.date = datetime.utcfromtimestamp(
+                os.stat(reply_path).st_mtime)
             replies.append(reply)
 
     # Sort the replies by date
@@ -218,8 +232,13 @@ def lookup():
     if not crypto_util.getkey(g.sid) and g.source.flagged:
         async_genkey(g.sid, g.codename)
 
-    return render_template('lookup.html', codename=g.codename, replies=replies,
-                           flagged=g.source.flagged, haskey=crypto_util.getkey(g.sid))
+    return render_template(
+        'lookup.html',
+        codename=g.codename,
+        replies=replies,
+        flagged=g.source.flagged,
+        haskey=crypto_util.getkey(
+            g.sid))
 
 
 def normalize_timestamps(sid):
@@ -235,7 +254,10 @@ def normalize_timestamps(sid):
         args.extend(sub_paths[:-1])
         rc = subprocess.call(args)
         if rc != 0:
-            app.logger.warning("Couldn't normalize submission timestamps (touch exited with %d)" % rc)
+            app.logger.warning(
+                "Couldn't normalize submission "
+                "timestamps (touch exited with %d)" %
+                rc)
 
 
 @app.route('/submit', methods=('POST',))
@@ -255,22 +277,37 @@ def submit():
 
     if msg:
         g.source.interaction_count += 1
-        fnames.append(store.save_message_submission(g.sid, g.source.interaction_count,
-                      journalist_filename, msg))
+        fnames.append(
+            store.save_message_submission(
+                g.sid,
+                g.source.interaction_count,
+                journalist_filename,
+                msg))
     if fh:
         g.source.interaction_count += 1
-        fnames.append(store.save_file_submission(g.sid, g.source.interaction_count,
-                      journalist_filename, fh.filename, fh.stream))
+        fnames.append(
+            store.save_file_submission(
+                g.sid,
+                g.source.interaction_count,
+                journalist_filename,
+                fh.filename,
+                fh.stream))
 
     if first_submission:
-        flash("Thanks for submitting something to SecureDrop! Please check back later for replies.",
-              "notification")
+        msg = render_template('first_submission_flashed_message.html')
+        flash(Markup(msg), "success")
+
     else:
-        if msg:
-            flash("Thanks! We received your message.", "notification")
-        if fh:
-            flash('{} "{}".'.format("Thanks! We received your document",
-                                    fh.filename or '[unnamed]'), "notification")
+        if msg and not fh:
+            things = 'message'
+        elif not msg and fh:
+            things = 'document'
+        else:
+            things = 'message and document'
+
+        msg = render_template('next_submission_flashed_message.html',
+                              things=things)
+        flash(Markup(msg), "success")
 
     for fname in fnames:
         submission = Submission(g.source, fname)
@@ -280,7 +317,8 @@ def submit():
         g.source.pending = False
 
         # Generate a keypair now, if there's enough entropy (issue #303)
-        entropy_avail = int(open('/proc/sys/kernel/random/entropy_avail').read())
+        entropy_avail = int(
+            open('/proc/sys/kernel/random/entropy_avail').read())
         if entropy_avail >= 2400:
             async_genkey(g.sid, g.codename)
 
@@ -294,13 +332,30 @@ def submit():
 @app.route('/delete', methods=('POST',))
 @login_required
 def delete():
-    query = Reply.query.filter(Reply.filename == request.form['reply_filename'])
+    query = Reply.query.filter(
+        Reply.filename == request.form['reply_filename'])
     reply = get_one_or_else(query, app.logger, abort)
     store.secure_unlink(store.path(g.sid, reply.filename))
     db_session.delete(reply)
     db_session.commit()
 
     flash("Reply deleted", "notification")
+    return redirect(url_for('lookup'))
+
+
+@app.route('/delete-all', methods=('POST',))
+@login_required
+def batch_delete():
+    replies = g.source.replies
+    if len(replies) == 0:
+        app.logger.error("Found no replies when at least one was expected")
+        return redirect(url_for('lookup'))
+    for reply in replies:
+        store.secure_unlink(store.path(g.sid, reply.filename))
+        db_session.delete(reply)
+    db_session.commit()
+
+    flash("All replies have been deleted", "notification")
     return redirect(url_for('lookup'))
 
 
@@ -341,19 +396,19 @@ def login():
 def logout():
     if logged_in():
         session.clear()
-        tor_msg = render_template('logout_flashed_message.html')
-        flash(Markup(tor_msg), "error")
+        msg = render_template('logout_flashed_message.html')
+        flash(Markup(msg), "important")
     return redirect(url_for('index'))
-
-
-@app.route('/howto-disable-js')
-def howto_disable_js():
-    return render_template("howto-disable-js.html")
 
 
 @app.route('/tor2web-warning')
 def tor2web_warning():
     return render_template("tor2web-warning.html")
+
+
+@app.route('/use-tor')
+def recommend_tor_browser():
+    return render_template("use-tor-browser.html")
 
 
 @app.route('/journalist-key')
@@ -370,6 +425,16 @@ def why_download_journalist_pubkey():
     return render_template("why-journalist-key.html")
 
 
+@app.route('/metadata')
+def metadata():
+    meta = {'gpg_fpr': config.JOURNALIST_KEY,
+            'sd_version': version.__version__,
+            }
+    resp = make_response(json.dumps(meta))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('notfound.html'), 404
@@ -380,12 +445,6 @@ def internal_error(error):
     return render_template('error.html'), 500
 
 
-def write_pidfile():
-    pid = str(os.getpid())
-    with open(config.SOURCE_PIDFILE, 'w') as fp:
-        fp.write(pid)
-
-if __name__ == "__main__":
-    write_pidfile()
-    # TODO make sure debug is not on in production
-    app.run(debug=True, host='0.0.0.0', port=8080)
+if __name__ == "__main__":  # pragma: no cover
+    debug = getattr(config, 'env', 'prod') != 'prod'
+    app.run(debug=debug, host='0.0.0.0', port=8080)

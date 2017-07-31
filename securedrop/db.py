@@ -23,8 +23,8 @@ import qrcode
 import qrcode.image.svg
 
 import config
-import crypto_util
 import store
+
 
 LOGIN_HARDENING = True
 # Unfortunately, the login hardening measures mess with the tests in
@@ -40,7 +40,7 @@ if config.DATABASE_ENGINE == "sqlite":
         config.DATABASE_ENGINE + ":///" +
         config.DATABASE_FILE
     )
-else:
+else:  # pragma: no cover
     engine = create_engine(
         config.DATABASE_ENGINE + '://' +
         config.DATABASE_USERNAME + ':' +
@@ -60,7 +60,9 @@ def get_one_or_else(query, logger, failure_method):
     try:
         return query.one()
     except MultipleResultsFound as e:
-        logger.error("Found multiple while executing %s when one was expected: %s" % (query, e, ))
+        logger.error(
+            "Found multiple while executing %s when one was expected: %s" %
+            (query, e, ))
         failure_method(500)
     except NoResultFound as e:
         logger.error("Found none when one was expected: %s" % (e,))
@@ -76,13 +78,15 @@ class Source(Base):
     last_updated = Column(DateTime, default=datetime.datetime.utcnow)
     star = relationship("SourceStar", uselist=False, backref="source")
 
-    # sources are "pending" and don't get displayed to journalists until they submit something
+    # sources are "pending" and don't get displayed to journalists until they
+    # submit something
     pending = Column(Boolean, default=True)
 
     # keep track of how many interactions have happened, for filenames
     interaction_count = Column(Integer, default=0, nullable=False)
 
     # Don't create or bother checking excessively long codenames to prevent DoS
+    NUM_WORDS = 7
     MAX_CODENAME_LEN = 128
 
     def __init__(self, filesystem_id=None, journalist_designation=None):
@@ -95,7 +99,8 @@ class Source(Base):
     @property
     def journalist_filename(self):
         valid_chars = 'abcdefghijklmnopqrstuvwxyz1234567890-_'
-        return ''.join([c for c in self.journalist_designation.lower().replace(' ', '_') if c in valid_chars])
+        return ''.join([c for c in self.journalist_designation.lower().replace(
+            ' ', '_') if c in valid_chars])
 
     def documents_messages_count(self):
         try:
@@ -105,7 +110,8 @@ class Source(Base):
             for submission in self.submissions:
                 if submission.filename.endswith('msg.gpg'):
                     self.docs_msgs_count['messages'] += 1
-                elif submission.filename.endswith('doc.gz.gpg') or submission.filename.endswith('doc.zip.gpg'):
+                elif (submission.filename.endswith('doc.gz.gpg') or
+                      submission.filename.endswith('doc.zip.gpg')):
                     self.docs_msgs_count['documents'] += 1
             return self.docs_msgs_count
 
@@ -124,7 +130,11 @@ class Submission(Base):
     __tablename__ = 'submissions'
     id = Column(Integer, primary_key=True)
     source_id = Column(Integer, ForeignKey('sources.id'))
-    source = relationship("Source", backref=backref('submissions', order_by=id))
+    source = relationship(
+        "Source",
+        backref=backref("submissions", order_by=id, cascade="delete")
+        )
+
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
     downloaded = Column(Boolean, default=False)
@@ -143,10 +153,17 @@ class Reply(Base):
     id = Column(Integer, primary_key=True)
 
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
-    journalist = relationship("Journalist", backref=backref('replies', order_by=id))
+    journalist = relationship(
+        "Journalist",
+        backref=backref(
+            'replies',
+            order_by=id))
 
     source_id = Column(Integer, ForeignKey('sources.id'))
-    source = relationship("Source", backref=backref('replies', order_by=id))
+    source = relationship(
+        "Source",
+        backref=backref("replies", order_by=id, cascade="delete")
+        )
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -169,7 +186,8 @@ class SourceStar(Base):
 
     def __eq__(self, other):
         if isinstance(other, SourceStar):
-            return self.source_id == other.source_id and self.id == other.id and self.starred == other.starred
+            return (self.source_id == other.source_id and
+                    self.id == other.id and self.starred == other.starred)
         return NotImplemented
 
     def __init__(self, source, starred=True):
@@ -178,18 +196,23 @@ class SourceStar(Base):
 
 
 class InvalidUsernameException(Exception):
+
     """Raised when a user logs in with an invalid username"""
 
 
 class LoginThrottledException(Exception):
-    """Raised when a user attempts to log in too many times in a given time period"""
+
+    """Raised when a user attempts to log in
+    too many times in a given time period"""
 
 
 class WrongPasswordException(Exception):
+
     """Raised when a user logs in with an incorrect password"""
 
 
 class BadTokenException(Exception):
+
     """Raised when a user logins in with an incorrect TOTP token"""
 
 
@@ -203,6 +226,10 @@ class InvalidPasswordLength(Exception):
     def __str__(self):
         if self.pw_len > Journalist.MAX_PASSWORD_LEN:
             return "Password too long (len={})".format(self.pw_len)
+        if self.pw_len < Journalist.MIN_PASSWORD_LEN:
+            return "Password needs to be at least {} characters".format(
+                Journalist.MIN_PASSWORD_LEN
+            )
 
 
 class Journalist(Base):
@@ -220,7 +247,9 @@ class Journalist(Base):
 
     created_on = Column(DateTime, default=datetime.datetime.utcnow)
     last_access = Column(DateTime)
-    login_attempts = relationship("JournalistLoginAttempt", backref="journalist")
+    login_attempts = relationship(
+        "JournalistLoginAttempt",
+        backref="journalist")
 
     def __init__(self, username, password, is_admin=False, otp_secret=None):
         self.username = username
@@ -230,8 +259,9 @@ class Journalist(Base):
             self.set_hotp_secret(otp_secret)
 
     def __repr__(self):
-        return "<Journalist {0}{1}>".format(self.username,
-                                            " [admin]" if self.is_admin else "")
+        return "<Journalist {0}{1}>".format(
+            self.username,
+            " [admin]" if self.is_admin else "")
 
     def _gen_salt(self, salt_bytes=32):
         return os.urandom(salt_bytes)
@@ -244,10 +274,17 @@ class Journalist(Base):
         return scrypt.hash(str(password), salt, **params)
 
     MAX_PASSWORD_LEN = 128
+    MIN_PASSWORD_LEN = 12
 
     def set_password(self, password):
+        # Don't do anything if user's password hasn't changed.
+        if self.pw_hash and self.valid_password(password):
+            return
         # Enforce a reasonable maximum length for passwords to avoid DoS
         if len(password) > self.MAX_PASSWORD_LEN:
+            raise InvalidPasswordLength(password)
+        # Enforce a reasonable minimum length for new passwords
+        if len(password) < self.MIN_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
@@ -256,14 +293,22 @@ class Journalist(Base):
         # Avoid hashing passwords that are over the maximum length
         if len(password) > self.MAX_PASSWORD_LEN:
             raise InvalidPasswordLength(password)
-        return self._scrypt_hash(password, self.pw_salt) == self.pw_hash
+        # No check on minimum password length here because some passwords
+        # may have been set prior to setting the minimum password length.
+        return pyotp.utils.compare_digest(
+            self._scrypt_hash(password, self.pw_salt),
+            self.pw_hash)
 
     def regenerate_totp_shared_secret(self):
         self.otp_secret = pyotp.random_base32()
 
     def set_hotp_secret(self, otp_secret):
         self.is_totp = False
-        self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ", "")))
+        self.otp_secret = base64.b32encode(
+            binascii.unhexlify(
+                otp_secret.replace(
+                    " ",
+                    "")))
         self.hotp_counter = 0
 
     @property
@@ -276,7 +321,9 @@ class Journalist(Base):
 
     @property
     def shared_secret_qrcode(self):
-        uri = self.totp.provisioning_uri(self.username, issuer_name="SecureDrop")
+        uri = self.totp.provisioning_uri(
+            self.username,
+            issuer_name="SecureDrop")
 
         qr = qrcode.QRCode(
             box_size=15,
@@ -295,46 +342,42 @@ class Journalist(Base):
         lowercase and split into four groups of four characters. The secret is
         base32-encoded, so it is case insensitive."""
         sec = self.otp_secret
-        chunks = [sec[i:i + 4] for i in xrange(0, len(sec), 4)]
+        chunks = [sec[i:i + 4] for i in range(0, len(sec), 4)]
         return ' '.join(chunks).lower()
 
     def _format_token(self, token):
-        """Strips from authentication tokens the whitespace that many clients add for readability"""
+        """Strips from authentication tokens the whitespace
+        that many clients add for readability"""
         return ''.join(token.split())
 
     def verify_token(self, token):
         token = self._format_token(token)
 
-        # Only allow each authentication token to be used once. This
-        # prevents some MITM attacks.
-        if token == self.last_token and LOGIN_HARDENING:
-            raise BadTokenException("previously used token {}".format(token))
-        else:
-            self.last_token = token
-            db_session.commit()
+        # Store latest token to prevent OTP token reuse
+        self.last_token = token
+        db_session.commit()
 
         if self.is_totp:
             # Also check the given token against the previous and next
             # valid tokens, to compensate for potential time skew
             # between the client and the server. The total valid
             # window is 1:30s.
-            now = datetime.datetime.now()
-            interval = datetime.timedelta(seconds=30)
-            times = [now - interval, now, now + interval]
-            return any([self.totp.verify(token, for_time=time) for time in times])
+            return self.totp.verify(token, valid_window=1)
         else:
-            for counter_val in range(self.hotp_counter, self.hotp_counter + 20):
+            for counter_val in range(
+                    self.hotp_counter,
+                    self.hotp_counter + 20):
                 if self.hotp.verify(token, counter_val):
                     self.hotp_counter = counter_val + 1
                     db_session.commit()
                     return True
             return False
 
+    _LOGIN_ATTEMPT_PERIOD = 60  # seconds
+    _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
+
     @classmethod
     def throttle_login(cls, user):
-        _LOGIN_ATTEMPT_PERIOD = 60  # seconds
-        _MAX_LOGIN_ATTEMPTS_PER_PERIOD = 5
-
         # Record the login attempt...
         login_attempt = JournalistLoginAttempt(user)
         db_session.add(login_attempt)
@@ -342,23 +385,31 @@ class Journalist(Base):
 
         # ...and reject it if they have exceeded the threshold
         login_attempt_period = datetime.datetime.utcnow() - \
-            datetime.timedelta(seconds=_LOGIN_ATTEMPT_PERIOD)
+            datetime.timedelta(seconds=cls._LOGIN_ATTEMPT_PERIOD)
         attempts_within_period = JournalistLoginAttempt.query.filter(
             JournalistLoginAttempt.timestamp > login_attempt_period).all()
-        if len(attempts_within_period) > _MAX_LOGIN_ATTEMPTS_PER_PERIOD:
-            raise LoginThrottledException("throttled ({} attempts in last {} seconds)".format(
-                len(attempts_within_period), _LOGIN_ATTEMPT_PERIOD))
+        if len(attempts_within_period) > cls._MAX_LOGIN_ATTEMPTS_PER_PERIOD:
+            raise LoginThrottledException(
+                "throttled ({} attempts in last {} seconds)".format(
+                    len(attempts_within_period),
+                    cls._LOGIN_ATTEMPT_PERIOD))
 
     @classmethod
     def login(cls, username, password, token):
         try:
             user = Journalist.query.filter_by(username=username).one()
         except NoResultFound:
-            raise InvalidUsernameException("invalid username '{}'".format(username))
+            raise InvalidUsernameException(
+                "invalid username '{}'".format(username))
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
+        # Prevent TOTP token reuse
+        if user.last_token is not None:
+            if pyotp.utils.compare_digest(token, user.last_token):
+                raise BadTokenException("previously used token "
+                                        "{}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid token")
         if not user.valid_password(password):
@@ -367,9 +418,10 @@ class Journalist(Base):
 
 
 class JournalistLoginAttempt(Base):
+
     """This model keeps track of journalist's login attempts so we can
     rate limit them in order to prevent attackers from brute forcing
-    passwords or two factor tokens."""
+    passwords or two-factor tokens."""
     __tablename__ = "journalist_login_attempt"
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)

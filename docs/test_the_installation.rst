@@ -7,18 +7,18 @@ Test connectivity
 SSH to both servers over Tor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the Admin Workstation, you should be able to SSH to the App
-Server and the Monitor Server. ::
+On the *Admin Workstation*, you should be able to SSH to the App
+Server and the *Monitor Server*. ::
 
-   $ ssh app
-   $ ssh mon
+   ssh app
+   ssh mon
 
 The SSH aliases should have been configured automatically by running
-the ``install.sh`` script. If you're unable to connect via aliases,
+the ``./securedrop-admin tailsconfig`` tool. If you're unable to connect via aliases,
 try using the verbose command format to troubleshoot: ::
 
-   $ ssh <username>@<app .onion>
-   $ ssh <username>@<mon .onion>
+   ssh <username>@<app .onion>
+   ssh <username>@<mon .onion>
 
 .. tip:: You can find the Onion URLs for SSH in ``app-ssh-aths`` and
          ``mon-ssh-aths`` inside the ``install_files/ansible-base`` directory.
@@ -27,7 +27,7 @@ Log in to both servers via TTY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All access to the SecureDrop servers should be performed over SSH from the
-Admin Workstation. To aid in troubleshooting, physical logins via TTY are
+*Admin Workstation*. To aid in troubleshooting, physical logins via TTY are
 supported, but require 2FA to be configured. See the :doc:`2FA setup guide
 <google_authenticator>` for information how to enable console logins.
 
@@ -48,13 +48,16 @@ On each server:
 #. Check that you can execute privileged commands by running ``sudo su``.
 #. Verify that you are booted into a grsec kernel: run ``uname -r``
    and verify that the name of the running kernel ends with ``-grsec``.
-#. Check the AppArmor status with ``sudo aa-status``. On a production
-   instance all profiles should be in enforce mode.
 #. Check the current applied iptables rules with ``iptables-save``. It
    should output *approximately* 50 lines.
 #. You should have received an email alert from OSSEC when it first
    started. If not, review our :doc:`OSSEC Alerts
    Guide <ossec_alerts>`.
+
+On the *Application Server*:
+
+#. Check the AppArmor status with ``sudo aa-status``. On a production
+   instance all profiles should be in enforce mode.
 
 Test the web interfaces
 -----------------------
@@ -69,14 +72,14 @@ Test the web interfaces
    - Usage of the Source Interface is covered by our :doc:`Source User
      Manual <source>`.
 
-#. Test that you can access the Document Interface, and that you can log
+#. Test that you can access the Journalist Interface, and that you can log
    in as the admin user you just created.
 
    - Open the Tor Browser and navigate to the onion URL from
-     app-document-aths. Enter your password and two-factor
+     app-journalist-aths. Enter your password and two-factor
      authentication code to log in.
-   - If you have problems logging in to the Admin/Document Interface,
-     SSH to the App Server and restart the ntp daemon to synchronize
+   - If you have problems logging in to the Admin/Journalist Interface,
+     SSH to the *Application Server* and restart the ntp daemon to synchronize
      the time: ``sudo service ntp restart``. Also check that your
      smartphone's time is accurate and set to network time in its
      device settings.
@@ -85,7 +88,7 @@ Test the web interfaces
 
    - While logged in as an admin, you can send a reply to the test
      source submission you made earlier.
-   - Usage of the Document Interface is covered by our :doc:`Journalist
+   - Usage of the Journalist Interface is covered by our :doc:`Journalist
      User Manual <journalist>`.
 
 #. Test that the source received the reply.
@@ -96,10 +99,10 @@ Test the web interfaces
      is present.
 
 #. We highly recommend that you create persistent bookmarks for the
-   Source and Document Interface addresses within Tor Browser.
+   Source and Journalist Interface addresses within Tor Browser.
 
 #. Remove the test submissions you made prior to putting SecureDrop to
-   real use. On the main Document Interface page, select all sources and
+   real use. On the main Journalist Interface page, select all sources and
    click 'Delete selected'.
 
 Once you've tested the installation and verified that everything is

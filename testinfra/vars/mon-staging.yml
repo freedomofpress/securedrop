@@ -1,0 +1,12 @@
+---
+dns_server: "8.8.8.8"
+
+# Hardcoding the IPv4 addresses will ONLY work with local testing in Vagrant.
+app_ip: 10.0.1.2
+app_hostname: app-staging
+tor_services:
+  - name: ssh
+    ports:
+      - "22" # assumes remote and local ports are identical
+    authenticated: yes # value will automatically be coerced to boolean
+    client: admin

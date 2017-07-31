@@ -1,75 +1,106 @@
-# ignore the external config file that will contain digital ocean api tokens
-snap.rb
-
 # ignore the production config files that don't end in .example
 securedrop-app-conf.yml
 securedrop-mon-conf.yml
+
+# ignore site-specific vars file, since we can't predict contents
+install_files/ansible-base/group_vars/all/site-specific
 
 # ignore securedrop-app-code wheelhouse archive
 wheelhouse
 
 # ignore the ATHS/THS hostname file ansible places
 app-ssh-aths
-app-document-aths
+app-document-aths # leave this here for historic reasons
+app-journalist-aths
 app-source-ths
 mon-ssh-aths
+*.key
+*.csr
+*.pem
+*.crt
 
-# ignore vagrant servet file
-secrets.rb
-
-# ignore the auto generated vagrant ansible inventory files
-vagrant_ansible_inventory*
-
-# ignore some things for the rspec tests
-spec-tests/gems/*
-Gemfile.lock
+# ignore ansible retry files
+*.retry
 
 # ignore "external" Ansible configuration file
 secureDropConf.yml
 
-*.py[cod]
 *.asc
 *.crt
 
 # zipped and deb files
 *.tgz
 *.deb
-# C extensions
-*.so
 *.tar.gz
 
-# Packages
-*.egg
-*.egg-info
-dist
-eggs
-parts
-bin
-sdist
-develop-eggs
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/*.deb
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
 .installed.cfg
-lib
-lib64
+*.egg
 
 # Installer logs
 pip-log.txt
+pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+htmlcov/
+.tox/
 .coverage
-.tox
+.coverage.*
+.cache
 nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
 
 # Translations
 *.mo
+*.pot
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Sphinx documentation
+docs/_build/
+
+# pyenv
+.python-version
+
+# dotenv
+.env
+
+# virtualenv
+.venv/
+venv/
+ENV/
 
 # Vim temp files
 *~
 *.swp
+*.swo
 
 # Functional test logs
 **/ghostdriver.log
@@ -85,3 +116,22 @@ nosetests.xml
 
 # Emacs
 \#*#
+
+# compiled assets
+securedrop/static/gen
+securedrop/static/.webassets-cache
+
+# Ignore .bundle directory added by Vagrant 1.8.0
+# Vagrant adding this directory is a bug, and should be fixed in Vagrant 1.8.1:
+# https://github.com/mitchellh/vagrant/issues/6705
+.bundle
+
+# ignore ansible retry files
+*.retry
+
+# Skip over CI junit files
+junit/
+*results.xml
+
+# Virtualenv on tails
+.venv

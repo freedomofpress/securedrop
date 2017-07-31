@@ -1,74 +1,103 @@
-Generate the SecureDrop Application GPG Key
-===========================================
-
-.. todo:: Tom complained about the name "SecureDrop Application GPG
-          Key". It's verbose, and "application key" is kind of vague
-          (what is its function within the application?). "SecureDrop
-          Submission Key" might be a better name.
+Generate the SecureDrop Submission Key
+======================================
 
 When a document or message is submitted to SecureDrop by a source, it is
-automatically encrypted with the *SecureDrop Application GPG Key*. The
-private part of this key is only stored on the *Secure Viewing Station*
-which is never connected to the Internet. SecureDrop submissions can
-only be decrypted and read on the *Secure Viewing Station*.
+automatically encrypted with the *SecureDrop Submission Key*. The private part
+of this key is only stored on the *Secure Viewing Station* which is never
+connected to the Internet. SecureDrop submissions can only be decrypted and
+read on the *Secure Viewing Station*.
 
-We will now generate the *SecureDrop Application GPG Key* on the
-*Secure Viewing Station*.
+We will now prepare the *Secure Viewing Station* and generate the *SecureDrop
+Submission Key*.
+
+Ensure Filenames are Preserved
+------------------------------
+
+In order to preserve filenames when you decrypt submissions, on each *Secure
+Viewing Station*, you should open a **Terminal** and type the following commands:
+
+.. code:: sh
+
+  cd /live/persistence/TailsData_unlocked/dotfiles
+  cp ~/.bashrc .
+  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
+
+.. note:: This only needs to be done once on each *Secure Viewing Station*.
+          After a reboot it will persist.
 
 Correct the system time
 -----------------------
 
 After booting up Tails on the *Secure Viewing Station*, you will need to
-manually set the system time before you create the *SecureDrop
-Application GPG Key*. To set the system time:
+manually set the system time before you create the *SecureDrop Submission
+Key*. Be sure to enable admin privileges before you do this. In Tails 3.x, you
+enable admin privileges by clicking the **+** button under **Additional
+Settings**, then navigating to **Administration Password**. Enter an
+administration password and then click **Start Tails**.
 
-#. Right-click the time in the top menu bar and select *Adjust Date &
-   Time.*
-#. Click *Unlock* in the top-right corner of the dialog window and enter
-   your temporary Tails administration password.
+To set the system time:
+
+#. Click the upper right down arrow in the menu bar and select the wrench icon:
+   |select settings|
+#. Then click **Date & Time**.
+#. Click **Unlock**. Type in the administrator password you set when you
+   started up Tails.
 #. Set the correct time, region and city.
-#. Click *Lock*, enter your temporary Tails administration password one
-   more time and wait for the system time to update in the top panel.
+#. Click **Lock**, exit Settings and wait for the system time to update in the
+   top panel.
 
 Once that's done, follow the steps below to create the key.
 
 Create the key
 --------------
 
--  Open a terminal |Terminal| and run ``gpg --gen-key``
--  When it says *Please select what kind of key you want*, choose
-   *(1) RSA and RSA (default)*.
--  When it asks *What keysize do you want?*, type ``4096``.
--  When it asks *Key is valid for?*, press Enter to keep the default.
--  When it asks *Is this correct?*, verify that you've entered
-   everything correctly so far, then type ``y``.
--  For *Real name*, type: ``SecureDrop``
--  For *Email address*, leave the field blank and press Enter
--  For *Comment*, type
-   ``[Your Organization's Name] SecureDrop Application GPG Key``
--  Verify that everything is correct so far, then type ``o`` for
-   ``(O)kay``
--  It will pop up a box asking you to type a passphrase, but it's safe
-   to click okay without typing one. The key is protected by the
-   encryption on the Tails persistent volume.
--  Wait for your GPG key to finish generating
+#. Navigate to **Applications ▸ Terminal** to open a terminal |Terminal|.
+#. In the terminal, run ``gpg --full-generate-key``:
 
-To manage GPG keys using the graphical interface (a program called
-Seahorse), click the clipboard icon |gpgApplet| in the top right corner
-and select "Manage Keys". You should see the key that you just generated
-under "GnuPG Keys."
+   |GPG generate key|
+
+#. When it says **Please select what kind of key you want**, choose "*(1) RSA
+   and RSA (default)*".
+#. When it asks **What keysize do you want?**, type ``4096``.
+#. When it asks **Key is valid for?**, press Enter. This means your key does
+   not expire.
+#. It will let you know that this means the key does not expire at all and ask
+   for confirmation. Type **y** and hit Enter to confirm.
+
+   |GPG key options|
+
+#. Next it will prompt you for user ID setup. Use the following options:
+     - **Real name**: "SecureDrop"
+     - **Email address**: leave this field blank
+     - **Comment**: ``[Your Organization's Name] SecureDrop Submission Key``
+
+#. GPG will confirm these options. Verify that everything is written correctly.
+   Then type ``O`` for ``(O)kay`` and hit enter to continue:
+
+   |OK to generate|
+
+#. A box will pop up (twice) asking you to type a passphrase. Since the key is
+   protected by the encryption on the Tails persistent volume, it is safe to
+   simply click **OK** without entering a passphrase.
+#. The software will ask you if you are sure. Click **Yes, protection is not
+   needed**.
+#. Wait for the key to finish generating.
+
+Export the public key
+---------------------
+
+To manage GPG keys using the graphical interface (a program called Seahorse),
+click the clipboard icon |gpgApplet| in the top right corner and select
+"Manage Keys". Click "GnuPG keys" and you should see the key that you just
+generated.
 
 |My Keys|
 
-Select the key you just generated and click "File" then "Export". Save
-the key to the *Transfer Device* as ``SecureDrop.pgp``, and make sure
-you change the file type from "PGP keys" to "Armored PGP keys" which can
-be switched right above the 'Export' button. Click the 'Export' button
-after switching to armored keys.
-
-.. todo:: I would prefer a filename of ``SecureDrop.pub.asc``, as that
-          explicitly denotes the file is a public key and is
-          ASCII-armored.
+#. Select the key you just generated and click "File" then "Export".
+#. Save the key to the *Transfer Device* as ``SecureDrop.pub.asc``, and make
+   sure you change the file type from "PGP keys" to "Armored PGP keys" which
+   can be switched at the bottom of the Save window. Click the 'Export' button
+   after switching to armored keys.
 
 .. note:: This is the public key only.
 
@@ -76,54 +105,27 @@ after switching to armored keys.
 
 |Export Key 2|
 
-.. todo:: The screenshot shows them saving the public key with a
-          filename of ``SecureDrop.asc``. The screenshot should be
-          consistent with the recommendations in the text of the docs.
-
 You'll need to provide the fingerprint of this new key during the
-installation.  Double-click on the newly generated key and change to
-the *Details* tab. Write down the 40 hexadecimal digits under
-*Fingerprint*.
+installation.  Double-click on the newly generated key and change to the
+*Details* tab. Write down the 40 hexadecimal digits under *Fingerprint*.
 
 |Fingerprint|
 
-.. note:: Your fingerprint will be different from the one in the
-          example screenshot.
+.. note:: Your fingerprint will be different from the one in the example
+          screenshot.
 
-Import GPG keys for journalists with access to SecureDrop
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+At this point, you are done with the *Secure Viewing Station* for now. You
+can shut down Tails, grab the *admin Tails USB* and move over to your regular
+workstation.
 
-.. todo:: This is the wrong place for this. The first phase of the
-          documentation should be focused just on installing
-          SecureDrop. We should have a whole separate section for
-          onboarding journalists.
-
-While working on a story, journalists may need to transfer some
-documents or notes from the *Secure Viewing Station* to the journalist's
-work computer on the corporate network. To do this, the journalists
-should re-encrypt them with their own keys. If a journalist does not
-already have a personal GPG key, they can follow the same steps
-above to create one. The journalist should store the private key
-somewhere safe; the public key should be stored on the *Secure Viewing
-Station*.
-
-If the journalist does have a key, transfer their public key from
-wherever it is located to the *Secure Viewing Station*, using the
-*Transfer Device*. Open the file manager |Nautilus| and double-click on
-the public key to import it. If the public key is not importing, rename
-the file to end in ".asc" and try again.
-
-|Importing Journalist GPG Keys|
-
-At this point, you are done with the *Secure Viewing Station* for now.
-You can shut down Tails, grab the *admin Tails USB* and move over to
-your regular workstation.
-
+.. |select settings| image:: images/install/selectsettings.png
+.. |GPG generate key| image:: images/install/run_gpg_gen_key.png
+.. |GPG key options| image:: images/install/key_options.png
+.. |OK to generate| image:: images/install/ok_to_generate.png
 .. |gpgApplet| image:: images/gpgapplet.png
 .. |My Keys| image:: images/install/keyring.png
 .. |Export Key| image:: images/install/exportkey.png
 .. |Export Key 2| image:: images/install/exportkey2.png
 .. |Fingerprint| image:: images/install/fingerprint.png
 .. |Nautilus| image:: images/nautilus.png
-.. |Importing Journalist GPG Keys| image:: images/install/importkey.png
 .. |Terminal| image:: images/terminal.png

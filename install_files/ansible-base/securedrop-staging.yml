@@ -1,108 +1,50 @@
+#!/usr/bin/env ansible-playbook
 ---
-- hosts: [ 'mon-staging', 'app-staging' ]
+  # Staging machines should be provisioned with local code,
+  # rather than pulling down stable releases from the app code.
+  # Therefore build the local debs before provisioning the staging hosts.
+- include: build-deb-pkgs.yml
+  tags: build_debs
 
-  vars_files:
-    - group_vars/securedrop.yml
-    - staging-specific.yml
+- name: Add FPF apt repository and install base packages.
+  hosts: staging
+  pre_tasks:
+    - name: Extract ec2 vars when in AWS
+      ec2_facts:
+      when: amazon_builder
 
+    - name: Set remote host for any reboot tasks under AWS
+      set_fact:
+        remote_host_ref: "{{ ansible_ec2_public_hostname }}"
+      when: amazon_builder
   roles:
-    - { role: install_fpf_repo, tags: [ 'fpf_repo' ] }
-    - { role: common, tags: [ 'common' ] }
-
+    - { role: common, tags: common }
+    - { role: tor-hidden-services, tags: tor }
+    - { role: install-fpf-repo, tags: [fpfrepo] }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+    - { role: install-local-packages, tags: [install_local_packages, rebuild],
+        when: install_local_packages }
   sudo: yes
 
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
+- name: Configure OSSEC manager.
+  hosts: mon-staging
   roles:
-    - { role: common-mon, tags: [ 'tor' ] }
-    # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
-    - ossec_server
-
+    - { role: ossec-server, tags: [ ossec, ossec_server ] }
   sudo: yes
 
-- hosts: [ 'app-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - staging-specific.yml
-
+- name: Configure SecureDrop Application Server.
+  hosts: app-staging
   roles:
-    # The common-app role should be renamed.
-    # It installs tor. Tor is required to be installed prior to the securedrop
-    # app-code package which contains an apparmor profile that depends on tor
-    # being present.
-    - { role: common-app, tags: [ 'tor' ] }
-    # this is a staging only role
-    - { role: install_local_pkgs, tags: [ 'install_local_pkgs' ] }
-    - { role: ossec_agent, tags: [ 'ossec' ] }
-    - app
-    - { role: app-test, tags: [ 'app-test' ] }
-
+    - { role: ossec-agent, tags: [ ossec, ossec_agent ] }
+    - { role: app, tags: app }
+    - { role: app-test, tags: app-test }
   sudo: yes
 
-  # If the OSSEC authd iptables rule exemptions are in place remove them and
-  # restart OSSEC. For the ossec agent the exemptions are removed as part of
-  # the authd role, in order to allow all agents to connect to the ossec server
-  # before killing authd and removing the ossec rules. This is a separate role for
-  # the ossec server. The order of events does matter: the monitor server authd
-  # service needs to be listening and reachable, then agent needs to connect to
-  # ossec server, agent needs to restart, then ossec server exemptions can be
-  # removed and the ossec server process can restart.
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
+  # Set iptables rules with exemptions for staging that permit direct access for SSH.
+  # The overrides that permit direct access are managed in group_vars/staging.yml,
+  # and default false in production environments, in order to force SSH traffic over Tor.
+- name: Configure host firewalls (with direct access for staging).
+  hosts: staging
   roles:
-    - { role: remove_authd_exemptions, tags: [ 'ossec' ] }
-
-  sudo: yes
-
-  # This section will put the ssh and iptables rules in place
-  # It will then add any staging exemptions required
-  # at the end of each host section is when the handlers are run.
-  # So iptables will not be reloaded until the exemptions are applied
-  # for production the last task is apply iptables. This will break their
-  # connection. After that point the admin will to proxy traffic over tor.
-- hosts: [ 'app-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/app.yml
-    - staging-specific.yml
-
-  roles:
-    - role: backup
-      # By default backups will NOT run, since they can claim a substantial
-      # amount of disk space. Enable backups explicitly via a backup var, or
-      # implicitly if performing a restore.
-      when: (perform_backup is defined and perform_backup == true) or
-            (restore_file is defined and restore_file != '')
-      tags: backup
-
-    - { role: restrict_direct_access_app, tags: [ 'common' ] }
-    - { role: allow_direct_access, tags: [ 'common' ] }
-
-  sudo: yes
-
-- hosts: [ 'mon-staging' ]
-
-  vars_files:
-    - group_vars/securedrop.yml
-    - host_vars/mon.yml
-    - staging-specific.yml
-
-  roles:
-    - { role: restrict_direct_access_mon, tags: [ 'common' ] }
-    - { role: allow_direct_access, tags: [ 'common' ] }
-
+    - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
   sudo: yes

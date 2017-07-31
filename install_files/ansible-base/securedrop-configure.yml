@@ -1,0 +1,192 @@
+---
+- name: Display message about upcoming interactive prompts.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - debug:
+        msg: >-
+          You will need to fill out the following prompts in order
+          to configure your SecureDrop instance. After entering
+          all prompts, the variables will be validated and any
+          failures displayed. See the docs for more information
+          https://docs.securedrop.org/en/stable
+
+- name: Prompt for required site-specific information.
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_prompt:
+    - name: ssh_users
+      prompt: Username for SSH access to the servers
+      default: sd
+      private: no
+
+    - name: app_ip
+      prompt: Local IPv4 address for the Application Server
+      default: "10.20.2.2"
+      private: no
+
+    - name: monitor_ip
+      prompt: Local IPv4 address for the Monitor Server
+      default: "10.20.3.2"
+      private: no
+
+    - name: app_hostname
+      prompt: Hostname for Application Server.
+      default: app
+      private: no
+
+    - name: monitor_hostname
+      prompt: Hostname for Monitor Server.
+      default: mon
+      private: no
+
+    - name: dns_server
+      prompt: DNS server specified during installation.
+      default: "8.8.8.8"
+      private: no
+
+    - name: securedrop_header_image
+      prompt: >-
+        Local filepath to your organization's logo,
+        to be displayed on the Source Interface
+      private: no
+      # Default must be empty string, since "None" will be interpreted
+      # as filepath, causing app role to fail.
+      default: ""
+
+    - name: securedrop_app_gpg_public_key
+      prompt: Local filepath to public key for SecureDrop Application GPG public key
+      default: SecureDrop.asc
+      private: no
+
+    - name: securedrop_app_https_on_source_interface
+      prompt: Whether HTTPS should be enabled on Source Interface (requires EV cert)
+      default: "no"
+      private: no
+
+    - name: securedrop_app_gpg_fingerprint
+      prompt: Full fingerprint for the SecureDrop Application GPG Key
+      default: ' '
+      private: no
+
+    - name: ossec_alert_gpg_public_key
+      prompt: Local filepath to OSSEC alerts GPG public key
+      default: ossec.pub
+      private: no
+
+    - name: ossec_gpg_fpr
+      prompt: Full fingerprint for the OSSEC alerts GPG public key
+      default: ' '
+      private: no
+
+    - name: ossec_alert_email
+      prompt: Admin email address for receiving OSSEC alerts
+      private: no
+
+    - name: smtp_relay
+      prompt: SMTP relay for sending OSSEC alerts
+      default: "smtp.gmail.com"
+      private: no
+
+    - name: smtp_relay_port
+      prompt: SMTP port for sending OSSEC alerts
+      default: "587"
+      private: no
+
+    - name: sasl_domain
+      prompt: SASL domain for sending OSSEC alerts
+      default: "gmail.com"
+      private: no
+
+    - name: sasl_username
+      prompt: SASL username for sending OSSEC alerts
+      default: ""
+      private: no
+
+    - name: sasl_password
+      prompt: SASL password for sending OSSEC alerts
+      default: ""
+      private: yes
+
+  pre_tasks:
+    - debug:
+        msg: >-
+          Validating user-entered variables...
+
+  tasks:
+    - name: Create group_vars/all/ directory.
+      file:
+        state: directory
+        dest: "{{ playbook_dir }}/group_vars/all/"
+
+    - name: Initialize site-specific vars file.
+      copy:
+        content: "---"
+        force: no
+        dest: "{{ playbook_dir }}/group_vars/all/site-specific"
+
+    - name: Save site-specific information as local vars file.
+      lineinfile:
+        regexp: "^{{ item.var_name }}:"
+        line: "{{ item.var_name }}: {{ item.var_value }}"
+        dest: "{{ playbook_dir }}/group_vars/all/site-specific"
+        create: yes
+      # Don't erase variables if undefined in this playbook. The validate role
+      # will handle ensuring proper definitions.
+      when: item.var_value is defined and item.var_value != ""
+      # Non-DRY approach to looping over all vars, but helps to ensure that we
+      # don't clobber site-specific customizations made by an Admin.
+      with_items:
+        - var_name: ssh_users
+          var_value: "{{ ssh_users }}"
+        - var_name: app_ip
+          var_value: "{{ app_ip }}"
+        - var_name: monitor_ip
+          var_value: "{{ monitor_ip }}"
+        - var_name: app_hostname
+          var_value: "{{ app_hostname }}"
+        - var_name: monitor_hostname
+          var_value: "{{ monitor_hostname }}"
+        - var_name: dns_server
+          var_value: "{{ dns_server }}"
+        - var_name: securedrop_header_image
+          var_value: "{{ securedrop_header_image }}"
+        - var_name: securedrop_app_gpg_public_key
+          var_value: "{{ securedrop_app_gpg_public_key }}"
+        - var_name: securedrop_app_gpg_fingerprint
+          var_value: "{{ securedrop_app_gpg_fingerprint }}"
+        - var_name: ossec_alert_gpg_public_key
+          var_value: "{{ ossec_alert_gpg_public_key }}"
+        - var_name: ossec_gpg_fpr
+          var_value: "{{ ossec_gpg_fpr }}"
+        - var_name: ossec_alert_email
+          var_value: "{{ ossec_alert_email }}"
+        - var_name: smtp_relay
+          var_value: "{{ smtp_relay }}"
+        - var_name: smtp_relay_port
+          var_value: "{{ smtp_relay_port }}"
+        - var_name: sasl_domain
+          var_value: "{{ sasl_domain }}"
+        - var_name: sasl_username
+          var_value: "{{ sasl_username }}"
+        - var_name: sasl_password
+          var_value: "{{ sasl_password }}"
+        - var_name: securedrop_app_https_on_source_interface
+          var_value: "{{ securedrop_app_https_on_source_interface | bool}}"
+
+- name: Validate site-specific information.
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  pre_tasks:
+    # Use a first-found loop to avoid erroring out if the vars file doesn't
+    # exist when the playbook is invoked, which is true on first run.
+    - name: Include site-specific vars.
+      include_vars: "{{ item }}"
+      with_first_found:
+        - group_vars/all/site-specific
+  roles:
+    - role: validate
+      tags: validate

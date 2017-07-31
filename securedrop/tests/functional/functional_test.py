@@ -1,31 +1,33 @@
-import unittest
-from selenium import webdriver
-from selenium.webdriver.firefox import firefox_binary
-from selenium.common.exceptions import WebDriverException
-from multiprocessing import Process
-import socket
-import shutil
-import os
-import gnupg
-import urllib2
-import sys
+# -*- coding: utf-8 -*-
 
-
-import config
-
-import source
-import journalist
-from tests import common
-import urllib2
-
-import signal
-import traceback
 from datetime import datetime
-import time
 import mock
+from multiprocessing import Process
+import os
+from os.path import abspath, dirname, join, realpath
+import shutil
+import signal
+import socket
+import sys
+import time
+import traceback
+import unittest
+import urllib2
+
+from Crypto import Random
+import gnupg
+from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.firefox import firefox_binary
 
 os.environ['SECUREDROP_ENV'] = 'test'
+import config
+import db
+import journalist
+import source
+import tests.utils.env as env
 
+LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
 
 class FunctionalTest():
 
@@ -37,8 +39,10 @@ class FunctionalTest():
         return port
 
     def _create_webdriver(self):
-        log_file = open('tests/log/firefox.log', 'a')
-        log_file.write('\n\n[%s] Running Functional Tests\n' % str(datetime.now()))
+        log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
+        log_file.write(
+            '\n\n[%s] Running Functional Tests\n' % str(
+                datetime.now()))
         log_file.flush()
         firefox = firefox_binary.FirefoxBinary(log_file=log_file)
         return webdriver.Firefox(firefox_binary=firefox)
@@ -52,9 +56,9 @@ class FunctionalTest():
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
 
-        common.create_directories()
-        self.gpg = common.init_gpg()
-        common.init_db()
+        env.create_directories()
+        self.gpg = env.init_gpg()
+        db.init_db()
 
         source_port = self._unused_port()
         journalist_port = self._unused_port()
@@ -63,10 +67,26 @@ class FunctionalTest():
         self.journalist_location = "http://localhost:%d" % journalist_port
 
         def start_source_server():
-            source.app.run(port=source_port, debug=True, use_reloader=False)
+            # We call Random.atfork() here because we fork the source and
+            # journalist server from the main Python process we use to drive
+            # our browser with multiprocessing.Process() below. These child
+            # processes inherit the same RNG state as the parent process, which
+            # is a problem because they would produce identical output if we
+            # didn't re-seed them after forking.
+            Random.atfork()
+            source.app.run(
+                port=source_port,
+                debug=True,
+                use_reloader=False,
+                threaded=True)
 
         def start_journalist_server():
-            journalist.app.run(port=journalist_port, debug=True, use_reloader=False)
+            Random.atfork()
+            journalist.app.run(
+                port=journalist_port,
+                debug=True,
+                use_reloader=False,
+                threaded=True)
 
         self.source_process = Process(target=start_source_server)
         self.journalist_process = Process(target=start_journalist_server)
@@ -89,14 +109,15 @@ class FunctionalTest():
         self.secret_message = 'blah blah blah'
 
     def tearDown(self):
-        common.clean_root()
+        env.teardown()
         self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
 
     def wait_for(self, function_with_assertion, timeout=5):
         """Polling wait for an arbitrary assertion."""
-        # Thanks to http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
+        # Thanks to
+        # http://chimera.labs.oreilly.com/books/1234000000754/ch20.html#_a_common_selenium_problem_race_conditions
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:

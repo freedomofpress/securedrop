@@ -1,17 +1,54 @@
 ---
-- name: update apt package lists
-  apt: update_cache=yes
-
-- name: install apt package deps for dev environment
-  apt: pkg="{{ item }}" state=latest
-  with_items: dev_deps
-
-- name: install pip dependencies for securedrop
-  pip: requirements="{{ securedrop_pip_requirements }}"
-
-- name: set SECUREDROP_ENV in bashrc
-  lineinfile:
-    dest: /home/{{ securedrop_user }}/.bashrc
+- name: Install apt package dependencies for Development environment.
+  apt:
+    name: "{{ item }}"
     state: present
-    insertafter: EOF
-    line: "export SECUREDROP_ENV=dev"
+  with_items: "{{ development_dependencies }}"
+  tags:
+    - apt
+    - development
+
+- name: Install pip dependencies for SecureDrop.
+  pip:
+    requirements: "{{ securedrop_pip_requirements }}"
+  tags:
+    - pip
+    - development
+
+- name: Install sass Ruby gem
+  gem:
+    name: sass
+    version: "{{ securedrop_sass_ver }}"
+    user_install: no
+  sudo: yes
+  tags:
+    - development
+
+# necessary for automated tests
+- name: Compile sass to css
+  shell: >
+    if [ -d /home/travis ]; then
+      /home/travis/.rvm/bin/rvm install {{ securedrop_rvm_ver }} &&
+      /home/travis/.rvm/bin/rvm use {{ securedrop_rvm_ver }} &&
+      gem install sass -v {{ securedrop_sass_ver }} &&
+      $(find /home/travis/.rvm -name sass | grep /wrappers/sass | head -1) --update sass:static/css
+    else
+      sass --update sass:static/css
+    fi
+  args:
+    chdir: '{{ securedrop_repo  }}/securedrop'
+  register: dev_sass_compile_result
+  # Any changed files will be printed to stdout; use that to detect whether
+  # the files have changed.
+  changed_when: "'write ' in dev_sass_compile_result.stdout"
+  tags:
+    - development
+
+# Setting at the system-wide level to apply to all users.
+- name: Set SECUREDROP_ENV in bashrc.
+  copy:
+    dest: /etc/profile.d/securedrop_env.sh
+    content: "export SECUREDROP_ENV=dev"
+  tags:
+    - environment
+    - development

@@ -1,18 +1,3 @@
-// Warn about using Javascript
-$(function(){
-  $('.warning').show();
-  $('#warning-close').click(function(){
-    $('.warning').hide(200);
-  });
-});
-
-// Customized, super-easy instructions for disabling JS in TBB
-var TBB_UAS = [
-  "Mozilla/5.0 (Windows NT 6.1; rv:10.0) Gecko/20100101 Firefox/10.0",
-  "Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0",
-  "Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0",
-];
-
 var TBB_UA_REGEX = /Mozilla\/5\.0 \(Windows NT 6\.1; rv:[0-9]{2}\.0\) Gecko\/20100101 Firefox\/([0-9]{2})\.0/;
 
 function is_likely_tor_browser() {
@@ -27,19 +12,46 @@ function tbb_version() {
   return Number(major_version);
 }
 
-$(function() {
+// Warn about using Javascript and not using Tor Browser
+$(function(){
   if (is_likely_tor_browser()) {
-    $("a#disable-js").click(function() {
-      // Toggle the bubble if it already exists
-      var infoBubble = $("div.bubble");
-      if (tbb_version() >= 31) {
-        infoBubble.addClass("tbb31plus");
-      }
-      infoBubble.fadeIn(500);
-      infoBubble.click(function() {
-        infoBubble.toggle();
-      });
+    // If the source is using Tor Browser, we want to encourage them to turn Tor
+    // Browser's Security Slider to "High", which enables various hardening
+    // methods, including disabling Javascript. Since JS is disabled by turning
+    // the Security Slider to "High", this code only runs if it set to another
+    // (less hardened) setting.
+    $('.js-warning').show();
+    $('#js-warning-close').click(function(){
+      $('.js-warning').hide(200);
+    });
+
+    // Display a friendly bubble with step-by-step instructions on how to turn
+    // the security slider to High.
+    var infoBubble = $('#security-slider-info-bubble');
+    var fadeDuration = 500; // milliseconds
+
+    $('#disable-js').click(function() {
+      infoBubble.fadeIn(fadeDuration);
       return false; // don't follow link
+    });
+
+    // If the user clicks outside of the infoBubble while it is visible, hide it.
+    $(window).click(function() {
+      if (infoBubble.is(':visible')) {
+        infoBubble.fadeOut(fadeDuration);
+      }
+    });
+
+    // If the user clicks inside the infoBubble while it is visible, make sure
+    // it stays visible.
+    infoBubble.click(function(e) {
+      e.stopPropagation();
+    });
+  } else {
+    // If the user is not using Tor Browser, we want to encourage them to do so.
+    $('.use-tor-browser').show();
+    $('#use-tor-browser-close').click(function(){
+      $('.use-tor-browser').hide(200);
     });
   }
 });

@@ -7,9 +7,9 @@ Setting up OSSEC alerts
 OSSEC is an open source host-based intrusion detection system (IDS) that
 we use to perform log analysis, file integrity checking, policy
 monitoring, rootkit detection and real-time alerting. It is installed on
-the Monitor Server and constitutes that machine's main function. OSSEC
+the *Monitor Server* and constitutes that machine's main function. OSSEC
 works in a server-agent scheme, that is, the OSSEC server extends its
-existing functions to the App Server through an agent installed on that
+existing functions to the *Application Server* through an agent installed on that
 server, covering monitoring for both machines.
 
 In order to receive email alerts from OSSEC, you need to supply several
@@ -17,8 +17,8 @@ settings to Ansible in the playbook for your environment. If you don't
 already have a working mail server or don't know what to do, then see
 the section below about using Gmail as a fallback option. We assume that
 you're working out of the 'securedrop' directory you cloned the code
-into, and editing install\_files/ansible-base/prod-specific.yml prior to
-installing SecureDrop.
+into, and editing ``install_files/ansible-base/group_vars/all/site-specific``
+prior to installing SecureDrop.
 
 What you need:
 
@@ -47,7 +47,10 @@ The SMTP relay that you use should support SASL authentication and SMTP
 TLS protocols TLSv1.2, TLSv1.1, and TLSv1. Most enterprise email
 solutions should be able to meet those requirements.
 
-These are the values you must specify in ``prod-specific.yml``:
+Below are the values you must specify in to configure OSSEC correctly.
+For first-time installs, you can use the
+:ref:`configuration playbook<configure_securedrop>`, or edit
+``install_files/ansible-base/group_vars/all/site-specific`` manually.
 
 - GPG public key used to encrypt OSSEC alerts:
   ``ossec_alert_gpg_public_key``
@@ -77,15 +80,16 @@ different from the ``sasl_domain``, e.g. smtp.gmail.com and gmail.com.
 
 In some cases, authentication or transport encryption mechanisms will
 vary and you may require later edits to the Postfix configuration
-(mainly /etc/postfix/main.cf) on the Monitor Server in order to get
+(mainly /etc/postfix/main.cf) on the *Monitor Server* in order to get
 alerts to work. You can consult `Postfix's official
 documentation <http://www.postfix.org/documentation.html>`__ for help,
-although we've described some common scenarios in the 
-:ref:`troubleshooting section <Troubleshooting>` of this document.
+although we've described some common scenarios in the
+:ref:`troubleshooting section <troubleshooting_ossec>`.
 
 If you have your GPG public key handy, copy it to
-install\_files/ansible-base and then specify the filename in the
-``ossec_alert_gpg_public_key`` line of prod-specific.yml.
+``install_files/ansible-base`` and then specify the filename, e.g.
+``ossec.pub``, in the ``ossec_alert_gpg_public_key`` line of
+``group_vars/all/site-specific``.
 
 If you don't have your GPG key ready, you can run GnuPG on the command line in
 order to find, import, and export your public key. It's best to copy the key
@@ -151,7 +155,7 @@ requires both a valid certificate and STARTTLS support on the SMTP
 relay. By default the system CAs will be used for validating the relay
 certificate. If you need to provide a custom CA to perform the
 validation, copy the cert file to ``install_files/ansible-base`` add a
-new variable to ``prod-specific.yml``: ::
+new variable to ``group_vars/all/site-specific``: ::
 
     smtp_relay_cert_override_file: MyOrg.crt
 
@@ -159,8 +163,8 @@ where ``MyOrg.crt`` is the filename. The file will be copied to the
 server in ``/etc/ssl/certs_local`` and the system CAs will be ignored
 when validating the SMTP relay TLS certificate.
 
-Save ``prod-specific.yml``, exit the editor and :ref:`proceed with the
-installation <Run the Ansible playbook>` by running the playbooks.
+Save ``group_vars/all/site-specific``, exit the editor and :ref:`proceed with
+the installation <Install SecureDrop Servers>` by running the playbooks.
 
 Using Gmail for OSSEC alerts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,7 +231,7 @@ following:
 
     6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29
 
-Finally, add a new variable to ``prod-specific.yml`` as
+Finally, add a new variable to ``group_vars/all/site-specific`` as
 ``smtp_relay_fingerprint``, like so: ::
 
     smtp_relay_fingerprint: "6D:87:EE:CB:D0:37:2F:88:B8:29:06:FB:35:F4:65:00:7F:FD:84:29"
@@ -235,11 +239,11 @@ Finally, add a new variable to ``prod-specific.yml`` as
 Specifying the fingerprint will configure Postfix to use it for
 verification on the next playbook run. (To disable fingerprint
 verification, simply delete the variable line you added, and rerun the
-playbooks.) Save ``prod-specific.yml``, exit the editor and :ref:`proceed
-with the installation <Run the Ansible playbook>` by running the
+playbooks.) Save ``group_vars/all/site-specific``, exit the editor and
+:ref:`proceed with the installation <Install SecureDrop Servers>` by running the
 playbooks.
 
-.. _Troubleshooting:
+.. _troubleshooting_ossec:
 
 Troubleshooting
 ---------------
@@ -286,7 +290,7 @@ OSSEC service.
 
 .. tip:: If you change the SMTP relay port after installation for any
          reason, you must update the ``smtp_relay_port`` variable in the
-         ``prod-specific.yml`` file, then rerun the Ansible playbook.
+         ``group_vars/all/site-specific`` file, then rerun the Ansible playbook.
          As a general best practice, we recommend modifying and
          rerunning the Ansible playbook instead of manually editing
          the files live on the servers, since values like ``smtp_relay_port``
@@ -314,11 +318,35 @@ Other log files that may contain useful information:
          security-related information about your organization's
          SecureDrop instance.
 
+Not receiving emails
+~~~~~~~~~~~~~~~~~~~~
+Some mail servers require that the sending email address match the account
+that authenticated to send mail. By default the *Monitor Server* will use
+``ossec@ossec.server`` for the from line, but your mail provider may not support
+the mismatch between the domain of that value and your real mail host.
+If the Admin email address (configured as ``ossec_alert_email`` in
+``group_vars/all/site-specific``) does not start receiving OSSEC alerts updates shortly
+after the first playbook run, try setting ``ossec_from_address`` in
+``group_vars/all/site-specific`` to the full email address used for sending the alerts,
+then run the playbook again.
+
+Message failed to encrypt
+~~~~~~~~~~~~~~~~~~~~~~~~~
+If OSSEC cannot encrypt the alert to the GPG public key for the Admin
+email address (configured as ``ossec_alert_email`` in ``group_vars/all/site-specific``),
+the system will send a static message instead of the scheduled alert:
+
+  Failed to encrypt OSSEC alert. Investigate the mailing configuration on the Monitor Server.
+
+Check the GPG configuration vars in ``group_vars/all/site-specific``. In particular,
+make sure the GPG fingerprint matches that of the public key file you
+exported.
+
 Troubleshooting SMTP TLS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your choice of SMTP relay server must support STARTTLS and have a valid
-server certificate. By default, the Monitor Server's Postfix
+server certificate. By default, the *Monitor Server*'s Postfix
 configuration will try to validate the server certificate using the
 default root store (in Ubuntu, this is maintained in the
 ``ca-certificates`` package). You can override this by setting
@@ -332,7 +360,7 @@ email send failures.
 
 In either case, start by attempting to make a STARTTLS connection to
 your chosen ``smtp_relay:smtp_relay_port`` (get the values from your
-``prod-specific.yml`` file). On a machine running Ubuntu, run the
+``group_vars/all/site-specific`` file). On a machine running Ubuntu, run the
 following ``openssl`` command, replacing ``smtp_relay`` and
 ``smtp_relay_port`` with your specific values: ::
 
@@ -373,7 +401,7 @@ For example, if I'm testing Gmail as my SMTP relay
 store results in ``Verify return code: 0 (ok)`` because their
 certificate is valid and signed by one of the roots in the default
 store. This indicates that can be successfully used to securely relay
-email in the default configuration of the Monitor Server.
+email in the default configuration of the *Monitor Server*.
 
 If your SMTP relay server does not successfully verify, you should use
 the return code and its text description to help you diagnose the cause.
@@ -389,7 +417,7 @@ intentionally do not want to use a certificate signed by one of the
 default CA's in Ubuntu, you can still use ``openssl`` to test whether
 you can successfully negotiate a secure connection. Begin by copying
 your certificate file (``smtp_relay_cert_override_file`` from
-``prod-specific.yml``) to the computer you are using for testing. You
+``group_vars/all/site-specific``) to the computer you are using for testing. You
 can use ``-CAfile`` to test if your connection will succeed using your
 custom root certificate: ::
 
@@ -462,7 +490,7 @@ particularly concerning messages with direct investigation.
 Common OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~
 
-The SecureDrop Application and Monitor Servers reboot every night, as part
+The SecureDrop *Application* and *Monitor Servers* reboot every night, as part
 of the unattended upgrades process. When the servers come back up, OSSEC will
 start again and report the change in status. Therefore you should receive an
 email alert every morning containing text similar to: ::
@@ -475,8 +503,44 @@ email alert every morning containing text similar to: ::
 
 This is a normal alert, and informs you that the system is working as expected.
 
+Similarly, your SecureDrop Application and Monitoring Servers will
+check for application updates on your servers. Should your servers require
+updates, OSSEC will alarm because the packages binaries will have changed
+Below is a sample alert, but you may see any number of these records in the
+logs. This will happen in batches so these emails might be longer than the
+below alert. You should also see them in an email named ``Daily Report:
+File Changes``. To verify this activity matches the package history, you
+can review the logs in ``/var/log/apt/history.log``. ::
+
+    Received From: (app)
+    Rule: 2902 fired (level 7) -> "New (Debian Package) installed."
+    Portion of the log(s):
+
+    status installed <package name> <version>
+
+This is a normal alert, it tells you your system is up-to-date and patched.
+
+Occasionally your SecureDrop Servers will send an alert for failing to connect
+to Tor relays. Since SecureDrop runs as a Tor Onion Service, it is possible
+for Tor connections to timeout or become overloaded. ::
+
+    Received From: (app)
+    Rule: 1002 fired (level 2) -> "Unknown problem somewhere in the system."
+    Portion of the log(s):
+
+    [warn] Your Guard <name> ($fingerprint) is failing a very large amount of
+    circuits. Most likely this means the Tor network is overloaded, but it
+    could also mean an attack against you or potentially the guard itself.
+
+This alert is common but if you see them for sustained periods of time (several
+times a day), please contact us at the `SecureDrop Support Portal`_ or at
+securedrop@freedom.press for help.
+
+.. _SecureDrop Support Portal: https://securedrop-support.readthedocs.io/en/latest/
+
 Uncommon OSSEC Alerts
 ~~~~~~~~~~~~~~~~~~~~~
 
 If you believe that the system is behaving abnormally, you should
-contact us at securedrop@freedom.press for help.
+contact us at the `SecureDrop Support Portal`_ or securedrop@freedom.press for
+help.

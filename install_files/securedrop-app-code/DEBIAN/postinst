@@ -22,7 +22,7 @@ case "$1" in
       -r /var/www/securedrop/requirements/securedrop-requirements.txt
 
     chown -R www-data:www-data /var/www/securedrop
-    chown www-data:www-data /var/www/document.wsgi
+    chown www-data:www-data /var/www/journalist.wsgi
     chown www-data:www-data /var/www/source.wsgi
 
     # Apache's default sites are not allowed by the securedrop apparmor profile

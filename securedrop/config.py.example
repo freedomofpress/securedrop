@@ -28,8 +28,6 @@ WORD_LIST = os.path.join(SECUREDROP_ROOT, 'wordlist')
 NOUNS = os.path.join(SECUREDROP_ROOT, 'dictionaries/nouns.txt')
 ADJECTIVES = os.path.join(SECUREDROP_ROOT, './dictionaries/adjectives.txt')
 
-JOURNALIST_PIDFILE = "/tmp/journalist.pid"
-SOURCE_PIDFILE = "/tmp/source.pid"
 WORKER_PIDFILE = "/tmp/securedrop_worker.pid"
 
 # "head -c 32 /dev/urandom | base64" for constructing public ID from source codename
@@ -55,6 +53,9 @@ if env == 'prod':
 elif env == 'dev':
     # Enable Flask's debugger for development
     FlaskConfig.DEBUG = True
+    # Use MAX_CONTENT_LENGTH to mimic the behavior of Apache's LimitRequestBody
+    # in the development environment. See #1714.
+    FlaskConfig.MAX_CONTENT_LENGTH = 524288000
 elif env == 'test':
     FlaskConfig.TESTING = True
     # Disable CSRF checks to make writing tests easier
@@ -82,4 +83,3 @@ TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 # depending on the environment
 DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
-

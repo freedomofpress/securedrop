@@ -40,7 +40,7 @@ def cleanup_deleted_sources(store_dir, c):
     """
     In 0.3pre and 0.3, there were two bugs that could potentially lead
     to the source directory failing to be deleted when a source was
-    deleted from the Document Interface. We clean up these leftover
+    deleted from the Journalist Interface. We clean up these leftover
     directories as part of the migration.
 
     These sources can be identified because they have a source_dir in

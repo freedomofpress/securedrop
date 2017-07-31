@@ -1,0 +1,13 @@
+---
+grsec_sysctl_flags:
+  - name: "kernel.grsecurity.rwxmap_logging"
+    value: "0"
+    # The grsec lock value needs to be the last sysctl flag set or else the
+    # rest will not be applied
+  - name: "kernel.grsecurity.grsec_lock"
+    value: "1"
+    # Stack clash mitigation, increasing main stack gap to 1MB.
+    # Storing as part of grsecurity vars, because sysctl option won't
+    # exist otherwise.
+  - name: "vm.heap_stack_gap"
+    value: "1048576"

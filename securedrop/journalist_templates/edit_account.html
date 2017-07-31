@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block body %}
+
+{% if user %}
+<h1>Edit user "{{ user.username }}"</h1>
+<p><a href="/admin">&laquo; Back to admin interface</a></p>
+{% else %}
+<h1>Edit your account</h1>
+{% endif %}
+
+<form method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+
+  {# Non-admin users are not able to change their own usernames. #}
+  {% if user %}
+  <p>
+    <label for="username">Change username</label>
+    <input name="username" id="username" type="text" placeholder="{{ user.username }}" />
+  </p>
+  {% endif %}
+
+  <p>
+    <label for="password">Change password</label>
+    <input name="password" id="password" type="password" />
+
+    {# While non-admin users can only change their own passwords, admin users
+    can make many other changes, which may exclude password changes. #}
+    {% if user %}
+    <em class="light">Leave blank for no change</em>
+    {% endif %}
+
+  </p>
+  <p>
+    <label for="password_again">Change password (confirm)</label>
+    <input name="password_again" id="password_again" type="password" />
+  </p>
+
+  {# Only admin users may modify the admin status of other users. #}
+  {% if user %}
+  <p>
+    <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
+    <label for="is_admin">Is Administrator</label>
+  </p>
+  {% endif %}
+
+  <button class="sd-button" type="submit" id="update">UPDATE</button>
+</form>
+
+<hr class="no-line">
+
+<h2>Reset Two-Factor Authentication</h2>
+
+{% if user %}
+<p>If a user's two-factor authentication credentials have been lost or
+compromised, you can reset them here. <em>If you do this, make sure the user is
+present and ready to set up their device with the new two-factor credentials.
+Otherwise, they will be locked out of their account.</em></p>
+{% else %}
+<p>If your two-factor authentication credentials have been lost or compromised,
+or you got a new device, you can reset your credentials here. <em>If you do
+this, make sure you are ready to set up your new device, otherwise you will be
+locked out of your account.</em></p>
+{% endif %}
+<p>To reset two-factor authentication for mobile apps such as Google
+Authenticator or FreeOTP, choose the first option. For hardware tokens like the
+Yubikey, choose the second.</p>
+
+{% if user %}
+  {% set totp_reset_url = url_for('admin_reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('admin_reset_two_factor_hotp') %}
+{% else %}
+  {% set totp_reset_url = url_for('account_reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
+{% endif %}
+
+{% macro twofa_reset(user, reset_url, type, button_text) %}
+<form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}">
+  {% if user %}
+  <input name="uid" type="hidden" value="{{ user.id }}"/>
+  {% endif %}
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <button class="sd-button" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
+</form>
+{%- endmacro %}
+
+{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO-FACTOR AUTHENTICATION
+(APP)")}}
+<br />
+{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO-FACTOR AUTHENTICATION
+(HARDWARE TOKEN)")}}
+
+{% endblock %}

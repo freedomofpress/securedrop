@@ -1,46 +1,60 @@
 ---
-- name: install cron-apt to handle unattended security upgrades
-  apt: name=cron-apt state=latest
+- name: Install cron-apt for unattended security upgrades.
+  apt:
+    name: cron-apt
+    state: latest
+  tags:
+    - apt
+    - cron-apt
 
-- name: ensure custom cron-apt config file is present
-  copy: src=cron-apt-config dest=/etc/cron-apt/config
+- name: Copy cron-apt config file.
+  copy:
+    src: cron-apt-config
+    dest: /etc/cron-apt/config
+  tags:
+    - apt
+    - cron-apt
 
-- name: ensure security.list file exists
+- name: Add security.list apt configuration.
   template:
     src: security.list
     dest: /etc/apt/security.list
+  tags:
+    - apt
 
-- name: ensure cron-apt updates the security.list packages
-  copy: src=0-update dest=/etc/cron-apt/action.d/0-update
+- name: Configure cron-apt to update the security.list repos.
+  copy:
+    src: 0-update
+    dest: /etc/cron-apt/action.d/0-update
+  tags:
+    - apt
+    - cron-apt
 
-- name: ensure cron-apt upgrades the secruity.list packages
-  copy: src=5-security dest=/etc/cron-apt/action.d/5-security
+- name: Configure cron-apt to upgrade the packages in the security.list repos.
+  copy:
+    src: 5-security
+    dest: /etc/cron-apt/action.d/5-security
+  tags:
+    - apt
+    - cron-apt
 
   # The default config file would download all security update every night
   # regardless if they were a security update. we only need it download and
   # install the security updates.
-- name: ensure default cron-apt file to download all updates does not exist
-  file: dest=/etc/cron-apt/action.d/3-download state=absent
+- name: Remove default cron-apt config file for downloading all updates.
+  file:
+    dest: /etc/cron-apt/action.d/3-download
+    state: absent
+  tags:
+    - apt
+    - cron-apt
 
-- name: ensure the cron.d config for cron-apt exists
-  copy: src=cron-apt dest=/etc/cron.d/cron-apt mode=644 owner=root
-
-- name: perform safe upgrade to ensure all the packages are updated
-  apt: upgrade=safe
-
-- stat: path=/var/run/reboot-required
-  register: reboot_required
-
-- name: reboot if required due to security updates
-  command: reboot
-  when: reboot_required.stat.exists
-
-- name: waiting for server to come back
-  local_action:
-    module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port }}
-      delay=20
-      state=started
-  when: reboot_required.stat.exists
-  sudo: false
+- name: Create cron job for running cron-apt updates nightly.
+  template:
+    src: cron-apt-cron-job.j2
+    dest: /etc/cron.d/cron-apt
+    mode: "0644"
+    owner: root
+  tags:
+    - apt
+    - cron-apt

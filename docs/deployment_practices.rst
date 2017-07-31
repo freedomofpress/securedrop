@@ -45,10 +45,10 @@ is being monitored would be trivially discovered.
 If the landing page is deployed on the same domain as another site, you
 might consider having some specific configuration (such as the security
 headers below) apply only to the /securedrop request URI. This can be done
-in Apache by the encapsulating these settings within a 
-`<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__ 
-block, which can be defined similarly in nginx by using the 
-`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__ 
+in Apache by the encapsulating these settings within a
+`<Location> <https://httpd.apache.org/docs/2.4/mod/core.html#location>`__
+block, which can be defined similarly in nginx by using the
+`location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
 directive.
 
 **HTTPS only (no mixed content)**
@@ -120,13 +120,15 @@ Most news websites, even those that are non-profits, use 3rd-party
 analytics tools or tracking bugs on their websites. It is vital that
 these are disabled for the SecureDrop landing page.
 
-Both the New Yorker and Forbes were heavily criticized when launching
-their version of SecureDrop because their landing page contained
-trackers. They were claiming they were going to great lengths to protect
-source's anonymity, but by having trackers on their landing page, also
+In the past, some news organizations were heavily criticized when launching
+their SecureDrop instances because their landing page contained
+trackers. They claimed they were going to great lengths to protect
+sources' anonymity, but by having trackers on their landing page, this also
 opened up multiple avenues for third parties to collect information on
 those sources. This information can potentially be accessed by law
 enforcement or intelligence agencies and could unduly expose a source.
+
+Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop landing page. These services intercept requests between a potential source and the SecureDrop landing page and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
 
 **Apply applicable security headers**
 
@@ -151,7 +153,6 @@ If you use Apache, you can use these:
     Header always append X-Frame-Options: DENY
     Header set X-XSS-Protection: "1; mode=block"
     Header set X-Content-Type-Options: nosniff
-    Header set X-Content-Security-Policy: "default-src 'self'"
     Header set X-Download-Options: noopen
     Header set X-Permitted-Cross-Domain-Policies: master-only
     Header set Content-Security-Policy: "default-src 'self'"
@@ -169,7 +170,7 @@ If you intend to run nginx as your webserver instead, this will work:
     add_header Content-Security-Policy "default-src 'self'";
     add_header X-Download-Options: noopen;
     add_header X-Permitted-Cross-Domain-Policies master-only;
-    
+
 
 **Additional Apache configuration**
 
@@ -182,6 +183,12 @@ HTTP (port 80) virtual host:
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
+The same thing can be achieved in nginx with a single line:
+
+::
+
+    return 301 https://$server_name$request_uri;
+
 In your SSL (port 443) virtual host, set up HSTS and use these settings
 to give preference to the most secure cipher suites:
 
@@ -191,7 +198,7 @@ to give preference to the most secure cipher suites:
     SSLProtocol all -SSLv2 -SSLv3
     SSLHonorCipherOrder on
     SSLCompression off
-    SSLCipherSuite EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
 
 Here's a similar example for nginx:
 
@@ -200,13 +207,13 @@ Here's a similar example for nginx:
     add_header Strict-Transport-Security max-age=16070400;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
-    ssl_ciphers "EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5";
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 
-.. note:: We have balanced security and compatibility with legacy clients in
-          selecting these cipher suites, originally based upon `CloudFlare's SSL
-          configuration <https://github.com/cloudflare/sslconfig>`__. For other 
-          examples, check out `Cipherli.st <https://cipherli.st/>`__.
-    
+.. note:: We have prioritized security in selecting these cipher suites, so if
+          you choose to use them then your site might not be compatible with
+          legacy or outdated browsers and operating systems. For a good
+          reference check out `Cipherli.st <https://cipherli.st/>`__.
+
 You'll need to run ``a2enmod headers ssl rewrite`` for all these to
 work. You should also set ``ServerSignature Off`` and
 ``ServerTokens Prod``, typically in /etc/apache2/conf.d/security. For nginx,
@@ -221,7 +228,7 @@ landing page content**
 
 OSSEC is a free and open source host-based intrusion detection suite
 that includes a file integrity monitor. More information can be found
-`here. <https://ossec.net>`__
+`here. <https://ossec.github.io/>`__
 
 **Don't log access to the landing page in the webserver**
 
@@ -271,7 +278,7 @@ the attack surface.
 Minimum requirements for the SecureDrop environment
 ---------------------------------------------------
 
--  The Application and Monitor servers should be dedicated physical
+-  The *Application* and *Monitor Servers* should be dedicated physical
    machines, not virtual machines.
 -  A trusted location to host the servers. The servers should be hosted
    in a location that is owned or occupied by the organization to ensure
@@ -282,10 +289,10 @@ Minimum requirements for the SecureDrop environment
    SecureDrop's point of demarcation.
 -  Video monitoring should be recorded of the server area and the
    organizations safe.
--  Journalist should ensure that while using the air-gapped viewing
+-  Journalists should ensure that while using the air-gapped viewing
    station they are in an area without video cameras.
 -  An established monitoring plan and incident response plan. Who will
-   receive the OSSEC alerts and what their response plan will be? These
+   receive the OSSEC alerts and what will their response plan be? These
    should cover technical outages and a compromised environment plan.
 
 Suggested
@@ -304,12 +311,9 @@ Ideally, some or all of the following changes are made to improve the
 overall security of the path to the landing page and obfuscate traffic
 analysis.
 
-#. Make the entire site available under 'ssl.washingtonpost.com'
-   (ideally without the '.ssl' prefix).
+#. Make your entire site available through HTTPS.
 
-   - That way, the domain won't be as suspicious as it is right now. I
-     suspect that this is more or less the only content hosted on the
-     domain.
+   - That way, visits to your landing page won't stand out as the only encrypted traffic to your site.
 
 #. Include an iframe for all (or a random subset of) visitors, loading
    this particular URL (hidden).

@@ -7,7 +7,9 @@ function enhance_ui() {
   $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
 
   // Add the "select {all,none}" buttons
-  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> select unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
 
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
@@ -20,9 +22,11 @@ $(function () {
 
   var all = $("#select_all");
   var none = $("#select_none");
+  var unread = $("#select_unread");
 
   all.css('cursor', 'pointer');
   none.css('cursor', 'pointer');
+  unread.css('cursor', 'pointer');
 
   all.click(function() {
     var checkboxes = $(":checkbox").filter(":visible");
@@ -32,6 +36,15 @@ $(function () {
     var checkboxes = $(":checkbox").filter(":visible");
     checkboxes.prop('checked', false);
   });
+  unread.click(function() {
+      var checkboxes = document.querySelectorAll(".submission > [type='checkbox']");
+      for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].className.includes("unread-cb"))
+              checkboxes[i].checked = true;
+          else
+              checkboxes[i].checked = false;
+      }
+    });
 
   $("#delete_collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
@@ -86,9 +99,9 @@ $(function () {
       return confirm("Are you sure you want to delete the user " + username + "?");
   });
 
-  // Confirm before resetting two factor authentication on edit user page
+  // Confirm before resetting two-factor authentication on edit user page
   $('form#reset-two-factor').submit(function(event) {
-      return confirm("Are you sure to want to reset this user's two factor authentication?");
+      return confirm("Are you sure to want to reset this user's two-factor authentication?");
   });
 
 });

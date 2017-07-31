@@ -1,0 +1,110 @@
+---
+# By default the role should install the SD app-code package from the repo,
+# but staging hosts will override this setting to prefer locally-built
+# deb packages. Development will also skip entirely.
+securedrop_app_install_from_repo: True
+
+# Whether to configure the Apache service for the application. Required
+# in prod and staging, but not relevant for development.
+securedrop_app_configure_apache: True
+
+# The securedrop_header_image must be in the install_files/ansible-base/
+# directory. Leave set to empty to use the SecureDrop logo.
+securedrop_header_image: ""
+
+# Username for ownership of the app code document root. Permitting override
+# for the development environment, e.g. "vagrant" or "travis".
+securedrop_user: www-data
+
+# Location of the application code on disk. Defaults to Apache-friendly path,
+# but will be overridden in testing and dev environments.
+securedrop_code: /var/www/securedrop
+
+# Location of the application storage on disk, including database.
+securedrop_data: /var/lib/securedrop
+
+# Whether to enable HTTPS on the Source Interface Onion URL. Off by default,
+# because it requires an organization to procure an EV certificate for HTTPS.
+securedrop_app_https_on_source_interface: no
+
+# Interface for Apache to listen on. Since the vhosts are served over Tor
+# as Onion URLs, bind to localhost.
+securedrop_app_apache_listening_address: 127.0.0.1
+securedrop_app_apache_allow_from: 127.0.0.1
+
+# Default values for looking up the certificate files on Admin Workstation.
+# Can be overridden, of course, but simplest if the files are saved
+# with the names below.
+securedrop_app_https_certificate_cert_src: securedrop_source_onion.crt
+securedrop_app_https_certificate_key_src: securedrop_source_onion.key
+securedrop_app_https_certificate_chain_src: DigiCertCA.crt
+
+# List of SSL ciphers honored by Source Interface vhost. Order matters!
+# The `SSLHonorCipherOrder` option is set to true, so ciphers below are
+# listed in order of preference.
+securedrop_app_https_ssl_ciphers:
+  - ECDHE-ECDSA-AES256-GCM-SHA384
+  - ECDHE-RSA-AES256-GCM-SHA384
+  - ECDHE-ECDSA-CHACHA20-POLY1305
+  - ECDHE-RSA-CHACHA20-POLY1305
+  - ECDHE-ECDSA-AES128-GCM-SHA256
+  - ECDHE-RSA-AES128-GCM-SHA256
+  - ECDHE-ECDSA-AES256-SHA384
+  - ECDHE-RSA-AES256-SHA384
+  - ECDHE-ECDSA-AES128-SHA256
+  - ECDHE-RSA-AES128-SHA256
+
+# Apt packages for configuring Apache service.
+apache_packages:
+  - apache2-mpm-worker
+  - libapache2-mod-wsgi
+  - libapache2-mod-xsendfile
+
+apache_templates:
+  - ports.conf
+  - sites-available/journalist.conf
+  - sites-available/source.conf
+
+# Apache modules required for the SecureDrop application. Will be enabled.
+apache_modules:
+  - access_compat
+  - authn_core
+  - alias
+  - authz_core
+  - authz_host
+  - authz_user
+  - deflate
+  - filter
+  - dir
+  - headers
+  - mime
+  - mpm_event
+  - negotiation
+  - reqtimeout
+  - rewrite
+  - ssl
+  - wsgi
+  - xsendfile
+
+# Apache modules prohibited for use with SecureDrop. Will be disabled.
+apache_disabled_modules:
+  - auth_basic
+  - authn_file
+  - autoindex
+  - env
+  - status
+
+# Apt package dependencies for running the SecureDrop application.
+appserver_dependencies:
+  - gnupg2
+  - haveged
+  - python
+  - python-pip
+  - secure-delete
+  - sqlite
+  - apparmor-utils
+  - redis-server
+  - supervisor
+
+# Log file location for worker service, used in supervisor template.
+worker_logs_dir: /var/log/securedrop_worker

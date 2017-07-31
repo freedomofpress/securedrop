@@ -2,19 +2,22 @@
 ## Usage: ./update_version.sh <version>
 
 # Only run this on the Vagrant build VM, with dch and git available
-command -v dch > /dev/null
-dch_installed=$?
-command -v git > /dev/null
-git_installed=$?
-if [ $dch_installed -ne 0 ] || [ $git_installed -ne 0 ]; then
-  echo "You must run this on a system with dch and git available (in order to edit the Debian package changelog and commit message)"
-  echo "If you are on Debian/Ubuntu, apt-get install devscripts git"
+set -e
+
+# Only run this on the Vagrant build VM, with dch and git available
+if [[ "$USER" != 'vagrant' || "$(hostname)" != 'build' ]]; then
+  echo 'Only run this on the Vagrant build VM!'
   exit 1
 fi
 
-set -e
+# Since we're running in a VM, we won't have access to ~/.gitconfig. So the
+# repo-level git user config file must be set.
+if ! grep -q '^\[user\]' /vagrant/.git/config; then
+    echo 'Please set your git user config in /vagrant/.git/config and retry!'
+    exit 1
+fi
 
-NEW_VERSION=$1
+readonly NEW_VERSION=$1
 
 if [ -z "$NEW_VERSION" ]; then
   echo "You must specify the new version!"
@@ -36,14 +39,18 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-os
 sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-keyring/DEBIAN/control
 
 # Update the version used by Ansible for the filename of the output of the deb building role
-sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/securedrop.yml
+sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
+
+# Update the version in testinfra vars
+sed -i "s/$OLD_VERSION/$NEW_VERSION/" testinfra/vars/build.yml
 
 # Update the version that we tell people to check out in the install doc
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
 sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
 
 # Update the changelog
-vi changelog.md
+sed -i 's/\(## '$OLD_VERSION'\)/## '$NEW_VERSION'\n\n\n\n\1/g' changelog.md
+vim +5 changelog.md
 
 export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"

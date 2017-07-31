@@ -5,68 +5,104 @@
   {% include 'flashed.html' %}
 
   {% if flagged and not haskey %}
-  <p class="notification"> <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" width="20px" height="20px">A journalist has been waiting for you to log in again so SecureDrop can generate a crypto key for you. Now that you have logged in, they are able to write you a reply. Check back later for replies.</p>
+    <div class="flash notification">
+      <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
+      <div class="message">
+        <strong>Whew, it’s you! Now, the embarrassing part...</strong></br>
+        <p>Our servers experienced an unusual surge of new activity, when you last visited. This could
+          have been human activity, an automated attack, or just some random blip. To err on the side
+          of caution, we put a hold on sending all documents from that day through to our journalists.</p>
+
+        <p>Now that we know you’re really a human, though, we’ll get your previous submission into the
+          hands of a journalist straight away. We’re sorry for the delay. Please do check back again
+          in a week or so.</p>
+      </div>
+    </div>
   {% endif %}
-
-  <h2 class="headline">Submit documents and messages</h2>
-  <p>You can send a file, a message, or both.</p>
-
-  <hr class="no-line">
 </div>
+
+<h1 class="headline">Submit Materials</h1>
+<p class="explanation">If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
+
+<p class="explanation">You can send a file, a message, or both.</p>
+<hr class="no-line">
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
   <div class="snippet">
     <div class="attachment grid-item center">
-      <img class="center" src="{{ url_for('static', filename='i/font-awesome/upload-large-gray.png') }}">
+      <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
       <input type="file" name="fh" autocomplete="off">
       <p class="center" id="max-file-size">Maximum upload size: 500 MB</p>
     </div>
     <div class="message grid-item">
-      <textarea name="msg" class="fill-parent" placeholder="Add message"></textarea>
+      <textarea name="msg" class="fill-parent" placeholder="Write a message."></textarea>
     </div>
   </div>
 
   <hr class="no-line">
-
-  <button type="submit" class="btn primary" id="submit-doc-button">
-    <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" />
-    <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" />
-    Submit
-  </button>
+  <div class="pull-right">
+    <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
+    <button type="submit" class="sd-button btn primary" id="submit-doc-button">
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px" />
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px" />
+      SUBMIT
+    </button>
+  </div>
 </form>
-
-<p><strong>Tip:</strong> If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="/journalist-key" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop; encrypting before submission provides an extra layer of security before your data reaches SecureDrop. <a href="/why-journalist-key" class="text-link">Learn more</a>.</p>
 
 <hr class="no-line"/>
 
-<h2 class="headline">Replies</h2>
+<h2 class="headline">Get Replies</h2>
 
 <div id="replies">
   {% if replies %}
-    <p>You have received a reply. For your security, please delete all replies when you're done with them. This also lets us know that you have received our reply. You can respond by submitting a new message above.</p>
+    <aside>
+      <p>You have received a reply. To protect your identity in the unlikely event someone learns your codename,
+        please delete all replies when you're done with them. This also lets us know that you have received our reply.
+        You can respond by submitting a new message above.</p>
+    </aside>
     <hr class="no-line">
     {% for reply in replies %}
       <div class="reply">
         <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
-        <form class="message" method="post" action="/delete" autocomplete="off">
-          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off"/>
-          <button type="submit"><img src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px"> Delete</button>
+        <form id="delete" class="message" method="post" action="/delete" autocomplete="off">
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+          <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
+          <a href="#confirm-delete-{{ reply.filename }}" class="delete">
+            <img id="delete-reply-{{ reply.filename }}" src="{{ url_for('static', filename='i/font-awesome/trash-black.png') }}" width="20px" height="20px">
+          </a>
+          <div id="confirm-delete-{{ reply.filename }}" class="confirm-prompt">
+            <p>Delete this reply?
+              <a href="#delete">Cancel</a>
+              <button type="submit" class="sd-button btn danger" id="confirm-delete-reply-button-{{ reply.filename }}">DELETE</button>
+            </p>
+          </div>
         </form>
         <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
         <div class="clearfix"></div>
       </div>
     {% endfor %}
+    <form id="delete-all" method="post" action="/delete-all">
+      <a class="sd-button btn" href="#delete-all-confirm">DELETE ALL REPLIES</a>
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <div id="delete-all-confirm" class="hidden-prompt">
+        <p><strong>Are you finished with the replies?</strong></p>
+        <button class="sd-button danger" type="submit">YES, DELETE ALL REPLIES</button>
+        <a class="sd-button btn cancel" href="#delete-all">NO, NOT YET</a>
+      </div>
+    </form>
   {% else %}
-    <p id="no-replies">There are no replies at this time.</p>
+    <p id="no-replies" class="explanation">There are no replies at this time.</p>
   {% endif %}
 </div>
 
 <hr class="no-line">
 
-<div class="code-reminder">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="20px" height="20px">Remember, your codename is: <strong>{{ codename }}</strong>
+<div class="code-reminder" id="codename-hint">
+  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> Remember your codename is:
+  <div id="show" class="show pull-right"></div>
+  <span id="content" class="codename"><p class="alert">{{ codename }}</p></span>
 </div>
 
 {% endblock %}

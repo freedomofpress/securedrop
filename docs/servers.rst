@@ -13,26 +13,53 @@ Install Ubuntu
   with, but we **strongly** encourage you to read and follow this documentation
   exactly as there are some "gotchas" that may cause your SecureDrop set up to break.
 
-The *Admin Workstation*, running Tails, should be used to download and verify
-Ubuntu Server.  The *Application Server* and the *Monitor Server* specifically
-require the 64-bit version of `Ubuntu Server 14.04.2 LTS (Trusty Tahr)
-<http://old-releases.ubuntu.com/releases/14.04.2/>`__. The image you want to get
-is named ``ubuntu-14.04.2-server-amd64.iso``. In order to verify the
-installation media, you should also download the files named ``SHA256SUMS`` and
-``SHA256SUMS.gpg``.
+The SecureDrop *Application Server* and *Monitor Server* run **Ubuntu Server
+14.04.5 LTS (Trusty Tahr)**. To install Ubuntu on the servers, you must first
+download and verify the Ubuntu installation media. You should use the *Admin
+Workstation* to download and verify the Ubuntu installation media.
 
-.. note:: Downloading Ubuntu over Tails may take a very long time because it's
-          being done over Tor.
+Download the Ubuntu installation media
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The installation media and the files required to verify it are available on the
+`Ubuntu Releases page`_. You will need to download the following files:
+
+* `ubuntu-14.04.5-server-amd64.iso`_
+* `SHA256SUMS`_
+* `SHA256SUMS.gpg`_
+
+If you're reading this documentation in the Tor Browser on the *Admin
+Workstation*, you can just click the links above and follow the prompts to save
+them to your Admin Workstation. We recommend saving them to the
+``/home/amnesia/Persistent/Tor Browser`` directory on the *Admin Workstation*,
+because it can be useful to have a copy of the installation media readily
+available.
+
+Alternatively, you can use the command line:
+
+.. code:: sh
+
+   cd ~/Persistent
+   torify curl -OOO http://releases.ubuntu.com/14.04.5/{ubuntu-14.04.5-server-amd64.iso,SHA256SUMS{,.gpg}}
+
+.. note:: Downloading Ubuntu on the *Admin Workstation* can take a while
+   because Tails does everything over Tor, and Tor is typically slow relative
+   to the speed of your upstream Internet conenction.
+
+.. _Ubuntu Releases page: http://releases.ubuntu.com/
+.. _ubuntu-14.04.5-server-amd64.iso: http://releases.ubuntu.com/14.04.5/ubuntu-14.04.5-server-amd64.iso
+.. _SHA256SUMS: http://releases.ubuntu.com/14.04.5/SHA256SUMS
+.. _SHA256SUMS.gpg: http://releases.ubuntu.com/14.04.5/SHA256SUMS.gpg
 
 Verify the Ubuntu installation media
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First, you should verify the Ubuntu image you downloaded hasn't been modified by
+You should verify the Ubuntu image you downloaded hasn't been modified by
 a malicious attacker or otherwise corrupted. We can do so by checking its
 integrity with cryptographic signatures and hashes.
 
 First, we will download *Ubuntu Image Signing Key* and verify its
-*fingerprint*. ::
+fingerprint. ::
 
     gpg --recv-key "C598 6B4F 1257 FFA8 6632 CBA7 4618 1433 FBB7 5451"
 
@@ -56,13 +83,13 @@ Verify the ``SHA256SUMS`` file and move on to the next step if you see
 
 The next and final step is to verify the Ubuntu image. ::
 
-    sha256sum -c <(grep ubuntu-14.04.2-server-amd64.iso SHA256SUMS)
+    sha256sum -c <(grep ubuntu-14.04.5-server-amd64.iso SHA256SUMS)
 
 
 If the final verification step is successful, you should see the
 following output in your terminal. ::
 
-    ubuntu-14.04.2-server-amd64.iso: OK
+    ubuntu-14.04.5-server-amd64.iso: OK
 
 .. caution:: If you do not see the line above it is not safe to proceed with the
              installation. If this happens, please contact us at
@@ -90,7 +117,7 @@ Ubuntu installer.
 If your USB is mapped to /dev/sdX and you are currently in the directory that
 contains the Ubuntu ISO, you would use dd like so: ::
 
-   sudo dd conv=fdatasync if=ubuntu-14.04.2-server-amd64.iso of=/dev/sdX
+   sudo dd conv=fdatasync if=ubuntu-14.04.5-server-amd64.iso of=/dev/sdX
 
 
 Perform the Installation
@@ -119,7 +146,7 @@ Configure the network manually
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Ubuntu installer will try to autoconfigure networking for the server
-you are setting up; however, SecureDrop 0.3 requires manual network
+you are setting up; however, SecureDrop requires manual network
 configuration. You can hit **Cancel** at any point during network
 autoconfiguration to be given the choice to *Configure the network
 manually*.
@@ -127,7 +154,7 @@ manually*.
 If network autoconfiguration completes before you can do this, the next
 window will ask for your hostname. To get back to the choice of
 configuring the network manually, **Cancel** the step that asks you to
-set a hostname and choose the manu option that says **Configure the
+set a hostname and choose the menu option that says **Configure the
 network manually** instead.
 
 For a production install with a pfSense network firewall in place, the
@@ -137,33 +164,11 @@ the settings you choose are unique on the firewall's network and
 remember to propagate your choices through the rest of the installation
 process.
 
-Below are two configurations you should enter, assuming you used the
-network settings from the network firewall guide. If you did not, adjust
-these settings accordingly.
+Below are the configurations you should enter, assuming you used the
+network settings from the network firewall guide for the recommended 4 NIC
+firewall. If you did not, adjust these settings accordingly.
 
-**3 NIC Firewall**
-
--  **Application Server**:
-
-   -  Server IP address: 10.20.1.2
-   -  Netmask (default is fine): 255.255.255.0
-   -  Gateway: 10.20.1.1
-   -  For DNS, use Google's name servers: 8.8.8.8 and 8.8.4.4
-   -  Hostname: app
-   -  Domain name should be left blank
-
--  **Monitor Server**:
-
-   -  Server IP address: 10.20.2.2
-   -  Netmask (default is fine): 255.255.255.0
-   -  Gateway: 10.20.2.1
-   -  For DNS, use Google's name servers: 8.8.8.8 and 8.8.4.4
-   -  Hostname: mon
-   -  Domain name should be left blank
-
-**4 NIC Firewall**
-
--  **Application Server**:
+-  *Application Server*:
 
   -  Server IP address: 10.20.2.2
   -  Netmask (default is fine): 255.255.255.0
@@ -172,7 +177,7 @@ these settings accordingly.
   -  Hostname: app
   -  Domain name should be left blank
 
--  **Monitor Server**:
+-  *Monitor Server*:
 
   -  Server IP address: 10.20.3.2
   -  Netmask (default is fine): 255.255.255.0
@@ -254,8 +259,10 @@ regular software updates.
           generated by the reboots.
 
 When you get to the software selection screen, only choose **OpenSSH
-server** by hitting the space bar (Note: hitting enter before the space
-bar will force you to start the installation process over).
+server** by hitting the space bar.
+
+.. caution:: Hitting enter before the space bar will force you to start the
+             installation process over.
 
 Once **OpenSSH Server** is selected, hit *Continue*.
 
@@ -265,9 +272,6 @@ When the packages are finished installing, Ubuntu will automatically
 install the bootloader (GRUB). If it asks to install the bootloader to
 the Master Boot Record, choose **Yes**. When everything is done, reboot.
 
-You can now return to where you left off in the main SecureDrop install
-guide :doc:`by clicking here <servers>`.
-
 .. |Ubuntu Server| image:: images/install/ubuntu_server.png
 
 Save the Configurations
@@ -275,8 +279,8 @@ Save the Configurations
 
 When you are done, make sure you save the following information:
 
--  The IP address of the App Server
--  The IP address of the Monitor Server
+-  The IP address of the *Application Server*
+-  The IP address of the *Monitor Server*
 -  The non-root user's name and password for the servers.
 
 Test Connectivity
@@ -317,28 +321,15 @@ First, generate the new SSH keypair:
 
 ::
 
-    $ ssh-keygen -t rsa -b 4096
+    ssh-keygen -t rsa -b 4096
 
-You'll be asked to "enter file in which to save the key." Type
+You'll be asked to "Enter file in which to save the key" Type
 **Enter** to use the default location.
 
-If you choose to passphrase-protect this key, you must use a strong,
-diceword-generated, passphrase that you can manually type (as Tails'
-pinentry will not allow you to copy and paste a passphrase). It is also
-acceptable to leave the passphrase blank in this case.
-
-.. todo:: Not sure if we should encourage people to put a passphrase
-          on this key. It's already on the encrypted persistence of a
-          Tails USB, so by the same logic that we use to justify not
-          passphrase-protecting the GPG key on the SVS, this key
-          should not be passphrase protected either. It also reduces
-          credential juggling and is one less thing to
-          forget/lose/actually be a bad passphrase because we're
-          asking people to keep track of so many of them.
-
-	  I also tend to agree with Joanna Rutkowska that encrypted
-	  private keys are security theater
-	  (http://blog.invisiblethings.org/keys/).
+Given that this key is on the encrypted persistence of a Tails USB,
+you do not need to add an additional passphrase to protect the key.
+If you do elect to use a passphrase, note that you will need to manually
+type it (Tails' pinentry will not allow you to copy and paste a passphrase).
 
 Once the key has finished generating, you need to copy the public key
 to both servers. Use ``ssh-copy-id`` to copy the public key to each
@@ -346,8 +337,8 @@ server, authenticating with your password:
 
 .. code:: sh
 
-    $ ssh-copy-id <username>@<App IP address>
-    $ ssh-copy-id <username>@<Mon IP address>
+    ssh-copy-id <username>@<App IP address>
+    ssh-copy-id <username>@<Mon IP address>
 
 Verify that you are able to authenticate to both servers by running
 the below commands. You should not be prompted for a passphrase

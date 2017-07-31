@@ -1,45 +1,50 @@
 ---
-- name: ensure /var/www/html/ is removed
-  file:
-    state: absent
-    dest: "/var/www/html"
-
-- name: ensure securedrop root directory exists
+- name: Create SecureDrop app code directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_code }}"
+  tags:
+    - permissions
 
-- name: ensure securedrop data directory exists
+- name: Create SecureDrop data directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}"
+  tags:
+    - permissions
 
-- name: ensure securedrop data store directory exists
+- name: Create SecureDrop data store directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/store"
+  tags:
+    - permissions
 
-- name: ensure securedrop keyring directory exists
+- name: Create SecureDrop keyring directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/keys"
+  tags:
+    - permissions
 
-- name: ensure securedrop temp directory exists
+- name: Create SecureDrop temp directory.
   file:
     state: directory
-    mode: 0700
+    mode: "0700"
     owner: "{{ securedrop_user }}"
     group: "{{ securedrop_user }}"
     dest: "{{ securedrop_data }}/tmp"
+  tags:
+    - permissions
