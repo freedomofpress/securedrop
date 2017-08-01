@@ -78,3 +78,7 @@ class TestSourceLayout(
     def test_tor2web_warning(self):
         self._source_tor2web_warning()
         self._screenshot('source-tor2web_warning.png')
+
+    def test_why_journalist_key(self):
+        self._source_why_journalist_key()
+        self._screenshot('source-why_journalist_key.png')
