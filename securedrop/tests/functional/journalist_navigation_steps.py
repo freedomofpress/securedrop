@@ -481,3 +481,18 @@ class JournalistNavigationSteps():
                 hotp_reset_button.get_attribute('action'))
 
         hotp_reset_button.click()
+
+    def _set_hotp_secret(self):
+        hotp_secret_field = self.driver.find_elements_by_css_selector(
+            'input[name="otp_secret"]')[0]
+        hotp_secret_field.send_keys('123456')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
+        submit_button.click()
+
+    def _visit_edit_totp_secret(self):
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        assert ('/account/reset-2fa-totp' in
+                totp_reset_button.get_attribute('action'))
+        totp_reset_button.click()
