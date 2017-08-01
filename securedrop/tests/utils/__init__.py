@@ -1,3 +1,3 @@
-import async
-import db_helper
-import env
+import async  # noqa
+import db_helper  # noqa
+import env  # noqa
