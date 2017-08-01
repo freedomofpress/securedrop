@@ -287,7 +287,7 @@ class JournalistNavigationSteps():
         new_user_edit_links[0].click()
 
         def can_edit_user():
-            assert ('Edit user "{}"'.format(self.new_user['username']) in
+            assert ('"{}"'.format(self.new_user['username']) in
                     self.driver.page_source)
         self.wait_for(can_edit_user)
 
@@ -301,8 +301,7 @@ class JournalistNavigationSteps():
         update_user_btn.click()
 
         def can_edit_user():
-            assert ('Edit user "{}"'.format(new_username) in
-                    self.driver.page_source)
+            assert ('"{}"'.format(new_username) in self.driver.page_source)
         self.wait_for(can_edit_user)
 
         # Update self.new_user with the new username for the future tests
