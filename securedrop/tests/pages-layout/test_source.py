@@ -70,3 +70,7 @@ class TestSourceLayout(
         self._source_submits_a_file()
         self._source_submits_a_message()
         self._screenshot('source-next_submission_flashed_message.png')
+
+    def test_notfound(self):
+        self._source_not_found()
+        self._screenshot('source-notfound.png')
