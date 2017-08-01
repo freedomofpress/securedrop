@@ -220,3 +220,15 @@ class TestJournalistLayout(
         self._admin_adds_a_user()
         self._admin_visits_edit_user()
         self._screenshot('journalist-edit_account_admin.png')
+
+    def test_flag(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._source_delete_key()
+        self._journalist_visits_col()
+        self._journalist_flags_source()
+        self._screenshot('journalist-flag.png')
