@@ -468,3 +468,16 @@ class JournalistNavigationSteps():
         self.driver.find_element_by_id('reply-button').click()
 
         assert "Thanks! Your reply has been stored." in self.driver.page_source
+
+    def _visit_edit_account(self):
+        edit_account_link = self.driver.find_element_by_id(
+            'link-edit-account')
+        edit_account_link.click()
+
+    def _visit_edit_hotp_secret(self):
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        assert ('/account/reset-2fa-hotp' in
+                hotp_reset_button.get_attribute('action'))
+
+        hotp_reset_button.click()
