@@ -37,8 +37,15 @@ latest release (0.4.1):
    git tag -v 0.4.1
 
 The output of the above commands should include ``Good signature from
-"Freedom of the Press Foundation Master Signing Key"``. If it does
+"SecureDrop Release Signing Key"``. If it does
 not, please contact us immediately at support@freedom.press.
+
+.. note::
+  You may also see output from GPG warning you that the key is not certified
+  with a trusted signature. This means that there is not a trust path to the
+  release signing key. As long as you see the fingerprint ``2224 5C81 E3BA EB41
+  38B3 6061 310F 5612 00F4 AD77`` displayed and the signature verifies as
+  described above then you can proceed safely.
 
 Once you've verified the latest release, check it out, then pop your local
 configuration back into place:
