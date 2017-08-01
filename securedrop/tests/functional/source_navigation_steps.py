@@ -185,3 +185,6 @@ class SourceNavigationSteps():
         self.driver.get(self.source_location + "/unlikely")
         message = self.driver.find_element_by_id('page-not-found')
         assert message.is_displayed()
+
+    def _source_visits_use_tor(self):
+        self.driver.get(self.source_location + "/use-tor")
