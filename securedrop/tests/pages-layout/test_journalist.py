@@ -68,3 +68,9 @@ class TestJournalistLayout(
     def test_login(self):
         self.driver.get(self.journalist_location + "/login")
         self._screenshot('journalist-login.png')
+
+    def test_admin(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._screenshot('journalist-admin.png')
