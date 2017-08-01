@@ -18,6 +18,21 @@
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
 import functional_test
+import pytest
+
+import db
+
+
+@pytest.fixture
+def hardening(request):
+    hardening = db.LOGIN_HARDENING
+
+    def finalizer():
+        db.LOGIN_HARDENING = hardening
+    request.addfinalizer(finalizer)
+    db.LOGIN_HARDENING = True
+    return None
+
 
 class TestJournalistLayout(
         functional_test.FunctionalTest,
@@ -257,3 +272,15 @@ class TestJournalistLayout(
         self._source_logs_out()
         self._journalist_logs_in()
         self._screenshot('journalist-index_javascript.png')
+
+    def test_fail_to_visit_admin(self):
+        self._journalist_visits_admin()
+        self._screenshot('journalist-code-fail_to_visit_admin.png')
+
+    def test_fail_login(self, hardening):
+        self._journalist_fail_login()
+        self._screenshot('journalist-code-fail_login.png')
+
+    def test_fail_login_many(self, hardening):
+        self._journalist_fail_login_many()
+        self._screenshot('journalist-code-fail_login_many.png')

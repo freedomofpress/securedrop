@@ -577,3 +577,15 @@ class JournalistNavigationSteps():
 
     def _journalist_flags_source(self):
         self.driver.find_element_by_id('flag-button').click()
+
+    def _journalist_visits_admin(self):
+        self.driver.get(self.journalist_location + "/admin")
+
+    def _journalist_fail_login(self):
+        self.user, self.user_pw = db_helper.init_journalist()
+        self._try_login_user(self.user.username, 'worse', 'mocked')
+
+    def _journalist_fail_login_many(self):
+        self.user, self.user_pw = db_helper.init_journalist()
+        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
+            self._try_login_user(self.user.username, 'worse', 'mocked')
