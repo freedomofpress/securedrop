@@ -19,12 +19,6 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    def test_write_then_read_twice(self):
-        self.f.write(self.msg)
-        self.f.read()
-
-        self.assertEqual(self.f.read(), '')
-
     def test_read_before_writing(self):
         with self.assertRaisesRegexp(AssertionError,
                                      'You must write before reading!'):
