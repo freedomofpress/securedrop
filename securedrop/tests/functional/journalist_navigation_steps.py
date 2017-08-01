@@ -496,3 +496,8 @@ class JournalistNavigationSteps():
         assert ('/account/reset-2fa-totp' in
                 totp_reset_button.get_attribute('action'))
         totp_reset_button.click()
+
+    def _admin_visits_add_user(self):
+        add_user_btn = self.driver.find_element_by_css_selector(
+            'button#add-user')
+        add_user_btn.click()
