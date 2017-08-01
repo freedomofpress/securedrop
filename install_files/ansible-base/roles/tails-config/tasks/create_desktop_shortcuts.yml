@@ -42,6 +42,7 @@
         onion_url: "{{ journalist_interface_lookup_result.stdout }}"
 
 - name: Create SecureDrop interface desktop icons.
+  become: yes
   template:
     src: desktop-icon.j2
     dest: "{{ item.1 }}/{{ item.0.filename }}"
