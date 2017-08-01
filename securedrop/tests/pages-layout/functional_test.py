@@ -80,3 +80,7 @@ class FunctionalTest(functional_test.FunctionalTest):
         actions.send_keys(Keys.RETURN)
         actions.send_keys(Keys.F5)
         actions.perform()
+
+    def _save_alert(self, filename):
+        fd = open(os.path.join(self.log_dir, filename), 'wb')
+        fd.write(self.driver.switch_to.alert.text.encode('utf-8'))
