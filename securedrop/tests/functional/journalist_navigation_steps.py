@@ -563,5 +563,17 @@ class JournalistNavigationSteps():
     def _journalist_continues_after_flagging(self):
         self.driver.find_element_by_id('continue-to-list').click()
 
+    def _journalist_delete_none(self):
+        self.driver.find_element_by_id('delete-selected').click()
+
+    def _journalist_delete_all_javascript(self):
+        self.driver.find_element_by_id('select_all').click()
+        self.driver.find_element_by_id('delete-selected').click()
+        self._alert_wait()
+
+    def _journalist_delete_one(self):
+        self.driver.find_elements_by_name('doc_names_selected')[0].click()
+        self.driver.find_element_by_id('delete-selected').click()
+
     def _journalist_flags_source(self):
         self.driver.find_element_by_id('flag-button').click()
