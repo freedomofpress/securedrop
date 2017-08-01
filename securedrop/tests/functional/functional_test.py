@@ -13,8 +13,11 @@ import requests
 
 from Crypto import Random
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (WebDriverException,
+                                        NoAlertPresentException)
 from selenium.webdriver.firefox import firefox_binary
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import db
@@ -23,6 +26,18 @@ import source
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
+
+
+# https://stackoverflow.com/a/34795883/837471
+class alert_is_not_present(object):
+    """ Expect an alert to not be present."""
+    def __call__(self, driver):
+        try:
+            alert = driver.switch_to.alert
+            alert.text
+            return False
+        except NoAlertPresentException:
+            return True
 
 
 class FunctionalTest():
@@ -131,3 +146,20 @@ class FunctionalTest():
                 time.sleep(0.1)
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
+
+    def _alert_wait(self):
+        WebDriverWait(self.driver, 5).until(
+            expected_conditions.alert_is_present(),
+            'Timed out waiting for confirmation popup.')
+
+    def _alert_accept(self):
+        self.driver.switch_to.alert.accept()
+        WebDriverWait(self.driver, 5).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')
+
+    def _alert_dismiss(self):
+        self.driver.switch_to.alert.dismiss()
+        WebDriverWait(self.driver, 5).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')

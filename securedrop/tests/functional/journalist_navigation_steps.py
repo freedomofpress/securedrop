@@ -56,6 +56,29 @@ class JournalistNavigationSteps():
         headline = self.driver.find_element_by_css_selector('span.headline')
         assert 'Sources' in headline.text
 
+    def _journalist_visits_col(self):
+        self.driver.find_element_by_css_selector(
+            '#un-starred-source-link-1').click()
+
+    def _journalist_selects_first_doc(self):
+        self.driver.find_elements_by_name('doc_names_selected')[0].click()
+
+    def _journalist_clicks_delete_selected_javascript(self):
+        self.driver.find_element_by_id('delete_selected').click()
+        self._alert_wait()
+
+    def _journalist_verifies_deletion_of_one_submission_javascript(self):
+        self._journalist_selects_first_doc()
+        self._journalist_clicks_delete_selected_javascript()
+        self._alert_dismiss()
+        selected_count = len(self.driver.find_elements_by_name(
+            'doc_names_selected'))
+        assert selected_count > 0
+        self._journalist_clicks_delete_selected_javascript()
+        self._alert_accept()
+        assert selected_count > len(self.driver.find_elements_by_name(
+            'doc_names_selected'))
+
     def _admin_logs_in(self):
         self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
