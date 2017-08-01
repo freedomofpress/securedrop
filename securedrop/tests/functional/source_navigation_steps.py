@@ -188,3 +188,6 @@ class SourceNavigationSteps():
 
     def _source_visits_use_tor(self):
         self.driver.get(self.source_location + "/use-tor")
+
+    def _source_tor2web_warning(self):
+        self.driver.get(self.source_location + "/tor2web-warning")

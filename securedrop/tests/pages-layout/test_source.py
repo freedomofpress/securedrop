@@ -74,3 +74,7 @@ class TestSourceLayout(
     def test_notfound(self):
         self._source_not_found()
         self._screenshot('source-notfound.png')
+
+    def test_tor2web_warning(self):
+        self._source_tor2web_warning()
+        self._screenshot('source-tor2web_warning.png')
