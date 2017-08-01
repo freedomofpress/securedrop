@@ -42,3 +42,9 @@ class TestJournalistLayout(
         self._visit_edit_account()
         self._visit_edit_totp_secret()
         self._screenshot('journalist-account_new_two_factor_totp.png')
+
+    def test_admin_add_user(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_visits_add_user()
+        self._screenshot('journalist-admin_add_user.png')
