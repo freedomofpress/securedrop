@@ -25,4 +25,11 @@ class TestSourceLayout(
         source_navigation_steps.SourceNavigationSteps,
         journalist_navigation_steps.JournalistNavigationSteps):
 
-    pass
+    def test_index(self):
+        self._source_visits_source_homepage()
+        self._screenshot('source-index.png')
+
+    def test_index_javascript(self):
+        self._javascript_toggle()
+        self._source_visits_source_homepage()
+        self._screenshot('source-index_javascript.png')
