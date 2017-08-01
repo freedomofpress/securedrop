@@ -20,6 +20,9 @@ import os
 from os.path import abspath, dirname, realpath
 import pytest
 
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+
 from selenium import webdriver
 from selenium.webdriver.firefox import firefox_binary
 
@@ -55,9 +58,25 @@ class FunctionalTest(functional_test.FunctionalTest):
         self.override_driver = True
         self.driver = webdriver.Firefox(firefox_binary=firefox,
                                         firefox_profile=profile)
+        self._javascript_toggle()
+
         yield None
 
         self.driver.quit()
 
     def _screenshot(self, filename):
         self.driver.save_screenshot(os.path.join(self.log_dir, filename))
+
+    def _javascript_toggle(self):
+        # the following is a noop for some reason, workaround it
+        # profile.set_preference("javascript.enabled", False)
+        # https://stackoverflow.com/a/36782979/837471
+        self.driver.get("about:config")
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.RETURN)
+        actions.send_keys("javascript.enabled")
+        actions.perform()
+        actions.send_keys(Keys.TAB)
+        actions.send_keys(Keys.RETURN)
+        actions.send_keys(Keys.F5)
+        actions.perform()
