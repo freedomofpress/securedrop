@@ -501,3 +501,30 @@ class JournalistNavigationSteps():
         add_user_btn = self.driver.find_element_by_css_selector(
             'button#add-user')
         add_user_btn.click()
+
+    def _admin_visits_edit_user(self):
+        new_user_edit_links = filter(
+            lambda el: (el.get_attribute('data-username') ==
+                        self.new_user['username']),
+            self.driver.find_elements_by_tag_name('a'))
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+
+        def can_edit_user():
+            assert ('"{}"'.format(self.new_user['username']) in
+                    self.driver.page_source)
+        self.wait_for(can_edit_user)
+
+    def _admin_visits_reset_2fa_hotp(self):
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        assert ('/admin/reset-2fa-hotp' in
+                hotp_reset_button.get_attribute('action'))
+        hotp_reset_button.click()
+
+    def _admin_visits_reset_2fa_totp(self):
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        assert ('/admin/reset-2fa-totp' in
+                totp_reset_button.get_attribute('action'))
+        totp_reset_button.click()

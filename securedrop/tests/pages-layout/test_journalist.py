@@ -48,3 +48,19 @@ class TestJournalistLayout(
         self._admin_visits_admin_interface()
         self._admin_visits_add_user()
         self._screenshot('journalist-admin_add_user.png')
+
+    def test_admin_edit_hotp_secret(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._admin_visits_edit_user()
+        self._admin_visits_reset_2fa_hotp()
+        self._screenshot('journalist-admin_edit_hotp_secret.png')
+
+    def test_admin_edit_totp_secret(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_adds_a_user()
+        self._admin_visits_edit_user()
+        self._admin_visits_reset_2fa_totp()
+        self._screenshot('journalist-admin_edit_totp_secret.png')
