@@ -64,3 +64,7 @@ class TestJournalistLayout(
         self._admin_visits_edit_user()
         self._admin_visits_reset_2fa_totp()
         self._screenshot('journalist-admin_edit_totp_secret.png')
+
+    def test_login(self):
+        self.driver.get(self.journalist_location + "/login")
+        self._screenshot('journalist-login.png')
