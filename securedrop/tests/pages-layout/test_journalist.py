@@ -24,4 +24,8 @@ class TestJournalistLayout(
         source_navigation_steps.SourceNavigationSteps,
         journalist_navigation_steps.JournalistNavigationSteps):
 
-    pass
+    def test_account_edit_hotp_secret(self):
+        self._journalist_logs_in()
+        self._visit_edit_account()
+        self._visit_edit_hotp_secret()
+        self._screenshot('journalist-account_edit_hotp_secret.png')
