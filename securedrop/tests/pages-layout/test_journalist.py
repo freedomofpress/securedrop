@@ -74,3 +74,15 @@ class TestJournalistLayout(
         self._admin_visits_admin_interface()
         self._admin_adds_a_user()
         self._screenshot('journalist-admin.png')
+
+    def test_admin_new_user_two_factor_hotp(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_creates_a_user(hotp='123456')
+        self._screenshot('journalist-admin_new_user_two_factor_hotp.png')
+
+    def test_admin_new_user_two_factor_totp(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._admin_creates_a_user(hotp=None)
+        self._screenshot('journalist-admin_new_user_two_factor_totp.png')
