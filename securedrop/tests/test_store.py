@@ -3,10 +3,9 @@ import os
 import unittest
 import zipfile
 
-import crypto_util
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
-from db import db_session, Source
+from db import db_session
 import mock
 import store
 import utils
@@ -34,8 +33,9 @@ class TestStore(unittest.TestCase):
     def test_verify_store_dir_not_absolute(self):
         STORE_DIR = config.STORE_DIR
         try:
-            with self.assertRaisesRegexp(store.PathException,
-                                         'config.STORE_DIR\(\S*\) is not absolute'):
+            with self.assertRaisesRegexp(
+                    store.PathException,
+                    'config.STORE_DIR\(\S*\) is not absolute'):
                 config.STORE_DIR = '.'
                 store.verify('something')
         finally:
@@ -64,8 +64,9 @@ class TestStore(unittest.TestCase):
         new_journalist_filename = 'nestor_makhno'
         expected_filename = old_filename.replace(old_journalist_filename,
                                                  new_journalist_filename)
-        actual_filename = store.rename_submission(source.filesystem_id, old_filename,
-                                                  new_journalist_filename)
+        actual_filename = store.rename_submission(
+            source.filesystem_id, old_filename,
+            new_journalist_filename)
         self.assertEquals(actual_filename, expected_filename)
 
     @mock.patch('store.subprocess.check_call')
