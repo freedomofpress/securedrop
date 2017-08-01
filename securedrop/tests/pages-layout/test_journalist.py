@@ -29,3 +29,16 @@ class TestJournalistLayout(
         self._visit_edit_account()
         self._visit_edit_hotp_secret()
         self._screenshot('journalist-account_edit_hotp_secret.png')
+
+    def test_account_new_two_factor_hotp(self):
+        self._journalist_logs_in()
+        self._visit_edit_account()
+        self._visit_edit_hotp_secret()
+        self._set_hotp_secret()
+        self._screenshot('journalist-account_new_two_factor_hotp.png')
+
+    def test_account_new_two_factor_totp(self):
+        self._journalist_logs_in()
+        self._visit_edit_account()
+        self._visit_edit_totp_secret()
+        self._screenshot('journalist-account_new_two_factor_totp.png')
