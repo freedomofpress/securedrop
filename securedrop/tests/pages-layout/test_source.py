@@ -49,3 +49,8 @@ class TestSourceLayout(
     def test_use_tor_browser(self):
         self._source_visits_use_tor()
         self._screenshot('source-use_tor_browser.png')
+
+    def test_generate(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._screenshot('source-generate.png')
