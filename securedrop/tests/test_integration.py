@@ -66,7 +66,7 @@ class TestIntegration(unittest.TestCase):
         with self.source_app as source_app:
             resp = source_app.get('/generate')
             resp = source_app.post('/create', follow_redirects=True)
-            sid = g.sid
+            filesystem_id = g.filesystem_id
             # redirected to submission form
             resp = self.source_app.post('/submit', data=dict(
                 msg=test_msg,
@@ -109,7 +109,7 @@ class TestIntegration(unittest.TestCase):
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
             action='confirm_delete',
-            sid=sid,
+            filesystem_id=filesystem_id,
             doc_names_selected=doc_name
         ))
 
@@ -123,7 +123,7 @@ class TestIntegration(unittest.TestCase):
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
             action='delete',
-            sid=sid,
+            filesystem_id=filesystem_id,
             doc_names_selected=doc_name,
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
@@ -139,7 +139,9 @@ class TestIntegration(unittest.TestCase):
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
         utils.async.wait_for_assertion(
-            lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+            lambda: self.assertFalse(
+                os.path.exists(store.path(filesystem_id, doc_name))
+            )
         )
 
     def test_submit_file(self):
@@ -151,7 +153,7 @@ class TestIntegration(unittest.TestCase):
         with self.source_app as source_app:
             resp = source_app.get('/generate')
             resp = source_app.post('/create', follow_redirects=True)
-            sid = g.sid
+            filesystem_id = g.filesystem_id
             # redirected to submission form
             resp = self.source_app.post('/submit', data=dict(
                 msg="",
@@ -197,7 +199,7 @@ class TestIntegration(unittest.TestCase):
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
             action='confirm_delete',
-            sid=sid,
+            filesystem_id=filesystem_id,
             doc_names_selected=doc_name
         ))
 
@@ -211,7 +213,7 @@ class TestIntegration(unittest.TestCase):
             'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = self.journalist_app.post('/bulk', data=dict(
             action='delete',
-            sid=sid,
+            filesystem_id=filesystem_id,
             doc_names_selected=doc_name,
         ), follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
@@ -227,7 +229,9 @@ class TestIntegration(unittest.TestCase):
         # since file deletion is handled by a polling worker, this test needs
         # to wait for the worker to get the job and execute it
         utils.async.wait_for_assertion(
-            lambda: self.assertFalse(os.path.exists(store.path(sid, doc_name)))
+            lambda: self.assertFalse(
+                os.path.exists(store.path(filesystem_id, doc_name))
+            )
         )
 
     def test_reply_normal(self):
@@ -290,7 +294,7 @@ class TestIntegration(unittest.TestCase):
             resp = source_app.get('/generate')
             resp = source_app.post('/create', follow_redirects=True)
             codename = session['codename']
-            sid = g.sid
+            filesystem_id = g.filesystem_id
             # redirected to submission form
             resp = source_app.post('/submit', data=dict(
                 msg=test_msg,
@@ -318,7 +322,7 @@ class TestIntegration(unittest.TestCase):
 
         with self.journalist_app as journalist_app:
             resp = journalist_app.post('/flag', data=dict(
-                sid=sid))
+                filesystem_id=filesystem_id))
             self.assertEqual(resp.status_code, 200)
 
         with self.source_app as source_app:
@@ -332,12 +336,14 @@ class TestIntegration(unittest.TestCase):
 
         # Block up to 15s for the reply keypair, so we can test sending a reply
         utils.async.wait_for_assertion(
-            lambda: self.assertNotEqual(crypto_util.getkey(sid), None), 15)
+            lambda: self.assertNotEqual(crypto_util.getkey(filesystem_id),
+                                        None),
+            15)
 
         # Create 2 replies to test deleting on journalist and source interface
         for i in range(2):
             resp = self.journalist_app.post('/reply', data=dict(
-                sid=sid,
+                filesystem_id=filesystem_id,
                 msg=test_reply
             ), follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
@@ -355,11 +361,11 @@ class TestIntegration(unittest.TestCase):
 
         # Download the reply and verify that it can be decrypted with the
         # journalist's key as well as the source's reply key
-        sid = soup.select('input[name="sid"]')[0]['value']
+        filesystem_id = soup.select('input[name="filesystem_id"]')[0]['value']
         checkbox_values = [
             soup.select('input[name="doc_names_selected"]')[1]['value']]
         resp = self.journalist_app.post('/bulk', data=dict(
-            sid=sid,
+            filesystem_id=filesystem_id,
             action='download',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
@@ -368,7 +374,8 @@ class TestIntegration(unittest.TestCase):
         zf = zipfile.ZipFile(StringIO(resp.data), 'r')
         data = zf.read(zf.namelist()[0])
         self._can_decrypt_with_key(data, config.JOURNALIST_KEY)
-        self._can_decrypt_with_key(data, crypto_util.getkey(sid), codename)
+        self._can_decrypt_with_key(data, crypto_util.getkey(filesystem_id),
+                                   codename)
 
         # Test deleting reply on the journalist interface
         last_reply_number = len(
@@ -394,7 +401,7 @@ class TestIntegration(unittest.TestCase):
                 msgid = soup.select(
                     'form.message > input[name="reply_filename"]')[0]['value']
                 resp = source_app.post('/delete', data=dict(
-                    sid=sid,
+                    filesystem_id=filesystem_id,
                     reply_filename=msgid
                 ), follow_redirects=True)
                 self.assertEqual(resp.status_code, 200)
@@ -403,7 +410,7 @@ class TestIntegration(unittest.TestCase):
                 # Make sure the reply is deleted from the filesystem
                 utils.async.wait_for_assertion(
                     lambda: self.assertFalse(os.path.exists(
-                        store.path(sid, msgid))))
+                        store.path(filesystem_id, msgid))))
 
             source_app.get('/logout')
 
@@ -427,9 +434,9 @@ class TestIntegration(unittest.TestCase):
         # find the delete form and extract the post parameters
         soup = BeautifulSoup(resp.data, 'html.parser')
         delete_form_inputs = soup.select('form#delete-collection')[0]('input')
-        sid = delete_form_inputs[1]['value']
+        filesystem_id = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
-        resp = self.journalist_app.post('/col/delete/' + sid,
+        resp = self.journalist_app.post('/col/delete/' + filesystem_id,
                                         follow_redirects=True)
         self.assertEquals(resp.status_code, 200)
 
@@ -439,7 +446,7 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the collection is deleted from the filesystem
         utils.async.wait_for_assertion(
-            lambda: self.assertFalse(os.path.exists(store.path(sid)))
+            lambda: self.assertFalse(os.path.exists(store.path(filesystem_id)))
         )
 
     def test_delete_collections(self):
@@ -470,7 +477,8 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the collections are deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
-            any([os.path.exists(store.path(sid)) for sid in checkbox_values])))
+            any([os.path.exists(store.path(filesystem_id))
+                for filesystem_id in checkbox_values])))
 
     def test_filenames(self):
         """Test pretty, sequential filenames when source uploads messages
@@ -586,13 +594,13 @@ class TestIntegration(unittest.TestCase):
         ), follow_redirects=True)
 
     def helper_filenames_delete(self, soup, i):
-        sid = soup.select('input[name="sid"]')[0]['value']
+        filesystem_id = soup.select('input[name="filesystem_id"]')[0]['value']
         checkbox_values = [
             soup.select('input[name="doc_names_selected"]')[i]['value']]
 
         # delete
         resp = self.journalist_app.post('/bulk', data=dict(
-            sid=sid,
+            filesystem_id=filesystem_id,
             action='confirm_delete',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
@@ -604,7 +612,7 @@ class TestIntegration(unittest.TestCase):
 
         # confirm delete
         resp = self.journalist_app.post('/bulk', data=dict(
-            sid=sid,
+            filesystem_id=filesystem_id,
             action='delete',
             doc_names_selected=checkbox_values
         ), follow_redirects=True)
@@ -613,5 +621,5 @@ class TestIntegration(unittest.TestCase):
 
         # Make sure the files were deleted from the filesystem
         utils.async.wait_for_assertion(lambda: self.assertFalse(
-            any([os.path.exists(store.path(sid, doc_name))
+            any([os.path.exists(store.path(filesystem_id, doc_name))
                  for doc_name in checkbox_values])))

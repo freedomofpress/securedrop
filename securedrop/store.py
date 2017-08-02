@@ -95,7 +95,8 @@ def get_bulk_archive(selected_submissions, zip_directory=''):
     return zip_file
 
 
-def save_file_submission(sid, count, journalist_filename, filename, stream):
+def save_file_submission(filesystem_id, count, journalist_filename, filename,
+                         stream):
     sanitized_filename = secure_filename(filename)
 
     # We store file submissions in a .gz file for two reasons:
@@ -114,7 +115,7 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
     encrypted_file_name = "{0}-{1}-doc.gz.gpg".format(
         count,
         journalist_filename)
-    encrypted_file_path = path(sid, encrypted_file_name)
+    encrypted_file_path = path(filesystem_id, encrypted_file_name)
     with SecureTemporaryFile("/tmp") as stf:
         with gzip.GzipFile(filename=sanitized_filename,
                            mode='wb', fileobj=stf) as gzf:
@@ -131,14 +132,15 @@ def save_file_submission(sid, count, journalist_filename, filename, stream):
     return encrypted_file_name
 
 
-def save_message_submission(sid, count, journalist_filename, message):
+def save_message_submission(filesystem_id, count, journalist_filename,
+                            message):
     filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
-    msg_loc = path(sid, filename)
+    msg_loc = path(filesystem_id, filename)
     crypto_util.encrypt(message, config.JOURNALIST_KEY, msg_loc)
     return filename
 
 
-def rename_submission(sid, orig_filename, journalist_filename):
+def rename_submission(filesystem_id, orig_filename, journalist_filename):
     check_submission_name = VALIDATE_FILENAME(orig_filename)
     if check_submission_name:
         parsed_filename = check_submission_name.groupdict()
@@ -147,7 +149,8 @@ def rename_submission(sid, orig_filename, journalist_filename):
                 parsed_filename['index'], journalist_filename,
                 parsed_filename['file_type'])
             try:
-                os.rename(path(sid, orig_filename), path(sid, new_filename))
+                os.rename(path(filesystem_id, orig_filename),
+                          path(filesystem_id, new_filename))
             except OSError:
                 pass
             else:

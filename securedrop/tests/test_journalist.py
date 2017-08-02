@@ -54,7 +54,7 @@ class TestJournalistApp(TestCase):
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         exception_class = StaleDataError
@@ -62,7 +62,8 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
-            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'),
+                             data={'filesystem_id': filesystem_id, 'msg': '_'})
 
         # Notice the "potentially sensitive" exception_msg is not present in
         # the log event.
@@ -73,13 +74,14 @@ class TestJournalistApp(TestCase):
 
     def test_reply_error_flashed_message(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         exception_class = StaleDataError
 
         with patch('db.db_session.commit', side_effect=exception_class()):
-            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'),
+                             data={'filesystem_id': filesystem_id, 'msg': '_'})
 
         self.assertMessageFlashed(
             'An unexpected error occurred! Please check '
@@ -87,22 +89,24 @@ class TestJournalistApp(TestCase):
 
     def test_empty_replies_are_rejected(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         resp = self.client.post(url_for('reply'),
-                                data={'sid': sid, 'msg': ''},
+                                data={'filesystem_id': filesystem_id,
+                                      'msg': ''},
                                 follow_redirects=True)
 
         self.assertIn("You cannot send an empty reply!", resp.data)
 
     def test_nonempty_replies_are_accepted(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         resp = self.client.post(url_for('reply'),
-                                data={'sid': sid, 'msg': '_'},
+                                data={'filesystem_id': filesystem_id,
+                                      'msg': '_'},
                                 follow_redirects=True)
 
         self.assertNotIn("You cannot send an empty reply!", resp.data)
@@ -588,8 +592,9 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('index'), url_for('col', sid='1'),
-                url_for('download_single_submission', sid='1', fn='1'),
+        urls = [url_for('index'), url_for('col', filesystem_id='1'),
+                url_for('download_single_submission',
+                        filesystem_id='1', fn='1'),
                 url_for('edit_account')]
 
         for url in urls:
@@ -597,8 +602,10 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
-        urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
-                url_for('col_process'), url_for('col_delete_single', sid='1'),
+        urls = [url_for('add_star', filesystem_id='1'),
+                url_for('remove_star', filesystem_id='1'),
+                url_for('col_process'),
+                url_for('col_delete_single', filesystem_id='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
@@ -740,7 +747,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         resp = self.client.post(
             '/bulk', data=dict(action='download',
-                               sid=source.filesystem_id,
+                               filesystem_id=source.filesystem_id,
                                doc_names_selected=selected_fnames))
 
         # The download request was succesful, and the app returned a zipfile
@@ -908,7 +915,8 @@ class TestJournalistApp(TestCase):
     def test_add_star_redirects_to_index(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
-        resp = self.client.post(url_for('add_star', sid=source.filesystem_id))
+        resp = self.client.post(url_for('add_star',
+                                        filesystem_id=source.filesystem_id))
         self.assertRedirects(resp, url_for('index'))
 
 
@@ -968,9 +976,9 @@ class TestJournalistAppTwo(unittest.TestCase):
     @patch("journalist.make_star_true")
     @patch("journalist.db_session")
     def test_col_star_call_db_(self, db_session, make_star_true):
-        journalist.col_star(['sid'])
+        journalist.col_star(['filesystem_id'])
 
-        make_star_true.assert_called_with('sid')
+        make_star_true.assert_called_with('filesystem_id')
 
     @patch("journalist.db_session")
     def test_col_un_star_call_db(self, db_session):
@@ -1043,44 +1051,44 @@ class TestJournalist(unittest.TestCase):
     @patch('journalist.url_for')
     @patch('journalist.redirect')
     def test_add_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.add_star('sid')
+        redirect_template = journalist.add_star('filesystem_id')
 
         self.assertEqual(redirect_template, redirect(url_for('index')))
 
     @patch('journalist.db_session')
     def test_add_star_makes_commits(self, db_session):
-        journalist.add_star('sid')
+        journalist.add_star('filesystem_id')
 
         db_session.commit.assert_called_with()
 
     @patch('journalist.make_star_true')
     def test_single_delegates_to_make_star_true(self, make_star_true):
-        sid = 'sid'
+        filesystem_id = 'filesystem_id'
 
-        journalist.add_star(sid)
+        journalist.add_star(filesystem_id)
 
-        make_star_true.assert_called_with(sid)
+        make_star_true.assert_called_with(filesystem_id)
 
     @patch('journalist.url_for')
     @patch('journalist.redirect')
     def test_remove_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.remove_star('sid')
+        redirect_template = journalist.remove_star('filesystem_id')
 
         self.assertEqual(redirect_template, redirect(url_for('index')))
 
     @patch('journalist.db_session')
     def test_remove_star_makes_commits(self, db_session):
-        journalist.remove_star('sid')
+        journalist.remove_star('filesystem_id')
 
         db_session.commit.assert_called_with()
 
     @patch('journalist.make_star_false')
     def test_remove_star_delegates_to_make_star_false(self, make_star_false):
-        sid = 'sid'
+        filesystem_id = 'filesystem_id'
 
-        journalist.remove_star(sid)
+        journalist.remove_star(filesystem_id)
 
-        make_star_false.assert_called_with(sid)
+        make_star_false.assert_called_with(filesystem_id)
 
     @classmethod
     def tearDownClass(cls):
