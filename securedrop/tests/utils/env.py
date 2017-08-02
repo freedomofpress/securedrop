@@ -8,7 +8,7 @@ import subprocess
 
 import gnupg
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 from db import init_db, db_session

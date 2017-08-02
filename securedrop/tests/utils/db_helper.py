@@ -5,13 +5,14 @@ filesystem) interaction.
 import mock
 import os
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 import db
 import store
 
-## db.{Journalist, Reply}
+# db.{Journalist, Reply}
+
 
 def init_journalist(is_admin=False):
     """Initialize a journalist into the database. Return their
@@ -88,7 +89,7 @@ def mark_downloaded(*submissions):
     db.db_session.commit()
 
 
-## db.{Source,Submission}
+# db.{Source,Submission}
 
 def init_source():
     """Initialize a source: create their database record, the
