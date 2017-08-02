@@ -1,8 +1,8 @@
-Upgrade from 0.3.x to 0.4
-=========================
+Upgrade from 0.3.x to 0.4.x
+===========================
 
-SecureDrop 0.4 requires the use of Tails 3. It includes substantial
-changes to the Admin tooling used for managing the configuration
+Beginning with SecureDrop 0.4, the use of Tails 3 is required. SecureDrop 0.4
+included substantial changes to the Admin tooling used for managing the configuration
 for the Application and Monitor Servers, and modifies the location
 of the configuration on Admin Workstation to prevent conflicts
 in the future.
@@ -11,7 +11,7 @@ in the future.
 
   .. note::
     All Admin and Journalist Workstations must be upgraded to Tails 3 for use
-    with SecureDrop 0.4. Follow the :doc:`/upgrade_to_tails_3x` guide for
+    with SecureDrop 0.4.x. Follow the :doc:`/upgrade_to_tails_3x` guide for
     detailed instructions on upgrading if you have not already done so.
 
 The steps below should be performed on **both the Admin and all Journalist
@@ -28,29 +28,36 @@ Open a **Terminal** and navigate to your SecureDrop directory.
    cd ~/Persistent/securedrop
 
 Stash your local configuration, fetch the latest code, and verify the tag for the
-latest release (0.4):
+latest release (0.4.1):
 
 .. code:: sh
 
    git stash save "site specific configs"
    git fetch
-   git tag -v 0.4
+   git tag -v 0.4.1
 
 The output of the above commands should include ``Good signature from
-"Freedom of the Press Foundation Master Signing Key"``. If it does
+"SecureDrop Release Signing Key"``. If it does
 not, please contact us immediately at support@freedom.press.
+
+.. note::
+  You may also see output from GPG warning you that the key is not certified
+  with a trusted signature. This means that there is not a trust path to the
+  release signing key. As long as you see the fingerprint ``2224 5C81 E3BA EB41
+  38B3 6061 310F 5612 00F4 AD77`` displayed and the signature verifies as
+  described above then you can proceed safely.
 
 Once you've verified the latest release, check it out, then pop your local
 configuration back into place:
 
 .. code:: sh
 
-   git checkout 0.4
+   git checkout 0.4.1
    git stash pop
 
 Upgrade the Tails Persistence Configuration
 ----------------------------------------------
-SecureDrop 0.4 provides more convenient tooling for configuring the ATHS info
+SecureDrop 0.4.x provides more convenient tooling for configuring the ATHS info
 required to access the Journalist Interface. Run the following commands
 to install the required packages and set up the access to your SecureDrop
 instance.
@@ -65,7 +72,7 @@ Clean up old version-controlled site config
 
 The ``tailsconfig`` task copied the site-specific configuration for your
 SecureDrop instance to a new location: ``install_files/ansible-base/group_vars/all/site-specific``.
-As of 0.4, manual edits to the inventory are no longer required, as the ATHS
+Beginning with 0.4, manual edits to the inventory are no longer required, as the ATHS
 information is read automatically from the ``app-ssh-aths`` and
 ``mon-ssh-aths`` files. Therefore you should permanently store any
 site-specific modifications:
