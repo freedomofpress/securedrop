@@ -1,0 +1,87 @@
+Internationalization (i18n)
+===========================
+
+The code, templates and javascript user visible strings must all be
+wrapped with `gettext`_ functions to be substituted at runtime with
+the equivalent localized string. These function names are used as
+markers to collect the strings to be translated and store them into
+the ``securedrop/translations/messages.pot`` file. For each language
+to be translated, a directory is created such as
+``securedrop/translations/fr_FR`` and populated with files derived
+from ``securedrop/translations/messages.pot``, for translators to work
+with and for the `gettext`_ substitution at runtime.
+
+The manage.py translate helper
+------------------------------
+
+The `pybabel`_ command line is wrapped into the ``manage.py
+translate`` helper for convenience. It is designed to be used by
+developers, to run tests with fixtures and during packaging.
+
+Updating strings to be translated
+---------------------------------
+
+After modifying a string in the code, templates or javascript, the
+``securedrop/translations/messages.pot`` file must be updated by
+running the following command at the root of the git tree, in the
+development virtual machine::
+
+    ./manage.py --verbose translate --extract-update
+
+The updated ``securedrop/translations/messages.pot`` should then be
+reviewed and commited. Once merged in develop, the changes will be
+visible in the `Weblate`_ web interface used by translators because it
+watches the develop branch of the SecureDrop repository.
+
+Compiling translations
+----------------------
+
+The `gettext`_ needs a compiled file for each language (the ``*.mo``
+files). This can be done by running the following command at the root
+of the git tree, in the development virtual machine::
+
+    ./manage.py --verbose translate --compile
+
+
+Verifying translations
+----------------------
+
+After a translation is compiled, the web page in which it shows can be
+verified visually by navigating to the corresponding state from
+``http://localhost:8080`` for the source interface or
+``http://localhost:8081`` for the journalist interface after running
+the following::
+
+     ./manage.py run
+
+An easier way is to generate screenshots for each state in each known
+language with::
+
+     $ pytest -v tests/pages-layout
+     ...
+     ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
+     ...TestJournalistLayout::test_col_no_documents[fr_FR] PASSED
+     ...
+
+The screenshots for ``fr_FR`` are available in
+``securedrop/tests/pages-layout/screenshots/fr_FR`` and the name of
+the file can be found in the function that created it in
+``securedrop/tests/pages-layout/test_journalist.py`` or
+``securedrop/tests/pages-layout/test_source.py``.
+
+Merging translations
+--------------------
+
+`Weblate`_ merges pushes the translations done via the web interface
+to the develop branch in a fork of the `SecureDrop git repository`_.
+These commits must be manually cherry-picked and proposed as pull
+requests for the `SecureDrop git repository`_.
+
+.. todo:: is this intermediate step necessary, even when the need-review
+   flag is set ? Ideally the need-review step blocks merging and
+   we can have Weblate merge in develop directly ?
+
+.. _`gettext`: https://www.gnu.org/software/gettext/
+.. _`pybabel`: http://babel.pocoo.org/
+.. _`Weblate`: http://weblate.securedrop.club/
+.. _`SecureDrop git repository`: https://github.com/freedomofpress/securedrop
