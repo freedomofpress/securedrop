@@ -1,14 +1,20 @@
 ---
 - name: Create SecureDrop-specific dotfiles directory for Tails persistence.
+  become: yes
   file:
     path: "{{ tails_config_securedrop_dotfiles }}"
     state: directory
     mode: "0755"
+    owner: amnesia
+    group: amnesia
 
 - name: Copy SecureDrop logo for desktop icons to dotfiles directory.
+  become: yes
   copy:
     src: securedrop_icon.png
     dest: "{{ tails_config_securedrop_dotfiles }}/"
+    owner: amnesia
+    group: amnesia
 
 # Script used to append torrc additions. Triggered by NetworkManager hook.
 # Resides in dotfiles in order to achieve persistence.

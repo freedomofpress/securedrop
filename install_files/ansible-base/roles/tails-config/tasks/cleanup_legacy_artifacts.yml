@@ -4,6 +4,7 @@
 # items will be handled and updated accordingly.
 
 - name: Remove deprecated network hook config files.
+  become: yes
   file:
     path: "{{ item.0 }}/{{ item.1 }}"
     state: absent
@@ -12,6 +13,7 @@
     - "{{ tails_config_deprecated_config_files }}"
 
 - name: Remove deprecated xsessionrc file.
+  become: yes
   file:
     path: "{{ tails_config_live_persistence }}/dotfiles/.xsessionrc"
     state: absent
