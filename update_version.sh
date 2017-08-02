@@ -30,7 +30,7 @@ old_version_regex="^__version__ = '(.*)'$"
 OLD_VERSION=${BASH_REMATCH[1]}
 
 # Update the version shown to users of the web application.
-sed -i "s/$OLD_VERSION/$NEW_VERSION/g" securedrop/version.py
+sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" securedrop/version.py
 
 # Update the version in the Debian packages
 sed -i "s/^\(Version: \).*/\1$NEW_VERSION/" install_files/securedrop-app-code/DEBIAN/control
@@ -42,11 +42,11 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ke
 sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
 
 # Update the version in testinfra vars
-sed -i "s/$OLD_VERSION/$NEW_VERSION/" testinfra/vars/build.yml
+sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" testinfra/vars/build.yml
 
 # Update the version that we tell people to check out in the install doc
-sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/set_up_admin_tails.rst
-sed -i "s/$OLD_VERSION/$NEW_VERSION/" docs/conf.py
+sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst
+sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" docs/conf.py
 
 # Update the changelog
 sed -i 's/\(## '$OLD_VERSION'\)/## '$NEW_VERSION'\n\n\n\n\1/g' changelog.md
