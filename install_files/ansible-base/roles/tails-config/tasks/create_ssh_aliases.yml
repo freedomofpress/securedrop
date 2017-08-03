@@ -15,16 +15,22 @@
   register: mon_ssh_lookup_result
 
 - name: Create SSH config directory.
+  become: yes
   file:
     state: directory
     path: "{{ tails_config_amnesia_home }}/.ssh"
     mode: "0700"
+    owner: amnesia
+    group: amnesia
 
 - name: Create SSH alias
+  become: yes
   template:
     src: ssh_config.j2
     dest: "{{ item }}"
     mode: "0600"
+    owner: amnesia
+    group: amnesia
   with_items:
     - "{{ tails_config_securedrop_dotfiles }}/ssh_config"
     - "{{ tails_config_amnesia_home }}/.ssh/config"

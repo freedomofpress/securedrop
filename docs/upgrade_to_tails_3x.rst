@@ -232,15 +232,15 @@ the *Secure Viewing Station* and typing the following commands:
 .. note:: This only needs to be done once on each *Secure Viewing Station*.
           After a reboot it will persist.
 
-6. Upgrade SecureDrop to 0.4
-----------------------------
+6. Upgrade SecureDrop to 0.4.x
+------------------------------
 
 Now that you've upgraded the Tails workstation to Tails 3, follow the
-:doc:`0.4 Upgrade Guide <upgrade/0.3.x_to_0.4>` to configure the Tails
+:doc:`0.4.x Upgrade Guide <upgrade/0.3.x_to_0.4>` to configure the Tails
 environment to access your SecureDrop instance. You will need to perform
 further upgrade steps for the *Admin* and *Journalist Workstations*.
 
-After upgrading to 0.4, you should move your backup drive to a safe location (if you
+After upgrading to 0.4.x, you should move your backup drive to a safe location (if you
 used a strong passphrase). Else, you should destroy the backup drive following
 the instructions `here <upgrade_to_tails_2x.html#wipe-the-backup-device>`__.
 

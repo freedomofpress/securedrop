@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.1
+
+* Fixes a bug in one of the Tails scripts used to set up the Desktop
+icons for the SecureDrop interfaces (#2049)
+
+The issues for this release were tracked in the 0.4.1 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.4.1.
+
 ## 0.4
 
 The issues for this release were tracked in the 0.4 milestone on Github:
