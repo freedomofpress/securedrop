@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
-import os
 import unittest
 
 import template_filters
+
 
 class TestTemplateFilters(unittest.TestCase):
 
