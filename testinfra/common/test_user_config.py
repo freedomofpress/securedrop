@@ -27,8 +27,11 @@ def test_sudoers_config(File, Sudo):
     assert re.search('^Defaults\s+env_reset$', sudoers_config, re.M)
     assert re.search('^Defaults\s+env_reset$', sudoers_config, re.M)
     assert re.search('^Defaults\s+mail_badpass$', sudoers_config, re.M)
-    assert re.search('Defaults\s+secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"', sudoers_config, re.M)
-    assert re.search('^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$', sudoers_config, re.M)
+    assert re.search('Defaults\s+secure_path="/usr/local/sbin:'
+                     '/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"',
+                     sudoers_config, re.M)
+    assert re.search('^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$',
+                     sudoers_config, re.M)
     assert re.search('Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
 
 
@@ -42,7 +45,8 @@ def test_sudoers_tmux_env(File):
 
     f = File('/etc/profile.d/securedrop_additions.sh')
     non_interactive_str = re.escape('[[ $- != *i* ]] && return')
-    tmux_check = re.escape('test -z "$TMUX" && (tmux attach || tmux new-session)')
+    tmux_check = re.escape('test -z "$TMUX" && (tmux attach ||'
+                           ' tmux new-session)')
 
     assert f.contains("^{}$".format(non_interactive_str))
     assert f.contains("^if which tmux >\/dev\/null 2>&1; then$")
@@ -55,15 +59,15 @@ def test_tmux_installed(Package):
     """
     Ensure the `tmux` package is present, since it's required for the user env.
     When running an interactive SSH session over Tor, tmux should be started
-    automatically, to prevent problems if the connection is broken unexpectedly,
-    as sometimes happens over Tor. The Admin will be able to reconnect to the
-    running tmux session and review command output.
+    automatically, to prevent problems if the connection is broken
+    unexpectedly, as sometimes happens over Tor. The Admin will be able to
+    reconnect to the running tmux session and review command output.
     """
     assert Package("tmux").is_installed
 
 
 @pytest.mark.skipif(hostenv == 'travis',
-            reason="Bashrc tests dont make sense on Travis")
+                    reason="Bashrc tests dont make sense on Travis")
 def test_sudoers_tmux_env_deprecated(File):
     """
     Previous version of the Ansible config set the tmux config
