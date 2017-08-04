@@ -39,11 +39,6 @@ your host machine to include them in the ``securedrop-app-code`` package.
    ansible -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory app-prod -m fetch -a 'flat=yes dest=install_files/ansible-base/ src=/etc/apparmor.d/usr.sbin.apache2'
    ansible -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory app-prod -m fetch -a 'flat=yes dest=install_files/ansible-base/ src=/etc/apparmor.d/usr.sbin.tor'
 
-.. todo:: Explain the different behavior of the virtual environments (staging
-          vs. prod) with regards to the AppArmor profiles.
-
 The AppArmor profiles are packaged with the ``securedrop-app-code``.
 The ``securedrop-app-code`` ``postinst`` puts the AppArmor profiles in enforce mode
-on production hosts. In the staging environment, the ``app-test`` Ansible role
-puts the AppArmor profiles in complain mode, to facilitate the development workflow
-with ``aa-logprof`` outlined above.
+on production and staging hosts.
