@@ -114,6 +114,11 @@ mounted and ready to access.
 Open a Nautilus window with administrator privileges by going to
 **Applications** ▸ **System Tools** ▸ **Root Terminal**.
 
+.. note::
+  If you cannot see the **Root Terminal** icon in your menu, it might be
+  because an administrator password wasn't set. If that's the case, you'll need
+  to restart and set an administrator password before continuing.
+
 |Root Terminal|
 
 Type ``nautilus`` at the terminal prompt and hit enter:
