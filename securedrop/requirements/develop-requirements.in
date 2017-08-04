@@ -1,6 +1,7 @@
 # Temporary peg until issue #1146 is resolved
 ansible==2.2.1
 boto
+html-linter
 flake8
 pip-tools
 pytest-xdist
