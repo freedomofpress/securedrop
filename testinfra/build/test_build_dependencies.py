@@ -17,7 +17,8 @@ def get_build_directories():
             ossec_version=securedrop_test_vars.ossec_version,
             keyring_version=securedrop_test_vars.keyring_version,
             )
-    build_directories = [d.format(**substitutions) for d in securedrop_test_vars.build_directories]
+    build_directories = [d.format(**substitutions) for d
+                         in securedrop_test_vars.build_directories]
     return build_directories
 
 

@@ -39,11 +39,13 @@ def get_deb_packages():
             keyring_version=securedrop_test_vars.keyring_version,
             )
 
-    deb_packages = [d.format(**substitutions) for d in securedrop_test_vars.build_deb_packages]
+    deb_packages = [d.format(**substitutions) for d
+                    in securedrop_test_vars.build_deb_packages]
     return deb_packages
 
 
 deb_packages = get_deb_packages()
+
 
 @pytest.mark.parametrize("deb", deb_packages)
 def test_build_deb_packages(File, deb):
@@ -78,8 +80,10 @@ def test_deb_packages_appear_installable(File, Command, Sudo, deb):
     # Sudo is required to call `dpkg --install`, even as dry-run.
     with Sudo():
         c = Command("dpkg --install --dry-run {}".format(deb_package.path))
-        assert "Selecting previously unselected package {}".format(package_name) in c.stdout
-        regex = "Preparing to unpack [./]+{} ...".format(re.escape(deb_basename))
+        assert "Selecting previously unselected package {}".format(
+            package_name) in c.stdout
+        regex = "Preparing to unpack [./]+{} ...".format(
+            re.escape(deb_basename))
         assert re.search(regex, c.stdout, re.M)
         assert c.rc == 0
 
@@ -176,17 +180,22 @@ def test_deb_package_contains_no_generated_assets(File, Command, deb):
     if "securedrop-app-code" in deb_package.path:
         c = Command("dpkg-deb --contents {}".format(deb_package.path))
         # static/gen/ directory should exist
-        assert re.search("^.*\./var/www/securedrop/static/gen/$", c.stdout, re.M)
+        assert re.search("^.*\./var/www/securedrop"
+                         "/static/gen/$", c.stdout, re.M)
         # static/gen/ directory should be empty
-        assert not re.search("^.*\./var/www/securedrop/static/gen/.+$", c.stdout, re.M)
+        assert not re.search("^.*\./var/www/securedrop"
+                             "/static/gen/.+$", c.stdout, re.M)
 
         # static/.webassets-cache/ directory should exist
-        assert re.search("^.*\./var/www/securedrop/static/.webassets-cache/$", c.stdout, re.M)
+        assert re.search("^.*\./var/www/securedrop"
+                         "/static/.webassets-cache/$", c.stdout, re.M)
         # static/.webassets-cache/ directory should be empty
-        assert not re.search("^.*\./var/www/securedrop/static/.webassets-cache/.+$", c.stdout, re.M)
+        assert not re.search("^.*\./var/www/securedrop"
+                             "/static/.webassets-cache/.+$", c.stdout, re.M)
 
         # no SASS files should exist; only the generated CSS files.
         assert not re.search("^.*sass.*$", c.stdout, re.M)
+
 
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_css(File, Command, deb):
@@ -202,5 +211,8 @@ def test_deb_package_contains_css(File, Command, deb):
         c = Command("dpkg-deb --contents {}".format(deb_package.path))
 
         for css_type in ['journalist', 'source']:
-            assert re.search("^.*\./var/www/securedrop/static/css/{}.css$".format(css_type), c.stdout, re.M)
-            assert re.search("^.*\./var/www/securedrop/static/css/{}.css.map$".format(css_type), c.stdout, re.M)
+            assert re.search("^.*\./var/www/securedrop/static/"
+                             "css/{}.css$".format(css_type), c.stdout, re.M)
+            assert re.search("^.*\./var/www/securedrop/static/"
+                             "css/{}.css.map$".format(css_type), c.stdout,
+                             re.M)
