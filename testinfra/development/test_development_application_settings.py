@@ -5,6 +5,7 @@ hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
 sd_test_vars = pytest.securedrop_test_vars
 
+
 @pytest.mark.parametrize('package', [
     "securedrop-app-code",
     "apache2-mpm-worker",
@@ -23,7 +24,8 @@ def test_development_lacks_deb_packages(Command, package):
     assert c.rc == 1
     assert c.stdout == ""
     stderr = c.stderr.rstrip()
-    assert stderr == "dpkg-query: no packages found matching {}".format(package)
+    assert stderr == "dpkg-query: no packages found matching {}".format(
+        package)
 
 
 def test_development_apparmor_no_complain_mode(Command, Sudo):
@@ -106,8 +108,10 @@ def test_development_clean_tmp_cron_job(Command, Sudo):
 
     with Sudo():
         c = Command.check_output('crontab -l')
-    assert "@daily {}/manage.py clean-tmp".format(sd_test_vars.securedrop_code) in c
-    assert "@daily {}/manage.py clean_tmp".format(sd_test_vars.securedrop_code) not in c
+    assert "@daily {}/manage.py clean-tmp".format(
+        sd_test_vars.securedrop_code) in c
+    assert "@daily {}/manage.py clean_tmp".format(
+        sd_test_vars.securedrop_code) not in c
     assert "clean_tmp".format(sd_test_vars.securedrop_code) not in c
     # Make sure that the only cron lines are a comment and the actual job.
     # We don't want any duplicates.

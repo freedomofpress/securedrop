@@ -1,6 +1,6 @@
 import pytest
-import os
 import getpass
+
 
 def test_development_app_dependencies(Package):
     """
@@ -50,7 +50,7 @@ def test_development_pip_dependencies(Command, pip_package, version):
 
 
 @pytest.mark.skipif(getpass.getuser() != 'vagrant',
-            reason="vagrant bashrc checks dont make sense in CI")
+                    reason="vagrant bashrc checks dont make sense in CI")
 def test_development_securedrop_env_var(File):
     """
     Ensure that the SECUREDROP_ENV var is set to "dev".

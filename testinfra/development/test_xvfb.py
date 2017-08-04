@@ -55,7 +55,7 @@ case "$1" in
 esac
 
 exit 0
-""".lstrip().rstrip()
+""".lstrip().rstrip()  # noqa
     with Sudo():
         assert f.contains('^XVFB=/usr/bin/Xvfb$')
         assert f.contains('^XVFBARGS=":1 -screen 0 1024x768x24 '
@@ -106,7 +106,7 @@ def test_xvfb_service_running(Process, Sudo):
     with Sudo():
         p = Process.get(user="root", comm="Xvfb")
         wanted_args = str('/usr/bin/Xvfb :1 -screen 0 1024x768x24 '
-                      '-ac +extension GLX +render -noreset')
+                          '-ac +extension GLX +render -noreset')
         assert p.args == wanted_args
         # We only expect a single process, no children.
         workers = Process.filter(ppid=p.pid)

@@ -3,6 +3,7 @@ import os
 
 hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
+
 @pytest.mark.skipif(hostenv == 'travis',
                     reason="Custom networking in Travis")
 def test_development_iptables_rules(Command, Sudo):
@@ -50,12 +51,12 @@ def test_development_redis_worker(Socket):
 # aren't configured to run by default, e.g. on boot. Nor
 # do the app tests cause them to be run. So, we shouldn't
 # really expected them to be running.
-## check for source interface flask port listening
-#describe port(8080) do
+# check for source interface flask port listening
+# describe port(8080) do
 #  it { should be_listening.on('0.0.0.0').with('tcp') }
-#end
+# end
 #
-## check for journalist interface flask port listening
-#describe port(8081) do
+# check for journalist interface flask port listening
+# describe port(8081) do
 #  it { should be_listening.on('0.0.0.0').with('tcp') }
-#end
+# end
