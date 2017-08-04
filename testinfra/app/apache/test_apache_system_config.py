@@ -4,6 +4,7 @@ import re
 
 securedrop_test_vars = pytest.securedrop_test_vars
 
+
 @pytest.mark.parametrize("package", [
     "apache2-mpm-worker",
     "libapache2-mod-wsgi",
@@ -131,5 +132,6 @@ def test_apache_modules_absent(Command, Sudo, apache_module):
     """
     with Sudo():
         c = Command("/usr/sbin/a2query -m {}".format(apache_module))
-        assert "No module matches {} (disabled".format(apache_module) in c.stderr
+        assert "No module matches {} (disabled".format(apache_module) in \
+            c.stderr
         assert c.rc == 32

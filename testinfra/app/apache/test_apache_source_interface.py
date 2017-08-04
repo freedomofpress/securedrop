@@ -20,8 +20,10 @@ def test_apache_headers_source_interface(File, header):
 
 
 @pytest.mark.parametrize("apache_opt", [
-    "<VirtualHost {}:80>".format(securedrop_test_vars.apache_listening_address),
-    "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(securedrop_test_vars.securedrop_code),
+    "<VirtualHost {}:80>".format(
+        securedrop_test_vars.apache_listening_address),
+    "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
+        securedrop_test_vars.securedrop_code),
     'WSGIProcessGroup source',
     'WSGIScriptAlias / /var/www/source.wsgi',
     'Header set Cache-Control "no-store"',

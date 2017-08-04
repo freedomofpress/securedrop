@@ -1,5 +1,4 @@
 import pytest
-import re
 
 
 securedrop_test_vars = pytest.securedrop_test_vars
@@ -65,5 +64,6 @@ def test_apache_listening(Socket, Sudo, port):
     """
     # Sudo is necessary to read from /proc/net/tcp.
     with Sudo():
-        s = Socket("tcp://{}:{}".format(securedrop_test_vars.apache_listening_address, port))
+        s = Socket("tcp://{}:{}".format(
+            securedrop_test_vars.apache_listening_address, port))
         assert s.is_listening
