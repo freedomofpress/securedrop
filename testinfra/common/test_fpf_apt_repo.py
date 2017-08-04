@@ -13,17 +13,17 @@ def test_fpf_apt_repo_present(File):
     is tested separately.
     """
     f = File('/etc/apt/sources.list.d/apt_freedom_press.list')
-    assert f.contains('^deb \[arch=amd64\] https:\/\/apt\.freedom\.press trusty main$')
+    assert f.contains('^deb \[arch=amd64\] https:\/\/apt\.freedom\.press '
+                      'trusty main$')
 
 
 def test_fpf_apt_repo_fingerprint(Command):
     """
     Ensure the FPF apt repo has the correct fingerprint on the associated
-    signing pubkey. The key changed in October 2016, so test for the 
-    newest fingerprint, which is installed on systems via the 
+    signing pubkey. The key changed in October 2016, so test for the
+    newest fingerprint, which is installed on systems via the
     `securedrop-keyring` package.
     """
-
 
     c = Command('apt-key finger')
 
@@ -36,7 +36,8 @@ uid                  SecureDrop Release Signing Key"""
     assert c.rc == 0
     assert fpf_gpg_pub_key_info in c.stdout
 
-    fpf_gpg_pub_key_fingerprint_expired = 'B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818'
+    fpf_gpg_pub_key_fingerprint_expired = ('B89A 29DB 2128 160B 8E4B  '
+                                           '1B4C BADD E0C7 FC9F 6818')
     fpf_gpg_pub_key_info_expired = """pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]
       Key fingerprint = #{fpf_gpg_pub_key_fingerprint_expired}
 uid                  Freedom of the Press Foundation Master Signing Key"""
