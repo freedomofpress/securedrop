@@ -514,15 +514,15 @@ def col(filesystem_id):
                            source=source)
 
 
-def delete_collection(source_id):
+def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(store.delete_source_directory, source_id)
+    job = worker.enqueue(store.delete_source_directory, filesystem_id)
 
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(source_id)
+    crypto_util.delete_reply_keypair(filesystem_id)
 
     # Delete their entry in the db
-    source = get_source(source_id)
+    source = get_source(filesystem_id)
     db_session.delete(source)
     db_session.commit()
     return job
@@ -608,8 +608,8 @@ def col_delete(cols_selected):
     if len(cols_selected) < 1:
         flash("No collections selected to delete!", "error")
     else:
-        for source_id in cols_selected:
-            delete_collection(source_id)
+        for filesystem_id in cols_selected:
+            delete_collection(filesystem_id)
         flash("%s %s deleted" % (
             len(cols_selected),
             "collection" if len(cols_selected) == 1 else "collections"

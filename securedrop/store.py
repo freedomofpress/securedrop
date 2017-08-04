@@ -168,6 +168,6 @@ def secure_unlink(fn, recursive=False):
     return "success"
 
 
-def delete_source_directory(source_id):
-    secure_unlink(path(source_id), recursive=True)
+def delete_source_directory(filesystem_id):
+    secure_unlink(path(filesystem_id), recursive=True)
     return "success"
