@@ -7,9 +7,7 @@ Vars should be placed in `testinfra/vars/<hostname>.yml`.
 """
 
 import os
-import sys
 import yaml
-import pytest
 
 
 target_host = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
