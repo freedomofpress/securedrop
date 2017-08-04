@@ -64,10 +64,12 @@ def run_testinfra(target_host, verbose=True):
     if target_host.endswith("-prod"):
         os.environ['SECUREDROP_SSH_OVER_TOR'] = '1'
         # Dump SSH config to tempfile so it can be passed as arg to testinfra.
-        ssh_config_output = subprocess.check_output(["vagrant", "ssh-config", target_host])
-        # Create temporary file to store ssh-config. Not deleting it automatically
-        # because there's no sensitive info (HidServAuth is required to connect),
-        # and we'll need it outside of the context-manager block that writes to it.
+        ssh_config_output = subprocess.check_output(["vagrant", "ssh-config",
+                                                     target_host])
+        # Create temporary file to store ssh-config. Not deleting it
+        # automatically because there's no sensitive info (HidServAuth is
+        # required to connect), and we'll need it outside of the
+        # context-manager block that writes to it.
         ssh_config_tmpfile = tempfile.NamedTemporaryFile(delete=False)
         with ssh_config_tmpfile.file as f:
             f.write(ssh_config_output)
@@ -84,7 +86,7 @@ testinfra \
 """.lstrip().rstrip()
 
     elif os.environ.get("FPF_CI", 'false') == 'true':
-        if os.environ.get("CI_SD_ENV","development") == "development":
+        if os.environ.get("CI_SD_ENV", "development") == "development":
             os.environ['SECUREDROP_TESTINFRA_TARGET_HOST'] = "travis"
             ssh_config_path = ""
             testinfra_command_template = "testinfra -vv {target_roles}"
@@ -129,6 +131,7 @@ testinfra \
 
     # Execute config tests.
     subprocess.check_call(testinfra_command)
+
 
 if __name__ == "__main__":
     run_testinfra(target_host)
