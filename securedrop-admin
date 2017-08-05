@@ -7,7 +7,6 @@ instances.
 """
 
 import argparse
-import getpass
 import logging
 import os
 import subprocess
@@ -197,8 +196,7 @@ def install_securedrop(args):
         # Attempt to read site-specific vars file, specifically
         # for informative messaging via exception handling.
         with open(SITE_CONFIG) as site_config_file:
-            site_config_vars = yaml.safe_load(site_config_file.read())
-
+            yaml.safe_load(site_config_file.read())
     except IOError:
         sdlog.error("Config file missing, re-run with sdconfig")
         sys.exit(1)
@@ -208,12 +206,13 @@ def install_securedrop(args):
 
     else:
         sdlog.info("Now installing SecureDrop on remote servers.")
-        sdlog.info("You will be prompted for the sudo password on the servers.")
-        sdlog.info("The sudo password is only necessary during initial installation.")
-        subprocess.check_call([os.path.join(ANSIBLE_PATH, 'securedrop-prod.yml'),
-                         '--ask-become-pass',
-                         ],
-                        cwd=ANSIBLE_PATH)
+        sdlog.info("You will be prompted for the sudo password on the "
+                   "servers.")
+        sdlog.info("The sudo password is only necessary during initial "
+                   "installation.")
+        subprocess.check_call([os.path.join(ANSIBLE_PATH,
+                                            'securedrop-prod.yml'),
+                              '--ask-become-pass'], cwd=ANSIBLE_PATH)
 
 
 def backup_securedrop(args):
@@ -276,9 +275,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=ArgParseFormatterCombo)
     parser.add_argument('-v', action='store_true', default=False,
-                            help="Increase verbosity on output")
+                        help="Increase verbosity on output")
     parser.add_argument('-d', action='store_true', default=False,
-                            help="Developer mode. Not to be used in production.")
+                        help="Developer mode. Not to be used in production.")
     subparsers = parser.add_subparsers()
 
     parse_setup = subparsers.add_parser('setup', help=envsetup.__doc__)
@@ -286,8 +285,10 @@ if __name__ == "__main__":
 
     parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
-    parse_sdconfig.add_argument('-f', '--force', action='store_true',
-                                help="Clobber site-specific vars for reconfiguration")
+    parse_sdconfig.add_argument(
+        '-f', '--force', action='store_true',
+        help="Clobber site-specific vars for reconfiguration"
+        )
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)
