@@ -29,6 +29,45 @@ your PR. If you modify the server configuration, you should run the
 testinfra tests. Please denote in the checklist when you submit the PR that
 you have performed these checks locally.
 
+Code Style
+----------
+
+We use code linters to keep a consistent code quality and style. These linters
+also run in CI and will produce build failures. To avoid this, we suggest running
+the linters locally as you work.
+
+.. note::
+  The code linters are installed automatically on the Development VM.
+  To install the linting tools locally on your host machine, from the root
+  of the repo you can run the following:
+
+  .. code:: sh
+
+     pip install -r securedrop/requirements/develop-requirements.txt
+
+Python
+~~~~~~
+
+All Python code should be `flake8 <http://flake8.pycqa.org/en/latest/>`__
+compliant. You can run ``flake8`` locally via:
+
+  .. code:: sh
+
+      flake8 example.py
+
+HTML
+~~~~
+
+HTML should be in compliance with
+`Google's HTML style guide <https://google.github.io/styleguide/htmlcssguide.html>`__.
+We use `html-linter <https://pypi.python.org/pypi/html-linter/>`__ to lint
+our HTML templates in ``securedrop/source_templates`` and
+``securedrop/journalist_templates``. Run the HTML linting options we use via:
+
+  .. code:: sh
+
+      html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation example.html
+
 Git History
 -----------
 
