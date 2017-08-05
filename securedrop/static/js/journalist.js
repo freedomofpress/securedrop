@@ -14,7 +14,7 @@ function enhance_ui() {
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
   // deleting submissions
-  $('button#delete_selected').attr('value', 'delete');
+  $('button#delete-selected').attr('value', 'delete');
 }
 
 $(function () {
@@ -46,11 +46,11 @@ $(function () {
       }
     });
 
-  $("#delete_collection").submit(function () {
+  $("#delete-collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
   });
 
-  $("#delete_collections").click(function () {
+  $("#delete-collections").click(function () {
     var checked = $("ul#cols li :checkbox").filter(":visible").filter(function(index) {
         return $(this).prop('checked');
     });
@@ -61,7 +61,7 @@ $(function () {
     return false;
   });
 
-  $("#delete_selected").click(function () {
+  $("#delete-selected").click(function () {
       var checked = $("ul#submissions li :checkbox").filter(function() {
           return $(this).prop('checked')
       });

@@ -10,13 +10,13 @@
   {% for item in items_selected %}
     <li>
       {{ item.filename }}
-      <input type="hidden" name="doc_names_selected" value="{{ item.filename }}" />
+      <input type="hidden" name="doc_names_selected" value="{{ item.filename }}">
     </li>
   {% endfor %}
   </ul>
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
-  <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off"/>
-  <input type="hidden" name="confirm_delete" value="true" />
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input type="hidden" name="sid" value="{{ sid }}" autocomplete="off">
+  <input type="hidden" name="confirm_delete" value="true">
   <p><button class="sd-button" type="submit" name="action" value="delete">PERMANENTLY DELETE FILES</button></p>
 </form>
 

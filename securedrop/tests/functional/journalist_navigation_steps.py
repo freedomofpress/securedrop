@@ -64,7 +64,7 @@ class JournalistNavigationSteps():
         self.driver.find_elements_by_name('doc_names_selected')[0].click()
 
     def _journalist_clicks_delete_selected_javascript(self):
-        self.driver.find_element_by_id('delete_selected').click()
+        self.driver.find_element_by_id('delete-selected').click()
         self._alert_wait()
 
     def _journalist_verifies_deletion_of_one_submission_javascript(self):
@@ -94,7 +94,7 @@ class JournalistNavigationSteps():
 
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_id(
-            'link_admin_index')
+            'link-admin-index')
         admin_interface_link.click()
 
         h1s = self.driver.find_elements_by_tag_name('h1')
@@ -163,7 +163,7 @@ class JournalistNavigationSteps():
 
     def _logout(self):
         # Click the logout link
-        logout_link = self.driver.find_element_by_id('link_logout')
+        logout_link = self.driver.find_element_by_id('link-logout')
         logout_link.click()
 
         # Logging out should redirect back to the login page
@@ -194,11 +194,11 @@ class JournalistNavigationSteps():
         # The new user was not an admin, so they should not have the admin
         # interface link available
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id('link_admin_index')
+            self.driver.find_element_by_id('link-admin-index')
 
     def _edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
-            'link_edit_account')
+            'link-edit-account')
         edit_account_link.click()
 
         # The header says "Edit your account"
@@ -214,7 +214,7 @@ class JournalistNavigationSteps():
         # There's no checkbox to change the administrator status of your
         # account.
         with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_css_selector('#is_admin')
+            self.driver.find_element_by_css_selector('#is-admin')
         # 2FA reset buttons at the bottom point to the user URLs for reset.
         totp_reset_button = self.driver.find_elements_by_css_selector(
             '#reset-two-factor-totp')[0]
@@ -247,7 +247,7 @@ class JournalistNavigationSteps():
         # There's a checkbox to change the administrator status of the user and
         # it's already checked appropriately to reflect the current status of
         # our user.
-        username_field = self.driver.find_element_by_css_selector('#is_admin')
+        username_field = self.driver.find_element_by_css_selector('#is-admin')
         assert (bool(username_field.get_attribute('checked')) ==
                 user.is_admin)
         # 2FA reset buttons at the bottom point to the admin URLs for
@@ -276,7 +276,7 @@ class JournalistNavigationSteps():
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
-            'link_admin_index')
+            'link-admin-index')
         admin_interface_link.click()
 
         # Click the "edit user" link for the new user
@@ -325,7 +325,7 @@ class JournalistNavigationSteps():
 
         # Go to the admin interface
         admin_interface_link = self.driver.find_element_by_id(
-            'link_admin_index')
+            'link-admin-index')
         admin_interface_link.click()
         # Edit the new user's password
         self._edit_user(self.new_user['username'])

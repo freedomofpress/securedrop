@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>SecureDrop</title>
 
-    <link rel="stylesheet" href="/static/css/journalist.css" />
+    <link rel="stylesheet" href="/static/css/journalist.css">
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
@@ -12,18 +12,17 @@
       "js/libs/jquery-2.1.4.min.js", "js/journalist.js" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
-
     {% block extrahead %}{% endblock %}
   </head>
   <body>
 
     {% if g.user %}
     <div id="logout">
-      <a href="{{ url_for('edit_account') }}" id="link_edit_account">Edit Account</a> |
+      <a href="{{ url_for('edit_account') }}" id="link-edit-account">Edit Account</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}" id="link_admin_index">Admin</a> |
+      <a href="{{ url_for('admin_index') }}" id="link-admin-index">Admin</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}" id="link_logout">Logout</a>
+      <a href="{{ url_for('logout') }}" id="link-logout">Logout</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
@@ -34,7 +33,7 @@
         <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br/>
+          Powered by<br>
           <img src="/static/i/securedrop_small.png" alt="SecureDrop">
         </div>
         {% endif %}
