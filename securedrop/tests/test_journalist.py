@@ -532,6 +532,8 @@ class TestJournalistApp(TestCase):
                                           password=VALID_PASSWORD,
                                           is_admin=False))
 
+        print resp.data.decode('utf-8')
+
         self.assertRedirects(resp, url_for('admin_new_user_two_factor',
                                            uid=max_journalist_pk+1))
 
@@ -541,7 +543,17 @@ class TestJournalistApp(TestCase):
                                 data=dict(username='',
                                           password=VALID_PASSWORD,
                                           is_admin=False))
-        self.assertIn('Missing username', resp.data)
+        self.assertIn('Invalid username', resp.data)
+
+    def test_admin_add_user_too_short_username(self):
+        self._login_admin()
+        username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username=username,
+                                          password='pentagonpapers',
+                                          password_again='pentagonpapers',
+                                          is_admin=False))
+        self.assertIn('Invalid username', resp.data)
 
     @patch('journalist.app.logger.error')
     @patch('journalist.Journalist',

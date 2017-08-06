@@ -264,10 +264,18 @@ class Journalist(Base):
         "JournalistLoginAttempt",
         backref="journalist")
 
+    MIN_USERNAME_LEN = 8
+
     def __init__(self, username, password, is_admin=False, otp_secret=None):
+        if len(username) < self.MIN_USERNAME_LEN:
+            raise InvalidUsernameException(
+                        'Username "{}" must be {} characters long.'
+                        .format(username, Journalist.MIN_USERNAME_LEN))
+
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
+
         if otp_secret:
             self.set_hotp_secret(otp_secret)
 

@@ -43,9 +43,13 @@ class TestManagementCommand(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    @mock.patch("__builtin__.raw_input", return_value='test')
-    def test_get_username(self, mock_stdin):
-        assert manage._get_username() == 'test'
+    @mock.patch("__builtin__.raw_input", return_value='test1234')
+    def test_get_username_success(self, mock_stdin):
+        assert manage._get_username() == 'test1234'
+
+    @mock.patch("__builtin__.raw_input", side_effect=['test', 'test1234'])
+    def test_get_username_fail(self, mock_stdin):
+        assert manage._get_username() == 'test1234'
 
     @mock.patch("__builtin__.raw_input", return_value='y')
     def test_get_yubikey_usage_yes(self, mock_stdin):
@@ -83,6 +87,10 @@ class TestManage(object):
 
     def teardown(self):
         utils.env.teardown()
+
+    @mock.patch("__builtin__.raw_input", return_value='foo-bar-baz')
+    def test_get_username(self, mock_get_usernam):
+        assert manage._get_username() == 'foo-bar-baz'
 
     def test_translate_compile_code_and_template(self):
         source = [
