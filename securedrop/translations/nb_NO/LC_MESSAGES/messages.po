@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-07 17:09+0000\n"
+"PO-Revision-Date: 2017-08-07 17:18+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -293,11 +293,11 @@ msgstr "Verifiseringskode"
 #: journalist_templates/admin_new_user_two_factor.html:23
 #: journalist_templates/col.html:80 source_templates/lookup.html:49
 msgid "SUBMIT"
-msgstr "SEND INN"
+msgstr "SEND"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr "Administrasjonsgrensesnitt"
+msgstr "Administrasjon"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
@@ -311,7 +311,7 @@ msgstr "Brukernavn"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
-msgstr ""
+msgstr "Rediger"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
@@ -344,7 +344,7 @@ msgstr "Ingen brukere å vise"
 #: journalist_templates/admin_add_user.html:4
 #: journalist_templates/edit_account.html:6
 msgid "Back to admin interface"
-msgstr "Tilbake til administrasjonsgrensesnitt"
+msgstr "Tilbake til administrasjonsgrensesnittet"
 
 #: journalist_templates/admin_add_user.html:10
 #: journalist_templates/login.html:9
@@ -372,6 +372,11 @@ msgid ""
 "have them enter one of the 6-digit codes from the app to confirm that two"
 " factor authentication is set up correctly."
 msgstr ""
+"Du er nesten ferdig! For å fullføre opprettelsen av denne nye brukeren, "
+"hjelp brukeren med å følge instruksjonene under for å sette opp Google "
+"Authenticator. Når du har fått lagt til SecureDrop-kontoen sin i appen, legg "
+"så inn én av de 6-sifrede kodene fra appen i skjemaet under for å bekrefte "
+"at autentiseringen er satt opp riktig."
 
 #: journalist_templates/base.html:24
 msgid "Edit Account"
@@ -383,13 +388,15 @@ msgstr "Administrator"
 
 #: journalist_templates/base.html:28
 msgid "Logout"
-msgstr ""
+msgstr "Logg ut"
 
 #: journalist_templates/base.html:39
 msgid ""
 "Powered by <br/> <img src=\"/static/i/securedrop_small.png\" "
 "alt=\"SecureDrop\">"
 msgstr ""
+"Drevet av <br/> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:53
 msgid "Powered by <em>SecureDrop {version}</em>."
@@ -405,6 +412,9 @@ msgid ""
 "if the first random codename is difficult to say or remember. You can "
 "generate new random codenames as many times as you like."
 msgstr ""
+"Generer ett nytt tilfeldig kodenavn for denne kilden. Vi anbefaler å gjøre "
+"dette om det første tildelte kodenavnet er vanskelig å si eller huske. Du "
+"kan generere nytt kodenavn så mange ganger du vil."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
@@ -432,15 +442,15 @@ msgstr ""
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr "Last ned valgte"
+msgstr "Last ned avkryssede"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr "Slett valgte"
+msgstr "Slett avkryssede"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr "Opplastet dokument"
+msgstr "Opplastet fil"
 
 #: journalist_templates/col.html:55
 msgid "Reply"
