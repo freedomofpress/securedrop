@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-07-26 22:02+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2017-08-07 17:04+0000\n"
+"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
-"<http://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -71,10 +71,12 @@ msgid "Two-factor token failed to verify"
 msgstr "Kontroll av tofaktor-kode mislyktes"
 
 #: journalist.py:267
+#, fuzzy
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "Ugyldig hemmelighetsformat: Bare bruk bokstavene A-F og tall 0-9."
 
 #: journalist.py:272
+#, fuzzy
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Ugyldig hemmelighetsformat: Feilaktig lengde på hemmelighet. Skrev du den "
@@ -109,6 +111,7 @@ msgid "Two-factor token successfully verified!"
 msgstr "Vellykket kontroll av tofaktor-kode!"
 
 #: journalist.py:519
+#, fuzzy
 msgid "No collections selected!"
 msgstr "Ingen samlinger valgt!"
 
@@ -147,10 +150,12 @@ msgid "No unread submissions for this source!"
 msgstr ""
 
 #: journalist.py:714
+#, fuzzy
 msgid "No collections selected to download!"
 msgstr "Ingen samlinger valgt for nedlasting!"
 
 #: journalist.py:746
+#, fuzzy
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
 msgstr[0] "Innsendelse slettet."
@@ -187,7 +192,7 @@ msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
-msgstr ""
+msgstr "filer"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
@@ -217,7 +222,7 @@ msgstr "FORTSETT"
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:4
 msgid "Enable Google Authenticator"
-msgstr ""
+msgstr "Aktivering av Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:5
 msgid ""
@@ -227,16 +232,21 @@ msgid ""
 "codes from the app to confirm that two factor authentication is set up "
 "correctly."
 msgstr ""
+"Du er nesten ferdig! For å fullføre tilbakestillingen av tofaktor-"
+"autentiseringen, følg instruksjonene under for å sette opp Google "
+"Authenticator. Når du har fått lagt til SecureDrop-kontoen i appen, legg så "
+"inn én av de 6-sifrede kodene fra appen i skjemaet under for å bekrefte at "
+"autentiseringen er satt opp riktig."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:7
 msgid "Install Google Authenticator on your phone"
-msgstr ""
+msgstr "Installer Google Authenticator på telefonen din"
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:8
 msgid "Open the Google Authenticator app"
-msgstr ""
+msgstr "Åpne Google Authenticator-appen"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:9
