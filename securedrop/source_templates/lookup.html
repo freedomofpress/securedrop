@@ -8,7 +8,7 @@
     <div class="flash notification">
       <img src="{{ url_for('static', filename='i/relieved_face.png')  }}" alt="relieved-face" class="icon">
       <div class="message">
-        <strong>Whew, it’s you! Now, the embarrassing part...</strong></br>
+        <strong>Whew, it’s you! Now, the embarrassing part...</strong>
         <p>Our servers experienced an unusual surge of new activity, when you last visited. This could
           have been human activity, an automated attack, or just some random blip. To err on the side
           of caution, we put a hold on sending all documents from that day through to our journalists.</p>
@@ -28,7 +28,7 @@
 <hr class="no-line">
 
 <form id="upload" method="post" action="/submit" enctype="multipart/form-data" autocomplete="off">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <div class="snippet">
     <div class="attachment grid-item center">
       <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
@@ -44,14 +44,14 @@
   <div class="pull-right">
     <a href="{{ url_for('lookup') }}" class="btn secondary" id="cancel">CANCEL</a>
     <button type="submit" class="sd-button btn primary" id="submit-doc-button">
-      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px" />
-      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px" />
+      <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px">
+      <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px">
       SUBMIT
     </button>
   </div>
 </form>
 
-<hr class="no-line"/>
+<hr class="no-line">
 
 <h2 class="headline">Get Replies</h2>
 
@@ -85,7 +85,7 @@
     {% endfor %}
     <form id="delete-all" method="post" action="/delete-all">
       <a class="sd-button btn" href="#delete-all-confirm">DELETE ALL REPLIES</a>
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <div id="delete-all-confirm" class="hidden-prompt">
         <p><strong>Are you finished with the replies?</strong></p>
         <button class="sd-button danger" type="submit">YES, DELETE ALL REPLIES</button>
@@ -102,7 +102,9 @@
 <div class="code-reminder" id="codename-hint">
   <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> Remember your codename is:
   <div id="show" class="show pull-right"></div>
-  <span id="content" class="codename"><p class="alert">{{ codename }}</p></span>
+  <span id="content" class="codename">
+    <p class="alert">{{ codename }}</p>
+  </span>
 </div>
 
 {% endblock %}

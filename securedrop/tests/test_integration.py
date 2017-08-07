@@ -426,7 +426,7 @@ class TestIntegration(unittest.TestCase):
 
         # find the delete form and extract the post parameters
         soup = BeautifulSoup(resp.data, 'html.parser')
-        delete_form_inputs = soup.select('form#delete_collection')[0]('input')
+        delete_form_inputs = soup.select('form#delete-collection')[0]('input')
         sid = delete_form_inputs[1]['value']
         col_name = delete_form_inputs[2]['value']
         resp = self.journalist_app.post('/col/delete/' + sid,

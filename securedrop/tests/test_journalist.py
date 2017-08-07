@@ -163,7 +163,7 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}" id="link_edit_account">'.format(
+        edit_account_link = '<a href="{}" id="link-edit-account">'.format(
             url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
@@ -173,7 +173,7 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}" id="link_edit_account">'.format(
+        edit_account_link = '<a href="{}" id="link-edit-account">'.format(
             url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
@@ -183,7 +183,7 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}" id="link_admin_index">'.format(
+        admin_link = '<a href="{}" id="link-admin-index">'.format(
             url_for('admin_index'))
         self.assertIn(admin_link, resp.data)
 
@@ -193,7 +193,7 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}" id="link_admin_index">'.format(
+        admin_link = '<a href="{}" id="link-admin-index">'.format(
             url_for('admin_index'))
         self.assertNotIn(admin_link, resp.data)
 
