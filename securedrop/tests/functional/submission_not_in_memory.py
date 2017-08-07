@@ -5,6 +5,7 @@ from source_navigation_steps import SourceNavigationSteps
 import os
 import getpass
 import re
+from step_helpers import screenshots
 
 
 class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
@@ -34,6 +35,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
     def _num_strings_in(self, needle, haystack):
         return sum(1 for _ in re.finditer(re.escape(needle), haystack))
 
+    @screenshots
     def test_message_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -48,6 +50,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
 
         assert secrets_in_memory < 1
 
+    @screenshots
     def test_file_upload_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

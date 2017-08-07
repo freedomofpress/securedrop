@@ -70,6 +70,15 @@ file, class, and test name:
 
     pytest tests/test_journalist.py::TestJournalistApp::test_invalid_credentials
 
+Some Selenium tests are decorated to produce before and after screenshots to aid
+in debugging. This behavior is enabled with the ``SCREENSHOTS_ENABLED``
+environment variable. Output PNG files will be placed in the ``tests/log/``
+directory.
+
+.. code:: sh
+
+    SCREENSHOTS_ENABLED=1 pytest tests/functional/
+
 
 Updating the application tests
 ------------------------------
