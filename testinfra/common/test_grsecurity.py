@@ -13,7 +13,7 @@ def test_ssh_motd_disabled(File):
     assert not f.contains("pam\.motd")
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("package", [
     'paxctl',
@@ -28,7 +28,7 @@ def test_grsecurity_apt_packages(Package, package):
     assert Package(package).is_installed
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("package", [
     'linux-signed-image-generic-lts-utopic',
@@ -42,7 +42,7 @@ def test_generic_kernels_absent(Command, package):
     """
     Ensure the default Ubuntu-provided kernel packages are absent.
     In the past, conflicting version numbers have caused machines
-    to reboot into a non-grsec kernel due to poor handling of 
+    to reboot into a non-grsec kernel due to poor handling of
     GRUB_DEFAULT logic. Removing the vendor-provided kernel packages
     prevents accidental boots into non-grsec kernels.
     """
@@ -55,7 +55,7 @@ def test_generic_kernels_absent(Command, package):
     assert c.stderr == error_text
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 def test_grsecurity_lock_file(File):
     """
@@ -68,7 +68,7 @@ def test_grsecurity_lock_file(File):
     assert f.size == 0
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 def test_grsecurity_kernel_is_running(Command):
     """
@@ -79,7 +79,7 @@ def test_grsecurity_kernel_is_running(Command):
     assert c.stdout == '3.14.79-grsec'
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize('sysctl_opt', [
   ('kernel.grsecurity.grsec_lock', 1),
@@ -94,7 +94,8 @@ def test_grsecurity_sysctl_options(Sysctl, Sudo, sysctl_opt):
     with Sudo():
         assert Sysctl(sysctl_opt[0]) == sysctl_opt[1]
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize('paxtest_check', [
   "Executable anonymous mapping",
@@ -127,10 +128,10 @@ def test_grsecurity_paxtest(Command, Sudo, paxtest_check):
             assert c.rc == 0
             assert "Vulnerable" not in c.stdout
             regex = "^{}\s*:\sKilled$".format(re.escape(paxtest_check))
+            assert re.search(regex, c.stdout)
 
 
-
-@pytest.mark.skipif(os.environ.get('FPF_CI','false') == "true",
+@pytest.mark.skipif(os.environ.get('FPF_CI', 'false') == "true",
                     reason="Not needed in CI environment")
 def test_grub_pc_marked_manual(Command):
     """
@@ -151,7 +152,7 @@ def test_apt_autoremove(Command):
     assert "The following packages will be REMOVED" not in c.stdout
 
 
-@pytest.mark.skipif(os.environ.get('FPF_GRSEC','true') == "false",
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
                     reason="Need to skip in environment w/o grsec")
 @pytest.mark.parametrize("binary", [
     "/usr/sbin/grub-probe",
