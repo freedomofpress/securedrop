@@ -1,0 +1,126 @@
+Getting Started with Weblate Translations
+=========================================
+
+SecureDrop is a whistleblower submission system that media
+organizations can use to securely accept documents from and
+communicate with anonymous sources. For more information, you may be
+interested to learn about :doc:`what makes SecureDrop unique
+<../what_makes_securedrop_unique>`.
+
+SecureDrop uses the Weblate platform. This page lists detailed
+instructions for getting started with the Weblate platform as a
+translator. Before starting this guide, you should know which language
+you would like to translate.
+
+Who uses SecureDrop?
+--------------------
+
+There are two kind of SecureDrop users: :doc:`Sources <../source>` and
+:doc:`Journalists <../journalist>`. A source is an individual who
+wants to communicate securely and anonymously with a
+journalist. Sources are not expected to be have any technical
+background. Journalists using SecureDrop have all received proper
+training and know what a PGP public key is, they understand the basic
+workflow of SecureDrop.
+
+.. _`Weblate registration page`: https://weblate.securedrop.club/accounts/register/
+
+Register for Weblate
+--------------------
+
+Login via GitHub for the first time
+...................................
+
+If you already have a GitHub account, go to the `Weblate registration page`_:
+
+|Weblate registration page screenshot|
+
+Click on the octocat icon and agree to login via GitHub.
+
+|GitHub authorization page screenshot|
+
+You will then be redirected to the Weblate dashboard.
+
+|Weblate dashboard screenshot|
+
+Register a Weblate account
+..........................
+
+Go to the `Weblate registration page`_
+
+|Weblate registration page screenshot|
+
+Fill the form and click **Register** and check your mail for a
+confirmation mail from **admin@securedrop.club** with the subject
+**[Weblate] Your registration on Weblate**. Click the first link to
+confirm: you will be redirected to the `Weblate dashboard`_:
+
+|Weblate dashboard screenshot|
+
+.. _`Weblate dashboard`: https://weblate.securedrop.club/
+
+Choose a language
+-----------------
+
+From your `Weblate dashboard`_:
+
+|Weblate dashboard screenshot|
+
+Click the **Watched translations** menu and select **Suggested
+translations**:
+
+|Weblate suggested translations screenshot|
+
+And click the **translate** button to the right on the line that shows
+your native language:
+
+|Weblate translate button screenshot|
+
+Translate a phrase
+------------------
+
+Each string to be translated is shown in a **Source** box and you can
+translate it right below in the **Translation** text area. When you
+are done, click **Save** and another string will be proposed.
+
+|Weblate translate screenshot|
+
+For most strings a screenshot is available on the right side to show
+how it looks in context. The screenshot can be displayed in full size
+by clicking on it:
+
+|Weblate translate context screenshot|
+
+A :doc:`glossary <../terminology>` is available to explain the
+SecureDrop specific terms.
+
+Getting help
+------------
+
+Should you need help, you can do one of the following:
+
+* post a message in the `translation category of the SecureDrop forum`_
+* chat in the `SecureDrop instant messenging channel`_
+* read the `Weblate documentation`_
+
+.. _`translation category of the SecureDrop forum`: https://forum.securedrop.club/c/translations
+.. _`SecureDrop instant messenging channel`: https://gitter.im/freedomofpress/securedrop
+.. _`Weblate documentation`: http://docs.weblate.org/en/latest/user/index.html
+
+
+.. |Weblate registration page screenshot| image:: ../images/weblate/weblate1.png
+.. |GitHub authorization page screenshot| image:: ../images/weblate/weblate2.png
+.. |Weblate dashboard screenshot| image:: ../images/weblate/weblate3.png
+.. |Weblate suggested translations screenshot| image:: ../images/weblate/weblate4.png
+.. |Weblate translate button screenshot| image:: ../images/weblate/weblate5.png
+.. |Weblate translate screenshot| image:: ../images/weblate/weblate6.png
+.. |Weblate translate context screenshot| image:: ../images/weblate/weblate7.png
+
+Frequently Asked Questions
+--------------------------                                                  
+
+* What if the language I want to translate is not on the list?
+
+  You can send a request for a new language in the `translation
+  category of the SecureDrop forum`_. But please make sure the
+  language you want is definitely not present!
