@@ -240,9 +240,16 @@ def admin_reset_two_factor_totp():
     uid = request.form['uid']
     user = Journalist.query.get(uid)
     user.is_totp = True
-    user.regenerate_totp_shared_secret()
-    db_session.commit()
-    return redirect(url_for('admin_new_user_two_factor', uid=uid))
+    try:
+        user.regenerate_totp_shared_secret()
+    except Exception as e:
+        flash("An unexpected error occurred! Please check the application "
+              "logs or inform your adminstrator.", "error")
+        app.logger.error("Reset TOTP for '{}' failed: {}".format(uid, e))
+        return redirect(url_for("admin_edit_user", user_id=uid))
+    else:
+        db_session.commit()
+        return redirect(url_for('admin_new_user_two_factor', uid=uid))
 
 
 @app.route('/admin/reset-2fa-hotp', methods=['POST'])
@@ -392,9 +399,17 @@ def account_new_two_factor():
 @login_required
 def account_reset_two_factor_totp():
     g.user.is_totp = True
-    g.user.regenerate_totp_shared_secret()
-    db_session.commit()
-    return redirect(url_for('account_new_two_factor'))
+    uid = g.user.id
+    try:
+        g.user.regenerate_totp_shared_secret()
+    except Exception as e:
+        flash("An unexpected error occurred! Please check the application "
+              "logs or inform your adminstrator.", "error")
+        app.logger.error("Reset TOTP for '{}' failed: {}".format(uid, e))
+        return redirect(url_for('edit_account'))
+    else:
+        db_session.commit()
+        return redirect(url_for('account_new_two_factor'))
 
 
 @app.route('/account/reset-2fa-hotp', methods=['POST'])
