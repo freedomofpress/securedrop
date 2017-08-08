@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+set -x
+export DISPLAY=:1
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+haveged &
+redis-server &
+
+touch tests/log/firefox.log
+tail -F tests/log/firefox.log &
+
+mkdir -p "/tmp/test-results/logs"
+
+pytest \
+  --junitxml=/tmp/test-results/junit.xml \
+  --cov-report html:/tmp/test-results/cov_html \
+  --cov-report xml:/tmp/test-results/cov.xml \
+  --cov-report annotate:/tmp/test-results/cov_annotate \
+  --cov=. \
+  "$@"
