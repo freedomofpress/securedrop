@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-08-08 08:23+0000\n"
+"PO-Revision-Date: 2017-08-07 08:55+0000\n"
 "Last-Translator: Loic Dachary <loic@dachary.org>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -21,115 +21,97 @@ msgstr ""
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:102
-#, fuzzy
 msgid "You must be an administrator to access that page"
 msgstr "Vous devez être administrateur pour accéder à cette page"
 
 #: journalist.py:118
-#, fuzzy
 msgid "Login failed."
 msgstr "Echec de connexion."
 
 #: journalist.py:122
-#, fuzzy
 msgid "Please wait at least {seconds} seconds before logging in again."
 msgstr ""
-"Vous êtes prié d'attendre {seconds} secondes avant de tenter une nouvelle "
-"connexion."
+"Vous êtes prié d'attendre {seconds} secondes avant de tenter une nouvelle"
+" connexion."
 
 #: journalist.py:132
-#, fuzzy
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
-"Vous êtes prié d'attendre un nouveau token d'identification à deux facteurs "
-"avant de vous connecter de nouveau."
+"Vous êtes prié d'attendre un nouveau token d'identification à deux "
+"facteurs avant de vous connecter de nouveau."
 
 #: journalist.py:176
-#, fuzzy
 msgid "Missing username"
 msgstr "Le nom d'utilisateur manque"
 
 #: journalist.py:182
-#, fuzzy
 msgid "Passwords didn't match"
 msgstr "Les mots de passe ne correspondent pas"
 
 #: journalist.py:200 journalist.py:304
-#, fuzzy
 msgid "Your password must be between {min} and {max} characters."
 msgstr "Votre mot de passe doit comporter entre {min} et {max} caractères."
 
 #: journalist.py:208
-#, fuzzy
 msgid "That username is already in use"
 msgstr "Ce nom d'utilisateur existe déjà"
 
 #: journalist.py:211
-#, fuzzy
 msgid ""
 "An error occurred saving this user to the database. Please check the "
 "application logs."
 msgstr ""
-"Une erreur s'est produite lors de la sauvegarde de cet utilisateur dans la "
-"base de données. Vous êtes prié de consulter les logs de l'application."
+"Une erreur s'est produite lors de la sauvegarde de cet utilisateur dans "
+"la base de données. Vous êtes prié de consulter les logs de "
+"l'application."
 
 #: journalist.py:233
-#, fuzzy
 msgid "Two-factor token successfully verified for user {user}!"
 msgstr ""
 "L'identification à deux facteurs a été vérifiée avec succès pour "
 "l'utilisateur {user} !"
 
 #: journalist.py:240 journalist.py:404
-#, fuzzy
 msgid "Two-factor token failed to verify"
 msgstr "L'identification à deux facteurs n'a pu être vérifiée"
 
 #: journalist.py:267
-#, fuzzy
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
-"Le format du secret est incorrect: vous êtes prié d'utiliser uniquement les "
-"lettres de A à F et les chiffres de 0 à 9."
+"Le format du secret est incorrect: vous êtes prié d'utiliser uniquement "
+"les lettres de A à F et les chiffres de 0 à 9."
 
 #: journalist.py:272
-#, fuzzy
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
-"Format de secret incorrect: le nombre de caractères est impair. Avez vous "
-"laissé une coquille ?"
+"Format de secret incorrect: le nombre de caractères est impair. Avez vous"
+" laissé une coquille ?"
 
 #: journalist.py:277 journalist.py:318 journalist.py:652
-#, fuzzy
 msgid ""
 "An unexpected error occurred! Please check the application logs or inform"
 " your adminstrator."
 msgstr ""
-"Une erreur inattendue s'est produite ! Vous êtes prié de consulter les logs "
-"de l'application ou d'informer votre administrateur."
+"Une erreur inattendue s'est produite ! Vous êtes prié de consulter les "
+"logs de l'application ou d'informer votre administrateur."
 
 #: journalist.py:299
-#, fuzzy
 msgid "Passwords didn't match!"
 msgstr "Les mots de passe ne sont pas identiques !"
 
 #: journalist.py:325
-#, fuzzy
 msgid "Account successfully updated!"
 msgstr "Le compte a été mis à jour avec succès !"
 
 #: journalist.py:340
-#, fuzzy
 msgid "Username \"{user}\" is already taken!"
 msgstr "Le nom d'utilisateur \"{user}\" est déjà pris !"
 
 #: journalist.py:368
-#, fuzzy
 msgid "Deleted user '{user}'"
 msgstr "L'utilisateur '{user}' a été supprimé"
 
 #: journalist.py:400
-#, fuzzy
 msgid "Two-factor token successfully verified!"
 msgstr "Le token d'identification à deux facteurs a été vérifié avec succès !"
 
@@ -150,14 +132,12 @@ msgid "No collections selected to delete!"
 msgstr "Aucune collection n'a été sélectionnée pour être supprimée !"
 
 #: journalist.py:594
-#, fuzzy
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] "La collection a été supprimée"
 msgstr[1] "{num} collections ont été supprimées"
 
 #: journalist.py:637
-#, fuzzy
 msgid "You cannot send an empty reply!"
 msgstr "Vous ne pouvez pas envoyer de réponse vide !"
 
@@ -170,7 +150,6 @@ msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "La source '{original_source}' a été renommée '{new_source}'"
 
 #: journalist.py:698
-#, fuzzy
 msgid "No unread submissions for this source!"
 msgstr "Aucune soumission de cette source !"
 
@@ -203,7 +182,6 @@ msgstr ""
 "souhaitez créer un nouveau compte, vous devez vous déconnecter."
 
 #: source.py:281
-#, fuzzy
 msgid "You must enter a message or choose a file to submit."
 msgstr "Vous devez taper un message ou sélectionner un fichier à soumettre."
 
@@ -224,12 +202,10 @@ msgid "docs {doc_num}"
 msgstr "documents {doc_num}"
 
 #: journalist_templates/_source_row.html:18
-#, fuzzy
 msgid "messages {msg_num}"
 msgstr "messages {msg_num}"
 
 #: journalist_templates/_source_row.html:21
-#, fuzzy
 msgid "{num_unread} unread"
 msgstr "{num_unread} non lus"
 
@@ -241,7 +217,6 @@ msgstr "Modifier le Secret"
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
-#, fuzzy
 msgid "HOTP Secret"
 msgstr "Secret HOTP"
 
@@ -253,7 +228,6 @@ msgstr "CONTINUER"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:4
-#, fuzzy
 msgid "Enable Google Authenticator"
 msgstr "Activer Google Authenticator"
 
@@ -273,7 +247,6 @@ msgstr ""
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:7
-#, fuzzy
 msgid "Install Google Authenticator on your phone"
 msgstr "Installez Google Authenticator sur votre téléphone"
 
@@ -284,20 +257,19 @@ msgstr "Ouvrez l'app Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:9
-#, fuzzy
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
-"Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-barres\""
+"Sélectionnez menu, puis \"Créez un compte\", puis \"Scanner un code-"
+"barres\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:10
-#, fuzzy
 msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, "
 "scan the barcode below:"
 msgstr ""
-"Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode, "
-"scannez le code-barres ci-dessous :"
+"Votre téléphone passera en mode \"scan\". Lorsque vous êtes dans ce mode,"
+" scannez le code-barres ci-dessous :"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:13
@@ -320,22 +292,19 @@ msgstr "Activation de Yubikey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:17
-#, fuzzy
 msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
 msgstr ""
-"Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres ci-"
-"dessous :"
+"Lorsque vous avez configuré votre Yubikey, entrez le code à 6 chiffres "
+"ci-dessous :"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:21
-#, fuzzy
 msgid "Verification code"
 msgstr "Code de vérification"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:23
 #: journalist_templates/col.html:80 source_templates/lookup.html:49
-#, fuzzy
 msgid "SUBMIT"
 msgstr "SOUMETTRE"
 
@@ -354,7 +323,6 @@ msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: journalist_templates/admin.html:17
-#, fuzzy
 msgid "Edit"
 msgstr "Edition"
 
@@ -363,7 +331,6 @@ msgid "Delete"
 msgstr "Suppression"
 
 #: journalist_templates/admin.html:19
-#, fuzzy
 msgid "Created"
 msgstr "Créé"
 
@@ -372,12 +339,10 @@ msgid "Last login"
 msgstr "Dernière connexion"
 
 #: journalist_templates/admin.html:25
-#, fuzzy
 msgid "Edit user {username}"
 msgstr "Editer l'utilisateur {username}"
 
 #: journalist_templates/admin.html:26
-#, fuzzy
 msgid "Delete user {username}"
 msgstr "Supprimer l'utilisateur {username}"
 
@@ -499,17 +464,14 @@ msgid "Delete Selected"
 msgstr "Supprimer la sélection"
 
 #: journalist_templates/col.html:53
-#, fuzzy
 msgid "Uploaded Document"
 msgstr "Envoyer le document"
 
 #: journalist_templates/col.html:55
-#, fuzzy
 msgid "Reply"
 msgstr "Répondre"
 
 #: journalist_templates/col.html:57
-#, fuzzy
 msgid "Message"
 msgstr "Message"
 
@@ -518,14 +480,12 @@ msgid "No documents to display."
 msgstr "Aucun document à afficher."
 
 #: journalist_templates/col.html:74
-#, fuzzy
-msgid "You can write a secure replperson who submitted these documents:"
+msgid "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
 "Vous pouvez écrire une réponse sécurisée à la personne qui a soumis ces "
 "documents :"
 
 #: journalist_templates/col.html:83
-#, fuzzy
 msgid "You've flagged this source for reply."
 msgstr "Vous avez marqué cette source pour lui répondre."
 
@@ -581,7 +541,6 @@ msgid "Return to the list of documents for {source_journalist_designation}..."
 msgstr "Retour à la liste des documents pour {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:5
-#, fuzzy
 msgid "Edit user"
 msgstr "Modifier l'utilisateur"
 
@@ -606,7 +565,6 @@ msgid "Change password (confirm)"
 msgstr "Nouveau mot de passe (confirmation)"
 
 #: journalist_templates/edit_account.html:46
-#, fuzzy
 msgid "UPDATE"
 msgstr "MISE A JOUR"
 
@@ -615,7 +573,6 @@ msgid "Reset Two-Factor Authentication"
 msgstr "Réinitialisation de l'identification à deux facteurs"
 
 #: journalist_templates/edit_account.html:54
-#, fuzzy
 msgid ""
 "If a user's two-factor authentication credentials have been lost or "
 "compromised, you can reset them here. <em>If you do this, make sure the "
@@ -623,23 +580,23 @@ msgid ""
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
 "Si l'identification à deux facteurs d'un utilisateur a été perdue ou "
-"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faites assurez "
-"vous que l'utilisateur est présent et prêt à mettre en place la nouvelle "
-"identification à deux facteurs sur sa machine. A défaut de cela il ne pourra "
-"plus accéder à son compte."
+"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faites "
+"assurez vous que l'utilisateur est présent et prêt à mettre en place la "
+"nouvelle identification à deux facteurs sur sa machine. A défaut de cela "
+"il ne pourra plus accéder à son compte."
 
 #: journalist_templates/edit_account.html:56
-#, fuzzy
 msgid ""
 "If your two-factor authentication credentials have been lost or "
 "compromised, or you got a new device, you can reset your credentials "
 "here. <em>If you do this, make sure you are ready to set up your new "
 "device, otherwise you will be locked out of your account.</em>"
 msgstr ""
-"Si votre identification à deux facteurs a été perdue ou compromise, si vous "
-"avez une nouvelle machine, vous pouvez la réinitialiser ici. <em>Si vous "
-"faites cela, assurez vous d'être en mesure d'initialiser votre nouvelle "
-"machine sans quoi vous ne pourrez plus accéder à votre compte.</em>"
+"Si votre identification à deux facteurs a été perdue ou compromise, si "
+"vous avez une nouvelle machine, vous pouvez la réinitialiser ici. <em>Si "
+"vous faites cela, assurez vous d'être en mesure d'initialiser votre "
+"nouvelle machine sans quoi vous ne pourrez plus accéder à votre "
+"compte.</em>"
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -656,17 +613,14 @@ msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
 msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (APP)"
 
 #: journalist_templates/edit_account.html:80
-#, fuzzy
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
 msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (TOKEN MATERIEL)"
 
 #: journalist_templates/flag.html:5
-#, fuzzy
 msgid "Thanks!"
 msgstr "Merci !"
 
 #: journalist_templates/flag.html:8
-#, fuzzy
 msgid ""
 "SecureDrop will generate a secure encryption key for this source the next"
 " time that they log in. Once the key has been generated, a reply box will"
@@ -679,32 +633,26 @@ msgstr ""
 "cette boite de dialogue pour leur écrire des messages chiffrés."
 
 #: journalist_templates/flag.html:10
-#, fuzzy
 msgid "Continue to the list of documents for {codename}..."
 msgstr "Continuer vers la liste des documents de {codename}..."
 
 #: journalist_templates/index.html:4
-#, fuzzy
 msgid "Sources"
 msgstr "Sources"
 
 #: journalist_templates/index.html:11
-#, fuzzy
 msgid "Download Unread"
 msgstr "Télécharger les messages non lus"
 
 #: journalist_templates/index.html:12
-#, fuzzy
 msgid "Download All"
 msgstr "Tout télécharger"
 
 #: journalist_templates/index.html:13
-#, fuzzy
 msgid "Star"
 msgstr "Star"
 
 #: journalist_templates/index.html:14
-#, fuzzy
 msgid "Un-star"
 msgstr "De-star"
 
@@ -994,3 +942,288 @@ msgid ""
 "          of caution, we put a hold on sending all documents from that "
 "day through to our journalists."
 msgstr ""
+"Nos serveurs ont été sollicités de façon inhabituelle la dernière fois "
+"que vous les avez visité. Cela peut être du à un grand nombre "
+"d'utilisateurs, une attaque automatisée ou simplement un problème "
+"temporaire. Pour plus de prudence, nous avons mis de coté tout les "
+"documents envoyés à nos journalistes ce jour-là."
+
+#: source_templates/lookup.html:16
+msgid ""
+"Now that we know you’re really a human, though, we’ll get your previous "
+"submission into the\n"
+"          hands of a journalist straight away. We’re sorry for the delay."
+" Please do check back again\n"
+"          in a week or so."
+msgstr ""
+"Cependant, maintenant que nous savons que vous êtes un véritable "
+"utilisateur, nous allons communiquer votre précédente soumission à un "
+"journaliste sans délai. Nous sommes navrés de ces complications. Veuillez"
+" revenir pour consulter de nouveaux messages d'ici quelque jours."
+
+#: source_templates/lookup.html:24
+msgid "Submit Materials"
+msgstr "Soumission d'information"
+
+#: source_templates/lookup.html:25
+msgid ""
+"If you are already familiar with GPG, you can optionally encrypt your "
+"files and messages with our <a href=\"/journalist-key\" class=\"text-"
+"link\">public key</a> before submission. Files are encrypted as they are "
+"received by SecureDrop."
+msgstr ""
+"Si vous connaissez déjà GPG, vous pouvez chiffrer vos fichiers et "
+"messages à destination de notre <a href=\"/journalist-key\" class=\"text-"
+"link\">clé publique</a> avant de les soumettre. Les fichiers sont "
+"chiffrés lorsqu'ils sont reçus par SecureDrop."
+
+#: source_templates/lookup.html:25
+msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
+msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">Apprenez en plus</a>."
+
+#: source_templates/lookup.html:27
+msgid "You can send a file, a message, or both."
+msgstr "Vous pouvez envoyer un fichier, un message ou les deux."
+
+#: source_templates/lookup.html:36
+msgid "Maximum upload size: 500 MB"
+msgstr "Taille maximum d'un fichier à téléverser: 500 MO"
+
+#: source_templates/lookup.html:56
+msgid "Get Replies"
+msgstr "Consulter les réponses"
+
+#: source_templates/lookup.html:61
+msgid ""
+"You have received a reply. To protect your identity in the unlikely event"
+" someone learns your codename,\n"
+"        please delete all replies when you're done with them. This also "
+"lets us know that you have received our reply.\n"
+"        You can respond by submitting a new message above."
+msgstr ""
+"Vous avez reçu une réponse. Pour protéger votre identité et dans "
+"l'hypothèse improbable ou quelqu'un prend connaissance de votre nom de "
+"code, veuillez effacer toutes les réponses après les avoir consulté. Cela"
+" nous permet aussi de savoir que vous avez reçu nos réponses. Vous pouvez"
+" répondre en soumettant un nouveau message ci-dessus."
+
+#: source_templates/lookup.html:76
+msgid "Delete this reply?"
+msgstr "Supprimer cette réponse ?"
+
+#: source_templates/lookup.html:78
+msgid "DELETE"
+msgstr "SUPPRIMER"
+
+#: source_templates/lookup.html:87
+msgid "DELETE ALL REPLIES"
+msgstr "SUPPRIMER TOUTES LES REPONSES"
+
+#: source_templates/lookup.html:90
+msgid "Are you finished with the replies?"
+msgstr "Avez-vous terminé de consulter les réponses ?"
+
+#: source_templates/lookup.html:91
+msgid "YES, DELETE ALL REPLIES"
+msgstr "OUI, SUPPRIMER TOUTES LES REPONSES"
+
+#: source_templates/lookup.html:92
+msgid "NO, NOT YET"
+msgstr "NON, PAS MAINTENANT"
+
+#: source_templates/lookup.html:96
+msgid "There are no replies at this time."
+msgstr "Il n'y a actuellement aucune réponse."
+
+#: source_templates/lookup.html:103
+msgid "Remember your codename is:"
+msgstr "Souvenez vous que votre nom de code est :"
+
+#: source_templates/next_submission_flashed_message.html:2
+msgid "Thanks! We received your {things}."
+msgstr "Merci! Nous avons reçu vos {things}."
+
+#: source_templates/notfound.html:5
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: source_templates/notfound.html:7
+msgid "Sorry, we couldn't locate what you requested."
+msgstr "Désolé, nous n'avons pu trouver ce que vous cherchez."
+
+#: source_templates/tor2web-warning.html:3
+msgid "Why is there a warning about Tor2Web?"
+msgstr "Pour quelle raison un avertissement concernant Tor2Web est-il affiché ?"
+
+#: source_templates/tor2web-warning.html:4
+msgid ""
+"<a href=\"https://tor2web.org\">Tor2Web</a> is a proxy service that lets "
+"you browse Tor Hidden Services (.onion sites) without installing Tor. It "
+"was designed to facilitate anonymous publishing."
+msgstr ""
+"<a href=\"https://tor2web.org\">Tor2Web</a> est un service de proxy qui "
+"vous permet de consulter les \"Tor Hidden Services\" (les sites se "
+"terminant par .onion) sans installer Tor. Il a été conçu pour faciliter "
+"la publication anonyme."
+
+#: source_templates/tor2web-warning.html:5
+msgid ""
+"Tor2Web only protects publishers, not readers. If you upload documents to"
+" us using Tor2Web, you are <strong>not anonymous</strong> and could be "
+"identified by your ISP or the Tor2Web proxy operators. Additionally, "
+"since Tor2Web sites typically use HTTPS, it is possible that your "
+"connection could be MITM'ed by a capable adversary."
+msgstr ""
+"Tor2Web protège les personnes qui publient des informations mais pas "
+"celles qui les consultent. Si vous nous envoyez des documents via "
+"Tor2Web, vous n'êtes <strong>pas anonymes</strong> et vous pouvez être "
+"identifié par votre fournisseur d'accès ou par les personnes qui font "
+"fonctionner Tor2Web. De plus, comme les sites Tor2Web utilisent HTTPS, il"
+" est possible que votre connexion soit victime de MITM de la part d'un "
+"adversaire compétent."
+
+#: source_templates/tor2web-warning.html:6
+msgid ""
+"If you want to submit information, we <strong>strongly advise "
+"you</strong> to install <a "
+"href=\"https://www.torproject.org/download.html.en\">Tor</a> and use it "
+"to access our site safely and anonymously."
+msgstr ""
+"Si vous voulez soumettre des informations, nous vous <strong>conseillons "
+"fortement</strong> d'installer <a "
+"href=\"https://www.torproject.org/download.html.en\">Tor</a> et de "
+"l'utiliser pour accéder à notre site de façon sécurisée et anonyme."
+
+#: source_templates/use-tor-browser.html:3
+msgid "You Should Use Tor Browser"
+msgstr "Vous devriez utiliser un navigateur Tor"
+
+#: source_templates/use-tor-browser.html:4
+msgid ""
+"If you are not using Tor Browser, you <strong>may not be "
+"anonymous</strong>."
+msgstr ""
+"Si vous n'utilisez pas un navigateur Tor, vous <strong>n'êtes "
+"probablement pas anonyme</strong>."
+
+#: source_templates/use-tor-browser.html:5
+msgid ""
+"If you want to submit information to SecureDrop, we <strong>strongly "
+"advise you</strong> to install Tor Browser and use it to access our site "
+"safely and anonymously."
+msgstr ""
+"Si vous voulez soumettre des informations à SecureDrop, nous vous "
+"<strong>recommandons fortement</strong> d'installer un navigateur Tor et "
+"de l'utiliser pour accéder à notre site de façon sécurisée et anonyme."
+
+#: source_templates/use-tor-browser.html:6
+msgid ""
+"Copy and paste the following address into your browser and follow the "
+"instructions to download and install Tor Browser:"
+msgstr ""
+"Copiez et collez l'adresse suivante dans votre navigateur et suivez les "
+"instructions pour télécharger et installer le navigateur Tor :"
+
+#: source_templates/why-journalist-key.html:3
+msgid "Why download the journalist's public key?"
+msgstr "Pourquoi télécharger la clé publique d'un(e) journaliste ?"
+
+#: source_templates/why-journalist-key.html:4
+msgid ""
+"SecureDrop encrypts files and messages after they are submitted. "
+"Encrypting messages and files before submission can provide an extra "
+"layer of security before your data reaches the SecureDrop server."
+msgstr ""
+"SecureDrop chiffre les fichiers et messages lorsqu'ils sont soumis. Le "
+"chiffrement des messages et des fichiers avant leur soumission peut "
+"fournir un niveau de sécurité supplémentaire, le temps qu'ils parviennent"
+" au serveur SecureDrop."
+
+#: source_templates/why-journalist-key.html:5
+msgid ""
+"If you are already familiar with the GPG encryption software, you may "
+"wish to encrypt your submissions yourself. To do so:"
+msgstr ""
+"Si vous êtes déjà familier avec le logiciel de chiffrement GPG, vous "
+"souhaitez peut-être chiffrer vos documents vous même. Pour ce faire :"
+
+#: source_templates/why-journalist-key.html:7
+msgid ""
+"<a href=\"/journalist-key\">Download</a> the public key. The public key "
+"is a text file with the extension <code>.asc</code>"
+msgstr ""
+"<a href=\"/journalist-key\">Téléchargez</a> la clé publique. La clé "
+"publique est un fichier texte avec l'extension <code>.asc</code>"
+
+#: source_templates/why-journalist-key.html:8
+msgid "Import it into your GPG keyring."
+msgstr "Importez la dans votre keyring GPG."
+
+#: source_templates/why-journalist-key.html:10
+msgid ""
+"If you are using Tails (https://tails.boum.org/), you can double-click "
+"the <code>.asc</code> file you just downloaded and it will be "
+"automatically imported to your keyring."
+msgstr ""
+"Si vous utilisez Tails (https://tails.boum.org/), vous pouvez double-"
+"cliquer sur le fichier <code>.asc</code> que vous venez de télécharger et"
+" il sera automatiquement importé dans votre keyring."
+
+#: source_templates/why-journalist-key.html:11
+msgid ""
+"If you are using Mac/Linux, open the Terminal. You can import the key "
+"with <code>gpg --import /path/to/key.asc</code>."
+msgstr ""
+"Si vous utilisez Mac ou GNU/Linux, ouvrez un terminal. Vous pouvez "
+"importer la clé avec <code>gpg --import /path/to/key.asc</code>."
+
+#: source_templates/why-journalist-key.html:14
+msgid "Encrypt your submission."
+msgstr "Chiffrez votre soumission."
+
+#: source_templates/why-journalist-key.html:16
+msgid ""
+"You will need to be able to identify the key (this is called the \"user "
+"ID\" or uid). Since the public key's filename is the key's fingerprint "
+"(with .asc at the end), you can just copy and paste that. (don't include "
+"the <code>.asc</code>!)"
+msgstr ""
+"Vous devez être capable d'identifier la clé (par ce qu'on appelle \"user "
+"ID\" ou uid). Comme le nom de fichier de la clé publique est aussi la "
+"fingerprint (avec .asc à la fin), vous pouvez simplement la copier et la "
+"coller. (n'incluez pas le <code>.asc</code>!)"
+
+#: source_templates/why-journalist-key.html:17
+msgid ""
+"On all systems, open the Terminal and use this gpg command: <code>gpg "
+"--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+msgstr ""
+"Sur tout les systèmes, ouvrez un terminal et utilisez cette commande gpg:"
+" <code>gpg --recipient &lt; user ID&gt;  --encrypt "
+"roswell_photos.pdf</code>"
+
+#: source_templates/why-journalist-key.html:20
+msgid ""
+"Upload your encrypted submission. It will have the same filename as the "
+"unencrypted file, with .gpg at the end (e.g. "
+"<code>roswell_photos.pdf.gpg</code>)"
+msgstr ""
+"Téléversez votre soumission chiffrée. Elle aura le même nom de fichier "
+"que l'original non chiffré, avec .gpg à la fin (e.g. "
+"<code>roswell_photos.pdf.gpg</code>)"
+
+#: source_templates/why-journalist-key.html:23
+msgid ""
+"<strong>Tip:</strong> If you wish to remain anonymous, <strong>do "
+"not</strong> use GPG to sign the encrypted file (with the "
+"<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
+" identity to us."
+msgstr ""
+"<strong>Conseil:</strong> Si vous souhaitez rester anonyme, "
+"<strong>n'utilisez pas</strong> GPG pour signer les fichiers (avec "
+"l'option <code>--sign</code> ou <code>-s</code>) car cela nous révélera "
+"votre identité."
+
+#: source_templates/why-journalist-key.html:25
+msgid "Back to submission page"
+msgstr "Retour à la page de soumission"
