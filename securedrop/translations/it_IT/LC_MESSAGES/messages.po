@@ -8,21 +8,23 @@
 # gio <gdamiola@gmail.com>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version:  SecureDrop\n"
+"Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2014-11-19 07:07+0000\n"
-"Last-Translator: edwincheese <edwincheese@gmail.com>\n"
-"Language: it\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/securedrop-"
-"app-code/language/it/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-08-09 20:55+0000\n"
+"Last-Translator: admin <admin@securedrop.club>\n"
+"Language-Team: Italian "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/it/>\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:102
+#, fuzzy
 msgid "You must be an administrator to access that page"
 msgstr "Devi essere un amministratore per poter accedere a questa pagina"
 
@@ -1092,4 +1094,3 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
-
