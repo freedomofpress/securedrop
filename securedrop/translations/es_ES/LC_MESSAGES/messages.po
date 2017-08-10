@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-09 20:35+0000\n"
-"Last-Translator: Loic Dachary <loic@dachary.org>\n"
+"PO-Revision-Date: 2017-08-10 08:05+0000\n"
+"Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -545,7 +545,6 @@ msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
 msgstr ""
 
 #: journalist_templates/flag.html:5
-#, fuzzy
 msgid "Thanks!"
 msgstr "Gracias!"
 
