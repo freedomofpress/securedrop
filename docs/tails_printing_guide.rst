@@ -67,7 +67,7 @@ has auto-detected. You should now see this:
 
 |select printer to add|
 
-In this example, we've connected an HP Deskjet F4200. Clicking on this printer
+In this example, we've connected an HP DeskJet F4200. Clicking on this printer
 will select it for installation, which, if successful, will display the
 following:
 
