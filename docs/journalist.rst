@@ -47,8 +47,7 @@ want to login, but after practicing a few times, it will become
 automatic.
 
 See our guide on setting up :doc:`Tails for the Admin and Journalist
-Workstation <tails_guide>` before continuing. We recommend that you
-create bookmarks for the Source and Journalist Interfaces.
+Workstation <tails_guide>` before continuing.
 
 After clicking on the SecureDrop ``Journalist Interface`` link, you can
 log in with your username, password, and two-factor authentication
