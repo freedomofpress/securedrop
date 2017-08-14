@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-08-13 09:08+0000\n"
+"PO-Revision-Date: 2017-08-14 09:22+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -896,7 +896,7 @@ msgstr "Cliquez <strong>Paramètres de sécurité...</strong>"
 #: source_templates/index.html:76
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
-"Déplacez le curseur sur <strong>Elevé</strong>, puis cliquez "
+"Déplacez le curseur sur <strong>Élevé</strong>, puis cliquez "
 "<strong>OK</strong>"
 
 #: source_templates/index.html:77
@@ -905,7 +905,7 @@ msgstr "<a href=\"/\">Cliquez ici</a> pour rafraîchir la page"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr "Tapez votre nom de code"
+msgstr "Tapez le nom de code"
 
 #: source_templates/login.html:11
 msgid "Enter your codename"
