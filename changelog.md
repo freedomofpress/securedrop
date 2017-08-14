@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.2
+
+* Explicitly enables DAC override capability in Apache AppArmor profile (#2105)
+
+The issues for this release were tracked in the 0.4.2 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.4.2.
+
 ## 0.4.1
 
 * Fixes a bug in one of the Tails scripts used to set up the Desktop
