@@ -16,6 +16,7 @@ def test_apparmor_enabled(Command, Sudo):
         assert Command("aa-status --enabled").rc == 0
 
 apache2_capabilities = [
+        'dac_override',
         'kill',
         'net_bind_service',
         'sys_ptrace'
