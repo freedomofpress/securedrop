@@ -413,16 +413,18 @@ Tails:
 +-------------------------+--------------+----------------+--------------------+
 | Printer Model           | Testing Date | Tails Versions | Printer Type       |
 +=========================+==============+================+====================+
-| HP Deskjet F4200        | 06/2017      | 3.0            | Color Inkjet       |
+| HP DeskJet F4200        | 06/2017      | 3.0            | Color Inkjet       |
 +-------------------------+--------------+----------------+--------------------+
-| HP Deskjet 1112         | 06/2017      | 3.0            | Color Inkjet       |
+| HP DeskJet 1112         | 06/2017      | 3.0            | Color Inkjet       |
++-------------------------+--------------+----------------+--------------------+
+| HP DeskJet 1110         | 08/2017      | 3.1            | Color Inkjet       |
 +-------------------------+--------------+----------------+--------------------+
 | HP LaserJet 400 M401n   | 06/2015      | 1.4            | Monochrome Laser   |
 +-------------------------+--------------+----------------+--------------------+
-| HP Deskjet 6940         | 04/2015      | 1.3.2          | Monochrome Injket  |
+| HP DeskJet 6940         | 04/2015      | 1.3.2          | Monochrome Injket  |
 +-------------------------+--------------+----------------+--------------------+
 
-.. note:: We've documented both the HP Deskjet F4200 and HP LaserJet 400 M401n
+.. note:: We've documented both the HP DeskJet F4200 and HP LaserJet 400 M401n
           with screenshots of the installation process, in our section on
           :ref:`printer_setup_in_tails`. While the F4200 installed
           automatically, the 400 M401n required that we set "Make and model" to
