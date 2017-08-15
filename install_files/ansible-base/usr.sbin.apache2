@@ -5,6 +5,7 @@
   #include <abstractions/base>
   #include <abstractions/tor>
 
+  capability dac_override,
   capability kill,
   capability net_bind_service,
   capability sys_ptrace,

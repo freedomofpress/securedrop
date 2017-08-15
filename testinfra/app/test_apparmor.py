@@ -17,6 +17,7 @@ def test_apparmor_enabled(Command, Sudo):
 
 
 apache2_capabilities = [
+        'dac_override',
         'kill',
         'net_bind_service',
         'sys_ptrace'
