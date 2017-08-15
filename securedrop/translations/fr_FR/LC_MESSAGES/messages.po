@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-08-14 09:22+0000\n"
+"PO-Revision-Date: 2017-08-15 09:20+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -1019,7 +1019,7 @@ msgstr "SUPPRIMER"
 
 #: source_templates/lookup.html:87
 msgid "DELETE ALL REPLIES"
-msgstr "SUPPRIMER TOUTES LES REPONSES"
+msgstr "SUPPRIMER TOUTES LES RÉPONSES"
 
 #: source_templates/lookup.html:90
 msgid "Are you finished with the replies?"
@@ -1027,7 +1027,7 @@ msgstr "Avez-vous terminé de consulter les réponses ?"
 
 #: source_templates/lookup.html:91
 msgid "YES, DELETE ALL REPLIES"
-msgstr "OUI, SUPPRIMER TOUTES LES REPONSES"
+msgstr "OUI, SUPPRIMER TOUTES LES RÉPONSES"
 
 #: source_templates/lookup.html:92
 msgid "NO, NOT YET"
