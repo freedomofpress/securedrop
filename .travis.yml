@@ -60,7 +60,7 @@ script:
   - make docs-lint
   # flake8 linting
   - pushd securedrop; flake8 *.py management tests/functional tests/*.py && popd
-  - flake8 testinfra
+  - flake8 testinfra securedrop-admin
   # HTML linting
   - >
       html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation
