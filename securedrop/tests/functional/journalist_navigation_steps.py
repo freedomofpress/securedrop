@@ -7,6 +7,7 @@ import gzip
 from selenium.common.exceptions import NoSuchElementException
 
 import tests.utils.db_helper as db_helper
+import crypto_util
 from db import Journalist
 from step_helpers import screenshots
 
@@ -58,7 +59,8 @@ class JournalistNavigationSteps():
         self._login_user(self.user.username, self.user_pw, 'mocked')
 
         headline = self.driver.find_element_by_css_selector('span.headline')
-        assert 'Sources' in headline.text
+        if not hasattr(self, 'accept_languages'):
+            assert 'Sources' in headline.text
 
     def _journalist_visits_col(self):
         self.driver.find_element_by_css_selector(
@@ -88,26 +90,29 @@ class JournalistNavigationSteps():
         self.admin, self.admin_pw = db_helper.init_journalist(is_admin=True)
         self._login_user(self.admin.username, self.admin_pw, 'mocked')
 
-        # Admin user should log in to the same interface as a normal user,
-        # since there may be users who wish to be both journalists and admins.
-        headline = self.driver.find_element_by_css_selector('span.headline')
-        assert 'Sources' in headline.text
+        if not hasattr(self, 'accept_languages'):
+            # Admin user should log in to the same interface as a
+            # normal user, since there may be users who wish to be
+            # both journalists and admins.
+            headline = self.driver.find_element_by_css_selector(
+                'span.headline')
+            assert 'Sources' in headline.text
 
-        # Admin user should have a link that take them to the admin page
-        links = self.driver.find_elements_by_tag_name('a')
-        assert 'Admin' in [el.text for el in links]
+            # Admin user should have a link that take them to the admin page
+            links = self.driver.find_elements_by_tag_name('a')
+            assert 'Admin' in [el.text for el in links]
 
     @screenshots
     def _admin_visits_admin_interface(self):
         admin_interface_link = self.driver.find_element_by_id(
             'link-admin-index')
         admin_interface_link.click()
-
-        h1s = self.driver.find_elements_by_tag_name('h1')
-        assert "Admin Interface" in [el.text for el in h1s]
+        if not hasattr(self, 'accept_languages'):
+            h1s = self.driver.find_elements_by_tag_name('h1')
+            assert "Admin Interface" in [el.text for el in h1s]
 
     @screenshots
-    def _add_user(self, username, password, is_admin=False):
+    def _add_user(self, username, password, is_admin=False, hotp=None):
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
         username_field.send_keys(username)
@@ -119,6 +124,15 @@ class JournalistNavigationSteps():
         password_again_field = self.driver.find_element_by_css_selector(
             'input[name="password_again"]')
         password_again_field.send_keys(password)
+
+        if hotp:
+            hotp_checkbox = self.driver.find_element_by_css_selector(
+                'input[name="is_hotp"]')
+            print(str(hotp_checkbox.__dict__))
+            hotp_checkbox.click()
+            hotp_secret = self.driver.find_element_by_css_selector(
+                'input[name="otp_secret"]')
+            hotp_secret.send_keys(hotp)
 
         if is_admin:
             # TODO implement (checkbox is unchecked by default)
@@ -134,9 +148,10 @@ class JournalistNavigationSteps():
             'button#add-user')
         add_user_btn.click()
 
-        # The add user page has a form with an "ADD USER" button
-        btns = self.driver.find_elements_by_tag_name('button')
-        assert 'ADD USER' in [el.text for el in btns]
+        if not hasattr(self, 'accept_languages'):
+            # The add user page has a form with an "ADD USER" button
+            btns = self.driver.find_elements_by_tag_name('button')
+            assert 'ADD USER' in [el.text for el in btns]
 
         self.new_user = dict(
             username='dellsberg',
@@ -144,10 +159,11 @@ class JournalistNavigationSteps():
 
         self._add_user(self.new_user['username'], self.new_user['password'])
 
-        # Clicking submit on the add user form should redirect to the Google
-        # Authenticator page
-        h1s = self.driver.find_elements_by_tag_name('h1')
-        assert "Enable Google Authenticator" in [el.text for el in h1s]
+        if not hasattr(self, 'accept_languages'):
+            # Clicking submit on the add user form should redirect to
+            # the Google Authenticator page
+            h1s = self.driver.find_elements_by_tag_name('h1')
+            assert "Enable Google Authenticator" in [el.text for el in h1s]
 
         # Retrieve the saved user object from the db and keep it around for
         # further testing
@@ -162,12 +178,13 @@ class JournalistNavigationSteps():
             'button[type=submit]')
         submit_button.click()
 
-        # Successfully verifying the code should redirect to the admin
-        # interface, and flash a message indicating success
-        flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
-        assert (("Two-factor token successfully verified for user"
-                 " {}!").format(self.new_user['username']) in
-                [el.text for el in flashed_msgs])
+        if not hasattr(self, 'accept_languages'):
+            # Successfully verifying the code should redirect to the admin
+            # interface, and flash a message indicating success
+            flashed_msgs = self.driver.find_elements_by_css_selector('.flash')
+            assert (("Two-factor token successfully verified for user"
+                     " {}!").format(self.new_user['username']) in
+                    [el.text for el in flashed_msgs])
 
     @screenshots
     def _logout(self):
@@ -186,8 +203,9 @@ class JournalistNavigationSteps():
         self._logout()
         self._login_user(self.new_user['username'],
                          self.new_user['password'], otp)
-        # Test that the new user was logged in successfully
-        assert 'Sources' in self.driver.page_source
+        if not hasattr(self, 'accept_languages'):
+            # Test that the new user was logged in successfully
+            assert 'Sources' in self.driver.page_source
 
     @screenshots
     def _new_user_can_log_in(self):
@@ -199,8 +217,9 @@ class JournalistNavigationSteps():
                          self.new_user['password'],
                          'mocked')
 
-        # Test that the new user was logged in successfully
-        assert 'Sources' in self.driver.page_source
+        if not hasattr(self, 'accept_languages'):
+            # Test that the new user was logged in successfully
+            assert 'Sources' in self.driver.page_source
 
         # The new user was not an admin, so they should not have the admin
         # interface link available
@@ -328,10 +347,10 @@ class JournalistNavigationSteps():
         self._login_user(self.new_user['username'],
                          self.new_user['password'],
                          'mocked')
-
-        def found_sources():
-            assert 'Sources' in self.driver.page_source
-        self.wait_for(found_sources)
+        if not hasattr(self, 'accept_languages'):
+            def found_sources():
+                assert 'Sources' in self.driver.page_source
+            self.wait_for(found_sources)
 
         # Log the admin user back in
         self._logout()
@@ -450,3 +469,123 @@ class JournalistNavigationSteps():
         self.driver.find_element_by_id('reply-button').click()
 
         assert "Thanks! Your reply has been stored." in self.driver.page_source
+
+    def _visit_edit_account(self):
+        edit_account_link = self.driver.find_element_by_id(
+            'link_edit_account')
+        edit_account_link.click()
+
+    def _visit_edit_hotp_secret(self):
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        assert ('/account/reset-2fa-hotp' in
+                hotp_reset_button.get_attribute('action'))
+
+        hotp_reset_button.click()
+
+    def _set_hotp_secret(self):
+        hotp_secret_field = self.driver.find_elements_by_css_selector(
+            'input[name="otp_secret"]')[0]
+        hotp_secret_field.send_keys('123456')
+        submit_button = self.driver.find_element_by_css_selector(
+            'button[type=submit]')
+        submit_button.click()
+
+    def _visit_edit_totp_secret(self):
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        assert ('/account/reset-2fa-totp' in
+                totp_reset_button.get_attribute('action'))
+        totp_reset_button.click()
+
+    def _admin_visits_add_user(self):
+        add_user_btn = self.driver.find_element_by_css_selector(
+            'button#add-user')
+        add_user_btn.click()
+
+    def _admin_visits_edit_user(self):
+        new_user_edit_links = filter(
+            lambda el: (el.get_attribute('data-username') ==
+                        self.new_user['username']),
+            self.driver.find_elements_by_tag_name('a'))
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+
+        def can_edit_user():
+            assert ('"{}"'.format(self.new_user['username']) in
+                    self.driver.page_source)
+        self.wait_for(can_edit_user)
+
+    def _admin_visits_reset_2fa_hotp(self):
+        hotp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-hotp')[0]
+        assert ('/admin/reset-2fa-hotp' in
+                hotp_reset_button.get_attribute('action'))
+        hotp_reset_button.click()
+
+    def _admin_visits_reset_2fa_totp(self):
+        totp_reset_button = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-totp')[0]
+        assert ('/admin/reset-2fa-totp' in
+                totp_reset_button.get_attribute('action'))
+        totp_reset_button.click()
+
+    def _admin_creates_a_user(self, hotp):
+        add_user_btn = self.driver.find_element_by_css_selector(
+            'button#add-user')
+        add_user_btn.click()
+
+        self.new_user = dict(
+            username='dellsberg',
+            password='pentagonpapers')
+
+        self._add_user(self.new_user['username'],
+                       self.new_user['password'],
+                       is_admin=False,
+                       hotp=hotp)
+
+    def _journalist_delete_all(self):
+        for checkbox in self.driver.find_elements_by_name(
+                'doc_names_selected'):
+            checkbox.click()
+        self.driver.find_element_by_id('delete_selected').click()
+
+    def _journalist_confirm_delete_all(self):
+        self.wait_for(
+            lambda: self.driver.find_element_by_id('confirm_delete'))
+        confirm_btn = self.driver.find_element_by_id('confirm_delete')
+        confirm_btn.click()
+
+    def _source_delete_key(self):
+        filesystem_id = crypto_util.hash_codename(self.source_name)
+        crypto_util.delete_reply_keypair(filesystem_id)
+
+    def _journalist_continues_after_flagging(self):
+        self.driver.find_element_by_id('continue-to-list').click()
+
+    def _journalist_delete_none(self):
+        self.driver.find_element_by_id('delete_selected').click()
+
+    def _journalist_delete_all_javascript(self):
+        self.driver.find_element_by_id('select_all').click()
+        self.driver.find_element_by_id('delete_selected').click()
+        self._alert_wait()
+
+    def _journalist_delete_one(self):
+        self.driver.find_elements_by_name('doc_names_selected')[0].click()
+        self.driver.find_element_by_id('delete_selected').click()
+
+    def _journalist_flags_source(self):
+        self.driver.find_element_by_id('flag-button').click()
+
+    def _journalist_visits_admin(self):
+        self.driver.get(self.journalist_location + "/admin")
+
+    def _journalist_fail_login(self):
+        self.user, self.user_pw = db_helper.init_journalist()
+        self._try_login_user(self.user.username, 'worse', 'mocked')
+
+    def _journalist_fail_login_many(self):
+        self.user, self.user_pw = db_helper.init_journalist()
+        for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
+            self._try_login_user(self.user.username, 'worse', 'mocked')

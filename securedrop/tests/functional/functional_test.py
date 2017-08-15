@@ -104,8 +104,6 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        self.driver = self._create_webdriver()
-
         for tick in range(30):
             try:
                 requests.get(self.source_location)
@@ -115,22 +113,27 @@ class FunctionalTest():
             else:
                 break
 
+        if not hasattr(self, 'override_driver'):
+            self.driver = self._create_webdriver()
+
+            # Poll the DOM briefly to wait for elements. It appears
+            # .click() does not always do a good job waiting for the
+            # page to load, or perhaps Firefox takes too long to
+            # render it (#399)
+            self.driver.implicitly_wait(5)
+
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1024, 768)
-
-        # Poll the DOM briefly to wait for elements. It appears .click() does
-        # not always do a good job waiting for the page to load, or perhaps
-        # Firefox takes too long to render it (#399)
-        self.driver.implicitly_wait(5)
 
         self.secret_message = 'blah blah blah'
 
     def teardown(self):
         self.patcher.stop()
         env.teardown()
-        self.driver.quit()
+        if not hasattr(self, 'override_driver'):
+            self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
 
