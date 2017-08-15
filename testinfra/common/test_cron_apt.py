@@ -38,7 +38,7 @@ def test_cron_apt_config(File):
   'deb http://security.ubuntu.com/ubuntu trusty-security universe',
   'deb-src http://security.ubuntu.com/ubuntu trusty-security universe',
   'deb [arch=amd64] https://apt.freedom.press trusty main',
-  'deb http://deb.torproject.org/torproject.org trusty main',
+  'deb http://tor-apt.ops.freedom.press trusty main',
 ])
 def test_cron_apt_repo_list(File, repo):
     """

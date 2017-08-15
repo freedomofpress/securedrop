@@ -10,8 +10,7 @@ def test_tor_apt_repo(File):
     The version of Tor in the Trusty repos is not up to date.
     """
     f = File('/etc/apt/sources.list.d/deb_torproject_org_torproject_org.list')
-    repo_regex = re.escape('deb http://deb.torproject.org/torproject.org '
-                           'trusty main')
+    repo_regex = re.escape('deb http://tor-apt.ops.freedom.press trusty main')
     assert f.contains(repo_regex)
 
 
