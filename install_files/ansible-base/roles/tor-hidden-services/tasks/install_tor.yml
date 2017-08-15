@@ -9,7 +9,8 @@
 
 - name: Setup Tor apt repo.
   apt_repository:
-    repo: deb http://deb.torproject.org/torproject.org {{ ansible_lsb.codename }} main
+    filename: deb_torproject_org_torproject_org
+    repo: deb {{ tor_apt_repo_url }} {{ ansible_lsb.codename }} main
     state: present
   register: add_tor_apt_repo
   tags:
