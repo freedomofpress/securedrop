@@ -55,6 +55,13 @@ case "$1" in
       rm /tmp/securedrop_custom_logo.png
     fi
 
+    # Repoint tor repositories to FPF mirror
+    for file in "sources.list.d/deb_torproject_org_torproject_org.list" "security.list"
+    do
+        if [ -f "/etc/apt/$file" ]; then
+            sed -i 's/deb.torproject.org\/torproject.org/tor-apt.ops.freedom.press/g' "/etc/apt/$file"
+        fi
+    done
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
