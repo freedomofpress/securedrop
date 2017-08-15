@@ -14,6 +14,8 @@ from sqlalchemy.sql.expression import false
 import config
 import version
 import crypto_util
+import i18n
+from flask_babel import gettext, ngettext
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
@@ -24,6 +26,8 @@ import worker
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
 app.config.from_object(config.JournalistInterfaceFlaskConfig)
 CSRFProtect(app)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
@@ -62,6 +66,9 @@ def setup_g():
     if uid:
         g.user = Journalist.query.get(uid)
 
+    g.locale = i18n.get_locale()
+    g.locales = i18n.get_locale2name()
+
     if request.method == 'POST':
         sid = request.form.get('sid')
         if sid:
@@ -95,7 +102,7 @@ def admin_required(func):
         if logged_in() and g.user.is_admin:
             return func(*args, **kwargs)
         # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash("You must be an administrator to access that page",
+        flash(gettext('You must be an administrator to access that page'),
               "notification")
         return redirect(url_for('index'))
     return wrapper
@@ -111,20 +118,22 @@ def login():
         except Exception as e:
             app.logger.error("Login for '{}' failed: {}".format(
                 request.form['username'], e))
-            login_flashed_msg = "Login failed."
+            login_flashed_msg = gettext('Login failed.')
 
             if isinstance(e, LoginThrottledException):
-                login_flashed_msg += (
-                    " Please wait at least {} seconds "
-                    "before logging in again.".format(
-                        Journalist._LOGIN_ATTEMPT_PERIOD))
+                login_flashed_msg += " "
+                login_flashed_msg += gettext(
+                    "Please wait at least {seconds} seconds "
+                    "before logging in again.").format(
+                        seconds=Journalist._LOGIN_ATTEMPT_PERIOD)
             else:
                 try:
                     user = Journalist.query.filter_by(
                         username=request.form['username']).one()
                     if user.is_totp:
-                        login_flashed_msg += (
-                            " Please wait for a new two-factor token"
+                        login_flashed_msg += " "
+                        login_flashed_msg += gettext(
+                            "Please wait for a new two-factor token"
                             " before logging in again.")
                 except:
                     pass
@@ -167,13 +176,13 @@ def admin_add_user():
         username = request.form['username']
         if len(username) == 0:
             form_valid = False
-            flash("Missing username", "error")
+            flash(gettext('Missing username'), "error")
 
         password = request.form['password']
         password_again = request.form['password_again']
         if password != password_again:
             form_valid = False
-            flash("Passwords didn't match", "error")
+            flash(gettext("Passwords didn't match"), "error")
 
         is_admin = bool(request.form.get('is_admin'))
 
@@ -190,20 +199,21 @@ def admin_add_user():
                 db_session.commit()
             except InvalidPasswordLength:
                 form_valid = False
-                flash("Your password must be "
-                      "between {} and {} characters.".format(
-                          Journalist.MIN_PASSWORD_LEN,
-                          Journalist.MAX_PASSWORD_LEN
-                      ), "error")
+                flash(gettext("Your password must be "
+                              "between {min} and {max} characters.".format(
+                                  min=Journalist.MIN_PASSWORD_LEN,
+                                  max=Journalist.MAX_PASSWORD_LEN
+                              )), "error")
             except IntegrityError as e:
                 db_session.rollback()
                 form_valid = False
                 if "UNIQUE constraint failed: journalists.username" in str(e):
-                    flash("That username is already in use",
+                    flash(gettext("That username is already in use"),
                           "error")
                 else:
-                    flash("An error occurred saving this user to the database."
-                          " Please check the application logs.",
+                    flash(gettext("An error occurred saving this user"
+                                  " to the database."
+                                  " Please check the application logs."),
                           "error")
                     app.logger.error("Adding user '{}' failed: {}".format(
                         username, e))
@@ -223,13 +233,14 @@ def admin_new_user_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if user.verify_token(token):
-            flash(
-                "Two-factor token successfully verified for user {}!".format(
-                    user.username),
-                "notification")
+            flash(gettext(
+                "Two-factor token successfully verified"
+                " for user {user}!").format(
+                    user=user.username),
+                  "notification")
             return redirect(url_for("admin_index"))
         else:
-            flash("Two-factor token failed to verify", "error")
+            flash(gettext("Two-factor token failed to verify"), "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
 
@@ -256,17 +267,20 @@ def admin_reset_two_factor_hotp():
             user.set_hotp_secret(otp_secret)
         except TypeError as e:
             if "Non-hexadecimal digit found" in str(e):
-                flash("Invalid secret format: "
-                      "please only submit letters A-F and numbers 0-9.",
+                flash(gettext(
+                    "Invalid secret format: "
+                    "please only submit letters A-F and numbers 0-9."),
                       "error")
             elif "Odd-length string" in str(e):
-                flash("Invalid secret format: "
-                      "odd-length secret. Did you mistype the secret?",
+                flash(gettext(
+                    "Invalid secret format: "
+                    "odd-length secret. Did you mistype the secret?"),
                       "error")
             else:
-                flash("An unexpected error occurred! "
-                      "Please check the application "
-                      "logs or inform your adminstrator.", "error")
+                flash(gettext(
+                    "An unexpected error occurred! "
+                    "Please check the application "
+                    "logs or inform your adminstrator."), "error")
                 app.logger.error(
                     "set_hotp_secret '{}' (id {}) failed: {}".format(
                         otp_secret, uid, e))
@@ -285,13 +299,15 @@ class PasswordMismatchError(Exception):
 def edit_account_password(user, password, password_again):
     if password:
         if password != password_again:
-            flash("Passwords didn't match!", "error")
+            flash(gettext("Passwords didn't match!"), "error")
             raise PasswordMismatchError
         try:
             user.set_password(password)
         except InvalidPasswordLength:
-            flash("Your password must be between {} and {} characters.".format(
-                    Journalist.MIN_PASSWORD_LEN, Journalist.MAX_PASSWORD_LEN
+            flash(gettext("Your password must be between"
+                          " {min} and {max} characters.").format(
+                              min=Journalist.MIN_PASSWORD_LEN,
+                              max=Journalist.MAX_PASSWORD_LEN
                 ), "error")
             raise
 
@@ -302,13 +318,14 @@ def commit_account_changes(user):
             db_session.add(user)
             db_session.commit()
         except Exception as e:
-            flash("An unexpected error occurred! Please check the application "
-                  "logs or inform your adminstrator.", "error")
+            flash(gettext(
+                "An unexpected error occurred! Please check the application "
+                  "logs or inform your adminstrator."), "error")
             app.logger.error("Account changes for '{}' failed: {}".format(user,
                                                                           e))
             db_session.rollback()
         else:
-            flash("Account successfully updated!", "success")
+            flash(gettext("Account successfully updated!"), "success")
 
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
@@ -323,8 +340,10 @@ def admin_edit_user(user_id):
                 pass
             elif Journalist.query.filter_by(
                     username=new_username).one_or_none():
-                flash('Username "{}" is already taken!'.format(new_username),
-                      "error")
+                flash(gettext(
+                    'Username "{user}" is already taken!').format(
+                        user=new_username),
+                    "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
             else:
                 user.username = new_username
@@ -349,7 +368,8 @@ def admin_delete_user(user_id):
     if user:
         db_session.delete(user)
         db_session.commit()
-        flash("Deleted user '{}'".format(user.username), "notification")
+        flash(gettext("Deleted user '{user}'").format(
+            user=user.username), "notification")
     else:
         app.logger.error(
             "Admin {} tried to delete nonexistent user with pk={}".format(
@@ -380,10 +400,12 @@ def account_new_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if g.user.verify_token(token):
-            flash("Two-factor token successfully verified!", "notification")
+            flash(gettext("Two-factor token successfully verified!"),
+                  "notification")
             return redirect(url_for('edit_account'))
         else:
-            flash("Two-factor token failed to verify", "error")
+            flash(gettext("Two-factor token failed to verify"),
+                  "error")
 
     return render_template('account_new_two_factor.html', user=g.user)
 
@@ -497,7 +519,7 @@ def col_process():
                'download-all': col_download_all, 'star': col_star,
                'un-star': col_un_star, 'delete': col_delete}
     if 'cols_selected' not in request.form:
-        flash('No collections selected!', 'error')
+        flash(gettext('No collections selected!'), 'error')
         return redirect(url_for('index'))
 
     # getlist is cgi.FieldStorage.getlist
@@ -520,7 +542,8 @@ def col_download_unread(cols_selected):
             Submission.downloaded == false(),
             Submission.source_id == id).all()
     if submissions == []:
-        flash("No unread submissions in collections selected!", "error")
+        flash(gettext("No unread submissions in collections selected!"),
+              "error")
         return redirect(url_for('index'))
     return download("unread", submissions)
 
@@ -557,23 +580,23 @@ def col_delete_single(sid):
     """deleting a single collection from its /col page"""
     source = get_source(sid)
     delete_collection(sid)
-    flash(
-        "%s's collection deleted" %
-        (source.journalist_designation,), "notification")
+    flash(gettext("{source_journalist_designation}'s collection deleted")
+          .format(source_journalist_designation=source.journalist_designation),
+          "notification")
     return redirect(url_for('index'))
 
 
 def col_delete(cols_selected):
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "error")
+        flash(gettext("No collections selected to delete!"), "error")
     else:
         for source_id in cols_selected:
             delete_collection(source_id)
-        flash("%s %s deleted" % (
-            len(cols_selected),
-            "collection" if len(cols_selected) == 1 else "collections"
-        ), "notification")
+        num = len(cols_selected)
+        flash(ngettext('{num} collection deleted', '{num} collections deleted',
+                       num).format(num=num),
+              "notification")
 
     return redirect(url_for('index'))
 
@@ -614,7 +637,7 @@ def reply():
     msg = request.form['msg']
     # Reject empty replies
     if not msg:
-        flash("You cannot send an empty reply!", "error")
+        flash(gettext("You cannot send an empty reply!"), "error")
         return redirect(url_for('col', sid=g.sid))
 
     g.source.interaction_count += 1
@@ -629,8 +652,9 @@ def reply():
         db_session.add(reply)
         db_session.commit()
     except Exception as exc:
-        flash("An unexpected error occurred! Please check the application "
-              "logs or inform your adminstrator.", "error")
+        flash(gettext(
+            "An unexpected error occurred! Please check the application "
+            "logs or inform your adminstrator."), "error")
         # We take a cautious approach to logging here because we're dealing
         # with responses to sources. It's possible the exception message could
         # contain information we don't want to write to disk.
@@ -639,7 +663,8 @@ def reply():
                                                          g.user.id,
                                                          exc.__class__))
     else:
-        flash("Thanks! Your reply has been stored.", "notification")
+        flash(gettext("Thanks! Your reply has been stored."),
+              "notification")
     finally:
         return redirect(url_for('col', sid=g.sid))
 
@@ -657,11 +682,12 @@ def generate_code():
             g.source.journalist_filename)
     db_session.commit()
 
-    flash(
-        "The source '%s' has been renamed to '%s'" %
-        (original_journalist_designation,
-         g.source.journalist_designation),
-        "notification")
+    flash(gettext(
+        "The source '{original_source}' has been"
+        " renamed to '{new_source}'")
+          .format(original_source=original_journalist_designation,
+                  new_source=g.source.journalist_designation),
+          "notification")
     return redirect('/col/' + g.sid)
 
 
@@ -673,7 +699,7 @@ def download_unread_sid(sid):
         Submission.source_id == id,
         Submission.downloaded == false()).all()
     if submissions == []:
-        flash("No unread submissions for this source!")
+        flash(gettext("No unread submissions for this source!"))
         return redirect(url_for('col', sid=sid))
     source = get_source(sid)
     return download(source.journalist_filename, submissions)
@@ -689,9 +715,9 @@ def bulk():
                      if doc.filename in doc_names_selected]
     if selected_docs == []:
         if action == 'download':
-            flash("No collections selected to download!", "error")
+            flash(gettext("No collections selected to download!"), "error")
         elif action in ('delete', 'confirm_delete'):
-            flash("No collections selected to delete!", "error")
+            flash(gettext("No collections selected to delete!"), "error")
         return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':
@@ -719,10 +745,9 @@ def bulk_delete(sid, items_selected):
         db_session.delete(item)
     db_session.commit()
 
-    flash(
-        "Submission{} deleted.".format(
-            "s" if len(items_selected) > 1 else ""),
-        "notification")
+    flash(ngettext("Submission deleted.",
+                   "Submissions deleted.",
+                   len(items_selected)), "notification")
     return redirect(url_for('col', sid=sid))
 
 

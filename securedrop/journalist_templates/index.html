@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h1><span class="headline">Sources</span></h1>
+  <h1><span class="headline">{{ gettext('Sources') }}</span></h1>
   {% if unstarred or starred %}
     <div id="filter-container"></div>
     <form id="process-collections" action="/col/process" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <p>
         <div id="index-select-container"></div>
-        <button type="submit" name="action" value="download-unread" class="small"><i class="fa fa-download"></i> Download Unread</button>
-        <button type="submit" name="action" value="download-all" class="small"><i class="fa fa-download"></i> Download</button>
-        <button type="submit" name="action" value="star" class="small"><i class="fa fa-star"></i> Star</button>
-        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-star-half-full"></i> Un-star</button>
-        <button type="submit" id="delete-collections" name="action" value="delete" class="small-danger"><i class="fa fa-trash-o"></i> Delete</button>
+        <button type="submit" name="action" value="download-unread" class="small"><i class="fa fa-download"></i> {{ gettext('Download Unread') }}</button>
+        <button type="submit" name="action" value="download-all" class="small"><i class="fa fa-download"></i> {{ gettext('Download') }}</button>
+        <button type="submit" name="action" value="star" class="small"><i class="fa fa-star"></i> {{ gettext('Star') }}</button>
+        <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-star-half-full"></i> {{ gettext('Un-star') }}</button>
+        <button type="submit" id="delete-collections" name="action" value="delete" class="small-danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete') }}</button>
       </p>
 
       {% if starred %}
@@ -39,7 +39,7 @@
 
     </form>
   {% else %}
-    <p>No documents have been submitted!</p>
+    <p>{{ gettext('No documents have been submitted!') }}</p>
   {% endif %}
 </div>
 {% endblock %}

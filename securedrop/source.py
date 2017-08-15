@@ -18,6 +18,8 @@ import config
 import json
 import version
 import crypto_util
+from flask_babel import gettext
+import i18n
 import store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
@@ -32,6 +34,8 @@ log = logging.getLogger('source')
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
@@ -87,6 +91,8 @@ def ignore_static(f):
 @ignore_static
 def setup_g():
     """Store commonly used values in Flask's special g object"""
+    g.locale = i18n.get_locale()
+    g.locales = i18n.get_locale2name()
     # ignore_static here because `crypto_util.hash_codename` is scrypt (very
     # time consuming), and we don't need to waste time running if we're just
     # serving a static resource that won't need to access these common values.
@@ -155,8 +161,9 @@ def generate_unique_codename():
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. "
-              "If you want to create a new account, you should log out first.",
+        flash(gettext(
+            "You were redirected because you are already logged in. "
+            "If you want to create a new account, you should log out first."),
               "notification")
         return redirect(url_for('lookup'))
 
@@ -268,7 +275,9 @@ def submit():
 
     # Don't bother submitting anything if it was an "empty" submission. #878.
     if not (msg or fh):
-        flash("You must enter a message or choose a file to submit.", "error")
+        flash(gettext(
+            "You must enter a message or choose a file to submit."),
+              "error")
         return redirect(url_for('lookup'))
 
     fnames = []
@@ -339,7 +348,7 @@ def delete():
     db_session.delete(reply)
     db_session.commit()
 
-    flash("Reply deleted", "notification")
+    flash(gettext("Reply deleted"), "notification")
     return redirect(url_for('lookup'))
 
 
@@ -355,7 +364,7 @@ def batch_delete():
         db_session.delete(reply)
     db_session.commit()
 
-    flash("All replies have been deleted", "notification")
+    flash(gettext("All replies have been deleted"), "notification")
     return redirect(url_for('lookup'))
 
 
@@ -388,7 +397,8 @@ def login():
         else:
             app.logger.info(
                     "Login failed for invalid codename".format(codename))
-            flash("Sorry, that is not a recognized codename.", "error")
+            flash(gettext("Sorry, that is not a recognized codename."),
+                  "error")
     return render_template('login.html')
 
 

@@ -10,8 +10,9 @@ class SourceNavigationSteps():
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
 
-        assert ("SecureDrop | Protecting Journalists and Sources" ==
-                self.driver.title)
+        if not hasattr(self, 'accept_languages'):
+            assert ("SecureDrop | Protecting Journalists and Sources" ==
+                    self.driver.title)
 
     @screenshots
     def _source_chooses_to_submit_documents(self):
@@ -82,8 +83,9 @@ class SourceNavigationSteps():
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
 
-        headline = self.driver.find_element_by_class_name('headline')
-        assert 'Submit Materials' == headline.text
+        if not hasattr(self, 'accept_languages'):
+            headline = self.driver.find_element_by_class_name('headline')
+            assert 'Submit Materials' == headline.text
 
     @screenshots
     def _source_continues_to_submit_page(self):
@@ -105,8 +107,9 @@ class SourceNavigationSteps():
 
         continue_button.click()
 
-        headline = self.driver.find_element_by_class_name('headline')
-        assert 'Submit Materials' == headline.text
+        if not hasattr(self, 'accept_languages'):
+            headline = self.driver.find_element_by_class_name('headline')
+            assert 'Submit Materials' == headline.text
 
     @screenshots
     def _source_submits_a_file(self):
@@ -130,11 +133,12 @@ class SourceNavigationSteps():
 
             submit_button.click()
 
-            notification = self.driver.find_element_by_css_selector(
-                '.success')
-            expected_notification = (
-                'Thank you for sending this information to us')
-            assert expected_notification in notification.text
+            if not hasattr(self, 'accept_languages'):
+                notification = self.driver.find_element_by_css_selector(
+                    '.success')
+                expected_notification = (
+                    'Thank you for sending this information to us')
+                assert expected_notification in notification.text
 
     @screenshots
     def _source_submits_a_message(self):
@@ -145,10 +149,10 @@ class SourceNavigationSteps():
         submit_button = self.driver.find_element_by_id('submit-doc-button')
         submit_button.click()
 
-        notification = self.driver.find_element_by_css_selector(
-            '.success')
-        assert ('Thank you for sending this information to us' in
-                notification.text)
+        if not hasattr(self, 'accept_languages'):
+            notification = self.driver.find_element_by_css_selector(
+                '.success')
+            assert 'Thank' in notification.text
 
     @screenshots
     def _source_deletes_a_journalist_reply(self):
@@ -167,8 +171,10 @@ class SourceNavigationSteps():
         assert confirm_button.is_displayed()
         confirm_button.click()
 
-        notification = self.driver.find_element_by_class_name('notification')
-        assert 'Reply deleted' in notification.text
+        if not hasattr(self, 'accept_languages'):
+            notification = self.driver.find_element_by_class_name(
+                'notification')
+            assert 'Reply deleted' in notification.text
 
     @screenshots
     def _source_logs_out(self):
@@ -179,3 +185,12 @@ class SourceNavigationSteps():
         self.driver.get(self.source_location + "/unlikely")
         message = self.driver.find_element_by_id('page-not-found')
         assert message.is_displayed()
+
+    def _source_visits_use_tor(self):
+        self.driver.get(self.source_location + "/use-tor")
+
+    def _source_tor2web_warning(self):
+        self.driver.get(self.source_location + "/tor2web-warning")
+
+    def _source_why_journalist_key(self):
+        self.driver.get(self.source_location + "/why-journalist-key")
