@@ -19,3 +19,18 @@ def test_grsec_denied_rwx_mapping_produces_alert(Command, Sudo):
         assert "Alert to be generated" in c.stderr
         alert_level = alert_level_regex.findall(c.stderr)[0]
         assert alert_level == "7"
+
+
+def test_overloaded_tor_guard_does_not_produce_alert(Command, Sudo):
+    """Check that using an overloaded guard does not produce an OSSEC alert"""
+    test_alert = ("Aug 16 21:54:44 app-staging Tor[26695]: [warn] Your Guard "
+                  "<name> (<fingerprint>) is failing a very large amount of "
+                  "circuits. Most likely this means the Tor network is "
+                  "overloaded, but it could also mean an attack against you "
+                  "or potentially the guard itself.")
+
+    with Sudo():
+        c = Command('echo "{}" | /var/ossec/bin/ossec-logtest'.format(
+                test_alert))
+
+        assert "Alert to be generated" not in c.stderr
