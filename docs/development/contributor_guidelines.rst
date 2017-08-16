@@ -66,7 +66,7 @@ our HTML templates in ``securedrop/source_templates`` and
 
   .. code:: sh
 
-      html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation example.html
+      make html-lint
 
 Git History
 -----------

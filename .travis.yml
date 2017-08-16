@@ -61,8 +61,6 @@ script:
   # flake8 linting
   - make flake8
   # HTML linting
-  - >
-      html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation
-      securedrop/source_templates/*.html securedrop/journalist_templates/*.html
+  - make html-lint
 after_success:
   cd securedrop/ && coveralls
