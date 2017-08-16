@@ -377,4 +377,4 @@ System Date
 ~~~~~~~~~~~
 
 The ``ansible`` playbooks you will run later depend on the system clock
-being set accurately, so run ``sudo ntpdate`` on both servers.
+being set accurately, so run ``sudo ntpdate ntp.ubuntu.com`` on both servers.
