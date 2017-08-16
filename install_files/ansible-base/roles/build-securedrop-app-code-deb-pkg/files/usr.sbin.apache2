@@ -225,6 +225,8 @@
   /var/www/securedrop/wordlist r,
   /var/www/securedrop/worker.py r,
   /var/www/securedrop/worker.pyc rw,
+  /var/www/securedrop/translations/ r,
+  /var/www/securedrop/translations/** r,
   /var/www/source.wsgi r,
   /var/www/.gnupg/ rw,
   /var/www/.gnupg/** rw,
