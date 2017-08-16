@@ -39,6 +39,8 @@
     -w {{ securedrop_app_code_deb_dir }}/var/securedrop/wheelhouse
   tags: pip
 
+- include: translations.yml
+
 - name: Create apparmor.d directory in build path.
   file:
     state: directory

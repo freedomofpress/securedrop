@@ -167,6 +167,35 @@ def test_deb_package_contains_no_config_file(File, Command, deb):
 
 
 @pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_pot_file(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package has the
+    messages.pot file
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        assert re.search("^.*messages.pot$", c.stdout, re.M)
+
+
+@pytest.mark.xfail  # remove after merging the first translation
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_package_contains_mo_file(File, Command, deb):
+    """
+    Ensures the `securedrop-app-code` package has at least one
+    compiled mo file.
+    """
+    deb_package = File(deb.format(
+        securedrop_test_vars.securedrop_version))
+    c = Command("dpkg-deb --contents {}".format(deb_package.path))
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        assert re.search("^.*messages\.mo$", c.stdout, re.M)
+
+
+@pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_no_generated_assets(File, Command, deb):
     """
     Ensures the `securedrop-app-code` package does not ship a minified
