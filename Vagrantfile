@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
     end
     development.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
-      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
+      override.vm.synced_folder './', '/vagrant', type: 'sshfs', disabled: false
     end
   end
 
@@ -153,7 +153,7 @@ Vagrant.configure("2") do |config|
     end
 
     build.vm.provider "libvirt" do |lv, override|
-      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
+      override.vm.synced_folder './', '/vagrant', type: 'sshfs', disabled: false
     end
   end
 
