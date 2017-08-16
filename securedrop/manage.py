@@ -7,8 +7,10 @@ import logging
 import os
 import shutil
 import signal
+import subprocess
 import sys
 import traceback
+import version
 
 import psutil
 import qrcode
@@ -23,7 +25,43 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
 
-def reset():  # pragma: no cover
+def sh(command, input=None):
+    """Run the *command* which must be a shell snippet. The stdin is
+    either /dev/null or the *input* argument string.
+
+    The stderr/stdout of the snippet are captured and logged via
+    logging.debug(), one line at a time.
+    """
+    log.debug(":sh: " + command)
+    if input is None:
+        stdin = None
+    else:
+        stdin = subprocess.PIPE
+    proc = subprocess.Popen(
+        args=command,
+        stdin=stdin,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        shell=True,
+        bufsize=1)
+    if stdin is not None:
+        proc.stdin.write(input)
+        proc.stdin.close()
+    lines_of_command_output = []
+    with proc.stdout:
+        for line in iter(proc.stdout.readline, b''):
+            line = line.decode('utf-8')
+            lines_of_command_output.append(line)
+            log.debug(line.strip().encode('ascii', 'ignore'))
+    if proc.wait() != 0:
+        raise subprocess.CalledProcessError(
+            returncode=proc.returncode,
+            cmd=command
+        )
+    return "".join(lines_of_command_output)
+
+
+def reset(args):  # pragma: no cover
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -58,11 +96,11 @@ def reset():  # pragma: no cover
     return 0
 
 
-def add_admin():  # pragma: no cover
+def add_admin(args):  # pragma: no cover
     return _add_user(is_admin=True)
 
 
-def add_journalist():  # pragma: no cover
+def add_journalist(args):  # pragma: no cover
     return _add_user()
 
 
@@ -134,7 +172,7 @@ def _add_user(is_admin=False):  # pragma: no cover
         return 0
 
 
-def delete_user():  # pragma: no cover
+def delete_user(args):  # pragma: no cover
     """Deletes a journalist or administrator from the application."""
     # Select user to delete
     username = raw_input('Username to delete: ')
@@ -172,7 +210,7 @@ def delete_user():  # pragma: no cover
     return 0
 
 
-def clean_tmp():  # pragma: no cover
+def clean_tmp(args):  # pragma: no cover
     """Cleanup the SecureDrop temp directory. This is intended to be run
     as an automated cron job. We skip files that are currently in use to
     avoid deleting files that are currently being downloaded."""
@@ -208,6 +246,56 @@ def clean_tmp():  # pragma: no cover
                 os.remove(path)
 
     return 0
+
+
+def translate(args):
+    messages_file = os.path.join(args.translations_dir, 'messages.pot')
+
+    if args.extract_update:
+        sh("""
+        set -xe
+
+        mkdir -p {translations_dir}
+
+        pybabel extract \
+        --charset=utf-8 \
+        --mapping={mapping} \
+        --output={messages_file} \
+        --project=SecureDrop \
+        --version={version} \
+        --msgid-bugs-address='securedrop@freedom.press' \
+        --copyright-holder='Freedom of the Press Foundation' \
+        {sources}
+
+        # we do not handle fuzzy translations yet
+        sed -i '/^#, fuzzy$/d' {messages_file}
+        """.format(translations_dir=args.translations_dir,
+                   mapping=args.mapping,
+                   messages_file=messages_file,
+                   version=args.version,
+                   sources=" ".join(args.source)))
+
+        if len(os.listdir(args.translations_dir)) > 1:
+            sh("""
+            set -xe
+            pybabel update \
+            --input-file {messages_file} \
+            --output-dir {translations_dir} \
+            --no-fuzzy-matching --ignore-obsolete
+            """.format(translations_dir=args.translations_dir,
+                       messages_file=messages_file))
+        else:
+            log.warning("no translations found (ok for tests, not otherwise)")
+
+    if args.compile:
+        sh("""
+        set -x
+
+        # stop here if there are no translations (for testing)
+        test $(ls {translations_dir} | wc -l) = 1 && exit 0
+
+        pybabel compile --directory {translations_dir}
+        """.format(translations_dir=args.translations_dir))
 
 
 def get_args():
@@ -249,7 +337,47 @@ def get_args():
     clean_tmp_subp_a = subps.add_parser('clean_tmp', help='^')
     clean_tmp_subp_a.set_defaults(func=clean_tmp)
 
+    set_translate_parser(subps)
+
     return parser
+
+
+def set_translate_parser(subps):
+    parser = subps.add_parser('translate',
+                              help='Update and compile translations')
+    translations_dir = 'translations'
+    parser.add_argument(
+        '--extract-update',
+        action='store_true',
+        help='run pybabel extract and pybabel update')
+    parser.add_argument(
+        '--compile',
+        action='store_true',
+        help='run pybabel compile')
+    mapping = 'babel.cfg'
+    parser.add_argument(
+        '--mapping',
+        default=mapping,
+        help='Mapping of files to consider (default {})'.format(
+            mapping))
+    parser.add_argument(
+        '--translations-dir',
+        default=translations_dir,
+        help='Base directory for translation files (default {})'.format(
+            translations_dir))
+    parser.add_argument(
+        '--version',
+        default=version.__version__,
+        help='SecureDrop version to store in pot files (default {})'.format(
+            version.__version__))
+    sources = ['.', 'source_templates', 'journalist_templates']
+    parser.add_argument(
+        '--source',
+        default=sources,
+        action='append',
+        help='Source file or directory to extract (default {})'.format(
+            sources))
+    parser.set_defaults(func=translate)
 
 
 def setup_verbosity(args):
@@ -262,8 +390,8 @@ def setup_verbosity(args):
 def _run_from_commandline():  # pragma: no cover
     try:
         args = get_args().parse_args()
-        rc = args.func()
         setup_verbosity(args)
+        rc = args.func(args)
         sys.exit(rc)
     except KeyboardInterrupt:
         sys.exit(signal.SIGINT)
