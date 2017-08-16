@@ -128,3 +128,16 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<!--
+  Do not send an email alert on overloaded Tor guard events.
+  These are purely informational notifications, but would be
+  a candidate for sending up to FPF for analysis in aggregate.
+-->
+<group name="tor guard overloaded">
+  <rule id="200002" level="0">
+    <if_sid>1002</if_sid>
+    <match>this means the Tor network is overloaded</match>
+    <options>no_email_alert</options>
+  </rule>
+</group>
