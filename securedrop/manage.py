@@ -295,13 +295,9 @@ def translate(args):
         else:
             log.warning("no translations found (ok for tests, not otherwise)")
 
-    if args.compile:
+    if args.compile and len(os.listdir(args.translations_dir)) > 1:
         sh("""
         set -x
-
-        # stop here if there are no translations (for testing)
-        test $(ls {translations_dir} | wc -l) = 1 && exit 0
-
         pybabel compile --directory {translations_dir}
         """.format(translations_dir=args.translations_dir))
 
