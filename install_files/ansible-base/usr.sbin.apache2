@@ -211,6 +211,7 @@
   /var/www/securedrop/static/js/libs/jquery-2.1.4.min.js r,
   /var/www/securedrop/static/js/source.js r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.eot r,
+  /var/www/securedrop/static/fonts/fontawesome-webfont.svg r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.ttf r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.woff r,
   /var/www/securedrop/static/fonts/fontawesome-webfont.woff2 r,
