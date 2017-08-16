@@ -5,6 +5,7 @@ import os
 from os.path import abspath, dirname, exists, isdir, join, realpath
 import shutil
 import subprocess
+import threading
 
 import gnupg
 
@@ -59,6 +60,12 @@ def setup():
 
 
 def teardown():
+    # make sure threads launched by tests complete before
+    # teardown, otherwise they may fail because resources
+    # they need disappear
+    for t in threading.enumerate():
+        if t.is_alive() and not isinstance(t, threading._MainThread):
+            t.join()
     db_session.remove()
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
