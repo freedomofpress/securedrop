@@ -59,9 +59,7 @@ script:
   - pip install -r securedrop/requirements/develop-requirements.txt
   - make docs-lint
   # flake8 linting
-  - >
-      flake8 testinfra securedrop-admin securedrop/*.py securedrop/management
-      securedrop/tests/functional securedrop/tests/*.py
+  - make flake8
   # HTML linting
   - >
       html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation

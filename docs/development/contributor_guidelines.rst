@@ -53,7 +53,7 @@ compliant. You can run ``flake8`` locally via:
 
   .. code:: sh
 
-      flake8 example.py
+      make flake8
 
 HTML
 ~~~~
