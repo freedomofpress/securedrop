@@ -80,6 +80,7 @@ anonymous sources.
    development/virtual_environments
    development/contributor_guidelines
    development/tips_and_tricks
+   development/i18n
    development/l10n
    development/documentation_guidelines
    development/testing_securedrop
