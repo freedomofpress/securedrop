@@ -1,6 +1,11 @@
 version: 2
 jobs:
   build:
+    branches:
+      ignore:
+        # Skip staging CI if branch name starts with `docs-`.
+        - /docs-.*/
+
     docker:
       - image: msheiny/pressfreedomci:latest
         environment:
