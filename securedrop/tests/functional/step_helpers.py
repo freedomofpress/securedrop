@@ -10,7 +10,7 @@ screenshots_enabled = os.environ.get('SCREENSHOTS_ENABLED')
 # screenshots is a decorator that records an image before and after
 # the steps described in this file
 def screenshots(f):
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
 
@@ -28,7 +28,7 @@ def screenshots(f):
         if screenshots_enabled:
             image_path = join(LOG_DIR, '%s-before.png' % path)
             args[0].driver.save_screenshot(image_path)
-        result = f(*args)
+        result = f(*args, **kwargs)
         if screenshots_enabled:
             image_path = join(LOG_DIR, '%s-after.png' % path)
             args[0].driver.save_screenshot(image_path)
