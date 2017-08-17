@@ -51,6 +51,10 @@ html-lint:
 	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 
+.PHONY: lint
+# Runs all linting tools (docs, flake8, HTML)
+lint: docs-lint flake8 html-lint
+
 help:
 	@echo Makefile for developing and testing SecureDrop.
 	@echo Subcommands:
@@ -58,6 +62,7 @@ help:
 	@echo "\t docs-lint: Check documentation for common syntax errors."
 	@echo "\t flake8: Validates PEP8 compliance for Python source files."
 	@echo "\t html-lint: Validates HTML in web application template files."
+	@echo "\t lint: Runs all linting tools (docs, flake8, HTML)."
 	@echo "\t ci-spinup: Creates AWS EC2 hosts for testing staging environment."
 	@echo "\t ci-teardown: Destroy AWS EC2 hosts for testing staging environment."
 	@echo "\t ci-run: Provisions AWS EC2 hosts for testing staging environment."

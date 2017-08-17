@@ -54,13 +54,10 @@ script:
   - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v tests/"
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
   - pip freeze -l
-  # Docs linting. Performing this step *after* build VM tests pass, so as not
+  # Performing new pip install step *after* build VM tests pass, so as not
   # to alter the pip requirements, which would cause config tests to fail.
+  # The develop requirements include sphinx tooling for docs linting.
   - pip install -r securedrop/requirements/develop-requirements.txt
-  - make docs-lint
-  # flake8 linting
-  - make flake8
-  # HTML linting
-  - make html-lint
+  - make lint
 after_success:
   cd securedrop/ && coveralls
