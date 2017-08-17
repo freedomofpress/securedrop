@@ -6,6 +6,17 @@ successfully install and operate a SecureDrop instance, and recommends
 some specific components that we have found to work well. If you have
 any questions, please email securedrop@freedom.press.
 
+Hardware Overview
+-----------------
+
+For an installation of SecureDrop, you must acquire:
+
+.. include:: includes/pre-install-hardware.txt
+
+In the sections that follow, we provide additional details on each item.
+
+.. _Hardware Recommendations:
+
 Required Hardware
 -----------------
 
