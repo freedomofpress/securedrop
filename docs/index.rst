@@ -44,6 +44,13 @@ anonymous sources.
    onboarding
 
 .. toctree::
+   :caption: Checklists
+   :name: checklists
+   :maxdepth: 2
+
+   checklists/pre_install_hardware
+
+.. toctree::
    :caption: Topic Guides
    :name: topictoc
    :maxdepth: 2
