@@ -57,8 +57,5 @@ workflows:
     jobs:
       - docs-lint
       - staging-test:
-          filters:
-            branches:
-              ignore: /^docs-.*/
           requires:
             - docs-lint
