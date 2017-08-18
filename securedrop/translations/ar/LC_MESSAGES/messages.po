@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-17 17:36+0000\n"
-"Last-Translator: admin <admin@securedrop.club>\n"
+"PO-Revision-Date: 2017-08-18 12:02+0000\n"
+"Last-Translator: Scharik yousif <abuakram@protonmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
@@ -44,7 +44,7 @@ msgstr "لا يوجد اسم المستخدم"
 
 #: journalist.py:182
 msgid "Passwords didn't match"
-msgstr "كلمات السر غير متطابقتين"
+msgstr "كلمات السر غير متطابقة"
 
 #: journalist.py:200 journalist.py:304
 msgid "Your password must be between {min} and {max} characters."
@@ -59,64 +59,66 @@ msgid ""
 "An error occurred saving this user to the database. Please check the "
 "application logs."
 msgstr ""
+"حدث خطأ أثناء حفظ هذا المستخدم إلى قاعدة البيانات. يرجى التحقق من سجلات "
+"التطبيق."
 
 #: journalist.py:233
 msgid "Two-factor token successfully verified for user {user}!"
-msgstr ""
+msgstr "تم التحقق بنجاح من الرمز المكون من عاملين للمستخدم"
 
 #: journalist.py:240 journalist.py:404
 msgid "Two-factor token failed to verify"
-msgstr ""
+msgstr "أخفق التحقق من الرمز المكون من عاملين"
 
 #: journalist.py:267
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
-msgstr ""
+msgstr "كلمة السر غير صالحة: الرجاء استخدم فقط حروف أبجدية وأرقام"
 
 #: journalist.py:272
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
-msgstr ""
+msgstr "كلمة السر غير صالحة: عدد الأحرف فردية.هل اخطأت في كتابتها؟"
 
 #: journalist.py:277 journalist.py:318 journalist.py:652
 msgid ""
 "An unexpected error occurred! Please check the application logs or inform"
 " your adminstrator."
-msgstr ""
+msgstr "حصل خطأ غير متوقع. الرجاء مراجعة سجل التطبيق أو إبلاغ الأدمن."
 
 #: journalist.py:299
 msgid "Passwords didn't match!"
-msgstr ""
+msgstr "كلمات السر غير متطابقة!"
 
 #: journalist.py:325
 msgid "Account successfully updated!"
-msgstr ""
+msgstr "تم تحديث الحساب بنجاح!"
 
 #: journalist.py:340
 msgid "Username \"{user}\" is already taken!"
-msgstr ""
+msgstr "اسم المستخدم {user} قيد الاستخدام!"
 
 #: journalist.py:368
 msgid "Deleted user '{user}'"
-msgstr ""
+msgstr "تم حذف اسم المستخدم '{user}'"
 
 #: journalist.py:400
 msgid "Two-factor token successfully verified!"
-msgstr ""
+msgstr "تم التحقق بنجاح من الرمز المكون من عاملين!"
 
 #: journalist.py:519
 msgid "No collections selected!"
-msgstr ""
+msgstr "لم يتم تحديد أية مجموعات!"
 
 #: journalist.py:542
 msgid "No unread submissions in collections selected!"
-msgstr ""
+msgstr "لم يتم إرسال أية مشاركات غير مقروءة في المجموعات المحددة!"
 
 #: journalist.py:580
 msgid "{source_journalist_designation}'s collection deleted"
-msgstr ""
+msgstr "تم حذف مجموعة {source_journalist_designation}"
 
 #: journalist.py:589 journalist.py:716
 msgid "No collections selected to delete!"
-msgstr ""
+msgstr "لم يتم تحديد مجموعات للحذف!"
 
 #: journalist.py:594
 msgid "{num} collection deleted"
