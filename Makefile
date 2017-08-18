@@ -38,11 +38,31 @@ docs:
 # Spins up livereload environment for editing; blocks.
 	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
 
+.PHONY: flake8
+flake8:
+# Validates PEP8 compliance for Python source files.
+	flake8 --exclude='config.py' testinfra securedrop-admin \
+		securedrop/*.py securedrop/management \
+		securedrop/tests/functional securedrop/tests/*.py
+
+.PHONY: html-lint
+html-lint:
+# Validates HTML to the best of our ability.
+	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation \
+		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
+
+.PHONY: lint
+# Runs all linting tools (docs, flake8, HTML)
+lint: docs-lint flake8 html-lint
+
 help:
 	@echo Makefile for developing and testing SecureDrop.
 	@echo Subcommands:
 	@echo "\t docs: Build project documentation in live reload for editing."
 	@echo "\t docs-lint: Check documentation for common syntax errors."
+	@echo "\t flake8: Validates PEP8 compliance for Python source files."
+	@echo "\t html-lint: Validates HTML in web application template files."
+	@echo "\t lint: Runs all linting tools (docs, flake8, HTML)."
 	@echo "\t ci-spinup: Creates AWS EC2 hosts for testing staging environment."
 	@echo "\t ci-teardown: Destroy AWS EC2 hosts for testing staging environment."
 	@echo "\t ci-run: Provisions AWS EC2 hosts for testing staging environment."
