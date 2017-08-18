@@ -187,8 +187,6 @@ def find_ssh_aths(filename)
 end
 
 # Build proxy command for connecting to prod instances over Tor.
-# connect-proxy is recommended, but netcat is also supported
-# for CentOS Snap CI boxes, where connect-proxy isn't available.
 def tor_ssh_proxy_command
    def command?(command)
      system("which #{command} > /dev/null 2>&1")
