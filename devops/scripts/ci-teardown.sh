@@ -3,6 +3,7 @@
 #
 #
 . devops/ansible_env
+devops/scripts/docs-detection || exit 0
 
 export ANSIBLE_INVENTORY="localhost"
 export RETRY_FILES_ENABLED=False

@@ -33,7 +33,10 @@ You can then can browse the documentation at http://127.0.0.1:8000/.
 As you make changes, the docs will automatically rebuild in the browser
 window, so you don't need to refresh the page manually.
 
-You can also check the docs for formatting violations by running the linting
+Testing documentation changes
+-----------------------------
+
+You can check the docs for formatting violations by running the linting
 option:
 
    .. code:: sh
@@ -43,7 +46,14 @@ option:
 The ``make docs`` command will display warnings, but will still build the
 documentation if formatting mistakes are found. Using ``make docs-lint``
 will convert any warnings to errors, causing the build to fail.
-The CI tests will automatically perform linting via the same command.
+The :ref:`CI tests<ci_tests>` will automatically perform linting via the same
+command.
+
+The :ref:`CI tests<ci_tests>` by default create staging servers to test the
+application code. If your PR only makes documentation changes, you should
+prefix the branch name with ``docs-`` to skip the staging run. Project
+maintainers will still need to approve the PR prior to merge, and the linting
+checks will also still run.
 
 Integration with Read the Docs
 ------------------------------
