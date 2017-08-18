@@ -6,7 +6,7 @@ jobs:
         environment:
           FPF_CI: true
           CI_SD_ENV: staging
-          CI_AWS_TYPE: t2.small
+          CI_AWS_TYPE: m4.large
           FPF_GRSEC: false
           TEST_REPORTS: /root/sd
     working_directory: /root/sd
