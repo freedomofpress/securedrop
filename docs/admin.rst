@@ -1,5 +1,5 @@
-Administrator Guide
-=====================
+Administrator Guide For Winners
+===============================
 
 You (the administrator) should have your own username and password, plus
 two-factor authentication through either the Google Authenticator app
