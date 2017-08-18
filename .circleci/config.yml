@@ -1,11 +1,22 @@
+---
 version: 2
 jobs:
-  build:
-    branches:
-      ignore:
-        # Skip staging CI if branch name starts with `docs-`.
-        - /docs-.*/
+  docs-lint:
+    docker:
+      - image: msheiny/pressfreedomci:latest
 
+    steps:
+      - checkout
+
+      - run:
+          name: Installation pre-reqs
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Run docs lint
+          command: make docs-lint
+
+  staging-test:
     docker:
       - image: msheiny/pressfreedomci:latest
         environment:
@@ -39,3 +50,15 @@ jobs:
 
       - store_artifacts:
           path: /root/sd/junit
+
+workflows:
+  version: 2
+  securedrop_ci:
+    jobs:
+      - docs-lint
+      - staging-test:
+          filters:
+            branches:
+              ignore: /^docs-.*/
+          requires:
+            - docs-lint
