@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 16:32+0000\n"
-"PO-Revision-Date: 2017-08-17 15:03+0000\n"
+"PO-Revision-Date: 2017-08-19 12:33+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -25,9 +25,8 @@ msgid "You must be an administrator to access that page"
 msgstr "Vous devez être administrateur pour accéder à cette page"
 
 #: journalist.py:118
-#, fuzzy
 msgid "Login failed."
-msgstr "Echec de connexion."
+msgstr "Échec de connexion."
 
 #: journalist.py:122
 msgid "Please wait at least {seconds} seconds before logging in again."
@@ -550,7 +549,6 @@ msgid "Edit your account"
 msgstr "Modifier votre compte"
 
 #: journalist_templates/edit_account.html:17
-#, fuzzy
 msgid "Change username"
 msgstr "Changer le nom d'utilisateur"
 
@@ -1097,15 +1095,15 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
-msgstr "Vous devriez utiliser un navigateur Tor"
+msgstr "Vous devriez utiliser le navigateur Tor"
 
 #: source_templates/use-tor-browser.html:4
 msgid ""
 "If you are not using Tor Browser, you <strong>may not be "
 "anonymous</strong>."
 msgstr ""
-"Si vous n'utilisez pas un navigateur Tor, vous <strong>n'êtes "
-"probablement pas anonyme</strong>."
+"Si vous n'utilisez pas le navigateur Tor, vous <strong>n'êtes probablement "
+"pas anonyme</strong>."
 
 #: source_templates/use-tor-browser.html:5
 msgid ""
@@ -1113,9 +1111,9 @@ msgid ""
 "advise you</strong> to install Tor Browser and use it to access our site "
 "safely and anonymously."
 msgstr ""
-"Si vous voulez soumettre des informations à SecureDrop, nous vous "
-"<strong>recommandons fortement</strong> d'installer un navigateur Tor et "
-"de l'utiliser pour accéder à notre site de façon sécurisée et anonyme."
+"Si vous voulez soumettre des informations à SecureDrop, nous vous <strong>"
+"recommandons fortement</strong> d'installer le navigateur Tor et de "
+"l'utiliser pour accéder à notre site de façon sécurisée et anonyme."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
@@ -1175,8 +1173,8 @@ msgid ""
 "If you are using Mac/Linux, open the Terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
-"Si vous utilisez Mac ou GNU/Linux, ouvrez un terminal. Vous pouvez "
-"importer la clé avec <code>gpg --import /path/to/key.asc</code>."
+"Si vous utilisez Mac ou GNU/Linux, ouvrez un terminal. Vous pouvez importer "
+"la clé avec <code>gpg --import /chemin/vers/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
@@ -1189,8 +1187,8 @@ msgid ""
 "(with .asc at the end), you can just copy and paste that. (don't include "
 "the <code>.asc</code>!)"
 msgstr ""
-"Vous devez être capable d'identifier la clé (par ce qu'on appelle \"user "
-"ID\" ou uid). Comme le nom de fichier de la clé publique est aussi la "
+"Vous devez être capable d'identifier la clé (par ce qu'on appelle \"user ID\""
+" ou uid). Comme le nom de fichier de la clé publique est aussi sa "
 "fingerprint (avec .asc à la fin), vous pouvez simplement la copier et la "
 "coller. (n'incluez pas le <code>.asc</code>!)"
 
@@ -1220,10 +1218,10 @@ msgid ""
 "<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
 " identity to us."
 msgstr ""
-"<strong>Conseil:</strong> Si vous souhaitez rester anonyme, "
-"<strong>n'utilisez pas</strong> GPG pour signer les fichiers (avec "
-"l'option <code>--sign</code> ou <code>-s</code>) car cela nous révélera "
-"votre identité."
+"<strong>Conseil:</strong> si vous souhaitez rester anonyme, <strong>"
+"n'utilisez pas</strong> GPG pour signer les fichiers (avec l'option "
+"<code>--sign</code> ou <code>-s</code>) car cela nous révélera votre "
+"identité."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
