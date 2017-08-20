@@ -112,18 +112,18 @@ mounted and ready to access.
 |Backup and TailsData Mounted|
 
 Open a Nautilus window with administrator privileges by going to
-**Applications** ▸ **System Tools** ▸ **Root Terminal**.
-
-.. note::
-  If you cannot see the **Root Terminal** icon in your menu, it might be
-  because an administrator password wasn't set. If that's the case, you'll need
-  to restart and set an administrator password before continuing.
+**Applications** ▸ **System Tools** ▸ **Terminal**.
 
 |Root Terminal|
 
-Type ``nautilus`` at the terminal prompt and hit enter:
+Type ``gksu nautilus`` at the terminal prompt and hit enter:
 
 |Start Nautilus|
+
+.. note::
+  If nothing happens, it might be because an administrator password wasn't set.
+  If that's the case, you'll need to restart and set an administrator password
+  before continuing.
 
 .. warning::
             Make sure you use keep the `Terminal` window open while you perform
