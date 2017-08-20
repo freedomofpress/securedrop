@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-18 12:02+0000\n"
+"PO-Revision-Date: 2017-08-20 02:25+0000\n"
 "Last-Translator: Scharik yousif <abuakram@protonmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -132,23 +132,23 @@ msgstr[5] ""
 
 #: journalist.py:637
 msgid "You cannot send an empty reply!"
-msgstr ""
+msgstr "لا يمكنك إرسال رد فارغ!"
 
 #: journalist.py:663
 msgid "Thanks! Your reply has been stored."
-msgstr ""
+msgstr "شكر! تم تخزين ردك."
 
 #: journalist.py:682
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
-msgstr ""
+msgstr "تمت إعادة تسمية المصدر '{original_source}' إلى '{new_source}'"
 
 #: journalist.py:698
 msgid "No unread submissions for this source!"
-msgstr ""
+msgstr "لا توجد مشاركات غير مقروءة لهذا المصدر!"
 
 #: journalist.py:714
 msgid "No collections selected to download!"
-msgstr ""
+msgstr "لم يتم إختيار مجموعات للتحميل!"
 
 #: journalist.py:746
 msgid "Submission deleted."
