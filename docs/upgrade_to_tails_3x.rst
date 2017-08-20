@@ -114,11 +114,12 @@ mounted and ready to access.
 Open a Nautilus window with administrator privileges by going to
 **Applications** ▸ **System Tools** ▸ **Terminal**.
 
-|Root Terminal|
+|Open Terminal|
 
-Type ``gksu nautilus`` at the terminal prompt and hit enter:
+Type ``gksu nautilus`` at the terminal prompt and hit enter. You'll need to type
+your administrator password.
 
-|Start Nautilus|
+|Start gksu nautilus|
 
 .. note::
   If nothing happens, it might be because an administrator password wasn't set.
@@ -149,16 +150,15 @@ for each device you backup.
 Finally, once you have completed the steps described in this section for each
 USB drive, unmount the Backup partition and store the drive somewhere safely.
 
-.. |Nautilus| image:: images/upgrade_to_tails_3x/nautilus_start.png
 .. |Browse to Places Computer| image:: images/upgrade_to_tails_3x/browse_to_places_computer.png
 .. |Click Cogs| image:: images/upgrade_to_tails_3x/click_the_button_with_cogs.png
 .. |Fill in Passphrase| image:: images/upgrade_to_tails_3x/fill_in_passphrase.png
 .. |Format Backup Drive| image:: images/upgrade_to_tails_3x/fill_out_as_follows.png
-.. |Start Nautilus| image:: images/upgrade_to_tails_3x/nautilus_start.png
+.. |Start gksu nautilus| image:: images/upgrade_to_tails_3x/gksu_nautilus.png
 .. |Make Folders for All Drives| image:: images/upgrade_to_tails_3x/make_folders_for_all_drives.png
 .. |Backup and TailsData Mounted| image:: images/upgrade_to_tails_3x/backup_and_tailsdata_mounted.png
 .. |Applications Utilities Disks| image:: images/upgrade_to_tails_3x/navigate_to_applications.png
-.. |Root Terminal| image:: images/upgrade_to_tails_3x/root_terminal.png
+.. |Open Terminal| image:: images/upgrade_to_tails_3x/open_terminal.png
 .. |Select the Disk| image:: images/upgrade_to_tails_3x/select_the_disk.png
 .. |Two Partitions Appear| image:: images/upgrade_to_tails_3x/two_partitions_appear.png
 
