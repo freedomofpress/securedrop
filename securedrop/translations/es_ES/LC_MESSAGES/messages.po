@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-10 08:05+0000\n"
-"Last-Translator: admin <admin@securedrop.club>\n"
+"PO-Revision-Date: 2017-08-20 00:17+0000\n"
+"Last-Translator: magpiewings <camillefassett@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -22,27 +22,29 @@ msgstr ""
 
 #: journalist.py:102
 msgid "You must be an administrator to access that page"
-msgstr ""
+msgstr "Debes ser un administrador para ver esa página"
 
 #: journalist.py:118
 msgid "Login failed."
-msgstr ""
+msgstr "Error de inicio de sesion."
 
 #: journalist.py:122
 msgid "Please wait at least {seconds} seconds before logging in again."
-msgstr ""
+msgstr "Por favor espere al menos {segundos} antes de de conectarse."
 
 #: journalist.py:132
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
+"Por favor espere para una llave de autenticación bifactorial antes de "
+"conectarse."
 
 #: journalist.py:176
 msgid "Missing username"
-msgstr ""
+msgstr "Necesitan un nombre de usuario"
 
 #: journalist.py:182
 msgid "Passwords didn't match"
-msgstr ""
+msgstr "Las contraseñas no coinciden"
 
 #: journalist.py:200 journalist.py:304
 msgid "Your password must be between {min} and {max} characters."
@@ -50,7 +52,7 @@ msgstr ""
 
 #: journalist.py:208
 msgid "That username is already in use"
-msgstr ""
+msgstr "El nombre del usuario elegido ya haya sido utilizado"
 
 #: journalist.py:211
 msgid ""
@@ -69,6 +71,8 @@ msgstr ""
 #: journalist.py:267
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
+"Formato secreto inválido: por favor envíe solo las letras A-F y los numeros "
+"0-9."
 
 #: journalist.py:272
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
@@ -1010,7 +1014,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr ""
+msgstr "Encrypta su envío."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
