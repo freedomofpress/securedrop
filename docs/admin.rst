@@ -174,3 +174,24 @@ possession when they attempt to log in to SecureDrop.
 .. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
 .. |Enable YubiKey| image:: images/admin_enable_yubikey.png
 .. |Verify YubiKey| image:: images/admin_verify_yubikey.png
+
+Managing `site-specific` updates on teams with multiple admins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Organizations with multiple admins should establish a protocol to communicate 
+any changes one admin makes to the `site-specifc` configuration file on the server. 
+
+Currently, when one admin pushes changes in `site-specifc` to the server, the 
+changes will not sync to the local `site-specific` file on the remaining admin workstations.
+Without being aware of changes made to `site-specific`, admins run the risk of pushing old 
+information to the servers. This can affect the receipt of OSSEC alerts, viability of the
+Submission Key, among other critical components of the SecureDrop environment.
+
+There are multiple ways to avoid pushing out-of-date information to the servers.
+We recommend admins establish a secure communication pipeline to alert fellow admins
+of any changes made to `site-specific` on the server. That clues every admin in on 
+changes in real time, providing all teammembers with a reminder to manually update 
+all `site-specific` files.
+
+In addition to secure group communications, admins can become aware of updates by monitoring 
+OSSEC alerts or SSHing into the server and cross-referencing `site-specific` files.
