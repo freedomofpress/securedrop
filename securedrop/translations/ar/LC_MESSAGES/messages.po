@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-20 02:25+0000\n"
+"PO-Revision-Date: 2017-08-20 16:09+0000\n"
 "Last-Translator: Scharik yousif <abuakram@protonmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -733,65 +733,68 @@ msgstr ""
 
 #: source_templates/index.html:15
 msgid "Learn how to set it to high"
-msgstr ""
+msgstr "تعرف على كيفية تعيينها إلى الأعلى"
 
 #: source_templates/index.html:15 source_templates/index.html:16
 msgid ", or ignore this warning to continue."
-msgstr ""
+msgstr "، أو تجاهل هذا التحذير للمتابعة."
 
 #: source_templates/index.html:16
 msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
 msgstr ""
+"<strong>نوصي باستخدام متصفح تور Tor Browser للوصول إلى Securedrop:</strong>"
 
 #: source_templates/index.html:16
 msgid "Learn how to install it"
-msgstr ""
+msgstr "تعرف إلى كيفية تنصيبه"
 
 #: source_templates/index.html:35
 msgid "Submit documents for the first time"
-msgstr ""
+msgstr "إرسال وثائق لأول مرة"
 
 #: source_templates/index.html:38
 msgid ""
 "If this is your first time submitting documents to journalists, start "
 "here."
-msgstr ""
+msgstr "ابدأ من هنا، إذا كانت هذه هي المرة الأولى التي ترسل فيها وثائق لصحفيين."
 
 #: source_templates/index.html:42
 msgid "SUBMIT DOCUMENTS"
-msgstr ""
+msgstr "أرسل وثائق"
 
 #: source_templates/index.html:47
 msgid "Already submitted something?"
-msgstr ""
+msgstr "هل سبق أن أرسلت شيئا؟"
 
 #: source_templates/index.html:50
 msgid ""
 "If you have already submitted documents in the past, log in here to check"
 " for responses."
-msgstr ""
+msgstr "إذا كنت قد أرسلت مستندات من قبل، فقم بتسجيل الدخول هنا للبحث عن الردود."
 
 #: source_templates/index.html:54
 msgid "CHECK FOR A RESPONSE"
-msgstr ""
+msgstr "تحقق من وصول رد"
 
 #: source_templates/index.html:60
 msgid "Note:"
-msgstr ""
+msgstr "ملحوظة:"
 
 #: source_templates/index.html:72
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider "
 "to High in 4 easy steps!"
 msgstr ""
+"يبدو أنك تستخدم متصفح تور. يمكنك تحويل منزلق الأمن إلى الأعلى في 4 خطوات "
+"سهلة!"
 
 #: source_templates/index.html:74
 msgid "Click the"
-msgstr ""
+msgstr "أنقر"
 
 #: source_templates/index.html:74
 msgid "Tor icon in the toolbar above"
-msgstr ""
+msgstr "رمز تور Tor في شريط الأدوات أعلاه"
 
 #: source_templates/index.html:75
 msgid "Click <strong>Security Settings...</strong>"
