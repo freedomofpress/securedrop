@@ -55,6 +55,14 @@ html-lint: ## Validates HTML in web application template files.
 .PHONY: lint
 lint: docs-lint flake8 html-lint ## Runs all linting tools (docs, flake8, HTML).
 
+.PHONY: docker-build-ubuntu
+docker-build-ubuntu: ## Builds SD Ubuntu docker container
+	@docker build -t quay.io/freedomofpress/ubuntu:trusty -f molecule/builder/Dockerfile molecule/builder
+
+.PHONY: build-debs
+build-debs: ## Builds and tests debian packages
+	@molecule test -s builder
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets

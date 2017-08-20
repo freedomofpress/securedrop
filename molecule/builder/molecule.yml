@@ -5,11 +5,8 @@ lint:
   name: yamllint
 platforms:
   - name: build
-    image: quay.io/freedomofpress/debian-jessie-systemd:latest
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    capabilities:
-      - SYS_ADMIN
+    image: quay.io/freedomofpress/ubuntu:trusty
+    hash_name: ubuntu
     groups:
       - build
 provisioner:
@@ -26,6 +23,12 @@ provisioner:
     name: ansible-lint
 scenario:
   name: builder
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
 verifier:
   name: testinfra
   lint:
