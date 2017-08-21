@@ -175,28 +175,31 @@ possession when they attempt to log in to SecureDrop.
 .. |Enable YubiKey| image:: images/admin_enable_yubikey.png
 .. |Verify YubiKey| image:: images/admin_verify_yubikey.png
 
-.. _Updating the Server:
+.. _Updating the Servers:
+
+Updating the Servers
+--------------------
 
 Managing ``site-specific`` updates on teams with multiple admins
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Organizations with multiple admins should establish a protocol to communicate 
-any changes one admin makes to the ``site-specifc`` configuration file on the server. 
+Organizations with multiple admins should establish a protocol to communicate
+any changes one admin makes to the ``site-specific`` configuration file on the server.
 
-Currently, when one admin pushes changes in ``site-specifc`` to the server, the 
+Currently, when one admin pushes changes in ``site-specific`` to the server, the
 changes will not sync to the local ``site-specific`` file on the remaining admin workstations.
-Without being aware of changes made to ``site-specific``, admins run the risk of pushing old 
+Without being aware of changes made to ``site-specific``, admins run the risk of pushing old
 information to the servers. This can affect the receipt of OSSEC alerts, viability of the
 Submission Key, among other critical components of the SecureDrop environment.
 
 There are multiple ways to avoid pushing out-of-date information to the servers.
 We recommend admins establish a secure communication pipeline to alert fellow admins
-of any changes made to ``site-specific`` on the server. That clues every admin in on 
-changes in real time, providing all team members with a reminder to manually update 
+of any changes made to ``site-specific`` on the server. That clues every admin in on
+changes in real time, providing all team members with a reminder to manually update
 all ``site-specific`` files.
 
-In addition to secure group communications, admins can learn of updates to the server 
-by monitoring OSSEC alerts. (Please note that while an OSSEC alert can notify you of the 
-occurence of an update to the server, it may not reveal the content of the change.) Another 
-management option would be SSHing into the server and manually inspecting the configuration to 
+In addition to secure group communications, admins can learn of updates to the server
+by monitoring OSSEC alerts. (Please note that while an OSSEC alert can notify you of the
+occurrence of an update to the server, it may not reveal the content of the change.) Another
+management option would be SSHing into the server and manually inspecting the configuration to
 identify any discrepancies.
