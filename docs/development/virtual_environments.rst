@@ -72,7 +72,7 @@ Debian packages on the staging machines:
 
 .. code:: sh
 
-   vagrant up --no-provision build
+   make build-debs 
    vagrant up /staging/
    vagrant ssh app-staging
    sudo su
@@ -82,7 +82,7 @@ Debian packages on the staging machines:
 
 To rebuild the local packages for the app code: ::
 
-   ANSIBLE_ARGS="--tags rebuild" vagrant provision /staging/
+   make build-debs 
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
