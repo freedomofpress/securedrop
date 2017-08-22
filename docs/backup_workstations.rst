@@ -102,9 +102,13 @@ your administrator password.
 |Start gksu nautilus|
 
 .. note::
-  If nothing happens, it might be because an administrator password wasn't set.
-  If that's the case, you'll need to restart and set an administrator password
-  before continuing.
+  When you run ``gksu nautilus``, you may run into an error where Nautilus
+  complains that it can't create a required folder. If that happens, just click
+  OK and continue normally.
+
+  If a Nautilus window *doesn't* come up, it might be because an administrator
+  password wasn't set. If that's the case, you'll need to restart and set an
+  administrator password before continuing.
 
 .. warning::
             Make sure you use keep the `Terminal` window open while you perform
