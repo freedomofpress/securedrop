@@ -36,7 +36,7 @@ docs-lint:
 .PHONY: docs
 docs:
 # Spins up livereload environment for editing; blocks.
-	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
+	make -C docs/ clean && sphinx-autobuild --host 0.0.0.0 docs/ docs/_build/html
 
 .PHONY: flake8
 flake8:
