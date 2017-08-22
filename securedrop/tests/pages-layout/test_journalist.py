@@ -33,7 +33,7 @@ def hardening(request):
     db.LOGIN_HARDENING = True
     return None
 
-
+@pytest.mark.pagelayout
 class TestJournalistLayout(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps,

@@ -18,8 +18,10 @@
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
 import functional_test
+import pytest
 
 
+@pytest.mark.pagelayout
 class TestSourceLayout(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps,
