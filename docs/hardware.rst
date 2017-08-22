@@ -6,6 +6,17 @@ successfully install and operate a SecureDrop instance, and recommends
 some specific components that we have found to work well. If you have
 any questions, please email securedrop@freedom.press.
 
+Hardware Overview
+-----------------
+
+For an installation of SecureDrop, you must acquire:
+
+.. include:: includes/pre-install-hardware.txt
+
+In the sections that follow, we provide additional details on each item.
+
+.. _Hardware Recommendations:
+
 Required Hardware
 -----------------
 
@@ -71,13 +82,13 @@ our support or consent.
 Workstations
 ^^^^^^^^^^^^
 .. note:: SecureDrop depends on the Tails operating system for its bootable USB
-  drives.  The current stable version of Tails, Tails 3.0, no longer supports
-  32-bit computers.
+  drives.  Since the release of Tails 3.0, 32-bit computers are no longer
+  supported.
 
   To see if you have a 64-bit machine, run ``uname -m`` from a terminal.  If you
   see ``x86_64``, then Tails should work on your current machine.  If, on the
   other hand, you see ``i686``, your current machine will not work with Tails
-  3.0.  For more details, see `the Tails website
+  3.0 or greater.  For more details, see `the Tails website
   <https://tails.boum.org/news/version_3.0/index.en.html#index3h3>`_.
 
 These components are necessary to do the initial installation of
@@ -346,7 +357,7 @@ as advertised by the `NUC5i5MYHE` that we recommend.
 Tails USBs
 ^^^^^^^^^^
 
-.. note:: The upcoming version of Tails, Tails 3.0, will no longer support 32-bit computers.
+.. note:: Tails no longer supports 32-bit computers.
 	Please see the note in the `Workstations`_ section for more details.
 
 We *strongly recommend* getting USB 3.0-compatible drives to run Tails
