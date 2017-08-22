@@ -17,6 +17,22 @@ import config
 TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
 
 
+def pytest_addoption(parser):
+    parser.addoption("--page-layout", action="store_true",
+                     default=False, help="run page layout tests")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--page-layout"):
+        return
+    skip_page_layout = pytest.mark.skip(
+        reason="need --page-layout option to run page layout tests"
+    )
+    for item in items:
+        if "pagelayout" in item.keywords:
+            item.add_marker(skip_page_layout)
+
+
 @pytest.fixture(scope='session')
 def setUptearDown():
     _start_test_rqworker(config)
