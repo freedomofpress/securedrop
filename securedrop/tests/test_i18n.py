@@ -70,6 +70,18 @@ class TestI18N(object):
                 {{ gettext('code hello i18n') }}
                 ''').strip() == translated_cn
 
+        translated_ar = 'code arabic'
+
+        for lang in ('ar', 'ar-kw'):
+            headers = Headers([('Accept-Language', lang)])
+            with app.test_request_context(headers=headers):
+                assert not hasattr(request, 'babel_locale')
+                assert translated_ar == gettext(not_translated)
+                assert hasattr(request, 'babel_locale')
+                assert render_template_string('''
+                {{ gettext('code hello i18n') }}
+                ''').strip() == translated_ar
+
         with app.test_client() as c:
             c.get('/')
             assert session.get('locale') is None
@@ -116,6 +128,14 @@ class TestI18N(object):
             assert 'fr_FR' in locales
             assert 'en_US' not in locales
 
+            base = render_template('base.html')
+            assert 'dir="ltr"' in base
+
+        with app.test_client() as c:
+            c.get('/?l=ar')
+            base = render_template('base.html')
+            assert 'dir="rtl"' in base
+
     def test_i18n(self):
         sources = [
             'tests/i18n/code.py',
@@ -142,6 +162,9 @@ class TestI18N(object):
         pybabel init -i {d}/messages.pot -d {d} -l zh_Hans_CN
         sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code chinese"/' \
               {d}/zh_Hans_CN/LC_MESSAGES/messages.po
+        pybabel init -i {d}/messages.pot -d {d} -l ar
+        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code arabic"/' \
+              {d}/ar/LC_MESSAGES/messages.po
         """.format(d=config.TEMP_DIR))
 
         manage.translate(args)

@@ -69,6 +69,7 @@ def setup_g():
         g.user = Journalist.query.get(uid)
 
     g.locale = i18n.get_locale()
+    g.text_direction = i18n.get_text_direction(g.locale)
     g.locales = i18n.get_locale2name()
 
     if request.method == 'POST':
