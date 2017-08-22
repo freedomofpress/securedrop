@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-07-16 12:05+0000\n"
-"PO-Revision-Date: 2017-08-20 09:53+0000\n"
+"PO-Revision-Date: 2017-08-22 20:37+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -71,12 +71,10 @@ msgid "Two-factor token failed to verify"
 msgstr "Kontroll av tofaktor-kode mislyktes"
 
 #: journalist.py:267
-#, fuzzy
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr "Ugyldig hemmelighetsformat: Bare bruk bokstavene A-F og tall 0-9."
 
 #: journalist.py:272
-#, fuzzy
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 "Ugyldig hemmelighetsformat: Feilaktig lengde på hemmelighet. Skrev du den "
@@ -113,25 +111,29 @@ msgstr "Vellykket kontroll av tofaktor-kode!"
 #: journalist.py:519
 #, fuzzy
 msgid "No collections selected!"
-msgstr "Ingen samlinger valgt!"
+msgstr "Ingen kildeoppføringer valgt!"
 
 #: journalist.py:542
+#, fuzzy
 msgid "No unread submissions in collections selected!"
-msgstr ""
+msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer!"
 
 #: journalist.py:580
+#, fuzzy
 msgid "{source_journalist_designation}'s collection deleted"
-msgstr ""
+msgstr "{source_journalist_designation}s kildedata slettet"
 
 #: journalist.py:589 journalist.py:716
+#, fuzzy
 msgid "No collections selected to delete!"
-msgstr ""
+msgstr "Ingen kildeoppføringer valgt for sletting!"
 
 #: journalist.py:594
+#, fuzzy
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} kildeoppføring slettet"
+msgstr[1] "{num} kildeoppføringer slettet"
 
 #: journalist.py:637
 msgid "You cannot send an empty reply!"
@@ -143,23 +145,22 @@ msgstr "Takk! Svaret ditt har blitt lagret."
 
 #: journalist.py:682
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
-msgstr ""
+msgstr "Kilden '{original_source}' har blitt omdøpt til '{new_source}'"
 
 #: journalist.py:698
 msgid "No unread submissions for this source!"
-msgstr ""
+msgstr "Ingen uleste bidrag fra denne kilden!"
 
 #: journalist.py:714
 #, fuzzy
 msgid "No collections selected to download!"
-msgstr "Ingen samlinger valgt for nedlasting!"
+msgstr "Ingen kildedata valgt for nedlasting!"
 
 #: journalist.py:746
-#, fuzzy
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] "Innsendelse slettet."
-msgstr[1] "Innsendelser slettet."
+msgstr[0] "Bidrag slettet."
+msgstr[1] "Bidragene er slettet."
 
 #: source.py:125
 msgid ""
@@ -167,12 +168,17 @@ msgid ""
 "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-"
 "warning\">Why is this dangerous?</a>"
 msgstr ""
+"<strong>ADVARSEL:</strong> Det ser ut som du bruker Tor2Web. Dette <strong>"
+"gir ikke</strong> anonym kommunikasjon. <a href=\"/tor2web-warning\">Hvorfor "
+"kan dette være problematisk?</a>"
 
 #: source.py:167
 msgid ""
 "You were redirected because you are already logged in. If you want to "
 "create a new account, you should log out first."
 msgstr ""
+"Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny "
+"konto må du først logge ut."
 
 #: source.py:281
 msgid "You must enter a message or choose a file to submit."
@@ -467,24 +473,28 @@ msgstr "Ingen dokumenter å vise."
 #: journalist_templates/col.html:74
 msgid "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
+"Du kan skrive et sikkert svar til personen som sendte inn dette bidraget:"
 
 #: journalist_templates/col.html:83
 msgid "You've flagged this source for reply."
-msgstr ""
+msgstr "Du har markert denne kilden for å kunne sende et svar til personen."
 
 #: journalist_templates/col.html:84
 msgid ""
 "An encryption key will be generated for the source the next time they log"
 " in, after which you will be able to reply to the source here."
 msgstr ""
+"Nesten gang kilden logger seg inn med kodeordet sitt vil det bli laget en "
+"krypteringsnøkkel. Dette vil gjøre at du deretter kan skrive et svar til "
+"kilden her."
 
 #: journalist_templates/col.html:86
 msgid "Click below if you would like to write a reply to this source."
-msgstr ""
+msgstr "Klikk her, om du ønsker å kunne skrive et svar til kilden."
 
 #: journalist_templates/col.html:90
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "MARKÉR DENNE KILDEN FOR Å SVARE"
 
 #: journalist_templates/col.html:95
 msgid ""
@@ -492,10 +502,14 @@ msgid ""
 "this, the files seen here will be unrecoverable and the source will no "
 "longer be able to login using their previous codename.</em>"
 msgstr ""
+"Klikk under for å slette kildedata for denne kilden. <em>Advarsel: Om du "
+"gjør dette, vil alle filene under bli permanent slettet og kilden vil ikke "
+"lenger kunne logge seg inn med kodenavnet for å fortsette "
+"kommunikasjonen.</em>"
 
 #: journalist_templates/col.html:101
 msgid "DELETE COLLECTION"
-msgstr ""
+msgstr "SLETT KILDEDATA"
 
 #: journalist_templates/delete.html:5
 msgid ""
@@ -504,16 +518,17 @@ msgid ""
 msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
-msgstr[0] ""
+msgstr[0] "Følgende fil er markert for <strong>permanent sletting</strong>:"
 msgstr[1] ""
+"Følgende {files} filer er markert for <strong>permanent sletting</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr ""
+msgstr "PERMANENT SLETTING AV FILER"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
-msgstr ""
+msgstr "Tilbake til listen over filer for  {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:5
 msgid "Edit user"
@@ -537,15 +552,15 @@ msgstr "La stå tom for ingen endring"
 
 #: journalist_templates/edit_account.html:34
 msgid "Change password (confirm)"
-msgstr ""
+msgstr "Endre passord (bekreft)"
 
 #: journalist_templates/edit_account.html:46
 msgid "UPDATE"
-msgstr ""
+msgstr "OPPDATER"
 
 #: journalist_templates/edit_account.html:51
 msgid "Reset Two-Factor Authentication"
-msgstr ""
+msgstr "Tilbakestill tofaktor-autentisering"
 
 #: journalist_templates/edit_account.html:54
 msgid ""
@@ -554,6 +569,10 @@ msgid ""
 "user is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
+"Hvis oppsettet av tofaktor-autentisering for en bruker er tapt eller på "
+"avveie, kan du tilbakestille tofaktor her. <em>Om du vil tilbakestille, må "
+"brukeren selv være til stede og klar for å sette opp enheten sin på nytt med "
+"tofaktor-autentisering. Ellers vil de bli låst ute av kontoen sin."
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -562,6 +581,11 @@ msgid ""
 "here. <em>If you do this, make sure you are ready to set up your new "
 "device, otherwise you will be locked out of your account.</em>"
 msgstr ""
+"Hvis oppsettet ditt for tofaktor-autentisering er tapt/på avveie, eller du "
+"har fått en ny enhet, kan du tilbakestille tofaktor her. <em>Om du vil "
+"tilbakestille, må du være klar for å sette opp en enhet på nytt med tofaktor-"
+"autentisering. Ellers vil du bli låst ute av kontoen din.\n"
+"</em>"
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -569,14 +593,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens "
 "like the Yubikey, choose the second."
 msgstr ""
+"For å tilbakestille tofaktor-autentisering for mobilapper som Google "
+"Authenticator eller FreeOTP, bruk det første alternativet. For fysiske "
+"sikkerhetsnøkler som Yubikey, bruk det andre alternativet."
 
 #: journalist_templates/edit_account.html:78
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr ""
+msgstr "TILBAKESTILL TOFAKTOR-AUTENTISERING (APP)"
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr ""
+msgstr "TILBAKESTILL TOFAKTOR-AUTENTISERING (FYSISK SIKKERHETSNØKKEL)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -589,10 +616,14 @@ msgid ""
 " appear under their collection of documents. You can use this box to "
 "write encrypted replies to them."
 msgstr ""
+"SecureDrop vil generere en sikker krypteringsnøkkel for denne kilden neste "
+"gang de logger inn. Når nøkkelen har blitt opprettet, vil en svarboks bli "
+"synlig under listen med innsendte bidrag. Du kan da bruke denne boksen for å "
+"sende tilbakemelding til dem."
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr ""
+msgstr "Fortsett til listen med innsendte bidrag fra {codename}..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -632,96 +663,105 @@ msgstr "velg uleste"
 
 #: journalist_templates/js-strings.html:6
 msgid "select none"
-msgstr ""
+msgstr "merk ingen"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette kildedata for denne kilden?"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette de {size} markerte kildeoppføringene?"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette de {size} markerte bidragene?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette brukeren {username}?"
 
 #: journalist_templates/js-strings.html:11
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
+"Er du sikker på at du vil tilbakestille tofaktor-autentisering for "
+"{username}?"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
-msgstr ""
+msgstr "Logg inn for å få tilgang til journalist-portalen"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr ""
+msgstr "Tofaktor-kode"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr ""
+msgstr "LOGG INN"
 
 #: source_templates/base.html:5 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
-msgstr ""
+msgstr "Sikkerhet for journalister og kilder"
 
 #: source_templates/base.html:20 source_templates/base.html:39
 #: source_templates/index.html:27 source_templates/index.html:64
 msgid "Powered by"
-msgstr ""
+msgstr "Drevet av"
 
 #: source_templates/base.html:29
 msgid "EXIT"
-msgstr ""
+msgstr "AVSLUTT"
 
 #: source_templates/base.html:39 source_templates/index.html:64
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
+"Som all programvare kan SecureDrop inneholde svakheter og "
+"sikkerhetssårbarheter. Gjør alltid egne sikkerhetsvurderinger."
 
 #: source_templates/error.html:5
 msgid "Server error"
-msgstr ""
+msgstr "Serverfeil"
 
 #: source_templates/error.html:7
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
-msgstr ""
+msgstr "Beklager, det oppstod en feil og siden kunne ikke laste."
 
 #: source_templates/error.html:9 source_templates/notfound.html:9
 msgid "Look up a codename..."
-msgstr ""
+msgstr "Logg inn med kodenavn..."
 
 #: source_templates/first_submission_flashed_message.html:2
 msgid "Success!"
-msgstr ""
+msgstr "Suksess!"
 
 #: source_templates/first_submission_flashed_message.html:3
 msgid ""
 "Thank you for sending this information to us. Please check back later for"
 " replies."
 msgstr ""
+"Takk for at du sendte inn informasjon. Kom gjerne tilbake for å se etter en "
+"tilbakemelding fra oss."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr ""
+msgstr "Glemt kodenavnet ditt?"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
-msgstr ""
+msgstr "Velkommen"
 
 #: source_templates/generate.html:5
 msgid ""
 "This codename is what you will use in future visits to receive messages "
 "from our journalists in response to what you submit on the next screen."
 msgstr ""
+"Dette er kodenavnet som du i framtiden kan bruke for å fortsette "
+"kommunikasjonen med våre journalister, f.eks. for å sjekke om de har svart "
+"på det du sendte inn."
 
 #: source_templates/generate.html:29
 msgid ""
@@ -732,26 +772,35 @@ msgid ""
 " questions or are interested in additional documents. Unlike passwords, "
 "there is no way to retrieve a lost codename."
 msgstr ""
+"Fordi vi ikke bruker noen som helst sporing av brukerne på vår "
+"<strong>SecureDrop</strong>-tjeneste, er dette kodenavnet den eneste måten "
+"for deg å kunne fortsette kommunikasjonen knyttet opp til det innsendte "
+"materialet. Dette kan være nyttig om journalistene har oppfølgingsspørsmål "
+"eller trenger hjelp til å forstå det du har sendt inn. Det er ingen «glemt "
+"passord»-funksjon, og dermed umulig å finne tilbake til kodenavnet om du "
+"glemmer det."
 
 #: source_templates/generate.html:36
 msgid ""
 "Please either write this codename down and keep it in a safe place, or "
 "memorize it."
-msgstr ""
+msgstr "Vennligst husk eller skriv ned kodenavnet på et sikkert sted."
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
-msgstr ""
+msgstr "HAR DU ALLEREDE ET KODENAVN?"
 
 #: source_templates/index.html:15
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong>"
 msgstr ""
+"<strong>Vi anbefaler at sikkerhetsnivået settes til High for å sikre din "
+"anonymitet:</strong>"
 
 #: source_templates/index.html:15
 msgid "Learn how to set it to high"
-msgstr ""
+msgstr "Ler hvordan du setter nivået til High"
 
 #: source_templates/index.html:15 source_templates/index.html:16
 msgid ", or ignore this warning to continue."
@@ -760,6 +809,8 @@ msgstr ", eller ignorer denne advarselen for å fortsette."
 #: source_templates/index.html:16
 msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
 msgstr ""
+"<strong>Vi anbefaler at du bruker Tor-nettleseren for å koble til "
+"SecureDrop:</strong>"
 
 #: source_templates/index.html:16
 msgid "Learn how to install it"
@@ -789,6 +840,8 @@ msgid ""
 "If you have already submitted documents in the past, log in here to check"
 " for responses."
 msgstr ""
+"Om du tidligere har sendt inn noe, logg inn her for å se etter svar og "
+"tilbakemeldinger."
 
 #: source_templates/index.html:54
 msgid "CHECK FOR A RESPONSE"
@@ -816,7 +869,7 @@ msgstr "Tor-ikonet i verktøylinjen ovenfor"
 
 #: source_templates/index.html:75
 msgid "Click <strong>Security Settings...</strong>"
-msgstr ""
+msgstr "Klikk <strong>Security Settings...</strong>"
 
 #: source_templates/index.html:76
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
@@ -850,10 +903,14 @@ msgid ""
 "   to clear all history of your SecureDrop usage from this\n"
 "   device."
 msgstr ""
+"Takk for at du avslutter din aktive oppkobling! Vennligst velg \"New\n"
+"   Identity\" fra den grønne Onion-knappen i Tor-nettleseren\n"
+"   for å fjerne all historikk om bruken av SecureDrop fra denne\n"
+"   enheten."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr ""
+msgstr "Puh, det er deg! Nå, det litt pinlige..."
 
 #: source_templates/lookup.html:12
 msgid ""
@@ -864,6 +921,12 @@ msgid ""
 "          of caution, we put a hold on sending all documents from that "
 "day through to our journalists."
 msgstr ""
+"Våre servere opplevde uvanlig mye trøkk sist du var innom. Dette kan ha vært "
+"mange\n"
+"          vanlige brukere, automatisert hærverk, eller bare tilfeldig krøll "
+"på linja. For sikkerhets\n"
+"          skyld, satte vi opp en automatisk brems på videresending av filer "
+"til våre journalister."
 
 #: source_templates/lookup.html:16
 msgid ""
@@ -873,6 +936,11 @@ msgid ""
 " Please do check back again\n"
 "          in a week or so."
 msgstr ""
+"Nå som vi vet at du faktisk er et ekte menneske, vil vi se til at det du "
+"sendte inn\n"
+"          kommer fram til en av våre journalister med én gang. Vi beklager "
+"forsinkelsen. Kom gjerne tilbake\n"
+"          innen en uke for å se om du har fått noen svar fra journalistene."
 
 #: source_templates/lookup.html:24
 msgid "Submit Materials"
@@ -885,6 +953,10 @@ msgid ""
 "link\">public key</a> before submission. Files are encrypted as they are "
 "received by SecureDrop."
 msgstr ""
+"Om du allerede er komfortabel med GPG, kan du velge å kryptere filene og "
+"meldingene dine med vår <a href=\"/journalist-key\" class=\"text-link\">"
+"offentlige nøkkel</a> før du sender dem inn. Alle filer krypteres automatisk "
+"av seg selv i det de mottas av SecureDrop."
 
 #: source_templates/lookup.html:25
 msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
@@ -910,6 +982,11 @@ msgid ""
 "lets us know that you have received our reply.\n"
 "        You can respond by submitting a new message above."
 msgstr ""
+"Du har fått et svar. For å beskytte din identitet, i tilfelle det "
+"usannsynlige skulle skje at noen får vite ditt hemmelige kodenavn,\n"
+"        slett gjerne svarene når du har lest dem. Dette vil også signalisere "
+"til oss at du har lest svaret.\n"
+"        Du kan svare oss ved å sende inn ei ny melding over."
 
 #: source_templates/lookup.html:76
 msgid "Delete this reply?"
@@ -941,7 +1018,7 @@ msgstr "Ingen svar til nå."
 
 #: source_templates/lookup.html:103
 msgid "Remember your codename is:"
-msgstr ""
+msgstr "Husk at kodenavnet ditt er:"
 
 #: source_templates/next_submission_flashed_message.html:2
 msgid "Thanks! We received your {things}."
@@ -953,7 +1030,7 @@ msgstr "Fant ikke siden"
 
 #: source_templates/notfound.html:7
 msgid "Sorry, we couldn't locate what you requested."
-msgstr ""
+msgstr "Beklager, men vi kunne ikke finne det du ba om."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
@@ -965,6 +1042,9 @@ msgid ""
 "you browse Tor Hidden Services (.onion sites) without installing Tor. It "
 "was designed to facilitate anonymous publishing."
 msgstr ""
+"<a href=\"https://tor2web.org\">Tor2Web</a> er en proxy-tjeneste som lar deg "
+"besøke Tor Hidden Services (.onion-sider) uten å installere Tor. Løsningen "
+"ble laget for å muliggjøre anonym drift av nettsider."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
@@ -974,6 +1054,11 @@ msgid ""
 "since Tor2Web sites typically use HTTPS, it is possible that your "
 "connection could be MITM'ed by a capable adversary."
 msgstr ""
+"Tor2Web beskytter bare de som driver sider, ikke besøkende. Om du sender oss "
+"informasjon ved å bruke Tor2Web, er du <strong>ikke anonym</strong> og både "
+"internettleverandøren din eller de som driver Tor2Web-systemer kan finne ut "
+"hvem du er. I tillegg, siden Tor2Web-sider ofte ikke bruker HTTPS, kan det "
+"teknisk sett være mulig å overvåke eller manipulere oppkoblingen din."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -982,6 +1067,10 @@ msgid ""
 "href=\"https://www.torproject.org/download.html.en\">Tor</a> and use it "
 "to access our site safely and anonymously."
 msgstr ""
+"Om du vil sende oss informasjon, anbefaler vi <strong>på det "
+"sterkeste</strong> at du installerer <a href=\""
+"https://www.torproject.org/download.html.en\">Tor</a> og bruker Tor-"
+"nettleseren for å sikkert og anonymt besøke siden."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -992,6 +1081,8 @@ msgid ""
 "If you are not using Tor Browser, you <strong>may not be "
 "anonymous</strong>."
 msgstr ""
+"Om du ikke bruker Tor-nettleseren, kan det være at <strong>du ikke er sikret "
+"anonymitet</strong> av den tekniske løsningen."
 
 #: source_templates/use-tor-browser.html:5
 msgid ""
@@ -999,12 +1090,17 @@ msgid ""
 "advise you</strong> to install Tor Browser and use it to access our site "
 "safely and anonymously."
 msgstr ""
+"Om du vil sende inn informasjon via SecureDrop, anbefaler vi <strong>på det "
+"sterkeste</strong> at du installerer Tor og bruker det for å besøke siden "
+"sikkert og anonymt."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
 "Copy and paste the following address into your browser and follow the "
 "instructions to download and install Tor Browser:"
 msgstr ""
+"Kopier og lim inn følgende adresse i adressefeltet øverst i "
+"nettleservinduet, og følg anvisningene for å installere Tor:"
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
@@ -1016,18 +1112,25 @@ msgid ""
 "Encrypting messages and files before submission can provide an extra "
 "layer of security before your data reaches the SecureDrop server."
 msgstr ""
+"SecureDrop krypterer alle filer og meldinger når de kommer inn via systemet. "
+"Kryptering av filer eller meldinger før de sendes inn kan gi et ekstra lag "
+"med beskyttelse for informasjonen før den når vår SecureDrop-server."
 
 #: source_templates/why-journalist-key.html:5
 msgid ""
 "If you are already familiar with the GPG encryption software, you may "
 "wish to encrypt your submissions yourself. To do so:"
 msgstr ""
+"Om du allerede er komfortabel med programvare for GPG-kryptering, kan du "
+"velge å kryptere det du sender inn selv. Gjør da følgende:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
 "<a href=\"/journalist-key\">Download</a> the public key. The public key "
 "is a text file with the extension <code>.asc</code>"
 msgstr ""
+"<a href=\"/journalist-key\">Last ned</a> den offentlige nøkkelen. Den "
+"offentlige nøkkelen er ei tekstfil med filendelsen <code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
@@ -1039,12 +1142,18 @@ msgid ""
 "the <code>.asc</code> file you just downloaded and it will be "
 "automatically imported to your keyring."
 msgstr ""
+"Om du bruker Tails (https://tails.boum.org/), kan du dobbeltklikke på "
+"<code>.asc</code>-filen du nettopp lastet ned. Da vil den automatisk legges "
+"til i nøkkelringen på systemet ditt."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using Mac/Linux, open the Terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
+"Om du bruker Mac/Linux, åpne Terminal. Du kan importere nøkkelen med "
+"følgende kommando <code>gpg --import "
+"/plassering/på/disken/for/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
@@ -1057,12 +1166,18 @@ msgid ""
 "(with .asc at the end), you can just copy and paste that. (don't include "
 "the <code>.asc</code>!)"
 msgstr ""
+"Du må identifisere nøkkelens ID (dette kalles \"user ID\" eller uid). Siden "
+"filnavnet for den offentlige nøkkelen er det samme som nøkkelens fingerprint "
+"(med .asc som endelse), kan du bare kopiere og lime inn det. (ikke ta med "
+"<code>.asc</code>!)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg "
 "--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
+"Uansett system, åpne Terminal og bruk denne gpg-kommandoen: <code>gpg --"
+"recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
 msgid ""
@@ -1070,6 +1185,9 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. "
 "<code>roswell_photos.pdf.gpg</code>)"
 msgstr ""
+"Last så opp ditt krypterte bidrag. Det vil ha det samme filnavnet som den "
+"ukrypterte filen, men med .gpg på slutten (f.eks. "
+"<code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
@@ -1078,6 +1196,10 @@ msgid ""
 "<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
 " identity to us."
 msgstr ""
+"<strong>Tips:</strong> Om du ønsker å være helt anonym, <strong>ikke</strong>"
+" bruk GPG for å signere den krypterte filen (med <code>--sign</code> eller "
+"<code>-s</code> flagget på kommandolinjen) fordi dette vil avsløre din GPG-"
+"identitet."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
