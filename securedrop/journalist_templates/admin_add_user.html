@@ -6,9 +6,9 @@
 
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="password" type="hidden" value="{{ password }}">
   <p><input name="username" type="text" placeholder="Username"></p>
-  <p><input name="password" type="password" placeholder="Password"></p>
-  <p><input name="password_again" type="password" placeholder="Password (again)"></p>
+  <p>The user's password will be: <span class="password" id="password">{{ password }}</span></p>
   <p>
     <input name="is_admin" id="is-admin" type="checkbox">
     <label for="is_admin">Is Administrator</label>
