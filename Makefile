@@ -38,7 +38,7 @@ docs-lint: ## Check documentation for common syntax errors.
 .PHONY: docs
 docs: ## Build project documentation in live reload for editing
 # Spins up livereload environment for editing; blocks.
-	make -C docs/ clean && sphinx-autobuild docs/ docs/_build/html
+	make -C docs/ clean && sphinx-autobuild --host 0.0.0.0 docs/ docs/_build/html
 
 .PHONY: flake8
 flake8: ## Validates PEP8 compliance for Python source files.
