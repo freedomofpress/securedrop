@@ -264,14 +264,10 @@ class Journalist(Base):
         "JournalistLoginAttempt",
         backref="journalist")
 
-    MIN_USERNAME_LEN = 8
+    MIN_USERNAME_LEN = 3
 
     def __init__(self, username, password, is_admin=False, otp_secret=None):
-        if len(username) < self.MIN_USERNAME_LEN:
-            raise InvalidUsernameException(
-                        'Username "{}" must be {} characters long.'
-                        .format(username, Journalist.MIN_USERNAME_LEN))
-
+        self.check_username_acceptable(username)
         self.username = username
         self.set_password(password)
         self.is_admin = is_admin
@@ -306,6 +302,13 @@ class Journalist(Base):
 
         self.pw_salt = self._gen_salt()
         self.pw_hash = self._scrypt_hash(password, self.pw_salt)
+
+    @classmethod
+    def check_username_acceptable(cls, username):
+        if len(username) < cls.MIN_USERNAME_LEN:
+            raise InvalidUsernameException(
+                        'Username "{}" must be {} characters long.'
+                        .format(username, cls.MIN_USERNAME_LEN))
 
     @classmethod
     def check_password_acceptable(cls, password):

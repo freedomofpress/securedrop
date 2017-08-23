@@ -18,7 +18,8 @@ from sqlalchemy.orm.exc import NoResultFound
 os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 import config
 import crypto_util
-from db import db_session, init_db, Journalist, PasswordError
+from db import (db_session, init_db, Journalist, PasswordError,
+                InvalidUsernameException)
 from management.run import run
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
@@ -107,11 +108,10 @@ def add_journalist(args):
 def _get_username():
     while True:
         username = raw_input('Username: ')
-
-        if len(username) < Journalist.MIN_USERNAME_LEN:
-            print('Username "{}" is too short. Minimum characters: {}'
-                  .format(username, Journalist.MIN_USERNAME_LEN))
-            continue
+        try:
+            Journalist.check_username_acceptable(username)
+        except InvalidUsernameException as e:
+            print('Invalid username: ' + str(e))
         else:
             return username
 

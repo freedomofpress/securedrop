@@ -297,6 +297,13 @@ def admin_edit_user(user_id):
     if request.method == 'POST':
         if request.form['username']:
             new_username = request.form['username']
+
+            try:
+                Journalist.check_username_acceptable(new_username)
+            except InvalidUsernameException as e:
+                flash('Invalid username: ' + str(e))
+                return redirect(url_for("admin_edit_user", user_id=user_id))
+
             if new_username == user.username:
                 pass
             elif Journalist.query.filter_by(
