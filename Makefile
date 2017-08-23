@@ -60,6 +60,9 @@ lint: docs-lint flake8 html-lint ## Runs all linting tools (docs, flake8, HTML).
 # 3. Format the split fields into $$1) the target name (in blue) and $$2) the target descrption
 # 4. Pass this file as an arg to awk
 # 5. Sort it alphabetically
+# 6. Format columns with colon as delimiter.
 .PHONY: help
 help: ## Print this message and exit.
-	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {printf "\033[36m%16s\033[0m : %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
+	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {printf "\033[36m%s\033[0m : %s\n", $$1, $$2}' $(MAKEFILE_LIST) \
+		| sort \
+		| column -s ':' -t
