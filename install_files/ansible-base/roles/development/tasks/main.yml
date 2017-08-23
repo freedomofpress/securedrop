@@ -15,6 +15,13 @@
     - pip
     - development
 
+- name: Install pip dev dependencies.
+  pip:
+    requirements: "{{ securedrop_pip_dev_requirements }}"
+  tags:
+    - pip
+    - development
+
 - name: Install sass Ruby gem
   gem:
     name: sass
