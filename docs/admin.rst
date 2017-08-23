@@ -84,7 +84,7 @@ Adding Users
 Now you can add new logins for the journalists at your news organization
 who will be checking the system for submissions. Make sure the
 journalist is physically in the same room as you when you do this, as
-they will have to create a password and scan a barcode for their
+they will have to scan a barcode for their
 two-factor authentication. Since you’re logged in, this is the screen
 you should see now:
 
@@ -100,8 +100,9 @@ Once there, click ‘Add User’ button, which will take you to this page:
 |Add a new user|
 
 Here, you will hand the keyboard over to the journalist so they can
-create their own username and password. Once they’re done entering a
-username and password for themselves, select whether you would like them
+create their own username. Once they’re done entering a
+username for themselves, have them write down their pre-generated diceware
+passphrase. Then, you will select whether you would like them
 to also be an administrator (this allows them to add or delete other
 journalist accounts), and whether they will be using Google
 Authenticator or a YubiKey for two-factor authentication.

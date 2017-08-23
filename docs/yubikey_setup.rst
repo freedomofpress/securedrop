@@ -67,7 +67,7 @@ If you have just installed SecureDrop, you will need to add the first
 admin user to the Journalist Interface with ``manage.py``. ``cd`` to the
 ``SECUREDROP_ROOT``, which is ``/vagrant/securedrop`` in development and
 ``/var/www/securedrop`` in production. Run ``./manage.py add-admin``.
-Fill in the username and password prompts. When it asks "Is this admin
+Fill in the username prompt. When it asks "Is this admin
 using a YubiKey [HOTP]? (y/N)", type "y", then enter. At the "Please
 configure your YubiKey and enter the secret:" prompt, enter the Secret
 Key value and hit enter. Note that the spaces are optional. When you are
