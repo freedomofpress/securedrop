@@ -1,3 +1,5 @@
+PWD := $(shell pwd)
+
 .PHONY: ci-spinup
 ci-spinup:
 	./devops/scripts/ci-spinup.sh
@@ -36,7 +38,7 @@ docs-lint:
 .PHONY: docs
 docs:
 # Spins up livereload environment for editing; blocks.
-	make -C docs/ clean && sphinx-autobuild --host 0.0.0.0 docs/ docs/_build/html
+	make -C docs/ clean && sphinx-autobuild `[ $(PWD) = /vagrant ] && echo '--host 0.0.0.0'` docs/ docs/_build/html
 
 .PHONY: flake8
 flake8:
