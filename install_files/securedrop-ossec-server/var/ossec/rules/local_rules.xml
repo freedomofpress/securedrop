@@ -141,3 +141,17 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<!--
+  Do not alert on OSSEC keep alive messages sent to the OSSEC manager.
+  See https://github.com/freedomofpress/securedrop/issues/2138 for discussion
+  of this message, which may be removed in a future version of OSSEC.
+-->
+<group name="OSSEC keep alive">
+  <rule id="300001" level="0">
+    <if_sid>1002</if_sid>
+    <program_name>ossec-keepalive</program_name>
+    <regex>--\s*MARK\s*--</regex>
+    <options>no_email_alert</options>
+  </rule>
+</group>
