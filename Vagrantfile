@@ -12,8 +12,14 @@ Vagrant.configure("2") do |config|
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
     development.vm.box = "bento/ubuntu-14.04"
+
+    # for hosted docs
+    development.vm.network "forwarded_port", guest: 8000, host: 8000, auto_correct: true
+    # source interface
     development.vm.network "forwarded_port", guest: 8080, host: 8080, auto_correct: true
+    # journalist interface
     development.vm.network "forwarded_port", guest: 8081, host: 8081, auto_correct: true
+
     development.vm.provision "ansible" do |ansible|
       # Hack to trick Vagrant into parsing the command-line args for
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
