@@ -532,7 +532,6 @@ class JournalistNavigationSteps():
             password='pentagonpapers')
 
         self._add_user(self.new_user['username'],
-                       self.new_user['password'],
                        is_admin=False,
                        hotp=hotp)
 
