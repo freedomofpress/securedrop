@@ -49,6 +49,6 @@
 
 - name: Reboot Application and Monitor Servers.
   hosts: securedrop
-  roles:
-    - { role: reboot, tags: reboot }
+  tasks:
+    - include: tasks/reboot_if_first_install.yml
   sudo: yes

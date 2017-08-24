@@ -1,0 +1,7 @@
+---
+- include: check_whether_first_install.yml
+
+- include: reboot.yml
+  # The conditional var below is defined via set_fact
+  # in the `check_whether_first_install` task list.
+  when: securedrop_initial_installation
