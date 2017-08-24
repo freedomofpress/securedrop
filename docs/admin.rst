@@ -170,11 +170,11 @@ possession when they attempt to log in to SecureDrop.
 
 .. |SecureDrop main page| image:: images/admin_main_home.png
 .. |SecureDrop admin home| image:: images/admin_secondary_home.png
-.. |Add a new user| image:: images/admin_add_new_user.png
-.. |Enable Google Authenticator| image:: images/admin_enable_authenticator.png
+.. |Add a new user| image:: images/manual/journalist-admin_add_user_totp.png
+.. |Enable Google Authenticator| image:: images/manual/journalist-admin_new_user_two_factor_totp.png
 .. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
-.. |Enable YubiKey| image:: images/admin_enable_yubikey.png
-.. |Verify YubiKey| image:: images/admin_verify_yubikey.png
+.. |Enable YubiKey| image:: images/manual/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey| image:: images/manual/journalist-admin_new_user_two_factor_hotp.png
 
 .. _Updating the Servers:
 
