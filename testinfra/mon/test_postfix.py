@@ -77,3 +77,20 @@ def test_postfix_generic_maps(File):
     """
     assert not File("/etc/postfix/generic").exists
     assert not File("/etc/postfix/main.cf").contains("^smtp_generic_maps")
+
+
+def test_postfix_service(Service, Socket, Sudo):
+    """
+    Check Postfix service. Postfix is used to deliver OSSEC alerts via
+    encrypted email. On staging hosts, Postfix is disabled, due to lack
+    of SASL authentication credentials, but on prod hosts it should run.
+    """
+    # Elevated privileges are required to read Postfix service info,
+    # specifically `/var/spool/postfix/pid/master.pid`.
+    with Sudo():
+        postfix = Service("postfix")
+        assert postfix.is_running == securedrop_test_vars.postfix_enabled
+        assert postfix.is_enabled == securedrop_test_vars.postfix_enabled
+
+        socket = Socket("tcp://127.0.0.1:25")
+        assert socket.is_listening == securedrop_test_vars.postfix_enabled
