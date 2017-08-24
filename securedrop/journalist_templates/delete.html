@@ -2,7 +2,7 @@
 {% block body %}
 
 {% with count=items_selected|length %}
-<p>The following {% if count == 1 %}file has{% else %}{{ count }} files have{% endif %} been selected for <strong>permanent deletion</strong>:</p>
+<p>{{ ngettext('The following file has been selected for <strong>permanent deletion</strong>:', 'The following {files} files have been selected for <strong>permanent deletion</strong>:', count).format(files=count)|safe }}</p>
 {% endwith %}
 
 <form action="/bulk" method="post">
@@ -17,8 +17,8 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}" autocomplete="off">
   <input type="hidden" name="confirm_delete" value="true">
-  <p><button class="sd-button" type="submit" name="action" value="delete" id="confirm-delete">PERMANENTLY DELETE FILES</button></p>
+  <p><button class="sd-button" type="submit" name="action" value="delete" id="confirm-delete">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
 </form>
 
-<p><a href="/col/{{ filesystem_id }}">Return to the list of documents for {{ source.journalist_designation }}...</a></p>
+<p><a href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_journalist_designation}...').format(source_journalist_designation=source.journalist_designation) }}</a></p>
 {% endblock %}
