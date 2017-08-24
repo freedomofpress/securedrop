@@ -57,7 +57,7 @@ the following::
 An easier way is to generate screenshots for each state in each known
 language with::
 
-     $ pytest -v tests/pages-layout
+     $ pytest -v tests/pages-layout --page-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
      ...TestJournalistLayout::test_col_no_documents[fr_FR] PASSED
