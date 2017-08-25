@@ -301,7 +301,7 @@ def admin_edit_user(user_id):
             try:
                 Journalist.check_username_acceptable(new_username)
             except InvalidUsernameException as e:
-                flash('Invalid username: ' + str(e))
+                flash('Invalid username: ' + str(e), 'error')
                 return redirect(url_for("admin_edit_user", user_id=user_id))
 
             if new_username == user.username:

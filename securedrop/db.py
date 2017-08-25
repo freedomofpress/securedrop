@@ -307,7 +307,7 @@ class Journalist(Base):
     def check_username_acceptable(cls, username):
         if len(username) < cls.MIN_USERNAME_LEN:
             raise InvalidUsernameException(
-                        'Username "{}" must be {} characters long.'
+                        'Username "{}" must be at least {} characters long.'
                         .format(username, cls.MIN_USERNAME_LEN))
 
     @classmethod
