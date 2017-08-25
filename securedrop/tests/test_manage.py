@@ -14,8 +14,9 @@ import sys
 import time
 import unittest
 import version
-
 import utils
+
+from db import Journalist
 
 
 class TestManagePy(object):
@@ -43,9 +44,14 @@ class TestManagementCommand(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    @mock.patch("__builtin__.raw_input", return_value='test')
-    def test_get_username(self, mock_stdin):
-        assert manage._get_username() == 'test'
+    @mock.patch("__builtin__.raw_input", return_value='jen')
+    def test_get_username_success(self, mock_stdin):
+        assert manage._get_username() == 'jen'
+
+    @mock.patch("__builtin__.raw_input",
+                side_effect=['a' * (Journalist.MIN_USERNAME_LEN - 1), 'jen'])
+    def test_get_username_fail(self, mock_stdin):
+        assert manage._get_username() == 'jen'
 
     @mock.patch("__builtin__.raw_input", return_value='y')
     def test_get_yubikey_usage_yes(self, mock_stdin):
@@ -83,6 +89,10 @@ class TestManage(object):
 
     def teardown(self):
         utils.env.teardown()
+
+    @mock.patch("__builtin__.raw_input", return_value='foo-bar-baz')
+    def test_get_username(self, mock_get_usernam):
+        assert manage._get_username() == 'foo-bar-baz'
 
     def test_translate_compile_code_and_template(self):
         source = [

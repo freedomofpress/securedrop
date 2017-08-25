@@ -49,7 +49,7 @@ class TestIntegration(unittest.TestCase):
         # Add a test user to the journalist interface and log them in
         # print Journalist.query.all()
         self.user_pw = "corret horse battery staple haha cultural reference"
-        self.user = Journalist(username="foo",
+        self.user = Journalist(username="some-username",
                                password=self.user_pw)
         db_session.add(self.user)
         db_session.commit()
