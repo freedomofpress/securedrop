@@ -580,3 +580,17 @@ class JournalistNavigationSteps():
         self.user, self.user_pw = db_helper.init_journalist()
         for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD + 1):
             self._try_login_user(self.user.username, 'worse', 'mocked')
+
+    def _admin_enters_journalist_account_details_hotp(self, username,
+                                                      hotp_secret):
+        username_field = self.driver.find_element_by_css_selector(
+            'input[name="username"]')
+        username_field.send_keys(username)
+
+        hotp_secret_field = self.driver.find_element_by_css_selector(
+            'input[name="otp_secret"]')
+        hotp_secret_field.send_keys(hotp_secret)
+
+        hotp_checkbox = self.driver.find_element_by_css_selector(
+            'input[name="is_hotp"]')
+        hotp_checkbox.click()
