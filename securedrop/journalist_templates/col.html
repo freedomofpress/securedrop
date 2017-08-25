@@ -4,7 +4,7 @@
 
   <form action="/regenerate-code" method="post" id="regenerate-code">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <input type="hidden" name="sid" value="{{ sid }}">
+    <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
 
     <p class="breadcrumbs">
       <a href="/">All Sources</a>
@@ -46,7 +46,7 @@
               <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
             {% else %}
-              <span class="file"><a class="btn small" href="/col/{{ sid }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
+              <span class="file"><a class="btn small" href="/col/{{ filesystem_id }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
             {% endif %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
@@ -61,7 +61,8 @@
       </ul>
 
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <input type="hidden" name="sid" value="{{ sid }}">
+      <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
+
     </form>
   {% else %}
     <p><br>No documents to display.</p>
@@ -74,7 +75,7 @@
     <p>You can write a secure reply to the person who submitted these documents:</p>
     <form action="/reply" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <input type="hidden" name="sid" value="{{ sid }}">
+      <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
       <textarea id="reply-text-field" name="msg" cols="72" rows="10"></textarea>
       <hr class="no-line">
       <button id="reply-button" class="sd-button" type="submit">SUBMIT</button>
@@ -85,7 +86,7 @@
   {% else %}
     <p>Click below if you would like to write a reply to this source.</p>
     <form action="/flag" method="post">
-      <input type="hidden" name="sid" value="{{ sid }}">
+      <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button id="flag-button" class="sd-button" type="submit">FLAG THIS SOURCE FOR REPLY</button>
     </form>
@@ -94,9 +95,9 @@
   <hr class="cut-out">
   <p>Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
 
-  <form id="delete-collection" action="/col/delete/{{sid}}" method="post">
+  <form id="delete-collection" action="/col/delete/{{filesystem_id}}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <input type="hidden" name="sid" value="{{ sid }}">
+    <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
     <button type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> DELETE COLLECTION</button>
   </form>

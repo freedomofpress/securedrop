@@ -46,11 +46,11 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
-def get_source(sid):
+def get_source(filesystem_id):
     """Return a Source object, representing the database row, for the source
-    with id `sid`"""
+    with the `filesystem_id`"""
     source = None
-    query = Source.query.filter(Source.filesystem_id == sid)
+    query = Source.query.filter(Source.filesystem_id == filesystem_id)
     source = get_one_or_else(query, app.logger, abort)
 
     return source
@@ -64,10 +64,10 @@ def setup_g():
         g.user = Journalist.query.get(uid)
 
     if request.method == 'POST':
-        sid = request.form.get('sid')
-        if sid:
-            g.sid = sid
-            g.source = get_source(sid)
+        filesystem_id = request.form.get('filesystem_id')
+        if filesystem_id:
+            g.filesystem_id = filesystem_id
+            g.source = get_source(filesystem_id)
 
 
 def logged_in():
@@ -452,8 +452,8 @@ def account_reset_two_factor_hotp():
         return render_template('account_edit_hotp_secret.html')
 
 
-def make_star_true(sid):
-    source = get_source(sid)
+def make_star_true(filesystem_id):
+    source = get_source(filesystem_id)
     if source.star:
         source.star.starred = True
     else:
@@ -461,8 +461,8 @@ def make_star_true(sid):
         db_session.add(source_star)
 
 
-def make_star_false(sid):
-    source = get_source(sid)
+def make_star_false(filesystem_id):
+    source = get_source(filesystem_id)
     if not source.star:
         source_star = SourceStar(source)
         db_session.add(source_star)
@@ -470,18 +470,18 @@ def make_star_false(sid):
     source.star.starred = False
 
 
-@app.route('/col/add_star/<sid>', methods=('POST',))
+@app.route('/col/add_star/<filesystem_id>', methods=('POST',))
 @login_required
-def add_star(sid):
-    make_star_true(sid)
+def add_star(filesystem_id):
+    make_star_true(filesystem_id)
     db_session.commit()
     return redirect(url_for('index'))
 
 
-@app.route("/col/remove_star/<sid>", methods=('POST',))
+@app.route("/col/remove_star/<filesystem_id>", methods=('POST',))
 @login_required
-def remove_star(sid):
-    make_star_false(sid)
+def remove_star(filesystem_id):
+    make_star_false(filesystem_id)
     db_session.commit()
     return redirect(url_for('index'))
 
@@ -511,23 +511,24 @@ def index():
     return render_template('index.html', unstarred=unstarred, starred=starred)
 
 
-@app.route('/col/<sid>')
+@app.route('/col/<filesystem_id>')
 @login_required
-def col(sid):
-    source = get_source(sid)
-    source.has_key = crypto_util.getkey(sid)
-    return render_template("col.html", sid=sid, source=source)
+def col(filesystem_id):
+    source = get_source(filesystem_id)
+    source.has_key = crypto_util.getkey(filesystem_id)
+    return render_template("col.html", filesystem_id=filesystem_id,
+                           source=source)
 
 
-def delete_collection(source_id):
+def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(store.delete_source_directory, source_id)
+    job = worker.enqueue(store.delete_source_directory, filesystem_id)
 
     # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(source_id)
+    crypto_util.delete_reply_keypair(filesystem_id)
 
     # Delete their entry in the db
-    source = get_source(source_id)
+    source = get_source(filesystem_id)
     db_session.delete(source)
     db_session.commit()
     return job
@@ -557,8 +558,9 @@ def col_process():
 def col_download_unread(cols_selected):
     """Download all unread submissions from all selected sources."""
     submissions = []
-    for sid in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == sid).one().id
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
         submissions += Submission.query.filter(
             Submission.downloaded == false(),
             Submission.source_id == id).all()
@@ -571,35 +573,36 @@ def col_download_unread(cols_selected):
 def col_download_all(cols_selected):
     """Download all submissions from all selected sources."""
     submissions = []
-    for sid in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == sid).one().id
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
         submissions += Submission.query.filter(
             Submission.source_id == id).all()
     return download("all", submissions)
 
 
 def col_star(cols_selected):
-    for sid in cols_selected:
-        make_star_true(sid)
+    for filesystem_id in cols_selected:
+        make_star_true(filesystem_id)
 
     db_session.commit()
     return redirect(url_for('index'))
 
 
 def col_un_star(cols_selected):
-    for source_id in cols_selected:
-        make_star_false(source_id)
+    for filesystem_id in cols_selected:
+        make_star_false(filesystem_id)
 
     db_session.commit()
     return redirect(url_for('index'))
 
 
-@app.route('/col/delete/<sid>', methods=('POST',))
+@app.route('/col/delete/<filesystem_id>', methods=('POST',))
 @login_required
-def col_delete_single(sid):
+def col_delete_single(filesystem_id):
     """deleting a single collection from its /col page"""
-    source = get_source(sid)
-    delete_collection(sid)
+    source = get_source(filesystem_id)
+    delete_collection(filesystem_id)
     flash(
         "%s's collection deleted" %
         (source.journalist_designation,), "notification")
@@ -611,8 +614,8 @@ def col_delete(cols_selected):
     if len(cols_selected) < 1:
         flash("No collections selected to delete!", "error")
     else:
-        for source_id in cols_selected:
-            delete_collection(source_id)
+        for filesystem_id in cols_selected:
+            delete_collection(filesystem_id)
         flash("%s %s deleted" % (
             len(cols_selected),
             "collection" if len(cols_selected) == 1 else "collections"
@@ -621,9 +624,9 @@ def col_delete(cols_selected):
     return redirect(url_for('index'))
 
 
-@app.route('/col/<sid>/<fn>')
+@app.route('/col/<filesystem_id>/<fn>')
 @login_required
-def download_single_submission(sid, fn):
+def download_single_submission(filesystem_id, fn):
     """Sends a client the contents of a single submission."""
     if '..' in fn or fn.startswith('/'):
         abort(404)
@@ -635,7 +638,8 @@ def download_single_submission(sid, fn):
     except NoResultFound as e:
         app.logger.error("Could not mark " + fn + " as downloaded: %s" % (e,))
 
-    return send_file(store.path(sid, fn), mimetype="application/pgp-encrypted")
+    return send_file(store.path(filesystem_id, fn),
+                     mimetype="application/pgp-encrypted")
 
 
 @app.route('/reply', methods=('POST',))
@@ -658,14 +662,15 @@ def reply():
     # Reject empty replies
     if not msg:
         flash("You cannot send an empty reply!", "error")
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
     crypto_util.encrypt(msg,
-                        [crypto_util.getkey(g.sid), config.JOURNALIST_KEY],
-                        output=store.path(g.sid, filename))
+                        [crypto_util.getkey(g.filesystem_id),
+                         config.JOURNALIST_KEY],
+                        output=store.path(g.filesystem_id, filename))
     reply = Reply(g.user, g.source, filename)
 
     try:
@@ -684,7 +689,7 @@ def reply():
     else:
         flash("Thanks! Your reply has been stored.", "notification")
     finally:
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
 
 @app.route('/regenerate-code', methods=('POST',))
@@ -695,7 +700,7 @@ def generate_code():
 
     for item in g.source.collection:
         item.filename = store.rename_submission(
-            g.sid,
+            g.filesystem_id,
             item.filename,
             g.source.journalist_filename)
     db_session.commit()
@@ -705,20 +710,20 @@ def generate_code():
         (original_journalist_designation,
          g.source.journalist_designation),
         "notification")
-    return redirect('/col/' + g.sid)
+    return redirect('/col/' + g.filesystem_id)
 
 
-@app.route('/download_unread/<sid>')
+@app.route('/download_unread/<filesystem_id>')
 @login_required
-def download_unread_sid(sid):
-    id = Source.query.filter(Source.filesystem_id == sid).one().id
+def download_unread_filesystem_id(filesystem_id):
+    id = Source.query.filter(Source.filesystem_id == filesystem_id).one().id
     submissions = Submission.query.filter(
         Submission.source_id == id,
         Submission.downloaded == false()).all()
     if submissions == []:
         flash("No unread submissions for this source!")
-        return redirect(url_for('col', sid=sid))
-    source = get_source(sid)
+        return redirect(url_for('col', filesystem_id=filesystem_id))
+    source = get_source(filesystem_id)
     return download(source.journalist_filename, submissions)
 
 
@@ -735,29 +740,29 @@ def bulk():
             flash("No collections selected to download!", "error")
         elif action in ('delete', 'confirm_delete'):
             flash("No collections selected to delete!", "error")
-        return redirect(url_for('col', sid=g.sid))
+        return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
     if action == 'download':
-        source = get_source(g.sid)
+        source = get_source(g.filesystem_id)
         return download(source.journalist_filename, selected_docs)
     elif action == 'delete':
-        return bulk_delete(g.sid, selected_docs)
+        return bulk_delete(g.filesystem_id, selected_docs)
     elif action == 'confirm_delete':
-        return confirm_bulk_delete(g.sid, selected_docs)
+        return confirm_bulk_delete(g.filesystem_id, selected_docs)
     else:
         abort(400)
 
 
-def confirm_bulk_delete(sid, items_selected):
+def confirm_bulk_delete(filesystem_id, items_selected):
     return render_template('delete.html',
-                           sid=sid,
+                           filesystem_id=filesystem_id,
                            source=g.source,
                            items_selected=items_selected)
 
 
-def bulk_delete(sid, items_selected):
+def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
-        item_path = store.path(sid, item.filename)
+        item_path = store.path(filesystem_id, item.filename)
         worker.enqueue(store.secure_unlink, item_path)
         db_session.delete(item)
     db_session.commit()
@@ -766,7 +771,7 @@ def bulk_delete(sid, items_selected):
         "Submission{} deleted.".format(
             "s" if len(items_selected) > 1 else ""),
         "notification")
-    return redirect(url_for('col', sid=sid))
+    return redirect(url_for('col', filesystem_id=filesystem_id))
 
 
 def download(zip_basename, submissions):
@@ -800,7 +805,7 @@ def download(zip_basename, submissions):
 def flag():
     g.source.flagged = True
     db_session.commit()
-    return render_template('flag.html', sid=g.sid,
+    return render_template('flag.html', filesystem_id=g.filesystem_id,
                            codename=g.source.journalist_designation)
 
 

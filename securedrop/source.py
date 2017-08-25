@@ -92,9 +92,11 @@ def setup_g():
     # serving a static resource that won't need to access these common values.
     if logged_in():
         g.codename = session['codename']
-        g.sid = crypto_util.hash_codename(g.codename)
+        g.filesystem_id = crypto_util.hash_codename(g.codename)
         try:
-            g.source = Source.query.filter(Source.filesystem_id == g.sid).one()
+            g.source = Source.query \
+                             .filter(Source.filesystem_id == g.filesystem_id) \
+                             .one()
         except MultipleResultsFound as e:
             app.logger.error(
                 "Found multiple Sources when one was expected: %s" %
@@ -107,7 +109,7 @@ def setup_g():
             del session['logged_in']
             del session['codename']
             return redirect(url_for('index'))
-        g.loc = store.path(g.sid)
+        g.loc = store.path(g.filesystem_id)
 
 
 @app.before_request
@@ -145,9 +147,9 @@ def generate_unique_codename():
                     "(Codename='{}')".format(codename))
             continue
 
-        sid = crypto_util.hash_codename(codename)  # scrypt (slow)
+        filesystem_id = crypto_util.hash_codename(codename)  # scrypt (slow)
         matching_sources = Source.query.filter(
-            Source.filesystem_id == sid).all()
+            Source.filesystem_id == filesystem_id).all()
         if len(matching_sources) == 0:
             return codename
 
@@ -167,9 +169,9 @@ def generate():
 
 @app.route('/create', methods=['POST'])
 def create():
-    sid = crypto_util.hash_codename(session['codename'])
+    filesystem_id = crypto_util.hash_codename(session['codename'])
 
-    source = Source(sid, crypto_util.display_id())
+    source = Source(filesystem_id, crypto_util.display_id())
     db_session.add(source)
     try:
         db_session.commit()
@@ -178,7 +180,7 @@ def create():
             "Attempt to create a source with duplicate codename: %s" %
             (e,))
     else:
-        os.mkdir(store.path(sid))
+        os.mkdir(store.path(filesystem_id))
 
     session['logged_in'] = True
     return redirect(url_for('lookup'))
@@ -192,18 +194,20 @@ def async(f):
 
 
 @async
-def async_genkey(sid, codename):
-    crypto_util.genkeypair(sid, codename)
+def async_genkey(filesystem_id, codename):
+    crypto_util.genkeypair(filesystem_id, codename)
 
     # Register key generation as update to the source, so sources will
     # filter to the top of the list in the journalist interface if a
     # flagged source logs in and has a key generated for them. #789
     try:
-        source = Source.query.filter(Source.filesystem_id == sid).one()
+        source = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                       .one()
         source.last_updated = datetime.utcnow()
         db_session.commit()
     except Exception as e:
-        app.logger.error("async_genkey for source (sid={}): {}".format(sid, e))
+        app.logger.error("async_genkey for source "
+                         "(filesystem_id={}): {}".format(filesystem_id, e))
 
 
 @app.route('/lookup', methods=('GET',))
@@ -211,7 +215,7 @@ def async_genkey(sid, codename):
 def lookup():
     replies = []
     for reply in g.source.replies:
-        reply_path = store.path(g.sid, reply.filename)
+        reply_path = store.path(g.filesystem_id, reply.filename)
         try:
             reply.decrypted = crypto_util.decrypt(
                 g.codename,
@@ -229,8 +233,8 @@ def lookup():
     # Generate a keypair to encrypt replies from the journalist
     # Only do this if the journalist has flagged the source as one
     # that they would like to reply to. (Issue #140.)
-    if not crypto_util.getkey(g.sid) and g.source.flagged:
-        async_genkey(g.sid, g.codename)
+    if not crypto_util.getkey(g.filesystem_id) and g.source.flagged:
+        async_genkey(g.filesystem_id, g.codename)
 
     return render_template(
         'lookup.html',
@@ -238,16 +242,16 @@ def lookup():
         replies=replies,
         flagged=g.source.flagged,
         haskey=crypto_util.getkey(
-            g.sid))
+            g.filesystem_id))
 
 
-def normalize_timestamps(sid):
+def normalize_timestamps(filesystem_id):
     """
     Update the timestamps on all of the source's submissions to match that of
     the latest submission. This minimizes metadata that could be useful to
     investigators. See #301.
     """
-    sub_paths = [store.path(sid, submission.filename)
+    sub_paths = [store.path(filesystem_id, submission.filename)
                  for submission in g.source.submissions]
     if len(sub_paths) > 1:
         args = ["touch"]
@@ -279,7 +283,7 @@ def submit():
         g.source.interaction_count += 1
         fnames.append(
             store.save_message_submission(
-                g.sid,
+                g.filesystem_id,
                 g.source.interaction_count,
                 journalist_filename,
                 msg))
@@ -287,7 +291,7 @@ def submit():
         g.source.interaction_count += 1
         fnames.append(
             store.save_file_submission(
-                g.sid,
+                g.filesystem_id,
                 g.source.interaction_count,
                 journalist_filename,
                 fh.filename,
@@ -320,11 +324,11 @@ def submit():
         entropy_avail = int(
             open('/proc/sys/kernel/random/entropy_avail').read())
         if entropy_avail >= 2400:
-            async_genkey(g.sid, g.codename)
+            async_genkey(g.filesystem_id, g.codename)
 
     g.source.last_updated = datetime.utcnow()
     db_session.commit()
-    normalize_timestamps(g.sid)
+    normalize_timestamps(g.filesystem_id)
 
     return redirect(url_for('lookup'))
 
@@ -335,7 +339,7 @@ def delete():
     query = Reply.query.filter(
         Reply.filename == request.form['reply_filename'])
     reply = get_one_or_else(query, app.logger, abort)
-    store.secure_unlink(store.path(g.sid, reply.filename))
+    store.secure_unlink(store.path(g.filesystem_id, reply.filename))
     db_session.delete(reply)
     db_session.commit()
 
@@ -351,7 +355,7 @@ def batch_delete():
         app.logger.error("Found no replies when at least one was expected")
         return redirect(url_for('lookup'))
     for reply in replies:
-        store.secure_unlink(store.path(g.sid, reply.filename))
+        store.secure_unlink(store.path(g.filesystem_id, reply.filename))
         db_session.delete(reply)
     db_session.commit()
 
