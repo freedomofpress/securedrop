@@ -52,4 +52,10 @@
   tags:
     - postfix
 
+- name: Configure Postfix service.
+  service:
+    name: postfix
+    state: "{{ 'started' if ossec_server_enable_postfix else 'stopped' }}"
+    enabled: "{{ ossec_server_enable_postfix }}"
+
 # TODO - name: configure postfix proxy

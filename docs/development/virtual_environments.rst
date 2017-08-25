@@ -63,6 +63,7 @@ a few exceptions:
 * The production environment only allows SSH over an Authenticated Tor Hidden
   Service (ATHS), but the staging environment allows direct SSH access so it's
   more ergonomic for developers to interact with the system during debugging.
+* The Postfix service is disabled, so OSSEC alerts will not be sent via email.
 
 This is a convenient environment to test how changes work across the full stack.
 

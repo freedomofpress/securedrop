@@ -48,3 +48,7 @@ iptables_complete_ruleset: |-
   -A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid
   -A LOGNDROP -j DROP
+
+# Postfix should indeed be running on prod hosts, otherwise
+# OSSEC alerts cannot be delivered. It's disabled in staging.
+postfix_enabled: True

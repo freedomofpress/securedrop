@@ -10,3 +10,6 @@ tor_services:
       - "22" # assumes remote and local ports are identical
     authenticated: yes # value will automatically be coerced to boolean
     client: admin
+
+# Disable Postfix in staging, since we don't have valid credentials.
+postfix_enabled: False

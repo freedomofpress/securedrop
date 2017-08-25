@@ -22,3 +22,8 @@ ossec_postfix_dependencies:
 
 # Configuration info for procmail and postfix
 postfix_hostname: ossec.server
+
+# Whether to enable Postfix for sending mail. Required in prod,
+# but unnecessary in staging contexts, where SASL authentication
+# will always fail, due to lack of site-specific credentials.
+ossec_server_enable_postfix: True

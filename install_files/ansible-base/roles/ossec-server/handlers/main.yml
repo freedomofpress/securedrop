@@ -28,6 +28,8 @@
   service:
     name: postfix
     state: restarted
+  # Don't bounce the service if set to disabled, e.g. in staging
+  when: ossec_server_enable_postfix
 
 - name: restart ossec-server
   service:
