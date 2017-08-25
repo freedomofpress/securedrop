@@ -91,8 +91,207 @@ by clicking on it:
 
 |Weblate translate context screenshot|
 
+Glossary
+--------
+
 A :doc:`glossary <../terminology>` is available to explain the
-SecureDrop specific terms.
+SecureDrop specific terms. In addition, it is important that some key
+terms are understood and precisely translated.
+
+Adversary
+.........
+
+Your adversary is the person or organization attempting to undermine
+your security goals. Adversaries can be different, depending on the
+situation. For instance, you may worry about criminals spying on the
+network at a cafe, or your classmates at a school. Often the adversary
+is hypothetical.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/adversary>`__
+
+Air gap
+.......
+
+A computer or network that is physically isolated from all other
+networks, including the Internet, is said to be air-gapped.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/air-gap>`__
+
+Attack
+......
+
+In computer security, an attack is a method that can be used to
+compromise security, or its actual use. An attacker is the person or
+organization using an attack. An attack method is sometimes called an
+"exploit."
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
+
+Command line tool
+.................
+
+The "command line" is an ancient way of giving a computer a series of
+small, self-contained orders (think of those science fiction movies
+where teenage geniuses type long strings of green text onto black
+screens). To use a command line tool, the user types a command into a
+window called a terminal emulator, hits the return or enter key, and
+then receives a textual response in the same window. Windows, Linux
+and Apple desktop computers still let you run software using this
+interface, and even some mobile phones can do the same with the right
+app. The command line can be used to run software pre-packaged with
+your operating system. Some downloadable programs, especially
+technical utilities, use the command line instead of a more familiar
+"icons and buttons" user interface. The command line needn't be scary,
+but it does require you to type in exactly the right set of letters
+and numbers to get the correct result, and it's often unclear what to
+do if the responses don't match your expectations.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/command-line-tool>`__
+
+
+Cryptography
+............
+
+The art of designing secret codes or ciphers that let you send and
+receive messages to a recipient without others being able to
+understand the message.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/cryptography>`__
+
+Decrypt
+.......
+
+Make a secret message or data intelligible. The idea behind encryption
+is to make messages that can only be decrypted by the person or people
+who are meant to receive them.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/decrypt>`__
+
+Encryption
+..........
+
+A process that takes a message and makes it unreadable except to a
+person who knows how to decrypt it back into a readable form.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/encryption>`__
+
+Encryption key
+..............
+
+An encryption key is a piece of information that is used to convert a
+message into an unreadable form. In some cases, you need the same
+encryption key to decode the message. In others, the encryption key
+and decryption key are different.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/encryption-key>`__
+
+Fingerprint
+...........
+
+The keys of public key cryptography are very large numbers, sometimes
+a thousand or more digits long. A fingerprint is a much smaller number
+or set of numbers and letters that can be used as a unique name for
+that key, without having to list all of the key's digits.  So, for
+instance, if you and a friend wished to make sure you both had the
+same key, you could either spend a long time reading off all the
+hundreds of digits in the key, or you could each calculate your key's
+fingerprint and compare those instead. The fingerprints presented by
+cryptographic software usually consist of around 40 letters and
+numbers. If you carefully check that a fingerprint has the right
+value, you should be safe against impersonation using a fake key. Some
+software tools may offer more convenient alternative ways to verify a
+friend's key, but some form of verification needs to happen to prevent
+communications providers from easily being able to listen in.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/fingerprint>`__
+
+HTTPS
+.....
+
+If you've ever seen a web address spelled out as
+“http://www.example.com/”, you'll recognize the “http” bit of this
+term. HTTP (hypertext transfer protocol) is the way a web browser on
+your machine talks to a remote web server. Unfortunately, standard
+http sends text insecurely across the Internet. HTTPS (the S stands
+for “secure”) uses encryption to better protect the data you send to
+websites, and the information they return to you, from prying eyes.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/https>`__
+
+Key
+...
+
+In cryptography, a piece of data which gives you the capability to
+encrypt or decrypt a message.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/key>`__
+
+Keyring
+.......
+
+If you use public key cryptography, you'll need to keep track of many
+keys: your secret, private key, your public key, and the public keys
+of everyone you communicate with. The collection of these keys is
+often referred to as your keyring.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/keyring>`__
+
+Man-in-the-middle attack (MITM)
+..................................
+
+Suppose you believe you were speaking to your friend, Bahram, via
+encrypted instant messager. To check it's really him, you ask him to
+tell you the city where you first met. "Istanbul" comes the
+reply. That's correct! Unfortunately, without you or Bahram knowing,
+someone else online has been intercepting all your
+communications. When you first connected to Bahram, you actually
+connected to this person, and she, in turn, connected to Bahram. When
+you think you are asking Bahram a question, she receives your message,
+relays the question to Bahram, receives his answer back , and then
+sends it to you. Even though you think you are communicating securely
+with Bahram, you are, in fact, only communicating securely with the
+spy, who is also communicating securely to Bahram! This is the
+man-in-the-middle attack. Men-in-the-middle can spy on communications
+or even insert false or misleading messages into your
+communications. Security-focused internet communications software
+needs to defend against the man-in-the-middle attack to be safe
+against attackers who have control of any part of the Internet between
+two communicators.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/man-middle-attack>`__
+
+Public key encryption
+.....................
+
+Traditional encryption systems use the same secret, or key, to encrypt
+and decrypt a message. So if I encrypted a file with the password
+"bluetonicmonster", you would need both the file and the secret
+"bluetonicmonster" to decode it. Public key encryption uses two keys:
+one to encrypt, and another to decrypt. This has all kinds of useful
+consequences. For one, it means that you can hand out the key to
+encrypt messages to you, and as long as you keep the other key secret,
+anyone with that key can talk to you securely. The key you hand out
+widely is known as the "public key": hence the name of the
+technique. Public key encryption is used to encrypt email and files by
+Pretty Good Privacy (PGP), OTR for instant messaging, and SSL/TLS for
+web browsing.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/public-key-encryption>`__
+
+Two-factor authentication
+.........................
+
+"Something you know, and something you have." Login systems that
+require only a username and password risk being broken when someone
+else can obtain (or guess) those pieces of information. Services that
+offer two-factor authentication also require you to provide a separate
+confirmation that you are who you say you are. The second factor could
+be a one-off secret code, a number generated by a program running on a
+mobile device, or a device that you carry and that you can use to
+confirm who you are. Companies like banks, and major internet services
+like Google, Paypal and Twitter now offer two-factor authentication.
+
+This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
 
 Getting help
 ------------
