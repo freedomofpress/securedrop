@@ -1,0 +1,45 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    molecule_instance_config: "{{ lookup('file', lookup('env', 'MOLECULE_INSTANCE_CONFIG')) | from_yaml }}"
+    aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
+    aws_ec2_teardown_timeout: 50
+  tasks:
+    - name: Store job_id (job name and build number) as host fact.
+      set_fact:
+        job_id: "securedrop-ci-{{ ansible_env.BUILD_NUM }}"
+
+    - name: Remove temporary SSH key from AWS region.
+      ec2_key:
+        name: "sdci-{{ job_id }}"
+        state: absent
+        region: "{{ aws_ec2_ci_region }}"
+
+    - name: Destroy molecule EC2 instance(s)
+      ec2:
+        region: "{{ aws_ec2_ci_region }}"
+        instance_ids: "{{ molecule_instance_config|map(attribute='instance_id')|list }}"
+        state: absent
+
+    - name: Remove temporary custom security group from AWS region.
+      ec2_group:
+        name: "{{ job_id }}"
+        description: Temporary rules for CI
+        state: absent
+        region: "{{ aws_ec2_ci_region }}"
+      register: ec2_group_result
+      until: "'group_id' in ec2_group_result"
+      retries: 6
+      delay: "{{ aws_ec2_teardown_timeout }}"
+
+    - name: Clean up temporary local SSH config items.
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ ansible_user_dir }}/.ssh/{{ job_id }}"
+        - "{{ ansible_user_dir }}/.ssh/{{ job_id }}.pub"

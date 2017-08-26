@@ -1,0 +1,114 @@
+---
+- name: Create CI remote hosts for testing SecureDrop config.
+  hosts: localhost
+  become: no
+  gather_facts: true
+  tasks:
+    - name: Ensure CI environment vars are declared.
+      assert:
+        that:
+          - ci_environment != ""
+          - aws_ec2_ci_tags.build_num != ""
+          - aws_ec2_vpc_id != ""
+
+    - include: tor.yml
+
+    - name: Store job_id (job name and build number) as host fact.
+      set_fact:
+        job_id: "{{ aws_ec2_ci_tags.job_name }}-{{ aws_ec2_ci_tags.build_num }}"
+
+    - name: Generate temporary SSH key for logging into CI hosts.
+      user:
+        name: "{{ ansible_user_id }}"
+        generate_ssh_key: yes
+        ssh_key_bits: 4096
+        ssh_key_file: "{{ ansible_user_dir }}/.ssh/{{ job_id }}"
+
+    - name: Add temporary SSH key to AWS region.
+      ec2_key:
+        name: "sdci-{{ job_id }}"
+        region: "{{ aws_ec2_ci_region }}"
+        key_material: "{{ lookup('file',ansible_user_dir+'/.ssh/{{ job_id }}.pub') }}"
+
+    - name: Find Ubuntu AMI.
+      ec2_ami_find:
+        owner: 099720109477
+        name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server*"
+        region: "{{ aws_ec2_ci_region }}"
+        sort: creationDate
+        sort_order: descending
+        sort_end: 1
+        virtualization_type: hvm
+      register: ami_search_result
+
+    - name: Find VPC subnet.
+      ec2_vpc_subnet_facts:
+        region: "{{ aws_ec2_ci_region }}"
+        filters:
+          vpc-id: "{{ aws_ec2_vpc_id }}"
+      register: vpc_subnet_result
+
+    - name: Create custom temporary security_group for CI hosts.
+      ec2_group:
+        name: "{{ job_id }}"
+        description: Temporary rules for CI
+        region: "{{ aws_ec2_ci_region }}"
+        vpc_id: "{{ aws_ec2_vpc_id }}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{ ci_box_ip  }}/32"
+          - proto: tcp
+            from_port: 1514
+            to_port: 1515
+            cidr_ip: "{{ vpc_subnet_result.subnets[0].cidr_block }}"
+          - proto: udp
+            from_port: 1514
+            to_port: 1515
+            cidr_ip: "{{ vpc_subnet_result.subnets[0].cidr_block }}"
+      register: group_create_result
+
+    - include: aws-launch.yml
+      until: ec2_launch_results_fact|succeeded
+      retries: 5
+      delay: 15
+
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf: "{{ instance_conf|default([]) + [{
+          'instance': item.tags.name,
+          'instance_id': item.id,
+          'address': item.public_ip,
+          'user': 'sdrop',
+          'port': '22',
+          'identity_file': ansible_user_dir+'/.ssh/'+job_id }] }}"
+      no_log: yes
+      with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
+      register: instance_config_dict
+
+    - name: Dump instance config
+      copy:
+        content: "{{ instance_conf | molecule_to_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+  vars:
+    aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
+    aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
+    aws_ec2_vpc_id: "{{ ansible_env.CI_AWS_VPC_ID | mandatory }}"
+    aws_ec2_boot_timeout: "500"
+    ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
+    ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    aws_ec2_ci_tags:
+      job_name: "securedrop-ci"
+      build_num: "{{ ansible_env.BUILD_NUM | mandatory }}"
+    aws_ec2_ci_userdata: |
+      #!/bin/bash
+      adduser --ingroup sudo --disabled-password --gecos "" sdrop
+      mkdir -p /home/sdrop/.ssh
+      curl -s http://169.254.169.254/2011-01-01/meta-data/public-keys/0/openssh-key > /home/sdrop/.ssh/authorized_keys
+      chown sdrop -R /home/sdrop/.ssh
+      chmod 700 -R /home/sdrop/.ssh
+      echo "sdrop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
