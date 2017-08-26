@@ -1,0 +1,40 @@
+---
+driver:
+  name: ec2
+lint:
+  name: yamllint
+platforms:
+  - name: mon-staging
+    groups:
+      - securedrop_monitor_server
+      - mon-staging
+      - staging
+      - securedrop
+
+  - name: app-staging
+    groups:
+      - securedrop_application_server
+      - app-staging
+      - staging
+      - securedrop
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  options:
+    skip-tags: "grsec,local_build"
+    e: "install_local_packages=true"
+    e: "primary_network_iface=eth0"
+  inventory:
+    links:
+      group_vars: ../../../install_files/ansible-base/group_vars
+      host_vars: ../../../install_files/ansible-base/host_vars
+  env:
+    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
+    ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins
+scenario:
+  name: aws
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
