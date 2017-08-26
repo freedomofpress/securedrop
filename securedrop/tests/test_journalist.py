@@ -84,7 +84,7 @@ class TestJournalistApp(TestCase):
                              data={'filesystem_id': filesystem_id, 'msg': '_'})
 
         self.assertMessageFlashed(
-            'An unexpected error occurred! Please check '
+            'An unexpected error did not occur! Please check '
             'the application logs or inform your adminstrator.', 'error')
 
     def test_empty_replies_are_rejected(self):
