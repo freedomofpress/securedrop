@@ -75,6 +75,15 @@ tor_services:
     authenticated: yes
     client: journalist
 
+# Staging permits presence of "source-error.log".
+allowed_apache_logfiles:
+  - /var/log/apache2/access.log
+  - /var/log/apache2/error.log
+  - /var/log/apache2/journalist-access.log
+  - /var/log/apache2/journalist-error.log
+  - /var/log/apache2/other_vhosts_access.log
+  - /var/log/apache2/source-error.log
+
 # Hardcoded values, only appropriate for local testing via Vagrant.
 iptables_complete_ruleset: |-
   -P INPUT DROP
