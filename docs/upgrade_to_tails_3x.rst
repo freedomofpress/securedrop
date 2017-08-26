@@ -232,14 +232,7 @@ Due to a change in Tails 3, if you wish to preserve the names of files when
 decrypting, you'll need to apply the following fix by opening a **Terminal** on
 the *Secure Viewing Station* and typing the following commands:
 
-.. code:: sh
-
-  cd /live/persistence/TailsData_unlocked/dotfiles
-  cp ~/.bashrc .
-  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
-
-.. note:: This only needs to be done once on each *Secure Viewing Station*.
-          After a reboot it will persist.
+.. include:: includes/tails-svs-nautilus.txt
 
 6. Upgrade SecureDrop to 0.4.x
 ------------------------------

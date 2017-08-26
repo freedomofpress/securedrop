@@ -16,14 +16,7 @@ Ensure Filenames are Preserved
 In order to preserve filenames when you decrypt submissions, on each *Secure
 Viewing Station*, you should open a **Terminal** and type the following commands:
 
-.. code:: sh
-
-  cd /live/persistence/TailsData_unlocked/dotfiles
-  cp ~/.bashrc .
-  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
-
-.. note:: This only needs to be done once on each *Secure Viewing Station*.
-          After a reboot it will persist.
+.. include:: includes/tails-svs-nautilus.txt
 
 Correct the system time
 -----------------------
