@@ -24,9 +24,11 @@ import config
 import os
 
 LOCALES = set(['en_US'])
+babel = None
 
 
 def setup_app(app):
+    global babel
     babel = Babel(app)
     assert len(list(babel.translation_directories)) == 1
     for dirname in os.listdir(next(babel.translation_directories)):
@@ -79,9 +81,45 @@ def get_text_direction(locale):
     return core.Locale.parse(locale).text_direction
 
 
+def _get_supported_locales(locales, supported, default_locale):
+    """Return SUPPORTED_LOCALES from config.py. It is missing return all
+    locales found in the translations directory.
+
+    """
+
+    if not supported:
+        return sorted(locales)
+    unsupported = set(supported) - set(locales)
+    if unsupported:
+        raise Exception("config.py SUPPORTED_LOCALES contains {} which is not "
+                        "among the locales found in the {} "
+                        "directory: {}".format(list(unsupported),
+                                               babel.translation_directories,
+                                               locales))
+    if default_locale and default_locale not in supported:
+        raise Exception("config.py SUPPORTED_LOCALES contains {} "
+                        "which does not include "
+                        "the value of DEFAULT_LOCALE '{}'".format(
+                            supported, default_locale))
+
+    return supported
+
+
+NAME_OVERRIDES = {
+    'nb_NO':  'norsk',
+}
+
+
 def get_locale2name():
+    locales = _get_supported_locales(
+        LOCALES,
+        getattr(config, 'SUPPORTED_LOCALES', None),
+        getattr(config, 'DEFAULT_LOCALE', None))
     locale2name = collections.OrderedDict()
-    for l in sorted(LOCALES):
-        locale = core.Locale.parse(l)
-        locale2name[l] = locale.languages[locale.language]
+    for l in locales:
+        if l in NAME_OVERRIDES:
+            locale2name[l] = NAME_OVERRIDES[l]
+        else:
+            locale = core.Locale.parse(l)
+            locale2name[l] = locale.languages[locale.language]
     return locale2name

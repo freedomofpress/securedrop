@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
 # Copyright (C) 2017 Loic Dachary <loic@dachary.org>
@@ -28,11 +29,26 @@ import config
 import i18n
 import journalist
 import manage
+import pytest
 import source
 import version
 
 
 class TestI18N(object):
+
+    def test_get_supported_locales(self):
+        locales = ['en_US', 'fr_FR']
+        assert locales == i18n._get_supported_locales(locales, None, None)
+        locales = ['en_US', 'fr_FR']
+        supported = ['en_US', 'not_found']
+        with pytest.raises(Exception) as excinfo:
+            i18n._get_supported_locales(locales, supported, None)
+        assert "contains ['not_found']" in str(excinfo.value)
+        supported = ['fr_FR']
+        locale = 'not_found'
+        with pytest.raises(Exception) as excinfo:
+            i18n._get_supported_locales(locales, supported, locale)
+        assert "DEFAULT_LOCALE 'not_found'" in str(excinfo.value)
 
     def verify_i18n(self, app):
         not_translated = 'code hello i18n'
@@ -136,6 +152,14 @@ class TestI18N(object):
             base = render_template('base.html')
             assert 'dir="rtl"' in base
 
+        # the canonical locale name is norsk bokmål but
+        # this is overriden with just norsk by i18n.NAME_OVERRIDES
+        with app.test_client() as c:
+            c.get('/?l=nb_NO')
+            base = render_template('base.html')
+            assert 'norsk' in base
+            assert 'norsk bo' not in base
+
     def test_i18n(self):
         sources = [
             'tests/i18n/code.py',
@@ -165,6 +189,9 @@ class TestI18N(object):
         pybabel init -i {d}/messages.pot -d {d} -l ar
         sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code arabic"/' \
               {d}/ar/LC_MESSAGES/messages.po
+        pybabel init -i {d}/messages.pot -d {d} -l nb_NO
+        sed -i -e '/code hello i18n/,+1s/msgstr ""/msgstr "code norwegian"/' \
+              {d}/nb_NO/LC_MESSAGES/messages.po
         """.format(d=config.TEMP_DIR))
 
         manage.translate(args)
