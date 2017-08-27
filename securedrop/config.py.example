@@ -84,5 +84,8 @@ TEMP_DIR = os.path.join(SECUREDROP_DATA_ROOT, "tmp")
 DATABASE_ENGINE = 'sqlite'
 DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
 
+# A selection of the available locales (optional, defaults to all available
+# locales).
+#SUPPORTED_LOCALES = ['en_US', 'fr_FR', 'nb_NO']
 # Which of the available locales should be displayed by default ?
 DEFAULT_LOCALE = 'en_US'
