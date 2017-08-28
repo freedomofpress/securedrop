@@ -70,9 +70,6 @@
       register: group_create_result
 
     - include: aws-launch.yml
-      until: ec2_launch_results_fact|succeeded
-      retries: 5
-      delay: 15
 
     - name: Populate instance config dict
       set_fact:
@@ -91,6 +88,9 @@
       copy:
         content: "{{ instance_conf | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
+  handlers:
+    - name: aws relaunch
+      include: aws-launch.yml
   vars:
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
