@@ -33,18 +33,15 @@
       register: ec2_launch_results
       with_items: "{{ reg_ec_instance.results }}"
       when: "item.tagged_instances[0].tags['build_num'] == aws_ec2_ci_tags.build_num"
-
   rescue:
     - name: Destroy EC2 instances (for relaunch)
       ec2:
         region: "{{ aws_ec2_ci_region }}"
         instance_ids: ["{{ item.item.tagged_instances[0].id }}"]
         state: absent
+      notify: aws relaunch
       when: item|failed
       with_items: "{{ ec2_launch_results.results }}"
 
-  always:
-    - name: Register EC2 instance
-      set_fact:
-        ec2_launch_results_fact:  "{{ ec2_launch_results }}"
-
+    - name: Flush handlers to re-run AWS logic
+      meta: flush_handlers
