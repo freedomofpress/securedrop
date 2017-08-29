@@ -35,11 +35,3 @@
       until: "'group_id' in ec2_group_result"
       retries: 6
       delay: "{{ aws_ec2_teardown_timeout }}"
-
-    - name: Clean up temporary local SSH config items.
-      file:
-        path: "{{ item }}"
-        state: absent
-      with_items:
-        - "{{ ansible_user_dir }}/.ssh/{{ job_id }}"
-        - "{{ ansible_user_dir }}/.ssh/{{ job_id }}.pub"
