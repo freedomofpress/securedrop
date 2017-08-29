@@ -94,6 +94,7 @@ anonymous sources.
 
    development/getting_started
    development/virtual_environments
+   development/virtualizing_tails
    development/contributor_guidelines
    development/tips_and_tricks
    development/i18n
