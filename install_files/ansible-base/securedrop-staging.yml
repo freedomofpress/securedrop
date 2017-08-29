@@ -20,16 +20,9 @@
 
 - name: Add FPF apt repository and install base packages.
   hosts: staging
-  pre_tasks:
-    - name: Extract ec2 vars when in AWS
-      ec2_facts:
-      when: amazon_builder
-
-    - name: Set remote host for any reboot tasks under AWS
-      set_fact:
-        remote_host_ref: "{{ ansible_ec2_public_hostname }}"
-      when: amazon_builder
   roles:
+    - role: ci-tweaks
+      when: amazon_builder
     - { role: common, tags: common }
     - { role: tor-hidden-services, tags: tor }
     - { role: install-fpf-repo, tags: [fpfrepo] }
