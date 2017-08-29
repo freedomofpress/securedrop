@@ -293,6 +293,34 @@ like Google, Paypal and Twitter now offer two-factor authentication.
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/two-factor-authentication>`__
 
+Weblate glossary
+----------------
+
+For each string to be translated, Weblate shows a glossary of terms
+and their translation to help unify their translations. For instance
+when translating `Please wait for a new two-factor token before
+logging in again`, Weblate notices the word `two-factor` is found in
+the glossary and displays the translation in the `glossary` to the
+right.
+
+|Weblate glossary show page screenshot|
+
+Before translating strings, it is recommended to add all terms in the
+`SecureDrop localization glossary <#glossary>`_ by clicking on the pen
+in the right corner of the glossary displayed with each translated
+string and then `Add new word`:
+
+|Weblate glossary add page screenshot|
+
+When all the terms are in the glossary, it is recommended to take
+another look at the full list of terms and verify there is no
+duplicate or other mistakes.
+
+|Weblate glossary list page screenshot|
+
+.. tip:: The terms copied from the EFF glossary already have a
+         translation in a number of languages.
+
 Getting help
 ------------
 
@@ -307,14 +335,6 @@ Should you need help, you can do one of the following:
 .. _`Weblate documentation`: http://docs.weblate.org/en/latest/user/index.html
 
 
-.. |Weblate registration page screenshot| image:: ../images/weblate/weblate1.png
-.. |GitHub authorization page screenshot| image:: ../images/weblate/weblate2.png
-.. |Weblate dashboard screenshot| image:: ../images/weblate/weblate3.png
-.. |Weblate suggested translations screenshot| image:: ../images/weblate/weblate4.png
-.. |Weblate translate button screenshot| image:: ../images/weblate/weblate5.png
-.. |Weblate translate screenshot| image:: ../images/weblate/weblate6.png
-.. |Weblate translate context screenshot| image:: ../images/weblate/weblate7.png
-
 Frequently Asked Questions
 --------------------------                                                  
 
@@ -323,3 +343,15 @@ Frequently Asked Questions
   You can send a request for a new language in the `translation
   category of the SecureDrop forum`_. But please make sure the
   language you want is definitely not present!
+
+.. |Weblate registration page screenshot| image:: ../images/weblate/weblate1.png
+.. |GitHub authorization page screenshot| image:: ../images/weblate/weblate2.png
+.. |Weblate dashboard screenshot| image:: ../images/weblate/weblate3.png
+.. |Weblate suggested translations screenshot| image:: ../images/weblate/weblate4.png
+.. |Weblate translate button screenshot| image:: ../images/weblate/weblate5.png
+.. |Weblate translate screenshot| image:: ../images/weblate/weblate6.png
+.. |Weblate translate context screenshot| image:: ../images/weblate/weblate7.png
+.. |Weblate glossary show page screenshot| image:: ../images/weblate/glossary1.png
+.. |Weblate glossary add page screenshot| image:: ../images/weblate/glossary2.png
+.. |Weblate glossary list page screenshot| image:: ../images/weblate/glossary3.png
+
