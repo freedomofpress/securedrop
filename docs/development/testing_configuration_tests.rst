@@ -33,11 +33,6 @@ For the staging VMs:
     vagrant up build --no-provision
     vagrant up /staging/
 
-.. note:: The staging machines must be rebooted via in order to finalize
-          the iptables config. You must manually reboot the machines via
-          ``vagrant reload /staging/`` prior to running the config tests
-          to ensure the config is valid.
-
 Running all VMs concurrently may cause performance
 problems if you have less than 8GB of RAM. You can isolate specific
 machines for faster testing:

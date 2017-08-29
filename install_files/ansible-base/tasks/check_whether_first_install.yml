@@ -1,0 +1,18 @@
+---
+# Determine whether this is an initial installation on hardware.
+# The default iptables ruleset will include only 3 lines:
+#
+#   -P INPUT ACCEPT
+#   -P FORWARD ACCEPT
+#   -P OUTPUT ACCEPT
+#
+# So we can reliably determine whether the installation has been completed
+# by counting the number of firewall rules.
+- name: Read iptables rule set.
+  command: iptables -S
+  changed_when: false
+  register: iptables_ruleset_result
+
+- name: Store whether this is a first-time installation.
+  set_fact:
+    securedrop_initial_installation: "{{ iptables_ruleset_result.stdout_lines|length <= 3 }}"

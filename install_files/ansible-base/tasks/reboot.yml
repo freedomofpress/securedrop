@@ -25,5 +25,9 @@
     state: started
   # Wait action runs on localhost, and does NOT require sudo.
   sudo: false
+  # Provide opt-out ability for waiting for the host to come back.
+  # During initial installation, waiting won't work, since the connection
+  # switches from IPv4 to Onion URLs.
+  when: reboot_wait|default(True)
   tags:
     - reboot

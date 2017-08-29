@@ -1,7 +1,8 @@
 ---
 # Encapsulating the reboot-and-wait-for logic in a task list,
 # so that notifying a single handler (i.e. "reboot") will run
-# multiple tasks. Declaring this handler at the site level so
-# it's available regardless of role or playbook.
+# multiple tasks. Including a task file from the site level
+# in order to reuse a single implementation of reboot logic
+# as necessary.
 - name: reboot
-  include: reboot.yml
+  include: "{{ role_path }}/../../tasks/reboot.yml"

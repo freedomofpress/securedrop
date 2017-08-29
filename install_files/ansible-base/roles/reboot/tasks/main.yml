@@ -1,9 +1,0 @@
----
-- name: Restart machine.
-  command: shutdown -r now "Ansible restart to boot into grsec kernel"
-  async: 0
-  poll: 0
-  ignore_errors: true
-  sudo: yes
-  tags:
-    - reboot

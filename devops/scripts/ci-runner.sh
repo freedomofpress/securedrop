@@ -16,6 +16,3 @@ if [[ "${SSH_USER}" == 'root' ]]; then SSH_USER='ubuntu'; fi
 
 # Build + install packages, install securedrop, and configure servers
 ansible-playbook "install_files/ansible-base/securedrop-${CI_SD_ENV}.yml" --skip-tags="grsec,local_build" -e primary_network_iface=eth0 -e install_local_packages=true -e ssh_users="${SSH_USER}"
-
-# Reboot and wait
-./devops/playbooks/reboot_and_wait.yml --diff

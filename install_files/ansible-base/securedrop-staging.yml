@@ -48,3 +48,9 @@
   roles:
     - { role: restrict-direct-access, tags: [ common, restrict-direct-access ] }
   sudo: yes
+
+- name: Reboot Application and Monitor Servers.
+  hosts: staging
+  tasks:
+    - include: tasks/reboot_if_first_install.yml
+  sudo: yes
