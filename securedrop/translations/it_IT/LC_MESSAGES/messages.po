@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  SecureDrop\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-24 12:51+0000\n"
+"POT-Creation-Date: 2017-08-29 22:08+0000\n"
 "PO-Revision-Date: 2017-08-09 20:55+0000\n"
 "Last-Translator: admin <admin@securedrop.club>\n"
 "Language: it_IT\n"
@@ -190,6 +190,40 @@ msgstr ""
 #: source.py:402
 msgid "Sorry, that is not a recognized codename."
 msgstr "Spiacente, il codename non è valido"
+
+#: template_filters.py:13
+msgid "{time} ago"
+msgstr ""
+
+#: template_filters.py:26
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: template_filters.py:28
+msgid "a minute"
+msgstr ""
+
+#: template_filters.py:30
+msgid "{n} minutes"
+msgstr ""
+
+#: template_filters.py:32
+msgid "an hour"
+msgstr ""
+
+#: template_filters.py:34
+msgid "{n} hours"
+msgstr ""
+
+#: template_filters.py:36
+msgid "a day"
+msgstr ""
+
+#: template_filters.py:38
+msgid "{n} days"
+msgstr ""
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"

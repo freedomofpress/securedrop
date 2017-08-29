@@ -184,6 +184,40 @@ msgstr ""
 msgid "Sorry, that is not a recognized codename."
 msgstr ""
 
+#: template_filters.py:13
+msgid "{time} ago"
+msgstr ""
+
+#: template_filters.py:26
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: template_filters.py:28
+msgid "a minute"
+msgstr ""
+
+#: template_filters.py:30
+msgid "{n} minutes"
+msgstr ""
+
+#: template_filters.py:32
+msgid "an hour"
+msgstr ""
+
+#: template_filters.py:34
+msgid "{n} hours"
+msgstr ""
+
+#: template_filters.py:36
+msgid "a day"
+msgstr ""
+
+#: template_filters.py:38
+msgid "{n} days"
+msgstr ""
+
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
 msgstr ""
