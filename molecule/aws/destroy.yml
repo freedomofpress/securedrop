@@ -11,7 +11,7 @@
   tasks:
     - name: Store job_id (job name and build number) as host fact.
       set_fact:
-        job_id: "securedrop-ci-{{ ansible_env.BUILD_NUM }}"
+        job_id: "securedrop-ci-{{ ansible_env.CIRCLE_BUILD_NUM }}"
 
     - name: Remove temporary SSH key from AWS region.
       ec2_key:

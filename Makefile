@@ -1,4 +1,5 @@
 DEFAULT_GOAL: help
+SHELL := /bin/bash
 PWD := $(shell pwd)
 
 .PHONY: ci-spinup
@@ -13,22 +14,9 @@ ci-teardown: ## Destroy AWS EC2 hosts for testing staging environment.
 ci-run: ## Provisions AWS EC2 hosts for testing staging environment.
 	./devops/scripts/ci-runner.sh
 
-# Run SpinUP, Playbooks, and Testinfra
 .PHONY: ci-go
 ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing staging environment.
-	./devops/scripts/spin-run-test.sh
-
-.PHONY: ci-test
-ci-test: ## Tests AWS EC2 hosts for testing staging environment.
-	./devops/scripts/spin-run-test.sh only_test
-
-.PHONY: ci-debug
-ci-debug: ## Prevents automatic destruction of AWS EC2 hosts on error.
-	touch ${HOME}/.FPF_CI_DEBUG
-
-.PHONY: ci-build-only
-ci-build-only: ## Kicks off build logic and pulls back deb files.
-	./devops/scripts/ci-build_only.sh
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s aws; else echo Not running on docs branch...; fi
 
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.
