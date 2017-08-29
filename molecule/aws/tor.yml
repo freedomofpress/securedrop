@@ -13,4 +13,4 @@
     command: "tail -f /dev/null"
     state: started
     env:
-      TOR_PROXY: "{{ lookup('pipe', 'docker exec tor hostname -I') }}" 
+      TOR_PROXY: "{{ lookup('pipe', 'docker exec tor hostname -I') }}"
