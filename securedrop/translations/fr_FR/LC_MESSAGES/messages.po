@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-08-29 22:08+0000\n"
-"PO-Revision-Date: 2017-08-29 22:33+0000\n"
+"PO-Revision-Date: 2017-08-29 23:47+0000\n"
 "Last-Translator: Loic Dachary <loic@dachary.org>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -451,7 +451,7 @@ msgstr "Administrateur"
 
 #: journalist_templates/base.html:27
 msgid "Logout"
-msgstr "Deconnexion"
+msgstr "Déconnexion"
 
 #: journalist_templates/base.html:39
 msgid ""
@@ -937,9 +937,7 @@ msgstr "Vous avez déjà soumis quelque chose ?"
 msgid ""
 "If you have already submitted documents in the past, log in here to check"
 " for responses."
-msgstr ""
-"Si vous avez déjà soumis des documents dans le passé, connectez vous ici "
-"pour voir les réponses que vous avez reçues."
+msgstr "Connectez vous ici pour voir les réponses que vous avez reçues."
 
 #: source_templates/index.html:55
 msgid "CHECK FOR A RESPONSE"
