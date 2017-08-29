@@ -60,7 +60,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 		-o -type f -iname '*.yml' -exec yamllint -d relaxed {} +
 
 .PHONY: lint
-lint: docs-lint flake8 html-lint ## Runs all linting tools (docs, flake8, HTML).
+lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
 
 .PHONY: docker-build-ubuntu
 docker-build-ubuntu: ## Builds SD Ubuntu docker container
