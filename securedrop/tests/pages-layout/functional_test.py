@@ -47,17 +47,11 @@ class FunctionalTest(functional_test.FunctionalTest):
             os.path.join(dirname(realpath(__file__)),
                          'screenshots', self.accept_languages))
         os.system("mkdir -p " + self.log_dir)
-        log_file = open(os.path.join(self.log_dir, 'firefox.log'), 'a')
-        log_file.write(
-            '\n\n[%s] Running Functional Tests\n' % str(
-                datetime.now()))
-        log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
+        firefox = self._prepare_webdriver()
         profile = webdriver.FirefoxProfile()
         profile.set_preference("intl.accept_languages", self.accept_languages)
         self.override_driver = True
-        self.driver = webdriver.Firefox(firefox_binary=firefox,
-                                        firefox_profile=profile)
+        self.driver = self._create_webdriver(firefox, profile)
         self._javascript_toggle()
 
         yield None

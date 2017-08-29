@@ -49,14 +49,17 @@ class FunctionalTest():
         s.close()
         return port
 
-    def _create_webdriver(self):
+    def _create_webdriver(self, firefox, profile=None):
+        return webdriver.Firefox(firefox_binary=firefox,
+                                 firefox_profile=profile)
+
+    def _prepare_webdriver(self):
         log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
         log_file.write(
             '\n\n[%s] Running Functional Tests\n' % str(
                 datetime.now()))
         log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+        return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self):
         # Patch the two-factor verification to avoid intermittent errors
@@ -114,7 +117,7 @@ class FunctionalTest():
                 break
 
         if not hasattr(self, 'override_driver'):
-            self.driver = self._create_webdriver()
+            self.driver = self._create_webdriver(self._prepare_webdriver())
 
             # Poll the DOM briefly to wait for elements. It appears
             # .click() does not always do a good job waiting for the
