@@ -15,7 +15,7 @@
         dest: ../../apptest-results.xml
         flat: yes
   vars:
-    ci_env: "{{ lookup('env', 'CI_SD_ENV') }}" 
+    ci_env: "{{ lookup('env', 'CI_SD_ENV') }}"
     # We must define this var at the play-level since the group/host vars
     # won't automatically be included, since they're relative to the
     # provisioning playbooks (rather than the CI bootstrapping playbooks).
