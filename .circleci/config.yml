@@ -3,7 +3,7 @@ version: 2
 jobs:
   docs-lint:
     docker:
-      - image: msheiny/pressfreedomci:latest
+      - image: quay.io/freedomofpress/circleci-docker:latest
 
     steps:
       - checkout
@@ -22,7 +22,7 @@ jobs:
 
   staging-test:
     docker:
-      - image: msheiny/pressfreedomci:latest
+      - image: quay.io/freedomofpress/circleci-docker:latest
         environment:
           FPF_CI: true
           CI_SD_ENV: staging
