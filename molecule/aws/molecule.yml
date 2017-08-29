@@ -19,6 +19,8 @@ platforms:
       - securedrop
 provisioner:
   name: ansible
+  playbooks:
+    side_effect: side_effect.yml
   lint:
     name: ansible-lint
   options:
@@ -33,6 +35,11 @@ provisioner:
     ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins
 scenario:
   name: aws
+  test_sequence:
+    - create
+    - converge
+    - side_effect
+    - destroy
 verifier:
   name: testinfra
   lint:

@@ -1,14 +1,16 @@
+import os
 import re
 import pytest
 
 sdvars = pytest.securedrop_test_vars
+testinfra_hosts = ["app", "app-staging"]
 
 
 def test_hosts_files(File, SystemInfo):
     """ Ensure host files mapping are in place """
     f = File('/etc/hosts')
 
-    mon_ip = sdvars.mon_ip
+    mon_ip = os.environ.get('MON_IP', sdvars.mon_ip)
     mon_host = sdvars.monitor_hostname
 
     assert f.contains('^127.0.0.1\s*localhost')
@@ -33,7 +35,7 @@ def test_ossec_keyfile_present(File, Command, Sudo, SystemInfo):
     """ ensure client keyfile for ossec-agent is present """
     pattern = "^1024 {} {} [0-9a-f]{{64}}$".format(
                                         sdvars.app_hostname,
-                                        sdvars.app_ip)
+                                        os.environ.get('APP_IP', sdvars.app_ip))
     regex = re.compile(pattern)
 
     with Sudo():
