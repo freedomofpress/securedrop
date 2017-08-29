@@ -5,6 +5,7 @@
   become: yes
   tasks:
     - include: reboot_and_wait.yml
+      when: false
 
 - name: Run application test suite in CI.
   hosts: "app-{{ ci_env }}"
@@ -26,19 +27,6 @@
         dest: ../../apptest-results.xml
         flat: yes
 
-  vars:
-    ci_env: "{{ lookup('env', 'CI_SD_ENV') }}" 
-    # We must define this var at the play-level since the group/host vars
-    # won't automatically be included, since they're relative to the
-    # provisioning playbooks (rather than the CI bootstrapping playbooks).
-    app_dir:
-      staging: /var/www/securedrop
-
-- name: Run thru testinfra
-  hosts: localhost
-  become: no
-  gather_facts: false
-  tasks:
     - name: Run testinfra tests
       command: "{{ molecule_scenario_directory }}/scripts/ci-tester.sh"
       args:
@@ -48,9 +36,20 @@
         APP_IP: "{{ molecule_instance_yml | selectattr('instance','match','^app') | map(attribute='priv_address')|first }}"
         CI_SSH_CONFIG: "{{ molecule_instance_yml[0].identity_file }}-config"
       register: testinfra_results
+      delegate_to: localhost
+      become: no
       ignore_errors: true
       no_log: true
+
+    - fail:
+      when: app_test_register|failed or testinfra_results|failed
   vars:
+    ci_env: "{{ lookup('env', 'CI_SD_ENV') }}"
+    # We must define this var at the play-level since the group/host vars
+    # won't automatically be included, since they're relative to the
+    # provisioning playbooks (rather than the CI bootstrapping playbooks).
+    app_dir:
+      staging: /var/www/securedrop
     molecule_instance_yml: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
     molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
