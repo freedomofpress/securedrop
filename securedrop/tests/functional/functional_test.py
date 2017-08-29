@@ -116,11 +116,20 @@ class FunctionalTest():
         if not hasattr(self, 'override_driver'):
             self.driver = self._create_webdriver()
 
-            # Poll the DOM briefly to wait for elements. It appears
-            # .click() does not always do a good job waiting for the
-            # page to load, or perhaps Firefox takes too long to
-            # render it (#399)
-            self.driver.implicitly_wait(5)
+        # Polls the DOM to wait for elements. To read more about why
+        # this is necessary:
+        #
+        # http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
+        #
+        # A value of 5 is known to not be enough in some cases, when
+        # the machine hosting the tests is slow, reason why it was
+        # raised to 10. Setting the value to 60 or more would surely
+        # cover even the slowest of machine. However it also means
+        # that a test failing to find the desired element in the DOM
+        # will only report failure after 60 seconds which is painful
+        # for quickly debuging.
+        #
+        self.driver.implicitly_wait(10)
 
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
@@ -151,18 +160,18 @@ class FunctionalTest():
         return function_with_assertion()
 
     def _alert_wait(self):
-        WebDriverWait(self.driver, 5).until(
+        WebDriverWait(self.driver, 10).until(
             expected_conditions.alert_is_present(),
             'Timed out waiting for confirmation popup.')
 
     def _alert_accept(self):
         self.driver.switch_to.alert.accept()
-        WebDriverWait(self.driver, 5).until(
+        WebDriverWait(self.driver, 10).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')
 
     def _alert_dismiss(self):
         self.driver.switch_to.alert.dismiss()
-        WebDriverWait(self.driver, 5).until(
+        WebDriverWait(self.driver, 10).until(
             alert_is_not_present(),
             'Timed out waiting for confirmation popup to disappear.')
