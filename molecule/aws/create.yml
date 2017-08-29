@@ -114,7 +114,7 @@
     molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
     aws_ec2_ci_tags:
       job_name: "securedrop-ci"
-      build_num: "{{ ansible_env.BUILD_NUM | mandatory }}"
+      build_num: "{{ ansible_env.CIRCLE_BUILD_NUM | mandatory }}"
     aws_ec2_ci_userdata: |
       #!/bin/bash
       adduser --ingroup sudo --disabled-password --gecos "" sdrop
