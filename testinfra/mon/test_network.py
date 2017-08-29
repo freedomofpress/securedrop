@@ -8,11 +8,10 @@ securedrop_test_vars = pytest.securedrop_test_vars
 
 
 def test_mon_iptables_rules(SystemInfo, Command, Sudo):
-    app_ip = securedrop_test_vars.app_ip
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
-        app_ip=app_ip,
+        app_ip=os.environ.get('APP_IP', securedrop_test_vars.app_ip),
         default_interface=Command.check_output(
             "ip r | head -n 1 | awk '{ print $5 }'"),
         tor_user_id=Command.check_output("id -u debian-tor"),

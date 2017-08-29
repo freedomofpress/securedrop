@@ -79,9 +79,7 @@ def test_sudoers_tmux_env_deprecated(File):
 
     admin_user = "vagrant"
     if os.environ.get("FPF_CI", None):
-        admin_user = getpass.getuser()
-        if admin_user == "root":
-            admin_user = "ubuntu"
+        admin_user = "sdrop"
 
     f = File("/home/{}/.bashrc".format(admin_user))
     assert not f.contains("^. \/etc\/bashrc\.securedrop_additions$")
