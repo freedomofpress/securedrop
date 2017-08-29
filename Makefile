@@ -52,6 +52,13 @@ html-lint: ## Validates HTML in web application template files.
 	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 
+.PHONY: yamllint
+yamllint: ## Lints YAML files (does not validate syntax!)
+# Prune the `.venv/` dir if it exists, since it contains pip-installed files
+# and is not subject to our linting.
+	find "$(PWD)" -path "$(PWD)/.venv" -prune \
+		-o -type f -iname '*.yml' -exec yamllint -d relaxed {} +
+
 .PHONY: lint
 lint: docs-lint flake8 html-lint ## Runs all linting tools (docs, flake8, HTML).
 
