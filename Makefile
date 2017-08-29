@@ -60,6 +60,14 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 	@find "$(PWD)" -path "$(PWD)/.venv" -prune -o -type f \
 		| grep -E '^.*\.ya?ml' | xargs yamllint -c "$(PWD)/.yamllint"
 
+.PHONY: shellcheck
+shellcheck: ## Lints Bash and sh scripts.
+# Omitting the `.git/` directory since its hooks won't pass validation, and we
+# don't maintain those scripts.
+	find "$(PWD)" -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
+		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
+		| xargs shellcheck -x
+
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
 
