@@ -22,13 +22,13 @@
         name: "{{ ansible_user_id }}"
         generate_ssh_key: yes
         ssh_key_bits: 4096
-        ssh_key_file: "{{ ansible_user_dir }}/.ssh/{{ job_id }}"
+        ssh_key_file: "{{ molecule_ephemeral_directory}}/{{ job_id }}"
 
     - name: Add temporary SSH key to AWS region.
       ec2_key:
         name: "sdci-{{ job_id }}"
         region: "{{ aws_ec2_ci_region }}"
-        key_material: "{{ lookup('file',ansible_user_dir+'/.ssh/{{ job_id }}.pub') }}"
+        key_material: "{{ lookup('file',molecule_ephemeral_directory+'/{{ job_id }}.pub') }}"
 
     - name: Find Ubuntu AMI.
       ec2_ami_find:
@@ -74,12 +74,14 @@
     - name: Populate instance config dict
       set_fact:
         instance_conf: "{{ instance_conf|default([]) + [{
-          'instance': item.tags.name,
+          'instance': item.tags.server_type,
           'instance_id': item.id,
           'address': item.public_ip,
+          'priv_address': item.private_ip,
           'user': 'sdrop',
           'port': '22',
-          'identity_file': ansible_user_dir+'/.ssh/'+job_id }] }}"
+          'hostname': item.public_dns_name,
+          'identity_file': molecule_ephemeral_directory+'/'+job_id }] }}"
       no_log: yes
       with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
       register: instance_config_dict
@@ -88,6 +90,13 @@
       copy:
         content: "{{ instance_conf | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
+
+    - name: Add AWS hosts to ephermeral ssh-config (needed for testinfra)
+      template:
+        dest: "{{ molecule_ephemeral_directory }}/{{ job_id }}-config"
+        src: ssh_config
+        mode: 0600
+
   handlers:
     - name: aws relaunch
       include: aws-launch.yml
@@ -101,6 +110,8 @@
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_instance_config_yml: "{{ lookup('file', molecule_instance_config)|from_yaml }}"
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
     aws_ec2_ci_tags:
       job_name: "securedrop-ci"
       build_num: "{{ ansible_env.BUILD_NUM | mandatory }}"
