@@ -1,7 +1,7 @@
 .. _virtualizing_tails:
 
-Virtualizing Tails
-==================
+Virtual Environments: Admin Workstation
+=======================================
 
 SecureDrop uses Tails for the *Admin Workstation* environment. In order to
 perform a fully virtualized production install, you will need to first set up

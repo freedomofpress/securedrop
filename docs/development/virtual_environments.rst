@@ -1,5 +1,5 @@
-Virtual Environments
-====================
+Virtual Environments: Servers
+=============================
 
 There are three predefined virtual environments in the Vagrantfile:
 
