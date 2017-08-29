@@ -127,8 +127,8 @@ organization using an attack. An attack method is sometimes called an
 
 This definition was copied from `the EFF glossary <https://ssd.eff.org/en/glossary/attack>`__
 
-Command line tool
-.................
+Command line tool (command)
+...........................
 
 The "command line" is an ancient way of giving a computer a series of
 small, self-contained orders (think of those science fiction movies
