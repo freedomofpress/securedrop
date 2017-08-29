@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+import errno
 import mock
 from multiprocessing import Process
 import os
@@ -49,14 +50,35 @@ class FunctionalTest():
         s.close()
         return port
 
-    def _create_webdriver(self):
+    def _create_webdriver(self, firefox, profile=None):
+        # see https://review.openstack.org/#/c/375258/ and the
+        # associated issues for background on why this is necessary
+        connrefused_retry_count = 3
+        connrefused_retry_interval = 5
+
+        for i in range(connrefused_retry_count + 1):
+            try:
+                driver = webdriver.Firefox(firefox_binary=firefox,
+                                           firefox_profile=profile)
+                if i > 0:
+                    # i==0 is normal behavior without connection refused.
+                    print('NOTE: Retried {} time(s) due to '
+                          'connection refused.'.format(i))
+                return driver
+            except socket.error as socket_error:
+                if (socket_error.errno == errno.ECONNREFUSED
+                        and i < connrefused_retry_count):
+                    time.sleep(connrefused_retry_interval)
+                    continue
+                raise
+
+    def _prepare_webdriver(self):
         log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
         log_file.write(
             '\n\n[%s] Running Functional Tests\n' % str(
                 datetime.now()))
         log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+        return firefox_binary.FirefoxBinary(log_file=log_file)
 
     def setup(self):
         # Patch the two-factor verification to avoid intermittent errors
@@ -114,7 +136,7 @@ class FunctionalTest():
                 break
 
         if not hasattr(self, 'override_driver'):
-            self.driver = self._create_webdriver()
+            self.driver = self._create_webdriver(self._prepare_webdriver())
 
         # Polls the DOM to wait for elements. To read more about why
         # this is necessary:
