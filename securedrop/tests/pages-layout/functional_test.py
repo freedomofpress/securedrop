@@ -78,7 +78,6 @@ class FunctionalTest(functional_test.FunctionalTest):
         actions.perform()
         actions.send_keys(Keys.TAB)
         actions.send_keys(Keys.RETURN)
-        actions.send_keys(Keys.F5)
         actions.perform()
 
     def _save_alert(self, filename):
