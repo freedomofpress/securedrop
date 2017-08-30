@@ -88,6 +88,9 @@ relevant location for the host you plan to test: ::
 In the example above, to add a new test for the ``app-staging`` host,
 add a new file to the ``testinfra/spec/app-staging`` directory.
 
+.. tip:: Read :ref:`updating_ossec_rules` to learn how to write tests for the
+         OSSEC rules.
+
 Config test layout
 ------------------
 

@@ -95,5 +95,6 @@ anonymous sources.
    development/testing_configuration_tests
    development/testing_continuous_integration
    development/apt_repo
+   development/updating_ossec
    development/apparmor_profiles
    development/threat_model
