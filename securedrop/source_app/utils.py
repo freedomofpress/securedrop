@@ -5,6 +5,7 @@ from flask import session, current_app, abort, g
 from threading import Thread
 
 import crypto_util
+import i18n
 import store
 
 from db import Source, db_session
@@ -30,7 +31,8 @@ def valid_codename(codename):
 def generate_unique_codename():
     """Generate random codenames until we get an unused one"""
     while True:
-        codename = crypto_util.genrandomid(Source.NUM_WORDS)
+        codename = crypto_util.genrandomid(Source.NUM_WORDS,
+                                           i18n.get_language())
 
         # The maximum length of a word in the wordlist is 9 letters and the
         # codename length is 7 words, so it is currently impossible to
