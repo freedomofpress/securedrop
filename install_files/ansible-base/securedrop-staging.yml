@@ -58,4 +58,5 @@
   hosts: staging
   tasks:
     - include: tasks/reboot_if_first_install.yml
+      when: not amazon_builder
   sudo: yes
