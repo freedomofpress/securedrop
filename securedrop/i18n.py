@@ -153,3 +153,7 @@ def locale_to_rfc_5646(locale):
         return 'zh-Hans'
     else:
         return LOCALE_SPLIT.split(locale)[0]
+
+
+def get_language():
+    return get_locale().split('_')[0]
