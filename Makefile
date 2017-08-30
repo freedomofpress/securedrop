@@ -57,7 +57,7 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
-	@molecule test -s builder
+	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
