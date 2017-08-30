@@ -5,7 +5,6 @@
   become: yes
   tasks:
     - include: reboot_and_wait.yml
-      when: false
 
 - name: Run application test suite in CI.
   hosts: "app-{{ ci_env }}"
