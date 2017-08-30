@@ -111,9 +111,9 @@ Config testing strategy
 -----------------------
 
 The config tests currently emphasize testing implementation rather than
-functionality. This is a temporary measure to increase the current testing
-baseline for validating the Ansible provisioning flow, to aid in migrating
-to a current version of Ansible (v2+). After the Ansible version is current,
+functionality. This was a temporary measure to increase the testing
+baseline for validating the Ansible provisioning flow, which aided in migrating
+to a current version of Ansible (v2+). Now that the Ansible version is current,
 the config tests can be improved to validate behavior, such as confirming
 ports are blocked via external network calls, rather than simply checking
 that the iptables rules are formatted as expected.
