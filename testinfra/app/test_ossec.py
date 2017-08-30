@@ -34,8 +34,8 @@ def test_ossec_agent_installed(Package):
 def test_ossec_keyfile_present(File, Command, Sudo, SystemInfo):
     """ ensure client keyfile for ossec-agent is present """
     pattern = "^1024 {} {} [0-9a-f]{{64}}$".format(
-                                        sdvars.app_hostname,
-                                        os.environ.get('APP_IP', sdvars.app_ip))
+                                    sdvars.app_hostname,
+                                    os.environ.get('APP_IP', sdvars.app_ip))
     regex = re.compile(pattern)
 
     with Sudo():

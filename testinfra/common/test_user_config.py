@@ -1,7 +1,6 @@
 import os
 import pytest
 import re
-import getpass
 
 hostenv = os.environ['SECUREDROP_TESTINFRA_TARGET_HOST']
 
