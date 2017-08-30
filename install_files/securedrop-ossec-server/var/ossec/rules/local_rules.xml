@@ -155,3 +155,18 @@
     <options>no_email_alert</options>
   </rule>
 </group>
+
+<!--
+  Alert on Ansible playbook runs on both servers. Note that administrators may
+  not realize what an "Ansible playbook" is, so we should be clear that this
+  means that securedrop-admin was executed with one of the options that involves
+  an Ansible playbook run.
+-->
+<group name="Ansible playbooks">
+  <rule id="400001" level="13">
+    <if_sid>1003</if_sid>
+    <program_name>ansible-apt_key</program_name>
+    <match>Invoked with file=None keyserver=None url=None</match>
+    <description>Ansible playbook run on server (securedrop-admin install, backup, or restore).</description>
+  </rule>
+</group>
