@@ -118,9 +118,10 @@ def check_tor2web():
     # ignore_static here so we only flash a single message warning
     # about Tor2Web, corresponding to the initial page load.
     if 'X-tor2web' in request.headers:
-        flash('<strong>WARNING:</strong> You appear to be using Tor2Web. '
-              'This <strong>does not</strong> provide anonymity. '
-              '<a href="/tor2web-warning">Why is this dangerous?</a>',
+        flash(Markup('<strong>WARNING:</strong> You appear to be using '
+                     'Tor2Web. This <strong>does not</strong> provide '
+                     'anonymity. <a href="/tor2web-warning">Why is this '
+                     'dangerous?</a>'),
               "banner-warning")
 
 
