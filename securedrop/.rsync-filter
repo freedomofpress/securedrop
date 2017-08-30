@@ -42,6 +42,8 @@ include tests/log/
 include tests/utils/
 include tests/utils/**.py
 include wordlist
+include wordlists/
+include wordlists/**.txt
 include sass/
 include sass/**.sass
 include babel.cfg

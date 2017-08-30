@@ -408,7 +408,7 @@ def admin_new_password(user_id):
 
 def _make_password():
     while True:
-        password = crypto_util.genrandomid(7)
+        password = crypto_util.genrandomid(7, i18n.get_language())
         try:
             Journalist.check_password_acceptable(password)
             return password

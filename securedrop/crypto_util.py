@@ -47,7 +47,7 @@ do_runtime_tests()
 
 gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
-words = open(config.WORD_LIST).read().rstrip('\n').split('\n')
+language2words = {}
 nouns = open(config.NOUNS).read().rstrip('\n').split('\n')
 adjectives = open(config.ADJECTIVES).read().rstrip('\n').split('\n')
 
@@ -77,8 +77,38 @@ def clean(s, also=''):
     return str(s)
 
 
-def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID):
-    return ' '.join(random.choice(words) for x in range(words_in_random_id))
+def _get_wordlist(locale):
+    """" Ensure the wordlist for the desired locale is read and available
+    in the words global variable. If there is no wordlist for the
+    desired local, fallback to the default english wordlist.
+
+    The localized wordlist are read from wordlists/{locale}.txt but
+    for backward compatibility purposes the english wordlist is read
+    from the config.WORD_LIST file.
+
+    """
+
+    if locale not in language2words:
+        if locale != 'en':
+            path = os.path.join(config.SECUREDROP_ROOT,
+                                'wordlists',
+                                locale + '.txt')
+            if os.path.exists(path):
+                wordlist_path = path
+            else:
+                wordlist_path = config.WORD_LIST
+        else:
+            wordlist_path = config.WORD_LIST
+
+        language2words[locale] = open(
+            wordlist_path).read().rstrip('\n').split('\n')
+
+    return language2words[locale]
+
+
+def genrandomid(words_in_random_id=DEFAULT_WORDS_IN_RANDOM_ID, locale='en'):
+    return ' '.join(random.choice(_get_wordlist(locale))
+                    for x in range(words_in_random_id))
 
 
 def display_id():

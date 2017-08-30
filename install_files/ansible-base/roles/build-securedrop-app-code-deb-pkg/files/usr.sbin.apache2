@@ -231,6 +231,7 @@
   /var/www/securedrop/version.py r,
   /var/www/securedrop/version.pyc rw,
   /var/www/securedrop/wordlist r,
+  /var/www/securedrop/wordlists/** r,
   /var/www/securedrop/worker.py r,
   /var/www/securedrop/worker.pyc rw,
   /var/www/securedrop/translations/ r,
