@@ -14,6 +14,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Binary
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from jinja2 import Markup
 
 import scrypt
 import pyotp
@@ -369,7 +370,7 @@ class Journalist(Base):
 
         svg_out = StringIO()
         img.save(svg_out)
-        return svg_out.getvalue()
+        return Markup(svg_out.getvalue())
 
     @property
     def formatted_otp_secret(self):
