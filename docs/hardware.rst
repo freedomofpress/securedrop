@@ -297,10 +297,10 @@ before it can be used. We recommend:
 	  updating the BIOS according to `these instructions
 	  <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
-.. caution:: Some BIOS versions on the NUC will cause the server to
-	  `brick itself <https://communities.intel.com/message/359708>`__ if
-	  the device attempts to suspend. Some suggestions include disabling
-	  suspend in the BIOS as well as OS options like "wake on LAN".
+.. caution:: Some older NUC BIOS versions will cause the server to `brick itself <https://communities.intel.com/message/359708>`__ if the device
+    attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
+    in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
+
 
 Secure Viewing Station (SVS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
