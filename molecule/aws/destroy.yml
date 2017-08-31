@@ -24,6 +24,7 @@
         region: "{{ aws_ec2_ci_region }}"
         instance_ids: "{{ molecule_instance_config|map(attribute='instance_id')|list }}"
         state: absent
+      ignore_errors: true
 
     - name: Remove temporary custom security group from AWS region.
       ec2_group:
