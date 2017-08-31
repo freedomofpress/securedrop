@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-08-29 22:08+0000\n"
-"PO-Revision-Date: 2017-08-30 22:01+0000\n"
+"PO-Revision-Date: 2017-08-31 22:02+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -452,12 +452,12 @@ msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" "
 "alt=\"SecureDrop\">"
 msgstr ""
-"Propulsé par <br> <img src=\"/static/i/securedrop_small.png\" "
-"alt=\"SecureDrop\">"
+"Propulsée par <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:53
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "Propulsé par <em>SecureDrop {version}</em>."
+msgstr "Propulsée par <em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -508,7 +508,7 @@ msgstr "Supprimer la sélection"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr "Envoyer le document"
+msgstr "Le document a été téléversé"
 
 #: journalist_templates/col.html:55
 msgid "Reply"
@@ -556,10 +556,10 @@ msgid ""
 "this, the files seen here will be unrecoverable and the source will no "
 "longer be able to login using their previous codename.</em>"
 msgstr ""
-"Cliquez ci dessous pour supprimer la collection de documents de cette "
-"source. <em>Attention: Si vous faites cela, les fichiers visibles ici ne "
-"pourront être récupérés et la source ne sera plus capable de se connecter"
-" en utilisant son nom de code.</em>"
+"Cliquez ci-dessous pour supprimer la collection de cette source. <em>"
+"Avertissement : si vous le faites, les fichiers apparaissant ici seront "
+"irrécupérables et la source ne pourra plus se connecter en utilisant son nom "
+"de code précédent.</em>"
 
 #: journalist_templates/col.html:101
 msgid "DELETE COLLECTION"
@@ -572,10 +572,12 @@ msgid ""
 msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
-msgstr[0] "Le fichier suivant va être <strong>supprimé de façon permanente</strong> :"
-msgstr[1] ""
-"Les {files} fichiers suivants vont être <strong>supprimés de façon "
+msgstr[0] ""
+"Le fichier suivant a été sélectionné pour être <strong>supprimé de façon "
 "permanente</strong> :"
+msgstr[1] ""
+"Les {files} fichiers suivants ont été sélectionnés pour être <strong>"
+"supprimés de façon permanente</strong> :"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
@@ -583,7 +585,7 @@ msgstr "SUPPRESSION PERMANENTE DES FICHIERS"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
-msgstr "Retour à la liste des documents pour {source_journalist_designation}..."
+msgstr "Revenir à la liste de documents de {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user"
@@ -591,7 +593,7 @@ msgstr "Modifier l'utilisateur"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
-msgstr "Modifier le nom de l'utilisateur et ses permissions d'administration"
+msgstr "Modifier le nom d'utilisateur et les droits d'administration"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -599,7 +601,7 @@ msgstr "Changer le nom d'utilisateur"
 
 #: journalist_templates/edit_account.html:19
 msgid "UPDATE"
-msgstr "MISE A JOUR"
+msgstr "METTRE À JOUR"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
@@ -612,7 +614,7 @@ msgstr "Réinitialiser le mot de passe"
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
 msgstr ""
-"SecureDrop utilise désormais des mots de passe diceware générés "
+"SecureDrop utilise désormais des mots de passe « diceware » générés "
 "automatiquement."
 
 #: journalist_templates/edit_account.html:28
@@ -620,9 +622,8 @@ msgid ""
 "Your password will be changed immediately, so you will need to save it "
 "before pressing the \"Reset Password\" button."
 msgstr ""
-"Votre mot de passe sera changé immédiatement, vous devez donc le "
-"mémoriser avant d'appuyer sur le bouton \"Réinitialiser le mot de "
-"passe\"."
+"Votre mot de passe sera changé immédiatement et vous devrez donc le prendre "
+"en note avant d'appuyer sur le bouton « Réinitialiser le mot de passe »."
 
 #: journalist_templates/edit_account.html:41
 msgid "The user's password will be changed to:"
@@ -638,7 +639,7 @@ msgstr "RÉINITIALISER LE MOT DE PASSE"
 
 #: journalist_templates/edit_account.html:53
 msgid "Reset Two-Factor Authentication"
-msgstr "Réinitialisation de l'identification à deux facteurs"
+msgstr "Réinitialiser la validation en deux étapes"
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -647,11 +648,11 @@ msgid ""
 "user is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"Si l'identification à deux facteurs d'un utilisateur a été perdue ou "
-"compromise, vous pouvez la réinitialiser ici. <em>Si vous le faites "
-"assurez vous que l'utilisateur est présent et prêt à mettre en place la "
-"nouvelle identification à deux facteurs sur sa machine. A défaut de cela "
-"il ne pourra plus accéder à son compte."
+"Si les authentifiants de validation en deux étapes d'un utilisateur ont été "
+"perdus ou compromis, vous pouvez les réinitialiser ici. <em>Si vous le "
+"faites, assurez-vous que l'utilisateur est présent et prêt à configurer les "
+"nouveaux authentifiants de validation en deux étapes sur son appareil. Il ne "
+"pourra autrement plus accéder à son compte."
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -660,11 +661,10 @@ msgid ""
 "here. <em>If you do this, make sure you are ready to set up your new "
 "device, otherwise you will be locked out of your account.</em>"
 msgstr ""
-"Si votre identification à deux facteurs a été perdue ou compromise, si "
-"vous avez une nouvelle machine, vous pouvez la réinitialiser ici. <em>Si "
-"vous faites cela, assurez vous d'être en mesure d'initialiser votre "
-"nouvelle machine sans quoi vous ne pourrez plus accéder à votre "
-"compte.</em>"
+"Si vos authentifiants de validation en deux étapes ont été perdus ou "
+"compromis ou si vous avez un nouvel appareil, vous pouvez les réinitialiser "
+"ici. <em>Si vous le faites, assurez-vous d'être prêt à configurer votre "
+"nouvel appareil, sans quoi vous ne pourrez plus accéder à votre compte.</em>"
 
 #: journalist_templates/edit_account.html:60
 msgid ""
@@ -672,18 +672,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens "
 "like the Yubikey, choose the second."
 msgstr ""
-"Pour réinitialiser l'identification à deux facteurs pour des applications"
-" mobiles telles que Google Authenticator ou FreeOTP, choisissez la "
-"première option. Pour les tokens matériels tels que Yubikey, choisissez "
-"la seconde."
+"Pour réinitialiser la validation en deux étapes pour des applis mobiles "
+"telles que Google Authenticator ou FreeOTP, choisissez la première option. "
+"Pour les jetons matériels tels que Yubikey, choisissez la seconde."
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (APP)"
+msgstr "RÉINITIALISER LA VALIDATION EN DEUX ÉTAPES (APPLI)"
 
 #: journalist_templates/edit_account.html:82
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "REINITIALISER L'IDENTIFICATION A DEUX FACTEURS (TOKEN MATERIEL)"
+msgstr "RÉINITIALISER LA VALIDATION EN DEUX ÉTAPES (JETON MATÉRIEL)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -696,14 +695,15 @@ msgid ""
 " appear under their collection of documents. You can use this box to "
 "write encrypted replies to them."
 msgstr ""
-"SecureDrop va créer une clé de chiffrement pour cette source la prochaine"
-" fois qu'elle se connecte. Lorsque la clé aura été créée, une boite de "
-"dialogue apparaîtra sous leur collection de  documents. Vous pouvez "
-"utiliser cette boite de dialogue pour leur écrire des messages chiffrés."
+"SecureDrop générera une clé de chiffrement sécurisée pour cette source la "
+"prochaine fois qu'elle se connectera. Lorsque la clé aura été générée, une "
+"boîte de réponse apparaîtra sous la collection de documents de la source. "
+"Vous pourrez utiliser cette boîte de dialogue pour lui écrire des messages "
+"chiffrés."
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr "Continuer vers la liste des documents de {codename}..."
+msgstr "Continuer vers la liste de documents de {codename}..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -711,7 +711,7 @@ msgstr "Sources"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr "Télécharger les messages non lus"
+msgstr "Télécharger les non lus"
 
 #: journalist_templates/index.html:12
 msgid "Download"
@@ -719,15 +719,15 @@ msgstr "Télécharger"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr "Star"
+msgstr "Étoile"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr "De-star"
+msgstr "Ôter l'étoile"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
-msgstr "Aucun document n'a été soumis !"
+msgstr "Aucun document n'a été envoyé !"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
@@ -735,45 +735,41 @@ msgstr "filtrer par nom de code"
 
 #: journalist_templates/js-strings.html:4
 msgid "select all"
-msgstr "tout sélectionner"
+msgstr "Tout sélectionner"
 
 #: journalist_templates/js-strings.html:5
 msgid "select unread"
-msgstr "sélectionner non lus"
+msgstr "Sélectionner les non lus"
 
 #: journalist_templates/js-strings.html:6
 msgid "select none"
-msgstr "désélectionner tout"
+msgstr "Ne rien sélectionner"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr "Etes vous certain de vouloir supprimer cette collection ?"
+msgstr "Voulez-vous vraiment supprimer cette collection ?"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr ""
-"Etes vous certain de vouloir supprimer les {size} collections "
-"sélectionnées ?"
+msgstr "Voulez-vous vraiment supprimer les {size} collections sélectionnées ?"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
-"Etes vous certain de vouloir supprimer les {size} soumissions "
-"sélectionnées ?"
+msgstr "Voulez-vous vraiment supprimer les {size} envois sélectionnés ?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr "Etes vous certain de vouloir supprimer l'utilisateur {username} ?"
+msgstr "Voulez-vous vraiment supprimer l'utilisateur {username} ?"
 
 #: journalist_templates/js-strings.html:11
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
-"Etes vous certain de vouloir réinitialiser l'authentification à deux "
-"facteurs pour {username} ?"
+"Voulez-vous vraiment réinitialiser la validation en deux étapes pour "
+"{username} ?"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
-msgstr "Identification pour accéder à l'interface journaliste"
+msgstr "Se connecter pour accéder à l'interface des journalistes"
 
 #: journalist_templates/login.html:9
 msgid "Password"
@@ -781,20 +777,20 @@ msgstr "Mot de passe"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "Code à deux facteurs"
+msgstr "Code de validation en deux étapes"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr "IDENTIFICATION"
+msgstr "CONNEXION"
 
 #: source_templates/base.html:5 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
-msgstr "Protège Journalistes et Sources"
+msgstr "Protège les journalistes et les sources"
 
 #: source_templates/base.html:23 source_templates/base.html:42
 #: source_templates/index.html:28 source_templates/index.html:62
 msgid "Powered by"
-msgstr "Propulsé par"
+msgstr "Propulsée par"
 
 #: source_templates/base.html:32
 msgid "EXIT"
@@ -805,40 +801,40 @@ msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
-"Comme tout logiciel, SecureDrop peut contenir des bugs. Ayez-en "
-"conscience lorsque vous l'utilisez."
+"Comme tout logiciel, SecureDrop peut contenir des bogues de sécurité. À "
+"utiliser à vos propres risques."
 
 #: source_templates/error.html:3
 msgid "Server error"
-msgstr "Erreur sur le serveur"
+msgstr "Erreur de serveur"
 
 #: source_templates/error.html:5
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
 msgstr ""
-"Désolé, une erreur s'est produite sur le site web et votre requête n'a pu"
-" être traitée."
+"Désolé, une erreur s'est produite sur le site Web et il n'a pas pu traiter "
+"votre requête."
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
-msgstr "Se connecter avec un nom de code..."
+msgstr "Chercher un nom de code…"
 
 #: source_templates/first_submission_flashed_message.html:2
 msgid "Success!"
-msgstr "Succès !"
+msgstr "Réussi !"
 
 #: source_templates/first_submission_flashed_message.html:3
 msgid ""
 "Thank you for sending this information to us. Please check back later for"
 " replies."
 msgstr ""
-"Merci de nous avoir envoyé ces informations. Veuillez revenir plus tard "
-"pour lire les réponses."
+"Nous vous remercions de nous avoir envoyé ces informations. Veuillez revenir "
+"plus tard pour lire les réponses."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr "Vous avez oublié votre nom de code ?"
+msgstr "Avez-vous oublié votre nom de code ?"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
@@ -849,9 +845,9 @@ msgid ""
 "This codename is what you will use in future visits to receive messages "
 "from our journalists in response to what you submit on the next screen."
 msgstr ""
-"Ce nom de code vous sera utile lors de vos visites ultérieures. Il vous "
-"permettra de consulter les messages que nos journalistes vous ont laissé "
-"sur la prochaine page."
+"Vous utiliserez ce nom de code lors de vos prochaines visites pour recevoir "
+"les messages de nos journalistes en réponse à ce que vous aurez envoyé sur "
+"la prochaine page."
 
 #: source_templates/generate.html:29
 msgid ""
@@ -862,46 +858,46 @@ msgid ""
 " questions or are interested in additional documents. Unlike passwords, "
 "there is no way to retrieve a lost codename."
 msgstr ""
-"Nous n'utilisons aucune des méthodes habituelles pour garder trace des "
-"visites des utilisateurs de <strong>SecureDrop</strong>.\n"
-"Votre utilisation de ce nom de code lors de vos futures visites est le "
-"seul moyen dont nous disposons pour communiquer avec vous, dans "
-"l'hypothèse ou nous avons des questions à vous poser ou si nous sommes "
-"intéressés par d'autres documents. Contrairement aux mots de passe, il "
-"n'existe aucun moyen de retrouver un nom de code qui a été perdu."
+"Dans la mesure où nous n'utilisons aucun des moyens traditionnels pour "
+"suivre à la trace les utilisateurs de notre service "
+"<strong>SecureDrop</strong>, l'utilisation de ce nom de code lors de visites "
+"futures est la seule façon dont nous disposons pour communiquer avec vous, "
+"que nous ayons des questions ou que nous soyons intéressés par d'autres "
+"documents. Contrairement aux mots de passe, un nom de code perdu ne peut pas "
+"être récupéré."
 
 #: source_templates/generate.html:36
 msgid ""
 "Please either write this codename down and keep it in a safe place, or "
 "memorize it."
 msgstr ""
-"Il est conseillé d'écrire ce nom de code et de le conserver dans un "
-"endroit sûr, ou bien de le mémoriser."
+"Veuillez soit prendre ce nom de code par écrit et le conserver en lieu sûr, "
+"soit le mémoriser."
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
-msgstr "VOUS AVEZ DEJA UN NOM DE CODE ?"
+msgstr "AVEZ-VOUS DÉJÀ UN NOM DE CODE ?"
 
 #: source_templates/index.html:16
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong>"
 msgstr ""
-"<strong>Nous recommandons de régler le Niveau de Sécurité sur \"Elevé\" "
-"pour protéger votre anonymat:</strong>"
+"<strong>Nous recommandons de régler le niveau de sécurité sur « Élevé » pour "
+"protéger votre anonymat :</strong>"
 
 #: source_templates/index.html:16
 msgid "Learn how to set it to high"
-msgstr "Apprenez à régler la sécurité au plus haut niveau"
+msgstr "Apprenez à le régler sur « Élevé »"
 
 #: source_templates/index.html:16 source_templates/index.html:17
 msgid ", or ignore this warning to continue."
-msgstr ", ou ignorez cet avertissement et continuez."
+msgstr "ou ignorez cet avertissement pour continuer."
 
 #: source_templates/index.html:17
 msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
 msgstr ""
-"<strong>Nous recommandons l'utilisation du navigateur Tor pour accéder à "
+"<strong>Nous recommandons d'utiliser le navigateur Tor pour accéder à "
 "SecureDrop</strong>"
 
 #: source_templates/index.html:17
@@ -910,71 +906,73 @@ msgstr "Apprenez à l'installer"
 
 #: source_templates/index.html:36
 msgid "Submit documents for the first time"
-msgstr "Soumettez des documents pour la première fois"
+msgstr "Envoyer des documents pour la première fois"
 
 #: source_templates/index.html:39
 msgid ""
 "If this is your first time submitting documents to journalists, start "
 "here."
 msgstr ""
-"Si vous soumettez des documents à des journalistes pour la première fois,"
-" démarrez ici."
+"Si vous envoyez des documents à des journalistes pour la première fois, "
+"commencez ici."
 
 #: source_templates/index.html:43
 msgid "SUBMIT DOCUMENTS"
-msgstr "SOUMETTRE DES DOCUMENTS"
+msgstr "ENVOYER DES DOCUMENTS"
 
 #: source_templates/index.html:48
 msgid "Already submitted something?"
-msgstr "Vous avez déjà soumis quelque chose ?"
+msgstr "Avez-vous déjà envoyé quelque chose ?"
 
 #: source_templates/index.html:51
 msgid ""
 "If you have already submitted documents in the past, log in here to check"
 " for responses."
-msgstr "Connectez vous ici pour voir les réponses que vous avez reçues."
+msgstr ""
+"Si vous avez déjà envoyé des documents, connectez-vous ici pour consulter "
+"les réponses."
 
 #: source_templates/index.html:55
 msgid "CHECK FOR A RESPONSE"
-msgstr "VOIR LES REPONSES"
+msgstr "CONSULTER LES RÉPONSES"
 
 #: source_templates/index.html:70
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider "
 "to High in 4 easy steps!"
 msgstr ""
-"Il semble que vous utilisez le navigateur Tor. Vous pouvez régler la "
-"sécurité au niveau le plus élevé en quatre étapes faciles !"
+"Il semble que vous utilisiez le navigateur Tor. Vous pouvez régler le niveau "
+"de sécurité sur « Élevé » en quatre étapes simples !"
 
 #: source_templates/index.html:72
 msgid "Click the"
-msgstr "Cliquez le"
+msgstr "Cliquez sur l'"
 
 #: source_templates/index.html:72
 msgid "Tor icon in the toolbar above"
-msgstr "icône Tor dans la barre d'outil ci dessus"
+msgstr "icône Tor dans la barre d'outil ci-dessus"
 
 #: source_templates/index.html:73
 msgid "Click <strong>Security Settings...</strong>"
-msgstr "Cliquez <strong>Paramètres de sécurité...</strong>"
+msgstr "Cliquez sur <strong>Paramètres de sécurité...</strong>"
 
 #: source_templates/index.html:74
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
-"Déplacez le curseur sur <strong>Élevé</strong>, puis cliquez "
+"Déplacez le curseur sur <strong>Élevé</strong>, puis cliquez sur "
 "<strong>OK</strong>"
 
 #: source_templates/index.html:75
 msgid "<a href=\"/\">Click here</a>to refresh the page"
-msgstr "<a href=\"/\">Cliquez ici</a> pour rafraîchir la page"
+msgstr "<a href=\"/\">Cliquez ici</a> pour actualiser la page"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr "Tapez le nom de code"
+msgstr "Saisir le nom de code"
 
 #: source_templates/login.html:11
 msgid "Enter your codename"
-msgstr "Tapez votre nom de code"
+msgstr "Saisissez votre nom de code"
 
 #: source_templates/login.html:13 source_templates/lookup.html:41
 msgid "CANCEL"
@@ -990,14 +988,14 @@ msgid ""
 "the green Onion button in the Tor browser to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
-"Merci d'avoir mis fin à votre session! Veuillez sélectionner \"Nouvelle "
-"identité\" depuis le bouton vert en forme d'oignon dans le navigateur Tor"
-" pour effacer tout l'historique de votre utilisation de SecureDrop depuis"
-" cette machine."
+"Nous remercions d'avoir mis fin à votre session ! Veuillez sélectionner « "
+"Nouvelle identité » dans le bouton vert en forme d'oignon du navigateur Tor "
+"pour effacer intégralement votre historique d'utilisation de SecureDrop de "
+"cet appareil."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "Ouf, c'est vous! Maintenant la partie délicate..."
+msgstr "C'est bien vous ! Maintenant la partie délicate…"
 
 #: source_templates/lookup.html:12
 msgid ""
@@ -1006,11 +1004,11 @@ msgid ""
 "just some random blip. To err on the side of caution, we put a hold on "
 "sending all documents from that day through to our journalists."
 msgstr ""
-"Nos serveurs ont été sollicités de façon inhabituelle la dernière fois "
-"que vous les avez visité. Cela peut être du à un grand nombre "
-"d'utilisateurs, une attaque automatisée ou simplement un problème "
-"temporaire. Pour plus de prudence, nous avons mis de coté tout les "
-"documents envoyés à nos journalistes ce jour-là."
+"Nos serveurs ont connu une augmentation inhabituelle d'activités nouvelles "
+"lors de votre dernière visite. Ces activités auraient pu provenir "
+"d'utilisateurs, d'une attaque automatisée ou simplement d'une anomalie "
+"passagère. Par mesure de précaution, nous avons suspendu l'envoi de tous les "
+"documents de cette journée à nos journalistes."
 
 #: source_templates/lookup.html:14
 msgid ""
@@ -1018,14 +1016,14 @@ msgid ""
 "submission into the hands of a journalist straight away. We’re sorry for "
 "the delay. Please do check back again in a week or so."
 msgstr ""
-"Cependant, maintenant que nous savons que vous êtes un véritable "
-"utilisateur, nous allons communiquer votre précédente soumission à un "
-"journaliste sans délai. Nous sommes navrés de ces complications. Veuillez"
-" revenir pour consulter de nouveaux messages d'ici quelque jours."
+"Maintenant que nous savons que vous êtes vraiment un être humain, nous "
+"remettrons sans délai votre envoi précédent à un journaliste. Nous sommes "
+"désolés de ce retard. Veuillez consulter ce site de nouveau  dans à peu près "
+"une semaine."
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
-msgstr "Soumission d'information"
+msgstr "Envoyer des documents"
 
 #: source_templates/lookup.html:21
 msgid ""
@@ -1034,14 +1032,16 @@ msgid ""
 "link\">public key</a> before submission. Files are encrypted as they are "
 "received by SecureDrop."
 msgstr ""
-"Si vous connaissez déjà GPG, vous pouvez chiffrer vos fichiers et "
-"messages à destination de notre <a href=\"/journalist-key\" class=\"text-"
-"link\">clé publique</a> avant de les soumettre. Les fichiers sont "
-"chiffrés lorsqu'ils sont reçus par SecureDrop."
+"Si vous connaissez déjà GPG, vous pouvez aussi chiffrer vos fichiers et "
+"messages avec notre <a href=\"/journalist-key\" class=\"text-link\">clé "
+"publique</a> avant de les envoyer. Les fichiers sont chiffrés lorsqu'ils "
+"sont reçus par SecureDrop."
 
 #: source_templates/lookup.html:21
 msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
-msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">Apprenez en plus</a>."
+msgstr ""
+"<a href=\"/why-journalist-key\" class=\"text-link\">En apprendre "
+"davantage</a>."
 
 #: source_templates/lookup.html:23
 msgid "You can send a file, a message, or both."
@@ -1049,7 +1049,7 @@ msgstr "Vous pouvez envoyer un fichier, un message ou les deux."
 
 #: source_templates/lookup.html:32
 msgid "Maximum upload size: 500 MB"
-msgstr "Taille maximum d'un fichier à téléverser: 500 MO"
+msgstr "Taille maximale de téléversement : 500 Mo"
 
 #: source_templates/lookup.html:52
 msgid "Get Replies"
