@@ -1,7 +1,7 @@
 ---
 version: 2
 jobs:
-  docs-lint:
+  lint:
     docker:
       - image: msheiny/pressfreedomci:latest
 
@@ -12,9 +12,32 @@ jobs:
           name: Installation pre-reqs
           command: pip install -U -r securedrop/requirements/develop-requirements.txt
 
+      # Circle CI automatically dumps its env vars (`CIRCLE_*`), but let's
+      # inspect everything.
+      - run:
+          name: Dump environment variables.
+          command: printenv | sort
+
+      - run:
+          name: Check python version
+          command: python --version || true
+
+      - run:
+          name: Check user
+          command: whoami ; id -u || true
+
+
+      # Intentionally *not* using `make lint` wrapper so as not to skip linting
+      # steps if one fails. Continue linting in CI, and report full status.
       - run:
           name: Run docs lint
           command: make docs-lint
+      - run:
+          name: Run flake8 linting checks
+          command: make flake8
+      - run:
+          name: Run HTML linting checks
+          command: make html-lint
 
   staging-test:
     docker:
@@ -55,7 +78,7 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - docs-lint
+      - lint
       - staging-test:
           requires:
-            - docs-lint
+            - lint
