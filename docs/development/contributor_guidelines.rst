@@ -33,17 +33,26 @@ Code Style
 ----------
 
 We use code linters to keep a consistent code quality and style. These linters
-also run in CI and will produce build failures. To avoid this, we suggest running
-the linters locally as you work.
+also run in CI and will produce build failures. To avoid this, we have included
+a git pre-commit hook. You can install it with the following command run at the
+root of the repository:
+
+.. code:: sh
+
+    ln -sf ../../git/pre-commit .git/hooks/pre-commit
+
 
 .. note::
-  The code linters are installed automatically on the Development VM.
-  To install the linting tools locally on your host machine, from the root
-  of the repo you can run the following:
+  The code linters are installed automatically on the Development VM, but for
+  the pre-commit hook to work, you will need to install the linting tools
+  locally on your host machine. From the root of the repo you can run the
+  following:
 
   .. code:: sh
 
      pip install -r securedrop/requirements/develop-requirements.txt
+
+
 
 Python
 ~~~~~~
