@@ -67,9 +67,12 @@ def teardown():
         if t.is_alive() and not isinstance(t, threading._MainThread):
             t.join()
     db_session.remove()
-    os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:
+        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
         if 'No such file or directory' not in exc:
             raise
+    except:
+        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
+        raise
