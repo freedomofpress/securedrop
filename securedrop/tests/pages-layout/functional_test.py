@@ -59,6 +59,7 @@ class FunctionalTest(functional_test.FunctionalTest):
         self.driver.quit()
 
     def _screenshot(self, filename):
+        self.driver.set_window_size(1024, 500)  # Trim size of images for docs
         self.driver.save_screenshot(os.path.join(self.log_dir, filename))
 
     def _javascript_toggle(self):

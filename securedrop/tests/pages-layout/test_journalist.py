@@ -169,6 +169,18 @@ class TestJournalistLayout(
         self._journalist_visits_col()
         self._screenshot('journalist-col_javascript.png')
 
+    def test_journalist_composes_reply(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_checks_messages()
+        self._journalist_downloads_message()
+        self._journalist_composes_reply()
+        self._screenshot('journalist-composes_reply.png')
+
     def test_delete_none(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -246,6 +258,15 @@ class TestJournalistLayout(
         self._admin_visits_edit_user()
         self._screenshot('journalist-edit_account_admin.png')
 
+    def test_index_no_documents_admin(self):
+        self._admin_logs_in()
+        self._screenshot('journalist-admin_index_no_documents.png')
+
+    def test_admin_interface_index(self):
+        self._admin_logs_in()
+        self._admin_visits_admin_interface()
+        self._screenshot('journalist-admin_interface_index.png')
+
     def test_flag(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -282,6 +303,14 @@ class TestJournalistLayout(
         self._source_logs_out()
         self._journalist_logs_in()
         self._screenshot('journalist-index_javascript.png')
+        self._journalist_selects_the_first_source()
+        self._journalist_selects_documents_to_download()
+        self._screenshot('journalist-clicks_on_source_and_selects_documents.png')
+
+    def test_index_entered_text(self):
+        self._input_text_in_login_form('jane_doe', 'my password is long',
+                                       '117264')
+        self._screenshot('journalist-index_with_text.png')
 
     def test_fail_to_visit_admin(self):
         self._journalist_visits_admin()

@@ -79,6 +79,11 @@ class SourceNavigationSteps():
         assert ("SecureDrop | Protecting Journalists and Sources" ==
                 self.driver.title)
 
+    def _source_enters_codename_in_login_form(self):
+        codename_input = self.driver.find_element_by_id(
+            'login-with-existing-codename')
+        codename_input.send_keys('ascension hypertext concert synopses')
+
     @screenshots
     def _source_hits_cancel_at_submit_page(self):
         self.driver.find_element_by_id('cancel').click()
@@ -153,6 +158,10 @@ class SourceNavigationSteps():
             notification = self.driver.find_element_by_css_selector(
                 '.success')
             assert 'Thank' in notification.text
+
+    def _source_enters_text_in_message_field(self):
+        text_box = self.driver.find_element_by_css_selector('[name=msg]')
+        text_box.send_keys(self.secret_message)
 
     @screenshots
     def _source_deletes_a_journalist_reply(self):

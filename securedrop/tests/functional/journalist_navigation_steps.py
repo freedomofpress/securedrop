@@ -28,7 +28,7 @@ class JournalistNavigationSteps():
 
             return content
 
-    def _try_login_user(self, username, password, token):
+    def _input_text_in_login_form(self, username, password, token):
         self.driver.get(self.journalist_location + "/login")
         username_field = self.driver.find_element_by_css_selector(
             'input[name="username"]')
@@ -41,6 +41,9 @@ class JournalistNavigationSteps():
         token_field = self.driver.find_element_by_css_selector(
             'input[name="token"]')
         token_field.send_keys(token)
+
+    def _try_login_user(self, username, password, token):
+        self._input_text_in_login_form(username, password, token)
 
         submit_button = self.driver.find_element_by_css_selector(
             'button[type=submit]')
@@ -421,10 +424,16 @@ class JournalistNavigationSteps():
         for checkbox in checkboxes:
             assert checkbox.is_selected() is False
 
-    @screenshots
-    def _journalist_downloads_message(self):
+    def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector(
             '#un-starred-source-link-1').click()
+
+    def _journalist_selects_documents_to_download(self):
+        self.driver.find_element_by_id('select_all').click()
+
+    @screenshots
+    def _journalist_downloads_message(self):
+        self._journalist_selects_the_first_source()
 
         submissions = self.driver.find_elements_by_css_selector(
             '#submissions a')
@@ -455,10 +464,15 @@ class JournalistNavigationSteps():
                                                   decrypted_submission)
         assert self.secret_message == submission
 
-    def _journalist_sends_reply_to_source(self):
+    def _journalist_composes_reply(self):
+        reply_text = ('Thanks for the documents. Can you submit more '
+                      'information about the main program?')
         self.driver.find_element_by_id('reply-text-field').send_keys(
-            'Nice docs')
+            reply_text
+        )
 
+    def _journalist_sends_reply_to_source(self):
+        self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
 
         assert "Thanks! Your reply has been stored." in self.driver.page_source

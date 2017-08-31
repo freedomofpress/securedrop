@@ -158,7 +158,8 @@ class FunctionalTest():
         self.driver.set_window_position(0, 0)
         self.driver.set_window_size(1024, 768)
 
-        self.secret_message = 'blah blah blah'
+        self.secret_message = ('These documents outline a major government '
+                               'invasion of privacy.')
 
     def teardown(self):
         self.patcher.stop()

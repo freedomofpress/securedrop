@@ -48,6 +48,12 @@ class TestSourceLayout(
         self._source_chooses_to_login()
         self._screenshot('source-login.png')
 
+    def test_enters_text_in_login_form(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_enters_codename_in_login_form()
+        self._screenshot('source-enter-codename-in-login.png')
+
     def test_use_tor_browser(self):
         self._source_visits_use_tor()
         self._screenshot('source-use_tor_browser.png')
@@ -65,6 +71,13 @@ class TestSourceLayout(
         self._source_logs_out()
         self._screenshot('source-logout_flashed_message.png')
 
+    def test_submission_entered_text(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_enters_text_in_message_field()
+        self._screenshot('source-submission_entered_text.png')
+
     def test_next_submission_flashed_message(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -72,6 +85,38 @@ class TestSourceLayout(
         self._source_submits_a_file()
         self._source_submits_a_message()
         self._screenshot('source-next_submission_flashed_message.png')
+
+    def test_source_checks_for_reply(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_checks_messages()
+        self._journalist_downloads_message()
+        self._journalist_sends_reply_to_source()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_proceeds_to_login()
+        self._screenshot('source-checks_for_reply.png')
+        self._source_deletes_a_journalist_reply()
+        self._screenshot('source-deletes_reply.png')
+
+    def test_source_flagged(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._source_delete_key()
+        self._journalist_visits_col()
+        self._journalist_flags_source()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_proceeds_to_login()
+        self._screenshot('source-flagged.png')
 
     def test_notfound(self):
         self._source_not_found()
