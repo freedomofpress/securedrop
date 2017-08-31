@@ -51,7 +51,7 @@ script:
   # Travis needs the config.py file to be owned by root. In other environments
   # it's the `securedrop_user` var.
   - sudo chown root:root securedrop/config.py
-  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v tests/ ; cat tests/log/firefox.log"
+  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v --page-layout tests/ ; cat tests/log/firefox.log"
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
   - pip freeze -l
