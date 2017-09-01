@@ -24,14 +24,10 @@ before_install:
   - sudo mknod -m 0666 /dev/random c 1 9
   - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
   - sudo /etc/init.d/rng-tools restart
+  - pip freeze -l
 install:
-  - pip freeze -l
-  # Preinstalled travis pytest is not tracked by us
-  # Preinstalled travis pbr is not tracked by us
-  - pip uninstall pytest pbr -y
-  - pip install -r testinfra/requirements.txt
-  - pip freeze -l
-script:
+  # Installing Python dependencies globally, to match SecureDrop deployment.
+  - sudo -H pip install -r securedrop/requirements/develop-requirements.txt
   # Using YAML folding operator '>' to aid in readability and avoid
   # extremely long lines.
   - >
@@ -55,11 +51,6 @@ script:
   - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v --page-layout tests/ ; cat tests/log/firefox.log"
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
-  - pip freeze -l
-  # Performing new pip install step *after* build VM tests pass, so as not
-  # to alter the pip requirements, which would cause config tests to fail.
-  # The develop requirements include sphinx tooling for docs linting.
-  - pip install -r securedrop/requirements/develop-requirements.txt
   - make -k lint
 after_success:
   cd securedrop/ && coveralls
