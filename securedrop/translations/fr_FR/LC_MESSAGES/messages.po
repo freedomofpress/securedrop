@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-08-29 22:08+0000\n"
-"PO-Revision-Date: 2017-08-31 22:02+0000\n"
+"PO-Revision-Date: 2017-09-01 13:51+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -1062,11 +1062,11 @@ msgid ""
 " with them. This also lets us know that you have received our reply. You "
 "can respond by submitting a new message above."
 msgstr ""
-"Vous avez reçu une réponse. Pour protéger votre identité et dans "
-"l'hypothèse improbable ou quelqu'un prend connaissance de votre nom de "
-"code, veuillez effacer toutes les réponses après les avoir consulté. Cela"
-"  nous permet aussi de savoir que vous avez reçu nos réponses. Vous "
-"pouvez  répondre en soumettant un nouveau message ci-dessus."
+"Vous avez reçu une réponse. Pour protéger votre identité dans le cas peu "
+"probable où quelqu'un découvrirait votre nom de code, veuillez effacer "
+"toutes les réponses après consultation. Cela nous indique aussi que vous "
+"avez reçu notre réponse. Vous pouvez y réagir en envoyant un nouveau message "
+"ci-dessus."
 
 #: source_templates/lookup.html:70
 msgid "Delete this reply?"
@@ -1090,31 +1090,32 @@ msgstr "OUI, SUPPRIMER TOUTES LES RÉPONSES"
 
 #: source_templates/lookup.html:86
 msgid "NO, NOT YET"
-msgstr "NON, PAS MAINTENANT"
+msgstr "NON, PAS ENCORE"
 
 #: source_templates/lookup.html:90
 msgid "There are no replies at this time."
-msgstr "Il n'y a actuellement aucune réponse."
+msgstr "Il n'y a aucune réponse pour l'instant."
 
 #: source_templates/lookup.html:97
 msgid "Remember your codename is:"
-msgstr "Souvenez vous que votre nom de code est :"
+msgstr "Souvenez-vous que votre nom de code est :"
 
 #: source_templates/next_submission_flashed_message.html:3
+#, fuzzy
 msgid "Thanks! We received your {things}."
-msgstr "Merci! Nous avons reçu vos {things}."
+msgstr "Merci ! Nous avons reçu vos {things}."
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
-msgstr "Page non trouvée"
+msgstr "La page est introuvable"
 
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
-msgstr "Désolé, nous n'avons pu trouver ce que vous cherchez."
+msgstr "Désolé, nous n'avons pas trouvé ce que vous avez demandé."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
-msgstr "Pour quelle raison un avertissement concernant Tor2Web est-il affiché ?"
+msgstr "Pourquoi y a-t-il un avertissement au sujet de Tor2Web ?"
 
 #: source_templates/tor2web-warning.html:4
 msgid ""
@@ -1122,10 +1123,9 @@ msgid ""
 "browse Tor Hidden Services (.onion sites) without installing Tor. It was "
 "designed to facilitate anonymous publishing."
 msgstr ""
-"<a href=\"tor2web.org\">Tor2Web</a> est un service de proxy qui vous "
-"permet de consulter les \"Tor Hidden Services\" (les sites se terminant "
-"par .onion) sans installer Tor. Il a été conçu pour faciliter la "
-"publication anonyme."
+"<a href=\" tor2web.org\">Tor2Web</a> est un service mandataire qui vous "
+"permet de consulter les services cachés de Tor (les sites .onion) sans "
+"installer Tor. Il a été conçu pour faciliter la publication anonyme."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
@@ -1135,13 +1135,12 @@ msgid ""
 "since Tor2Web sites typically use HTTPS, it is possible that your "
 "connection could be MITM'ed by a capable adversary."
 msgstr ""
-"Tor2Web protège les personnes qui publient des informations mais pas "
-"celles qui les consultent. Si vous nous envoyez des documents via "
-"Tor2Web, vous n'êtes <strong>pas anonymes</strong> et vous pouvez être "
-"identifiés par votre fournisseur d'accès ou par les personnes qui font "
-"fonctionner Tor2Web. De plus, comme les sites Tor2Web utilisent HTTPS, il"
-" est possible que votre connexion soit victime de MITM de la part d'un "
-"adversaire compétent."
+"Tor2Web ne protège que les personnes qui publient, pas les lecteurs. Si vous "
+"téléversez des documents à notre intention en utilisant Tor2Web, vous n'êtes "
+"<strong>pas anonymes</strong> et pourriez être identifié par votre FAI ou "
+"par les exploitants du mandataire Tor2Web. De plus, comme les sites Tor2Web "
+"utilisent habituellement HTTPS, il est possible que votre connexion soit la "
+"cible d'une attaque de l'intercepteur menée par un adversaire compétent."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1150,10 +1149,10 @@ msgid ""
 "href=\"torproject.org/download.html.en\">Tor</a> and use it to access our"
 " site safely and anonymously."
 msgstr ""
-"Si vous voulez soumettre des informations, nous vous <strong>conseillons "
-"fortement</strong> d'installer <a "
-"href=\"torproject.org/download.html.en\">Tor</a>  et de l'utiliser pour "
-"accéder à notre site de façon sécurisée et anonyme."
+"Si vous souhaitez envoyer des informations, nous vous <strong>conseillons "
+"vivement</strong> d'installer <a href=\"torproject.org/download.html.en\""
+">Tor</a> et de l'utiliser pour accéder à notre site en toute sécurité et "
+"anonymement."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1173,9 +1172,9 @@ msgid ""
 "advise you</strong> to install Tor Browser and use it to access our site "
 "safely and anonymously."
 msgstr ""
-"Si vous voulez soumettre des informations à SecureDrop, nous vous "
-"<strong>recommandons fortement</strong> d'installer le navigateur Tor et "
-"de l'utiliser pour accéder à notre site de façon sécurisée et anonyme."
+"Si vous souhaitez envoyer des informations à SecureDrop, nous vous <strong>"
+"conseillons vivement </strong> d'installer le navigateur Tor et de "
+"l'utiliser pour accéder à notre site en toute sécurité et anonymement."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
@@ -1187,7 +1186,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
-msgstr "Pourquoi télécharger la clé publique d'un(e) journaliste ?"
+msgstr "Pourquoi télécharger la clé publique d'un journaliste ?"
 
 #: source_templates/why-journalist-key.html:4
 msgid ""
@@ -1195,18 +1194,18 @@ msgid ""
 "Encrypting messages and files before submission can provide an extra "
 "layer of security before your data reaches the SecureDrop server."
 msgstr ""
-"SecureDrop chiffre les fichiers et messages lorsqu'ils sont soumis. Le "
-"chiffrement des messages et des fichiers avant leur soumission peut "
-"fournir un niveau de sécurité supplémentaire, le temps qu'ils parviennent"
-" au serveur SecureDrop."
+"SecureDrop chiffre les fichiers et messages une fois qu'ils ont été envoyés. "
+"Le chiffrement des messages et fichiers avant leur envoi peut fournir une "
+"couche de sécurité supplémentaire avant que vos données parviennent au "
+"serveur SecureDrop."
 
 #: source_templates/why-journalist-key.html:5
 msgid ""
 "If you are already familiar with the GPG encryption software, you may "
 "wish to encrypt your submissions yourself. To do so:"
 msgstr ""
-"Si vous êtes déjà familier avec le logiciel de chiffrement GPG, vous "
-"souhaitez peut-être chiffrer vos documents vous même. Pour ce faire :"
+"Si vous connaissez déjà le logiciel de chiffrement GPG, vous souhaitez peut-"
+"être chiffrer vos documents vous-même. Pour ce faire :"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
@@ -1218,7 +1217,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
-msgstr "Importez la dans votre keyring GPG."
+msgstr "Importez-la dans votre trousseau GPG."
 
 #: source_templates/why-journalist-key.html:10
 msgid ""
@@ -1226,21 +1225,21 @@ msgid ""
 "click the <code>.asc</code> file you just downloaded and it will be "
 "automatically imported to your keyring."
 msgstr ""
-"Si vous utilisez <a href=\"tails.boum.org\">Tails</a>, vous pouvez "
-"double-cliquer sur le fichier <code>.asc</code> que vous venez de "
-"télécharger et il sera automatiquement importé dans votre keyring."
+"Si vous utilisez <a href=\"tails.boum.org\">Tails</a>, vous pouvez double-"
+"cliquer sur le fichier <code>.asc</code> que vous venez de télécharger et il "
+"sera importé automatiquement dans votre trousseau."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using Mac/Linux, open the Terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
-"Si vous utilisez Mac ou GNU/Linux, ouvrez un terminal. Vous pouvez "
-"importer la clé avec <code>gpg --import /chemin/vers/key.asc</code>."
+"Si vous utilisez Mac ou Linux, ouvrez un terminal. Vous pouvez importer la "
+"clé avec <code>gpg --import /chemin/vers/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr "Chiffrez votre soumission."
+msgstr "Chiffrez votre envoi."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
@@ -1249,19 +1248,18 @@ msgid ""
 "(with .asc at the end), you can just copy and paste that. (don't include "
 "the <code>.asc</code>!)"
 msgstr ""
-"Vous devez être capable d'identifier la clé (par ce qu'on appelle \"user "
-"ID\" ou uid). Comme le nom de fichier de la clé publique est aussi sa "
-"fingerprint (avec .asc à la fin), vous pouvez simplement la copier et la "
-"coller. (n'incluez pas le <code>.asc</code>!)"
+"Vous devrez pouvoir identifier la clé (ce qu'on appelle l'« ID utilisateur » "
+"ou uid). Comme le nom de fichier de la clé publique est l'empreinte de la "
+"clé (avec .asc à la fin), vous pouvez simplement le copier et le coller (ne "
+"pas inclure <code>.asc</code> !)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg "
 "--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
-"Sur tout les systèmes, ouvrez un terminal et utilisez cette commande gpg:"
-" <code>gpg --recipient &lt; user ID&gt;  --encrypt "
-"roswell_photos.pdf</code>"
+"Sur tout les systèmes, ouvrez un terminal et utilisez cette commande gpg : "
+"<code>gpg --recipient &lt; user ID&gt;  --encrypt photos_roswell.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
 msgid ""
@@ -1269,9 +1267,9 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. "
 "<code>roswell_photos.pdf.gpg</code>)"
 msgstr ""
-"Téléversez votre soumission chiffrée. Elle aura le même nom de fichier "
-"que l'original non chiffré, avec .gpg à la fin (e.g. "
-"<code>roswell_photos.pdf.gpg</code>)"
+"Téléversez votre envoi chiffré. Il aura le même nom de fichier que le "
+"fichier non chiffré, avec .gpg à la fin (e.g. "
+"<code>photos_roswell.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
@@ -1280,11 +1278,11 @@ msgid ""
 "<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
 " identity to us."
 msgstr ""
-"<strong>Conseil:</strong> si vous souhaitez rester anonyme, "
-"<strong>n'utilisez pas</strong> GPG pour signer les fichiers (avec "
-"l'option <code>--sign</code> ou <code>-s</code>) car cela nous révélera "
-"votre identité."
+"<strong>Conseil :</strong> si vous souhaitez rester anonyme, <strong>"
+"n'utilisez pas</strong> GPG pour signer les fichiers (avec l'option "
+"<code>--sign</code> ou <code>-s</code>), car cela nous révélera votre "
+"identité GPG."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr "Retour à la page de soumission"
+msgstr "Revenir à la page d'envoi"
