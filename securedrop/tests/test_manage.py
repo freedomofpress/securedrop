@@ -2,6 +2,7 @@
 
 import argparse
 import os
+from os.path import abspath, dirname, exists, getmtime, join, realpath
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import logging
@@ -85,6 +86,7 @@ class TestManagementCommand(unittest.TestCase):
 class TestManage(object):
 
     def setup(self):
+        self.dir = abspath(dirname(realpath(__file__)))
         utils.env.setup()
 
     def teardown(self):
@@ -96,12 +98,12 @@ class TestManage(object):
 
     def test_translate_compile_code_and_template(self):
         source = [
-            'tests/i18n/code.py',
-            'tests/i18n/template.html',
+            join(self.dir, 'i18n/code.py'),
+            join(self.dir, 'i18n/template.html'),
         ]
         kwargs = {
             'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
+            'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
             'compile': True,
@@ -111,34 +113,34 @@ class TestManage(object):
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
         manage.translate(args)
-        messages_file = os.path.join(config.TEMP_DIR, 'messages.pot')
-        assert os.path.exists(messages_file)
+        messages_file = join(config.TEMP_DIR, 'messages.pot')
+        assert exists(messages_file)
         pot = open(messages_file).read()
         assert 'code hello i18n' in pot
         assert 'template hello i18n' in pot
 
         locale = 'en_US'
-        locale_dir = os.path.join(config.TEMP_DIR, locale)
+        locale_dir = join(config.TEMP_DIR, locale)
         manage.sh("pybabel init -i {} -d {} -l {}".format(
             messages_file,
             config.TEMP_DIR,
             locale,
         ))
-        mo_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.mo')
-        assert not os.path.exists(mo_file)
+        mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
+        assert not exists(mo_file)
         manage.translate(args)
-        assert os.path.exists(mo_file)
+        assert exists(mo_file)
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
         assert 'template hello i18n' in mo
 
     def test_translate_compile_arg(self):
         source = [
-            'tests/i18n/code.py',
+            join(self.dir, 'i18n/code.py'),
         ]
         kwargs = {
             'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
+            'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
             'compile': False,
@@ -148,42 +150,42 @@ class TestManage(object):
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
         manage.translate(args)
-        messages_file = os.path.join(config.TEMP_DIR, 'messages.pot')
-        assert os.path.exists(messages_file)
+        messages_file = join(config.TEMP_DIR, 'messages.pot')
+        assert exists(messages_file)
         pot = open(messages_file).read()
         assert 'code hello i18n' in pot
 
         locale = 'en_US'
-        locale_dir = os.path.join(config.TEMP_DIR, locale)
-        po_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.po')
+        locale_dir = join(config.TEMP_DIR, locale)
+        po_file = join(locale_dir, 'LC_MESSAGES/messages.po')
         manage.sh("pybabel init -i {} -d {} -l {}".format(
             messages_file,
             config.TEMP_DIR,
             locale,
         ))
-        assert os.path.exists(po_file)
+        assert exists(po_file)
         # pretend this happened a few seconds ago
         few_seconds_ago = time.time() - 60
         os.utime(po_file, (few_seconds_ago, few_seconds_ago))
 
-        mo_file = os.path.join(locale_dir, 'LC_MESSAGES/messages.mo')
+        mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
 
         #
         # Extract+update but do not compile
         #
-        old_po_mtime = os.path.getmtime(po_file)
-        assert not os.path.exists(mo_file)
+        old_po_mtime = getmtime(po_file)
+        assert not exists(mo_file)
         manage.translate(args)
-        assert not os.path.exists(mo_file)
-        current_po_mtime = os.path.getmtime(po_file)
+        assert not exists(mo_file)
+        current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
 
         #
         # Compile but do not extract+update
         #
         source = [
-            'tests/i18n/code.py',
-            'tests/i18n/template.html',
+            join(self.dir, 'i18n/code.py'),
+            join(self.dir, 'i18n/template.html'),
         ]
         kwargs['extract_update'] = False
         kwargs['compile'] = True
