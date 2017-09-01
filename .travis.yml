@@ -22,6 +22,8 @@ before_install:
 install:
   # Installing Python dependencies globally, to match SecureDrop deployment.
   - sudo -H pip install -r securedrop/requirements/develop-requirements.txt
+  # Run linting early, to fail fast.
+  - make --keep-going lint
   # Using YAML folding operator '>' to aid in readability and avoid
   # extremely long lines.
   - >
@@ -38,6 +40,5 @@ script:
   - DISPLAY=:1 pytest -v securedrop/tests --page-layout
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
-  - make -k lint
 after_success:
   cd securedrop/ && coveralls
