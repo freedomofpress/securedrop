@@ -8,14 +8,15 @@ dist: trusty
 addons:
   firefox: 46.0.1
 
-language: python
-python:
-  - '2.7'
+# Setting language=generic to prevent Travis from setting up a virtualenv.
+# Using a virtualenv conflicts with the global pip installation currently
+# used for configuring SecureDrop, both in development and staging.
+language: generic
 
-virtualenv:
-  system_site_packages: true
 before_install:
   - 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
+  # Removes Travis-specific PATH customizations that affect Python.
+  - export PATH="$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")"
   - printenv | sort # dump Travis environment for debugging
   - sudo apt-get update -qq
   - sudo apt-get install --yes rng-tools
