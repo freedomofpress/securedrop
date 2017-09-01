@@ -7,9 +7,9 @@ function enhance_ui() {
   $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
 
   // Add the "select {all,none}" buttons
-  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> select unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> Select Unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
 
-  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
 
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
