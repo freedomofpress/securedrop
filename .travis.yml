@@ -34,10 +34,8 @@ install:
   - >
       ansible-playbook -i inventory -vv --connection=local
       install_files/ansible-base/securedrop-development.yml
-  # Travis needs the config.py file to be owned by root. In other environments
-  # it's the `securedrop_user` var.
-  - sudo chown root:root securedrop/config.py
-  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v --page-layout tests/ ; cat tests/log/firefox.log"
+script:
+  - DISPLAY=:1 pytest -v securedrop/tests --page-layout
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
   - make -k lint
