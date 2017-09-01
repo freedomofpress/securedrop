@@ -86,6 +86,7 @@ class TestManagementCommand(unittest.TestCase):
 class TestManage(object):
 
     def setup(self):
+        self.dir = abspath(dirname(realpath(__file__)))
         utils.env.setup()
 
     def teardown(self):
@@ -97,12 +98,12 @@ class TestManage(object):
 
     def test_translate_compile_code_and_template(self):
         source = [
-            'tests/i18n/code.py',
-            'tests/i18n/template.html',
+            join(self.dir, 'i18n/code.py'),
+            join(self.dir, 'i18n/template.html'),
         ]
         kwargs = {
             'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
+            'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
             'compile': True,
@@ -135,11 +136,11 @@ class TestManage(object):
 
     def test_translate_compile_arg(self):
         source = [
-            'tests/i18n/code.py',
+            join(self.dir, 'i18n/code.py'),
         ]
         kwargs = {
             'translations_dir': config.TEMP_DIR,
-            'mapping': 'tests/i18n/babel.cfg',
+            'mapping': join(self.dir, 'i18n/babel.cfg'),
             'source': source,
             'extract_update': True,
             'compile': False,
@@ -183,8 +184,8 @@ class TestManage(object):
         # Compile but do not extract+update
         #
         source = [
-            'tests/i18n/code.py',
-            'tests/i18n/template.html',
+            join(self.dir, 'i18n/code.py'),
+            join(self.dir, 'i18n/template.html'),
         ]
         kwargs['extract_update'] = False
         kwargs['compile'] = True
