@@ -139,35 +139,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'build', autostart: false do |build|
-    build.vm.hostname = "build"
-    build.vm.box = "bento/ubuntu-14.04"
-    build.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
-      ansible.verbose = 'v'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-
-    # TODO: For some reason, the build VM is defaulting to using 1GB of RAM.
-    # It does not need this much RAM, and the staging environment has been
-    # causing issues (hangs and crashes) on developer machines that have <= 8GB
-    # RAM, so hopefully setting this to a smaller value will help with that
-    # issue. We should look into why this is being automatically allocated 1GB
-    # of RAM instead of the expected 512MB default.
-    build.vm.provider "virtualbox" do |v|
-      v.memory = 512
-    end
-
-    build.vm.provider "libvirt" do |lv, override|
-      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
-    end
-  end
-
-  # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
-  #if Vagrant.has_plugin?("vagrant-cachier")
-  #  config.cache.scope = :box
-  #end
-
 end
 
 

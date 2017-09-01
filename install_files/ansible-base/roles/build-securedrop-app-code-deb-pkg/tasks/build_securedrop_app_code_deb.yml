@@ -13,7 +13,7 @@
 
 - name: Copy install_files/securedrop-app-code dir to build path.
   synchronize:
-    src: ../securedrop-app-code/
+    src: "{{ role_path }}/../../../securedrop-app-code/"
     dest: "{{ securedrop_app_code_deb_dir }}"
     delete: yes
     recursive: yes
@@ -23,7 +23,7 @@
 
 - name: Copy app code to build directory.
   synchronize:
-    src: ../../securedrop/
+    src: "{{ role_path }}/../../../../securedrop/"
     dest: "{{ securedrop_code_filtered }}"
     recursive: yes
     delete: yes

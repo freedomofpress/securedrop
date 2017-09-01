@@ -17,12 +17,12 @@ Prerequisites
 
 SecureDrop is a multi-machine design. To make development and testing easy, we
 provide a set of virtual environments, each tailored for a specific type of
-development task. We use Vagrant and VirtualBox to conveniently develop with a
-set of virtual environments, and our Ansible playbooks can provision these
-environments on either virtual machines or physical hardware.
+development task. We use Vagrant, VirtualBox, and Docker to conveniently
+develop with a set of virtual environments, and our Ansible playbooks can
+provision these environments on either virtual machines or physical hardware.
 
-To get started, you will need to install Vagrant, VirtualBox, and Ansible on
-your development workstation.
+To get started, you will need to install Vagrant, VirtualBox, Docker, and
+Ansible on your development workstation.
 
 
 Ubuntu/Debian
@@ -49,10 +49,17 @@ from the `Vagrant Downloads page`_ and then install it.
     # OR this, if you downloaded the deb package.
     sudo dpkg -i vagrant.deb
 
+We recommend using the stable version of Docker CE (Community Edition) which can
+be installed via the official documentation links:
+
+* `Docker CE for Ubuntu`_
+* `Docker CE for Debian`_
 
 .. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
 .. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
 .. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
+.. _`Docker CE for Ubuntu`: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+.. _`Docker CE for Debian`: https://docs.docker.com/engine/installation/linux/docker-ce/debian/
 
 .. warning:: We do not recommend installing vagrant-cachier. It destroys apt’s
             state unless the VMs are always shut down/rebooted with Vagrant,
@@ -93,6 +100,7 @@ development-related tooling. Using `virtualenvwrapper
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
     mkvirtualenv -p /usr/bin/python2 securedrop
     pip install -r securedrop/requirements/develop-requirements.txt
+    pip install -r testinfra/requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
@@ -107,6 +115,7 @@ Install the dependencies for the development environment:
 #. Vagrant_
 #. VirtualBox_
 #. Ansible_
+#. Docker_
 #. rsync >= 3.1.0
 
 .. note:: Note that the version of rsync installed by default on macOS is
@@ -128,6 +137,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
     source /usr/local/bin/virtualenvwrapper.sh
     mkvirtualenv -p python2 securedrop
     pip install -r securedrop/requirements/develop-requirements.txt
+    pip install -r testinfra/requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
@@ -138,6 +148,7 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
 .. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
 .. _Ansible: http://docs.ansible.com/intro_installation.html
 .. _Homebrew: https://brew.sh/
+.. _Docker: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
 Clone the repository
 --------------------

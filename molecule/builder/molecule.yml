@@ -1,0 +1,35 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: build
+    image: quay.io/freedomofpress/ubuntu:trusty
+    hash_name: ubuntu
+    groups:
+      - build
+provisioner:
+  name: ansible
+  inventory:
+    links:
+      # Path is relative to .molecule folder
+      group_vars: ../../../install_files/ansible-base/group_vars
+  env:
+    ANSIBLE_ROLES_PATH: ../../install_files/ansible-base/roles
+    ANSIBLE_ACTION_PLUGINS: ../../install_files/ansible-base/action_plugins
+    ANSIBLE_ARGS: "-vvv"
+  lint:
+    name: ansible-lint
+scenario:
+  name: builder
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

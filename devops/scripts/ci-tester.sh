@@ -22,7 +22,6 @@ rm -v ./*results.xml || true
 if [ "$?" == "0" ]; then
     case "$CI_SD_ENV" in
     "staging")
-        ./testinfra/test.py build
         ./testinfra/test.py "app-$CI_SD_ENV"
         ./testinfra/test.py "mon-$CI_SD_ENV"
         ./testinfra/test.py apptestclient

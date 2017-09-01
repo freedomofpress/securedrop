@@ -30,7 +30,7 @@ For the staging VMs:
 
 .. code:: sh
 
-    vagrant up build --no-provision
+    make build-debs
     vagrant up /staging/
 
 Running all VMs concurrently may cause performance

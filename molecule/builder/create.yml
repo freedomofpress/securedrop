@@ -1,0 +1,24 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
+    molecule_scenario_directory: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    docker_hash: "{{ lookup('file', '../docker_hashes.yml') | from_yaml }}"
+  tasks:
+    - name: Create molecule instance(s)
+      docker_container:
+        name: "{{ item.name }}"
+        hostname: "{{ item.name }}"
+        image: "{{ item.image }}@{{ docker_hash[item.hash_name] }}"
+        state: started
+        recreate: True
+        command: "tail -f /dev/null"
+        privileged: "{{ item.privileged | default(omit) }}"
+        volumes: "{{ item.volumes | default(omit) }}"
+        capabilities: "{{ item.capabilities | default(omit) }}"
+      with_items: "{{ molecule_yml.platforms }}"

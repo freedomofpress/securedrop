@@ -134,3 +134,6 @@ junit/
 
 # Virtualenv on tails
 .venv
+
+# molecule
+.molecule
