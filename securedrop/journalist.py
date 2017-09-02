@@ -47,7 +47,7 @@ def shutdown_session(exception=None):
 
 def get_source(sid):
     """Return a Source object, representing the database row, for the source
-    with id `sid`"""
+    with ID `sid`"""
     source = None
     query = Source.query.filter(Source.filesystem_id == sid)
     source = get_one_or_else(query, app.logger, abort)
@@ -70,7 +70,7 @@ def setup_g():
 
 
 def logged_in():
-    # When a user is logged in, we push their user id (database primary key)
+    # When a user is logged in, we push their user ID (database primary key)
     # into the session. setup_g checks for this value, and if it finds it,
     # stores a reference to the user's Journalist object in g.
     #
@@ -95,7 +95,7 @@ def admin_required(func):
         if logged_in() and g.user.is_admin:
             return func(*args, **kwargs)
         # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash("You must be an administrator to access that page",
+        flash("Only administrators can access this page.",
               "notification")
         return redirect(url_for('index'))
     return wrapper
@@ -129,7 +129,7 @@ def login():
 
             flash(login_flashed_msg, "error")
         else:
-            app.logger.info("Successful login for '{}' with token {}".format(
+            app.logger.info("'{}' logged in with the token {}".format(
                 request.form['username'], request.form['token']))
 
             # Update access metadata
@@ -220,12 +220,12 @@ def admin_new_user_two_factor():
         token = request.form['token']
         if user.verify_token(token):
             flash(
-                "Two-factor token successfully verified for user {}!".format(
+                "Token in two-factor authentication accepted for user {}.".format(
                     user.username),
                 "notification")
             return redirect(url_for("admin_index"))
         else:
-            flash("Two-factor token failed to verify", "error")
+            flash("Could not verify token in two-factor authentication.", "error")
 
     return render_template("admin_new_user_two_factor.html", user=user)
 
@@ -304,7 +304,7 @@ def commit_account_changes(user):
                                                                           e))
             db_session.rollback()
         else:
-            flash("Account successfully updated!", "success")
+            flash("Account updated.", "success")
 
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
@@ -376,10 +376,10 @@ def account_new_two_factor():
     if request.method == 'POST':
         token = request.form['token']
         if g.user.verify_token(token):
-            flash("Two-factor token successfully verified!", "notification")
+            flash("Token in two-factor authentication verified.", "notification")
             return redirect(url_for('edit_account'))
         else:
-            flash("Two-factor token failed to verify", "error")
+            flash("Could not verify token in two-factor authentication.", "error")
 
     return render_template('account_new_two_factor.html', user=g.user)
 
@@ -515,7 +515,7 @@ def col_download_unread(cols_selected):
         submissions += Submission.query.filter(Submission.downloaded == False,
                                                Submission.source_id == id).all()
     if submissions == []:
-        flash("No unread submissions in collections selected!", "error")
+        flash("No unread submissions in selected collections.", "error")
         return redirect(url_for('index'))
     return download("unread", submissions)
 
@@ -560,7 +560,7 @@ def col_delete_single(sid):
 def col_delete(cols_selected):
     """deleting multiple collections from the index"""
     if len(cols_selected) < 1:
-        flash("No collections selected to delete!", "error")
+        flash("No collections selected for deletion.", "error")
     else:
         for source_id in cols_selected:
             delete_collection(source_id)
@@ -592,7 +592,7 @@ def download_single_submission(sid, fn):
 @app.route('/reply', methods=('POST',))
 @login_required
 def reply():
-    """Attempt to send a Reply from a Journalist to a Source. Empty
+    """Attempt to send a reply from a journalist to a source. Empty
     messages are rejected, and an informative error message is flashed
     on the client. In the case of unexpected errors involving database
     transactions (potentially caused by racing request threads that
@@ -601,8 +601,8 @@ def reply():
     generic error message is flashed on the client.
 
     Returns:
-       flask.Response: The user is redirected to the same Source
-           collection view, regardless if the Reply is created
+       flask.Response: The user is redirected to the same source
+           collection view, regardless if the reply is created
            successfully.
     """
     msg = request.form['msg']
@@ -682,9 +682,9 @@ def bulk():
                      if doc.filename in doc_names_selected]
     if selected_docs == []:
         if action == 'download':
-            flash("No collections selected to download!", "error")
+            flash("No collections selected for download!", "error")
         elif action in ('delete', 'confirm_delete'):
-            flash("No collections selected to delete!", "error")
+            flash("No collections selected for deletion!", "error")
         return redirect(url_for('col', sid=g.sid))
 
     if action == 'download':
@@ -720,15 +720,15 @@ def bulk_delete(sid, items_selected):
 
 
 def download(zip_basename, submissions):
-    """Send client contents of zipfile *zip_basename*-<timestamp>.zip
-    containing *submissions*. The zipfile, being a
+    """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
+    containing *submissions*. The ZIP-file, being a
     :class:`tempfile.NamedTemporaryFile`, is stored on disk only
     temporarily.
 
-    :param str zip_basename: The basename of the zipfile download.
+    :param str zip_basename: The basename of the ZIP-file download.
 
     :param list submissions: A list of :class:`db.Submission`s to
-                             include in the zipfile.
+                             include in the ZIP-file.
     """
     zf = store.get_bulk_archive(submissions,
                                 zip_directory=zip_basename)
