@@ -60,6 +60,23 @@ prefix the branch name with ``docs-`` to skip the staging run. Project
 maintainers will still need to approve the PR prior to merge, and the linting
 checks will also still run.
 
+Updating screenshots
+--------------------
+
+The user guides for SecureDrop contain screenshots of the web applications.
+To update these screenshots automatically, from ``/vagrant`` inside a
+development VM you can run:
+
+.. code:: sh
+
+   make update-user-guides
+
+This will generate screenshots for each image in the web application and copy
+them to the folder under ``docs/images/manual/screenshots`` where they will
+replace the existing screenshots. Stage for commit any screenshots you wish to
+update. If you wish to update all screenshots, simply stage for commit all
+changed files in that directory.
+
 Integration with Read the Docs
 ------------------------------
 
