@@ -32,7 +32,7 @@ function send_encrypted_alert() {
         send_plaintext_fail_message
     else
         echo "${encrypted_alert_text}" | \
-            /usr/bin/mail -s "$(echo $SUBJECT | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
+            /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
     fi
 }
 
@@ -42,7 +42,7 @@ function send_encrypted_alert() {
 function send_plaintext_fail_message() {
     printf "Failed to encrypt OSSEC alert. Investigate the mailing configuration on the Monitor Server." | \
         /usr/bin/formail -I "" | \
-        /usr/bin/mail -s "$(echo $SUBJECT | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
+        /usr/bin/mail -s "$(echo "${SUBJECT}" | sed -r 's/([0-9]{1,3}\.){3}[0-9]{1,3}\s?//g' )" '{{ ossec_alert_email }}'
 }
 
 # Encrypt the OSSEC notification and pass to mailer for sending.

@@ -20,20 +20,20 @@ if [ ! -d $BUILD_PATH ]; then
 fi
 
 build_generic() {
-    PACKAGE_VERSION=$(grep Version $PACKAGE_PATH/DEBIAN/control | cut -d: -f2 | tr -d ' ')
+    PACKAGE_VERSION=$(grep Version "${PACKAGE_PATH}/DEBIAN/control" | cut -d: -f2 | tr -d ' ')
 
-    BUILD_DIR="$BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH"
-    if [ -d $BUILD_DIR ]; then
-        rm -R $BUILD_DIR
+    BUILD_DIR="${BUILD_PATH}/${PACKAGE_NAME}-${PACKAGE_VERSION}-${SD_ARCH}"
+    if [ -d "${BUILD_DIR}" ]; then
+        rm -R "${BUILD_DIR}"
     fi
-    mkdir -p $BUILD_DIR
+    mkdir -p "${BUILD_DIR}"
 
-    cp -r $PACKAGE_PATH/* $BUILD_DIR
+    cp -r "${PACKAGE_PATH}"/* "${BUILD_DIR}"
 
     # Create the deb package
-    dpkg-deb --build $BUILD_DIR
-    cp $BUILD_PATH/$PACKAGE_NAME-$PACKAGE_VERSION-$SD_ARCH.deb /tmp
+    dpkg-deb --build "${BUILD_DIR}"
+    cp "${BUILD_PATH}/${PACKAGE_NAME}-${PACKAGE_VERSION}-${SD_ARCH}.deb" /tmp
 }
 
-build_generic $PACKAGE_NAME $PACKAGE_PATH
+build_generic "${PACKAGE_NAME}" "${PACKAGE_PATH}"
 exit 0
