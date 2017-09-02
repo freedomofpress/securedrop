@@ -2,7 +2,7 @@ Using YubiKey with the Journalist Interface
 ===========================================
 
 This is a quick and dirty guide to using YubiKey for two-factor
-authentication on the Journalist Interface.
+authentication in the Journalist Interface.
 
 Download the YubiKey personalization tool
 -----------------------------------------
@@ -50,8 +50,8 @@ SecureDrop, click the "Write Configuration" button. Click through the
 warning about overwriting Configuration Slot 1 and choose a location to
 save the log file.
 
-When the configuration has been successfully written, you should see
-green text saying "YubiKey successfully configured" at the top of the
+When the configuration has been written, you should see
+green text saying "YubiKey configured" at the top of the
 window.
 
 Set up a user with the OATH-HOTP secret key
@@ -68,11 +68,10 @@ admin user to the Journalist Interface with ``manage.py``. ``cd`` to the
 ``SECUREDROP_ROOT``, which is ``/vagrant/securedrop`` in development and
 ``/var/www/securedrop`` in production. Run ``./manage.py add-admin``.
 Fill in the username and password prompts. When it asks "Is this admin
-using a YubiKey [HOTP]? (y/N)", type "y", then enter. At the "Please
+using a YubiKey [HOTP]? (y/N)", type "y", then Enter. At the "Please
 configure your YubiKey and enter the secret:" prompt, enter the Secret
-Key value and hit enter. Note that the spaces are optional. When you are
-done, you should see a message saying "Admin '(your username)'
-successfully added".
+Key value and hit Enter. Note that the spaces are optional. When you are
+done, you should see a message saying "Admin '(your username)' added".
 
 Admin Interface
 ~~~~~~~~~~~~~~~
