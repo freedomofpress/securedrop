@@ -26,7 +26,7 @@ fi
 
 # Get the old version from securedrop/version.py
 old_version_regex="^__version__ = '(.*)'$"
-[[ `cat securedrop/version.py` =~ $old_version_regex ]]
+[[ "$(cat securedrop/version.py)" =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 
 # Update the version shown to users of the web application.
