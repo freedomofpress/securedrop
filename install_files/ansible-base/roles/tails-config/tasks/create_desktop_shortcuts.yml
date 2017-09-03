@@ -34,17 +34,17 @@
 - name: Assemble desktop icon info.
   set_fact:
     _securedrop_desktop_icon_info:
-      - name: SecureDrop Source Interface
+      - src: desktop-source-icon.j2
         filename: source.desktop
         onion_url: "{{ source_interface_lookup_result.stdout }}"
-      - name: SecureDrop Journalist Interface
+      - src: desktop-journalist-icon.j2
         filename: journalist.desktop
         onion_url: "{{ journalist_interface_lookup_result.stdout }}"
 
 - name: Create SecureDrop interface desktop icons.
   become: yes
   template:
-    src: desktop-icon.j2
+    src: "{{ item.0.src }}"
     dest: "{{ item.1 }}/{{ item.0.filename }}"
     owner: amnesia
     group: amnesia
