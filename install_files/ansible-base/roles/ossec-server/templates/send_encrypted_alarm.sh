@@ -23,7 +23,7 @@ function send_encrypted_alert() {
     # Try to encrypt the alert message. We'll inspect the exit status of the
     # pipeline to decide whether to send the alert text, or the default
     # failure message.
-    encrypted_alert_text="$(printf "${ossec_alert_text}" | \
+    encrypted_alert_text="$(printf "%s" "${ossec_alert_text}" | \
         /usr/bin/formail -I '' | \
         /usr/bin/gpg --homedir /var/ossec/.gnupg --trust-model always -ear '{{ ossec_gpg_fpr }}')"
 
