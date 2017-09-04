@@ -189,7 +189,7 @@ class TestI18N(object):
         }
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
-        manage.translate(args)
+        manage.translate_messages(args)
 
         manage.sh("""
         pybabel init -i {d}/messages.pot -d {d} -l en_US
@@ -211,7 +211,7 @@ class TestI18N(object):
               {d}/nb_NO/LC_MESSAGES/messages.po
         """.format(d=config.TEMP_DIR))
 
-        manage.translate(args)
+        manage.translate_messages(args)
 
         supported = getattr(config, 'SUPPORTED_LOCALES', None)
         try:

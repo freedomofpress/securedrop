@@ -180,7 +180,7 @@ class TestManage(object):
         }
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
-        manage.translate(args)
+        manage.translate_messages(args)
         messages_file = join(config.TEMP_DIR, 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
@@ -196,13 +196,13 @@ class TestManage(object):
         ))
         mo_file = join(locale_dir, 'LC_MESSAGES/messages.mo')
         assert not exists(mo_file)
-        manage.translate(args)
+        manage.translate_messages(args)
         assert exists(mo_file)
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
         assert 'template hello i18n' in mo
 
-    def test_translate_compile_arg(self):
+    def test_translate_messages_compile_arg(self):
         source = [
             join(self.dir, 'i18n/code.py'),
         ]
@@ -217,7 +217,7 @@ class TestManage(object):
         }
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
-        manage.translate(args)
+        manage.translate_messages(args)
         messages_file = join(config.TEMP_DIR, 'messages.pot')
         assert exists(messages_file)
         pot = open(messages_file).read()
@@ -243,7 +243,7 @@ class TestManage(object):
         #
         old_po_mtime = getmtime(po_file)
         assert not exists(mo_file)
-        manage.translate(args)
+        manage.translate_messages(args)
         assert not exists(mo_file)
         current_po_mtime = getmtime(po_file)
         assert old_po_mtime < current_po_mtime
@@ -259,8 +259,8 @@ class TestManage(object):
         kwargs['compile'] = True
         args = argparse.Namespace(**kwargs)
         old_po_mtime = current_po_mtime
-        manage.translate(args)
-        assert old_po_mtime == current_po_mtime
+        manage.translate_messages(args)
+        assert old_po_mtime == getmtime(po_file)
         mo = open(mo_file).read()
         assert 'code hello i18n' in mo
         assert 'template hello i18n' not in mo
