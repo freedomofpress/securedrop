@@ -308,6 +308,7 @@ def translate(args):
             --ignore-obsolete
             """.format(translations_dir=args.translations_dir,
                        messages_file=messages_file))
+            log.warning("messages translations updated in " + messages_file)
         else:
             log.warning("messages translations are already up to date")
 
