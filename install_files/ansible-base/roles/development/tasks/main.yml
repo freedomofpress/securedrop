@@ -8,6 +8,32 @@
     - apt
     - development
 
+- name: Add gettext zesty apt repository
+  apt_repository:
+    repo: deb http://archive.ubuntu.com/ubuntu/ zesty main
+    state: present
+    update_cache: yes
+  tags:
+    - apt
+    - development
+
+- name: Install modern gettext
+  apt:
+    name: gettext
+    state: latest
+  tags:
+    - apt
+    - development
+
+- name: Remove gettext zesty apt repository
+  apt_repository:
+    repo: deb http://archive.ubuntu.com/ubuntu/ zesty main
+    state: absent
+    update_cache: yes
+  tags:
+    - apt
+    - development
+
 - name: Install pip dependencies for SecureDrop.
   pip:
     requirements: "{{ securedrop_pip_requirements }}"
