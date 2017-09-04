@@ -10,6 +10,7 @@ import manage
 import mock
 import pytest
 from StringIO import StringIO
+import shutil
 import subprocess
 import sys
 import time
@@ -96,7 +97,76 @@ class TestManage(object):
     def test_get_username(self, mock_get_usernam):
         assert manage._get_username() == 'foo-bar-baz'
 
-    def test_translate_compile_code_and_template(self):
+    def test_translate_desktop_l10n(self):
+        in_files = {}
+        for what in ('source', 'journalist'):
+            in_files[what] = join(config.TEMP_DIR, what + '.desktop.in')
+            shutil.copy(join(self.dir, 'i18n/' + what + '.desktop.in'),
+                        in_files[what])
+        kwargs = {
+            'translations_dir': config.TEMP_DIR,
+            'source': [in_files['source']],
+            'extract_update': True,
+            'compile': False,
+            'verbose': logging.DEBUG,
+            'version': version.__version__,
+        }
+        args = argparse.Namespace(**kwargs)
+        manage.setup_verbosity(args)
+        manage.translate_desktop(args)
+        messages_file = join(config.TEMP_DIR, 'desktop.pot')
+        assert exists(messages_file)
+        pot = open(messages_file).read()
+        assert 'SecureDrop Source Interfaces' in pot
+        # pretend this happened a few seconds ago
+        few_seconds_ago = time.time() - 60
+        os.utime(messages_file, (few_seconds_ago, few_seconds_ago))
+
+        i18n_file = join(config.TEMP_DIR, 'source.desktop')
+
+        #
+        # Extract+update but do not compile
+        #
+        kwargs['source'] = in_files.values()
+        old_messages_mtime = getmtime(messages_file)
+        assert not exists(i18n_file)
+        manage.translate_desktop(args)
+        assert not exists(i18n_file)
+        current_messages_mtime = getmtime(messages_file)
+        assert old_messages_mtime < current_messages_mtime
+
+        locale = 'fr_FR'
+        po_file = join(config.TEMP_DIR, locale + ".po")
+        manage.sh("""
+        msginit  --no-translator \
+                 --locale {locale} \
+                 --output {po_file} \
+                 --input {messages_file}
+        sed -i -e '/{source}/,+1s/msgstr ""/msgstr "SOURCE FR"/' \
+                 {po_file}
+        """.format(source='SecureDrop Source Interfaces',
+                   messages_file=messages_file,
+                   po_file=po_file,
+                   locale=locale))
+        assert exists(po_file)
+
+        #
+        # Compile but do not extract+update
+        #
+        kwargs['source'] = in_files.values() + ['BOOM']
+        kwargs['extract_update'] = False
+        kwargs['compile'] = True
+        args = argparse.Namespace(**kwargs)
+        old_messages_mtime = current_messages_mtime
+        manage.translate_desktop(args)
+        assert old_messages_mtime == getmtime(messages_file)
+        po = open(po_file).read()
+        assert 'SecureDrop Source Interfaces' in po
+        assert 'SecureDrop Journalist Interfaces' not in po
+        i18n = open(i18n_file).read()
+        assert 'SOURCE FR' in i18n
+
+    def test_translate_messages_l10n(self):
         source = [
             join(self.dir, 'i18n/code.py'),
             join(self.dir, 'i18n/template.html'),

@@ -38,6 +38,7 @@ include tests/i18n/
 include tests/i18n/*.py
 include tests/i18n/*.html
 include tests/i18n/*.cfg
+include tests/i18n/*.in
 include tests/log/
 include tests/utils/
 include tests/utils/**.py
