@@ -268,7 +268,7 @@ def clean_tmp(args):  # pragma: no cover
     return 0
 
 
-def translate(args):
+def translate_messages(args):
     messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
     if args.extract_update:
@@ -358,29 +358,23 @@ def get_args():
     clean_tmp_subp_a = subps.add_parser('clean_tmp', help='^')
     clean_tmp_subp_a.set_defaults(func=clean_tmp)
 
-    set_translate_parser(subps)
+    set_translate_messages_parser(subps)
 
     return parser
 
 
-def set_translate_parser(subps):
-    parser = subps.add_parser('translate',
-                              help='Update and compile translations')
-    translations_dir = 'translations'
+def set_translate_parser(subps,
+                         parser,
+                         translations_dir,
+                         sources):
     parser.add_argument(
         '--extract-update',
         action='store_true',
-        help='run pybabel extract and pybabel update')
+        help='extract strings to translate and update existing translations')
     parser.add_argument(
         '--compile',
         action='store_true',
-        help='run pybabel compile')
-    mapping = 'babel.cfg'
-    parser.add_argument(
-        '--mapping',
-        default=mapping,
-        help='Mapping of files to consider (default {})'.format(
-            mapping))
+        help='compile translations')
     parser.add_argument(
         '--translations-dir',
         default=translations_dir,
@@ -391,14 +385,28 @@ def set_translate_parser(subps):
         default=version.__version__,
         help='SecureDrop version to store in pot files (default {})'.format(
             version.__version__))
-    sources = ['.', 'source_templates', 'journalist_templates']
     parser.add_argument(
         '--source',
         default=sources,
         action='append',
-        help='Source file or directory to extract (default {})'.format(
+        help='Source files and directories to extract (default {})'.format(
             sources))
-    parser.set_defaults(func=translate)
+
+
+def set_translate_messages_parser(subps):
+    parser = subps.add_parser('translate-messages',
+                              help=('Update and compile '
+                                    'source and template translations'))
+    translations_dir = join(dirname(realpath(__file__)), 'translations')
+    sources = ['.', 'source_templates', 'journalist_templates']
+    set_translate_parser(subps, parser, translations_dir, sources)
+    mapping = 'babel.cfg'
+    parser.add_argument(
+        '--mapping',
+        default=mapping,
+        help='Mapping of files to consider (default {})'.format(
+            mapping))
+    parser.set_defaults(func=translate_messages)
 
 
 def setup_verbosity(args):
