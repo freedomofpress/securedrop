@@ -30,6 +30,9 @@
   when: item.startswith(tails_config_amnesia_home)
   with_items: "{{ tails_config_desktop_icon_directories }}"
 
+- name: Add translations to SecureDrop interface desktop icons.
+  shell: "../securedrop/manage.py --verbose translate-desktop --compile"
+
 # Storing as host fact so we can loop over the data in one task.
 - name: Assemble desktop icon info.
   set_fact:
