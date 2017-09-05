@@ -22,3 +22,5 @@
 - include: setup_cron.yml
 
 - include: configure_haveged.yml
+
+- include: install_gettext.yml
