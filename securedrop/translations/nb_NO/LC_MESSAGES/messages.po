@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-02 20:20+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2017-09-05 06:19+0000\n"
+"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -764,7 +764,7 @@ msgstr "Sikkerhet for journalister og kilder"
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:82
 msgid "Powered by"
-msgstr "Drevet av:"
+msgstr "Drevet av"
 
 #: source_templates/base.html:33
 msgid "EXIT"
