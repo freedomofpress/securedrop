@@ -1,3 +1,5 @@
+.. _ossec_guide:
+
 OSSEC Guide
 ===========
 
