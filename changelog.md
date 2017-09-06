@@ -1,5 +1,69 @@
 # Changelog
 
+## 0.4.3-rc1
+
+The issues for this release were tracked in the 0.4.3 milestone on Github:
+https://github.com/freedomofpress/securedrop/milestones/0.4.3.
+
+### Web Applications
+
+* Automatically generate diceware passphrases for SecureDrop journalists and administrators (#980).
+* Add minimum length check for journalist usernames (#1682).
+* Resolve inconsistently named source IDs (#1998).
+* Fix transient test errors (#2122, #2214, #2205).
+* Progress towards internationalizing SecureDrop: Add utilities for extracting strings for translation and for compiling translations (#2120), add DEFAULT_LOCATE to config.py (#2197).
+* Make source interface index responsive (#2235).
+* Remove safe filter from jinja templates (#2227).
+
+### Operations
+
+* Retry SMTP relay and SASL domain verification tasks in validate role (#2099).
+* Disable Postfix in the staging environment (#1164).
+* Refactor Debian package build logic (#2160).
+* Reboot staging servers on first provision (#1704).
+* Bugfix: Whitelist fontawesome-webfont.svg in AppArmor (#2075).
+
+### Tails Environment
+
+* Bugfix: Use .xsessionrc in SVS to prevent unpacking of office files (#2188).
+
+### Monitoring
+
+* Remove OSSEC alert for Tor Guard overloaded log event (#1670).
+* Remove OSSEC alert when journalists bulk delete submissions (#1691).
+* Remove OSSEC alert for OSSEC keepalive event (#2138).
+* Add "Ansible playbook run on server" OSSEC rule (#2224).
+* Update locations of logs on app server for OSSEC syscheck (#2153).
+* Adds regression testing for OSSEC false positives (#2137).
+
+### Developer Workflow
+
+* Adds flake8 linting (#886).
+* Add code style guide for contributors (#47).
+* Produce screenshots before and after Selenium tests for debugging (#2086).
+* Add HTML linting (#2081).
+* Add Makefile targets for linters (#1920).
+* Adds "page layout" automated tests that take screenshots of the source and journalist interface in each language (#2141).
+* Expose documentation on port 8000 on development machine (#2170).
+* Make Makefile self-documenting (#2169).
+* Add pre-commit hook for developers (#2234).
+* CI: Do not run staging CI if only documentation has changed (#2132).
+* CI: Use new Trusty image for Travis CI (#1876).
+
+### Documentation
+
+* Adds guide and glossary for translators (#2039, #2162).
+* Adds i18n guide for developers (#2118).
+* Adds note in Tails upgrade documentation about missing "Root Terminal" launcher in workstation backup procedure (#2065).
+* Update AppArmor developer documentation (#2077).
+* Adds pre-installation checklist (#2139).
+* Specify NTP server to use in install documentation (#2094).
+* Adds new tested printer for use in SecureDrop airgap (#2117).
+* Add documentation for multiple administrators managing config (#2096).
+* Update KeePassX (#2158).
+* Add documentation for using gksu nautilus in lieu of "Root Terminal" in Tails 3 backup process (#2069).
+* Update hardware requirements (#2207).
+
 ## 0.4.2
 
 * Explicitly enables DAC override capability in Apache AppArmor profile (#2105)
