@@ -601,8 +601,8 @@ def reply():
     generic error message is flashed on the client.
 
     Returns:
-       flask.Response: The user is redirected to the same source
-           collection view, regardless if the reply is created
+       flask.Response: The user is redirected to the same Source
+           collection view, regardless if the Reply is created
            successfully.
     """
     msg = request.form['msg']
