@@ -1,12 +1,12 @@
 #!/bin/bash
 ## Usage: ./update_version.sh <version>
 
-# Only run this on the Vagrant build VM, with dch and git available
+# Only run this on the Vagrant development VM, with dch and git available
 set -e
 
-# Only run this on the Vagrant build VM, with dch and git available
-if [[ "$USER" != 'vagrant' || "$(hostname)" != 'build' ]]; then
-  echo 'Only run this on the Vagrant build VM!'
+# Only run this on the Vagrant development VM, with dch and git available
+if [[ "$USER" != 'vagrant' || "$(hostname)" != 'development' ]]; then
+  echo 'Only run this on the Vagrant development VM!'
   exit 1
 fi
 
