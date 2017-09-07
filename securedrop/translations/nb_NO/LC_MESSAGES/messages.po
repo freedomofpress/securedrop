@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-05 06:19+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-09-07 09:49+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -59,7 +59,7 @@ msgstr ""
 
 #: journalist.py:230
 msgid "Two-factor token successfully verified for user {user}!"
-msgstr "Vellykket kontroll av tofaktor-kode for brukeren {user}!"
+msgstr "Tofaktor-kode for brukeren {user} gjennomgikk kontroll."
 
 #: journalist.py:237 journalist.py:453
 msgid "Two-factor token failed to verify"
@@ -85,7 +85,7 @@ msgstr ""
 
 #: journalist.py:306
 msgid "Account successfully updated!"
-msgstr "Vellykket oppdatering av konto!"
+msgstr "Konto oppdatert."
 
 #: journalist.py:328
 msgid "Username \"{user}\" is already taken!"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: journalist.py:449
 msgid "Two-factor token successfully verified!"
-msgstr "Vellykket kontroll av tofaktor-kode!"
+msgstr "Tofaktor-kode gjenomgikk kontroll."
 
 #: journalist.py:569
 msgid "No collections selected!"
@@ -561,7 +561,7 @@ msgstr "PERMANENT SLETTING AV FILER"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
-msgstr "Tilbake til listen over filer for  {source_journalist_designation}…"
+msgstr "Tilbake til listen over filer for {source_journalist_designation}…"
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user"
@@ -858,7 +858,7 @@ msgstr ""
 
 #: source_templates/index.html:17
 msgid "Learn how to set it to high"
-msgstr "Ler hvordan du setter nivået til Høyt"
+msgstr "Lær hvordan du setter nivået til Høyt"
 
 #: source_templates/index.html:17 source_templates/index.html:18
 msgid ", or ignore this warning to continue."
@@ -1029,9 +1029,9 @@ msgid ""
 "can respond by submitting a new message above."
 msgstr ""
 "Du har mottatt et svar. For å beskytte din egen identitet i tilfelle noen "
-"skulle få tak i kodenavnet ditt, vennligst slett alle svar når du har lest "
-"dem. Dette gjør også at vi enklere kan se at du har lest svarene. Du kan "
-"fortsette kommunikasjonen ved å sende inn ei ny melding over."
+"skulle få tak i kodenavnet ditt, slett alle svar når du har lest dem. Dette "
+"gjør også at vi enklere kan se at du har lest svarene. Du kan fortsette "
+"kommunikasjonen ved å sende inn ei ny melding over."
 
 #: source_templates/lookup.html:70
 msgid "Delete this reply?"
@@ -1198,7 +1198,7 @@ msgid ""
 "If you are using Mac/Linux, open the Terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
-"Om du bruker Mac/Linux, åpne Terminal. Du kan importere nøkkelen med "
+"Om du bruker Mac/Linux, åpne terminalen. Du kan importere nøkkelen med "
 "følgende kommando <code>gpg --import "
 "/plassering/på/disken/for/key.asc</code>."
 
@@ -1213,10 +1213,10 @@ msgid ""
 "(with .asc at the end), you can just copy and paste that. (don't include "
 "the <code>.asc</code>!)"
 msgstr ""
-"Du må identifisere nøkkelens ID (dette kalles \"user ID\" eller uid). "
-"Siden filnavnet for den offentlige nøkkelen er det samme som nøkkelens "
-"fingerprint (med .asc som endelse), kan du bare kopiere og lime inn det. "
-"(ikke ta med <code>.asc</code>!)"
+"Du må identifisere nøkkelens ID (dette kalles \"user ID\" eller UID). Siden "
+"filnavnet for den offentlige nøkkelen er det samme som nøkkelens fingerprint "
+"(med .asc som endelse), kan du bare kopiere og lime inn det. (ikke ta med "
+"<code>.asc</code>!)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
