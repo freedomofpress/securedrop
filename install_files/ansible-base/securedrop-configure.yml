@@ -156,11 +156,11 @@
         - var_name: securedrop_app_gpg_public_key
           var_value: "{{ securedrop_app_gpg_public_key }}"
         - var_name: securedrop_app_gpg_fingerprint
-          var_value: "{{ securedrop_app_gpg_fingerprint }}"
+          var_value: "{{ securedrop_app_gpg_fingerprint|replace(" ","") }}"
         - var_name: ossec_alert_gpg_public_key
           var_value: "{{ ossec_alert_gpg_public_key }}"
         - var_name: ossec_gpg_fpr
-          var_value: "{{ ossec_gpg_fpr }}"
+          var_value: "{{ ossec_gpg_fpr|replace(" ","") }}"
         - var_name: ossec_alert_email
           var_value: "{{ ossec_alert_email }}"
         - var_name: smtp_relay
