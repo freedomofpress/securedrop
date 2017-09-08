@@ -37,6 +37,10 @@ install:
       ansible-playbook -i inventory -vv --connection=local
       install_files/ansible-base/securedrop-development.yml
 script:
+  # For some reason, redis-server does not start automatically when installed
+  # on Travis. I believe Travis' service machinery may be interfering. See
+  # http://docs.travis-ci.com/user/database-setup/#Redis
+  - sudo service redis-server start
   # The `cd securedrop` is necessary for coverage support. Swap in the line
   # below once #2246 is resolved.
   # - DISPLAY=:1 pytest -v securedrop/tests --page-layout
