@@ -5,7 +5,6 @@ import config
 import zipfile
 import crypto_util
 import tempfile
-import subprocess
 import gzip
 from werkzeug import secure_filename
 
@@ -156,18 +155,3 @@ def rename_submission(filesystem_id, orig_filename, journalist_filename):
             else:
                 return new_filename  # Only return new filename if successful
     return orig_filename
-
-
-def secure_unlink(fn, recursive=False):
-    verify(fn)
-    command = ['srm']
-    if recursive:
-        command.append('-r')
-    command.append(fn)
-    subprocess.check_call(command)
-    return "success"
-
-
-def delete_source_directory(filesystem_id):
-    secure_unlink(path(filesystem_id), recursive=True)
-    return "success"

@@ -144,6 +144,8 @@
   /var/www/securedrop/journalist_templates/login.html r,
   /var/www/securedrop/request_that_secures_file_uploads.py r,
   /var/www/securedrop/request_that_secures_file_uploads.pyc rw,
+  /var/www/securedrop/rm.py r,
+  /var/www/securedrop/rm.pyc rw,
   /var/www/securedrop/secure_tempfile.py r,
   /var/www/securedrop/secure_tempfile.pyc rw,
   /var/www/securedrop/source.py r,
