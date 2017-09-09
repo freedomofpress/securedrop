@@ -18,6 +18,7 @@ import config
 import json
 import version
 import crypto_util
+from rm import srm
 import store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
@@ -340,7 +341,7 @@ def delete():
     query = Reply.query.filter(
         Reply.filename == request.form['reply_filename'])
     reply = get_one_or_else(query, app.logger, abort)
-    store.secure_unlink(store.path(g.filesystem_id, reply.filename))
+    srm(store.path(g.filesystem_id, reply.filename))
     db_session.delete(reply)
     db_session.commit()
 
@@ -356,7 +357,7 @@ def batch_delete():
         app.logger.error("Found no replies when at least one was expected")
         return redirect(url_for('lookup'))
     for reply in replies:
-        store.secure_unlink(store.path(g.filesystem_id, reply.filename))
+        srm(store.path(g.filesystem_id, reply.filename))
         db_session.delete(reply)
     db_session.commit()
 

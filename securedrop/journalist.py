@@ -15,6 +15,7 @@ from sqlalchemy.sql.expression import false
 import config
 import version
 import crypto_util
+from rm import srm
 import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
@@ -526,7 +527,7 @@ def col(filesystem_id):
 
 def delete_collection(filesystem_id):
     # Delete the source's collection of submissions
-    job = worker.enqueue(store.delete_source_directory, filesystem_id)
+    job = worker.enqueue(srm, store.path(filesystem_id))
 
     # Delete the source's reply keypair
     crypto_util.delete_reply_keypair(filesystem_id)
@@ -767,7 +768,7 @@ def confirm_bulk_delete(filesystem_id, items_selected):
 def bulk_delete(filesystem_id, items_selected):
     for item in items_selected:
         item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(store.secure_unlink, item_path)
+        worker.enqueue(srm, item_path)
         db_session.delete(item)
     db_session.commit()
 
