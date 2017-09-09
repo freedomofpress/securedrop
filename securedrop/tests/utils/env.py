@@ -70,9 +70,5 @@ def teardown():
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:
-        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
         if 'No such file or directory' not in exc:
             raise
-    except:
-        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
-        raise
