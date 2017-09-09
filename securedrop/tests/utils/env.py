@@ -69,6 +69,9 @@ def teardown():
     db_session.remove()
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
+        import time
+        time.sleep(0.1)
+        assert not os.path.exists(config.SECUREDROP_DATA_ROOT)  # safeguard for #844
     except OSError as exc:
         if 'No such file or directory' not in exc:
             raise
