@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-03 07:25+0000\n"
+"PO-Revision-Date: 2017-09-11 06:30+0000\n"
 "Last-Translator: Loic Dachary <loic@dachary.org>\n"
 "Language-Team: Chinese (Traditional) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
@@ -76,48 +76,48 @@ msgstr "发生了没有预料到的错误！请检查应用日志，或者通知
 
 #: journalist.py:306
 msgid "Account successfully updated!"
-msgstr ""
+msgstr "账户创建成功！"
 
 #: journalist.py:328
 msgid "Username \"{user}\" is already taken!"
-msgstr ""
+msgstr "用户名“{user}”已经存在了！"
 
 #: journalist.py:365
 msgid "Deleted user '{user}'"
-msgstr ""
+msgstr "删除了用户'{user}'"
 
 #: journalist.py:420
 msgid "You submitted a bad password! Password not changed."
-msgstr ""
+msgstr "你提交的口令不好！口令没有更改。"
 
 #: journalist.py:427
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
 "should reset your password again."
-msgstr ""
+msgstr "有错误，新口令可能没有正确地保存。为了防止你的账户被锁定，请再次重置你的口令。"
 
 #: journalist.py:436
 msgid ""
 "The password was successfully updated! Don't forget to save it in your "
 "KeePassX database. The new password is:"
-msgstr ""
+msgstr "口令已经成功地更新了！ 不要忘记把它保存在你的 KeePassX 数据库中，新的口令是："
 
 #: journalist.py:449
 msgid "Two-factor token successfully verified!"
-msgstr ""
+msgstr "两因子的记号成功地验证了！"
 
 #: journalist.py:569
 msgid "No collections selected!"
-msgstr ""
+msgstr "没有选择集合！"
 
 #: journalist.py:593
 msgid "No unread submissions in collections selected!"
-msgstr ""
+msgstr "在集合中没有未读的提交被选择！"
 
 #: journalist.py:632
 msgid "{source_journalist_designation}'s collection deleted"
-msgstr ""
+msgstr "{source_journal_designation}的集合已删除"
 
 #: journalist.py:641 journalist.py:771
 msgid "No collections selected to delete!"
@@ -126,11 +126,11 @@ msgstr "未選擇要刪除的資料夾！"
 #: journalist.py:646
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
-msgstr[0] ""
+msgstr[0] "{num}集合已删除"
 
 #: journalist.py:690
 msgid "You cannot send an empty reply!"
-msgstr ""
+msgstr "你不能发送一个空的回复！"
 
 #: journalist.py:717
 msgid "Thanks! Your reply has been stored."
@@ -138,11 +138,11 @@ msgstr "感謝您！我們已儲存您的回覆。"
 
 #: journalist.py:736
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
-msgstr ""
+msgstr "源{original_source}已经被重命名为{new_source}"
 
 #: journalist.py:753
 msgid "No unread submissions for this source!"
-msgstr ""
+msgstr "此源里没有未读的提交！"
 
 #: journalist.py:769
 msgid "No collections selected to download!"
