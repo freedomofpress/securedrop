@@ -145,35 +145,6 @@ The next page will ask for your secret codename. Enter it and click
 
 |Check for response|
 
-.. attention::
-
-   At the time of this writing, the current version of Tor Browser (7.0.2)
-   shows a warning on the **Enter your codename** password input field when you
-   focus it that says "This connection is not secure. Logins entered here could
-   be compromised." It looks like this:
-
-   |Insecure login warning|
-
-   This warning seems alarming, *but there is actually no cause for concern*.
-   The warning is the result of a relatively new Mozilla Firefox feature that
-   is intended to protect users from submitting potentially sensitive
-   information on web sites that do not use HTTPS to encrypt the connection
-   between the user and the site. While some SecureDrop sites use HTTPS, most
-   do not; however, this is acceptable because SecureDrop uses Tor Hidden
-   Services, which encrypt the connection without having to use HTTPS.
-   
-   Unfortunately, this new Firefox feature is unaware of the special properties
-   of hidden services, and so it mistakenly shows these warnings on any hidden
-   service that isn't also using HTTPS. This issue is being addressed upstream
-   by the Tor Browser developers, and we hope it will be resolved in a new
-   version of Tor Browser soon. In the meantime, you can safely ignore these
-   warnings and continue to use SecureDrop. 
-   
-   For the latest on this issue, and how it affects SecureDrop users, see the
-   `GitHub issue`_.
-
-.. _GitHub issue: https://github.com/freedomofpress/securedrop/issues/1882
-
 If a journalist has responded, their message will appear on the
 next page. This page also allows you to upload another document or send
 another message to the journalist. Before leaving the page, you should
@@ -211,7 +182,6 @@ Repeat these steps to continue communicating with the journalist.
 .. |Logout| image:: images/manual/logout-notification.png
 .. |Restart TBB| image:: images/manual/restart-tor-browser.png
 .. |Check for response| image:: images/manual/source-step8.png
-.. |Insecure login warning| image:: images/manual/insecure-login-warning-source-interface.png
 .. |Check for a reply| image:: images/manual/source-step9.png
 .. |Delete received messages| image:: images/manual/source-step10.png
 .. |Check for an initial response| image:: images/manual/source_flagged_for_reply.png
