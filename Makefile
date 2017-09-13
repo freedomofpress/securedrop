@@ -70,7 +70,7 @@ shellcheck: ## Lints Bash and sh scripts.
 		-o -path "$(PWD)/install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
-		| xargs shellcheck -x
+		| xargs shellcheck -x --exclude=SC2001,SC2064,SC2181
 
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
