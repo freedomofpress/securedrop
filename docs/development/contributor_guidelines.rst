@@ -52,8 +52,6 @@ root of the repository:
 
      pip install -r securedrop/requirements/develop-requirements.txt
 
-
-
 Python
 ~~~~~~
 
@@ -76,6 +74,19 @@ our HTML templates in ``securedrop/source_templates`` and
   .. code:: sh
 
       make html-lint
+
+YAML
+~~~~
+
+The Ansible configuration is specified in YAML files, including variables,
+tasks, and playbooks. All YAML files in the project should pass the
+`yamllint <https://github.com/adrienverge/yamllint>`__ standards declared
+in the ``.yamllint`` file at the root of the repository.
+Run the checks locally via:
+
+  .. code:: sh
+
+      make yamllint
 
 Git History
 -----------
