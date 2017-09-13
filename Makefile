@@ -57,7 +57,7 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
 # and is not subject to our linting.
 	find "$(PWD)" -path "$(PWD)/.venv" -prune \
-		-o -type f -iname '*.yml' \
+		-o -type f -regextype posix-extended -iregex '^.*\.ya?ml$$' \
 		-exec yamllint -c "$(PWD)/.yamllint" {} +
 
 .PHONY: lint
