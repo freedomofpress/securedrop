@@ -469,16 +469,21 @@ Configuration Reference Templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As an alternative to the provided screenshots, you can examine the provided
-``.xml`` templates as a reference:
+``.xml`` templates as a reference. However, because of the Tails chroot,
+you can not download the ``.xml`` files directly. Using the Unsecure Browser,
+download the files from `GitHub <https://github.com/freedomofpress/securedrop/tree/develop/install_files/network_firewall/>`__
+as "Raw" and save them as plaintext documents.
 
-- Interfaces config: ``install_files/network_firewall/interfaces-config-pfSense.xml``
-- Aliases: ``install_files/network_firewall/aliases-config-pfSense.xml``
-- Firewall rules: ``install_files/network_firewall/filter-config-pfSense.xml``
+- Interfaces config: ``interfaces-config-pfSense.xml``
+- Aliases: ``aliases-config-pfSense.xml``
+- Firewall rules: ``filter-config-pfSense.xml``
 
-.. note:: These will not load using pfSense Restore and are here as a reference
-          only. See `GitHub #2282`_ for more info.
+Once the files are saved, you can import them by navigating to Diagnostics >
+Backup/Restore and selecting them from the ``clearnet`` user's Download directory.
+Ensure you have selected the appropriate Restore Area. After all three
+files are restored, reboot the firewall. Confirm you still have access to
+Tor using the Tor Browser after the firewall has restarted.
 
-.. _`GitHub #2282`: https://github.com/freedomofpress/securedrop/pull/2282
 
 Tips for setting up pfSense Firewall Rules
 ------------------------------------------
