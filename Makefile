@@ -55,10 +55,10 @@ html-lint: ## Validates HTML in web application template files.
 .PHONY: yamllint
 yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
-# and is not subject to our linting.
-	find "$(PWD)" -path "$(PWD)/.venv" -prune \
-		-o -type f -regextype posix-extended -iregex '^.*\.ya?ml$$' \
-		-exec yamllint -c "$(PWD)/.yamllint" {} +
+# and is not subject to our linting. Using grep to filter filepaths since
+# `-regextype=posix-extended` is not cross-platform.
+	@find "$(PWD)" -path "$(PWD)/.venv" -prune -o -type f \
+		| grep -E '^.*\.ya?ml' | xargs yamllint -c "$(PWD)/.yamllint"
 
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
