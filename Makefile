@@ -63,8 +63,12 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 .PHONY: shellcheck
 shellcheck: ## Lints Bash and sh scripts.
 # Omitting the `.git/` directory since its hooks won't pass validation, and we
-# don't maintain those scripts.
-	find "$(PWD)" -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
+# don't maintain those scripts. Omitting the `.venv/` dir because we don't control
+# files in there. Omitting the ossec packages because there are a LOT of violations,
+# and we have a separate issue dedicated to cleaning those up.
+	@find "$(PWD)" \( -path "$(PWD)/.venv" -o -path "$(PWD)/install_files/ossec-server" \
+		-o -path "$(PWD)/install_files/ossec-agent" \) -prune \
+		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
 		| xargs shellcheck -x
 
