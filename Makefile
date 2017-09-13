@@ -57,7 +57,8 @@ yamllint: ## Lints YAML files (does not validate syntax!)
 # Prune the `.venv/` dir if it exists, since it contains pip-installed files
 # and is not subject to our linting.
 	find "$(PWD)" -path "$(PWD)/.venv" -prune \
-		-o -type f -iname '*.yml' -exec yamllint -d relaxed {} +
+		-o -type f -iname '*.yml' \
+		-exec yamllint -c "$(PWD)/.yamllint" {} +
 
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
