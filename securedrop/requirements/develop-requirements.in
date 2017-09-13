@@ -1,10 +1,11 @@
 ansible==2.3.2.0
 boto
-html-linter
 flake8
+html-linter
 pip-tools
 pytest-xdist
-testinfra
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme
+testinfra
+yamllint
