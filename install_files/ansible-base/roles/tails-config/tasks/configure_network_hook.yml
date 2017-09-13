@@ -19,4 +19,3 @@
     - "{{ tails_config_live_persistence }}/custom-nm-hooks"
     - "{{ tails_config_network_manager_dispatcher }}"
   notify: run securedrop network hook
-
