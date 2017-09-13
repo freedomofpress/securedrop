@@ -41,7 +41,7 @@
   .content
     position: relative
     margin: 15px auto
-    width: 980px
+    max-width: 980px
 
   a
     color: $color_purple_medium
@@ -51,6 +51,11 @@
 
       &:hover
         color: $color_purple_medium
+
+  .codename, .password
+    font-family: monospace
+    letter-spacing: 0.15em
+    font-weight: normal
 
   .document-actions
     margin-bottom: 20px
@@ -397,10 +402,10 @@
   em.light
     color: gray
 
-  div#qrcode_container
+  div#qrcode-container
     text-align: center
 
-  span#shared_secret
+  span#shared-secret
     background-color: #FFFD9E
     color: #555
     padding: 4px

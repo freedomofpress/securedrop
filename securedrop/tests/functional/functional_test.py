@@ -1,33 +1,45 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+import errno
 import mock
 from multiprocessing import Process
 import os
 from os.path import abspath, dirname, join, realpath
-import shutil
 import signal
 import socket
-import sys
 import time
 import traceback
-import unittest
-import urllib2
+import requests
 
 from Crypto import Random
-import gnupg
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (WebDriverException,
+                                        NoAlertPresentException)
 from selenium.webdriver.firefox import firefox_binary
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
-os.environ['SECUREDROP_ENV'] = 'test'
-import config
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import db
 import journalist
 import source
 import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
+
+
+# https://stackoverflow.com/a/34795883/837471
+class alert_is_not_present(object):
+    """ Expect an alert to not be present."""
+    def __call__(self, driver):
+        try:
+            alert = driver.switch_to.alert
+            alert.text
+            return False
+        except NoAlertPresentException:
+            return True
+
 
 class FunctionalTest():
 
@@ -38,20 +50,40 @@ class FunctionalTest():
         s.close()
         return port
 
-    def _create_webdriver(self):
+    def _create_webdriver(self, firefox, profile=None):
+        # see https://review.openstack.org/#/c/375258/ and the
+        # associated issues for background on why this is necessary
+        connrefused_retry_count = 3
+        connrefused_retry_interval = 5
+
+        for i in range(connrefused_retry_count + 1):
+            try:
+                driver = webdriver.Firefox(firefox_binary=firefox,
+                                           firefox_profile=profile)
+                if i > 0:
+                    # i==0 is normal behavior without connection refused.
+                    print('NOTE: Retried {} time(s) due to '
+                          'connection refused.'.format(i))
+                return driver
+            except socket.error as socket_error:
+                if (socket_error.errno == errno.ECONNREFUSED
+                        and i < connrefused_retry_count):
+                    time.sleep(connrefused_retry_interval)
+                    continue
+                raise
+
+    def _prepare_webdriver(self):
         log_file = open(join(LOG_DIR, 'firefox.log'), 'a')
         log_file.write(
             '\n\n[%s] Running Functional Tests\n' % str(
                 datetime.now()))
         log_file.flush()
-        firefox = firefox_binary.FirefoxBinary(log_file=log_file)
-        return webdriver.Firefox(firefox_binary=firefox)
+        return firefox_binary.FirefoxBinary(log_file=log_file)
 
-    def setUp(self):
+    def setup(self):
         # Patch the two-factor verification to avoid intermittent errors
-        patcher = mock.patch('journalist.Journalist.verify_token')
-        self.addCleanup(patcher.stop)
-        self.mock_journalist_verify_token = patcher.start()
+        self.patcher = mock.patch('journalist.Journalist.verify_token')
+        self.mock_journalist_verify_token = self.patcher.start()
         self.mock_journalist_verify_token.return_value = True
 
         signal.signal(signal.SIGUSR1, lambda _, s: traceback.print_stack(s))
@@ -94,23 +126,45 @@ class FunctionalTest():
         self.source_process.start()
         self.journalist_process.start()
 
-        self.driver = self._create_webdriver()
+        for tick in range(30):
+            try:
+                requests.get(self.source_location)
+                requests.get(self.journalist_location)
+            except:
+                time.sleep(1)
+            else:
+                break
+
+        if not hasattr(self, 'override_driver'):
+            self.driver = self._create_webdriver(self._prepare_webdriver())
+
+        # Polls the DOM to wait for elements. To read more about why
+        # this is necessary:
+        #
+        # http://www.obeythetestinggoat.com/how-to-get-selenium-to-wait-for-page-load-after-a-click.html
+        #
+        # A value of 5 is known to not be enough in some cases, when
+        # the machine hosting the tests is slow, reason why it was
+        # raised to 10. Setting the value to 60 or more would surely
+        # cover even the slowest of machine. However it also means
+        # that a test failing to find the desired element in the DOM
+        # will only report failure after 60 seconds which is painful
+        # for quickly debuging.
+        #
+        self.driver.implicitly_wait(10)
 
         # Set window size and position explicitly to avoid potential bugs due
         # to discrepancies between environments.
-        self.driver.set_window_position(0, 0);
-        self.driver.set_window_size(1024, 768);
-
-        # Poll the DOM briefly to wait for elements. It appears .click() does
-        # not always do a good job waiting for the page to load, or perhaps
-        # Firefox takes too long to render it (#399)
-        self.driver.implicitly_wait(5)
+        self.driver.set_window_position(0, 0)
+        self.driver.set_window_size(1024, 768)
 
         self.secret_message = 'blah blah blah'
 
-    def tearDown(self):
+    def teardown(self):
+        self.patcher.stop()
         env.teardown()
-        self.driver.quit()
+        if not hasattr(self, 'override_driver'):
+            self.driver.quit()
         self.source_process.terminate()
         self.journalist_process.terminate()
 
@@ -126,3 +180,20 @@ class FunctionalTest():
                 time.sleep(0.1)
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
+
+    def _alert_wait(self):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.alert_is_present(),
+            'Timed out waiting for confirmation popup.')
+
+    def _alert_accept(self):
+        self.driver.switch_to.alert.accept()
+        WebDriverWait(self.driver, 10).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')
+
+    def _alert_dismiss(self):
+        self.driver.switch_to.alert.dismiss()
+        WebDriverWait(self.driver, 10).until(
+            alert_is_not_present(),
+            'Timed out waiting for confirmation popup to disappear.')

@@ -1,21 +1,15 @@
-import unittest
 import source_navigation_steps
 import journalist_navigation_steps
 import functional_test
+from step_helpers import screenshots
 
 
-class SubmitAndRetrieveFile(
-        unittest.TestCase,
+class TestSubmitAndRetrieveFile(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps,
         journalist_navigation_steps.JournalistNavigationSteps):
 
-    def setUp(self):
-        functional_test.FunctionalTest.setUp(self)
-
-    def tearDown(self):
-        functional_test.FunctionalTest.tearDown(self)
-
+    @screenshots
     def test_submit_and_retrieve_happy_path(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -33,11 +27,13 @@ class SubmitAndRetrieveFile(
         self._source_proceeds_to_login()
         self._source_deletes_a_journalist_reply()
 
+    @screenshots
     def test_source_cancels_at_login_page(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_login()
         self._source_hits_cancel_at_login_page()
 
+    @screenshots
     def test_source_cancels_at_submit_page(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

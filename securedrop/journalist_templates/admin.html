@@ -6,11 +6,11 @@
   <button class="sd-button" type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i> ADD USER</button>
 </form>
 
-<hr class="no-line" />
+<hr class="no-line">
 
 {% if users %}
-<form id="user_actions" method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<form id="user-actions" method="post">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <table id="users">
     <tr>
       <th>Username</th>

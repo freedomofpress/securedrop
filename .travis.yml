@@ -3,34 +3,27 @@
 # Relevant docs: https://docs.travis-ci.com/user/trusty-ci-environment/
 sudo: required
 dist: trusty
-# Use old Trusty images, since new ones are failing Selenium tests.
-# Must be updated by 2017-09-01. More info:
-# https://blog.travis-ci.com/2017-06-21-trusty-updates-2017-Q2-launch
-group: deprecated-2017Q2
+# Pin older version of Firefox, for Selenium compatibility. Must match version
+# specified in app-test role vars!
+addons:
+  firefox: 46.0.1
 
-language: python
-python:
-  - '2.7'
+# Setting language=generic to prevent Travis from setting up a virtualenv.
+# Using a virtualenv conflicts with the global pip installation currently
+# used for configuring SecureDrop, both in development and staging.
+language: generic
 
-virtualenv:
-  system_site_packages: true
 before_install:
   - 'for e in /.packer-env/*; do echo -n "${e}: "; cat "${e}"; done'
+  # Removes Travis-specific PATH customizations that affect Python.
+  - export PATH="$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")"
   - printenv | sort # dump Travis environment for debugging
-  - sudo apt-get update -qq
-  - sudo apt-get install --yes rng-tools
-  - sudo rm -f /dev/random
-  - sudo mknod -m 0666 /dev/random c 1 9
-  - echo HRNGDEVICE=/dev/urandom | sudo tee /etc/default/rng-tools
-  - sudo /etc/init.d/rng-tools restart
+  - pip freeze -l
 install:
-  - pip freeze -l
-  # Preinstalled travis pytest is not tracked by us
-  # Preinstalled travis pbr is not tracked by us
-  - pip uninstall pytest pbr -y
-  - pip install -r testinfra/requirements.txt
-  - pip freeze -l
-script:
+  # Installing Python dependencies globally, to match SecureDrop deployment.
+  - sudo -H pip install -r securedrop/requirements/develop-requirements.txt
+  # Run linting early, to fail fast.
+  - make --keep-going lint
   # Using YAML folding operator '>' to aid in readability and avoid
   # extremely long lines.
   - >
@@ -43,21 +36,16 @@ script:
   - >
       ansible-playbook -i inventory -vv --connection=local
       install_files/ansible-base/securedrop-development.yml
-
+script:
   # For some reason, redis-server does not start automatically when installed
   # on Travis. I believe Travis' service machinery may be interfering. See
   # http://docs.travis-ci.com/user/database-setup/#Redis
   - sudo service redis-server start
-  # Travis needs the config.py file to be owned by root. In other environments
-  # it's the `securedrop_user` var.
-  - sudo chown root:root securedrop/config.py
-  - sudo sh -c "export DISPLAY=:1; cd securedrop/ && pytest -v tests/"
-  - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
+  # The `cd securedrop` is necessary for coverage support. Swap in the line
+  # below once #2246 is resolved.
+  # - DISPLAY=:1 pytest -v securedrop/tests --page-layout
+  - sh -c "export DISPLAY=:1 ; cd securedrop && pytest -v tests --page-layout"
   - pip freeze -l
-  # Docs linting. Performing this step *after* build VM tests pass, so as not
-  # to alter the pip requirements, which would cause config tests to fail.
-  - pip install -r securedrop/requirements/develop-requirements.txt
-  - make docs-lint
-  - pushd securedrop; flake8 db.py crypto_util.py manage.py store.py secure_tempfile.py source.py template_filters.py tests/test_2fa.py tests/conftest.py tests/test_db.py tests/test_manage.py tests/test_crypto_util.py tests/test_journalist.py tests/test_integration.py && popd
+  - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
 after_success:
   cd securedrop/ && coveralls

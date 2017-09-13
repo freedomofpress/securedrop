@@ -7,14 +7,14 @@ function enhance_ui() {
   $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
 
   // Add the "select {all,none}" buttons
-  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> select unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> Select Unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
 
-  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> select all</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> select none</span>');
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
 
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
   // deleting submissions
-  $('button#delete_selected').attr('value', 'delete');
+  $('button#delete-selected').attr('value', 'delete');
 }
 
 $(function () {
@@ -46,11 +46,11 @@ $(function () {
       }
     });
 
-  $("#delete_collection").submit(function () {
+  $("#delete-collection").submit(function () {
     return confirm("Are you sure you want to delete this collection?");
   });
 
-  $("#delete_collections").click(function () {
+  $("#delete-collections").click(function () {
     var checked = $("ul#cols li :checkbox").filter(":visible").filter(function(index) {
         return $(this).prop('checked');
     });
@@ -61,12 +61,12 @@ $(function () {
     return false;
   });
 
-  $("#delete_selected").click(function () {
+  $("#delete-selected").click(function () {
       var checked = $("ul#submissions li :checkbox").filter(function() {
           return $(this).prop('checked')
       });
       if (checked.length > 0) {
-          return confirmed = confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
+          return confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
       }
       // Don't submit the form if no submissions are selected
       return false;

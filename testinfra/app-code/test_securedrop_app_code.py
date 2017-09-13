@@ -35,6 +35,18 @@ def test_securedrop_application_apt_dependencies(Package, package):
     assert Package(package).is_installed
 
 
+def test_securedrop_application_test_locale(File, Sudo):
+    """
+    Ensure SecureDrop DEFAULT_LOCALE is present.
+    """
+    securedrop_config = File("{}/config.py".format(
+        securedrop_test_vars.securedrop_code))
+    with Sudo():
+        assert securedrop_config.is_file
+        assert securedrop_config.contains("^DEFAULT_LOCALE")
+        assert securedrop_config.content.count("DEFAULT_LOCALE") == 1
+
+
 def test_securedrop_application_test_journalist_key(File, Sudo):
     """
     Ensure the SecureDrop Application GPG public key file is present.
@@ -63,11 +75,13 @@ def test_securedrop_application_test_journalist_key(File, Sudo):
             assert securedrop_config.user == "root"
             assert securedrop_config.group == "root"
         else:
-            assert securedrop_config.user == securedrop_test_vars.securedrop_user
-            assert securedrop_config.group == securedrop_test_vars.securedrop_user
+            assert securedrop_config.user == \
+                securedrop_test_vars.securedrop_user
+            assert securedrop_config.group == \
+                securedrop_test_vars.securedrop_user
         assert oct(securedrop_config.mode) == "0600"
         assert securedrop_config.contains(
-                "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
+            "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
 
 
 def test_securedrop_application_sqlite_db(File, Sudo):

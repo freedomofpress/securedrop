@@ -1,15 +1,30 @@
-import pytest
+import os
 
 
-@pytest.mark.parametrize('dependency', [
-  'firefox',
-  'xvfb',
-])
-def test_xvfb_apt_dependencies(Package, dependency):
+def test_xvfb_is_installed(Package):
     """
     Ensure apt requirements for Xvfb are present.
     """
-    assert Package(dependency).is_installed
+    assert Package("xvfb").is_installed
+
+
+def test_firefox_is_installed(Package, Command):
+    """
+    The app test suite requires a very specific version of Firefox, for
+    compatibility with Selenium. Make sure to check the explicit
+    version of Firefox, not just that any version of Firefox is installed.
+
+    In Travis, the Firefox installation is handled via the travis.yml
+    file, and so it won't show as installed via dpkg.
+    """
+    if "TRAVIS" not in os.environ:
+        p = Package("firefox")
+        assert p.is_installed
+
+    c = Command("firefox --version")
+    # Reminder: the rstrip is only necessary for local-context actions,
+    # e.g. in Travis, but it's a fine practice in all contexts.
+    assert c.stdout.rstrip() == "Mozilla Firefox 46.0.1"
 
 
 def test_xvfb_service_config(File, Sudo):
@@ -55,7 +70,7 @@ case "$1" in
 esac
 
 exit 0
-""".lstrip().rstrip()
+""".lstrip().rstrip()  # noqa
     with Sudo():
         assert f.contains('^XVFB=/usr/bin/Xvfb$')
         assert f.contains('^XVFBARGS=":1 -screen 0 1024x768x24 '
@@ -106,7 +121,7 @@ def test_xvfb_service_running(Process, Sudo):
     with Sudo():
         p = Process.get(user="root", comm="Xvfb")
         wanted_args = str('/usr/bin/Xvfb :1 -screen 0 1024x768x24 '
-                      '-ac +extension GLX +render -noreset')
+                          '-ac +extension GLX +render -noreset')
         assert p.args == wanted_args
         # We only expect a single process, no children.
         workers = Process.filter(ppid=p.pid)

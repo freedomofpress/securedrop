@@ -32,7 +32,6 @@ def test_cron_apt_config(File):
     assert f.contains('^EXITON=error$')
 
 
-
 @pytest.mark.parametrize('repo', [
   'deb http://security.ubuntu.com/ubuntu trusty-security main',
   'deb-src http://security.ubuntu.com/ubuntu trusty-security main',
@@ -54,7 +53,6 @@ def test_cron_apt_repo_list(File, repo):
     assert f.contains(repo_regex)
 
 
-
 def test_cron_apt_repo_config_update(File):
     """
     Ensure cron-apt updates repos from the security.list config.
@@ -65,8 +63,8 @@ def test_cron_apt_repo_config_update(File):
     assert f.user == "root"
     assert oct(f.mode) == "0644"
     repo_config = str('update -o quiet=2'
-                     ' -o Dir::Etc::SourceList=/etc/apt/security.list'
-                     ' -o Dir::Etc::SourceParts=""')
+                      ' -o Dir::Etc::SourceList=/etc/apt/security.list'
+                      ' -o Dir::Etc::SourceParts=""')
     assert f.contains('^{}$'.format(repo_config))
 
 
@@ -80,9 +78,9 @@ def test_cron_apt_repo_config_upgrade(File):
     assert oct(f.mode) == "0644"
     assert f.contains('^autoclean -y$')
     repo_config = str('dist-upgrade -y -o APT::Get::Show-Upgraded=true'
-                       ' -o Dir::Etc::SourceList=/etc/apt/security.list'
-                       ' -o Dpkg::Options::=--force-confdef'
-                       ' -o Dpkg::Options::=--force-confold')
+                      ' -o Dir::Etc::SourceList=/etc/apt/security.list'
+                      ' -o Dpkg::Options::=--force-confdef'
+                      ' -o Dpkg::Options::=--force-confold')
     assert f.contains(re.escape(repo_config))
 
 
@@ -95,15 +93,12 @@ def test_cron_apt_config_deprecated(File):
 
 
 @pytest.mark.parametrize('cron_job', [
-    { 'job': '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot',
-      'state': 'present',
-    },
-    { 'job': '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
-      'state': 'absent',
-    },
-    { 'job': '0 5 * * * root    /sbin/reboot',
-      'state': 'absent',
-    },
+    {'job': '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt && /sbin/reboot', # noqa
+     'state': 'present'},
+    {'job': '0 4 * * * root    /usr/bin/test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt', # noqa
+     'state': 'absent'},
+    {'job': '0 5 * * * root    /sbin/reboot',
+     'state': 'absent'},
 ])
 def test_cron_apt_cron_jobs(File, cron_job):
     """
@@ -136,5 +131,6 @@ def test_cron_apt_all_packages_updated(Command):
     assert c.rc == 0
     # Staging hosts will have locally built deb packages, marked as held.
     # Staging and development will have a version-locked Firefox pinned for
-    # Selenium compatibility; if the holds are working, they shouldn't be upgraded.
+    # Selenium compatibility; if the holds are working, they shouldn't be
+    # upgraded.
     assert "No packages will be installed, upgraded, or removed." in c.stdout

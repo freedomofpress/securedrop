@@ -1,6 +1,6 @@
 import pytest
-import os
 import getpass
+
 
 def test_development_app_dependencies(Package):
     """
@@ -38,19 +38,23 @@ def test_development_app_dependencies(Package):
     ('selenium', '2.53.6'),
     ('six', '1.10.0'),
 ])
-def test_development_pip_dependencies(Command, pip_package, version):
+def test_development_pip_dependencies(Command, Sudo, pip_package, version):
     """
     Declare SecureDrop app pip requirements. On the development VM,
     the pip dependencies should be installed directly via pip, rather
     than relying on the deb packages with pip-wheel inclusions.
     Versions here are intentionally hardcoded to track changes.
     """
-    c = Command('pip freeze')
-    assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
+    # Using elevated privileges to list the Python packages, since
+    # the playbooks use sudo to install the pip packages system-wide.
+    # In Travis, lack of sudo here hides a number of dependencies.
+    with Sudo():
+        c = Command('pip freeze')
+        assert "{}=={}".format(pip_package, version) in c.stdout.rstrip()
 
 
 @pytest.mark.skipif(getpass.getuser() != 'vagrant',
-            reason="vagrant bashrc checks dont make sense in CI")
+                    reason="vagrant bashrc checks dont make sense in CI")
 def test_development_securedrop_env_var(File):
     """
     Ensure that the SECUREDROP_ENV var is set to "dev".

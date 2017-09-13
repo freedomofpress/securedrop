@@ -32,7 +32,8 @@ def test_tor_service_hostnames(File, Sudo, tor_service):
     ths_hostname_regex = "[a-z0-9]{16}\.onion"
 
     with Sudo():
-        f = File("/var/lib/tor/services/{}/hostname".format(tor_service['name']))
+        f = File("/var/lib/tor/services/{}/hostname".format(
+            tor_service['name']))
         assert f.is_file
         assert oct(f.mode) == "0600"
         assert f.user == "debian-tor"
@@ -43,8 +44,10 @@ def test_tor_service_hostnames(File, Sudo, tor_service):
 
         if tor_service['authenticated']:
             # HidServAuth regex is approximately [a-zA-Z0-9/+], but validating
-            # the entire entry is sane, and we don't need to nitpick the charset.
-            aths_hostname_regex = ths_hostname_regex+" .{22} # client: "+tor_service['client']
+            # the entire entry is sane, and we don't need to nitpick the
+            # charset.
+            aths_hostname_regex = ths_hostname_regex + " .{22} # client: " + \
+                                  tor_service['client']
             assert re.search("^{}$".format(aths_hostname_regex), f.content)
         else:
             assert re.search("^{}$".format(ths_hostname_regex), f.content)
@@ -67,7 +70,7 @@ def test_tor_services_config(File, tor_service):
     """
     f = File("/etc/tor/torrc")
     dir_regex = "HiddenServiceDir /var/lib/tor/services/{}".format(
-                                                            tor_service['name'])
+        tor_service['name'])
     # We need at least one port, but it may be used for both config values.
     # On the Journalist Interface, we reuse the "80" remote port but map it to
     # a different local port, so Apache can listen on several sockets.

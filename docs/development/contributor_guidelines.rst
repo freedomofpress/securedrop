@@ -29,6 +29,54 @@ your PR. If you modify the server configuration, you should run the
 testinfra tests. Please denote in the checklist when you submit the PR that
 you have performed these checks locally.
 
+Code Style
+----------
+
+We use code linters to keep a consistent code quality and style. These linters
+also run in CI and will produce build failures. To avoid this, we have included
+a git pre-commit hook. You can install it with the following command run at the
+root of the repository:
+
+.. code:: sh
+
+    ln -sf ../../git/pre-commit .git/hooks/pre-commit
+
+
+.. note::
+  The code linters are installed automatically on the Development VM, but for
+  the pre-commit hook to work, you will need to install the linting tools
+  locally on your host machine. From the root of the repo you can run the
+  following:
+
+  .. code:: sh
+
+     pip install -r securedrop/requirements/develop-requirements.txt
+
+
+
+Python
+~~~~~~
+
+All Python code should be `flake8 <http://flake8.pycqa.org/en/latest/>`__
+compliant. You can run ``flake8`` locally via:
+
+  .. code:: sh
+
+      make flake8
+
+HTML
+~~~~
+
+HTML should be in compliance with
+`Google's HTML style guide <https://google.github.io/styleguide/htmlcssguide.html>`__.
+We use `html-linter <https://pypi.python.org/pypi/html-linter/>`__ to lint
+our HTML templates in ``securedrop/source_templates`` and
+``securedrop/journalist_templates``. Run the HTML linting options we use via:
+
+  .. code:: sh
+
+      make html-lint
+
 Git History
 -----------
 
@@ -39,6 +87,17 @@ many unnecessary commits that do not add information to aid in review, they
 should be removed. If you are unfamiliar with how to squash commits with rebase,
 check out this
 `blog post <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`__.
+
+Privileges
+----------
+
+Dedicated contributors to SecureDrop will be granted extra privileges
+such as the right to push new branches or to merge pull
+requests. There is no formal process at the moment but the general
+idea is that any contributor with the right technical and social
+skills is entitled to ask. The people who have the power to grant such
+privileges are commited to do so in a transparent way to avoid any
+dispute.
 
 Other Tips
 ----------

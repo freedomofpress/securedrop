@@ -44,6 +44,13 @@ anonymous sources.
    onboarding
 
 .. toctree::
+   :caption: Checklists
+   :name: checklists
+   :maxdepth: 2
+
+   checklists/pre_install_hardware
+
+.. toctree::
    :caption: Topic Guides
    :name: topictoc
    :maxdepth: 2
@@ -80,11 +87,14 @@ anonymous sources.
    development/virtual_environments
    development/contributor_guidelines
    development/tips_and_tricks
+   development/i18n
+   development/l10n
    development/documentation_guidelines
    development/testing_securedrop
    development/testing_application_tests
    development/testing_configuration_tests
    development/testing_continuous_integration
    development/apt_repo
+   development/updating_ossec
    development/apparmor_profiles
    development/threat_model

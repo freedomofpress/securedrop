@@ -1,8 +1,8 @@
-import re
 import pytest
 
 
 securedrop_test_vars = pytest.securedrop_test_vars
+
 
 @pytest.mark.parametrize('package', [
     'mailutils',
@@ -19,84 +19,24 @@ def test_ossec_package(Package, package):
     assert Package(package).is_installed
 
 
-@pytest.mark.parametrize('header', [
-    '/^X-Originating-IP:/    IGNORE',
-    '/^X-Mailer:/    IGNORE',
-    '/^Mime-Version:/        IGNORE',
-    '/^User-Agent:/  IGNORE',
-    '/^Received:/    IGNORE',
-])
-def test_postfix_headers(File, header):
-    """
-    Ensure postfix header filters are set correctly. Common mail headers
-    are stripped by default to avoid leaking metadata about the instance.
-    Message body is always encrypted prior to sending.
-    """
-    f = File("/etc/postfix/header_checks")
-    assert f.is_file
-    assert oct(f.mode) == "0644"
-    regex = '^{}$'.format(re.escape(header))
-    assert re.search(regex, f.content, re.M)
-
-
-@pytest.mark.parametrize('setting', [
-    'relayhost = [smtp.gmail.com]:587',
-    'smtp_sasl_auth_enable = yes',
-    'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd',
-    'smtp_sasl_security_options = noanonymous',
-    'smtp_use_tls = yes',
-    'smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache',
-    'smtp_tls_security_level = secure',
-    'smtp_tls_CApath = /etc/ssl/certs',
-    'smtp_tls_ciphers = high',
-    'smtp_tls_protocols = TLSv1.2 TLSv1.1 TLSv1 !SSLv3 !SSLv2',
-    'myhostname = ossec.server',
-    'myorigin = $myhostname',
-    'smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)',
-    'biff = no',
-    'append_dot_mydomain = no',
-    'readme_directory = no',
-    'smtp_header_checks = regexp:/etc/postfix/header_checks',
-    'mailbox_command = /usr/bin/procmail',
-    'inet_interfaces = loopback-only',
-    'alias_maps = hash:/etc/aliases',
-    'alias_database = hash:/etc/aliases',
-    'mydestination = $myhostname, localhost.localdomain , localhost',
-    'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128',
-    'mailbox_size_limit = 0',
-    'recipient_delimiter = +',
-])
-def test_postfix_settings(File, setting):
-    """
-    Check all postfix configuration lines. There are technically multiple
-    configuration paths regarding the TLS settings, particularly the
-    fingerprint verification logic, but only the base default config is tested
-    currently.
-    """
-    f = File("/etc/postfix/main.cf")
-    assert f.is_file
-    assert f.user == 'root'
-    assert oct(f.mode) == "0644"
-    regex = '^{}$'.format(re.escape(setting))
-    assert re.search(regex, f.content, re.M)
-
-
 def test_ossec_connectivity(Command, Sudo):
     """
     Ensure ossec-server machine has active connection to the ossec-agent.
     The ossec service will report all available agents, and we can inspect
     that list to make sure it's the host we expect.
     """
-    desired_output = "{}-{} is available.".format(securedrop_test_vars.app_hostname,
-            securedrop_test_vars.app_ip)
+    desired_output = "{}-{} is available.".format(
+        securedrop_test_vars.app_hostname,
+        securedrop_test_vars.app_ip)
     with Sudo():
         c = Command.check_output("/var/ossec/bin/list_agents -a")
         assert c == desired_output
 
-def test_ossec_gnupg(File, Sudo):
+
+def test_ossec_gnupg_homedir(File, Sudo):
     """ ensure ossec gpg homedir exists """
     with Sudo():
-        f = File(OSSEC_GNUPG)
+        f = File("/var/ossec/.gnupg")
         assert f.is_directory
         assert f.user == "ossec"
         assert oct(f.mode) == "0700"
@@ -123,10 +63,11 @@ def test_ossec_pubkey_in_keyring(Command, Sudo):
     """
     ossec_gpg_pubkey_info = """pub   4096R/EDDDC102 2014-10-15
 uid                  Test/Development (DO NOT USE IN PRODUCTION) (Admin's OSSEC Alert GPG key) <securedrop@freedom.press>
-sub   4096R/97D2EB39 2014-10-15"""
+sub   4096R/97D2EB39 2014-10-15"""  # noqa
     with Sudo("ossec"):
-        c = Command.check_output("gpg --homedir /var/ossec/.gnupg --list-keys EDDDC102")
-        assert c ==  ossec_gpg_pubkey_info
+        c = Command.check_output("gpg --homedir /var/ossec/.gnupg "
+                                 "--list-keys EDDDC102")
+        assert c == ossec_gpg_pubkey_info
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
@@ -146,8 +87,8 @@ def test_ossec_keyfiles(File, Sudo, keyfile):
     with Sudo():
         f = File(keyfile)
         assert f.is_file
-        # The postinst scripts in the OSSEC deb packages set 440 on the keyfiles;
-        # the Ansible config should be updated to do the same.
+        # The postinst scripts in the OSSEC deb packages set 440 on the
+        # keyfiles; the Ansible config should be updated to do the same.
         assert oct(f.mode) == "0440"
         assert f.user == "root"
         assert f.group == "ossec"
@@ -209,20 +150,11 @@ def test_ossec_authd(Command, Sudo):
         assert c.stdout == ""
         assert c.rc != 0
 
-# Currently failing in CI under remote hosts
-# Looks like vagrant is currently appending hostname to local IP
-@pytest.mark.xfail
-def test_hosts_files(File, SystemInfo):
-    """ Ensure host localhost is mapping to servername """
-    f = File('/etc/hosts')
-    mon_host = securedrop_test_vars.monitor_hostname
-    assert f.contains('^127.0.0.1.*{0}$'.format(mon_host))
 
 def test_hosts_files(File, SystemInfo):
     """ Ensure host files mapping are in place """
     f = File('/etc/hosts')
 
-    hostname = SystemInfo.hostname
     app_ip = securedrop_test_vars.app_ip
     app_host = securedrop_test_vars.app_hostname
 
@@ -248,15 +180,3 @@ def test_ossec_log_contains_no_malformed_events(File, Sudo):
 def test_regression_hosts(Command):
     """ Regression test to check for duplicate entries. """
     assert Command.check_output("uniq --repeated /etc/hosts") == ""
-
-
-def test_postfix_generic_maps(File):
-    """
-    Regression test to check that generic Postfix maps are not configured
-    by default. As of #1565 Admins can opt-in to overriding the FROM address
-    used for sending OSSEC alerts, but by default we're preserving the old
-    `ossec@ossec.server` behavior, to avoid breaking email for previously
-    existing instances.
-    """
-    assert not File("/etc/postfix/generic").exists
-    assert not File("/etc/postfix/main.cf").contains("^smtp_generic_maps")

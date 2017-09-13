@@ -2,10 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SecureDrop | Protecting Journalists and Sources</title>
 
-    <link rel="stylesheet" href="/static/css/source.css" />
-    <link rel="icon" type="image/png" href="/static/i/favicon.png" >
+    <link rel="stylesheet" href="/static/css/source.css">
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
     {% block extrahead %}{% endblock %}
   </head>
   <body>
@@ -14,10 +15,12 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}">
+          <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
+        </a>
         {% if use_custom_header_image %}
         <div class="powered">
-          Powered by<br/>
+          Powered by<br>
           <img src="/static/i/securedrop_small.png" alt="SecureDrop">
         </div>
         {% endif %}
@@ -28,7 +31,7 @@
       {% if 'logged_in' in session %}
         <a href="{{ url_for('logout') }}" class="sd-button btn pull-right" id="logout">EXIT</a>
       {% endif %}
-        <hr class="no-line" />
+        <hr class="no-line">
 
         {% block body %}{% endblock %}
 

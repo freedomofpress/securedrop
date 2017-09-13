@@ -15,6 +15,9 @@ one.
 
 .. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
 
+
+.. _development_vm:
+
 Development
 -----------
 
@@ -60,6 +63,7 @@ a few exceptions:
 * The production environment only allows SSH over an Authenticated Tor Hidden
   Service (ATHS), but the staging environment allows direct SSH access so it's
   more ergonomic for developers to interact with the system during debugging.
+* The Postfix service is disabled, so OSSEC alerts will not be sent via email.
 
 This is a convenient environment to test how changes work across the full stack.
 
@@ -68,7 +72,7 @@ Debian packages on the staging machines:
 
 .. code:: sh
 
-   vagrant up --no-provision build
+   make build-debs 
    vagrant up /staging/
    vagrant ssh app-staging
    sudo su
@@ -78,7 +82,7 @@ Debian packages on the staging machines:
 
 To rebuild the local packages for the app code: ::
 
-   ANSIBLE_ARGS="--tags rebuild" vagrant provision /staging/
+   make build-debs 
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.

@@ -64,7 +64,7 @@ def test_blacklisted_kernel_modules(Command, File, Sudo, kernel_module):
 
 
 @pytest.mark.skipif(hostenv.startswith('mon'),
-        reason="Monitor Server does not have swap disabled yet.")
+                    reason="Monitor Server does not have swap disabled yet.")
 def test_swap_disabled(Command):
     """
     Ensure swap space is disabled. Prohibit writing memory to swapfiles

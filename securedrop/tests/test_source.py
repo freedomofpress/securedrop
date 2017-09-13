@@ -2,9 +2,7 @@
 from cStringIO import StringIO
 import gzip
 from mock import patch, ANY
-import os
 import re
-import unittest
 
 from bs4 import BeautifulSoup
 from flask import session, escape
@@ -15,7 +13,6 @@ import source
 import version
 import utils
 import json
-import config
 
 
 class TestSourceApp(TestCase):
@@ -46,7 +43,8 @@ class TestSourceApp(TestCase):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
         # contains various symbols.
-        codename_re = r'<p [^>]*id="codename"[^>]*>(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>'
+        codename_re = (r'<p [^>]*id="codename"[^>]*>'
+                       r'(?P<codename>[a-z0-9 &#;?:=@_.*+()\'"$%!-]+)</p>')
         codename_match = re.search(codename_re, html)
         self.assertIsNotNone(codename_match)
         return codename_match.group('codename')
@@ -56,7 +54,8 @@ class TestSourceApp(TestCase):
             resp = c.get('/generate')
             self.assertEqual(resp.status_code, 200)
             session_codename = session['codename']
-        self.assertIn("This codename is what you will use in future visits", resp.data)
+        self.assertIn("This codename is what you will use in future visits",
+                      resp.data)
         codename = self._find_codename(resp.data)
         self.assertEqual(len(codename.split()), Source.NUM_WORDS)
         # codename is also stored in the session - make sure it matches the
@@ -87,7 +86,6 @@ class TestSourceApp(TestCase):
     def test_create(self):
         with self.client as c:
             resp = c.get('/generate')
-            codename = session['codename']
             resp = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
@@ -123,14 +121,15 @@ class TestSourceApp(TestCase):
 
         with self.client as c:
             resp = c.post('/login', data=dict(codename='invalid'),
-                                  follow_redirects=True)
+                          follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Sorry, that is not a recognized codename.', resp.data)
+            self.assertIn('Sorry, that is not a recognized codename.',
+                          resp.data)
             self.assertNotIn('logged_in', session)
 
         with self.client as c:
             resp = c.post('/login', data=dict(codename=codename),
-                        follow_redirects=True)
+                          follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertTrue(session['logged_in'])
             resp = c.get('/logout', follow_redirects=True)
@@ -138,7 +137,8 @@ class TestSourceApp(TestCase):
             self.assertIn('Thank you for exiting your session!', resp.data)
 
     def test_login_with_whitespace(self):
-        """Test that codenames with leading or trailing whitespace still work"""
+        """
+        Test that codenames with leading or trailing whitespace still work"""
         def login_test(codename):
             resp = self.client.get('/login')
             self.assertEqual(resp.status_code, 200)
@@ -146,7 +146,7 @@ class TestSourceApp(TestCase):
 
             with self.client as c:
                 resp = c.post('/login', data=dict(codename=codename),
-                            follow_redirects=True)
+                              follow_redirects=True)
                 self.assertEqual(resp.status_code, 200)
                 self.assertIn("Submit Materials", resp.data)
                 self.assertTrue(session['logged_in'])
@@ -239,7 +239,7 @@ class TestSourceApp(TestCase):
     def test_delete_all(self):
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
-        replies = utils.db_helper.reply(journalist, source, 1)
+        utils.db_helper.reply(journalist, source, 1)
         with self.client as c:
             resp = c.post('/login', data=dict(codename=codename),
                           follow_redirects=True)
@@ -287,7 +287,8 @@ class TestSourceApp(TestCase):
         resp = self.client.get('/metadata')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.headers.get('Content-Type'), 'application/json')
-        self.assertEqual(json.loads(resp.data.decode('utf-8')).get('sd_version'), version.__version__)
+        self.assertEqual(json.loads(resp.data.decode('utf-8')).get(
+            'sd_version'), version.__version__)
 
     @patch('crypto_util.hash_codename')
     def test_login_with_overly_long_codename(self, mock_hash_codename):
@@ -298,7 +299,8 @@ class TestSourceApp(TestCase):
             resp = c.post('/login', data=dict(codename=overly_long_codename),
                           follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Sorry, that is not a recognized codename.", resp.data)
+            self.assertIn("Sorry, that is not a recognized codename.",
+                          resp.data)
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")

@@ -12,8 +12,14 @@ Vagrant.configure("2") do |config|
   config.vm.define 'development', primary: true do |development|
     development.vm.hostname = "development"
     development.vm.box = "bento/ubuntu-14.04"
+
+    # for hosted docs
+    development.vm.network "forwarded_port", guest: 8000, host: 8000, auto_correct: true
+    # source interface
     development.vm.network "forwarded_port", guest: 8080, host: 8080, auto_correct: true
+    # journalist interface
     development.vm.network "forwarded_port", guest: 8081, host: 8081, auto_correct: true
+
     development.vm.provision "ansible" do |ansible|
       # Hack to trick Vagrant into parsing the command-line args for
       # Ansible options, see https://gist.github.com/phantomwhale/9657134
@@ -133,35 +139,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define 'build', autostart: false do |build|
-    build.vm.hostname = "build"
-    build.vm.box = "bento/ubuntu-14.04"
-    build.vm.provision "ansible" do |ansible|
-      ansible.playbook = "install_files/ansible-base/build-deb-pkgs.yml"
-      ansible.verbose = 'v'
-      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-    end
-
-    # TODO: For some reason, the build VM is defaulting to using 1GB of RAM.
-    # It does not need this much RAM, and the staging environment has been
-    # causing issues (hangs and crashes) on developer machines that have <= 8GB
-    # RAM, so hopefully setting this to a smaller value will help with that
-    # issue. We should look into why this is being automatically allocated 1GB
-    # of RAM instead of the expected 512MB default.
-    build.vm.provider "virtualbox" do |v|
-      v.memory = 512
-    end
-
-    build.vm.provider "libvirt" do |lv, override|
-      override.vm.synced_folder './', '/vagrant', type: 'nfs', disabled: false
-    end
-  end
-
-  # "Quick Start" config from https://github.com/fgrehm/vagrant-cachier#quick-start
-  #if Vagrant.has_plugin?("vagrant-cachier")
-  #  config.cache.scope = :box
-  #end
-
 end
 
 
@@ -187,8 +164,6 @@ def find_ssh_aths(filename)
 end
 
 # Build proxy command for connecting to prod instances over Tor.
-# connect-proxy is recommended, but netcat is also supported
-# for CentOS Snap CI boxes, where connect-proxy isn't available.
 def tor_ssh_proxy_command
    def command?(command)
      system("which #{command} > /dev/null 2>&1")

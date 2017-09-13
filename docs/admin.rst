@@ -84,7 +84,7 @@ Adding Users
 Now you can add new logins for the journalists at your news organization
 who will be checking the system for submissions. Make sure the
 journalist is physically in the same room as you when you do this, as
-they will have to create a password and scan a barcode for their
+they will have to scan a barcode for their
 two-factor authentication. Since you’re logged in, this is the screen
 you should see now:
 
@@ -100,8 +100,9 @@ Once there, click ‘Add User’ button, which will take you to this page:
 |Add a new user|
 
 Here, you will hand the keyboard over to the journalist so they can
-create their own username and password. Once they’re done entering a
-username and password for themselves, select whether you would like them
+create their own username. Once they’re done entering a
+username for themselves, have them write down their pre-generated diceware
+passphrase. Then, you will select whether you would like them
 to also be an administrator (this allows them to add or delete other
 journalist accounts), and whether they will be using Google
 Authenticator or a YubiKey for two-factor authentication.
@@ -169,8 +170,37 @@ possession when they attempt to log in to SecureDrop.
 
 .. |SecureDrop main page| image:: images/admin_main_home.png
 .. |SecureDrop admin home| image:: images/admin_secondary_home.png
-.. |Add a new user| image:: images/admin_add_new_user.png
-.. |Enable Google Authenticator| image:: images/admin_enable_authenticator.png
+.. |Add a new user| image:: images/manual/journalist-admin_add_user_totp.png
+.. |Enable Google Authenticator| image:: images/manual/journalist-admin_new_user_two_factor_totp.png
 .. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
-.. |Enable YubiKey| image:: images/admin_enable_yubikey.png
-.. |Verify YubiKey| image:: images/admin_verify_yubikey.png
+.. |Enable YubiKey| image:: images/manual/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey| image:: images/manual/journalist-admin_new_user_two_factor_hotp.png
+
+.. _Updating the Servers:
+
+Updating the Servers
+--------------------
+
+Managing ``site-specific`` updates on teams with multiple admins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Organizations with multiple admins should establish a protocol to communicate
+any changes one admin makes to the ``site-specific`` configuration file on the server.
+
+Currently, when one admin pushes changes in ``site-specific`` to the server, the
+changes will not sync to the local ``site-specific`` file on the remaining admin workstations.
+Without being aware of changes made to ``site-specific``, admins run the risk of pushing old
+information to the servers. This can affect the receipt of OSSEC alerts, viability of the
+Submission Key, among other critical components of the SecureDrop environment.
+
+There are multiple ways to avoid pushing out-of-date information to the servers.
+We recommend admins establish a secure communication pipeline to alert fellow admins
+of any changes made to ``site-specific`` on the server. That clues every admin in on
+changes in real time, providing all team members with a reminder to manually update
+all ``site-specific`` files.
+
+In addition to secure group communications, admins can learn of updates to the server
+by monitoring OSSEC alerts. (Please note that while an OSSEC alert can notify you of the
+occurrence of an update to the server, it may not reveal the content of the change.) Another
+management option would be SSHing into the server and manually inspecting the configuration to
+identify any discrepancies.

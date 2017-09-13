@@ -52,10 +52,10 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
 
         super(DevServerProcess, self).__init__(
             self.cmd,
-            stdin  = subprocess.PIPE,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.STDOUT,
-            preexec_fn = os.setsid)
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            preexec_fn=os.setsid)
 
     def print_label(self, to):
         label = "\n => {} <= \n\n".format(self.label)
@@ -64,14 +64,14 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
         to.write(label)
 
     def fileno(self):
-        """
-        Implement fileno() in order to use DevServerProcesses with select.select
-        directly.
+        """Implement fileno() in order to use DevServerProcesses with
+        select.select directly.
 
         Note this method assumes we only want to select this process'
         stdout. This is a reasonable assumption for a DevServerProcess
         because the __init__ redirects stderr to stdout, so all output is
         available on stdout.
+
         """
         return self.stdout.fileno()
 
@@ -140,7 +140,7 @@ class DevServerProcessMonitor(object):  # pragma: no cover
                 proc.terminate()
 
 
-def run():  # pragma: no cover
+def run(args):  # pragma: no cover
     """
     Starts development servers for both the Source Interface and the
     Journalist Interface concurrently. Their output is collected,
@@ -150,7 +150,7 @@ def run():  # pragma: no cover
     Ctrl-C will kill the servers and return you to the terminal.
 
     Useful resources:
-    * https://stackoverflow.com/questions/22565606/python-asynhronously-print-stdout-from-multiple-subprocesses
+    * https://stackoverflow.com/q/22565606/837471
 
     """
     print \
@@ -164,7 +164,7 @@ def run():  # pragma: no cover
     \\/_____/\\/____/\\/____/ \\/___/  \\/_/ \\/____/ \\/___/  \\/_/ \\/___/  \\ \\ \\/ 
                                                                       \\ \\_\\ 
                                                                        \\/_/ 
-"""
+"""  # noqa
 
     procs = [
         lambda: DevServerProcess('Source Interface',

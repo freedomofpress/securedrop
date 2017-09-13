@@ -5,10 +5,11 @@ import os
 from os.path import abspath, dirname, exists, isdir, join, realpath
 import shutil
 import subprocess
+import threading
 
 import gnupg
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import crypto_util
 from db import init_db, db_session
@@ -59,9 +60,19 @@ def setup():
 
 
 def teardown():
+    # make sure threads launched by tests complete before
+    # teardown, otherwise they may fail because resources
+    # they need disappear
+    for t in threading.enumerate():
+        if t.is_alive() and not isinstance(t, threading._MainThread):
+            t.join()
     db_session.remove()
     try:
         shutil.rmtree(config.SECUREDROP_DATA_ROOT)
     except OSError as exc:
+        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
         if 'No such file or directory' not in exc:
             raise
+    except:
+        os.system("find " + config.SECUREDROP_DATA_ROOT)  # REMOVE ME, see #844
+        raise

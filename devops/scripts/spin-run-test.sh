@@ -3,6 +3,7 @@
 #
 #
 . devops/ansible_env
+devops/scripts/docs-detection || exit 0
 
 # When this script completes, teardown the environment
 # To get around this and debug, enter `make ci-debug` before

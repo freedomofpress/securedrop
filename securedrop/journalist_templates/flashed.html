@@ -1,19 +1,14 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
   {% for category, message in messages %}
-    {% if category != 'banner-warning' %}
+    {% if category != "banner-warning" %}
       <div class="flash {{ category }}">
-        {% if category == 'notification' %}
-        <img src="{{ url_for('static',
-        filename='i/font-awesome/info-circle-black.png') }}" height=16
-        width=20>
-        {% elif category == 'success' %}
-        <img src="{{ url_for('static', filename='i/success_checkmark.png') }}"
-        height=17 width=20>
-        {% elif category == 'error' %}
-        <img src="{{ url_for('static',
-        filename='i/font-awesome/exclamation-triangle-black.png') }}" height=17
-        width=20>
+        {% if category == "notification" %}
+        <img src="{{ url_for('static', filename='i/font-awesome/info-circle-black.png') }}" height="16" width="20">
+        {% elif category == "success" %}
+        <img src="{{ url_for('static', filename='i/success_checkmark.png') }}" height="17" width="20">
+        {% elif category == "error" %}
+        <img src="{{ url_for('static', filename='i/font-awesome/exclamation-triangle-black.png') }}" height="17" width="20">
         {% endif %}
         {{ message }}
       </div>
@@ -21,4 +16,3 @@
   {% endfor %}
 {% endif %}
 {% endwith %}
-

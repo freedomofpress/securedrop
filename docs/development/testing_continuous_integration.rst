@@ -75,7 +75,7 @@ Source the setup script using the following command:
 
 .. code:: sh
 
-    $ source ./devops/scripts/local-setup.sh
+    source ./devops/scripts/local-setup.sh
 
 You will be prompted for the values of the required environment variables. There
 are some defaults set that you may want to change. You will need to determine

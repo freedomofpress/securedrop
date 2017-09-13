@@ -3,7 +3,7 @@
   synchronize:
     # All Debian package control files for FPF-maintained packages reside in
     # `install_files/<package_name>` in the SecureDrop git repository.
-    src: "../{{ package_name }}/"
+    src: "{{ role_path }}/../../../{{ package_name }}/"
     dest: "/tmp/build/{{ package_name }}/"
     recursive: yes
     delete: yes

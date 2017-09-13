@@ -112,13 +112,23 @@ mounted and ready to access.
 |Backup and TailsData Mounted|
 
 Open a Nautilus window with administrator privileges by going to
-**Applications** ▸ **System Tools** ▸ **Root Terminal**.
+**Applications** ▸ **System Tools** ▸ **Terminal**.
 
-|Root Terminal|
+|Open Terminal|
 
-Type ``nautilus`` at the terminal prompt and hit enter:
+Type ``gksu nautilus`` at the terminal prompt and hit enter. You'll need to type
+your administrator password.
 
-|Start Nautilus|
+|Start gksu nautilus|
+
+.. note::
+  When you run ``gksu nautilus``, you may run into an error where Nautilus
+  complains that it can't create a required folder. If that happens, just click
+  OK and continue normally.
+
+  If a Nautilus window *doesn't* come up, it might be because an administrator
+  password wasn't set. If that's the case, you'll need to restart and set an
+  administrator password before continuing.
 
 .. warning::
             Make sure you use keep the `Terminal` window open while you perform
@@ -144,16 +154,15 @@ for each device you backup.
 Finally, once you have completed the steps described in this section for each
 USB drive, unmount the Backup partition and store the drive somewhere safely.
 
-.. |Nautilus| image:: images/upgrade_to_tails_3x/nautilus_start.png
 .. |Browse to Places Computer| image:: images/upgrade_to_tails_3x/browse_to_places_computer.png
 .. |Click Cogs| image:: images/upgrade_to_tails_3x/click_the_button_with_cogs.png
 .. |Fill in Passphrase| image:: images/upgrade_to_tails_3x/fill_in_passphrase.png
 .. |Format Backup Drive| image:: images/upgrade_to_tails_3x/fill_out_as_follows.png
-.. |Start Nautilus| image:: images/upgrade_to_tails_3x/nautilus_start.png
+.. |Start gksu nautilus| image:: images/upgrade_to_tails_3x/gksu_nautilus.png
 .. |Make Folders for All Drives| image:: images/upgrade_to_tails_3x/make_folders_for_all_drives.png
 .. |Backup and TailsData Mounted| image:: images/upgrade_to_tails_3x/backup_and_tailsdata_mounted.png
 .. |Applications Utilities Disks| image:: images/upgrade_to_tails_3x/navigate_to_applications.png
-.. |Root Terminal| image:: images/upgrade_to_tails_3x/root_terminal.png
+.. |Open Terminal| image:: images/upgrade_to_tails_3x/open_terminal.png
 .. |Select the Disk| image:: images/upgrade_to_tails_3x/select_the_disk.png
 .. |Two Partitions Appear| image:: images/upgrade_to_tails_3x/two_partitions_appear.png
 
@@ -223,14 +232,7 @@ Due to a change in Tails 3, if you wish to preserve the names of files when
 decrypting, you'll need to apply the following fix by opening a **Terminal** on
 the *Secure Viewing Station* and typing the following commands:
 
-.. code:: sh
-
-  cd /live/persistence/TailsData_unlocked/dotfiles
-  cp ~/.bashrc .
-  echo "/usr/bin/dconf write /org/gnome/nautilus/preferences/automatic-decompression false" >> .bashrc
-
-.. note:: This only needs to be done once on each *Secure Viewing Station*.
-          After a reboot it will persist.
+.. include:: includes/tails-svs-nautilus.txt
 
 6. Upgrade SecureDrop to 0.4.x
 ------------------------------

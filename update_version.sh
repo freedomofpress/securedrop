@@ -1,12 +1,12 @@
 #!/bin/bash
 ## Usage: ./update_version.sh <version>
 
-# Only run this on the Vagrant build VM, with dch and git available
+# Only run this on the Vagrant development VM, with dch and git available
 set -e
 
-# Only run this on the Vagrant build VM, with dch and git available
-if [[ "$USER" != 'vagrant' || "$(hostname)" != 'build' ]]; then
-  echo 'Only run this on the Vagrant build VM!'
+# Only run this on the Vagrant development VM, with dch and git available
+if [[ "$USER" != 'vagrant' || "$(hostname)" != 'development' ]]; then
+  echo 'Only run this on the Vagrant development VM!'
   exit 1
 fi
 
@@ -41,8 +41,8 @@ sed -i "s/^\(Version: [0-9.]\++\).*/\1$NEW_VERSION/" install_files/securedrop-ke
 # Update the version used by Ansible for the filename of the output of the deb building role
 sed -i "s/^\(securedrop_app_code_version: \"\).*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
 
-# Update the version in testinfra vars
-sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" testinfra/vars/build.yml
+# Update the version in molecule testinfra vars
+sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder/tests/vars.yml
 
 # Update the version that we tell people to check out in the install doc
 sed -i "s@$(echo $OLD_VERSION | sed 's/\./\\./g')@$NEW_VERSION@g" docs/set_up_admin_tails.rst

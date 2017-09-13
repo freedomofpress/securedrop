@@ -30,13 +30,8 @@ For the staging VMs:
 
 .. code:: sh
 
-    vagrant up build --no-provision
+    make build-debs
     vagrant up /staging/
-
-.. note:: The staging machines must be rebooted via in order to finalize
-          the iptables config. You must manually reboot the machines via
-          ``vagrant reload /staging/`` prior to running the config tests
-          to ensure the config is valid.
 
 Running all VMs concurrently may cause performance
 problems if you have less than 8GB of RAM. You can isolate specific
@@ -93,6 +88,9 @@ relevant location for the host you plan to test: ::
 In the example above, to add a new test for the ``app-staging`` host,
 add a new file to the ``testinfra/spec/app-staging`` directory.
 
+.. tip:: Read :ref:`updating_ossec_rules` to learn how to write tests for the
+         OSSEC rules.
+
 Config test layout
 ------------------
 
@@ -116,9 +114,9 @@ Config testing strategy
 -----------------------
 
 The config tests currently emphasize testing implementation rather than
-functionality. This is a temporary measure to increase the current testing
-baseline for validating the Ansible provisioning flow, to aid in migrating
-to a current version of Ansible (v2+). After the Ansible version is current,
+functionality. This was a temporary measure to increase the testing
+baseline for validating the Ansible provisioning flow, which aided in migrating
+to a current version of Ansible (v2+). Now that the Ansible version is current,
 the config tests can be improved to validate behavior, such as confirming
 ports are blocked via external network calls, rather than simply checking
 that the iptables rules are formatted as expected.

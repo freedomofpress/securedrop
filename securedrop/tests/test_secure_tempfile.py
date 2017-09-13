@@ -4,7 +4,7 @@ import unittest
 
 from gnupg._util import _is_stream
 
-os.environ['SECUREDROP_ENV'] = 'test'
+os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 import secure_tempfile
 import utils
@@ -19,17 +19,11 @@ class TestSecureTempfile(unittest.TestCase):
     def tearDown(self):
         utils.env.teardown()
 
-    def test_write_then_read_twice(self):
-        self.f.write(self.msg)
-        self.f.read()
-
-        self.assertEqual(self.f.read(), '')
-
     def test_read_before_writing(self):
         with self.assertRaisesRegexp(AssertionError,
                                      'You must write before reading!'):
             self.f.read()
-        
+
     def test_write_then_read_once(self):
         self.f.write(self.msg)
 
@@ -58,7 +52,7 @@ class TestSecureTempfile(unittest.TestCase):
     def test_read_write_unicode(self):
         unicode_msg = u'鬼神 Kill Em All 1989'
         self.f.write(unicode_msg)
-        
+
         self.assertEqual(self.f.read().decode('utf-8'), unicode_msg)
 
     def test_file_seems_encrypted(self):
@@ -80,7 +74,8 @@ class TestSecureTempfile(unittest.TestCase):
         self.assertFalse(os.path.exists(fp))
 
     def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE(self):
-        self.assertTrue(_is_stream(secure_tempfile.SecureTemporaryFile('/tmp')))
+        self.assertTrue(_is_stream(
+            secure_tempfile.SecureTemporaryFile('/tmp')))
 
     def test_buffered_read(self):
         msg = self.msg * 1000

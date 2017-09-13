@@ -2,48 +2,51 @@
 {% block body %}
 
 {% if user %}
-<h1>Edit user "{{ user.username }}"</h1>
-<p><a href="/admin">&laquo; Back to admin interface</a></p>
+  {# Only admins may edit usernames and admin status #}
+  <h1>Edit user "{{ user.username }}"</h1>
+  <p><a href="/admin">« Back to admin interface</a></p>
+  <h2>Change Username & Admin Status</h2>
+  <form method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <p>
+      <label for="username">Change username</label>
+      <input name="username" id="username" type="text" placeholder="{{ user.username }}">
+    </p>
+    <p>
+      <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
+      <label for="is_admin">Is Administrator</label>
+    </p>
+    <button class="sd-button" type="submit" id="update">UPDATE</button>
+  </form>
 {% else %}
-<h1>Edit your account</h1>
+  <h1>Edit your account</h1>
 {% endif %}
 
-<form method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+<h2>Reset Password</h2>
 
-  {# Non-admin users are not able to change their own usernames. #}
-  {% if user %}
+<p>SecureDrop now uses automatically generated diceware passwords.</p>
+<p>Your password will be changed immediately, so you will need to save it before pressing
+the "Reset Password" button.</p>
+
+{% if user %}
+  {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
+{% else %}
+  {% set password_reset_url = url_for('new_password') %}
+{% endif %}
+
+<form action="{{ password_reset_url }}" method="post" id="new-password">
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input name="password" type="hidden" value="{{ password }}">
   <p>
-    <label for="username">Change username</label>
-    <input name="username" id="username" type="text" placeholder="{{ user.username }}" />
-  </p>
-  {% endif %}
-
-  <p>
-    <label for="password">Change password</label>
-    <input name="password" id="password" type="password" />
-
-    {# While non-admin users can only change their own passwords, admin users
-    can make many other changes, which may exclude password changes. #}
     {% if user %}
-    <em class="light">Leave blank for no change</em>
+      The user's password will be changed to:
+    {% else %}
+      Your password will be changed to:
     {% endif %}
-
+    <br>
+    <span id="password" class="password">{{ password }}</span>
   </p>
-  <p>
-    <label for="password_again">Change password (confirm)</label>
-    <input name="password_again" id="password_again" type="password" />
-  </p>
-
-  {# Only admin users may modify the admin status of other users. #}
-  {% if user %}
-  <p>
-    <input name="is_admin" id="is_admin" type="checkbox" {% if user.is_admin %}checked{% endif %} />
-    <label for="is_admin">Is Administrator</label>
-  </p>
-  {% endif %}
-
-  <button class="sd-button" type="submit" id="update">UPDATE</button>
+  <button class="sd-button btn" type="submit" id="reset-password">RESET PASSWORD</button>
 </form>
 
 <hr class="no-line">
@@ -76,17 +79,15 @@ Yubikey, choose the second.</p>
 {% macro twofa_reset(user, reset_url, type, button_text) %}
 <form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}">
   {% if user %}
-  <input name="uid" type="hidden" value="{{ user.id }}"/>
+  <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
+  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <button class="sd-button" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
 </form>
 {%- endmacro %}
 
-{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO-FACTOR AUTHENTICATION
-(APP)")}}
-<br />
-{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO-FACTOR AUTHENTICATION
-(HARDWARE TOKEN)")}}
+{{ twofa_reset(user, totp_reset_url, "totp", "RESET TWO-FACTOR AUTHENTICATION (APP)")}}
+<br>
+{{ twofa_reset(user, hotp_reset_url, "hotp", "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)")}}
 
 {% endblock %}

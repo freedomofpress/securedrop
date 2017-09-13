@@ -49,6 +49,11 @@
 
 - name: Reboot Application and Monitor Servers.
   hosts: securedrop
-  roles:
-    - { role: reboot, tags: reboot }
+  vars:
+    # Override the default behavior of waiting for the servers to come back.
+    # Won't work on initial installs because the connection addresses change
+    # from IPv4 to Onion URLs, so just reboot and don't wait.
+    reboot_wait: no
+  tasks:
+    - include: tasks/reboot_if_first_install.yml
   sudo: yes

@@ -23,6 +23,9 @@ import utils
 # Smugly seed the RNG for deterministic testing
 random.seed('¯\_(ツ)_/¯')
 
+VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
+VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
+
 
 class TestJournalistApp(TestCase):
 
@@ -44,10 +47,14 @@ class TestJournalistApp(TestCase):
     def tearDown(self):
         utils.env.teardown()
 
+    @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
+    def test_make_password(self, mocked_pw_gen):
+        assert journalist._make_password() == VALID_PASSWORD
+
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         exception_class = StaleDataError
@@ -55,7 +62,8 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
-            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'),
+                             data={'filesystem_id': filesystem_id, 'msg': '_'})
 
         # Notice the "potentially sensitive" exception_msg is not present in
         # the log event.
@@ -66,13 +74,14 @@ class TestJournalistApp(TestCase):
 
     def test_reply_error_flashed_message(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         exception_class = StaleDataError
 
         with patch('db.db_session.commit', side_effect=exception_class()):
-            self.client.post(url_for('reply'), data={'sid': sid, 'msg': '_'})
+            self.client.post(url_for('reply'),
+                             data={'filesystem_id': filesystem_id, 'msg': '_'})
 
         self.assertMessageFlashed(
             'An unexpected error occurred! Please check '
@@ -80,22 +89,24 @@ class TestJournalistApp(TestCase):
 
     def test_empty_replies_are_rejected(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         resp = self.client.post(url_for('reply'),
-                                data={'sid': sid, 'msg': ''},
+                                data={'filesystem_id': filesystem_id,
+                                      'msg': ''},
                                 follow_redirects=True)
 
         self.assertIn("You cannot send an empty reply!", resp.data)
 
     def test_nonempty_replies_are_accepted(self):
         source, _ = utils.db_helper.init_source()
-        sid = source.filesystem_id
+        filesystem_id = source.filesystem_id
         self._login_user()
 
         resp = self.client.post(url_for('reply'),
-                                data={'sid': sid, 'msg': '_'},
+                                data={'filesystem_id': filesystem_id,
+                                      'msg': '_'},
                                 follow_redirects=True)
 
         self.assertNotIn("You cannot send an empty reply!", resp.data)
@@ -163,8 +174,8 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}">{}</a>'.format(
-            url_for('edit_account'), "Edit Account")
+        edit_account_link = '<a href="{}" id="link-edit-account">'.format(
+            url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_user_has_link_to_edit_account_page_in_index_page(self):
@@ -173,8 +184,8 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        edit_account_link = '<a href="{}">{}</a>'.format(
-            url_for('edit_account'), "Edit Account")
+        edit_account_link = '<a href="{}" id="link-edit-account">'.format(
+            url_for('edit_account'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
@@ -183,8 +194,8 @@ class TestJournalistApp(TestCase):
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(
-            url_for('admin_index'), "Admin")
+        admin_link = '<a href="{}" id="link-admin-index">'.format(
+            url_for('admin_index'))
         self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
@@ -193,8 +204,8 @@ class TestJournalistApp(TestCase):
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
-        admin_link = '<a href="{}">{}</a>'.format(
-            url_for('admin_index'), "Admin")
+        admin_link = '<a href="{}" id="link-admin-index">'.format(
+            url_for('admin_index'))
         self.assertNotIn(admin_link, resp.data)
 
     # WARNING: we are purposely doing something that would not work in
@@ -256,112 +267,119 @@ class TestJournalistApp(TestCase):
     def test_admin_edits_user_password_success_response(self):
         self._login_admin()
 
-        self.client.post(
-            url_for('admin_edit_user', user_id=self.user.id),
-            data=dict(username=self.user.username, is_admin=False,
-                      password='validlongpassword',
-                      password_again='validlongpassword'))
+        resp = self.client.post(
+            url_for('admin_new_password', user_id=self.user.id),
+            data=dict(password=VALID_PASSWORD_2),
+            follow_redirects=True)
 
-        self.assertMessageFlashed("Account successfully updated!", 'success')
+        text = resp.data.decode('utf-8')
+        assert 'The password was successfully updated!' in text
+        assert VALID_PASSWORD_2 in text
+
+    def test_admin_edits_user_password_error_response(self):
+        self._login_admin()
+
+        with patch('db.db_session.commit', side_effect=Exception()):
+            resp = self.client.post(
+                url_for('admin_new_password', user_id=self.user.id),
+                data=dict(password=VALID_PASSWORD_2),
+                follow_redirects=True)
+
+        assert ('There was an error, and the new password might not have '
+                'been saved correctly.') in resp.data.decode('utf-8')
 
     def test_user_edits_password_success_reponse(self):
         self._login_user()
-        self.client.post(url_for('edit_account'),
-                         data=dict(password='validlongpassword',
-                                   password_again='validlongpassword'))
-        self.assertMessageFlashed("Account successfully updated!", 'success')
-
-    def test_admin_edits_user_password_mismatch_warning(self):
-        self._login_admin()
-
-        self.client.post(
-            url_for('admin_edit_user', user_id=self.user.id),
-            data=dict(username=self.user.username, is_admin=False,
-                      password='not', password_again='thesame'),
+        resp = self.client.post(
+            url_for('new_password'),
+            data=dict(password=VALID_PASSWORD_2),
             follow_redirects=True)
 
-        self.assertMessageFlashed("Passwords didn't match!", "error")
+        text = resp.data.decode('utf-8')
+        assert "The password was successfully updated!" in text
+        assert VALID_PASSWORD_2 in text
 
-    def test_user_edits_password_mismatch_redirect(self):
+    def test_user_edits_password_error_reponse(self):
         self._login_user()
-        resp = self.client.post(url_for('edit_account'), data=dict(
-            password='not',
-            password_again='thesame'))
-        self.assertRedirects(resp, url_for('edit_account'))
 
-    def test_admin_add_user_password_mismatch_warning(self):
-        self._login_admin()
-        resp = self.client.post(url_for('admin_add_user'),
-                                data=dict(username='dellsberg',
-                                          password='not',
-                                          password_again='thesame',
-                                          is_admin=False))
-        self.assertIn('Passwords didn', resp.data)
+        with patch('db.db_session.commit', side_effect=Exception()):
+            resp = self.client.post(
+                url_for('new_password'),
+                data=dict(password=VALID_PASSWORD_2),
+                follow_redirects=True)
+
+        assert ('There was an error, and the new password might not have '
+                'been saved correctly.') in resp.data.decode('utf-8')
 
     def test_admin_add_user_when_username_already_in_use(self):
         self._login_admin()
         resp = self.client.post(url_for('admin_add_user'),
                                 data=dict(username=self.admin.username,
-                                          password='testtesttest',
-                                          password_again='testtesttest',
+                                          password=VALID_PASSWORD,
                                           is_admin=False))
         self.assertIn('That username is already in use', resp.data)
 
     def test_max_password_length(self):
         """Creating a Journalist with a password that is greater than the
         maximum password length should raise an exception"""
-        overly_long_password = 'a'*(Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password = VALID_PASSWORD + \
+            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
         with self.assertRaises(InvalidPasswordLength):
             Journalist(username="My Password is Too Big!",
                        password=overly_long_password)
 
     def test_min_password_length(self):
         """Creating a Journalist with a password that is smaller than the
-        minimum password length should raise an exception"""
+           minimum password length should raise an exception. This uses the
+           magic number 7 below to get around the "diceware-like" requirement
+           that may cause a failure before the length check.
+        """
+        password = ('a ' * 7)[0:(Journalist.MIN_PASSWORD_LEN - 1)]
         with self.assertRaises(InvalidPasswordLength):
             Journalist(username="My Password is Too Small!",
-                       password='tiny')
+                       password=password)
 
     def test_admin_edits_user_password_too_long_warning(self):
         self._login_admin()
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password = VALID_PASSWORD + \
+            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(
-            url_for('admin_edit_user', user_id=self.user.id),
+        resp = self.client.post(
+            url_for('admin_new_password', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
-                      password=overly_long_password,
-                      password_again=overly_long_password),
+                      password=overly_long_password),
             follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        print resp.data.decode('utf-8')
+        self.assertMessageFlashed('You submitted a bad password! '
+                                  'Password not changed.', 'error')
 
     def test_user_edits_password_too_long_warning(self):
         self._login_user()
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
+        overly_long_password = VALID_PASSWORD + \
+            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(url_for('edit_account'),
-                         data=dict(password=overly_long_password,
-                                   password_again=overly_long_password),
+        self.client.post(url_for('new_password'),
+                         data=dict(password=overly_long_password),
                          follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        self.assertMessageFlashed('You submitted a bad password! '
+                                  'Password not changed.', 'error')
 
     def test_admin_add_user_password_too_long_warning(self):
         self._login_admin()
 
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
-        resp = self.client.post(
+        overly_long_password = VALID_PASSWORD + \
+            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+        self.client.post(
             url_for('admin_add_user'),
-            data=dict(username='dellsberg', password=overly_long_password,
-                      password_again=overly_long_password, is_admin=False))
+            data=dict(username='dellsberg',
+                      password=overly_long_password,
+                      is_admin=False))
 
-        self.assertIn('Your password must be between', resp.data)
+        self.assertMessageFlashed('There was an error with the autogenerated '
+                                  'password. User not created. '
+                                  'Please try again.', 'error')
 
     def test_admin_edits_user_invalid_username(self):
         """Test expected error message when admin attempts to change a user's
@@ -371,8 +389,7 @@ class TestJournalistApp(TestCase):
 
         self.client.post(
             url_for('admin_edit_user', user_id=self.user.id),
-            data=dict(username=new_username, is_admin=False,
-                      password='', password_again=''))
+            data=dict(username=new_username, is_admin=False))
 
         self.assertMessageFlashed('Username "{}" is already taken!'.format(
             new_username), 'error')
@@ -516,9 +533,10 @@ class TestJournalistApp(TestCase):
 
         resp = self.client.post(url_for('admin_add_user'),
                                 data=dict(username='dellsberg',
-                                          password='pentagonpapers',
-                                          password_again='pentagonpapers',
+                                          password=VALID_PASSWORD,
                                           is_admin=False))
+
+        print resp.data.decode('utf-8')
 
         self.assertRedirects(resp, url_for('admin_new_user_two_factor',
                                            uid=max_journalist_pk+1))
@@ -527,10 +545,19 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         resp = self.client.post(url_for('admin_add_user'),
                                 data=dict(username='',
+                                          password=VALID_PASSWORD,
+                                          is_admin=False))
+        self.assertIn('Invalid username', resp.data)
+
+    def test_admin_add_user_too_short_username(self):
+        self._login_admin()
+        username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username=username,
                                           password='pentagonpapers',
                                           password_again='pentagonpapers',
                                           is_admin=False))
-        self.assertIn('Missing username', resp.data)
+        self.assertIn('Invalid username', resp.data)
 
     @patch('journalist.app.logger.error')
     @patch('journalist.Journalist',
@@ -542,8 +569,7 @@ class TestJournalistApp(TestCase):
 
         self.client.post(url_for('admin_add_user'),
                          data=dict(username='username',
-                                   password='pentagonpapers',
-                                   password_again='pentagonpapers',
+                                   password=VALID_PASSWORD,
                                    is_admin=False))
 
         mocked_error_logger.assert_called_once_with(
@@ -578,8 +604,9 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('index'), url_for('col', sid='1'),
-                url_for('download_single_submission', sid='1', fn='1'),
+        urls = [url_for('index'), url_for('col', filesystem_id='1'),
+                url_for('download_single_submission',
+                        filesystem_id='1', fn='1'),
                 url_for('edit_account')]
 
         for url in urls:
@@ -587,8 +614,10 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
-        urls = [url_for('add_star', sid='1'), url_for('remove_star', sid='1'),
-                url_for('col_process'), url_for('col_delete_single', sid='1'),
+        urls = [url_for('add_star', filesystem_id='1'),
+                url_for('remove_star', filesystem_id='1'),
+                url_for('col_process'),
+                url_for('col_delete_single', filesystem_id='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account_new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
@@ -599,31 +628,32 @@ class TestJournalistApp(TestCase):
 
     def test_invalid_user_password_change(self):
         self._login_user()
-        res = self.client.post(url_for('edit_account'), data=dict(
-            password='not',
-            password_again='thesame'))
+        res = self.client.post(url_for('new_password'),
+                               data=dict(password='badpw'))
         self.assertRedirects(res, url_for('edit_account'))
 
     def test_too_long_user_password_change(self):
         self._login_user()
-        overly_long_password = 'a' * (Journalist.MAX_PASSWORD_LEN + 1)
 
-        self.client.post(url_for('edit_account'), data=dict(
-            password=overly_long_password,
-            password_again=overly_long_password),
+        overly_long_password = VALID_PASSWORD + \
+            'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
+
+        self.client.post(url_for('new_password'),
+                         data=dict(password=overly_long_password),
                          follow_redirects=True)
 
-        self.assertMessageFlashed('Your password must be between {} and {} '
-                                  'characters.'.format(
-                                      Journalist.MIN_PASSWORD_LEN,
-                                      Journalist.MAX_PASSWORD_LEN), 'error')
+        self.assertMessageFlashed('You submitted a bad password! Password not '
+                                  'changed.', 'error')
 
     def test_valid_user_password_change(self):
         self._login_user()
-        self.client.post(url_for('edit_account'), data=dict(
-            password='validlongpassword',
-            password_again='validlongpassword'))
-        self.assertMessageFlashed("Account successfully updated!", 'success')
+        resp = self.client.post(
+            url_for('new_password'),
+            data=dict(password=VALID_PASSWORD_2),
+            follow_redirects=True)
+
+        assert 'The password was successfully updated!' in \
+            resp.data.decode('utf-8')
 
     def test_regenerate_totp(self):
         self._login_user()
@@ -729,7 +759,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         resp = self.client.post(
             '/bulk', data=dict(action='download',
-                               sid=source.filesystem_id,
+                               filesystem_id=source.filesystem_id,
                                doc_names_selected=selected_fnames))
 
         # The download request was succesful, and the app returned a zipfile
@@ -897,7 +927,8 @@ class TestJournalistApp(TestCase):
     def test_add_star_redirects_to_index(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
-        resp = self.client.post(url_for('add_star', sid=source.filesystem_id))
+        resp = self.client.post(url_for('add_star',
+                                        filesystem_id=source.filesystem_id))
         self.assertRedirects(resp, url_for('index'))
 
 
@@ -957,9 +988,9 @@ class TestJournalistAppTwo(unittest.TestCase):
     @patch("journalist.make_star_true")
     @patch("journalist.db_session")
     def test_col_star_call_db_(self, db_session, make_star_true):
-        journalist.col_star(['sid'])
+        journalist.col_star(['filesystem_id'])
 
-        make_star_true.assert_called_with('sid')
+        make_star_true.assert_called_with('filesystem_id')
 
     @patch("journalist.db_session")
     def test_col_un_star_call_db(self, db_session):
@@ -1032,44 +1063,44 @@ class TestJournalist(unittest.TestCase):
     @patch('journalist.url_for')
     @patch('journalist.redirect')
     def test_add_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.add_star('sid')
+        redirect_template = journalist.add_star('filesystem_id')
 
         self.assertEqual(redirect_template, redirect(url_for('index')))
 
     @patch('journalist.db_session')
     def test_add_star_makes_commits(self, db_session):
-        journalist.add_star('sid')
+        journalist.add_star('filesystem_id')
 
         db_session.commit.assert_called_with()
 
     @patch('journalist.make_star_true')
     def test_single_delegates_to_make_star_true(self, make_star_true):
-        sid = 'sid'
+        filesystem_id = 'filesystem_id'
 
-        journalist.add_star(sid)
+        journalist.add_star(filesystem_id)
 
-        make_star_true.assert_called_with(sid)
+        make_star_true.assert_called_with(filesystem_id)
 
     @patch('journalist.url_for')
     @patch('journalist.redirect')
     def test_remove_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.remove_star('sid')
+        redirect_template = journalist.remove_star('filesystem_id')
 
         self.assertEqual(redirect_template, redirect(url_for('index')))
 
     @patch('journalist.db_session')
     def test_remove_star_makes_commits(self, db_session):
-        journalist.remove_star('sid')
+        journalist.remove_star('filesystem_id')
 
         db_session.commit.assert_called_with()
 
     @patch('journalist.make_star_false')
     def test_remove_star_delegates_to_make_star_false(self, make_star_false):
-        sid = 'sid'
+        filesystem_id = 'filesystem_id'
 
-        journalist.remove_star(sid)
+        journalist.remove_star(filesystem_id)
 
-        make_star_false.assert_called_with(sid)
+        make_star_false.assert_called_with(filesystem_id)
 
     @classmethod
     def tearDownClass(cls):

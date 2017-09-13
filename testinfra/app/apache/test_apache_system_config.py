@@ -4,6 +4,7 @@ import re
 
 securedrop_test_vars = pytest.securedrop_test_vars
 
+
 @pytest.mark.parametrize("package", [
     "apache2-mpm-worker",
     "libapache2-mod-wsgi",
@@ -131,5 +132,37 @@ def test_apache_modules_absent(Command, Sudo, apache_module):
     """
     with Sudo():
         c = Command("/usr/sbin/a2query -m {}".format(apache_module))
-        assert "No module matches {} (disabled".format(apache_module) in c.stderr
+        assert "No module matches {} (disabled".format(apache_module) in \
+            c.stderr
         assert c.rc == 32
+
+
+@pytest.mark.parametrize("logfile",
+                         securedrop_test_vars.allowed_apache_logfiles)
+def test_apache_logfiles_present(File, Command, Sudo, logfile):
+    """"
+    Ensure that whitelisted Apache log files for the Source and Journalist
+    Interfaces are present. In staging, we permit a "source-error" log,
+    but on prod even that is not allowed. A separate test will confirm
+    absence of unwanted logfiles by comparing the file count in the
+    Apache log directory.
+    """
+    # We need elevated privileges to read files inside /var/log/apache2
+    with Sudo():
+        f = File(logfile)
+        assert f.is_file
+        assert f.user == "root"
+
+
+def test_apache_logfiles_no_extras(Command, Sudo):
+    """
+    Ensure that no unwanted Apache logfiles are present. Complements the
+    `test_apache_logfiles_present` config test. Here, we confirm that the
+    total number of Apache logfiles exactly matches the number permitted
+    on the Application Server, whether staging or prod.
+    """
+    # We need elevated privileges to read files inside /var/log/apache2
+    with Sudo():
+        c = Command("find /var/log/apache2 -mindepth 1 | wc -l")
+        assert int(c.stdout) == \
+            len(securedrop_test_vars.allowed_apache_logfiles)

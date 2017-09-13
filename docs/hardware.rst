@@ -6,6 +6,17 @@ successfully install and operate a SecureDrop instance, and recommends
 some specific components that we have found to work well. If you have
 any questions, please email securedrop@freedom.press.
 
+Hardware Overview
+-----------------
+
+For an installation of SecureDrop, you must acquire:
+
+.. include:: includes/pre-install-hardware.txt
+
+In the sections that follow, we provide additional details on each item.
+
+.. _Hardware Recommendations:
+
 Required Hardware
 -----------------
 
@@ -71,13 +82,13 @@ our support or consent.
 Workstations
 ^^^^^^^^^^^^
 .. note:: SecureDrop depends on the Tails operating system for its bootable USB
-  drives.  The current stable version of Tails, Tails 3.0, no longer supports
-  32-bit computers.
+  drives.  Since the release of Tails 3.0, 32-bit computers are no longer
+  supported.
 
   To see if you have a 64-bit machine, run ``uname -m`` from a terminal.  If you
   see ``x86_64``, then Tails should work on your current machine.  If, on the
   other hand, you see ``i686``, your current machine will not work with Tails
-  3.0.  For more details, see `the Tails website
+  3.0 or greater.  For more details, see `the Tails website
   <https://tails.boum.org/news/version_3.0/index.en.html#index3h3>`_.
 
 These components are necessary to do the initial installation of
@@ -252,65 +263,44 @@ Specific Hardware Recommendations
 Application and Monitor Servers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Intel NUC (Next Unit of Computing) is a capable, cheap, quiet, and
-low-powered device that can be used for the SecureDrop servers. There
+The Intel NUC (Next Unit of Computing) is a capable, inexpensive, quiet, and
+low-power device that can be used for the SecureDrop servers. There
 are a `variety of
 models <https://www-ssl.intel.com/content/www/us/en/nuc/products-overview.html>`__
 to choose from. We recommend the
-`D54250WYK <https://www-ssl.intel.com/content/www/us/en/nuc/nuc-kit-d54250wyk.html>`__
-because it has a mid-range CPU (Intel i5), the common Mini DisplayPort
-connector for the monitor, and USB 3.0 ports for faster OS installation
+`NUC5i5MYHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc5i5myhe.html>`__
+because it has a mid-range CPU (Intel i5), a Mini DisplayPort
+port for a monitor, and USB 3.0 ports for faster OS installation
 and data transfer.
 
-Conveniently (for the paranoid), it supports wireless networking (Wifi
-and Bluetooth) through *optional* expansion cards not included by
-default - which means you don't have to spend time ripping out the
-wireless hardware before beginning the installation.
+Conveniently, the NUC5i5MYHE supports wireless through *optionally-purchased*
+expansion cards; this means the wireless components aren't soldered on, which
+would make them nearly impossible to remove without inflicting damage to the NUC.
+This optional support is preferable in whichever solution you choose for your
+servers, since you want neither Wifi nor Bluetooth; if you're repurposing old
+hardware, be sure to remove these components if they exist.
 
-.. note:: If you purchase the NUC from `Amazon
-	  <http://www.amazon.com/Intel-D54250WYK-DisplayPort-Graphics-i5-4250U/dp/B00F3F38O2/>`__,
-	  make sure you click "With Powercord" to have one included in
-	  the package.
+The NUCs come as kits, and some assembly is required. You will need to purchase
+the RAM and hard drive separately for each NUC and insert the cards into the NUC
+before it can be used. We recommend:
 
-The NUCs come as kits, and some assembly is required. You will
-need to purchase the RAM and hard drive separately for each NUC and
-insert the cards into the NUC before it can be used. We recommend:
-
--  2 `240 GB SSDs <http://www.amazon.com/dp/B00BQ8RKT4/>`__
--  A `4 GB (4GBx2) memory
-   kit <http://www.amazon.com/Crucial-PC3-12800-204-Pin-Notebook-CT2CP25664BF160B/dp/B005MWQ6WC/>`__
-
+-  2x 240 GB SSDs
+-  1x 4 GB (4GBx2) memory kit
    -  You can put one 4GB memory stick in each of the servers.
 
-.. note:: The D54250WYK has recently been `EOL'ed by Intel
-	  <http://ark.intel.com/products/series/70407/Intel-NUC-Boards-and-Kits>`__.
-	  Availability and prices may be subject to change. We are
-	  working on analyzing alternative recommendations, but there
-	  are no immediately obvious alternatives that share the
-	  benefits of the D54250WYK (primarily, the lack of integrated
-	  wireless networking hardware).
+.. note:: The D54250WYK we previously recommended has now entered `End of Life`
+    and `End of Interactive Support` statuses. If you're currently using this
+    model for your SecureDrop setup, and need hardware support, you'll need to
+    consult the `support community <https://communities.intel.com/community/tech/nuc>`__ forum.
 
-.. note:: An earlier release of SecureDrop (0.2.1) was based on Ubuntu
-	  12.04.1 (precise). We encountered issues installing this
-	  version of Ubuntu on some types of Intel NUCs. The problem
-	  manifested after installing Ubuntu on the NUC. The
-	  installation would complete, but rebooting after
-	  installation would not succeed.
-
-	  We have not encountered this or any similar problems in
-	  testing the current release series (0.3.x) with the Intel
-	  NUCs. Since 0.3 is based on Ubuntu 14.04.1 (trusty), we
-	  believe the issue has been resolved in the newer release of
-	  Ubuntu.
-
-	  If you do encounter issues booting Ubuntu on the NUCs, try
+.. note:: If you encounter issues booting Ubuntu on the NUCs, try
 	  updating the BIOS according to `these instructions
 	  <http://arstechnica.com/gadgets/2014/02/new-intel-nuc-bios-update-fixes-steamos-other-linux-booting-problems/>`__.
 
-.. note:: Some BIOS versions on the NUC will cause the server to
-	  `brick itself <https://communities.intel.com/message/359708>`__ if
-	  the device attempts to suspend. Some suggestions include disabling
-	  suspend in the BIOS as well as OS options like "wake on LAN".
+.. caution:: Some older NUC BIOS versions will cause the server to `brick itself <https://communities.intel.com/message/359708>`__ if the device
+    attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
+    in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
+
 
 Secure Viewing Station (SVS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -338,7 +328,7 @@ recommend taping over with opaque masking tape.
 If you choose to use an Intel NUC that differs from our recommended
 model, make sure you use one that offers wireless as an **option**. If the model
 is advertised as having "integrated wireless", such as the `NUC5i5RYK`, this
-means it's built into the motherboard, making it physically irremovable, and
+could mean it's built into the motherboard, making it physically irremovable, and
 attempting to do so would risk damaging the unit; instead, look for attributes like
 `M.2 22×30 slot and wireless antenna pre-assembled (for wireless card support)`,
 as advertised by the `NUC5i5MYHE` that we recommend.
@@ -346,7 +336,7 @@ as advertised by the `NUC5i5MYHE` that we recommend.
 Tails USBs
 ^^^^^^^^^^
 
-.. note:: The upcoming version of Tails, Tails 3.0, will no longer support 32-bit computers.
+.. note:: Tails no longer supports 32-bit computers.
 	Please see the note in the `Workstations`_ section for more details.
 
 We *strongly recommend* getting USB 3.0-compatible drives to run Tails
@@ -413,16 +403,18 @@ Tails:
 +-------------------------+--------------+----------------+--------------------+
 | Printer Model           | Testing Date | Tails Versions | Printer Type       |
 +=========================+==============+================+====================+
-| HP Deskjet F4200        | 06/2017      | 3.0            | Color Inkjet       |
+| HP DeskJet F4200        | 06/2017      | 3.0            | Color Inkjet       |
 +-------------------------+--------------+----------------+--------------------+
-| HP Deskjet 1112         | 06/2017      | 3.0            | Color Inkjet       |
+| HP DeskJet 1112         | 06/2017      | 3.0            | Color Inkjet       |
++-------------------------+--------------+----------------+--------------------+
+| HP DeskJet 1110         | 08/2017      | 3.1            | Color Inkjet       |
 +-------------------------+--------------+----------------+--------------------+
 | HP LaserJet 400 M401n   | 06/2015      | 1.4            | Monochrome Laser   |
 +-------------------------+--------------+----------------+--------------------+
-| HP Deskjet 6940         | 04/2015      | 1.3.2          | Monochrome Injket  |
+| HP DeskJet 6940         | 04/2015      | 1.3.2          | Monochrome Injket  |
 +-------------------------+--------------+----------------+--------------------+
 
-.. note:: We've documented both the HP Deskjet F4200 and HP LaserJet 400 M401n
+.. note:: We've documented both the HP DeskJet F4200 and HP LaserJet 400 M401n
           with screenshots of the installation process, in our section on
           :ref:`printer_setup_in_tails`. While the F4200 installed
           automatically, the 400 M401n required that we set "Make and model" to

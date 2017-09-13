@@ -2,7 +2,7 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
-securedrop_app_code_version: "0.4.2"
+securedrop_app_code_version: "0.4.3"
 
 grsecurity: true
 install_local_packages: false
@@ -25,6 +25,9 @@ development_dependencies:
   - ruby # to ensure `gem` command is available
   - tmux
   - vim
+  - libffi-dev # for sphinx
+  - git
+  - devscripts # for dch
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them

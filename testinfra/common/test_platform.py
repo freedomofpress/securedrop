@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_ansible_version(host):
     """
     Check that a supported version of Ansible is being used.
@@ -12,6 +9,7 @@ def test_ansible_version(host):
     localhost = host.get_host("local://")
     c = localhost.check_output("ansible --version")
     assert c.startswith("ansible 2.")
+
 
 def test_platform(SystemInfo):
     """
