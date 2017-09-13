@@ -73,7 +73,7 @@ shellcheck: ## Lints Bash and sh scripts.
 		| xargs shellcheck -x --exclude=SC2001,SC2064,SC2181
 
 .PHONY: lint
-lint: docs-lint flake8 html-lint yamllint ## Runs all linting tools (docs, flake8, HTML, YAML).
+lint: docs-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, flake8, HTML, YAML, shell).
 
 .PHONY: docker-build-ubuntu
 docker-build-ubuntu: ## Builds SD Ubuntu docker container
