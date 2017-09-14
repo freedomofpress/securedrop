@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SecureDrop 0.4.2\n"
+"Project-Id-Version: SecureDrop 0.4.3-rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:107
-msgid "You must be an administrator to access that page"
+msgid "Only administrators can access this page."
 msgstr ""
 
 #: journalist.py:123
@@ -49,103 +49,107 @@ msgid ""
 msgstr ""
 
 #: journalist.py:230
-msgid "Two-factor token successfully verified for user {user}!"
+msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
 
-#: journalist.py:237 journalist.py:453
-msgid "Two-factor token failed to verify"
+#: journalist.py:237 journalist.py:455
+msgid "Could not verify token in two-factor authentication."
 msgstr ""
 
-#: journalist.py:264
+#: journalist.py:266
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
 
-#: journalist.py:269
+#: journalist.py:271
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
 
-#: journalist.py:274 journalist.py:299 journalist.py:706
+#: journalist.py:276 journalist.py:301 journalist.py:709
 msgid ""
 "An unexpected error occurred! Please check the application logs or inform"
 " your adminstrator."
 msgstr ""
 
-#: journalist.py:306
-msgid "Account successfully updated!"
+#: journalist.py:308
+msgid "Account updated."
 msgstr ""
 
-#: journalist.py:328
+#: journalist.py:330
 msgid "Username \"{user}\" is already taken!"
 msgstr ""
 
-#: journalist.py:365
+#: journalist.py:367
 msgid "Deleted user '{user}'"
 msgstr ""
 
-#: journalist.py:420
+#: journalist.py:422
 msgid "You submitted a bad password! Password not changed."
 msgstr ""
 
-#: journalist.py:427
+#: journalist.py:429
 msgid ""
 "There was an error, and the new password might not have been saved "
 "correctly. To prevent you from getting locked out of your account, you "
 "should reset your password again."
 msgstr ""
 
-#: journalist.py:436
+#: journalist.py:438
 msgid ""
 "The password was successfully updated! Don't forget to save it in your "
 "KeePassX database. The new password is:"
 msgstr ""
 
-#: journalist.py:449
-msgid "Two-factor token successfully verified!"
+#: journalist.py:451
+msgid "Token in two-factor authentication verified."
 msgstr ""
 
-#: journalist.py:569
+#: journalist.py:572
 msgid "No collections selected!"
 msgstr ""
 
-#: journalist.py:593
-msgid "No unread submissions in collections selected!"
+#: journalist.py:596
+msgid "No unread submissions in selected collections."
 msgstr ""
 
-#: journalist.py:632
+#: journalist.py:635
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr ""
 
-#: journalist.py:641 journalist.py:771
-msgid "No collections selected to delete!"
+#: journalist.py:644
+msgid "No collections selected for deletion."
 msgstr ""
 
-#: journalist.py:646
+#: journalist.py:649
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
 msgstr[0] ""
 msgstr[1] ""
 
-#: journalist.py:690
+#: journalist.py:693
 msgid "You cannot send an empty reply!"
 msgstr ""
 
-#: journalist.py:717
+#: journalist.py:720
 msgid "Thanks! Your reply has been stored."
 msgstr ""
 
-#: journalist.py:736
+#: journalist.py:739
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr ""
 
-#: journalist.py:753
+#: journalist.py:756
 msgid "No unread submissions for this source!"
 msgstr ""
 
-#: journalist.py:769
-msgid "No collections selected to download!"
+#: journalist.py:772
+msgid "No collections selected for download!"
 msgstr ""
 
-#: journalist.py:801
+#: journalist.py:774
+msgid "No collections selected for deletion!"
+msgstr ""
+
+#: journalist.py:804
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
 msgstr[0] ""
@@ -291,12 +295,12 @@ msgstr ""
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
-msgid "Enable Yubikey (OATH-HOTP)"
+msgid "Enable YubiKey (OATH-HOTP)"
 msgstr ""
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:19
-msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
 
 #: journalist_templates/account_new_two_factor.html:22
@@ -372,7 +376,7 @@ msgid "Is Administrator"
 msgstr ""
 
 #: journalist_templates/admin_add_user.html:18
-msgid "I'm using a Yubikey"
+msgid "I'm using a YubiKey [HOTP]"
 msgstr ""
 
 #: journalist_templates/admin_new_user_two_factor.html:6
@@ -978,14 +982,14 @@ msgid ""
 "Tor2Web only protects publishers, not readers. If you upload documents to"
 " us using Tor2Web, you are <strong>not anonymous</strong> and could be "
 "identified by your ISP or the Tor2Web proxy operators. Additionally, "
-"since Tor2Web sites typically use HTTPS, it is possible that your "
+"since Tor2Web sites typically do not use HTTPS, it is possible that your "
 "connection could be MITM'ed by a capable adversary."
 msgstr ""
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
-"If you want to submit information, we <strong>strongly advise "
-"you</strong> to install <a "
+"If you want to submit information, you are <strong>strongly "
+"advised</strong> to install <a "
 "href=\"torproject.org/download.html.en\">Tor</a> and use it to access our"
 " site safely and anonymously."
 msgstr ""
@@ -1049,7 +1053,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
-"If you are using Mac/Linux, open the Terminal. You can import the key "
+"If you are using Mac/Linux, open the terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
 
@@ -1060,7 +1064,7 @@ msgstr ""
 #: source_templates/why-journalist-key.html:16
 msgid ""
 "You will need to be able to identify the key (this is called the \"user "
-"ID\" or uid). Since the public key's filename is the key's fingerprint "
+"ID\" or UID). Since the public key's filename is the key's fingerprint "
 "(with .asc at the end), you can just copy and paste that. (don't include "
 "the <code>.asc</code>!)"
 msgstr ""
