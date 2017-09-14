@@ -15,7 +15,7 @@
 <p>Once you have scanned the barcode, enter the 6-digit code below:</p>
 {% else %}
 <h1>Enable YubiKey (OATH-HOTP)</h1>
-<p>Once you have configured your Yubikey, enter the 6-digit code below:</p>
+<p>Once you have configured your YubiKey, enter the 6-digit code below:</p>
 {% endif %}
 <form id="check-token" method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
