@@ -21,6 +21,26 @@ class TestStore(unittest.TestCase):
         utils.env.teardown()
         db_session.remove()
 
+    def test_path_returns_filename_of_folder(self):
+        """store.path is called in this way in journalist.delete_collection"""
+        filesystem_id = 'example'
+
+        generated_absolute_path = store.path(filesystem_id)
+
+        expected_absolute_path = os.path.join(config.STORE_DIR, filesystem_id)
+        self.assertEquals(generated_absolute_path, expected_absolute_path)
+
+    def test_path_returns_filename_of_items_within_folder(self):
+        """store.path is called in this way in journalist.bulk_delete"""
+        filesystem_id = 'example'
+        item_filename = '1-quintuple_cant-msg.gpg'
+
+        generated_absolute_path = store.path(filesystem_id, item_filename)
+
+        expected_absolute_path = os.path.join(config.STORE_DIR,
+                                              filesystem_id, item_filename)
+        self.assertEquals(generated_absolute_path, expected_absolute_path)
+
     def test_verify_path_not_absolute(self):
         with self.assertRaises(store.PathException):
             store.verify(os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
