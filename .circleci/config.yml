@@ -10,8 +10,7 @@ jobs:
 
       - run:
           name: Rebase on-top of latest develop
-          command: |
-            if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  ]]; then git fetch origin develop && git rebase origin/develop; git rev-parse HEAD; fi
+          command: ./devops/scripts/rebase-develop.sh
 
       - run:
           name: Installation pre-reqs
@@ -37,8 +36,7 @@ jobs:
 
       - run:
           name: Rebase on-top of latest develop
-          command: |
-            if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  ]]; then git fetch origin develop && git rebase origin/develop; git rev-parse HEAD; fi
+          command: ./devops/scripts/rebase-develop.sh
 
       - run:
           name: Installation pre-reqs
