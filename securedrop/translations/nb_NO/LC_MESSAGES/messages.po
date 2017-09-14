@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-08 15:15+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
-"Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
-"securedrop/securedrop/nb_NO/>\n"
+"PO-Revision-Date: 2017-09-14 14:25+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,10 +21,8 @@ msgstr ""
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:107
-#, fuzzy
-#| msgid "You must be an administrator to access that page"
 msgid "Only administrators can access this page."
-msgstr "Du må være administrator for å få tilgang til denne siden"
+msgstr "Bare administratorer har tilgang til denne siden."
 
 #: journalist.py:123
 msgid "Login failed."
@@ -60,16 +58,12 @@ msgstr ""
 "administrator sjekke loggene."
 
 #: journalist.py:230
-#, fuzzy
-#| msgid "Two-factor token successfully verified for user {user}!"
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "Tofaktor-kode for brukeren {user} gjennomgikk kontroll!"
+msgstr "Tofaktor-kode for brukeren {user} gjennomgikk kontroll."
 
 #: journalist.py:237 journalist.py:455
-#, fuzzy
-#| msgid "Two-factor token failed to verify"
 msgid "Could not verify token in two-factor authentication."
-msgstr "Kontroll av tofaktor-kode mislyktes"
+msgstr "Kunne ikke bekrefte symbol i to-faktorinnlogging."
 
 #: journalist.py:266
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -90,8 +84,6 @@ msgstr ""
 "administrator."
 
 #: journalist.py:308
-#, fuzzy
-#| msgid "Account successfully updated!"
 msgid "Account updated."
 msgstr "Konto oppdatert!"
 
@@ -125,30 +117,24 @@ msgstr ""
 "KeePassX-database. Det nye passordet er:"
 
 #: journalist.py:451
-#, fuzzy
-#| msgid "Two-factor token successfully verified!"
 msgid "Token in two-factor authentication verified."
-msgstr "Tofaktor-kode gjenomgikk kontroll!"
+msgstr "Tofaktor-kode gjenomgikk kontroll."
 
 #: journalist.py:572
 msgid "No collections selected!"
 msgstr "Ingen kildeoppføringer valgt!"
 
 #: journalist.py:596
-#, fuzzy
-#| msgid "No unread submissions in collections selected!"
 msgid "No unread submissions in selected collections."
-msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer!"
+msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer."
 
 #: journalist.py:635
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "{source_journalist_designation}s kildedata slettet"
 
 #: journalist.py:644
-#, fuzzy
-#| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion."
-msgstr "Ingen kildeoppføringer valgt for sletting!"
+msgstr "Ingen kildeoppføringer valgt for sletting."
 
 #: journalist.py:649
 msgid "{num} collection deleted"
@@ -173,16 +159,12 @@ msgid "No unread submissions for this source!"
 msgstr "Ingen uleste bidrag fra denne kilden!"
 
 #: journalist.py:772
-#, fuzzy
-#| msgid "No collections selected to download!"
 msgid "No collections selected for download!"
-msgstr "Ingen kildedata valgt for nedlasting!"
+msgstr "Ingen kildedata valgt for nedlasting."
 
 #: journalist.py:774
-#, fuzzy
-#| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion!"
-msgstr "Ingen kildeoppføringer valgt for sletting!"
+msgstr "Ingen kildeoppføringer valgt for sletting."
 
 #: journalist.py:804
 msgid "Submission deleted."
@@ -342,15 +324,11 @@ msgstr "Etter å ha skannet QR-koden, skriv inn den 6-sifrede koden under:"
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
-#, fuzzy
-#| msgid "Enable Yubikey (OATH-HOTP)"
 msgid "Enable YubiKey (OATH-HOTP)"
 msgstr "Skru på YubiKey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:19
-#, fuzzy
-#| msgid "Once you have configured your Yubikey, enter the 6-digit code below:"
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
 "Når du har satt opp din YubiKey, skriv inn den 6 tegn lange koden nedenfor:"
@@ -428,10 +406,8 @@ msgid "Is Administrator"
 msgstr "Er administrator"
 
 #: journalist_templates/admin_add_user.html:18
-#, fuzzy
-#| msgid "I'm using a Yubikey"
 msgid "I'm using a YubiKey [HOTP]"
-msgstr "Jeg bruker en YubiKey"
+msgstr "Jeg bruker en YubiKey [HOTP]"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -1121,13 +1097,6 @@ msgstr ""
 "Løsningen ble laget for å muliggjøre anonym drift av nettsider."
 
 #: source_templates/tor2web-warning.html:5
-#, fuzzy
-#| msgid ""
-#| "Tor2Web only protects publishers, not readers. If you upload documents to "
-#| "us using Tor2Web, you are <strong>not anonymous</strong> and could be "
-#| "identified by your ISP or the Tor2Web proxy operators. Additionally, "
-#| "since Tor2Web sites typically use HTTPS, it is possible that your "
-#| "connection could be MITM'ed by a capable adversary."
 msgid ""
 "Tor2Web only protects publishers, not readers. If you upload documents to us "
 "using Tor2Web, you are <strong>not anonymous</strong> and could be "
@@ -1143,19 +1112,15 @@ msgstr ""
 "oppkoblingen din."
 
 #: source_templates/tor2web-warning.html:6
-#, fuzzy
-#| msgid ""
-#| "If you want to submit information, we <strong>strongly advise you</"
-#| "strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> "
-#| "and use it to access our site safely and anonymously."
 msgid ""
 "If you want to submit information, you are <strong>strongly advised</strong> "
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
 "access our site safely and anonymously."
 msgstr ""
-"Om du vil sende oss informasjon, anbefaler vi <strong>på det sterkeste</"
-"strong> at du installerer <a href=\"https://www.torproject.org/download.html."
-"en\">Tor</a> og bruker Tor-nettleseren for å sikkert og anonymt besøke siden."
+"Om du vil sende oss informasjon, anbefales det <strong>på det "
+"sterkeste</strong> å installerere <a href=\""
+"https://www.torproject.org/download.html.en\">Tor</a> og bruke Tor-"
+"nettleseren for å sikkert og anonymt besøke siden."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1231,29 +1196,19 @@ msgstr ""
 "til i nøkkelringen på systemet ditt."
 
 #: source_templates/why-journalist-key.html:11
-#, fuzzy
-#| msgid ""
-#| "If you are using Mac/Linux, open the Terminal. You can import the key "
-#| "with <code>gpg --import /path/to/key.asc</code>."
 msgid ""
 "If you are using Mac/Linux, open the terminal. You can import the key with "
 "<code>gpg --import /path/to/key.asc</code>."
 msgstr ""
 "Om du bruker Mac/Linux, åpne terminalen. Du kan importere nøkkelen med "
-"følgende kommando <code>gpg --import /plassering/på/disken/for/key.asc</"
-"code>."
+"følgende kommando <code>gpg --import "
+"/plassering/på/disken/for/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
 msgstr "Krypter din innsendelse."
 
 #: source_templates/why-journalist-key.html:16
-#, fuzzy
-#| msgid ""
-#| "You will need to be able to identify the key (this is called the \"user ID"
-#| "\" or uid). Since the public key's filename is the key's fingerprint "
-#| "(with .asc at the end), you can just copy and paste that. (don't include "
-#| "the <code>.asc</code>!)"
 msgid ""
 "You will need to be able to identify the key (this is called the \"user ID\" "
 "or UID). Since the public key's filename is the key's fingerprint (with .asc "
