@@ -310,7 +310,7 @@ def admin_edit_user(user_id):
                 pass
             elif Journalist.query.filter_by(
                     username=new_username).one_or_none():
-                flash('Username "{}" is already taken!'.format(new_username),
+                flash('Username "{}" already taken.'.format(new_username),
                       "error")
                 return redirect(url_for("admin_edit_user", user_id=user_id))
             else:
@@ -413,8 +413,8 @@ def _set_diceware_password(user, password):
         return
 
     # using Markup so the HTML isn't escaped
-    flash(Markup("<p>The password was successfully updated! Don't forget to "
-                 'save it in your KeePassX database. The new password is: '
+    flash(Markup("<p>Password updated. Don't forget to "
+                 'save it in your KeePassX database. New password: '
                  '<span><code>{}</code></span></p>'.format(password)),
           'success')
 
@@ -545,7 +545,7 @@ def col_process():
                'download-all': col_download_all, 'star': col_star,
                'un-star': col_un_star, 'delete': col_delete}
     if 'cols_selected' not in request.form:
-        flash('No collections selected!', 'error')
+        flash('No collections selected.', 'error')
         return redirect(url_for('index'))
 
     # getlist is cgi.FieldStorage.getlist
@@ -665,7 +665,7 @@ def reply():
     msg = request.form['msg']
     # Reject empty replies
     if not msg:
-        flash("You cannot send an empty reply!", "error")
+        flash("You cannot send an empty reply.", "error")
         return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
     g.source.interaction_count += 1
@@ -687,11 +687,11 @@ def reply():
         # with responses to sources. It's possible the exception message could
         # contain information we don't want to write to disk.
         app.logger.error(
-            "Reply from '{}' (id {}) failed: {}!".format(g.user.username,
+            "Reply from '{}' (ID {}) failed: {}!".format(g.user.username,
                                                          g.user.id,
                                                          exc.__class__))
     else:
-        flash("Thanks! Your reply has been stored.", "notification")
+        flash("Thanks. Your reply has been stored.", "notification")
     finally:
         return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
@@ -725,7 +725,7 @@ def download_unread_filesystem_id(filesystem_id):
         Submission.source_id == id,
         Submission.downloaded == false()).all()
     if submissions == []:
-        flash("No unread submissions for this source!")
+        flash("No unread submissions for this source.")
         return redirect(url_for('col', filesystem_id=filesystem_id))
     source = get_source(filesystem_id)
     return download(source.journalist_filename, submissions)
@@ -741,9 +741,9 @@ def bulk():
                      if doc.filename in doc_names_selected]
     if selected_docs == []:
         if action == 'download':
-            flash("No collections selected for download!", "error")
+            flash("No collections selected for download.", "error")
         elif action in ('delete', 'confirm_delete'):
-            flash("No collections selected for deletion!", "error")
+            flash("No collections selected for deletion.", "error")
         return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
     if action == 'download':
