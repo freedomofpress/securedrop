@@ -303,10 +303,9 @@ def translate_messages(args):
         if changed and len(os.listdir(args.translations_dir)) > 1:
             sh("""
             set -xe
-            pybabel update \
-            --input-file {messages_file} \
-            --output-dir {translations_dir} \
-            --ignore-obsolete
+            for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
+              msgmerge --previous --update $translation {messages_file}
+            done
             """.format(translations_dir=args.translations_dir,
                        messages_file=messages_file))
             log.warning("messages translations updated in " + messages_file)
