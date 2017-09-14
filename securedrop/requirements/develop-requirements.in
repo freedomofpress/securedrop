@@ -1,11 +1,12 @@
 # Temporary peg until issue #1146 is resolved
 ansible==2.2.1
 boto
-html-linter
 flake8
+html-linter
 pip-tools
 pytest-xdist
-testinfra
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme
+testinfra
+yamllint
