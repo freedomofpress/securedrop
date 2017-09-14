@@ -44,4 +44,10 @@ include tests/utils/**.py
 include wordlist
 include sass/
 include sass/**.sass
+include babel.cfg
+include translations/
+include translations/*.pot
+include translations/*/
+include translations/*/*/
+include translations/*/*/*.po
 exclude *

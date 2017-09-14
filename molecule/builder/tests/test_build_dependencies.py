@@ -31,6 +31,7 @@ build_directories = get_build_directories()
     "libssl-dev",
     "python-dev",
     "python-pip",
+    "secure-delete",
 ])
 def test_build_dependencies(Package, package):
     """
@@ -58,6 +59,15 @@ def test_sass_gem_installed(Command):
     """
     c = Command("gem list")
     assert "sass (3.4.23)" in c.stdout
+    assert c.rc == 0
+
+
+def test_pip_dependencies_installed(Command):
+    """
+    Ensure the development pip dependencies are installed
+    """
+    c = Command("pip list installed")
+    assert "Flask-Babel" in c.stdout
     assert c.rc == 0
 
 
