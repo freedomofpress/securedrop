@@ -66,11 +66,12 @@ shellcheck: ## Lints Bash and sh scripts.
 # don't maintain those scripts. Omitting the `.venv/` dir because we don't control
 # files in there. Omitting the ossec packages because there are a LOT of violations,
 # and we have a separate issue dedicated to cleaning those up.
-	@find "$(PWD)" \( -path "$(PWD)/.venv" -o -path "$(PWD)/install_files/ossec-server" \
-		-o -path "$(PWD)/install_files/ossec-agent" \) -prune \
+	@find \( -path "./.venv" -o -path "./install_files/ossec-server" \
+		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
-		| xargs shellcheck -x --exclude=SC2001,SC2064,SC2181
+		| xargs docker run -v "$(PWD):/mnt" -t koalaman/shellcheck:v0.4.6 \
+		-x --exclude=SC1091,SC2001,SC2064,SC2181
 
 .PHONY: lint
 lint: docs-lint flake8 html-lint yamllint shellcheck ## Runs all linting tools (docs, flake8, HTML, YAML, shell).
