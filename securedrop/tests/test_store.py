@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 import unittest
 import zipfile
 
@@ -59,6 +60,22 @@ class TestStore(unittest.TestCase):
                 store.verify('something')
         finally:
             config.STORE_DIR = STORE_DIR
+
+    def test_verify_flagged_file_in_sourcedir_returns_true(self):
+        # Simulate source directory with flagged file
+        source_directory = os.path.join(config.STORE_DIR,
+                                        'example-filesystem-id')
+        os.makedirs(source_directory)
+
+        flagged_file_path = os.path.join(source_directory, '_FLAG')
+        with open(flagged_file_path, 'a'):
+            os.utime(flagged_file_path, None)
+
+        # This should be considered a valid path by verify
+        self.assertTrue(store.verify(flagged_file_path))
+
+        # Clean up created files
+        shutil.rmtree(source_directory)
 
     def test_get_zip(self):
         source, _ = utils.db_helper.init_source()
