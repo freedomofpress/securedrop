@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-15 14:36+0000\n"
+"PO-Revision-Date: 2017-09-15 18:55+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -330,7 +330,7 @@ msgstr ""
 #: journalist_templates/admin_new_user_two_factor.html:16
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
 msgstr ""
-"Après avoir lu le code-barres, saisissez le code à 6 chiffres ci-dessous :"
+"Après avoir lu le code-barres, saisissez ci-dessous le code à 6 chiffres :"
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
@@ -909,7 +909,7 @@ msgstr "Envoyer des documents pour la première fois"
 
 #: source_templates/index.html:48
 msgid "Already submitted something?"
-msgstr "Avez-vous déjà envoyé quelque chose ?"
+msgstr "Avez-vous déjà envoyé quelque chose ?"
 
 #: source_templates/index.html:54
 msgid ""
@@ -1265,8 +1265,8 @@ msgid ""
 "code>)"
 msgstr ""
 "Téléversez votre envoi chiffré. Il aura le même nom de fichier que le "
-"fichier non chiffré, avec .gpg à la fin (e.g. <code>photos_roswell.pdf.gpg</"
-"code>)"
+"fichier non chiffré, avec .gpg à la fin (p. ex. "
+"<code>photos_roswell.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
