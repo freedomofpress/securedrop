@@ -87,7 +87,7 @@ generated.
 |My Keys|
 
 #. Select the key you just generated and click "File" then "Export".
-#. Save the key to the *Transfer Device* as ``SecureDrop.pub.asc``, and make
+#. Save the key to the *Transfer Device* as ``SecureDrop.asc``, and make
    sure you change the file type from "PGP keys" to "Armored PGP keys" which
    can be switched at the bottom of the Save window. Click the 'Export' button
    after switching to armored keys.
