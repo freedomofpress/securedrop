@@ -77,6 +77,25 @@ class TestStore(unittest.TestCase):
         # Clean up created files
         shutil.rmtree(source_directory)
 
+    def test_verify_invalid_file_extension_in_sourcedir_raises_exception(self):
+        # Simulate source directory with flagged file
+        source_directory = os.path.join(config.STORE_DIR,
+                                        'example-filesystem-id')
+        os.makedirs(source_directory)
+
+        invalid_file_path = os.path.join(source_directory, 'not_valid.txt')
+        with open(invalid_file_path, 'a'):
+            os.utime(invalid_file_path, None)
+
+        # This should not be considered a valid path by verify
+        with self.assertRaisesRegexp(
+                store.PathException,
+                'Invalid file extension .txt'):
+            store.verify(invalid_file_path)
+
+        # Clean up created files
+        shutil.rmtree(source_directory)
+
     def test_get_zip(self):
         source, _ = utils.db_helper.init_source()
         submissions = utils.db_helper.submit(source, 2)
