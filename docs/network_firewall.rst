@@ -416,8 +416,8 @@ Make aliases for the following:
 - ``admin_workstation``: ``10.20.1.2``
 - ``app_server``: ``10.20.2.2``
 - ``external_dns_servers``: ``8.8.8.8, 8.8.4.4``
-- ``local_servers``: ``app_server, monitor_server``
 - ``monitor_server``: ``10.20.3.2``
+- ``local_servers``: ``app_server, monitor_server``
 
 |Add Firewall Alias|
 
