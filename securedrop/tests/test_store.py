@@ -142,3 +142,13 @@ class TestStore(unittest.TestCase):
             source.filesystem_id, old_filename,
             new_journalist_filename)
         self.assertEquals(actual_filename, expected_filename)
+
+    def test_rename_submission_with_invalid_filename(self):
+        original_filename = '1-quintuple_cant-msg.gpg'
+        returned_filename = store.rename_submission(
+                'example-filesystem-id', original_filename,
+                'this-new-filename-should-not-be-returned')
+
+        # None of the above files exist, so we expect the attempt to rename
+        # the submission to fail and the original filename to be returned.
+        self.assertEquals(original_filename, returned_filename)
