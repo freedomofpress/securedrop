@@ -22,6 +22,18 @@ class TestStore(unittest.TestCase):
         utils.env.teardown()
         db_session.remove()
 
+    def create_file_in_source_dir(self, filesystem_id, filename):
+        """Helper function for simulating files"""
+        source_directory = os.path.join(config.STORE_DIR,
+                                        filesystem_id)
+        os.makedirs(source_directory)
+
+        file_path = os.path.join(source_directory, filename)
+        with open(file_path, 'a'):
+            os.utime(file_path, None)
+
+        return source_directory, file_path
+
     def test_path_returns_filename_of_folder(self):
         """store.path is called in this way in journalist.delete_collection"""
         filesystem_id = 'example'
@@ -62,58 +74,37 @@ class TestStore(unittest.TestCase):
             config.STORE_DIR = STORE_DIR
 
     def test_verify_flagged_file_in_sourcedir_returns_true(self):
-        # Simulate source directory with flagged file
-        source_directory = os.path.join(config.STORE_DIR,
-                                        'example-filesystem-id')
-        os.makedirs(source_directory)
+        source_directory, file_path = self.create_file_in_source_dir(
+            'example-filesystem-id', '_FLAG'
+        )
 
-        flagged_file_path = os.path.join(source_directory, '_FLAG')
-        with open(flagged_file_path, 'a'):
-            os.utime(flagged_file_path, None)
+        self.assertTrue(store.verify(file_path))
 
-        # This should be considered a valid path by verify
-        self.assertTrue(store.verify(flagged_file_path))
-
-        # Clean up created files
-        shutil.rmtree(source_directory)
+        shutil.rmtree(source_directory)  # Clean up created files
 
     def test_verify_invalid_file_extension_in_sourcedir_raises_exception(self):
-        # Simulate source directory with flagged file
-        source_directory = os.path.join(config.STORE_DIR,
-                                        'example-filesystem-id')
-        os.makedirs(source_directory)
+        source_directory, file_path = self.create_file_in_source_dir(
+            'example-filesystem-id', 'not_valid.txt'
+        )
 
-        invalid_file_path = os.path.join(source_directory, 'not_valid.txt')
-        with open(invalid_file_path, 'a'):
-            os.utime(invalid_file_path, None)
-
-        # This should not be considered a valid path by verify
         with self.assertRaisesRegexp(
                 store.PathException,
                 'Invalid file extension .txt'):
-            store.verify(invalid_file_path)
+            store.verify(file_path)
 
-        # Clean up created files
-        shutil.rmtree(source_directory)
+        shutil.rmtree(source_directory)  # Clean up created files
 
     def test_verify_invalid_filename_in_sourcedir_raises_exception(self):
-        # Simulate source directory with flagged file
-        source_directory = os.path.join(config.STORE_DIR,
-                                        'example-filesystem-id')
-        os.makedirs(source_directory)
+        source_directory, file_path = self.create_file_in_source_dir(
+            'example-filesystem-id', 'NOTVALID.gpg'
+        )
 
-        invalid_file_path = os.path.join(source_directory, 'NOTVALID.gpg')
-        with open(invalid_file_path, 'a'):
-            os.utime(invalid_file_path, None)
-
-        # This should not be considered a valid path by verify
         with self.assertRaisesRegexp(
                 store.PathException,
                 'Invalid filename NOTVALID.gpg'):
-            store.verify(invalid_file_path)
+            store.verify(file_path)
 
-        # Clean up created files
-        shutil.rmtree(source_directory)
+        shutil.rmtree(source_directory)  # Clean up created files
 
     def test_get_zip(self):
         source, _ = utils.db_helper.init_source()
