@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-14 13:26+0000\n"
-"Last-Translator: Loic Dachary <loic@dachary.org>\n"
+"PO-Revision-Date: 2017-09-15 14:36+0000\n"
+"Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: journalist.py:107
 msgid "Only administrators can access this page."
-msgstr "Vous devez être administrateur pour accéder à cette page."
+msgstr "Seuls les administrateurs peuvent accéder à cette page."
 
 #: journalist.py:123
 msgid "Login failed."
@@ -60,16 +60,14 @@ msgstr ""
 "la base de données. Veuillez consulter les journaux de l'application."
 
 #: journalist.py:230
-#, fuzzy
-#| msgid "Two-factor token successfully verified for user {user}!"
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
-"Le jeton de la validation en deux étapes a été vérifié avec succès pour "
-"l'utilisateur {user}."
+"Le jeton de la validation en deux étapes a été accepté pour l'utilisateur "
+"{user}."
 
 #: journalist.py:237 journalist.py:455
 msgid "Could not verify token in two-factor authentication."
-msgstr "Échec de vérification du jeton de la validation en deux étapes."
+msgstr "Impossible de vérifier le jeton de la validation en deux étapes."
 
 #: journalist.py:266
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -92,10 +90,8 @@ msgstr ""
 "l'application ou informer votre administrateur."
 
 #: journalist.py:308
-#, fuzzy
-#| msgid "Account successfully updated!"
 msgid "Account updated."
-msgstr "Le compte a été mis à jour avec succès !"
+msgstr "Le compte a été mis à jour."
 
 #: journalist.py:330
 msgid "Username \"{user}\" is already taken!"
@@ -128,30 +124,24 @@ msgstr ""
 "l'enregistrer dans votre base de données KeePassX. Le mot de passe est :"
 
 #: journalist.py:451
-#, fuzzy
-#| msgid "Two-factor token successfully verified!"
 msgid "Token in two-factor authentication verified."
-msgstr "Le jeton de validation en deux étapes a été vérifié avec succès !"
+msgstr "Le jeton de validation en deux étapes a été vérifié."
 
 #: journalist.py:572
 msgid "No collections selected!"
 msgstr "Aucune collection n'a été sélectionnée !"
 
 #: journalist.py:596
-#, fuzzy
-#| msgid "No unread submissions in collections selected!"
 msgid "No unread submissions in selected collections."
-msgstr "Aucun envoi non lu des collections n'a été sélectionné !"
+msgstr "Il n'y a aucun envoi non lu dans les collections sélectionnées."
 
 #: journalist.py:635
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "La collection de {source_journalist_designation} a été supprimée"
 
 #: journalist.py:644
-#, fuzzy
-#| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion."
-msgstr "Aucune collection n'a été sélectionnée pour être supprimée !"
+msgstr "Aucune collection n'a été sélectionnée pour être supprimée."
 
 #: journalist.py:649
 msgid "{num} collection deleted"
@@ -176,14 +166,10 @@ msgid "No unread submissions for this source!"
 msgstr "Aucun envoi non lu de cette source !"
 
 #: journalist.py:772
-#, fuzzy
-#| msgid "No collections selected to download!"
 msgid "No collections selected for download!"
 msgstr "Aucune collection n'a été sélectionnée pour être téléchargée !"
 
 #: journalist.py:774
-#, fuzzy
-#| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion!"
 msgstr "Aucune collection n'a été sélectionnée pour être supprimée !"
 
@@ -1140,13 +1126,6 @@ msgstr ""
 "installer Tor. Il a été conçu pour faciliter la publication anonyme."
 
 #: source_templates/tor2web-warning.html:5
-#, fuzzy
-#| msgid ""
-#| "Tor2Web only protects publishers, not readers. If you upload documents to "
-#| "us using Tor2Web, you are <strong>not anonymous</strong> and could be "
-#| "identified by your ISP or the Tor2Web proxy operators. Additionally, "
-#| "since Tor2Web sites typically use HTTPS, it is possible that your "
-#| "connection could be MITM'ed by a capable adversary."
 msgid ""
 "Tor2Web only protects publishers, not readers. If you upload documents to us "
 "using Tor2Web, you are <strong>not anonymous</strong> and could be "
@@ -1158,23 +1137,19 @@ msgstr ""
 "téléversez des documents à notre intention en utilisant Tor2Web, vous n'êtes "
 "<strong>pas anonymes</strong> et pourriez être identifié par votre FAI ou "
 "par les exploitants du mandataire Tor2Web. De plus, comme les sites Tor2Web "
-"utilisent habituellement HTTPS, il est possible que votre connexion soit la "
-"cible d'une attaque de l'intercepteur menée par un adversaire compétent."
+"n'utilisent habituellement pas HTTPS, il est possible que votre connexion "
+"soit la cible d'une attaque de l'intercepteur menée par un adversaire "
+"compétent."
 
 #: source_templates/tor2web-warning.html:6
-#, fuzzy
-#| msgid ""
-#| "If you want to submit information, we <strong>strongly advise you</"
-#| "strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> "
-#| "and use it to access our site safely and anonymously."
 msgid ""
 "If you want to submit information, you are <strong>strongly advised</strong> "
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
 "access our site safely and anonymously."
 msgstr ""
-"Si vous souhaitez envoyer des informations, nous vous <strong>conseillons "
-"vivement</strong> d'installer <a href=\"torproject.org/download.html.en"
-"\">Tor</a> et de l'utiliser pour accéder à notre site en toute sécurité et "
+"Si vous souhaitez envoyer des informations, il vous <strong>vivement "
+"conseillé</strong> d'installer <a href=\"torproject.org/download.html.en\""
+">Tor</a> et de l'utiliser pour accéder à notre site en toute sécurité et "
 "anonymement."
 
 #: source_templates/use-tor-browser.html:3
