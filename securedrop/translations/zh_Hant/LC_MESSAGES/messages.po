@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-11 06:30+0000\n"
+"PO-Revision-Date: 2017-09-16 12:58+0000\n"
 "Last-Translator: Loic Dachary <loic@dachary.org>\n"
-"Language-Team: Chinese (Traditional) <https://weblate.securedrop.club/"
-"projects/securedrop/securedrop/zh_Hant/>\n"
+"Language-Team: Chinese (Traditional) "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,7 +62,7 @@ msgstr "为用户{用户}的两节记号的验证成功了！"
 
 #: journalist.py:237 journalist.py:455
 msgid "Could not verify token in two-factor authentication."
-msgstr ""
+msgstr "无法验证两个部分组成的记号的授权。"
 
 #: journalist.py:266
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -114,7 +114,7 @@ msgstr ""
 
 #: journalist.py:451
 msgid "Token in two-factor authentication verified."
-msgstr ""
+msgstr "由两个部分组成的记号的授权已经验证。"
 
 #: journalist.py:572
 msgid "No collections selected!"
@@ -172,7 +172,7 @@ msgstr "未選擇要刪除的資料夾！"
 #: journalist.py:804
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] ""
+msgstr[0] "提交被删除了。"
 
 #: source.py:128
 msgid ""
@@ -180,16 +180,18 @@ msgid ""
 "not</strong> provide anonymity. <a href=\"/tor2web-warning\">Why is this "
 "dangerous?</a>"
 msgstr ""
+"<strong> 警告：</strong>你似乎要用Tor2Web。 这 <strong>不能</strong>提供匿名性。<a href"
+"=\"/tor2web-warning\">为何这很危险？</a>"
 
 #: source.py:169
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
-msgstr ""
+msgstr "你被重定向了， 因为你已经登录了。如果你想创建一个新的账户，你应该先退出。"
 
 #: source.py:285
 msgid "You must enter a message or choose a file to submit."
-msgstr ""
+msgstr "你必须输入一条消息，或者选择一个文件提交。"
 
 #: source.py:358
 msgid "Reply deleted"
@@ -197,7 +199,7 @@ msgstr "回覆已刪除"
 
 #: source.py:374
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "所有的回复都已经被删除了"
 
 #: source.py:407
 msgid "Sorry, that is not a recognized codename."
@@ -205,48 +207,48 @@ msgstr "對不起，無法識別這個代號"
 
 #: template_filters.py:13
 msgid "{time} ago"
-msgstr ""
+msgstr "{time} 之前"
 
 #: template_filters.py:26
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] ""
+msgstr[0] "{n}秒"
 
 #: template_filters.py:29
 msgid "a minute"
-msgstr ""
+msgstr "一分钟"
 
 #: template_filters.py:31
 msgid "{n} minutes"
-msgstr ""
+msgstr "{n}分钟"
 
 #: template_filters.py:33
 msgid "an hour"
-msgstr ""
+msgstr "一小时"
 
 #: template_filters.py:35
 msgid "{n} hours"
-msgstr ""
+msgstr "{n}小时"
 
 #: template_filters.py:37
 msgid "a day"
-msgstr ""
+msgstr "一天"
 
 #: template_filters.py:39
 msgid "{n} days"
-msgstr ""
+msgstr "{n}天"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
-msgstr ""
+msgstr "文档{doc_num}"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
-msgstr ""
+msgstr "消息{msg_num}"
 
 #: journalist_templates/_source_row.html:21
 msgid "{num_unread} unread"
-msgstr ""
+msgstr "{num_unread} 未读"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -263,7 +265,7 @@ msgstr "HOTP 密碼"
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:17
 msgid "CONTINUE"
-msgstr ""
+msgstr "继续"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
@@ -277,6 +279,8 @@ msgid ""
 "added the entry for your account in the app, enter one of the 6-digit codes "
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
+"你快完成了！ 为了完成重置你的由两部分组成的授权，请按照下面的指示设置 Google "
+"Authenticator。一旦你在应用程序中为你的账户加入了输入内容，请输入来自应用程序的以下6位代码之一，以确认由两部分组成的授权被正确地设置。"
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
@@ -333,7 +337,7 @@ msgstr "驗證碼"
 #: journalist_templates/admin_new_user_two_factor.html:25
 #: journalist_templates/col.html:81 source_templates/lookup.html:45
 msgid "SUBMIT"
-msgstr ""
+msgstr "提交"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
@@ -342,7 +346,7 @@ msgstr "管理員介面"
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "增加用户"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:10
@@ -368,11 +372,11 @@ msgstr "最後登入"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "编辑用户{username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "删除用户{username}"
 
 #: journalist_templates/admin.html:31
 msgid "Never"
@@ -389,7 +393,7 @@ msgstr "返回管理員介面"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "The user's password will be:"
-msgstr ""
+msgstr "用户的密码将是："
 
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:17
@@ -398,7 +402,7 @@ msgstr "這是管理員"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "I'm using a YubiKey [HOTP]"
-msgstr ""
+msgstr "我在用 YubiKey[HOTP]"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -408,10 +412,12 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
+"你即将完成！ 为了增加这一新的用户，让他们按照以下的指示用 Google Authenticator 来设置由两个部分组成的授权。 "
+"一旦他们在本应用程序中增加了这一账户的记录，让他们输入来自应用程序的6位代码之一，以确认两个部分授权被正确设置。"
 
 #: journalist_templates/base.html:24
 msgid "Edit Account"
-msgstr ""
+msgstr "编辑账户"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -425,11 +431,11 @@ msgstr "登出"
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
-msgstr ""
+msgstr "由<br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">支持"
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr ""
+msgstr "由 <em> SecureDrop {version}</em> 支持"
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -450,15 +456,15 @@ msgstr "更改代號"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr ""
+msgstr "你确信要生成一个新的代码名称吗？"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:71
 msgid "Cancel"
-msgstr ""
+msgstr "撤销"
 
 #: journalist_templates/col.html:16
 msgid "CONFIRM"
-msgstr ""
+msgstr "确认"
 
 #: journalist_templates/col.html:22
 msgid ""
@@ -468,11 +474,11 @@ msgstr "為安全起見，所有文件都已經在儲存前加密。請使用 GP
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr ""
+msgstr "选择了下载"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr ""
+msgstr "选择了删除"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
@@ -511,7 +517,7 @@ msgstr "請按下面以回覆這個線人。"
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "为了回复，请对这一源加上旗标"
 
 #: journalist_templates/col.html:96
 msgid ""
@@ -519,10 +525,11 @@ msgid ""
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
+"点击下面以删除这一源的集合。<em>警告：如果你这么做，这里看到的多个文件将是不可恢复的，而且这一源将无法用它们之前的代码名称再登录。</em>"
 
 #: journalist_templates/col.html:102
 msgid "DELETE COLLECTION"
-msgstr ""
+msgstr "删除集合"
 
 #: journalist_templates/delete.html:5
 msgid ""
@@ -530,15 +537,15 @@ msgid ""
 msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
-msgstr[0] ""
+msgstr[0] "以下的{files}文件已经被选择，将被<strong>永久型地被删除</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr ""
+msgstr "永久性地删除文件"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
-msgstr ""
+msgstr "为{source_journalist_designation}返回文档的列表..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user"
@@ -546,7 +553,7 @@ msgstr "編輯使用者"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
-msgstr ""
+msgstr "改变用户名和管理状态"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -554,41 +561,41 @@ msgstr "更改使用者名稱"
 
 #: journalist_templates/edit_account.html:19
 msgid "UPDATE"
-msgstr ""
+msgstr "更新"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
-msgstr ""
+msgstr "编辑你的账户"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
-msgstr ""
+msgstr "重置密码"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
-msgstr ""
+msgstr "SecureDrop 现在使用自动生成的类似骰子物的密码。"
 
 #: journalist_templates/edit_account.html:28
 msgid ""
 "Your password will be changed immediately, so you will need to save it "
 "before pressing the \"Reset Password\" button."
-msgstr ""
+msgstr "你的密码将被立即改变，因此你需要在按“重置密码”按钮此之前保存它。"
 
 #: journalist_templates/edit_account.html:41
 msgid "The user's password will be changed to:"
-msgstr ""
+msgstr "用户的秘密将改成："
 
 #: journalist_templates/edit_account.html:43
 msgid "Your password will be changed to:"
-msgstr ""
+msgstr "你的密码将被改成："
 
 #: journalist_templates/edit_account.html:48
 msgid "RESET PASSWORD"
-msgstr ""
+msgstr "重置密码"
 
 #: journalist_templates/edit_account.html:53
 msgid "Reset Two-Factor Authentication"
-msgstr ""
+msgstr "重置两部分授权"
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -597,6 +604,8 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
+"如果用户的两部分授权信用已经丢失或者减低，你可以在此重置它们。<em>如果你这么做，应该确信该用户是当前的，而且准备好用新的两部分信用去设置他们的设备。否"
+"则，他们的账户将被锁住。"
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -605,6 +614,8 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
+"如果你的两部分授权信用丢失或者减低，或者你有一件新的设备，你可以这次重置你的信用。<em> "
+"如果你这么做，应该确信你已经准备好设置你的新设备，否则你的账户将被锁住。</em>"
 
 #: journalist_templates/edit_account.html:60
 msgid ""
@@ -612,14 +623,16 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
+"为手机应用例如 Google Authenticator 或者 FreeOTP 重置两部分授权，请选择第一选项。对于像 "
+"Yubikey之类的硬件记号，请选择第二项。"
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr ""
+msgstr "重置两部分授权（应用程序）"
 
 #: journalist_templates/edit_account.html:82
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr ""
+msgstr "重置两部分授权（硬件记号）"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -637,7 +650,7 @@ msgstr ""
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr ""
+msgstr "为{codename}续到文档列表..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -645,19 +658,19 @@ msgstr "線人"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr ""
+msgstr "下载未读"
 
 #: journalist_templates/index.html:12
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr ""
+msgstr "星"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr ""
+msgstr "未标星"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
@@ -665,40 +678,40 @@ msgstr "未有提交文件！"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
-msgstr ""
+msgstr "按照代码名称过滤"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
-msgstr ""
+msgstr "选择全部"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr ""
+msgstr "选择未读"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr ""
+msgstr "选择无"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr ""
+msgstr "你确信要删除这一集合？"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr ""
+msgstr "你确信你要删除这一{size}所选择的集合？"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
+msgstr "你确信你要删除这一{size}所选择的提交？"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr ""
+msgstr "你确信要删除这一用户{username}？"
 
 #: journalist_templates/js-strings.html:11
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
-msgstr ""
+msgstr "你确信你要重置{username}的两部分授权？"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
@@ -714,26 +727,26 @@ msgstr "驗證碼"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr ""
+msgstr "登录"
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
-msgstr ""
+msgstr "保护记者和源"
 
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:82
 msgid "Powered by"
-msgstr ""
+msgstr "由...支撑"
 
 #: source_templates/base.html:33
 msgid "EXIT"
-msgstr ""
+msgstr "退出"
 
 #: source_templates/base.html:43 source_templates/index.html:82
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
-msgstr ""
+msgstr "和所有的软件一样，SecureDrop 可能含有安全漏洞。使用它时，风险自理。"
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -751,21 +764,21 @@ msgstr "查詢代號⋯⋯"
 
 #: source_templates/first_submission_flashed_message.html:2
 msgid "Success!"
-msgstr ""
+msgstr "成功！"
 
 #: source_templates/first_submission_flashed_message.html:3
 msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
-msgstr ""
+msgstr "感谢你发出这一信息给我们。请稍晚一点回来查看回复。"
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr ""
+msgstr "忘记了你的代码名称？"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
-msgstr ""
+msgstr "欢迎"
 
 #: source_templates/generate.html:5
 msgid ""
