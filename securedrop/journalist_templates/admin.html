@@ -28,7 +28,7 @@
         {% if user.last_access %}
           <td><time class="date" title="{{ user.last_access }}">{{ user.last_access|datetimeformat(relative=True) }}</time></td>
         {% else %}
-          <td><time class="date">Never</time></td>
+          <td><time class="date">never</time></td>
         {% endif %}
       </tr>
     {% endfor %}
