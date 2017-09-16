@@ -49,6 +49,18 @@ class SourceNavigationSteps():
         assert len(codename.text) > 0
         self.source_name = codename.text
 
+    def _source_shows_codename(self):
+        content = self.driver.find_element_by_id('codename-hint-content')
+        assert not content.is_displayed()
+        self.driver.find_element_by_id('codename-hint-show').click()
+        assert content.is_displayed()
+
+    def _source_hides_codename(self):
+        content = self.driver.find_element_by_id('codename-hint-content')
+        assert content.is_displayed()
+        self.driver.find_element_by_id('codename-hint-hide').click()
+        assert not content.is_displayed()
+
     @screenshots
     def _source_chooses_to_login(self):
         self.driver.find_element_by_id('login-button').click()
