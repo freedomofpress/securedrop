@@ -82,6 +82,40 @@ class TestManagementCommand(unittest.TestCase):
         self.assertIn('ERROR: That username is already taken!',
                       sys.stdout.getvalue())
 
+    @mock.patch("manage._get_username", return_value='test-user-56789')
+    @mock.patch("manage._get_yubikey_usage", return_value=False)
+    @mock.patch("manage._get_username_to_delete",
+                return_value='test-user-56789')
+    @mock.patch('manage._get_delete_confirmation', return_value=True)
+    def test_delete_user(self,
+                         mock_username,
+                         mock_yubikey,
+                         mock_user_to_delete,
+                         mock_user_del_confirm):
+        return_value = manage._add_user()
+        self.assertEqual(return_value, 0)
+
+        return_value = manage.delete_user(args=None)
+        self.assertEqual(return_value, 0)
+
+    @mock.patch("manage._get_username_to_delete",
+                return_value='does-not-exist')
+    @mock.patch('manage._get_delete_confirmation', return_value=True)
+    @mock.patch("sys.stdout", new_callable=StringIO)
+    def test_delete_non_existent_user(self,
+                                      mock_user_to_delete,
+                                      mock_user_del_confirm,
+                                      mock_stdout):
+        return_value = manage.delete_user(args=None)
+        self.assertEqual(return_value, 0)
+        self.assertIn('ERROR: That user was not found!',
+                      sys.stdout.getvalue())
+
+    @mock.patch("__builtin__.raw_input", return_value='test-user-12345')
+    def test_get_username_to_delete(self, mock_username):
+        return_value = manage._get_username_to_delete()
+        self.assertEqual(return_value, 'test-user-12345')
+
 
 class TestManage(object):
 
