@@ -116,6 +116,12 @@ class TestManagementCommand(unittest.TestCase):
         return_value = manage._get_username_to_delete()
         self.assertEqual(return_value, 'test-user-12345')
 
+    def test_reset(self):
+        return_value = manage.reset(args=None)
+        self.assertEqual(return_value, 0)
+        assert os.path.exists(config.DATABASE_FILE)
+        assert os.path.exists(config.STORE_DIR)
+
 
 class TestManage(object):
 

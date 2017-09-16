@@ -62,7 +62,7 @@ def sh(command, input=None):
     return "".join(lines_of_command_output)
 
 
-def reset(args):  # pragma: no cover
+def reset(args):
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
