@@ -63,17 +63,6 @@ html
     width: 100%
     display: block
 
-input#show
-  display: none
-
-#content
-  display: block
-  transition: opacity 1s ease-out
-  opacity: 0
-  height: 0
-  font-size: 0
-  overflow: hidden
-
 #codename-hint
   background: rgba(0, 0, 0, 0.05)
   box-sizing: border-box
@@ -81,21 +70,6 @@ input#show
   padding: 5px 10px
   text-align: center
 
-
-#show
-  &:before
-    color: $color_purple_medium
-    content: "Show"
-
-  &:hover
-    &.show:before
-      color: $color_grey_medium
-      content: "Hide"
-
-    ~ span#content
-      opacity: 1
-      font-size: 100%
-      height: auto
 
 input.codename-box
   width: 400px
