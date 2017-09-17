@@ -54,14 +54,17 @@ the following::
 
      ./manage.py run
 
-An easier way is to generate screenshots for each state in each known
-language with::
+An easier way is to generate screenshots for each desired language
+with::
 
-     $ pytest -v tests/pages-layout --page-layout
+     $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
+     $ pytest -v --page-layout tests/pages-layout
      ...
      ...TestJournalistLayout::test_col_no_documents[en_US] PASSED
      ...TestJournalistLayout::test_col_no_documents[fr_FR] PASSED
      ...
+
+.. note:: if unset, PAGE_LAYOUT_LOCALES defaults to en_US
 
 The screenshots for ``fr_FR`` are available in
 ``securedrop/tests/pages-layout/screenshots/fr_FR`` and the name of

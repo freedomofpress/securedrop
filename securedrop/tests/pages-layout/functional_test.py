@@ -30,11 +30,10 @@ from tests.functional import functional_test
 
 
 def list_locales():
-    d = os.path.join(dirname(__file__), '..', '..', 'translations')
-    locales = ['en_US']
-    if os.path.isdir(d):
-        files = os.listdir(d)
-        locales.extend([f for f in files if f != 'messages.pot'])
+    if 'PAGE_LAYOUT_LOCALES' in os.environ:
+        locales = os.environ['PAGE_LAYOUT_LOCALES'].split(',')
+    else:
+        locales = ['en_US']
     return locales
 
 
