@@ -298,7 +298,7 @@ def admin_edit_user(user_id):
     user = Journalist.query.get(user_id)
 
     if request.method == 'POST':
-        if request.form['username']:
+        if request.form.get('username', None):
             new_username = request.form['username']
 
             try:

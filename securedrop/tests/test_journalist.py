@@ -344,13 +344,12 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        resp = self.client.post(
+        self.client.post(
             url_for('admin_new_password', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=False,
                       password=overly_long_password),
             follow_redirects=True)
 
-        print resp.data.decode('utf-8')
         self.assertMessageFlashed('You submitted a bad password! '
                                   'Password not changed.', 'error')
 
@@ -536,8 +535,6 @@ class TestJournalistApp(TestCase):
                                           password=VALID_PASSWORD,
                                           is_admin=False))
 
-        print resp.data.decode('utf-8')
-
         self.assertRedirects(resp, url_for('admin_new_user_two_factor',
                                            uid=max_journalist_pk+1))
 
@@ -558,6 +555,44 @@ class TestJournalistApp(TestCase):
                                           password_again='pentagonpapers',
                                           is_admin=False))
         self.assertIn('Invalid username', resp.data)
+
+    def test_admin_sets_user_to_admin(self):
+        self._login_admin()
+        new_user = 'admin-set-user-to-admin-test'
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username=new_user,
+                                          password=VALID_PASSWORD,
+                                          is_admin=False))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+        assert not journo.is_admin
+
+        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+                                data=dict(is_admin=True))
+        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
+
+        # there are better ways to do this, but flake8 complains
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+        assert journo.is_admin is True
+
+    def test_admin_renames_user(self):
+        self._login_admin()
+        new_user = 'admin-renames-user-test'
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username=new_user,
+                                          password=VALID_PASSWORD,
+                                          is_admin=False))
+        assert resp.status_code in (200, 302)
+        journo = Journalist.query.filter(Journalist.username == new_user).one()
+
+        new_user = new_user + 'a'
+        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+                                data=dict(username=new_user))
+        assert resp.status_code in (200, 302), resp.data.decode('utf-8')
+
+        # the following will throw an exception if new_user is not found
+        # therefore asserting it has been created
+        Journalist.query.filter(Journalist.username == new_user).one()
 
     @patch('journalist.app.logger.error')
     @patch('journalist.Journalist',
