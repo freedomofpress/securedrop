@@ -368,7 +368,17 @@ def edit_account():
 @login_required
 def new_password():
     user = g.user
-    password = request.form.get('password')
+    password = request.form.get('password', None)
+    old_password = request.form.get('old_password', None)
+
+    if not old_password:
+        flash('You must provide your old password to set a new one.', 'error')
+        return redirect(url_for('edit_account'))
+
+    if not user.valid_password(old_password):
+        flash('Old password was invalid.', 'error')
+        return redirect(url_for('edit_account'))
+
     _set_diceware_password(user, password)
     return redirect(url_for('edit_account'))
 

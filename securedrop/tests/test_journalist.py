@@ -292,7 +292,10 @@ class TestJournalistApp(TestCase):
         self._login_user()
         resp = self.client.post(
             url_for('new_password'),
-            data=dict(password=VALID_PASSWORD_2),
+            data=dict(
+                password=VALID_PASSWORD_2,
+                old_password=self.user.password,
+            ),
             follow_redirects=True)
 
         text = resp.data.decode('utf-8')
@@ -305,7 +308,10 @@ class TestJournalistApp(TestCase):
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('new_password'),
-                data=dict(password=VALID_PASSWORD_2),
+                data=dict(
+                    password=VALID_PASSWORD_2,
+                    old_password=self.user.password,
+                ),
                 follow_redirects=True)
 
         assert ('There was an error, and the new password might not have '
@@ -360,7 +366,8 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(url_for('new_password'),
-                         data=dict(password=overly_long_password),
+                         data=dict(password=overly_long_password,
+                                   old_password=self.user.password),
                          follow_redirects=True)
 
         self.assertMessageFlashed('You submitted a bad password! '
@@ -629,8 +636,10 @@ class TestJournalistApp(TestCase):
     def test_invalid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('new_password'),
-                               data=dict(password='badpw'))
+                               data=dict(old_password='badpw',
+                                         password=VALID_PASSWORD + 'a'))
         self.assertRedirects(res, url_for('edit_account'))
+        self.assertMessageFlashed('Old password was invalid.', 'error')
 
     def test_too_long_user_password_change(self):
         self._login_user()
@@ -639,7 +648,8 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(url_for('new_password'),
-                         data=dict(password=overly_long_password),
+                         data=dict(password=overly_long_password,
+                                   old_password=VALID_PASSWORD),
                          follow_redirects=True)
 
         self.assertMessageFlashed('You submitted a bad password! Password not '

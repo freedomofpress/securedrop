@@ -46,6 +46,9 @@ the "Reset Password" button.</p>
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
+  {% if not user %}
+    <p><input id="old_password" name="old_password" type="password" placeholder="Current password"></p>
+  {% endif %}
   <button class="sd-button btn" type="submit" id="reset-password">RESET PASSWORD</button>
 </form>
 
