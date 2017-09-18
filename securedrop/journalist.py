@@ -42,6 +42,7 @@ else:
     app.jinja_env.globals['use_custom_header_image'] = False
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
 @app.teardown_appcontext
