@@ -78,6 +78,7 @@ def get_bulk_archive(selected_submissions, zip_directory=''):
     # folder structure per #383
     with zipfile.ZipFile(zip_file, 'w') as zip:
         for source in sources:
+            fname = ""
             submissions = [s for s in selected_submissions
                            if s.source.journalist_designation == source]
             for submission in submissions:
@@ -85,9 +86,12 @@ def get_bulk_archive(selected_submissions, zip_directory=''):
                                 submission.filename)
                 verify(filename)
                 document_number = submission.filename.split('-')[0]
+                if zip_directory == submission.source.journalist_filename:
+                    fname = zip_directory
+                else:
+                    fname = os.path.join(zip_directory, source)
                 zip.write(filename, arcname=os.path.join(
-                    zip_directory,
-                    source,
+                    fname,
                     "%s_%s" % (document_number,
                                submission.source.last_updated.date()),
                     os.path.basename(filename)
