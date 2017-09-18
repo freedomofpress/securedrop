@@ -809,7 +809,6 @@ class TestJournalistApp(TestCase):
                 zipfile.ZipFile(StringIO(resp.data)).getinfo(
                     os.path.join(
                         source.journalist_filename,
-                        source.journalist_designation,
                         "%s_%s" % (filename.split('-')[0],
                                    source.last_updated.date()),
                         filename
