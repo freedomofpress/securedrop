@@ -9,6 +9,10 @@ jobs:
       - checkout
 
       - run:
+          name: Rebase on-top of latest develop
+          command: ./devops/scripts/rebase-develop.sh
+
+      - run:
           name: Installation pre-reqs
           command: pip install -U -r securedrop/requirements/develop-requirements.txt
 
@@ -29,6 +33,10 @@ jobs:
 
     steps:
       - checkout
+
+      - run:
+          name: Rebase on-top of latest develop
+          command: ./devops/scripts/rebase-develop.sh
 
       - run:
           name: Installation pre-reqs
