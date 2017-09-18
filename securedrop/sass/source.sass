@@ -63,31 +63,39 @@ html
     width: 100%
     display: block
 
-input#show
-  display: none
+#codename-hint
+  background: rgba(0, 0, 0, 0.05)
+  box-sizing: border-box
+  -moz-box-sizing: border-box
+  padding: 5px 10px
+  text-align: center
 
-#content
-  display: block
-  transition: opacity 1s ease-out
-  opacity: 0
-  height: 0
-  font-size: 0
-  overflow: hidden
+#codename-hint-visible
+  .visible-codename
+    margin: auto
+    padding: auto
+    height: auto
+    overflow: visible
 
-#show
-  &:before
-    color: $color_purple_medium
-    content: "Show"
+  .hidden-codename
+    margin: 0
+    padding: 0
+    height: 0
+    overflow: hidden
 
-  &:hover
-    &.show:before
-      color: $color_grey_medium
-      content: "Hide"
+  &:target
 
-    ~ span#content
-      opacity: 1
-      font-size: 100%
+    .visible-codename
+      margin: 0
+      padding: 0
+      height: 0
+      overflow: hidden
+
+    .hidden-codename
+      margin: auto
+      padding: auto
       height: auto
+      overflow: visible
 
 input.codename-box
   width: 400px

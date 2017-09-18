@@ -100,11 +100,13 @@
 <hr class="no-line">
 
 <div class="code-reminder" id="codename-hint">
-  <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> Remember your codename is:
-  <div id="show" class="show pull-right"></div>
-  <span id="content" class="codename">
-    <p class="alert">{{ codename }}</p>
-  </span>
+  <div id="codename-hint-visible">
+    <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> Remember your codename is:
+    <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">Show</a>
+    <div id="codename-hint-content" class="hidden-codename codename">
+      <p>{{ codename }} <a id="codename-hint-hide" class="pull-right" href="#codename-hint">Hide</a></p>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
