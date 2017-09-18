@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-18 13:02+0000\n"
+"PO-Revision-Date: 2017-09-18 16:23+0000\n"
 "Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
@@ -112,11 +112,11 @@ msgstr ""
 
 #: journalist.py:572
 msgid "No collections selected!"
-msgstr ""
+msgstr "Keine ausgewählten Sammlungen!"
 
 #: journalist.py:596
 msgid "No unread submissions in selected collections."
-msgstr ""
+msgstr "Keine ungelesenen Nachrichten in den ausgewählten Sammlungen."
 
 #: journalist.py:635
 msgid "{source_journalist_designation}'s collection deleted"
@@ -134,7 +134,7 @@ msgstr[1] "{num} Sammlungen werden gelöscht"
 
 #: journalist.py:693
 msgid "You cannot send an empty reply!"
-msgstr ""
+msgstr "Sie können keine leere Antwort senden!"
 
 #: journalist.py:720
 msgid "Thanks! Your reply has been stored."
@@ -142,11 +142,11 @@ msgstr "Vielen Dank! Ihre Antwort wurde gespeichert."
 
 #: journalist.py:739
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
-msgstr ""
+msgstr "Die Quelle wurde von '{original_source}' zu '{new_source}' umbenannt"
 
 #: journalist.py:756
 msgid "No unread submissions for this source!"
-msgstr ""
+msgstr "Keine ungelesenen Nachrichten für diese Quelle!"
 
 #: journalist.py:772
 msgid "No collections selected for download!"
@@ -191,7 +191,7 @@ msgstr "Antwort wirt gelöscht"
 
 #: source.py:374
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "Alle Antworten wurden gelöscht"
 
 #: source.py:407
 msgid "Sorry, that is not a recognized codename."
@@ -199,37 +199,37 @@ msgstr "Es tut uns leid, das ist kein erkannte Deckname."
 
 #: template_filters.py:13
 msgid "{time} ago"
-msgstr ""
+msgstr "vor {time}"
 
 #: template_filters.py:26
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} Sekunde"
+msgstr[1] "{n} Sekunden"
 
 #: template_filters.py:29
 msgid "a minute"
-msgstr ""
+msgstr "eine Minute"
 
 #: template_filters.py:31
 msgid "{n} minutes"
-msgstr ""
+msgstr "{n} Minuten"
 
 #: template_filters.py:33
 msgid "an hour"
-msgstr ""
+msgstr "eine Stunde"
 
 #: template_filters.py:35
 msgid "{n} hours"
-msgstr ""
+msgstr "{n} Stunden"
 
 #: template_filters.py:37
 msgid "a day"
-msgstr ""
+msgstr "ein Tag"
 
 #: template_filters.py:39
 msgid "{n} days"
-msgstr ""
+msgstr "{n} Tagen"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -258,7 +258,7 @@ msgstr "HOTP-Secret"
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:17
 msgid "CONTINUE"
-msgstr ""
+msgstr "FORTSETZEN"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
@@ -332,7 +332,7 @@ msgstr "Bestätigungscode"
 #: journalist_templates/admin_new_user_two_factor.html:25
 #: journalist_templates/col.html:81 source_templates/lookup.html:45
 msgid "SUBMIT"
-msgstr ""
+msgstr "EINREICHEN"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
@@ -341,7 +341,7 @@ msgstr "Admin-Interface"
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "BENUTZER HINZUFÜGEN"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:10
@@ -367,11 +367,11 @@ msgstr "Letzter Login"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Benutzer {username} bearbeiten"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Benutzer {username} löschen"
 
 #: journalist_templates/admin.html:31
 msgid "Never"
@@ -388,7 +388,7 @@ msgstr "Zurück nach Admin-Interface"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "The user's password will be:"
-msgstr ""
+msgstr "Der Benutzers Password lautet:"
 
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:17
@@ -410,7 +410,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Edit Account"
-msgstr ""
+msgstr "Konto Bearbeiten"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
