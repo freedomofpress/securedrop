@@ -19,6 +19,7 @@ import json
 import version
 import crypto_util
 from rm import srm
+import i18n
 import store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
@@ -33,6 +34,8 @@ log = logging.getLogger('source')
 app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
 app.request_class = RequestThatSecuresFileUploads
 app.config.from_object(config.SourceInterfaceFlaskConfig)
+
+i18n.setup_app(app)
 
 assets = Environment(app)
 
@@ -88,6 +91,7 @@ def ignore_static(f):
 @ignore_static
 def setup_g():
     """Store commonly used values in Flask's special g object"""
+    g.locale = i18n.get_locale()
     # ignore_static here because `crypto_util.hash_codename` is scrypt (very
     # time consuming), and we don't need to waste time running if we're just
     # serving a static resource that won't need to access these common values.
