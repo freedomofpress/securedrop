@@ -6,6 +6,29 @@ successfully install and operate a SecureDrop instance, and recommends
 some specific components that we have found to work well. If you have
 any questions, please email securedrop@freedom.press.
 
+Before You Begin
+----------------
+
+The nature of a SecureDrop installation is to securely acquire documents
+from sources who could be a potentially high-risk source. Your harware setup
+should take steps to minimize risks by considering the following questions: 
+
+* Where are you obtaining your hardware? 
+* How are you obtaining your hardware?
+* Is there a risk of intridiction of your hardware?
+* Has the hardware ever been used for previous applications? If so, when and for what purposes? 
+
+We **strongly** recommend buying all new dedicated hardware, from a physical store
+wherever possible. Every install will be different for every organization; these
+recommendations are not an exhaustive list. However consider traveling to a store
+that is not tied to your organizations physical address, paying cash if possible,
+and using only new devices (including USB devices). Consider removing any
+hardware that won't be used including cameras, audio speakers, Bluetooth, WiFi
+(if applicable), or any ports that won't be used. Furthermore, you should consider
+keeping the details of your hardware procurement on a need-to-known basis. While
+this may not be possible for every piece of hardware, it is worth considering
+at all times during your installation.
+
 Hardware Overview
 -----------------
 
