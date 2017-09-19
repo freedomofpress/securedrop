@@ -70,7 +70,9 @@ match your environment: ::
 The script will automatically validate the answers you provided, and display
 error messages if any problems were detected. The answers you provided will be
 written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
-which you can edit manually to provide further customization.
+which you can edit in case of errors such as typos before rerunning the script. 
+You can also run ``./securedrop-admin sdconfig --force`` to remove your entire 
+configuration file and start over.
 
 When you're done, save the file and quit the editor.
 
@@ -90,7 +92,9 @@ You will be prompted to enter the sudo password for the *Application* and
 
 The install process will take some time, and it will return
 the terminal to you when it is complete. If an error occurs while
-running the install, please submit a detailed `GitHub
+running the install, please check all of the details of the error output
+and if needed, make edits to the file located at ``install_files/ansible-base/group_vars/all/site-specific``
+as described above. If you continue to have issues please submit a detailed `GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/new>`__ or
 send an email to securedrop@freedom.press.
 
