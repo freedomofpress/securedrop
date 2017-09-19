@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-19 07:04+0000\n"
+"PO-Revision-Date: 2017-09-19 11:44+0000\n"
 "Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
@@ -62,16 +62,23 @@ msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
 
 #: journalist.py:237 journalist.py:455
+#, fuzzy
 msgid "Could not verify token in two-factor authentication."
-msgstr ""
+msgstr "Two-Faktor token wurde nicht verifiziert."
 
 #: journalist.py:266
+#, fuzzy
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
+"Ungültiges Secret-Format: bitten geben Sie nur die Buschstaben A-B und "
+"nummern 0-9 ein."
 
 #: journalist.py:271
+#, fuzzy
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
+"Ungültiges Secret-Format: ungerade Secret-Länge. Haben Sie es falsche "
+"eingegeben?"
 
 #: journalist.py:276 journalist.py:301 journalist.py:709
 msgid ""
@@ -640,12 +647,14 @@ msgid ""
 msgstr ""
 
 #: journalist_templates/edit_account.html:80
+#, fuzzy
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr ""
+msgstr "ZWEI-FAKTOR AUTHENTIFIZIERUNG ZURÜCKSETZEN (APP)"
 
 #: journalist_templates/edit_account.html:82
+#, fuzzy
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr ""
+msgstr "ZWEI-FAKTOR AUTHENTIFIZIERUNG ZURÜCKSETZEN (HARDWARE-TOKEN)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -674,19 +683,20 @@ msgstr "Quellen"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr ""
+msgstr "Ungelesene herunterladen"
 
 #: journalist_templates/index.html:12
 msgid "Download"
-msgstr ""
+msgstr "Herunterladen"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr ""
+msgstr "Markieren"
 
 #: journalist_templates/index.html:14
+#, fuzzy
 msgid "Un-star"
-msgstr ""
+msgstr "Unmarkieren"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
@@ -698,15 +708,15 @@ msgstr "Nach Deckname filtern"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
-msgstr ""
+msgstr "All"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr ""
+msgstr "Ungelesene auswählen"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr ""
+msgstr "Keine auswählen"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
