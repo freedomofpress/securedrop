@@ -2,10 +2,10 @@
 {% block body %}
 <p class="flash notification">
   <i class="fa fa-info-circle pull-left"></i>
-Thanks!
+{{ gettext('Thanks!') }}
 </p>
 
-<p>SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them.</p>
+<p>{{ gettext('SecureDrop will generate a secure encryption key for this source the next time that they log in. Once the key has been generated, a reply box will appear under their collection of documents. You can use this box to write encrypted replies to them.') }}</p>
 
-<p><a href="/col/{{ filesystem_id }}" id="continue-to-list">Continue to the list of documents for {{ codename }}...</a></p>
+<p><a href="/col/{{ filesystem_id }}" id="continue-to-list">{{ gettext('Continue to the list of documents for {codename}...').format(codename=codename) }}</a></p>
 {% endblock %}

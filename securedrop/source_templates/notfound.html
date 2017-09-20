@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Page not found</h1>
+<h1>{{ gettext('Page not found') }}</h1>
 
-<p id="page-not-found">Sorry, we couldn't locate what you requested.</p>
+<p id="page-not-found">{{ gettext("Sorry, we couldn't locate what you requested.") }}</p>
 
-<p><a href="/login">Look up a codename...</a></p>
+<p><a href="/login">{{ gettext('Look up a codename...') }}</a></p>
 {% endblock %}

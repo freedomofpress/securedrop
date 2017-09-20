@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Admin Interface</h1>
+<h1>{{ gettext('Admin Interface') }}</h1>
 
 <form action="{{ url_for('admin_add_user') }}">
-  <button class="sd-button" type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i> ADD USER</button>
+  <button class="sd-button" type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
 
 <hr class="no-line">
@@ -13,29 +13,29 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <table id="users">
     <tr>
-      <th>Username</th>
-      <th>Edit</th>
-      <th>Delete</th>
-      <th>Created</th>
-      <th>Last login</th>
+      <th>{{ gettext('Username') }}</th>
+      <th>{{ gettext('Edit') }}</th>
+      <th>{{ gettext('Delete') }}</th>
+      <th>{{ gettext('Created') }}</th>
+      <th>{{ gettext('Last login') }}</th>
     </tr>
     {% for user in users %}
       <tr class="user">
         <td>{{ user.username }}</td>
-        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="Edit user {{ user.username }}"></i></a></td>
-        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="Delete user {{ user.username }}"></i></button></td>
+        <td><a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}"><i class="fa fa-edit" title="{{ gettext('Edit user {username}').format(username=user.username) }}"></i></a></td>
+        <td><button type="submit" class="plain delete-user" formaction="/admin/delete/{{ user.id }}" data-username="{{ user.username}}"><i class="fa fa-trash-o" title="{{ gettext('Delete user {username}').format(username=user.username) }}"></i></button></td>
         <td><time class="date" title="{{ user.created_on }}">{{ user.created_on|datetimeformat(relative=True) }}</time></td>
         {% if user.last_access %}
           <td><time class="date" title="{{ user.last_access }}">{{ user.last_access|datetimeformat(relative=True) }}</time></td>
         {% else %}
-          <td><time class="date">never</time></td>
+          <td><time class="date">{{ gettext('never') }}</time></td>
         {% endif %}
       </tr>
     {% endfor %}
   </table>
 </form>
 {% else %}
-<p>No users to display</p>
+<p>{{ gettext('No users to display') }}</p>
 {% endif %}
 
 {% endblock %}

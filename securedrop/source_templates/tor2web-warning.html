@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Why is there a warning about Tor2Web?</h1>
-<p><a href="tor2web.org">Tor2Web</a> is a proxy service that lets you browse Tor Hidden Services (.onion sites) without installing Tor. It was designed to facilitate anonymous publishing.</p>
-<p>Tor2Web only protects publishers, not readers. If you upload documents to us using Tor2Web, you are <strong>not anonymous</strong> and could be identified by your ISP or the Tor2Web proxy operators. Additionally, since Tor2Web sites typically do not use HTTPS, it is possible that your connection could be MITM'ed by a capable adversary.</p>
-<p>If you want to submit information, you are <strong>strongly advised</strong> to install <a href="torproject.org/download.html.en">Tor</a> and use it to access our site safely and anonymously.</p>
+<h1>{{ gettext('Why is there a warning about Tor2Web?') }}</h1>
+<p>{{ gettext('<a href="tor2web.org">Tor2Web</a> is a proxy service that lets you browse Tor Hidden Services (.onion sites) without installing Tor. It was designed to facilitate anonymous publishing.') }}</p>
+<p>{{ gettext('Tor2Web only protects publishers, not readers. If you upload documents to us using Tor2Web, you are <strong>not anonymous</strong> and could be identified by your ISP or the Tor2Web proxy operators. Additionally, since Tor2Web sites typically do not use HTTPS, it is possible that your connection could be MITM\'ed by a capable adversary.') }}</p>
+<p>{{ gettext('If you want to submit information, you are <strong>strongly advised</strong> to install <a href="torproject.org/download.html.en">Tor</a> and use it to access our site safely and anonymously.') }}</p>
 {% endblock %}

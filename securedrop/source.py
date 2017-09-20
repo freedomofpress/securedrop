@@ -18,6 +18,7 @@ import config
 import json
 import version
 import crypto_util
+from flask_babel import gettext
 from rm import srm
 import i18n
 import store
@@ -123,10 +124,10 @@ def check_tor2web():
     # ignore_static here so we only flash a single message warning
     # about Tor2Web, corresponding to the initial page load.
     if 'X-tor2web' in request.headers:
-        flash(Markup('<strong>WARNING:</strong> You appear to be using '
-                     'Tor2Web. This <strong>does not</strong> provide '
-                     'anonymity. <a href="/tor2web-warning">Why is this '
-                     'dangerous?</a>'),
+        flash(Markup(gettext(
+            '<strong>WARNING:</strong> You appear to be using Tor2Web. '
+            'This <strong>does not</strong> provide anonymity. '
+            '<a href="/tor2web-warning">Why is this dangerous?</a>')),
               "banner-warning")
 
 
@@ -163,8 +164,9 @@ def generate_unique_codename():
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
-        flash("You were redirected because you are already logged in. "
-              "If you want to create a new account, you should log out first.",
+        flash(gettext(
+            "You were redirected because you are already logged in. "
+            "If you want to create a new account, you should log out first."),
               "notification")
         return redirect(url_for('lookup'))
 
@@ -278,7 +280,9 @@ def submit():
 
     # Don't bother submitting anything if it was an "empty" submission. #878.
     if not (msg or fh):
-        flash("You must enter a message or choose a file to submit.", "error")
+        flash(gettext(
+            "You must enter a message or choose a file to submit."),
+              "error")
         return redirect(url_for('lookup'))
 
     fnames = []
@@ -349,7 +353,7 @@ def delete():
     db_session.delete(reply)
     db_session.commit()
 
-    flash("Reply deleted", "notification")
+    flash(gettext("Reply deleted"), "notification")
     return redirect(url_for('lookup'))
 
 
@@ -365,7 +369,7 @@ def batch_delete():
         db_session.delete(reply)
     db_session.commit()
 
-    flash("All replies have been deleted", "notification")
+    flash(gettext("All replies have been deleted"), "notification")
     return redirect(url_for('lookup'))
 
 
@@ -398,7 +402,8 @@ def login():
         else:
             app.logger.info(
                     "Login failed for invalid codename".format(codename))
-            flash("Sorry, that is not a recognized codename.", "error")
+            flash(gettext("Sorry, that is not a recognized codename."),
+                  "error")
     return render_template('login.html')
 
 

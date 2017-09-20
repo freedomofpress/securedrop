@@ -7,24 +7,24 @@
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
 
     <p class="breadcrumbs">
-      <a href="/">All Sources</a>
+      <a href="/">{{ gettext('All Sources') }}</a>
       <i class="fa fa-chevron-right"></i>
       <strong>{{ source.journalist_designation }}</strong>
-      <a href="#change-codename-{{ source.journalist_designation }}" title="Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like." class="plain" id="regenerate-codename-btn"><span id="regenerate-codename-btn-label">Change codename</span></a>
-      <div id="change-codename-{{ source.journalist_designation }}" class="confirm-prompt">Are you sure you want to generate a new codename?
-        <a href="#regenerate-code">Cancel</a>
-        <button class="sd-button" type="submit">CONFIRM</button>
+      <a href="#change-codename-{{ source.journalist_designation }}" title="{{ gettext('Generate a new random codename for this source. We recommend doing this if the first random codename is difficult to say or remember. You can generate new random codenames as many times as you like.') }}" class="plain" id="regenerate-codename-btn"><span id="regenerate-codename-btn-label">{{ gettext('Change codename') }}</span></a>
+      <div id="change-codename-{{ source.journalist_designation }}" class="confirm-prompt">{{ gettext('Are you sure you want to generate a new codename?') }}
+        <a href="#regenerate-code">{{ gettext('Cancel') }}</a>
+        <button class="sd-button" type="submit">{{ gettext('CONFIRM') }}</button>
       </div>
     </p>
   </form>
 
   {% if source.collection %}
-    <p>The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.</p>
+    <p>{{ gettext('The documents are stored encrypted for security. To read them, you will need to decrypt them using GPG.') }}</p>
     <form action="/bulk" method="post">
       <p>
         <div id="select-container"></div>
-        <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> Download Selected</button>
-        <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="small danger"><i class="fa fa-trash-o"></i> Delete Selected</button>
+        <button type="submit" name="action" value="download" class="small"><i class="fa fa-download"></i> {{ gettext('Download Selected') }}</button>
+        <button type="submit" name="action" value="confirm_delete" id="delete-selected" class="small danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete Selected') }}</button>
       </p>
 
       <ul id="submissions" class="plain submissions">
@@ -50,11 +50,11 @@
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat(binary=True) }}</span></span>
             {% endif %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <i title="Uploaded Document" class="fa fa-file-archive-o pull-right"></i>
+              <i title="{{ gettext('Uploaded Document') }}" class="fa fa-file-archive-o pull-right"></i>
             {% elif doc.filename.endswith('-reply.gpg') %}
-              <i title="Reply" class="fa fa-reply pull-right"></i>
+              <i title="{{ gettext('Reply') }}" class="fa fa-reply pull-right"></i>
             {% else %}
-              <i title="Message" class="fa fa-file-text-o pull-right"></i>
+              <i title="{{ gettext('Message') }}" class="fa fa-file-text-o pull-right"></i>
             {% endif %}
           </li>
         {% endfor %}
@@ -65,41 +65,41 @@
 
     </form>
   {% else %}
-    <p><br>No documents to display.</p>
+    <p><br>{{ gettext('No documents to display.') }}</p>
   {% endif %}
 
   <hr class="cut-out">
   <hr class="no-line">
-  <h3><i class="fa fa-reply"></i> Reply</h3>
+  <h3><i class="fa fa-reply"></i> {{ gettext('Reply') }}</h3>
   {% if source.has_key %}
-    <p>You can write a secure reply to the person who submitted these documents:</p>
+    <p>{{ gettext('You can write a secure reply to the person who submitted these documents:') }}</p>
     <form action="/reply" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
       <textarea id="reply-text-field" name="msg" cols="72" rows="10"></textarea>
       <hr class="no-line">
-      <button id="reply-button" class="sd-button" type="submit">SUBMIT</button>
+      <button id="reply-button" class="sd-button" type="submit">{{ gettext('SUBMIT') }}</button>
     </form>
   {% elif source.flagged %}
-    <p class="notification">You've flagged this source for reply.</p>
-    <p>An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.</p>
+    <p class="notification">{{ gettext("You've flagged this source for reply.") }}</p>
+    <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% else %}
-    <p>Click below if you would like to write a reply to this source.</p>
+    <p>{{ gettext("Click below if you would like to write a reply to this source.") }}</p>
     <form action="/flag" method="post">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <button id="flag-button" class="sd-button" type="submit">FLAG THIS SOURCE FOR REPLY</button>
+      <button id="flag-button" class="sd-button" type="submit">{{ gettext('FLAG THIS SOURCE FOR REPLY') }}</button>
     </form>
   {% endif %}
   <hr class="no-line">
   <hr class="cut-out">
-  <p>Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em></p>
+  <p>{{ gettext("Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>")|safe }}</p>
 
   <form id="delete-collection" action="/col/delete/{{filesystem_id}}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
-    <button type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> DELETE COLLECTION</button>
+    <button type="submit" class="sd-button danger"><i class="fa fa-trash-o"></i> {{ gettext('DELETE COLLECTION') }}</button>
   </form>
 
 </div>

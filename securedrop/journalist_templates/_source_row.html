@@ -14,11 +14,11 @@
     {% endif %}
   </div>
   <div class="submission-count">
-    <span><i class="fa fa-file-archive-o"></i> {{ docs }} docs</span>
-    <span><i class="fa fa-file-text-o"></i> {{ msgs }} messages</span>
+    <span><i class="fa fa-file-archive-o"></i> {{ gettext('docs {doc_num}').format(doc_num=docs) }}</span>
+    <span><i class="fa fa-file-text-o"></i> {{ gettext('messages {msg_num}').format(msg_num=msgs) }}</span>
     {% if source.num_unread > 0 %}
       <span class="unread">
-        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}"><i class="fa fa-download"></i> {{ source.num_unread }} unread</a>
+        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}"><i class="fa fa-download"></i> {{ gettext('{num_unread} unread').format(num_unread=source.num_unread) }}</a>
       </span>
     {% endif %}
   </div>

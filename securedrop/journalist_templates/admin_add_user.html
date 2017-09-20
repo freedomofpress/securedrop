@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% block body %}
 <p>
-  <a href="/admin">« Back to admin interface</a>
+  <a href="/admin">« {{ gettext('Back to admin interface') }}</a>
 </p>
 
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="password" type="hidden" value="{{ password }}">
-  <p><input name="username" type="text" placeholder="Username"></p>
-  <p>The user's password will be: <span class="password" id="password">{{ password }}</span></p>
+  <p><input name="username" type="text" placeholder="{{ gettext('Username') }}"></p>
+  <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
   <p>
     <input name="is_admin" id="is-admin" type="checkbox">
-    <label for="is_admin">Is Administrator</label>
+    <label for="is_admin">{{ gettext('Is Administrator') }}</label>
   </p>
   <p>
     <input name="is_hotp" id="is-hotp" type="checkbox">
-    <label for="is_hotp">Is using a YubiKey [HOTP] </label>
-    <input name="otp_secret" type="text" placeholder="HOTP Secret" size="60"><br>
+    <label for="is_hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
+    <input name="otp_secret" type="text" placeholder="{{ gettext('HOTP Secret') }}" size="60"><br>
   </p>
-  <button type="submit" class="sd-button"><i class="fa fa-plus"></i> ADD USER</button>
+  <button type="submit" class="sd-button"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
 {% endblock %}

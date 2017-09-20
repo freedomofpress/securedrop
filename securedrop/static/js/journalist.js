@@ -4,18 +4,33 @@
  */
 function enhance_ui() {
   // Add the "quick filter" box for sources
-  $('div#filter-container').html('<input id="filter" type="text" placeholder="filter by codename" autofocus >');
+  $('div#filter-container').html('<input id="filter" type="text" placeholder="' + get_string("filter-by-codename-placeholder-string") + '" autofocus >');
 
   // Add the "select {all,none}" buttons
-  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> Select Unread</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
+  $('div#select-container').html('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-all-string") + '</span> <span id="select_unread" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-unread-string") + '</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> ' + get_string("select-none-string") + '</span>');
 
-  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> Select All</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> Select None</span>');
+  $('div#index-select-container').replaceWith('<span id="select_all" class="select"><i class="fa fa-check-square-o"></i> ' + get_string("select-all-string") + '</span> <span id="select_none" class="select"><i class="fa fa-square-o"></i> ' + get_string("select-none-string") + '</span>');
 
   // Change the action on the /col pages so we use a Javascript
   // confirmation instead of redirecting to a confirmation page before
   // deleting submissions
   $('button#delete-selected').attr('value', 'delete');
 }
+
+function get_string(string_id) {
+  return $("#js-strings > #" + string_id)[0].innerHTML;
+}
+
+// String interpolation helper
+// Credit where credit is due: http://stackoverflow.com/a/1408373
+String.prototype.supplant = function (o) {
+    return this.replace(/{([^{}]*)}/g,
+        function (a, b) {
+            var r = o[b];
+            return typeof r === 'string' || typeof r === 'number' ? r : a;
+        }
+    );
+};
 
 $(function () {
   enhance_ui();
@@ -47,7 +62,7 @@ $(function () {
     });
 
   $("#delete-collection").submit(function () {
-    return confirm("Are you sure you want to delete this collection?");
+    return confirm(get_string("collection-delete-confirm-string"));
   });
 
   $("#delete-collections").click(function () {
@@ -55,7 +70,7 @@ $(function () {
         return $(this).prop('checked');
     });
     if (checked.length > 0) {
-      return confirm("Are you sure you want to delete the " + checked.length + " selected collection" + (checked.length > 1 ? "s?" : "?"));
+      return confirm(get_string("collection-multi-delete-confirm-string").supplant({ size: checked.length }));
     }
     // Don't submit the form if no collections are selected
     return false;
@@ -66,7 +81,7 @@ $(function () {
           return $(this).prop('checked')
       });
       if (checked.length > 0) {
-          return confirm("Are you sure you want delete the " + checked.length + " selected submission" + (checked.length > 1 ? "s?" : "?"));
+          return confirm(get_string('submission-multi-delete-confirm-string').supplant({ size: checked.length }));
       }
       // Don't submit the form if no submissions are selected
       return false;
@@ -96,12 +111,12 @@ $(function () {
   // Confirm before deleting user on admin page
   $('button.delete-user').click(function(event) {
       var username = $(this).attr('data-username');
-      return confirm("Are you sure you want to delete the user " + username + "?");
+      return confirm(get_string("delete-user-confirm-string").supplant({ username: username }));
   });
 
   // Confirm before resetting two-factor authentication on edit user page
   $('form#reset-two-factor').submit(function(event) {
-      return confirm("Are you sure to want to reset this user's two-factor authentication?");
+      return confirm(get_string("reset-user-mfa-confirm-string").supplant({ username: username }));
   });
 
 });
