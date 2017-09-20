@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-20 15:53+0000\n"
-"Last-Translator: anna <annskaja@riseup.net>\n"
+"PO-Revision-Date: 2017-09-20 17:17+0000\n"
+"Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
 "Language: de_DE\n"
@@ -48,13 +48,12 @@ msgid "That username is already in use"
 msgstr "Dieser Benutzername ist bereits vergeben"
 
 #: journalist.py:210
-#, fuzzy
 msgid ""
 "An error occurred saving this user to the database. Please check the "
 "application logs."
 msgstr ""
 "Beim Speichern dieses Nutzers in der Datenbank trat ein Fehler auf. Bitte "
-"überprüfen sie die Logs der Anwendung."
+"überprüfen Sie die Logs der Anwendung."
 
 #: journalist.py:232
 #, fuzzy
@@ -295,9 +294,9 @@ msgid ""
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
 "Sie sind fast fertig! Um das Zurücksetzen der Zwei-Faktor-Authentifizierung "
-"abzuschließen, folgen sie den untenstehenden Anweisungen, um Google "
-"Authenticator einzurichten. Sobald sie den Eintrag für Ihren Account in der "
-"App hinzugefügt haben, geben sie einen der sechsstelligen Codes aus der App "
+"abzuschließen, folgen Sie den untenstehenden Anweisungen, um Google "
+"Authenticator einzurichten. Sobald Sie den Eintrag für Ihren Account in der "
+"App hinzugefügt haben, geben Sie einen der sechsstelligen Codes aus der App "
 "ein, um zu bestätigen, dass die Zwei-Faktor-Authentifizierung erfolgreich "
 "eingerichtet ist."
 
@@ -587,10 +586,8 @@ msgid "Return to the list of documents for {source_journalist_designation}..."
 msgstr "Zurück zur Dokumentenliste für {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:6
-#, fuzzy
-#| msgid "Edit user {username}"
 msgid "Edit user \"{user}\""
-msgstr "Benutzer {username} bearbeiten"
+msgstr "Benutzer \"{user}\" bearbeiten"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
