@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-20 10:05+0000\n"
-"Last-Translator: Loic Dachary <loic@dachary.org>\n"
+"PO-Revision-Date: 2017-09-20 13:56+0000\n"
+"Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
@@ -396,7 +396,7 @@ msgstr "Supprimer l'utilisateur {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
-msgstr "Jamais"
+msgstr "jamais"
 
 #: journalist_templates/admin.html:38
 msgid "No users to display"
@@ -587,7 +587,7 @@ msgstr "Revenir à la liste de documents de {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr "Modifier l'utilisateur «{username}»"
+msgstr "Modifier l'utilisateur « {username} »"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
@@ -1101,7 +1101,7 @@ msgstr "Souvenez-vous que votre nom de code est :"
 
 #: source_templates/lookup.html:99
 msgid "Show"
-msgstr "Montrer"
+msgstr "Afficher"
 
 #: source_templates/lookup.html:101
 msgid "Hide"
