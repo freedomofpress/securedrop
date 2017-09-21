@@ -72,3 +72,7 @@ def get_locale():
         return locale
     else:
         return getattr(config, 'DEFAULT_LOCALE', 'en_US')
+
+
+def get_text_direction(locale):
+    return core.Locale.parse(locale).text_direction
