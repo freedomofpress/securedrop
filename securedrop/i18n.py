@@ -22,7 +22,9 @@ from babel import core
 import collections
 import config
 import os
+import re
 
+LOCALE_SPLIT = re.compile('(-|_)')
 LOCALES = set(['en_US'])
 babel = None
 
@@ -129,3 +131,13 @@ def get_locale2name():
             locale = core.Locale.parse(l)
             locale2name[l] = locale.languages[locale.language]
     return locale2name
+
+
+def locale_to_rfc_5646(locale):
+    lower = locale.lower()
+    if 'hant' in lower:
+        return 'zh-Hant'
+    elif 'hans' in lower:
+        return 'zh-Hans'
+    else:
+        return LOCALE_SPLIT.split(locale)[0]

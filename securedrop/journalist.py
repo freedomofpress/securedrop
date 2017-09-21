@@ -71,6 +71,7 @@ def setup_g():
 
     g.locale = i18n.get_locale()
     g.text_direction = i18n.get_text_direction(g.locale)
+    g.html_lang = i18n.locale_to_rfc_5646(g.locale)
     g.locales = i18n.get_locale2name()
 
     if request.method == 'POST':
