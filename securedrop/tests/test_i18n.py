@@ -19,6 +19,7 @@
 import argparse
 import logging
 import os
+import re
 
 from flask import request, session, render_template_string, render_template
 from flask_babel import gettext
@@ -217,6 +218,29 @@ class TestI18N(object):
                 assert not_translated == gettext(not_translated)
         finally:
             config.DEFAULT_LOCALE = DEFAULT_LOCALE
+
+    def test_locale_to_rfc_5646(self):
+        assert i18n.locale_to_rfc_5646('en') == 'en'
+        assert i18n.locale_to_rfc_5646('en-US') == 'en'
+        assert i18n.locale_to_rfc_5646('en_US') == 'en'
+        assert i18n.locale_to_rfc_5646('en-us') == 'en'
+        assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
+
+    def test_html_lang_correct(self):
+        app = journalist.app.test_client()
+        resp = app.get('/', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="en".*>').search(html), html
+
+        app = source.app.test_client()
+        resp = app.get('/', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="en".*>').search(html), html
+
+        # check '/generate' too because '/' uses a different template
+        resp = app.get('/', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="en".*>').search(html), html
 
     @classmethod
     def teardown_class(cls):

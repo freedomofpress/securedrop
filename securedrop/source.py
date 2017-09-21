@@ -95,7 +95,9 @@ def setup_g():
     """Store commonly used values in Flask's special g object"""
     g.locale = i18n.get_locale()
     g.text_direction = i18n.get_text_direction(g.locale)
+    g.html_lang = i18n.locale_to_rfc_5646(g.locale)
     g.locales = i18n.get_locale2name()
+
     # ignore_static here because `crypto_util.hash_codename` is scrypt (very
     # time consuming), and we don't need to waste time running if we're just
     # serving a static resource that won't need to access these common values.
