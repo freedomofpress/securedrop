@@ -304,6 +304,7 @@ def translate(args):
             --no-fuzzy-matching --ignore-obsolete
             """.format(translations_dir=args.translations_dir,
                        messages_file=messages_file))
+            log.warning("messages translations updated in " + messages_file)
         else:
             log.warning("no translations found (ok for tests, not otherwise)")
 
