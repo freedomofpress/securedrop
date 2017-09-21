@@ -11,27 +11,38 @@ to be translated, a directory is created such as
 from ``securedrop/translations/messages.pot``, for translators to work
 with and for the `gettext`_ substitution at runtime.
 
+The desktop icon are in the
+``install_files/ansible-base/roles/tails-config/templates`` directory.
+Their labels are collected in the ``desktop.pot`` file and translated
+in the corresponding ``.po`` files in the same directory (``fr.po``,
+``de.po`` etc.)
+
 The manage.py translate helper
 ------------------------------
 
-The `pybabel`_ command line is wrapped into the ``manage.py
-translate`` helper for convenience. It is designed to be used by
-developers, to run tests with fixtures and during packaging.
+The `pybabel`_ and `gettext`_ command line is wrapped into the
+``manage.py translate-messages`` and ``manage.py translate-desktop``
+helpers for convenience. It is designed to be used by developers, to
+run tests with fixtures and for packaging.
 
 Updating strings to be translated
 ---------------------------------
 
-After modifying a string in the code, templates or javascript, the
-``securedrop/translations/messages.pot`` file must be updated by
-running the following command in ``/vagrant/securedrop``, in the
-development virtual machine::
+After modifying a string in the code, templates, javascript or desktop
+labels, the ``.pot`` files must be updated by running the following
+command in ``/vagrant/securedrop``, in the development virtual
+machine::
 
-    ./manage.py --verbose translate --extract-update
+    make translate
 
-The updated ``securedrop/translations/messages.pot`` should then be
-reviewed and commited. Once merged in develop, the changes will be
-visible in the `Weblate`_ web interface used by translators because it
-watches the develop branch of the SecureDrop repository.
+which wraps ``manage.py translate-messages`` and ``manage.py
+translate-desktop``.  The updated
+``securedrop/translations/messages.pot`` and
+``install_files/ansible-base/roles/tails-config/templates/desktop.pot``
+should then be reviewed and commited. Once merged in develop, the
+changes will be visible in the `Weblate`_ web interface used by
+translators because it watches the develop branch of the SecureDrop
+repository.
 
 Compiling translations
 ----------------------
@@ -40,8 +51,16 @@ Compiling translations
 files). This can be done by running the following command
 in ``/vagrant/securedrop``, in the development virtual machine::
 
-    ./manage.py --verbose translate --compile
+    ./manage.py --verbose translate-messages --compile
 
+For desktop files the compilation phases creates a modified version of
+the original file which includes all the translations collected from
+the ``.po`` files.
+
+This can be done by running the following command in
+``/vagrant/securedrop``, in the development virtual machine::
+
+    ./manage.py --verbose translate-desktop --compile
 
 Verifying translations
 ----------------------
@@ -75,7 +94,7 @@ the file can be found in the function that created it in
 Merging translations
 --------------------
 
-`Weblate`_ merges pushes the translations done via the web interface
+`Weblate`_ pushes the translations done via the web interface
 to the develop branch in a fork of the `SecureDrop git repository`_.
 These commits must be manually cherry-picked and proposed as pull
 requests for the `SecureDrop git repository`_.

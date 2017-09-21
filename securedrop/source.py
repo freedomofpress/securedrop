@@ -55,6 +55,7 @@ else:
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
+app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
 @app.teardown_appcontext
@@ -93,6 +94,8 @@ def ignore_static(f):
 def setup_g():
     """Store commonly used values in Flask's special g object"""
     g.locale = i18n.get_locale()
+    g.text_direction = i18n.get_text_direction(g.locale)
+    g.locales = i18n.get_locale2name()
     # ignore_static here because `crypto_util.hash_codename` is scrypt (very
     # time consuming), and we don't need to waste time running if we're just
     # serving a static resource that won't need to access these common values.
@@ -139,7 +142,8 @@ def index():
 def generate_unique_codename():
     """Generate random codenames until we get an unused one"""
     while True:
-        codename = crypto_util.genrandomid(Source.NUM_WORDS)
+        codename = crypto_util.genrandomid(Source.NUM_WORDS,
+                                           i18n.get_language())
 
         # The maximum length of a word in the wordlist is 9 letters and the
         # codename length is 7 words, so it is currently impossible to

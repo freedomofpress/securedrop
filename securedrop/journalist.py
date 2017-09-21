@@ -42,6 +42,7 @@ else:
     app.jinja_env.globals['use_custom_header_image'] = False
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
 @app.teardown_appcontext
@@ -69,6 +70,8 @@ def setup_g():
         g.user = Journalist.query.get(uid)
 
     g.locale = i18n.get_locale()
+    g.text_direction = i18n.get_text_direction(g.locale)
+    g.locales = i18n.get_locale2name()
 
     if request.method == 'POST':
         filesystem_id = request.form.get('filesystem_id')
@@ -406,7 +409,7 @@ def admin_new_password(user_id):
 
 def _make_password():
     while True:
-        password = crypto_util.genrandomid(7)
+        password = crypto_util.genrandomid(7, i18n.get_language())
         try:
             Journalist.check_password_acceptable(password)
             return password

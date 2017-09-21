@@ -1,0 +1,11 @@
+{% if g.locales|length > 1 %}
+  <div class="center">
+    {% for locale in g.locales %}
+      {% if locale == g.locale %}
+        {{ g.locales[locale] }}
+      {% else %}
+        <a href="?l={{ locale }}" rel="nofollow">{{ g.locales[locale] }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

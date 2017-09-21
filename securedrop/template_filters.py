@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask_babel import gettext, ngettext
+from flask_babel import gettext, ngettext, get_locale
+from babel import units
 from datetime import datetime
 from jinja2 import Markup, escape
+import math
 
 
 def datetimeformat(dt, fmt=None, relative=False):
@@ -46,3 +48,26 @@ def nl2br(context, value):
     if context.autoescape:
         formatted = Markup(formatted)
     return formatted
+
+
+def filesizeformat(value):
+    prefixes = [
+        'digital-kilobyte',
+        'digital-megabyte',
+        'digital-gigabyte',
+        'digital-terabyte',
+    ]
+    locale = get_locale()
+    base = 1024
+    #
+    # we are using the long length because the short length has no
+    # plural variant and it reads like a bug instead of something
+    # on purpose
+    #
+    if value < base:
+        return units.format_unit(value, "byte", locale=locale, length="long")
+    else:
+        i = min(int(math.log(value, base)), len(prefixes)) - 1
+        prefix = prefixes[i]
+        bytes = float(value) / base ** (i + 1)
+        return units.format_unit(bytes, prefix, locale=locale, length="short")

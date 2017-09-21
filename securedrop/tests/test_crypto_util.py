@@ -21,7 +21,7 @@ class TestCryptoUtil(unittest.TestCase):
         utils.env.teardown()
 
     def test_word_list_does_not_contain_empty_strings(self):
-        self.assertNotIn('', (crypto_util.words
+        self.assertNotIn('', (crypto_util._get_wordlist('en')
                               + crypto_util.nouns
                               + crypto_util.adjectives))
 
@@ -133,14 +133,29 @@ class TestCryptoUtil(unittest.TestCase):
 
         self.assertEqual(message, plaintext_)
 
-    def test_genrandomid(self):
-        id = crypto_util.genrandomid()
+    def verify_genrandomid(self, locale):
+        id = crypto_util.genrandomid(locale=locale)
         id_words = id.split()
 
         self.assertEqual(id, crypto_util.clean(id))
         self.assertEqual(len(id_words), crypto_util.DEFAULT_WORDS_IN_RANDOM_ID)
         for word in id_words:
-            self.assertIn(word, crypto_util.words)
+            self.assertIn(word, crypto_util._get_wordlist(locale))
+
+    def test_genrandomid(self):
+        self.verify_genrandomid('en')
+
+    def test_get_wordlist(self):
+        locales = []
+        wordlists_path = os.path.join(config.SECUREDROP_ROOT, 'wordlists')
+        for f in os.listdir(wordlists_path):
+            if f.endswith('.txt') and f != 'en.txt':
+                locales.append(f.split('.')[0])
+        wordlist_en = crypto_util._get_wordlist('en')
+        for locale in locales:
+            self.assertNotEqual(wordlist_en, crypto_util._get_wordlist(locale))
+            self.verify_genrandomid(locale)
+        self.assertEqual(wordlist_en, crypto_util._get_wordlist('unknown'))
 
     def test_display_id(self):
         id = crypto_util.display_id()

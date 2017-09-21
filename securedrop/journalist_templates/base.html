@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="{{ g.text_direction }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,6 +34,7 @@
       {% block header %}
       <div id="header">
         <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        {% include 'locales.html' %}
         {% if use_custom_header_image %}
         <div class="powered">
           {{ gettext('Powered by <br> <img src="/static/i/securedrop_small.png" alt="SecureDrop">') }}
