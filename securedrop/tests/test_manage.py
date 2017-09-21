@@ -210,17 +210,25 @@ class TestSh(object):
         manage.sh("echo AB ; sleep 5 ; echo C")
         records = caplog.records()
         assert ':sh: ' in records[0].message
+        assert records[0].levelname == 'DEBUG'
         assert 'AB' == records[1].message
+        assert records[1].levelname == 'DEBUG'
         assert 'C' == records[2].message
+        assert records[2].levelname == 'DEBUG'
 
     def test_sh_input(self, caplog):
         assert 'abc' == manage.sh("cat", 'abc')
 
     def test_sh_fail(self, caplog):
+        level = manage.log.getEffectiveLevel()
+        manage.log.setLevel(logging.INFO)
+        assert manage.log.getEffectiveLevel() == logging.INFO
         with pytest.raises(subprocess.CalledProcessError) as excinfo:
-            manage.sh("/bin/echo -n AB ; /bin/echo C ; exit 111")
+            manage.sh("echo AB ; echo C ; exit 111")
+        manage.log.setLevel(level)
         assert excinfo.value.returncode == 111
-        for record in caplog.records():
-            if record.levelname == 'ERROR':
-                assert ('replay full' in record.message or
-                        'ABC\n' == record.message)
+        records = caplog.records()
+        assert 'AB' == records[0].message
+        assert records[0].levelname == 'ERROR'
+        assert 'C' == records[1].message
+        assert records[1].levelname == 'ERROR'
