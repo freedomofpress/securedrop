@@ -49,12 +49,18 @@ def sh(command, input=None):
         proc.stdin.write(input)
         proc.stdin.close()
     lines_of_command_output = []
+    loggable_line_list = []
     with proc.stdout:
         for line in iter(proc.stdout.readline, b''):
             line = line.decode('utf-8')
             lines_of_command_output.append(line)
-            log.debug(line.strip().encode('ascii', 'ignore'))
+            loggable_line = line.strip().encode('ascii', 'ignore')
+            log.debug(loggable_line)
+            loggable_line_list.append(loggable_line)
     if proc.wait() != 0:
+        if log.getEffectiveLevel() > logging.DEBUG:
+            for loggable_line in loggable_line_list:
+                log.error(loggable_line)
         raise subprocess.CalledProcessError(
             returncode=proc.returncode,
             cmd=command
