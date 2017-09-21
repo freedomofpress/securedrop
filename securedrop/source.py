@@ -55,6 +55,7 @@ else:
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
+app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
 @app.teardown_appcontext
