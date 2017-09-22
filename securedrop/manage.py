@@ -68,7 +68,7 @@ def sh(command, input=None):
     return "".join(lines_of_command_output)
 
 
-def reset(args):  # pragma: no cover
+def reset(args):
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
@@ -198,10 +198,23 @@ def _add_user(is_admin=False):
         return 0
 
 
-def delete_user(args):  # pragma: no cover
+def _get_username_to_delete():
+    return raw_input('Username to delete: ')
+
+
+def _get_delete_confirmation(user):
+    confirmation = raw_input('Are you sure you want to delete user '
+                             '"{}" (y/n)?'.format(user))
+    if confirmation.lower() != 'y':
+        print('Confirmation not received: user "{}" was NOT '
+              'deleted'.format(user))
+        return False
+    return True
+
+
+def delete_user(args):
     """Deletes a journalist or administrator from the application."""
-    # Select user to delete
-    username = raw_input('Username to delete: ')
+    username = _get_username_to_delete()
     try:
         selected_user = Journalist.query.filter_by(username=username).one()
     except NoResultFound:
@@ -209,28 +222,24 @@ def delete_user(args):  # pragma: no cover
         return 0
 
     # Confirm deletion if user is found
-    confirmation = raw_input('Are you sure you want to delete user '
-                             '{} (y/n)?'.format(selected_user))
-    if confirmation.lower() != 'y':
-        print('Confirmation not received: user "{}" was NOT '
-              'deleted'.format(username))
+    if not _get_delete_confirmation(selected_user.username):
         return 0
 
     # Try to delete user from the database
     try:
         db_session.delete(selected_user)
         db_session.commit()
-    except:
+    except Exception as e:
         # If the user was deleted between the user selection and confirmation,
         # (e.g., through the web app), we don't report any errors. If the user
         # is still there, but there was a error deleting them from the
         # database, we do report it.
         try:
-            selected_user = Journalist.query.filter_by(username=username).one()
+            Journalist.query.filter_by(username=username).one()
         except NoResultFound:
             pass
         else:
-            raise
+            raise e
 
     print('User "{}" successfully deleted'.format(username))
     return 0
