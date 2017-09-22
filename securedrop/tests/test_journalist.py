@@ -68,7 +68,7 @@ class TestJournalistApp(TestCase):
         # Notice the "potentially sensitive" exception_msg is not present in
         # the log event.
         mocked_error_logger.assert_called_once_with(
-            "Reply from '{}' (id {}) failed: {}!".format(self.user.username,
+            "Reply from '{}' (ID {}) failed: {}!".format(self.user.username,
                                                          self.user.id,
                                                          exception_class))
 
@@ -97,7 +97,7 @@ class TestJournalistApp(TestCase):
                                       'msg': ''},
                                 follow_redirects=True)
 
-        self.assertIn("You cannot send an empty reply!", resp.data)
+        self.assertIn("You cannot send an empty reply.", resp.data)
 
     def test_nonempty_replies_are_accepted(self):
         source, _ = utils.db_helper.init_source()
@@ -109,7 +109,7 @@ class TestJournalistApp(TestCase):
                                       'msg': '_'},
                                 follow_redirects=True)
 
-        self.assertNotIn("You cannot send an empty reply!", resp.data)
+        self.assertNotIn("You cannot send an empty reply.", resp.data)
 
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))
@@ -273,7 +273,7 @@ class TestJournalistApp(TestCase):
             follow_redirects=True)
 
         text = resp.data.decode('utf-8')
-        assert 'The password was successfully updated!' in text
+        assert 'Password updated.' in text
         assert VALID_PASSWORD_2 in text
 
     def test_admin_edits_user_password_error_response(self):
@@ -296,7 +296,7 @@ class TestJournalistApp(TestCase):
             follow_redirects=True)
 
         text = resp.data.decode('utf-8')
-        assert "The password was successfully updated!" in text
+        assert "Password updated." in text
         assert VALID_PASSWORD_2 in text
 
     def test_user_edits_password_error_reponse(self):
@@ -390,7 +390,7 @@ class TestJournalistApp(TestCase):
             url_for('admin_edit_user', user_id=self.user.id),
             data=dict(username=new_username, is_admin=None))
 
-        self.assertMessageFlashed('Username "{}" is already taken!'.format(
+        self.assertMessageFlashed('Username "{}" already taken.'.format(
             new_username), 'error')
 
     def test_admin_resets_user_hotp(self):
@@ -687,7 +687,7 @@ class TestJournalistApp(TestCase):
             data=dict(password=VALID_PASSWORD_2),
             follow_redirects=True)
 
-        assert 'The password was successfully updated!' in \
+        assert 'Password updated.' in \
             resp.data.decode('utf-8')
 
     def test_regenerate_totp(self):
