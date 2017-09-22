@@ -175,13 +175,22 @@ Repeat these steps to continue communicating with the journalist.
 .. |Source Interface with Javascript Enabled| image:: images/manual/source-step1.png
 .. |Security Slider| image:: images/manual/security-slider-high.png
 .. |Fix Javascript warning| image:: images/manual/source-step2.png
-.. |Source Interface with Javascript Disabled| image:: images/manual/source-step3-and-step7.png
-.. |Memorizing your codename| image:: images/manual/source-step4.png
-.. |Submit a document| image:: images/manual/source-step5.png
-.. |Confirmation page| image:: images/manual/source-step6.png
-.. |Logout| image:: images/manual/logout-notification.png
+.. |Source Interface with Javascript Disabled|
+  image:: images/manual/screenshots/source-index.png
+.. |Memorizing your codename|
+  image:: images/manual/screenshots/source-generate.png
+.. |Submit a document|
+  image:: images/manual/screenshots/source-submission_entered_text.png
+.. |Confirmation page|
+  image:: images/manual/screenshots/source-lookup.png
+.. |Logout|
+  image:: images/manual/screenshots/source-logout_flashed_message.png
 .. |Restart TBB| image:: images/manual/restart-tor-browser.png
-.. |Check for response| image:: images/manual/source-step8.png
-.. |Check for a reply| image:: images/manual/source-step9.png
-.. |Delete received messages| image:: images/manual/source-step10.png
-.. |Check for an initial response| image:: images/manual/source_flagged_for_reply.png
+.. |Check for response|
+  image:: images/manual/screenshots/source-enter-codename-in-login.png
+.. |Check for a reply|
+  image:: images/manual/screenshots/source-checks_for_reply.png
+.. |Delete received messages|
+  image:: images/manual/screenshots/source-deletes_reply.png
+.. |Check for an initial response|
+  image:: images/manual/screenshots/source-flagged.png
