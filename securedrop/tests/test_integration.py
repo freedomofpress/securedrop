@@ -351,7 +351,7 @@ class TestIntegration(unittest.TestCase):
         if not expected_success:
             pass
         else:
-            self.assertIn("Thanks! Your reply has been stored.", resp.data)
+            self.assertIn("Thanks. Your reply has been stored.", resp.data)
 
         with self.journalist_app as journalist_app:
             resp = journalist_app.get(col_url)

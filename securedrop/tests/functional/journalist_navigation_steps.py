@@ -368,8 +368,7 @@ class JournalistNavigationSteps():
         reset_pw_btn.click()
 
         def update_password_success():
-            assert ('The password was successfully updated' in
-                    self.driver.page_source)
+            assert 'Password updated.' in self.driver.page_source
 
         # Wait until page refreshes to avoid causing a broken pipe error (#623)
         self.wait_for(update_password_success)
@@ -461,7 +460,7 @@ class JournalistNavigationSteps():
 
         self.driver.find_element_by_id('reply-button').click()
 
-        assert "Thanks! Your reply has been stored." in self.driver.page_source
+        assert "Thanks. Your reply has been stored." in self.driver.page_source
 
     def _visit_edit_account(self):
         edit_account_link = self.driver.find_element_by_id(
