@@ -68,9 +68,13 @@ You will only be able to view the documents the source has sent you on
 the *Secure Viewing Station*. After clicking on an individual source
 you will see the page below with the messages that source has sent you.
 Click on a document or message name to save it, or select a number of
-documents and save them at once by clicking "Download Selected".
+documents and save them at once by clicking **Download Selected**.
 
 | |Load external content|
+
+A dialog box will appear asking if you want to **Open** or **Save** the file.
+Select **Save File**:
+
 | |Download selected|
 
 In order to protect you from malware, the browser only allows you to
