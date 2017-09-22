@@ -66,7 +66,7 @@ shellcheck: ## Lints Bash and sh scripts.
 # don't maintain those scripts. Omitting the `.venv/` dir because we don't control
 # files in there. Omitting the ossec packages because there are a LOT of violations,
 # and we have a separate issue dedicated to cleaning those up.
-	@find \( -path "./.venv" -o -path "./install_files/ossec-server" \
+	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
 		-o -path "./install_files/ossec-agent" \) -prune \
 		-o -type f -and -not -ipath '*/.git/*' -exec file --mime {} + \
 		| perl -F: -lanE '$$F[1] =~ /x-shellscript/ and say $$F[0]' \
