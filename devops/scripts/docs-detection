@@ -1,3 +1,0 @@
-#!/bin/bash
-
-if [[ "$CIRCLE_BRANCH" == docs-* ]]; then echo "Docs branch detected. Exiting..."; exit 1; fi

@@ -4,7 +4,7 @@
 set -a
 FPF_CI=true
 
-read -e -p "Enter a build designator: " -i "${USER}" BUILD_NUM
+read -e -p "Enter a build designator: " -i "${USER}" CIRCLE_BUILD_NUM
 read -e -p "Enter AWS region: " -i "us-west-1" CI_AWS_REGION
 read -e -p "Enter AWS EC2 type: " -i "t2.small" CI_AWS_TYPE
 read -e -p "Enter AWS VPC ID: " -i "${CI_AWS_VPC_ID}" CI_AWS_VPC_ID

@@ -11,7 +11,7 @@ def test_app_iptables_rules(SystemInfo, Command, Sudo):
 
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
-        mon_ip=securedrop_test_vars.mon_ip,
+        mon_ip=os.environ.get('MON_IP', securedrop_test_vars.mon_ip),
         default_interface=Command.check_output("ip r | head -n 1 | "
                                                "awk '{ print $5 }'"),
         tor_user_id=Command.check_output("id -u debian-tor"),

@@ -1,3 +1,4 @@
+import os
 import pytest
 
 
@@ -27,7 +28,7 @@ def test_ossec_connectivity(Command, Sudo):
     """
     desired_output = "{}-{} is available.".format(
         securedrop_test_vars.app_hostname,
-        securedrop_test_vars.app_ip)
+        os.environ.get('APP_IP', securedrop_test_vars.app_ip))
     with Sudo():
         c = Command.check_output("/var/ossec/bin/list_agents -a")
         assert c == desired_output
@@ -155,7 +156,7 @@ def test_hosts_files(File, SystemInfo):
     """ Ensure host files mapping are in place """
     f = File('/etc/hosts')
 
-    app_ip = securedrop_test_vars.app_ip
+    app_ip = os.environ.get('APP_IP', securedrop_test_vars.app_ip)
     app_host = securedrop_test_vars.app_hostname
 
     assert f.contains('^127.0.0.1.*localhost')
