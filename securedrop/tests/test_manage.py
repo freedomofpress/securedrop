@@ -9,6 +9,7 @@ import logging
 import manage
 import mock
 import pytest
+from sqlalchemy.orm.exc import NoResultFound
 from StringIO import StringIO
 import subprocess
 import sys
@@ -17,7 +18,7 @@ import unittest
 import version
 import utils
 
-from db import Journalist
+from db import Journalist, db_session
 
 
 class TestManagePy(object):
@@ -117,10 +118,19 @@ class TestManagementCommand(unittest.TestCase):
         self.assertEqual(return_value, 'test-user-12345')
 
     def test_reset(self):
+        test_journalist, _ = utils.db_helper.init_journalist()
+        user_should_be_gone = test_journalist.username
+
         return_value = manage.reset(args=None)
+
         self.assertEqual(return_value, 0)
         assert os.path.exists(config.DATABASE_FILE)
         assert os.path.exists(config.STORE_DIR)
+
+        # Verify journalist user present in the database is gone
+        db_session.remove()  # Close session and get a session on the new db
+        with self.assertRaises(NoResultFound):
+            Journalist.query.filter_by(username=user_should_be_gone).one()
 
 
 class TestManage(object):
