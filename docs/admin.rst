@@ -168,13 +168,18 @@ SecureDrop. Make sure the journalist remembers their username and
 password and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
-.. |SecureDrop main page| image:: images/admin_main_home.png
-.. |SecureDrop admin home| image:: images/admin_secondary_home.png
-.. |Add a new user| image:: images/manual/journalist-admin_add_user_totp.png
-.. |Enable Google Authenticator| image:: images/manual/journalist-admin_new_user_two_factor_totp.png
-.. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
-.. |Enable YubiKey| image:: images/manual/journalist-admin_add_user_hotp.png
-.. |Verify YubiKey| image:: images/manual/journalist-admin_new_user_two_factor_hotp.png
+.. |SecureDrop main page|
+  image:: images/manual/screenshots/journalist-admin_index_no_documents.png
+.. |SecureDrop admin home|
+  image:: images/manual/screenshots/journalist-admin_interface_index.png
+.. |Add a new user|
+  image:: images/manual/screenshots/journalist-admin_add_user_totp.png
+.. |Enable Google Authenticator|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
+.. |Enable YubiKey|
+  image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
 
 .. _Updating the Servers:
 
