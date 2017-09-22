@@ -134,10 +134,8 @@ characters that are highlighted in yellow.
 Inside the Google Authenticator app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
 new number every thirty seconds. Enter the six digit number under
-“Verification code” at the bottom of the SecureDrop screen here, and hit
-enter:
-
-|Verify Google Authenticator works|
+“Verification code” at the bottom of the screen, and hit
+enter.
 
 If Google Authenticator was set up correctly, you will be redirected
 back to the Admin Interface and will see a flashed message that says
