@@ -34,6 +34,7 @@
       {% block header %}
       <div id="header">
         <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        {% include 'locales.html' %}
         {% if use_custom_header_image %}
         <div class="powered">
           {{ gettext('Powered by <br> <img src="/static/i/securedrop_small.png" alt="SecureDrop">') }}
