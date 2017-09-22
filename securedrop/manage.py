@@ -292,13 +292,20 @@ def translate(args):
         --msgid-bugs-address='securedrop@freedom.press' \
         --copyright-holder='Freedom of the Press Foundation' \
         {sources}
+
+        # remove this line so the file does not change if no
+        # strings are modified
+        sed -i '/^"POT-Creation-Date/d' {messages_file}
         """.format(translations_dir=args.translations_dir,
                    mapping=args.mapping,
                    messages_file=messages_file,
                    version=args.version,
                    sources=" ".join(args.source)))
 
-        if len(os.listdir(args.translations_dir)) > 1:
+        changed = subprocess.call("git diff --quiet {}".format(messages_file),
+                                  shell=True)
+
+        if changed and len(os.listdir(args.translations_dir)) > 1:
             sh("""
             set -xe
             for translation in {translations_dir}/*/LC_MESSAGES/*.po ; do
@@ -308,7 +315,7 @@ def translate(args):
                        messages_file=messages_file))
             log.warning("messages translations updated in " + messages_file)
         else:
-            log.warning("no translations found (ok for tests, not otherwise)")
+            log.warning("messages translations are already up to date")
 
     if args.compile and len(os.listdir(args.translations_dir)) > 1:
         sh("""
