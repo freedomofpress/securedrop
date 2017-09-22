@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-20 13:56+0000\n"
+"PO-Revision-Date: 2017-09-22 19:57+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -440,7 +440,7 @@ msgstr "Modifier le compte"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
-msgstr "Administrateur"
+msgstr "Administration"
 
 #: journalist_templates/base.html:28
 msgid "Logout"
