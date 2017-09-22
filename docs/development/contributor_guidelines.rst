@@ -62,6 +62,19 @@ compliant. You can run ``flake8`` locally via:
 
       make flake8
 
+Shell
+~~~~~
+
+All Shell code (e.g. ``bash``, ``sh``) should be `shellcheck <https://github.com/koalaman/shellcheck>`__
+compliant. You can run ``shellcheck`` locally via:
+
+  .. code:: sh
+
+      make shellcheck
+
+For reference, consult the `shellcheck wiki <https://github.com/koalaman/shellcheck/wiki>`__
+for detailed explanations of any reported violations.
+
 HTML
 ~~~~
 
