@@ -23,6 +23,8 @@ if [ -z "$VIRTUAL_ENV" ]; then
     # installed globally.
     declare -r venv='./venv/bin/activate'
     if [ -f "$venv" ]; then
+      # File may not exist, so don't follow for shellcheck linting (SC1090).
+      # shellcheck source=/dev/null
       source "$venv"
     fi
 fi
