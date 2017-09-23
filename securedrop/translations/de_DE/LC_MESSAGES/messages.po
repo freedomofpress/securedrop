@@ -3,10 +3,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-21 18:54+0000\n"
-"Last-Translator: anna <annskaja@riseup.net>\n"
-"Language-Team: German <https://weblate.securedrop.club/projects/securedrop/"
-"securedrop/de/>\n"
+"PO-Revision-Date: 2017-09-23 09:36+0000\n"
+"Last-Translator: heartsucker <heartsucker@riseup.net>\n"
+"Language-Team: German "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -91,10 +91,8 @@ msgid "Account updated."
 msgstr "Account wurde aktualisiert."
 
 #: journalist.py:332
-#, fuzzy
-#| msgid "Username \"{user}\" is already taken!"
 msgid "Username \"{user}\" already taken."
-msgstr "Benutzername \"{user}\" ist schon vergeben!"
+msgstr "Benutzername \"{user}\" ist schon vergeben."
 
 #: journalist.py:369
 msgid "Deleted user '{user}'"
@@ -117,15 +115,11 @@ msgstr ""
 "zugreifen können, sollten Sie Ihr Passwort zurücksetzen."
 
 #: journalist.py:440
-#, fuzzy
-#| msgid ""
-#| "The password was successfully updated! Don't forget to save it in your "
-#| "KeePassX database. The new password is:"
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
-"Das Passwort wurde erfolgreich aktualisiert! Vergessen Sie nicht, es in "
+"Das Passwort wurde erfolgreich aktualisiert. Vergessen Sie nicht, es in "
 "Ihrer KeePassX-Datenbank zu speichern. Das neue Passwort ist:"
 
 #: journalist.py:453
@@ -133,10 +127,8 @@ msgid "Token in two-factor authentication verified."
 msgstr "Zwei-Faktor-Authentifizierungstoken wurde verifiziert."
 
 #: journalist.py:574
-#, fuzzy
-#| msgid "No collections selected!"
 msgid "No collections selected."
-msgstr "Keine ausgewählten Sammlungen!"
+msgstr "Keine ausgewählten Sammlungen."
 
 #: journalist.py:598
 msgid "No unread submissions in selected collections."
@@ -157,32 +149,24 @@ msgstr[0] "{num} Sammlung wird gelöscht"
 msgstr[1] "{num} Sammlungen werden gelöscht"
 
 #: journalist.py:695
-#, fuzzy
-#| msgid "You cannot send an empty reply!"
 msgid "You cannot send an empty reply."
-msgstr "Sie können keine leere Antwort senden!"
+msgstr "Sie können keine leere Antwort senden."
 
 #: journalist.py:722
-#, fuzzy
-#| msgid "Thanks! Your reply has been stored."
 msgid "Thanks. Your reply has been stored."
-msgstr "Vielen Dank! Ihre Antwort wurde gespeichert."
+msgstr "Vielen Dank. Ihre Antwort wurde gespeichert."
 
 #: journalist.py:741
 msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "Die Quelle wurde von '{original_source}' zu '{new_source}' umbenannt"
 
 #: journalist.py:758
-#, fuzzy
-#| msgid "No unread submissions for this source!"
 msgid "No unread submissions for this source."
-msgstr "Keine ungelesenen Nachrichten für diese Quelle!"
+msgstr "Keine ungelesenen Nachrichten für diese Quelle."
 
 #: journalist.py:774
-#, fuzzy
-#| msgid "No collections selected for download!"
 msgid "No collections selected for download."
-msgstr "Es sind keine Sammlungen zum Download ausgewählt!"
+msgstr "Es sind keine Sammlungen zum Download ausgewählt."
 
 #: journalist.py:806
 msgid "Submission deleted."
@@ -426,7 +410,7 @@ msgstr "Admin"
 
 #: journalist_templates/base.html:28
 msgid "Log Out"
-msgstr ""
+msgstr "Abmelden"
 
 #: journalist_templates/base.html:40
 msgid ""
@@ -772,10 +756,8 @@ msgid "Powered by"
 msgstr "Ermöglicht durch"
 
 #: source_templates/base.html:33
-#, fuzzy
-#| msgid "LOG IN"
 msgid "LOG OUT"
-msgstr "EINLOGGEN"
+msgstr "ABMELDEN"
 
 #: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
