@@ -1,18 +1,24 @@
-from flask import Flask, render_template, flash, Markup, request
+from flask import (Flask, render_template, flash, Markup, request, g, session,
+                   abort, url_for, redirect)
 from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect
 from jinja2 import evalcontextfilter
 from os import path
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import config as global_config
+import crypto_util
 import i18n
+import store
 import template_filters
 import version
 
+from db import Source
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import views
 from source_app.decorators import ignore_static
+from source_app.utils import logged_in
 
 
 def create_app(config=None):
@@ -62,6 +68,40 @@ def create_app(config=None):
                 'This <strong>does not</strong> provide anonymity. '
                 '<a href="/tor2web-warning">Why is this dangerous?</a>')),
                   "banner-warning")
+
+    @app.before_request
+    @ignore_static
+    def setup_g():
+        """Store commonly used values in Flask's special g object"""
+        g.locale = i18n.get_locale()
+        g.text_direction = i18n.get_text_direction(g.locale)
+        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
+        g.locales = i18n.get_locale2name()
+
+        # ignore_static here because `crypto_util.hash_codename` is scrypt
+        # (very time consuming), and we don't need to waste time running if
+        # we're just serving a static resource that won't need to access
+        # these common values.
+        if logged_in():
+            g.codename = session['codename']
+            g.filesystem_id = crypto_util.hash_codename(g.codename)
+            try:
+                g.source = Source.query \
+                            .filter(Source.filesystem_id == g.filesystem_id) \
+                            .one()
+            except MultipleResultsFound as e:
+                app.logger.error(
+                    "Found multiple Sources when one was expected: %s" %
+                    (e,))
+                abort(500)
+            except NoResultFound as e:
+                app.logger.error(
+                    "Found no Sources when one was expected: %s" %
+                    (e,))
+                del session['logged_in']
+                del session['codename']
+                return redirect(url_for('main.index'))
+            g.loc = store.path(g.filesystem_id)
 
     @app.errorhandler(404)
     def page_not_found(error):
