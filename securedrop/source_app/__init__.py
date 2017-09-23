@@ -6,9 +6,11 @@ from os import path
 
 import config as global_config
 import i18n
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 import template_filters
 import version
+
+from request_that_secures_file_uploads import RequestThatSecuresFileUploads
+from source_app import views
 
 
 def create_app(config=None):
@@ -44,6 +46,8 @@ def create_app(config=None):
     app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    views.add_blueprints(app)
 
     @app.errorhandler(404)
     def page_not_found(error):
