@@ -14,7 +14,8 @@ from db import Source, db_session, Submission, Reply, get_one_or_else
 from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
-                              async_genkey, normalize_timestamps)
+                              async_genkey, normalize_timestamps,
+                              valid_codename)
 
 
 def add_blueprints(app):
@@ -195,5 +196,19 @@ def _main_blueprint():
 
         flash(gettext("All replies have been deleted"), "notification")
         return redirect(url_for('.lookup'))
+
+    @view.route('/login', methods=('GET', 'POST'))
+    def login():
+        if request.method == 'POST':
+            codename = request.form['codename'].strip()
+            if valid_codename(codename):
+                session.update(codename=codename, logged_in=True)
+                return redirect(url_for('.lookup', from_login='1'))
+            else:
+                current_app.logger.info(
+                        "Login failed for invalid codename".format(codename))
+                flash(gettext("Sorry, that is not a recognized codename."),
+                      "error")
+        return render_template('login.html')
 
     return view

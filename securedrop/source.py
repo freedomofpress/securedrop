@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
-from flask import (request, render_template, session, redirect, url_for,
+from flask import (render_template, session, redirect, url_for,
                    flash, send_file, Markup, make_response)
 
 import config
 import json
 import version
 import crypto_util
-from flask_babel import gettext
 from source_app import create_app
-from source_app.utils import logged_in, valid_codename
+from source_app.utils import logged_in
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -17,21 +16,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/login', methods=('GET', 'POST'))
-def login():
-    if request.method == 'POST':
-        codename = request.form['codename'].strip()
-        if valid_codename(codename):
-            session.update(codename=codename, logged_in=True)
-            return redirect(url_for('main.lookup', from_login='1'))
-        else:
-            app.logger.info(
-                    "Login failed for invalid codename".format(codename))
-            flash(gettext("Sorry, that is not a recognized codename."),
-                  "error")
-    return render_template('login.html')
 
 
 @app.route('/logout')

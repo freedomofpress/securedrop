@@ -67,7 +67,7 @@
             </div>
 
             <div class="index-column index-bottom">
-              <a href="/login" id="login-button" class="sd-button btn primary">
+              <a href="{{ url_for('main.login') }}" id="login-button" class="sd-button btn primary">
                 <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/comments-white.png') }}" width="20px" height="16px">
                 <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/comments-blue.png') }}" width="20px" height="16px">
                 {{ gettext('CHECK FOR A RESPONSE') }}
