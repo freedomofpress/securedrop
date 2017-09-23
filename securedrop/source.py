@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 from cStringIO import StringIO
 import subprocess
-from threading import Thread
 import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
@@ -22,7 +21,7 @@ import store
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
 from source_app.decorators import login_required, ignore_static
-from source_app.utils import (logged_in, valid_codename,
+from source_app.utils import (logged_in, valid_codename, async_genkey,
                               generate_unique_codename)
 
 import logging
@@ -118,30 +117,6 @@ def create():
 
     session['logged_in'] = True
     return redirect(url_for('lookup'))
-
-
-def async(f):
-    def wrapper(*args, **kwargs):
-        thread = Thread(target=f, args=args, kwargs=kwargs)
-        thread.start()
-    return wrapper
-
-
-@async
-def async_genkey(filesystem_id, codename):
-    crypto_util.genkeypair(filesystem_id, codename)
-
-    # Register key generation as update to the source, so sources will
-    # filter to the top of the list in the journalist interface if a
-    # flagged source logs in and has a key generated for them. #789
-    try:
-        source = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                       .one()
-        source.last_updated = datetime.utcnow()
-        db_session.commit()
-    except Exception as e:
-        app.logger.error("async_genkey for source "
-                         "(filesystem_id={}): {}".format(filesystem_id, e))
 
 
 @app.route('/lookup', methods=('GET',))

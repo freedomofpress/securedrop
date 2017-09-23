@@ -1,8 +1,10 @@
+from datetime import datetime
 from flask import session, current_app, abort
+from threading import Thread
 
 import crypto_util
 
-from db import Source
+from db import Source, db_session
 
 
 def logged_in():
@@ -51,3 +53,28 @@ def generate_unique_codename():
             Source.filesystem_id == filesystem_id).all()
         if len(matching_sources) == 0:
             return codename
+
+
+def async(f):
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=f, args=args, kwargs=kwargs)
+        thread.start()
+    return wrapper
+
+
+@async
+def async_genkey(filesystem_id, codename):
+    crypto_util.genkeypair(filesystem_id, codename)
+
+    # Register key generation as update to the source, so sources will
+    # filter to the top of the list in the journalist interface if a
+    # flagged source logs in and has a key generated for them. #789
+    try:
+        source = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                       .one()
+        source.last_updated = datetime.utcnow()
+        db_session.commit()
+    except Exception as e:
+        current_app.logger.error(
+                "async_genkey for source (filesystem_id={}): {}"
+                .format(filesystem_id, e))
