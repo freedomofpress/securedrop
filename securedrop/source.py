@@ -29,13 +29,6 @@ log = logging.getLogger('source')
 app = create_app()
 
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    """Automatically remove database sessions at the end of the request, or
-    when the application shuts down"""
-    db_session.remove()
-
-
 @app.route('/generate', methods=('GET', 'POST'))
 def generate():
     if logged_in():
