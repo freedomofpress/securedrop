@@ -24,7 +24,9 @@ Updating strings to be translated
 After modifying a string in the code, templates or javascript, the
 ``securedrop/translations/messages.pot`` file must be updated by
 running the following command in ``/vagrant/securedrop``, in the
-development virtual machine::
+development virtual machine:
+
+.. code:: sh
 
     ./manage.py --verbose translate --extract-update
 
@@ -38,7 +40,9 @@ Compiling translations
 
 `gettext`_ needs a compiled file for each language (the ``*.mo``
 files). This can be done by running the following command
-in ``/vagrant/securedrop``, in the development virtual machine::
+in ``/vagrant/securedrop``, in the development virtual machine:
+
+.. code:: sh
 
     ./manage.py --verbose translate --compile
 
@@ -50,12 +54,16 @@ After a translation is compiled, the web page in which it shows can be
 verified visually by navigating to the corresponding state from
 ``http://localhost:8080`` for the source interface or
 ``http://localhost:8081`` for the journalist interface after running
-the following::
+the following:
+
+.. code:: sh
 
      ./manage.py run
 
 An easier way is to generate screenshots for each desired language
-with::
+with:
+
+.. code:: sh
 
      $ export PAGE_LAYOUT_LOCALES=en_US,fr_FR
      $ pytest -v --page-layout tests/pages-layout
