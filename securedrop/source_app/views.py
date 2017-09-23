@@ -3,14 +3,15 @@ import os
 
 from datetime import datetime
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
-                   session, current_app, request, Markup)
+                   session, current_app, request, Markup, abort)
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
 import crypto_util
 import store
 
-from db import Source, db_session, Submission
+from db import Source, db_session, Submission, Reply, get_one_or_else
+from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps)
@@ -164,5 +165,18 @@ def _main_blueprint():
         normalize_timestamps(g.filesystem_id)
 
         return redirect(url_for('main.lookup'))
+
+    @view.route('/delete', methods=('POST',))
+    @login_required
+    def delete():
+        query = Reply.query.filter(
+            Reply.filename == request.form['reply_filename'])
+        reply = get_one_or_else(query, current_app.logger, abort)
+        srm(store.path(g.filesystem_id, reply.filename))
+        db_session.delete(reply)
+        db_session.commit()
+
+        flash(gettext("Reply deleted"), "notification")
+        return redirect(url_for('.lookup'))
 
     return view

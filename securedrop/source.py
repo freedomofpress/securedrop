@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
 from flask import (request, render_template, session, redirect, url_for,
-                   flash, abort, g, send_file, Markup, make_response)
+                   flash, g, send_file, Markup, make_response)
 
 import config
 import json
@@ -10,7 +10,7 @@ import crypto_util
 from flask_babel import gettext
 from rm import srm
 import store
-from db import db_session, Reply, get_one_or_else
+from db import db_session
 from source_app import create_app
 from source_app.decorators import login_required
 from source_app.utils import logged_in, valid_codename
@@ -21,20 +21,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/delete', methods=('POST',))
-@login_required
-def delete():
-    query = Reply.query.filter(
-        Reply.filename == request.form['reply_filename'])
-    reply = get_one_or_else(query, app.logger, abort)
-    srm(store.path(g.filesystem_id, reply.filename))
-    db_session.delete(reply)
-    db_session.commit()
-
-    flash(gettext("Reply deleted"), "notification")
-    return redirect(url_for('main.lookup'))
 
 
 @app.route('/delete-all', methods=('POST',))

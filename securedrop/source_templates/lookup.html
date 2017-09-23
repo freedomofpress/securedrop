@@ -60,7 +60,7 @@
     {% for reply in replies %}
       <div class="reply">
         <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
-        <form id="delete" class="message" method="post" action="/delete" autocomplete="off">
+        <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
           <a href="#confirm-delete-{{ reply.filename }}" class="delete">
