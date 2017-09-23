@@ -16,7 +16,7 @@ import version
 
 from db import Source, db_session
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from source_app import views
+from source_app import main, info
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 
@@ -55,7 +55,8 @@ def create_app(config=None):
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
-    views.add_blueprints(app)
+    for blueprint in [main.make_blueprint(), info.make_blueprint()]:
+        app.register_blueprint(blueprint)
 
     @app.before_request
     @ignore_static
