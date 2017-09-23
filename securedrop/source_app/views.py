@@ -20,6 +20,7 @@ from source_app.utils import (logged_in, generate_unique_codename,
 
 def add_blueprints(app):
     app.register_blueprint(_main_blueprint())
+    app.register_blueprint(_info_blueprint())
 
 
 def _main_blueprint():
@@ -218,5 +219,15 @@ def _main_blueprint():
             msg = render_template('logout_flashed_message.html')
             flash(Markup(msg), "important hide-if-not-tor-browser")
         return redirect(url_for('.index'))
+
+    return view
+
+
+def _info_blueprint():
+    view = Blueprint('info', 'info')
+
+    @view.route('/tor2web-warning')
+    def tor2web_warning():
+        return render_template("tor2web-warning.html")
 
     return view

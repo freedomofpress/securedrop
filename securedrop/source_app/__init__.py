@@ -66,7 +66,8 @@ def create_app(config=None):
             flash(Markup(gettext(
                 '<strong>WARNING:</strong> You appear to be using Tor2Web. '
                 'This <strong>does not</strong> provide anonymity. '
-                '<a href="/tor2web-warning">Why is this dangerous?</a>')),
+                '<a href="{url}">Why is this dangerous?</a>')
+                .format(url=url_for('info.tor2web_warning'))),
                   "banner-warning")
 
     @app.before_request
