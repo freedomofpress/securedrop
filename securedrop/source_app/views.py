@@ -211,4 +211,12 @@ def _main_blueprint():
                       "error")
         return render_template('login.html')
 
+    @view.route('/logout')
+    def logout():
+        if logged_in():
+            session.clear()
+            msg = render_template('logout_flashed_message.html')
+            flash(Markup(msg), "important hide-if-not-tor-browser")
+        return redirect(url_for('.index'))
+
     return view

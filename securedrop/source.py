@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
-from flask import (render_template, session, redirect, url_for,
-                   flash, send_file, Markup, make_response)
+from flask import render_template, send_file, make_response
 
 import config
 import json
 import version
 import crypto_util
 from source_app import create_app
-from source_app.utils import logged_in
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -16,15 +14,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/logout')
-def logout():
-    if logged_in():
-        session.clear()
-        msg = render_template('logout_flashed_message.html')
-        flash(Markup(msg), "important hide-if-not-tor-browser")
-    return redirect(url_for('main.index'))
 
 
 @app.route('/tor2web-warning')
