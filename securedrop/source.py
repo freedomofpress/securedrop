@@ -8,8 +8,6 @@ from threading import Thread
 import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
-from flask_wtf.csrf import CSRFProtect
-from flask_assets import Environment
 
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -33,15 +31,8 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
 i18n.setup_app(app)
 
-assets = Environment(app)
-
-# The default CSRF token expiration is 1 hour. Since large uploads can
-# take longer than an hour over Tor, we increase the valid window to 24h.
-app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
-CSRFProtect(app)
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
