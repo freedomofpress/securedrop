@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, Markup, request
+from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect
 from jinja2 import evalcontextfilter
@@ -11,6 +12,7 @@ import version
 
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from source_app import views
+from source_app.decorators import ignore_static
 
 
 def create_app(config=None):
@@ -48,6 +50,18 @@ def create_app(config=None):
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
     views.add_blueprints(app)
+
+    @app.before_request
+    @ignore_static
+    def check_tor2web():
+        # ignore_static here so we only flash a single message warning
+        # about Tor2Web, corresponding to the initial page load.
+        if 'X-tor2web' in request.headers:
+            flash(Markup(gettext(
+                '<strong>WARNING:</strong> You appear to be using Tor2Web. '
+                'This <strong>does not</strong> provide anonymity. '
+                '<a href="/tor2web-warning">Why is this dangerous?</a>')),
+                  "banner-warning")
 
     @app.errorhandler(404)
     def page_not_found(error):
