@@ -179,4 +179,21 @@ def _main_blueprint():
         flash(gettext("Reply deleted"), "notification")
         return redirect(url_for('.lookup'))
 
+    @view.route('/delete-all', methods=('POST',))
+    @login_required
+    def batch_delete():
+        replies = g.source.replies
+        if len(replies) == 0:
+            current_app.logger.error("Found no replies when at least one was "
+                                     "expected")
+            return redirect(url_for('.lookup'))
+
+        for reply in replies:
+            srm(store.path(g.filesystem_id, reply.filename))
+            db_session.delete(reply)
+        db_session.commit()
+
+        flash(gettext("All replies have been deleted"), "notification")
+        return redirect(url_for('.lookup'))
+
     return view
