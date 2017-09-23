@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from cStringIO import StringIO
-from flask import render_template, send_file, make_response
+from flask import render_template, make_response
 
 import config
 import json
 import version
-import crypto_util
 from source_app import create_app
 
 import logging
@@ -14,15 +12,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/journalist-key')
-def download_journalist_pubkey():
-    journalist_pubkey = crypto_util.gpg.export_keys(config.JOURNALIST_KEY)
-    return send_file(StringIO(journalist_pubkey),
-                     mimetype="application/pgp-keys",
-                     attachment_filename=config.JOURNALIST_KEY + ".asc",
-                     as_attachment=True)
 
 
 @app.route('/why-journalist-key')
