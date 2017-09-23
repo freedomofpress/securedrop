@@ -85,7 +85,9 @@ msgid "Account updated."
 msgstr "账户创建成功！"
 
 #: journalist.py:332
-msgid "Username \"{user}\" is already taken!"
+#, fuzzy
+#| msgid "Username \"{user}\" is already taken!"
+msgid "Username \"{user}\" already taken."
 msgstr "用户名“{user}”已经存在了！"
 
 #: journalist.py:369
@@ -106,9 +108,13 @@ msgstr ""
 "令。"
 
 #: journalist.py:440
+#, fuzzy
+#| msgid ""
+#| "The password was successfully updated! Don't forget to save it in your "
+#| "KeePassX database. The new password is:"
 msgid ""
-"The password was successfully updated! Don't forget to save it in your "
-"KeePassX database. The new password is:"
+"Password updated. Don't forget to save it in your KeePassX database. New "
+"password:"
 msgstr ""
 "口令已经成功地更新了！ 不要忘记把它保存在你的 KeePassX 数据库中，新的口令是："
 
@@ -117,7 +123,9 @@ msgid "Token in two-factor authentication verified."
 msgstr "由两个部分组成的记号的授权已经验证。"
 
 #: journalist.py:574
-msgid "No collections selected!"
+#, fuzzy
+#| msgid "No collections selected!"
+msgid "No collections selected."
 msgstr "没有选择集合！"
 
 #: journalist.py:598
@@ -130,7 +138,7 @@ msgstr "在集合中没有未读的提交被选择！"
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "{source_journal_designation}的集合已删除"
 
-#: journalist.py:646
+#: journalist.py:646 journalist.py:776
 #, fuzzy
 #| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion."
@@ -142,11 +150,15 @@ msgid_plural "{num} collections deleted"
 msgstr[0] "{num}集合已删除"
 
 #: journalist.py:695
-msgid "You cannot send an empty reply!"
+#, fuzzy
+#| msgid "You cannot send an empty reply!"
+msgid "You cannot send an empty reply."
 msgstr "你不能发送一个空的回复！"
 
 #: journalist.py:722
-msgid "Thanks! Your reply has been stored."
+#, fuzzy
+#| msgid "Thanks! Your reply has been stored."
+msgid "Thanks. Your reply has been stored."
 msgstr "感謝您！我們已儲存您的回覆。"
 
 #: journalist.py:741
@@ -154,20 +166,16 @@ msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "源{original_source}已经被重命名为{new_source}"
 
 #: journalist.py:758
-msgid "No unread submissions for this source!"
+#, fuzzy
+#| msgid "No unread submissions for this source!"
+msgid "No unread submissions for this source."
 msgstr "此源里没有未读的提交！"
 
 #: journalist.py:774
 #, fuzzy
 #| msgid "No collections selected to download!"
-msgid "No collections selected for download!"
+msgid "No collections selected for download."
 msgstr "未選擇要下載的資料夾！"
-
-#: journalist.py:776
-#, fuzzy
-#| msgid "No collections selected to delete!"
-msgid "No collections selected for deletion!"
-msgstr "未選擇要刪除的資料夾！"
 
 #: journalist.py:806
 msgid "Submission deleted."
@@ -183,61 +191,28 @@ msgstr ""
 "<strong> 警告：</strong>你似乎要用Tor2Web。 这 <strong>不能</strong>提供匿名"
 "性。<a href=\"/tor2web-warning\">为何这很危险？</a>"
 
-#: source.py:171
+#: source.py:170
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
 msgstr ""
 "你被重定向了， 因为你已经登录了。如果你想创建一个新的账户，你应该先退出。"
 
-#: source.py:287
+#: source.py:286
 msgid "You must enter a message or choose a file to submit."
 msgstr "你必须输入一条消息，或者选择一个文件提交。"
 
-#: source.py:360
+#: source.py:359
 msgid "Reply deleted"
 msgstr "回覆已刪除"
 
-#: source.py:376
+#: source.py:375
 msgid "All replies have been deleted"
 msgstr "所有的回复都已经被删除了"
 
-#: source.py:409
+#: source.py:408
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號"
-
-#: template_filters.py:15
-msgid "{time} ago"
-msgstr "{time} 之前"
-
-#: template_filters.py:28
-msgid "{n} second"
-msgid_plural "{n} seconds"
-msgstr[0] "{n}秒"
-
-#: template_filters.py:31
-msgid "a minute"
-msgstr "一分钟"
-
-#: template_filters.py:33
-msgid "{n} minutes"
-msgstr "{n}分钟"
-
-#: template_filters.py:35
-msgid "an hour"
-msgstr "一小时"
-
-#: template_filters.py:37
-msgid "{n} hours"
-msgstr "{n}小时"
-
-#: template_filters.py:39
-msgid "a day"
-msgstr "一天"
-
-#: template_filters.py:41
-msgid "{n} days"
-msgstr "{n}天"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -431,8 +406,8 @@ msgid "Admin"
 msgstr "管理員"
 
 #: journalist_templates/base.html:28
-msgid "Logout"
-msgstr "登出"
+msgid "Log Out"
+msgstr ""
 
 #: journalist_templates/base.html:40
 msgid ""
@@ -747,15 +722,17 @@ msgid "Protecting Journalists and Sources"
 msgstr "保护记者和源"
 
 #: source_templates/base.html:24 source_templates/base.html:43
-#: source_templates/index.html:32 source_templates/index.html:82
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "由...支撑"
 
 #: source_templates/base.html:33
-msgid "EXIT"
-msgstr "退出"
+#, fuzzy
+#| msgid "LOG IN"
+msgid "LOG OUT"
+msgstr "登录"
 
-#: source_templates/base.html:43 source_templates/index.html:82
+#: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -868,30 +845,30 @@ msgstr ""
 msgid "CHECK FOR A RESPONSE"
 msgstr ""
 
-#: source_templates/index.html:90
+#: source_templates/index.html:92
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
 msgstr ""
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Click the"
 msgstr ""
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Tor icon in the toolbar above"
 msgstr ""
 
-#: source_templates/index.html:93
+#: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
 msgstr ""
 
-#: source_templates/index.html:94
+#: source_templates/index.html:96
 msgid ""
 "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
 
-#: source_templates/index.html:95
+#: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgstr ""
 
@@ -1173,6 +1150,42 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#, fuzzy
+#~| msgid "No collections selected to delete!"
+#~ msgid "No collections selected for deletion!"
+#~ msgstr "未選擇要刪除的資料夾！"
+
+#~ msgid "{time} ago"
+#~ msgstr "{time} 之前"
+
+#~ msgid "{n} second"
+#~ msgid_plural "{n} seconds"
+#~ msgstr[0] "{n}秒"
+
+#~ msgid "a minute"
+#~ msgstr "一分钟"
+
+#~ msgid "{n} minutes"
+#~ msgstr "{n}分钟"
+
+#~ msgid "an hour"
+#~ msgstr "一小时"
+
+#~ msgid "{n} hours"
+#~ msgstr "{n}小时"
+
+#~ msgid "a day"
+#~ msgstr "一天"
+
+#~ msgid "{n} days"
+#~ msgstr "{n}天"
+
+#~ msgid "Logout"
+#~ msgstr "登出"
+
+#~ msgid "EXIT"
+#~ msgstr "退出"
 
 #~ msgid "Edit user"
 #~ msgstr "編輯使用者"

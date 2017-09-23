@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
 "PO-Revision-Date: 2017-09-23 03:07+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål "
-"<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
+"Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
+"securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,7 +88,9 @@ msgid "Account updated."
 msgstr "Konto oppdatert."
 
 #: journalist.py:332
-msgid "Username \"{user}\" is already taken!"
+#, fuzzy
+#| msgid "Username \"{user}\" is already taken!"
+msgid "Username \"{user}\" already taken."
 msgstr "Brukernavnet \"{user}\" er allerede i bruk!"
 
 #: journalist.py:369
@@ -109,9 +111,13 @@ msgstr ""
 "unngå å bli utelåst fra kontoen bør du tilbakestille passordet ditt på nytt."
 
 #: journalist.py:440
+#, fuzzy
+#| msgid ""
+#| "The password was successfully updated! Don't forget to save it in your "
+#| "KeePassX database. The new password is:"
 msgid ""
-"The password was successfully updated! Don't forget to save it in your "
-"KeePassX database. The new password is:"
+"Password updated. Don't forget to save it in your KeePassX database. New "
+"password:"
 msgstr ""
 "Passord-oppdateringen var vellykket! Ikke glem å lagre passordet i din "
 "KeePassX-database. Det nye passordet er:"
@@ -121,7 +127,9 @@ msgid "Token in two-factor authentication verified."
 msgstr "Tofaktor-kode gjenomgikk kontroll."
 
 #: journalist.py:574
-msgid "No collections selected!"
+#, fuzzy
+#| msgid "No collections selected!"
+msgid "No collections selected."
 msgstr "Ingen kildeoppføringer valgt!"
 
 #: journalist.py:598
@@ -132,7 +140,7 @@ msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer."
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "{source_journalist_designation}s kildedata slettet"
 
-#: journalist.py:646
+#: journalist.py:646 journalist.py:776
 msgid "No collections selected for deletion."
 msgstr "Ingen kildeoppføringer valgt for sletting."
 
@@ -143,11 +151,15 @@ msgstr[0] "{num} kildeoppføring slettet"
 msgstr[1] "{num} kildeoppføringer slettet"
 
 #: journalist.py:695
-msgid "You cannot send an empty reply!"
+#, fuzzy
+#| msgid "You cannot send an empty reply!"
+msgid "You cannot send an empty reply."
 msgstr "Du kan ikke sende et tomt svar!"
 
 #: journalist.py:722
-msgid "Thanks! Your reply has been stored."
+#, fuzzy
+#| msgid "Thanks! Your reply has been stored."
+msgid "Thanks. Your reply has been stored."
 msgstr "Takk! Svaret ditt har blitt lagret."
 
 #: journalist.py:741
@@ -155,16 +167,16 @@ msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "Kilden '{original_source}' har endret navn til '{new_source}'"
 
 #: journalist.py:758
-msgid "No unread submissions for this source!"
+#, fuzzy
+#| msgid "No unread submissions for this source!"
+msgid "No unread submissions for this source."
 msgstr "Ingen uleste bidrag fra denne kilden!"
 
 #: journalist.py:774
-msgid "No collections selected for download!"
+#, fuzzy
+#| msgid "No collections selected for download!"
+msgid "No collections selected for download."
 msgstr "Ingen kildedata valgt for nedlasting."
-
-#: journalist.py:776
-msgid "No collections selected for deletion!"
-msgstr "Ingen kildeoppføringer valgt for sletting."
 
 #: journalist.py:806
 msgid "Submission deleted."
@@ -182,7 +194,7 @@ msgstr ""
 "<strong>gir ikke</strong> anonym kommunikasjon. <a href=\"/tor2web-warning"
 "\">Hvorfor kan dette være problematisk?</a>"
 
-#: source.py:171
+#: source.py:170
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -190,55 +202,21 @@ msgstr ""
 "Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny "
 "konto må du først logge ut."
 
-#: source.py:287
+#: source.py:286
 msgid "You must enter a message or choose a file to submit."
 msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
-#: source.py:360
+#: source.py:359
 msgid "Reply deleted"
 msgstr "Svar slettet"
 
-#: source.py:376
+#: source.py:375
 msgid "All replies have been deleted"
 msgstr "Alle svar har blitt slettet"
 
-#: source.py:409
+#: source.py:408
 msgid "Sorry, that is not a recognized codename."
 msgstr "Beklager, det er ikke et gjenkjent kodenavn."
-
-#: template_filters.py:15
-msgid "{time} ago"
-msgstr "{time} siden"
-
-#: template_filters.py:28
-msgid "{n} second"
-msgid_plural "{n} seconds"
-msgstr[0] "{n} sekund"
-msgstr[1] "{n} sekunder"
-
-#: template_filters.py:31
-msgid "a minute"
-msgstr "ett minutt"
-
-#: template_filters.py:33
-msgid "{n} minutes"
-msgstr "{n} minutter"
-
-#: template_filters.py:35
-msgid "an hour"
-msgstr "én time"
-
-#: template_filters.py:37
-msgid "{n} hours"
-msgstr "{n} timer"
-
-#: template_filters.py:39
-msgid "a day"
-msgstr "én dag"
-
-#: template_filters.py:41
-msgid "{n} days"
-msgstr "{n} dager"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -432,8 +410,8 @@ msgid "Admin"
 msgstr "Administrator"
 
 #: journalist_templates/base.html:28
-msgid "Logout"
-msgstr "Logg ut"
+msgid "Log Out"
+msgstr ""
 
 #: journalist_templates/base.html:40
 msgid ""
@@ -769,15 +747,17 @@ msgid "Protecting Journalists and Sources"
 msgstr "Sikkerhet for journalister og kilder"
 
 #: source_templates/base.html:24 source_templates/base.html:43
-#: source_templates/index.html:32 source_templates/index.html:82
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "Drevet av"
 
 #: source_templates/base.html:33
-msgid "EXIT"
-msgstr "AVSLUTT"
+#, fuzzy
+#| msgid "LOG IN"
+msgid "LOG OUT"
+msgstr "LOGG INN"
 
-#: source_templates/base.html:43 source_templates/index.html:82
+#: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -911,7 +891,7 @@ msgstr "SEND INN DOKUMENTER"
 msgid "CHECK FOR A RESPONSE"
 msgstr "SE ETTER SVAR"
 
-#: source_templates/index.html:90
+#: source_templates/index.html:92
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
@@ -919,25 +899,25 @@ msgstr ""
 "Du later til å bruke Tor-nettleseren. Du kan stille inn "
 "sikkerhetsglidebryteren til Høyt i 4 enkle steg!"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Click the"
 msgstr "Klikk på"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Tor icon in the toolbar above"
 msgstr "Tor-ikonet i verktøylinjen ovenfor"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klikk <strong>Sikkerhetsinnstillinger…</strong>"
 
-#: source_templates/index.html:94
+#: source_templates/index.html:96
 msgid ""
 "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
 "Beveg glidebryteren til <strong>Høyt</strong>, klikk så <strong>OK</strong>"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgstr "<a href=\"/\">Klikk her</a>for å oppdatere siden"
 
@@ -1259,6 +1239,41 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "No collections selected for deletion!"
+#~ msgstr "Ingen kildeoppføringer valgt for sletting."
+
+#~ msgid "{time} ago"
+#~ msgstr "{time} siden"
+
+#~ msgid "{n} second"
+#~ msgid_plural "{n} seconds"
+#~ msgstr[0] "{n} sekund"
+#~ msgstr[1] "{n} sekunder"
+
+#~ msgid "a minute"
+#~ msgstr "ett minutt"
+
+#~ msgid "{n} minutes"
+#~ msgstr "{n} minutter"
+
+#~ msgid "an hour"
+#~ msgstr "én time"
+
+#~ msgid "{n} hours"
+#~ msgstr "{n} timer"
+
+#~ msgid "a day"
+#~ msgstr "én dag"
+
+#~ msgid "{n} days"
+#~ msgstr "{n} dager"
+
+#~ msgid "Logout"
+#~ msgstr "Logg ut"
+
+#~ msgid "EXIT"
+#~ msgstr "AVSLUTT"
 
 #~ msgid "Edit user"
 #~ msgstr "Rediger bruker"

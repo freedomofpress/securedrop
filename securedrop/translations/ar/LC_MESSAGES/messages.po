@@ -88,7 +88,9 @@ msgid "Account updated."
 msgstr "تم تحديث الحساب بنجاح!"
 
 #: journalist.py:332
-msgid "Username \"{user}\" is already taken!"
+#, fuzzy
+#| msgid "Username \"{user}\" is already taken!"
+msgid "Username \"{user}\" already taken."
 msgstr "اسم المستخدم {user} قيد الاستخدام!"
 
 #: journalist.py:369
@@ -108,8 +110,8 @@ msgstr ""
 
 #: journalist.py:440
 msgid ""
-"The password was successfully updated! Don't forget to save it in your "
-"KeePassX database. The new password is:"
+"Password updated. Don't forget to save it in your KeePassX database. New "
+"password:"
 msgstr ""
 
 #: journalist.py:453
@@ -117,7 +119,9 @@ msgid "Token in two-factor authentication verified."
 msgstr ""
 
 #: journalist.py:574
-msgid "No collections selected!"
+#, fuzzy
+#| msgid "No collections selected!"
+msgid "No collections selected."
 msgstr "لم يتم تحديد أية مجموعات!"
 
 #: journalist.py:598
@@ -130,7 +134,7 @@ msgstr "لم يتم إرسال أية مشاركات غير مقروءة في ا
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "تم حذف مجموعة {source_journalist_designation}"
 
-#: journalist.py:646
+#: journalist.py:646 journalist.py:776
 #, fuzzy
 #| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion."
@@ -147,11 +151,15 @@ msgstr[4] ""
 msgstr[5] ""
 
 #: journalist.py:695
-msgid "You cannot send an empty reply!"
+#, fuzzy
+#| msgid "You cannot send an empty reply!"
+msgid "You cannot send an empty reply."
 msgstr "لا يمكنك إرسال رد فارغ!"
 
 #: journalist.py:722
-msgid "Thanks! Your reply has been stored."
+#, fuzzy
+#| msgid "Thanks! Your reply has been stored."
+msgid "Thanks. Your reply has been stored."
 msgstr "شكر! تم تخزين ردك."
 
 #: journalist.py:741
@@ -159,20 +167,16 @@ msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "تمت إعادة تسمية المصدر '{original_source}' إلى '{new_source}'"
 
 #: journalist.py:758
-msgid "No unread submissions for this source!"
+#, fuzzy
+#| msgid "No unread submissions for this source!"
+msgid "No unread submissions for this source."
 msgstr "لا توجد مشاركات غير مقروءة لهذا المصدر!"
 
 #: journalist.py:774
 #, fuzzy
 #| msgid "No collections selected to download!"
-msgid "No collections selected for download!"
+msgid "No collections selected for download."
 msgstr "لم يتم إختيار مجموعات للتحميل!"
-
-#: journalist.py:776
-#, fuzzy
-#| msgid "No collections selected to delete!"
-msgid "No collections selected for deletion!"
-msgstr "لم يتم تحديد مجموعات للحذف!"
 
 #: journalist.py:806
 msgid "Submission deleted."
@@ -191,64 +195,26 @@ msgid ""
 "dangerous?</a>"
 msgstr ""
 
-#: source.py:171
+#: source.py:170
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
 msgstr ""
 
-#: source.py:287
+#: source.py:286
 msgid "You must enter a message or choose a file to submit."
 msgstr ""
 
-#: source.py:360
+#: source.py:359
 msgid "Reply deleted"
 msgstr ""
 
-#: source.py:376
+#: source.py:375
 msgid "All replies have been deleted"
 msgstr ""
 
-#: source.py:409
+#: source.py:408
 msgid "Sorry, that is not a recognized codename."
-msgstr ""
-
-#: template_filters.py:15
-msgid "{time} ago"
-msgstr ""
-
-#: template_filters.py:28
-msgid "{n} second"
-msgid_plural "{n} seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
-
-#: template_filters.py:31
-msgid "a minute"
-msgstr ""
-
-#: template_filters.py:33
-msgid "{n} minutes"
-msgstr ""
-
-#: template_filters.py:35
-msgid "an hour"
-msgstr ""
-
-#: template_filters.py:37
-msgid "{n} hours"
-msgstr ""
-
-#: template_filters.py:39
-msgid "a day"
-msgstr ""
-
-#: template_filters.py:41
-msgid "{n} days"
 msgstr ""
 
 #: journalist_templates/_source_row.html:17
@@ -429,7 +395,7 @@ msgid "Admin"
 msgstr ""
 
 #: journalist_templates/base.html:28
-msgid "Logout"
+msgid "Log Out"
 msgstr ""
 
 #: journalist_templates/base.html:40
@@ -735,15 +701,15 @@ msgid "Protecting Journalists and Sources"
 msgstr ""
 
 #: source_templates/base.html:24 source_templates/base.html:43
-#: source_templates/index.html:32 source_templates/index.html:82
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr ""
 
 #: source_templates/base.html:33
-msgid "EXIT"
+msgid "LOG OUT"
 msgstr ""
 
-#: source_templates/base.html:43 source_templates/index.html:82
+#: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -859,7 +825,7 @@ msgstr "أرسل وثائق"
 msgid "CHECK FOR A RESPONSE"
 msgstr "تحقق من وصول رد"
 
-#: source_templates/index.html:90
+#: source_templates/index.html:92
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
@@ -867,24 +833,24 @@ msgstr ""
 "يبدو أنك تستخدم متصفح تور. يمكنك تحويل منزلق الأمن إلى الأعلى في 4 خطوات "
 "سهلة!"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Click the"
 msgstr "أنقر"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Tor icon in the toolbar above"
 msgstr "رمز تور Tor في شريط الأدوات أعلاه"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
 msgstr ""
 
-#: source_templates/index.html:94
+#: source_templates/index.html:96
 msgid ""
 "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
 
-#: source_templates/index.html:95
+#: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgstr ""
 
@@ -1142,6 +1108,11 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr ""
+
+#, fuzzy
+#~| msgid "No collections selected to delete!"
+#~ msgid "No collections selected for deletion!"
+#~ msgstr "لم يتم تحديد مجموعات للحذف!"
 
 #~ msgid "Two-factor token failed to verify"
 #~ msgstr "أخفق التحقق من الرمز المكون من عاملين"

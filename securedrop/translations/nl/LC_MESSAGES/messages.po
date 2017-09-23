@@ -106,7 +106,9 @@ msgid "Account updated."
 msgstr "Gebruikers succesvol geüpdatet!"
 
 #: journalist.py:332
-msgid "Username \"{user}\" is already taken!"
+#, fuzzy
+#| msgid "Username \"{user}\" is already taken!"
+msgid "Username \"{user}\" already taken."
 msgstr "Gebruikersnaam \"{user}\" is reeds in gebruik!"
 
 #: journalist.py:369
@@ -128,9 +130,13 @@ msgstr ""
 "het wachtwoord opnieuw te herstellen."
 
 #: journalist.py:440
+#, fuzzy
+#| msgid ""
+#| "The password was successfully updated! Don't forget to save it in your "
+#| "KeePassX database. The new password is:"
 msgid ""
-"The password was successfully updated! Don't forget to save it in your "
-"KeePassX database. The new password is:"
+"Password updated. Don't forget to save it in your KeePassX database. New "
+"password:"
 msgstr ""
 "Het wachtwoord is succesvol geüpdatet! Vergeet je wachtwoord niet op te "
 "slaan in je KeePassX database. het nieuwe wachtwoord is:"
@@ -142,7 +148,9 @@ msgid "Token in two-factor authentication verified."
 msgstr "Authenticatie in twee stappen succesvol geverifieerd!"
 
 #: journalist.py:574
-msgid "No collections selected!"
+#, fuzzy
+#| msgid "No collections selected!"
+msgid "No collections selected."
 msgstr "Geen collecties geselecteerd!"
 
 #: journalist.py:598
@@ -155,7 +163,7 @@ msgstr "Geen ongelezen inzendingen in de geselecteerde collecties!"
 msgid "{source_journalist_designation}'s collection deleted"
 msgstr "{source_journalist_designation}s collectie verwijderd"
 
-#: journalist.py:646
+#: journalist.py:646 journalist.py:776
 #, fuzzy
 #| msgid "No collections selected to delete!"
 msgid "No collections selected for deletion."
@@ -168,11 +176,15 @@ msgstr[0] "{num} collectie verwijderd"
 msgstr[1] "{num} collecties verwijderd"
 
 #: journalist.py:695
-msgid "You cannot send an empty reply!"
+#, fuzzy
+#| msgid "You cannot send an empty reply!"
+msgid "You cannot send an empty reply."
 msgstr "Het is niet mogelijk een leeg antwoord te versturen!"
 
 #: journalist.py:722
-msgid "Thanks! Your reply has been stored."
+#, fuzzy
+#| msgid "Thanks! Your reply has been stored."
+msgid "Thanks. Your reply has been stored."
 msgstr "Bedankt! Je antwoord is opgeslagen."
 
 #: journalist.py:741
@@ -180,20 +192,16 @@ msgid "The source '{original_source}' has been renamed to '{new_source}'"
 msgstr "De naam van bron '{original_source}' is veranderd naar '{new_source}'"
 
 #: journalist.py:758
-msgid "No unread submissions for this source!"
+#, fuzzy
+#| msgid "No unread submissions for this source!"
+msgid "No unread submissions for this source."
 msgstr "Geen ongelezen inzendingen van deze bron!"
 
 #: journalist.py:774
 #, fuzzy
 #| msgid "No collections selected to download!"
-msgid "No collections selected for download!"
+msgid "No collections selected for download."
 msgstr "Geen collecties geselecteerd om te downloaden!"
-
-#: journalist.py:776
-#, fuzzy
-#| msgid "No collections selected to delete!"
-msgid "No collections selected for deletion!"
-msgstr "Geen collecties geselecteerd om te verwijderen!"
 
 #: journalist.py:806
 msgid "Submission deleted."
@@ -211,7 +219,7 @@ msgstr ""
 "Tor2Web <strong>zorgt niet</strong> voor anonimiteit. <a href=\"/tor2web-"
 "warning\">Waarom is dit gevaarlijk?</a>"
 
-#: source.py:171
+#: source.py:170
 msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
@@ -219,56 +227,22 @@ msgstr ""
 "Je bent hierheen gestuurd omdat je al ingelogd bent. Als je een nieuw "
 "account wil maken, moet je eerst uitloggen."
 
-#: source.py:287
+#: source.py:286
 #, fuzzy
 msgid "You must enter a message or choose a file to submit."
 msgstr "Je moet een bericht of bestand selecteren om te versturen."
 
-#: source.py:360
+#: source.py:359
 msgid "Reply deleted"
 msgstr "Antwoord verwijderd"
 
-#: source.py:376
+#: source.py:375
 msgid "All replies have been deleted"
 msgstr "Alle antwoorden zijn verwijderd"
 
-#: source.py:409
+#: source.py:408
 msgid "Sorry, that is not a recognized codename."
 msgstr "Helaas, dat is geen codenaam die we herkennen."
-
-#: template_filters.py:15
-msgid "{time} ago"
-msgstr "{time} geleden"
-
-#: template_filters.py:28
-msgid "{n} second"
-msgid_plural "{n} seconds"
-msgstr[0] "{n} seconde"
-msgstr[1] "{n} seconden"
-
-#: template_filters.py:31
-msgid "a minute"
-msgstr "een minuut"
-
-#: template_filters.py:33
-msgid "{n} minutes"
-msgstr "{n} minuten"
-
-#: template_filters.py:35
-msgid "an hour"
-msgstr "een uur"
-
-#: template_filters.py:37
-msgid "{n} hours"
-msgstr "{n} uur"
-
-#: template_filters.py:39
-msgid "a day"
-msgstr "een dag"
-
-#: template_filters.py:41
-msgid "{n} days"
-msgstr "{n} dagen"
 
 #: journalist_templates/_source_row.html:17
 #, fuzzy
@@ -477,8 +451,8 @@ msgid "Admin"
 msgstr "Beheerder"
 
 #: journalist_templates/base.html:28
-msgid "Logout"
-msgstr "Uitloggen"
+msgid "Log Out"
+msgstr ""
 
 #: journalist_templates/base.html:40
 msgid ""
@@ -827,16 +801,17 @@ msgid "Protecting Journalists and Sources"
 msgstr "Bescherming voor Journalisten en Bronnen"
 
 #: source_templates/base.html:24 source_templates/base.html:43
-#: source_templates/index.html:32 source_templates/index.html:82
+#: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
 
 #: source_templates/base.html:33
 #, fuzzy
-msgid "EXIT"
-msgstr "UITGANG"
+#| msgid "LOG IN"
+msgid "LOG OUT"
+msgstr "LOG IN"
 
-#: source_templates/base.html:43 source_templates/index.html:82
+#: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
@@ -972,7 +947,7 @@ msgstr "STUUR DOCUMENTEN IN"
 msgid "CHECK FOR A RESPONSE"
 msgstr "CONTROLEER OF JE ANTWOORD HEBT"
 
-#: source_templates/index.html:90
+#: source_templates/index.html:92
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
@@ -980,26 +955,26 @@ msgstr ""
 "Het lijkt erop dat je de Tor Browser gebruikt. Je kan de  Veiligheidsschuif "
 "op Hoog zetten in vier simpele stappen!"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Click the"
 msgstr "Klik op"
 
-#: source_templates/index.html:92
+#: source_templates/index.html:94
 msgid "Tor icon in the toolbar above"
 msgstr "het Tor-icoon in de taakbalk bovenin"
 
-#: source_templates/index.html:93
+#: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
 msgstr "Klik op <strong>Veiligheidsinstellingen...</strong>"
 
-#: source_templates/index.html:94
+#: source_templates/index.html:96
 msgid ""
 "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
 "Beweeg de Schuif naar <strong>Hoog</strong> en klik vervolgens op "
 "<strong>Ok</strong>"
 
-#: source_templates/index.html:95
+#: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgstr "<a href=\"/\">Klik hier</a> om de pagina te vernieuwen"
 
@@ -1340,6 +1315,44 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#, fuzzy
+#~| msgid "No collections selected to delete!"
+#~ msgid "No collections selected for deletion!"
+#~ msgstr "Geen collecties geselecteerd om te verwijderen!"
+
+#~ msgid "{time} ago"
+#~ msgstr "{time} geleden"
+
+#~ msgid "{n} second"
+#~ msgid_plural "{n} seconds"
+#~ msgstr[0] "{n} seconde"
+#~ msgstr[1] "{n} seconden"
+
+#~ msgid "a minute"
+#~ msgstr "een minuut"
+
+#~ msgid "{n} minutes"
+#~ msgstr "{n} minuten"
+
+#~ msgid "an hour"
+#~ msgstr "een uur"
+
+#~ msgid "{n} hours"
+#~ msgstr "{n} uur"
+
+#~ msgid "a day"
+#~ msgstr "een dag"
+
+#~ msgid "{n} days"
+#~ msgstr "{n} dagen"
+
+#~ msgid "Logout"
+#~ msgstr "Uitloggen"
+
+#, fuzzy
+#~ msgid "EXIT"
+#~ msgstr "UITGANG"
 
 #~ msgid "Edit user"
 #~ msgstr "Wijzig gebruiker"
