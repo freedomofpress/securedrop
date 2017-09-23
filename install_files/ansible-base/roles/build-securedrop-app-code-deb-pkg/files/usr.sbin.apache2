@@ -157,6 +157,8 @@
   /var/www/securedrop/source_app/__init__.py r,
   /var/www/securedrop/source_app/__init__.pyc rw,
   /var/www/securedrop/source_app/__pycache__/** rw,
+  /var/www/securedrop/source_app/api.py r,
+  /var/www/securedrop/source_app/api.pyc rw,
   /var/www/securedrop/source_app/decorators.py r,
   /var/www/securedrop/source_app/decorators.pyc rw,
   /var/www/securedrop/source_app/info.py r,

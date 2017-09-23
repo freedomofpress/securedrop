@@ -18,7 +18,7 @@ from source_app.utils import (logged_in, generate_unique_codename,
                               valid_codename)
 
 
-def make_blueprint():
+def make_blueprint(config):
     view = Blueprint('main', __name__)
 
     @view.route('/')
