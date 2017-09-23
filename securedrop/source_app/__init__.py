@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect
 from jinja2 import evalcontextfilter
@@ -44,5 +44,13 @@ def create_app(config=None):
     app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('notfound.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        return render_template('error.html'), 500
 
     return app
