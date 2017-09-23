@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
 from datetime import datetime
 from cStringIO import StringIO
-import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 
@@ -27,41 +25,6 @@ log = logging.getLogger('source')
 app = create_app()
 
 
-@app.route('/lookup', methods=('GET',))
-@login_required
-def lookup():
-    replies = []
-    for reply in g.source.replies:
-        reply_path = store.path(g.filesystem_id, reply.filename)
-        try:
-            reply.decrypted = crypto_util.decrypt(
-                g.codename,
-                open(reply_path).read()).decode('utf-8')
-        except UnicodeDecodeError:
-            app.logger.error("Could not decode reply %s" % reply.filename)
-        else:
-            reply.date = datetime.utcfromtimestamp(
-                os.stat(reply_path).st_mtime)
-            replies.append(reply)
-
-    # Sort the replies by date
-    replies.sort(key=operator.attrgetter('date'), reverse=True)
-
-    # Generate a keypair to encrypt replies from the journalist
-    # Only do this if the journalist has flagged the source as one
-    # that they would like to reply to. (Issue #140.)
-    if not crypto_util.getkey(g.filesystem_id) and g.source.flagged:
-        async_genkey(g.filesystem_id, g.codename)
-
-    return render_template(
-        'lookup.html',
-        codename=g.codename,
-        replies=replies,
-        flagged=g.source.flagged,
-        haskey=crypto_util.getkey(
-            g.filesystem_id))
-
-
 @app.route('/submit', methods=('POST',))
 @login_required
 def submit():
@@ -73,7 +36,7 @@ def submit():
         flash(gettext(
             "You must enter a message or choose a file to submit."),
               "error")
-        return redirect(url_for('lookup'))
+        return redirect(url_for('main.lookup'))
 
     fnames = []
     journalist_filename = g.source.journalist_filename
@@ -131,7 +94,7 @@ def submit():
     db_session.commit()
     normalize_timestamps(g.filesystem_id)
 
-    return redirect(url_for('lookup'))
+    return redirect(url_for('main.lookup'))
 
 
 @app.route('/delete', methods=('POST',))
@@ -145,7 +108,7 @@ def delete():
     db_session.commit()
 
     flash(gettext("Reply deleted"), "notification")
-    return redirect(url_for('lookup'))
+    return redirect(url_for('main.lookup'))
 
 
 @app.route('/delete-all', methods=('POST',))
@@ -154,14 +117,14 @@ def batch_delete():
     replies = g.source.replies
     if len(replies) == 0:
         app.logger.error("Found no replies when at least one was expected")
-        return redirect(url_for('lookup'))
+        return redirect(url_for('main.lookup'))
     for reply in replies:
         srm(store.path(g.filesystem_id, reply.filename))
         db_session.delete(reply)
     db_session.commit()
 
     flash(gettext("All replies have been deleted"), "notification")
-    return redirect(url_for('lookup'))
+    return redirect(url_for('main.lookup'))
 
 
 @app.route('/login', methods=('GET', 'POST'))
@@ -170,7 +133,7 @@ def login():
         codename = request.form['codename'].strip()
         if valid_codename(codename):
             session.update(codename=codename, logged_in=True)
-            return redirect(url_for('lookup', from_login='1'))
+            return redirect(url_for('main.lookup', from_login='1'))
         else:
             app.logger.info(
                     "Login failed for invalid codename".format(codename))
