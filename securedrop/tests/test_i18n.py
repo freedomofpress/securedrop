@@ -206,8 +206,7 @@ class TestI18N(object):
             if supported:
                 del config.SUPPORTED_LOCALES
             for app in (journalist.app, source.app):
-                app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
-                i18n.setup_app(app)
+                i18n.setup_app(app, translation_dirs=config.TEMP_DIR)
                 self.verify_i18n(app)
         finally:
             if supported:
