@@ -157,6 +157,8 @@
   /var/www/securedrop/source_app/__init__.py r,
   /var/www/securedrop/source_app/__init__.pyc rw,
   /var/www/securedrop/source_app/__pycache__/** rw,
+  /var/www/securedrop/source_app/utils.py r,
+  /var/www/securedrop/source_app/utils.pyc rw,
   /var/www/securedrop/source_templates/banner_warning_flashed.html r,
   /var/www/securedrop/source_templates/base.html r,
   /var/www/securedrop/source_templates/error.html r,
