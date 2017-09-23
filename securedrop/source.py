@@ -16,11 +16,6 @@ log = logging.getLogger('source')
 app = create_app()
 
 
-@app.route('/tor2web-warning')
-def tor2web_warning():
-    return render_template("tor2web-warning.html")
-
-
 @app.route('/use-tor')
 def recommend_tor_browser():
     return render_template("use-tor-browser.html")
