@@ -22,6 +22,7 @@ import i18n
 import store
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
+from source_app.utils import logged_in
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -36,10 +37,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def logged_in():
-    return 'logged_in' in session
 
 
 def login_required(f):
