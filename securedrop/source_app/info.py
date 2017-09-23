@@ -23,4 +23,8 @@ def make_blueprint(config):
                          attachment_filename=config.JOURNALIST_KEY + ".asc",
                          as_attachment=True)
 
+    @view.route('/why-journalist-key')
+    def why_download_journalist_pubkey():
+        return render_template("why-journalist-key.html")
+
     return view
