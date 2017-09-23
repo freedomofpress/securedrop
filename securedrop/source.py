@@ -2,7 +2,6 @@
 import os
 from datetime import datetime
 from cStringIO import StringIO
-import subprocess
 import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
@@ -22,7 +21,7 @@ from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
 from source_app.decorators import login_required, ignore_static
 from source_app.utils import (logged_in, valid_codename, async_genkey,
-                              generate_unique_codename)
+                              generate_unique_codename, normalize_timestamps)
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -152,25 +151,6 @@ def lookup():
         flagged=g.source.flagged,
         haskey=crypto_util.getkey(
             g.filesystem_id))
-
-
-def normalize_timestamps(filesystem_id):
-    """
-    Update the timestamps on all of the source's submissions to match that of
-    the latest submission. This minimizes metadata that could be useful to
-    investigators. See #301.
-    """
-    sub_paths = [store.path(filesystem_id, submission.filename)
-                 for submission in g.source.submissions]
-    if len(sub_paths) > 1:
-        args = ["touch"]
-        args.extend(sub_paths[:-1])
-        rc = subprocess.call(args)
-        if rc != 0:
-            app.logger.warning(
-                "Couldn't normalize submission "
-                "timestamps (touch exited with %d)" %
-                rc)
 
 
 @app.route('/submit', methods=('POST',))

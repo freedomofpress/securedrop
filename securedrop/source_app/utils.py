@@ -1,8 +1,11 @@
+import subprocess
+
 from datetime import datetime
-from flask import session, current_app, abort
+from flask import session, current_app, abort, g
 from threading import Thread
 
 import crypto_util
+import store
 
 from db import Source, db_session
 
@@ -78,3 +81,22 @@ def async_genkey(filesystem_id, codename):
         current_app.logger.error(
                 "async_genkey for source (filesystem_id={}): {}"
                 .format(filesystem_id, e))
+
+
+def normalize_timestamps(filesystem_id):
+    """
+    Update the timestamps on all of the source's submissions to match that of
+    the latest submission. This minimizes metadata that could be useful to
+    investigators. See #301.
+    """
+    sub_paths = [store.path(filesystem_id, submission.filename)
+                 for submission in g.source.submissions]
+    if len(sub_paths) > 1:
+        args = ["touch"]
+        args.extend(sub_paths[:-1])
+        rc = subprocess.call(args)
+        if rc != 0:
+            current_app.logger.warning(
+                "Couldn't normalize submission "
+                "timestamps (touch exited with %d)" %
+                rc)
