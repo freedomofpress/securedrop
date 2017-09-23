@@ -3,16 +3,17 @@ import os
 
 from datetime import datetime
 from flask import (Blueprint, render_template, flash, redirect, url_for, g,
-                   session, current_app)
+                   session, current_app, request, Markup)
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 
 import crypto_util
 import store
 
-from db import Source, db_session
+from db import Source, db_session, Submission
 from source_app.decorators import login_required
-from source_app.utils import logged_in, generate_unique_codename, async_genkey
+from source_app.utils import (logged_in, generate_unique_codename,
+                              async_genkey, normalize_timestamps)
 
 
 def add_blueprints(app):
@@ -92,5 +93,76 @@ def _main_blueprint():
             flagged=g.source.flagged,
             haskey=crypto_util.getkey(
                 g.filesystem_id))
+
+    @view.route('/submit', methods=('POST',))
+    @login_required
+    def submit():
+        msg = request.form['msg']
+        fh = request.files['fh']
+
+        # Don't submit anything if it was an "empty" submission. #878
+        if not (msg or fh):
+            flash(gettext(
+                "You must enter a message or choose a file to submit."),
+                  "error")
+            return redirect(url_for('main.lookup'))
+
+        fnames = []
+        journalist_filename = g.source.journalist_filename
+        first_submission = g.source.interaction_count == 0
+
+        if msg:
+            g.source.interaction_count += 1
+            fnames.append(
+                store.save_message_submission(
+                    g.filesystem_id,
+                    g.source.interaction_count,
+                    journalist_filename,
+                    msg))
+        if fh:
+            g.source.interaction_count += 1
+            fnames.append(
+                store.save_file_submission(
+                    g.filesystem_id,
+                    g.source.interaction_count,
+                    journalist_filename,
+                    fh.filename,
+                    fh.stream))
+
+        if first_submission:
+            msg = render_template('first_submission_flashed_message.html')
+            flash(Markup(msg), "success")
+
+        else:
+            if msg and not fh:
+                html_contents = gettext('Thanks! We received your message.')
+            elif not msg and fh:
+                html_contents = gettext('Thanks! We received your document.')
+            else:
+                html_contents = gettext('Thanks! We received your message and '
+                                        'document.')
+
+            msg = render_template('next_submission_flashed_message.html',
+                                  html_contents=html_contents)
+            flash(Markup(msg), "success")
+
+        for fname in fnames:
+            submission = Submission(g.source, fname)
+            db_session.add(submission)
+
+        if g.source.pending:
+            g.source.pending = False
+
+            # Generate a keypair now, if there's enough entropy (issue #303)
+            entropy_avail = int(
+                open('/proc/sys/kernel/random/entropy_avail').read())
+            if entropy_avail >= 2400:
+                async_genkey(g.filesystem_id, g.codename)
+
+        g.source.last_updated = datetime.utcnow()
+        db_session.commit()
+        normalize_timestamps(g.filesystem_id)
+
+        return redirect(url_for('main.lookup'))
 
     return view
