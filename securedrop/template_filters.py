@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask_babel import get_locale
+from flask_babel import gettext, get_locale
 from babel import units, dates
 from datetime import datetime
 from jinja2 import Markup, escape
@@ -9,8 +9,9 @@ import math
 def datetimeformat(dt, fmt=None, relative=False):
     """Template filter for readable formatting of datetime.datetime"""
     if relative:
-        return dates.format_timedelta(datetime.utcnow() - dt,
+        time = dates.format_timedelta(datetime.utcnow() - dt,
                                       locale=get_locale())
+        return gettext('{time} ago').format(time=time)
     else:
         fmt = fmt or 'MMM dd, yyyy hh:mm a'
         return dates.format_datetime(dt, fmt, locale=get_locale())
