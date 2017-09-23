@@ -14,11 +14,6 @@ log = logging.getLogger('source')
 app = create_app()
 
 
-@app.route('/why-journalist-key')
-def why_download_journalist_pubkey():
-    return render_template("why-journalist-key.html")
-
-
 @app.route('/metadata')
 def metadata():
     meta = {'gpg_fpr': config.JOURNALIST_KEY,
