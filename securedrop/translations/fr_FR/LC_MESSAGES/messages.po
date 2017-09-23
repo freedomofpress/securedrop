@@ -565,7 +565,7 @@ msgstr "Revenir à la liste de documents de {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr "Modifier l'utilisateur « {username} »"
+msgstr "Modifier l'utilisateur « {user} »"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"

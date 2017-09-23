@@ -464,7 +464,7 @@ msgstr ""
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "Mogelijk gemaakt door <em>SecureDrop {versie}</em>."
+msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -598,7 +598,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Edit user {username}"
 msgid "Edit user \"{user}\""
-msgstr "Gebruiker {username} wijzigen"
+msgstr "Gebruiker {user} wijzigen"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
