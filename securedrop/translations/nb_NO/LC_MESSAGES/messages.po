@@ -85,7 +85,7 @@ msgstr ""
 
 #: journalist.py:310
 msgid "Account updated."
-msgstr "Konto oppdatert!"
+msgstr "Konto oppdatert."
 
 #: journalist.py:332
 msgid "Username \"{user}\" is already taken!"
