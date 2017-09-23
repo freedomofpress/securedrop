@@ -6,7 +6,7 @@ from cStringIO import StringIO
 import subprocess
 from threading import Thread
 import operator
-from flask import (Flask, request, render_template, session, redirect, url_for,
+from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 from flask_wtf.csrf import CSRFProtect
 from flask_assets import Environment
@@ -24,17 +24,15 @@ import i18n
 import store
 import template_filters
 from db import db_session, Source, Submission, Reply, get_one_or_else
-from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from jinja2 import evalcontextfilter
+from source_app import create_app
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
 # even when this is run from the command line (e.g. during development)
 log = logging.getLogger('source')
 
-app = Flask(__name__, template_folder=config.SOURCE_TEMPLATES_DIR)
-app.request_class = RequestThatSecuresFileUploads
-app.config.from_object(config.SourceInterfaceFlaskConfig)
+app = create_app()
 
 i18n.setup_app(app)
 
