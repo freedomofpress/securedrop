@@ -19,7 +19,7 @@ from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, valid_codename, async_genkey,
-                              generate_unique_codename, normalize_timestamps)
+                              normalize_timestamps)
 
 import logging
 # This module's logger is explicitly labeled so the correct logger is used,
@@ -27,20 +27,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/generate', methods=('GET', 'POST'))
-def generate():
-    if logged_in():
-        flash(gettext(
-            "You were redirected because you are already logged in. "
-            "If you want to create a new account, you should log out first."),
-              "notification")
-        return redirect(url_for('lookup'))
-
-    codename = generate_unique_codename()
-    session['codename'] = codename
-    return render_template('generate.html', codename=codename)
 
 
 @app.route('/create', methods=['POST'])
