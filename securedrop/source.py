@@ -92,7 +92,7 @@ def setup_g():
                 (e,))
             del session['logged_in']
             del session['codename']
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
         g.loc = store.path(g.filesystem_id)
 
 
@@ -107,11 +107,6 @@ def check_tor2web():
             'This <strong>does not</strong> provide anonymity. '
             '<a href="/tor2web-warning">Why is this dangerous?</a>')),
               "banner-warning")
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 def generate_unique_codename():
@@ -392,7 +387,7 @@ def logout():
         session.clear()
         msg = render_template('logout_flashed_message.html')
         flash(Markup(msg), "important hide-if-not-tor-browser")
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 @app.route('/tor2web-warning')
