@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-from functools import wraps
 from cStringIO import StringIO
 import subprocess
 from threading import Thread
@@ -22,7 +21,7 @@ import i18n
 import store
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
-from source_app.decorators import login_required
+from source_app.decorators import login_required, ignore_static
 from source_app.utils import logged_in
 
 import logging
@@ -38,17 +37,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def ignore_static(f):
-    """Only executes the wrapped function if we're not loading
-    a static resource."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if request.path.startswith('/static'):
-            return  # don't execute the decorated function
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 @app.before_request
