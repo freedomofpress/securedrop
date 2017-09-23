@@ -6,8 +6,6 @@ import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 
-from sqlalchemy.exc import IntegrityError
-
 import config
 import json
 import version
@@ -15,7 +13,7 @@ import crypto_util
 from flask_babel import gettext
 from rm import srm
 import store
-from db import db_session, Source, Submission, Reply, get_one_or_else
+from db import db_session, Submission, Reply, get_one_or_else
 from source_app import create_app
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, valid_codename, async_genkey,
@@ -27,25 +25,6 @@ import logging
 log = logging.getLogger('source')
 
 app = create_app()
-
-
-@app.route('/create', methods=['POST'])
-def create():
-    filesystem_id = crypto_util.hash_codename(session['codename'])
-
-    source = Source(filesystem_id, crypto_util.display_id())
-    db_session.add(source)
-    try:
-        db_session.commit()
-    except IntegrityError as e:
-        app.logger.error(
-            "Attempt to create a source with duplicate codename: %s" %
-            (e,))
-    else:
-        os.mkdir(store.path(filesystem_id))
-
-    session['logged_in'] = True
-    return redirect(url_for('lookup'))
 
 
 @app.route('/lookup', methods=('GET',))
