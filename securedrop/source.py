@@ -16,11 +16,6 @@ log = logging.getLogger('source')
 app = create_app()
 
 
-@app.route('/use-tor')
-def recommend_tor_browser():
-    return render_template("use-tor-browser.html")
-
-
 @app.route('/journalist-key')
 def download_journalist_pubkey():
     journalist_pubkey = crypto_util.gpg.export_keys(config.JOURNALIST_KEY)
