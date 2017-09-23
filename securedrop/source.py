@@ -6,7 +6,6 @@ import operator
 from flask import (request, render_template, session, redirect, url_for,
                    flash, abort, g, send_file, Markup, make_response)
 
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import config
@@ -15,11 +14,10 @@ import version
 import crypto_util
 from flask_babel import gettext
 from rm import srm
-import i18n
 import store
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
-from source_app.decorators import login_required, ignore_static
+from source_app.decorators import login_required
 from source_app.utils import (logged_in, valid_codename, async_genkey,
                               generate_unique_codename, normalize_timestamps)
 
@@ -36,40 +34,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-@app.before_request
-@ignore_static
-def setup_g():
-    """Store commonly used values in Flask's special g object"""
-    g.locale = i18n.get_locale()
-    g.text_direction = i18n.get_text_direction(g.locale)
-    g.html_lang = i18n.locale_to_rfc_5646(g.locale)
-    g.locales = i18n.get_locale2name()
-
-    # ignore_static here because `crypto_util.hash_codename` is scrypt (very
-    # time consuming), and we don't need to waste time running if we're just
-    # serving a static resource that won't need to access these common values.
-    if logged_in():
-        g.codename = session['codename']
-        g.filesystem_id = crypto_util.hash_codename(g.codename)
-        try:
-            g.source = Source.query \
-                             .filter(Source.filesystem_id == g.filesystem_id) \
-                             .one()
-        except MultipleResultsFound as e:
-            app.logger.error(
-                "Found multiple Sources when one was expected: %s" %
-                (e,))
-            abort(500)
-        except NoResultFound as e:
-            app.logger.error(
-                "Found no Sources when one was expected: %s" %
-                (e,))
-            del session['logged_in']
-            del session['codename']
-            return redirect(url_for('main.index'))
-        g.loc = store.path(g.filesystem_id)
 
 
 @app.route('/generate', methods=('GET', 'POST'))
