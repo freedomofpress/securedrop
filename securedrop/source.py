@@ -22,6 +22,7 @@ import i18n
 import store
 from db import db_session, Source, Submission, Reply, get_one_or_else
 from source_app import create_app
+from source_app.decorators import login_required
 from source_app.utils import logged_in
 
 import logging
@@ -37,15 +38,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 def ignore_static(f):
