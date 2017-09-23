@@ -91,6 +91,27 @@ by clicking on it:
 
 |Weblate translate context screenshot|
 
+Placeholders
+------------
+
+The strings may contain placeholders between braces: they will be
+substituted with actual content at runtime and must be left
+unmodified. For instance::
+
+  Edit user {user}
+
+will be displayed to the user as::
+
+  Edit user Jean-Claude
+
+The French translated string should look like::
+
+  Modifier l'utiliser {user}
+
+And it would be **incorrect** to translate the placeholder like so::
+
+  Modifier l'utiliser {utilisateur}
+
 Glossary
 --------
 
