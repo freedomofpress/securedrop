@@ -80,19 +80,98 @@ the file can be found in the function that created it in
 ``securedrop/tests/pages-layout/test_journalist.py`` or
 ``securedrop/tests/pages-layout/test_source.py``.
 
-Merging translations
---------------------
+Merging translations back to develop
+------------------------------------
 
-`Weblate`_ merges pushes the translations done via the web interface
-to the develop branch in a fork of the `SecureDrop git repository`_.
-These commits must be manually cherry-picked and proposed as pull
-requests for the `SecureDrop git repository`_.
+`Weblate`_ automatically pushes the translations done via the web
+interface as a series of commit to the ``i18n`` branch in the `Weblate
+SecureDrop branch`_ which is a fork of the ``develop`` branch of the
+`SecureDrop git repository`_. These translations need to be submitted
+to the ``develop`` branch via pull requests for merge on a regular basis.
 
-.. todo:: is this intermediate step necessary, even when the need-review
-   flag is set ? Ideally the need-review step blocks merging and
-   we can have Weblate merge in develop directly ?
+.. code:: sh
+
+      $ git clone https://github.com/freedomofpress/securedrop
+      $ cd securedrop
+      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
+      $ git fetch lab
+      $ git checkout -b wip-i18n origin/develop
+      $ git checkout lab/i18n -- securedrop/translations
+      $ git add translations
+      $ git commit -m 'sync with weblate' translations
+      $ git push wip-i18n
+
+Go to https://github.com/freedomofpress/securedrop and propose a pull request.
+
+Merging develop into the weblate fork
+-------------------------------------
+
+`Weblate`_ works on a long standing fork of the `SecureDrop git
+repository`_ and is exclusively responsible for the content of the
+``*.pot`` and ``*.po`` files. It needs to merge the content of the
+``develop`` branch back into its ``i18n`` branch to be able to extract
+from the sources new strings to translate or existing strings that
+have been updated.
+
+The translations must be suspended in `Weblate`_ to avoid conflicts.
+
+* Go to the `Weblate commit page for SecureDrop`_
+
+|Weblate commit Lock|
+
+* Click ``Lock``
+
+|Weblate commit Locked|
+
+The ``develop`` branch can now be merged into ``i18n`` as follows:
+
+.. code:: sh
+
+      $ git clone https://github.com/freedomofpress/securedrop
+      $ cd securedrop
+      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
+      $ git fetch lab
+      $ git checkout -b i18n lab/i18n
+      $ git merge origin/develop
+      $ ./manage.py translate --extract-update
+
+The ``manage.py`` command examines all the source files, looking for
+strings that need to be translated (i.e. gettext('translate me') etc.)
+and update the files used by Weblate, removing, updating and inserting
+strings to keep them in sync withe the sources. Carefully review the
+output of ``git diff``. Check ``messages.pot`` first for updated strings,
+looking for formatting problems. Then review the ``messages.po`` of one
+existing translation, with a focus on ``fuzzy`` translations. There is
+no need to review other translations because they are processed in the
+same way. When you are satisfied with the result, it can be merged
+with:
+
+.. code:: sh
+
+      $ git commit -a -m 'l10n: sync with upstream origin/develop'
+      $ git push lab i18n
+
+
+* Go to the `Weblate commit page for SecureDrop`_ and verify the
+  commit hash matches the last commit of the ``i18n`` branch. This must
+  happen instantly after the branch is pushed because Weblate is
+  notified by GitLab via a webhook. If it is different, ask for help.
+
+|Weblate commit Unlock|
+
+* Click ``Unlock``
+
+|Weblate commit Unlocked|
 
 .. _`gettext`: https://www.gnu.org/software/gettext/
 .. _`pybabel`: http://babel.pocoo.org/
 .. _`Weblate`: http://weblate.securedrop.club/
 .. _`SecureDrop git repository`: https://github.com/freedomofpress/securedrop
+.. _`Weblate SecureDrop branch`: http://lab.securedrop.club/bot/securedrop/tree/i18n
+.. _`patch they contain is unique`: https://git-scm.com/docs/git-patch-id
+.. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.club/projects/securedrop/securedrop/#repository
+
+.. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
+.. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png
+.. |Weblate commit Unlock| image:: ../images/weblate/admin-unlock.png
+.. |Weblate commit Unlocked| image:: ../images/weblate/admin-unlocked.png
