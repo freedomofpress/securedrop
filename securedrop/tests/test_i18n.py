@@ -195,10 +195,17 @@ class TestI18N(object):
 
         manage.translate(args)
 
-        for app in (journalist.app, source.app):
-            app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
-            i18n.setup_app(app)
-            self.verify_i18n(app)
+        supported = getattr(config, 'SUPPORTED_LOCALES', None)
+        try:
+            if supported:
+                del config.SUPPORTED_LOCALES
+            for app in (journalist.app, source.app):
+                app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
+                i18n.setup_app(app)
+                self.verify_i18n(app)
+        finally:
+            if supported:
+                config.SUPPORTED_LOCALES = supported
 
     def test_verify_default_locale_en_us_if_not_defined_in_config(self):
         DEFAULT_LOCALE = config.DEFAULT_LOCALE
