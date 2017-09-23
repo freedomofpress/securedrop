@@ -55,7 +55,7 @@ def create_app(config=None):
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
-    for blueprint in [main.make_blueprint(), info.make_blueprint()]:
+    for blueprint in [main.make_blueprint(), info.make_blueprint(config)]:
         app.register_blueprint(blueprint)
 
     @app.before_request
