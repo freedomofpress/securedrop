@@ -190,3 +190,11 @@ def col_download_unread(cols_selected):
               "error")
         return redirect(url_for('index'))
     return download("unread", submissions)
+
+
+def col_star(cols_selected):
+    for filesystem_id in cols_selected:
+        make_star_true(filesystem_id)
+
+    db_session.commit()
+    return redirect(url_for('index'))
