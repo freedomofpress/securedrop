@@ -24,7 +24,7 @@ from journalist_app.decorators import login_required, admin_required
 from journalist_app.utils import (get_source, commit_account_changes,
                                   make_password, set_diceware_password,
                                   make_star_true, make_star_false, download,
-                                  delete_collection)
+                                  delete_collection, confirm_bulk_delete)
 
 app = create_app(config)
 
@@ -639,13 +639,6 @@ def bulk():
         return confirm_bulk_delete(g.filesystem_id, selected_docs)
     else:
         abort(400)
-
-
-def confirm_bulk_delete(filesystem_id, items_selected):
-    return render_template('delete.html',
-                           filesystem_id=filesystem_id,
-                           source=g.source,
-                           items_selected=items_selected)
 
 
 def bulk_delete(filesystem_id, items_selected):

@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask import abort, current_app, g, flash, Markup, send_file
+from flask import (abort, current_app, g, flash, Markup, send_file,
+                   render_template)
 from flask_babel import gettext
 
 import crypto_util
@@ -141,3 +142,10 @@ def delete_collection(filesystem_id):
     db_session.delete(source)
     db_session.commit()
     return job
+
+
+def confirm_bulk_delete(filesystem_id, items_selected):
+    return render_template('delete.html',
+                           filesystem_id=filesystem_id,
+                           source=g.source,
+                           items_selected=items_selected)
