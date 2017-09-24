@@ -32,7 +32,7 @@ class TestTemplateFilters(object):
 
             test_time = datetime.utcnow() - timedelta(hours=2)
             result = template_filters.datetimeformat(test_time, relative=True)
-            assert "2 hours" == result
+            assert "2 hours ago" == result
 
             c.get('/?l=fr_FR')
             assert session.get('locale') == 'fr_FR'
@@ -46,7 +46,7 @@ class TestTemplateFilters(object):
 
             test_time = datetime.utcnow() - timedelta(hours=2)
             result = template_filters.datetimeformat(test_time, relative=True)
-            assert "2 heures" == result
+            assert "2 heures ago" == result
 
     def verify_filesizeformat(self, app):
         with app.test_client() as c:
