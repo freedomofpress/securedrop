@@ -3,7 +3,8 @@ from flask_babel import gettext
 
 import crypto_util
 
-from db import Journalist, Source, get_one_or_else, db_session, PasswordError
+from db import (Journalist, Source, get_one_or_else, db_session, PasswordError,
+                SourceStar)
 
 
 def get_source(filesystem_id):
@@ -78,3 +79,12 @@ def set_diceware_password(user, password):
         "save it in your KeePassX database. New password:") +
         ' <span><code>{}</code></span></p>'.format(password)),
         'success')
+
+
+def make_star_true(filesystem_id):
+    source = get_source(filesystem_id)
+    if source.star:
+        source.star.starred = True
+    else:
+        source_star = SourceStar(source)
+        db_session.add(source_star)
