@@ -7,6 +7,8 @@ import i18n
 import template_filters
 import version
 
+from db import db_session
+
 
 def create_app(config):
     app = Flask(__name__,
@@ -32,5 +34,11 @@ def create_app(config):
 
     app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        """Automatically remove database sessions at the end of the request, or
+        when the application shuts down"""
+        db_session.remove()
 
     return app
