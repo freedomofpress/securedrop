@@ -23,7 +23,8 @@ from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
 from journalist_app.utils import (get_source, commit_account_changes,
                                   make_password, set_diceware_password,
-                                  make_star_true, make_star_false, download)
+                                  make_star_true, make_star_false, download,
+                                  delete_collection)
 
 app = create_app(config)
 
@@ -415,20 +416,6 @@ def col(filesystem_id):
     source.has_key = crypto_util.getkey(filesystem_id)
     return render_template("col.html", filesystem_id=filesystem_id,
                            source=source)
-
-
-def delete_collection(filesystem_id):
-    # Delete the source's collection of submissions
-    job = worker.enqueue(srm, store.path(filesystem_id))
-
-    # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
-
-    # Delete their entry in the db
-    source = get_source(filesystem_id)
-    db_session.delete(source)
-    db_session.commit()
-    return job
 
 
 @app.route('/col/process', methods=('POST',))

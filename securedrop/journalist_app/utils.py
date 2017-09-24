@@ -4,9 +4,11 @@ from flask_babel import gettext
 
 import crypto_util
 import store
+import worker
 
 from db import (Journalist, Source, get_one_or_else, db_session, PasswordError,
                 SourceStar)
+from rm import srm
 
 
 def get_source(filesystem_id):
@@ -125,3 +127,17 @@ def download(zip_basename, submissions):
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)
+
+
+def delete_collection(filesystem_id):
+    # Delete the source's collection of submissions
+    job = worker.enqueue(srm, store.path(filesystem_id))
+
+    # Delete the source's reply keypair
+    crypto_util.delete_reply_keypair(filesystem_id)
+
+    # Delete their entry in the db
+    source = get_source(filesystem_id)
+    db_session.delete(source)
+    db_session.commit()
+    return job
