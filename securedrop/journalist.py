@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import functools
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
@@ -22,8 +21,8 @@ from db import (db_session, Source, Journalist, Submission, Reply,
 import worker
 
 from journalist_app import create_app
-from journalist_app.decorators import login_required
-from journalist_app.utils import get_source, logged_in
+from journalist_app.decorators import login_required, admin_required
+from journalist_app.utils import get_source
 
 app = create_app(config)
 
@@ -52,18 +51,6 @@ def setup_g():
         if filesystem_id:
             g.filesystem_id = filesystem_id
             g.source = get_source(filesystem_id)
-
-
-def admin_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if logged_in() and g.user.is_admin:
-            return func(*args, **kwargs)
-        # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash(gettext("Only administrators can access this page."),
-              "notification")
-        return redirect(url_for('index'))
-    return wrapper
 
 
 @app.route('/login', methods=('GET', 'POST'))
