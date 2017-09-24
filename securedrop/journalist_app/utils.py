@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import (abort, current_app, g, flash, Markup, send_file,
-                   render_template)
-from flask_babel import gettext
+                   render_template, url_for, redirect)
+from flask_babel import gettext, ngettext
 
 import crypto_util
 import store
@@ -149,3 +149,16 @@ def confirm_bulk_delete(filesystem_id, items_selected):
                            filesystem_id=filesystem_id,
                            source=g.source,
                            items_selected=items_selected)
+
+
+def bulk_delete(filesystem_id, items_selected):
+    for item in items_selected:
+        item_path = store.path(filesystem_id, item.filename)
+        worker.enqueue(srm, item_path)
+        db_session.delete(item)
+    db_session.commit()
+
+    flash(ngettext("Submission deleted.",
+                   "Submissions deleted.",
+                   len(items_selected)), "notification")
+    return redirect(url_for('col', filesystem_id=filesystem_id))

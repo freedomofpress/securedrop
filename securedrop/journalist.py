@@ -10,21 +10,20 @@ from sqlalchemy.sql.expression import false
 
 import config
 import crypto_util
-from rm import srm
 import i18n
 from flask_babel import gettext, ngettext
 import store
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, LoginThrottledException,
                 PasswordError, InvalidUsernameException)
-import worker
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
 from journalist_app.utils import (get_source, commit_account_changes,
                                   make_password, set_diceware_password,
                                   make_star_true, make_star_false, download,
-                                  delete_collection, confirm_bulk_delete)
+                                  delete_collection, confirm_bulk_delete,
+                                  bulk_delete)
 
 app = create_app(config)
 
@@ -639,19 +638,6 @@ def bulk():
         return confirm_bulk_delete(g.filesystem_id, selected_docs)
     else:
         abort(400)
-
-
-def bulk_delete(filesystem_id, items_selected):
-    for item in items_selected:
-        item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(srm, item_path)
-        db_session.delete(item)
-    db_session.commit()
-
-    flash(ngettext("Submission deleted.",
-                   "Submissions deleted.",
-                   len(items_selected)), "notification")
-    return redirect(url_for('col', filesystem_id=filesystem_id))
 
 
 @app.route('/flag', methods=('POST',))
