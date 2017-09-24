@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import (abort, current_app, g, flash, Markup, send_file,
                    render_template, url_for, redirect)
 from flask_babel import gettext, ngettext
+from sqlalchemy.sql.expression import false
 
 import crypto_util
 import store
@@ -173,3 +174,19 @@ def col_download_all(cols_selected):
         submissions += Submission.query.filter(
             Submission.source_id == id).all()
     return download("all", submissions)
+
+
+def col_download_unread(cols_selected):
+    """Download all unread submissions from all selected sources."""
+    submissions = []
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
+        submissions += Submission.query.filter(
+            Submission.downloaded == false(),
+            Submission.source_id == id).all()
+    if submissions == []:
+        flash(gettext("No unread submissions in selected collections."),
+              "error")
+        return redirect(url_for('index'))
+    return download("unread", submissions)
