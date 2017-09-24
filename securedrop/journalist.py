@@ -232,10 +232,6 @@ def admin_reset_two_factor_hotp():
         return render_template('admin_edit_hotp_secret.html', uid=uid)
 
 
-class PasswordMismatchError(Exception):
-    pass
-
-
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required
 def admin_edit_user(user_id):
