@@ -7,7 +7,6 @@ from jinja2 import evalcontextfilter
 from os import path
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-import config as global_config
 import crypto_util
 import i18n
 import store
@@ -21,10 +20,7 @@ from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 
 
-def create_app(config=None):
-    if config is None:
-        config = global_config
-
+def create_app(config):
     app = Flask(__name__,
                 template_folder=config.SOURCE_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
