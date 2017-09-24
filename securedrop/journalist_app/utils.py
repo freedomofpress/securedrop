@@ -8,7 +8,7 @@ import store
 import worker
 
 from db import (Journalist, Source, get_one_or_else, db_session, PasswordError,
-                SourceStar)
+                SourceStar, Submission)
 from rm import srm
 
 
@@ -162,3 +162,14 @@ def bulk_delete(filesystem_id, items_selected):
                    "Submissions deleted.",
                    len(items_selected)), "notification")
     return redirect(url_for('col', filesystem_id=filesystem_id))
+
+
+def col_download_all(cols_selected):
+    """Download all submissions from all selected sources."""
+    submissions = []
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
+        submissions += Submission.query.filter(
+            Submission.source_id == id).all()
+    return download("all", submissions)
