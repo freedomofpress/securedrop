@@ -23,7 +23,7 @@ from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
 from journalist_app.utils import (get_source, commit_account_changes,
                                   make_password, set_diceware_password,
-                                  make_star_true)
+                                  make_star_true, make_star_false)
 
 app = create_app(config)
 
@@ -369,15 +369,6 @@ def account_reset_two_factor_hotp():
         return redirect(url_for('account_new_two_factor'))
     else:
         return render_template('account_edit_hotp_secret.html')
-
-
-def make_star_false(filesystem_id):
-    source = get_source(filesystem_id)
-    if not source.star:
-        source_star = SourceStar(source)
-        db_session.add(source_star)
-        db_session.commit()
-    source.star.starred = False
 
 
 @app.route('/col/add_star/<filesystem_id>', methods=('POST',))
