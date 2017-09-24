@@ -5,8 +5,6 @@ import functools
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from flask_wtf.csrf import CSRFProtect
-from flask_assets import Environment
 from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -28,11 +26,8 @@ import worker
 from journalist_app import create_app
 
 app = create_app(config)
-CSRFProtect(app)
 
 i18n.setup_app(app)
-
-assets = Environment(app)
 
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
