@@ -1,6 +1,7 @@
-from flask import abort, current_app, g
+from flask import abort, current_app, g, flash
+from flask_babel import gettext
 
-from db import Source, get_one_or_else
+from db import Source, get_one_or_else, db_session
 
 
 def get_source(filesystem_id):
@@ -22,3 +23,19 @@ def logged_in():
     # has an active session - we will not authenticate a user if they are not
     # in the database.
     return bool(g.get('user', None))
+
+
+def commit_account_changes(user):
+    if db_session.is_modified(user):
+        try:
+            db_session.add(user)
+            db_session.commit()
+        except Exception as e:
+            flash(gettext(
+                "An unexpected error occurred! Please check the application "
+                  "logs or inform your adminstrator."), "error")
+            current_app.logger.error("Account changes for '{}' failed: {}"
+                                     .format(user, e))
+            db_session.rollback()
+        else:
+            flash(gettext("Account updated."), "success")
