@@ -22,7 +22,8 @@ import worker
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
-from journalist_app.utils import get_source, commit_account_changes
+from journalist_app.utils import (get_source, commit_account_changes,
+                                  make_password)
 
 app = create_app(config)
 
@@ -159,7 +160,7 @@ def admin_add_user():
             return redirect(url_for('admin_new_user_two_factor',
                                     uid=new_user.id))
 
-    return render_template("admin_add_user.html", password=_make_password())
+    return render_template("admin_add_user.html", password=make_password())
 
 
 @app.route('/admin/2fa', methods=('GET', 'POST'))
@@ -266,7 +267,7 @@ def admin_edit_user(user_id):
 
         commit_account_changes(user)
 
-    password = _make_password()
+    password = make_password()
     return render_template("edit_account.html", user=user,
                            password=password)
 
@@ -305,7 +306,7 @@ def admin_delete_user(user_id):
 @app.route('/account', methods=('GET',))
 @login_required
 def edit_account():
-    password = _make_password()
+    password = make_password()
     return render_template('edit_account.html',
                            password=password)
 
@@ -330,16 +331,6 @@ def admin_new_password(user_id):
     password = request.form.get('password')
     _set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
-
-
-def _make_password():
-    while True:
-        password = crypto_util.genrandomid(7)
-        try:
-            Journalist.check_password_acceptable(password)
-            return password
-        except PasswordError:
-            continue
 
 
 def _set_diceware_password(user, password):

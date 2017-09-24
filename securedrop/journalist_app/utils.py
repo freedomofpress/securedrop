@@ -1,7 +1,9 @@
 from flask import abort, current_app, g, flash
 from flask_babel import gettext
 
-from db import Source, get_one_or_else, db_session
+import crypto_util
+
+from db import Journalist, Source, get_one_or_else, db_session, PasswordError
 
 
 def get_source(filesystem_id):
@@ -39,3 +41,13 @@ def commit_account_changes(user):
             db_session.rollback()
         else:
             flash(gettext("Account updated."), "success")
+
+
+def make_password():
+    while True:
+        password = crypto_util.genrandomid(7)
+        try:
+            Journalist.check_password_acceptable(password)
+            return password
+        except PasswordError:
+            continue
