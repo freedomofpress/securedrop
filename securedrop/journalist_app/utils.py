@@ -1,7 +1,9 @@
-from flask import abort, current_app, g, flash, Markup
+from datetime import datetime
+from flask import abort, current_app, g, flash, Markup, send_file
 from flask_babel import gettext
 
 import crypto_util
+import store
 
 from db import (Journalist, Source, get_one_or_else, db_session, PasswordError,
                 SourceStar)
@@ -97,3 +99,29 @@ def make_star_false(filesystem_id):
         db_session.add(source_star)
         db_session.commit()
     source.star.starred = False
+
+
+def download(zip_basename, submissions):
+    """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
+    containing *submissions*. The ZIP-file, being a
+    :class:`tempfile.NamedTemporaryFile`, is stored on disk only
+    temporarily.
+
+    :param str zip_basename: The basename of the ZIP-file download.
+
+    :param list submissions: A list of :class:`db.Submission`s to
+                             include in the ZIP-file.
+    """
+    zf = store.get_bulk_archive(submissions,
+                                zip_directory=zip_basename)
+    attachment_filename = "{}--{}.zip".format(
+        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+
+    # Mark the submissions that have been downloaded as such
+    for submission in submissions:
+        submission.downloaded = True
+    db_session.commit()
+
+    return send_file(zf.name, mimetype="application/zip",
+                     attachment_filename=attachment_filename,
+                     as_attachment=True)

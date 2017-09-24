@@ -23,7 +23,7 @@ from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
 from journalist_app.utils import (get_source, commit_account_changes,
                                   make_password, set_diceware_password,
-                                  make_star_true, make_star_false)
+                                  make_star_true, make_star_false, download)
 
 app = create_app(config)
 
@@ -672,32 +672,6 @@ def bulk_delete(filesystem_id, items_selected):
                    "Submissions deleted.",
                    len(items_selected)), "notification")
     return redirect(url_for('col', filesystem_id=filesystem_id))
-
-
-def download(zip_basename, submissions):
-    """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
-    containing *submissions*. The ZIP-file, being a
-    :class:`tempfile.NamedTemporaryFile`, is stored on disk only
-    temporarily.
-
-    :param str zip_basename: The basename of the ZIP-file download.
-
-    :param list submissions: A list of :class:`db.Submission`s to
-                             include in the ZIP-file.
-    """
-    zf = store.get_bulk_archive(submissions,
-                                zip_directory=zip_basename)
-    attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
-
-    # Mark the submissions that have been downloaded as such
-    for submission in submissions:
-        submission.downloaded = True
-    db_session.commit()
-
-    return send_file(zf.name, mimetype="application/zip",
-                     attachment_filename=attachment_filename,
-                     as_attachment=True)
 
 
 @app.route('/flag', methods=('POST',))
