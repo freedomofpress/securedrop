@@ -3,6 +3,8 @@ from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect
 from os import path
 
+import i18n
+
 
 def create_app(config):
     app = Flask(__name__,
@@ -13,5 +15,7 @@ def create_app(config):
 
     CSRFProtect(app)
     Environment(app)
+
+    i18n.setup_app(app)
 
     return app

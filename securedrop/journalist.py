@@ -27,8 +27,6 @@ from journalist_app import create_app
 
 app = create_app(config)
 
-i18n.setup_app(app)
-
 app.jinja_env.globals['version'] = version.__version__
 if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
     app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
