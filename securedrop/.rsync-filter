@@ -4,6 +4,8 @@ include *.py
 include COPYING
 include dictionaries/
 include dictionaries/*.txt
+include journalist_app/
+include journalist_app/*.py
 include journalist_templates/
 include journalist_templates/*.html
 include management/

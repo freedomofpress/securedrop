@@ -24,6 +24,8 @@ import config
 import os
 import re
 
+from os import path
+
 LOCALE_SPLIT = re.compile('(-|_)')
 LOCALES = set(['en_US'])
 babel = None
@@ -34,8 +36,18 @@ class LocaleNotFound(Exception):
     """Raised when the desired locale is not in the translations directory"""
 
 
-def setup_app(app):
+def setup_app(app, translation_dirs=None):
     global babel
+
+    if translation_dirs is None:
+        translation_dirs = \
+                path.join(path.dirname(path.realpath(__file__)),
+                          'translations')
+
+    # `babel.translation_directories` is a nightmare
+    # We need to set this manually via an absolute path
+    app.config['BABEL_TRANSLATION_DIRECTORIES'] = translation_dirs
+
     babel = Babel(app)
     assert len(list(babel.translation_directories)) == 1
     for dirname in os.listdir(next(babel.translation_directories)):
