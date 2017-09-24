@@ -22,6 +22,7 @@ from db import (db_session, Source, Journalist, Submission, Reply,
 import worker
 
 from journalist_app import create_app
+from journalist_app.decorators import login_required
 from journalist_app.utils import get_source, logged_in
 
 app = create_app(config)
@@ -51,15 +52,6 @@ def setup_g():
         if filesystem_id:
             g.filesystem_id = filesystem_id
             g.source = get_source(filesystem_id)
-
-
-def login_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('login'))
-        return func(*args, **kwargs)
-    return wrapper
 
 
 def admin_required(func):
