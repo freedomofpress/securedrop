@@ -205,4 +205,19 @@ def col_un_star(cols_selected):
         make_star_false(filesystem_id)
 
     db_session.commit()
+
+
+def col_delete(cols_selected):
+    """deleting multiple collections from the index"""
+    if len(cols_selected) < 1:
+        flash(gettext("No collections selected for deletion."), "error")
+    else:
+        for filesystem_id in cols_selected:
+            delete_collection(filesystem_id)
+        num = len(cols_selected)
+        flash(ngettext('{num} collection deleted', '{num} collections deleted',
+                       num).format(num=num),
+              "notification")
+
+    return redirect(url_for('index'))
     return redirect(url_for('index'))

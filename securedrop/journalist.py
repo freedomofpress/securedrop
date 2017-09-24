@@ -11,7 +11,7 @@ from sqlalchemy.sql.expression import false
 import config
 import crypto_util
 import i18n
-from flask_babel import gettext, ngettext
+from flask_babel import gettext
 import store
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, LoginThrottledException,
@@ -24,7 +24,8 @@ from journalist_app.utils import (get_source, commit_account_changes,
                                   make_star_true, make_star_false, download,
                                   delete_collection, confirm_bulk_delete,
                                   bulk_delete, col_download_all,
-                                  col_download_unread, col_star, col_un_star)
+                                  col_download_unread, col_star, col_un_star,
+                                  col_delete)
 
 app = create_app(config)
 
@@ -448,21 +449,6 @@ def col_delete_single(filesystem_id):
     flash(gettext("{source_journalist_designation}'s collection deleted")
           .format(source_journalist_designation=source.journalist_designation),
           "notification")
-    return redirect(url_for('index'))
-
-
-def col_delete(cols_selected):
-    """deleting multiple collections from the index"""
-    if len(cols_selected) < 1:
-        flash(gettext("No collections selected for deletion."), "error")
-    else:
-        for filesystem_id in cols_selected:
-            delete_collection(filesystem_id)
-        num = len(cols_selected)
-        flash(ngettext('{num} collection deleted', '{num} collections deleted',
-                       num).format(num=num),
-              "notification")
-
     return redirect(url_for('index'))
 
 
