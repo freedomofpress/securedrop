@@ -24,7 +24,7 @@ from journalist_app.utils import (get_source, commit_account_changes,
                                   make_star_true, make_star_false, download,
                                   delete_collection, confirm_bulk_delete,
                                   bulk_delete, col_download_all,
-                                  col_download_unread, col_star)
+                                  col_download_unread, col_star, col_un_star)
 
 app = create_app(config)
 
@@ -437,14 +437,6 @@ def col_process():
 
     method = actions[action]
     return method(cols_selected)
-
-
-def col_un_star(cols_selected):
-    for filesystem_id in cols_selected:
-        make_star_false(filesystem_id)
-
-    db_session.commit()
-    return redirect(url_for('index'))
 
 
 @app.route('/col/delete/<filesystem_id>', methods=('POST',))
