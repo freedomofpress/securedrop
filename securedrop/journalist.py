@@ -17,11 +17,12 @@ import i18n
 from flask_babel import gettext, ngettext
 import store
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, LoginThrottledException,
+                SourceStar, LoginThrottledException,
                 PasswordError, InvalidUsernameException)
 import worker
 
 from journalist_app import create_app
+from journalist_app.utils import get_source
 
 app = create_app(config)
 
@@ -31,16 +32,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def get_source(filesystem_id):
-    """Return a Source object, representing the database row, for the source
-    with the `filesystem_id`"""
-    source = None
-    query = Source.query.filter(Source.filesystem_id == filesystem_id)
-    source = get_one_or_else(query, app.logger, abort)
-
-    return source
 
 
 @app.before_request
