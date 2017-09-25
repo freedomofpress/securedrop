@@ -68,9 +68,13 @@ You will only be able to view the documents the source has sent you on
 the *Secure Viewing Station*. After clicking on an individual source
 you will see the page below with the messages that source has sent you.
 Click on a document or message name to save it, or select a number of
-documents and save them at once by clicking "Download Selected".
+documents and save them at once by clicking **Download Selected**.
 
 | |Load external content|
+
+A dialog box will appear asking if you want to **Open** or **Save** the file.
+Select **Save File**:
+
 | |Download selected|
 
 In order to protect you from malware, the browser only allows you to
@@ -259,9 +263,12 @@ crimes and corruption, and change the world.
           :doc:`Promotion Guide <getting_the_most_out_of_securedrop>`
           to read more about how to encourage sources to use SecureDrop.
 
-.. |Journalist Interface Login| image:: images/manual/document6.png
-.. |Journalist Interface| image:: images/manual/document1.png
-.. |Load external content| image:: images/manual/document4.png
+.. |Journalist Interface Login|
+  image:: images/manual/screenshots/journalist-index_with_text.png
+.. |Journalist Interface|
+  image:: images/manual/screenshots/journalist-index_javascript.png
+.. |Load external content|
+  image:: images/manual/screenshots/journalist-clicks_on_source_and_selects_documents.png
 .. |Download selected| image:: images/manual/tbb_Document5.png
 .. |Download to sandbox folder| image:: images/manual/tbb_Document6.png
 .. |Move to transfer device 1| image:: images/manual/tbb_Document7.png
@@ -271,9 +278,12 @@ crimes and corruption, and change the world.
 .. |Decrypted documents| image:: images/manual/viewing3.png
 .. |Opened document| image:: images/manual/viewing4.png
 .. |Cycle source codename| image:: images/manual/change-codename.png
-.. |Sent reply| image:: images/manual/document2.png
-.. |Flag for reply button| image:: images/manual/document_flag_for_reply_button.png
-.. |Flag for reply notification| image:: images/manual/document_flagged_for_reply_notification.png
+.. |Sent reply|
+  image:: images/manual/screenshots/journalist-composes_reply.png
+.. |Flag for reply button|
+  image:: images/manual/screenshots/journalist-col_has_no_key.png
+.. |Flag for reply notification|
+  image:: images/manual/screenshots/journalist-col_flagged.png
 .. |Wiping documents| image:: images/manual/viewing5.png
 .. |Encrypting 1| image:: images/manual/viewing6.png
 .. |Encrypting 2| image:: images/manual/viewing7.png

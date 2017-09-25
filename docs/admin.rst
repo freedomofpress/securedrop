@@ -134,10 +134,8 @@ characters that are highlighted in yellow.
 Inside the Google Authenticator app, a new entry for this account will
 appear on the main screen, with a six digit number that recycles to a
 new number every thirty seconds. Enter the six digit number under
-“Verification code” at the bottom of the SecureDrop screen here, and hit
-enter:
-
-|Verify Google Authenticator works|
+“Verification code” at the bottom of the screen, and hit
+enter.
 
 If Google Authenticator was set up correctly, you will be redirected
 back to the Admin Interface and will see a flashed message that says
@@ -168,13 +166,18 @@ SecureDrop. Make sure the journalist remembers their username and
 password and always has their 2 factor authentication device in their
 possession when they attempt to log in to SecureDrop.
 
-.. |SecureDrop main page| image:: images/admin_main_home.png
-.. |SecureDrop admin home| image:: images/admin_secondary_home.png
-.. |Add a new user| image:: images/manual/journalist-admin_add_user_totp.png
-.. |Enable Google Authenticator| image:: images/manual/journalist-admin_new_user_two_factor_totp.png
-.. |Verify Google Authenticator works| image:: images/admin_enter_verification.png
-.. |Enable YubiKey| image:: images/manual/journalist-admin_add_user_hotp.png
-.. |Verify YubiKey| image:: images/manual/journalist-admin_new_user_two_factor_hotp.png
+.. |SecureDrop main page|
+  image:: images/manual/screenshots/journalist-admin_index_no_documents.png
+.. |SecureDrop admin home|
+  image:: images/manual/screenshots/journalist-admin_interface_index.png
+.. |Add a new user|
+  image:: images/manual/screenshots/journalist-admin_add_user_totp.png
+.. |Enable Google Authenticator|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_totp.png
+.. |Enable YubiKey|
+  image:: images/manual/screenshots/journalist-admin_add_user_hotp.png
+.. |Verify YubiKey|
+  image:: images/manual/screenshots/journalist-admin_new_user_two_factor_hotp.png
 
 .. _Updating the Servers:
 

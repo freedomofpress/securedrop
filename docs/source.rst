@@ -54,35 +54,38 @@ Source Interface you wish to make a submission to. The page should look similar
 to the screenshot below, although it will probably have a logo specific to the
 organization you are submitting to.
 
-|Source Interface With Javascript Enabled|
+|Source Interface with Javascript Disabled|
 
 If this is the first time you're using the Tor browser, it's likely that you
 have Javascript enabled and that the Security Slider that Tor browser provides
 is set to "Low". If you do, there will be a purple warning banner at the top of
 the page that encourages you to disable Javascript and turn up the Security
-Slider to "High".
+Slider to "High":
 
-|Security Slider|
+|Source Interface Security Slider Warning|
 
 Click the **Learn how to set it to high** link in the warning banner and a
 message bubble will pop up explaining how to disable Javascript and turn up the
-Slider. Follow the instructions and the page should refresh automatically. Note
-that this will change the slider and disable Javascript for every page in your
-Tor Browser, and this setting will persist across browser sessions.
+Slider:
 
 |Fix Javascript warning|
 
-The page should now look similar to the screenshot below. If this is the first
+Follow the instructions and the page should refresh automatically. Note
+that this will change the slider and disable Javascript for every page in your
+Tor Browser, and this setting will persist across browser sessions.
+
+|Security Slider|
+
+The page should look similar to the screenshot below. If this is the first
 time you are using SecureDrop, click the **Submit Documents** button.
 
 |Source Interface with Javascript Disabled|
 
 You should now see a screen that shows the unique codename that SecureDrop has
-generated for you. In the example screenshot below the codename is
-``catering zit isotope consonant tiny shriek provider``, but yours will
-be different. It is extremely important that you both remember this code and
-keep it secret. After submitting documents, you will need to provide this code
-to log back in and check for responses.
+generated for you. Note that your codename will not be the same as the codename
+shown in the image below. It is extremely important that you both remember this
+code and keep it secret. After submitting documents, you will need to provide
+this code to log back in and check for responses.
 
 The best way to protect your codename is to memorize it. If you cannot memorize
 it right away, we recommend writing it down and keeping it in a safe place at
@@ -172,16 +175,25 @@ log in again to see if a journalist has responded.
 Repeat these steps to continue communicating with the journalist.
 
 
-.. |Source Interface with Javascript Enabled| image:: images/manual/source-step1.png
+.. |Source Interface Security Slider Warning| image:: images/manual/securedrop-security-slider-warning.png
 .. |Security Slider| image:: images/manual/security-slider-high.png
-.. |Fix Javascript warning| image:: images/manual/source-step2.png
-.. |Source Interface with Javascript Disabled| image:: images/manual/source-step3-and-step7.png
-.. |Memorizing your codename| image:: images/manual/source-step4.png
-.. |Submit a document| image:: images/manual/source-step5.png
-.. |Confirmation page| image:: images/manual/source-step6.png
-.. |Logout| image:: images/manual/logout-notification.png
+.. |Fix Javascript warning| image:: images/manual/source-turn-slider-to-high.png
+.. |Source Interface with Javascript Disabled|
+  image:: images/manual/screenshots/source-index.png
+.. |Memorizing your codename|
+  image:: images/manual/screenshots/source-generate.png
+.. |Submit a document|
+  image:: images/manual/screenshots/source-submission_entered_text.png
+.. |Confirmation page|
+  image:: images/manual/screenshots/source-lookup.png
+.. |Logout|
+  image:: images/manual/screenshots/source-logout_flashed_message.png
 .. |Restart TBB| image:: images/manual/restart-tor-browser.png
-.. |Check for response| image:: images/manual/source-step8.png
-.. |Check for a reply| image:: images/manual/source-step9.png
-.. |Delete received messages| image:: images/manual/source-step10.png
-.. |Check for an initial response| image:: images/manual/source_flagged_for_reply.png
+.. |Check for response|
+  image:: images/manual/screenshots/source-enter-codename-in-login.png
+.. |Check for a reply|
+  image:: images/manual/screenshots/source-checks_for_reply.png
+.. |Delete received messages|
+  image:: images/manual/screenshots/source-deletes_reply.png
+.. |Check for an initial response|
+  image:: images/manual/screenshots/source-flagged.png
