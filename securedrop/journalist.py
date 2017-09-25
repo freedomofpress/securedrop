@@ -1,65 +1,33 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import functools
 
-from flask import (Flask, request, render_template, send_file, redirect, flash,
+from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from flask_wtf.csrf import CSRFProtect
-from flask_assets import Environment
-from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
 
 import config
-import version
 import crypto_util
-from rm import srm
 import i18n
-from flask_babel import gettext, ngettext
+from flask_babel import gettext
 import store
-import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, get_one_or_else, LoginThrottledException,
+                SourceStar, LoginThrottledException,
                 PasswordError, InvalidUsernameException)
-import worker
 
-app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
-app.config.from_object(config.JournalistInterfaceFlaskConfig)
-CSRFProtect(app)
+from journalist_app import create_app
+from journalist_app.decorators import login_required, admin_required
+from journalist_app.utils import (get_source, commit_account_changes,
+                                  make_password, set_diceware_password,
+                                  make_star_true, make_star_false, download,
+                                  delete_collection, confirm_bulk_delete,
+                                  bulk_delete, col_download_all,
+                                  col_download_unread, col_star, col_un_star,
+                                  col_delete)
 
-i18n.setup_app(app)
-
-assets = Environment(app)
-
-app.jinja_env.globals['version'] = version.__version__
-if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
-    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
-    app.jinja_env.globals['use_custom_header_image'] = True
-else:
-    app.jinja_env.globals['header_image'] = 'logo.png'
-    app.jinja_env.globals['use_custom_header_image'] = False
-
-app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
-app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
-
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    """Automatically remove database sessions at the end of the request, or
-    when the application shuts down"""
-    db_session.remove()
-
-
-def get_source(filesystem_id):
-    """Return a Source object, representing the database row, for the source
-    with the `filesystem_id`"""
-    source = None
-    query = Source.query.filter(Source.filesystem_id == filesystem_id)
-    source = get_one_or_else(query, app.logger, abort)
-
-    return source
+app = create_app(config)
 
 
 @app.before_request
@@ -71,6 +39,7 @@ def setup_g():
 
     g.locale = i18n.get_locale()
     g.text_direction = i18n.get_text_direction(g.locale)
+    g.html_lang = i18n.locale_to_rfc_5646(g.locale)
     g.locales = i18n.get_locale2name()
 
     if request.method == 'POST':
@@ -78,38 +47,6 @@ def setup_g():
         if filesystem_id:
             g.filesystem_id = filesystem_id
             g.source = get_source(filesystem_id)
-
-
-def logged_in():
-    # When a user is logged in, we push their user ID (database primary key)
-    # into the session. setup_g checks for this value, and if it finds it,
-    # stores a reference to the user's Journalist object in g.
-    #
-    # This check is good for the edge case where a user is deleted but still
-    # has an active session - we will not authenticate a user if they are not
-    # in the database.
-    return bool(g.get('user', None))
-
-
-def login_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('login'))
-        return func(*args, **kwargs)
-    return wrapper
-
-
-def admin_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if logged_in() and g.user.is_admin:
-            return func(*args, **kwargs)
-        # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash(gettext("Only administrators can access this page."),
-              "notification")
-        return redirect(url_for('index'))
-    return wrapper
 
 
 @app.route('/login', methods=('GET', 'POST'))
@@ -218,7 +155,7 @@ def admin_add_user():
             return redirect(url_for('admin_new_user_two_factor',
                                     uid=new_user.id))
 
-    return render_template("admin_add_user.html", password=_make_password())
+    return render_template("admin_add_user.html", password=make_password())
 
 
 @app.route('/admin/2fa', methods=('GET', 'POST'))
@@ -290,26 +227,6 @@ def admin_reset_two_factor_hotp():
         return render_template('admin_edit_hotp_secret.html', uid=uid)
 
 
-class PasswordMismatchError(Exception):
-    pass
-
-
-def commit_account_changes(user):
-    if db_session.is_modified(user):
-        try:
-            db_session.add(user)
-            db_session.commit()
-        except Exception as e:
-            flash(gettext(
-                "An unexpected error occurred! Please check the application "
-                  "logs or inform your adminstrator."), "error")
-            app.logger.error("Account changes for '{}' failed: {}".format(user,
-                                                                          e))
-            db_session.rollback()
-        else:
-            flash(gettext("Account updated."), "success")
-
-
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
 @admin_required
 def admin_edit_user(user_id):
@@ -341,21 +258,21 @@ def admin_edit_user(user_id):
 
         commit_account_changes(user)
 
-    password = _make_password()
+    password = make_password()
     return render_template("edit_account.html", user=user,
                            password=password)
 
 
 @app.route('/admin/edit/<int:user_id>/new-password', methods=('POST',))
 @admin_required
-def admin_set_diceware_password(user_id):
+def adminset_diceware_password(user_id):
     try:
         user = Journalist.query.get(user_id)
     except NoResultFound:
         abort(404)
 
     password = request.form.get('password')
-    _set_diceware_password(user, password)
+    set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
 
 
@@ -380,7 +297,7 @@ def admin_delete_user(user_id):
 @app.route('/account', methods=('GET',))
 @login_required
 def edit_account():
-    password = _make_password()
+    password = make_password()
     return render_template('edit_account.html',
                            password=password)
 
@@ -390,7 +307,7 @@ def edit_account():
 def new_password():
     user = g.user
     password = request.form.get('password')
-    _set_diceware_password(user, password)
+    set_diceware_password(user, password)
     return redirect(url_for('edit_account'))
 
 
@@ -403,45 +320,8 @@ def admin_new_password(user_id):
         abort(404)
 
     password = request.form.get('password')
-    _set_diceware_password(user, password)
+    set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
-
-
-def _make_password():
-    while True:
-        password = crypto_util.genrandomid(7)
-        try:
-            Journalist.check_password_acceptable(password)
-            return password
-        except PasswordError:
-            continue
-
-
-def _set_diceware_password(user, password):
-    try:
-        user.set_password(password)
-    except PasswordError:
-        flash(gettext(
-            'You submitted a bad password! Password not changed.'), 'error')
-        return
-
-    try:
-        db_session.commit()
-    except Exception:
-        flash(gettext(
-            'There was an error, and the new password might not have been '
-            'saved correctly. To prevent you from getting locked '
-            'out of your account, you should reset your password again.'),
-            'error')
-        app.logger.error('Failed to update a valid password.')
-        return
-
-    # using Markup so the HTML isn't escaped
-    flash(Markup("<p>" + gettext(
-        "Password updated. Don't forget to "
-        "save it in your KeePassX database. New password:") +
-        ' <span><code>{}</code></span></p>'.format(password)),
-        'success')
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))
@@ -480,24 +360,6 @@ def account_reset_two_factor_hotp():
         return redirect(url_for('account_new_two_factor'))
     else:
         return render_template('account_edit_hotp_secret.html')
-
-
-def make_star_true(filesystem_id):
-    source = get_source(filesystem_id)
-    if source.star:
-        source.star.starred = True
-    else:
-        source_star = SourceStar(source)
-        db_session.add(source_star)
-
-
-def make_star_false(filesystem_id):
-    source = get_source(filesystem_id)
-    if not source.star:
-        source_star = SourceStar(source)
-        db_session.add(source_star)
-        db_session.commit()
-    source.star.starred = False
 
 
 @app.route('/col/add_star/<filesystem_id>', methods=('POST',))
@@ -550,20 +412,6 @@ def col(filesystem_id):
                            source=source)
 
 
-def delete_collection(filesystem_id):
-    # Delete the source's collection of submissions
-    job = worker.enqueue(srm, store.path(filesystem_id))
-
-    # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
-
-    # Delete their entry in the db
-    source = get_source(filesystem_id)
-    db_session.delete(source)
-    db_session.commit()
-    return job
-
-
 @app.route('/col/process', methods=('POST',))
 @login_required
 def col_process():
@@ -585,49 +433,6 @@ def col_process():
     return method(cols_selected)
 
 
-def col_download_unread(cols_selected):
-    """Download all unread submissions from all selected sources."""
-    submissions = []
-    for filesystem_id in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                   .one().id
-        submissions += Submission.query.filter(
-            Submission.downloaded == false(),
-            Submission.source_id == id).all()
-    if submissions == []:
-        flash(gettext("No unread submissions in selected collections."),
-              "error")
-        return redirect(url_for('index'))
-    return download("unread", submissions)
-
-
-def col_download_all(cols_selected):
-    """Download all submissions from all selected sources."""
-    submissions = []
-    for filesystem_id in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                   .one().id
-        submissions += Submission.query.filter(
-            Submission.source_id == id).all()
-    return download("all", submissions)
-
-
-def col_star(cols_selected):
-    for filesystem_id in cols_selected:
-        make_star_true(filesystem_id)
-
-    db_session.commit()
-    return redirect(url_for('index'))
-
-
-def col_un_star(cols_selected):
-    for filesystem_id in cols_selected:
-        make_star_false(filesystem_id)
-
-    db_session.commit()
-    return redirect(url_for('index'))
-
-
 @app.route('/col/delete/<filesystem_id>', methods=('POST',))
 @login_required
 def col_delete_single(filesystem_id):
@@ -637,21 +442,6 @@ def col_delete_single(filesystem_id):
     flash(gettext("{source_name}'s collection deleted")
           .format(source_name=source.journalist_designation),
           "notification")
-    return redirect(url_for('index'))
-
-
-def col_delete(cols_selected):
-    """deleting multiple collections from the index"""
-    if len(cols_selected) < 1:
-        flash(gettext("No collections selected for deletion."), "error")
-    else:
-        for filesystem_id in cols_selected:
-            delete_collection(filesystem_id)
-        num = len(cols_selected)
-        flash(ngettext('{num} collection deleted', '{num} collections deleted',
-                       num).format(num=num),
-              "notification")
-
     return redirect(url_for('index'))
 
 
@@ -784,52 +574,6 @@ def bulk():
         return confirm_bulk_delete(g.filesystem_id, selected_docs)
     else:
         abort(400)
-
-
-def confirm_bulk_delete(filesystem_id, items_selected):
-    return render_template('delete.html',
-                           filesystem_id=filesystem_id,
-                           source=g.source,
-                           items_selected=items_selected)
-
-
-def bulk_delete(filesystem_id, items_selected):
-    for item in items_selected:
-        item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(srm, item_path)
-        db_session.delete(item)
-    db_session.commit()
-
-    flash(ngettext("Submission deleted.",
-                   "Submissions deleted.",
-                   len(items_selected)), "notification")
-    return redirect(url_for('col', filesystem_id=filesystem_id))
-
-
-def download(zip_basename, submissions):
-    """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
-    containing *submissions*. The ZIP-file, being a
-    :class:`tempfile.NamedTemporaryFile`, is stored on disk only
-    temporarily.
-
-    :param str zip_basename: The basename of the ZIP-file download.
-
-    :param list submissions: A list of :class:`db.Submission`s to
-                             include in the ZIP-file.
-    """
-    zf = store.get_bulk_archive(submissions,
-                                zip_directory=zip_basename)
-    attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
-
-    # Mark the submissions that have been downloaded as such
-    for submission in submissions:
-        submission.downloaded = True
-    db_session.commit()
-
-    return send_file(zf.name, mimetype="application/zip",
-                     attachment_filename=attachment_filename,
-                     as_attachment=True)
 
 
 @app.route('/flag', methods=('POST',))
