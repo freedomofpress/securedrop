@@ -634,8 +634,8 @@ def col_delete_single(filesystem_id):
     """deleting a single collection from its /col page"""
     source = get_source(filesystem_id)
     delete_collection(filesystem_id)
-    flash(gettext("{source_journalist_designation}'s collection deleted")
-          .format(source_journalist_designation=source.journalist_designation),
+    flash(gettext("{source_name}'s collection deleted")
+          .format(source_name=source.journalist_designation),
           "notification")
     return redirect(url_for('index'))
 
@@ -739,10 +739,9 @@ def generate_code():
     db_session.commit()
 
     flash(gettext(
-        "The source '{original_source}' has been"
-        " renamed to '{new_source}'")
-          .format(original_source=original_journalist_designation,
-                  new_source=g.source.journalist_designation),
+        "The source '{original_name}' has been renamed to '{new_name}'")
+          .format(original_name=original_journalist_designation,
+                  new_name=g.source.journalist_designation),
           "notification")
     return redirect('/col/' + g.filesystem_id)
 

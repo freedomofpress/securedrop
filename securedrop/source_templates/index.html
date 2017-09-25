@@ -14,8 +14,8 @@
     {% endassets %}
   </head>
   <body>
-    <div class="js-warning warning">{{ gettext('<strong>We recommend turning the Security Slider to High to protect your anonymity:</strong>') }} <a id="disable-js" href="">{{ gettext('Learn how to set it to high') }}</a>{{ gettext(', or ignore this warning to continue.') }} <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
-    <div class="use-tor-browser warning">{{ gettext('<strong>We recommend using Tor Browser to access SecureDrop:</strong>') }} <a id="recommend-tor" href="{{ url_for("recommend_tor_browser") }}">{{ gettext('Learn how to install it') }}</a>{{ gettext(', or ignore this warning to continue.') }} <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="js-warning warning">{{ gettext('<strong>We recommend turning the Security Slider to High to protect your anonymity:</strong> <a id="disable-js" href="">Learn how to set it to high</a>, or ignore this warning to continue.') }} <img id="js-warning-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
+    <div class="use-tor-browser warning">{{ gettext('<strong>We recommend using Tor Browser to access SecureDrop:</strong> <a id="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('recommend_tor_browser')) }} <img id="use-tor-browser-close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" width="12px" height="12px"></div>
 
     {% include 'banner_warning_flashed.html' %}
 
@@ -91,10 +91,10 @@
     <div class="bubble" id="security-slider-info-bubble">
       <p>{{ gettext('You appear to be using the Tor Browser. You can turn the Security Slider to High in 4 easy steps!') }}</p>
       <ol>
-        <li>{{ gettext('Click the') }} <img src="{{ url_for("static", filename="i/toronion.png") }}" alt="Tor icon">{{ gettext('Tor icon in the toolbar above') }}</li>
+        <li>{{ gettext('Click the <img src="{icon}" alt="Tor icon"> Tor icon in the toolbar above').format(icon=url_for("static", filename="i/toronion.png"))  }}</li>
         <li>{{ gettext('Click <strong>Security Settings...</strong>') }}</li>
         <li>{{ gettext('Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>') }}</li>
-        <li>{{ gettext('<a href="/">Click here</a>to refresh the page') }}</li>
+        <li>{{ gettext('<a href="/">Click here</a> to refresh the page') }}</li>
       </ol>
     </div>
 

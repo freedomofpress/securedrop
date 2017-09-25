@@ -316,14 +316,15 @@ def submit():
 
     else:
         if msg and not fh:
-            things = 'message'
+            html_contents = gettext('Thanks! We received your message.')
         elif not msg and fh:
-            things = 'document'
+            html_contents = gettext('Thanks! We received your document.')
         else:
-            things = 'message and document'
+            html_contents = gettext('Thanks! We received your message and '
+                                    'document.')
 
         msg = render_template('next_submission_flashed_message.html',
-                              things=things)
+                              html_contents=html_contents)
         flash(Markup(msg), "success")
 
     for fname in fnames:
