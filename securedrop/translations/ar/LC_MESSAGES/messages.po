@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-25 10:41+0000\n"
+"PO-Revision-Date: 2017-09-25 15:25+0000\n"
 "Last-Translator: Jasmine Khalil <jasmine.khalil@outlook.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -422,25 +422,27 @@ msgstr ""
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr ""
+msgstr "تغيير اسم الرمز"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد انشاء اسم رمز جديد؟"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:71
 msgid "Cancel"
-msgstr ""
+msgstr "إلغاء"
 
 #: journalist_templates/col.html:16
 msgid "CONFIRM"
-msgstr ""
+msgstr "تأكيد"
 
 #: journalist_templates/col.html:22
 msgid ""
 "The documents are stored encrypted for security. To read them, you will need "
 "to decrypt them using GPG."
 msgstr ""
+"تم تخزين المستندات و تشفيرها لأسباب أمنية. إذا كنت تريد قراءتها, ستحتاج إلى "
+"تشفيرها باستخدام ملف GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
@@ -452,24 +454,24 @@ msgstr ""
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr ""
+msgstr "تم تحميل المستند"
 
 #: journalist_templates/col.html:55 journalist_templates/col.html:73
 msgid "Reply"
-msgstr ""
+msgstr "رد"
 
 #: journalist_templates/col.html:57
 msgid "Message"
-msgstr ""
+msgstr "رسالة"
 
 #: journalist_templates/col.html:68
 msgid "No documents to display."
-msgstr ""
+msgstr "لا يمكن عرض أي مستند."
 
 #: journalist_templates/col.html:75
 msgid ""
 "You can write a secure reply to the person who submitted these documents:"
-msgstr ""
+msgstr "يمكنك كتابة رد آمن للشخص الذي عرض هذه المستندات:"
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
@@ -480,10 +482,12 @@ msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
+"في المرة القادمة عندما يتم تسجيل دخولهم, سيتم إنشاء مفتاح التشفير, بعد ذلك "
+"ستتمكن من الرد على المصدر هنا."
 
 #: journalist_templates/col.html:87
 msgid "Click below if you would like to write a reply to this source."
-msgstr ""
+msgstr "انقر أدناه إذ تود الرد على هذا المصدر."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
@@ -515,37 +519,35 @@ msgstr[5] ""
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr ""
+msgstr "حذف الملفات بشكل دائم"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_journalist_designation}..."
-msgstr ""
+msgstr "الرجوع إلى قائمة المستندات ل {source_journalist_designation}..."
 
 #: journalist_templates/edit_account.html:6
-#, fuzzy
-#| msgid "Deleted user '{user}'"
 msgid "Edit user \"{user}\""
-msgstr "تم حذف اسم المستخدم '{user}'"
+msgstr "تعديل اسم المستخدم \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
-msgstr ""
+msgstr "تغيير حالة المشرف و اسم المستخدم"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
-msgstr ""
+msgstr "تغيير اسم المستخدم"
 
 #: journalist_templates/edit_account.html:19
 msgid "UPDATE"
-msgstr ""
+msgstr "تحديث"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
-msgstr ""
+msgstr "تعديل حسابك"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
-msgstr ""
+msgstr "ضبط كلمة السر"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
@@ -556,18 +558,20 @@ msgid ""
 "Your password will be changed immediately, so you will need to save it "
 "before pressing the \"Reset Password\" button."
 msgstr ""
+"سيتم تغيير كلمة السر الخاصة بك فورا, لذلك ستحتاج إلى حفظها قبل الضغط على زر "
+"\"ضبط كلمة السر\"."
 
 #: journalist_templates/edit_account.html:41
 msgid "The user's password will be changed to:"
-msgstr ""
+msgstr "كلمة السر الخاصة بالمستخدم ستتغير الى:"
 
 #: journalist_templates/edit_account.html:43
 msgid "Your password will be changed to:"
-msgstr ""
+msgstr "كلمة السر الخاصة بك ستتغير الى:"
 
 #: journalist_templates/edit_account.html:48
 msgid "RESET PASSWORD"
-msgstr ""
+msgstr "ضبط كلمة السر"
 
 #: journalist_templates/edit_account.html:53
 msgid "Reset Two-Factor Authentication"
@@ -606,7 +610,7 @@ msgstr ""
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
-msgstr ""
+msgstr "شكرا!"
 
 #: journalist_templates/flag.html:8
 msgid ""
@@ -622,15 +626,15 @@ msgstr ""
 
 #: journalist_templates/index.html:4
 msgid "Sources"
-msgstr ""
+msgstr "المصادر"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr ""
+msgstr "تحميل غير قابل للقراءة"
 
 #: journalist_templates/index.html:12
 msgid "Download"
-msgstr ""
+msgstr "تحميل"
 
 #: journalist_templates/index.html:13
 msgid "Star"
@@ -650,7 +654,7 @@ msgstr ""
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
-msgstr ""
+msgstr "تحديد الكل"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
@@ -662,11 +666,11 @@ msgstr ""
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr ""
+msgstr "هل أنت مـاكد من أنك تريد حذف هذه المجموعة؟"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد حذف حجم المجموعة المحددة؟"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
@@ -674,7 +678,7 @@ msgstr ""
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد حذف اسم المستخدم؟"
 
 #: journalist_templates/js-strings.html:11
 msgid ""
@@ -687,7 +691,7 @@ msgstr ""
 
 #: journalist_templates/login.html:9
 msgid "Password"
-msgstr ""
+msgstr "كلمة السر"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
@@ -695,7 +699,7 @@ msgstr ""
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
@@ -704,17 +708,19 @@ msgstr ""
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
-msgstr ""
+msgstr "مشغل بواسطة"
 
 #: source_templates/base.html:33
 msgid "LOG OUT"
-msgstr ""
+msgstr "تسجيل الخروج"
 
 #: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
+"مثل جميع البرمجيات, ربما يحتوي الSecureDrop على ثغرات أمنية. استخدامها على "
+"مسؤوليتك."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -724,7 +730,7 @@ msgstr ""
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
-msgstr ""
+msgstr "نأسف, لقد واجه الموقع الإلكتروني خطأ ولم يتمكن من إكمال طلبك."
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
@@ -738,15 +744,15 @@ msgstr ""
 msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
-msgstr ""
+msgstr "شكرا لارسالك لنا هذه المعلومات. الرجاء التحقق من الرد لاحقا."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr ""
+msgstr "هل نسيت اسم الرمز الخاص بك؟"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
-msgstr ""
+msgstr "أهلا بك"
 
 #: source_templates/generate.html:5
 msgid ""
@@ -772,7 +778,7 @@ msgstr ""
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
-msgstr ""
+msgstr "هل لديك اسم رمز؟"
 
 #: source_templates/index.html:17
 msgid ""
@@ -782,11 +788,11 @@ msgstr ""
 
 #: source_templates/index.html:17
 msgid "Learn how to set it to high"
-msgstr "تعرف على كيفية تعيينها إلى الأعلى"
+msgstr "تعرف على كيفية ضبطها للأعلى"
 
 #: source_templates/index.html:17 source_templates/index.html:18
 msgid ", or ignore this warning to continue."
-msgstr "، أو تجاهل هذا التحذير للمتابعة."
+msgstr "، أو تجاهل هذا التنبيه للمتابعة."
 
 #: source_templates/index.html:18
 msgid "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
@@ -795,7 +801,7 @@ msgstr ""
 
 #: source_templates/index.html:18
 msgid "Learn how to install it"
-msgstr "تعرف إلى كيفية تنصيبه"
+msgstr "تعرف إلى كيفية تحميله"
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -808,15 +814,14 @@ msgstr "هل سبق أن أرسلت شيئا؟"
 #: source_templates/index.html:54
 msgid ""
 "If this is your first time submitting documents to journalists, start here."
-msgstr ""
-"ابدأ من هنا، إذا كانت هذه هي المرة الأولى التي ترسل فيها وثائق لصحفيين."
+msgstr "ابدأ هنا، إذا كانت هذه هي المرة الأولى التي ترسل فيها وثائق لصحفيين."
 
 #: source_templates/index.html:58
 msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
 msgstr ""
-"إذا كنت قد أرسلت مستندات من قبل، فقم بتسجيل الدخول هنا للبحث عن الردود."
+"إذا كنت قد أرسلت مستندات من قبل، فقم بتسجيل الدخول هنا للبحث عن الأجوبة."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
@@ -831,7 +836,7 @@ msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
 msgstr ""
-"يبدو أنك تستخدم متصفح تور. يمكنك تحويل منزلق الأمن إلى الأعلى في 4 خطوات "
+"يبدو أنك تستخدم متصفح تور Tor. يمكنك تحويل منزلق الأمن إلى الأعلى في 4 خطوات "
 "سهلة!"
 
 #: source_templates/index.html:94
@@ -840,7 +845,7 @@ msgstr "أنقر"
 
 #: source_templates/index.html:94
 msgid "Tor icon in the toolbar above"
-msgstr "رمز تور Tor في شريط الأدوات أعلاه"
+msgstr "أيقونة تور Tor في شريط الأدوات أعلاه"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
@@ -857,19 +862,19 @@ msgstr ""
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr ""
+msgstr "أدخل اسم الرمز"
 
 #: source_templates/login.html:11
 msgid "Enter your codename"
-msgstr ""
+msgstr "أدخل اسم الرمز الخاص بك"
 
 #: source_templates/login.html:13 source_templates/lookup.html:41
 msgid "CANCEL"
-msgstr ""
+msgstr "إلغاء"
 
 #: source_templates/logout_flashed_message.html:4
 msgid "Important!"
-msgstr ""
+msgstr "مهم!"
 
 #: source_templates/logout_flashed_message.html:5
 msgid ""
@@ -915,15 +920,15 @@ msgstr ""
 
 #: source_templates/lookup.html:23
 msgid "You can send a file, a message, or both."
-msgstr ""
+msgstr "يمكنك ارسال ملف او رسالة او كلاهما."
 
 #: source_templates/lookup.html:32
 msgid "Maximum upload size: 500 MB"
-msgstr ""
+msgstr "الحد الأقصى للتحميل: 500 ميجابايت"
 
 #: source_templates/lookup.html:52
 msgid "Get Replies"
-msgstr ""
+msgstr "احصل على الردود"
 
 #: source_templates/lookup.html:57
 msgid ""
@@ -932,58 +937,61 @@ msgid ""
 "with them. This also lets us know that you are aware of our reply. You can "
 "respond by submitting a new message above."
 msgstr ""
+"انك استلمت رد. لحماية هويتك في حالة أن أحدا قام باكتشاف الرقم الرمزي الخاص "
+"بك, الرجاء قم بحذف جميع الردود عند الانتهاء منها. هذا أيضا سيمكننا من معرفة "
+"أنك مدرك بردنا عليك. يمكنك الرد من خلال إرسال"
 
 #: source_templates/lookup.html:70
 msgid "Delete this reply?"
-msgstr ""
+msgstr "هل تود حذف هذا الرد؟"
 
 #: source_templates/lookup.html:72
 msgid "DELETE"
-msgstr ""
+msgstr "حذف"
 
 #: source_templates/lookup.html:81
 msgid "DELETE ALL REPLIES"
-msgstr ""
+msgstr "حذف جميع الردود"
 
 #: source_templates/lookup.html:84
 msgid "Are you finished with the replies?"
-msgstr ""
+msgstr "هل انتهيت من الردود؟"
 
 #: source_templates/lookup.html:85
 msgid "YES, DELETE ALL REPLIES"
-msgstr ""
+msgstr "نعم, حذف جميع الردود"
 
 #: source_templates/lookup.html:86
 msgid "NO, NOT YET"
-msgstr ""
+msgstr "لا, ليس بعد"
 
 #: source_templates/lookup.html:90
 msgid "There are no replies at this time."
-msgstr ""
+msgstr "لا يوجد أي رد حتى الآن"
 
 #: source_templates/lookup.html:98
 msgid "Remember your codename is:"
-msgstr ""
+msgstr "تذكر أن اسم الرمز الخاص بك هو:"
 
 #: source_templates/lookup.html:99
 msgid "Show"
-msgstr ""
+msgstr "عرض"
 
 #: source_templates/lookup.html:101
 msgid "Hide"
-msgstr ""
+msgstr "اخفاء"
 
 #: source_templates/next_submission_flashed_message.html:3
 msgid "Thanks! We received your {things}."
-msgstr ""
+msgstr "شكرا! لقد استلمنا الأشياء الخاصة بك."
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
-msgstr ""
+msgstr "الصفحة غير موجودة"
 
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
-msgstr ""
+msgstr "نأسف, لم نتمكن من إيجاد ما طلبته."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
