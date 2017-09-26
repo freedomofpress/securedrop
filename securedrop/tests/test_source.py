@@ -83,13 +83,27 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("because you are already logged in.", resp.data)
 
-    def test_create(self):
+    def test_create_new_source(self):
         with self.client as c:
             resp = c.get('/generate')
             resp = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
             self.assertIn("Submit Materials", resp.data)
+
+    @patch('source.app.logger.error')
+    def test_create_duplicate_codename(self, logger):
+        with self.client as c:
+            c.get('/generate')
+
+            # Create a source the first time
+            c.post('/create', follow_redirects=True)
+
+            # Attempt to add the same source
+            c.post('/create', follow_redirects=True)
+            logger.assert_called_once()
+            self.assertIn("Attempt to create a source with duplicate codename",
+                          logger.call_args[0][0])
 
     def _new_codename(self):
         return utils.db_helper.new_codename(self.client, session)
