@@ -32,6 +32,8 @@ See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
 See the [Development Guide](https://docs.securedrop.org/en/latest/development/getting_started.html) and the [Contributing Guidelines](https://docs.securedrop.org/en/latest/development/contributor_guidelines.html).
 
+Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop/wiki/Development-Roadmap) to see our plans and priorities for upcoming releases.
+
 We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/).
 
 ## License
