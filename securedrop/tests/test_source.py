@@ -236,7 +236,7 @@ class TestSourceApp(TestCase):
         self.assertIn("Thanks! We received your message and document",
                       resp.data)
 
-    def test_delete_all(self):
+    def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
         utils.db_helper.reply(journalist, source, 1)
@@ -247,6 +247,22 @@ class TestSourceApp(TestCase):
             resp = c.post('/delete-all', follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("All replies have been deleted", resp.data)
+
+    @patch('source.app.logger.error')
+    def test_delete_all_replies_already_deleted(self, logger):
+        journalist, _ = utils.db_helper.init_journalist()
+        source, codename = utils.db_helper.init_source()
+        # Note that we are creating the source and no replies
+
+        with self.client as c:
+            resp = c.post('/login', data=dict(codename=codename),
+                          follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            resp = c.post('/delete-all', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            logger.assert_called_once_with(
+                "Found no replies when at least one was expected"
+            )
 
     @patch('gzip.GzipFile', wraps=gzip.GzipFile)
     def test_submit_sanitizes_filename(self, gzipfile):
