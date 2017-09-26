@@ -1,0 +1,29 @@
+#!/bin/sh
+# postinst script for securedrop-config
+
+set -e
+set -x
+
+case "$1" in
+    configure)
+
+    # Ensure official Tor repo entry is removed, so that only FPF mirror is used.
+    rm -f /etc/apt/sources.list.d/deb_torproject_org_torproject_org.list
+
+    # Repoint tor repositories to FPF mirror
+    apt_security_list="/etc/apt/security.list"
+    if [ -f "$apt_security_list" ]; then
+        sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.ops.freedom.press/g' "$apt_security_list"
+    fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0
