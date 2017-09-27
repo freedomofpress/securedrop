@@ -58,10 +58,10 @@ class CryptoException(Exception):
 
 def clean(s, also=''):
     """
-    >>> clean("Hello, world!")
+    >>> clean("[]")
     Traceback (most recent call last):
       ...
-    CryptoException: invalid input: Hello, world!
+    CryptoException: invalid input: []
     >>> clean("Helloworld")
     'Helloworld'
     """
