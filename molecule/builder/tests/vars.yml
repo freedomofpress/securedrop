@@ -2,6 +2,7 @@
 securedrop_version: "0.5"
 ossec_version: "2.8.2"
 keyring_version: "0.1.1"
+config_version: "0.1.0"
 
 # These values will be interpolated with values populated above
 # via helper functions in the tests.
@@ -10,6 +11,7 @@ build_directories:
   # i.e. lacking the `/tmp/build` pardir.
   - /tmp/securedrop-app-code-{securedrop_version}-amd64/
   - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64/
+  - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64/
   - /tmp/build/securedrop-ossec-agent-{ossec_version}+{securedrop_version}-amd64/
   - /tmp/build/securedrop-ossec-server-{ossec_version}+{securedrop_version}-amd64/
   - /tmp/build/ossec-agent-{ossec_version}-amd64/
@@ -23,10 +25,10 @@ build_deb_packages:
   - /tmp/build/ossec-server-{ossec_version}-amd64.deb
   - /tmp/build/ossec-agent-{ossec_version}-amd64.deb
   - /tmp/build/securedrop-keyring-{keyring_version}+{securedrop_version}-amd64.deb
+  - /tmp/build/securedrop-config-{config_version}+{securedrop_version}-amd64.deb
 
 lintian_tags:
   # - non-standard-file-perm
   - package-contains-vcs-control-file
   - package-installs-python-bytecode
   # - wrong-file-owner-uid-or-gid
-
