@@ -68,4 +68,8 @@
     - role: build-generic-pkg
       tags: "securedrop-keyring"
       package_name: "securedrop-keyring"
+
+    - role: build-generic-pkg
+      tags: "securedrop-config"
+      package_name: "securedrop-config"
   tags: rebuild
