@@ -150,6 +150,12 @@ class TestSourceApp(TestCase):
             self.assertTrue(not session)
             self.assertIn('Thank you for exiting your session!', resp.data)
 
+    def test_user_must_log_in_for_protected_views(self):
+        with self.client as c:
+            resp = c.get('/lookup', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Enter Codename", resp.data)
+
     def test_login_with_whitespace(self):
         """
         Test that codenames with leading or trailing whitespace still work"""
