@@ -408,4 +408,21 @@ class TestSourceApp(TestCase):
         logger.assert_called_once_with(
             "Found no Sources when one was expected: "
             "No row was found for one()"
+
+    @patch('source.app.logger.info')
+    def test_login_with_invalid_codename(self, logger):
+        """Logging in with a codename that causes a CryptoException should
+        log an error and throw a 500"""
+
+        invalid_codename = '[]'
+
+        with self.client as c:
+            resp = c.post('/login', data=dict(codename=invalid_codename),
+                          follow_redirects=True)
+            self.assertEqual(resp.status_code, 500)
+
+        logger.assert_called_once_with(
+            "Could not compute filesystem ID for "
+            "codename '{codename}': invalid input: {codename}".format(
+                codename=invalid_codename)
         )
