@@ -14,6 +14,8 @@ import version
 import utils
 import json
 
+overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
+
 
 class TestSourceApp(TestCase):
 
@@ -90,6 +92,22 @@ class TestSourceApp(TestCase):
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
             self.assertIn("Submit Materials", resp.data)
+
+    @patch('source.app.logger.warning')
+    @patch('crypto_util.genrandomid',
+           side_effect=[overly_long_codename, 'short codename'])
+    def test_generate_too_long_codename(self, genrandomid, logger):
+        """Generate a codename that exceeds the maximum codename length"""
+
+        with self.client as c:
+            resp = c.post('/generate')
+            self.assertEqual(resp.status_code, 200)
+
+        logger.assert_called_with(
+            "Generated a source codename that was too long, "
+            "skipping it. This should not happen. "
+            "(Codename='{}')".format(overly_long_codename)
+        )
 
     @patch('source.app.logger.error')
     def test_create_duplicate_codename(self, logger):
@@ -330,7 +348,6 @@ class TestSourceApp(TestCase):
     def test_login_with_overly_long_codename(self, mock_hash_codename):
         """Attempting to login with an overly long codename should result in
         an error, and scrypt should not be called to avoid DoS."""
-        overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
         with self.client as c:
             resp = c.post('/login', data=dict(codename=overly_long_codename),
                           follow_redirects=True)
