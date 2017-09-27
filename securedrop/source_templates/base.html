@@ -15,7 +15,7 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{% if 'logged_in' in session %}{{ url_for('lookup') }}{% else %}{{ url_for('index') }}{% endif %}">
+        <a href="{% if 'logged_in' in session %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
           <img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px">
         </a>
         {% include 'locales.html' %}
@@ -30,7 +30,7 @@
 
       <div class="panel selected">
       {% if 'logged_in' in session %}
-        <a href="{{ url_for('logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
+        <a href="{{ url_for('main.logout') }}" class="sd-button btn pull-right" id="logout">{{ gettext('LOG OUT') }}</a>
       {% endif %}
         <hr class="no-line">
 
