@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-26 19:00+0000\n"
+"PO-Revision-Date: 2017-09-27 18:30+0000\n"
 "Last-Translator: Jasmine Khalil <jasmine.khalil@outlook.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -268,21 +268,21 @@ msgstr "افتح تطبيق Google Authenticator"
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
-msgstr "انقر على menu, ثم \"Set up account\", ثم \"Scan a barcode\""
+msgstr ""
+"اضغط على على لائحة الخيارات, ثم على \"اعداد الحساب\" , ثم على \" تصوير الرمز "
+"الشريطي\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
 msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
-msgstr ""
-"ان هاتفك في وضعية \"المسح الضوئي\". عندما تجد نفسك في هذه الوضعية, قم بمسح "
-"الرمز الشريطي أدناه:"
+msgstr "ان هاتفك في وضعية \"المسح الضوئي\". الآن, قم بمسح الرمز الشريطي أدناه:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
 msgid "Can't scan the barcode? Enter the following code manually:"
-msgstr "لا يمكنك مسح الرمز الشريطي؟ قم بإدخال الرمز الآتي يدويا:"
+msgstr "لا تستطيع مسح الرمز الشريطي؟ قم بإدخال الرمز الآتي يدويا:"
 
 #: journalist_templates/account_new_two_factor.html:15
 #: journalist_templates/admin_new_user_two_factor.html:16
@@ -292,14 +292,14 @@ msgstr "حالما قمت بمسح الرمز الشريطي, أدخل الرم�
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
 msgid "Enable YubiKey (OATH-HOTP)"
-msgstr ""
+msgstr "فعل (YubiKey (OATH-HOTP"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:19
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
-"حالما قمت بتكوين مفتاح الأمن الخاص بك \"YubiKey\", أدخل الرموز المكونة من 6 "
-"أرقام أدناه:"
+"حالما قمت بتكوين مفتاح الحماية الخاص بك \"YubiKey\", أدخل الرموز المكونة من "
+"6 أرقام أدناه:"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:23
@@ -345,11 +345,11 @@ msgstr "آخر تسجيل دخول"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr "أدخل اسم المستخدم"
+msgstr "{username} إدخال اسم المستخدم"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr "حذف اسم المستخدم"
+msgstr "{username} حذف اسم المستخدم"
 
 #: journalist_templates/admin.html:31
 msgid "never"
@@ -371,11 +371,11 @@ msgstr "كلمة سر المستخدم ستكون:"
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:17
 msgid "Is Administrator"
-msgstr "هو المشرف"
+msgstr "هو المسؤول"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "Is using a YubiKey [HOTP]"
-msgstr ""
+msgstr "هو استعمال [YubiKey [HOTP"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -385,18 +385,18 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
-"أنت على وشك الإنتهاء! لإنهاء إضافة المستخدم الجديد, اتبع التعليمات أدناه "
+"أنت على وشك الإنتهاء! لإنهاء إضافة الحساب الجديد, اتبع التعليمات أدناه "
 "لإعداد التوثيق الثنائي باستخدام Google Authenticator. حالما اضفت التسجيل "
 "لحسابك في التطبيق, أدخل إحدى الرموز المكونة من 6 أرقام من التطبيق للتأكد من "
-"أنالتوثيق الثنائي تم إعداده بالشكل الصحيح."
+"أن التوثيق الثنائي تم إعداده بالشكل الصحيح."
 
 #: journalist_templates/base.html:24
 msgid "Edit Account"
-msgstr "تعديل الحساب"
+msgstr "تعديل حساب"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
-msgstr "مشرف"
+msgstr "مسؤول"
 
 #: journalist_templates/base.html:28
 msgid "Log Out"
@@ -407,10 +407,12 @@ msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
+"مشغل من خلال <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr ""
+msgstr "مشغل من خلال<em>SecureDrop {version}</em>"
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -422,8 +424,8 @@ msgid ""
 "the first random codename is difficult to say or remember. You can generate "
 "new random codenames as many times as you like."
 msgstr ""
-"قم بإنشاء اسم رمز عشوائي لهذا المصدر. نوصي بالقيام بها إذا كان اسم الرمز "
-"الاول من الصعب نطقه أو تذكره. يمكنك إنشاء اسماء رموز جديدة عدة مرات كما تريد."
+"قم بإنشاء اسم رمز عشوائي لهذا المصدر. نوصي بهذا إذا كان الاسم الاول من الصعب "
+"نطقه أو تذكره. يمكنك إنشاء اسماء جديدة عدة مرات كما تريد."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
