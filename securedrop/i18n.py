@@ -66,14 +66,14 @@ def get_locale():
     - 'en_US'
     """
     locale = None
-    accept_languages = set()
+    accept_languages = []
     for l in request.accept_languages.values():
         if '-' in l:
             sep = '-'
         else:
             sep = '_'
         try:
-            accept_languages.add(str(core.Locale.parse(l, sep)))
+            accept_languages.append(str(core.Locale.parse(l, sep)))
         except:
             pass
     if 'l' in request.args:
