@@ -80,6 +80,13 @@ class TestI18N(object):
                 {{ gettext('code hello i18n') }}
                 ''').strip() == translated_fr
 
+        # https://github.com/freedomofpress/securedrop/issues/2379
+        headers = Headers([('Accept-Language',
+                            'en-US;q=0.6,fr_FR;q=0.4,nb_NO;q=0.2')])
+        with app.test_request_context(headers=headers):
+            assert not hasattr(request, 'babel_locale')
+            assert not_translated == gettext(not_translated)
+
         translated_cn = 'code chinese'
 
         for lang in ('zh-CN', 'zh-Hans-CN'):
