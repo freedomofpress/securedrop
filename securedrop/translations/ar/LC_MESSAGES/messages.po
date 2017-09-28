@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-27 18:30+0000\n"
+"PO-Revision-Date: 2017-09-28 10:41+0000\n"
 "Last-Translator: Jasmine Khalil <jasmine.khalil@outlook.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -448,12 +448,12 @@ msgid ""
 "The documents are stored encrypted for security. To read them, you will need "
 "to decrypt them using GPG."
 msgstr ""
-"تم تخزين المستندات و تشفيرها لأسباب أمنية. إذا تريد قراءتها, ستحتاج إلى "
+"تم تخزين المستندات و تشفيرها لأسباب أمنية. إذا كنت تريد قراءتها, ستحتاج إلى "
 "تشفيرها باستخدام ملف GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr "تحميل المحدد"
+msgstr "تنزيل المحدد"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
@@ -461,7 +461,7 @@ msgstr "حذف المحدد"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr "تم تحميل المستند"
+msgstr "تحميل المستند"
 
 #: journalist_templates/col.html:55 journalist_templates/col.html:73
 msgid "Reply"
@@ -489,7 +489,7 @@ msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
-"في المرة القادمة عندما يتم تسجيل دخولهم, سيتم إنشاء مفتاح التشفير, بعد ذلك "
+"في المرة القادمة عندما يتم تسجيل الدخول, سيتم إنشاء مفتاح التشفير, بعد ذلك "
 "ستتمكن من الرد على المصدر هنا."
 
 #: journalist_templates/col.html:87
@@ -506,6 +506,9 @@ msgid ""
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
+"انقر أدناه لحذف مجموعة هذا المصدر. <em> تنبيه: إذا قمت بذلك, فستكون هذه "
+"الملفات غير قابلة للاسترداد ولم يتمكن المصدر من تسجيل الدخول باستخدام الاسم "
+"السابق.</em>"
 
 #: journalist_templates/col.html:102
 msgid "DELETE COLLECTION"
@@ -534,11 +537,11 @@ msgstr "الرجوع إلى قائمة المستندات ل {source_journalist_
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr "تعديل المستخدم \"{user}\""
+msgstr "\"{user}\" تعديل المستخدم"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username & Admin Status"
-msgstr "تغيير حالة المشرف و اسم المستخدم"
+msgstr "تغيير حالة المسؤول و اسم المستخدم"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -558,7 +561,7 @@ msgstr "إعادة ضبط كلمة السر"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
-msgstr ""
+msgstr "SecureDrop يستخدم الآن كلمات السر ديسوير diceware تلقائيا."
 
 #: journalist_templates/edit_account.html:28
 msgid ""
@@ -591,6 +594,9 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
+"إذا فقد المستخدم أوراق اعتماد التوثيق الثنائي, فإنه يمكنك استرجاعها هنا. <em>"
+" فإذا قمت بذلك, تأكد بأن المستخدم موجود و جاهز لتفعيل أجهزة المستخدم بأوراق "
+"اعتماد جديدة. والا سيتم اقفال حسابهم."
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -599,6 +605,9 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
+"إذا فقدت اوراق اعتماد التوثيق الثنائي الخاص بك, أو حصلت على جهاز جديد, يمكنك "
+"اعادة اوراق الاعتماد هنا.<em> فإذا قمت بذلك, تأكد بأنك جاهز لتفعيل جهازك "
+"الجديد, وإلا سيتم منعك من استخدام حسابك.</em>"
 
 #: journalist_templates/edit_account.html:60
 msgid ""
@@ -606,6 +615,9 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
+"لإعادة ضبط التوثيق الثنائي لتطبيقات الهاتف المحمول مثل Google Authenticator "
+"أو FreeOTP, اختر الخيار الاول. أما لمعدات token مثل Yubikey, اختر الخيار "
+"الثاني."
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
@@ -626,10 +638,13 @@ msgid ""
 "appear under their collection of documents. You can use this box to write "
 "encrypted replies to them."
 msgstr ""
+"SecureDrop سينتج مفتاح تشفير آمن لهذا المصدر للمرة القادمة التي يتم فيها "
+"تسجيل الدخول. حالما يتم إنتاج المفتاح, سوف يظهر صندوق للرد تحت مجموعة "
+"المستندات الخاصة بهم. يمكنك استخدام هذا الصندوق لكتابة ردود مشفرة لهم."
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr ""
+msgstr "استمر لقائمة المستندات ل{codename}..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -637,11 +652,11 @@ msgstr "مصادر"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr "تحميل غير قابل للقراءة"
+msgstr "تنزيل غير قابل للقراءة"
 
 #: journalist_templates/index.html:12
 msgid "Download"
-msgstr "تحميل"
+msgstr "تنزيل"
 
 #: journalist_templates/index.html:13
 msgid "Star"
@@ -665,32 +680,33 @@ msgstr "تحديد الكل"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr ""
+msgstr "تحديد غير قابل للقراءة"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr ""
+msgstr "تحديد لا شيء"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr "هل أنت مـاكد من أنك تريد حذف هذه المجموعة؟"
+msgstr "هل أنت متأكد من أنك تريد حذف هذه المجموعة؟"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr "هل أنت متأكد من أنك تريد حذف حجم المجموعة المحددة؟"
+msgstr "هل أنت متأكد من أنك تريد حذف حجم {size} المجموعة المحددة؟"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد حذف حجم {size} الرسائل المحددة؟"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr "هل أنت متأكد من أنك تريد حذف اسم المستخدم؟"
+msgstr "هل أنت متأكد من أنك تريد حذف اسم المستخدم {username}؟"
 
 #: journalist_templates/js-strings.html:11
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
-msgstr "هل أنت متأكد من أنك تريد اعادة ضبط التوثيق ثنائي لاسم المستخدم؟"
+msgstr ""
+"هل أنت متأكد من أنك تريد اعادة ضبط التوثيق الثنائي لاسم المستخدم {username}؟"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
@@ -778,6 +794,10 @@ msgid ""
 " questions or are interested in additional documents. Unlike passwords, "
 "there is no way to retrieve a lost codename."
 msgstr ""
+"<strong> 1SecureDrop</strong> 2 لأننا لا نستخدم أي من الوسائل التقليدية "
+"لتتبع خدمة مستخدمي سيكيور دروب, فاستخدام هذا الاسم في الزيارات المقبلة هي "
+"الطريقة الوحيدة للتواصل معك. مقارنة بكلمات السر, فانها لا توجد طريقة "
+"لاسترداد اسم مفقود."
 
 #: source_templates/generate.html:36
 msgid ""
@@ -794,7 +814,7 @@ msgstr "هل لديك اسم رمز من قبل؟"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong>"
-msgstr ""
+msgstr "<strong> نوصي بتشغيل شريط الحماية لأعلى لحماية هويتك:</strong>"
 
 #: source_templates/index.html:17
 msgid "Learn how to set it to high"
@@ -830,11 +850,11 @@ msgstr "إذا كانت هذه هي المرة الأولى التي ترسل ف
 msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
-msgstr "إذا كنت قد أرسلت مستندات من قبل، فقم بتسجيل الدخول هنا للبحث عن الردود."
+msgstr "إذا كنت قد أرسلت مستندات من قبل، قم بتسجيل الدخول هنا للبحث عن الردود."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
-msgstr "أرسل وثائق"
+msgstr "ارسال وثائق"
 
 #: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
@@ -858,16 +878,17 @@ msgstr "أيقونة تور Tor في شريط الأدوات أعلاه"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
-msgstr ""
+msgstr "انقر على <strong>إعدادات الحماية...</strong>"
 
 #: source_templates/index.html:96
 msgid ""
 "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
+"أدر شريط التمرير إلى <strong>عالي</strong>, ثم انقر على <strong>Ok</strong>"
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a>to refresh the page"
-msgstr ""
+msgstr "<a href=\"/\">انقر هنا</a>لتحديث الصفحة"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
@@ -891,10 +912,12 @@ msgid ""
 "green Onion button in the Tor browser to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
+"شكرا لخروجك من الجلسة! الرجاء اختر \"هوية جديدة\" من خلال الزر الاخضر في "
+"متصفح تور لحذف سجل استخدام SecureDrop من الجهاز."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "يا للعجب, هذا أنت! والآن الجزء المحرج..."
+msgstr "يا للعجب, هذا أنت! والآن الجزء المربك..."
 
 #: source_templates/lookup.html:12
 msgid ""
@@ -903,6 +926,9 @@ msgid ""
 "some random blip. To err on the side of caution, we put a hold on sending "
 "all documents from that day through to our journalists."
 msgstr ""
+"شهدت خوادمنا موجة غير عادية من النشاط الجديد, عند زيارتك الأخيرة. كان يمكن "
+"أن يكون هذا نشاط بشري, هجوم آلي, أو مجرد علامة ضوئية. لتخطئ على جانب الحذر, "
+"فإننا وضعنا تعليق لعملية ارسال المستندات منذ ذلك اليوم من خلال صحافينا."
 
 #: source_templates/lookup.html:14
 msgid ""
@@ -913,7 +939,7 @@ msgstr ""
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
-msgstr ""
+msgstr "ارسال الادوات"
 
 #: source_templates/lookup.html:21
 msgid ""
@@ -922,6 +948,9 @@ msgid ""
 "key</a> before submission. Files are encrypted as they are received by "
 "SecureDrop."
 msgstr ""
+"إذا كنت على دراية بGPG, فإنه يمكنك تشفير الملفات والرسائل الخاصة بك باستخدام "
+"<a href=\"/journalist-key\" class=\"text-link\">مفتاحنا العام</a> قبل "
+"التسليم. يتم تشفير الملفات كما يتم استلامها من قبل سكوريدروب SecureDrop."
 
 #: source_templates/lookup.html:21
 msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
