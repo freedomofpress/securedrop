@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 from flask import session, escape
 from flask_testing import TestCase
 
-from db import Source
+import crypto_util
+from db import db_session, Source
 import source
 import version
 import utils
@@ -357,3 +358,54 @@ class TestSourceApp(TestCase):
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")
+
+    @patch('source.app.logger.warning')
+    @patch('subprocess.call', return_value=1)
+    def test_failed_normalize_timestamps_logs_warning(self, call, logger):
+        """If a normalize timestamps event fails, the subprocess that calls
+        touch will fail and exit 1. When this happens, the submission should
+        still occur, but a warning should be logged (this will trigger an
+        OSSEC alert)."""
+
+        self._new_codename()
+        self._dummy_submission()
+        resp = self.client.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Thanks! We received your message", resp.data)
+
+        logger.assert_called_once_with(
+            "Couldn't normalize submission "
+            "timestamps (touch exited with 1)"
+        )
+
+    @patch('source.app.logger.error')
+    def test_source_is_deleted_while_logged_in(self, logger):
+        """If a source is deleted by a journalist when they are logged in,
+        a NoResultFound will occur. The source should be redirected to the
+        index when this happens, and a warning logged."""
+
+        codename = self._new_codename()
+        resp = self.client.post('login', data=dict(codename=codename),
+                                follow_redirects=True)
+
+        # Now the journalist deletes the source
+        filesystem_id = crypto_util.hash_codename(codename)
+        crypto_util.delete_reply_keypair(filesystem_id)
+        source = Source.query.filter_by(filesystem_id=filesystem_id).one()
+        db_session.delete(source)
+        db_session.commit()
+
+        # Source attempts to continue to navigate
+        resp = self.client.post('/lookup', follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('Submit documents for the first time', resp.data)
+        self.assertNotIn('logged_in', session.keys())
+        self.assertNotIn('codename', session.keys())
+
+        logger.assert_called_once_with(
+            "Found no Sources when one was expected: "
+            "No row was found for one()"
+        )
