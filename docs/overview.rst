@@ -135,7 +135,7 @@ Technical Setup
 Once you are familiar with the architecture and have all the hardware,
 :doc:`setting up SecureDrop <install>` will take at least a day's work for your
 admin. We recommend that you set aside at least a week to
-:doc:`complete and test <deployment_practices>` your setup.
+:ref:`complete and test <Deployment>` your setup.
 
 Provisioning & Training
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,7 +163,7 @@ Once you have a SecureDrop instance and your team knows how to use it, you
 should test it thoroughly and then tell the world. The `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ are happy to help you check that
 your SecureDrop setup is up-to-code and properly grounded. After that you'll want
-to check out the :doc:`best practices <deployment_practices>` for your
+to check out the :ref:`best practices <Landing Page>` for your
 SecureDrop landing page and our guide to
 :doc:`promoting your SecureDrop instance <getting_the_most_out_of_securedrop>`.
 
