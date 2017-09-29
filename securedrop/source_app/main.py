@@ -48,6 +48,7 @@ def make_blueprint(config):
         try:
             db_session.commit()
         except IntegrityError as e:
+            db_session.rollback()
             current_app.logger.error(
                 "Attempt to create a source with duplicate codename: %s" %
                 (e,))

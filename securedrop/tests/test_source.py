@@ -8,11 +8,14 @@ from bs4 import BeautifulSoup
 from flask import session, escape
 from flask_testing import TestCase
 
-from db import Source
+import crypto_util
+from db import db_session, Source
 import source
 import version
 import utils
 import json
+
+overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
 
 
 class TestSourceApp(TestCase):
@@ -83,13 +86,43 @@ class TestSourceApp(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertIn("because you are already logged in.", resp.data)
 
-    def test_create(self):
+    def test_create_new_source(self):
         with self.client as c:
             resp = c.get('/generate')
             resp = c.post('/create', follow_redirects=True)
             self.assertTrue(session['logged_in'])
             # should be redirected to /lookup
             self.assertIn("Submit Materials", resp.data)
+
+    @patch('source.app.logger.warning')
+    @patch('crypto_util.genrandomid',
+           side_effect=[overly_long_codename, 'short codename'])
+    def test_generate_too_long_codename(self, genrandomid, logger):
+        """Generate a codename that exceeds the maximum codename length"""
+
+        with self.client as c:
+            resp = c.post('/generate')
+            self.assertEqual(resp.status_code, 200)
+
+        logger.assert_called_with(
+            "Generated a source codename that was too long, "
+            "skipping it. This should not happen. "
+            "(Codename='{}')".format(overly_long_codename)
+        )
+
+    @patch('source.app.logger.error')
+    def test_create_duplicate_codename(self, logger):
+        with self.client as c:
+            c.get('/generate')
+
+            # Create a source the first time
+            c.post('/create', follow_redirects=True)
+
+            # Attempt to add the same source
+            c.post('/create', follow_redirects=True)
+            logger.assert_called_once()
+            self.assertIn("Attempt to create a source with duplicate codename",
+                          logger.call_args[0][0])
 
     def _new_codename(self):
         return utils.db_helper.new_codename(self.client, session)
@@ -135,6 +168,12 @@ class TestSourceApp(TestCase):
             resp = c.get('/logout', follow_redirects=True)
             self.assertTrue(not session)
             self.assertIn('Thank you for exiting your session!', resp.data)
+
+    def test_user_must_log_in_for_protected_views(self):
+        with self.client as c:
+            resp = c.get('/lookup', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Enter Codename", resp.data)
 
     def test_login_with_whitespace(self):
         """
@@ -236,7 +275,7 @@ class TestSourceApp(TestCase):
         self.assertIn("Thanks! We received your message and document",
                       resp.data)
 
-    def test_delete_all(self):
+    def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
         utils.db_helper.reply(journalist, source, 1)
@@ -247,6 +286,22 @@ class TestSourceApp(TestCase):
             resp = c.post('/delete-all', follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("All replies have been deleted", resp.data)
+
+    @patch('source.app.logger.error')
+    def test_delete_all_replies_already_deleted(self, logger):
+        journalist, _ = utils.db_helper.init_journalist()
+        source, codename = utils.db_helper.init_source()
+        # Note that we are creating the source and no replies
+
+        with self.client as c:
+            resp = c.post('/login', data=dict(codename=codename),
+                          follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            resp = c.post('/delete-all', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            logger.assert_called_once_with(
+                "Found no replies when at least one was expected"
+            )
 
     @patch('gzip.GzipFile', wraps=gzip.GzipFile)
     def test_submit_sanitizes_filename(self, gzipfile):
@@ -294,7 +349,6 @@ class TestSourceApp(TestCase):
     def test_login_with_overly_long_codename(self, mock_hash_codename):
         """Attempting to login with an overly long codename should result in
         an error, and scrypt should not be called to avoid DoS."""
-        overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
         with self.client as c:
             resp = c.post('/login', data=dict(codename=overly_long_codename),
                           follow_redirects=True)
@@ -304,3 +358,54 @@ class TestSourceApp(TestCase):
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
                              "length")
+
+    @patch('source.app.logger.warning')
+    @patch('subprocess.call', return_value=1)
+    def test_failed_normalize_timestamps_logs_warning(self, call, logger):
+        """If a normalize timestamps event fails, the subprocess that calls
+        touch will fail and exit 1. When this happens, the submission should
+        still occur, but a warning should be logged (this will trigger an
+        OSSEC alert)."""
+
+        self._new_codename()
+        self._dummy_submission()
+        resp = self.client.post('/submit', data=dict(
+            msg="This is a test.",
+            fh=(StringIO(''), ''),
+        ), follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("Thanks! We received your message", resp.data)
+
+        logger.assert_called_once_with(
+            "Couldn't normalize submission "
+            "timestamps (touch exited with 1)"
+        )
+
+    @patch('source.app.logger.error')
+    def test_source_is_deleted_while_logged_in(self, logger):
+        """If a source is deleted by a journalist when they are logged in,
+        a NoResultFound will occur. The source should be redirected to the
+        index when this happens, and a warning logged."""
+
+        codename = self._new_codename()
+        resp = self.client.post('login', data=dict(codename=codename),
+                                follow_redirects=True)
+
+        # Now the journalist deletes the source
+        filesystem_id = crypto_util.hash_codename(codename)
+        crypto_util.delete_reply_keypair(filesystem_id)
+        source = Source.query.filter_by(filesystem_id=filesystem_id).one()
+        db_session.delete(source)
+        db_session.commit()
+
+        # Source attempts to continue to navigate
+        resp = self.client.post('/lookup', follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('Submit documents for the first time', resp.data)
+        self.assertNotIn('logged_in', session.keys())
+        self.assertNotIn('codename', session.keys())
+
+        logger.assert_called_once_with(
+            "Found no Sources when one was expected: "
+            "No row was found for one()"
+        )

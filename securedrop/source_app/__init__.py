@@ -1,11 +1,11 @@
 from flask import (Flask, render_template, flash, Markup, request, g, session,
-                   abort, url_for, redirect)
+                   url_for, redirect)
 from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect
 from jinja2 import evalcontextfilter
 from os import path
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 
 import crypto_util
 import i18n
@@ -87,11 +87,6 @@ def create_app(config):
                 g.source = Source.query \
                             .filter(Source.filesystem_id == g.filesystem_id) \
                             .one()
-            except MultipleResultsFound as e:
-                app.logger.error(
-                    "Found multiple Sources when one was expected: %s" %
-                    (e,))
-                abort(500)
             except NoResultFound as e:
                 app.logger.error(
                     "Found no Sources when one was expected: %s" %
