@@ -69,7 +69,10 @@
 
   .sd-button
     font-weight: normal
-    letter-spacing: 0.15em
+    &:not([lang=ar])
+      letter-spacing: 0.15em
+    &:lang(ar)
+      letter-spacing: 0em
 
   .select
     border: 1px #C4C2C2 solid
