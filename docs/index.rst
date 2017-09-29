@@ -44,6 +44,16 @@ anonymous sources.
    onboarding
 
 .. toctree::
+   :caption: Deployment Best Practices
+   :name: deploymenttoc
+   :maxdepth: 2
+
+   deployment/overview.rst
+   deployment/landing_page.rst
+   deployment/minimum_security_requirements.rst
+   deployment/whole_site_changes.rst
+
+.. toctree::
    :caption: Checklists
    :name: checklists
    :maxdepth: 2
@@ -55,7 +65,6 @@ anonymous sources.
    :name: topictoc
    :maxdepth: 2
 
-   deployment_practices
    getting_the_most_out_of_securedrop
    what_makes_securedrop_unique
    google_authenticator
