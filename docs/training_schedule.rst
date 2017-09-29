@@ -56,7 +56,7 @@ recipients and anyone else interested
    -  https://securedrop.org
    -  https://docs.securedrop.org
    -  :doc:`Hardware for SecureDrop <hardware>`
-   -  :doc:`SecureDrop Deployment Best Practices <deployment_practices>`
+   -  :ref:`Deployment` guidelines
    -  :doc:`Source Best Practice Guide <source>`
    -  :doc:`Journalist Best Practice Guide <journalist>`
    -  :doc:`Admin Best Practice Guide <admin>`

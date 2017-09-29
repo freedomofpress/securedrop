@@ -11,7 +11,7 @@ and sources, but no tool can guarantee safety. This guide will
 instruct you in installing and configuring SecureDrop, but it does not
 explain how to use it safely and effectively. Put another way: at the
 end of this guide, you will have built a car; you will not know how to
-drive. Make sure to review the :doc:`deployment_practices` to get the
+drive. Make sure to review the :ref:`Deployment` to get the
 most out of your new SecureDrop instance.
 
 Installing SecureDrop is an extended manual process which requires a
