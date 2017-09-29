@@ -1,41 +1,10 @@
-SecureDrop Deployment Best Practices
-====================================
-
-SecureDrop is only as secure as the environment that surrounds it. To
-keep sources safe, the news organization's website must employ a set of
-basic security best practices or else you risk losing any source
-protection provided by SecureDrop.
-
-While SecureDrop itself is located on a Tor hidden service, news
-organizations also need to create a SecureDrop landing page that will
-explain how SecureDrop works, give sources instructions on how to access
-the Tor hidden service, and disclose the risks.
-
-It is important to keep in mind that implementing SecureDrop will bring
-more attention to your organization by security researchers, hackers,
-and other like-minded people. If the landing page minimum requirements
-are not implemented, these people will be sure to loudly point this out
-on Twitter and other blogs as a #SecurityFail. This will discourage
-potential sources from using your instance of SecureDrop. However, it
-can easily be avoided by following the below best practices.
-
-Freedom of the Press Foundation eventually plans to `list all of those
-SecureDrop onion URLs <https://securedrop.org/directory>`__ as
-"verified" on its website that meet the minimum requirements for
-deployment best practices. If your organization cannot follow the
-minimum guidelines we cannot recommend to users that your SecureDrop
-instance is safe to use.
-
-In addition to implementing the below best practices, it is strongly
-recommended that you have a reputable security firm perform a security
-review of your organization's public website prior to launching an
-instance of SecureDrop. Upon request, we can help put you in touch with
-a few security firms if you need more assistance.
+.. _Landing Page:
 
 Landing Page
-------------
+============
 
-**URL and location**
+URL and location
+----------------
 
 Ideally you would not use a separate subdomain, but would use a path at
 your top-level domain, e.g. organization.com/securedrop. This is because
@@ -51,7 +20,8 @@ block, which can be defined similarly in nginx by using the
 `location {} <http://nginx.org/en/docs/http/ngx_http_core_module.html#location>`__
 directive.
 
-**HTTPS only (no mixed content)**
+HTTPS only (no mixed content)
+-----------------------------
 
 Most news organizations, `in fact almost
 all <https://freedom.press/blog/2014/09/after-nsa-revelations-why-arent-more-news-organizations-using-https>`__,
@@ -79,7 +49,8 @@ preload list <https://hstspreload.appspot.com/>`__ if you can meet all
 of the requirements. This will tell web browsers that the site is only
 ever to be reached over HTTPS.
 
-**Perfect Forward Secrecy**
+Perfect Forward Secrecy
+-----------------------
 
 Perfect Forward Secrecy (PFS) is a property of encryption protocols that
 ensures each SSL session has a unique key, meaning that if the key is
@@ -88,7 +59,8 @@ recorded SSL sessions. You may need to talk to your CA (certificate
 authority) and CDN (content delivery network) for this, although our
 recommended configuration below provides forward secrecy.
 
-**SSL certificate recommendations**
+SSL certificate recommendations
+-------------------------------
 
 Regardless of where you choose to purchase your SSL cert and which CA
 issues it, you'll often be asked to generate the private key and a CSR
@@ -114,7 +86,8 @@ This will potentially leak information about sources to third parties,
 which can more easily be accessed by law enforcement agencies. Simply
 copy them to your server and serve them yourself to avoid this problem.
 
-**Don't use 3rd party analytics, tracking, or advertising**
+Don't use 3rd party analytics, tracking, or advertising
+-------------------------------------------------------
 
 Most news websites, even those that are non-profits, use 3rd-party
 analytics tools or tracking bugs on their websites. It is vital that
@@ -130,7 +103,8 @@ enforcement or intelligence agencies and could unduly expose a source.
 
 Similarly, consider avoiding the use of Cloudflare (and other CDNs: Akamai, StackPath, Incapsula, Amazon CloudFront, etc.) for the SecureDrop landing page. These services intercept requests between a potential source and the SecureDrop landing page and can be used to `track <https://github.com/Synzvato/decentraleyes/wiki/Frequently-Asked-Questions>`__ or collect information on sources.
 
-**Apply applicable security headers**
+Apply applicable security headers
+---------------------------------
 
 Security headers give instructions to the web browser on how to handle
 requests from the web application. These headers set strict rules for
@@ -172,7 +146,8 @@ If you intend to run nginx as your webserver instead, this will work:
     add_header X-Permitted-Cross-Domain-Policies master-only;
 
 
-**Additional Apache configuration**
+Additional Apache configuration
+-------------------------------
 
 To enforce HTTPS/SSL always, you need to set up redirection within the
 HTTP (port 80) virtual host:
@@ -274,56 +249,3 @@ that user and group file permissions are locked down and that modules or
 gateway interfaces for dynamic scripting languages are not enabled. You
 don't want any unnecessary code or services running as this increases
 the attack surface.
-
-Minimum requirements for the SecureDrop environment
----------------------------------------------------
-
--  The *Application* and *Monitor Servers* should be dedicated physical
-   machines, not virtual machines.
--  A trusted location to host the servers. The servers should be hosted
-   in a location that is owned or occupied by the organization to ensure
-   that their legal can not be bypassed with gag orders.
--  The SecureDrop servers should be on a separate internet connection or
-   completely segmented from corporate network.
--  All traffic from the corporate network should be blocked at the
-   SecureDrop's point of demarcation.
--  Video monitoring should be recorded of the server area and the
-   organizations safe.
--  Journalists should ensure that while using the air-gapped viewing
-   station they are in an area without video cameras.
--  An established monitoring plan and incident response plan. Who will
-   receive the OSSEC alerts and what will their response plan be? These
-   should cover technical outages and a compromised environment plan.
-
-Suggested
----------
-
--  For publicly advertised SecureDrop instances display the Source
-   Interface's hidden service onion address on all of the organization
-   public pages.
--  Mirror the Tor Browser and Tails so sources do not have to visit
-   `torproject.org <https://www.torproject.org>`__ to download it.
-
-Whole Site Changes
-------------------
-
-Ideally, some or all of the following changes are made to improve the
-overall security of the path to the landing page and obfuscate traffic
-analysis.
-
-#. Make your entire site available through HTTPS.
-
-   - That way, visits to your landing page won't stand out as the only encrypted traffic to your site.
-
-#. Include an iframe for all (or a random subset of) visitors, loading
-   this particular URL (hidden).
-
-   - By artificially generating traffic to the endpoint it will be
-     harder to distinguish these from other, 'real' requests.
-   - Use a random delay for adding the iframe (otherwise the 'pairing'
-     with the initial HTTP request may distinguish this traffic).
-
-#. Print the link, URL and info block on the dead trees (the paper),
-   as others have suggested.
-#. Add `HSTS headers
-   <http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security>`__.
