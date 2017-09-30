@@ -161,6 +161,8 @@
   /var/www/securedrop/source_app/api.pyc rw,
   /var/www/securedrop/source_app/decorators.py r,
   /var/www/securedrop/source_app/decorators.pyc rw,
+  /var/www/securedrop/source_app/forms.py r,
+  /var/www/securedrop/source_app/forms.pyc rw,
   /var/www/securedrop/source_app/info.py r,
   /var/www/securedrop/source_app/info.pyc rw,
   /var/www/securedrop/source_app/main.py r,
