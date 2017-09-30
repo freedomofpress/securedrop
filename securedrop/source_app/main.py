@@ -16,6 +16,7 @@ from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
                               valid_codename)
+from source_app.forms import LoginForm
 
 
 def make_blueprint(config):
@@ -196,7 +197,8 @@ def make_blueprint(config):
 
     @view.route('/login', methods=('GET', 'POST'))
     def login():
-        if request.method == 'POST':
+        form = LoginForm()
+        if form.validate_on_submit():
             codename = request.form['codename'].strip()
             if valid_codename(codename):
                 session.update(codename=codename, logged_in=True)
@@ -206,7 +208,7 @@ def make_blueprint(config):
                         "Login failed for invalid codename".format(codename))
                 flash(gettext("Sorry, that is not a recognized codename."),
                       "error")
-        return render_template('login.html')
+        return render_template('login.html', form=form)
 
     @view.route('/logout')
     def logout():
