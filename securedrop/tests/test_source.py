@@ -353,7 +353,8 @@ class TestSourceApp(TestCase):
             resp = c.post('/login', data=dict(codename=overly_long_codename),
                           follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Sorry, that is not a recognized codename.",
+            self.assertIn("Field must be between 1 and {} "
+                          "characters long.".format(Source.MAX_CODENAME_LEN),
                           resp.data)
             self.assertFalse(mock_hash_codename.called,
                              "Called hash_codename for codename w/ invalid "
@@ -407,22 +408,16 @@ class TestSourceApp(TestCase):
 
         logger.assert_called_once_with(
             "Found no Sources when one was expected: "
-            "No row was found for one()"
+            "No row was found for one()")
 
-    @patch('source.app.logger.info')
-    def test_login_with_invalid_codename(self, logger):
-        """Logging in with a codename that causes a CryptoException should
-        log an error and throw a 500"""
+    def test_login_with_invalid_codename(self):
+        """Logging in with a codename with invalid characters should return
+        an informative message to the user."""
 
         invalid_codename = '[]'
 
         with self.client as c:
             resp = c.post('/login', data=dict(codename=invalid_codename),
                           follow_redirects=True)
-            self.assertEqual(resp.status_code, 500)
-
-        logger.assert_called_once_with(
-            "Could not compute filesystem ID for "
-            "codename '{codename}': invalid input: {codename}".format(
-                codename=invalid_codename)
-        )
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Invalid input.", resp.data)
