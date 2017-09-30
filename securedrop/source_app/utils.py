@@ -15,12 +15,6 @@ def logged_in():
 
 
 def valid_codename(codename):
-    # Ignore codenames that are too long to avoid DoS
-    if len(codename) > Source.MAX_CODENAME_LEN:
-        current_app.logger.info(
-                "Ignored attempted login because the codename was too long.")
-        return False
-
     try:
         filesystem_id = crypto_util.hash_codename(codename)
     except crypto_util.CryptoException as e:
