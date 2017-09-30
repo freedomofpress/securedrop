@@ -8,7 +8,14 @@
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
-<p class="center"><input id="login-with-existing-codename" type="password" name="codename" class="codename-box" autocomplete="off" placeholder="{{ gettext('Enter your codename') }}" autofocus></p>
+<p class="center">
+  {{ form.codename(id="login-with-existing-codename", class="codename-box", autocomplete="off", placeholder=gettext('Enter your codename'), autofocus=True) }}
+  <br>
+  {% for error in form.codename.errors %}
+    <span class="form-validation-error">{{ error }}</span>
+  {% endfor %}
+</p>
+
 <div class="pull-right">
   <a href="{{ url_for('main.index') }}" class="sd-button btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
   <button type="submit" class="sd-button btn primary" id="login">
