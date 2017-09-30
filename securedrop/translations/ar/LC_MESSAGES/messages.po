@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-28 10:41+0000\n"
+"PO-Revision-Date: 2017-09-30 13:55+0000\n"
 "Last-Translator: Jasmine Khalil <jasmine.khalil@outlook.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -954,7 +954,7 @@ msgstr ""
 
 #: source_templates/lookup.html:21
 msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
-msgstr ""
+msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">المزيد</a>."
 
 #: source_templates/lookup.html:23
 msgid "You can send a file, a message, or both."
@@ -1033,7 +1033,7 @@ msgstr "نأسف, لم نتمكن من إيجاد ما طلبته."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
-msgstr ""
+msgstr "لماذا هناك تنبيه بخصوص Tor2Web؟"
 
 #: source_templates/tor2web-warning.html:4
 msgid ""
@@ -1050,6 +1050,10 @@ msgid ""
 "Tor2Web sites typically do not use HTTPS, it is possible that your "
 "connection could be MITM'ed by a capable adversary."
 msgstr ""
+"شبكة Tor2Web تقوم بحماية الناشرين. اذا قمت بتحميل المستندات باستخدام "
+"Tor2Web, فانك <strong>غير مجهول</strong> و يمكن تحديد هويتك من خلال عاملي "
+"ISP او تور ويب بروكسي Tor2Web proxy. بالاضافة الى أن منذ مواقع تور ويب لم "
+"تستخدم HTTPS, فانه من الممكن أن اتصالك قد اعترض من قبل شخص بارع."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1057,6 +1061,9 @@ msgid ""
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
 "access our site safely and anonymously."
 msgstr ""
+"إذا كنت تريد إرسال المعلومات, فانه <strong> ينصح بشدة تنزيل <a href=\""
+"torproject.org/download.html.en\"> تور </a>واستخدامه للوصول الى موقعنا بأمان "
+"و بعوية مجهولة."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1066,6 +1073,8 @@ msgstr "يجب عليك استخدام المتصفح تور Tor"
 msgid ""
 "If you are not using Tor Browser, you <strong>may not be anonymous</strong>."
 msgstr ""
+"اذا كنت لا تستخدم متصفح تور, فانه <strong> لا يمكنك أن تكون مجهول "
+"الهوية</strong>."
 
 #: source_templates/use-tor-browser.html:5
 msgid ""
@@ -1073,13 +1082,16 @@ msgid ""
 "you</strong> to install Tor Browser and use it to access our site safely and "
 "anonymously."
 msgstr ""
+"اذا كنت تريد ارسال الرسائل لسيكيور دروب SecureDrop, فاننا <strong>ننصحك "
+"بشدة</strong> بتنزيل متصفح تور و استخدامه للدخول الى موقعنا بأمان و مجهول "
+"الهوية."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
 "Copy and paste the following address into your browser and follow the "
 "instructions to download and install Tor Browser:"
 msgstr ""
-"انسخ والصق هذا العنوان في المتصفح الخاص بك واتبع التعليمات لتحميل و تثبيت "
+"انسخ والصق هذا العنوان في المتصفح الخاص بك واتبع التعليمات لتنزيل و تثبيت "
 "المتصفح تور Tor"
 
 #: source_templates/why-journalist-key.html:3
@@ -1109,6 +1121,8 @@ msgid ""
 "<a href=\"/journalist-key\">Download</a> the public key. The public key is a "
 "text file with the extension <code>.asc</code>"
 msgstr ""
+"<a href=\"/journalist-key\">قم بتنزيل</a>المفتاح العام. يعتبر المفتاح العام "
+"ملف نصي مزود برمز<code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
@@ -1120,6 +1134,9 @@ msgid ""
 "the <code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
+"اذا كنت تستخدم <a href=\"tails.boum.org\">رابط</a>, فانه يمكنك القيام بالنقر "
+"المزدوج على<code>إمتداد الملف</code>الذي قمت بتنزيله و سيقوم بادخاله تلقائيا "
+"الى كلمات المرور المحفوظة الخاصة بك."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
@@ -1129,7 +1146,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr ""
+msgstr "تشفير الرسائل الخاصة بك."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
@@ -1138,6 +1155,9 @@ msgid ""
 "at the end), you can just copy and paste that. (don't include the <code>."
 "asc</code>!)"
 msgstr ""
+"يجب أن تكون قادر على تحديد المفتاح (هذا ما يسمى ب\"هوية المستخدم\" أو رقم "
+"التعريف). نظرا لأن اسم ملف المفتاح العام هو بصمة المفتاح, يمكنك فقط نسخه و "
+"لصقه. (لا يشمل ذلك<code>إمتداد الملف</code>!)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
@@ -1161,7 +1181,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr ""
+msgstr "الرجوع الى صفحة الارسال"
 
 #, fuzzy
 #~| msgid "No collections selected to delete!"
