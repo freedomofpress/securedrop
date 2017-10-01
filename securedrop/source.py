@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import config
 
 from source_app import create_app
