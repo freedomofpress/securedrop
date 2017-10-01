@@ -14,6 +14,8 @@ import source
 import version
 import utils
 import json
+import config
+from utils.db_helper import new_codename
 
 overly_long_codename = 'a' * (Source.MAX_CODENAME_LEN + 1)
 
@@ -76,15 +78,16 @@ class TestSourceApp(TestCase):
         self.assertEqual(already_have_codename_link['href'], '/login')
 
     def test_generate_already_logged_in(self):
-        self._new_codename()
-        # Make sure it redirects to /lookup when logged in
-        resp = self.client.get('/generate')
-        self.assertEqual(resp.status_code, 302)
-        # Make sure it flashes the message on the lookup page
-        resp = self.client.get('/generate', follow_redirects=True)
-        # Should redirect to /lookup
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("because you are already logged in.", resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            # Make sure it redirects to /lookup when logged in
+            resp = client.get('/generate')
+            self.assertEqual(resp.status_code, 302)
+            # Make sure it flashes the message on the lookup page
+            resp = client.get('/generate', follow_redirects=True)
+            # Should redirect to /lookup
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("because you are already logged in.", resp.data)
 
     def test_create_new_source(self):
         with self.client as c:
@@ -124,33 +127,31 @@ class TestSourceApp(TestCase):
             self.assertIn("Attempt to create a source with duplicate codename",
                           logger.call_args[0][0])
 
-    def _new_codename(self):
-        return utils.db_helper.new_codename(self.client, session)
-
     def test_lookup(self):
         """Test various elements on the /lookup page."""
-        codename = self._new_codename()
-        resp = self.client.post('login', data=dict(codename=codename),
-                                follow_redirects=True)
-        # redirects to /lookup
-        self.assertIn("public key", resp.data)
-        # download the public key
-        resp = self.client.get('journalist-key')
-        self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", resp.data)
+        with self.client as client:
+            codename = new_codename(client, session)
+            resp = client.post('login', data=dict(codename=codename),
+                               follow_redirects=True)
+            # redirects to /lookup
+            self.assertIn("public key", resp.data)
+            # download the public key
+            resp = client.get('journalist-key')
+            self.assertIn("BEGIN PGP PUBLIC KEY BLOCK", resp.data)
 
     def test_login_and_logout(self):
         resp = self.client.get('/login')
         self.assertEqual(resp.status_code, 200)
         self.assertIn("Enter Codename", resp.data)
 
-        codename = self._new_codename()
-        with self.client as c:
-            resp = c.post('/login', data=dict(codename=codename),
-                          follow_redirects=True)
+        with self.client as client:
+            codename = new_codename(client, session)
+            resp = client.post('/login', data=dict(codename=codename),
+                               follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Submit Materials", resp.data)
             self.assertTrue(session['logged_in'])
-            resp = c.get('/logout', follow_redirects=True)
+            resp = client.get('/logout', follow_redirects=True)
 
         with self.client as c:
             resp = c.post('/login', data=dict(codename='invalid'),
@@ -182,23 +183,24 @@ class TestSourceApp(TestCase):
     def test_login_with_whitespace(self):
         """
         Test that codenames with leading or trailing whitespace still work"""
-        def login_test(codename):
-            resp = self.client.get('/login')
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Enter Codename", resp.data)
 
-            with self.client as c:
-                resp = c.post('/login', data=dict(codename=codename),
-                              follow_redirects=True)
+        with self.client as client:
+            def login_test(codename):
+                resp = client.get('/login')
+                self.assertEqual(resp.status_code, 200)
+                self.assertIn("Enter Codename", resp.data)
+
+                resp = client.post('/login', data=dict(codename=codename),
+                                   follow_redirects=True)
                 self.assertEqual(resp.status_code, 200)
                 self.assertIn("Submit Materials", resp.data)
                 self.assertTrue(session['logged_in'])
-                resp = c.get('/logout', follow_redirects=True)
+                resp = client.get('/logout', follow_redirects=True)
 
-        codename = self._new_codename()
-        login_test(codename + ' ')
-        login_test(' ' + codename + ' ')
-        login_test(' ' + codename)
+            codename = new_codename(client, session)
+            login_test(codename + ' ')
+            login_test(' ' + codename + ' ')
+            login_test(' ' + codename)
 
     def _dummy_submission(self):
         """
@@ -217,31 +219,34 @@ class TestSourceApp(TestCase):
         first submission is always greeted with a notification
         reminding sources to check back later for replies.
         """
-        self._new_codename()
-        resp = self._dummy_submission()
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(
-            "Thank you for sending this information to us.",
-            resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            resp = self._dummy_submission()
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                "Thank you for sending this information to us.",
+                resp.data)
 
     def test_submit_message(self):
-        self._new_codename()
-        self._dummy_submission()
-        resp = self.client.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message", resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission()
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Thanks! We received your message", resp.data)
 
     def test_submit_empty_message(self):
-        self._new_codename()
-        resp = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertIn("You must enter a message or choose a file to submit.",
-                      resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            resp = self.client.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertIn("You must enter a message or choose a file to submit.",
+                          resp.data)
 
     def test_submit_big_message(self):
         '''
@@ -249,35 +254,38 @@ class TestSourceApp(TestCase):
         just residing in memory. Make sure the different return type of
         SecureTemporaryFile is handled as well as BytesIO.
         '''
-        self._new_codename()
-        self._dummy_submission()
-        resp = self.client.post('/submit', data=dict(
-            msg="AA" * (1024 * 512),
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message", resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission()
+            resp = client.post('/submit', data=dict(
+                msg="AA" * (1024 * 512),
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Thanks! We received your message", resp.data)
 
     def test_submit_file(self):
-        self._new_codename()
-        self._dummy_submission()
-        resp = self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn('Thanks! We received your document', resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission()
+            resp = client.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO('This is a test'), 'test.txt'),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Thanks! We received your document', resp.data)
 
     def test_submit_both(self):
-        self._new_codename()
-        self._dummy_submission()
-        resp = self.client.post('/submit', data=dict(
-            msg="This is a test",
-            fh=(StringIO('This is a test'), 'test.txt'),
-        ), follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message and document",
-                      resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission()
+            resp = client.post('/submit', data=dict(
+                msg="This is a test",
+                fh=(StringIO('This is a test'), 'test.txt'),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Thanks! We received your message and document",
+                          resp.data)
 
     def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()
@@ -313,14 +321,15 @@ class TestSourceApp(TestCase):
         insecure_filename = '../../bin/gpg'
         sanitized_filename = 'bin_gpg'
 
-        self._new_codename()
-        self.client.post('/submit', data=dict(
-            msg="",
-            fh=(StringIO('This is a test'), insecure_filename),
-        ), follow_redirects=True)
-        gzipfile.assert_called_with(filename=sanitized_filename,
-                                    mode=ANY,
-                                    fileobj=ANY)
+        with self.client as client:
+            new_codename(client, session)
+            client.post('/submit', data=dict(
+                msg="",
+                fh=(StringIO('This is a test'), insecure_filename),
+            ), follow_redirects=True)
+            gzipfile.assert_called_with(filename=sanitized_filename,
+                                        mode=ANY,
+                                        fileobj=ANY)
 
     def test_tor2web_warning_headers(self):
         resp = self.client.get('/', headers=[('X-tor2web', 'encrypted')])
@@ -372,19 +381,20 @@ class TestSourceApp(TestCase):
         still occur, but a warning should be logged (this will trigger an
         OSSEC alert)."""
 
-        self._new_codename()
-        self._dummy_submission()
-        resp = self.client.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn("Thanks! We received your message", resp.data)
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission()
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Thanks! We received your message", resp.data)
 
-        logger.assert_called_once_with(
-            "Couldn't normalize submission "
-            "timestamps (touch exited with 1)"
-        )
+            logger.assert_called_once_with(
+                "Couldn't normalize submission "
+                "timestamps (touch exited with 1)"
+            )
 
     @patch('source.app.logger.error')
     def test_source_is_deleted_while_logged_in(self, logger):
@@ -392,27 +402,24 @@ class TestSourceApp(TestCase):
         a NoResultFound will occur. The source should be redirected to the
         index when this happens, and a warning logged."""
 
-        codename = self._new_codename()
-        resp = self.client.post('login', data=dict(codename=codename),
-                                follow_redirects=True)
+        with self.client as client:
+            codename = new_codename(client, session)
+            resp = client.post('login', data=dict(codename=codename),
+                               follow_redirects=True)
 
-        # Now the journalist deletes the source
-        filesystem_id = crypto_util.hash_codename(codename)
-        crypto_util.delete_reply_keypair(filesystem_id)
-        source = Source.query.filter_by(filesystem_id=filesystem_id).one()
-        db_session.delete(source)
-        db_session.commit()
+            # Now the journalist deletes the source
+            filesystem_id = crypto_util.hash_codename(codename)
+            crypto_util.delete_reply_keypair(filesystem_id)
+            source = Source.query.filter_by(filesystem_id=filesystem_id).one()
+            db_session.delete(source)
+            db_session.commit()
 
-        # Source attempts to continue to navigate
-        resp = self.client.post('/lookup', follow_redirects=True)
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn('Submit documents for the first time', resp.data)
-        self.assertNotIn('logged_in', session.keys())
-        self.assertNotIn('codename', session.keys())
-
-        logger.assert_called_once_with(
-            "Found no Sources when one was expected: "
-            "No row was found for one()")
+            # Source attempts to continue to navigate
+            resp = client.post('/lookup', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Submit documents for the first time', resp.data)
+            self.assertNotIn('logged_in', session.keys())
+            self.assertNotIn('codename', session.keys())
 
     def test_login_with_invalid_codename(self):
         """Logging in with a codename with invalid characters should return
