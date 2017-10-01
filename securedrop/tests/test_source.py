@@ -166,7 +166,11 @@ class TestSourceApp(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertTrue(session['logged_in'])
             resp = c.get('/logout', follow_redirects=True)
+
+            # sessions always have 'expires', so pop it for the next check
+            session.pop('expires', None)
             self.assertTrue(not session)
+
             self.assertIn('Thank you for exiting your session!', resp.data)
 
     def test_user_must_log_in_for_protected_views(self):
