@@ -144,15 +144,11 @@ def submit(source, num_submissions):
     return submissions
 
 
-# NOTE: this method is potentially dangerous to rely on for now due
-# to the fact flask_testing.TestCase only uses on request context
-# per method (see
-# https://github.com/freedomofpress/securedrop/issues/1444).
 def new_codename(client, session):
     """Helper function to go through the "generate codename" flow.
     """
-    with client as c:
-        c.get('/generate')
-        codename = session['codename']
-        c.post('/create')
+    client.get('/generate')
+    print(session)
+    codename = session['codename']
+    client.post('/create')
     return codename
