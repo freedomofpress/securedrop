@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import functools
 
 from flask import (Flask, request, render_template, send_file, redirect, flash,
@@ -65,6 +65,13 @@ def get_source(filesystem_id):
 @app.before_request
 def setup_g():
     """Store commonly used values in Flask's special g object"""
+    if 'expires' in session and datetime.utcnow() >= session['expires']:
+        session.clear()
+        flash(gettext('You have been logged out due to inactivity'), 'error')
+
+    session['expires'] = datetime.utcnow() + \
+        timedelta(minutes=getattr(config, 'SESSION_EXPIRATION_MINUTES', 30))
+
     uid = session.get('uid', None)
     if uid:
         g.user = Journalist.query.get(uid)
@@ -162,6 +169,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('uid', None)
+    session.pop('expires', None)
     return redirect(url_for('index'))
 
 
