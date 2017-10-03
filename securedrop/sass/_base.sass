@@ -28,6 +28,9 @@
     text-align: left
     font-size: 30px
 
+    &:dir(rtl)
+      text-align: right
+
   h2
     font-size: 25px
 
@@ -61,6 +64,9 @@
     margin-bottom: 20px
     text-align: left
 
+    &:dir(rtl)
+      text-align: right
+
   .doc-check
     margin-right: 10px
 
@@ -89,11 +95,20 @@
   .pull-left
     float: left
 
+    &:dir(rtl)
+      float: right
+
   .pull-right
     float: right
 
+    &:dir(rtl)
+      text-align: left
+
   #header
     float: left
+
+    &:dir(rtl)
+      float: right
 
     .powered
       margin-top: 10px
@@ -111,6 +126,9 @@
       border-bottom: 1px solid #ddd
       padding: 6px
       text-align: left
+
+      &:dir(rtl)
+        text-align: right
 
       &:last-child
         border-bottom: none
@@ -271,6 +289,9 @@
     text-align: left
     font-size: medium
 
+    &:dir(rtl)
+      text-align: right
+
   .flash
     display: flex
     flex-flow: row nowrap
@@ -348,7 +369,7 @@
 
   .logo
     width: 250px
-    margin-right: 20px
+    margin-right: 9px
     margin-top: 36px
     margin-left: 9px
 
@@ -359,11 +380,17 @@
   .submissions
     padding-left: 0px
 
+    &:dir(rtl)
+      padding-right: 0px
+
   .submission
     background: $color_grey_xlight
     border-bottom: 1px solid #ddd
     padding: 10px
     text-align: left
+
+    &:dir(rtl)
+      text-align: right
 
     &:last-child
       border-bottom: none
