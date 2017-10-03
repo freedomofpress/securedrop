@@ -44,10 +44,10 @@ Assumptions about the person installing SecureDrop, usually the admin
    to give the attacker system-level access that would be unreasonable.
 -  The person obtains an authentic copy of SecureDrop and its
    dependencies.
--  The person follows our guidelines for :doc:`deploying the system, setting
-   up the landing page for the
-   organization <../deployment_practices>`, and for :doc:`installing
-   SecureDrop <../install>`.
+-  The person follows our guidelines for
+   :ref:`deploying the system <deployment>`, setting
+   up the :ref:`landing page <Landing Page>` for the
+   organization, and for :doc:`installing SecureDrop <../install>`.
 
 Assumptions about the source's computer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
