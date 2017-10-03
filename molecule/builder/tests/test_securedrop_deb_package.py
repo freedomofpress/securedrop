@@ -121,7 +121,12 @@ def test_deb_package_control_fields(File, Command, deb):
     c = Command("dpkg-deb --field {}".format(deb_package.path))
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
-    assert "Architecture: amd64" in c.stdout
+    # The securedrop-config package is architecture indepedent
+    if package_name == "securedrop-config":
+        assert "Architecture: all" in c.stdout
+    else:
+        assert "Architecture: amd64" in c.stdout
+
     assert "Package: {}".format(package_name) in c.stdout
     assert c.rc == 0
 
