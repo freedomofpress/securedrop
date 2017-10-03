@@ -36,14 +36,14 @@ sub   2048R/219EC810 2009-09-04 [expires: 2018-08-30]"""
     '/etc/apt/security.list',
     '/etc/apt/sources.list.d',
 ])
-def test_tor_project_repo_absent(Command):
+def test_tor_project_repo_absent(Command, filename):
     """
     Ensure that no apt source list files contain the entry for
     the official Tor apt repo, since we don't control issuing updates
     in that repo. We're mirroring it to avoid breakage caused by
     untested updates (which has broken prod twice to date).
     """
-    c = Command("grep -riP 'deb\.torproject\.org' /etc/apt*")
+    c = Command("grep -riP 'deb\.torproject\.org' {}".format(filename))
     # Grep returns non-zero when no matches, and we want no matches.
     assert c.rc != 0
     assert c.stdout == ""
