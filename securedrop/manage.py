@@ -8,10 +8,10 @@ import shutil
 import signal
 import subprocess
 import sys
+import time
 import traceback
 import version
 
-import psutil
 import qrcode
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -246,39 +246,22 @@ def delete_user(args):
 
 
 def clean_tmp(args):  # pragma: no cover
-    """Cleanup the SecureDrop temp directory. This is intended to be run
-    as an automated cron job. We skip files that are currently in use to
-    avoid deleting files that are currently being downloaded."""
-    # Inspired by http://stackoverflow.com/a/11115521/1093000
-    def file_in_use(fname):
-        for proc in psutil.process_iter():
-            try:
-                open_files = proc.open_files()
-                in_use = False or any([open_file.path == fname
-                                       for open_file in open_files])
-                # Early return for perf
-                if in_use:
-                    break
-            except psutil.NoSuchProcess:
-                # This catches a race condition where a process ends before we
-                # can examine its files. Ignore this - if the process ended, it
-                # can't be using fname, so this won't cause an error.
-                pass
-
-        return in_use
+    """Cleanup the SecureDrop temp directory. """
+    if not os.path.exists(args.directory):
+        log.debug('{} does not exist, do nothing'.format(args.directory))
+        return 0
 
     def listdir_fullpath(d):
-        # Thanks to http://stackoverflow.com/a/120948/1093000
         return [os.path.join(d, f) for f in os.listdir(d)]
 
-    try:
-        os.stat(config.TEMP_DIR)
-    except OSError:
-        pass
-    else:
-        for path in listdir_fullpath(config.TEMP_DIR):
-            if not file_in_use(path):
-                os.remove(path)
+    too_old = args.days * 24 * 60 * 60
+    for path in listdir_fullpath(args.directory):
+        if time.time() - os.stat(path).st_mtime > too_old:
+            os.remove(path)
+            log.debug('{} removed'.format(path))
+        else:
+            log.debug('{} modified less than {} days ago'.format(
+                path, args.days))
 
     return 0
 
@@ -366,11 +349,8 @@ def get_args():
                                   "SecureDrop application's state.")
     reset_subp.set_defaults(func=reset)
     # Cleanup the SD temp dir
-    clean_tmp_subp = subps.add_parser('clean-tmp', help='Cleanup the '
-                                      'SecureDrop temp directory.')
-    clean_tmp_subp.set_defaults(func=clean_tmp)
-    clean_tmp_subp_a = subps.add_parser('clean_tmp', help='^')
-    clean_tmp_subp_a.set_defaults(func=clean_tmp)
+    set_clean_tmp_parser(subps, 'clean-tmp')
+    set_clean_tmp_parser(subps, 'clean_tmp')
 
     set_translate_parser(subps)
 
@@ -413,6 +393,24 @@ def set_translate_parser(subps):
         help='Source file or directory to extract (default {})'.format(
             sources))
     parser.set_defaults(func=translate)
+
+
+def set_clean_tmp_parser(subps, name):
+    parser = subps.add_parser(name, help='Cleanup the '
+                              'SecureDrop temp directory.')
+    default_days = 7
+    parser.add_argument(
+        '--days',
+        default=default_days,
+        type=int,
+        help=('remove files not modified in a given number of DAYS '
+              '(default {} days)'.format(default_days)))
+    parser.add_argument(
+        '--directory',
+        default=config.TEMP_DIR,
+        help=('remove old files from DIRECTORY '
+              '(default {})'.format(config.TEMP_DIR)))
+    parser.set_defaults(func=clean_tmp)
 
 
 def setup_verbosity(args):
