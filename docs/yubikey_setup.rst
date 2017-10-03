@@ -50,8 +50,8 @@ SecureDrop, click the "Write Configuration" button. Click through the
 warning about overwriting Configuration Slot 1 and choose a location to
 save the log file.
 
-When the configuration has been successfully written, you should see
-green text saying "YubiKey successfully configured" at the top of the
+When the configuration has been written, you should see
+green text saying "YubiKey configured" at the top of the
 window.
 
 Set up a user with the OATH-HOTP secret key
@@ -71,9 +71,8 @@ Fill in the username prompt. Be sure to save the automatically generated
 diceware passphrase in the user's KeePassX database. When it asks "Is this admin
 using a YubiKey [HOTP]? (y/N)", type "y", then enter. At the "Please
 configure your YubiKey and enter the secret:" prompt, enter the Secret
-Key value and hit enter. Note that the spaces are optional. When you are
-done, you should see a message saying "Admin '(your username)'
-successfully added".
+Key value and hit Enter. Note that the spaces are optional. When you are
+done, you should see a message saying "Admin '(your username)' added".
 
 Admin Interface
 ~~~~~~~~~~~~~~~
