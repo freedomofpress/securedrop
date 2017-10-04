@@ -15,6 +15,8 @@ one.
 
 .. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
 
+.. note:: If you see test failures due to ``Too many levels of symbolic links``
+          and you are using VirtualBox, try restarting VirtualBox.
 
 .. _development_vm:
 
@@ -72,7 +74,7 @@ Debian packages on the staging machines:
 
 .. code:: sh
 
-   make build-debs 
+   make build-debs
    vagrant up /staging/
    vagrant ssh app-staging
    sudo su
@@ -82,7 +84,7 @@ Debian packages on the staging machines:
 
 To rebuild the local packages for the app code: ::
 
-   make build-debs 
+   make build-debs
 
 The Debian packages will be rebuilt from the current state of your
 local git repository and then installed on the staging servers.
