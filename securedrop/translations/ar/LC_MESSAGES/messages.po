@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-30 13:55+0000\n"
-"Last-Translator: Jasmine Khalil <jasmine.khalil@outlook.com>\n"
+"PO-Revision-Date: 2017-10-04 06:51+0000\n"
+"Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
@@ -30,9 +30,10 @@ msgid "Login failed."
 msgstr "فشل تسجيل الدخول."
 
 #: journalist.py:129
+#, fuzzy
 msgid "Please wait at least {seconds} seconds before logging in again."
 msgstr ""
-"الرجاء الإنتظار لمدة {ثواني} ثواني على الاقل قبل محاولة تسجيل الدخول مرة "
+"الرجاء الإنتظار لمدة {seconds} ثواني على الاقل قبل محاولة تسجيل الدخول مرة "
 "أخرى."
 
 #: journalist.py:139
@@ -61,8 +62,9 @@ msgstr ""
 "التطبيق."
 
 #: journalist.py:232
+#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "تم التحقق من رمز التوثيق الثنائي للمستخدم {المستخدم}."
+msgstr "تم التحقق من رمز التوثيق الثنائي للمستخدم {user}."
 
 #: journalist.py:239 journalist.py:457
 msgid "Could not verify token in two-factor authentication."
