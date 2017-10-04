@@ -91,6 +91,19 @@ by clicking on it:
 
 |Weblate translate context screenshot|
 
+Instructions about a user navigation
+------------------------------------
+
+The strings may contain instructions relative to the user interface of
+a software. The software should be run and the steps verified to find
+the translation. For instance::
+
+  ...tap "Set up account"...
+
+must be translated by navigating to the localized interface of Google
+Authenticator and using the translation displayed in place of **Set up
+account**.
+
 Placeholders
 ------------
 
