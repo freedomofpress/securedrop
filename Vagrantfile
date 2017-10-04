@@ -43,6 +43,7 @@ Vagrant.configure("2") do |config|
     # more memory than the previous version did.
     development.vm.provider "virtualbox" do |v|
       v.memory = 1024
+      v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
     end
     development.vm.provider "libvirt" do |lv, override|
       lv.memory = 1024
