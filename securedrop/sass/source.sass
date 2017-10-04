@@ -168,6 +168,9 @@ p#codename
     border-radius: 5px
     position: relative
 
+    &:dir(rtl)
+      text-align: right
+
     p
       color: #777
       font-style: italic
@@ -221,11 +224,17 @@ p.explanation
   text-align: left
   color: $color_grey_dark
 
+  &:dir(rtl)
+    text-align: right
+
 #replies blockquote
   margin: 1em 1em
 
 p.breadcrumbs
   text-align: left
+
+  &:dir(rtl)
+    text-align: right
 
 p#max-file-size
   font-size: 10px

@@ -12,6 +12,9 @@
     margin-bottom: 1em
     border-radius: 5px
 
+    &:dir(rtl)
+      text-align: right
+
     .date
       float: right
       background-color: $color_grey_medium
@@ -47,10 +50,16 @@ p.breadcrumbs
   text-align: left
   position: relative
 
+  &:dir(rtl)
+    text-align: right
+
 #regenerate-code .confirm-prompt
   font-size: 14px
   font-style: italic
   text-align: left
+
+  &:dir(rtl)
+    text-align: right
 
   button
     padding: 5px 15px
