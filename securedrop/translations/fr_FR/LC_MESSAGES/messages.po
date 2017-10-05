@@ -166,9 +166,9 @@ msgstr "Merci. Votre réponse a été enregistrée."
 
 #: journalist.py:750
 #, fuzzy
-#| msgid "The source '{original_source}' has been renamed to '{new_source}'"
+#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "La source '{original_source}' a été renommée '{new_source}'"
+msgstr "La source '{original_name}' a été renommée '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -525,9 +525,9 @@ msgstr "SUPPRESSION PERMANENTE DES FICHIERS"
 #: journalist_templates/delete.html:23
 #, fuzzy
 #| msgid ""
-#| "Return to the list of documents for {source_journalist_designation}..."
+#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
-msgstr "Revenir à la liste de documents de {source_journalist_designation}..."
+msgstr "Revenir à la liste de documents de {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -1310,8 +1310,8 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Revenir à la page d'envoi"
 
-#~ msgid "{source_journalist_designation}'s collection deleted"
-#~ msgstr "La collection de {source_journalist_designation} a été supprimée"
+#~ msgid "{source_name}'s collection deleted"
+#~ msgstr "La collection de {source_name} a été supprimée"
 
 #~ msgid "Edit Account"
 #~ msgstr "Modifier le compte"

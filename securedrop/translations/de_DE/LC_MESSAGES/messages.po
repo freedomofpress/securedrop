@@ -165,9 +165,9 @@ msgstr "Vielen Dank. Ihre Antwort wurde gespeichert."
 
 #: journalist.py:750
 #, fuzzy
-#| msgid "The source '{original_source}' has been renamed to '{new_source}'"
+#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "Die Quelle wurde von '{original_source}' zu '{new_source}' umbenannt"
+msgstr "Die Quelle wurde von '{original_name}' zu '{new_name}' umbenannt"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -525,9 +525,9 @@ msgstr "DATEIEN  PERMANENT LÖSCHEN"
 #: journalist_templates/delete.html:23
 #, fuzzy
 #| msgid ""
-#| "Return to the list of documents for {source_journalist_designation}..."
+#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
-msgstr "Zurück zur Dokumentenliste für {source_journalist_designation}..."
+msgstr "Zurück zur Dokumentenliste für {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -1310,8 +1310,8 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
 
-#~ msgid "{source_journalist_designation}'s collection deleted"
-#~ msgstr "{source_journalist_designation}s Sammlung wird gelöscht"
+#~ msgid "{source_name}'s collection deleted"
+#~ msgstr "{source_name}s Sammlung wird gelöscht"
 
 #~ msgid "Edit Account"
 #~ msgstr "Konto Bearbeiten"

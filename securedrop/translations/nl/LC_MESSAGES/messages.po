@@ -167,9 +167,9 @@ msgstr "Bedankt. Je antwoord is opgeslagen."
 
 #: journalist.py:750
 #, fuzzy
-#| msgid "The source '{original_source}' has been renamed to '{new_source}'"
+#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "De naam van bron '{original_source}' is veranderd naar '{new_source}'"
+msgstr "De naam van bron '{original_name}' is veranderd naar '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -525,10 +525,10 @@ msgstr "VERWIJDER BESTANDEN PERMANENT"
 #: journalist_templates/delete.html:23
 #, fuzzy
 #| msgid ""
-#| "Return to the list of documents for {source_journalist_designation}..."
+#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
 msgstr ""
-"Ga terug naar de documentenlijst voor {source_journalist_designation}..."
+"Ga terug naar de documentenlijst voor {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -1303,8 +1303,8 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
 
-#~ msgid "{source_journalist_designation}'s collection deleted"
-#~ msgstr "{source_journalist_designation}s collectie verwijderd"
+#~ msgid "{source_name}'s collection deleted"
+#~ msgstr "{source_name}s collectie verwijderd"
 
 #~ msgid "Edit Account"
 #~ msgstr "Wijzig Account"

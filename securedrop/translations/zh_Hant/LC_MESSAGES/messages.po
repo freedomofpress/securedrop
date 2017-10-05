@@ -170,9 +170,9 @@ msgstr "感謝您！我們已儲存您的回覆。"
 
 #: journalist.py:750
 #, fuzzy
-#| msgid "The source '{original_source}' has been renamed to '{new_source}'"
+#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "源{original_source}已经被重命名为{new_source}"
+msgstr "源{original_name}已经被重命名为{new_name}"
 
 #: journalist.py:766
 #, fuzzy
@@ -511,9 +511,9 @@ msgstr "永久性地删除文件"
 #: journalist_templates/delete.html:23
 #, fuzzy
 #| msgid ""
-#| "Return to the list of documents for {source_journalist_designation}..."
+#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
-msgstr "为{source_journalist_designation}返回文档的列表..."
+msgstr "为{source_name}返回文档的列表..."
 
 #: journalist_templates/edit_account.html:6
 #, fuzzy
@@ -1181,7 +1181,7 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
 
-#~ msgid "{source_journalist_designation}'s collection deleted"
+#~ msgid "{source_name}'s collection deleted"
 #~ msgstr "{source_journal_designation}的集合已删除"
 
 #~ msgid "Edit Account"

@@ -159,9 +159,9 @@ msgstr "Takk. Svaret ditt har blitt lagret."
 
 #: journalist.py:750
 #, fuzzy
-#| msgid "The source '{original_source}' has been renamed to '{new_source}'"
+#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "Kilden '{original_source}' har endret navn til '{new_source}'"
+msgstr "Kilden '{original_name}' har endret navn til '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -509,9 +509,9 @@ msgstr "PERMANENT SLETTING AV FILER"
 #: journalist_templates/delete.html:23
 #, fuzzy
 #| msgid ""
-#| "Return to the list of documents for {source_journalist_designation}..."
+#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
-msgstr "Tilbake til listen over filer for {source_journalist_designation}…"
+msgstr "Tilbake til listen over filer for {source_name}…"
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -1279,8 +1279,8 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
 
-#~ msgid "{source_journalist_designation}'s collection deleted"
-#~ msgstr "{source_journalist_designation}s kildedata slettet"
+#~ msgid "{source_name}'s collection deleted"
+#~ msgstr "{source_name}s kildedata slettet"
 
 #~ msgid "Edit Account"
 #~ msgstr "Rediger konto"
