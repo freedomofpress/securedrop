@@ -202,13 +202,13 @@ class TestSourceApp(TestCase):
             login_test(' ' + codename + ' ')
             login_test(' ' + codename)
 
-    def _dummy_submission(self):
+    def _dummy_submission(self, client):
         """
         Helper to make a submission (content unimportant), mostly useful in
         testing notification behavior for a source's first vs. their
         subsequent submissions
         """
-        return self.client.post('/submit', data=dict(
+        return client.post('/submit', data=dict(
             msg="Pay no attention to the man behind the curtain.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
@@ -221,7 +221,7 @@ class TestSourceApp(TestCase):
         """
         with self.client as client:
             new_codename(client, session)
-            resp = self._dummy_submission()
+            resp = self._dummy_submission(client)
             self.assertEqual(resp.status_code, 200)
             self.assertIn(
                 "Thank you for sending this information to us.",
@@ -230,7 +230,7 @@ class TestSourceApp(TestCase):
     def test_submit_message(self):
         with self.client as client:
             new_codename(client, session)
-            self._dummy_submission()
+            self._dummy_submission(client)
             resp = client.post('/submit', data=dict(
                 msg="This is a test.",
                 fh=(StringIO(''), ''),
@@ -241,11 +241,12 @@ class TestSourceApp(TestCase):
     def test_submit_empty_message(self):
         with self.client as client:
             new_codename(client, session)
-            resp = self.client.post('/submit', data=dict(
+            resp = client.post('/submit', data=dict(
                 msg="",
                 fh=(StringIO(''), ''),
             ), follow_redirects=True)
-            self.assertIn("You must enter a message or choose a file to submit.",
+            self.assertIn("You must enter a message or choose a file to "
+                          "submit.",
                           resp.data)
 
     def test_submit_big_message(self):
@@ -256,7 +257,7 @@ class TestSourceApp(TestCase):
         '''
         with self.client as client:
             new_codename(client, session)
-            self._dummy_submission()
+            self._dummy_submission(client)
             resp = client.post('/submit', data=dict(
                 msg="AA" * (1024 * 512),
                 fh=(StringIO(''), ''),
@@ -267,7 +268,7 @@ class TestSourceApp(TestCase):
     def test_submit_file(self):
         with self.client as client:
             new_codename(client, session)
-            self._dummy_submission()
+            self._dummy_submission(client)
             resp = client.post('/submit', data=dict(
                 msg="",
                 fh=(StringIO('This is a test'), 'test.txt'),
@@ -278,7 +279,7 @@ class TestSourceApp(TestCase):
     def test_submit_both(self):
         with self.client as client:
             new_codename(client, session)
-            self._dummy_submission()
+            self._dummy_submission(client)
             resp = client.post('/submit', data=dict(
                 msg="This is a test",
                 fh=(StringIO('This is a test'), 'test.txt'),
@@ -383,7 +384,7 @@ class TestSourceApp(TestCase):
 
         with self.client as client:
             new_codename(client, session)
-            self._dummy_submission()
+            self._dummy_submission(client)
             resp = client.post('/submit', data=dict(
                 msg="This is a test.",
                 fh=(StringIO(''), ''),
@@ -421,6 +422,10 @@ class TestSourceApp(TestCase):
             self.assertNotIn('logged_in', session.keys())
             self.assertNotIn('codename', session.keys())
 
+        logger.assert_called_once_with(
+            "Found no Sources when one was expected: "
+            "No row was found for one()")
+
     def test_login_with_invalid_codename(self):
         """Logging in with a codename with invalid characters should return
         an informative message to the user."""
@@ -432,3 +437,36 @@ class TestSourceApp(TestCase):
                           follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Invalid input.", resp.data)
+
+    def _test_source_session_expiration(self):
+        try:
+            old_expiration = config.SESSION_EXPIRATION_MINUTES
+            has_session_expiration = True
+        except AttributeError:
+            has_session_expiration = False
+
+        try:
+            with self.client as client:
+                codename = new_codename(client, session)
+
+                # set the expiration to ensure we trigger an expiration
+                config.SESSION_EXPIRATION_MINUTES = -1
+
+                resp = client.post('/login',
+                                   data=dict(codename=codename),
+                                   follow_redirects=True)
+                assert resp.status_code == 200
+                resp = client.get('/lookup', follow_redirects=True)
+
+                # check that the session was cleared (apart from 'expires'
+                # which is always present and 'csrf_token' which leaks no info)
+                session.pop('expires', None)
+                session.pop('csrf_token', None)
+                assert not session, session
+                assert ('You have been logged out due to inactivity' in
+                        resp.data.decode('utf-8'))
+        finally:
+            if has_session_expiration:
+                config.SESSION_EXPIRATION_MINUTES = old_expiration
+            else:
+                del config.SESSION_EXPIRATION_MINUTES

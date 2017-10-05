@@ -147,8 +147,10 @@ def submit(source, num_submissions):
 def new_codename(client, session):
     """Helper function to go through the "generate codename" flow.
     """
+    # clear the session because our tests have implicit reliance on each other
+    session.clear()
+
     client.get('/generate')
-    print(session)
     codename = session['codename']
     client.post('/create')
     return codename
