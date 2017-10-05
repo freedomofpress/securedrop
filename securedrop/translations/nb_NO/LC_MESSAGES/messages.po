@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-23 09:57+0000\n"
+"PO-Revision-Date: 2017-10-05 21:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://weblate.securedrop.club/projects/"
-"securedrop/securedrop/nb_NO/>\n"
+"Language-Team: Norwegian Bokmål "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr ""
+msgstr "Du har blitt utlogget som følge av inaktivitet"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
@@ -366,7 +366,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "Innlogget som"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -726,15 +726,15 @@ msgstr ""
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Dette feltet er påkrevd."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Feltet må være mellom ett og {max_codename_len} tegn langt. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "Ugyldig inndata."
 
 #: source_app/main.py:32
 msgid ""
@@ -888,6 +888,9 @@ msgid ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or "
 "ignore this warning to continue."
 msgstr ""
+"<strong>Det anbefales å bruke Tor-nettleseren for å nå SecureDrop:</strong> <"
+"a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer "
+"den</a>, eller se bort fra denne advarselen for å fortsette uten."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -931,6 +934,8 @@ msgstr ""
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
+"Klikk på <img src=\"{icon}\" alt=\"Tor icon\"> den grønne løken i "
+"verktøylinjen oppe til venstre"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
