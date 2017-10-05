@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-25 14:46+0000\n"
+"PO-Revision-Date: 2017-10-05 21:39+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
-"Language-Team: French <https://weblate.securedrop.club/projects/securedrop/"
-"securedrop/fr/>\n"
+"Language-Team: French "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr ""
+msgstr "Vous avez été déconnecté pour cause d'inactivité"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
@@ -140,11 +140,8 @@ msgid "No unread submissions in selected collections."
 msgstr "Il n'y a aucun envoi non lu dans les collections sélectionnées."
 
 #: journalist.py:646
-#, fuzzy
-#| msgid "{num} collection deleted"
-#| msgid_plural "{num} collections deleted"
 msgid "{source_name}'s collection deleted"
-msgstr "{num} collection a été supprimée"
+msgstr "La collection de {source_name} a été supprimée"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
@@ -165,8 +162,6 @@ msgid "Thanks. Your reply has been stored."
 msgstr "Merci. Votre réponse a été enregistrée."
 
 #: journalist.py:750
-#, fuzzy
-#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "La source '{original_name}' a été renommée '{new_name}'"
 
@@ -377,7 +372,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "Connecté en tant que"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -523,9 +518,6 @@ msgid "PERMANENTLY DELETE FILES"
 msgstr "SUPPRESSION PERMANENTE DES FICHIERS"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid ""
-#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
 msgstr "Revenir à la liste de documents de {source_name}..."
 
@@ -534,8 +526,6 @@ msgid "Edit user \"{user}\""
 msgstr "Modifier l'utilisateur « {user} »"
 
 #: journalist_templates/edit_account.html:8
-#, fuzzy
-#| msgid "Change Username & Admin Status"
 msgid "Change Username &amp; Admin Status"
 msgstr "Modifier le nom d'utilisateur et les droits d'administration"
 
@@ -729,30 +719,25 @@ msgid "LOG IN"
 msgstr "CONNEXION"
 
 #: source_app/__init__.py:64
-#, fuzzy
-#| msgid ""
-#| "<strong>WARNING:</strong> You appear to be using Tor2Web. This "
-#| "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-warning"
-#| "\">Why is this dangerous?</a>"
 msgid ""
 "<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
 "<strong>AVERTISSEMENT :</strong> il semble que vous utilisez Tor2Web. Cela "
-"<strong>ne garantit pas</strong> votre anonymat. <a href=\"/tor2web-warning"
-"\">Pourquoi cela représente-t-il un danger ?</a>"
+"<strong>ne garantit pas</strong> votre anonymat. <a href=\"{url}\">Pourquoi "
+"cela représente-t-il un danger ?</a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Ce champ est exigé."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Le champ doit comprendre entre 1 et {max_codename_len} caractères. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "L'entrée est invalide."
 
 #: source_app/main.py:32
 msgid ""
@@ -767,22 +752,16 @@ msgid "You must enter a message or choose a file to submit."
 msgstr "Vous devez saisir un message ou sélectionner un fichier à envoyer."
 
 #: source_app/main.py:138
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message."
-msgstr "Merci ! Nous avons reçu votre {things}."
+msgstr "Merci ! Nous avons reçu votre message."
 
 #: source_app/main.py:140
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your document."
-msgstr "Merci ! Nous avons reçu votre {things}."
+msgstr "Merci ! Nous avons reçu votre document."
 
 #: source_app/main.py:142
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message and document."
-msgstr "Merci ! Nous avons reçu votre {things}."
+msgstr "Merci ! Nous avons reçu vos document et message."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
@@ -892,17 +871,14 @@ msgid "ALREADY HAVE A CODENAME?"
 msgstr "AVEZ-VOUS DÉJÀ UN NOM DE CODE ?"
 
 #: source_templates/index.html:17
-#, fuzzy
-#| msgid ""
-#| "<strong>We recommend turning the Security Slider to High to protect your "
-#| "anonymity:</strong>"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>Nous recommandons de régler le niveau de sécurité sur « Élevé » pour "
-"protéger votre anonymat :</strong>"
+"<strong>Nous recommandons de régler le niveau de sécurité sur Élevé pour "
+"protéger votre anonymat :</strong> <a id=\"disable-js\" href=\"\">Apprenez à "
+"le régler sur Élevé</a> ou ignorez ce message pour poursuivre."
 
 #: source_templates/index.html:18
 msgid ""
@@ -910,6 +886,10 @@ msgid ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or "
 "ignore this warning to continue."
 msgstr ""
+"<strong>Nous recommandons d'utiliser le navigateur Tor pour accéder à "
+"SecureDrop :</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> "
+"Apprenez comment l'installer</a> ou ignorez cet avertissement pour "
+"poursuivre."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -954,6 +934,8 @@ msgstr ""
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
+"Cliquez sur l'<img src=\"{icon}\" alt=\"Tor icon\"> icône de Tor dans la "
+"barre d'outils ci-dessus"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
@@ -967,10 +949,8 @@ msgstr ""
 "strong>"
 
 #: source_templates/index.html:97
-#, fuzzy
-#| msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr "<a href=\"/\">Cliquez ici</a> pour actualiser la page"
+msgstr "<a href=\"/\">Cliquer ici</a> pour actualiser la page"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
@@ -1032,29 +1012,19 @@ msgid "Submit Materials"
 msgstr "Envoyer des documents"
 
 #: source_templates/lookup.html:21
-#, fuzzy
-#| msgid ""
-#| "If you are already familiar with GPG, you can optionally encrypt your "
-#| "files and messages with our <a href=\"/journalist-key\" class=\"text-link"
-#| "\">public key</a> before submission. Files are encrypted as they are "
-#| "received by SecureDrop."
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
 "before submission. Files are encrypted as they are received by SecureDrop."
 msgstr ""
 "Si vous connaissez déjà GPG, vous pouvez aussi chiffrer vos fichiers et "
-"messages avec notre <a href=\"/journalist-key\" class=\"text-link\">clé "
-"publique</a> avant de les envoyer. Les fichiers sont chiffrés lorsqu'ils "
-"sont reçus par SecureDrop."
+"messages avec notre <a href=\"{url}\" class=\"text-link\">clé publique</a> "
+"avant de les envoyer. Les fichiers sont chiffrés lorsqu'ils sont reçus par "
+"SecureDrop."
 
 #: source_templates/lookup.html:22
-#, fuzzy
-#| msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr ""
-"<a href=\"/why-journalist-key\" class=\"text-link\">En apprendre davantage</"
-"a>."
+msgstr "<a href=\"{url}\" class=\"text-link\">En apprendre davantage</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
@@ -1223,35 +1193,26 @@ msgstr ""
 "être chiffrer vos documents vous-même. Pour ce faire :"
 
 #: source_templates/why-journalist-key.html:7
-#, fuzzy
-#| msgid ""
-#| "<a href=\"/journalist-key\">Download</a> the public key. The public key "
-#| "is a text file with the extension <code>.asc</code>"
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. The public key is a text file "
 "with the extension <code>.asc</code>"
 msgstr ""
-"<a href=\"/journalist-key\">Téléchargez</a> la clé publique. La clé publique "
-"est un fichier texte avec l'extension <code>.asc</code>"
+"<a href=\"{url}\">Téléchargez</a> la clé publique. La clé publique est un "
+"fichier texte avec l'extension <code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
 msgstr "Importez-la dans votre trousseau GPG."
 
 #: source_templates/why-journalist-key.html:10
-#, fuzzy
-#| msgid ""
-#| "If you are using <a href=\"tails.boum.org\">Tails</a>, you can double-"
-#| "click the <code>.asc</code> file you just downloaded and it will be "
-#| "automatically imported to your keyring."
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
-"Si vous utilisez <a href=\"tails.boum.org\">Tails</a>, vous pouvez double-"
-"cliquer sur le fichier <code>.asc</code> que vous venez de télécharger et il "
-"sera importé automatiquement dans votre trousseau."
+"Si vous utilisez <a href=\"{url}\">Tails</a>, vous pouvez double-cliquer sur "
+"le fichier <code>.asc</code> que vous venez de télécharger et il sera "
+"importé automatiquement dans votre trousseau."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
