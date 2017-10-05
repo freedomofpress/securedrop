@@ -2,7 +2,7 @@ Set up the Network Firewall
 ===========================
 
 Now that you've set up your password manager, you can move on to setting
-up the Network Firewall. You should stay logged in to your *admin Tails
+up the Network Firewall. You should stay logged in to your *Admin Tails
 USB* to access the Network Firewall's web interface for configuration.
 
 Unfortunately, due to the wide variety of firewalls that may be used, we
@@ -50,7 +50,7 @@ Before you begin
 First, consider how the firewall will be connected to the Internet. You
 will need to provision several unique subnets, which should not conflict
 with the network configuration on the WAN interface. If you are unsure,
-consult your local sysadmin.
+consult your local system administrator.
 
 Many firewalls, including the recommended Netgate pfSense,
 automatically set up the LAN interface on ``192.168.1.1/24``. This
@@ -193,8 +193,8 @@ Setup Wizard
 #. Leave the defaults for "Time Server Information". Click **Next**.
 
 #. On "Configure WAN Interface", enter the appropriate configuration for
-   your network. Consult your local sysadmin if you are unsure what to
-   enter here. For many environments, the default of DHCP will work and the
+   your network. Consult your local system administrator if you are unsure what
+   to enter here. For many environments, the default of DHCP will work and the
    rest of the fields can be left blank. Click **Next**.
 
 #. For "Configure LAN Interface", use the IP address of the *Admin Gateway*
@@ -245,6 +245,10 @@ Internet through the WAN. The easiest way to do this is to use ping
 that you expect to be up (e.g. ``google.com``) and click "Ping".
 
 |Ping|
+
+At this stage, you can elect to manually set up your firewall, or use the
+templates we provide. We recommend using the templates, and if you have
+trouble you can step through the manual configuration to configure the firewall.
 
 Disable DHCP on the LAN
 -----------------------
@@ -334,11 +338,11 @@ reconnect. You should see a popup notification that says "Connection
 Established", followed several seconds later by the "Tor is ready"
 popup notification.
 
-For the next step, SecureDrop Configuration, you will manually configure the
-firewall for SecureDrop, using screenshots or XML templates as a reference.
+For the next step, SecureDrop Configuration, you can elect to manually configure
+your firewall using the WebGUI, or you can load the templates we provide.
 
-SecureDrop Configuration
-------------------------
+SecureDrop Configuration (Manual)
+---------------------------------
 
 SecureDrop uses the firewall to achieve two primary goals:
 
@@ -465,14 +469,22 @@ to add a rule.
 Once you've set up the firewall, exit the Unsafe Browser, and continue
 with the "Keeping pfSense up to date" section below.
 
-Configuration Reference Templates
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SecureDrop Configuration (Templates)
+------------------------------------
 
-As an alternative to the provided screenshots, you can examine the provided
-``.xml`` templates as a reference. However, because of the Tails chroot,
-you can not download the ``.xml`` files directly. Using the Unsecure Browser,
-download the files from `GitHub <https://github.com/freedomofpress/securedrop/tree/develop/install_files/network_firewall/>`__
+As an alternative to the manually provided screenshots, you can use our ``.xml``
+templates. However, because of the Tails chroot, you can not download the
+``.xml`` files directly. Using the Unsecure Browser, download the files from
+`GitHub <https://github.com/freedomofpress/securedrop/tree/develop/install_files/network_firewall/>`__
 as "Raw" and save them as plaintext documents.
+
+Navigate to **Diagnostics ▸ Backup & Restore**:
+
+|Backup & Restore|
+
+Scroll down to "Restore Backup" and install each one of the template files for
+**Restore Areas**. Make sure to select the correct area in the following order:
+Interfaces, then Aliases and finally Firewall Rules.
 
 - Interfaces config: ``interfaces-config-pfSense.xml``
 - Aliases: ``aliases-config-pfSense.xml``
@@ -484,6 +496,10 @@ Ensure you have selected the appropriate Restore Area. After all three
 files are restored, reboot the firewall. Confirm you still have access to
 Tor using the Tor Browser after the firewall has restarted.
 
+Note that none of the template filters are encrypted. Click "Restore Configuration"
+to restore each file. After this is done, verify that the rules have been configured
+properly by comparing your settings with the screenshots above. If so, proceed to
+the next section.
 
 Tips for setting up pfSense Firewall Rules
 ------------------------------------------
@@ -579,6 +595,7 @@ Once it is complete, you will see a notification of successful upgrade:
 .. |Firewall Update Confirmation| image:: images/firewall/system_update.png
 .. |Firewall Update Progress| image:: images/firewall/system_is_updating.png
 .. |Firewall Update Complete| image:: images/firewall/system_update_complete.png
+.. |Backup & Restore| image:: images/firewall/backup_and_restore.png
 
 .. [#] Tails screenshots were taken on Tails 3.0~beta4. Please make an issue on
        GitHub if you are using the most recent version of Tails and the
