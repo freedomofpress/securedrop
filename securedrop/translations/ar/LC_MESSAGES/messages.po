@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-04 20:15+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2017-10-05 07:12+0000\n"
+"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
@@ -1058,14 +1058,15 @@ msgstr ""
 "تستخدم HTTPS, فانه من الممكن أن اتصالك قد اعترض من قبل شخص بارع."
 
 #: source_templates/tor2web-warning.html:6
+#, fuzzy
 msgid ""
 "If you want to submit information, you are <strong>strongly advised</strong> "
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
 "access our site safely and anonymously."
 msgstr ""
-"إذا كنت تريد إرسال المعلومات, فانه <strong> ينصح بشدة تنزيل <a href=\""
-"torproject.org/download.html.en\"> تور </a>واستخدامه للوصول الى موقعنا بأمان "
-"و بعوية مجهولة."
+"إذا كنت تريد إرسال المعلومات, فانه <strong> ينصح بشدة</strong> تنزيل <a href="
+"\"torproject.org/download.html.en\"> تور </a>واستخدامه للوصول الى موقعنا "
+"بأمان و بعوية مجهولة."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1094,7 +1095,7 @@ msgid ""
 "instructions to download and install Tor Browser:"
 msgstr ""
 "انسخ والصق هذا العنوان في المتصفح الخاص بك واتبع التعليمات لتنزيل و تثبيت "
-"المتصفح تور Tor"
+"المتصفح تور Tor:"
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
