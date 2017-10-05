@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
@@ -75,6 +76,16 @@ def create_app(config):
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
+
+        if 'expires' in session and datetime.utcnow() >= session['expires']:
+            session.clear()
+            flash(gettext('You have been logged out due to inactivity'),
+                  'error')
+
+        session['expires'] = datetime.utcnow() + \
+            timedelta(minutes=getattr(config,
+                                      'SESSION_EXPIRATION_MINUTES',
+                                      30))
 
         # ignore_static here because `crypto_util.hash_codename` is scrypt
         # (very time consuming), and we don't need to waste time running if

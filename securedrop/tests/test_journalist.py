@@ -5,7 +5,7 @@ import random
 import unittest
 import zipfile
 
-from flask import url_for, escape
+from flask import url_for, escape, session
 from flask_testing import TestCase
 from mock import patch, ANY, MagicMock
 from sqlalchemy.orm.exc import StaleDataError
@@ -964,6 +964,42 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(url_for('add_star',
                                         filesystem_id=source.filesystem_id))
         self.assertRedirects(resp, url_for('index'))
+
+    def test_journalist_session_expiration(self):
+        try:
+            old_expiration = config.SESSION_EXPIRATION_MINUTES
+            has_session_expiration = True
+        except AttributeError:
+            has_session_expiration = False
+
+        try:
+            with self.client as client:
+                # do a real login to get a real session
+                # (none of the mocking `g` hacks)
+                resp = self.client.post(url_for('login'),
+                                        data=dict(username=self.user.username,
+                                                  password=VALID_PASSWORD,
+                                                  token='mocked'))
+                assert resp.status_code == 200
+
+                # set the expiration to ensure we trigger an expiration
+                config.SESSION_EXPIRATION_MINUTES = -1
+
+                resp = client.get(url_for('edit_account'),
+                                  follow_redirects=True)
+
+                # check that the session was cleared (apart from 'expires'
+                # which is always present and 'csrf_token' which leaks no info)
+                session.pop('expires', None)
+                session.pop('csrf_token', None)
+                assert not session, session
+                assert ('You have been logged out due to inactivity' in
+                        resp.data.decode('utf-8'))
+        finally:
+            if has_session_expiration:
+                config.SESSION_EXPIRATION_MINUTES = old_expiration
+            else:
+                del config.SESSION_EXPIRATION_MINUTES
 
 
 class TestJournalistAppTwo(unittest.TestCase):
