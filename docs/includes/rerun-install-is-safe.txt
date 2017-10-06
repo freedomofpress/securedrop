@@ -1,0 +1,5 @@
+.. note:: If you see an error running ``./securedrop-admin install``, and
+          believe it may be an intermittent issue (for example, due to losing
+          network connectivity to the servers), it is safe to run the
+          ``./securedrop-admin install`` command again. If you see the same
+          issue consistently, then you will need to troubleshoot it.
