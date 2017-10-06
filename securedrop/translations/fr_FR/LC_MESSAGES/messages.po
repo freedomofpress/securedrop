@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-05 21:40+0000\n"
+"PO-Revision-Date: 2017-10-06 19:09+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -665,7 +665,7 @@ msgstr "Aucun document n'a été envoyé !"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
-msgstr "filtrer par nom de code"
+msgstr "Filtrer par nom de code"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
@@ -704,7 +704,7 @@ msgstr ""
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
-msgstr "Se connecter pour accéder à l'interface des journalistes"
+msgstr "Connectez-vous pour accéder à l'interface des journalistes"
 
 #: journalist_templates/login.html:9
 msgid "Password"
@@ -877,7 +877,7 @@ msgid ""
 "high</a>, or ignore this warning to continue."
 msgstr ""
 "<strong>Nous recommandons de régler le niveau de sécurité sur Élevé pour "
-"protéger votre anonymat :</strong> <a id=\"disable-js\" href=\"\">Apprenez à "
+"protéger votre anonymat :</strong> <a id=\"disable-js\" href=\"\">apprenez à "
 "le régler sur Élevé</a> ou ignorez ce message pour poursuivre."
 
 #: source_templates/index.html:18
@@ -888,7 +888,7 @@ msgid ""
 msgstr ""
 "<strong>Nous recommandons d'utiliser le navigateur Tor pour accéder à "
 "SecureDrop :</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> "
-"Apprenez comment l'installer</a> ou ignorez cet avertissement pour "
+"apprenez comment l'installer</a> ou ignorez cet avertissement pour "
 "poursuivre."
 
 #: source_templates/index.html:41
