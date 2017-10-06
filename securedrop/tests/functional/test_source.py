@@ -2,7 +2,7 @@ import source_navigation_steps
 import functional_test
 
 
-class TestSourceInterfaceBannerWarnings(
+class TestSourceInterface(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationSteps):
 
