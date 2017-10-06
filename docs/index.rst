@@ -52,6 +52,7 @@ anonymous sources.
    deployment/landing_page.rst
    deployment/minimum_security_requirements.rst
    deployment/whole_site_changes.rst
+   deployment/sample_privacy_policy.rst
 
 .. toctree::
    :caption: Checklists
