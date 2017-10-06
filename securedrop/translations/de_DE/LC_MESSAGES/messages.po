@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-06 18:31+0000\n"
+"PO-Revision-Date: 2017-10-06 18:33+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
@@ -79,8 +79,8 @@ msgstr ""
 #: journalist.py:282
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
-"Ungültiges Passwort-Format: ungerade Passwort-Länge. Haben Sie es falsch "
-"eingegeben?"
+"Ungültiges Geheimnisformat: ungerade Geheimnislänge. Haben Sie das Geheimnis "
+"falsch eingetippt?"
 
 #: journalist.py:287 journalist.py:312 journalist.py:720
 msgid ""
@@ -417,7 +417,7 @@ msgstr "Deckname ändern"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr "Sind Sie sicher, dass sie einen neuen Decknamen generieren wollen?"
+msgstr "Sind Sie sicher, dass Sie einen neuen Decknamen generieren möchten?"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:72
 msgid "Cancel"
