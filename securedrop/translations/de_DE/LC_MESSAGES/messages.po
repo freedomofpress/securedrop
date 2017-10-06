@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-06 12:44+0000\n"
-"Last-Translator: heartsucker <heartsucker@riseup.net>\n"
+"PO-Revision-Date: 2017-10-06 18:31+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
 "Language: de_DE\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr ""
+msgstr "Sie wurden wegen Inaktivität abgemeldet"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
@@ -375,7 +375,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "Angemeldet als"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -730,15 +730,15 @@ msgstr ""
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Dieses Feld ist erforderlich."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "Ungültige Eingabe."
 
 #: source_app/main.py:32
 msgid ""
@@ -872,17 +872,15 @@ msgid "ALREADY HAVE A CODENAME?"
 msgstr "HABEN SIE BEREITS EINEN DECKNAMEN?"
 
 #: source_templates/index.html:17
-#, fuzzy
-#| msgid ""
-#| "<strong>We recommend turning the Security Slider to High to protect your "
-#| "anonymity:</strong>"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
 msgstr ""
 "<strong>Wir empfehlen, die Sicherheitseinstellungen auf 'Hoch' zu setzen, um "
-"Ihre Anonymität zu schützen:</strong>"
+"Ihre Anonymität zu schützen:</strong><a id=\"disable-js\" href=\"\">Erfahren "
+"Sie, wie man ihn auf hoch einstellt</a> oder ignorieren Sie diese Warnung, "
+"um fortzufahren."
 
 #: source_templates/index.html:18
 msgid ""
@@ -890,6 +888,10 @@ msgid ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or "
 "ignore this warning to continue."
 msgstr ""
+"<strong>Wir empfehlen die Nutzung des Tor-Browsers für den Zugriff auf "
+"SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">"
+"Erfahren Sie, wie Sie ihn installieren</a> oder ignorieren Sie diese "
+"Warnung, um fortzufahren."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -934,6 +936,8 @@ msgstr ""
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
+"Klicken Sie auf das <img src=\"{icon}\" alt=\"Tor icon\"> Tor-Symbol in der "
+"Werkzeugleiste oben"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
