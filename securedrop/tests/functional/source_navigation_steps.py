@@ -236,4 +236,7 @@ class SourceNavigationSteps():
 
     def _source_sees_session_timeout_message(self):
         notification = self.driver.find_element_by_css_selector('.important')
-        assert 'Your session timed out due to inactivity.' in notification.text
+
+        if not hasattr(self, 'accept_languages'):
+            expected_text = 'Your session timed out due to inactivity.'
+            assert expected_text in notification.text
