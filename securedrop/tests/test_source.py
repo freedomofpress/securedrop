@@ -44,6 +44,25 @@ class TestSourceApp(TestCase):
         self.assertIn("Submit documents for the first time", response.data)
         self.assertIn("Already submitted something?", response.data)
 
+    def test_all_words_in_wordlist_validate(self):
+        """Verify that all words in the wordlist are allowed by the form
+        validation. Otherwise a source will have a codename and be unable to
+        return."""
+
+        wordlist_en = crypto_util._get_wordlist('en')
+
+        for word in wordlist_en:
+            with self.client as c:
+                resp = c.post('/login', data=dict(codename=word),
+                              follow_redirects=True)
+                self.assertEqual(resp.status_code, 200)
+                # If the word does not validate, then it will show
+                # 'Invalid input'. If it does validate, it should show that
+                # it isn't a recognized codename.
+                self.assertIn('Sorry, that is not a recognized codename.',
+                              resp.data)
+                self.assertNotIn('logged_in', session)
+
     def _find_codename(self, html):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
