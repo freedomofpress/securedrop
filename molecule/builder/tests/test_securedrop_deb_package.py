@@ -37,6 +37,7 @@ def get_deb_packages():
             securedrop_version=securedrop_test_vars.securedrop_version,
             ossec_version=securedrop_test_vars.ossec_version,
             keyring_version=securedrop_test_vars.keyring_version,
+            config_version=securedrop_test_vars.config_version,
             )
 
     deb_packages = [d.format(**substitutions) for d
@@ -103,7 +104,12 @@ def test_deb_package_control_fields(File, Command, deb):
     c = Command("dpkg-deb --field {}".format(deb_package.path))
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
-    assert "Architecture: amd64" in c.stdout
+    # The securedrop-config package is architecture indepedent
+    if package_name == "securedrop-config":
+        assert "Architecture: all" in c.stdout
+    else:
+        assert "Architecture: amd64" in c.stdout
+
     assert "Package: {}".format(package_name) in c.stdout
     assert c.rc == 0
 
