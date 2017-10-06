@@ -184,6 +184,37 @@ possession when they attempt to log in to SecureDrop.
 Updating the Servers
 --------------------
 
+Sometimes you will want to update the system configuration on the SecureDrop
+servers. For example, to customize the logo on the source interface,
+or change the PGP key that OSSEC alerts are encrypted to. You can do this from
+your *Admin Workstation* by following the procedure described in this
+section.
+
+Updating system configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The server configuration is stored on the *Admin Workstation* in
+``~/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific``.
+
+If you want to update the system configuration, there are two options:
+
+1. Manually edit the ``site-specific`` file to make the desired modifications.
+2. From ``~/Persistent/securedrop``, run
+   ``./securedrop-admin sdconfig --force``, which will require you to retype
+   each variable in ``site-specific``.
+
+Once you have edited the ``site-specific`` server configuration file, you will
+need to apply the changes to the servers. From ``~/Persistent/securedrop``:
+
+.. code:: sh
+
+  ./securedrop-admin install
+
+.. include:: includes/rerun-install-is-safe.txt
+
+Once the install command has successfully completed, the changes are applied.
+Read the next section if you have multiple administrators.
+
 Managing ``site-specific`` updates on teams with multiple admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
