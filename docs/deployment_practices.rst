@@ -11,7 +11,10 @@ protection provided by SecureDrop.
 While SecureDrop itself is located on a Tor hidden service, news
 organizations also need to create a SecureDrop landing page that will
 explain how SecureDrop works, give sources instructions on how to access
-the Tor hidden service, and disclose the risks.
+the Tor hidden service, and disclose the risks. We recommend to also include a
+privacy policy (see our :ref:`Sample Privacy Policy`)
+that describes what data is collected and how it will be used by your
+organization.
 
 It is important to keep in mind that implementing SecureDrop will bring
 more attention to your organization by security researchers, hackers,
