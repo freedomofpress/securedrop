@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-05 07:12+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Arabic <https://weblate.securedrop.club/projects/securedrop/"
-"securedrop/ar/>\n"
+"PO-Revision-Date: 2017-10-07 16:24+0000\n"
+"Last-Translator: Ali <aboshanab_@hotmail.com>\n"
+"Language-Team: Arabic "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr ""
+msgstr "لقد تم تسجيل خروجك بسبب عدم تفاعلك"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
@@ -34,7 +34,6 @@ msgid "Login failed."
 msgstr "فشل تسجيل الدخول."
 
 #: journalist.py:137
-#, fuzzy
 msgid "Please wait at least {seconds} seconds before logging in again."
 msgstr ""
 "الرجاء الإنتظار لمدة {seconds} ثواني على الاقل قبل محاولة تسجيل الدخول مرة "
@@ -66,7 +65,6 @@ msgstr ""
 "التطبيق."
 
 #: journalist.py:241
-#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr "تم التحقق من رمز التوثيق الثنائي للمستخدم {user}."
 
@@ -134,24 +132,22 @@ msgid "No unread submissions in selected collections."
 msgstr "لا توجد رسائل غير مقروءة في المجموعات المحددة."
 
 #: journalist.py:646
-#, fuzzy
 msgid "{source_name}'s collection deleted"
-msgstr "تم حذف {num} مجموعة"
+msgstr "مجموعة {source_name} حُذفت"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
 msgstr "لم يتم تحديد مجموعات للحذف."
 
 #: journalist.py:660
-#, fuzzy
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
-msgstr[0] "تم حذف {num} مجموعة"
-msgstr[1] "تم حذف {num} مجموعة"
-msgstr[2] "تم حذف {num} مجموعتين"
-msgstr[3] "تم حذف {num} مجموعات"
-msgstr[4] "تم حذف {num} مجموعات"
-msgstr[5] "تم حذف {num} مجموعة"
+msgstr[0] "{num} مجموعة حُذفت"
+msgstr[1] "{num} مجموعة حُذفت"
+msgstr[2] "{num} مجموعة حُذفت"
+msgstr[3] "{num} مجموعات حُذفت"
+msgstr[4] "{num} مجموعة حُذفت"
+msgstr[5] "{num} مجموعة حُذفت"
 
 #: journalist.py:704
 msgid "You cannot send an empty reply."
@@ -162,8 +158,6 @@ msgid "Thanks. Your reply has been stored."
 msgstr "شكرا. لقد تم تخزين ردك."
 
 #: journalist.py:750
-#, fuzzy
-#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "تمت إعادة تسمية المصدر '{original_name}' إلى '{new_name}'"
 
@@ -187,7 +181,7 @@ msgstr[5] "تم حذف الرسائل"
 
 #: template_filters.py:14
 msgid "{time} ago"
-msgstr ""
+msgstr "{time} مضى"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
@@ -372,7 +366,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "مُسجل بإسم"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -462,7 +456,7 @@ msgstr "يمكنك كتابة رد آمن للشخص الذي أرسل هذه ا
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
-msgstr ""
+msgstr "لقد أبلغت هذا المصدر للرد."
 
 #: journalist_templates/col.html:85
 msgid ""
@@ -478,7 +472,7 @@ msgstr "انقر أدناه إذ تود الرد على هذا المصدر."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "ضع علامة على هذا المصدر للرد"
 
 #: journalist_templates/col.html:96
 msgid ""
@@ -500,21 +494,18 @@ msgid ""
 msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تم تحديد الملف التالي ل<strong>حذفه بشكل نهائي</strong>:"
+msgstr[1] "تم تحديد الملف التالي ل<strong>حذفه بشكل نهائي</strong>:"
+msgstr[2] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
+msgstr[3] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
+msgstr[4] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
+msgstr[5] "تم تحديد {files} الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
 msgstr "حذف الملفات بشكل دائم"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid ""
-#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
 msgstr "الرجوع إلى قائمة المستندات ل {source_name}..."
 
@@ -523,10 +514,8 @@ msgid "Edit user \"{user}\""
 msgstr "\"{user}\" تعديل المستخدم"
 
 #: journalist_templates/edit_account.html:8
-#, fuzzy
-#| msgid "Change Username & Admin Status"
 msgid "Change Username &amp; Admin Status"
-msgstr "تغيير حالة المسؤول و اسم المستخدم"
+msgstr "تغيير اسم المستخدم &amp; حالة المشرف"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -645,11 +634,11 @@ msgstr "تنزيل"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr ""
+msgstr "تمييز"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr ""
+msgstr "الغاء التمييز"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
@@ -710,29 +699,24 @@ msgid "LOG IN"
 msgstr "تسجيل الدخول"
 
 #: source_app/__init__.py:64
-#, fuzzy
-#| msgid ""
-#| "<strong>WARNING:</strong> You appear to be using Tor2Web. This "
-#| "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-warning"
-#| "\">Why is this dangerous?</a>"
 msgid ""
 "<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
 "<strong>تنبيه:</strong> يبدو أنك تستخدم Tor2Web. هذا <strong>لا</strong> "
-"يخفي هوية المستخدم. <a href=\"/tor2web-warning\"> ما الخطير في ذلك؟</a>"
+"يخفي هوية المستخدم. <a href=\"{url}\"> ما الخطير في ذلك؟</a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "هذه الخانة مطلوبة."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "يجب أن يتراوح طول الحقل بين 1 الى {max_codename_len} حروف. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "مدخل غير صالح."
 
 #: source_app/main.py:32
 msgid ""
@@ -747,22 +731,16 @@ msgid "You must enter a message or choose a file to submit."
 msgstr "يجب عليك ترك رسالة أو تحميل ملف."
 
 #: source_app/main.py:138
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message."
-msgstr "شكرا! لقد استلمنا الأشياء الخاصة بك."
+msgstr "شكرا! لقد استلمنا رسالتك."
 
 #: source_app/main.py:140
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your document."
-msgstr "شكرا! لقد استلمنا الأشياء الخاصة بك."
+msgstr "شكرا! لقد استلمنا مستندك."
 
 #: source_app/main.py:142
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message and document."
-msgstr "شكرا! لقد استلمنا الأشياء الخاصة بك."
+msgstr "شكرا! لقد استلمنا مستندك ورسالتك."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
@@ -863,15 +841,14 @@ msgid "ALREADY HAVE A CODENAME?"
 msgstr "هل لديك اسم رمز من قبل؟"
 
 #: source_templates/index.html:17
-#, fuzzy
-#| msgid ""
-#| "<strong>We recommend turning the Security Slider to High to protect your "
-#| "anonymity:</strong>"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
-msgstr "<strong> نوصي بتشغيل شريط الحماية لأعلى لحماية هويتك:</strong>"
+msgstr ""
+"<strong>نوصي بوضع شريط الأمان للأعلى لعدم كشف هويتك: </strong> <a id"
+"=\"disable-js\" href=\"\">تعلم كيفية وضعه للأعلى</a>أو تجاهل هذا التحذير "
+"للمتابعة."
 
 #: source_templates/index.html:18
 msgid ""
@@ -879,6 +856,9 @@ msgid ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or "
 "ignore this warning to continue."
 msgstr ""
+"<strong>نحن نوصي بإستعمال Tor Browser للوصول لخدمة SecureDrop:</strong> <a id"
+"=\"recommend-tor\" href=\"{tor_browser_url}\">تعلم كيفية تنصيبه</a>, أو "
+"تجاهل هذا التحذير للمتابعة."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -919,6 +899,8 @@ msgstr ""
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
+"اضغط على <img src=\"{icon}\" alt=\"Tor icon\"> Tor ايقونة Tor في شريط "
+"الأدوات أعلاه"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
@@ -931,10 +913,8 @@ msgstr ""
 "أدر شريط التمرير إلى <strong>عالي</strong>, ثم انقر على <strong>Ok</strong>"
 
 #: source_templates/index.html:97
-#, fuzzy
-#| msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr "<a href=\"/\">انقر هنا</a>لتحديث الصفحة"
+msgstr "<a href=\"/\">انقر هنا</a> لتحديث الصفحة"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
@@ -982,32 +962,26 @@ msgid ""
 "submission into the hands of a journalist straight away. We’re sorry for the "
 "delay. Please do check back again in a week or so."
 msgstr ""
+"الآن تاكدنا بأنك إنسان, ورغما عن ذلك, سوف نرسل التقديم الخاص بك لأيدي الصحفي "
+"على الفور. نأسف على التاخير. يرجى التحقق مرة أخرى في غضون أسبوع أو نحو ذلك."
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
 msgstr "ارسال الادوات"
 
 #: source_templates/lookup.html:21
-#, fuzzy
-#| msgid ""
-#| "If you are already familiar with GPG, you can optionally encrypt your "
-#| "files and messages with our <a href=\"/journalist-key\" class=\"text-link"
-#| "\">public key</a> before submission. Files are encrypted as they are "
-#| "received by SecureDrop."
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
 "before submission. Files are encrypted as they are received by SecureDrop."
 msgstr ""
 "إذا كنت على دراية بGPG, فإنه يمكنك تشفير الملفات والرسائل الخاصة بك باستخدام "
-"<a href=\"/journalist-key\" class=\"text-link\">مفتاحنا العام</a> قبل "
-"التسليم. يتم تشفير الملفات كما يتم استلامها من قبل سكوريدروب SecureDrop."
+"<a href=\"{url}\" class=\"text-link\">مفتاحنا العام</a> قبل التسليم. يتم "
+"تشفير الملفات كما يتم استلامها من قبل سكوريدروب SecureDrop."
 
 #: source_templates/lookup.html:22
-#, fuzzy
-#| msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">المزيد</a>."
+msgstr "<a href=\"{url}\" class=\"text-link\">المزيد</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
@@ -1090,6 +1064,8 @@ msgid ""
 "Tor Hidden Services (.onion sites) without installing Tor. It was designed "
 "to facilitate anonymous publishing."
 msgstr ""
+"<a href=\"tor2web.org\">Tor2Web</a> هو خادم وكيل يجعلك تتصفح خدمات Tor "
+"الخفية (صفحات .onion) بدون تثبيت Tor. مصممة من أجل تسهيل النشر بشكل مجهول."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
@@ -1105,7 +1081,6 @@ msgstr ""
 "تستخدم HTTPS, فانه من الممكن أن اتصالك قد اعترض من قبل شخص بارع."
 
 #: source_templates/tor2web-warning.html:6
-#, fuzzy
 msgid ""
 "If you want to submit information, you are <strong>strongly advised</strong> "
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
@@ -1146,7 +1121,7 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
-msgstr ""
+msgstr "لماذا أقوم بتحميل المفتاح العمومي للصحفي؟"
 
 #: source_templates/why-journalist-key.html:4
 msgid ""
@@ -1167,41 +1142,34 @@ msgstr ""
 "بك بنفسك. للقيام بذلك:"
 
 #: source_templates/why-journalist-key.html:7
-#, fuzzy
-#| msgid ""
-#| "<a href=\"/journalist-key\">Download</a> the public key. The public key "
-#| "is a text file with the extension <code>.asc</code>"
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. The public key is a text file "
 "with the extension <code>.asc</code>"
 msgstr ""
-"<a href=\"/journalist-key\">قم بتنزيل</a>المفتاح العام. يعتبر المفتاح العام "
-"ملف نصي مزود برمز<code>.asc</code>"
+"<a href=\"{url}\">قم بتنزيل</a>المفتاح العام. يعتبر المفتاح العام ملف نصي "
+"مزود برمز<code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
-msgstr ""
+msgstr "قم بإستيراده على حلقة مفاتيح GPG."
 
 #: source_templates/why-journalist-key.html:10
-#, fuzzy
-#| msgid ""
-#| "If you are using <a href=\"tails.boum.org\">Tails</a>, you can double-"
-#| "click the <code>.asc</code> file you just downloaded and it will be "
-#| "automatically imported to your keyring."
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
-"اذا كنت تستخدم <a href=\"tails.boum.org\">رابط</a>, فانه يمكنك القيام بالنقر "
-"المزدوج على<code>إمتداد الملف</code>الذي قمت بتنزيله و سيقوم بادخاله تلقائيا "
-"الى كلمات المرور المحفوظة الخاصة بك."
+"اذا كنت تستخدم <a href=\"{url}\">Tails</a>, فانه يمكنك القيام بالنقر المزدوج "
+"على<code>إمتداد الملف</code>الذي قمت بتنزيله و سيقوم بادخاله تلقائيا الى "
+"كلمات المرور المحفوظة الخاصة بك."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using Mac/Linux, open the terminal. You can import the key with "
 "<code>gpg --import /path/to/key.asc</code>."
 msgstr ""
+"إذا كنت تستخدم Mac/Linux, قم بفتح الطرفية. وإستيراد المفتاح من خلال الامر "
+"<code>gpg --import /path/to/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
@@ -1223,6 +1191,8 @@ msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg --"
 "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
+"في جميع الأنظمة, قم بفتح الطرفية وأستعمل الأمر الآتي: <code>gpg --recipient "
+"&lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
 msgid ""
@@ -1230,6 +1200,8 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
 "code>)"
 msgstr ""
+"قم برفع الملفات المشفرة المراد تسليمها. سيكون اسمها مثل أسم الملف الغير مشفر "
+"بوجود .gpg في نهاية الملف (مثال <code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
@@ -1237,6 +1209,9 @@ msgid ""
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
+"<strong>نصيحة:</strong> إذا كنت ترغب في البقاء مجهول الهوية, <strong>do "
+"not</strong> إستعمل GPG للتوقيع على الملف المشفر (بواسطة <code>--sign</code> "
+"أو <code>-s</code>) ليكشف لنا عنوان GPG الخاص بك."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
