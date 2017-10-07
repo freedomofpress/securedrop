@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-09-26 14:57+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.club/projects/securedrop/"
-"securedrop/nl/>\n"
+"PO-Revision-Date: 2017-10-07 19:37+0000\n"
+"Last-Translator: Anne M <info@numijneigenwebsite.nl>\n"
+"Language-Team: Dutch "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr ""
+msgstr "U bent uitgelogd wegens inactiviteit"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
@@ -141,11 +141,8 @@ msgid "No unread submissions in selected collections."
 msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 
 #: journalist.py:646
-#, fuzzy
-#| msgid "{num} collection deleted"
-#| msgid_plural "{num} collections deleted"
 msgid "{source_name}'s collection deleted"
-msgstr "{num} collectie verwijderd"
+msgstr "{source_name}en collectie verwijderd"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
@@ -166,10 +163,8 @@ msgid "Thanks. Your reply has been stored."
 msgstr "Bedankt. Je antwoord is opgeslagen."
 
 #: journalist.py:750
-#, fuzzy
-#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr "De naam van bron '{original_name}' is veranderd naar '{new_name}'"
+msgstr "De bron '{original_name}' is hernoemd naar '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -379,7 +374,7 @@ msgstr ""
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "Aangemeld als"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
@@ -523,22 +518,16 @@ msgid "PERMANENTLY DELETE FILES"
 msgstr "VERWIJDER BESTANDEN PERMANENT"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid ""
-#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
-msgstr ""
-"Ga terug naar de documentenlijst voor {source_name}..."
+msgstr "Ga terug naar de documentenlijst voor {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
 msgstr "Gebruiker \"{user}\" wijzigen"
 
 #: journalist_templates/edit_account.html:8
-#, fuzzy
-#| msgid "Change Username & Admin Status"
 msgid "Change Username &amp; Admin Status"
-msgstr "Verander Gebruikersnaam & Beheerdersstatus"
+msgstr "Verander Gebruikersnaam & Beheerderstatus"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -732,30 +721,25 @@ msgid "LOG IN"
 msgstr "LOG IN"
 
 #: source_app/__init__.py:64
-#, fuzzy
-#| msgid ""
-#| "<strong>WARNING:</strong> You appear to be using Tor2Web. This "
-#| "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-warning"
-#| "\">Why is this dangerous?</a>"
 msgid ""
 "<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
-"<strong>WAARSCHUWING:</strong> Het lijkt erop dat je Tor2Web gebruikt. "
-"Tor2Web <strong>zorgt niet</strong> voor anonimiteit. <a href=\"/tor2web-"
-"warning\">Waarom is dit gevaarlijk?</a>"
+"<strong>WAARSCHUWING:</strong> Het lijkt erop dat u Tor2Web gebruikt. "
+"Tor2Web zorgt <strong>niet</strong> voor anonimiteit. <a href=\"{url}\">"
+"Waarom is dit gevaarlijk?</a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Dit is een verplicht veld."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Veld moet tussen 1 en {max_codename_len} tekens lang zijn. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "Ongeldige invoer."
 
 #: source_app/main.py:32
 msgid ""
@@ -770,22 +754,16 @@ msgid "You must enter a message or choose a file to submit."
 msgstr "Je moet een bericht ingeven of een bestand selecteren om te versturen."
 
 #: source_app/main.py:138
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message."
-msgstr "Bedankt! We hebben je {things} ontvangen."
+msgstr "Bedankt! We hebben uw bericht ontvangen."
 
 #: source_app/main.py:140
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your document."
-msgstr "Bedankt! We hebben je {things} ontvangen."
+msgstr "Bedankt! We hebben uw document ontvangen."
 
 #: source_app/main.py:142
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message and document."
-msgstr "Bedankt! We hebben je {things} ontvangen."
+msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
@@ -891,17 +869,14 @@ msgid "ALREADY HAVE A CODENAME?"
 msgstr "HEB JE AL EEN CODENAAM?"
 
 #: source_templates/index.html:17
-#, fuzzy
-#| msgid ""
-#| "<strong>We recommend turning the Security Slider to High to protect your "
-#| "anonymity:</strong>"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>We raden aan om de Veiligheidsschuif op Hoog te zetten om je "
-"anonimiteit te waarborgen:</strong>"
+"<strong>Wij adviseren om de Security Slider op Hoog te zetten om uw "
+"anonimiteit te beschermen:</strong> <a id=\"disable-js\" href=\"\">Lees hier "
+"hoe u dit op hoog zet</a> of negeer deze waarschuwing."
 
 #: source_templates/index.html:18
 msgid ""
@@ -909,6 +884,9 @@ msgid ""
 "\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or "
 "ignore this warning to continue."
 msgstr ""
+"<strong>Wij adviseren om de Tor Browser te gebruiken om SecureDrop te "
+"bezoeken:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lees "
+"hier informatie om deze te installeren</a> of negeer deze waarschuwing."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -953,6 +931,8 @@ msgstr ""
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar above"
 msgstr ""
+"Klik op het <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in de werkbalk "
+"hierboven"
 
 #: source_templates/index.html:95
 msgid "Click <strong>Security Settings...</strong>"
@@ -966,10 +946,8 @@ msgstr ""
 "<strong>Ok</strong>"
 
 #: source_templates/index.html:97
-#, fuzzy
-#| msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr "<a href=\"/\">Klik hier</a> om de pagina te vernieuwen"
+msgstr "<a href=\"/\">Klik hier</a> om de pagina te verversen"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
@@ -1029,28 +1007,19 @@ msgid "Submit Materials"
 msgstr "Materiaal insturen"
 
 #: source_templates/lookup.html:21
-#, fuzzy
-#| msgid ""
-#| "If you are already familiar with GPG, you can optionally encrypt your "
-#| "files and messages with our <a href=\"/journalist-key\" class=\"text-link"
-#| "\">public key</a> before submission. Files are encrypted as they are "
-#| "received by SecureDrop."
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
 "before submission. Files are encrypted as they are received by SecureDrop."
 msgstr ""
-"Als je bekend bent met GPG, dan is het mogelijk om je bestanden en berichten "
-"te versleutelen met onze <a href=\"/journalist-key\" class=\"text-link"
-"\">openbare sleutel</a> voordat je het verstuurt. Bestanden worden "
-"versleuteld op het moment dat ze door SecureDrop ontvangen worden."
+"Indien u reeds bekend bent met GPG kunt u eventueel uw bestanden en "
+"berichten versleutelen met onze <a href=\"{url}\" class=\"text-link\">"
+"publieke sleutel</a> alvorens deze te versturen. Bestanden worden "
+"versleuteld ontvangen door SecureDrop."
 
 #: source_templates/lookup.html:22
-#, fuzzy
-#| msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr ""
-"<a href=\"/why-journalist-key\" class=\"text-link\">Meer informatie</a>."
+msgstr "<a href=\"{url}\" class=\"text-link\">Lees meer</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
@@ -1216,35 +1185,26 @@ msgstr ""
 "je inzendingen zelf te versleutelen. Om dat te doen:"
 
 #: source_templates/why-journalist-key.html:7
-#, fuzzy
-#| msgid ""
-#| "<a href=\"/journalist-key\">Download</a> the public key. The public key "
-#| "is a text file with the extension <code>.asc</code>"
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. The public key is a text file "
 "with the extension <code>.asc</code>"
 msgstr ""
-"<a href=\"/journalist-key\">Download</a> de publieke sleutel. De publieke "
-"sleutel is een tekstbestand met de bestandsextensie <code>.asc</code>"
+"<a href=\"{url}\">Download</a> de publieke sleutel. De publieke sleutel is "
+"een tekstbestand met de <code>.asc</code> bestandsextensie"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
 msgstr "Importeer dit in je GPG sleutelring."
 
 #: source_templates/why-journalist-key.html:10
-#, fuzzy
-#| msgid ""
-#| "If you are using <a href=\"tails.boum.org\">Tails</a>, you can double-"
-#| "click the <code>.asc</code> file you just downloaded and it will be "
-#| "automatically imported to your keyring."
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
-"Als je <a href=\"tails.boum.org\">Tails</a> gebruikt, kun je dubbelklikken "
-"op het <code>.asc</code>-bestand dat je zojuist gedownload hebt en het zal "
-"automatisch toegevoegd worden aan je sleutelring."
+"Indien u <a href=\"{url}\">Tails</a> gebruikt, kunt u dubbelklikken op het "
+"<code>.asc</code>-bestand dat u zojuist gedownload hebt en het wordt "
+"automatisch toegevoegd aan uw sleutelring."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
@@ -1266,10 +1226,10 @@ msgid ""
 "asc</code>!)"
 msgstr ""
 "Het is nodig dat je je sleutel kan identificeren (dit heet \"user ID\" of "
-"uid). Omdat de bestandsnaam van je publieke sleutel hetzelfde is als de "
-"vingerafdruk van je sleutel (met .asc aan het einde), kan je die gewoon "
-"kopiëren en plakken (zorg ervoor dat je het <code>.asc</code>-gedeelte niet "
-"mee kopieert!)."
+"UID). Omdat de bestandsnaam van je publieke sleutel ook de vingerafdruk van "
+"je sleutel (met .asc aan het einde) is, kan je die gewoon kopiëren en "
+"plakken (zorg ervoor dat je het <code>.asc</code>-gedeelte niet mee "
+"kopieert!)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
