@@ -30,7 +30,5 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-  options:
-    n: auto
   lint:
     name: flake8
