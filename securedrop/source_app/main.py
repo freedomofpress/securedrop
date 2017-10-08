@@ -38,6 +38,7 @@ def make_blueprint(config):
 
         codename = generate_unique_codename()
         session['codename'] = codename
+        session['new_user'] = True
         return render_template('generate.html', codename=codename)
 
     @view.route('/create', methods=['POST'])
@@ -91,6 +92,7 @@ def make_blueprint(config):
             codename=g.codename,
             replies=replies,
             flagged=g.source.flagged,
+            new_user=session.get('new_user', None),
             haskey=crypto_util.getkey(
                 g.filesystem_id))
 
