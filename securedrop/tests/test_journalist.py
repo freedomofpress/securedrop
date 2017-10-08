@@ -63,7 +63,8 @@ class TestJournalistApp(TestCase):
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
             self.client.post(url_for('reply'),
-                             data={'filesystem_id': filesystem_id, 'msg': '_'})
+                             data={'filesystem_id': filesystem_id,
+                             'message': '_'})
 
         # Notice the "potentially sensitive" exception_msg is not present in
         # the log event.
@@ -81,7 +82,8 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit', side_effect=exception_class()):
             self.client.post(url_for('reply'),
-                             data={'filesystem_id': filesystem_id, 'msg': '_'})
+                             data={'filesystem_id': filesystem_id,
+                             'message': '_'})
 
         self.assertMessageFlashed(
             'An unexpected error occurred! Please check '
@@ -94,7 +96,7 @@ class TestJournalistApp(TestCase):
 
         resp = self.client.post(url_for('reply'),
                                 data={'filesystem_id': filesystem_id,
-                                      'msg': ''},
+                                      'message': ''},
                                 follow_redirects=True)
 
         self.assertIn("You cannot send an empty reply.", resp.data)
@@ -106,7 +108,7 @@ class TestJournalistApp(TestCase):
 
         resp = self.client.post(url_for('reply'),
                                 data={'filesystem_id': filesystem_id,
-                                      'msg': '_'},
+                                      'message': '_'},
                                 follow_redirects=True)
 
         self.assertNotIn("You cannot send an empty reply.", resp.data)
