@@ -228,7 +228,7 @@ def admin_add_user():
                 else:
                     flash(gettext("An error occurred saving this user"
                                   " to the database."
-                                  " Please check the application logs."),
+                                  " Please inform your administrator."),
                           "error")
                     app.logger.error("Adding user '{}' failed: {}".format(
                         username, e))
@@ -296,8 +296,7 @@ def admin_reset_two_factor_hotp():
             else:
                 flash(gettext(
                     "An unexpected error occurred! "
-                    "Please check the application "
-                    "logs or inform your adminstrator."), "error")
+                    "Please inform your administrator."), "error")
                 app.logger.error(
                     "set_hotp_secret '{}' (id {}) failed: {}".format(
                         otp_secret, uid, e))
@@ -320,8 +319,8 @@ def commit_account_changes(user):
             db_session.commit()
         except Exception as e:
             flash(gettext(
-                "An unexpected error occurred! Please check the application "
-                  "logs or inform your adminstrator."), "error")
+                "An unexpected error occurred! Please "
+                  "inform your administrator."), "error")
             app.logger.error("Account changes for '{}' failed: {}".format(user,
                                                                           e))
             db_session.rollback()
@@ -729,8 +728,8 @@ def reply():
         db_session.commit()
     except Exception as exc:
         flash(gettext(
-            "An unexpected error occurred! Please check the application "
-            "logs or inform your adminstrator."), "error")
+            "An unexpected error occurred! Please "
+            "inform your administrator."), "error")
         # We take a cautious approach to logging here because we're dealing
         # with responses to sources. It's possible the exception message could
         # contain information we don't want to write to disk.

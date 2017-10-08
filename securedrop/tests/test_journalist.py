@@ -86,8 +86,8 @@ class TestJournalistApp(TestCase):
                              'message': '_'})
 
         self.assertMessageFlashed(
-            'An unexpected error occurred! Please check '
-            'the application logs or inform your adminstrator.', 'error')
+            'An unexpected error occurred! Please '
+            'inform your administrator.', 'error')
 
     def test_empty_replies_are_rejected(self):
         source, _ = utils.db_helper.init_source()
@@ -454,8 +454,7 @@ class TestJournalistApp(TestCase):
 
         self.assertEqual(old_hotp, new_hotp)
         self.assertMessageFlashed("An unexpected error occurred! "
-                                  "Please check the application "
-                                  "logs or inform your adminstrator.", "error")
+                                  "Please inform your administrator.", "error")
         mocked_error_logger.assert_called_once_with(
             "set_hotp_secret '{}' (id {}) failed: {}".format(
                 otp_secret, self.user.id, error_message))
@@ -614,7 +613,7 @@ class TestJournalistApp(TestCase):
             "None [SQL: 'STATEMENT'] [parameters: 'PARAMETERS']")
         self.assertMessageFlashed(
             "An error occurred saving this user to the database."
-            " Please check the application logs.",
+            " Please inform your administrator.",
             "error")
 
     def test_admin_page_restriction_http_gets(self):
