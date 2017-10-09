@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-10-09 14:48+0000\n"
+"PO-Revision-Date: 2017-10-09 20:31+0000\n"
 "Last-Translator: Maria Ovsyannikova <xella.design@gmail.com>\n"
 "Language-Team: Russian "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ru/>\n"
@@ -773,23 +773,26 @@ msgstr ""
 
 #: source_templates/base.html:33
 msgid "LOG OUT"
-msgstr ""
+msgstr "ВЫЙТИ"
 
 #: source_templates/base.html:43 source_templates/index.html:84
 msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
+"Как и любое другое программное обеспечение, SecureDrop может иметь ошибки в "
+"обеспечении безопасности. Вы используете данное программное обеспечение на "
+"свой страх и риск."
 
 #: source_templates/error.html:3
 msgid "Server error"
-msgstr ""
+msgstr "Ошибка сервера"
 
 #: source_templates/error.html:5
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
-msgstr ""
+msgstr "Извините, на сайте произошла ошибка. Ваш запрос не был выполнен."
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
@@ -797,21 +800,24 @@ msgstr ""
 
 #: source_templates/first_submission_flashed_message.html:2
 msgid "Success!"
-msgstr ""
+msgstr "Успех!"
 
 #: source_templates/first_submission_flashed_message.html:3
+#, fuzzy
 msgid ""
 "Thank you for sending this information to us. Please check back later for"
 " replies."
 msgstr ""
+"Благодарим вас за отправку нам этой информаци. Пожалуйста, зайдите позже, "
+"чтобы проверить ответы."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr ""
+msgstr "Забыли ваше кодовое название?"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
-msgstr ""
+msgstr "Добро пожаловать"
 
 #: source_templates/generate.html:5
 msgid ""
@@ -834,10 +840,12 @@ msgid ""
 "Please either write this codename down and keep it in a safe place, or "
 "memorize it."
 msgstr ""
+"Пожалуйста, либо запишите данный псевдоним и сохраните его в безопасном "
+"месте или запомните его."
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
-msgstr ""
+msgstr "У ВАС УЖЕ ЕСТЬ ПСЕВДОНИМ?"
 
 #: source_templates/index.html:17
 msgid ""
@@ -855,71 +863,85 @@ msgstr ""
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
-msgstr ""
+msgstr "Отправить документы в первый раз"
 
 #: source_templates/index.html:48
 msgid "Already submitted something?"
-msgstr ""
+msgstr "Уже что-то отправляли?"
 
 #: source_templates/index.html:54
 msgid ""
 "If this is your first time submitting documents to journalists, start "
 "here."
-msgstr ""
+msgstr "Если вы впервые отправляете документы журналистам, начните здесь."
 
 #: source_templates/index.html:58
 msgid ""
 "If you have already submitted documents in the past, log in here to check"
 " for responses."
 msgstr ""
+"Если вы уже отправляли документы раньше, войдите в систему, чтобы проверить "
+"ответы."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
-msgstr ""
+msgstr "ОТПРАВИТЬ ДОКУМЕНТЫ"
 
 #: source_templates/index.html:73
+#, fuzzy
 msgid "CHECK FOR A RESPONSE"
-msgstr ""
+msgstr "ПРОВЕРИТЬ ПОЛУЧЕННЫЕ ОТВЕТЫ"
 
 #: source_templates/index.html:92
+#, fuzzy
 msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider "
 "to High in 4 easy steps!"
 msgstr ""
+"Кажется, вы используете Tor Browser. При помощи четырех простых шагов вы "
+"можете установить свои настройки безопасности на \"Высокий\" уровень."
 
 #: source_templates/index.html:94
 msgid ""
 "Click the <img src=\"{icon}\" alt=\"Tor icon\"> Tor icon in the toolbar "
 "above"
 msgstr ""
+"Нажмите на значок Tor (<img src=\"{icon}\" alt=\"Tor icon\">) в панели "
+"инструментов выше"
 
 #: source_templates/index.html:95
+#, fuzzy
 msgid "Click <strong>Security Settings...</strong>"
-msgstr ""
+msgstr "Нажмите <strong>Настройки Безопасности...</strong>"
 
 #: source_templates/index.html:96
+#, fuzzy
 msgid "Turn the Slider to <strong>High</strong>, then click <strong>Ok</strong>"
 msgstr ""
+"Установите ползунок на значение <strong>Высокий</strong>, потом нажмите "
+"<strong>Ок</strong>"
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr ""
+msgstr "<a href=\"/\">Нажмите здесь</a>, чтобы обновить страницу"
 
 #: source_templates/login.html:4
+#, fuzzy
 msgid "Enter Codename"
-msgstr ""
+msgstr "Введите псевдоним"
 
 #: source_templates/login.html:12
+#, fuzzy
 msgid "Enter your codename"
-msgstr ""
+msgstr "Введите ваш псевдоним"
 
 #: source_templates/login.html:20 source_templates/lookup.html:42
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТМЕНИТЬ"
 
 #: source_templates/logout_flashed_message.html:4
 msgid "Important!"
-msgstr ""
+msgstr "Важно!"
 
 #: source_templates/logout_flashed_message.html:5
 msgid ""
@@ -948,8 +970,9 @@ msgid ""
 msgstr ""
 
 #: source_templates/lookup.html:20
+#, fuzzy
 msgid "Submit Materials"
-msgstr ""
+msgstr "Отправить материалы"
 
 #: source_templates/lookup.html:21
 msgid ""
@@ -961,15 +984,15 @@ msgstr ""
 
 #: source_templates/lookup.html:22
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr ""
+msgstr "<a href=\"{url}\" class=\"text-link\">Подробнее</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
-msgstr ""
+msgstr "Вы можете отправить фаил, сообщение или и то и другое."
 
 #: source_templates/lookup.html:33
 msgid "Maximum upload size: 500 MB"
-msgstr ""
+msgstr "Максимальный размер для загрузки: 500МБ"
 
 #: source_templates/lookup.html:53
 msgid "Get Replies"
@@ -985,15 +1008,15 @@ msgstr ""
 
 #: source_templates/lookup.html:71
 msgid "Delete this reply?"
-msgstr ""
+msgstr "Удалить этот ответ?"
 
 #: source_templates/lookup.html:73
 msgid "DELETE"
-msgstr ""
+msgstr "УДАЛИТЬ"
 
 #: source_templates/lookup.html:82
 msgid "DELETE ALL REPLIES"
-msgstr ""
+msgstr "УДАЛИТЬ ВСЕ ОТВЕТЫ"
 
 #: source_templates/lookup.html:85
 msgid "Are you finished with the replies?"
@@ -1001,11 +1024,11 @@ msgstr ""
 
 #: source_templates/lookup.html:86
 msgid "YES, DELETE ALL REPLIES"
-msgstr ""
+msgstr "ДА, УДАЛИТЬ ВСЕ ОТВЕТЫ"
 
 #: source_templates/lookup.html:87
 msgid "NO, NOT YET"
-msgstr ""
+msgstr "НЕТ, ЕЩЁ НЕТ"
 
 #: source_templates/lookup.html:91
 msgid "There are no replies at this time."
@@ -1013,23 +1036,23 @@ msgstr ""
 
 #: source_templates/lookup.html:99
 msgid "Remember your codename is:"
-msgstr ""
+msgstr "Запомните, что ваш псевдоним:"
 
 #: source_templates/lookup.html:100
 msgid "Show"
-msgstr ""
+msgstr "Показать"
 
 #: source_templates/lookup.html:102
 msgid "Hide"
-msgstr ""
+msgstr "Скрыть"
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
-msgstr ""
+msgstr "Страница не найдена"
 
 #: source_templates/notfound.html:5
 msgid "Sorry, we couldn't locate what you requested."
-msgstr ""
+msgstr "К сожалению, мы не смогли найти то, что вы просили."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
@@ -1058,6 +1081,9 @@ msgid ""
 "href=\"torproject.org/download.html.en\">Tor</a> and use it to access our"
 " site safely and anonymously."
 msgstr ""
+"Если вы хотите отправить информацию, <strong>настоятельно "
+"рекомендуем</strong> установить <a href=\"torproject.org/download.html.en\""
+">Tor</a> и использовать его для доступа на наш сайт безопасно и анонимно."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1155,10 +1181,13 @@ msgid ""
 msgstr ""
 
 #: source_templates/why-journalist-key.html:17
+#, fuzzy
 msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg "
 "--recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
+"Для всех систем, откройте терминал и используйте gpg команду: <code>gpg "
+"--recipient&lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
 msgid ""
