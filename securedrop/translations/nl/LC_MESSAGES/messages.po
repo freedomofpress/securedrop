@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-07 22:23+0000\n"
+"PO-Revision-Date: 2017-10-09 16:30+0000\n"
 "Last-Translator: Anne M <info@numijneigenwebsite.nl>\n"
 "Language-Team: Dutch "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nl/>\n"
@@ -40,7 +40,7 @@ msgstr ""
 #: journalist.py:147
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
-"Wacht op een nieuwe tweeledige verificatie-token alvorens opnieuw in te "
+"Wacht op een nieuw tweeledige verificatie-token alvorens opnieuw in te "
 "loggen."
 
 #: journalist.py:205
@@ -75,8 +75,8 @@ msgstr "Token voor tweeledige verificatie kan niet worden gecontroleerd."
 #: journalist.py:277
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
-"Ongeldige samenstelling voor geheim: alleen gebruik van letters A-F en "
-"nummers 0-9 toegestaan."
+"Ongeldige samenstelling voor geheim: gebruik uitsluitend letters A-F en "
+"cijfers 0-9."
 
 #: journalist.py:282
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
@@ -93,7 +93,7 @@ msgstr ""
 
 #: journalist.py:319
 msgid "Account updated."
-msgstr "Gebruiker succesvol geüpdatet."
+msgstr "Account is bijgewerkt."
 
 #: journalist.py:341
 msgid "Username \"{user}\" already taken."
@@ -139,7 +139,7 @@ msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 
 #: journalist.py:646
 msgid "{source_name}'s collection deleted"
-msgstr "{source_name}en collectie verwijderd"
+msgstr "{source_name}-collectie verwijderd"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
@@ -153,7 +153,7 @@ msgstr[1] "{num} collecties verwijderd"
 
 #: journalist.py:704
 msgid "You cannot send an empty reply."
-msgstr "Het is niet mogelijk een leeg antwoord te versturen."
+msgstr "U kunt geen leeg antwoord te versturen."
 
 #: journalist.py:731
 msgid "Thanks. Your reply has been stored."
@@ -241,8 +241,8 @@ msgstr "Open de Google Authenticator app"
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
-"Open het menu, ga vervolgens naar \"Account toevoegen\", en druk vervolgens "
-"op \"Scan barcode\""
+"Klik op menu, vervolgens op \"Account inrichten\" en klik daarna op \"Scan "
+"barcode\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
@@ -274,7 +274,8 @@ msgstr "YubiKey activeren (OATH-HOTP)"
 #: journalist_templates/admin_new_user_two_factor.html:19
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
-"Zodra u uw Yubikey ingesteld hebt, voer de zescijferige code hieronder in:"
+"Zodra u uw YubiKey geconfigureerd heeft, voer de zescijferige code hieronder "
+"in:"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:23
@@ -304,7 +305,7 @@ msgstr "Gebruikersnaam"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
-msgstr "Wijzigen"
+msgstr "Bewerken"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
@@ -320,11 +321,11 @@ msgstr "Laatste login"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr "Gebruiker {username} wijzigen"
+msgstr "Gebruiker {username} bewerken"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr "Verwijder gebruiker {username}"
+msgstr "Gebruiker {username} verwijderen"
 
 #: journalist_templates/admin.html:31
 msgid "never"
@@ -361,11 +362,11 @@ msgid ""
 "authentication is set up correctly."
 msgstr ""
 "U bent bijna klaar! Om het toevoegen van deze nieuwe gebruiker af te ronden, "
-"laat hem/haar onderstaande instructies volgen om authenticatie in twee "
-"stappen met de Google Authenticator in te stellen. Zodra hij/zij dit account "
-"heeft toegevoegd, laat hem/haar vervolgens de zescijferige code uit de app "
+"laat hem/haar onderstaande instructies volgen om de tweeledige authenticatie "
+"met de Google Authenticator in te stellen. Zodra hij/zij dit account heeft "
+"toegevoegd, laat hem/haar vervolgens de zescijferige code uit de app "
 "invoeren om te bevestigen dat de authenticatie in twee stappen succesvol is "
-"toegevoegd."
+"ingericht."
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
@@ -377,15 +378,15 @@ msgstr "Beheerder"
 
 #: journalist_templates/base.html:28
 msgid "Log Out"
-msgstr "Afmelden"
+msgstr "Uitloggen"
 
 #: journalist_templates/base.html:40
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
-"Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt="
-"\"SecureDrop\">"
+"Mogelijk gemaakt door <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
@@ -393,7 +394,7 @@ msgstr "Mogelijk gemaakt door <em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
-msgstr "Alle Bronnen"
+msgstr "Alle bronnen"
 
 #: journalist_templates/col.html:13
 msgid ""
@@ -401,13 +402,13 @@ msgid ""
 "the first random codename is difficult to say or remember. You can generate "
 "new random codenames as many times as you like."
 msgstr ""
-"Genereer een nieuwe willekeurige codenaam voor deze bron. We raden dit aan "
-"wanneer de eerste willekeurige codenaam moeilijk uit te spreken of te "
-"onthouden is. Er is geen limiet op het aantal te generen codenamen."
+"Genereer een nieuwe willekeurige codenaam voor deze bron. We adviseren dit "
+"indien de eerste willekeurige codenaam moeilijk uit te spreken of te "
+"onthouden is. U kunt nieuwe willekeurige codenamen genereren zo vaak u wilt."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr "Verander codenaam"
+msgstr "Codenaam veranderen"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
@@ -431,19 +432,19 @@ msgstr ""
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr "Download Geselecteerd"
+msgstr "Geselecteerde downloaden"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr "Verwijder Geselecteerd"
+msgstr "Geselecteerde verwijderen"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr "Geüploadete Document"
+msgstr "Geüpload document"
 
 #: journalist_templates/col.html:55 journalist_templates/col.html:73
 msgid "Reply"
-msgstr "Beantwoord"
+msgstr "Reageer"
 
 #: journalist_templates/col.html:57
 msgid "Message"
@@ -457,28 +458,27 @@ msgstr "Geen documenten om weer te geven."
 msgid ""
 "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
-"U kunt een versleuteld antwoord sturen naar de persoon die deze documenten "
-"gestuurd heeft:"
+"U kunt beveiligd reageren naar de persoon die deze documenten gestuurd heeft:"
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
-msgstr "U heeft deze bron gemarkeerd om te beantwoorden."
+msgstr "U heeft deze bron gemarkeerd om te reageren."
 
 #: journalist_templates/col.html:85
 msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
-"Een encryptiesleutel zal gegenereerd worden voor de volgende keer dat de "
-"bron inlogt. Daarna zal het mogelijk zijn om de bron hier te beantwoorden."
+"Er wordt een encryptiesleutel gegenereerd voor de bron en wanneer deze de "
+"volgende keer inlogt, kunt u daarna hier reageren naar de bron."
 
 #: journalist_templates/col.html:87
 msgid "Click below if you would like to write a reply to this source."
-msgstr "Klik hieronder indien u een antwoord wilt sturen naar deze bron."
+msgstr "Klik hieronder indien u wilt reageren naar deze bron."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "MARKEER DEZE BRON OM TE BEANTWOORDEN"
+msgstr "MARKEER DEZE BRON OM TE REAGEREN"
 
 #: journalist_templates/col.html:96
 msgid ""
@@ -487,7 +487,7 @@ msgid ""
 "able to login using their previous codename.</em>"
 msgstr ""
 "Klik hieronder om de collectie van deze bron te verwijderen. "
-"<em>Waarschuwing: Als de collectie verwijderd wordt, kunnen de documenten "
+"<em>Waarschuwing: Indien de collectie verwijderd wordt, kunnen de documenten "
 "niet hersteld worden en zal de bron niet langer kunnen inloggen met zijn/"
 "haar vorige codenaam.</em>"
 
@@ -510,7 +510,7 @@ msgstr[1] ""
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr "VERWIJDER BESTANDEN PERMANENT"
+msgstr "BESTANDEN PERMANENT VERWIJDEREN"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_name}..."
@@ -518,19 +518,19 @@ msgstr "Ga terug naar de documentenlijst voor {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr "Gebruiker \"{user}\" wijzigen"
+msgstr "Gebruiker \"{user}\" bewerken"
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr "Verander Gebruikersnaam & Beheerderstatus"
+msgstr "Gebruikersnaam & Beheerderstatus wijzigen"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
-msgstr "Verander gebruikersnaam"
+msgstr "Gebruikersnaam wijzigen"
 
 #: journalist_templates/edit_account.html:19
 msgid "UPDATE"
-msgstr "UPDATE"
+msgstr "BIJWERKEN"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
@@ -538,13 +538,11 @@ msgstr "Wijzig uw account"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
-msgstr "Herstel Wachtwoord"
+msgstr "Herstel wachtwoord"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
-msgstr ""
-"SecureDrop gebruikt nu automatisch gegenereerde wachtwoorden volgens het "
-"diceware-principe."
+msgstr "SecureDrop gebruikt nu automatisch gegenereerde diceware wachtwoorden."
 
 #: journalist_templates/edit_account.html:28
 msgid ""
@@ -560,7 +558,7 @@ msgstr "Het wachtwoord van de gebruiker zal veranderd worden in:"
 
 #: journalist_templates/edit_account.html:43
 msgid "Your password will be changed to:"
-msgstr "Het wachtwoord zal veranderd worden in:"
+msgstr "Uw wachtwoord wordt gewijzigd in:"
 
 #: journalist_templates/edit_account.html:48
 msgid "RESET PASSWORD"
@@ -568,7 +566,7 @@ msgstr "HERSTEL WACHTWOORD"
 
 #: journalist_templates/edit_account.html:53
 msgid "Reset Two-Factor Authentication"
-msgstr "Herstel authenticatie in twee stappen"
+msgstr "Herstel tweeledige authenticatie"
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -577,10 +575,12 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"Als de inloggegevens voor authenticatie de in twee stappen kwijt zijn of  of "
-"ze zijn mogelijk niet meer veilig, dan kunnen ze hier hersteld worden. "
-"<em>Zorg dat de gebruiker aanwezig is op het moment dat dit gedaan wordt, "
-"anders kan de gebruiker niet meer inloggen op zijn/haar account."
+"Indien gebruiker zijn inloggegevens voor tweeledige authenticatie kwijt is "
+"of mogelijk niet meer veilig, dan kunt u het hier herstellen. <em>Zorg "
+"ervoor dat de gebruiker aanwezig is op het moment dat dit gedaan wordt en "
+"dat hun apparaat gereed is voor inrichting met een nieuwe tweeledige "
+"authenticatie. Anders kan de gebruiker niet meer inloggen op zijn/haar "
+"account."
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -600,17 +600,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
-"Om authenticatie in twee stappen voor apps zoals Google Authenticator of "
-"FreeOTP, kies de eerste optie. Kies de tweede optie voor hardwareoplossingen "
-"zoals Yubikey."
+"Om tweeledige authenticatie voor mobiele apps zoals Google Authenticator of "
+"FreeOTP te herstellen, kies de eerste optie. Voor hardware-tokens zoals "
+"Yubikey kiest u de tweede."
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "HERSTEL AUTHENTICATIE IN TWEE STAPPEN (APP)"
+msgstr "HERSTEL TWEELEDIGE AUTHENTICATIE (APP)"
 
 #: journalist_templates/edit_account.html:82
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "HERSTEL AUTHENTICATIE IN TWEE STAPPEN (HARDWAREOPTIE)"
+msgstr "HERSTEL TWEELEDIGE AUTHENTICATIE (HARDWARE TOKEN)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -638,7 +638,7 @@ msgstr "Bronnen"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr "Download Ongelezen"
+msgstr "Ongelezen downloaden"
 
 #: journalist_templates/index.html:12
 msgid "Download"
@@ -650,11 +650,11 @@ msgstr "Markeren"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr "Vlag weghalen"
+msgstr "De-markeren"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
-msgstr "Er zijn geen documenten toegevoegd!"
+msgstr "Geen documenten ingezonden!"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
@@ -666,11 +666,11 @@ msgstr "Selecteer Alles"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr "Selecteer Ongelezen"
+msgstr "Ongelezen selecteren"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr "Selecteer Niets"
+msgstr "Niets selecteren"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
@@ -693,7 +693,7 @@ msgstr "Weet u zeker dat u de gebruiker {username} wilt verwijderen?"
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
-"Weet u zeker dat u de tweeledige verificatie voor {username} wilt resetten?"
+"Weet u zeker dat u de tweeledige verificatie voor {username} wilt herstellen?"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
@@ -705,11 +705,11 @@ msgstr "Wachtwoord"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "Code voor authenticatie in twee stappen"
+msgstr "Tweeledige code"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr "LOG IN"
+msgstr "INLOGGEN"
 
 #: source_app/__init__.py:64
 msgid ""
@@ -758,19 +758,19 @@ msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
-msgstr "Antwoord verwijderd"
+msgstr "Reactie verwijderd"
 
 #: source_app/main.py:195
 msgid "All replies have been deleted"
-msgstr "Alle antwoorden zijn verwijderd"
+msgstr "Alle reacties zijn verwijderd"
 
 #: source_app/main.py:209
 msgid "Sorry, that is not a recognized codename."
-msgstr "Helaas, dat is geen codenaam die we herkennen."
+msgstr "Helaas is dit geen erkende codenaam."
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
-msgstr "Bescherming voor Journalisten en Bronnen"
+msgstr "Journalisten en bronnen beschermen"
 
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:84
@@ -786,8 +786,8 @@ msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
-"Zoals bij alle software is het mogelijk dat SecureDrop enkele "
-"veiligheidsdefecten heeft. Gebruik is op eigen risico."
+"Mogelijk bevat SecureDrop zoals alle software beveiligingsfouten. Gebruik "
+"het op eigen risico."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -797,7 +797,7 @@ msgstr "Serverfout"
 msgid ""
 "Sorry, the website encountered an error and was unable to complete your "
 "request."
-msgstr "Sorry, de website ondervond een fout en kon uw verzoek niet uitvoeren."
+msgstr "Sorry, de website ondervond een fout en kon uw verzoek niet voltooien."
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
@@ -812,8 +812,8 @@ msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
 msgstr ""
-"Bedankt dat u deze informatie naar ons gestuurd hebt. Probeer het later "
-"opnieuw voor eventuele antwoorden."
+"Bedankt voor het inzenden van deze informatie. Kom later terug om reacties "
+"te bekijken."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
@@ -852,7 +852,9 @@ msgstr ""
 msgid ""
 "Please either write this codename down and keep it in a safe place, or "
 "memorize it."
-msgstr "Sla deze codenaam op een veilige plaats op of leer hem uit het hoofd."
+msgstr ""
+"Noteer deze codenaam en bewaar op een veilige plaats of leer hem uit het "
+"hoofd."
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
@@ -880,11 +882,11 @@ msgstr ""
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
-msgstr "Stuur voor het eerst documenten in"
+msgstr "Voor de eerste keer documenten inzenden"
 
 #: source_templates/index.html:48
 msgid "Already submitted something?"
-msgstr "Al iets ingestuurd?"
+msgstr "Al eerder iets ingezonden?"
 
 #: source_templates/index.html:54
 msgid ""
@@ -898,12 +900,12 @@ msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
 msgstr ""
-"Indien u al eerder documenten ingestuurd heeft, log dan hier in om te kijken "
+"Indien u al eerder documenten ingezonden heeft, log dan hier in om te kijken "
 "of u reacties heeft."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
-msgstr "STUUR DOCUMENTEN IN"
+msgstr "DOCUMENTEN INZENDEN"
 
 #: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
@@ -941,7 +943,7 @@ msgstr "<a href=\"/\">Klik hier</a> om de pagina te verversen"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr "Voer Codenaam in"
+msgstr "Codenaam invoeren"
 
 #: source_templates/login.html:12
 msgid "Enter your codename"
@@ -962,12 +964,12 @@ msgid ""
 "SecureDrop usage from this device."
 msgstr ""
 "Bedankt voor het uitloggen! Klik nu op \"New Identity\" onder de groene "
-"Onion-knop in de Tor Browser om uw gebruikersgeschiedenis van SecureDrop van "
+"Onion-knop in de Tor Browser om uw gebruikersgeschiedenis van SecureDrop op "
 "dit apparaat te verwijderen."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
-msgstr "Gelukkig, het ligt niet aan jou! En dan nu het beschamende gedeelte..."
+msgstr "Gelukkig, het ligt niet aan u! En dan nu het gênante deel..."
 
 #: source_templates/lookup.html:12
 msgid ""
@@ -994,7 +996,7 @@ msgstr ""
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
-msgstr "Materiaal insturen"
+msgstr "Materiaal inzenden"
 
 #: source_templates/lookup.html:21
 msgid ""
@@ -1021,7 +1023,7 @@ msgstr "Maximale bestandsgrootte: 500 MB"
 
 #: source_templates/lookup.html:53
 msgid "Get Replies"
-msgstr "Antwoorden bekijken"
+msgstr "Reacties bekijken"
 
 #: source_templates/lookup.html:58
 msgid ""
@@ -1030,15 +1032,15 @@ msgid ""
 "with them. This also lets us know that you are aware of our reply. You can "
 "respond by submitting a new message above."
 msgstr ""
-"U heeft een antwoord ontvangen. Om uw identiteit te beschermen voor het "
+"U heeft een reactie ontvangen. Om uw identiteit te beschermen voor het "
 "onwaarschijnlijke geval dat iemand uw codenaam kent, adviseren wij om alle "
-"antwoorden te verwijderen zodra u ermee klaar bent. Dit laat ons ook zien "
-"dat u ons antwoord hebt gezien. U kunt antwoorden door een nieuw bericht "
+"reacties te verwijderen zodra u er klaar mee bent. Hierdoor weten wij ook "
+"dat u onze reactie heeft gezien. U kunt reageren door een nieuw bericht "
 "hierboven te versturen."
 
 #: source_templates/lookup.html:71
 msgid "Delete this reply?"
-msgstr "Dit bericht verwijderen?"
+msgstr "Deze reactie verwijderen?"
 
 #: source_templates/lookup.html:73
 msgid "DELETE"
@@ -1046,15 +1048,15 @@ msgstr "VERWIJDER"
 
 #: source_templates/lookup.html:82
 msgid "DELETE ALL REPLIES"
-msgstr "VERWIJDER ALLE BERICHTEN"
+msgstr "VERWIJDER ALLE REACTIES"
 
 #: source_templates/lookup.html:85
 msgid "Are you finished with the replies?"
-msgstr "Heeft u de antwoorden gelezen?"
+msgstr "Heeft u de reacties gelezen?"
 
 #: source_templates/lookup.html:86
 msgid "YES, DELETE ALL REPLIES"
-msgstr "JA, VERWIJDER ALLE BERICHTEN"
+msgstr "JA, VERWIJDER ALLE REACTIES"
 
 #: source_templates/lookup.html:87
 msgid "NO, NOT YET"
@@ -1062,7 +1064,7 @@ msgstr "NEE, NOG NIET"
 
 #: source_templates/lookup.html:91
 msgid "There are no replies at this time."
-msgstr "Op dit moment zijn er geen berichten."
+msgstr "Op dit moment zijn er geen reacties."
 
 #: source_templates/lookup.html:99
 msgid "Remember your codename is:"
@@ -1096,7 +1098,7 @@ msgid ""
 msgstr ""
 "<a href=\"tor2web.org\">Tor2Web</a> is een proxy service waarmee u Tor "
 "Hidden Services (.onion sites) kunt gebruiken zonder dat u Tor hoeft te "
-"installeren. Het is ontworpen om anoniem kunnen te publiceren."
+"installeren. Het is ontwikkeld om anoniem kunnen te publiceren."
 
 #: source_templates/tor2web-warning.html:5
 msgid ""
@@ -1119,7 +1121,7 @@ msgid ""
 "to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to "
 "access our site safely and anonymously."
 msgstr ""
-"Indien u informatie wilt inzenden adviseren wij u <strong>ten zeerste "
+"Indien u informatie wilt inzenden adviseren wij <strong>ten zeerste "
 "aan</strong> om <a href=\"torproject.org/download.html.en\">Tor</a> te "
 "installeren en te gebruiken zodat u veilig en anoniem onze site kunt "
 "bezoeken."
@@ -1141,7 +1143,7 @@ msgid ""
 "you</strong> to install Tor Browser and use it to access our site safely and "
 "anonymously."
 msgstr ""
-"Indien u informatie wilt insturen via SecureDrop adviseren wij u <strong>ten "
+"Indien u informatie wilt inzenden via SecureDrop adviseren wij <strong>ten "
 "strengste</strong> om de Tor Browser te installeren en te gebruiken om onze "
 "site veilig en anoniem te bezoeken."
 
@@ -1165,7 +1167,8 @@ msgid ""
 msgstr ""
 "SecureDrop versleutelt bestanden en berichten nadat ze verstuurd zijn. "
 "Berichten en bestanden versleutelen vóór het inzenden kan een extra "
-"beveiligingslaag toevoegen alvorens uw data de SecureDrop server bereikt."
+"beveiligingslaag toevoegen alvorens uw gegevens de SecureDrop server "
+"bereiken."
 
 #: source_templates/why-journalist-key.html:5
 msgid ""
@@ -1181,7 +1184,7 @@ msgid ""
 "with the extension <code>.asc</code>"
 msgstr ""
 "<a href=\"{url}\">Download</a> de publieke sleutel. De publieke sleutel is "
-"een tekstbestand met de <code>.asc</code> bestandsextensie"
+"een tekstbestand met de <code>.asc</code>-bestandsextensie"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
@@ -1236,7 +1239,7 @@ msgid ""
 "code>)"
 msgstr ""
 "Upload uw versleutelde inzending. Deze moet dezelfde bestandsnaam hebben als "
-"het onversleutelde bestand, met .gpg als bestandsextensie (v.b.: "
+"het onversleutelde bestand, met .gpg als bestandsextensie (bijv.: "
 "<code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
@@ -1247,7 +1250,7 @@ msgid ""
 msgstr ""
 "<strong>Tip:</strong> Indien u anoniem wilt blijven,gebruik dan "
 "<strong>niet</strong> GPG om het versleutelde bestand te tekenen (met de "
-"<code> 5--sign</code> 6 or <code> 7-s</code> vlag) aangezien wij hierdoor uw "
+"<code>--sign</code> of <code>-s</code> markering) aangezien wij hierdoor uw "
 "GPG-identiteit kunnen zien."
 
 #: source_templates/why-journalist-key.html:25
