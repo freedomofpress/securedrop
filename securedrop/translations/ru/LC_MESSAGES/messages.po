@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-10-09 14:13+0000\n"
+"PO-Revision-Date: 2017-10-09 14:48+0000\n"
 "Last-Translator: Maria Ovsyannikova <xella.design@gmail.com>\n"
 "Language-Team: Russian "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ru/>\n"
@@ -206,7 +206,7 @@ msgstr "Изменить секретный ключ"
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
-msgstr ""
+msgstr "Секретный HOTP ключ"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
@@ -449,7 +449,7 @@ msgstr "Сообщение"
 
 #: journalist_templates/col.html:68
 msgid "No documents to display."
-msgstr ""
+msgstr "Нет документов для отображения."
 
 #: journalist_templates/col.html:75
 #, fuzzy
@@ -459,8 +459,9 @@ msgstr ""
 "документы:"
 
 #: journalist_templates/col.html:84
+#, fuzzy
 msgid "You've flagged this source for reply."
-msgstr ""
+msgstr "Вы отметили этот источник для ответа."
 
 #: journalist_templates/col.html:85
 msgid ""
@@ -643,8 +644,9 @@ msgid "Un-star"
 msgstr "Снять отметку"
 
 #: journalist_templates/index.html:42
+#, fuzzy
 msgid "No documents have been submitted!"
-msgstr ""
+msgstr "Отправленные документы отсутствуют!"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
@@ -672,8 +674,9 @@ msgid "Are you sure you want to delete the {size} selected collections?"
 msgstr "Вы уверены, что хотите удалить {size} выбранные коллекции?"
 
 #: journalist_templates/js-strings.html:9
+#, fuzzy
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
+msgstr "Вы действительно хотите удалить {size} выбранные отправления?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
@@ -716,7 +719,7 @@ msgstr "Это обязательное поле."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Поле должно содержать от 1 до {max_codename_len} символов. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
@@ -727,38 +730,41 @@ msgid ""
 "You were redirected because you are already logged in. If you want to "
 "create a new account, you should log out first."
 msgstr ""
+"Вы были перенаправлены, так как вы уже выполнили вход в систему. Если вы "
+"хотите создать новый аккаунт, то вам сначала нужно выйти из системы."
 
 #: source_app/main.py:105
 msgid "You must enter a message or choose a file to submit."
-msgstr ""
+msgstr "Вы должны ввести сообщение или выбрать фаил для отправки."
 
 #: source_app/main.py:138
 msgid "Thanks! We received your message."
-msgstr ""
+msgstr "Спасибо! Мы получили ваше сообщение."
 
 #: source_app/main.py:140
 msgid "Thanks! We received your document."
-msgstr ""
+msgstr "Спасибо! Мы получили ваш документ."
 
 #: source_app/main.py:142
 msgid "Thanks! We received your message and document."
-msgstr ""
+msgstr "Спасибо! Мы получили ваше сообщение и документ."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
-msgstr ""
+msgstr "Ответ удалён"
 
 #: source_app/main.py:195
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "Все ответы были удалены"
 
 #: source_app/main.py:209
 msgid "Sorry, that is not a recognized codename."
-msgstr ""
+msgstr "К сожалению, это кодовое название не распознано."
 
 #: source_templates/base.html:6 source_templates/index.html:4
+#, fuzzy
 msgid "Protecting Journalists and Sources"
-msgstr ""
+msgstr "Защищает Журналистов и Источники"
 
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:84
@@ -1055,13 +1061,15 @@ msgstr ""
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
-msgstr ""
+msgstr "Вы должны использовать Tor Browser"
 
 #: source_templates/use-tor-browser.html:4
 msgid ""
 "If you are not using Tor Browser, you <strong>may not be "
 "anonymous</strong>."
 msgstr ""
+"Если вы не используете Tor Browser, то ,возможно, вы <strong>не "
+"анонимны</strong>."
 
 #: source_templates/use-tor-browser.html:5
 msgid ""
@@ -1069,39 +1077,55 @@ msgid ""
 "advise you</strong> to install Tor Browser and use it to access our site "
 "safely and anonymously."
 msgstr ""
+"Если вы хотите отправить информацию SecureDrop, мы <strong>настоятельно "
+"рекомендуем</strong> установить Tor Browser и использовать его для доступа "
+"на наш сайт безопасно и анонимно."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
 "Copy and paste the following address into your browser and follow the "
 "instructions to download and install Tor Browser:"
 msgstr ""
+"Скопируйте и вставьте следующий адрес в ваш браузер, следуйте инструкциям "
+"для загрузки и установки Tor Browser:"
 
 #: source_templates/why-journalist-key.html:3
+#, fuzzy
 msgid "Why download the journalist's public key?"
-msgstr ""
+msgstr "Зачем загружать открытый ключ журналиста?"
 
 #: source_templates/why-journalist-key.html:4
+#, fuzzy
 msgid ""
 "SecureDrop encrypts files and messages after they are submitted. "
 "Encrypting messages and files before submission can provide an extra "
 "layer of security before your data reaches the SecureDrop server."
 msgstr ""
+"SecureDrop зашифровывает файлы и сообщения после их отправки. Шифрование "
+"сообщений и файлов перед отправкой может обеспечить дополнительный уровень "
+"безопасности до того, как ваши данные достигнут сервера SecureDrop."
 
 #: source_templates/why-journalist-key.html:5
+#, fuzzy
 msgid ""
 "If you are already familiar with the GPG encryption software, you may "
 "wish to encrypt your submissions yourself. To do so:"
 msgstr ""
+"Если вы уже знакомы с программным обеспечением для шифрования GPG, вы можете "
+"зашифровать ваши материалы самостоятельно. Для этого:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. The public key is a text "
 "file with the extension <code>.asc</code>"
 msgstr ""
+"<a href=\"{url}\">Загрузить</a> открытый ключ. Открытый ключ - это текстовый "
+"фаил с расширением <code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
+#, fuzzy
 msgid "Import it into your GPG keyring."
-msgstr ""
+msgstr "Импортировать в ваш GPG Keyring."
 
 #: source_templates/why-journalist-key.html:10
 msgid ""
@@ -1115,10 +1139,12 @@ msgid ""
 "If you are using Mac/Linux, open the terminal. You can import the key "
 "with <code>gpg --import /path/to/key.asc</code>."
 msgstr ""
+"Если вы используете Mac/Linux, то откройте терминал. Вы можете импортировать "
+"ключ при помощи команды <code>gpg --import /path/to/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr ""
+msgstr "Зашифровка вашего отправления."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
