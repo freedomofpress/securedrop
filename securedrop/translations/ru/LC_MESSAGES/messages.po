@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-10-08 15:20+0000\n"
+"PO-Revision-Date: 2017-10-09 14:13+0000\n"
 "Last-Translator: Maria Ovsyannikova <xella.design@gmail.com>\n"
 "Language-Team: Russian "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ru/>\n"
@@ -200,7 +200,7 @@ msgstr "{num_unread} непрочитано"
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr ""
+msgstr "Изменить секретный ключ"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
@@ -452,8 +452,11 @@ msgid "No documents to display."
 msgstr ""
 
 #: journalist_templates/col.html:75
+#, fuzzy
 msgid "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
+"Вы можете написать безопасный ответ пользователю, предоставившему эти "
+"документы:"
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
@@ -467,11 +470,11 @@ msgstr ""
 
 #: journalist_templates/col.html:87
 msgid "Click below if you would like to write a reply to this source."
-msgstr ""
+msgstr "Нажмите ниже, если вы хотите написать ответ этому источнику."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "ОТМЕТИТЬ ЭТОТ ИСТОЧНИК ДЛЯ ОТВЕТА"
 
 #: journalist_templates/col.html:96
 msgid ""
@@ -485,6 +488,7 @@ msgid "DELETE COLLECTION"
 msgstr "УДАЛИТЬ КОЛЛЕКЦИЮ"
 
 #: journalist_templates/delete.html:5
+#, fuzzy
 msgid ""
 "The following file has been selected for <strong>permanent "
 "deletion</strong>:"
@@ -492,8 +496,14 @@ msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
 msgstr[0] ""
+"Следующий {files} фаил был выбран для <strong>безвозвратного "
+"удаления</strong>:"
 msgstr[1] ""
+"Следующие {files} файла были выбраны для <strong>безвозвратного "
+"удаления</strong>:"
 msgstr[2] ""
+"Следующие {files} файлов были выбраны для <strong>безвозвратного "
+"удаления</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
@@ -1132,13 +1142,18 @@ msgid ""
 msgstr ""
 
 #: source_templates/why-journalist-key.html:23
+#, fuzzy
 msgid ""
 "<strong>Tip:</strong> If you wish to remain anonymous, <strong>do "
 "not</strong> use GPG to sign the encrypted file (with the "
 "<code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG"
 " identity to us."
 msgstr ""
+"<strong>Совет:</strong> Если вы хотите сохранить анонимность, <strong>не "
+"используйте</strong> GPG для подписания зашифрованного файла (с пометками "
+"<code>--sign</code> или <code>-s</code>), так как это раскроет вашу GPG "
+"личность для нас."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr ""
+msgstr "Вернуться на страницу отправки"
