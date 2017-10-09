@@ -294,7 +294,9 @@ class TestJournalistApp(TestCase):
         self._login_user()
         resp = self.client.post(
             url_for('new_password'),
-            data=dict(password=VALID_PASSWORD_2),
+            data=dict(current_password=self.user_pw,
+                      token='mocked',
+                      password=VALID_PASSWORD_2),
             follow_redirects=True)
 
         text = resp.data.decode('utf-8')
@@ -307,7 +309,9 @@ class TestJournalistApp(TestCase):
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
                 url_for('new_password'),
-                data=dict(password=VALID_PASSWORD_2),
+                data=dict(current_password=self.user_pw,
+                          token='mocked',
+                          password=VALID_PASSWORD_2),
                 follow_redirects=True)
 
         assert ('There was an error, and the new password might not have '
@@ -361,7 +365,9 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(url_for('new_password'),
-                         data=dict(password=overly_long_password),
+                         data=dict(password=overly_long_password,
+                                   token='mocked',
+                                   current_password=self.user_pw),
                          follow_redirects=True)
 
         self.assertMessageFlashed('You submitted a bad password! '
@@ -662,10 +668,23 @@ class TestJournalistApp(TestCase):
             res = self.client.post(url)
             self.assertStatus(res, 302)
 
+    def test_incorrect_current_password_change(self):
+        self._login_user()
+        resp = self.client.post(url_for('new_password'),
+                                data=dict(password=VALID_PASSWORD,
+                                          token='mocked',
+                                          current_password='badpw'),
+                                follow_redirects=True)
+
+        text = resp.data.decode('utf-8')
+        self.assertIn('Incorrect password or two-factor code', text)
+
     def test_invalid_user_password_change(self):
         self._login_user()
         res = self.client.post(url_for('new_password'),
-                               data=dict(password='badpw'))
+                               data=dict(password='badpw',
+                                         token='mocked',
+                                         current_password=self.user_pw))
         self.assertRedirects(res, url_for('edit_account'))
 
     def test_too_long_user_password_change(self):
@@ -675,7 +694,9 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(url_for('new_password'),
-                         data=dict(password=overly_long_password),
+                         data=dict(password=overly_long_password,
+                                   token='mocked',
+                                   current_password=self.user_pw),
                          follow_redirects=True)
 
         self.assertMessageFlashed('You submitted a bad password! Password not '
@@ -685,7 +706,9 @@ class TestJournalistApp(TestCase):
         self._login_user()
         resp = self.client.post(
             url_for('new_password'),
-            data=dict(password=VALID_PASSWORD_2),
+            data=dict(password=VALID_PASSWORD_2,
+                      token='mocked',
+                      current_password=self.user_pw),
             follow_redirects=True)
 
         assert 'Password updated.' in \

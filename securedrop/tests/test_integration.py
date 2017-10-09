@@ -545,7 +545,9 @@ class TestIntegration(unittest.TestCase):
         # change password
         new_pw = 'another correct horse battery staply long password'
         self.journalist_app.post('/account/new-password',
-                                 data=dict(password=new_pw))
+                                 data=dict(password=new_pw,
+                                           current_password=self.user_pw,
+                                           token='mocked'))
 
         # logout
         self.journalist_app.get('/logout')

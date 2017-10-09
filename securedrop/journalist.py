@@ -131,42 +131,57 @@ def admin_required(func):
     return wrapper
 
 
+def validate_user(username, password, token, error_message=None):
+    """
+    Validates the user by calling the login and handling exceptions
+    :param username: Username
+    :param password: Password
+    :param token: Two-factor authentication token
+    :param error_message: Localized error message string to use on failure
+    :return: Journalist user object if successful, None otherwise.
+    """
+    try:
+        return Journalist.login(username, password, token)
+    except Exception as e:
+        app.logger.error("Login for '{}' failed: {}".format(
+            username, e))
+        if not error_message:
+            error_message = gettext('Login failed.')
+        login_flashed_msg = error_message
+
+        if isinstance(e, LoginThrottledException):
+            login_flashed_msg += " "
+            period = Journalist._LOGIN_ATTEMPT_PERIOD
+            # ngettext is needed although we always have period > 1
+            # see https://github.com/freedomofpress/securedrop/issues/2422
+            login_flashed_msg += ngettext(
+                "Please wait at least {seconds} second "
+                "before logging in again.",
+                "Please wait at least {seconds} seconds "
+                "before logging in again.", period).format(seconds=period)
+        else:
+            try:
+                user = Journalist.query.filter_by(
+                    username=username).one()
+                if user.is_totp:
+                    login_flashed_msg += " "
+                    login_flashed_msg += gettext(
+                        "Please wait for a new two-factor token"
+                        " before trying again.")
+            except:
+                pass
+
+        flash(login_flashed_msg, "error")
+        return None
+
+
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        try:
-            user = Journalist.login(request.form['username'],
-                                    request.form['password'],
-                                    request.form['token'])
-        except Exception as e:
-            app.logger.error("Login for '{}' failed: {}".format(
-                request.form['username'], e))
-            login_flashed_msg = gettext('Login failed.')
-
-            if isinstance(e, LoginThrottledException):
-                login_flashed_msg += " "
-                period = Journalist._LOGIN_ATTEMPT_PERIOD
-                # ngettext is needed although we always have period > 1
-                # see https://github.com/freedomofpress/securedrop/issues/2422
-                login_flashed_msg += ngettext(
-                    "Please wait at least {seconds} second "
-                    "before logging in again.",
-                    "Please wait at least {seconds} seconds "
-                    "before logging in again.", period).format(seconds=period)
-            else:
-                try:
-                    user = Journalist.query.filter_by(
-                        username=request.form['username']).one()
-                    if user.is_totp:
-                        login_flashed_msg += " "
-                        login_flashed_msg += gettext(
-                            "Please wait for a new two-factor token"
-                            " before logging in again.")
-                except:
-                    pass
-
-            flash(login_flashed_msg, "error")
-        else:
+        user = validate_user(request.form['username'],
+                             request.form['password'],
+                             request.form['token'])
+        if user:
             app.logger.info("'{}' logged in with the token {}".format(
                 request.form['username'], request.form['token']))
 
@@ -408,12 +423,17 @@ def edit_account():
                            password=password)
 
 
-@app.route('/account/new-password', methods=['POST'])
+@app.route('/account/new-password', methods=('POST',))
 @login_required
 def new_password():
     user = g.user
-    password = request.form.get('password')
-    _set_diceware_password(user, password)
+    current_password = request.form.get('current_password')
+    token = request.form.get('token')
+    error_message = gettext('Incorrect password or two-factor code.')
+    # If the user is validated, change their password
+    if validate_user(user.username, current_password, token, error_message):
+        password = request.form.get('password')
+        _set_diceware_password(user, password)
     return redirect(url_for('edit_account'))
 
 
