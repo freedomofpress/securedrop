@@ -31,6 +31,7 @@ scenario:
 verifier:
   name: testinfra
   options:
+    # provided by pytest-xdist
     n: auto
   lint:
     name: flake8
