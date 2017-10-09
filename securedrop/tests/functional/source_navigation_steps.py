@@ -54,12 +54,19 @@ class SourceNavigationSteps():
         assert not content.is_displayed()
         self.driver.find_element_by_id('codename-hint-show').click()
         assert content.is_displayed()
+        content_content = self.driver.find_element_by_css_selector(
+                '#codename-hint-content p')
+        assert content_content.text == self.source_name
 
     def _source_hides_codename(self):
         content = self.driver.find_element_by_id('codename-hint-content')
         assert content.is_displayed()
         self.driver.find_element_by_id('codename-hint-hide').click()
         assert not content.is_displayed()
+
+    def _source_sees_no_codename(self):
+        codename = self.driver.find_elements_by_css_selector('.code-reminder')
+        assert len(codename) == 0
 
     @screenshots
     def _source_chooses_to_login(self):
@@ -90,6 +97,10 @@ class SourceNavigationSteps():
 
         assert ("SecureDrop | Protecting Journalists and Sources" ==
                 self.driver.title)
+        # Check that we've logged in
+
+        replies = self.driver.find_elements_by_id("replies")
+        assert len(replies) == 1
 
     def _source_enters_codename_in_login_form(self):
         codename_input = self.driver.find_element_by_id(
