@@ -12,6 +12,10 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
 
+from flask_wtf import FlaskForm
+from wtforms import TextAreaField
+from wtforms.validators import InputRequired
+
 import config
 import version
 import crypto_util
@@ -43,6 +47,12 @@ else:
 
 app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
 app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+
+class ReplyForm(FlaskForm):
+    message = TextAreaField(u'Message', id="content-area", validators=[
+        InputRequired(message=gettext('You cannot send an empty reply.'))
+    ])
 
 
 @app.teardown_appcontext
@@ -552,10 +562,11 @@ def index():
 @app.route('/col/<filesystem_id>')
 @login_required
 def col(filesystem_id):
+    form = ReplyForm()
     source = get_source(filesystem_id)
     source.has_key = crypto_util.getkey(filesystem_id)
     return render_template("col.html", filesystem_id=filesystem_id,
-                           source=source)
+                           source=source, form=form)
 
 
 def delete_collection(filesystem_id):
@@ -697,16 +708,16 @@ def reply():
            collection view, regardless if the Reply is created
            successfully.
     """
-    msg = request.form['msg']
-    # Reject empty replies
-    if not msg:
-        flash(gettext("You cannot send an empty reply."), "error")
+    form = ReplyForm()
+    if not form.validate_on_submit():
+        for error in form.message.errors:
+            flash(error, "error")
         return redirect(url_for('col', filesystem_id=g.filesystem_id))
 
     g.source.interaction_count += 1
     filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                           g.source.journalist_filename)
-    crypto_util.encrypt(msg,
+    crypto_util.encrypt(form.message.data,
                         [crypto_util.getkey(g.filesystem_id),
                          config.JOURNALIST_KEY],
                         output=store.path(g.filesystem_id, filename))
