@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
 
-<h1>{{ gettext('Enter Codename') }}</h1>
-
 {% include 'flashed.html' %}
+
+<h1>{{ gettext('Enter Codename') }}</h1>
 
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">

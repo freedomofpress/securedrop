@@ -180,6 +180,7 @@
   /var/www/securedrop/source_templates/logout_flashed_message.html r,
   /var/www/securedrop/source_templates/locales.html r,
   /var/www/securedrop/source_templates/lookup.html r,
+  /var/www/securedrop/source_templates/session_timeout.html r,
   /var/www/securedrop/source_templates/next_submission_flashed_message.html r,
   /var/www/securedrop/source_templates/notfound.html r,
   /var/www/securedrop/source_templates/tor2web-warning.html r,

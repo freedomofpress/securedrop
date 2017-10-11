@@ -79,8 +79,8 @@ def create_app(config):
 
         if 'expires' in session and datetime.utcnow() >= session['expires']:
             session.clear()
-            flash(gettext('You have been logged out due to inactivity'),
-                  'error')
+            msg = render_template('session_timeout.html')
+            flash(Markup(msg), "important")
 
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
