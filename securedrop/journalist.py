@@ -45,7 +45,8 @@ else:
     app.jinja_env.globals['header_image'] = 'logo.png'
     app.jinja_env.globals['use_custom_header_image'] = False
 
-app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+app.jinja_env.filters['rel_datetime_format'] = \
+    template_filters.rel_datetime_format
 app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
