@@ -144,10 +144,14 @@ def login():
 
             if isinstance(e, LoginThrottledException):
                 login_flashed_msg += " "
-                login_flashed_msg += gettext(
+                period = Journalist._LOGIN_ATTEMPT_PERIOD
+                # ngettext is needed although we always have period > 1
+                # see https://github.com/freedomofpress/securedrop/issues/2422
+                login_flashed_msg += ngettext(
+                    "Please wait at least {seconds} second "
+                    "before logging in again.",
                     "Please wait at least {seconds} seconds "
-                    "before logging in again.").format(
-                        seconds=Journalist._LOGIN_ATTEMPT_PERIOD)
+                    "before logging in again.", period).format(seconds=period)
             else:
                 try:
                     user = Journalist.query.filter_by(
