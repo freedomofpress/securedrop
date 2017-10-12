@@ -36,8 +36,6 @@ def create_app(config):
     assets = Environment(app)
     app.config['assets'] = assets
 
-    # this set needs to happen *before* we set the jinja filters otherwise
-    # we get name collisions
     i18n.setup_app(app)
 
     app.jinja_env.globals['version'] = version.__version__
@@ -48,7 +46,8 @@ def create_app(config):
         app.jinja_env.globals['header_image'] = 'logo.png'
         app.jinja_env.globals['use_custom_header_image'] = False
 
-    app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+    app.jinja_env.filters['rel_datetime_format'] = \
+        template_filters.rel_datetime_format
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
