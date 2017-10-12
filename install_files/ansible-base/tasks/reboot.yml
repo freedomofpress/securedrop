@@ -24,7 +24,7 @@
     search_regex: OpenSSH
     state: started
   # Wait action runs on localhost, and does NOT require sudo.
-  sudo: false
+  become: false
   # Provide opt-out ability for waiting for the host to come back.
   # During initial installation, waiting won't work, since the connection
   # switches from IPv4 to Onion URLs.
