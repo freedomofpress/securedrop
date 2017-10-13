@@ -966,6 +966,17 @@ class TestJournalistApp(TestCase):
                                         filesystem_id=source.filesystem_id))
         self.assertRedirects(resp, url_for('index'))
 
+    def test_col_process_aborts_with_bad_action(self):
+        """If the action is not a valid choice, a 500 should occur"""
+        self._login_user()
+
+        form_data = {'cols_selected': 'does not matter',
+                     'action': 'this action does not exist'}
+
+        resp = self.client.post(url_for('col_process'), data=form_data)
+
+        self.assert500(resp)
+
 
 class TestJournalistAppTwo(unittest.TestCase):
 
@@ -1010,15 +1021,6 @@ class TestJournalistAppTwo(unittest.TestCase):
         journalist.col_process()
 
         col_un_star.assert_called_with(cols_selected)
-
-    @patch("journalist.abort")
-    def test_col_process_returns_404_with_bad_action(self, abort):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'something-random')
-
-        journalist.col_process()
-
-        abort.assert_called_with(ANY)
 
     @patch("journalist.make_star_true")
     @patch("journalist.db_session")
