@@ -73,7 +73,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
+  <button class="sd-button" id="button-reset-two-factor-{{ type }}" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
 </form>
 {%- endmacro %}
 

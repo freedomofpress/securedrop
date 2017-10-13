@@ -481,13 +481,18 @@ class JournalistNavigationSteps():
             'link-edit-account')
         edit_account_link.click()
 
-    def _visit_edit_hotp_secret(self):
-        hotp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-hotp')[0]
-        assert ('/account/reset-2fa-hotp' in
-                hotp_reset_button.get_attribute('action'))
+    def _visit_edit_secret(self, type):
+        reset_form = self.driver.find_elements_by_css_selector(
+            '#reset-two-factor-' + type)[0]
+        assert ('/account/reset-2fa-' + type in
+                reset_form.get_attribute('action'))
 
-        hotp_reset_button.click()
+        reset_button = self.driver.find_elements_by_css_selector(
+            '#button-reset-two-factor-' + type)[0]
+        reset_button.click()
+
+    def _visit_edit_hotp_secret(self):
+        self._visit_edit_secret('hotp')
 
     def _set_hotp_secret(self):
         hotp_secret_field = self.driver.find_elements_by_css_selector(
@@ -498,11 +503,7 @@ class JournalistNavigationSteps():
         submit_button.click()
 
     def _visit_edit_totp_secret(self):
-        totp_reset_button = self.driver.find_elements_by_css_selector(
-            '#reset-two-factor-totp')[0]
-        assert ('/account/reset-2fa-totp' in
-                totp_reset_button.get_attribute('action'))
-        totp_reset_button.click()
+        self._visit_edit_secret('totp')
 
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_css_selector(
