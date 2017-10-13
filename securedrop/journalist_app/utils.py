@@ -221,4 +221,3 @@ def col_delete(cols_selected):
               "notification")
 
     return redirect(url_for('index'))
-    return redirect(url_for('index'))
