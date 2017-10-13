@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-05 21:32+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2017-10-13 16:50+0000\n"
+"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -133,11 +133,8 @@ msgid "No unread submissions in selected collections."
 msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer."
 
 #: journalist.py:646
-#, fuzzy
-#| msgid "{num} collection deleted"
-#| msgid_plural "{num} collections deleted"
 msgid "{source_name}'s collection deleted"
-msgstr "{num} kildeoppføring slettet"
+msgstr "{source_name}s kildeoppføring slettet"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
@@ -158,8 +155,6 @@ msgid "Thanks. Your reply has been stored."
 msgstr "Takk. Svaret ditt har blitt lagret."
 
 #: journalist.py:750
-#, fuzzy
-#| msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "Kilden '{original_name}' har endret navn til '{new_name}'"
 
@@ -507,9 +502,6 @@ msgid "PERMANENTLY DELETE FILES"
 msgstr "PERMANENT SLETTING AV FILER"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid ""
-#| "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}..."
 msgstr "Tilbake til listen over filer for {source_name}…"
 
@@ -518,10 +510,8 @@ msgid "Edit user \"{user}\""
 msgstr "Rediger brukeren \"{user}\""
 
 #: journalist_templates/edit_account.html:8
-#, fuzzy
-#| msgid "Change Username & Admin Status"
 msgid "Change Username &amp; Admin Status"
-msgstr "Endre brukernavn og admin-status"
+msgstr "Endre brukernavn &amp; admin-status"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -711,18 +701,13 @@ msgid "LOG IN"
 msgstr "LOGG INN"
 
 #: source_app/__init__.py:64
-#, fuzzy
-#| msgid ""
-#| "<strong>WARNING:</strong> You appear to be using Tor2Web. This "
-#| "<strong>does not</strong> provide anonymity. <a href=\"/tor2web-warning"
-#| "\">Why is this dangerous?</a>"
 msgid ""
 "<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
-"<strong>ADVARSEL:</strong> Det ser ut som du bruker Tor2Web. Dette "
-"<strong>gir ikke</strong> anonym kommunikasjon. <a href=\"/tor2web-warning"
-"\">Hvorfor kan dette være problematisk?</a>"
+"<strong>ADVARSEL:</strong> Det ser ut som du bruker Tor2Web. Dette <strong>"
+"gir ikke</strong> anonym kommunikasjon. <a href=\"{url}\">Hvorfor kan dette "
+"være problematisk?</a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
@@ -749,22 +734,16 @@ msgid "You must enter a message or choose a file to submit."
 msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
 #: source_app/main.py:138
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message."
-msgstr "Takk! Vi mottok dine {things}."
+msgstr "Takk! Vi mottok din melding."
 
 #: source_app/main.py:140
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your document."
-msgstr "Takk! Vi mottok dine {things}."
+msgstr "Takk! Vi mottok dokumentet."
 
 #: source_app/main.py:142
-#, fuzzy
-#| msgid "Thanks! We received your {things}."
 msgid "Thanks! We received your message and document."
-msgstr "Takk! Vi mottok dine {things}."
+msgstr "Takk! Vi mottok din melding og ditt dokument."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
@@ -870,17 +849,14 @@ msgid "ALREADY HAVE A CODENAME?"
 msgstr "HAR DU ALLEREDE ET KODENAVN?"
 
 #: source_templates/index.html:17
-#, fuzzy
-#| msgid ""
-#| "<strong>We recommend turning the Security Slider to High to protect your "
-#| "anonymity:</strong>"
 msgid ""
 "<strong>We recommend turning the Security Slider to High to protect your "
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
 msgstr ""
 "<strong>Vi anbefaler at sikkerhetsnivået settes til Høyt for å sikre din "
-"anonymitet:</strong>"
+"anonymitet:</strong><a id=\"disable-js\" href=\"\">Lær hvordan sette det til "
+"Høyt</a>, eller ignorer denne advarselen for å fortsette."
 
 #: source_templates/index.html:18
 msgid ""
@@ -948,10 +924,8 @@ msgstr ""
 "Beveg glidebryteren til <strong>Høyt</strong>, klikk så <strong>OK</strong>"
 
 #: source_templates/index.html:97
-#, fuzzy
-#| msgid "<a href=\"/\">Click here</a>to refresh the page"
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr "<a href=\"/\">Klikk her</a>for å oppdatere siden"
+msgstr "<a href=\"/\">Klikk her</a> for å oppdatere siden"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
@@ -1011,27 +985,19 @@ msgid "Submit Materials"
 msgstr "Send inn materiale"
 
 #: source_templates/lookup.html:21
-#, fuzzy
-#| msgid ""
-#| "If you are already familiar with GPG, you can optionally encrypt your "
-#| "files and messages with our <a href=\"/journalist-key\" class=\"text-link"
-#| "\">public key</a> before submission. Files are encrypted as they are "
-#| "received by SecureDrop."
 msgid ""
 "If you are already familiar with GPG, you can optionally encrypt your files "
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
 "before submission. Files are encrypted as they are received by SecureDrop."
 msgstr ""
 "Om du allerede er komfortabel med GPG, kan du velge å kryptere filene og "
-"meldingene dine med vår <a href=\"/journalist-key\" class=\"text-link"
-"\">offentlige nøkkel</a> før du sender dem inn. Alle filer krypteres "
-"automatisk av seg selv i det de mottas av SecureDrop."
+"meldingene dine med vår <a href=\"{url}\" class=\"text-link\">offentlige "
+"nøkkel</a> før du sender dem inn. Alle filer krypteres automatisk av seg "
+"selv i det de mottas av SecureDrop."
 
 #: source_templates/lookup.html:22
-#, fuzzy
-#| msgid "<a href=\"/why-journalist-key\" class=\"text-link\">Learn more</a>."
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr "<a href=\"/why-journalist-key\" class=\"text-link\">Lær mer</a>."
+msgstr "<a href=\"{url}\" class=\"text-link\">Lær mer</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
@@ -1196,33 +1162,24 @@ msgstr ""
 "velge å kryptere det du sender inn selv. Gjør da følgende:"
 
 #: source_templates/why-journalist-key.html:7
-#, fuzzy
-#| msgid ""
-#| "<a href=\"/journalist-key\">Download</a> the public key. The public key "
-#| "is a text file with the extension <code>.asc</code>"
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. The public key is a text file "
 "with the extension <code>.asc</code>"
 msgstr ""
-"<a href=\"/journalist-key\">Last ned</a> den offentlige nøkkelen. Den "
-"offentlige nøkkelen er ei tekstfil med filendelsen <code>.asc</code>"
+"<a href=\"{url}\">Last ned</a> den offentlige nøkkelen. Den offentlige "
+"nøkkelen er ei tekstfil med filendelsen <code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
 msgstr "Importer den til din GPG-nøkkelring."
 
 #: source_templates/why-journalist-key.html:10
-#, fuzzy
-#| msgid ""
-#| "If you are using <a href=\"tails.boum.org\">Tails</a>, you can double-"
-#| "click the <code>.asc</code> file you just downloaded and it will be "
-#| "automatically imported to your keyring."
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
-"Om du bruker <a href=\"tails.boum.org\">Tails</a>, kan du dobbeltklikke på "
+"Om du bruker <a href=\"{url}\">Tails</a>, kan du dobbeltklikke på "
 "<code>.asc</code>-filen du nettopp lastet ned. Da vil den automatisk legges "
 "til i nøkkelringen på systemet ditt."
 
