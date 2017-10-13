@@ -13,7 +13,7 @@ case "$1" in
     # Repoint tor repositories to FPF mirror
     apt_security_list="/etc/apt/security.list"
     if [ -f "$apt_security_list" ]; then
-        sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.ops.freedom.press/g' "$apt_security_list"
+        sed -i 's/deb\.torproject\.org\/torproject\.org/tor-apt.freedom.press/g' "$apt_security_list"
     fi
     ;;
 

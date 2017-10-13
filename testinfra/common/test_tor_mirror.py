@@ -3,13 +3,13 @@ import pytest
 
 def test_tor_mirror_present(File):
     """
-    Ensure the FPF mirror of the Tor apt repo, tor-apt.ops.freedom.press,
+    Ensure the FPF mirror of the Tor apt repo, tor-apt.freedom.press,
     is configured. This repository required manual updating with current
     tor releases, to avoid breakage of untested updates.
     """
-    f = File('/etc/apt/sources.list.d/tor_apt_ops_apt_freedom_press.list')
+    f = File('/etc/apt/sources.list.d/tor_apt_freedom_press.list')
 
-    regex = ('^deb http:\/\/tor-apt\.ops\.freedom\.press trusty main$')
+    regex = ('^deb https:\/\/tor-apt\.freedom\.press trusty main$')
     assert f.contains(regex)
 
 
