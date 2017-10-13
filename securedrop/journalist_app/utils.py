@@ -205,6 +205,7 @@ def col_un_star(cols_selected):
         make_star_false(filesystem_id)
 
     db_session.commit()
+    return redirect(url_for('index'))
 
 
 def col_delete(cols_selected):
