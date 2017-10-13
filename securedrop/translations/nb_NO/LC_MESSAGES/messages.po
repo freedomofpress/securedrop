@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-13 16:55+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-10-13 18:26+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -511,7 +511,7 @@ msgstr "Rediger brukeren \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr "Endre brukernavn &amp; admin-status"
+msgstr "Endre brukernavn og admin-status"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -735,15 +735,15 @@ msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
 #: source_app/main.py:138
 msgid "Thanks! We received your message."
-msgstr "Takk! Vi mottok din melding."
+msgstr "Takk! Vi mottok meldingen din."
 
 #: source_app/main.py:140
 msgid "Thanks! We received your document."
-msgstr "Takk! Vi mottok dokumentet."
+msgstr "Takk! Vi mottok dokumentet ditt."
 
 #: source_app/main.py:142
 msgid "Thanks! We received your message and document."
-msgstr "Takk! Vi mottok din melding og ditt dokument."
+msgstr "Takk! Vi mottok meldingen og dokumentet ditt."
 
 #: source_app/main.py:178
 msgid "Reply deleted"
