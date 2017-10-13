@@ -391,9 +391,11 @@ class JournalistNavigationSteps():
         code_names = self.driver.find_elements_by_class_name('code-name')
         assert 1 == len(code_names)
 
-        # There should be a "1 unread" span in the sole collection entry
-        unread_span = self.driver.find_element_by_css_selector('span.unread')
-        assert "1 unread" in unread_span.text
+        if not hasattr(self, 'accept_languages'):
+            # There should be a "1 unread" span in the sole collection entry
+            unread_span = self.driver.find_element_by_css_selector(
+                'span.unread')
+            assert "1 unread" in unread_span.text
 
     @screenshots
     def _journalist_stars_and_unstars_single_message(self):
@@ -474,7 +476,9 @@ class JournalistNavigationSteps():
         self._journalist_composes_reply()
         self.driver.find_element_by_id('reply-button').click()
 
-        assert "Thanks. Your reply has been stored." in self.driver.page_source
+        if not hasattr(self, 'accept_languages'):
+            assert ("Thanks. Your reply has been stored." in
+                    self.driver.page_source)
 
     def _visit_edit_account(self):
         edit_account_link = self.driver.find_element_by_id(

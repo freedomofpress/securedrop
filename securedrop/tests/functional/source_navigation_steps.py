@@ -87,8 +87,9 @@ class SourceNavigationSteps():
 
         self.driver.get(self.source_location)
 
-        assert ("SecureDrop | Protecting Journalists and Sources" ==
-                self.driver.title)
+        if not hasattr(self, 'accept_languages'):
+            assert ("SecureDrop | Protecting Journalists and Sources" ==
+                    self.driver.title)
 
     @screenshots
     def _source_proceeds_to_login(self):
@@ -99,8 +100,9 @@ class SourceNavigationSteps():
         continue_button = self.driver.find_element_by_id('login')
         continue_button.click()
 
-        assert ("SecureDrop | Protecting Journalists and Sources" ==
-                self.driver.title)
+        if not hasattr(self, 'accept_languages'):
+            assert ("SecureDrop | Protecting Journalists and Sources" ==
+                    self.driver.title)
         # Check that we've logged in
 
         replies = self.driver.find_elements_by_id("replies")
