@@ -180,7 +180,6 @@ def test_deb_package_contains_pot_file(File, Command, deb):
         assert re.search("^.*messages.pot$", c.stdout, re.M)
 
 
-@pytest.mark.xfail  # remove after merging the first translation
 @pytest.mark.parametrize("deb", deb_packages)
 def test_deb_package_contains_mo_file(File, Command, deb):
     """
