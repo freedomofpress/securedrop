@@ -977,6 +977,28 @@ class TestJournalistApp(TestCase):
 
         self.assert500(resp)
 
+    def test_col_process_successfully_deletes_multiple_sources(self):
+        # Create two sources with one submission each
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
+        source_2, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_2, 1)
+
+        self._login_user()
+
+        form_data = {'cols_selected': [source_1.filesystem_id,
+                                       source_2.filesystem_id],
+                     'action': 'delete'}
+
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
+
+        self.assert200(resp)
+
+        # Verify there are no remaining sources
+        remaining_sources = db_session.query(db.Source).all()
+        self.assertEqual(len(remaining_sources), 0)
+
 
 class TestJournalistAppTwo(unittest.TestCase):
 
@@ -994,15 +1016,6 @@ class TestJournalistAppTwo(unittest.TestCase):
         journalist.request.form.__contains__.return_value = True
         journalist.request.form.getlist = MagicMock(return_value=cols_selected)
         journalist.request.form.__getitem__.return_value = action
-
-    @patch("journalist.col_delete")
-    def test_col_process_delegates_to_col_delete(self, col_delete):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'delete')
-
-        journalist.col_process()
-
-        col_delete.assert_called_with(cols_selected)
 
     @patch("journalist.col_star")
     def test_col_process_delegates_to_col_star(self, col_star):
