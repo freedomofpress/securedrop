@@ -4,7 +4,7 @@
     group_id: "{{ group_create_result.group_id }}"
     vpc_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
     assign_public_ip: yes
-    image: "{{ ami_search_result.results[0].ami_id }}"
+    image: "ami-bf1f2ddf"
     region: "{{ aws_ec2_ci_region }}"
     key_name: "sdci-{{ job_id }}"
     exact_count: 1

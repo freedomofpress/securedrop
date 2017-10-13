@@ -30,17 +30,6 @@
         region: "{{ aws_ec2_ci_region }}"
         key_material: "{{ lookup('file',molecule_ephemeral_directory+'/{{ job_id }}.pub') }}"
 
-    - name: Find Ubuntu AMI.
-      ec2_ami_find:
-        owner: 099720109477
-        name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server*"
-        region: "{{ aws_ec2_ci_region }}"
-        sort: creationDate
-        sort_order: descending
-        sort_end: 1
-        virtualization_type: hvm
-      register: ami_search_result
-
     - name: Find VPC subnet.
       ec2_vpc_subnet_facts:
         region: "{{ aws_ec2_ci_region }}"
