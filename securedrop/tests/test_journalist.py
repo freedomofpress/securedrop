@@ -7,7 +7,7 @@ import zipfile
 
 from flask import url_for, escape
 from flask_testing import TestCase
-from mock import patch, ANY, MagicMock
+from mock import patch
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 
@@ -970,6 +970,22 @@ class TestJournalistApp(TestCase):
         # Assert source is starred
         self.assertTrue(source.star.starred)
 
+    def test_single_source_is_successfully_unstarred(self):
+        source, _ = utils.db_helper.init_source()
+        self._login_user()
+
+        # First star the source
+        self.client.post(url_for('add_star',
+                                 filesystem_id=source.filesystem_id))
+
+        # Now unstar the source
+        resp = self.client.post(url_for('remove_star',
+                                filesystem_id=source.filesystem_id))
+
+        self.assertRedirects(resp, url_for('index'))
+
+        # Assert source is not starred
+        self.assertFalse(source.star.starred)
 
     def test_col_process_aborts_with_bad_action(self):
         """If the action is not a valid choice, a 500 should occur"""
@@ -1082,44 +1098,6 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertFalse(
             mock_scrypt_hash.called,
             "Called _scrypt_hash for password w/ invalid length")
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
-
-
-class TestJournalist(unittest.TestCase):
-
-    def setUp(self):
-        journalist.logged_in = MagicMock()
-        journalist.make_star_true = MagicMock()
-        journalist.db_session = MagicMock()
-        journalist.url_for = MagicMock()
-        journalist.redirect = MagicMock()
-        journalist.get_one_or_else = MagicMock()
-
-    @patch('journalist.url_for')
-    @patch('journalist.redirect')
-    def test_remove_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.remove_star('filesystem_id')
-
-        self.assertEqual(redirect_template, redirect(url_for('index')))
-
-    @patch('journalist.db_session')
-    def test_remove_star_makes_commits(self, db_session):
-        journalist.remove_star('filesystem_id')
-
-        db_session.commit.assert_called_with()
-
-    @patch('journalist.make_star_false')
-    def test_remove_star_delegates_to_make_star_false(self, make_star_false):
-        filesystem_id = 'filesystem_id'
-
-        journalist.remove_star(filesystem_id)
-
-        make_star_false.assert_called_with(filesystem_id)
 
     @classmethod
     def tearDownClass(cls):
