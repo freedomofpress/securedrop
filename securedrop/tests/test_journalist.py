@@ -1073,6 +1073,22 @@ class TestJournalistApp(TestCase):
         remaining_sources = db_session.query(db.Source).all()
         self.assertEqual(len(remaining_sources), 0)
 
+    def test_col_process_successfully_stars_sources(self):
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
+
+        self._login_user()
+
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'star'}
+
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
+
+        self.assert200(resp)
+
+        # Verify the source is starred
+        self.assertTrue(source_1.star.starred)
 
 class TestJournalistAppTwo(unittest.TestCase):
 
@@ -1091,15 +1107,6 @@ class TestJournalistAppTwo(unittest.TestCase):
         journalist.request.form.getlist = MagicMock(return_value=cols_selected)
         journalist.request.form.__getitem__.return_value = action
 
-    @patch("journalist.col_star")
-    def test_col_process_delegates_to_col_star(self, col_star):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'star')
-
-        journalist.col_process()
-
-        col_star.assert_called_with(cols_selected)
-
     @patch("journalist.col_un_star")
     def test_col_process_delegates_to_col_un_star(self, col_un_star):
         cols_selected = ['source_id']
@@ -1108,13 +1115,6 @@ class TestJournalistAppTwo(unittest.TestCase):
         journalist.col_process()
 
         col_un_star.assert_called_with(cols_selected)
-
-    @patch("journalist.make_star_true")
-    @patch("journalist.db_session")
-    def test_col_star_call_db_(self, db_session, make_star_true):
-        journalist.col_star(['filesystem_id'])
-
-        make_star_true.assert_called_with('filesystem_id')
 
     @patch("journalist.db_session")
     def test_col_un_star_call_db(self, db_session):
@@ -1125,7 +1125,7 @@ class TestJournalistAppTwo(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         # Reset the module variables that were changed to mocks so we don't
-        # break other tests
+        # break other test
         reload(journalist)
 
 
