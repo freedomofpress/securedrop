@@ -1090,43 +1090,28 @@ class TestJournalistApp(TestCase):
         # Verify the source is starred
         self.assertTrue(source_1.star.starred)
 
-class TestJournalistAppTwo(unittest.TestCase):
+    def test_col_process_successfully_unstars_sources(self):
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
 
-    def setUp(self):
-        journalist.logged_in = MagicMock()
-        journalist.request = MagicMock()
-        journalist.url_for = MagicMock()
-        journalist.redirect = MagicMock()
-        journalist.abort = MagicMock()
-        journalist.db_session = MagicMock()
-        journalist.get_docs = MagicMock()
-        journalist.get_or_else = MagicMock()
+        self._login_user()
 
-    def _set_up_request(self, cols_selected, action):
-        journalist.request.form.__contains__.return_value = True
-        journalist.request.form.getlist = MagicMock(return_value=cols_selected)
-        journalist.request.form.__getitem__.return_value = action
+        # First star the source
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'star'}
+        self.client.post(url_for('col_process'), data=form_data,
+                         follow_redirects=True)
 
-    @patch("journalist.col_un_star")
-    def test_col_process_delegates_to_col_un_star(self, col_un_star):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'un-star')
+        # Now unstar the source
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'un-star'}
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
 
-        journalist.col_process()
+        self.assert200(resp)
 
-        col_un_star.assert_called_with(cols_selected)
-
-    @patch("journalist.db_session")
-    def test_col_un_star_call_db(self, db_session):
-        journalist.col_un_star([])
-
-        db_session.commit.assert_called_with()
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other test
-        reload(journalist)
+        # Verify the source is not starred
+        self.assertFalse(source_1.star.starred)
 
 
 class TestJournalistLogin(unittest.TestCase):
