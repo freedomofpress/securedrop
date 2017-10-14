@@ -26,7 +26,8 @@ import store
 import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, LoginThrottledException,
-                PasswordError, InvalidUsernameException)
+                PasswordError, InvalidUsernameException,
+                BadTokenException, WrongPasswordException)
 import worker
 
 app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
@@ -142,7 +143,10 @@ def validate_user(username, password, token, error_message=None):
     """
     try:
         return Journalist.login(username, password, token)
-    except Exception as e:
+    except (InvalidUsernameException,
+            BadTokenException,
+            WrongPasswordException,
+            LoginThrottledException) as e:
         app.logger.error("Login for '{}' failed: {}".format(
             username, e))
         if not error_message:

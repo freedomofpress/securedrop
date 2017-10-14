@@ -34,11 +34,11 @@
   <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 
-<form action="{{ password_reset_url }}" method="post" id="new-password">
+<form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   {% if not user or g.user == user %}
-  <input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}">
-  <input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}">
+  <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
+  <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
   {% endif %}
   <input name="password" type="hidden" value="{{ password }}">
   <p>
