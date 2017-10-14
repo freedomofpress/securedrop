@@ -37,27 +37,6 @@
           vpc-id: "{{ aws_ec2_vpc_id }}"
       register: vpc_subnet_result
 
-    - name: Create custom temporary security_group for CI hosts.
-      ec2_group:
-        name: "{{ job_id }}"
-        description: Temporary rules for CI
-        region: "{{ aws_ec2_ci_region }}"
-        vpc_id: "{{ aws_ec2_vpc_id }}"
-        rules:
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: "{{ ci_box_ip  }}/32"
-          - proto: tcp
-            from_port: 1514
-            to_port: 1515
-            cidr_ip: "{{ vpc_subnet_result.subnets[0].cidr_block }}"
-          - proto: udp
-            from_port: 1514
-            to_port: 1515
-            cidr_ip: "{{ vpc_subnet_result.subnets[0].cidr_block }}"
-      register: group_create_result
-
     - include: aws-launch.yml
 
     - name: Populate instance config dict
@@ -94,6 +73,7 @@
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
     aws_ec2_vpc_id: "{{ ansible_env.CI_AWS_VPC_ID | mandatory }}"
     aws_ec2_boot_timeout: "500"
+    aws_ec2_sg_id: "sg-3b2e5f5d"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
