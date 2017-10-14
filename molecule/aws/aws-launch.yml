@@ -29,6 +29,7 @@
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
         timeout: 120
+        search_regex: OpenSSH
         state: started
       register: ec2_launch_results
       with_items: "{{ reg_ec_instance.results }}"
