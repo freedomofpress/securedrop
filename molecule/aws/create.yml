@@ -67,20 +67,21 @@
 
     - name: Perform black magic tomfoolery to get host access before converge
       add_host:
-        hostname: "{{ item.tags.server_type }}"
-        ansible_ssh_host: "{{ item.public_dns_name }}"
+        hostname: "{{ item.instance }}"
+        ansible_ssh_host: "{{ item.address }}"
         ansible_ssh_user: "sdrop"
         ansible_ssh_private_key_file: "{{ molecule_ephemeral_directory+'/'+job_id }}"
-      with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
+      with_items: "{{ instance_conf }}"
 
     - name: Ensure we can make an ansible connection to the remote servers
-      setup:
-      delegate_to: "{{ item.tags.server_type }}"
+      ping:
+      delegate_to: "{{ item.instance }}"
       register: setup_result
       until: setup_result|succeeded
+      ignore_errors: "true"
       retries: 5
       delay: 10
-      with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
+      with_items: "{{ instance_conf }}"
 
   handlers:
     - name: aws relaunch
