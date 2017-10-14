@@ -959,12 +959,17 @@ class TestJournalistApp(TestCase):
                         submission.filename)
                     )
 
-    def test_add_star_redirects_to_index(self):
+    def test_single_source_is_successfully_starred(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
         resp = self.client.post(url_for('add_star',
                                         filesystem_id=source.filesystem_id))
+
         self.assertRedirects(resp, url_for('index'))
+
+        # Assert source is starred
+        self.assertTrue(source.star.starred)
+
 
     def test_col_process_aborts_with_bad_action(self):
         """If the action is not a valid choice, a 500 should occur"""
@@ -1094,27 +1099,6 @@ class TestJournalist(unittest.TestCase):
         journalist.url_for = MagicMock()
         journalist.redirect = MagicMock()
         journalist.get_one_or_else = MagicMock()
-
-    @patch('journalist.url_for')
-    @patch('journalist.redirect')
-    def test_add_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.add_star('filesystem_id')
-
-        self.assertEqual(redirect_template, redirect(url_for('index')))
-
-    @patch('journalist.db_session')
-    def test_add_star_makes_commits(self, db_session):
-        journalist.add_star('filesystem_id')
-
-        db_session.commit.assert_called_with()
-
-    @patch('journalist.make_star_true')
-    def test_single_delegates_to_make_star_true(self, make_star_true):
-        filesystem_id = 'filesystem_id'
-
-        journalist.add_star(filesystem_id)
-
-        make_star_true.assert_called_with(filesystem_id)
 
     @patch('journalist.url_for')
     @patch('journalist.redirect')
