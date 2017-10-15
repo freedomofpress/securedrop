@@ -44,7 +44,7 @@ class TestI18N(object):
 
     def test_get_supported_locales(self):
         locales = ['en_US', 'fr_FR']
-        assert locales == i18n._get_supported_locales(locales, None, None)
+        assert ['en_US'] == i18n._get_supported_locales(locales, None, None)
         locales = ['en_US', 'fr_FR']
         supported = ['en_US', 'not_found']
         with pytest.raises(i18n.LocaleNotFound) as excinfo:
@@ -213,6 +213,8 @@ class TestI18N(object):
             if supported:
                 del config.SUPPORTED_LOCALES
             for app in (journalist.app, source.app):
+                config.SUPPORTED_LOCALES = [
+                    'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
                 i18n.setup_app(app, translation_dirs=config.TEMP_DIR)
                 self.verify_i18n(app)
         finally:
