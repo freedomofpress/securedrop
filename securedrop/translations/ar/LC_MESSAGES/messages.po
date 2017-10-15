@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-15 16:31+0000\n"
+"PO-Revision-Date: 2017-10-15 18:13+0000\n"
 "Last-Translator: Thalia Rahme <trahme@gmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -337,8 +337,9 @@ msgid "never"
 msgstr "أبدا"
 
 #: journalist_templates/admin.html:38
+#, fuzzy
 msgid "No users to display"
-msgstr "لا يمكن ظهور أي مستخدم"
+msgstr "ما من مستخدمين لعرضهم"
 
 #: journalist_templates/admin_add_user.html:4
 #: journalist_templates/edit_account.html:7
@@ -356,7 +357,7 @@ msgstr "هو المسؤول"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "Is using a YubiKey [HOTP]"
-msgstr "هو استعمال [YubiKey [HOTP"
+msgstr "يستخدم (تستخدم) [YubiKey [HOTP"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -366,10 +367,12 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
-"أنت على وشك الإنتهاء! لإنهاء إضافة الحساب الجديد, اتبع التعليمات أدناه "
-"لإعداد التوثيق الثنائي باستخدام Google Authenticator. حالما اضفت التسجيل "
-"لحسابك في التطبيق, أدخل إحدى الرموز المكونة من 6 أرقام من التطبيق للتأكد من "
-"أن التوثيق الثنائي تم إعداده بالشكل الصحيح."
+"أنت على وشك الإنتهاء! لإنهاء عملية إضافة المستخدم الجديد، اطلب منهم أن "
+"يتبعوا التعليمات أدناه لتنصيب التوثيق الثنائي  بواسطة Google Authenticator. "
+"\n"
+" ما إن يضيفوا  معلومات حسابهم على هذا التطبيق، اطلب منهم إدخال إحدى الرموز "
+"المكونة من 6 أرقام من التطبيق للتأكد من أن التوثيق الثنائي تم  تنصيبه بالشكل "
+"الصحيح."
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
