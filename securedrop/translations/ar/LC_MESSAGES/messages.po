@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-16 08:49+0000\n"
+"PO-Revision-Date: 2017-10-16 18:32+0000\n"
 "Last-Translator: Thalia Rahme <trahme@gmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -337,7 +337,6 @@ msgid "never"
 msgstr "أبدا"
 
 #: journalist_templates/admin.html:38
-#, fuzzy
 msgid "No users to display"
 msgstr "ما من مستخدمين لعرضهم"
 
@@ -564,7 +563,7 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:41
 msgid "The user's password will be changed to:"
-msgstr "كلمة السر الخاصة بالمستخدم ستتغير الى:"
+msgstr "ستتغير كلمة السر الخاصة بالمستخدم  إلى:"
 
 #: journalist_templates/edit_account.html:43
 msgid "Your password will be changed to:"
@@ -585,9 +584,10 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"إذا فقد المستخدم أوراق اعتماد التوثيق الثنائي, فإنه يمكنك استرجاعها هنا. "
-"<em> فإذا قمت بذلك, تأكد بأن المستخدم موجود و جاهز لتفعيل أجهزة المستخدم "
-"بأوراق اعتماد جديدة. والا سيتم اقفال حسابهم."
+"إذا فقد مستخدم  ما  المعلومات والبيانات المتعلّقة بالتوثيق الثنائي الخاص به "
+"ككلمة السر والأسم,  يمكنك استرجاعها هنا. <em> فإذا قمت بذلك, تأكد بأن "
+"المستخدم حاضر ومستعد لتفعيل أجهزته عن طريق بيانات التوثيق الثنائي الجديدة. "
+"والا سيحظرون من الدخول إلى حسابهم."
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -596,9 +596,10 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"إذا فقدت اوراق اعتماد التوثيق الثنائي الخاص بك, أو حصلت على جهاز جديد, يمكنك "
-"اعادة اوراق الاعتماد هنا.<em> فإذا قمت بذلك, تأكد بأنك جاهز لتفعيل جهازك "
-"الجديد, وإلا سيتم منعك من استخدام حسابك.</em>"
+"إذا فقدت المعلومات والبيانات المتعلّقة بالتوثيق الثنائي الخاص بك ككلمة السر "
+"والأسم,, أو  إذا اقنيت  جهاز جديد، فيمكنك اعادة ضبط هذه البيانات اهنا.<em> "
+"فإذا قمت بذلك، تأكد بأنك جاهز لتفعيل جهازك الجديد, وإلا سيتم منعك من الدخول "
+"إلى حسابك.</em>"
 
 #: journalist_templates/edit_account.html:60
 msgid ""
@@ -606,17 +607,18 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
-"لإعادة ضبط التوثيق الثنائي لتطبيقات الهاتف المحمول مثل Google Authenticator "
-"أو FreeOTP, اختر الخيار الاول. أما لمعدات token مثل Yubikey, اختر الخيار "
-"الثاني."
+"لإعادة ضبط التوثيق الثنائي مثل Google Authenticator أو FreeOTP على تطبيقات "
+"الهاتف المحمول،   اضغط على الخيار الاول. أما فيما يتعلّق بالتطبيقات الخاصة "
+"بالأجهزة أو ما يسمى بالعتاد الحاسوبي ك Yubikey,  فاضغط على الخيار الثاني."
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "إعادة ضبط التوثيق الثنائي (تطبيق APP)"
+msgstr "إعادة ضبط التوثيق الثنائي (تطبيق)"
 
 #: journalist_templates/edit_account.html:82
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "إعادة ضبط التوثيق الثنائي (معدات TOKEN)"
+msgstr ""
+"إعادة ضبط التوثيق الثنائي ( برمجيات خاصة بالأجهزة الصلبة أو العتاد الحاسوبي)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -629,13 +631,14 @@ msgid ""
 "appear under their collection of documents. You can use this box to write "
 "encrypted replies to them."
 msgstr ""
-"SecureDrop سينتج مفتاح تشفير آمن لهذا المصدر للمرة القادمة التي يتم فيها "
-"تسجيل الدخول. حالما يتم إنتاج المفتاح, سوف يظهر صندوق للرد تحت مجموعة "
-"المستندات الخاصة بهم. يمكنك استخدام هذا الصندوق لكتابة ردود مشفرة لهم."
+"في المرة الثانية الني سيقوم المصدر فيها بتسجيل دخوله، سيولّد  SecureDrop، "
+"ويخلق مفتاح تشفير آمن لهذا المصدر. حالما يتم إنتاج المفتاح, سوف يظهر صندوق "
+"للرد تحت مجموعة المستندات الخاصة بهم. يمكنك استخدام  مربّع الحوار أو الصندوق "
+"الحوار هذا لكتابة ردود مشفرة لهم."
 
 #: journalist_templates/flag.html:10
 msgid "Continue to the list of documents for {codename}..."
-msgstr "استمر لقائمة المستندات ل{codename}..."
+msgstr "تابع إلى قائمة المستندات ل{codename}..."
 
 #: journalist_templates/index.html:4
 msgid "Sources"
@@ -643,7 +646,7 @@ msgstr "مصادر"
 
 #: journalist_templates/index.html:11
 msgid "Download Unread"
-msgstr "تنزيل غير قابل للقراءة"
+msgstr "تنزيل لم تتم قراءته"
 
 #: journalist_templates/index.html:12
 msgid "Download"
@@ -651,31 +654,32 @@ msgstr "تنزيل"
 
 #: journalist_templates/index.html:13
 msgid "Star"
-msgstr "تمييز"
+msgstr "وضع علامة النجمة"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr "الغاء التمييز"
+msgstr "الغاء علامة النجمة"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
 msgstr "لم يتم إرسال أية مستندات!"
 
 #: journalist_templates/js-strings.html:3
+#, fuzzy
 msgid "filter by codename"
-msgstr "تصفية حسب الاسم الرمزي"
+msgstr "قم بالتصفية بحسب الاسم الرمزي"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
-msgstr "تحديد الكل"
+msgstr "اختر الكل"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr "تحديد غير قابل للقراءة"
+msgstr "اختر الرسائل الغير المقروءة"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr "تحديد لا شيء"
+msgstr "لا تختر اي شيء"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
@@ -683,23 +687,24 @@ msgstr "هل أنت متأكد من أنك تريد حذف هذه المجموع
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
-msgstr "هل أنت متأكد من أنك تريد حذف حجم {size} المجموعة المحددة؟"
+msgstr "هل أنت متأكد من أنك تريد حذف {size} المجموعة المختارة؟"
 
 #: journalist_templates/js-strings.html:9
+#, fuzzy
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr "هل أنت متأكد من أنك تريد حذف حجم {size} الرسائل المحددة؟"
+msgstr "هل أنت متأكد من أنك تريد حذف  {size} المضمون المرسل المختار؟"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr "هل أنت متأكد من أنك تريد حذف اسم المستخدم {username}؟"
+msgstr "هل أنت متأكد من أنك تريد حذف المستخدم {username}؟"
 
 #: journalist_templates/js-strings.html:11
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
-msgstr ""
-"هل أنت متأكد من أنك تريد اعادة ضبط التوثيق الثنائي لاسم المستخدم {username}؟"
+msgstr "هل أنت متأكد من أنك تريد اعادة ضبط التوثيق الثنائي ل {username}؟"
 
 #: journalist_templates/login.html:4
+#, fuzzy
 msgid "Login to access the journalist interface"
 msgstr "قم بتسجيل الدخول للوصول إلى واجهة الصحفي"
 
@@ -709,7 +714,7 @@ msgstr "كلمة السر"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "رمز ثنائي"
+msgstr "رمز التوثيق الثنائي"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
@@ -721,15 +726,15 @@ msgid ""
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
 "<strong>تنبيه:</strong> يبدو أنك تستخدم Tor2Web. هذا <strong>لا</strong> "
-"يخفي هوية المستخدم. <a href=\"{url}\"> ما الخطير في ذلك؟</a>"
+"يخفي هوية المستخدم. <a href=\"{url}\">  ما الخطر في ذلك؟</a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr "هذه الخانة مطلوبة."
+msgstr "إن هذه الخانة إلزامية."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr "يجب أن يتراوح طول الحقل بين 1 الى {max_codename_len} حروف. "
+msgstr "يجب أن يتراوح طول الحقل بين 1  و {max_codename_len} حروف. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
@@ -740,12 +745,12 @@ msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
 msgstr ""
-"لقد تم تحويلك لأنك قمت بتسجيل الدخول من قبل. إذا كنت تريد انشاء حساب جديد, "
-"يجب عليك أولا تسجيل الخروج."
+"لقد تم تحويلك لأنك قمت بتسجيل الدخول من قبل. إذا كنت تريد انشاء حساب جديد، "
+"يجب عليك أولا أن تخرج من حسابك."
 
 #: source_app/main.py:105
 msgid "You must enter a message or choose a file to submit."
-msgstr "يجب عليك ترك رسالة أو تحميل ملف."
+msgstr "يجب عليك كتابة رسالة أو اختيار ملف لإرساله."
 
 #: source_app/main.py:138
 msgid "Thanks! We received your message."
@@ -769,7 +774,7 @@ msgstr "تم حذف جميع الردود"
 
 #: source_app/main.py:209
 msgid "Sorry, that is not a recognized codename."
-msgstr "نأسف, هذا الاسم الرمزي غير معترف به."
+msgstr "عذراً, هذا الاسم الرمزي غير معترف به."
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
@@ -789,8 +794,7 @@ msgid ""
 "Like all software, SecureDrop may contain security bugs. Use at your own "
 "risk."
 msgstr ""
-"ربما يحتوي الSecureDrop على ثغرات أمنية مثل جميع البرمجيات. استخدمها تحت "
-"مسؤوليتك."
+"كجميع البرمجيات، قد  تشوبSecureDrop على ثغرات أمنية. استخدمها تحت مسؤوليتك."
 
 #: source_templates/error.html:3
 msgid "Server error"
@@ -804,7 +808,7 @@ msgstr "نأسف, لقد واجه الموقع الإلكتروني خطأ ول�
 
 #: source_templates/error.html:7 source_templates/notfound.html:7
 msgid "Look up a codename..."
-msgstr "ابحث عن اسم رمز..."
+msgstr "ابحث عن اسم رمزي..."
 
 #: source_templates/first_submission_flashed_message.html:2
 msgid "Success!"
@@ -814,11 +818,11 @@ msgstr "نجاح!"
 msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
-msgstr "شكرا لقيامك بإرسال هذه المعلومات لنا. الرجاء التحقق من الرد لاحقا."
+msgstr "شكرا لقيامك بإرسال هذه المعلومات لنا. الرجاء التحقق من ردنا لاحقا."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
-msgstr "هل نسيت اسم الرمز الخاص بك؟"
+msgstr "هل نسيت الاسم الرمزي الخاص بك؟"
 
 #: source_templates/generate.html:4
 msgid "Welcome"
@@ -829,8 +833,8 @@ msgid ""
 "This codename is what you will use in future visits to receive messages from "
 "our journalists in response to what you submit on the next screen."
 msgstr ""
-"اسم الرمز هذا ستستخدمه في الزيارات المقبلة لاستلام الرسائل من صحافينا ردا "
-"على ما قمت بتقديمه على الشاشة التالية."
+"اسم الرمز هذا ستستخدمه في الزيارات المقبلة لاستلام الرسائل من صحافيينا ردا "
+"على ما  أرسلته على الشاشة التالية."
 
 #: source_templates/generate.html:29
 msgid ""
@@ -842,20 +846,21 @@ msgid ""
 "there is no way to retrieve a lost codename."
 msgstr ""
 "<strong> 1SecureDrop</strong> 2 لأننا لا نستخدم أي من الوسائل التقليدية "
-"لتتبع خدمة مستخدمي سيكيور دروب, فاستخدام هذا الاسم في الزيارات المقبلة هي "
-"الطريقة الوحيدة للتواصل معك. مقارنة بكلمات السر, فانها لا توجد طريقة "
-"لاسترداد اسم مفقود."
+"لتتبع  مستخدمي سيكيور دروب SecureDrop, فاستخدام هذا الاسم في الزيارات "
+"المقبلة  لهو الطريقة الوحيدة  كي نتواصل معك في حال ساورتنا أي أسئلة أو في "
+"حال احتجنا إلى أي مستندات إضافيى.  بخلاف كلمات السر, فما منطريقة لاسترداد "
+"اسم رمزي مفقود."
 
 #: source_templates/generate.html:36
 msgid ""
 "Please either write this codename down and keep it in a safe place, or "
 "memorize it."
 msgstr ""
-"الرجاء, اما أن تكتب اسم الرمز هذا وحفظه في مكان آمن, أو أن تحفظه عن ظهر قلب."
+"من فضلك، ما  سجّل هذا الإسم الرمز واحفظه في مكان آمن, أو احفظه عن ظهر قلب."
 
 #: source_templates/generate.html:42
 msgid "ALREADY HAVE A CODENAME?"
-msgstr "هل لديك اسم رمز من قبل؟"
+msgstr "هل لديك اسم رمزي؟"
 
 #: source_templates/index.html:17
 msgid ""
@@ -863,9 +868,9 @@ msgid ""
 "anonymity:</strong> <a id=\"disable-js\" href=\"\">Learn how to set it to "
 "high</a>, or ignore this warning to continue."
 msgstr ""
-"<strong>نوصي بوضع شريط الأمان للأعلى لعدم كشف هويتك: </strong> <a id"
-"=\"disable-js\" href=\"\">تعلم كيفية وضعه للأعلى</a>أو تجاهل هذا التحذير "
-"للمتابعة."
+"<strong>نوصي بوضع برفع مستوى وشريط الأمان إلى أعلى مستوى  لحماية مجهوليتك أو "
+"خصوصيتك: </strong> <a id=\"disable-js\" href=\"\">تعلم كيفية وضعه للأعلى</a>"
+"أو تجاهل هذا التحذير للمتابعة."
 
 #: source_templates/index.html:18
 msgid ""
@@ -883,7 +888,7 @@ msgstr "إرسال وثائق لأول مرة"
 
 #: source_templates/index.html:48
 msgid "Already submitted something?"
-msgstr "هل سبق أن أرسلت شيئا؟"
+msgstr "هل سبق و أرسلت شيئا؟"
 
 #: source_templates/index.html:54
 msgid ""
@@ -894,7 +899,8 @@ msgstr "إذا كانت هذه هي المرة الأولى التي ترسل ف
 msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
-msgstr "إذا كنت قد أرسلت مستندات من قبل، قم بتسجيل الدخول هنا للبحث عن الردود."
+msgstr ""
+"إذا كنت قد  سبق وأرسلت مستندات ، قم بتسجيل الدخول هنا  لمعرفة إذا وصلتك ردود."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
@@ -909,8 +915,8 @@ msgid ""
 "You appear to be using the Tor Browser. You can turn the Security Slider to "
 "High in 4 easy steps!"
 msgstr ""
-"يبدو أنك تستخدم متصفح تور Tor. يمكنك تحويل شريط تمرير الحماية إلى الأعلى في "
-"4 خطوات سهلة!"
+"يبدو أنك تستخدم متصفح تور Tor. يمكنك  رفع  سلّم الحماية  Security Slider "
+"شريط تمرير الحماية إلى الأعلى في 4 خطوات سهلة!"
 
 #: source_templates/index.html:94
 msgid ""
@@ -935,11 +941,11 @@ msgstr "<a href=\"/\">انقر هنا</a> لتحديث الصفحة"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr "أدخل اسم الرمز"
+msgstr "أدخل الاسم الرمزي"
 
 #: source_templates/login.html:12
 msgid "Enter your codename"
-msgstr "أدخل اسم الرمز الخاص بك"
+msgstr "أدخل الاسم الرمزي الخاص بك"
 
 #: source_templates/login.html:20 source_templates/lookup.html:42
 msgid "CANCEL"
@@ -969,9 +975,9 @@ msgid ""
 "some random blip. To err on the side of caution, we put a hold on sending "
 "all documents from that day through to our journalists."
 msgstr ""
-"شهدت خوادمنا موجة غير عادية من النشاط الجديد, عند زيارتك الأخيرة. كان يمكن "
-"أن يكون هذا نشاط بشري, هجوم آلي, أو مجرد علامة ضوئية. لتخطئ على جانب الحذر, "
-"فإننا وضعنا تعليق لعملية ارسال المستندات منذ ذلك اليوم من خلال صحافينا."
+"شهدت خوادمنا موجة غير عادية من النشاط الجديد، عند زيارتك الأخيرة. يمكن أن "
+"يكون هذا نشاط بشري, هجوم آلي, أو مجرد علامة ضوئية.  من باب الحذر, فقد علّ"
+"قنا  منذ ذلك اليوم، عملية ارسال اي مستند إلى صحافينا."
 
 #: source_templates/lookup.html:14
 msgid ""
@@ -979,12 +985,12 @@ msgid ""
 "submission into the hands of a journalist straight away. We’re sorry for the "
 "delay. Please do check back again in a week or so."
 msgstr ""
-"الآن تاكدنا بأنك إنسان, ورغما عن ذلك, سوف نرسل التقديم الخاص بك لأيدي الصحفي "
-"على الفور. نأسف على التاخير. يرجى التحقق مرة أخرى في غضون أسبوع أو نحو ذلك."
+"الآن  وقد تاكدنا بأنك إنسان، سوف نوجّه فوراً رسالتك السابقة لصحفي على الفور. "
+"نأسف على التاخير. يرجى التحقق مرة أخرى في غضون أسبوع أو نحو ذلك."
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
-msgstr "ارسال الادوات"
+msgstr "ارسال المواد أو المستندات"
 
 #: source_templates/lookup.html:21
 msgid ""
@@ -992,13 +998,13 @@ msgid ""
 "and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> "
 "before submission. Files are encrypted as they are received by SecureDrop."
 msgstr ""
-"إذا كنت على دراية بGPG, فإنه يمكنك تشفير الملفات والرسائل الخاصة بك باستخدام "
-"<a href=\"{url}\" class=\"text-link\">مفتاحنا العام</a> قبل التسليم. يتم "
-"تشفير الملفات كما يتم استلامها من قبل سكوريدروب SecureDrop."
+"إذا كنت على دراية بGPG, يمكنك إذا تشفير الملفات والرسائل الخاصة بك  بواسطة<a "
+"href=\"{url}\" class=\"text-link\">مفتاحنا العام</a> قبل ارسالها. يتم تشفير "
+"الملفات كما يتم استلامها من قبل سكوريدروب SecureDrop."
 
 #: source_templates/lookup.html:22
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr "<a href=\"{url}\" class=\"text-link\">المزيد</a>."
+msgstr "<a href=\"{url}\" class=\"text-link\"> لمعرفة المزيد</a>."
 
 #: source_templates/lookup.html:24
 msgid "You can send a file, a message, or both."
@@ -1019,9 +1025,9 @@ msgid ""
 "with them. This also lets us know that you are aware of our reply. You can "
 "respond by submitting a new message above."
 msgstr ""
-"لقد استلمت ردا. لحماية هويتك في حالة أن أحدا قام باكتشاف الرقم الرمزي الخاص "
-"بك, الرجاء قم بحذف جميع الردود عند الانتهاء منها. هذا أيضا سيمكننا من معرفة "
-"أنك مدرك بردنا عليك. يمكنك الرد من خلال إرسال"
+"لقد استلمت ردا. لحماية هويتك في حالة قام  أحد باكتشاف  اسمك الرمزي،  من فضلك "
+"احذف جميع الردود عند الانتهاء منها. بهذا الشكل، سنعرف بدورنا، أنك على علم "
+"أننا قمنا بالاجابة عليك.يمكنك الرد من خلال توجيه رسالة أعلاه."
 
 #: source_templates/lookup.html:71
 msgid "Delete this reply?"
@@ -1037,7 +1043,7 @@ msgstr "حذف جميع الردود"
 
 #: source_templates/lookup.html:85
 msgid "Are you finished with the replies?"
-msgstr "هل انتهيت من الردود؟"
+msgstr "هل انتهيت من الاطلاع على الردود؟"
 
 #: source_templates/lookup.html:86
 msgid "YES, DELETE ALL REPLIES"
@@ -1049,11 +1055,11 @@ msgstr "لا, ليس بعد"
 
 #: source_templates/lookup.html:91
 msgid "There are no replies at this time."
-msgstr "لا يوجد أي رد حتى الآن"
+msgstr "ما من رد في الوقت الراهن."
 
 #: source_templates/lookup.html:99
 msgid "Remember your codename is:"
-msgstr "تذكر أن اسم الرمز الخاص بك هو:"
+msgstr "تذكر أن اسمك الرمزي هو:"
 
 #: source_templates/lookup.html:100
 msgid "Show"
@@ -1082,9 +1088,10 @@ msgid ""
 "to facilitate anonymous publishing."
 msgstr ""
 "<a href=\"tor2web.org\">Tor2Web</a> هو خادم وكيل يجعلك تتصفح خدمات Tor "
-"الخفية (صفحات .onion) بدون تثبيت Tor. مصممة من أجل تسهيل النشر بشكل مجهول."
+"الخفية (صفحات .onion) بدون تثبيت Tor. مصمممن أجل تسهيل النشر بشكل مجهول."
 
 #: source_templates/tor2web-warning.html:5
+#, fuzzy
 msgid ""
 "Tor2Web only protects publishers, not readers. If you upload documents to us "
 "using Tor2Web, you are <strong>not anonymous</strong> and could be "
@@ -1092,10 +1099,11 @@ msgid ""
 "Tor2Web sites typically do not use HTTPS, it is possible that your "
 "connection could be MITM'ed by a capable adversary."
 msgstr ""
-"شبكة Tor2Web تقوم بحماية الناشرين. اذا قمت بتحميل المستندات باستخدام "
-"Tor2Web, فانك <strong>غير مجهول</strong> و يمكن تحديد هويتك من خلال عاملي "
-"ISP او تور ويب بروكسي Tor2Web proxy. بالاضافة الى أن منذ مواقع تور ويب لم "
-"تستخدم HTTPS, فانه من الممكن أن اتصالك قد اعترض من قبل شخص بارع."
+"شبكة Tor2Web تقوم بحماية الناشرين فقط ولكنها لا تحمي القرّاء. اذا قمت بتحميل "
+"المستندات باستخدام Tor2Web وأرسلتها لنا بواسطته, فانك <strong>مكشوف</strong> "
+"و يمكن تحديد هويتك من خلال  من يزودك الانترنت أو عن طريق    خادم وكيل ك "
+"Tor2Web . بالإضافة إلى ذلك و كما أن مواقع تور ويب Tor2Web  لا تعمل بنظام "
+"HTTPS, فانه من الممكن أن  ينم اعتراض اتصالك قد اعترض من قبل  خصم بارع."
 
 #: source_templates/tor2web-warning.html:6
 msgid ""
@@ -1105,18 +1113,18 @@ msgid ""
 msgstr ""
 "إذا كنت تريد إرسال المعلومات, فانه <strong> ينصح بشدة</strong> تنزيل <a href="
 "\"torproject.org/download.html.en\"> تور </a>واستخدامه للوصول الى موقعنا "
-"بأمان و بعوية مجهولة."
+"بأمان و  بخصوصية تامة أي من دون الكشف عن هويتك."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
-msgstr "يجب عليك استخدام المتصفح تور Tor"
+msgstr "عليك استخدام متصفح تور Tor"
 
 #: source_templates/use-tor-browser.html:4
 msgid ""
 "If you are not using Tor Browser, you <strong>may not be anonymous</strong>."
 msgstr ""
-"اذا كنت لا تستخدم متصفح تور, فانه <strong> لا يمكنك أن تكون مجهول الهوية</"
-"strong>."
+"اذا كنت لا تستخدم متصفح تور, فانه <strong>   قد تكون هويتك ونشاطك الرقمي "
+"مكشوفين</strong>."
 
 #: source_templates/use-tor-browser.html:5
 msgid ""
@@ -1124,21 +1132,21 @@ msgid ""
 "you</strong> to install Tor Browser and use it to access our site safely and "
 "anonymously."
 msgstr ""
-"اذا كنت تريد ارسال الرسائل لسيكيور دروب SecureDrop, فاننا <strong>ننصحك "
-"بشدة</strong> بتنزيل متصفح تور و استخدامه للدخول الى موقعنا بأمان و مجهول "
-"الهوية."
+"إذا رغبت بإرسال معلومات لسيكيور دروب SecureDrop, فاننا <strong>ننصحك "
+"بشدة</strong> أن تنزل متصفح تور و استخدامه للدخول الى موقعنا بأمان و \n"
+" بصورة مجهول ."
 
 #: source_templates/use-tor-browser.html:6
 msgid ""
 "Copy and paste the following address into your browser and follow the "
 "instructions to download and install Tor Browser:"
 msgstr ""
-"انسخ والصق هذا العنوان في المتصفح الخاص بك واتبع التعليمات لتنزيل و تثبيت "
+"انسخ والصق هذا العنوان ugn  المتصفح الخاص بك واتبع التعليمات لتنزيل و تثبيت "
 "المتصفح تور Tor:"
 
 #: source_templates/why-journalist-key.html:3
 msgid "Why download the journalist's public key?"
-msgstr "لماذا أقوم بتحميل المفتاح العمومي للصحفي؟"
+msgstr "لماذا  أحمّل المفتاح العمومي للصحفي؟"
 
 #: source_templates/why-journalist-key.html:4
 msgid ""
@@ -1146,17 +1154,16 @@ msgid ""
 "messages and files before submission can provide an extra layer of security "
 "before your data reaches the SecureDrop server."
 msgstr ""
-"SecureDrop يقوم بتشفير الملفات و الرسائل بعد إرسالها. تشفير الرسائل والملفات "
-"قبل تسليمها يمكنها ان تزود بطبقة إضافية من الأمن قبل أن تصل بياناتك الى "
-"الخادم SecureDrop."
+"SecureDropيعمّي الملفات و الرسائل بعد إرسالها. من شأن تعمية الرسائل والملفات "
+"قبل ارساله أن يرفع من مستوى الأمان قبل أن تصل بياناتك الى خادم SecureDrop."
 
 #: source_templates/why-journalist-key.html:5
 msgid ""
 "If you are already familiar with the GPG encryption software, you may wish "
 "to encrypt your submissions yourself. To do so:"
 msgstr ""
-"إذا كنت على دراية ببرامج التشفير GPG من قبل, قد ترغب بتشفير التقارير الخاصة "
-"بك بنفسك. للقيام بذلك:"
+"إذا كنت على دراية ببرمجية التشفير GPG , فقد ترغب بتشفير  ملفاتك بنفسك. "
+"للقيام بذلك:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
@@ -1164,11 +1171,11 @@ msgid ""
 "with the extension <code>.asc</code>"
 msgstr ""
 "<a href=\"{url}\">قم بتنزيل</a>المفتاح العام. يعتبر المفتاح العام ملف نصي "
-"مزود برمز<code>.asc</code>"
+"مزود بإضافة<code>.asc</code>"
 
 #: source_templates/why-journalist-key.html:8
 msgid "Import it into your GPG keyring."
-msgstr "قم بإستيراده على حلقة مفاتيح GPG."
+msgstr "قم بإستيراده ووضعه في حلقة مفاتيحك الGPG."
 
 #: source_templates/why-journalist-key.html:10
 msgid ""
@@ -1176,21 +1183,21 @@ msgid ""
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
-"اذا كنت تستخدم <a href=\"{url}\">Tails</a>, فانه يمكنك القيام بالنقر المزدوج "
-"على<code>إمتداد الملف</code>الذي قمت بتنزيله و سيقوم بادخاله تلقائيا الى "
-"كلمات المرور المحفوظة الخاصة بك."
+"اذا كنت تستخدم <a href=\"{url}\">Tails</a>, فانه يمكنك القيام بالنقر مرتين "
+"على<code>asc</code>الذي قمت بتنزيله و سيتم بادخاله تلقائيا الى كلمات المرور "
+"المحفوظة الخاصة بك."
 
 #: source_templates/why-journalist-key.html:11
 msgid ""
 "If you are using Mac/Linux, open the terminal. You can import the key with "
 "<code>gpg --import /path/to/key.asc</code>."
 msgstr ""
-"إذا كنت تستخدم Mac/Linux, قم بفتح الطرفية. وإستيراد المفتاح من خلال الامر "
-"<code>gpg --import /path/to/key.asc</code>."
+"إذا كنت تستخدم Mac/Linux, قم بفتح الطرفية وبإستيراد المفتاح من خلال ا <code>"
+"gpg --import /path/to/key.asc</code>."
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr "تشفير الرسائل الخاصة بك."
+msgstr "قم بتعمية الرسائل الخاصة بك."
 
 #: source_templates/why-journalist-key.html:16
 msgid ""
@@ -1199,17 +1206,17 @@ msgid ""
 "at the end), you can just copy and paste that. (don't include the <code>."
 "asc</code>!)"
 msgstr ""
-"يجب أن تكون قادر على تحديد المفتاح (هذا ما يسمى ب\"هوية المستخدم\" أو رقم "
+"يجب أن تكون قادر على تحديد المفتاح (المسمّى  ب\"هوية المستخدم\" أو رقم "
 "التعريف). نظرا لأن اسم ملف المفتاح العام هو بصمة المفتاح, يمكنك فقط نسخه و "
-"لصقه. (لا يشمل ذلك<code>إمتداد الملف</code>!)"
+"لصقه. (لا تنسخ أيضاً <code>إمتداد الملف</code>!)"
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg --"
 "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
-"في جميع الأنظمة, قم بفتح الطرفية وأستعمل الأمر الآتي: <code>gpg --recipient "
-"&lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
+"في جميع الأنظمة, قم بفتح الطرفية وأستعمل أمر gpg التالي: <code>gpg --"
+"recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
 msgid ""
@@ -1217,8 +1224,8 @@ msgid ""
 "unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
 "code>)"
 msgstr ""
-"قم برفع الملفات المشفرة المراد تسليمها. سيكون اسمها مثل أسم الملف الغير مشفر "
-"بوجود .gpg في نهاية الملف (مثال <code>roswell_photos.pdf.gpg</code>)"
+"قم برفع الملفات المشفرة المراد تسليمها. سوف تحمل نفس أسم الملف الغير مشفر مع "
+".gpg في نهاية الملف (مثال <code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
 msgid ""
@@ -1226,9 +1233,9 @@ msgid ""
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
-"<strong>نصيحة:</strong> إذا كنت ترغب في البقاء مجهول الهوية, <strong>do "
+"<strong>نصيحة:</strong> إذا كنت ترغب في البقاء مجهول الهوية،<strong>do "
 "not</strong> إستعمل GPG للتوقيع على الملف المشفر (بواسطة <code>--sign</code> "
-"أو <code>-s</code>) ليكشف لنا عنوان GPG الخاص بك."
+"أو <code>-s</code>) إذ من شأن ذلك أن يكشف لنا هويتك ال GPG ."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
