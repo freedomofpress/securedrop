@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-15 18:13+0000\n"
+"PO-Revision-Date: 2017-10-16 08:49+0000\n"
 "Last-Translator: Thalia Rahme <trahme@gmail.com>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
@@ -391,12 +391,13 @@ msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
-"مشغل من خلال <\"br> <img src=\"/static/i/securedrop_small.png\" alt="
-"\"SecureDrop>"
+"مشغل من قبل <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:54
+#, fuzzy
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "مشغل من خلال<em>SecureDrop {version}</em>"
+msgstr "مشغّل من قبل </</em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -408,16 +409,17 @@ msgid ""
 "the first random codename is difficult to say or remember. You can generate "
 "new random codenames as many times as you like."
 msgstr ""
-"قم بإنشاء اسم رمز عشوائي لهذا المصدر. نوصي بهذا إذا كان الاسم الاول من الصعب "
-"نطقه أو تذكره. يمكنك إنشاء اسماء جديدة عدة مرات كما تريد."
+"قم بإنشاء اسم رمزي عشوائي جديد لهذا المصدر. نوصي بهذا إذا كان الاسم الرمزي "
+"الاول من الصعب نطقه أو تذكره. يمكنك إنشاء اسماء رمزية جديدة  جديدة قدر ما "
+"تشاء."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr "تغيير اسم الرمز"
+msgstr "تغيير الاسم الرمزي"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr "هل أنت متأكد من أنك تريد انشاء اسم رمز جديد؟"
+msgstr "هل أنت متأكد من أنك تريد انشاء اسم رمزي جديد؟"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:72
 msgid "Cancel"
@@ -432,20 +434,20 @@ msgid ""
 "The documents are stored encrypted for security. To read them, you will need "
 "to decrypt them using GPG."
 msgstr ""
-"تم تخزين المستندات و تشفيرها لأسباب أمنية. إذا كنت تريد قراءتها, ستحتاج إلى "
-"تشفيرها باستخدام ملف GPG."
+"تم تخزين المستندات و تعميتها لغايات أمنية. إذا كنت تريد قراءتها, ستحتاج إلى  "
+"فك التعمية  وذلك بواسطة  نظام GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr "تنزيل المحدد"
+msgstr "تنزيل الاختيار"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr "حذف المحدد"
+msgstr "حذف الاختيار"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr "تحميل المستند"
+msgstr "تم تحميل المستند"
 
 #: journalist_templates/col.html:55 journalist_templates/col.html:73
 msgid "Reply"
@@ -457,58 +459,62 @@ msgstr "رسالة"
 
 #: journalist_templates/col.html:68
 msgid "No documents to display."
-msgstr "لا يمكن عرض أي مستند."
+msgstr "ما من مستندات موجودة لعرضها."
 
 #: journalist_templates/col.html:75
 msgid ""
 "You can write a secure reply to the person who submitted these documents:"
-msgstr "يمكنك كتابة رد آمن للشخص الذي أرسل هذه المستندات:"
+msgstr "يمكنك الرد كتابياً بشكل آمن على الشخص الذي أرسل هذه المستندات:"
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
-msgstr "لقد أبلغت هذا المصدر للرد."
+msgstr "لقد علّمت أو أشرت بعلامة  لهذا المصدر للرد عليه."
 
 #: journalist_templates/col.html:85
 msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
-"في المرة القادمة عندما يتم تسجيل الدخول, سيتم إنشاء مفتاح التشفير, بعد ذلك "
-"ستتمكن من الرد على المصدر هنا."
+"سيتم إنشاء مفتاح تعمية للمصدر  وذلك عندما يسجلّوا دخولهم  مرّة جديدة،  بعد "
+"هذه العملية، ستتمكن من الرد على المصدر هنا."
 
 #: journalist_templates/col.html:87
 msgid "Click below if you would like to write a reply to this source."
-msgstr "انقر أدناه إذ تود الرد على هذا المصدر."
+msgstr "انقر أدناه إن كنت تريد الرد على هذا المصدر."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr "ضع علامة على هذا المصدر للرد"
+msgstr "علّم هذا المصدر أو أشر بعلامة إليه، للرد عليه"
 
 #: journalist_templates/col.html:96
+#, fuzzy
 msgid ""
 "Click below to delete this source's collection. <em>Warning: If you do this, "
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
 "انقر أدناه لحذف مجموعة هذا المصدر. <em> تنبيه: إذا قمت بذلك, فستكون هذه "
-"الملفات غير قابلة للاسترداد ولم يتمكن المصدر من تسجيل الدخول باستخدام الاسم "
-"السابق.</em>"
+"الملفات غير قابلة للاسترداد ولن يتمكن المصدر من تسجيل دخوله باستخدام اسمه "
+"الرمزي السابق.</em>"
 
 #: journalist_templates/col.html:102
 msgid "DELETE COLLECTION"
 msgstr "حذف المجموعة"
 
 #: journalist_templates/delete.html:5
+#, fuzzy
 msgid ""
 "The following file has been selected for <strong>permanent deletion</strong>:"
 msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
-msgstr[0] "تم تحديد الملف التالي ل<strong>حذفه بشكل نهائي</strong>:"
+msgstr[0] "لم يتم اختيار أي ملف<strong> لحذفه بشكل نهائي</strong>:"
 msgstr[1] "تم تحديد الملف التالي ل<strong>حذفه بشكل نهائي</strong>:"
-msgstr[2] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
-msgstr[3] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
-msgstr[4] "تم تحديد الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
+msgstr[2] ""
+"تم تحديد الملفين التاليين {files}  ل<strong>لحذفهما بشكل نهائي</strong>:"
+msgstr[3] "تم تحديد  بعض الملفات {files}  ل<strong>حذفها بشكل نهائي</strong>:"
+msgstr[4] ""
+"تم تحديد  العديد من الملفات {files}  ل<strong>حذفها بشكل نهائي</strong>:"
 msgstr[5] "تم تحديد {files} الملفات التالية ل<strong>حذفها بشكل نهائي</strong>:"
 
 #: journalist_templates/delete.html:20
@@ -517,15 +523,16 @@ msgstr "حذف الملفات بشكل دائم"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_name}..."
-msgstr "الرجوع إلى قائمة المستندات ل {source_name}..."
+msgstr "الرجوع إلى قائمة المستندات {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr "\"{user}\" تعديل المستخدم"
+msgstr "تعديل المستخدم \"{user}\""
 
 #: journalist_templates/edit_account.html:8
+#, fuzzy
 msgid "Change Username &amp; Admin Status"
-msgstr "تغيير اسم المستخدم &amp; حالة المشرف"
+msgstr "تغيير اسم المستخدم &amp; و وضع وصلاحيات المسؤول"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -537,7 +544,7 @@ msgstr "تحديث"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
-msgstr "تعديل حسابك"
+msgstr "عدّل حسابك"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
@@ -545,7 +552,7 @@ msgstr "إعادة ضبط كلمة السر"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
-msgstr "SecureDrop يستخدم الآن كلمات السر ديسوير diceware تلقائيا."
+msgstr "SecureDrop يستخدم الآن كلمات السر ديسوير \"diceware\" المولّدة تلقائيا."
 
 #: journalist_templates/edit_account.html:28
 msgid ""
