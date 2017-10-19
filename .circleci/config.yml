@@ -56,7 +56,7 @@ jobs:
       - run:
           name: Ensure environment torn down
           command: molecule destroy -s aws
-          when: always
+          when: on_fail
 
       - store_test_results:
           path: /root/sd/junit
