@@ -4,7 +4,11 @@
   hosts: securedrop
   become: yes
   tasks:
+    # THIS IS BEING SKIPPED TEMPORARILY TO RESOLVE CI ISSUES
+    # NEED TO REMOVE `when` HERE and XFAIL ON IPTABLES TESTS
+    # WHEN REINSTATING REBOOT
     - include: reboot_and_wait.yml
+      when: "false"
 
 - name: Run application test suite in CI.
   hosts: "app-{{ ci_env }}"

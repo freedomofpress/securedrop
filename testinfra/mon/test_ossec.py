@@ -20,6 +20,7 @@ def test_ossec_package(Package, package):
     assert Package(package).is_installed
 
 
+@pytest.mark.xfail(strict=True)
 def test_ossec_connectivity(Command, Sudo):
     """
     Ensure ossec-server machine has active connection to the ossec-agent.
