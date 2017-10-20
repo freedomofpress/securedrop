@@ -28,9 +28,9 @@
       wait_for:
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
-        timeout: 120
+        timeout: 180
         search_regex: OpenSSH
-        delay: 60
+        delay: 10
         state: started
       register: ec2_launch_results
       with_items: "{{ reg_ec_instance.results }}"
