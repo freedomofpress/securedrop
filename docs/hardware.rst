@@ -301,6 +301,43 @@ before it can be used. We recommend:
     attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
     in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
 
+Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM2)
+for installing SecureDrop. However, on the first install of Ubuntu Server
+the Mac Minis will not boot: this is a known and
+`documented <https://nsrc.org/workshops/2015/nsrc-icann-dns-ttt-dubai/raw-attachment/wiki/Agenda/install-ubuntu-mac-mini.htm#your-mac-does-not-boot>`__
+issue. The workaround requires a one-time installation configuration after you
+install Ubuntu but before you move on to
+`install SecureDrop <https://docs.securedrop.org/en/stable/install.html>`__.
+This requires rebooting your Mac Minis from the same USB device and entering
+``recovery mode`` after entering your keyboard setting; once you see ``Configure
+Network`` hit the Escape key and drop down to ``Enter rescue mode``.
+In the drop-down menu execute a shell with the server hostnames, i.e. ``/dev/mon-vg/root/``.
+Follow the prompts until you have a login shell and type ``efibootmgr``.
+You should see the following:
+
+.. code::
+
+    BootCurrent: 0000
+    Timeout: 5 seconds
+    BootOrder: 0080
+    Boot0000* ubuntu
+    Boot0080* Mac OS X
+    BootFFFF*
+
+After this you should type ``efibootmgr -o 00`` and again type ``efibootmgr``.
+This time you should see the following:
+
+.. code::
+
+    BootCurrent: 0000
+    Timeout: 5 seconds
+    BootOrder: 0000
+    Boot0000* ubuntu
+    Boot0080* Mac OS X
+    BootFFFF*
+
+Mac Minis also have removable wireless cards which we recommend removing but
+require a screwdriver for non-standard T6 Torx security screws.
 
 Secure Viewing Station (SVS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
