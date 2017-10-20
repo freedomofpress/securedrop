@@ -73,3 +73,7 @@
         dest: "{{ molecule_ephemeral_directory }}/{{ job_id }}-config"
         src: ssh_config
         mode: 0600
+
+    - name: Add arbitrary sleep to give cloud-init some time
+      wait_for:
+        timeout: 60
