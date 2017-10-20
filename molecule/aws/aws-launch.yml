@@ -30,6 +30,7 @@
         port: 22
         timeout: 120
         search_regex: OpenSSH
+        delay: 60
         state: started
       register: ec2_launch_results
       with_items: "{{ reg_ec_instance.results }}"
