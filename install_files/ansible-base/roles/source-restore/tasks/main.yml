@@ -1,0 +1,28 @@
+---
+- name: Copy restore script to Application Server.
+  copy:
+    src: source-restore.py
+    dest: /var/www/securedrop
+    owner: www-data
+    mode: "0770"
+
+- name: Copy source file to Application Server.
+  copy:
+    src: "{{ restore_file }}"
+    dest: /var/www/securedrop/{{ restore_file }}
+
+- name: Run the restore script (can be slow).
+  command: /var/www/securedrop/source-restore.py /var/www/securedrop/{{ restore_file }}
+  async: 3600
+  poll: 10
+
+- name: Delete the restore file to save disk space.
+  file:
+    path: /var/www/securedrop/{{ restore_file }}
+    state: absent
+
+- name: Ensure the database is owned by the www-data user.
+  file:
+    path: /var/lib/securedrop/db.sqlite
+    owner: www-data
+    group: www-data

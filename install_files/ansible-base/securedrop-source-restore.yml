@@ -1,0 +1,7 @@
+---
+- name: Restore SecureDrop source identities only.
+  hosts: securedrop_application_server
+  roles:
+    - role: source-restore
+      tags: source-restore
+  become: yes

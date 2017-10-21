@@ -1,0 +1,7 @@
+---
+- name: Back up SecureDrop source identities only.
+  hosts: securedrop_application_server
+  roles:
+    - role: source-backup
+      tags: source-backup
+  become: yes
