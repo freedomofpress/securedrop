@@ -7,10 +7,13 @@ instances.
 """
 
 import argparse
+import json
 import logging
 import os
 import subprocess
 import sys
+
+import pgpdump
 
 sdlog = logging.getLogger(__name__)
 
@@ -215,6 +218,50 @@ def install_securedrop(args):
                               '--ask-become-pass'], cwd=ANSIBLE_PATH)
 
 
+def backup_sources(args):
+    """Backup source identities only so sources can be transferred over to a
+    fresh SecureDrop installation."""
+    activate_venv(args)
+    sdlog.info("Backing up SecureDrop source identities...")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-source-backup.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    sdlog.info("Done! Source identities saved in install_files/ansible-base")
+
+
+def restore_sources(args):
+    """Restore source identities only so that sources can login on a fresh
+    SecureDrop installation."""
+    activate_venv(args)
+    sdlog.info("Restoring source identities on SecureDrop server...")
+
+    with open(args.restore_file, 'r') as infile:
+        sources = json.load(infile)
+
+    # First we should use pgpdump to validate the source PGP keys before
+    # putting them on a new server.
+    for source in sources:
+        try:
+            validate_gpg_key(source['gpg_key'],
+                             source['filesystem_id'])
+        except AssertionError:
+            print ('Unusual data found in a PGP key. '
+                   'Please contact Freedom of the Press Foundation.')
+            sys.exit(1)
+
+    restore_file_basename = os.path.basename(args.restore_file)
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-source-restore.yml'),
+        '-e',
+        "restore_file='{}'".format(restore_file_basename),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    sdlog.info("Done! Source identities restored to application server.")
+
+
 def backup_securedrop(args):
     """Perform backup of the SecureDrop Application Server.
     Creates a tarball of submissions and server config, and fetches
@@ -246,6 +293,10 @@ def restore_securedrop(args):
         "restore_file='{}'".format(restore_file_basename),
     ]
     subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+
+
+def validate_gpg_key(seckey_ascii, filesystem_id):
+    pass
 
 
 def run_tails_config(args):
@@ -302,6 +353,17 @@ if __name__ == "__main__":
         '-f', '--force', action='store_true',
         help="Clobber site-specific vars for reconfiguration"
         )
+
+    parse_backup_source_identities = subparsers.add_parser(
+        'backup-source-identities',
+        help=backup_sources.__doc__)
+    parse_backup_source_identities.set_defaults(func=backup_sources)
+
+    parse_restore_source_identities = subparsers.add_parser(
+        'restore-source-identities',
+        help=restore_sources.__doc__)
+    parse_restore_source_identities.set_defaults(func=restore_sources)
+    parse_restore_source_identities.add_argument("restore_file")
 
     parse_install = subparsers.add_parser('install',
                                           help=install_securedrop.__doc__)
