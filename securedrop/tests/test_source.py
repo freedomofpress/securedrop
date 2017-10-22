@@ -51,9 +51,13 @@ class TestSourceApp(TestCase):
 
         wordlist_en = crypto_util._get_wordlist('en')
 
-        for word in wordlist_en:
+        # chunk the words to cut down on the number of requets we make
+        # otherwise this test is *slow*
+        chunks = [wordlist_en[i:i + 7] for i in range(0, len(wordlist_en), 7)]
+
+        for words in chunks:
             with self.client as c:
-                resp = c.post('/login', data=dict(codename=word),
+                resp = c.post('/login', data=dict(codename=' '.join(words)),
                               follow_redirects=True)
                 self.assertEqual(resp.status_code, 200)
                 # If the word does not validate, then it will show
