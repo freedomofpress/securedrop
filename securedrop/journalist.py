@@ -5,7 +5,6 @@ import functools
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from flask_assets import Environment
 from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
@@ -34,8 +33,6 @@ from journalist_app import create_app
 app = create_app(config)
 
 i18n.setup_app(app)
-
-assets = Environment(app)
 
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True

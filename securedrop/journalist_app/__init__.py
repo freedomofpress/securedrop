@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, session, redirect, url_for, flash
+from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
@@ -14,6 +15,7 @@ def create_app(config):
     app.config.from_object(config.JournalistInterfaceFlaskConfig)
 
     CSRFProtect(app)
+    Environment(app)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
