@@ -49,7 +49,11 @@ def setup_app(app, translation_dirs=None):
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = translation_dirs
 
     babel = Babel(app)
-    assert len(list(babel.translation_directories)) == 1
+    if len(list(babel.translation_directories)) != 1:
+        raise AssertionError(
+            'Expected exactly one translation directory but got {}.'
+            .format(babel.translation_directories))
+
     for dirname in os.listdir(next(babel.translation_directories)):
         if dirname != 'messages.pot':
             LOCALES.add(dirname)
