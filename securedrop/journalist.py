@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 import functools
 
-from flask import (Flask, request, render_template, send_file, redirect, flash,
+from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_assets import Environment
@@ -30,8 +30,9 @@ from db import (db_session, Source, Journalist, Submission, Reply,
                 BadTokenException, WrongPasswordException)
 import worker
 
-app = Flask(__name__, template_folder=config.JOURNALIST_TEMPLATES_DIR)
-app.config.from_object(config.JournalistInterfaceFlaskConfig)
+from journalist_app import create_app
+
+app = create_app(config)
 CSRFProtect(app)
 
 
