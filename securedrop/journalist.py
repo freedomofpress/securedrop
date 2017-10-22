@@ -10,10 +10,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
 
-from flask_wtf import FlaskForm
-from wtforms import TextAreaField
-from wtforms.validators import InputRequired
-
 import config
 import crypto_util
 from rm import srm
@@ -27,14 +23,9 @@ from db import (db_session, Source, Journalist, Submission, Reply,
 import worker
 
 from journalist_app import create_app
+from journalist_app.forms import ReplyForm
 
 app = create_app(config)
-
-
-class ReplyForm(FlaskForm):
-    message = TextAreaField(u'Message', id="content-area", validators=[
-        InputRequired(message=gettext('You cannot send an empty reply.'))
-    ])
 
 
 @app.teardown_appcontext
