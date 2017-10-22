@@ -7,6 +7,8 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 
 import i18n
+import template_filters
+import version
 
 
 def create_app(config):
@@ -28,5 +30,19 @@ def create_app(config):
         return redirect(url_for('login'))
 
     i18n.setup_app(app)
+
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
+    app.jinja_env.globals['version'] = version.__version__
+    if hasattr(config, 'CUSTOM_HEADER_IMAGE'):
+        app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
+        app.jinja_env.globals['use_custom_header_image'] = True
+    else:
+        app.jinja_env.globals['header_image'] = 'logo.png'
+        app.jinja_env.globals['use_custom_header_image'] = False
+
+    app.jinja_env.filters['rel_datetime_format'] = \
+        template_filters.rel_datetime_format
+    app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
     return app

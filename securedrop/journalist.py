@@ -15,13 +15,11 @@ from wtforms import TextAreaField
 from wtforms.validators import InputRequired
 
 import config
-import version
 import crypto_util
 from rm import srm
 import i18n
 from flask_babel import gettext, ngettext
 import store
-import template_filters
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, get_one_or_else, LoginThrottledException,
                 PasswordError, InvalidUsernameException,
@@ -31,20 +29,6 @@ import worker
 from journalist_app import create_app
 
 app = create_app(config)
-
-app.jinja_env.trim_blocks = True
-app.jinja_env.lstrip_blocks = True
-app.jinja_env.globals['version'] = version.__version__
-if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
-    app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
-    app.jinja_env.globals['use_custom_header_image'] = True
-else:
-    app.jinja_env.globals['header_image'] = 'logo.png'
-    app.jinja_env.globals['use_custom_header_image'] = False
-
-app.jinja_env.filters['rel_datetime_format'] = \
-    template_filters.rel_datetime_format
-app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
 
 class ReplyForm(FlaskForm):
