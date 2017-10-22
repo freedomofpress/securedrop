@@ -133,6 +133,8 @@
   /var/www/securedrop/journalist_app/__init__.pyc rw,
   /var/www/securedrop/journalist_app/forms.py r,
   /var/www/securedrop/journalist_app/forms.pyc rw,
+  /var/www/securedrop/journalist_app/utils.py r,
+  /var/www/securedrop/journalist_app/utils.pyc rw,
   /var/www/securedrop/journalist_app/__pycache__/** rw,
   /var/www/securedrop/journalist_templates/_source_row.html r,
   /var/www/securedrop/journalist_templates/admin.html r,

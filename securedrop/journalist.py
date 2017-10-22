@@ -24,6 +24,7 @@ import worker
 
 from journalist_app import create_app
 from journalist_app.forms import ReplyForm
+from journalist_app.utils import logged_in
 
 app = create_app(config)
 
@@ -69,17 +70,6 @@ def setup_g():
         if filesystem_id:
             g.filesystem_id = filesystem_id
             g.source = get_source(filesystem_id)
-
-
-def logged_in():
-    # When a user is logged in, we push their user ID (database primary key)
-    # into the session. setup_g checks for this value, and if it finds it,
-    # stores a reference to the user's Journalist object in g.
-    #
-    # This check is good for the edge case where a user is deleted but still
-    # has an active session - we will not authenticate a user if they are not
-    # in the database.
-    return bool(g.get('user', None))
 
 
 def login_required(func):
