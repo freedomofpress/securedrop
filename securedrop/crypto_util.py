@@ -35,7 +35,8 @@ DEFAULT_WORDS_IN_RANDOM_ID = 8
 # Make sure these pass before the app can run
 # TODO: Add more tests
 def do_runtime_tests():
-    assert(config.SCRYPT_ID_PEPPER != config.SCRYPT_GPG_PEPPER)
+    if config.SCRYPT_ID_PEPPER == config.SCRYPT_GPG_PEPPER:
+        raise AssertionError('SCRYPT_ID_PEPPER == SCRYPT_GPG_PEPPER')
     # crash if we don't have srm:
     try:
         subprocess.check_call(['srm'], stdout=subprocess.PIPE)
