@@ -215,8 +215,11 @@ def make_blueprint(config):
     @view.route('/logout')
     def logout():
         if logged_in():
-            session.clear()
             msg = render_template('logout_flashed_message.html')
+
+            # clear the session after we render the message so it's localized
+            session.clear()
+
             flash(Markup(msg), "important hide-if-not-tor-browser")
         return redirect(url_for('.index'))
 
