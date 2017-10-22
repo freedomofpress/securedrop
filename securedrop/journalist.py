@@ -32,8 +32,6 @@ from journalist_app import create_app
 
 app = create_app(config)
 
-i18n.setup_app(app)
-
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.globals['version'] = version.__version__

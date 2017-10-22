@@ -6,6 +6,8 @@ from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 
+import i18n
+
 
 def create_app(config):
     app = Flask(__name__,
@@ -24,5 +26,7 @@ def create_app(config):
         session.clear()
         flash(msg, 'error')
         return redirect(url_for('login'))
+
+    i18n.setup_app(app)
 
     return app
