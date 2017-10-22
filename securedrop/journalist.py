@@ -5,7 +5,6 @@ import functools
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_assets import Environment
 from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
@@ -33,17 +32,6 @@ import worker
 from journalist_app import create_app
 
 app = create_app(config)
-CSRFProtect(app)
-
-
-@app.errorhandler(CSRFError)
-def handle_csrf_error(e):
-    # render the message first to ensure it's localized.
-    msg = gettext('You have been logged out due to inactivity')
-    session.clear()
-    flash(msg, 'error')
-    return redirect(url_for('login'))
-
 
 i18n.setup_app(app)
 
