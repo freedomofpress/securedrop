@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-17 05:54+0000\n"
-"Last-Translator: SHIH-CHIEH Ilya LI <ilyaericlee@gmail.com>\n"
+"PO-Revision-Date: 2017-10-22 10:04+0000\n"
+"Last-Translator: H.-L. Lee <hsulei.lee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -147,10 +147,8 @@ msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr "來源{original_name}已重新命名為{new_name}"
 
 #: journalist.py:766
-#, fuzzy
-#| msgid "No unread submissions for this source!"
 msgid "No unread submissions for this source."
-msgstr "此源里没有未读的提交！"
+msgstr "此來源裡没有未讀的提交。"
 
 #: journalist.py:782
 msgid "No collections selected for download."
@@ -244,8 +242,6 @@ msgstr "掃描條碼後，請在下面輸入6個位的編碼："
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
-#, fuzzy
-#| msgid "Enable Yubikey (OATH-HOTP)"
 msgid "Enable YubiKey (OATH-HOTP)"
 msgstr "啟用 Yubikey (OATH-HOTP)"
 
@@ -831,11 +827,12 @@ msgstr "如果您已提交過文件，您可以登入查閱回覆。"
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
-msgstr ""
+msgstr "提交文件"
 
 #: source_templates/index.html:73
+#, fuzzy
 msgid "CHECK FOR A RESPONSE"
-msgstr ""
+msgstr "檢查回覆"
 
 #: source_templates/index.html:92
 msgid ""
@@ -859,11 +856,11 @@ msgstr ""
 
 #: source_templates/index.html:97
 msgid "<a href=\"/\">Click here</a> to refresh the page"
-msgstr ""
+msgstr "<a href=\"/\"> 按此</a> 重新整理頁面"
 
 #: source_templates/login.html:4
 msgid "Enter Codename"
-msgstr ""
+msgstr "輸入代號"
 
 #: source_templates/login.html:12
 msgid "Enter your codename"
@@ -871,11 +868,11 @@ msgstr "請輸入您的代號組合："
 
 #: source_templates/login.html:20 source_templates/lookup.html:42
 msgid "CANCEL"
-msgstr ""
+msgstr "取消"
 
 #: source_templates/logout_flashed_message.html:4
 msgid "Important!"
-msgstr ""
+msgstr "重要！"
 
 #: source_templates/logout_flashed_message.html:5
 msgid ""
@@ -940,15 +937,15 @@ msgstr ""
 
 #: source_templates/lookup.html:71
 msgid "Delete this reply?"
-msgstr ""
+msgstr "刪除這則回覆？"
 
 #: source_templates/lookup.html:73
 msgid "DELETE"
-msgstr ""
+msgstr "刪除"
 
 #: source_templates/lookup.html:82
 msgid "DELETE ALL REPLIES"
-msgstr ""
+msgstr "刪除所有回覆"
 
 #: source_templates/lookup.html:85
 msgid "Are you finished with the replies?"
@@ -956,11 +953,11 @@ msgstr ""
 
 #: source_templates/lookup.html:86
 msgid "YES, DELETE ALL REPLIES"
-msgstr ""
+msgstr "是，刪除所有回覆"
 
 #: source_templates/lookup.html:87
 msgid "NO, NOT YET"
-msgstr ""
+msgstr "不，還沒有"
 
 #: source_templates/lookup.html:91
 msgid "There are no replies at this time."
@@ -972,11 +969,11 @@ msgstr ""
 
 #: source_templates/lookup.html:100
 msgid "Show"
-msgstr ""
+msgstr "顯示"
 
 #: source_templates/lookup.html:102
 msgid "Hide"
-msgstr ""
+msgstr "隱藏"
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
