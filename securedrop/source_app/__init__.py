@@ -38,6 +38,8 @@ def create_app(config):
 
     i18n.setup_app(app)
 
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
     if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
