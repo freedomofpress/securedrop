@@ -14,19 +14,17 @@ import config
 from db import Source
 
 
-nouns = open(config.NOUNS).read().rstrip('\n').split('\n')
-adjectives = open(config.ADJECTIVES).read().rstrip('\n').split('\n')
-
-
 def validate_source(source):
     # Is the filesystem_id a valid hash?
-    valid_characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890='
+    valid_hash_characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890='
     for char in source.filesystem_id:
-        assert char in valid_characters
+        assert char in valid_hash_characters
 
+    valid_codeword_characters = 'abcdefghijklmnopqrstuvwxyz0123456789-_'
     # Does the journalist designation consist of expected words?
     for word in source.journalist_designation.split():
-        assert word in nouns + adjectives
+        for char in word:
+            assert str.lower(str(char)) in valid_codeword_characters
 
     return source.filesystem_id, source.journalist_designation
 
