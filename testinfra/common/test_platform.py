@@ -14,7 +14,7 @@ def test_ansible_version(host):
 def test_platform(SystemInfo):
     """
     SecureDrop requires Ubuntu Trusty 14.04 LTS. The shelf life
-    of that release means we'll need to migrate to Xenial LTS
+    of that release means we'll need to migrate to Bionic LTS
     at some point; until then, require hosts to be running
     Ubuntu.
     """
