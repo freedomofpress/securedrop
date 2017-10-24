@@ -27,14 +27,19 @@
 <p>{{ gettext('SecureDrop now uses automatically generated diceware passwords.') }}</p>
 <p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
 
-{% if user %}
+{% if user and g.user != user %}
   {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
 {% else %}
   {% set password_reset_url = url_for('new_password') %}
+  <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 
-<form action="{{ password_reset_url }}" method="post" id="new-password">
+<form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  {% if not user or g.user == user %}
+  <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
+  <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
+  {% endif %}
   <input name="password" type="hidden" value="{{ password }}">
   <p>
     {% if user %}
