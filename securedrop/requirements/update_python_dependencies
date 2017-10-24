@@ -37,10 +37,13 @@ trap 'rm -rf "${VENV}" && popd' EXIT
 virtualenv -p python2 "${VENV}"
 # shellcheck disable=SC1090
 source "${VENV}"/bin/activate
-pip install -U pip-tools
+pip install -U pip-tools safety
 
 # Compile new requirements (.txt) files from our top-level dependency (.in)
 # files (see http://nvie.com/posts/better-package-management/).
+# Then runs a dependency checker to ensure ther are no known CVEs present
+# in any of the dependencies.
 for prefix in "${REQUIREMENTS_FILE_PREFIXES[@]}"; do
   pip-compile -U -o "${prefix}"-requirements.txt "${prefix}"-requirements.in
+  safety check --full-report -r "${prefix}"-requirements.txt
 done

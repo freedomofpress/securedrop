@@ -5,3 +5,4 @@ molecule>=2.*
 pip-tools
 pytest-xdist
 testinfra
+safety

@@ -83,6 +83,15 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 build-debs: ## Builds and tests debian packages
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
 
+.PHONY: safety
+safety: ## Runs `safety check` to check python dependencies for vulnerabilities
+	@for req_file in `find . -type f -name '*requirements.txt'`; do \
+		echo "Checking file $$req_file" \
+		&& safety check --full-report -r $$req_file \
+		&& echo -e '\n' \
+		|| exit 1; \
+	done
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets

@@ -43,6 +43,10 @@ jobs:
           name: Installation pre-reqs
           command: pip install -U -r ./testinfra/requirements.txt
 
+      - run:
+          name: Check Python dependencies for CVEs
+          command: make safety
+
       - setup_remote_docker
 
       - run:
