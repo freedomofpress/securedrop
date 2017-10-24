@@ -3,7 +3,7 @@ from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
 from flask_assets import Environment
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from jinja2 import evalcontextfilter
 from os import path
 from sqlalchemy.orm.exc import NoResultFound
@@ -31,7 +31,15 @@ def create_app(config):
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
+
     CSRFProtect(app)
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        msg = render_template('session_timeout.html')
+        session.clear()
+        flash(Markup(msg), "important")
+        return redirect(url_for('main.index'))
 
     assets = Environment(app)
     app.config['assets'] = assets
