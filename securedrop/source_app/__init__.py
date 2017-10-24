@@ -79,8 +79,11 @@ def create_app(config):
         g.locales = i18n.get_locale2name()
 
         if 'expires' in session and datetime.utcnow() >= session['expires']:
-            session.clear()
             msg = render_template('session_timeout.html')
+
+            # clear the session after we render the message so it's localized
+            session.clear()
+
             flash(Markup(msg), "important")
 
         session['expires'] = datetime.utcnow() + \
