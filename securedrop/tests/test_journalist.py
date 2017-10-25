@@ -1002,6 +1002,21 @@ class TestJournalistApp(TestCase):
             else:
                 del config.SESSION_EXPIRATION_MINUTES
 
+    def test_csrf_error_page(self):
+        old_enabled = self.app.config['WTF_CSRF_ENABLED']
+        self.app.config['WTF_CSRF_ENABLED'] = True
+
+        try:
+            with self.app.test_client() as app:
+                resp = app.post(url_for('login'))
+                self.assertRedirects(resp, url_for('login'))
+
+                resp = app.post(url_for('login'), follow_redirects=True)
+                self.assertIn('You have been logged out due to inactivity',
+                              resp.data)
+        finally:
+            self.app.config['WTF_CSRF_ENABLED'] = old_enabled
+
 
 class TestJournalistAppTwo(unittest.TestCase):
 
