@@ -5,7 +5,7 @@ from mock import patch, ANY
 import re
 
 from bs4 import BeautifulSoup
-from flask import session, escape
+from flask import session, escape, url_for
 from flask_testing import TestCase
 
 import crypto_util
@@ -494,3 +494,18 @@ class TestSourceApp(TestCase):
                 config.SESSION_EXPIRATION_MINUTES = old_expiration
             else:
                 del config.SESSION_EXPIRATION_MINUTES
+
+    def test_csrf_error_page(self):
+        old_enabled = self.app.config['WTF_CSRF_ENABLED']
+        self.app.config['WTF_CSRF_ENABLED'] = True
+
+        try:
+            with self.app.test_client() as app:
+                resp = app.post(url_for('main.create'))
+                self.assertRedirects(resp, url_for('main.index'))
+
+                resp = app.post(url_for('main.create'), follow_redirects=True)
+                self.assertIn('Your session timed out due to inactivity',
+                              resp.data)
+        finally:
+            self.app.config['WTF_CSRF_ENABLED'] = old_enabled
