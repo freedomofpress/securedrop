@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-26 16:03+0000\n"
+"PO-Revision-Date: 2017-10-26 17:10+0000\n"
 "Last-Translator: Loic Dachary <loic@dachary.org>\n"
 "Language-Team: Bengali (India) "
 "<https://*/projects/securedrop/securedrop/bn_IN/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr "Fake translation for test purposes, please remove at will"
+msgstr ""
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
