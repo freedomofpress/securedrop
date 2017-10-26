@@ -54,6 +54,10 @@ def make_blueprint(config):
             current_app.logger.error(
                 "Attempt to create a source with duplicate codename: %s" %
                 (e,))
+
+            # Issue 2386: don't log in on duplicates
+            del session['codename']
+            abort(500)
         else:
             os.mkdir(store.path(filesystem_id))
 
