@@ -58,7 +58,8 @@ def restore_source(source):
     try:
         new_source = Source(
             filesystem_id=source['filesystem_id'],
-            journalist_designation=source['journalist_designation'])
+            journalist_designation=source['journalist_designation'],
+            pending=False)
         db_session.add(new_source)
         db_session.commit()
     except IntegrityError:
