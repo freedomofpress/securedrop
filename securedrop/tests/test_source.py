@@ -149,6 +149,7 @@ class TestSourceApp(TestCase):
             logger.assert_called_once()
             self.assertIn("Attempt to create a source with duplicate codename",
                           logger.call_args[0][0])
+            assert 'codename' not in session
 
     def test_lookup(self):
         """Test various elements on the /lookup page."""
