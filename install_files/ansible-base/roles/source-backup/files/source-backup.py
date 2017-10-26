@@ -61,6 +61,15 @@ def main():
     with open(backup_filename, 'w') as outfile:
         json.dump(sources_export, outfile)
 
+    # Make all files in gpg home folder owned by www-data
+    gpg_files = [f for f in os.listdir(config.GPG_KEY_DIR)
+        if os.path.isdir(os.path.join(config.GPG_KEY_DIR, f))]
+
+    for gpg_file in gpg_files:
+        uid = pwd.getpwnam("www-data").pw_uid
+        gid = grp.getgrnam("www-data").gr_gid
+        os.chown(gpg_file, uid, gid)
+
     print backup_filename
 
 
