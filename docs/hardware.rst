@@ -263,6 +263,11 @@ Specific Hardware Recommendations
 Application and Monitor Servers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+We currently recommend Intel NUCs or Mac Minis for SecureDrop servers.
+
+Intel NUCs
+~~~~~~~~~~
+
 The Intel NUC (Next Unit of Computing) is a capable, inexpensive, quiet, and
 low-power device that can be used for the SecureDrop servers. There
 are a `variety of
@@ -301,6 +306,61 @@ before it can be used. We recommend:
     attempts to suspend. This has `since been fixed <https://communities.intel.com/message/432692#432692>`__
     in a BIOS update. See these `release notes <https://downloadmirror.intel.com/26263/eng/RY_0359_ReleaseNotes.pdf>`__ (PDF) for more details.
 
+Mac Minis
+~~~~~~~~~
+
+Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM2)
+for installing SecureDrop. Mac Minis have removable wireless cards that you
+should remove. This requires a screwdriver for non-standard
+`T6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
+
+However, on the first install of Ubuntu Server
+the Mac Minis will not boot: this is a known and
+`documented <https://nsrc.org/workshops/2015/nsrc-icann-dns-ttt-dubai/raw-attachment/wiki/Agenda/install-ubuntu-mac-mini.htm#your-mac-does-not-boot>`__
+issue. The workaround requires a one-time modification after you
+install Ubuntu but before you move on to
+`install SecureDrop <https://docs.securedrop.org/en/stable/install.html>`__.
+After Ubuntu is installed, for each Mac Mini you should:
+
+#. Connect your Ubuntu installation media (USB drive or CD)
+#. Boot your Mac Mini while holding down the **Option** key.
+#. Select **EFI Boot** and select **Rescue a broken system** at the Ubuntu
+   install screen.
+#. Accept the default options for the install steps until you get to **Device to
+   use as root file system**.
+#. At the **Device to use as root file system** prompt, select
+   ``/dev/mon-vg/root`` or ``/dev/app-vg/root`` for the monitor and application
+   servers respectively.
+#. Select to mount the separate ``/boot`` partition.
+#. Select **Execute a shell in** ``/dev/mon-vg/root`` (or ``/dev/app-vg/root``)
+   and select **Continue**.
+#. You should now be at a rescue Linux shell. Type ``efibootmgr``, and you
+   should see the following:
+
+    .. code::
+
+        BootCurrent: 0000
+        Timeout: 5 seconds
+        BootOrder: 0080
+        Boot0000* ubuntu
+        Boot0080* Mac OS X
+        BootFFFF*
+
+#. Type ``efibootmgr -o 00``.
+#. Again type ``efibootmgr``. This time you should see the following:
+
+    .. code::
+
+        BootCurrent: 0000
+        Timeout: 5 seconds
+        BootOrder: 0000
+        Boot0000* ubuntu
+        Boot0080* Mac OS X
+        BootFFFF*
+
+#. Type ``exit``.
+#. Select **Reboot the system** and remove the installation media.
+   Your server should now boot to Ubuntu by default.
 
 Secure Viewing Station (SVS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
