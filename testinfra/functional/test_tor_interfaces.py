@@ -5,7 +5,6 @@ import pytest
 sdvars = pytest.securedrop_test_vars
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize('site', sdvars.tor_url_files)
 @pytest.mark.skipif(os.environ.get('FPF_CI', 'false') == "false",
                     reason="Can only assure Tor is configured in CI atm")
