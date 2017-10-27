@@ -33,7 +33,7 @@ reboots, the Tails instance must have persistence enabled (specifically, the
 .. note:: Starting in version 0.3.7, SecureDrop requires Tails 2.x or greater.
 
 To install the auto-connect configuration, start by navigating to the directory
-with these scripts, and run the install script:
+with these scripts (``~/Persistent/securedrop/``), and run the install script:
 
 .. code:: sh
 
