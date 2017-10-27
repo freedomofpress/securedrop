@@ -7,7 +7,7 @@ import zipfile
 
 from flask import url_for, escape, session
 from flask_testing import TestCase
-from mock import patch, ANY, MagicMock
+from mock import patch
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 
@@ -982,12 +982,33 @@ class TestJournalistApp(TestCase):
                         submission.filename)
                     )
 
-    def test_add_star_redirects_to_index(self):
+    def test_single_source_is_successfully_starred(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
         resp = self.client.post(url_for('add_star',
                                         filesystem_id=source.filesystem_id))
+
         self.assertRedirects(resp, url_for('index'))
+
+        # Assert source is starred
+        self.assertTrue(source.star.starred)
+
+    def test_single_source_is_successfully_unstarred(self):
+        source, _ = utils.db_helper.init_source()
+        self._login_user()
+
+        # First star the source
+        self.client.post(url_for('add_star',
+                                 filesystem_id=source.filesystem_id))
+
+        # Now unstar the source
+        resp = self.client.post(url_for('remove_star',
+                                filesystem_id=source.filesystem_id))
+
+        self.assertRedirects(resp, url_for('index'))
+
+        # Assert source is not starred
+        self.assertFalse(source.star.starred)
 
     def test_journalist_session_expiration(self):
         try:
@@ -1040,78 +1061,78 @@ class TestJournalistApp(TestCase):
         finally:
             self.app.config['WTF_CSRF_ENABLED'] = old_enabled
 
+    def test_col_process_aborts_with_bad_action(self):
+        """If the action is not a valid choice, a 500 should occur"""
+        self._login_user()
 
-class TestJournalistAppTwo(unittest.TestCase):
+        form_data = {'cols_selected': 'does not matter',
+                     'action': 'this action does not exist'}
 
-    def setUp(self):
-        journalist.logged_in = MagicMock()
-        journalist.request = MagicMock()
-        journalist.url_for = MagicMock()
-        journalist.redirect = MagicMock()
-        journalist.abort = MagicMock()
-        journalist.db_session = MagicMock()
-        journalist.get_docs = MagicMock()
-        journalist.get_or_else = MagicMock()
+        resp = self.client.post(url_for('col_process'), data=form_data)
 
-    def _set_up_request(self, cols_selected, action):
-        journalist.request.form.__contains__.return_value = True
-        journalist.request.form.getlist = MagicMock(return_value=cols_selected)
-        journalist.request.form.__getitem__.return_value = action
+        self.assert500(resp)
 
-    @patch("journalist.col_delete")
-    def test_col_process_delegates_to_col_delete(self, col_delete):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'delete')
+    def test_col_process_successfully_deletes_multiple_sources(self):
+        # Create two sources with one submission each
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
+        source_2, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_2, 1)
 
-        journalist.col_process()
+        self._login_user()
 
-        col_delete.assert_called_with(cols_selected)
+        form_data = {'cols_selected': [source_1.filesystem_id,
+                                       source_2.filesystem_id],
+                     'action': 'delete'}
 
-    @patch("journalist.col_star")
-    def test_col_process_delegates_to_col_star(self, col_star):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'star')
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
 
-        journalist.col_process()
+        self.assert200(resp)
 
-        col_star.assert_called_with(cols_selected)
+        # Verify there are no remaining sources
+        remaining_sources = db_session.query(db.Source).all()
+        self.assertEqual(len(remaining_sources), 0)
 
-    @patch("journalist.col_un_star")
-    def test_col_process_delegates_to_col_un_star(self, col_un_star):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'un-star')
+    def test_col_process_successfully_stars_sources(self):
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
 
-        journalist.col_process()
+        self._login_user()
 
-        col_un_star.assert_called_with(cols_selected)
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'star'}
 
-    @patch("journalist.abort")
-    def test_col_process_returns_404_with_bad_action(self, abort):
-        cols_selected = ['source_id']
-        self._set_up_request(cols_selected, 'something-random')
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
 
-        journalist.col_process()
+        self.assert200(resp)
 
-        abort.assert_called_with(ANY)
+        # Verify the source is starred
+        self.assertTrue(source_1.star.starred)
 
-    @patch("journalist.make_star_true")
-    @patch("journalist.db_session")
-    def test_col_star_call_db_(self, db_session, make_star_true):
-        journalist.col_star(['filesystem_id'])
+    def test_col_process_successfully_unstars_sources(self):
+        source_1, _ = utils.db_helper.init_source()
+        utils.db_helper.submit(source_1, 1)
 
-        make_star_true.assert_called_with('filesystem_id')
+        self._login_user()
 
-    @patch("journalist.db_session")
-    def test_col_un_star_call_db(self, db_session):
-        journalist.col_un_star([])
+        # First star the source
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'star'}
+        self.client.post(url_for('col_process'), data=form_data,
+                         follow_redirects=True)
 
-        db_session.commit.assert_called_with()
+        # Now unstar the source
+        form_data = {'cols_selected': [source_1.filesystem_id],
+                     'action': 'un-star'}
+        resp = self.client.post(url_for('col_process'), data=form_data,
+                                follow_redirects=True)
 
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
+        self.assert200(resp)
+
+        # Verify the source is not starred
+        self.assertFalse(source_1.star.starred)
 
 
 class TestJournalistLogin(unittest.TestCase):
@@ -1151,65 +1172,6 @@ class TestJournalistLogin(unittest.TestCase):
         self.assertFalse(
             mock_scrypt_hash.called,
             "Called _scrypt_hash for password w/ invalid length")
-
-    @classmethod
-    def tearDownClass(cls):
-        # Reset the module variables that were changed to mocks so we don't
-        # break other tests
-        reload(journalist)
-
-
-class TestJournalist(unittest.TestCase):
-
-    def setUp(self):
-        journalist.logged_in = MagicMock()
-        journalist.make_star_true = MagicMock()
-        journalist.db_session = MagicMock()
-        journalist.url_for = MagicMock()
-        journalist.redirect = MagicMock()
-        journalist.get_one_or_else = MagicMock()
-
-    @patch('journalist.url_for')
-    @patch('journalist.redirect')
-    def test_add_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.add_star('filesystem_id')
-
-        self.assertEqual(redirect_template, redirect(url_for('index')))
-
-    @patch('journalist.db_session')
-    def test_add_star_makes_commits(self, db_session):
-        journalist.add_star('filesystem_id')
-
-        db_session.commit.assert_called_with()
-
-    @patch('journalist.make_star_true')
-    def test_single_delegates_to_make_star_true(self, make_star_true):
-        filesystem_id = 'filesystem_id'
-
-        journalist.add_star(filesystem_id)
-
-        make_star_true.assert_called_with(filesystem_id)
-
-    @patch('journalist.url_for')
-    @patch('journalist.redirect')
-    def test_remove_star_renders_template(self, redirect, url_for):
-        redirect_template = journalist.remove_star('filesystem_id')
-
-        self.assertEqual(redirect_template, redirect(url_for('index')))
-
-    @patch('journalist.db_session')
-    def test_remove_star_makes_commits(self, db_session):
-        journalist.remove_star('filesystem_id')
-
-        db_session.commit.assert_called_with()
-
-    @patch('journalist.make_star_false')
-    def test_remove_star_delegates_to_make_star_false(self, make_star_false):
-        filesystem_id = 'filesystem_id'
-
-        journalist.remove_star(filesystem_id)
-
-        make_star_false.assert_called_with(filesystem_id)
 
     @classmethod
     def tearDownClass(cls):
