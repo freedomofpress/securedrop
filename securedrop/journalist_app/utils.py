@@ -262,3 +262,14 @@ def col_download_unread(cols_selected):
               "error")
         return redirect(url_for('index'))
     return download("unread", submissions)
+
+
+def col_download_all(cols_selected):
+    """Download all submissions from all selected sources."""
+    submissions = []
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
+        submissions += Submission.query.filter(
+            Submission.source_id == id).all()
+    return download("all", submissions)
