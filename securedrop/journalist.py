@@ -11,13 +11,10 @@ from sqlalchemy.sql.expression import false
 
 import config
 import crypto_util
-from rm import srm
-import i18n
 from flask_babel import gettext, ngettext
 import store
 from db import (db_session, Source, Journalist, Submission, Reply,
                 SourceStar, PasswordError, InvalidUsernameException)
-import worker
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
@@ -26,7 +23,8 @@ from journalist_app.utils import (commit_account_changes,
                                   get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
-                                  col_un_star, make_password)
+                                  col_un_star, make_password,
+                                  delete_collection)
 
 app = create_app(config)
 
@@ -411,20 +409,6 @@ def col(filesystem_id):
     source.has_key = crypto_util.getkey(filesystem_id)
     return render_template("col.html", filesystem_id=filesystem_id,
                            source=source, form=form)
-
-
-def delete_collection(filesystem_id):
-    # Delete the source's collection of submissions
-    job = worker.enqueue(srm, store.path(filesystem_id))
-
-    # Delete the source's reply keypair
-    crypto_util.delete_reply_keypair(filesystem_id)
-
-    # Delete their entry in the db
-    source = get_source(filesystem_id)
-    db_session.delete(source)
-    db_session.commit()
-    return job
 
 
 @app.route('/col/process', methods=('POST',))
