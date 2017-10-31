@@ -415,7 +415,7 @@ class TestJournalistApp(TestCase):
         # Redirect to admin 2FA view
         self.assertRedirects(
             resp,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+            url_for('admin.new_user_two_factor', uid=self.user.id))
 
     def test_admin_resets_user_hotp_format_non_hexa(self):
         self._login_admin()
@@ -492,7 +492,7 @@ class TestJournalistApp(TestCase):
 
         self.assertRedirects(
             resp,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+            url_for('admin.new_user_two_factor', uid=self.user.id))
 
     def test_user_resets_totp(self):
         self._login_user()
@@ -517,15 +517,15 @@ class TestJournalistApp(TestCase):
     def test_admin_new_user_2fa_redirect(self):
         self._login_admin()
         resp = self.client.post(
-            url_for('admin_new_user_two_factor', uid=self.user.id),
+            url_for('admin.new_user_two_factor', uid=self.user.id),
             data=dict(token='mocked'))
         self.assertRedirects(resp, url_for('admin.index'))
 
     def test_http_get_on_admin_new_user_two_factor_page(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_new_user_two_factor',
+        resp = self.client.get(url_for('admin.new_user_two_factor',
                                        uid=self.user.id))
-        # any GET req should take a user to the admin_new_user_two_factor page
+        # any GET req should take a user to the admin.new_user_two_factor page
         self.assertIn('Authenticator', resp.data)
 
     def test_http_get_on_admin_add_user_page(self):
@@ -543,7 +543,7 @@ class TestJournalistApp(TestCase):
                                           password=VALID_PASSWORD,
                                           is_admin=None))
 
-        self.assertRedirects(resp, url_for('admin_new_user_two_factor',
+        self.assertRedirects(resp, url_for('admin.new_user_two_factor',
                                            uid=max_journalist_pk+1))
 
     def test_admin_add_user_without_username(self):
@@ -636,7 +636,7 @@ class TestJournalistApp(TestCase):
         admin_urls = [url_for('admin_reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
                       url_for('admin.add_user', user_id=self.user.id),
-                      url_for('admin_new_user_two_factor'),
+                      url_for('admin.new_user_two_factor'),
                       url_for('admin_reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
                       url_for('admin_edit_user', user_id=self.user.id),

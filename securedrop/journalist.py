@@ -27,28 +27,6 @@ from journalist_app.utils import (commit_account_changes,
 app = create_app(config)
 
 
-@app.route('/admin/2fa', methods=('GET', 'POST'))
-@admin_required
-def admin_new_user_two_factor():
-    user = Journalist.query.get(request.args['uid'])
-
-    if request.method == 'POST':
-        token = request.form['token']
-        if user.verify_token(token):
-            flash(gettext(
-                "Token in two-factor authentication "
-                "accepted for user {user}.").format(
-                    user=user.username),
-                "notification")
-            return redirect(url_for("admin.index"))
-        else:
-            flash(gettext(
-                "Could not verify token in two-factor authentication."),
-                  "error")
-
-    return render_template("admin_new_user_two_factor.html", user=user)
-
-
 @app.route('/admin/reset-2fa-totp', methods=['POST'])
 @admin_required
 def admin_reset_two_factor_totp():
@@ -57,7 +35,7 @@ def admin_reset_two_factor_totp():
     user.is_totp = True
     user.regenerate_totp_shared_secret()
     db_session.commit()
-    return redirect(url_for('admin_new_user_two_factor', uid=uid))
+    return redirect(url_for('admin.new_user_two_factor', uid=uid))
 
 
 @app.route('/admin/reset-2fa-hotp', methods=['POST'])
@@ -90,7 +68,7 @@ def admin_reset_two_factor_hotp():
             return render_template('admin_edit_hotp_secret.html', uid=uid)
         else:
             db_session.commit()
-            return redirect(url_for('admin_new_user_two_factor', uid=uid))
+            return redirect(url_for('admin.new_user_two_factor', uid=uid))
     else:
         return render_template('admin_edit_hotp_secret.html', uid=uid)
 

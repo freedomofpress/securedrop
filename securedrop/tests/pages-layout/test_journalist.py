@@ -104,13 +104,13 @@ class TestJournalistLayout(
         self._admin_logs_in()
         self._admin_visits_admin_interface()
         self._admin_creates_a_user(hotp='123456')
-        self._screenshot('journalist-admin_new_user_two_factor_hotp.png')
+        self._screenshot('journalist-admin.new_user_two_factor_hotp.png')
 
     def test_admin_new_user_two_factor_totp(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()
         self._admin_creates_a_user(hotp=None)
-        self._screenshot('journalist-admin_new_user_two_factor_totp.png')
+        self._screenshot('journalist-admin.new_user_two_factor_totp.png')
 
     def test_col_no_documents(self):
         self._source_visits_source_homepage()

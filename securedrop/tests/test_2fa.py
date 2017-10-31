@@ -77,7 +77,7 @@ class TestJournalist2FA(flask_testing.TestCase):
 
         # Create and submit an invalid 2FA token
         invalid_token = u'000000'
-        resp = self.client.post(url_for('admin_new_user_two_factor',
+        resp = self.client.post(url_for('admin.new_user_two_factor',
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
 
@@ -88,7 +88,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         self.assertEqual(self.admin.last_token, invalid_token)
 
         # Submit the same invalid token again
-        resp = self.client.post(url_for('admin_new_user_two_factor',
+        resp = self.client.post(url_for('admin.new_user_two_factor',
                                         uid=self.admin.id),
                                 data=dict(token=invalid_token))
 

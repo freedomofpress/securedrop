@@ -65,9 +65,30 @@ def make_blueprint(config):
                                                  .format(username, e))
 
             if form_valid:
-                return redirect(url_for('admin_new_user_two_factor',
+                return redirect(url_for('admin.new_user_two_factor',
                                         uid=new_user.id))
 
         return render_template("admin_add_user.html", password=make_password())
+
+    @view.route('/2fa', methods=('GET', 'POST'))
+    @admin_required
+    def new_user_two_factor():
+        user = Journalist.query.get(request.args['uid'])
+
+        if request.method == 'POST':
+            token = request.form['token']
+            if user.verify_token(token):
+                flash(gettext(
+                    "Token in two-factor authentication "
+                    "accepted for user {user}.").format(
+                        user=user.username),
+                    "notification")
+                return redirect(url_for("admin.index"))
+            else:
+                flash(gettext(
+                    "Could not verify token in two-factor authentication."),
+                      "error")
+
+        return render_template("admin_new_user_two_factor.html", user=user)
 
     return view
