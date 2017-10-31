@@ -171,7 +171,7 @@ def col_star(cols_selected):
         make_star_true(filesystem_id)
 
     db_session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 def col_un_star(cols_selected):
@@ -179,7 +179,7 @@ def col_un_star(cols_selected):
         make_star_false(filesystem_id)
 
     db_session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 def col_delete(cols_selected):
@@ -194,7 +194,7 @@ def col_delete(cols_selected):
                        num).format(num=num),
               "notification")
 
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 def make_password():
@@ -260,7 +260,7 @@ def col_download_unread(cols_selected):
     if submissions == []:
         flash(gettext("No unread submissions in selected collections."),
               "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     return download("unread", submissions)
 
 

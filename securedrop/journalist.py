@@ -11,7 +11,7 @@ import crypto_util
 from flask_babel import gettext
 import store
 from db import (db_session, Source, Journalist, Submission, Reply,
-                SourceStar, PasswordError, InvalidUsernameException)
+                PasswordError, InvalidUsernameException)
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
@@ -302,7 +302,7 @@ def account_reset_two_factor_hotp():
 def add_star(filesystem_id):
     make_star_true(filesystem_id)
     db_session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 @app.route("/col/remove_star/<filesystem_id>", methods=('POST',))
@@ -310,32 +310,7 @@ def add_star(filesystem_id):
 def remove_star(filesystem_id):
     make_star_false(filesystem_id)
     db_session.commit()
-    return redirect(url_for('index'))
-
-
-@app.route('/')
-@login_required
-def index():
-    unstarred = []
-    starred = []
-
-    # Long SQLAlchemy statements look best when formatted according to
-    # the Pocoo style guide, IMHO:
-    # http://www.pocoo.org/internal/styleguide/
-    sources = Source.query.filter_by(pending=False) \
-                          .order_by(Source.last_updated.desc()) \
-                          .all()
-    for source in sources:
-        star = SourceStar.query.filter_by(source_id=source.id).first()
-        if star and star.starred:
-            starred.append(source)
-        else:
-            unstarred.append(source)
-        source.num_unread = len(
-            Submission.query.filter_by(source_id=source.id,
-                                       downloaded=False).all())
-
-    return render_template('index.html', unstarred=unstarred, starred=starred)
+    return redirect(url_for('main.index'))
 
 
 @app.route('/col/<filesystem_id>')
@@ -356,7 +331,7 @@ def col_process():
                'un-star': col_un_star, 'delete': col_delete}
     if 'cols_selected' not in request.form:
         flash(gettext('No collections selected.'), 'error')
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     # getlist is cgi.FieldStorage.getlist
     cols_selected = request.form.getlist('cols_selected')
@@ -378,7 +353,7 @@ def col_delete_single(filesystem_id):
     flash(gettext("{source_name}'s collection deleted")
           .format(source_name=source.journalist_designation),
           "notification")
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 
 @app.route('/col/<filesystem_id>/<fn>')

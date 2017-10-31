@@ -115,7 +115,7 @@ class TestJournalistApp(TestCase):
         self.assertNotIn("You cannot send an empty reply.", resp.data)
 
     def test_unauthorized_access_redirects_to_login(self):
-        resp = self.client.get(url_for('index'))
+        resp = self.client.get(url_for('main.index'))
         self.assertRedirects(resp, url_for('main.login'))
 
     def test_login_throttle(self):
@@ -162,14 +162,14 @@ class TestJournalistApp(TestCase):
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_user_login_redirects_to_index(self):
         resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_has_link_to_edit_account_page_in_index_page(self):
         resp = self.client.post(url_for('main.login'),
@@ -231,12 +231,12 @@ class TestJournalistApp(TestCase):
     def test_admin_logout_redirects_to_index(self):
         self._login_admin()
         resp = self.client.get(url_for('main.logout'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_user_logout_redirects_to_index(self):
         self._login_user()
         resp = self.client.get(url_for('main.logout'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_index(self):
         self._login_admin()
@@ -647,7 +647,7 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('index'), url_for('col', filesystem_id='1'),
+        urls = [url_for('main.index'), url_for('col', filesystem_id='1'),
                 url_for('download_single_submission',
                         filesystem_id='1', fn='1'),
                 url_for('edit_account')]
@@ -989,7 +989,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(url_for('add_star',
                                         filesystem_id=source.filesystem_id))
 
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         # Assert source is starred
         self.assertTrue(source.star.starred)
@@ -1006,7 +1006,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(url_for('remove_star',
                                 filesystem_id=source.filesystem_id))
 
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         # Assert source is not starred
         self.assertFalse(source.star.starred)

@@ -55,7 +55,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         token = self.user.totp.now()
         resp = self._login_user(token)
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         resp = self._login_user(token)
         self.assert200(resp)

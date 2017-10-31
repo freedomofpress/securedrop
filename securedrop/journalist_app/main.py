@@ -4,7 +4,8 @@ from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template)
 
-from db import db_session
+from db import db_session, Source, SourceStar, Submission
+from journalist_app.decorators import login_required
 from journalist_app.utils import validate_user
 
 
@@ -28,7 +29,7 @@ def make_blueprint(config):
                 db_session.commit()
 
                 session['uid'] = user.id
-                return redirect(url_for('index'))
+                return redirect(url_for('main.index'))
 
         return render_template("login.html")
 
@@ -36,6 +37,32 @@ def make_blueprint(config):
     def logout():
         session.pop('uid', None)
         session.pop('expires', None)
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
+
+    @view.route('/')
+    @login_required
+    def index():
+        unstarred = []
+        starred = []
+
+        # Long SQLAlchemy statements look best when formatted according to
+        # the Pocoo style guide, IMHO:
+        # http://www.pocoo.org/internal/styleguide/
+        sources = Source.query.filter_by(pending=False) \
+                              .order_by(Source.last_updated.desc()) \
+                              .all()
+        for source in sources:
+            star = SourceStar.query.filter_by(source_id=source.id).first()
+            if star and star.starred:
+                starred.append(source)
+            else:
+                unstarred.append(source)
+            source.num_unread = len(
+                Submission.query.filter_by(source_id=source.id,
+                                           downloaded=False).all())
+
+        return render_template('index.html',
+                               unstarred=unstarred,
+                               starred=starred)
 
     return view

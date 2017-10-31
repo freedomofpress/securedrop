@@ -24,5 +24,5 @@ def admin_required(func):
         # TODO: sometimes this gets flashed 2x (Chrome only?)
         flash(gettext("Only administrators can access this page."),
               "notification")
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     return wrapper
