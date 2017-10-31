@@ -12,7 +12,7 @@ import template_filters
 import version
 
 from db import db_session, Journalist
-from journalist_app import admin, main
+from journalist_app import account, admin, main
 from journalist_app.utils import get_source
 
 
@@ -85,6 +85,8 @@ def create_app(config):
                 g.source = get_source(filesystem_id)
 
     app.register_blueprint(main.make_blueprint(config))
+    app.register_blueprint(account.make_blueprint(config),
+                           url_prefix='/account')
     app.register_blueprint(admin.make_blueprint(config), url_prefix='/admin')
 
     return app

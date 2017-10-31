@@ -17,7 +17,7 @@ from journalist_app.forms import ReplyForm
 from journalist_app.utils import (get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
-                                  col_un_star, make_password,
+                                  col_un_star,
                                   delete_collection, col_delete,
                                   set_diceware_password, col_download_unread,
                                   col_download_all)
@@ -27,14 +27,6 @@ app = create_app(config)
 
 class PasswordMismatchError(Exception):
     pass
-
-
-@app.route('/account', methods=('GET',))
-@login_required
-def edit_account():
-    password = make_password()
-    return render_template('edit_account.html',
-                           password=password)
 
 
 @app.route('/account/new-password', methods=('POST',))
@@ -48,7 +40,7 @@ def new_password():
     if validate_user(user.username, current_password, token, error_message):
         password = request.form.get('password')
         set_diceware_password(user, password)
-    return redirect(url_for('edit_account'))
+    return redirect(url_for('account.edit'))
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))
@@ -59,7 +51,7 @@ def account_new_two_factor():
         if g.user.verify_token(token):
             flash(gettext("Token in two-factor authentication verified."),
                   "notification")
-            return redirect(url_for('edit_account'))
+            return redirect(url_for('account.edit'))
         else:
             flash(gettext(
                 "Could not verify token in two-factor authentication."),

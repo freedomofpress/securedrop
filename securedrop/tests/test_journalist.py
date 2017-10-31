@@ -178,7 +178,7 @@ class TestJournalistApp(TestCase):
                                           token='mocked'),
                                 follow_redirects=True)
         edit_account_link = '<a href="{}" id="link-edit-account">'.format(
-            url_for('edit_account'))
+            url_for('account.edit'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_user_has_link_to_edit_account_page_in_index_page(self):
@@ -188,7 +188,7 @@ class TestJournalistApp(TestCase):
                                           token='mocked'),
                                 follow_redirects=True)
         edit_account_link = '<a href="{}" id="link-edit-account">'.format(
-            url_for('edit_account'))
+            url_for('account.edit'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
@@ -650,7 +650,7 @@ class TestJournalistApp(TestCase):
         urls = [url_for('main.index'), url_for('col', filesystem_id='1'),
                 url_for('download_single_submission',
                         filesystem_id='1', fn='1'),
-                url_for('edit_account')]
+                url_for('account.edit')]
 
         for url in urls:
             resp = self.client.get(url)
@@ -686,7 +686,7 @@ class TestJournalistApp(TestCase):
                                data=dict(password='badpw',
                                          token='mocked',
                                          current_password=self.user_pw))
-        self.assertRedirects(res, url_for('edit_account'))
+        self.assertRedirects(res, url_for('account.edit'))
 
     def test_too_long_user_password_change(self):
         self._login_user()
@@ -1031,7 +1031,7 @@ class TestJournalistApp(TestCase):
                 # set the expiration to ensure we trigger an expiration
                 config.SESSION_EXPIRATION_MINUTES = -1
 
-                resp = client.get(url_for('edit_account'),
+                resp = client.get(url_for('account.edit'),
                                   follow_redirects=True)
 
                 # check that the session was cleared (apart from 'expires'
