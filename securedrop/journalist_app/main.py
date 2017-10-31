@@ -32,4 +32,10 @@ def make_blueprint(config):
 
         return render_template("login.html")
 
+    @view.route('/logout')
+    def logout():
+        session.pop('uid', None)
+        session.pop('expires', None)
+        return redirect(url_for('index'))
+
     return view

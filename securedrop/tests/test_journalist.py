@@ -230,12 +230,12 @@ class TestJournalistApp(TestCase):
 
     def test_admin_logout_redirects_to_index(self):
         self._login_admin()
-        resp = self.client.get(url_for('logout'))
+        resp = self.client.get(url_for('main.logout'))
         self.assertRedirects(resp, url_for('index'))
 
     def test_user_logout_redirects_to_index(self):
         self._login_user()
-        resp = self.client.get(url_for('logout'))
+        resp = self.client.get(url_for('main.logout'))
         self.assertRedirects(resp, url_for('index'))
 
     def test_admin_index(self):

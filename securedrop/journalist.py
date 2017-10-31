@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import (request, render_template, send_file, redirect, flash,
-                   url_for, g, abort, session)
+                   url_for, g, abort)
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
@@ -26,13 +26,6 @@ from journalist_app.utils import (commit_account_changes,
                                   col_download_all)
 
 app = create_app(config)
-
-
-@app.route('/logout')
-def logout():
-    session.pop('uid', None)
-    session.pop('expires', None)
-    return redirect(url_for('index'))
 
 
 @app.route('/admin', methods=('GET', 'POST'))

@@ -25,7 +25,7 @@
       {% if g.user and g.user.is_admin %}
       <a href="{{ url_for('admin_index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
+      <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
