@@ -9,10 +9,10 @@ import config
 import crypto_util
 from flask_babel import gettext
 import store
-from db import db_session, Source, Journalist, Submission, Reply
+from db import db_session, Source, Submission, Reply
 
 from journalist_app import create_app
-from journalist_app.decorators import login_required, admin_required
+from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
@@ -49,19 +49,6 @@ def new_password():
         password = request.form.get('password')
         set_diceware_password(user, password)
     return redirect(url_for('edit_account'))
-
-
-@app.route('/admin/edit/<int:user_id>/new-password', methods=('POST',))
-@admin_required
-def admin_new_password(user_id):
-    try:
-        user = Journalist.query.get(user_id)
-    except NoResultFound:
-        abort(404)
-
-    password = request.form.get('password')
-    set_diceware_password(user, password)
-    return redirect(url_for('admin.edit_user', user_id=user_id))
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))

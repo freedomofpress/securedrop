@@ -28,7 +28,7 @@
 <p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
 
 {% if user and g.user != user %}
-  {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
+  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
   {% set password_reset_url = url_for('new_password') %}
   <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>

@@ -203,4 +203,16 @@ def make_blueprint(config):
 
         return redirect(url_for('admin.index'))
 
+    @view.route('/edit/<int:user_id>/new-password', methods=('POST',))
+    @admin_required
+    def new_password(user_id):
+        try:
+            user = Journalist.query.get(user_id)
+        except NoResultFound:
+            abort(404)
+
+        password = request.form.get('password')
+        set_diceware_password(user, password)
+        return redirect(url_for('admin.edit_user', user_id=user_id))
+
     return view

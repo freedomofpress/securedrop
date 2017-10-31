@@ -271,7 +271,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
 
         resp = self.client.post(
-            url_for('admin_new_password', user_id=self.user.id),
+            url_for('admin.new_password', user_id=self.user.id),
             data=dict(password=VALID_PASSWORD_2),
             follow_redirects=True)
 
@@ -284,7 +284,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
-                url_for('admin_new_password', user_id=self.user.id),
+                url_for('admin.new_password', user_id=self.user.id),
                 data=dict(password=VALID_PASSWORD_2),
                 follow_redirects=True)
 
@@ -352,7 +352,7 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(
-            url_for('admin_new_password', user_id=self.user.id),
+            url_for('admin.new_password', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=None,
                       password=overly_long_password),
             follow_redirects=True)
