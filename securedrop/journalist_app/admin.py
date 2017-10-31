@@ -91,4 +91,14 @@ def make_blueprint(config):
 
         return render_template("admin_new_user_two_factor.html", user=user)
 
+    @view.route('/reset-2fa-totp', methods=['POST'])
+    @admin_required
+    def reset_two_factor_totp():
+        uid = request.form['uid']
+        user = Journalist.query.get(uid)
+        user.is_totp = True
+        user.regenerate_totp_shared_secret()
+        db_session.commit()
+        return redirect(url_for('admin.new_user_two_factor', uid=uid))
+
     return view

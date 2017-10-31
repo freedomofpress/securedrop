@@ -484,7 +484,7 @@ class TestJournalistApp(TestCase):
         old_totp = self.user.totp
 
         resp = self.client.post(
-            url_for('admin_reset_two_factor_totp'),
+            url_for('admin.reset_two_factor_totp'),
             data=dict(uid=self.user.id))
         new_totp = self.user.totp
 
@@ -633,11 +633,11 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_admin_page_restriction_http_posts(self):
-        admin_urls = [url_for('admin_reset_two_factor_totp'),
+        admin_urls = [url_for('admin.reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
                       url_for('admin.add_user', user_id=self.user.id),
                       url_for('admin.new_user_two_factor'),
-                      url_for('admin_reset_two_factor_totp'),
+                      url_for('admin.reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
                       url_for('admin_edit_user', user_id=self.user.id),
                       url_for('admin_delete_user', user_id=self.user.id)]

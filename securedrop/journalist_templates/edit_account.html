@@ -65,7 +65,7 @@
 <p>{{ gettext('To reset two-factor authentication for mobile apps such as Google Authenticator or FreeOTP, choose the first option. For hardware tokens like the Yubikey, choose the second.') }}</p>
 
 {% if user %}
-  {% set totp_reset_url = url_for('admin_reset_two_factor_totp') %}
+  {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
   {% set hotp_reset_url = url_for('admin_reset_two_factor_hotp') %}
 {% else %}
   {% set totp_reset_url = url_for('account_reset_two_factor_totp') %}
