@@ -21,6 +21,10 @@ import utils
 from db import Journalist, db_session
 
 
+YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
+                'cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc d7']
+
+
 class TestManagePy(object):
     def test_parse_args(self):
         # just test that the arg parser is stable
@@ -62,6 +66,20 @@ class TestManagementCommand(unittest.TestCase):
     @mock.patch("__builtin__.raw_input", return_value='n')
     def test_get_yubikey_usage_no(self, mock_stdin):
         assert not manage._get_yubikey_usage()
+
+    @mock.patch("manage._get_username", return_value='ntoll')
+    @mock.patch("manage._get_yubikey_usage", return_value=True)
+    @mock.patch("__builtin__.raw_input", side_effect=YUBIKEY_HOTP)
+    @mock.patch("sys.stdout", new_callable=StringIO)
+    def test_handle_invalid_secret(self, mock_username, mock_yubikey,
+                                   mock_htop, mock_stdout):
+        """Regression test for bad secret logic in manage.py"""
+
+        # We will try to provide one invalid and one valid secret
+        return_value = manage._add_user()
+        self.assertEqual(return_value, 0)
+        self.assertIn('Try again.', sys.stdout.getvalue())
+        self.assertIn('successfully added', sys.stdout.getvalue())
 
     @mock.patch("manage._get_username", return_value='foo-bar-baz')
     @mock.patch("manage._get_yubikey_usage", return_value=False)

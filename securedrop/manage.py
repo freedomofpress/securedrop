@@ -159,6 +159,13 @@ def _add_user(is_admin=False):
             otp_secret = raw_input(
                 "Please configure this user's YubiKey and enter the secret: ")
             if otp_secret:
+                tmp_str = otp_secret.replace(" ", "")
+                if len(tmp_str) != 40:
+                    print("The length of the secret is not correct. "
+                          "Expected 40 characters, but received {0}. "
+                          "Try again.".format(len(tmp_str)))
+                    continue
+            if otp_secret:
                 break
 
     try:
