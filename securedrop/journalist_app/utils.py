@@ -151,3 +151,12 @@ def make_star_true(filesystem_id):
     else:
         source_star = SourceStar(source)
         db_session.add(source_star)
+
+
+def make_star_false(filesystem_id):
+    source = get_source(filesystem_id)
+    if not source.star:
+        source_star = SourceStar(source)
+        db_session.add(source_star)
+        db_session.commit()
+    source.star.starred = False

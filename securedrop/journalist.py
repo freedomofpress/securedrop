@@ -25,7 +25,7 @@ from journalist_app.forms import ReplyForm
 from journalist_app.utils import (logged_in, commit_account_changes,
                                   get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
-                                  make_star_true)
+                                  make_star_true, make_star_false)
 
 app = create_app(config)
 
@@ -390,15 +390,6 @@ def account_reset_two_factor_hotp():
         return redirect(url_for('account_new_two_factor'))
     else:
         return render_template('account_edit_hotp_secret.html')
-
-
-def make_star_false(filesystem_id):
-    source = get_source(filesystem_id)
-    if not source.star:
-        source_star = SourceStar(source)
-        db_session.add(source_star)
-        db_session.commit()
-    source.star.starred = False
 
 
 @app.route('/col/add_star/<filesystem_id>', methods=('POST',))
