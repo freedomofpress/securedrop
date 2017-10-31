@@ -11,7 +11,7 @@ def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not logged_in():
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
         return func(*args, **kwargs)
     return wrapper
 

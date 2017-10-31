@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
 from sqlalchemy.orm.exc import NoResultFound
@@ -28,27 +26,6 @@ from journalist_app.utils import (commit_account_changes,
                                   col_download_all)
 
 app = create_app(config)
-
-
-@app.route('/login', methods=('GET', 'POST'))
-def login():
-    if request.method == 'POST':
-        user = validate_user(request.form['username'],
-                             request.form['password'],
-                             request.form['token'])
-        if user:
-            app.logger.info("'{}' logged in with the token {}".format(
-                request.form['username'], request.form['token']))
-
-            # Update access metadata
-            user.last_access = datetime.utcnow()
-            db_session.add(user)
-            db_session.commit()
-
-            session['uid'] = user.id
-            return redirect(url_for('index'))
-
-    return render_template("login.html")
 
 
 @app.route('/logout')

@@ -12,6 +12,7 @@ import template_filters
 import version
 
 from db import db_session, Journalist
+from journalist_app import main
 from journalist_app.utils import get_source
 
 
@@ -31,7 +32,7 @@ def create_app(config):
         msg = gettext('You have been logged out due to inactivity')
         session.clear()
         flash(msg, 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
 
     i18n.setup_app(app)
 
@@ -82,5 +83,7 @@ def create_app(config):
             if filesystem_id:
                 g.filesystem_id = filesystem_id
                 g.source = get_source(filesystem_id)
+
+    app.register_blueprint(main.make_blueprint(config))
 
     return app

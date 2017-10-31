@@ -116,20 +116,20 @@ class TestJournalistApp(TestCase):
 
     def test_unauthorized_access_redirects_to_login(self):
         resp = self.client.get(url_for('index'))
-        self.assertRedirects(resp, url_for('login'))
+        self.assertRedirects(resp, url_for('main.login'))
 
     def test_login_throttle(self):
         db.LOGIN_HARDENING = True
         try:
             for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                resp = self.client.post(url_for('login'),
+                resp = self.client.post(url_for('main.login'),
                                         data=dict(username=self.user.username,
                                                   password='invalid',
                                                   token='mocked'))
                 self.assert200(resp)
                 self.assertIn("Login failed", resp.data)
 
-            resp = self.client.post(url_for('login'),
+            resp = self.client.post(url_for('main.login'),
                                     data=dict(username=self.user.username,
                                               password='invalid',
                                               token='mocked'))
@@ -140,7 +140,7 @@ class TestJournalistApp(TestCase):
             db.LOGIN_HARDENING = False
 
     def test_login_invalid_credentials(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password='invalid',
                                           token='mocked'))
@@ -148,7 +148,7 @@ class TestJournalistApp(TestCase):
         self.assertIn("Login failed", resp.data)
 
     def test_login_valid_credentials(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
@@ -158,21 +158,21 @@ class TestJournalistApp(TestCase):
         self.assertIn("No documents have been submitted!", resp.data)
 
     def test_admin_login_redirects_to_index(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'))
         self.assertRedirects(resp, url_for('index'))
 
     def test_user_login_redirects_to_index(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'))
         self.assertRedirects(resp, url_for('index'))
 
     def test_admin_has_link_to_edit_account_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'),
@@ -182,7 +182,7 @@ class TestJournalistApp(TestCase):
         self.assertIn(edit_account_link, resp.data)
 
     def test_user_has_link_to_edit_account_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
@@ -192,7 +192,7 @@ class TestJournalistApp(TestCase):
         self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'),
@@ -202,7 +202,7 @@ class TestJournalistApp(TestCase):
         self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
@@ -1022,7 +1022,7 @@ class TestJournalistApp(TestCase):
             with self.client as client:
                 # do a real login to get a real session
                 # (none of the mocking `g` hacks)
-                resp = self.client.post(url_for('login'),
+                resp = self.client.post(url_for('main.login'),
                                         data=dict(username=self.user.username,
                                                   password=VALID_PASSWORD,
                                                   token='mocked'))
@@ -1053,10 +1053,10 @@ class TestJournalistApp(TestCase):
 
         try:
             with self.app.test_client() as app:
-                resp = app.post(url_for('login'))
-                self.assertRedirects(resp, url_for('login'))
+                resp = app.post(url_for('main.login'))
+                self.assertRedirects(resp, url_for('main.login'))
 
-                resp = app.post(url_for('login'), follow_redirects=True)
+                resp = app.post(url_for('main.login'), follow_redirects=True)
                 self.assertIn('You have been logged out due to inactivity',
                               resp.data)
         finally:

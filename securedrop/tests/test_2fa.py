@@ -33,7 +33,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         if token is None:
             token = self.admin.totp.now()
-        self.client.post(url_for('login'),
+        self.client.post(url_for('main.login'),
                          data=dict(username=self.admin.username,
                                    password=self.admin_pw,
                                    token=token))
@@ -43,7 +43,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         """
         if token is None:
             token = self.user.totp.now()
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token=token))
