@@ -23,7 +23,8 @@ import worker
 from journalist_app import create_app
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (logged_in, commit_account_changes,
-                                  get_source, validate_user, download)
+                                  get_source, validate_user, download,
+                                  bulk_delete)
 
 app = create_app(config)
 
@@ -700,19 +701,6 @@ def confirm_bulk_delete(filesystem_id, items_selected):
                            filesystem_id=filesystem_id,
                            source=g.source,
                            items_selected=items_selected)
-
-
-def bulk_delete(filesystem_id, items_selected):
-    for item in items_selected:
-        item_path = store.path(filesystem_id, item.filename)
-        worker.enqueue(srm, item_path)
-        db_session.delete(item)
-    db_session.commit()
-
-    flash(ngettext("Submission deleted.",
-                   "Submissions deleted.",
-                   len(items_selected)), "notification")
-    return redirect(url_for('col', filesystem_id=filesystem_id))
 
 
 @app.route('/flag', methods=('POST',))

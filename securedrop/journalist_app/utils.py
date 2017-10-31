@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from flask import g, flash, current_app, abort, send_file
+from flask import g, flash, current_app, abort, send_file, redirect, url_for
 from flask_babel import gettext, ngettext
 
 import store
+import worker
 
 from db import (db_session, get_one_or_else, Source, Journalist,
                 InvalidUsernameException, WrongPasswordException,
                 LoginThrottledException, BadTokenException)
+from rm import srm
 
 
 def logged_in():
@@ -119,3 +121,16 @@ def download(zip_basename, submissions):
     return send_file(zf.name, mimetype="application/zip",
                      attachment_filename=attachment_filename,
                      as_attachment=True)
+
+
+def bulk_delete(filesystem_id, items_selected):
+    for item in items_selected:
+        item_path = store.path(filesystem_id, item.filename)
+        worker.enqueue(srm, item_path)
+        db_session.delete(item)
+    db_session.commit()
+
+    flash(ngettext("Submission deleted.",
+                   "Submissions deleted.",
+                   len(items_selected)), "notification")
+    return redirect(url_for('col', filesystem_id=filesystem_id))
