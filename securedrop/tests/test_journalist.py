@@ -198,7 +198,7 @@ class TestJournalistApp(TestCase):
                                           token='mocked'),
                                 follow_redirects=True)
         admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin_index'))
+            url_for('admin.index'))
         self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
@@ -208,7 +208,7 @@ class TestJournalistApp(TestCase):
                                           token='mocked'),
                                 follow_redirects=True)
         admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin_index'))
+            url_for('admin.index'))
         self.assertNotIn(admin_link, resp.data)
 
     # WARNING: we are purposely doing something that would not work in
@@ -240,7 +240,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_index(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_index'))
+        resp = self.client.get(url_for('admin.index'))
         self.assert200(resp)
         self.assertIn("Admin Interface", resp.data)
 
@@ -519,7 +519,7 @@ class TestJournalistApp(TestCase):
         resp = self.client.post(
             url_for('admin_new_user_two_factor', uid=self.user.id),
             data=dict(token='mocked'))
-        self.assertRedirects(resp, url_for('admin_index'))
+        self.assertRedirects(resp, url_for('admin.index'))
 
     def test_http_get_on_admin_new_user_two_factor_page(self):
         self._login_admin()
@@ -624,7 +624,7 @@ class TestJournalistApp(TestCase):
             "error")
 
     def test_admin_page_restriction_http_gets(self):
-        admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
+        admin_urls = [url_for('admin.index'), url_for('admin_add_user'),
                       url_for('admin_edit_user', user_id=self.user.id)]
 
         self._login_user()

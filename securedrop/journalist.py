@@ -28,13 +28,6 @@ from journalist_app.utils import (commit_account_changes,
 app = create_app(config)
 
 
-@app.route('/admin', methods=('GET', 'POST'))
-@admin_required
-def admin_index():
-    users = Journalist.query.all()
-    return render_template("admin.html", users=users)
-
-
 @app.route('/admin/add', methods=('GET', 'POST'))
 @admin_required
 def admin_add_user():
@@ -98,7 +91,7 @@ def admin_new_user_two_factor():
                 "accepted for user {user}.").format(
                     user=user.username),
                 "notification")
-            return redirect(url_for("admin_index"))
+            return redirect(url_for("admin.index"))
         else:
             flash(gettext(
                 "Could not verify token in two-factor authentication."),
@@ -221,7 +214,7 @@ def admin_delete_user(user_id):
                 g.user.username, user_id))
         abort(404)
 
-    return redirect(url_for('admin_index'))
+    return redirect(url_for('admin.index'))
 
 
 @app.route('/account', methods=('GET',))
