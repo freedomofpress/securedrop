@@ -160,3 +160,11 @@ def make_star_false(filesystem_id):
         db_session.add(source_star)
         db_session.commit()
     source.star.starred = False
+
+
+def col_star(cols_selected):
+    for filesystem_id in cols_selected:
+        make_star_true(filesystem_id)
+
+    db_session.commit()
+    return redirect(url_for('index'))
