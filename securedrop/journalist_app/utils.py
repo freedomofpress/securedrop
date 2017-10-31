@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flask import g, flash, current_app
+from flask import g, flash, current_app, abort
 from flask_babel import gettext
 
-from db import db_session
+from db import db_session, get_one_or_else, Source
 
 
 def logged_in():
@@ -31,3 +31,13 @@ def commit_account_changes(user):
             db_session.rollback()
         else:
             flash(gettext("Account updated."), "success")
+
+
+def get_source(filesystem_id):
+    """Return a Source object, representing the database row, for the source
+    with the `filesystem_id`"""
+    source = None
+    query = Source.query.filter(Source.filesystem_id == filesystem_id)
+    source = get_one_or_else(query, current_app.logger, abort)
+
+    return source
