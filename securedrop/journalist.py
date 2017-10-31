@@ -24,7 +24,7 @@ import worker
 
 from journalist_app import create_app
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import logged_in
+from journalist_app.utils import logged_in, commit_account_changes
 
 app = create_app(config)
 
@@ -295,22 +295,6 @@ def admin_reset_two_factor_hotp():
 
 class PasswordMismatchError(Exception):
     pass
-
-
-def commit_account_changes(user):
-    if db_session.is_modified(user):
-        try:
-            db_session.add(user)
-            db_session.commit()
-        except Exception as e:
-            flash(gettext(
-                "An unexpected error occurred! Please "
-                  "inform your administrator."), "error")
-            app.logger.error("Account changes for '{}' failed: {}".format(user,
-                                                                          e))
-            db_session.rollback()
-        else:
-            flash(gettext("Account updated."), "success")
 
 
 @app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
