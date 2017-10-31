@@ -25,10 +25,6 @@ from journalist_app.utils import (get_source, download,
 app = create_app(config)
 
 
-class PasswordMismatchError(Exception):
-    pass
-
-
 @app.route('/account/2fa', methods=('GET', 'POST'))
 @login_required
 def account_new_two_factor():
