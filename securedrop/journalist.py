@@ -30,13 +30,6 @@ from journalist_app.utils import (commit_account_changes,
 app = create_app(config)
 
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    """Automatically remove database sessions at the end of the request, or
-    when the application shuts down"""
-    db_session.remove()
-
-
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':

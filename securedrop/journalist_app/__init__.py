@@ -11,7 +11,7 @@ import i18n
 import template_filters
 import version
 
-from db import Journalist
+from db import db_session, Journalist
 from journalist_app.utils import get_source
 
 
@@ -48,6 +48,12 @@ def create_app(config):
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        """Automatically remove database sessions at the end of the request, or
+        when the application shuts down"""
+        db_session.remove()
 
     @app.before_request
     def setup_g():
