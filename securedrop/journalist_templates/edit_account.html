@@ -30,7 +30,7 @@
 {% if user and g.user != user %}
   {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
-  {% set password_reset_url = url_for('new_password') %}
+  {% set password_reset_url = url_for('account.new_password') %}
   <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 

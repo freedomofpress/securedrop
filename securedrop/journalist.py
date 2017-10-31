@@ -14,12 +14,12 @@ from db import db_session, Source, Submission, Reply
 from journalist_app import create_app
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import (get_source, validate_user, download,
+from journalist_app.utils import (get_source, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star,
                                   delete_collection, col_delete,
-                                  set_diceware_password, col_download_unread,
+                                  col_download_unread,
                                   col_download_all)
 
 app = create_app(config)
@@ -27,20 +27,6 @@ app = create_app(config)
 
 class PasswordMismatchError(Exception):
     pass
-
-
-@app.route('/account/new-password', methods=('POST',))
-@login_required
-def new_password():
-    user = g.user
-    current_password = request.form.get('current_password')
-    token = request.form.get('token')
-    error_message = gettext('Incorrect password or two-factor code.')
-    # If the user is validated, change their password
-    if validate_user(user.username, current_password, token, error_message):
-        password = request.form.get('password')
-        set_diceware_password(user, password)
-    return redirect(url_for('account.edit'))
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))

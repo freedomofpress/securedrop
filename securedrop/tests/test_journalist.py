@@ -294,7 +294,7 @@ class TestJournalistApp(TestCase):
     def test_user_edits_password_success_reponse(self):
         self._login_user()
         resp = self.client.post(
-            url_for('new_password'),
+            url_for('account.new_password'),
             data=dict(current_password=self.user_pw,
                       token='mocked',
                       password=VALID_PASSWORD_2),
@@ -309,7 +309,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
-                url_for('new_password'),
+                url_for('account.new_password'),
                 data=dict(current_password=self.user_pw,
                           token='mocked',
                           password=VALID_PASSWORD_2),
@@ -365,7 +365,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(url_for('new_password'),
+        self.client.post(url_for('account.new_password'),
                          data=dict(password=overly_long_password,
                                    token='mocked',
                                    current_password=self.user_pw),
@@ -671,7 +671,7 @@ class TestJournalistApp(TestCase):
 
     def test_incorrect_current_password_change(self):
         self._login_user()
-        resp = self.client.post(url_for('new_password'),
+        resp = self.client.post(url_for('account.new_password'),
                                 data=dict(password=VALID_PASSWORD,
                                           token='mocked',
                                           current_password='badpw'),
@@ -682,7 +682,7 @@ class TestJournalistApp(TestCase):
 
     def test_invalid_user_password_change(self):
         self._login_user()
-        res = self.client.post(url_for('new_password'),
+        res = self.client.post(url_for('account.new_password'),
                                data=dict(password='badpw',
                                          token='mocked',
                                          current_password=self.user_pw))
@@ -694,7 +694,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(url_for('new_password'),
+        self.client.post(url_for('account.new_password'),
                          data=dict(password=overly_long_password,
                                    token='mocked',
                                    current_password=self.user_pw),
@@ -706,7 +706,7 @@ class TestJournalistApp(TestCase):
     def test_valid_user_password_change(self):
         self._login_user()
         resp = self.client.post(
-            url_for('new_password'),
+            url_for('account.new_password'),
             data=dict(password=VALID_PASSWORD_2,
                       token='mocked',
                       current_password=self.user_pw),
