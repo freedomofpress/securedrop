@@ -396,7 +396,7 @@ class TestJournalistApp(TestCase):
         new_username = self.admin.username
 
         self.client.post(
-            url_for('admin_edit_user', user_id=self.user.id),
+            url_for('admin.edit_user', user_id=self.user.id),
             data=dict(username=new_username, is_admin=None))
 
         self.assertMessageFlashed('Username "{}" already taken.'.format(
@@ -575,7 +575,7 @@ class TestJournalistApp(TestCase):
         journo = Journalist.query.filter(Journalist.username == new_user).one()
         assert not journo.is_admin
 
-        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
                                 data=dict(is_admin=True))
         assert resp.status_code in (200, 302), resp.data.decode('utf-8')
 
@@ -594,7 +594,7 @@ class TestJournalistApp(TestCase):
         journo = Journalist.query.filter(Journalist.username == new_user).one()
 
         new_user = new_user + 'a'
-        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
                                 data=dict(username=new_user))
         assert resp.status_code in (200, 302), resp.data.decode('utf-8')
 
@@ -625,7 +625,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_page_restriction_http_gets(self):
         admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
-                      url_for('admin_edit_user', user_id=self.user.id)]
+                      url_for('admin.edit_user', user_id=self.user.id)]
 
         self._login_user()
         for admin_url in admin_urls:
@@ -639,7 +639,7 @@ class TestJournalistApp(TestCase):
                       url_for('admin.new_user_two_factor'),
                       url_for('admin.reset_two_factor_totp'),
                       url_for('admin.reset_two_factor_hotp'),
-                      url_for('admin_edit_user', user_id=self.user.id),
+                      url_for('admin.edit_user', user_id=self.user.id),
                       url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
         for admin_url in admin_urls:

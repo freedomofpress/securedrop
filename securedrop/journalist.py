@@ -9,14 +9,12 @@ import config
 import crypto_util
 from flask_babel import gettext
 import store
-from db import (db_session, Source, Journalist, Submission, Reply,
-                InvalidUsernameException)
+from db import db_session, Source, Journalist, Submission, Reply
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required, admin_required
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import (commit_account_changes,
-                                  get_source, validate_user, download,
+from journalist_app.utils import (get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star, make_password,
@@ -31,42 +29,6 @@ class PasswordMismatchError(Exception):
     pass
 
 
-@app.route('/admin/edit/<int:user_id>', methods=('GET', 'POST'))
-@admin_required
-def admin_edit_user(user_id):
-    user = Journalist.query.get(user_id)
-
-    if request.method == 'POST':
-        if request.form.get('username', None):
-            new_username = request.form['username']
-
-            try:
-                Journalist.check_username_acceptable(new_username)
-            except InvalidUsernameException as e:
-                flash('Invalid username: ' + str(e), 'error')
-                return redirect(url_for("admin_edit_user", user_id=user_id))
-
-            if new_username == user.username:
-                pass
-            elif Journalist.query.filter_by(
-                    username=new_username).one_or_none():
-                flash(gettext(
-                    'Username "{user}" already taken.').format(
-                        user=new_username),
-                    "error")
-                return redirect(url_for("admin_edit_user", user_id=user_id))
-            else:
-                user.username = new_username
-
-        user.is_admin = bool(request.form.get('is_admin'))
-
-        commit_account_changes(user)
-
-    password = make_password()
-    return render_template("edit_account.html", user=user,
-                           password=password)
-
-
 @app.route('/admin/edit/<int:user_id>/new-password', methods=('POST',))
 @admin_required
 def admin_set_diceware_password(user_id):
@@ -77,7 +39,7 @@ def admin_set_diceware_password(user_id):
 
     password = request.form.get('password')
     set_diceware_password(user, password)
-    return redirect(url_for('admin_edit_user', user_id=user_id))
+    return redirect(url_for('admin.edit_user', user_id=user_id))
 
 
 @app.route('/admin/delete/<int:user_id>', methods=('POST',))
@@ -130,7 +92,7 @@ def admin_new_password(user_id):
 
     password = request.form.get('password')
     set_diceware_password(user, password)
-    return redirect(url_for('admin_edit_user', user_id=user_id))
+    return redirect(url_for('admin.edit_user', user_id=user_id))
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))

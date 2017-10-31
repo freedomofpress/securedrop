@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from db import (db_session, Journalist, InvalidUsernameException,
                 PasswordError)
 from journalist_app.decorators import admin_required
-from journalist_app.utils import make_password
+from journalist_app.utils import make_password, commit_account_changes
 
 
 def make_blueprint(config):
@@ -134,5 +134,42 @@ def make_blueprint(config):
                 return redirect(url_for('admin.new_user_two_factor', uid=uid))
         else:
             return render_template('admin_edit_hotp_secret.html', uid=uid)
+
+    @view.route('/edit/<int:user_id>', methods=('GET', 'POST'))
+    @admin_required
+    def edit_user(user_id):
+        user = Journalist.query.get(user_id)
+
+        if request.method == 'POST':
+            if request.form.get('username', None):
+                new_username = request.form['username']
+
+                try:
+                    Journalist.check_username_acceptable(new_username)
+                except InvalidUsernameException as e:
+                    flash('Invalid username: ' + str(e), 'error')
+                    return redirect(url_for("admin.edit_user",
+                                            user_id=user_id))
+
+                if new_username == user.username:
+                    pass
+                elif Journalist.query.filter_by(
+                        username=new_username).one_or_none():
+                    flash(gettext(
+                        'Username "{user}" already taken.').format(
+                            user=new_username),
+                        "error")
+                    return redirect(url_for("admin.edit_user",
+                                            user_id=user_id))
+                else:
+                    user.username = new_username
+
+            user.is_admin = bool(request.form.get('is_admin'))
+
+            commit_account_changes(user)
+
+        password = make_password()
+        return render_template("edit_account.html", user=user,
+                               password=password)
 
     return view
