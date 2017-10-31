@@ -10,7 +10,7 @@ import worker
 
 from db import (db_session, get_one_or_else, Source, Journalist,
                 InvalidUsernameException, WrongPasswordException,
-                LoginThrottledException, BadTokenException)
+                LoginThrottledException, BadTokenException, SourceStar)
 from rm import srm
 
 
@@ -142,3 +142,12 @@ def confirm_bulk_delete(filesystem_id, items_selected):
                            filesystem_id=filesystem_id,
                            source=g.source,
                            items_selected=items_selected)
+
+
+def make_star_true(filesystem_id):
+    source = get_source(filesystem_id)
+    if source.star:
+        source.star.starred = True
+    else:
+        source_star = SourceStar(source)
+        db_session.add(source_star)
