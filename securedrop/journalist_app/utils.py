@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from flask import g, flash, current_app, abort
+from datetime import datetime
+from flask import g, flash, current_app, abort, send_file
 from flask_babel import gettext, ngettext
+
+import store
 
 from db import (db_session, get_one_or_else, Source, Journalist,
                 InvalidUsernameException, WrongPasswordException,
@@ -90,3 +93,29 @@ def validate_user(username, password, token, error_message=None):
 
         flash(login_flashed_msg, "error")
         return None
+
+
+def download(zip_basename, submissions):
+    """Send client contents of ZIP-file *zip_basename*-<timestamp>.zip
+    containing *submissions*. The ZIP-file, being a
+    :class:`tempfile.NamedTemporaryFile`, is stored on disk only
+    temporarily.
+
+    :param str zip_basename: The basename of the ZIP-file download.
+
+    :param list submissions: A list of :class:`db.Submission`s to
+                             include in the ZIP-file.
+    """
+    zf = store.get_bulk_archive(submissions,
+                                zip_directory=zip_basename)
+    attachment_filename = "{}--{}.zip".format(
+        zip_basename, datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+
+    # Mark the submissions that have been downloaded as such
+    for submission in submissions:
+        submission.downloaded = True
+    db_session.commit()
+
+    return send_file(zf.name, mimetype="application/zip",
+                     attachment_filename=attachment_filename,
+                     as_attachment=True)
