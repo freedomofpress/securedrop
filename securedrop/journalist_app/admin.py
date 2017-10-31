@@ -101,4 +101,38 @@ def make_blueprint(config):
         db_session.commit()
         return redirect(url_for('admin.new_user_two_factor', uid=uid))
 
+    @view.route('/reset-2fa-hotp', methods=['POST'])
+    @admin_required
+    def reset_two_factor_hotp():
+        uid = request.form['uid']
+        otp_secret = request.form.get('otp_secret', None)
+        if otp_secret:
+            user = Journalist.query.get(uid)
+            try:
+                user.set_hotp_secret(otp_secret)
+            except TypeError as e:
+                if "Non-hexadecimal digit found" in str(e):
+                    flash(gettext(
+                        "Invalid secret format: "
+                        "please only submit letters A-F and numbers 0-9."),
+                          "error")
+                elif "Odd-length string" in str(e):
+                    flash(gettext(
+                        "Invalid secret format: "
+                        "odd-length secret. Did you mistype the secret?"),
+                          "error")
+                else:
+                    flash(gettext(
+                        "An unexpected error occurred! "
+                        "Please inform your administrator."), "error")
+                    current_app.logger.error(
+                        "set_hotp_secret '{}' (id {}) failed: {}".format(
+                            otp_secret, uid, e))
+                return render_template('admin_edit_hotp_secret.html', uid=uid)
+            else:
+                db_session.commit()
+                return redirect(url_for('admin.new_user_two_factor', uid=uid))
+        else:
+            return render_template('admin_edit_hotp_secret.html', uid=uid)
+
     return view

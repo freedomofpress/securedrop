@@ -406,7 +406,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp
 
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
                                 data=dict(uid=self.user.id, otp_secret=123456))
         new_hotp = self.user.hotp
 
@@ -421,7 +421,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='ZZ'))
         new_hotp = self.user.hotp.secret
 
@@ -434,7 +434,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='Z'))
         new_hotp = self.user.hotp.secret
 
@@ -455,7 +455,7 @@ class TestJournalistApp(TestCase):
         mock_set_hotp_secret.side_effect = TypeError(error_message)
 
         otp_secret = '1234'
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret=otp_secret))
         new_hotp = self.user.hotp.secret
 
@@ -509,7 +509,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_resets_hotp_with_missing_otp_secret_key(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
                                 data=dict(uid=self.user.id))
 
         self.assertIn('Change Secret', resp.data)
@@ -634,11 +634,11 @@ class TestJournalistApp(TestCase):
 
     def test_admin_page_restriction_http_posts(self):
         admin_urls = [url_for('admin.reset_two_factor_totp'),
-                      url_for('admin_reset_two_factor_hotp'),
+                      url_for('admin.reset_two_factor_hotp'),
                       url_for('admin.add_user', user_id=self.user.id),
                       url_for('admin.new_user_two_factor'),
                       url_for('admin.reset_two_factor_totp'),
-                      url_for('admin_reset_two_factor_hotp'),
+                      url_for('admin.reset_two_factor_hotp'),
                       url_for('admin_edit_user', user_id=self.user.id),
                       url_for('admin_delete_user', user_id=self.user.id)]
         self._login_user()
