@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template, Markup)
 from flask_babel import gettext, ngettext
+from sqlalchemy.sql.expression import false
 
 import crypto_util
 import i18n
@@ -13,7 +14,7 @@ import worker
 from db import (db_session, get_one_or_else, Source, Journalist,
                 InvalidUsernameException, WrongPasswordException,
                 LoginThrottledException, BadTokenException, SourceStar,
-                PasswordError)
+                PasswordError, Submission)
 from rm import srm
 
 
@@ -245,3 +246,19 @@ def set_diceware_password(user, password):
         "save it in your KeePassX database. New password:") +
         ' <span><code>{}</code></span></p>'.format(password)),
         'success')
+
+
+def col_download_unread(cols_selected):
+    """Download all unread submissions from all selected sources."""
+    submissions = []
+    for filesystem_id in cols_selected:
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+                   .one().id
+        submissions += Submission.query.filter(
+            Submission.downloaded == false(),
+            Submission.source_id == id).all()
+    if submissions == []:
+        flash(gettext("No unread submissions in selected collections."),
+              "error")
+        return redirect(url_for('index'))
+    return download("unread", submissions)

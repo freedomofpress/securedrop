@@ -24,7 +24,7 @@ from journalist_app.utils import (commit_account_changes,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star, make_password,
                                   delete_collection, col_delete,
-                                  set_diceware_password)
+                                  set_diceware_password, col_download_unread)
 
 app = create_app(config)
 
@@ -403,22 +403,6 @@ def col_process():
 
     method = actions[action]
     return method(cols_selected)
-
-
-def col_download_unread(cols_selected):
-    """Download all unread submissions from all selected sources."""
-    submissions = []
-    for filesystem_id in cols_selected:
-        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
-                   .one().id
-        submissions += Submission.query.filter(
-            Submission.downloaded == false(),
-            Submission.source_id == id).all()
-    if submissions == []:
-        flash(gettext("No unread submissions in selected collections."),
-              "error")
-        return redirect(url_for('index'))
-    return download("unread", submissions)
 
 
 def col_download_all(cols_selected):
