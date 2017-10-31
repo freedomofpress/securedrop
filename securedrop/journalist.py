@@ -29,19 +29,6 @@ class PasswordMismatchError(Exception):
     pass
 
 
-@app.route('/admin/edit/<int:user_id>/new-password', methods=('POST',))
-@admin_required
-def admin_set_diceware_password(user_id):
-    try:
-        user = Journalist.query.get(user_id)
-    except NoResultFound:
-        abort(404)
-
-    password = request.form.get('password')
-    set_diceware_password(user, password)
-    return redirect(url_for('admin.edit_user', user_id=user_id))
-
-
 @app.route('/admin/delete/<int:user_id>', methods=('POST',))
 @admin_required
 def admin_delete_user(user_id):

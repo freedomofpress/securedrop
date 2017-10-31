@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from flask import (Blueprint, render_template, request, url_for, redirect,
-                   current_app, flash)
+                   current_app, flash, abort)
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
 
 from db import (db_session, Journalist, InvalidUsernameException,
                 PasswordError)
 from journalist_app.decorators import admin_required
-from journalist_app.utils import make_password, commit_account_changes
+from journalist_app.utils import (make_password, commit_account_changes,
+                                  set_diceware_password)
 
 
 def make_blueprint(config):
@@ -171,5 +173,17 @@ def make_blueprint(config):
         password = make_password()
         return render_template("edit_account.html", user=user,
                                password=password)
+
+    @view.route('/edit/<int:user_id>/new-password', methods=('POST',))
+    @admin_required
+    def set_password(user_id):
+        try:
+            user = Journalist.query.get(user_id)
+        except NoResultFound:
+            abort(404)
+
+        password = request.form.get('password')
+        set_diceware_password(user, password)
+        return redirect(url_for('admin.edit_user', user_id=user_id))
 
     return view
