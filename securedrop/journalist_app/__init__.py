@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, session, redirect, url_for, flash
+from datetime import datetime, timedelta
+from flask import Flask, session, redirect, url_for, flash, g, request
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -9,6 +10,9 @@ from os import path
 import i18n
 import template_filters
 import version
+
+from db import Journalist
+from journalist_app.utils import get_source
 
 
 def create_app(config):
@@ -44,5 +48,33 @@ def create_app(config):
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
+
+    @app.before_request
+    def setup_g():
+        """Store commonly used values in Flask's special g object"""
+        if 'expires' in session and datetime.utcnow() >= session['expires']:
+            session.clear()
+            flash(gettext('You have been logged out due to inactivity'),
+                  'error')
+
+        session['expires'] = datetime.utcnow() + \
+            timedelta(minutes=getattr(config,
+                                      'SESSION_EXPIRATION_MINUTES',
+                                      30))
+
+        uid = session.get('uid', None)
+        if uid:
+            g.user = Journalist.query.get(uid)
+
+        g.locale = i18n.get_locale()
+        g.text_direction = i18n.get_text_direction(g.locale)
+        g.html_lang = i18n.locale_to_rfc_5646(g.locale)
+        g.locales = i18n.get_locale2name()
+
+        if request.method == 'POST':
+            filesystem_id = request.form.get('filesystem_id')
+            if filesystem_id:
+                g.filesystem_id = filesystem_id
+                g.source = get_source(filesystem_id)
 
     return app
