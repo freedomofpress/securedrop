@@ -320,7 +320,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_add_user_when_username_already_in_use(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=self.admin.username,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -380,7 +380,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
         self.client.post(
-            url_for('admin_add_user'),
+            url_for('admin.add_user'),
             data=dict(username='dellsberg',
                       password=overly_long_password,
                       is_admin=None))
@@ -530,7 +530,7 @@ class TestJournalistApp(TestCase):
 
     def test_http_get_on_admin_add_user_page(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_add_user'))
+        resp = self.client.get(url_for('admin.add_user'))
         # any GET req should take a user to the admin_add_user page
         self.assertIn('ADD USER', resp.data)
 
@@ -538,7 +538,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         max_journalist_pk = max([user.id for user in Journalist.query.all()])
 
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username='dellsberg',
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -548,7 +548,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_add_user_without_username(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username='',
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -557,7 +557,7 @@ class TestJournalistApp(TestCase):
     def test_admin_add_user_too_short_username(self):
         self._login_admin()
         username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=username,
                                           password='pentagonpapers',
                                           password_again='pentagonpapers',
@@ -567,7 +567,7 @@ class TestJournalistApp(TestCase):
     def test_admin_sets_user_to_admin(self):
         self._login_admin()
         new_user = 'admin-set-user-to-admin-test'
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=new_user,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -586,7 +586,7 @@ class TestJournalistApp(TestCase):
     def test_admin_renames_user(self):
         self._login_admin()
         new_user = 'admin-renames-user-test'
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=new_user,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -602,15 +602,15 @@ class TestJournalistApp(TestCase):
         # therefore asserting it has been created
         Journalist.query.filter(Journalist.username == new_user).one()
 
-    @patch('journalist.app.logger.error')
-    @patch('journalist.Journalist',
+    @patch('journalist_app.admin.current_app.logger.error')
+    @patch('journalist_app.admin.Journalist',
            side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
     def test_admin_add_user_integrity_error(self,
                                             mock_journalist,
                                             mocked_error_logger):
         self._login_admin()
 
-        self.client.post(url_for('admin_add_user'),
+        self.client.post(url_for('admin.add_user'),
                          data=dict(username='username',
                                    password=VALID_PASSWORD,
                                    is_admin=None))
@@ -624,7 +624,7 @@ class TestJournalistApp(TestCase):
             "error")
 
     def test_admin_page_restriction_http_gets(self):
-        admin_urls = [url_for('admin.index'), url_for('admin_add_user'),
+        admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
                       url_for('admin_edit_user', user_id=self.user.id)]
 
         self._login_user()
@@ -635,7 +635,7 @@ class TestJournalistApp(TestCase):
     def test_admin_page_restriction_http_posts(self):
         admin_urls = [url_for('admin_reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
-                      url_for('admin_add_user', user_id=self.user.id),
+                      url_for('admin.add_user', user_id=self.user.id),
                       url_for('admin_new_user_two_factor'),
                       url_for('admin_reset_two_factor_totp'),
                       url_for('admin_reset_two_factor_hotp'),
