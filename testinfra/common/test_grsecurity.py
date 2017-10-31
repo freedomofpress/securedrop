@@ -143,6 +143,8 @@ def test_grub_pc_marked_manual(Command):
     assert c.stdout == "grub-pc"
 
 
+@pytest.mark.skipif(os.environ.get('FPF_GRSEC', 'true') == "false",
+                    reason="Need to skip in environment w/o grsec")
 def test_apt_autoremove(Command):
     """
     Ensure old packages have been autoremoved.
