@@ -249,7 +249,7 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(Journalist.query.get(self.user.id), None)
 
         self._login_admin()
-        resp = self.client.post(url_for('admin_delete_user',
+        resp = self.client.post(url_for('admin.delete_user',
                                         user_id=self.user.id),
                                 follow_redirects=True)
 
@@ -263,7 +263,7 @@ class TestJournalistApp(TestCase):
     def test_admin_deletes_invalid_user_404(self):
         self._login_admin()
         invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
-        resp = self.client.post(url_for('admin_delete_user',
+        resp = self.client.post(url_for('admin.delete_user',
                                         user_id=invalid_user_pk))
         self.assert404(resp)
 
@@ -640,7 +640,7 @@ class TestJournalistApp(TestCase):
                       url_for('admin.reset_two_factor_totp'),
                       url_for('admin.reset_two_factor_hotp'),
                       url_for('admin.edit_user', user_id=self.user.id),
-                      url_for('admin_delete_user', user_id=self.user.id)]
+                      url_for('admin.delete_user', user_id=self.user.id)]
         self._login_user()
         for admin_url in admin_urls:
             resp = self.client.post(admin_url)

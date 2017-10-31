@@ -29,24 +29,6 @@ class PasswordMismatchError(Exception):
     pass
 
 
-@app.route('/admin/delete/<int:user_id>', methods=('POST',))
-@admin_required
-def admin_delete_user(user_id):
-    user = Journalist.query.get(user_id)
-    if user:
-        db_session.delete(user)
-        db_session.commit()
-        flash(gettext("Deleted user '{user}'").format(
-            user=user.username), "notification")
-    else:
-        app.logger.error(
-            "Admin {} tried to delete nonexistent user with pk={}".format(
-                g.user.username, user_id))
-        abort(404)
-
-    return redirect(url_for('admin.index'))
-
-
 @app.route('/account', methods=('GET',))
 @login_required
 def edit_account():

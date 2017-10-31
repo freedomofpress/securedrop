@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import (Blueprint, render_template, request, url_for, redirect,
+from flask import (Blueprint, render_template, request, url_for, redirect, g,
                    current_app, flash, abort)
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
@@ -185,5 +185,22 @@ def make_blueprint(config):
         password = request.form.get('password')
         set_diceware_password(user, password)
         return redirect(url_for('admin.edit_user', user_id=user_id))
+
+    @view.route('/delete/<int:user_id>', methods=('POST',))
+    @admin_required
+    def delete_user(user_id):
+        user = Journalist.query.get(user_id)
+        if user:
+            db_session.delete(user)
+            db_session.commit()
+            flash(gettext("Deleted user '{user}'").format(
+                user=user.username), "notification")
+        else:
+            current_app.logger.error(
+                "Admin {} tried to delete nonexistent user with pk={}".format(
+                    g.user.username, user_id))
+            abort(404)
+
+        return redirect(url_for('admin.index'))
 
     return view
