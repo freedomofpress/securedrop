@@ -5,12 +5,15 @@ from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
                    render_template)
 from flask_babel import gettext, ngettext
 
+import crypto_util
+import i18n
 import store
 import worker
 
 from db import (db_session, get_one_or_else, Source, Journalist,
                 InvalidUsernameException, WrongPasswordException,
-                LoginThrottledException, BadTokenException, SourceStar)
+                LoginThrottledException, BadTokenException, SourceStar,
+                PasswordError)
 from rm import srm
 
 
@@ -176,3 +179,13 @@ def col_un_star(cols_selected):
 
     db_session.commit()
     return redirect(url_for('index'))
+
+
+def make_password():
+    while True:
+        password = crypto_util.genrandomid(7, i18n.get_language())
+        try:
+            Journalist.check_password_acceptable(password)
+            return password
+        except PasswordError:
+            continue

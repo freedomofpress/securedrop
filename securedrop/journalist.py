@@ -26,7 +26,7 @@ from journalist_app.utils import (commit_account_changes,
                                   get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
-                                  col_un_star)
+                                  col_un_star, make_password)
 
 app = create_app(config)
 
@@ -120,7 +120,7 @@ def admin_add_user():
             return redirect(url_for('admin_new_user_two_factor',
                                     uid=new_user.id))
 
-    return render_template("admin_add_user.html", password=_make_password())
+    return render_template("admin_add_user.html", password=make_password())
 
 
 @app.route('/admin/2fa', methods=('GET', 'POST'))
@@ -226,7 +226,7 @@ def admin_edit_user(user_id):
 
         commit_account_changes(user)
 
-    password = _make_password()
+    password = make_password()
     return render_template("edit_account.html", user=user,
                            password=password)
 
@@ -265,7 +265,7 @@ def admin_delete_user(user_id):
 @app.route('/account', methods=('GET',))
 @login_required
 def edit_account():
-    password = _make_password()
+    password = make_password()
     return render_template('edit_account.html',
                            password=password)
 
@@ -295,16 +295,6 @@ def admin_new_password(user_id):
     password = request.form.get('password')
     _set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
-
-
-def _make_password():
-    while True:
-        password = crypto_util.genrandomid(7, i18n.get_language())
-        try:
-            Journalist.check_password_acceptable(password)
-            return password
-        except PasswordError:
-            continue
 
 
 def _set_diceware_password(user, password):

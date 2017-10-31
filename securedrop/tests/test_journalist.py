@@ -18,6 +18,7 @@ from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
 import db
 import journalist
+import journalist_app.utils
 import utils
 
 # Smugly seed the RNG for deterministic testing
@@ -49,7 +50,7 @@ class TestJournalistApp(TestCase):
 
     @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
-        assert journalist._make_password() == VALID_PASSWORD
+        assert journalist_app.utils.make_password() == VALID_PASSWORD
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
