@@ -4,7 +4,6 @@ from datetime import datetime
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
-from jinja2 import Markup
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import false
@@ -24,7 +23,8 @@ from journalist_app.utils import (commit_account_changes,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star, make_password,
-                                  delete_collection, col_delete)
+                                  delete_collection, col_delete,
+                                  set_diceware_password)
 
 app = create_app(config)
 
@@ -238,7 +238,7 @@ def admin_set_diceware_password(user_id):
         abort(404)
 
     password = request.form.get('password')
-    _set_diceware_password(user, password)
+    set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
 
 
@@ -278,7 +278,7 @@ def new_password():
     # If the user is validated, change their password
     if validate_user(user.username, current_password, token, error_message):
         password = request.form.get('password')
-        _set_diceware_password(user, password)
+        set_diceware_password(user, password)
     return redirect(url_for('edit_account'))
 
 
@@ -291,35 +291,8 @@ def admin_new_password(user_id):
         abort(404)
 
     password = request.form.get('password')
-    _set_diceware_password(user, password)
+    set_diceware_password(user, password)
     return redirect(url_for('admin_edit_user', user_id=user_id))
-
-
-def _set_diceware_password(user, password):
-    try:
-        user.set_password(password)
-    except PasswordError:
-        flash(gettext(
-            'You submitted a bad password! Password not changed.'), 'error')
-        return
-
-    try:
-        db_session.commit()
-    except Exception:
-        flash(gettext(
-            'There was an error, and the new password might not have been '
-            'saved correctly. To prevent you from getting locked '
-            'out of your account, you should reset your password again.'),
-            'error')
-        app.logger.error('Failed to update a valid password.')
-        return
-
-    # using Markup so the HTML isn't escaped
-    flash(Markup("<p>" + gettext(
-        "Password updated. Don't forget to "
-        "save it in your KeePassX database. New password:") +
-        ' <span><code>{}</code></span></p>'.format(password)),
-        'success')
 
 
 @app.route('/account/2fa', methods=('GET', 'POST'))

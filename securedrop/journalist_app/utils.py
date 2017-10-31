@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template)
+                   render_template, Markup)
 from flask_babel import gettext, ngettext
 
 import crypto_util
@@ -218,3 +218,30 @@ def delete_collection(filesystem_id):
     db_session.delete(source)
     db_session.commit()
     return job
+
+
+def set_diceware_password(user, password):
+    try:
+        user.set_password(password)
+    except PasswordError:
+        flash(gettext(
+            'You submitted a bad password! Password not changed.'), 'error')
+        return
+
+    try:
+        db_session.commit()
+    except Exception:
+        flash(gettext(
+            'There was an error, and the new password might not have been '
+            'saved correctly. To prevent you from getting locked '
+            'out of your account, you should reset your password again.'),
+            'error')
+        current_app.logger.error('Failed to update a valid password.')
+        return
+
+    # using Markup so the HTML isn't escaped
+    flash(Markup("<p>" + gettext(
+        "Password updated. Don't forget to "
+        "save it in your KeePassX database. New password:") +
+        ' <span><code>{}</code></span></p>'.format(password)),
+        'success')
