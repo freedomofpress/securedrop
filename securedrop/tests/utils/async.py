@@ -7,7 +7,7 @@ import time
 REDIS_SUCCESS_RETURN_VALUE = 'success'
 
 
-def wait_for_redis_worker(job, timeout=5):
+def wait_for_redis_worker(job, timeout=60):
     """Raise an error if the Redis job doesn't complete successfully
     before a timeout.
 
