@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from flask import g, flash, current_app, abort, send_file, redirect, url_for
+from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
+                   render_template)
 from flask_babel import gettext, ngettext
 
 import store
@@ -134,3 +135,10 @@ def bulk_delete(filesystem_id, items_selected):
                    "Submissions deleted.",
                    len(items_selected)), "notification")
     return redirect(url_for('col', filesystem_id=filesystem_id))
+
+
+def confirm_bulk_delete(filesystem_id, items_selected):
+    return render_template('delete.html',
+                           filesystem_id=filesystem_id,
+                           source=g.source,
+                           items_selected=items_selected)

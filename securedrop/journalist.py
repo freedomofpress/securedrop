@@ -24,7 +24,7 @@ from journalist_app import create_app
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (logged_in, commit_account_changes,
                                   get_source, validate_user, download,
-                                  bulk_delete)
+                                  bulk_delete, confirm_bulk_delete)
 
 app = create_app(config)
 
@@ -694,13 +694,6 @@ def bulk():
         return confirm_bulk_delete(g.filesystem_id, selected_docs)
     else:
         abort(400)
-
-
-def confirm_bulk_delete(filesystem_id, items_selected):
-    return render_template('delete.html',
-                           filesystem_id=filesystem_id,
-                           source=g.source,
-                           items_selected=items_selected)
 
 
 @app.route('/flag', methods=('POST',))
