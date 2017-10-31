@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import functools
 
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, g, abort, session)
@@ -21,9 +20,9 @@ from db import (db_session, Source, Journalist, Submission, Reply,
 import worker
 
 from journalist_app import create_app
-from journalist_app.decorators import login_required
+from journalist_app.decorators import login_required, admin_required
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import (logged_in, commit_account_changes,
+from journalist_app.utils import (commit_account_changes,
                                   get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
@@ -37,18 +36,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def admin_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if logged_in() and g.user.is_admin:
-            return func(*args, **kwargs)
-        # TODO: sometimes this gets flashed 2x (Chrome only?)
-        flash(gettext("Only administrators can access this page."),
-              "notification")
-        return redirect(url_for('index'))
-    return wrapper
 
 
 @app.route('/login', methods=('GET', 'POST'))
