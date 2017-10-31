@@ -21,6 +21,7 @@ from db import (db_session, Source, Journalist, Submission, Reply,
 import worker
 
 from journalist_app import create_app
+from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (logged_in, commit_account_changes,
                                   get_source, validate_user, download,
@@ -36,15 +37,6 @@ def shutdown_session(exception=None):
     """Automatically remove database sessions at the end of the request, or
     when the application shuts down"""
     db_session.remove()
-
-
-def login_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('login'))
-        return func(*args, **kwargs)
-    return wrapper
 
 
 def admin_required(func):

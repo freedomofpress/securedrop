@@ -131,6 +131,8 @@
   /var/www/securedrop/journalist.pyc rw,
   /var/www/securedrop/journalist_app/__init__.py r,
   /var/www/securedrop/journalist_app/__init__.pyc rw,
+  /var/www/securedrop/journalist_app/decorators.py r,
+  /var/www/securedrop/journalist_app/decorators.pyc rw,
   /var/www/securedrop/journalist_app/forms.py r,
   /var/www/securedrop/journalist_app/forms.pyc rw,
   /var/www/securedrop/journalist_app/utils.py r,
