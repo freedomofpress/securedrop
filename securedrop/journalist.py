@@ -25,7 +25,8 @@ from journalist_app.forms import ReplyForm
 from journalist_app.utils import (logged_in, commit_account_changes,
                                   get_source, validate_user, download,
                                   bulk_delete, confirm_bulk_delete,
-                                  make_star_true, make_star_false, col_star)
+                                  make_star_true, make_star_false, col_star,
+                                  col_un_star)
 
 app = create_app(config)
 
@@ -503,14 +504,6 @@ def col_download_all(cols_selected):
         submissions += Submission.query.filter(
             Submission.source_id == id).all()
     return download("all", submissions)
-
-
-def col_un_star(cols_selected):
-    for filesystem_id in cols_selected:
-        make_star_false(filesystem_id)
-
-    db_session.commit()
-    return redirect(url_for('index'))
 
 
 @app.route('/col/delete/<filesystem_id>', methods=('POST',))

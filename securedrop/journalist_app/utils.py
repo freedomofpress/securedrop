@@ -168,3 +168,11 @@ def col_star(cols_selected):
 
     db_session.commit()
     return redirect(url_for('index'))
+
+
+def col_un_star(cols_selected):
+    for filesystem_id in cols_selected:
+        make_star_false(filesystem_id)
+
+    db_session.commit()
+    return redirect(url_for('index'))
