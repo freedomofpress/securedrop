@@ -28,7 +28,7 @@ These are the core components of a SecureDrop instance.
 * *Application Server*: 1 physical server to run the SecureDrop web services.
 
 * *Monitor Server*: 1 physical server which monitors activity on the
-  *Application Server* and sends email notifications to an administrator.
+  *Application Server* and sends email notifications to an admin.
 
 * *Network Firewall*: 1 physical computer that is used as a dedicated firewall
   for the SecureDrop servers.

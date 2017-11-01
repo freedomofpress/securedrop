@@ -79,7 +79,7 @@ And each Journalist would only have to:
 Memorizing further passwords beyond the ones listed above is counterproductive:
 an attacker with access to any of those environments would be able to pivot to
 anything they wish to access, and increasing the burden of keeping track of
-additional credentials is unpleasant for journalists and administrators and
+additional credentials is unpleasant for journalists and admins and
 increases the risk that they will either forget their credentials, compromising
 the availability of the system, or compensate for the difficulty by using weak
 or reused credentials, potentially compromising the security of the system.

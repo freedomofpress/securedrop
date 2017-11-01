@@ -3,7 +3,7 @@ Journalist Guide
 
 Journalists viewing documents on SecureDrop must connect to the
 respective Source or Journalist Interface using the `Tails operating
-system <https://tails.boum.org/>`__, which your administrator should
+system <https://tails.boum.org/>`__, which your admin should
 have already set up for you.
 
 Workflow
