@@ -4,6 +4,7 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
                    flash)
 from flask_babel import gettext
 
+from db import db_session
 from journalist_app.decorators import login_required
 from journalist_app.utils import (make_password, set_diceware_password,
                                   validate_user)
@@ -48,5 +49,13 @@ def make_blueprint(config):
                       "error")
 
         return render_template('account_new_two_factor.html', user=g.user)
+
+    @view.route('/reset-2fa-totp', methods=['POST'])
+    @login_required
+    def reset_two_factor_totp():
+        g.user.is_totp = True
+        g.user.regenerate_totp_shared_secret()
+        db_session.commit()
+        return redirect(url_for('account.new_two_factor'))
 
     return view

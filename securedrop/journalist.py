@@ -25,15 +25,6 @@ from journalist_app.utils import (get_source, download,
 app = create_app(config)
 
 
-@app.route('/account/reset-2fa-totp', methods=['POST'])
-@login_required
-def account_reset_two_factor_totp():
-    g.user.is_totp = True
-    g.user.regenerate_totp_shared_secret()
-    db_session.commit()
-    return redirect(url_for('account.new_two_factor'))
-
-
 @app.route('/account/reset-2fa-hotp', methods=['POST'])
 @login_required
 def account_reset_two_factor_hotp():

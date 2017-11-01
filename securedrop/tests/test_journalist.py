@@ -498,7 +498,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         old_totp = self.user.totp
 
-        resp = self.client.post(url_for('account_reset_two_factor_totp'))
+        resp = self.client.post(url_for('account.reset_two_factor_totp'))
         new_totp = self.user.totp
 
         # check that totp is different
@@ -663,7 +663,7 @@ class TestJournalistApp(TestCase):
                 url_for('col_delete_single', filesystem_id='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account.new_two_factor'),
-                url_for('account_reset_two_factor_totp'),
+                url_for('account.reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
@@ -719,7 +719,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         old_totp = self.user.totp
 
-        res = self.client.post(url_for('account_reset_two_factor_totp'))
+        res = self.client.post(url_for('account.reset_two_factor_totp'))
         new_totp = self.user.totp
 
         # check that totp is different
