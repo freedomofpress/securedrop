@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, request, g, redirect, url_for
+from flask import (Blueprint, render_template, request, g, redirect, url_for,
+                   flash)
 from flask_babel import gettext
 
 from journalist_app.decorators import login_required
@@ -31,5 +32,21 @@ def make_blueprint(config):
             password = request.form.get('password')
             set_diceware_password(user, password)
         return redirect(url_for('account.edit'))
+
+    @view.route('/2fa', methods=('GET', 'POST'))
+    @login_required
+    def new_two_factor():
+        if request.method == 'POST':
+            token = request.form['token']
+            if g.user.verify_token(token):
+                flash(gettext("Token in two-factor authentication verified."),
+                      "notification")
+                return redirect(url_for('account.edit'))
+            else:
+                flash(gettext(
+                    "Could not verify token in two-factor authentication."),
+                      "error")
+
+        return render_template('account_new_two_factor.html', user=g.user)
 
     return view

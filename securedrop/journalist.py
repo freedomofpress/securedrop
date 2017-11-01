@@ -25,30 +25,13 @@ from journalist_app.utils import (get_source, download,
 app = create_app(config)
 
 
-@app.route('/account/2fa', methods=('GET', 'POST'))
-@login_required
-def account_new_two_factor():
-    if request.method == 'POST':
-        token = request.form['token']
-        if g.user.verify_token(token):
-            flash(gettext("Token in two-factor authentication verified."),
-                  "notification")
-            return redirect(url_for('account.edit'))
-        else:
-            flash(gettext(
-                "Could not verify token in two-factor authentication."),
-                  "error")
-
-    return render_template('account_new_two_factor.html', user=g.user)
-
-
 @app.route('/account/reset-2fa-totp', methods=['POST'])
 @login_required
 def account_reset_two_factor_totp():
     g.user.is_totp = True
     g.user.regenerate_totp_shared_secret()
     db_session.commit()
-    return redirect(url_for('account_new_two_factor'))
+    return redirect(url_for('account.new_two_factor'))
 
 
 @app.route('/account/reset-2fa-hotp', methods=['POST'])
@@ -58,7 +41,7 @@ def account_reset_two_factor_hotp():
     if otp_secret:
         g.user.set_hotp_secret(otp_secret)
         db_session.commit()
-        return redirect(url_for('account_new_two_factor'))
+        return redirect(url_for('account.new_two_factor'))
     else:
         return render_template('account_edit_hotp_secret.html')
 

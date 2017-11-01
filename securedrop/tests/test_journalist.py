@@ -477,7 +477,7 @@ class TestJournalistApp(TestCase):
         # check that hotp is different
         self.assertNotEqual(old_hotp.secret, new_hotp.secret)
         # should redirect to verification page
-        self.assertRedirects(resp, url_for('account_new_two_factor'))
+        self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_admin_resets_user_totp(self):
         self._login_admin()
@@ -505,7 +505,7 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(resp, url_for('account_new_two_factor'))
+        self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_admin_resets_hotp_with_missing_otp_secret_key(self):
         self._login_admin()
@@ -662,7 +662,7 @@ class TestJournalistApp(TestCase):
                 url_for('col_process'),
                 url_for('col_delete_single', filesystem_id='1'),
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
-                url_for('account_new_two_factor'),
+                url_for('account.new_two_factor'),
                 url_for('account_reset_two_factor_totp'),
                 url_for('account_reset_two_factor_hotp')]
         for url in urls:
@@ -726,7 +726,7 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account.new_two_factor'))
 
     def test_edit_hotp(self):
         self._login_user()
@@ -742,7 +742,7 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(old_hotp.secret, new_hotp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account.new_two_factor'))
 
     def test_delete_source_deletes_submissions(self):
         """Verify that when a source is deleted, the submissions that

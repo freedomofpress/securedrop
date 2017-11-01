@@ -103,7 +103,7 @@ class TestJournalist2FA(flask_testing.TestCase):
 
         # Create and submit an invalid 2FA token
         invalid_token = u'000000'
-        resp = self.client.post(url_for('account_new_two_factor'),
+        resp = self.client.post(url_for('account.new_two_factor'),
                                 data=dict(token=invalid_token))
 
         self.assert200(resp)
@@ -113,7 +113,7 @@ class TestJournalist2FA(flask_testing.TestCase):
         self.assertEqual(self.user.last_token, invalid_token)
 
         # Submit the same invalid token again
-        resp = self.client.post(url_for('account_new_two_factor'),
+        resp = self.client.post(url_for('account.new_two_factor'),
                                 data=dict(token=invalid_token))
 
         # A flashed message should appear
