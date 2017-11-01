@@ -312,7 +312,7 @@ Mac Minis
 Other than the NUCs we also recommend the 2014 Apple Mac Minis (part number MGEM2)
 for installing SecureDrop. Mac Minis have removable wireless cards that you
 should remove. This requires a screwdriver for non-standard
-`T6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
+`TR6 Torx security screws <https://www.amazon.com/Mini-Torx-Security-Screwdriver-Tool/dp/B01BG8P2Q6>`__.
 
 However, on the first install of Ubuntu Server
 the Mac Minis will not boot: this is a known and
