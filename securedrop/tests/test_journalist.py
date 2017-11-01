@@ -470,7 +470,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
         old_hotp = self.user.hotp
 
-        resp = self.client.post(url_for('account_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('account.reset_two_factor_hotp'),
                                 data=dict(otp_secret=123456))
         new_hotp = self.user.hotp
 
@@ -664,7 +664,7 @@ class TestJournalistApp(TestCase):
                 url_for('reply'), url_for('generate_code'), url_for('bulk'),
                 url_for('account.new_two_factor'),
                 url_for('account.reset_two_factor_totp'),
-                url_for('account_reset_two_factor_hotp')]
+                url_for('account.reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
             self.assertStatus(res, 302)
@@ -733,7 +733,7 @@ class TestJournalistApp(TestCase):
         old_hotp = self.user.hotp
 
         res = self.client.post(
-            url_for('account_reset_two_factor_hotp'),
+            url_for('account.reset_two_factor_hotp'),
             data=dict(otp_secret=123456)
             )
         new_hotp = self.user.hotp

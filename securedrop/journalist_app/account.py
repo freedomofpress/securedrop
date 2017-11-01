@@ -58,4 +58,15 @@ def make_blueprint(config):
         db_session.commit()
         return redirect(url_for('account.new_two_factor'))
 
+    @view.route('/reset-2fa-hotp', methods=['POST'])
+    @login_required
+    def reset_two_factor_hotp():
+        otp_secret = request.form.get('otp_secret', None)
+        if otp_secret:
+            g.user.set_hotp_secret(otp_secret)
+            db_session.commit()
+            return redirect(url_for('account.new_two_factor'))
+        else:
+            return render_template('account_edit_hotp_secret.html')
+
     return view

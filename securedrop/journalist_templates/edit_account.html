@@ -69,7 +69,7 @@
   {% set hotp_reset_url = url_for('admin.reset_two_factor_hotp') %}
 {% else %}
   {% set totp_reset_url = url_for('account.reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
+  {% set hotp_reset_url = url_for('account.reset_two_factor_hotp') %}
 {% endif %}
 
 {% macro twofa_reset(user, reset_url, type, button_text) %}
