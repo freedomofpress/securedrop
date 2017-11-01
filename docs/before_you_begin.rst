@@ -17,7 +17,7 @@ best practices for SecureDrop deployments.
 Installing SecureDrop is an extended manual process which requires a
 bunch of preparation and equipment. You should probably set aside a day
 to complete the install process. A successful install requires an
-administrator with at-least basic familiarity with Linux, the GNU core
+admin with at-least basic familiarity with Linux, the GNU core
 utilities and Bash shell. If you are not proficient in these areas, it
 is strongly recommended that you contact the `Freedom of the Press
 Foundation <https://securedrop.org/help>`__ for installation assistance.

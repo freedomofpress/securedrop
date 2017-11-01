@@ -33,7 +33,7 @@ To set the system time:
 #. Click the upper right down arrow in the menu bar and select the wrench icon:
    |select settings|
 #. Then click **Date & Time**.
-#. Click **Unlock**. Type in the administrator password you set when you
+#. Click **Unlock**. Type in the admin password you set when you
    started up Tails.
 #. Set the correct time, region and city.
 #. Click **Lock**, exit Settings and wait for the system time to update in the
