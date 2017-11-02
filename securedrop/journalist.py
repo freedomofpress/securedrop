@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from flask import (request, render_template, send_file, redirect, flash,
+from flask import (request, send_file, redirect, flash,
                    url_for, abort)
 from sqlalchemy.orm.exc import NoResultFound
 
 import config
-import crypto_util
 from flask_babel import gettext
 import store
 from db import db_session, Submission
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required
-from journalist_app.forms import ReplyForm
 from journalist_app.utils import (get_source,
                                   col_star,
                                   col_un_star,
@@ -21,16 +19,6 @@ from journalist_app.utils import (get_source,
                                   col_download_all)
 
 app = create_app(config)
-
-
-@app.route('/col/<filesystem_id>')
-@login_required
-def col(filesystem_id):
-    form = ReplyForm()
-    source = get_source(filesystem_id)
-    source.has_key = crypto_util.getkey(filesystem_id)
-    return render_template("col.html", filesystem_id=filesystem_id,
-                           source=source, form=form)
 
 
 @app.route('/col/process', methods=('POST',))

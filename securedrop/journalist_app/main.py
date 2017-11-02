@@ -92,7 +92,7 @@ def make_blueprint(config):
         if not form.validate_on_submit():
             for error in form.message.errors:
                 flash(error, "error")
-            return redirect(url_for('col', filesystem_id=g.filesystem_id))
+            return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
         g.source.interaction_count += 1
         filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
@@ -121,7 +121,7 @@ def make_blueprint(config):
             flash(gettext("Thanks. Your reply has been stored."),
                   "notification")
         finally:
-            return redirect(url_for('col', filesystem_id=g.filesystem_id))
+            return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/flag', methods=('POST',))
     @login_required
@@ -146,7 +146,7 @@ def make_blueprint(config):
             elif action in ('delete', 'confirm_delete'):
                 flash(gettext("No collections selected for deletion."),
                       "error")
-            return redirect(url_for('col', filesystem_id=g.filesystem_id))
+            return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
         if action == 'download':
             source = get_source(g.filesystem_id)
@@ -176,7 +176,7 @@ def make_blueprint(config):
               .format(original_name=original_journalist_designation,
                       new_name=g.source.journalist_designation),
               "notification")
-        return redirect('/col/' + g.filesystem_id)
+        return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/download_unread/<filesystem_id>')
     @login_required
@@ -188,7 +188,7 @@ def make_blueprint(config):
             Submission.downloaded == false()).all()
         if submissions == []:
             flash(gettext("No unread submissions for this source."))
-            return redirect(url_for('col', filesystem_id=filesystem_id))
+            return redirect(url_for('col.col', filesystem_id=filesystem_id))
         source = get_source(filesystem_id)
         return download(source.journalist_filename, submissions)
 

@@ -647,7 +647,7 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('main.index'), url_for('col', filesystem_id='1'),
+        urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
                 url_for('download_single_submission',
                         filesystem_id='1', fn='1'),
                 url_for('account.edit')]

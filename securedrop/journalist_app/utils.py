@@ -138,7 +138,7 @@ def bulk_delete(filesystem_id, items_selected):
     flash(ngettext("Submission deleted.",
                    "Submissions deleted.",
                    len(items_selected)), "notification")
-    return redirect(url_for('col', filesystem_id=filesystem_id))
+    return redirect(url_for('col.col', filesystem_id=filesystem_id))
 
 
 def confirm_bulk_delete(filesystem_id, items_selected):
