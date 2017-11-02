@@ -63,7 +63,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
-            self.client.post(url_for('reply'),
+            self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
 
@@ -82,7 +82,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
 
         with patch('db.db_session.commit', side_effect=exception_class()):
-            self.client.post(url_for('reply'),
+            self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
 
@@ -95,7 +95,7 @@ class TestJournalistApp(TestCase):
         filesystem_id = source.filesystem_id
         self._login_user()
 
-        resp = self.client.post(url_for('reply'),
+        resp = self.client.post(url_for('main.reply'),
                                 data={'filesystem_id': filesystem_id,
                                       'message': ''},
                                 follow_redirects=True)
@@ -107,7 +107,7 @@ class TestJournalistApp(TestCase):
         filesystem_id = source.filesystem_id
         self._login_user()
 
-        resp = self.client.post(url_for('reply'),
+        resp = self.client.post(url_for('main.reply'),
                                 data={'filesystem_id': filesystem_id,
                                       'message': '_'},
                                 follow_redirects=True)
@@ -661,7 +661,7 @@ class TestJournalistApp(TestCase):
                 url_for('remove_star', filesystem_id='1'),
                 url_for('col_process'),
                 url_for('col_delete_single', filesystem_id='1'),
-                url_for('reply'),
+                url_for('main.reply'),
                 url_for('generate_code'),
                 url_for('main.bulk'),
                 url_for('account.new_two_factor'),
