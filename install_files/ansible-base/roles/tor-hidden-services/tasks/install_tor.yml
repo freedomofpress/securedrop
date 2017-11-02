@@ -25,7 +25,6 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-    force: yes
     update_cache: yes
     cache_valid_time: 3600
   with_items:
