@@ -15,7 +15,6 @@ from journalist_app import create_app
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (get_source, download,
-                                  bulk_delete, confirm_bulk_delete,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star,
                                   delete_collection, col_delete,
@@ -187,32 +186,6 @@ def download_unread_filesystem_id(filesystem_id):
         return redirect(url_for('col', filesystem_id=filesystem_id))
     source = get_source(filesystem_id)
     return download(source.journalist_filename, submissions)
-
-
-@app.route('/bulk', methods=('POST',))
-@login_required
-def bulk():
-    action = request.form['action']
-
-    doc_names_selected = request.form.getlist('doc_names_selected')
-    selected_docs = [doc for doc in g.source.collection
-                     if doc.filename in doc_names_selected]
-    if selected_docs == []:
-        if action == 'download':
-            flash(gettext("No collections selected for download."), "error")
-        elif action in ('delete', 'confirm_delete'):
-            flash(gettext("No collections selected for deletion."), "error")
-        return redirect(url_for('col', filesystem_id=g.filesystem_id))
-
-    if action == 'download':
-        source = get_source(g.filesystem_id)
-        return download(source.journalist_filename, selected_docs)
-    elif action == 'delete':
-        return bulk_delete(g.filesystem_id, selected_docs)
-    elif action == 'confirm_delete':
-        return confirm_bulk_delete(g.filesystem_id, selected_docs)
-    else:
-        abort(400)
 
 
 if __name__ == "__main__":  # pragma: no cover

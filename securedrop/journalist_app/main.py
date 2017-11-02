@@ -2,11 +2,13 @@
 
 from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
-                   render_template, g)
+                   render_template, g, flash, abort)
+from flask_babel import gettext
 
 from db import db_session, Source, SourceStar, Submission
 from journalist_app.decorators import login_required
-from journalist_app.utils import validate_user
+from journalist_app.utils import (validate_user, bulk_delete, download,
+                                  confirm_bulk_delete, get_source)
 
 
 def make_blueprint(config):
@@ -72,5 +74,32 @@ def make_blueprint(config):
         db_session.commit()
         return render_template('flag.html', filesystem_id=g.filesystem_id,
                                codename=g.source.journalist_designation)
+
+    @view.route('/bulk', methods=('POST',))
+    @login_required
+    def bulk():
+        action = request.form['action']
+
+        doc_names_selected = request.form.getlist('doc_names_selected')
+        selected_docs = [doc for doc in g.source.collection
+                         if doc.filename in doc_names_selected]
+        if selected_docs == []:
+            if action == 'download':
+                flash(gettext("No collections selected for download."),
+                      "error")
+            elif action in ('delete', 'confirm_delete'):
+                flash(gettext("No collections selected for deletion."),
+                      "error")
+            return redirect(url_for('col', filesystem_id=g.filesystem_id))
+
+        if action == 'download':
+            source = get_source(g.filesystem_id)
+            return download(source.journalist_filename, selected_docs)
+        elif action == 'delete':
+            return bulk_delete(g.filesystem_id, selected_docs)
+        elif action == 'confirm_delete':
+            return confirm_bulk_delete(g.filesystem_id, selected_docs)
+        else:
+            abort(400)
 
     return view
