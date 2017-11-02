@@ -4,7 +4,7 @@ from flask import Blueprint, redirect, url_for
 
 from db import db_session
 from journalist_app.decorators import login_required
-from journalist_app.utils import make_star_true
+from journalist_app.utils import make_star_true, make_star_false
 
 
 def make_blueprint(config):
@@ -14,6 +14,13 @@ def make_blueprint(config):
     @login_required
     def add_star(filesystem_id):
         make_star_true(filesystem_id)
+        db_session.commit()
+        return redirect(url_for('main.index'))
+
+    @view.route("/remove_star/<filesystem_id>", methods=('POST',))
+    @login_required
+    def remove_star(filesystem_id):
+        make_star_false(filesystem_id)
         db_session.commit()
         return redirect(url_for('main.index'))
 

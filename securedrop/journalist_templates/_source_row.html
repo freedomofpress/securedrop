@@ -4,7 +4,8 @@
   <time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|rel_datetime_format(fmt="%Y-%m-%d %H:%M:%S%Z") }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
   <div class="designation">
     {% if source.star.starred %}
-      <button class="button-star starred" type="submit" formaction="/col/remove_star/{{ source.filesystem_id }}"><i class="fa fa-star"></i></button>
+      <button class="button-star starred" type="submit"
+              formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"><i class="fa fa-star"></i></button>
       <input id="checkbox" type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}">
       <span class="code-name"><a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}">{{ source.journalist_designation }}</a></span>
     {% else %}

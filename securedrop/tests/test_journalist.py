@@ -658,7 +658,7 @@ class TestJournalistApp(TestCase):
 
     def test_user_authorization_for_posts(self):
         urls = [url_for('col.add_star', filesystem_id='1'),
-                url_for('remove_star', filesystem_id='1'),
+                url_for('col.remove_star', filesystem_id='1'),
                 url_for('col_process'),
                 url_for('col_delete_single', filesystem_id='1'),
                 url_for('main.reply'),
@@ -1005,7 +1005,7 @@ class TestJournalistApp(TestCase):
                                  filesystem_id=source.filesystem_id))
 
         # Now unstar the source
-        resp = self.client.post(url_for('remove_star',
+        resp = self.client.post(url_for('col.remove_star',
                                 filesystem_id=source.filesystem_id))
 
         self.assertRedirects(resp, url_for('main.index'))
