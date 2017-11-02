@@ -659,7 +659,7 @@ class TestJournalistApp(TestCase):
     def test_user_authorization_for_posts(self):
         urls = [url_for('col.add_star', filesystem_id='1'),
                 url_for('col.remove_star', filesystem_id='1'),
-                url_for('col_process'),
+                url_for('col.process'),
                 url_for('col.delete_single', filesystem_id='1'),
                 url_for('main.reply'),
                 url_for('main.regenerate_code'),
@@ -883,7 +883,7 @@ class TestJournalistApp(TestCase):
 
         # Download all unread messages from all sources
         self.resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-unread',
                       cols_selected=[self.source0.filesystem_id,
                                      self.source1.filesystem_id]))
@@ -946,12 +946,12 @@ class TestJournalistApp(TestCase):
 
         # Dowload all messages from self.source1
         self.resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-all',
                       cols_selected=[self.source1.filesystem_id]))
 
         resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-all',
                       cols_selected=[self.source1.filesystem_id]))
 
@@ -1071,7 +1071,7 @@ class TestJournalistApp(TestCase):
         form_data = {'cols_selected': 'does not matter',
                      'action': 'this action does not exist'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data)
+        resp = self.client.post(url_for('col.process'), data=form_data)
 
         self.assert500(resp)
 
@@ -1088,7 +1088,7 @@ class TestJournalistApp(TestCase):
                                        source_2.filesystem_id],
                      'action': 'delete'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)
@@ -1106,7 +1106,7 @@ class TestJournalistApp(TestCase):
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'star'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)
@@ -1123,13 +1123,13 @@ class TestJournalistApp(TestCase):
         # First star the source
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'star'}
-        self.client.post(url_for('col_process'), data=form_data,
+        self.client.post(url_for('col.process'), data=form_data,
                          follow_redirects=True)
 
         # Now unstar the source
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'un-star'}
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)

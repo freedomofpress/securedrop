@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, redirect, url_for, render_template, flash
+from flask import (Blueprint, redirect, url_for, render_template, flash,
+                   request, abort)
 from flask_babel import gettext
 
 import crypto_util
@@ -9,7 +10,9 @@ from db import db_session
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
-                                  delete_collection)
+                                  delete_collection, col_download_unread,
+                                  col_download_all, col_star, col_un_star,
+                                  col_delete)
 
 
 def make_blueprint(config):
@@ -48,5 +51,25 @@ def make_blueprint(config):
               .format(source_name=source.journalist_designation),
               "notification")
         return redirect(url_for('main.index'))
+
+    @view.route('/process', methods=('POST',))
+    @login_required
+    def process():
+        actions = {'download-unread': col_download_unread,
+                   'download-all': col_download_all, 'star': col_star,
+                   'un-star': col_un_star, 'delete': col_delete}
+        if 'cols_selected' not in request.form:
+            flash(gettext('No collections selected.'), 'error')
+            return redirect(url_for('main.index'))
+
+        # getlist is cgi.FieldStorage.getlist
+        cols_selected = request.form.getlist('cols_selected')
+        action = request.form['action']
+
+        if action not in actions:
+            return abort(500)
+
+        method = actions[action]
+        return method(cols_selected)
 
     return view
