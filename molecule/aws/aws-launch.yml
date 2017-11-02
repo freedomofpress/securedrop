@@ -65,7 +65,7 @@
 
     - name: Dump instance config
       copy:
-        content: "{{ instance_conf | molecule_to_yaml | molecule_header }}"
+        content: "{{ instance_conf | to_nice_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
 
     - name: Add AWS hosts to ephermeral ssh-config (needed for testinfra)
