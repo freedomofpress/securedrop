@@ -215,15 +215,6 @@ def bulk():
         abort(400)
 
 
-@app.route('/flag', methods=('POST',))
-@login_required
-def flag():
-    g.source.flagged = True
-    db_session.commit()
-    return render_template('flag.html', filesystem_id=g.filesystem_id,
-                           codename=g.source.journalist_designation)
-
-
 if __name__ == "__main__":  # pragma: no cover
     debug = getattr(config, 'env', 'prod') != 'prod'
     app.run(debug=debug, host='0.0.0.0', port=8081)

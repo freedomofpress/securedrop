@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
-                   render_template)
+                   render_template, g)
 
 from db import db_session, Source, SourceStar, Submission
 from journalist_app.decorators import login_required
@@ -64,5 +64,13 @@ def make_blueprint(config):
         return render_template('index.html',
                                unstarred=unstarred,
                                starred=starred)
+
+    @view.route('/flag', methods=('POST',))
+    @login_required
+    def flag():
+        g.source.flagged = True
+        db_session.commit()
+        return render_template('flag.html', filesystem_id=g.filesystem_id,
+                               codename=g.source.journalist_designation)
 
     return view
