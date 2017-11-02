@@ -14,21 +14,13 @@ from journalist_app import create_app
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (get_source,
-                                  make_star_true, make_star_false, col_star,
+                                  make_star_false, col_star,
                                   col_un_star,
                                   delete_collection, col_delete,
                                   col_download_unread,
                                   col_download_all)
 
 app = create_app(config)
-
-
-@app.route('/col/add_star/<filesystem_id>', methods=('POST',))
-@login_required
-def add_star(filesystem_id):
-    make_star_true(filesystem_id)
-    db_session.commit()
-    return redirect(url_for('main.index'))
 
 
 @app.route("/col/remove_star/<filesystem_id>", methods=('POST',))

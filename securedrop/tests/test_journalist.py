@@ -657,7 +657,7 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
-        urls = [url_for('add_star', filesystem_id='1'),
+        urls = [url_for('col.add_star', filesystem_id='1'),
                 url_for('remove_star', filesystem_id='1'),
                 url_for('col_process'),
                 url_for('col_delete_single', filesystem_id='1'),
@@ -988,7 +988,7 @@ class TestJournalistApp(TestCase):
     def test_single_source_is_successfully_starred(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
-        resp = self.client.post(url_for('add_star',
+        resp = self.client.post(url_for('col.add_star',
                                         filesystem_id=source.filesystem_id))
 
         self.assertRedirects(resp, url_for('main.index'))
@@ -1001,7 +1001,7 @@ class TestJournalistApp(TestCase):
         self._login_user()
 
         # First star the source
-        self.client.post(url_for('add_star',
+        self.client.post(url_for('col.add_star',
                                  filesystem_id=source.filesystem_id))
 
         # Now unstar the source

@@ -135,6 +135,8 @@
   /var/www/securedrop/journalist_app/account.pyc rw,
   /var/www/securedrop/journalist_app/admin.py r,
   /var/www/securedrop/journalist_app/admin.pyc rw,
+  /var/www/securedrop/journalist_app/col.py r,
+  /var/www/securedrop/journalist_app/col.pyc rw,
   /var/www/securedrop/journalist_app/decorators.py r,
   /var/www/securedrop/journalist_app/decorators.pyc rw,
   /var/www/securedrop/journalist_app/forms.py r,
