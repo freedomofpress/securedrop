@@ -11,10 +11,9 @@ from db import db_session, Submission
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required
-from journalist_app.utils import (get_source,
-                                  col_star,
+from journalist_app.utils import (col_star,
                                   col_un_star,
-                                  delete_collection, col_delete,
+                                  col_delete,
                                   col_download_unread,
                                   col_download_all)
 
@@ -40,18 +39,6 @@ def col_process():
 
     method = actions[action]
     return method(cols_selected)
-
-
-@app.route('/col/delete/<filesystem_id>', methods=('POST',))
-@login_required
-def col_delete_single(filesystem_id):
-    """deleting a single collection from its /col page"""
-    source = get_source(filesystem_id)
-    delete_collection(filesystem_id)
-    flash(gettext("{source_name}'s collection deleted")
-          .format(source_name=source.journalist_designation),
-          "notification")
-    return redirect(url_for('main.index'))
 
 
 @app.route('/col/<filesystem_id>/<fn>')

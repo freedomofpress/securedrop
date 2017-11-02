@@ -660,7 +660,7 @@ class TestJournalistApp(TestCase):
         urls = [url_for('col.add_star', filesystem_id='1'),
                 url_for('col.remove_star', filesystem_id='1'),
                 url_for('col_process'),
-                url_for('col_delete_single', filesystem_id='1'),
+                url_for('col.delete_single', filesystem_id='1'),
                 url_for('main.reply'),
                 url_for('main.regenerate_code'),
                 url_for('main.bulk'),
@@ -751,7 +751,7 @@ class TestJournalistApp(TestCase):
         correspond to them are also deleted."""
 
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source should be gone
         results = db_session.query(Source).filter(
@@ -768,7 +768,7 @@ class TestJournalistApp(TestCase):
         record, as well as Reply & Submission records associated with
         that record are purged from the database."""
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
         results = Source.query.filter(Source.id == self.source.id).all()
         self.assertEqual(results, [])
         results = db_session.query(
@@ -786,7 +786,7 @@ class TestJournalistApp(TestCase):
         source_key = crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
 
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source key no longer exists
         source_key = crypto_util.getkey(self.source.filesystem_id)
@@ -802,7 +802,7 @@ class TestJournalistApp(TestCase):
                                        self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        job = journalist.delete_collection(self.source.filesystem_id)
+        job = journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Wait up to 5s to wait for Redis worker `srm` operation to complete
         utils.async.wait_for_redis_worker(job)
