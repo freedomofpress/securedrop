@@ -2,9 +2,9 @@
 - name: Create remote CI hosts on AWS.
   ec2:
     group_id: "{{ aws_ec2_sg_id }}"
-    vpc_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
-    assign_public_ip: yes
-    image: "ami-2a172a4a"
+    vpc_subnet_id: "{{ aws_ec2_subnet_id }}"
+    assign_public_ip: "{{ aws_ec2_public_ip }}"
+    image: "{{ aws_ec2_ami }}"
     region: "{{ aws_ec2_ci_region }}"
     key_name: "sdci-{{ job_id }}"
     exact_count: 1

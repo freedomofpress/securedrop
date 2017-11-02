@@ -9,7 +9,6 @@
         that:
           - ci_environment != ""
           - aws_ec2_ci_tags.build_num != ""
-          - aws_ec2_vpc_id != ""
 
     - include: tor.yml
 
@@ -30,12 +29,45 @@
         region: "{{ aws_ec2_ci_region }}"
         key_material: "{{ lookup('file',molecule_ephemeral_directory+'/{{ job_id }}.pub') }}"
 
-    - name: Find VPC subnet.
+    - name: Find VPC to use by tag name
+      ec2_vpc_net_facts:
+        region: "{{ aws_ec2_ci_region }}"
+        filters:
+          "tag:Name": "{{ aws_ec2_ci_vpc_name }}"
+      register: vpc_search_result
+
+    - name: Find subnet to use by tag name
       ec2_vpc_subnet_facts:
         region: "{{ aws_ec2_ci_region }}"
         filters:
-          vpc-id: "{{ aws_ec2_vpc_id }}"
+          vpc-id: "{{ vpc_search_result.vpcs[0].id }}"
+          "tag:Name": "{{ aws_ec2_ci_subnet_name }}"
       register: vpc_subnet_result
+
+    - name: Find security group to utilize
+      ec2_group_facts:
+        region: "{{ aws_ec2_ci_region }}"
+        filters:
+          vpc-id: "{{ vpc_search_result.vpcs[0].id }}"
+          group_name: "{{ aws_ec2_ci_sg_name|default('default') }}"
+      register: vpc_sg_result
+
+    - name: Find latest SD CI AMI
+      ec2_ami_find:
+        region: "{{ aws_ec2_ci_region }}"
+        owner: self
+        sort_order: descending
+        sort_end: 1
+        sort: name
+        name: 'fpf-sd-base*'
+      register: ami_search_result
+
+    - name: Register facts pulled from ec2 fact gathering above
+      set_fact:
+        aws_ec2_vpc_id: "{{ vpc_search_result.vpcs[0].id }}"
+        aws_ec2_sg_id: "{{ vpc_sg_result.security_groups[0].group_id }}"
+        aws_ec2_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
+        aws_ec2_ami: "{{ ami_search_result.results[0].ami_id }}"
 
     - include: aws-launch.yml
 
@@ -45,9 +77,10 @@
   vars:
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
-    aws_ec2_vpc_id: "{{ ansible_env.CI_AWS_VPC_ID | mandatory }}"
     aws_ec2_boot_timeout: "500"
-    aws_ec2_sg_id: "sg-3b2e5f5d"
+    aws_ec2_ci_sg_name: "{{ ansible_env.CI_SG_NAME | default('CI-SD-Automation') }}"
+    aws_ec2_ci_vpc_name: "{{ ansible_env.CI_VPC_NAME | default('securedrop') }}"
+    aws_ec2_ci_subnet_name: "{{ ansible_env.CI_SUBNET_NAME | default('default') }}"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
