@@ -78,6 +78,7 @@
     aws_ec2_instance_type: "{{ ansible_env.CI_AWS_TYPE | mandatory }}"
     aws_ec2_ci_region: "{{ ansible_env.CI_AWS_REGION | default('us-west-1') }}"
     aws_ec2_boot_timeout: "500"
+    aws_ec2_public_ip: "{{ ansible_env.CI_AWS_PUBLIC_IP | default('yes') | bool }}"
     aws_ec2_ci_sg_name: "{{ ansible_env.CI_SG_NAME | default('CI-SD-Automation') }}"
     aws_ec2_ci_vpc_name: "{{ ansible_env.CI_VPC_NAME | default('securedrop') }}"
     aws_ec2_ci_subnet_name: "{{ ansible_env.CI_SUBNET_NAME | default('default') }}"

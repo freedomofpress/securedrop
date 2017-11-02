@@ -23,10 +23,15 @@
   register: reg_ec_instance
   with_items: "{{ molecule_yml.platforms }}"
 
+- name: Establish private facts
+  set_fact:
+    aws_instance_dns: "{{ 'public_dns_name' if aws_ec2_public_ip else 'private_dns_name' }}"
+    aws_instance_ip:  "{{ 'public_ip' if aws_ec2_public_ip else 'private_ip' }}"
+
 - block:
     - name: Wait for EC2 instances to boot.
       wait_for:
-        host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
+        host: "{{ item.tagged_instances[0][aws_instance_dns] }}"
         port: 22
         timeout: 180
         search_regex: OpenSSH
@@ -53,11 +58,11 @@
         instance_conf: "{{ instance_conf|default([]) + [{
           'instance': item.tags.server_type,
           'instance_id': item.id,
-          'address': item.public_ip,
+          'address': item[aws_instance_ip],
           'priv_address': item.private_ip,
           'user': 'sdrop',
           'port': '22',
-          'hostname': item.public_dns_name,
+          'hostname': item[aws_instance_dns],
           'identity_file': molecule_ephemeral_directory+'/'+job_id }] }}"
       no_log: yes
       with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
