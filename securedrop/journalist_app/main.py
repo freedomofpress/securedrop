@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import (Blueprint, request, current_app, session, url_for, redirect,
                    render_template, g, flash, abort)
 from flask_babel import gettext
+from sqlalchemy.sql.expression import false
 
 import crypto_util
 import store
@@ -176,5 +177,19 @@ def make_blueprint(config):
                       new_name=g.source.journalist_designation),
               "notification")
         return redirect('/col/' + g.filesystem_id)
+
+    @view.route('/download_unread/<filesystem_id>')
+    @login_required
+    def download_unread_filesystem_id(filesystem_id):
+        id = Source.query.filter(Source.filesystem_id == filesystem_id) \
+            .one().id
+        submissions = Submission.query.filter(
+            Submission.source_id == id,
+            Submission.downloaded == false()).all()
+        if submissions == []:
+            flash(gettext("No unread submissions for this source."))
+            return redirect(url_for('col', filesystem_id=filesystem_id))
+        source = get_source(filesystem_id)
+        return download(source.journalist_filename, submissions)
 
     return view

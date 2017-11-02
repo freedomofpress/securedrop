@@ -3,18 +3,17 @@
 from flask import (request, render_template, send_file, redirect, flash,
                    url_for, abort)
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.expression import false
 
 import config
 import crypto_util
 from flask_babel import gettext
 import store
-from db import db_session, Source, Submission
+from db import db_session, Submission
 
 from journalist_app import create_app
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import (get_source, download,
+from journalist_app.utils import (get_source,
                                   make_star_true, make_star_false, col_star,
                                   col_un_star,
                                   delete_collection, col_delete,
@@ -99,20 +98,6 @@ def download_single_submission(filesystem_id, fn):
 
     return send_file(store.path(filesystem_id, fn),
                      mimetype="application/pgp-encrypted")
-
-
-@app.route('/download_unread/<filesystem_id>')
-@login_required
-def download_unread_filesystem_id(filesystem_id):
-    id = Source.query.filter(Source.filesystem_id == filesystem_id).one().id
-    submissions = Submission.query.filter(
-        Submission.source_id == id,
-        Submission.downloaded == false()).all()
-    if submissions == []:
-        flash(gettext("No unread submissions for this source."))
-        return redirect(url_for('col', filesystem_id=filesystem_id))
-    source = get_source(filesystem_id)
-    return download(source.journalist_filename, submissions)
 
 
 if __name__ == "__main__":  # pragma: no cover
