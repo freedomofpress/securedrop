@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import (request, render_template, send_file, redirect, flash,
-                   url_for, g, abort)
+                   url_for, abort)
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import false
 
@@ -99,27 +99,6 @@ def download_single_submission(filesystem_id, fn):
 
     return send_file(store.path(filesystem_id, fn),
                      mimetype="application/pgp-encrypted")
-
-
-@app.route('/regenerate-code', methods=('POST',))
-@login_required
-def generate_code():
-    original_journalist_designation = g.source.journalist_designation
-    g.source.journalist_designation = crypto_util.display_id()
-
-    for item in g.source.collection:
-        item.filename = store.rename_submission(
-            g.filesystem_id,
-            item.filename,
-            g.source.journalist_filename)
-    db_session.commit()
-
-    flash(gettext(
-        "The source '{original_name}' has been renamed to '{new_name}'")
-          .format(original_name=original_journalist_designation,
-                  new_name=g.source.journalist_designation),
-          "notification")
-    return redirect('/col/' + g.filesystem_id)
 
 
 @app.route('/download_unread/<filesystem_id>')

@@ -662,7 +662,7 @@ class TestJournalistApp(TestCase):
                 url_for('col_process'),
                 url_for('col_delete_single', filesystem_id='1'),
                 url_for('main.reply'),
-                url_for('generate_code'),
+                url_for('main.regenerate_code'),
                 url_for('main.bulk'),
                 url_for('account.new_two_factor'),
                 url_for('account.reset_two_factor_totp'),

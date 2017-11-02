@@ -2,7 +2,7 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <form action="/regenerate-code" method="post" id="regenerate-code">
+  <form action="{{ url_for('main.regenerate_code') }}" method="post" id="regenerate-code">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
 
