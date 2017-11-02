@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from flask import (Blueprint, redirect, url_for, render_template, flash,
-                   request, abort)
+                   request, abort, send_file, current_app)
 from flask_babel import gettext
+from sqlalchemy.orm.exc import NoResultFound
 
 import crypto_util
+import store
 
-from db import db_session
+from db import db_session, Submission
 from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
@@ -71,5 +73,23 @@ def make_blueprint(config):
 
         method = actions[action]
         return method(cols_selected)
+
+    @view.route('/<filesystem_id>/<fn>')
+    @login_required
+    def download_single_submission(filesystem_id, fn):
+        """Sends a client the contents of a single submission."""
+        if '..' in fn or fn.startswith('/'):
+            abort(404)
+
+        try:
+            Submission.query.filter(
+                Submission.filename == fn).one().downloaded = True
+            db_session.commit()
+        except NoResultFound as e:
+            current_app.logger.error(
+                "Could not mark " + fn + " as downloaded: %s" % (e,))
+
+        return send_file(store.path(filesystem_id, fn),
+                         mimetype="application/pgp-encrypted")
 
     return view

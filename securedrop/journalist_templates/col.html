@@ -46,7 +46,9 @@
               <span class="file reply"><span class="filename">{{ doc.filename }}</span></span>
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
             {% else %}
-              <span class="file"><a class="btn small" href="/col/{{ filesystem_id }}/{{ doc.filename }}"><i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
+            <span class="file">
+                <a class="btn small" href="{{ url_for('col.download_single_submission', filesystem_id=filesystem_id, fn=doc.filename) }}">
+                    <i class="fa fa-download"></i> <span class="filename">{{ doc.filename }}</span></a></span>
               <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
             {% endif %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
