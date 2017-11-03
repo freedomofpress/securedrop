@@ -19,7 +19,7 @@
         delete_on_termination: True
     instance_tags: "{{ aws_ec2_ci_tags | combine({'server_type': item.name}) }}"
     count_tag: "{{ aws_ec2_ci_tags | combine({'server_type': item.name}) }}"
-    instance_profile_name: securedrop
+    instance_profile_name: "{{ aws_ec2_ci_profile_name }}"
   register: reg_ec_instance
   with_items: "{{ molecule_yml.platforms }}"
 

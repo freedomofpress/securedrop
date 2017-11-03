@@ -81,6 +81,7 @@
     aws_ec2_public_ip: "{{ ansible_env.CI_AWS_PUBLIC_IP | default('yes') | bool }}"
     aws_ec2_ci_sg_name: "{{ ansible_env.CI_SG_NAME | default('CI-SD-Automation') }}"
     aws_ec2_ci_vpc_name: "{{ ansible_env.CI_VPC_NAME | default('securedrop') }}"
+    aws_ec2_ci_profile_name: "{{ ansible_env.CI_PROFILE_NAME | default('securedrop') }}"
     aws_ec2_ci_subnet_name: "{{ ansible_env.CI_SUBNET_NAME | default('default') }}"
     ci_environment: "{{ ansible_env.CI_SD_ENV | mandatory }}"
     ci_box_ip: "{{ lookup('pipe', 'curl -s ifconfig.co') }}"
