@@ -283,6 +283,8 @@ When you are done, make sure you save the following information:
 -  The IP address of the *Monitor Server*
 -  The non-root user's name and password for the servers.
 
+.. _test_connectivity:
+
 Test Connectivity
 -----------------
 
