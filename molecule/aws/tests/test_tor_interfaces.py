@@ -2,12 +2,13 @@ import os
 import re
 import pytest
 
-sdvars = pytest.securedrop_test_vars
+TOR_URL_FILES = [{'file': 'app-source-ths',
+                  'check_string': 'SUBMIT DOCUMENTS',
+                  'error_string': "ERROR"}]
 
+testinfra_hosts = ["docker://apptestclient"]
 
-@pytest.mark.parametrize('site', sdvars.tor_url_files)
-@pytest.mark.skipif(os.environ.get('FPF_CI', 'false') == "false",
-                    reason="Can only assure Tor is configured in CI atm")
+@pytest.mark.parametrize('site', TOR_URL_FILES)
 def test_www(host, site):
     """
     Ensure tor interface is reachable and returns expected content.
@@ -16,7 +17,7 @@ def test_www(host, site):
     # Extract Onion URL from saved onion file, fetched back from app-staging.
     onion_url_filepath = os.path.join(
         os.path.dirname(__file__),
-        "../../install_files/ansible-base/{}".format(site['file'])
+        "../../../install_files/ansible-base/{}".format(site['file'])
     )
     onion_url_raw = open(onion_url_filepath, 'ro').read()
     onion_url = re.search("\w+\.onion", onion_url_raw).group()
