@@ -36,7 +36,7 @@ mccabe==0.6.1             # via flake8
 paramiko==2.2.1           # via ansible
 pathspec==0.5.5           # via yamllint
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
-pip-tools==1.9.0
+pip-tools==1.10.1
 port-for==0.3.1           # via sphinx-autobuild
 py==1.4.34                # via pytest
 pyasn1==0.3.1             # via paramiko

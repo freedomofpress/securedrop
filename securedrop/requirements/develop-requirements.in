@@ -2,7 +2,7 @@ ansible==2.3.2.0
 boto
 flake8
 html-linter
-pip-tools
+pip-tools>=1.10
 pytest-xdist
 sphinx
 sphinx-autobuild
