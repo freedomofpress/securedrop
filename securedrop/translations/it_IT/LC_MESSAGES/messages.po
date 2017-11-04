@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-08 16:10+0000\n"
-"Last-Translator: beatricemartini <mail@beatricemartini.it>\n"
+"PO-Revision-Date: 2017-11-04 14:00+0000\n"
+"Last-Translator: Beatrice <mail@beatricemartini.it>\n"
 "Language-Team: Italian "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/it/>\n"
 "Language: it_IT\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.14.1\n"
+"X-Generator: Weblate 2.17.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: journalist.py:70 source_app/__init__.py:82
@@ -66,8 +66,11 @@ msgstr ""
 "di controllare i dati registrati relativi all'uso."
 
 #: journalist.py:241
+#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
+"Identificatore nell'autenticazione a due fattori accettato per l'utente "
+"{user}."
 
 #: journalist.py:248 journalist.py:466
 msgid "Could not verify token in two-factor authentication."
@@ -76,17 +79,21 @@ msgstr ""
 
 #: journalist.py:277
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
-msgstr ""
+msgstr "Formato segreto non valido: utilizza solo lettere A-F e numeri 0-9."
 
 #: journalist.py:282
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
+"Formato segreto non valido: segreto di lunghezza insolita. Forse non l'hai "
+"digitato correttamente?"
 
 #: journalist.py:287 journalist.py:312 journalist.py:720
 msgid ""
 "An unexpected error occurred! Please check the application logs or inform "
 "your adminstrator."
 msgstr ""
+"Si è verificato un errore inaspettato! Controlla il log applícazioni o "
+"informa il tuo amministratore."
 
 #: journalist.py:319
 msgid "Account updated."
@@ -110,16 +117,21 @@ msgid ""
 "correctly. To prevent you from getting locked out of your account, you "
 "should reset your password again."
 msgstr ""
+"Si è verificato un errore, e la nuova password potrebbe non essere stata "
+"salvata correttamente. Per evitare che ti venga impedito l'accesso al tuo "
+"account, reimposta la tua password."
 
 #: journalist.py:449
 msgid ""
 "Password updated. Don't forget to save it in your KeePassX database. New "
 "password:"
 msgstr ""
+"Password aggiornata. Non dimenticare di salvarla nella tua base dati "
+"KeePassX. Nuova password:"
 
 #: journalist.py:462
 msgid "Token in two-factor authentication verified."
-msgstr ""
+msgstr "Identificatore nell'autenticazione a due fattori verificato."
 
 #: journalist.py:583
 msgid "No collections selected."
@@ -127,7 +139,7 @@ msgstr "Non è stato selezionato nessun archivio."
 
 #: journalist.py:607
 msgid "No unread submissions in selected collections."
-msgstr ""
+msgstr "Non ci sono richieste non lette nelle collezioni selezionate."
 
 #: journalist.py:646
 msgid "{source_name}'s collection deleted"
@@ -138,14 +150,15 @@ msgid "No collections selected for deletion."
 msgstr "Nessun archivio é stato selezionato per la cancellazione."
 
 #: journalist.py:660
+#, fuzzy
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} collezione cancellata"
+msgstr[1] "{num} collezioni cancellate"
 
 #: journalist.py:704
 msgid "You cannot send an empty reply."
-msgstr ""
+msgstr "Non puoi inviare una risposta vuota."
 
 #: journalist.py:731
 msgid "Thanks. Your reply has been stored."
@@ -153,11 +166,11 @@ msgstr "Grazie. La tua risposta è stata archiviata."
 
 #: journalist.py:750
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr ""
+msgstr "La fonte '{original_name}' è stata rinominata '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
-msgstr ""
+msgstr "Non ci sono richieste non lette per questa fonte."
 
 #: journalist.py:782
 msgid "No collections selected for download."
@@ -166,24 +179,25 @@ msgstr "Nessun archivio é stato selezionato per essere scaricato."
 #: journalist.py:814
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Richiesta cancellata."
+msgstr[1] "Richieste cancellate."
 
 #: template_filters.py:14
 msgid "{time} ago"
-msgstr ""
+msgstr "{time} fa"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
-msgstr ""
+msgstr "documenti {doc_num}"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
-msgstr ""
+msgstr "messaggi {msg_num}"
 
 #: journalist_templates/_source_row.html:21
+#, fuzzy
 msgid "{num_unread} unread"
-msgstr ""
+msgstr "{num_unread} non letti"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
@@ -200,7 +214,7 @@ msgstr "HOTP Secret"
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:24
 msgid "CONTINUE"
-msgstr ""
+msgstr "CONTINUA"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
@@ -214,6 +228,11 @@ msgid ""
 "added the entry for your account in the app, enter one of the 6-digit codes "
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
+"Hai quasi finito! Per finire di reimpostare la tua autenticazione a due "
+"fattori, segui le istruzioni qui sotto per impostare Google Authenticator. "
+"Dopo aver aggiunto i dati per il tuo account nell'applicazione, inserisci "
+"uno dei codici a 6 cifre che trovi nell'applicazione per confermare che "
+"l'autenticazione a due fattori è stata impostata correttamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
@@ -274,7 +293,7 @@ msgstr "Codice di verifica"
 #: journalist_templates/admin_new_user_two_factor.html:25
 #: journalist_templates/col.html:81 source_templates/lookup.html:46
 msgid "SUBMIT"
-msgstr ""
+msgstr "INVIA"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
@@ -283,7 +302,7 @@ msgstr "Interfaccia amministrazione"
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "AGGIUNGI UTENTE"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:10
@@ -309,11 +328,11 @@ msgstr "Ultimo accesso"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Modifica utente {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Cancella utente {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
@@ -330,7 +349,7 @@ msgstr "Torna all'interfaccia di amministrazione"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "The user's password will be:"
-msgstr ""
+msgstr "La password dell'utente sará:"
 
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:17
@@ -339,7 +358,7 @@ msgstr "È un Amministratore"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "Is using a YubiKey [HOTP]"
-msgstr ""
+msgstr "Sta utilizzando una YubiKey [HOTP]"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -349,6 +368,12 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
+"Hai quasi finito! Per finire di aggiungere questo nuovo utente, chiedi "
+"all'utente di seguire le istruzioni qui sotto per impostare l'autenticazione "
+"a due fattori con Google Authenticator. Una volta che avrà inserito i dati "
+"per questo account nell'applicazione, chiedi all'utente di inserire uno dei "
+"codici a 6 cifre che trova nell'applicazione per confermare che "
+"l'autenticazione a due fattori é stata impostata correttamente."
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
