@@ -1,9 +1,11 @@
-ansible==2.3.2.0
 boto
+docker-py
 flake8
 html-linter
+molecule>=2.*
 pip-tools>=1.10
 pytest-xdist
+safety
 sphinx
 sphinx-autobuild
 sphinx_rtd_theme

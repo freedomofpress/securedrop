@@ -168,6 +168,5 @@ Ensure your virtualenv is activated and install the packages.
 .. code:: sh
 
     pip install -r securedrop/requirements/develop-requirements.txt
-    pip install -r testinfra/requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.
