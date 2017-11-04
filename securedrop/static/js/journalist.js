@@ -61,21 +61,6 @@ $(function () {
       }
     });
 
-  $("#delete-collection").submit(function () {
-    return confirm(get_string("collection-delete-confirm-string"));
-  });
-
-  $("#delete-collections").click(function () {
-    var checked = $(".panel ul#cols li :checkbox").filter(":visible").filter(function(index) {
-        return $(this).prop('checked');
-    });
-    if (checked.length > 0) {
-      return confirm(get_string("collection-multi-delete-confirm-string").supplant({ size: checked.length }));
-    }
-    // Don't submit the form if no collections are selected
-    return false;
-  });
-
   $("#delete-selected").click(function () {
       var checked = $(".panel ul#submissions li :checkbox").filter(function() {
           return $(this).prop('checked')

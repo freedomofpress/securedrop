@@ -12,7 +12,11 @@
         <button type="submit" name="action" value="download-all" class="small"><i class="fa fa-download"></i> {{ gettext('Download') }}</button>
         <button type="submit" name="action" value="star" class="small"><i class="fa fa-star"></i> {{ gettext('Star') }}</button>
         <button type="submit" name="action" value="un-star" class="small"><i class="fa fa-star-half-full"></i> {{ gettext('Un-star') }}</button>
-        <button type="submit" id="delete-collections" name="action" value="delete" class="small-danger"><i class="fa fa-trash-o"></i> {{ gettext('Delete') }}</button>
+        <input type="checkbox" id="delete-checkbox" name="input" class="small-danger" />
+        <label for="delete-checkbox" class="btn" id="delete-label"><i class="fa fa-trash-o"></i>{{ gettext('Delete') }}</label>
+        <button type="submit" id="delete-collections" name="action"
+        value="delete" class="small-danger"> {{
+            gettext('Confirm') }}</button>
       </p>
 
       {% if starred %}
