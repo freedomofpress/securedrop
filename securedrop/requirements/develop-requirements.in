@@ -1,5 +1,4 @@
-# Temporary peg until issue #1146 is resolved
-ansible==2.2.1
+ansible==2.3.2.0
 boto
 html-linter
 flake8
