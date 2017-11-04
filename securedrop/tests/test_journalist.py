@@ -18,6 +18,7 @@ from db import (db_session, InvalidPasswordLength, Journalist, Reply, Source,
                 Submission)
 import db
 import journalist
+import journalist_app.utils
 import utils
 
 # Smugly seed the RNG for deterministic testing
@@ -49,7 +50,7 @@ class TestJournalistApp(TestCase):
 
     @patch('crypto_util.genrandomid', side_effect=['bad', VALID_PASSWORD])
     def test_make_password(self, mocked_pw_gen):
-        assert journalist._make_password() == VALID_PASSWORD
+        assert journalist_app.utils.make_password() == VALID_PASSWORD
 
     @patch('journalist.app.logger.error')
     def test_reply_error_logging(self, mocked_error_logger):
@@ -62,7 +63,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit',
                    side_effect=exception_class(exception_msg)):
-            self.client.post(url_for('reply'),
+            self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
 
@@ -81,7 +82,7 @@ class TestJournalistApp(TestCase):
         exception_class = StaleDataError
 
         with patch('db.db_session.commit', side_effect=exception_class()):
-            self.client.post(url_for('reply'),
+            self.client.post(url_for('main.reply'),
                              data={'filesystem_id': filesystem_id,
                              'message': '_'})
 
@@ -94,7 +95,7 @@ class TestJournalistApp(TestCase):
         filesystem_id = source.filesystem_id
         self._login_user()
 
-        resp = self.client.post(url_for('reply'),
+        resp = self.client.post(url_for('main.reply'),
                                 data={'filesystem_id': filesystem_id,
                                       'message': ''},
                                 follow_redirects=True)
@@ -106,7 +107,7 @@ class TestJournalistApp(TestCase):
         filesystem_id = source.filesystem_id
         self._login_user()
 
-        resp = self.client.post(url_for('reply'),
+        resp = self.client.post(url_for('main.reply'),
                                 data={'filesystem_id': filesystem_id,
                                       'message': '_'},
                                 follow_redirects=True)
@@ -114,21 +115,21 @@ class TestJournalistApp(TestCase):
         self.assertNotIn("You cannot send an empty reply.", resp.data)
 
     def test_unauthorized_access_redirects_to_login(self):
-        resp = self.client.get(url_for('index'))
-        self.assertRedirects(resp, url_for('login'))
+        resp = self.client.get(url_for('main.index'))
+        self.assertRedirects(resp, url_for('main.login'))
 
     def test_login_throttle(self):
         db.LOGIN_HARDENING = True
         try:
             for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                resp = self.client.post(url_for('login'),
+                resp = self.client.post(url_for('main.login'),
                                         data=dict(username=self.user.username,
                                                   password='invalid',
                                                   token='mocked'))
                 self.assert200(resp)
                 self.assertIn("Login failed", resp.data)
 
-            resp = self.client.post(url_for('login'),
+            resp = self.client.post(url_for('main.login'),
                                     data=dict(username=self.user.username,
                                               password='invalid',
                                               token='mocked'))
@@ -139,7 +140,7 @@ class TestJournalistApp(TestCase):
             db.LOGIN_HARDENING = False
 
     def test_login_invalid_credentials(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password='invalid',
                                           token='mocked'))
@@ -147,7 +148,7 @@ class TestJournalistApp(TestCase):
         self.assertIn("Login failed", resp.data)
 
     def test_login_valid_credentials(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
@@ -157,57 +158,57 @@ class TestJournalistApp(TestCase):
         self.assertIn("No documents have been submitted!", resp.data)
 
     def test_admin_login_redirects_to_index(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_user_login_redirects_to_index(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'))
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_has_link_to_edit_account_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
         edit_account_link = '<a href="{}" id="link-edit-account">'.format(
-            url_for('edit_account'))
+            url_for('account.edit'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_user_has_link_to_edit_account_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
         edit_account_link = '<a href="{}" id="link-edit-account">'.format(
-            url_for('edit_account'))
+            url_for('account.edit'))
         self.assertIn(edit_account_link, resp.data)
 
     def test_admin_has_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.admin.username,
                                           password=self.admin_pw,
                                           token='mocked'),
                                 follow_redirects=True)
         admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin_index'))
+            url_for('admin.index'))
         self.assertIn(admin_link, resp.data)
 
     def test_user_lacks_link_to_admin_index_page_in_index_page(self):
-        resp = self.client.post(url_for('login'),
+        resp = self.client.post(url_for('main.login'),
                                 data=dict(username=self.user.username,
                                           password=self.user_pw,
                                           token='mocked'),
                                 follow_redirects=True)
         admin_link = '<a href="{}" id="link-admin-index">'.format(
-            url_for('admin_index'))
+            url_for('admin.index'))
         self.assertNotIn(admin_link, resp.data)
 
     # WARNING: we are purposely doing something that would not work in
@@ -229,17 +230,17 @@ class TestJournalistApp(TestCase):
 
     def test_admin_logout_redirects_to_index(self):
         self._login_admin()
-        resp = self.client.get(url_for('logout'))
-        self.assertRedirects(resp, url_for('index'))
+        resp = self.client.get(url_for('main.logout'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_user_logout_redirects_to_index(self):
         self._login_user()
-        resp = self.client.get(url_for('logout'))
-        self.assertRedirects(resp, url_for('index'))
+        resp = self.client.get(url_for('main.logout'))
+        self.assertRedirects(resp, url_for('main.index'))
 
     def test_admin_index(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_index'))
+        resp = self.client.get(url_for('admin.index'))
         self.assert200(resp)
         self.assertIn("Admin Interface", resp.data)
 
@@ -248,7 +249,7 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(Journalist.query.get(self.user.id), None)
 
         self._login_admin()
-        resp = self.client.post(url_for('admin_delete_user',
+        resp = self.client.post(url_for('admin.delete_user',
                                         user_id=self.user.id),
                                 follow_redirects=True)
 
@@ -262,7 +263,7 @@ class TestJournalistApp(TestCase):
     def test_admin_deletes_invalid_user_404(self):
         self._login_admin()
         invalid_user_pk = max([user.id for user in Journalist.query.all()]) + 1
-        resp = self.client.post(url_for('admin_delete_user',
+        resp = self.client.post(url_for('admin.delete_user',
                                         user_id=invalid_user_pk))
         self.assert404(resp)
 
@@ -270,7 +271,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
 
         resp = self.client.post(
-            url_for('admin_new_password', user_id=self.user.id),
+            url_for('admin.new_password', user_id=self.user.id),
             data=dict(password=VALID_PASSWORD_2),
             follow_redirects=True)
 
@@ -283,7 +284,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
-                url_for('admin_new_password', user_id=self.user.id),
+                url_for('admin.new_password', user_id=self.user.id),
                 data=dict(password=VALID_PASSWORD_2),
                 follow_redirects=True)
 
@@ -293,7 +294,7 @@ class TestJournalistApp(TestCase):
     def test_user_edits_password_success_reponse(self):
         self._login_user()
         resp = self.client.post(
-            url_for('new_password'),
+            url_for('account.new_password'),
             data=dict(current_password=self.user_pw,
                       token='mocked',
                       password=VALID_PASSWORD_2),
@@ -308,7 +309,7 @@ class TestJournalistApp(TestCase):
 
         with patch('db.db_session.commit', side_effect=Exception()):
             resp = self.client.post(
-                url_for('new_password'),
+                url_for('account.new_password'),
                 data=dict(current_password=self.user_pw,
                           token='mocked',
                           password=VALID_PASSWORD_2),
@@ -319,7 +320,7 @@ class TestJournalistApp(TestCase):
 
     def test_admin_add_user_when_username_already_in_use(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=self.admin.username,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -351,7 +352,7 @@ class TestJournalistApp(TestCase):
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
         self.client.post(
-            url_for('admin_new_password', user_id=self.user.id),
+            url_for('admin.new_password', user_id=self.user.id),
             data=dict(username=self.user.username, is_admin=None,
                       password=overly_long_password),
             follow_redirects=True)
@@ -364,7 +365,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(url_for('new_password'),
+        self.client.post(url_for('account.new_password'),
                          data=dict(password=overly_long_password,
                                    token='mocked',
                                    current_password=self.user_pw),
@@ -379,7 +380,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
         self.client.post(
-            url_for('admin_add_user'),
+            url_for('admin.add_user'),
             data=dict(username='dellsberg',
                       password=overly_long_password,
                       is_admin=None))
@@ -395,7 +396,7 @@ class TestJournalistApp(TestCase):
         new_username = self.admin.username
 
         self.client.post(
-            url_for('admin_edit_user', user_id=self.user.id),
+            url_for('admin.edit_user', user_id=self.user.id),
             data=dict(username=new_username, is_admin=None))
 
         self.assertMessageFlashed('Username "{}" already taken.'.format(
@@ -405,7 +406,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp
 
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
                                 data=dict(uid=self.user.id, otp_secret=123456))
         new_hotp = self.user.hotp
 
@@ -414,13 +415,13 @@ class TestJournalistApp(TestCase):
         # Redirect to admin 2FA view
         self.assertRedirects(
             resp,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+            url_for('admin.new_user_two_factor', uid=self.user.id))
 
     def test_admin_resets_user_hotp_format_non_hexa(self):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='ZZ'))
         new_hotp = self.user.hotp.secret
 
@@ -433,7 +434,7 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         old_hotp = self.user.hotp.secret
 
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret='Z'))
         new_hotp = self.user.hotp.secret
 
@@ -454,7 +455,7 @@ class TestJournalistApp(TestCase):
         mock_set_hotp_secret.side_effect = TypeError(error_message)
 
         otp_secret = '1234'
-        self.client.post(url_for('admin_reset_two_factor_hotp'),
+        self.client.post(url_for('admin.reset_two_factor_hotp'),
                          data=dict(uid=self.user.id, otp_secret=otp_secret))
         new_hotp = self.user.hotp.secret
 
@@ -469,21 +470,21 @@ class TestJournalistApp(TestCase):
         self._login_user()
         old_hotp = self.user.hotp
 
-        resp = self.client.post(url_for('account_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('account.reset_two_factor_hotp'),
                                 data=dict(otp_secret=123456))
         new_hotp = self.user.hotp
 
         # check that hotp is different
         self.assertNotEqual(old_hotp.secret, new_hotp.secret)
         # should redirect to verification page
-        self.assertRedirects(resp, url_for('account_new_two_factor'))
+        self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_admin_resets_user_totp(self):
         self._login_admin()
         old_totp = self.user.totp
 
         resp = self.client.post(
-            url_for('admin_reset_two_factor_totp'),
+            url_for('admin.reset_two_factor_totp'),
             data=dict(uid=self.user.id))
         new_totp = self.user.totp
 
@@ -491,24 +492,24 @@ class TestJournalistApp(TestCase):
 
         self.assertRedirects(
             resp,
-            url_for('admin_new_user_two_factor', uid=self.user.id))
+            url_for('admin.new_user_two_factor', uid=self.user.id))
 
     def test_user_resets_totp(self):
         self._login_user()
         old_totp = self.user.totp
 
-        resp = self.client.post(url_for('account_reset_two_factor_totp'))
+        resp = self.client.post(url_for('account.reset_two_factor_totp'))
         new_totp = self.user.totp
 
         # check that totp is different
         self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(resp, url_for('account_new_two_factor'))
+        self.assertRedirects(resp, url_for('account.new_two_factor'))
 
     def test_admin_resets_hotp_with_missing_otp_secret_key(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_reset_two_factor_hotp'),
+        resp = self.client.post(url_for('admin.reset_two_factor_hotp'),
                                 data=dict(uid=self.user.id))
 
         self.assertIn('Change Secret', resp.data)
@@ -516,20 +517,20 @@ class TestJournalistApp(TestCase):
     def test_admin_new_user_2fa_redirect(self):
         self._login_admin()
         resp = self.client.post(
-            url_for('admin_new_user_two_factor', uid=self.user.id),
+            url_for('admin.new_user_two_factor', uid=self.user.id),
             data=dict(token='mocked'))
-        self.assertRedirects(resp, url_for('admin_index'))
+        self.assertRedirects(resp, url_for('admin.index'))
 
     def test_http_get_on_admin_new_user_two_factor_page(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_new_user_two_factor',
+        resp = self.client.get(url_for('admin.new_user_two_factor',
                                        uid=self.user.id))
-        # any GET req should take a user to the admin_new_user_two_factor page
+        # any GET req should take a user to the admin.new_user_two_factor page
         self.assertIn('Authenticator', resp.data)
 
     def test_http_get_on_admin_add_user_page(self):
         self._login_admin()
-        resp = self.client.get(url_for('admin_add_user'))
+        resp = self.client.get(url_for('admin.add_user'))
         # any GET req should take a user to the admin_add_user page
         self.assertIn('ADD USER', resp.data)
 
@@ -537,17 +538,17 @@ class TestJournalistApp(TestCase):
         self._login_admin()
         max_journalist_pk = max([user.id for user in Journalist.query.all()])
 
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username='dellsberg',
                                           password=VALID_PASSWORD,
                                           is_admin=None))
 
-        self.assertRedirects(resp, url_for('admin_new_user_two_factor',
+        self.assertRedirects(resp, url_for('admin.new_user_two_factor',
                                            uid=max_journalist_pk+1))
 
     def test_admin_add_user_without_username(self):
         self._login_admin()
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username='',
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -556,7 +557,7 @@ class TestJournalistApp(TestCase):
     def test_admin_add_user_too_short_username(self):
         self._login_admin()
         username = 'a' * (Journalist.MIN_USERNAME_LEN - 1)
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=username,
                                           password='pentagonpapers',
                                           password_again='pentagonpapers',
@@ -566,7 +567,7 @@ class TestJournalistApp(TestCase):
     def test_admin_sets_user_to_admin(self):
         self._login_admin()
         new_user = 'admin-set-user-to-admin-test'
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=new_user,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -574,7 +575,7 @@ class TestJournalistApp(TestCase):
         journo = Journalist.query.filter(Journalist.username == new_user).one()
         assert not journo.is_admin
 
-        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
                                 data=dict(is_admin=True))
         assert resp.status_code in (200, 302), resp.data.decode('utf-8')
 
@@ -585,7 +586,7 @@ class TestJournalistApp(TestCase):
     def test_admin_renames_user(self):
         self._login_admin()
         new_user = 'admin-renames-user-test'
-        resp = self.client.post(url_for('admin_add_user'),
+        resp = self.client.post(url_for('admin.add_user'),
                                 data=dict(username=new_user,
                                           password=VALID_PASSWORD,
                                           is_admin=None))
@@ -593,7 +594,7 @@ class TestJournalistApp(TestCase):
         journo = Journalist.query.filter(Journalist.username == new_user).one()
 
         new_user = new_user + 'a'
-        resp = self.client.post(url_for('admin_edit_user', user_id=journo.id),
+        resp = self.client.post(url_for('admin.edit_user', user_id=journo.id),
                                 data=dict(username=new_user))
         assert resp.status_code in (200, 302), resp.data.decode('utf-8')
 
@@ -601,15 +602,15 @@ class TestJournalistApp(TestCase):
         # therefore asserting it has been created
         Journalist.query.filter(Journalist.username == new_user).one()
 
-    @patch('journalist.app.logger.error')
-    @patch('journalist.Journalist',
+    @patch('journalist_app.admin.current_app.logger.error')
+    @patch('journalist_app.admin.Journalist',
            side_effect=IntegrityError('STATEMENT', 'PARAMETERS', None))
     def test_admin_add_user_integrity_error(self,
                                             mock_journalist,
                                             mocked_error_logger):
         self._login_admin()
 
-        self.client.post(url_for('admin_add_user'),
+        self.client.post(url_for('admin.add_user'),
                          data=dict(username='username',
                                    password=VALID_PASSWORD,
                                    is_admin=None))
@@ -623,8 +624,8 @@ class TestJournalistApp(TestCase):
             "error")
 
     def test_admin_page_restriction_http_gets(self):
-        admin_urls = [url_for('admin_index'), url_for('admin_add_user'),
-                      url_for('admin_edit_user', user_id=self.user.id)]
+        admin_urls = [url_for('admin.index'), url_for('admin.add_user'),
+                      url_for('admin.edit_user', user_id=self.user.id)]
 
         self._login_user()
         for admin_url in admin_urls:
@@ -632,45 +633,47 @@ class TestJournalistApp(TestCase):
             self.assertStatus(resp, 302)
 
     def test_admin_page_restriction_http_posts(self):
-        admin_urls = [url_for('admin_reset_two_factor_totp'),
-                      url_for('admin_reset_two_factor_hotp'),
-                      url_for('admin_add_user', user_id=self.user.id),
-                      url_for('admin_new_user_two_factor'),
-                      url_for('admin_reset_two_factor_totp'),
-                      url_for('admin_reset_two_factor_hotp'),
-                      url_for('admin_edit_user', user_id=self.user.id),
-                      url_for('admin_delete_user', user_id=self.user.id)]
+        admin_urls = [url_for('admin.reset_two_factor_totp'),
+                      url_for('admin.reset_two_factor_hotp'),
+                      url_for('admin.add_user', user_id=self.user.id),
+                      url_for('admin.new_user_two_factor'),
+                      url_for('admin.reset_two_factor_totp'),
+                      url_for('admin.reset_two_factor_hotp'),
+                      url_for('admin.edit_user', user_id=self.user.id),
+                      url_for('admin.delete_user', user_id=self.user.id)]
         self._login_user()
         for admin_url in admin_urls:
             resp = self.client.post(admin_url)
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_gets(self):
-        urls = [url_for('index'), url_for('col', filesystem_id='1'),
-                url_for('download_single_submission',
+        urls = [url_for('main.index'), url_for('col.col', filesystem_id='1'),
+                url_for('col.download_single_submission',
                         filesystem_id='1', fn='1'),
-                url_for('edit_account')]
+                url_for('account.edit')]
 
         for url in urls:
             resp = self.client.get(url)
             self.assertStatus(resp, 302)
 
     def test_user_authorization_for_posts(self):
-        urls = [url_for('add_star', filesystem_id='1'),
-                url_for('remove_star', filesystem_id='1'),
-                url_for('col_process'),
-                url_for('col_delete_single', filesystem_id='1'),
-                url_for('reply'), url_for('generate_code'), url_for('bulk'),
-                url_for('account_new_two_factor'),
-                url_for('account_reset_two_factor_totp'),
-                url_for('account_reset_two_factor_hotp')]
+        urls = [url_for('col.add_star', filesystem_id='1'),
+                url_for('col.remove_star', filesystem_id='1'),
+                url_for('col.process'),
+                url_for('col.delete_single', filesystem_id='1'),
+                url_for('main.reply'),
+                url_for('main.regenerate_code'),
+                url_for('main.bulk'),
+                url_for('account.new_two_factor'),
+                url_for('account.reset_two_factor_totp'),
+                url_for('account.reset_two_factor_hotp')]
         for url in urls:
             res = self.client.post(url)
             self.assertStatus(res, 302)
 
     def test_incorrect_current_password_change(self):
         self._login_user()
-        resp = self.client.post(url_for('new_password'),
+        resp = self.client.post(url_for('account.new_password'),
                                 data=dict(password=VALID_PASSWORD,
                                           token='mocked',
                                           current_password='badpw'),
@@ -681,11 +684,11 @@ class TestJournalistApp(TestCase):
 
     def test_invalid_user_password_change(self):
         self._login_user()
-        res = self.client.post(url_for('new_password'),
+        res = self.client.post(url_for('account.new_password'),
                                data=dict(password='badpw',
                                          token='mocked',
                                          current_password=self.user_pw))
-        self.assertRedirects(res, url_for('edit_account'))
+        self.assertRedirects(res, url_for('account.edit'))
 
     def test_too_long_user_password_change(self):
         self._login_user()
@@ -693,7 +696,7 @@ class TestJournalistApp(TestCase):
         overly_long_password = VALID_PASSWORD + \
             'a' * (Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1)
 
-        self.client.post(url_for('new_password'),
+        self.client.post(url_for('account.new_password'),
                          data=dict(password=overly_long_password,
                                    token='mocked',
                                    current_password=self.user_pw),
@@ -705,7 +708,7 @@ class TestJournalistApp(TestCase):
     def test_valid_user_password_change(self):
         self._login_user()
         resp = self.client.post(
-            url_for('new_password'),
+            url_for('account.new_password'),
             data=dict(password=VALID_PASSWORD_2,
                       token='mocked',
                       current_password=self.user_pw),
@@ -718,21 +721,21 @@ class TestJournalistApp(TestCase):
         self._login_user()
         old_totp = self.user.totp
 
-        res = self.client.post(url_for('account_reset_two_factor_totp'))
+        res = self.client.post(url_for('account.reset_two_factor_totp'))
         new_totp = self.user.totp
 
         # check that totp is different
         self.assertNotEqual(old_totp.secret, new_totp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account.new_two_factor'))
 
     def test_edit_hotp(self):
         self._login_user()
         old_hotp = self.user.hotp
 
         res = self.client.post(
-            url_for('account_reset_two_factor_hotp'),
+            url_for('account.reset_two_factor_hotp'),
             data=dict(otp_secret=123456)
             )
         new_hotp = self.user.hotp
@@ -741,14 +744,14 @@ class TestJournalistApp(TestCase):
         self.assertNotEqual(old_hotp.secret, new_hotp.secret)
 
         # should redirect to verification page
-        self.assertRedirects(res, url_for('account_new_two_factor'))
+        self.assertRedirects(res, url_for('account.new_two_factor'))
 
     def test_delete_source_deletes_submissions(self):
         """Verify that when a source is deleted, the submissions that
         correspond to them are also deleted."""
 
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source should be gone
         results = db_session.query(Source).filter(
@@ -765,7 +768,7 @@ class TestJournalistApp(TestCase):
         record, as well as Reply & Submission records associated with
         that record are purged from the database."""
         self._delete_collection_setup()
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
         results = Source.query.filter(Source.id == self.source.id).all()
         self.assertEqual(results, [])
         results = db_session.query(
@@ -783,7 +786,7 @@ class TestJournalistApp(TestCase):
         source_key = crypto_util.getkey(self.source.filesystem_id)
         self.assertNotEqual(source_key, None)
 
-        journalist.delete_collection(self.source.filesystem_id)
+        journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Source key no longer exists
         source_key = crypto_util.getkey(self.source.filesystem_id)
@@ -799,7 +802,7 @@ class TestJournalistApp(TestCase):
                                        self.source.filesystem_id)
         self.assertTrue(os.path.exists(dir_source_docs))
 
-        job = journalist.delete_collection(self.source.filesystem_id)
+        job = journalist_app.utils.delete_collection(self.source.filesystem_id)
 
         # Wait up to 5s to wait for Redis worker `srm` operation to complete
         utils.async.wait_for_redis_worker(job)
@@ -880,7 +883,7 @@ class TestJournalistApp(TestCase):
 
         # Download all unread messages from all sources
         self.resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-unread',
                       cols_selected=[self.source0.filesystem_id,
                                      self.source1.filesystem_id]))
@@ -943,12 +946,12 @@ class TestJournalistApp(TestCase):
 
         # Dowload all messages from self.source1
         self.resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-all',
                       cols_selected=[self.source1.filesystem_id]))
 
         resp = self.client.post(
-            '/col/process',
+            url_for('col.process'),
             data=dict(action='download-all',
                       cols_selected=[self.source1.filesystem_id]))
 
@@ -985,10 +988,10 @@ class TestJournalistApp(TestCase):
     def test_single_source_is_successfully_starred(self):
         source, _ = utils.db_helper.init_source()
         self._login_user()
-        resp = self.client.post(url_for('add_star',
+        resp = self.client.post(url_for('col.add_star',
                                         filesystem_id=source.filesystem_id))
 
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         # Assert source is starred
         self.assertTrue(source.star.starred)
@@ -998,14 +1001,14 @@ class TestJournalistApp(TestCase):
         self._login_user()
 
         # First star the source
-        self.client.post(url_for('add_star',
+        self.client.post(url_for('col.add_star',
                                  filesystem_id=source.filesystem_id))
 
         # Now unstar the source
-        resp = self.client.post(url_for('remove_star',
+        resp = self.client.post(url_for('col.remove_star',
                                 filesystem_id=source.filesystem_id))
 
-        self.assertRedirects(resp, url_for('index'))
+        self.assertRedirects(resp, url_for('main.index'))
 
         # Assert source is not starred
         self.assertFalse(source.star.starred)
@@ -1021,7 +1024,7 @@ class TestJournalistApp(TestCase):
             with self.client as client:
                 # do a real login to get a real session
                 # (none of the mocking `g` hacks)
-                resp = self.client.post(url_for('login'),
+                resp = self.client.post(url_for('main.login'),
                                         data=dict(username=self.user.username,
                                                   password=VALID_PASSWORD,
                                                   token='mocked'))
@@ -1030,7 +1033,7 @@ class TestJournalistApp(TestCase):
                 # set the expiration to ensure we trigger an expiration
                 config.SESSION_EXPIRATION_MINUTES = -1
 
-                resp = client.get(url_for('edit_account'),
+                resp = client.get(url_for('account.edit'),
                                   follow_redirects=True)
 
                 # check that the session was cleared (apart from 'expires'
@@ -1052,10 +1055,10 @@ class TestJournalistApp(TestCase):
 
         try:
             with self.app.test_client() as app:
-                resp = app.post(url_for('login'))
-                self.assertRedirects(resp, url_for('login'))
+                resp = app.post(url_for('main.login'))
+                self.assertRedirects(resp, url_for('main.login'))
 
-                resp = app.post(url_for('login'), follow_redirects=True)
+                resp = app.post(url_for('main.login'), follow_redirects=True)
                 self.assertIn('You have been logged out due to inactivity',
                               resp.data)
         finally:
@@ -1068,7 +1071,7 @@ class TestJournalistApp(TestCase):
         form_data = {'cols_selected': 'does not matter',
                      'action': 'this action does not exist'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data)
+        resp = self.client.post(url_for('col.process'), data=form_data)
 
         self.assert500(resp)
 
@@ -1085,7 +1088,7 @@ class TestJournalistApp(TestCase):
                                        source_2.filesystem_id],
                      'action': 'delete'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)
@@ -1103,7 +1106,7 @@ class TestJournalistApp(TestCase):
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'star'}
 
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)
@@ -1120,13 +1123,13 @@ class TestJournalistApp(TestCase):
         # First star the source
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'star'}
-        self.client.post(url_for('col_process'), data=form_data,
+        self.client.post(url_for('col.process'), data=form_data,
                          follow_redirects=True)
 
         # Now unstar the source
         form_data = {'cols_selected': [source_1.filesystem_id],
                      'action': 'un-star'}
-        resp = self.client.post(url_for('col_process'), data=form_data,
+        resp = self.client.post(url_for('col.process'), data=form_data,
                                 follow_redirects=True)
 
         self.assert200(resp)

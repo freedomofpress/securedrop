@@ -2,7 +2,7 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<form action="{{ url_for('admin_add_user') }}">
+<form action="{{ url_for('admin.add_user') }}">
   <button class="sd-button" type="submit" class="btn" id="add-user"><i class="fa fa-plus"></i>{{ gettext('ADD USER') }}</button>
 </form>
 

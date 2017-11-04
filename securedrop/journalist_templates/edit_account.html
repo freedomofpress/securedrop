@@ -28,9 +28,9 @@
 <p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
 
 {% if user and g.user != user %}
-  {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
+  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
-  {% set password_reset_url = url_for('new_password') %}
+  {% set password_reset_url = url_for('account.new_password') %}
   <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 
@@ -65,11 +65,11 @@
 <p>{{ gettext('To reset two-factor authentication for mobile apps such as Google Authenticator or FreeOTP, choose the first option. For hardware tokens like the Yubikey, choose the second.') }}</p>
 
 {% if user %}
-  {% set totp_reset_url = url_for('admin_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('admin_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('admin.reset_two_factor_hotp') %}
 {% else %}
-  {% set totp_reset_url = url_for('account_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('account.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('account.reset_two_factor_hotp') %}
 {% endif %}
 
 {% macro twofa_reset(user, reset_url, type, button_text) %}
