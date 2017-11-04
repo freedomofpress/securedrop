@@ -100,6 +100,8 @@ update-pip-requirements: ## Updates all Python requirements files via pip-compil
 	pip-compile --output-file securedrop/requirements/develop-requirements.txt \
 		securedrop/requirements/ansible.in \
 		securedrop/requirements/develop-requirements.in
+	pip-compile --output-file securedrop/requirements/test-requirements.txt \
+		securedrop/requirements/test-requirements.in
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
