@@ -131,8 +131,8 @@ We also recommend buying two additional USBs to use as bootable backups of the
 
 **Two-factor authenticator**: Two-factor authentication is used when connecting
 to different parts of the SecureDrop system. Each admin and each journalist
-needs a two-factor authenticator. We currently support two options for t
-wo-factor authentication:
+needs a two-factor authenticator. We currently support two options for
+two-factor authentication:
 
 * Your existing smartphone with an app that computes TOTP codes
   (e.g. `Google Authenticator <https://support.google.com/accounts/answer/1066447?hl=en>`__).
@@ -263,34 +263,62 @@ Specific Hardware Recommendations
 Application and Monitor Servers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We currently recommend Intel NUCs or Mac Minis for SecureDrop servers.
+We currently recommend the Gigabyte BRIX, Intel NUC, or Mac Mini for
+SecureDrop servers.
 
-Intel NUCs
-~~~~~~~~~~
+.. note:: If using non-recommended hardware, ensure you remove as much
+    extraneous hardware as physically possible from your servers. This
+    could include: speakers, cameras, microphones, fingerprint readers,
+    wireless, and Bluetooth cards.
 
-The Intel NUC (Next Unit of Computing) is a capable, inexpensive, quiet, and
-low-power device that can be used for the SecureDrop servers. There
-are a `variety of
-models <https://www-ssl.intel.com/content/www/us/en/nuc/products-overview.html>`__
-to choose from. We recommend the
-`NUC5i5MYHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc5i5myhe.html>`__
-because it has a mid-range CPU (Intel i5), a Mini DisplayPort
-port for a monitor, and USB 3.0 ports for faster OS installation
-and data transfer.
+Gigabyte BRIX
+~~~~~~~~~~~~~
 
-Conveniently, the NUC5i5MYHE supports wireless through *optionally-purchased*
-expansion cards; this means the wireless components aren't soldered on, which
-would make them nearly impossible to remove without inflicting damage to the NUC.
-This optional support is preferable in whichever solution you choose for your
-servers, since you want neither Wifi nor Bluetooth; if you're repurposing old
-hardware, be sure to remove these components if they exist.
+The Gigabyte BRIX series is an inexpensive, quiet, low-power device that
+can be used for SecureDrop servers. There are a
+`variety of models <http://www.gigabyte.us/Mini-PcBarebone/BRIX>`__ to choose
+from; we recommend the GB-BXi5-5575. It has a mid-range CPU (the 5th
+generation Intel i5), a full-size HDMI port for a monitor, and four USB 2 ports.
+If you select a different model series (such as the GB-BSi5H) carefully
+verify that it uses the 5th generation Intel i5. Newer generation CPUs will
+**not** work with SecureDrop.
 
-The NUCs come as kits, and some assembly is required. You will need to purchase
-the RAM and hard drive separately for each NUC and insert the cards into the NUC
+The GB-BXi5-5575 supports wireless and Bluetooth through a removable card. This
+removable card is preferable, since you want neither WiFi nor Bluetooth. You
+can open the BRIX by removing the screws from the underside of the computer; the
+wireless card has one small screw you need to remove and two small connectors.
+
+The BRIXs come as kits, and some assembly is required. You will need to purchase
+the RAM and hard drive separately for each BRIX and insert both into the machine
 before it can be used. We recommend:
 
--  2x 240 GB SSDs
--  1x 4 GB (4GBx2) memory kit
+-  2x 240 GB SSDs (2.5")
+-  1x memory kit of 2x4GB sticks (DIMM DDR3 1866MHz)
+   -  You can put one 4GB memory stick in each of the servers.
+
+Intel NUC
+~~~~~~~~~
+
+The Intel NUC (Next Unit of Computing) is an inexpensive, quiet, low-power
+device that can be used for the SecureDrop servers. There are a
+`variety of models <https://www-ssl.intel.com/content/www/us/en/nuc/products-overview.html>`__
+to choose from. We recommend the
+`NUC5i5MYHE <https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc5i5myhe.html>`__
+because it has a mid-range CPU (the 5th generation Intel i5), a Mini
+DisplayPort port for a monitor, and two USB 3.0 ports for faster OS
+installation and data transfer.
+
+The NUC5i5MYHE supports wireless through *optionally-purchased* expansion cards.
+This means the wireless components aren't soldered on which would make them
+nearly impossible to remove without inflicting damage to the NUC. This optional
+support is preferable, since you want neither WiFi nor Bluetooth.
+
+The NUCs come as kits, and some assembly is required. You will need to purchase
+the RAM and hard drive separately for each NUC and insert both into the NUC
+before it can be used. We recommend:
+
+-  2x 240 GB SSDs (2.5")
+-  1x memory kit of 2x4GB sticks
    -  You can put one 4GB memory stick in each of the servers.
 
 .. note:: The D54250WYK we previously recommended has now entered `End of Life`
