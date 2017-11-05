@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-05 04:00+0000\n"
-"Last-Translator: Jose <joseteneb@gmail.com>\n"
+"PO-Revision-Date: 2017-11-05 23:00+0000\n"
+"Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -26,11 +26,11 @@ msgstr "Has sido desconectado por inactividad"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
-msgstr "Solo los administradores pueden acceder a esta pagina."
+msgstr "Solo administradores pueden acceder esta pagina."
 
 #: journalist.py:133
 msgid "Login failed."
-msgstr "Error de inicio de sesion."
+msgstr "El inicio de sesión falló."
 
 #: journalist.py:137
 msgid "Please wait at least {seconds} seconds before logging in again."
@@ -63,9 +63,8 @@ msgstr ""
 "revise los registros de la aplicación."
 
 #: journalist.py:241
-#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "Token en autenticación de dos factores aceptado para el usuario {user}."
+msgstr "Token en autenticación de dos factores aceptada para el usuario {user}."
 
 #: journalist.py:248 journalist.py:466
 msgid "Could not verify token in two-factor authentication."
@@ -80,8 +79,8 @@ msgstr ""
 #: journalist.py:282
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 msgstr ""
-"Formato de secreto invalido: secreto de longitud impar.  ¿Has escrito mal el "
-"secreto?"
+"El formato del secreto es invalido: secreto con largo impar.  ¿Has escrito "
+"mal el secreto?"
 
 #: journalist.py:287 journalist.py:312 journalist.py:720
 msgid ""
@@ -105,7 +104,7 @@ msgstr "Usuario eliminado '{user}'"
 
 #: journalist.py:433
 msgid "You submitted a bad password! Password not changed."
-msgstr "Has enviado una contraseña incorrecta! La contraseña no ha modificada."
+msgstr "Has enviado una contraseña incorrecta! La contraseña no cambio."
 
 #: journalist.py:440
 msgid ""
@@ -169,13 +168,14 @@ msgstr ""
 
 #: journalist.py:782
 msgid "No collections selected for download."
-msgstr ""
+msgstr "No colecciones seleccionadas para bajar."
 
 #: journalist.py:814
+#, fuzzy
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sumisión eliminada."
+msgstr[1] "Sumisiones eliminadas."
 
 #: template_filters.py:14
 msgid "{time} ago"
@@ -187,28 +187,29 @@ msgstr ""
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
-msgstr ""
+msgstr "mensajes {msg_num}"
 
 #: journalist_templates/_source_row.html:21
 msgid "{num_unread} unread"
-msgstr ""
+msgstr "{num_unread}  no leído"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr ""
+msgstr "Cambiar Secreto"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
+#, fuzzy
 msgid "HOTP Secret"
-msgstr ""
+msgstr "HOTP Secreto"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:24
 msgid "CONTINUE"
-msgstr ""
+msgstr "CONTINUAR"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
@@ -225,8 +226,9 @@ msgstr ""
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
+#, fuzzy
 msgid "Install Google Authenticator on your phone"
-msgstr ""
+msgstr "Instale Google Authenticator en su telefono."
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
