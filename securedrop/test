@@ -7,7 +7,10 @@ haveged &
 redis-server &
 
 touch tests/log/firefox.log
-tail -F tests/log/firefox.log &
+function cleanup {
+  cp tests/log/firefox.log /tmp/test-results/logs/
+}
+trap cleanup EXIT
 
 mkdir -p "/tmp/test-results/logs"
 
