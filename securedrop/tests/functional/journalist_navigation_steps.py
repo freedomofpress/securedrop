@@ -468,8 +468,8 @@ class JournalistNavigationSteps():
     def _journalist_composes_reply(self):
         reply_text = ('Thanks for the documents. Can you submit more '
                       'information about the main program?')
-        self.driver.find_element_by_id('reply-text-field').send_keys(
-            reply_text
+        self.wait_for(
+            lambda: self.driver.find_element_by_id('reply-text-field').send_keys(reply_text)
         )
 
     def _journalist_sends_reply_to_source(self):
