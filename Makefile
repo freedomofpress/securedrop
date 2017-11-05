@@ -14,6 +14,10 @@ app-test: ## Run securedrop application level tests
 app-testclean: ## Delete securedrop application related containers
 	$(MAKE) -C securedrop testclean
 
+.PHONY: app-dev
+app-dev:
+	$(MAKE) -C securedrop dev
+
 .PHONY: ci-spinup
 ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
 	./devops/scripts/ci-spinup.sh

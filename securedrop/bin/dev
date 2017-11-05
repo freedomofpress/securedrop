@@ -1,0 +1,10 @@
+#!/bin/bash
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+haveged &
+redis-server &
+
+rm /dev/random
+ln -s /dev/urandom /dev/random
+
+make config.py
+./manage.py run
