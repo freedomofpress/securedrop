@@ -10,6 +10,7 @@ images:
 	docker build $(EXTRA_BUILD_ARGS) -t $(IMAGE):$(TAG) .
 	# combine dockerfiles but strip out first COPY for better cache utilization
 	cat Dockerfile* |sed '/#skip-if-test$$/N;/#skip-if-test/d' | docker build $(EXTRA_BUILD_ARGS) -f - -t $(IMAGE)-test:$(TAG) .
+	docker tag $(IMAGE)-test:$(TAG) $(IMAGE)-test:latest
 
 .PHONY: test
 test:
@@ -18,11 +19,22 @@ test:
 		$(EXTRA_TEST_ARGS) \
 		--name $(IMAGE)-test \
 		-ti $(IMAGE)-test:$(TAG) \
-		./test -v $(TESTFILES)
+		./bin/test -v $(TESTFILES)
 
 .PHONY: testclean
 testclean:
 	-docker rm -f $(IMAGE)-test
+
+.PHONY: dev
+dev: config.py
+	docker run --privileged \
+		-p8080:8080 -p8081:8081 \
+		-v $(shell pwd):/app \
+		-ti $(IMAGE)-test:$(TAG) \
+		./bin/dev
+
+
+config.py: test-config
 
 .PHONY: test-config
 test-config:

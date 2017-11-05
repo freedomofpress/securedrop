@@ -18,8 +18,12 @@ COPY ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
 RUN gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub
 
 COPY . /app
+RUN sass --force --stop-on-error --update sass:static/css --style compressed
 
 RUN make test-config
 RUN ./manage.py reset
+
+EXPOSE 8080 8081
+
 
 CMD ["pytest"]

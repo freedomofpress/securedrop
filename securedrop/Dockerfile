@@ -12,8 +12,11 @@ WORKDIR /app
 COPY requirements requirements
 RUN pip install -r requirements/securedrop-requirements.txt
 
+#skip-if-test
 COPY static static
+#skip-if-test
 COPY sass sass
+#skip-if-test
 RUN sass --force --stop-on-error --update sass:static/css --style compressed
 
 #skip-if-test
