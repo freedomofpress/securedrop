@@ -118,7 +118,7 @@ jobs:
     working_directory: /build
     environment:
       DOCKER_API_VERSION=1.23
-    parallelism: 4
+    parallelism: 6
     steps:
       - run: apt-get install -y make
       - checkout
