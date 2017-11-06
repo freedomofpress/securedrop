@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-06 03:00+0000\n"
+"PO-Revision-Date: 2017-11-06 09:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
@@ -159,12 +159,14 @@ msgid "Thanks. Your reply has been stored."
 msgstr "Gracias. Tu respuesta ha sido almacenado."
 
 #: journalist.py:750
+#, fuzzy
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
 msgstr ""
+"La fuente '{nombre_original}' ha sido cambiado de nombre a '{nombre_nuevo}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
-msgstr ""
+msgstr "No hay sumisiones sin leer para esta fuente."
 
 #: journalist.py:782
 msgid "No collections selected for download."
@@ -178,12 +180,14 @@ msgstr[0] "Sumisión eliminada."
 msgstr[1] "Sumisiones eliminadas."
 
 #: template_filters.py:14
+#, fuzzy
 msgid "{time} ago"
-msgstr ""
+msgstr "{tiempo} pasado"
 
 #: journalist_templates/_source_row.html:17
+#, fuzzy
 msgid "docs {doc_num}"
-msgstr ""
+msgstr "documentos {doc_num}"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
@@ -1048,54 +1052,77 @@ msgid ""
 msgstr ""
 
 #: source_templates/why-journalist-key.html:8
+#, fuzzy
 msgid "Import it into your GPG keyring."
-msgstr ""
+msgstr "Importelo en su llavero de GPG."
 
 #: source_templates/why-journalist-key.html:10
+#, fuzzy
 msgid ""
 "If you are using <a href=\"{url}\">Tails</a>, you can double-click the "
 "<code>.asc</code> file you just downloaded and it will be automatically "
 "imported to your keyring."
 msgstr ""
+"Si usted esta usando <a href=\"{url}\">Tails</a>, usted puede darle doble "
+"click al archivo <code>.asc</code> que recien bajo y este automaticamente va "
+"hacer importado a su llavero."
 
 #: source_templates/why-journalist-key.html:11
+#, fuzzy
 msgid ""
 "If you are using Mac/Linux, open the terminal. You can import the key with "
 "<code>gpg --import /path/to/key.asc</code>."
 msgstr ""
+"Si esta usando Mac o Linux, abra la terminal. Usted puede importar la llave "
+"con <code>1gpg --import /path/to/key.ask</code>"
 
 #: source_templates/why-journalist-key.html:14
 msgid "Encrypt your submission."
-msgstr "Encrypta su envío."
+msgstr "Encripte su envío."
 
 #: source_templates/why-journalist-key.html:16
+#, fuzzy
 msgid ""
 "You will need to be able to identify the key (this is called the \"user ID\" "
 "or UID). Since the public key's filename is the key's fingerprint (with .asc "
 "at the end), you can just copy and paste that. (don't include the <code>."
 "asc</code>!)"
 msgstr ""
+"Usted va a necesitar poder identificar la llave (esta es llamada la \"user "
+"ID\" o UID). Como el nombre del archivo de la llave publica es la huella "
+"digital (con .asc al final), usted puede copiar y pegarla. (no incluya "
+"la<code>.asc</code>!)"
 
 #: source_templates/why-journalist-key.html:17
+#, fuzzy
 msgid ""
 "On all systems, open the Terminal and use this gpg command: <code>gpg --"
 "recipient &lt;user ID&gt; --encrypt roswell_photos.pdf</code>"
 msgstr ""
+"En todos los sistemas, abra la la Terminal y use este commando de GPG: <code>"
+"gpg --recipient &lt; user ID&gt; --encrypt roswell_photos.pdf</code>"
 
 #: source_templates/why-journalist-key.html:20
+#, fuzzy
 msgid ""
 "Upload your encrypted submission. It will have the same filename as the "
 "unencrypted file, with .gpg at the end (e.g. <code>roswell_photos.pdf.gpg</"
 "code>)"
 msgstr ""
+"Suba el envió encriptado. Este va tener el mismo nombre de archivo, con .gpg "
+"al final (por ejemplo<code>roswell_photos.pdf.gpg</code>)"
 
 #: source_templates/why-journalist-key.html:23
+#, fuzzy
 msgid ""
 "<strong>Tip:</strong> If you wish to remain anonymous, <strong>do not</"
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
+"<strong>Tip:</strong> Si tu deseas permanecer anonymo,<strong>no </strong> "
+"use GPG para firmar el archivo encriptado (con el <code> --sign</code> or "
+"<code> -s</code> bandera) ya que este va revelar su identidad GPG a nosotros."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr "Regresar a la pagina de envío."
+msgstr "Regresar a la pagina de sumisión."
