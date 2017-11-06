@@ -80,9 +80,10 @@ changed files in that directory.
 Integration with Read the Docs
 ------------------------------
 
+.. include:: ../includes/docs-branches.txt
+
 Our documentation is built and hosted by `Read the Docs`_ and is available at
-https://securedrop.readthedocs.org. The "latest" documentation is currently
-based on the **develop** branch of the `upstream Git repository`_. We use a
+https://docs.securedrop.org. We use a
 `webhook`_ so the docs are rebuilt automatically when commits get pushed to the
 branch.
 
