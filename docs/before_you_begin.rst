@@ -25,6 +25,11 @@ Foundation <https://securedrop.org/help>`__ for installation assistance.
 Before you begin, you will need to assemble all the :doc:`hardware <hardware>`
 that you are going to use.
 
+To better assist in the installation process, you can organize your work using the
+`SecureDrop Installation Worksheet <https://docs.google.com/a/freedom.press/document/d/18RMAzhx1XCgpmw366I8tItBXQTzkFy_i_D0c605DTS8/edit?usp=sharing>`__.
+It is **critical** you destroy this worksheet when your installation is complete
+and all of your passphrases have been safely stored in a password manager.
+
 When running commands or editing configuration files that include
 filenames, version numbers, usernames, and hostnames or IP addresses,
 make sure you use the appropriate values for your instance.
