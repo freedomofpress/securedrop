@@ -1137,6 +1137,30 @@ class TestJournalistApp(TestCase):
         # Verify the source is not starred
         self.assertFalse(source_1.star.starred)
 
+    def test_render_locales(self):
+        """the locales.html template must collect both request.args (l=XX) and
+        request.view_args (/<filesystem_id>) to build the URL to
+        change the locale
+
+        """
+        supported = getattr(config, 'SUPPORTED_LOCALES', None)
+        try:
+            if supported:
+                del config.SUPPORTED_LOCALES
+            config.SUPPORTED_LOCALES = ['en_US', 'fr_FR', 'ar']
+
+            source, _ = utils.db_helper.init_source()
+            self._login_user()
+
+            url = url_for('col.col', filesystem_id=source.filesystem_id)
+            resp = self.client.get(url + '?l=fr_FR')
+            self.assertNotIn('?l=fr_FR', resp.data)
+            self.assertIn(url + '?l=en_US', resp.data)
+
+        finally:
+            if supported:
+                config.SUPPORTED_LOCALES = supported
+
 
 class TestJournalistLogin(unittest.TestCase):
 
