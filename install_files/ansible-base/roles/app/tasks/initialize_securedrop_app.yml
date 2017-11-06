@@ -189,3 +189,12 @@
   when: db.stat.exists
   tags:
     - securedrop_config
+
+- name: Update SUPPORTED_LOCALES in config.py
+  blockinfile:
+    content: "SUPPORTED_LOCALES = {{ securedrop_supported_locales + ['en_US'] }}"
+    path: "{{ securedrop_code }}/config.py"
+    marker: "# {mark} subset of the available locales that will be proposed to the user"
+  when: securedrop_supported_locales is defined
+  tags:
+    - securedrop_config

@@ -110,6 +110,12 @@
       default: ""
       private: yes
 
+    - name: securedrop_supported_locales
+      # the list is from the securedrop/translations repository
+      prompt: Space separated list of additional locales to support (ar de_DE en_US es_ES fr_FR nb_NO nl)
+      default: ""
+      private: no
+
   pre_tasks:
     - debug:
         msg: >-
@@ -175,6 +181,8 @@
           var_value: "{{ sasl_password }}"
         - var_name: securedrop_app_https_on_source_interface
           var_value: "{{ securedrop_app_https_on_source_interface | bool}}"
+        - var_name: securedrop_supported_locales
+          var_value: "{% if securedrop_supported_locales is string %}{{ securedrop_supported_locales.split() | to_yaml }}{% else %}{{ securedrop_supported_locales | to_yaml }}{% endif %}"
 
 - name: Validate site-specific information.
   hosts: localhost
