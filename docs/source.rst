@@ -36,7 +36,7 @@ Each SecureDrop instance has a publicly available *Source Interface*: a website 
 
 Each Source Interface is only available as a *Tor Hidden Service*, which is a special type of website with an address ending in ".onion" that is only accessible through Tor. Tor is an anonymizing network that makes it difficult for anybody observing the network to associate a user's identity (e.g. their computer's IP address) with their activity (e.g. uploading information to SecureDrop).
 
-The easiest and most secure way to use Tor is to download the Tor Browser Bundle from the `Tor Project website`_. This bundle includes the Tor Browser, a modified version of the Firefox web browser designed to protect your security and anonymity while using Tor.
+The easiest and most secure way to use Tor is to download the Tor Browser from the `Tor Project website`_. The Tor Browser is a modified version of the Firefox web browser designed to protect your security and anonymity while using Tor.
 
 Once you have the Tor Browser, launch it and enter the ".onion" address for the Source Interface of the organization that you wish to submit to. You can find this address on the organization's landing page, or listed on the SecureDrop Directory.
 
