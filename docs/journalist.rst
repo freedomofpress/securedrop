@@ -199,7 +199,7 @@ However, if they do compromise it, Tails is designed so that the next
 time you reboot the malware will be gone.
 
 Tails comes with lots of applications that will help you securely work
-with documents, including `The Tor Browser Bundle <https://www.torproject.org/>`__
+with documents, including the `Tor Browser <https://www.torproject.org/>`__
 , an office suite, graphics tools, desktop publishing tools, audio
 tools, and printing and scanning tools. Journalists should take care
 to research submissions using the Tor Browser, ideally in a new
