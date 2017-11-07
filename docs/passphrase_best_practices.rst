@@ -2,7 +2,7 @@
 Passphrase Best Practices
 #########################
 
-All SecureDrop end users---Sources, Journalists, and Administrators---are
+All SecureDrop end users---Sources, Journalists, and Admins---are
 required to remember one or more passphrases in order to use the system. This
 document describes best practices for passphrase management in the context of
 SecureDrop.
@@ -48,22 +48,22 @@ activity on the SecureDrop server. In order to preserve your anonymity, you
 should avoid creating physical or digital associations between yourself and your
 passphrase as much as possible.
 
-******************************
-For Journalists/Administrators
-******************************
+***********************
+For Journalists/Admins
+***********************
 
 While Sources only have one passphrase that they are required to manage,
-Journalists and Administrators unfortunately have to manage a veritable
+Journalists and Admins unfortunately have to manage a veritable
 menagerie of credentials.
 
 We have tried to minimize the number of credentials that Journalists and
-Administrators actually have to *remember* by automating the storage and entry
+admins actually have to *remember* by automating the storage and entry
 of credentials on the Tails workstations wherever possible. For example,
 shortcut icons are created on the Desktop of each Tails workstation to make it
 easy to access the Tor Hidden Services without having to look up their
 ``.onion`` addresses every time.
 
-Ideally, each Administrator would only have to:
+Ideally, each admin would only have to:
 
 1. Keep track of their Admin Workstation Tails USB.
 2. Remember the passphrase to unlock the persistent storage on that Tails USB.

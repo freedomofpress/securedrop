@@ -70,8 +70,8 @@ which keeps track of the *Application Server* and sends out alerts if there's a
 problem. These two servers run on dedicated hardware connected to a dedicated
 firewall appliance. They are typically located physically inside the newsroom.
 
-Administrators
-~~~~~~~~~~~~~~
+Admins
+~~~~~~
 
 The SecureDrop servers are managed by a systems admin; for larger
 newsrooms, there may be a team of systems admins. The admin
