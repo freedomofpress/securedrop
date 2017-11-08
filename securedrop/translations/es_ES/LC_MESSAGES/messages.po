@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-07 01:00+0000\n"
-"Last-Translator: Jose <joseteneb@gmail.com>\n"
+"PO-Revision-Date: 2017-11-08 03:22+0000\n"
+"Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -21,11 +21,11 @@ msgstr ""
 
 #: journalist.py:70 source_app/__init__.py:82
 msgid "You have been logged out due to inactivity"
-msgstr "Has sido desconectado por inactividad"
+msgstr "Su sesión ha sido terminada por inactividad"
 
 #: journalist.py:117
 msgid "Only administrators can access this page."
-msgstr "Solo administradores pueden acceder esta pagina."
+msgstr "Solo administradores tienen acceso a esta pagina."
 
 #: journalist.py:133
 msgid "Login failed."
@@ -33,13 +33,15 @@ msgstr "El inicio de sesión falló."
 
 #: journalist.py:137
 msgid "Please wait at least {seconds} seconds before logging in again."
-msgstr "Por favor espere al menos {segundos} antes de de conectarse."
+msgstr ""
+"Por favor espere al menos {segundos} segundos antes de tratar de iniciar la "
+"session de nuevo."
 
 #: journalist.py:147
 msgid "Please wait for a new two-factor token before logging in again."
 msgstr ""
-"Por favor espere para una llave de autenticación bifactorial antes de "
-"conectarse."
+"Por favor espere por una token de autenticación de dos factores nueva antes "
+"de conectarse de nuevo."
 
 #: journalist.py:205
 msgid ""
@@ -51,7 +53,7 @@ msgstr ""
 
 #: journalist.py:216
 msgid "That username is already in use"
-msgstr "El nombre del usuario elegido ya haya sido utilizado"
+msgstr "Ese nombre de usuario ya esta en uso"
 
 #: journalist.py:219
 msgid ""
@@ -72,7 +74,7 @@ msgstr "No se pudo verificar el token en la autenticación de dos factores."
 #: journalist.py:277
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
 msgstr ""
-"Formato secreto inválido: por favor envíe solo las letras A-F y los numeros "
+"Formato secreto inválido: por favor envíe solo las letras A-F y los números "
 "0-9."
 
 #: journalist.py:282
@@ -1126,4 +1128,4 @@ msgstr ""
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
-msgstr "Regresar a la pagina de sumisión."
+msgstr "Regresar a la pagina de sumisión"
