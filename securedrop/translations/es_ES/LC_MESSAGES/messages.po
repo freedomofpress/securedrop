@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-08 03:22+0000\n"
+"PO-Revision-Date: 2017-11-08 04:21+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -97,15 +97,15 @@ msgstr "Cuenta actualizada."
 
 #: journalist.py:341
 msgid "Username \"{user}\" already taken."
-msgstr "El nombre del usuario \"{user}\" ya esta siendo utilizado."
+msgstr "El nombre de usuario \"{user}\" ya esta tomado."
 
 #: journalist.py:378
 msgid "Deleted user '{user}'"
-msgstr "Usuario eliminado '{user}'"
+msgstr "Usuario borrado '{user}'"
 
 #: journalist.py:433
 msgid "You submitted a bad password! Password not changed."
-msgstr "Has enviado una contraseña incorrecta! La contraseña no cambio."
+msgstr "Usted ha entrado una contraseña incorrecta! La contraseña no cambio."
 
 #: journalist.py:440
 msgid ""
@@ -114,8 +114,8 @@ msgid ""
 "should reset your password again."
 msgstr ""
 "Hubo un error y es posible que la nueva contraseña no se haya guardado "
-"correctamente. Para evitar que se bloquee su cuenta, debe restablecer su "
-"contraseña nuevamente."
+"correctamente. Para evitar que usted sea bloqueado de su cuenta, debe "
+"restablecer su contraseña nuevamente."
 
 #: journalist.py:449
 msgid ""
@@ -123,7 +123,7 @@ msgid ""
 "password:"
 msgstr ""
 "Contraseña actualizada. No olvides guardarla en tu base de datos KeePassX. "
-"Nueva Contraseña:"
+"Contraseña nueva:"
 
 #: journalist.py:462
 msgid "Token in two-factor authentication verified."
