@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-08 04:21+0000\n"
+"PO-Revision-Date: 2017-11-08 04:22+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -134,8 +134,9 @@ msgid "No collections selected."
 msgstr "No hay colecciones seleccionadas."
 
 #: journalist.py:607
+#, fuzzy
 msgid "No unread submissions in selected collections."
-msgstr "No hay envíos sin leer en las colecciones seleccionadas."
+msgstr "No hay comentarios sin leer en las colecciones seleccionadas."
 
 #: journalist.py:646
 msgid "{source_name}'s collection deleted"
