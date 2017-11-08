@@ -28,6 +28,7 @@ development_dependencies:
   - libffi-dev # for sphinx
   - git
   - devscripts # for dch
+  - gdb # for gcore in TestSubmissionNotInMemory
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them
@@ -50,4 +51,3 @@ appserver_dependencies:
   - apparmor-utils
   - redis-server
   - supervisor
-
