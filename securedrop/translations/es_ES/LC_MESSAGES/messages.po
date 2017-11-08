@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-08 04:22+0000\n"
+"PO-Revision-Date: 2017-11-08 13:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -105,7 +105,7 @@ msgstr "Usuario borrado '{user}'"
 
 #: journalist.py:433
 msgid "You submitted a bad password! Password not changed."
-msgstr "Usted ha entrado una contraseña incorrecta! La contraseña no cambio."
+msgstr "¡Envio una contraseña mala! La contraseña no cambio."
 
 #: journalist.py:440
 msgid ""
@@ -140,7 +140,7 @@ msgstr "No hay comentarios sin leer en las colecciones seleccionadas."
 
 #: journalist.py:646
 msgid "{source_name}'s collection deleted"
-msgstr "Colección {source_name} eliminada"
+msgstr "Colección de {source_name} eliminada"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
@@ -154,17 +154,15 @@ msgstr[1] "{num} colecciones eliminadas"
 
 #: journalist.py:704
 msgid "You cannot send an empty reply."
-msgstr "No es posible enviar una respuesta vacía."
+msgstr "Usted no puede enviar una respuesta vacía."
 
 #: journalist.py:731
 msgid "Thanks. Your reply has been stored."
-msgstr "Gracias. Tu respuesta ha sido almacenado."
+msgstr "Gracias. Su respuesta ha sido guardada."
 
 #: journalist.py:750
-#, fuzzy
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr ""
-"La fuente '{nombre_original}' ha sido cambiado de nombre a '{nombre_nuevo}'"
+msgstr "La fuente '{original_name}' ha sido renombrada a '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
@@ -172,24 +170,21 @@ msgstr "No hay sumisiones sin leer para esta fuente."
 
 #: journalist.py:782
 msgid "No collections selected for download."
-msgstr "No colecciones seleccionadas para bajar."
+msgstr "No hay colecciones seleccionadas para bajar."
 
 #: journalist.py:814
-#, fuzzy
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
 msgstr[0] "Sumisión eliminada."
 msgstr[1] "Sumisiones eliminadas."
 
 #: template_filters.py:14
-#, fuzzy
 msgid "{time} ago"
-msgstr "{tiempo} pasado"
+msgstr "{time} atrás"
 
 #: journalist_templates/_source_row.html:17
-#, fuzzy
 msgid "docs {doc_num}"
-msgstr "documentos {doc_num}"
+msgstr "docs {doc_num}"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
@@ -197,19 +192,18 @@ msgstr "mensajes {msg_num}"
 
 #: journalist_templates/_source_row.html:21
 msgid "{num_unread} unread"
-msgstr "{num_unread}  no leído"
+msgstr "{num_unread}  sin leer"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr "Cambiar Secreto"
+msgstr "Cambie Secreto"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
-#, fuzzy
 msgid "HOTP Secret"
-msgstr "HOTP Secreto"
+msgstr "Secreto HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
@@ -219,8 +213,9 @@ msgstr "CONTINUAR"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
+#, fuzzy
 msgid "Enable Google Authenticator"
-msgstr ""
+msgstr "Habilite el autenticador de Google (Google Authenticator)"
 
 #: journalist_templates/account_new_two_factor.html:5
 msgid ""
@@ -229,125 +224,144 @@ msgid ""
 "added the entry for your account in the app, enter one of the 6-digit codes "
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
+"¡Ya casi termina! Para terminar de reconfigurar la autenticación de dos "
+"factores, Siga las instrucciones a continuación para configurar el "
+"Autenticador de Google (Google Authenticator). Una vez que haya agregado la "
+"entrada para su cuenta en la aplicación, introduzca uno de los códigos de 6 "
+"dígitos de la aplicación para confirmar que la autenticación de dos factores "
+"esta configura correctamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
-#, fuzzy
 msgid "Install Google Authenticator on your phone"
-msgstr "Instale Google Authenticator en su telefono."
+msgstr "Instale el autenticador de Google (Google Authenticator) en su teléfono"
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
+#, fuzzy
 msgid "Open the Google Authenticator app"
-msgstr ""
+msgstr "Abrir la aplicación autenticadora de Google (Google Authenticator)"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
+#, fuzzy
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
+"Pulse en menú, luego pulse \"configurar cuenta\", luego pulse \"escanear un "
+"código de barras\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
+#, fuzzy
 msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
+"Su teléfono estará ahora en modo \"escaneando\". Cuando usted esté en este "
+"modo, escanee el código de barras de abajo:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
 msgid "Can't scan the barcode? Enter the following code manually:"
 msgstr ""
+"¿No puede escanear el código de barras? Introduzca el siguiente código "
+"manualmente:"
 
 #: journalist_templates/account_new_two_factor.html:15
 #: journalist_templates/admin_new_user_two_factor.html:16
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
 msgstr ""
+"Una vez que haya escaneado el código de barras, ingrese el codigo de 6 "
+"dígitos abajo:"
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:18
+#, fuzzy
 msgid "Enable YubiKey (OATH-HOTP)"
-msgstr ""
+msgstr "Habilite el dispositivo YubiKey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:19
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
 msgstr ""
+"Una vez que usted haya configurado su dispositivo YubiKey, ingrese abajo el "
+"código de 6 dígitos:"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:23
 msgid "Verification code"
-msgstr ""
+msgstr "Código de verificación"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:25
 #: journalist_templates/col.html:81 source_templates/lookup.html:46
 msgid "SUBMIT"
-msgstr ""
+msgstr "ENVIAR"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr ""
+msgstr "Interfaz de administración"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:21
 msgid "ADD USER"
-msgstr ""
+msgstr "AGREGAR USUARIO"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:10
 #: journalist_templates/login.html:8
 msgid "Username"
-msgstr ""
+msgstr "Nombre de Usuario"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
-msgstr ""
+msgstr "Creado"
 
 #: journalist_templates/admin.html:20
 msgid "Last login"
-msgstr ""
+msgstr "Último acceso"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Editar usuario {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Borrar usuario {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
-msgstr ""
+msgstr "nunca"
 
 #: journalist_templates/admin.html:38
 msgid "No users to display"
-msgstr ""
+msgstr "No hay usuarios para mostrar"
 
 #: journalist_templates/admin_add_user.html:4
 #: journalist_templates/edit_account.html:7
 msgid "Back to admin interface"
-msgstr ""
+msgstr "Volver a la interfaz de administración"
 
 #: journalist_templates/admin_add_user.html:11
 msgid "The user's password will be:"
-msgstr ""
+msgstr "La contraseña del usuario será:"
 
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/edit_account.html:17
 msgid "Is Administrator"
-msgstr ""
+msgstr "Es Administrador"
 
 #: journalist_templates/admin_add_user.html:18
 msgid "Is using a YubiKey [HOTP]"
-msgstr ""
+msgstr "Está utilizando un dispositivo YubiKey [HOTP]"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
@@ -357,32 +371,43 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
+"¡ ya casi termina! Para terminar de agregar este nuevo usuario, haga que "
+"ellos sigan las instrucciones de abajo para configurar la autenticación de "
+"dos factores con el Autenticador de Google (Google Authenticator). Una vez "
+"que ellos hayan agregado una entrada para esta cuenta en la aplicación, haga "
+"que ellos ingresen uno de los códigos de 6 dígitos de la aplicación para "
+"confirmar que la autenticación de dos factores esta configurada "
+"correctamente."
 
 #: journalist_templates/base.html:24
 msgid "Logged on as"
-msgstr ""
+msgstr "Conectado como"
 
 #: journalist_templates/base.html:26
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: journalist_templates/base.html:28
 msgid "Log Out"
-msgstr ""
+msgstr "Cerrar Sesión"
 
 #: journalist_templates/base.html:40
+#, fuzzy
 msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
+"Con tecnología de  <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
+"SecureDrop\">"
 
 #: journalist_templates/base.html:54
+#, fuzzy
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr ""
+msgstr "Con tecnología de <em> SecureDrop {version}</em>"
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
-msgstr ""
+msgstr "Todas las Fuentes"
 
 #: journalist_templates/col.html:13
 msgid ""
@@ -390,75 +415,84 @@ msgid ""
 "the first random codename is difficult to say or remember. You can generate "
 "new random codenames as many times as you like."
 msgstr ""
+"Genere un pseudónimo nuevo al azar para esta fuente. Recomendamos hacer esto "
+"si el primer pseudónimo es difícil de decir o recordar. Puede generar nuevos "
+"pseudónimos tantas veces como usted guste."
 
 #: journalist_templates/col.html:13
 msgid "Change codename"
-msgstr ""
+msgstr "Cambie pseudónimo"
 
 #: journalist_templates/col.html:14
 msgid "Are you sure you want to generate a new codename?"
-msgstr ""
+msgstr "¿Está seguro de que desea generar un nuevo pseudónimo?"
 
 #: journalist_templates/col.html:15 source_templates/lookup.html:72
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: journalist_templates/col.html:16
 msgid "CONFIRM"
-msgstr ""
+msgstr "CONFIRMAR"
 
 #: journalist_templates/col.html:22
 msgid ""
 "The documents are stored encrypted for security. To read them, you will need "
 "to decrypt them using GPG."
 msgstr ""
+"Los documentos estan encriptados por seguridad. Para leerlos, usted tendrá "
+"que desencriptarlos usando GPG."
 
 #: journalist_templates/col.html:26
 msgid "Download Selected"
-msgstr ""
+msgstr "Descargar lo Seleccionado"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr ""
+msgstr "Eliminar lo Seleccionado"
 
 #: journalist_templates/col.html:53
 msgid "Uploaded Document"
-msgstr ""
+msgstr "Documento Cargado"
 
 #: journalist_templates/col.html:55 journalist_templates/col.html:73
 msgid "Reply"
-msgstr ""
+msgstr "Responder"
 
 #: journalist_templates/col.html:57
 msgid "Message"
-msgstr ""
+msgstr "Mensaje"
 
 #: journalist_templates/col.html:68
 msgid "No documents to display."
-msgstr ""
+msgstr "No hay documentos que mostrar."
 
 #: journalist_templates/col.html:75
 msgid ""
 "You can write a secure reply to the person who submitted these documents:"
 msgstr ""
+"Usted puede escribir una respuesta segura a la persona que presentó estos "
+"documentos:"
 
 #: journalist_templates/col.html:84
 msgid "You've flagged this source for reply."
-msgstr ""
+msgstr "Usted ha marcado esta fuente para responder."
 
 #: journalist_templates/col.html:85
 msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
+"Una llave encriptada se generará para la fuente la próxima vez que ellos se "
+"conecten, después de lo cual usted podrá responder a la fuente desde aquí."
 
 #: journalist_templates/col.html:87
 msgid "Click below if you would like to write a reply to this source."
-msgstr ""
+msgstr "Haga clic abajo si desea escribir una respuesta a esta fuente."
 
 #: journalist_templates/col.html:91
 msgid "FLAG THIS SOURCE FOR REPLY"
-msgstr ""
+msgstr "MARCA ESTA FUENTE PARA RESPONDER"
 
 #: journalist_templates/col.html:96
 msgid ""
@@ -466,10 +500,13 @@ msgid ""
 "the files seen here will be unrecoverable and the source will no longer be "
 "able to login using their previous codename.</em>"
 msgstr ""
+"Haga clic abajo para eliminar la colección de esta fuente. <em>Advertencia: "
+"Si hace esto, los archivos que se ven aquí serán irrecuperables y la fuente "
+"ya no podrá accesar usando su pseudónimo anterior.</em>"
 
 #: journalist_templates/col.html:102
 msgid "DELETE COLLECTION"
-msgstr ""
+msgstr "ELIMINAR COLECCION"
 
 #: journalist_templates/delete.html:5
 msgid ""
@@ -478,65 +515,73 @@ msgid_plural ""
 "The following {files} files have been selected for <strong>permanent "
 "deletion</strong>:"
 msgstr[0] ""
+"El siguiente archivo ha sido seleccionado para <strong> eliminación "
+"permanente</strong>:"
 msgstr[1] ""
+"Los siguientes {files} archivos han sido selecionados para <strong> "
+"eliminación permanente</strong>:"
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr ""
+msgstr "ELIMINAR PERMANENTEMENTE ARCHIVOS"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_name}..."
-msgstr ""
+msgstr "Volver a la lista de documentos para {source_name}..."
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
-msgstr ""
+msgstr "Editar usuario \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr ""
+msgstr "Cambiar nombre de usuario &amp; Estado de Admin"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
-msgstr ""
+msgstr "Cambiar nombre de usuario"
 
 #: journalist_templates/edit_account.html:19
 msgid "UPDATE"
-msgstr ""
+msgstr "ACTUALIZAR"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
-msgstr ""
+msgstr "Edita su cuenta"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
-msgstr ""
+msgstr "Restablecer Contraseña"
 
 #: journalist_templates/edit_account.html:27
 msgid "SecureDrop now uses automatically generated diceware passwords."
 msgstr ""
+"SecureDrop ahora usa contraseñas automáticamente generadas con el método "
+"diceware."
 
 #: journalist_templates/edit_account.html:28
 msgid ""
 "Your password will be changed immediately, so you will need to save it "
 "before pressing the \"Reset Password\" button."
 msgstr ""
+"Su contraseña cambiará inmediatamente, usted tendrá que guardarla antes de "
+"pulsar el botón \"Restablecer Contraseña\"."
 
 #: journalist_templates/edit_account.html:41
 msgid "The user's password will be changed to:"
-msgstr ""
+msgstr "La contraseña del usuario se cambiará a:"
 
 #: journalist_templates/edit_account.html:43
 msgid "Your password will be changed to:"
-msgstr ""
+msgstr "Su contraseña va ser cambiada a:"
 
 #: journalist_templates/edit_account.html:48
 msgid "RESET PASSWORD"
-msgstr ""
+msgstr "RESTABLECER CONTRASEÑA"
 
 #: journalist_templates/edit_account.html:53
 msgid "Reset Two-Factor Authentication"
-msgstr ""
+msgstr "Restablecer la Autenticación de Dos-Factores"
 
 #: journalist_templates/edit_account.html:56
 msgid ""
@@ -545,6 +590,11 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
+"Si un usuario han perdido o comprometido las credenciales de autenticación "
+"de dos factores, puede restablecerlos aquí. <em> Si usted hace esto, "
+"asegúrese de que el usuario está presente y listo para configurar su "
+"dispositivo con las nuevas credenciales de dos-factores. De lo contrario, "
+"ellos serán bloqueados de su cuenta."
 
 #: journalist_templates/edit_account.html:58
 msgid ""
@@ -553,6 +603,11 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
+"Si sus credenciales de autenticación de dos factores se han perdido o se han "
+"comprometido, o si tiene un dispositivo nuevo, usted puede restablecer sus "
+"credenciales aquí. <em> SI usted hace esto, asegúrese de que está listo para "
+"configurar su nuevo dispositivo, de lo contrario se le bloqueará fuera de su "
+"cuenta. </em>"
 
 #: journalist_templates/edit_account.html:60
 msgid ""
@@ -560,14 +615,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
+"Para restablecer la autenticación de dos factores para aplicaciones móviles "
+"como el Autenticador de Google (Google Authenticator) o FreeOTP, elija la "
+"primera opción. Para tokens de hardware como el Yubikey, elija el segundo."
 
 #: journalist_templates/edit_account.html:80
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr ""
+msgstr "RESTABLECER LA AUTENTICATION DE DOS FACTORES (APP)"
 
 #: journalist_templates/edit_account.html:82
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr ""
+msgstr "RESTABLECER LA AUTENTICATION DE DOS FACTORES (TOKEN DE HARDWARE)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
