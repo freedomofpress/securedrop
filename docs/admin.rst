@@ -1,7 +1,7 @@
-Administrator Guide
-=====================
+Admin Guide
+===========
 
-You (the administrator) should have your own username and password, plus
+You (the admin) should have your own username and password, plus
 two-factor authentication through either the Google Authenticator app
 on your smartphone or a YubiKey.
 
@@ -12,9 +12,9 @@ Responsibilities
 
 The SecureDrop architecture contains multiple hardened servers, and while we have
 automated many of the installation and maintenance tasks, a skilled Linux
-administrator and some manual intervention is required to responsibly run the system.
+admin and some manual intervention is required to responsibly run the system.
 
-This section outlines the tasks the administrator is responsible for in order to
+This section outlines the tasks the admin is responsible for in order to
 ensure that the SecureDrop server continues to be a safe place for sources to
 talk to journalists.
 
@@ -103,7 +103,7 @@ Here, you will hand the keyboard over to the journalist so they can
 create their own username. Once they’re done entering a
 username for themselves, have them write down their pre-generated diceware
 passphrase. Then, you will select whether you would like them
-to also be an administrator (this allows them to add or delete other
+to also be an admin (this allows them to add or delete other
 journalist accounts), and whether they will be using Google
 Authenticator or a YubiKey for two-factor authentication.
 
@@ -213,7 +213,7 @@ need to apply the changes to the servers. From ``~/Persistent/securedrop``:
 .. include:: includes/rerun-install-is-safe.txt
 
 Once the install command has successfully completed, the changes are applied.
-Read the next section if you have multiple administrators.
+Read the next section if you have multiple admins.
 
 Managing ``site-specific`` updates on teams with multiple admins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
