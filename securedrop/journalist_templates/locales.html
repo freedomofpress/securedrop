@@ -6,7 +6,11 @@
       {% if locale == g.locale %}
         {{ g.locales[locale] }}
       {% else %}
-        <a href="?l={{ locale }}" rel="nofollow">{{ g.locales[locale] }}</a>
+        {% set args = {} %}
+        {% set _ = args.update(request.args or {}) %}
+        {% set _ = args.update(request.view_args or {}) %}
+        {% set _ = args.update({'l': locale}) %}
+        <a href="{{ url_for(request.endpoint or 'main.index', **args) }}" rel="nofollow">{{ g.locales[locale] }}</a>
       {% endif %}
       </li>
     {% endfor %}
