@@ -8,10 +8,9 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-09 05:35+0000\n"
+"PO-Revision-Date: 2017-11-09 05:36+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
-"Language-Team: Spanish "
-"<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
+"Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -655,8 +654,9 @@ msgid "Download"
 msgstr "Descargar"
 
 #: journalist_templates/index.html:13
+#, fuzzy
 msgid "Star"
-msgstr ""
+msgstr "Estrella"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
