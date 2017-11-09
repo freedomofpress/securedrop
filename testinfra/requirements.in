@@ -1,8 +1,0 @@
-ansible==2.3.2.0
-docker-py
-boto
-molecule>=2.*
-pip-tools
-pytest-xdist
-testinfra
-safety

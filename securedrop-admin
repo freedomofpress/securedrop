@@ -164,7 +164,8 @@ def install_pip_dependencies(args):
             os.path.join(VENV_DIR, 'bin', 'pip'),
             'install',
             # Specify requirements file.
-            '-r', os.path.join(ANSIBLE_PATH, 'requirements.txt'),
+            '-r', os.path.join(SD_DIR, 'securedrop',
+                               'requirements', 'admin-requirements.txt'),
             '--require-hashes',
             # Make sure to upgrade packages only if necessary.
             '-U', '--upgrade-strategy', 'only-if-needed',

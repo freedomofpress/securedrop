@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: Installation pre-reqs
-          command: pip install -U -r ./testinfra/requirements.txt
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
 
       - run:
           name: Check Python dependencies for CVEs
