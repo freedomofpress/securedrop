@@ -119,11 +119,11 @@ will be displayed to the user as::
 
 The French translated string should look like::
 
-  Modifier l'utiliser {user}
+  Modifier l'utilisateur {user}
 
 And it would be **incorrect** to translate the placeholder like so::
 
-  Modifier l'utiliser {utilisateur}
+  Modifier l'utilisateur {utilisateur}
 
 Glossary
 --------
