@@ -72,6 +72,7 @@
   /proc/ r,
   /proc/*/mounts r,
   /proc/*/stat r,
+  /proc/*/status r,
   /proc/sys/kernel/random/entropy_avail r,
   /run/apache2/apache2.pid rw,
   /run/apache2/wsgi.*.lock rwk,
