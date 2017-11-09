@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-09 05:36+0000\n"
+"PO-Revision-Date: 2017-11-09 12:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -654,88 +654,93 @@ msgid "Download"
 msgstr "Descargar"
 
 #: journalist_templates/index.html:13
-#, fuzzy
 msgid "Star"
 msgstr "Estrella"
 
 #: journalist_templates/index.html:14
 msgid "Un-star"
-msgstr ""
+msgstr "Sin-estrella"
 
 #: journalist_templates/index.html:42
 msgid "No documents have been submitted!"
-msgstr ""
+msgstr "¡No se han enviado documentos!"
 
 #: journalist_templates/js-strings.html:3
 msgid "filter by codename"
-msgstr ""
+msgstr "filtrar por pseudónimo"
 
 #: journalist_templates/js-strings.html:4
 msgid "Select All"
-msgstr ""
+msgstr "Selecionar Todos"
 
 #: journalist_templates/js-strings.html:5
 msgid "Select Unread"
-msgstr ""
+msgstr "Seleccionar Sin Leer"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr ""
+msgstr "Seleccionar Ninguno"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
-msgstr ""
+msgstr "¿Está seguro de que desea eliminar esta colección?"
 
 #: journalist_templates/js-strings.html:8
 msgid "Are you sure you want to delete the {size} selected collections?"
 msgstr ""
+"¿Está seguro de que desea eliminar las {size} colecciones seleccionadas?"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr ""
+msgstr "¿Está seguro de que desea eliminar las {size} sumisiones seleccionadas?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
-msgstr ""
+msgstr "¿Está seguro de que desea eliminar el usuario {username}?"
 
 #: journalist_templates/js-strings.html:11
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
+"¿Está seguro de que desea restablecer la autenticación de dos factores para "
+"{username}?"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
-msgstr ""
+msgstr "Login para acceder la interfaz de periodista"
 
 #: journalist_templates/login.html:9
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr ""
+msgstr "Código de Dos Factores"
 
 #: journalist_templates/login.html:11
 msgid "LOG IN"
-msgstr ""
+msgstr "INICIAR SESION"
 
 #: source_app/__init__.py:64
 msgid ""
 "<strong>WARNING:</strong> You appear to be using Tor2Web. This <strong>does "
 "not</strong> provide anonymity. <a href=\"{url}\">Why is this dangerous?</a>"
 msgstr ""
+"<strong> ADVERTENCIA:</strong> Usted parece estar usando Tor2Web. Este "
+"<strong> no </strong> proporciona anonimato. <a href=\"{url}\"> ¿Porque es "
+"esto peligroso? </a>"
 
 #: source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Esta area es obligatoria."
 
 #: source_app/forms.py:14
 msgid "Field must be between 1 and {max_codename_len} characters long. "
-msgstr ""
+msgstr "Esta area debe estar entre 1 y {max_codename_len} caracteres de largo. "
 
 #: source_app/forms.py:18
 msgid "Invalid input."
-msgstr ""
+msgstr "Entrada inválida."
 
 #: source_app/main.py:32
 msgid ""
