@@ -112,7 +112,7 @@ def install_apt_dependencies(args):
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
         # on with more apt requests.
-        sdlog.error(e.output)
+        sdlog.debug(e.output)
         sdlog.error(("Failed to install apt dependencies. Check network"
                      " connection and try again."))
         sys.exit(1)
@@ -145,7 +145,7 @@ def envsetup(args):
                                                  VENV_DIR],
                                                 stderr=subprocess.STDOUT))
         except subprocess.CalledProcessError as e:
-            sdlog.error(e.output)
+            sdlog.debug(e.output)
             sdlog.error(("Unable to create virtualenv. Check network settings"
                          " and try again."))
             sys.exit(1)
@@ -177,7 +177,7 @@ def install_pip_dependencies(args):
     try:
         pip_output = subprocess.check_output(pip_install_cmd)
     except subprocess.CalledProcessError as e:
-        sdlog.error(e.output)
+        sdlog.debug(e.output)
         sdlog.error(("Failed to install pip dependencies. Check network"
                      " connection and try again."))
         sys.exit(1)
