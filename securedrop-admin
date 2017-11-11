@@ -110,11 +110,10 @@ def install_apt_dependencies(args):
         # of progress during long-running command.
         for output_line in run_command(apt_command):
             print(output_line.rstrip())
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
         # on with more apt requests.
-        sdlog.debug(e.output)
         sdlog.error(("Failed to install apt dependencies. Check network"
                      " connection and try again."))
         sys.exit(1)
