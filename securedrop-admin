@@ -158,25 +158,25 @@ def envsetup(args):
     sdlog.info("Finished installing SecureDrop dependencies")
 
 
-def install_pip_dependencies(args):
+def install_pip_dependencies(args, pip_install_cmd=[
+        'torify',
+        os.path.join(VENV_DIR, 'bin', 'pip'),
+        'install',
+        # Specify requirements file.
+        '-r', os.path.join(SD_DIR, 'securedrop',
+                           'requirements', 'admin-requirements.txt'),
+        '--require-hashes',
+        # Make sure to upgrade packages only if necessary.
+        '-U', '--upgrade-strategy', 'only-if-needed',
+]):
     """
     Install Python dependencies via pip into virtualenv.
     """
-    pip_install_cmd = [
-            'torify',
-            os.path.join(VENV_DIR, 'bin', 'pip'),
-            'install',
-            # Specify requirements file.
-            '-r', os.path.join(SD_DIR, 'securedrop',
-                               'requirements', 'admin-requirements.txt'),
-            '--require-hashes',
-            # Make sure to upgrade packages only if necessary.
-            '-U', '--upgrade-strategy', 'only-if-needed',
-            ]
 
     sdlog.info("Checking Python dependencies for securedrop-admin")
     try:
-        pip_output = subprocess.check_output(pip_install_cmd)
+        pip_output = subprocess.check_output(pip_install_cmd,
+                                             stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
         sdlog.error(("Failed to install pip dependencies. Check network"
