@@ -91,4 +91,4 @@ DATABASE_FILE = os.path.join(SECUREDROP_DATA_ROOT, 'db.sqlite')
 DEFAULT_LOCALE = 'en_US'
 
 # How long a session is valid before it expires and logs a user out
-SESSION_EXPIRATION_MINUTES = 30
+SESSION_EXPIRATION_MINUTES = 120
