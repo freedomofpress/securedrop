@@ -73,7 +73,9 @@ def run_command(command):
     Yields a list of the stdout from the `command`, and raises a
     CalledProcessError if `command` returns non-zero.
     """
-    popen = subprocess.Popen(command, stdout=subprocess.PIPE)
+    popen = subprocess.Popen(command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT)
     for stdout_line in iter(popen.stdout.readline, ""):
         yield stdout_line
     popen.stdout.close()

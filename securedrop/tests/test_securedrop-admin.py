@@ -42,3 +42,17 @@ class TestSecureDropAdmin(object):
         out, err = capsys.readouterr()
         assert 'HIDDEN' not in out
         assert 'VISIBLE' in out
+
+    def test_run_command(self):
+        for output_line in securedrop_admin.run_command(
+                ['/bin/echo', 'something']):
+            assert output_line.strip() == 'something'
+
+        lines = []
+        with pytest.raises(subprocess.CalledProcessError):
+            for output_line in securedrop_admin.run_command(
+                    ['sh', '-c',
+                     'echo in stdout ; echo in stderr >&2 ; false']):
+                lines.append(output_line.strip())
+        assert lines[0] == 'in stdout'
+        assert lines[1] == 'in stderr'
