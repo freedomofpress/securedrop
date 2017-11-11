@@ -38,7 +38,7 @@ continuing:
    Guide <ossec_alerts>`.
 -  The first username of a journalist who will be using SecureDrop (you
    can add more later)
--  The username of the system administrator
+-  The username of the system admin
 -  (Optional) An image to replace the SecureDrop logo on the *Source
    Interface* and *Journalist Interface*
 

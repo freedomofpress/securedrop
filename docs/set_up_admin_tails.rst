@@ -148,7 +148,7 @@ To use the template:
 	     file used to protect the database.
 
 In case you wish to manually create a database, the suggested password fields in
-the administrator template are:
+the admin template are:
 
 **Administrator**:
 

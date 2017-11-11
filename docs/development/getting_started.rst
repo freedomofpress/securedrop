@@ -1,16 +1,7 @@
 Getting Started
 ===============
 
-.. note:: SecureDrop maintains two branches of documentation, `stable
-          <https://docs.securedrop.org/en/stable/development/getting_started.html>`_
-          and `latest
-          <https://docs.securedrop.org/en/latest/development/getting_started.html>`_,
-          the former being the default used by our Read the Docs powered site.
-          ``stable`` is built from our latest signed git tag, while ``latest``
-          is built from the head of the ``develop`` git branch.  In almost all
-          cases involving development work, you'll want to make sure you have
-          the ``latest`` version selected by clicking the appropriate link
-          above, or by using the menu in the bottom left corner.
+.. include:: ../includes/docs-branches.txt
 
 Prerequisites
 -------------
@@ -168,6 +159,5 @@ Ensure your virtualenv is activated and install the packages.
 .. code:: sh
 
     pip install -r securedrop/requirements/develop-requirements.txt
-    pip install -r testinfra/requirements.txt
 
 .. note:: You will need to run this everytime new packages are added.

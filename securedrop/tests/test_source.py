@@ -95,7 +95,7 @@ class TestSourceApp(TestCase):
            if they already have a codename, rather than create a new one.
         """
         resp = self.client.get('/generate')
-        self.assertIn("ALREADY HAVE A CODENAME?", resp.data)
+        self.assertIn("USE EXISTING CODENAME", resp.data)
         soup = BeautifulSoup(resp.data, 'html.parser')
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')

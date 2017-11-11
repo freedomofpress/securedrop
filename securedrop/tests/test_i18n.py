@@ -112,13 +112,18 @@ class TestI18N(object):
                 ''').strip() == translated_ar
 
         with app.test_client() as c:
-            c.get('/')
+            page = c.get('/login')
             assert session.get('locale') is None
             assert not_translated == gettext(not_translated)
+            assert '?l=fr_FR' in page.data
+            assert '?l=en_US' not in page.data
 
-            c.get('/?l=fr_FR', headers=Headers([('Accept-Language', 'en_US')]))
+            page = c.get('/login?l=fr_FR',
+                         headers=Headers([('Accept-Language', 'en_US')]))
             assert session.get('locale') == 'fr_FR'
             assert translated_fr == gettext(not_translated)
+            assert '?l=fr_FR' not in page.data
+            assert '?l=en_US' in page.data
 
             c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
             assert session.get('locale') == 'fr_FR'

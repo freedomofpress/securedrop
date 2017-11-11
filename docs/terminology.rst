@@ -39,13 +39,13 @@ Application Server
 The *Application Server* runs the SecureDrop application. This server hosts both
 the website that sources access (the *Source Interface*) and the website that
 journalists access (the *Journalist Interface*). Sources, journalists, and
-administrators may only connect to this server using Tor.
+admins may only connect to this server using Tor.
 
 Monitor Server
 --------------
 
 The *Monitor Server* keeps track of the *Application Server* and sends out an
-email alert if something seems wrong. Only system administrators connect
+email alert if something seems wrong. Only system admins connect
 to this server, and they may only do so using Tor.
 
 Source Interface
@@ -85,9 +85,9 @@ Instructions for using the *Journalist Workstation* are available in our
 Admin Workstation
 -----------------
 
-The *Admin Workstation* is a machine that the system administrator can
+The *Admin Workstation* is a machine that the system admin can
 use to connect to the *Application Server* and the *Monitor Server* using Tor
-and SSH. The administrator will also need to have an Android or iOS
+and SSH. The admin will also need to have an Android or iOS
 device with the Google Authenticator app installed.
 
 Secure Viewing Station
