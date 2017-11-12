@@ -1,17 +1,25 @@
 {% if g.locales|length > 1 %}
-<div class="locales">
-  <ul class="plain">
+<div class="menu">
+  {% for locale in g.locales %}
+    {% if locale == g.locale %}
+      <input id="menu-1-checkbox" class='menu__checkbox visually-hidden' type="checkbox" />
+      <label for="menu-1-checkbox" class="menu__trigger">
+        <span class="menu__icon flag flag--{{locale}}"></span>
+        <span class="menu__trigger-text">{{ g.locales[locale] }}</span>
+      </label>
+    {% endif %}
+  {% endfor %}
+  <ul class="menu__items">
     {% for locale in g.locales %}
-      <li>
-      {% if locale == g.locale %}
-        {{ g.locales[locale] }}
-      {% else %}
-        {% set args = {} %}
-        {% set _ = args.update(request.args or {}) %}
-        {% set _ = args.update(request.view_args or {}) %}
-        {% set _ = args.update({'l': locale}) %}
-        <a href="{{ url_for(request.endpoint or 'main.index', **args) }}" rel="nofollow">{{ g.locales[locale] }}</a>
-      {% endif %}
+      <li class="menu__item">
+      {% set args = {} %}
+      {% set _ = args.update(request.args or {}) %}
+      {% set _ = args.update(request.view_args or {}) %}
+      {% set _ = args.update({'l': locale}) %}
+        <a href="{{ url_for(request.endpoint or 'main.index', **args) }}" rel="nofollow">
+          <span class="menu__icon flag flag--{{locale}}"></span>
+          <span>{{ g.locales[locale] }}</span>
+        </a>
       </li>
     {% endfor %}
   </ul>
