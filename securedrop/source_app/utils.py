@@ -2,6 +2,7 @@ import subprocess
 
 from datetime import datetime
 from flask import session, current_app, abort, g
+import random
 from threading import Thread
 
 import crypto_util
@@ -96,3 +97,7 @@ def normalize_timestamps(filesystem_id):
                 "Couldn't normalize submission "
                 "timestamps (touch exited with %d)" %
                 rc)
+
+
+def randompayload(min=1, max=2048):
+    return "." * random.randint(min, max)
