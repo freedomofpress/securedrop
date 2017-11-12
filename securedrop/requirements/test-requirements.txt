@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file securedrop/requirements/test-requirements.txt securedrop/requirements/test-requirements.in
 #
+apipkg==1.4               # via execnet
 beautifulsoup4==4.6.0
 blinker==1.4
 certifi==2017.4.17        # via requests
@@ -12,6 +13,7 @@ click==6.7                # via flask, pip-tools
 coverage==4.4.1           # via coveralls, pytest-cov
 coveralls==1.1
 docopt==0.6.2             # via coveralls
+execnet==1.5.0            # via pytest-xdist
 first==2.0.1              # via pip-tools
 flask-testing==0.6.2
 flask==0.12.2             # via flask-testing
@@ -26,6 +28,8 @@ pip-tools==1.9.0
 py==1.4.34
 pytest-capturelog==0.7
 pytest-cov==2.5.1
+pytest-forked==0.2        # via pytest-xdist
+pytest-xdist==1.20.1
 pytest==3.1.1
 requests==2.17.3          # via coveralls
 selenium==2.53.6

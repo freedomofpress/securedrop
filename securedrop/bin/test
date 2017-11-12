@@ -18,6 +18,7 @@ mkdir -p "/tmp/test-results/logs"
 
 export PAGE_LAYOUT_LOCALES="en_US,ar,fr_FR"
 pytest \
+  -n 2 \
   --page-layout \
   --durations 10 \
   --junitxml=/tmp/test-results/junit.xml \
