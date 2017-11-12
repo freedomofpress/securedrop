@@ -29,6 +29,7 @@ testclean:
 dev: config.py
 	docker run --privileged \
 		-p8080:8080 -p8081:8081 \
+		-p5901:5901 -p5902:5902 \
 		-v $(shell pwd):/app \
 		-ti $(IMAGE)-test:$(TAG) \
 		./bin/dev

@@ -11,6 +11,8 @@ RUN curl -LO https://launchpad.net/~ubuntu-mozilla-security/+archive/ubuntu/ppa/
 
 RUN pip install -r requirements/test-requirements.txt
 
+RUN apt-get install -y x11vnc
+
 RUN mkdir -p /var/lib/securedrop/store /var/lib/securedrop/keys
 
 COPY ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
@@ -24,6 +26,6 @@ RUN make test-config
 RUN ./manage.py reset
 
 EXPOSE 8080 8081
-
+EXPOSE 5901 5902
 
 CMD ["pytest"]
