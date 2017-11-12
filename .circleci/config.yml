@@ -148,7 +148,7 @@ jobs:
             set +o pipefail
             docker images
             fromtag=$(docker images |grep securedrop-test |head -n1 |awk '{print $2}')
-            cd securedrop && EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag}" make images TAG=${CIRCLE_SHA1}
+            cd securedrop && EXTRA_BUILD_ARGS="--cache-from securedrop-test:${fromtag:-latest}" make images TAG=${CIRCLE_SHA1}
 
       - run:
           name: Save Docker image layer cache
