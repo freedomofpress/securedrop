@@ -6,6 +6,8 @@ Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
 haveged &
 redis-server &
 
+echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
+
 touch tests/log/firefox.log
 function cleanup {
   cp tests/log/firefox.log /tmp/test-results/logs/
