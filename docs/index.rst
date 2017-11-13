@@ -108,4 +108,11 @@ anonymous sources.
    development/apt_repo
    development/updating_ossec
    development/apparmor_profiles
-   development/threat_model
+
+.. toctree::
+  :caption: Threat Model
+  :name: threatdoc
+  :maxdepth: 2
+
+  threat_model/threat_model.rst
+  threat_model/dataflow.rst
