@@ -1,8 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 set -x
-export DISPLAY=:1
 Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+Xvfb :2 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+Xvfb :3 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+Xvfb :4 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
 haveged &
 redis-server &
 
@@ -18,7 +20,7 @@ mkdir -p "/tmp/test-results/logs"
 
 export PAGE_LAYOUT_LOCALES="en_US,ar,fr_FR"
 pytest \
-  -n 2 \
+  -n 4 \
   --page-layout \
   --durations 10 \
   --junitxml=/tmp/test-results/junit.xml \
