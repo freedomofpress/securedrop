@@ -5,7 +5,7 @@ Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
 Xvfb :2 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
 Xvfb :3 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
 Xvfb :4 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
-haveged &
+haveged -F -v &
 redis-server &
 
 echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
