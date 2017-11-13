@@ -35,10 +35,9 @@ dev: config.py
 		./bin/dev
 
 
-config.py: test-config
+test-config: config.py
 
-.PHONY: test-config
-test-config:
+config.py:
 	source_secret_key=$(shell head -c 32 /dev/urandom | base64) \
 	journalist_secret_key=$(shell head -c 32 /dev/urandom | base64) \
 	scrypt_id_pepper=$(shell head -c 32 /dev/urandom | base64) \

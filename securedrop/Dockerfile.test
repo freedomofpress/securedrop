@@ -13,11 +13,11 @@ RUN pip install -r requirements/test-requirements.txt
 
 RUN apt-get install -y x11vnc
 
-RUN mkdir -p /var/lib/securedrop/store /var/lib/securedrop/keys
+RUN mkdir -p /tmp/securedrop/store /tmp/securedrop/keys
 
-COPY ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
+COPY ./tests/files/test_journalist_key.pub /tmp/securedrop/keys
 
-RUN gpg --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub
+RUN gpg --homedir /tmp/securedrop/keys --import /tmp/securedrop/keys/test_journalist_key.pub
 
 COPY . /app
 RUN sass --force --stop-on-error --update sass:static/css --style compressed

@@ -10,11 +10,14 @@ import pytest
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import config
 
+WORKER_ID = str(int(os.environ.get('PYTEST_XDIST_WORKER', '-1').replace('gw',''))+1)
+os.environ['SECUREDROP_WORKER_QUEUE_NAME'] = 'test' + WORKER_ID
+
 # TODO: the PID file for the redis worker is hard-coded below.
 # Ideally this constant would be provided by a test harness.
 # It has been intentionally omitted from `config.py.example`
 # in order to isolate the test vars from prod vars.
-TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
+TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid' + WORKER_ID
 
 
 def pytest_addoption(parser):
@@ -43,8 +46,8 @@ def setUptearDown():
 
 def _start_test_rqworker(config):
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
-        tmp_logfile = open('/tmp/test_rqworker.log', 'w')
-        subprocess.Popen(['rqworker', 'test',
+        tmp_logfile = open('/tmp/test_rqworker.log' + '.' + WORKER_ID, 'w')
+        subprocess.Popen(['rqworker', os.environ.get('SECUREDROP_WORKER_QUEUE_NAME', 'test'),
                           '-P', config.SECUREDROP_ROOT,
                           '--pid', TEST_WORKER_PIDFILE],
                          stdout=tmp_logfile,
