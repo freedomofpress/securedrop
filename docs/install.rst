@@ -4,11 +4,11 @@ Install SecureDrop
 Install Prerequisites
 ----------------------
 
-SecureDrop has some dependencies that need to be loaded onto the admin tails
-stick prior to the installation of the server.
+SecureDrop has some dependencies that need to be loaded onto the *Admin 
+Workstation* prior to the installation of the server.
 
-To load these dependencies, from the base of the SecureDrop repo run the
-following commands:
+To load these dependencies, from the base of the SecureDrop repository
+(``~/Persistent/securedrop/``) run the following commands:
 
 .. code:: sh
 
@@ -16,6 +16,12 @@ following commands:
 
 The package installation will complete in approximately 10 minutes, depending
 on network speed and computing power.
+
+ .. note :: Occasionally this command times out due to network latency issues.
+    You should be able to re-run the command and complete the setup. If you run
+    into a problem, try removing the ``~/Persistent/securedrop/.venv/``
+    directory and running the command again. The command should only be run as
+    the ``amnesia`` user.
 
 .. _configure_securedrop:
 
