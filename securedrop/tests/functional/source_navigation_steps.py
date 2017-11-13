@@ -154,7 +154,7 @@ class SourceNavigationStepsMixin():
             filename = file.name
 
             file_upload_box = self.driver.find_element_by_css_selector(
-                '[name=fh]')
+                '[name=fh\[\]]')
             file_upload_box.send_keys(filename)
 
             submit_button = self.driver.find_element_by_id('submit-doc-button')

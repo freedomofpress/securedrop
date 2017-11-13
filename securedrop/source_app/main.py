@@ -104,7 +104,14 @@ def make_blueprint(config):
     @login_required
     def submit():
         msg = request.form['msg']
-        fh = request.files['fh']
+        files = request.files
+        fh = files.getlist('fh[]')
+
+        #  Based on http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
+        #  if user does not select file, browser also
+        #  submit a empty part without filename
+        if fh and not fh[0].filename:
+            fh = []
 
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
@@ -126,14 +133,15 @@ def make_blueprint(config):
                     journalist_filename,
                     msg))
         if fh:
-            g.source.interaction_count += 1
-            fnames.append(
-                store.save_file_submission(
-                    g.filesystem_id,
-                    g.source.interaction_count,
-                    journalist_filename,
-                    fh.filename,
-                    fh.stream))
+            for file_submitted in fh:
+                g.source.interaction_count += 1
+                fnames.append(
+                    store.save_file_submission(
+                        g.filesystem_id,
+                        g.source.interaction_count,
+                        journalist_filename,
+                        file_submitted.filename,
+                        file_submitted.stream))
 
         if first_submission:
             msg = render_template('first_submission_flashed_message.html')
@@ -143,10 +151,11 @@ def make_blueprint(config):
             if msg and not fh:
                 html_contents = gettext('Thanks! We received your message.')
             elif not msg and fh:
-                html_contents = gettext('Thanks! We received your document.')
+                html_contents = gettext('Thanks! We received your'
+                                        ' document(s).')
             else:
                 html_contents = gettext('Thanks! We received your message and '
-                                        'document.')
+                                        'document(s).')
 
             msg = render_template('next_submission_flashed_message.html',
                                   html_contents=html_contents)

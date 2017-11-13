@@ -273,10 +273,10 @@ class TestSourceApp(TestCase):
         with self.client as client:
             new_codename(client, session)
             self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="AA" * (1024 * 512),
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
+            resp = client.post('/submit', data={
+                'msg': "AA" * (1024 * 512),
+                'fh[]': [],
+                }, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Thanks! We received your message", resp.data)
 
@@ -284,23 +284,35 @@ class TestSourceApp(TestCase):
         with self.client as client:
             new_codename(client, session)
             self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO('This is a test'), 'test.txt'),
-            ), follow_redirects=True)
+            resp = client.post('/submit', data={
+                'msg': "",
+                'fh[]': [(StringIO('This is a test'), 'test.txt'), ],
+            }, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('Thanks! We received your document', resp.data)
+            self.assertIn('Thanks! We received your document(s)', resp.data)
+
+    def test_submit_two_files(self):
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission(client)
+            resp = client.post('/submit', data={
+                'msg': "",
+                'fh[]': [(StringIO('This is a test'), 'test.txt'),
+                         (StringIO('This is a test2'), 'test2.txt')],
+            }, follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Thanks! We received your document(s)', resp.data)
 
     def test_submit_both(self):
         with self.client as client:
             new_codename(client, session)
             self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="This is a test",
-                fh=(StringIO('This is a test'), 'test.txt'),
-            ), follow_redirects=True)
+            resp = client.post('/submit', data={
+                'msg': "This is a test",
+                'fh[]': [(StringIO('This is a test'), 'test.txt'), ],
+            }, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Thanks! We received your message and document",
+            self.assertIn("Thanks! We received your message and document(s)",
                           resp.data)
 
     @patch('source_app.main.async_genkey')
@@ -371,10 +383,10 @@ class TestSourceApp(TestCase):
 
         with self.client as client:
             new_codename(client, session)
-            client.post('/submit', data=dict(
-                msg="",
-                fh=(StringIO('This is a test'), insecure_filename),
-            ), follow_redirects=True)
+            client.post('/submit', data={
+                'msg': "",
+                'fh[]': [(StringIO('This is a test'), insecure_filename), ],
+            }, follow_redirects=True)
             gzipfile.assert_called_with(filename=sanitized_filename,
                                         mode=ANY,
                                         fileobj=ANY)

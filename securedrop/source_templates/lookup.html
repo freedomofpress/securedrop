@@ -29,7 +29,7 @@
   <div class="snippet">
     <div class="attachment grid-item center">
       <img class="center" src="{{ url_for('static', filename='i/server_upload.png') }}" width="73px" height="62px">
-      <input type="file" name="fh" autocomplete="off">
+      <input type="file" name="fh[]" autocomplete="off" multiple>
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
     <div class="message grid-item">
