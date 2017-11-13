@@ -1,5 +1,6 @@
 import tempfile
 import time
+import os.path
 
 from selenium.webdriver.common.action_chains import ActionChains
 from step_helpers import screenshots
@@ -168,6 +169,10 @@ class SourceNavigationStepsMixin():
             submit_button.click()
 
             if not hasattr(self, 'accept_languages'):
+                file_notification = self.driver.find_element_by_class_name(
+                    'info')
+                tmpname = os.path.basename(filename)
+                assert tmpname in file_notification.text
                 notification = self.driver.find_element_by_css_selector(
                     '.success')
                 expected_notification = (

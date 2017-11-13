@@ -421,10 +421,10 @@ class TestIntegration(unittest.TestCase):
         # first, add a source
         self.source_app.get('/generate')
         self.source_app.post('/create')
-        resp = self.source_app.post('/submit', data=dict(
-            msg="This is a test.",
-            fh=(StringIO(''), ''),
-        ), follow_redirects=True)
+        resp = self.source_app.post('/submit', data={
+            'msg': "This is a test.",
+            'fh[]': []
+        }, follow_redirects=True)
 
         assert resp.status_code == 200, resp.data.decode('utf-8')
 
@@ -464,10 +464,10 @@ class TestIntegration(unittest.TestCase):
         for i in range(num_sources):
             self.source_app.get('/generate')
             self.source_app.post('/create')
-            self.source_app.post('/submit', data=dict(
-                msg="This is a test " + str(i) + ".",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
+            self.source_app.post('/submit', data={
+                'msg': "This is a test " + str(i) + ".",
+                'fh[]': []
+            }, follow_redirects=True)
             self.source_app.get('/logout')
 
         resp = self.journalist_app.get('/')

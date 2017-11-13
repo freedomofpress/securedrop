@@ -444,10 +444,10 @@ class TestSourceApp(TestCase):
         with self.client as client:
             new_codename(client, session)
             self._dummy_submission(client)
-            resp = client.post('/submit', data=dict(
-                msg="This is a test.",
-                fh=(StringIO(''), ''),
-            ), follow_redirects=True)
+            resp = client.post('/submit', data={
+                'msg': "This is a test.",
+                'fh[]': [(StringIO('This is a test'), 'test.txt'), ]
+            }, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Thanks! We received your message", resp.data)
 
