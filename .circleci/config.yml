@@ -164,11 +164,14 @@ jobs:
 
       - run: mkdir -p ~/test-results
 
-      - run: |
-          set +o pipefail
-          export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
-          docker rm -f securedrop-test |true
-          cd securedrop && make test TAG=${CIRCLE_SHA1}
+      - run:
+          name: Run Tests
+          no_output_timeout: 3m
+          command: |
+            set +o pipefail
+            export TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/**/test*py' |circleci tests split --split-by=timings |xargs echo)
+            docker rm -f securedrop-test |true
+            cd securedrop && make test TAG=${CIRCLE_SHA1}
 
       - run:
           name: Report results
