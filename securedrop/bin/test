@@ -10,6 +10,8 @@ echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
 rm /dev/random
 ln -s /dev/urandom /dev/random
 
+x11vnc -display :1 -autoport 5901 -shared &
+
 touch tests/log/firefox.log
 function cleanup {
   cp tests/log/firefox.log /tmp/test-results/logs/
