@@ -2,16 +2,16 @@ DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
 
-.PHONY: images
-images:
+.PHONY: app-images
+app-images: ## Create securedrop application docker images
 	$(MAKE) -C securedrop images
 
-.PHONY: test
-test:
+.PHONY: app-test
+app-test: ## Run securedrop application level tests
 	$(MAKE) -C securedrop test
 
-.PHONY: testclean
-testclean:
+.PHONY: app-testclean
+app-testclean: ## Delete securedrop application related containers
 	$(MAKE) -C securedrop testclean
 
 .PHONY: ci-spinup
