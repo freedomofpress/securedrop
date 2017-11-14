@@ -149,9 +149,10 @@ def make_blueprint(config):
                 db_session.add(submission)
                 db_session.commit()
 
+                filename = Markup.escape(file_submitted.filename)
                 html_msg = render_template(
                     'next_submission_flashed_message.html',
-                    html_contents="{0}".format(file_submitted.filename))
+                    html_contents="{0}".format(filename))
                 flash(Markup(html_msg), "info")
 
         if first_submission:
