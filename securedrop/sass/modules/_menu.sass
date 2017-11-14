@@ -48,11 +48,13 @@
   flex-direction: column
 
 .menu__checkbox:checked ~ .menu__trigger
-  position: absolute
-  top: -100vh
-  left: -100vw
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
   background-color: transparent
-  & .menu__trigger-text
+  & .menu__trigger-text, & .menu__icon
     display: none
 
 .menu__checkbox:focus  ~ .menu__trigger
