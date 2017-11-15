@@ -10,7 +10,6 @@ import crypto_util
 import store
 
 from db import db_session, Source, SourceStar, Submission, Reply
-from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
@@ -47,7 +46,6 @@ def make_blueprint(config):
         return redirect(url_for('main.index'))
 
     @view.route('/')
-    @login_required
     def index():
         unstarred = []
         starred = []
@@ -73,7 +71,6 @@ def make_blueprint(config):
                                starred=starred)
 
     @view.route('/reply', methods=('POST',))
-    @login_required
     def reply():
         """Attempt to send a Reply from a Journalist to a Source. Empty
         messages are rejected, and an informative error message is flashed
@@ -124,7 +121,6 @@ def make_blueprint(config):
             return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/flag', methods=('POST',))
-    @login_required
     def flag():
         g.source.flagged = True
         db_session.commit()
@@ -132,7 +128,6 @@ def make_blueprint(config):
                                codename=g.source.journalist_designation)
 
     @view.route('/bulk', methods=('POST',))
-    @login_required
     def bulk():
         action = request.form['action']
 
@@ -159,7 +154,6 @@ def make_blueprint(config):
             abort(400)
 
     @view.route('/regenerate-code', methods=('POST',))
-    @login_required
     def regenerate_code():
         original_journalist_designation = g.source.journalist_designation
         g.source.journalist_designation = crypto_util.display_id()
@@ -179,7 +173,6 @@ def make_blueprint(config):
         return redirect(url_for('col.col', filesystem_id=g.filesystem_id))
 
     @view.route('/download_unread/<filesystem_id>')
-    @login_required
     def download_unread_filesystem_id(filesystem_id):
         id = Source.query.filter(Source.filesystem_id == filesystem_id) \
             .one().id

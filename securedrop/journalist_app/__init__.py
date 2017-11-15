@@ -13,7 +13,9 @@ import version
 
 from db import db_session, Journalist
 from journalist_app import account, admin, main, col
-from journalist_app.utils import get_source
+from journalist_app.utils import get_source, logged_in
+
+_insecure_views = ['main.login', 'static']
 
 
 def create_app(config):
@@ -77,6 +79,9 @@ def create_app(config):
         g.text_direction = i18n.get_text_direction(g.locale)
         g.html_lang = i18n.locale_to_rfc_5646(g.locale)
         g.locales = i18n.get_locale2name()
+
+        if request.endpoint not in _insecure_views and not logged_in():
+            return redirect(url_for('main.login'))
 
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')

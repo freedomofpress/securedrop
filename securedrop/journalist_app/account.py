@@ -5,7 +5,6 @@ from flask import (Blueprint, render_template, request, g, redirect, url_for,
 from flask_babel import gettext
 
 from db import db_session
-from journalist_app.decorators import login_required
 from journalist_app.utils import (make_password, set_diceware_password,
                                   validate_user)
 
@@ -14,14 +13,12 @@ def make_blueprint(config):
     view = Blueprint('account', __name__)
 
     @view.route('/account', methods=('GET',))
-    @login_required
     def edit():
         password = make_password()
         return render_template('edit_account.html',
                                password=password)
 
     @view.route('/new-password', methods=('POST',))
-    @login_required
     def new_password():
         user = g.user
         current_password = request.form.get('current_password')
@@ -35,7 +32,6 @@ def make_blueprint(config):
         return redirect(url_for('account.edit'))
 
     @view.route('/2fa', methods=('GET', 'POST'))
-    @login_required
     def new_two_factor():
         if request.method == 'POST':
             token = request.form['token']
@@ -51,7 +47,6 @@ def make_blueprint(config):
         return render_template('account_new_two_factor.html', user=g.user)
 
     @view.route('/reset-2fa-totp', methods=['POST'])
-    @login_required
     def reset_two_factor_totp():
         g.user.is_totp = True
         g.user.regenerate_totp_shared_secret()
@@ -59,7 +54,6 @@ def make_blueprint(config):
         return redirect(url_for('account.new_two_factor'))
 
     @view.route('/reset-2fa-hotp', methods=['POST'])
-    @login_required
     def reset_two_factor_hotp():
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
