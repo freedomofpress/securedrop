@@ -7,9 +7,7 @@ assets:
 
 .PHONY: images
 images:
-	docker build $(EXTRA_BUILD_ARGS) -t $(IMAGE):$(TAG) .
-	# combine dockerfiles but strip out first COPY for better cache utilization
-	cat Dockerfile* |sed '/#skip-if-test$$/N;/#skip-if-test/d' | docker build $(EXTRA_BUILD_ARGS) -f - -t $(IMAGE)-test:$(TAG) .
+	docker build $(EXTRA_BUILD_ARGS) -f Dockerfile -t $(IMAGE)-test:$(TAG) .
 
 .PHONY: test
 test:
