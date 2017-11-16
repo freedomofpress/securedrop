@@ -8,4 +8,5 @@ py
 pytest
 pytest-cov
 pytest-capturelog
+pytest-xdist
 selenium < 3

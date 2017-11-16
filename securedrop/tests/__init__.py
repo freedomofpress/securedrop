@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from os.path import abspath, dirname, join, realpath
 import sys
 
@@ -6,3 +7,4 @@ import sys
 # the securedrop directory to sys.path here, all test modules are able to
 # directly import modules in the securedrop directory.
 sys.path.append(abspath(join(dirname(realpath(__file__)), '..', 'securedrop')))
+

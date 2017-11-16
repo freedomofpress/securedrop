@@ -1,4 +1,5 @@
 import os
+import shutil
 
 # Default values for production, may be overridden later based on environment
 class FlaskConfig(object):
@@ -64,12 +65,21 @@ elif env == 'test':
     SECUREDROP_DATA_ROOT = '/tmp/securedrop'
 
 # The following configuration is dependent on SECUREDROP_DATA_ROOT
+suffix = str(int(os.environ.get('PYTEST_XDIST_WORKER', '-1').replace('gw',''))+1)
+SECUREDROP_DATA_ROOT_COMMON = SECUREDROP_DATA_ROOT
+SECUREDROP_DATA_ROOT += suffix
+if not os.path.exists(SECUREDROP_DATA_ROOT):
+    os.mkdir(SECUREDROP_DATA_ROOT)
 
 # Directory where encrypted submissions are stored
 STORE_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'store')
+if not os.path.exists(STORE_DIR):
+    os.mkdir(STORE_DIR)
 
 # Directory where GPG keyring is stored
 GPG_KEY_DIR=os.path.join(SECUREDROP_DATA_ROOT, 'keys')
+import subprocess
+subprocess.call(['cp', '-r', os.path.join(SECUREDROP_DATA_ROOT_COMMON,'keys'), GPG_KEY_DIR])
 
 # Directory for temporary files
 # We use a directory under the SECUREDROP_DATA_ROOT instead of `/tmp` because

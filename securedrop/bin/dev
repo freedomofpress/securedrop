@@ -1,0 +1,12 @@
+#!/bin/bash
+Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+Xvfb :2 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+haveged &
+redis-server &
+
+x11vnc -display :1 -autoport 5901 -shared &
+x11vnc -display :2 -autoport 5902 -shared & 
+
+echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
+
+./manage.py run

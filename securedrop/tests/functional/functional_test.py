@@ -29,6 +29,10 @@ import tests.utils.env as env
 
 LOG_DIR = abspath(join(dirname(realpath(__file__)), '..', 'log'))
 
+os.environ['DISPLAY'] = ':'  + str(int(os.environ.get('PYTEST_XDIST_WORKER', '-1').replace('gw',''))+1)
+import sys
+print >> sys.stderr, 'ftest:', os.environ['DISPLAY']
+
 
 # https://stackoverflow.com/a/34795883/837471
 class alert_is_not_present(object):
