@@ -9,7 +9,6 @@ import crypto_util
 import store
 
 from db import db_session, Submission
-from journalist_app.decorators import login_required
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   delete_collection, col_download_unread,
@@ -21,21 +20,18 @@ def make_blueprint(config):
     view = Blueprint('col', __name__)
 
     @view.route('/add_star/<filesystem_id>', methods=('POST',))
-    @login_required
     def add_star(filesystem_id):
         make_star_true(filesystem_id)
         db_session.commit()
         return redirect(url_for('main.index'))
 
     @view.route("/remove_star/<filesystem_id>", methods=('POST',))
-    @login_required
     def remove_star(filesystem_id):
         make_star_false(filesystem_id)
         db_session.commit()
         return redirect(url_for('main.index'))
 
     @view.route('/<filesystem_id>')
-    @login_required
     def col(filesystem_id):
         form = ReplyForm()
         source = get_source(filesystem_id)
@@ -44,7 +40,6 @@ def make_blueprint(config):
                                source=source, form=form)
 
     @view.route('/delete/<filesystem_id>', methods=('POST',))
-    @login_required
     def delete_single(filesystem_id):
         """deleting a single collection from its /col page"""
         source = get_source(filesystem_id)
@@ -55,7 +50,6 @@ def make_blueprint(config):
         return redirect(url_for('main.index'))
 
     @view.route('/process', methods=('POST',))
-    @login_required
     def process():
         actions = {'download-unread': col_download_unread,
                    'download-all': col_download_all, 'star': col_star,
@@ -75,7 +69,6 @@ def make_blueprint(config):
         return method(cols_selected)
 
     @view.route('/<filesystem_id>/<fn>')
-    @login_required
     def download_single_submission(filesystem_id, fn):
         """Sends a client the contents of a single submission."""
         if '..' in fn or fn.startswith('/'):

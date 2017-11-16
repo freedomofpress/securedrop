@@ -7,15 +7,6 @@ from functools import wraps
 from journalist_app.utils import logged_in
 
 
-def login_required(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if not logged_in():
-            return redirect(url_for('main.login'))
-        return func(*args, **kwargs)
-    return wrapper
-
-
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
