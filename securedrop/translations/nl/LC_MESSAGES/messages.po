@@ -1257,75 +1257,25 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
 
-#~ msgid "{source_name}'s collection deleted"
-#~ msgstr "{source_name}s collectie verwijderd"
 
-#~ msgid "Edit Account"
-#~ msgstr "Wijzig Account"
 
-#~ msgid "Learn how to set it to high"
-#~ msgstr "Ontdek hoe je deze instelling op Hoog kan zetten"
 
-#~ msgid ", or ignore this warning to continue."
-#~ msgstr "of negeer deze waarschuwing en ga door."
 
-#~ msgid ""
-#~ "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
-#~ msgstr ""
-#~ "<strong>We raden aan om de Tor Browser te gebruiken om SecureDrop te "
-#~ "gebruiken:</strong>"
 
-#~ msgid "Learn how to install it"
-#~ msgstr "Ontdek hoe je de Tor Browser installeert"
 
-#~ msgid "Click the"
-#~ msgstr "Klik op"
 
-#~ msgid "Tor icon in the toolbar above"
-#~ msgstr "het Tor-icoon in de taakbalk bovenin"
 
 #, fuzzy
-#~| msgid "No collections selected to delete!"
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "Geen collecties geselecteerd om te verwijderen!"
 
-#~ msgid "{n} second"
-#~ msgid_plural "{n} seconds"
-#~ msgstr[0] "{n} seconde"
-#~ msgstr[1] "{n} seconden"
 
-#~ msgid "a minute"
-#~ msgstr "een minuut"
 
-#~ msgid "{n} minutes"
-#~ msgstr "{n} minuten"
 
-#~ msgid "an hour"
-#~ msgstr "een uur"
 
-#~ msgid "{n} hours"
-#~ msgstr "{n} uur"
 
-#~ msgid "a day"
-#~ msgstr "een dag"
 
-#~ msgid "{n} days"
-#~ msgstr "{n} dagen"
 
-#~ msgid "Logout"
-#~ msgstr "Uitloggen"
 
 #, fuzzy
-#~ msgid "EXIT"
-#~ msgstr "UITGANG"
 
-#~ msgid "Edit user"
-#~ msgstr "Wijzig gebruiker"
 
-#~ msgid "Two-factor token failed to verify"
-#~ msgstr ""
-#~ "Beveiligingscode voor authenticatie in twee stappen kon niet geverifieerd "
-#~ "worden"
 
-#~ msgid "Two-factor token successfully verified!"
-#~ msgstr "Authenticatie in twee stappen succesvol geverifieerd!"

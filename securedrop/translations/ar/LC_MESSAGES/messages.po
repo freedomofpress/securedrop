@@ -1217,40 +1217,14 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "الرجوع الى صفحة الارسال"
 
-#~ msgid "{source_name}'s collection deleted"
-#~ msgstr "تم حذف مجموعة {source_name}"
 
-#~ msgid "Edit Account"
-#~ msgstr "تعديل حساب"
 
-#~ msgid "Learn how to set it to high"
-#~ msgstr "تعرف على كيفية الضبط للأعلى"
 
-#~ msgid ", or ignore this warning to continue."
-#~ msgstr "، أو تجاهل هذا التنبيه للمتابعة."
 
-#~ msgid ""
-#~ "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
-#~ msgstr ""
-#~ "<strong>نوصي باستخدام متصفح تور Tor Browser للوصول إلى Securedrop:</"
-#~ "strong>"
 
-#~ msgid "Learn how to install it"
-#~ msgstr "تعرف على كيفية تثبيته"
 
-#~ msgid "Click the"
-#~ msgstr "انقر على"
 
-#~ msgid "Tor icon in the toolbar above"
-#~ msgstr "أيقونة تور Tor في شريط الأدوات أعلاه"
 
 #, fuzzy
-#~| msgid "No collections selected to delete!"
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "لم يتم تحديد مجموعات للحذف!"
 
-#~ msgid "Two-factor token failed to verify"
-#~ msgstr "أخفق التحقق من الرمز المكون من عاملين"
 
-#~ msgid "Two-factor token successfully verified!"
-#~ msgstr "تم التحقق بنجاح من الرمز المكون من عاملين!"

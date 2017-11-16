@@ -1284,64 +1284,21 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
 
-#~ msgid "{source_name}'s collection deleted"
-#~ msgstr "{source_name}s kildedata slettet"
 
-#~ msgid "Edit Account"
-#~ msgstr "Rediger konto"
 
-#~ msgid "Learn how to set it to high"
-#~ msgstr "Lær hvordan du setter nivået til Høyt"
 
-#~ msgid ", or ignore this warning to continue."
-#~ msgstr ", eller ignorer denne advarselen for å fortsette."
 
-#~ msgid ""
-#~ "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
-#~ msgstr ""
-#~ "<strong>Vi anbefaler at du bruker Tor-nettleseren for å koble til "
-#~ "SecureDrop:</strong>"
 
-#~ msgid "Learn how to install it"
-#~ msgstr "Lær hvordan du installerer den"
 
-#~ msgid "Click the"
-#~ msgstr "Klikk på"
 
-#~ msgid "Tor icon in the toolbar above"
-#~ msgstr "Tor-ikonet i verktøylinjen ovenfor"
 
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "Ingen kildeoppføringer valgt for sletting."
 
-#~ msgid "{n} second"
-#~ msgid_plural "{n} seconds"
-#~ msgstr[0] "{n} sekund"
-#~ msgstr[1] "{n} sekunder"
 
-#~ msgid "a minute"
-#~ msgstr "ett minutt"
 
-#~ msgid "{n} minutes"
-#~ msgstr "{n} minutter"
 
-#~ msgid "an hour"
-#~ msgstr "én time"
 
-#~ msgid "{n} hours"
-#~ msgstr "{n} timer"
 
-#~ msgid "a day"
-#~ msgstr "én dag"
 
-#~ msgid "{n} days"
-#~ msgstr "{n} dager"
 
-#~ msgid "Logout"
-#~ msgstr "Logg ut"
 
-#~ msgid "EXIT"
-#~ msgstr "AVSLUTT"
 
-#~ msgid "Edit user"
-#~ msgstr "Rediger bruker"
