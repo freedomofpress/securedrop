@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import codecs
 import logging
 import os
 import shutil
@@ -194,6 +195,7 @@ def _add_user(is_admin=False):
                                              issuer_name='SecureDrop')
             qr = qrcode.QRCode()
             qr.add_data(uri)
+            sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
             qr.print_ascii(tty=sys.stdout.isatty())
             print('\nIf the barcode does not render correctly, try changing '
                   "your terminal's font (Monospace for Linux, Menlo for OS "
