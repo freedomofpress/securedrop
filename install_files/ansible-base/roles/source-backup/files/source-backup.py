@@ -21,7 +21,7 @@ def validate_source(source):
     for char in source.filesystem_id:
         assert char in valid_hash_characters
 
-    valid_codeword_characters = 'abcdefghijklmnopqrstuvwxyz0123456789-_'
+    valid_codeword_characters = "'abcdefghijklmnopqrstuvwxyz0123456789-_"
     # Does the journalist designation consist of expected words?
     for word in source.journalist_designation.split():
         for char in word:
