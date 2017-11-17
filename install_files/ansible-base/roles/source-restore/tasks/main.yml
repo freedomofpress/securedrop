@@ -26,3 +26,11 @@
     path: /var/lib/securedrop/db.sqlite
     owner: www-data
     group: www-data
+
+- name: Ensure key files owned by www-data user
+  file:
+    path: /var/lib/securedrop/keys
+    state: directory
+    recurse: yes
+    owner: www-data
+    group: www-data
