@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-16 22:00+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-11-17 03:00+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://*/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -244,7 +244,7 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
-"Telefonen din vil nå være i \"skanne\"-modus. I denne modusen, pek kameraet "
+"Telefonen din vil nå være i \"skanne\"-modus. I dette moduset, pek kameraet "
 "mot QR-koden under og skann:"
 
 #: journalist_templates/account_new_two_factor.html:14
@@ -1005,7 +1005,7 @@ msgstr "Du kan sende ei fil, melding, eller begge deler."
 
 #: source_templates/lookup.html:33
 msgid "Maximum upload size: 500 MB"
-msgstr "Maksimal opplastingsstørrelse: 500MB"
+msgstr "Maksimal opplastningsstørrelse: 500MB"
 
 #: source_templates/lookup.html:53
 msgid "Get Replies"
