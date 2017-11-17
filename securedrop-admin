@@ -243,8 +243,9 @@ def restore_sources(args):
     # putting them on a new server.
     for source in sources:
         try:
-            validate_gpg_key(source['gpg_key'],
-                             source['filesystem_id'])
+            if source['gpg_key']:
+                validate_gpg_key(source['gpg_key'],
+                                 source['filesystem_id'])
         except AssertionError:
             print ('Unusual data found in a PGP key. '
                    'Please contact Freedom of the Press Foundation.')

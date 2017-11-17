@@ -42,17 +42,19 @@ def verify_args():
 
 
 def restore_source(source):
-    gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
-    gpg.import_keys(source['gpg_key'])
+    if source['gpg_key']:
+        gpg = gnupg.GPG(binary='gpg2', homedir=config.GPG_KEY_DIR)
 
-    # Make all files in gpg home folder owned by www-data
-    gpg_files = [f for f in os.listdir(config.GPG_KEY_DIR)
-        if os.path.isdir(os.path.join(config.GPG_KEY_DIR, f))]
+        gpg.import_keys(source['gpg_key'])
 
-    for gpg_file in gpg_files:
-        uid = pwd.getpwnam("www-data").pw_uid
-        gid = grp.getgrnam("www-data").gr_gid
-        os.chown(gpg_file, uid, gid)
+        # Make all files in gpg home folder owned by www-data
+        gpg_files = [f for f in os.listdir(config.GPG_KEY_DIR)
+            if os.path.isdir(os.path.join(config.GPG_KEY_DIR, f))]
+
+        for gpg_file in gpg_files:
+            uid = pwd.getpwnam("www-data").pw_uid
+            gid = grp.getgrnam("www-data").gr_gid
+            os.chown(gpg_file, uid, gid)
 
     # Make directory for source documents and ensure it has the right
     # permissions
