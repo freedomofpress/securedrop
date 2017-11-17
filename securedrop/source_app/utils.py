@@ -1,3 +1,4 @@
+import logging
 import subprocess
 
 from datetime import datetime
@@ -78,7 +79,7 @@ def async_genkey(filesystem_id, codename):
         source.last_updated = datetime.utcnow()
         db_session.commit()
     except Exception as e:
-        current_app.logger.error(
+        logging.getLogger(__name__).error(
                 "async_genkey for source (filesystem_id={}): {}"
                 .format(filesystem_id, e))
 
