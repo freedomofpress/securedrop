@@ -38,3 +38,7 @@
     path: /var/lib/securedrop/db.sqlite
     owner: www-data
     group: www-data
+
+- name: Manual confimation to grab content
+  debug:
+    msg: "Make sure you copy/paste anylines starting with 'SCRYPT_' from the old config.py to the new one"
