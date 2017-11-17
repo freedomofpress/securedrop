@@ -8,6 +8,7 @@ source identities to enable them to login.
 from datetime import datetime
 import json
 import subprocess
+import os
 import sys
 
 import config
