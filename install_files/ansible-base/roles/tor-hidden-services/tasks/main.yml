@@ -1,4 +1,11 @@
 ---
+- name: Determine if we are installing/configuring Tor
+  set_fact:
+    install_tor: false
+  when: not enable_ssh_over_tor and 'securedrop_monitor_server' in group_names
+
 - include: install_tor.yml
+  when: install_tor|default(true)
 
 - include: configure_tor_hidden_services.yml
+  when: install_tor|default(true)

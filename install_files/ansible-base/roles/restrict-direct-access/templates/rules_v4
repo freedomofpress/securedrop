@@ -4,6 +4,7 @@
 :OUTPUT DROP [0:0]
 :LOGNDROP - [0:0]
 
+{% if enable_ssh_over_tor %}
 # Prod ssh connections happen through an authenticated tor hidden service
 # The ssh connection is proxied on the server by the tor client to
 # the ssh dameon listening on the local loopback.
@@ -16,7 +17,9 @@
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -m limit --limit 3/min --limit-burst 3 -j ACCEPT -m comment --comment "Rate limit traffic from tor to the ssh dameon"
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state NEW -j LOGNDROP -m comment --comment "Drop all other new connections from tor to the ssh dameon"
 -A OUTPUT -o lo -p tcp --dport 22 -m owner --uid-owner debian-tor -m state --state ESTABLISHED,RELATED -j ACCEPT -m comment --comment "Allow the established traffic from tor to the ssh dameon"
+{% endif %}
 
+{% if enable_ssh_over_tor or 'securedrop_application_server' in group_names %}
 # Load before tor user drop rules
 # TODO: use ansible facts to populate the in use interface to further restrict
 # the rules.
@@ -26,6 +29,7 @@
 # Drop all other outbound traffic by the tor user.
 # Load before generic loopback rules
 -A OUTPUT -m owner --uid-owner debian-tor -j LOGNDROP -m comment --comment "Drop all other traffic for the tor instance used for ssh"
+{% endif %}
 
 {% if 'securedrop_application_server' in group_names %}
 # Only allow inbound rules from loopback with a dport of 80 or 8080 respectively for apache user
@@ -90,26 +94,20 @@
 {% endif %}
 
 
-# Permit direct SSH access for staging environment. Using a dual conditional here for safety;
-# the role default var "allow_direct_access" is false, and the "staging" name is not present in prod.
-# Both conditions must be satisfied to add these exemptions.
-{% if allow_direct_access == true and
-      'staging' in group_names %}
-
-{% if 'securedrop_application_server' in group_names %}
--A INPUT -i {{ ansible_default_ipv4.interface }}  -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -o {{ ansible_default_ipv4.interface }}  -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-
-{% elif 'securedrop_monitor_server' in group_names %}
--A INPUT -i {{ ansible_default_ipv4.interface }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -o {{ ansible_default_ipv4.interface }} -p tcp --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p udp --sport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-{% endif %}
-
-{% endif %}
+# Permit direct SSH access.
+# Allowed for staging and optionally for production (disables ssh over tor)
+{% for interface in ansible_interfaces -%}
+  {%- set int_details = hostvars[inventory_hostname]['ansible_'+interface].ipv4 -%}
+  {%- set net_string = '/'.join([int_details.network,int_details.netmask]) -%}
+  {%- if ssh_ip|ipaddr(net_string) -%}
+    {%- set ssh_local_net = net_string|ipaddr('cidr') -%}
+    {%- set ssh_int = interface -%}
+      {%- if enable_ssh_over_tor == true or 'staging' in group_names -%}
+-A INPUT -i {{ ssh_int }} -s {{ ssh_local_net }} -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -o {{ ssh_int }} -p tcp -m owner --uid-owner root --sport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+      {%- endif %}
+  {%- endif %}
+{% endfor %}
 
 # Allow generic loopback connections
 -A INPUT -i lo -p all -j ACCEPT -m comment --comment "Allow lo to lo traffic all protocols"

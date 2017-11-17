@@ -50,7 +50,7 @@ postfix_enable_service: no
 # Permit direct access for SSH in the staging environment.
 # Otherwise, all SSH connections would be forced over Tor.
 ssh_listening_address: 0.0.0.0
-allow_direct_access: true
+enable_ssh_over_tor: false
 
 ### Use for backup restores ###
 # If the `backup_zip` variable is defined ansible will copy the defined file to
