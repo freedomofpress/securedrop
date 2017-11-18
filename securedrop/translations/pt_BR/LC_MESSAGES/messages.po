@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-16 23:00+0000\n"
+"PO-Revision-Date: 2017-11-18 11:00+0000\n"
 "Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
-"<https://*/projects/securedrop/securedrop/pt_BR/>\n"
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -131,89 +131,90 @@ msgstr ""
 
 #: journalist.py:583
 msgid "No collections selected."
-msgstr ""
+msgstr "Nenhuma coleção selecionada."
 
 #: journalist.py:607
 msgid "No unread submissions in selected collections."
-msgstr ""
+msgstr "Nenhum envio não lido nas coleções selecionadas."
 
 #: journalist.py:646
 msgid "{source_name}'s collection deleted"
-msgstr ""
+msgstr "Coleção {source_name} apagada"
 
 #: journalist.py:655 journalist.py:784
 msgid "No collections selected for deletion."
-msgstr ""
+msgstr "Nenhuma coleção foi selecionada para ser excluída."
 
 #: journalist.py:660
 msgid "{num} collection deleted"
 msgid_plural "{num} collections deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} coleção apagada"
+msgstr[1] "{num} coleções apagadas"
 
 #: journalist.py:704
 msgid "You cannot send an empty reply."
-msgstr ""
+msgstr "Não é possível enviar uma resposta em branco."
 
 #: journalist.py:731
 msgid "Thanks. Your reply has been stored."
-msgstr ""
+msgstr "Obrigado. Sua resposta foi registrada."
 
 #: journalist.py:750
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
-msgstr ""
+msgstr "A fonte '{original_name}' foi renomeada como '{new_name}'"
 
 #: journalist.py:766
 msgid "No unread submissions for this source."
-msgstr ""
+msgstr "Esta fonte não tem nenhum envio não lido."
 
 #: journalist.py:782
 msgid "No collections selected for download."
-msgstr ""
+msgstr "Nenhuma coleção selecionada para download."
 
 #: journalist.py:814
 msgid "Submission deleted."
 msgid_plural "Submissions deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Envio apagado."
+msgstr[1] "Envios apagados."
 
 #: template_filters.py:14
 msgid "{time} ago"
-msgstr ""
+msgstr "há {time}"
 
 #: journalist_templates/_source_row.html:17
 msgid "docs {doc_num}"
-msgstr ""
+msgstr "documentos {doc_num}"
 
 #: journalist_templates/_source_row.html:18
 msgid "messages {msg_num}"
-msgstr ""
+msgstr "mensagens {msg_num}"
 
 #: journalist_templates/_source_row.html:21
+#, fuzzy
 msgid "{num_unread} unread"
-msgstr ""
+msgstr "{num_unread} não lidas"
 
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr ""
+msgstr "Alterar segredo"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:19
 #: journalist_templates/admin_edit_hotp_secret.html:8
 msgid "HOTP Secret"
-msgstr ""
+msgstr "Segredo HOTP"
 
 #: journalist_templates/account_edit_hotp_secret.html:9
 #: journalist_templates/admin_edit_hotp_secret.html:10
 #: source_templates/generate.html:46 source_templates/login.html:24
 msgid "CONTINUE"
-msgstr ""
+msgstr "CONTINUAR"
 
 #: journalist_templates/account_new_two_factor.html:4
 #: journalist_templates/admin_new_user_two_factor.html:5
 msgid "Enable Google Authenticator"
-msgstr ""
+msgstr "Habilitar Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:5
 msgid ""
@@ -223,21 +224,27 @@ msgid ""
 "codes from the app to confirm that two factor authentication is set up "
 "correctly."
 msgstr ""
+"Está quase terminando! Para completar a redefinição da autenticação de dois "
+"fatores, siga as instruções abaixo para configurar o Google Authenticator. "
+"Depois de registrar a sua conta no aplicativo, insira um dos códigos de seis "
+"dígitos do aplicativo para verificar se a autenticação de dois fatores foi "
+"configurada corretamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
 msgid "Install Google Authenticator on your phone"
-msgstr ""
+msgstr "Instale o Google Authenticator no seu telefone"
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
 msgid "Open the Google Authenticator app"
-msgstr ""
+msgstr "Abra o app Google Authenticator"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
+"No menu, selecione \"Criar uma conta\" e depois \"Escanear código de barras\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
