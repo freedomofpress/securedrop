@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-19 12:23+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-11-20 00:00+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -62,7 +62,7 @@ msgstr ""
 
 #: journalist_app/admin.py:84
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "Tofaktor-kode for brukeren {user} er godkjent."
+msgstr "Tofaktor-kode for brukeren {user} ble godkjent."
 
 #: journalist_app/admin.py:118
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
