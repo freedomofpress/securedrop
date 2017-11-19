@@ -16,7 +16,7 @@ import version
 
 from db import Source, db_session
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from source_app import main, info, api
+from source_app import main, info, api, utils
 from source_app.decorators import ignore_static
 from source_app.utils import logged_in
 
@@ -49,6 +49,8 @@ def create_app(config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
+    app.jinja_env.globals['randompayload'] = utils.randompayload
+
     if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
         app.jinja_env.globals['use_custom_header_image'] = True

@@ -11,6 +11,7 @@ from flask_testing import TestCase
 import crypto_util
 from db import db_session, Source
 import source
+from source_app import utils as source_utils
 import version
 import utils
 import json
@@ -509,3 +510,15 @@ class TestSourceApp(TestCase):
                               resp.data)
         finally:
             self.app.config['WTF_CSRF_ENABLED'] = old_enabled
+
+    def test_randompayload(self):
+        min = 512
+        max = 1024
+        assert len(source_utils.randompayload(min, max)) > 512
+
+    def test_render_randompayload(self):
+        resp = self.client.get('/')
+        self.assertIn('difficult to fingerprint', resp.data)
+
+        resp = self.client.get('/generate')
+        self.assertIn('difficult to fingerprint', resp.data)
