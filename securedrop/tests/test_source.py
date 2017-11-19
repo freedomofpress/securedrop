@@ -5,7 +5,7 @@ from mock import patch, ANY
 import re
 
 from bs4 import BeautifulSoup
-from flask import session, escape
+from flask import session, escape, url_for
 from flask_testing import TestCase
 
 import crypto_util
@@ -44,6 +44,29 @@ class TestSourceApp(TestCase):
         self.assertIn("Submit documents for the first time", response.data)
         self.assertIn("Already submitted something?", response.data)
 
+    def test_all_words_in_wordlist_validate(self):
+        """Verify that all words in the wordlist are allowed by the form
+        validation. Otherwise a source will have a codename and be unable to
+        return."""
+
+        wordlist_en = crypto_util._get_wordlist('en')
+
+        # chunk the words to cut down on the number of requets we make
+        # otherwise this test is *slow*
+        chunks = [wordlist_en[i:i + 7] for i in range(0, len(wordlist_en), 7)]
+
+        for words in chunks:
+            with self.client as c:
+                resp = c.post('/login', data=dict(codename=' '.join(words)),
+                              follow_redirects=True)
+                self.assertEqual(resp.status_code, 200)
+                # If the word does not validate, then it will show
+                # 'Invalid input'. If it does validate, it should show that
+                # it isn't a recognized codename.
+                self.assertIn('Sorry, that is not a recognized codename.',
+                              resp.data)
+                self.assertNotIn('logged_in', session)
+
     def _find_codename(self, html):
         """Find a source codename (diceware passphrase) in HTML"""
         # Codenames may contain HTML escape characters, and the wordlist
@@ -72,7 +95,7 @@ class TestSourceApp(TestCase):
            if they already have a codename, rather than create a new one.
         """
         resp = self.client.get('/generate')
-        self.assertIn("ALREADY HAVE A CODENAME?", resp.data)
+        self.assertIn("USE EXISTING CODENAME", resp.data)
         soup = BeautifulSoup(resp.data, 'html.parser')
         already_have_codename_link = soup.select('a#already-have-codename')[0]
         self.assertEqual(already_have_codename_link['href'], '/login')
@@ -126,6 +149,7 @@ class TestSourceApp(TestCase):
             logger.assert_called_once()
             self.assertIn("Attempt to create a source with duplicate codename",
                           logger.call_args[0][0])
+            assert 'codename' not in session
 
     def test_lookup(self):
         """Test various elements on the /lookup page."""
@@ -470,3 +494,18 @@ class TestSourceApp(TestCase):
                 config.SESSION_EXPIRATION_MINUTES = old_expiration
             else:
                 del config.SESSION_EXPIRATION_MINUTES
+
+    def test_csrf_error_page(self):
+        old_enabled = self.app.config['WTF_CSRF_ENABLED']
+        self.app.config['WTF_CSRF_ENABLED'] = True
+
+        try:
+            with self.app.test_client() as app:
+                resp = app.post(url_for('main.create'))
+                self.assertRedirects(resp, url_for('main.index'))
+
+                resp = app.post(url_for('main.create'), follow_redirects=True)
+                self.assertIn('Your session timed out due to inactivity',
+                              resp.data)
+        finally:
+            self.app.config['WTF_CSRF_ENABLED'] = old_enabled

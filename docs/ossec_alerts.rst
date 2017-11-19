@@ -68,7 +68,7 @@ For first-time installs, you can use the
 - Password of the email used to send OSSEC alerts: ``sasl_password``
 
 If you don't know what value to enter for one of these, please ask your
-organization's email administrator for the full configuration before
+organization's email admin for the full configuration before
 proceeding. It is better to get these right the first time rather than
 changing them after SecureDrop is installed. If you're not sure of the
 correct ``smtp_relay_port`` number, you can use a simple mail client
@@ -142,7 +142,7 @@ will retrieve and format the fingerprint per our requirements: ::
 
 Next you specify the e-mail that you'll be sending alerts to, as
 ``ossec_alert_email``. This could be your work email, or an alias for a
-group of IT administrators at your organization. It helps for your mail
+group of IT admins at your organization. It helps for your mail
 client to have the ability to filter the numerous messages from OSSEC
 into a separate folder.
 

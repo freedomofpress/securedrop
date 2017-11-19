@@ -21,11 +21,11 @@
 
     {% if g.user %}
     <div id="logout">
-      {{ gettext('Logged on as') }} <a href="{{ url_for('edit_account') }}" id="link-edit-account">{{ g.user.username }}</a> |
+      {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
       {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin_index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
+      <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
       {% endif %}
-      <a href="{{ url_for('logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
+      <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
     </div>
     <div class="clearfix"></div>
     {% endif %}
@@ -33,7 +33,7 @@
     <div class="content">
       {% block header %}
       <div id="header">
-        <a href="{{ url_for('index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
+        <a href="{{ url_for('main.index') }}"><img src="/static/i/{{ header_image }}" class="logo small" alt="SecureDrop" width="250px"></a>
         {% include 'locales.html' %}
         {% if use_custom_header_image %}
         <div class="powered">

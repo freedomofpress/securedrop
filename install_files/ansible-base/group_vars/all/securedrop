@@ -2,7 +2,7 @@
 # Variables that apply to both the app and monitor server go in this file
 # If the monitor or app server need different values define the variable in
 # hosts_vars/app.yml or host_vars/mon.yml host_vars/development.yml
-securedrop_app_code_version: "0.4.3"
+securedrop_app_code_version: "0.4.4"
 
 grsecurity: true
 install_local_packages: false
@@ -28,6 +28,7 @@ development_dependencies:
   - libffi-dev # for sphinx
   - git
   - devscripts # for dch
+  - gdb # for gcore in TestSubmissionNotInMemory
 
 # These profiles are referenced by multiple machines, such as Application Server
 # for direct copying at install time, and the build machine for including them
@@ -50,4 +51,3 @@ appserver_dependencies:
   - apparmor-utils
   - redis-server
   - supervisor
-

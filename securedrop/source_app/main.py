@@ -38,6 +38,7 @@ def make_blueprint(config):
 
         codename = generate_unique_codename()
         session['codename'] = codename
+        session['new_user'] = True
         return render_template('generate.html', codename=codename)
 
     @view.route('/create', methods=['POST'])
@@ -53,6 +54,10 @@ def make_blueprint(config):
             current_app.logger.error(
                 "Attempt to create a source with duplicate codename: %s" %
                 (e,))
+
+            # Issue 2386: don't log in on duplicates
+            del session['codename']
+            abort(500)
         else:
             os.mkdir(store.path(filesystem_id))
 
@@ -91,6 +96,7 @@ def make_blueprint(config):
             codename=g.codename,
             replies=replies,
             flagged=g.source.flagged,
+            new_user=session.get('new_user', None),
             haskey=crypto_util.getkey(
                 g.filesystem_id))
 
@@ -213,8 +219,11 @@ def make_blueprint(config):
     @view.route('/logout')
     def logout():
         if logged_in():
-            session.clear()
             msg = render_template('logout_flashed_message.html')
+
+            # clear the session after we render the message so it's localized
+            session.clear()
+
             flash(Markup(msg), "important hide-if-not-tor-browser")
         return redirect(url_for('.index'))
 

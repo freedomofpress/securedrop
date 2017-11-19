@@ -4,7 +4,7 @@
   <h1><span class="headline">{{ gettext('Sources') }}</span></h1>
   {% if unstarred or starred %}
     <div id="filter-container"></div>
-    <form id="process-collections" action="/col/process" method="post">
+    <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <p>
         <div id="index-select-container"></div>

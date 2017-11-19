@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.4
+
+Bugfix release. Fixes configuration management logic to ensure all packages
+are properly validated prior to installation.
+
+* Remove force=yes in package install tasks in Ansible config.
+* Upgrade Ansible to 2.3.2 to address CVE-2017-7481.
+* Add securedrop-admin `logs` command for collecting log files.
+* Increases expiration date on SecureDrop Release Signing Key to October 2018.
+
+Since this is a bugfix release, the changes on the 0.4.4 milestone
+are not included here. Those issues have been postponed to a future release.
+
 ## 0.4.3
 
 The issues for this release were tracked in the 0.4.3 milestone on Github:

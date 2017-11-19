@@ -1,3 +1,7 @@
+import pytest
+
+
+@pytest.mark.xfail()
 def test_ip6tables_drop_everything(Command, Sudo):
     """
     Ensure that all IPv6 packets are dropped by default.

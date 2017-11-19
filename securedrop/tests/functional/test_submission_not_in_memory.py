@@ -1,22 +1,21 @@
-from unittest import TestCase
 from functional_test import FunctionalTest
 import subprocess
 from source_navigation_steps import SourceNavigationSteps
 import os
+import pytest
 import getpass
 import re
-from step_helpers import screenshots
 
 
-class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
+class TestSubmissionNotInMemory(FunctionalTest,
                                 SourceNavigationSteps):
 
-    def setUp(self):
+    def setup(self):
         self.devnull = open('/dev/null', 'r')
-        FunctionalTest.setUp(self)
+        FunctionalTest.setup(self)
 
-    def tearDown(self):
-        FunctionalTest.tearDown(self)
+    def teardown(self):
+        FunctionalTest.teardown(self)
 
     def _memory_dump(self, pid):
         core_dump_base_name = '/tmp/core_dump'
@@ -30,12 +29,13 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
             with open(core_dump_file_name, 'r') as fp:
                 return fp.read()
         finally:
+            pass
             os.remove(core_dump_file_name)
 
     def _num_strings_in(self, needle, haystack):
         return sum(1 for _ in re.finditer(re.escape(needle), haystack))
 
-    @screenshots
+    @pytest.mark.xfail()
     def test_message_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -50,7 +50,7 @@ class SubmissionNotInMemoryTest(TestCase, FunctionalTest,
 
         assert secrets_in_memory < 1
 
-    @screenshots
+    @pytest.mark.xfail()
     def test_file_upload_is_not_retained_in_memory(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

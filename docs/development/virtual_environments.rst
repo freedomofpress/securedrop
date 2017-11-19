@@ -1,14 +1,17 @@
-Virtual Environments
-====================
+Virtual Environments: Servers
+=============================
 
 There are three predefined virtual environments in the Vagrantfile:
 
-1. Development
-2. Staging
-3. Production
+1. :ref:`Development <development_vm>`
+2. :ref:`Staging <staging_vms>`
+3. :ref:`Production <production_vms>`
 
 This document explains the purpose of, and how to get started working with, each
 one.
+
+.. note:: If you plan to alter the configuration of any of these machines, make sure to
+          review the :ref:`config_tests` documentation.
 
 .. note:: If you have errors with mounting shared folders in the Vagrant guest
           machine, you should look at `GitHub #1381`_.
@@ -53,11 +56,13 @@ following ports:
 * Source Interface: `localhost:8080 <http://localhost:8080>`__
 * Journalist Interface: `localhost:8081 <http://localhost:8081>`__
 
+.. _staging_vms:
+
 Staging
 -------
 
 A compromise between the development and production environments. This
-configuration can be thought of as identical to the production enviornment, with
+configuration can be thought of as identical to the production environment, with
 a few exceptions:
 
 * The Debian packages are built from your local copy of the code, instead of
@@ -153,6 +158,8 @@ Direct SSH access is available via Vagrant for staging hosts, so you can use
 ``vagrant ssh app-staging`` and ``vagrant ssh mon-staging`` to start an
 interactive session on either server.
 
+.. _production_vms:
+
 Production
 ----------
 
@@ -162,7 +169,73 @@ virtualized, rather than running on hardware. You will need to
 ``ANSIBLE_ARGS="--skip-tags validate"`` to skip the tasks that prevent the prod
 playbook from running with Vagrant-specific info.
 
-To create only the prod servers, run:
+You can provision production VMs from an Admin Workstation (most realistic),
+or from your host. Instructions for both follow.
+
+.. _prod_install_from_tails:
+
+Install from an Admin Workstation VM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In SecureDrop, admin tasks are performed from a Tails *Admin Workstation*.
+You should configure a Tails VM in order to install the SecureDrop production VMs
+by following the instructions in the :ref:`Virtualizing Tails <virtualizing_tails>`
+guide.
+
+Once you're prepared the *Admin Workstation*, you can start each VM:
+
+.. code:: sh
+
+  vagrant up --no-provision /prod/
+
+At this point you should be able to SSH into both ``app-prod`` and ``mon-prod``.
+From here you can follow the :ref:`server configuration instructions
+<test_connectivity>` to test connectivity and prepare the servers. These
+instructions will have you generate SSH keys and use ``ssh-copy-id`` to transfer
+the key onto the servers.
+
+.. note:: If you have trouble SSHing to the servers from Ansible, remember
+          to remove any old ATHS files in ``install_files/ansible-base``.
+
+Now from your Admin workstation:
+
+.. code:: sh
+
+  cd ~/Persistent/securedrop
+  ./securedrop-admin setup
+  ./securedrop-admin sdconfig
+  ./securedrop-admin install
+
+.. note:: The sudo password for the ``app-prod`` and ``mon-prod`` servers is by
+          default ``vagrant``.
+
+After install you can configure your Admin Workstation to SSH into each VM via:
+
+.. code:: sh
+
+  ./securedrop-admin tailsconfig
+
+Install from Host OS
+~~~~~~~~~~~~~~~~~~~~
+
+If you are not virtualizing Tails, you can manually modify ``site-specific``,
+and then provision the machines. You should set the following options in
+``site-specific``:
+
+.. code:: sh
+
+  ssh_users: "vagrant"
+  monitor_ip: "10.0.1.5"
+  monitor_hostname: "mon-prod"
+  app_hostname: "app-prod"
+  app_ip: "10.0.1.4"
+
+Note that you will also need to generate Submission and OSSEC PGP public keys,
+and provide email credentials to send emails to. Refer to
+:ref:`this document on configuring prod-like secrets<configure_securedrop>`
+for more details on those steps.
+
+To create the prod servers, run:
 
 .. code:: sh
 
@@ -181,8 +254,8 @@ directory, named:
 * ``app-ssh-aths``
 * ``mon-ssh-aths``
 
+SSH Access
+~~~~~~~~~~
+
 Direct SSH access is not available in the prod environment. You will need to log
 in over Tor after initial provisioning. See :ref:`ssh_over_tor` for more info.
-
-If you plan to alter the configuration of any of these machines, make sure to
-review the :ref:`config_tests` documentation.

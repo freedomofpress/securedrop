@@ -111,13 +111,13 @@ mounted and ready to access.
 
 |Backup and TailsData Mounted|
 
-Open a Nautilus window with administrator privileges by going to
+Open a Nautilus window with admin privileges by going to
 **Applications** ▸ **System Tools** ▸ **Terminal**.
 
 |Open Terminal|
 
 Type ``gksu nautilus`` at the terminal prompt and hit enter. You'll need to type
-your administrator password.
+your admin password.
 
 |Start gksu nautilus|
 
@@ -126,9 +126,9 @@ your administrator password.
   complains that it can't create a required folder. If that happens, just click
   OK and continue normally.
 
-  If a Nautilus window *doesn't* come up, it might be because an administrator
+  If a Nautilus window *doesn't* come up, it might be because an admin
   password wasn't set. If that's the case, you'll need to restart and set an
-  administrator password before continuing.
+  admin password before continuing.
 
 .. warning::
             Make sure you use keep the `Terminal` window open while you perform

@@ -3,7 +3,7 @@ from flask import (Flask, render_template, flash, Markup, request, g, session,
                    url_for, redirect)
 from flask_babel import gettext
 from flask_assets import Environment
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from jinja2 import evalcontextfilter
 from os import path
 from sqlalchemy.orm.exc import NoResultFound
@@ -31,15 +31,23 @@ def create_app(config):
     # The default CSRF token expiration is 1 hour. Since large uploads can
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config['WTF_CSRF_TIME_LIMIT'] = 60 * 60 * 24
+
     CSRFProtect(app)
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        msg = render_template('session_timeout.html')
+        session.clear()
+        flash(Markup(msg), "important")
+        return redirect(url_for('main.index'))
 
     assets = Environment(app)
     app.config['assets'] = assets
 
-    # this set needs to happen *before* we set the jinja filters otherwise
-    # we get name collisions
     i18n.setup_app(app)
 
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals['version'] = version.__version__
     if getattr(config, 'CUSTOM_HEADER_IMAGE', None):
         app.jinja_env.globals['header_image'] = config.CUSTOM_HEADER_IMAGE
@@ -48,7 +56,8 @@ def create_app(config):
         app.jinja_env.globals['header_image'] = 'logo.png'
         app.jinja_env.globals['use_custom_header_image'] = False
 
-    app.jinja_env.filters['datetimeformat'] = template_filters.datetimeformat
+    app.jinja_env.filters['rel_datetime_format'] = \
+        template_filters.rel_datetime_format
     app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
 
@@ -78,9 +87,12 @@ def create_app(config):
         g.locales = i18n.get_locale2name()
 
         if 'expires' in session and datetime.utcnow() >= session['expires']:
+            msg = render_template('session_timeout.html')
+
+            # clear the session after we render the message so it's localized
             session.clear()
-            flash(gettext('You have been logged out due to inactivity'),
-                  'error')
+
+            flash(Markup(msg), "important")
 
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,

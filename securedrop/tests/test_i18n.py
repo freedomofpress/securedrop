@@ -44,7 +44,7 @@ class TestI18N(object):
 
     def test_get_supported_locales(self):
         locales = ['en_US', 'fr_FR']
-        assert locales == i18n._get_supported_locales(locales, None, None)
+        assert ['en_US'] == i18n._get_supported_locales(locales, None, None)
         locales = ['en_US', 'fr_FR']
         supported = ['en_US', 'not_found']
         with pytest.raises(i18n.LocaleNotFound) as excinfo:
@@ -112,13 +112,18 @@ class TestI18N(object):
                 ''').strip() == translated_ar
 
         with app.test_client() as c:
-            c.get('/')
+            page = c.get('/login')
             assert session.get('locale') is None
             assert not_translated == gettext(not_translated)
+            assert '?l=fr_FR' in page.data
+            assert '?l=en_US' not in page.data
 
-            c.get('/?l=fr_FR', headers=Headers([('Accept-Language', 'en_US')]))
+            page = c.get('/login?l=fr_FR',
+                         headers=Headers([('Accept-Language', 'en_US')]))
             assert session.get('locale') == 'fr_FR'
             assert translated_fr == gettext(not_translated)
+            assert '?l=fr_FR' not in page.data
+            assert '?l=en_US' in page.data
 
             c.get('/', headers=Headers([('Accept-Language', 'en_US')]))
             assert session.get('locale') == 'fr_FR'
@@ -213,6 +218,8 @@ class TestI18N(object):
             if supported:
                 del config.SUPPORTED_LOCALES
             for app in (journalist.app, source.app):
+                config.SUPPORTED_LOCALES = [
+                    'en_US', 'fr_FR', 'zh_Hans_CN', 'ar', 'nb_NO']
                 i18n.setup_app(app, translation_dirs=config.TEMP_DIR)
                 self.verify_i18n(app)
         finally:
@@ -237,7 +244,7 @@ class TestI18N(object):
         assert i18n.locale_to_rfc_5646('en-us') == 'en'
         assert i18n.locale_to_rfc_5646('zh-hant') == 'zh-Hant'
 
-    def test_html_lang_correct(self):
+    def test_html_en_lang_correct(self):
         app = journalist.app.test_client()
         resp = app.get('/', follow_redirects=True)
         html = resp.data.decode('utf-8')
@@ -252,6 +259,23 @@ class TestI18N(object):
         resp = app.get('/generate', follow_redirects=True)
         html = resp.data.decode('utf-8')
         assert re.compile('<html .*lang="en".*>').search(html), html
+
+    def test_html_fr_lang_correct(self):
+        """Check that when the locale is fr_FR the lang property is correct"""
+        app = journalist.app.test_client()
+        resp = app.get('/?l=fr_FR', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="fr".*>').search(html), html
+
+        app = source.app.test_client()
+        resp = app.get('/?l=fr_FR', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="fr".*>').search(html), html
+
+        # check '/generate' too because '/' uses a different template
+        resp = app.get('/generate?l=fr_FR', follow_redirects=True)
+        html = resp.data.decode('utf-8')
+        assert re.compile('<html .*lang="fr".*>').search(html), html
 
     @classmethod
     def teardown_class(cls):

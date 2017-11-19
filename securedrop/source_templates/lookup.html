@@ -33,24 +33,24 @@
       <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
     </div>
     <div class="message grid-item">
-      <textarea name="msg" class="fill-parent" placeholder="Write a message."></textarea>
+      <textarea name="msg" class="fill-parent" placeholder="{{ gettext('Write a message.') }}"></textarea>
     </div>
   </div>
 
   <hr class="no-line">
   <div class="pull-right">
-    <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
     <button type="submit" class="sd-button btn primary" id="submit-doc-button">
       <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-white.png') }}" width="20px" height="14px">
       <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/cloud-upload-blue.png') }}" width="20px" height="14px">
       {{ gettext('SUBMIT') }}
     </button>
+    <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
   </div>
 </form>
 
 <hr class="no-line">
 
-<h2 class="headline">{{ gettext('Get Replies') }}</h2>
+<h2 class="headline">{{ gettext('Read Replies') }}</h2>
 
 <div id="replies">
   {% if replies %}
@@ -60,7 +60,7 @@
     <hr class="no-line">
     {% for reply in replies %}
       <div class="reply">
-        <time class="date" title="{{ reply.date|datetimeformat }}" datetime="{{ reply.date }}">{{ reply.date|datetimeformat(relative=True) }}</time>
+        <time class="date" title="{{ reply.date|rel_datetime_format }}" datetime="{{ reply.date }}">{{ reply.date|rel_datetime_format(relative=True) }}</time>
         <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
@@ -94,14 +94,17 @@
 
 <hr class="no-line">
 
+{% if new_user %}
 <div class="code-reminder" id="codename-hint">
   <div id="codename-hint-visible">
     <img class="pull-left" src="{{ url_for('static', filename='i/font-awesome/lock-black.png') }}" width="17px" height="20px"> {{ gettext('Remember your codename is:') }}
     <a id="codename-hint-show" class="show pull-right visible-codename" href="#codename-hint-visible">{{ gettext('Show') }}</a>
     <div id="codename-hint-content" class="hidden-codename codename">
-      <p>{{ codename }} <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a></p>
+      <a id="codename-hint-hide" class="pull-right" href="#codename-hint">{{ gettext('Hide') }}</a>
+      <p>{{ codename }}</p>
     </div>
   </div>
 </div>
+{% endif %}
 
 {% endblock %}

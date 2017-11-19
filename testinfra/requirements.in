@@ -1,7 +1,0 @@
-ansible<2.3
-docker-py
-boto
-molecule>=2.*
-pip-tools
-pytest-xdist
-testinfra

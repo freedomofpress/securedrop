@@ -55,6 +55,12 @@
       &:hover
         color: $color_purple_medium
 
+  .localized
+    text-align: left
+
+    &:dir(rtl)
+      text-align: right
+
   .codename, .password
     font-family: monospace
     letter-spacing: 0.15em
@@ -151,7 +157,6 @@
 
         a
           color: #333
-          text-decoration: none
           font-weight: bold
           margin: 5px
           display: inline-block
@@ -210,7 +215,7 @@
     padding: 10px 15px
     border-bottom: 2px solid $color_warning_red
     font-size: large
-    text-align: center
+    direction: ltr
 
   .snippet
     border: 1px solid #c3c3c3
@@ -220,6 +225,8 @@
       background-color: $color_grey_xlight
       padding: 12px
       width: 330px
+      @media only screen and (max-width: 815px)
+        width: 100%
       display: inline-block
       vertical-align: top
 
@@ -237,6 +244,8 @@
       display: inline-block
       vertical-align: top
       width: 401px
+      @media only screen and (max-width: 815px)
+        width: 100%
       background: white
       overflow: hidden
 
@@ -244,8 +253,9 @@
         vertical-align: top
         display: block
         padding: 10px
-        min-width: 406px
-        max-width: 406px
+        width: 406px
+        @media only screen and (max-width: 815px)
+          width: 100%
         min-height: 168px
         border: none
 
@@ -461,3 +471,7 @@
     margin-top: 20px
     padding-top: 20px
     color: $color_grey_medium
+
+span.form-validation-error
+  color: red
+  font-size: small

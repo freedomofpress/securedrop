@@ -1,10 +1,10 @@
 ---
 - name: Create remote CI hosts on AWS.
   ec2:
-    group_id: "{{ group_create_result.group_id }}"
+    group_id: "{{ aws_ec2_sg_id }}"
     vpc_subnet_id: "{{ vpc_subnet_result.subnets[0].id }}"
     assign_public_ip: yes
-    image: "{{ ami_search_result.results[0].ami_id }}"
+    image: "ami-2a172a4a"
     region: "{{ aws_ec2_ci_region }}"
     key_name: "sdci-{{ job_id }}"
     exact_count: 1
@@ -28,7 +28,9 @@
       wait_for:
         host: "{{ item.tagged_instances[0]['public_dns_name'] }}"
         port: 22
-        timeout: 20
+        timeout: 180
+        search_regex: OpenSSH
+        delay: 10
         state: started
       register: ec2_launch_results
       with_items: "{{ reg_ec_instance.results }}"
@@ -45,3 +47,33 @@
 
     - name: Flush handlers to re-run AWS logic
       meta: flush_handlers
+  always:
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf: "{{ instance_conf|default([]) + [{
+          'instance': item.tags.server_type,
+          'instance_id': item.id,
+          'address': item.public_ip,
+          'priv_address': item.private_ip,
+          'user': 'sdrop',
+          'port': '22',
+          'hostname': item.public_dns_name,
+          'identity_file': molecule_ephemeral_directory+'/'+job_id }] }}"
+      no_log: yes
+      with_items: "{{ reg_ec_instance.results|map(attribute='tagged_instances')|list }}"
+      register: instance_config_dict
+
+    - name: Dump instance config
+      copy:
+        content: "{{ instance_conf | to_nice_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+
+    - name: Add AWS hosts to ephermeral ssh-config (needed for testinfra)
+      template:
+        dest: "{{ molecule_ephemeral_directory }}/{{ job_id }}-config"
+        src: ssh_config
+        mode: 0600
+
+    - name: Add arbitrary sleep to give cloud-init some time
+      wait_for:
+        timeout: 60

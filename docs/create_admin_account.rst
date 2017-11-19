@@ -1,7 +1,7 @@
 Create an admin account on the Journalist Interface
 ===================================================
 
-In order for any user (administrator or journalist) to access the
+In order for any user (admin or journalist) to access the
 Journalist Interface, they need:
 
 1. The ``auth-cookie`` for the Journalist Interface's ATHS

@@ -2,6 +2,18 @@ DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
 
+.PHONY: app-images
+app-images: ## Create securedrop application docker images
+	$(MAKE) -C securedrop images
+
+.PHONY: app-test
+app-test: ## Run securedrop application level tests
+	$(MAKE) -C securedrop test
+
+.PHONY: app-testclean
+app-testclean: ## Delete securedrop application related containers
+	$(MAKE) -C securedrop testclean
+
 .PHONY: ci-spinup
 ci-spinup: ## Creates AWS EC2 hosts for testing staging environment.
 	./devops/scripts/ci-spinup.sh
@@ -43,6 +55,7 @@ docs: ## Build project documentation in live reload for editing
 flake8: ## Validates PEP8 compliance for Python source files.
 	flake8 --exclude='config.py' testinfra securedrop-admin \
 		securedrop/*.py securedrop/management \
+		securedrop/journalist_app/*.py \
 		securedrop/source_app/*.py \
 		securedrop/tests/functional securedrop/tests/*.py
 
@@ -82,6 +95,27 @@ docker-build-ubuntu: ## Builds SD Ubuntu docker container
 .PHONY: build-debs
 build-debs: ## Builds and tests debian packages
 	@if [[ "${CIRCLE_BRANCH}" != docs-* ]]; then molecule test -s builder; else echo Not running on docs branch...; fi
+
+.PHONY: safety
+safety: ## Runs `safety check` to check python dependencies for vulnerabilities
+	@for req_file in `find . -type f -name '*requirements.txt'`; do \
+		echo "Checking file $$req_file" \
+		&& safety check --full-report -r $$req_file \
+		&& echo -e '\n' \
+		|| exit 1; \
+	done
+
+.PHONY: update-pip-requirements
+update-pip-requirements: ## Updates all Python requirements files via pip-compile.
+	pip-compile --generate-hashes --output-file securedrop/requirements/admin-requirements.txt \
+		securedrop/requirements/ansible.in
+	pip-compile --output-file securedrop/requirements/develop-requirements.txt \
+		securedrop/requirements/ansible.in \
+		securedrop/requirements/develop-requirements.in
+	pip-compile --output-file securedrop/requirements/test-requirements.txt \
+		securedrop/requirements/test-requirements.in
+	pip-compile --output-file securedrop/requirements/securedrop-requirements.txt \
+		securedrop/requirements/securedrop-requirements.in
 
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##

@@ -49,7 +49,11 @@ def setup_app(app, translation_dirs=None):
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = translation_dirs
 
     babel = Babel(app)
-    assert len(list(babel.translation_directories)) == 1
+    if len(list(babel.translation_directories)) != 1:
+        raise AssertionError(
+            'Expected exactly one translation directory but got {}.'
+            .format(babel.translation_directories))
+
     for dirname in os.listdir(next(babel.translation_directories)):
         if dirname != 'messages.pot':
             LOCALES.add(dirname)
@@ -101,13 +105,13 @@ def get_text_direction(locale):
 
 
 def _get_supported_locales(locales, supported, default_locale):
-    """Return SUPPORTED_LOCALES from config.py. It is missing return all
-    locales found in the translations directory.
+    """Return SUPPORTED_LOCALES from config.py. If it is missing return
+    the default locale.
 
     """
 
     if not supported:
-        return sorted(locales)
+        return [default_locale or 'en_US']
     unsupported = set(supported) - set(locales)
     if unsupported:
         raise LocaleNotFound(

@@ -344,7 +344,7 @@ class TestIntegration(unittest.TestCase):
         for i in range(2):
             resp = self.journalist_app.post('/reply', data=dict(
                 filesystem_id=filesystem_id,
-                msg=test_reply
+                message=test_reply
             ), follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
 
@@ -419,10 +419,12 @@ class TestIntegration(unittest.TestCase):
         # first, add a source
         self.source_app.get('/generate')
         self.source_app.post('/create')
-        self.source_app.post('/submit', data=dict(
+        resp = self.source_app.post('/submit', data=dict(
             msg="This is a test.",
             fh=(StringIO(''), ''),
         ), follow_redirects=True)
+
+        assert resp.status_code == 200, resp.data.decode('utf-8')
 
         resp = self.journalist_app.get('/')
         # navigate to the collection page
@@ -543,7 +545,9 @@ class TestIntegration(unittest.TestCase):
         # change password
         new_pw = 'another correct horse battery staply long password'
         self.journalist_app.post('/account/new-password',
-                                 data=dict(password=new_pw))
+                                 data=dict(password=new_pw,
+                                           current_password=self.user_pw,
+                                           token='mocked'))
 
         # logout
         self.journalist_app.get('/logout')

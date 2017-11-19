@@ -1,0 +1,64 @@
+---
+- name: Gather logs for forensics from SecureDrop application server.
+  hosts: securedrop
+  become: yes
+  vars:
+    log_paths_reference:
+      app:
+        - '/var/log/apt' # dir
+        - '/var/log/aptitude*'
+      mon:
+        - '/var/log/apt' # dir
+        - '/var/log/aptitude*'
+        # syscheck contains the file integrity checking data store
+        - '/var/ossec/queue/syscheck'
+        - '/var/ossec/queue/rootcheck'
+        # OSSEC alerts archives
+        - '/var/ossec/logs'
+    fpf_support_gpg_fingerprint: "734F6E707434ECA6C007E1AE82BD6C9616DABB79"
+
+  tasks:
+    - name: Set tarball filename.
+      set_fact:
+        log_tarball_filename: "securedrop-logs-{{ inventory_hostname }}-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+
+    - name: Set logfiles to collect.
+      set_fact:
+        # Only "app" and "mon" are supported hostnames in dynamic inventory as of 0.4.
+        log_paths: "{{ log_paths_reference[inventory_hostname] }}"
+
+    - name: Create tar archive.
+      shell: tar -czf "{{ log_tarball_filename|escape }}" {{ log_paths|join(' ') }}
+
+    - name: Fetch tarball back to Admin Workstation.
+      fetch:
+        flat: yes
+        fail_on_missing: yes
+        src: "{{ log_tarball_filename }}"
+        dest: "{{ playbook_dir }}/{{ log_tarball_filename }}"
+
+    - name: Fetch FPF GPG key.
+      become: no
+      local_action: >-
+        command
+        gpg --recv-key "{{ fpf_support_gpg_fingerprint }}"
+      register: fpf_gpg_key_fetch_result
+      changed_when: "'imported: 1' in fpf_gpg_key_fetch_result.stderr"
+      run_once: yes
+
+    - name: Encrypt logs to FPF GPG key.
+      become: no
+      local_action: >-
+        shell
+        gpg --encrypt --recipient "{{ fpf_support_gpg_fingerprint }}"
+        --output "{{ log_tarball_filename }}.gpg"
+        --trust-model always
+        --batch --yes
+        "{{ log_tarball_filename }}"
+      environment:
+        GNUPG_HOME: /home/amensia/.gnupg
+
+    - name: Display filenames of local log tarballs.
+      debug:
+        msg: >-
+          Logs copied successfully, find them at {{ (playbook_dir +'/'+ log_tarball_filename )|realpath }}.gpg .

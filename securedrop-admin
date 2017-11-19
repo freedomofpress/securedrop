@@ -164,7 +164,8 @@ def install_pip_dependencies(args):
             os.path.join(VENV_DIR, 'bin', 'pip'),
             'install',
             # Specify requirements file.
-            '-r', os.path.join(ANSIBLE_PATH, 'requirements.txt'),
+            '-r', os.path.join(SD_DIR, 'securedrop',
+                               'requirements', 'admin-requirements.txt'),
             '--require-hashes',
             # Make sure to upgrade packages only if necessary.
             '-U', '--upgrade-strategy', 'only-if-needed',
@@ -265,6 +266,19 @@ def run_tails_config(args):
                           cwd=ANSIBLE_PATH)
 
 
+def get_logs(args):
+    """Get logs for forensics and debugging purposes"""
+    activate_venv(args)
+    sdlog.info("Gathering logs for forensics and debugging")
+    ansible_cmd = [
+        'ansible-playbook',
+        os.path.join(ANSIBLE_PATH, 'securedrop-logs.yml'),
+    ]
+    subprocess.check_call(ansible_cmd, cwd=ANSIBLE_PATH)
+    sdlog.info("Encrypt logs and send to securedrop@freedom.press or upload "
+               "to the SecureDrop support portal.")
+
+
 if __name__ == "__main__":
     class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
                                  argparse.RawTextHelpFormatter):
@@ -306,6 +320,10 @@ if __name__ == "__main__":
                                           help=restore_securedrop.__doc__)
     parse_restore.set_defaults(func=restore_securedrop)
     parse_restore.add_argument("restore_file")
+
+    parse_logs = subparsers.add_parser('logs',
+                                       help=get_logs.__doc__)
+    parse_logs.set_defaults(func=get_logs)
 
     args = parser.parse_args()
     setup_logger(args.v)

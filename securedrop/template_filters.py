@@ -6,7 +6,7 @@ from jinja2 import Markup, escape
 import math
 
 
-def datetimeformat(dt, fmt=None, relative=False):
+def rel_datetime_format(dt, fmt=None, relative=False):
     """Template filter for readable formatting of datetime.datetime"""
     if relative:
         time = dates.format_timedelta(datetime.utcnow() - dt,

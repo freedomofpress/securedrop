@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
 
-<h1>{{ gettext('Enter Codename') }}</h1>
-
 {% include 'flashed.html' %}
+
+<h1>{{ gettext('Enter Codename') }}</h1>
 
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
 <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
@@ -17,12 +17,12 @@
 </p>
 
 <div class="pull-right">
-  <a href="{{ url_for('main.index') }}" class="sd-button btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
   <button type="submit" class="sd-button btn primary" id="login">
     <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="18px" height="18px">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="18px" height="18px">
     {{ gettext('CONTINUE') }}
   </button>
+  <a href="{{ url_for('main.index') }}" class="sd-button btn secondary" id="cancel">{{ gettext('CANCEL') }}</a>
 </div>
 
 </form>

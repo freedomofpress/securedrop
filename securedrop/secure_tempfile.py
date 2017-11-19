@@ -77,7 +77,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         but after calling :meth:`read`, you cannot write to the file
         again.
         """
-        assert self.last_action != 'read', 'You cannot write after reading!'
+        if self.last_action == 'read':
+            raise AssertionError('You cannot write after reading!')
         self.last_action = 'write'
 
         if isinstance(data, unicode):  # noqa
@@ -103,7 +104,8 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
             count (int): the number of bytes to try to read from the
                 file from the current position.
         """
-        assert self.last_action != 'init', 'You must write before reading!'
+        if self.last_action == 'init':
+            raise AssertionError('You must write before reading!')
         if self.last_action == 'write':
             self.seek(0, 0)
             self.last_action = 'read'

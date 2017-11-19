@@ -52,6 +52,7 @@ anonymous sources.
    deployment/landing_page.rst
    deployment/minimum_security_requirements.rst
    deployment/whole_site_changes.rst
+   deployment/sample_privacy_policy.rst
 
 .. toctree::
    :caption: Checklists
@@ -94,6 +95,7 @@ anonymous sources.
 
    development/getting_started
    development/virtual_environments
+   development/virtualizing_tails
    development/contributor_guidelines
    development/tips_and_tricks
    development/i18n
@@ -106,4 +108,11 @@ anonymous sources.
    development/apt_repo
    development/updating_ossec
    development/apparmor_profiles
-   development/threat_model
+
+.. toctree::
+  :caption: Threat Model
+  :name: threatdoc
+  :maxdepth: 2
+
+  threat_model/threat_model.rst
+  threat_model/dataflow.rst

@@ -19,7 +19,7 @@ def print_red_bold(text):
 class CallbackModule(CallbackBase):
     def __init__(self):
         # Can't use `on_X` because this isn't forwards compatible with Ansible 2.0+
-        required_version = '2.2'  # Keep synchronized with group_vars/all/main.yml
+        required_version = '2.3.2'  # Keep synchronized with group_vars/all/main.yml
         if not ansible.__version__.startswith(required_version):
             print_red_bold(
                 "SecureDrop restriction: only Ansible {version}.* is supported. "

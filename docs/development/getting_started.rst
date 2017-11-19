@@ -1,16 +1,7 @@
 Getting Started
 ===============
 
-.. note:: SecureDrop maintains two branches of documentation, `stable
-          <https://docs.securedrop.org/en/stable/development/getting_started.html>`_
-          and `latest
-          <https://docs.securedrop.org/en/latest/development/getting_started.html>`_,
-          the former being the default used by our Read the Docs powered site.
-          ``stable`` is built from our latest signed git tag, while ``latest``
-          is built from the head of the ``develop`` git branch.  In almost all
-          cases involving development work, you'll want to make sure you have
-          the ``latest`` version selected by clicking the appropriate link
-          above, or by using the menu in the bottom left corner.
+.. include:: ../includes/docs-branches.txt
 
 Prerequisites
 -------------
@@ -99,8 +90,6 @@ development-related tooling. Using `virtualenvwrapper
     sudo apt-get install virtualenvwrapper
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
     mkvirtualenv -p /usr/bin/python2 securedrop
-    pip install -r securedrop/requirements/develop-requirements.txt
-    pip install -r testinfra/requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
@@ -136,8 +125,6 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
     pip install -U virtualenvwrapper
     source /usr/local/bin/virtualenvwrapper.sh
     mkvirtualenv -p python2 securedrop
-    pip install -r securedrop/requirements/develop-requirements.txt
-    pip install -r testinfra/requirements.txt
 
 .. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
           to your ``~/.bashrc`` (or whatever your default shell configuration
@@ -150,12 +137,27 @@ different version, the path to ``virtualenvwrapper.sh`` will differ. Running
 .. _Homebrew: https://brew.sh/
 .. _Docker: https://store.docker.com/editions/community/docker-ce-desktop-mac
 
-Clone the repository
---------------------
+Fork & Clone the repository
+---------------------------
 
-Once you've installed the prerequisites for the development environment,
-use git to clone the SecureDrop repo.
+Now you are ready to get your own copy of the source code.
+Visit our repository_ fork it and clone it on you local machine:
+
 
 .. code:: sh
 
-   git clone https://github.com/freedomofpress/securedrop.git
+   git clone git@github.com:<your_github_username>/securedrop.git
+
+.. _repository: https://github.com/freedomofpress/securedrop
+
+Install python requirments
+--------------------------
+
+SecureDrop uses many 3rd party open source packages from the python community.
+Ensure your virtualenv is activated and install the packages.
+
+.. code:: sh
+
+    pip install -r securedrop/requirements/develop-requirements.txt
+
+.. note:: You will need to run this everytime new packages are added.

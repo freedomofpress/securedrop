@@ -4,11 +4,11 @@ Install SecureDrop
 Install Prerequisites
 ----------------------
 
-SecureDrop has some dependencies that need to be loaded onto the admin tails
-stick prior to the installation of the server.
+SecureDrop has some dependencies that need to be loaded onto the *Admin 
+Workstation* prior to the installation of the server.
 
-To load these dependencies, from the base of the SecureDrop repo run the
-following commands:
+To load these dependencies, from the base of the SecureDrop repository
+(``~/Persistent/securedrop/``) run the following commands:
 
 .. code:: sh
 
@@ -16,6 +16,12 @@ following commands:
 
 The package installation will complete in approximately 10 minutes, depending
 on network speed and computing power.
+
+ .. note :: Occasionally this command times out due to network latency issues.
+    You should be able to re-run the command and complete the setup. If you run
+    into a problem, try removing the ``~/Persistent/securedrop/.venv/``
+    directory and running the command again. The command should only be run as
+    the ``amnesia`` user.
 
 .. _configure_securedrop:
 
@@ -38,7 +44,7 @@ continuing:
    Guide <ossec_alerts>`.
 -  The first username of a journalist who will be using SecureDrop (you
    can add more later)
--  The username of the system administrator
+-  The username of the system admin
 -  (Optional) An image to replace the SecureDrop logo on the *Source
    Interface* and *Journalist Interface*
 
@@ -70,8 +76,8 @@ match your environment: ::
 The script will automatically validate the answers you provided, and display
 error messages if any problems were detected. The answers you provided will be
 written to the file ``install_files/ansible-base/group_vars/all/site-specific``,
-which you can edit in case of errors such as typos before rerunning the script. 
-You can also run ``./securedrop-admin sdconfig --force`` to remove your entire 
+which you can edit in case of errors such as typos before rerunning the script.
+You can also run ``./securedrop-admin sdconfig --force`` to remove your entire
 configuration file and start over.
 
 When you're done, save the file and quit the editor.
@@ -91,9 +97,15 @@ You will be prompted to enter the sudo password for the *Application* and
 *Monitor Servers* (which should be the same).
 
 The install process will take some time, and it will return
-the terminal to you when it is complete. If an error occurs while
-running the install, please check all of the details of the error output
-and if needed, make edits to the file located at ``install_files/ansible-base/group_vars/all/site-specific``
+the terminal to you when it is complete.
+
+If an error occurs while
+running the install, please check all of the details of the error output.
+
+.. include:: includes/rerun-install-is-safe.txt
+
+If needed, make edits to the file located at
+``install_files/ansible-base/group_vars/all/site-specific``
 as described above. If you continue to have issues please submit a detailed `GitHub
 issue <https://github.com/freedomofpress/securedrop/issues/new>`__ or
 send an email to securedrop@freedom.press.

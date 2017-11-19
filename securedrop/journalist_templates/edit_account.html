@@ -27,14 +27,19 @@
 <p>{{ gettext('SecureDrop now uses automatically generated diceware passwords.') }}</p>
 <p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
 
-{% if user %}
-  {% set password_reset_url = url_for('admin_new_password', user_id=user.id) %}
+{% if user and g.user != user %}
+  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
-  {% set password_reset_url = url_for('new_password') %}
+  {% set password_reset_url = url_for('account.new_password') %}
+  <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
 {% endif %}
 
-<form action="{{ password_reset_url }}" method="post" id="new-password">
+<form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  {% if not user or g.user == user %}
+  <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
+  <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
+  {% endif %}
   <input name="password" type="hidden" value="{{ password }}">
   <p>
     {% if user %}
@@ -45,7 +50,7 @@
     <br>
     <span id="password" class="password">{{ password }}</span>
   </p>
-  <button class="sd-button btn" type="submit" id="reset-password">{{ gettext('RESET PASSWORD') }}</button>
+  <button class="sd-button btn" type="submit" id="reset-password"><i class="fa fa-refresh"></i> {{ gettext('RESET PASSWORD') }}</button>
 </form>
 
 <hr class="no-line">
@@ -60,11 +65,11 @@
 <p>{{ gettext('To reset two-factor authentication for mobile apps such as Google Authenticator or FreeOTP, choose the first option. For hardware tokens like the Yubikey, choose the second.') }}</p>
 
 {% if user %}
-  {% set totp_reset_url = url_for('admin_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('admin_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('admin.reset_two_factor_hotp') %}
 {% else %}
-  {% set totp_reset_url = url_for('account_reset_two_factor_totp') %}
-  {% set hotp_reset_url = url_for('account_reset_two_factor_hotp') %}
+  {% set totp_reset_url = url_for('account.reset_two_factor_totp') %}
+  {% set hotp_reset_url = url_for('account.reset_two_factor_hotp') %}
 {% endif %}
 
 {% macro twofa_reset(user, reset_url, type, button_text) %}
@@ -73,7 +78,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button class="sd-button" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
+  <button class="sd-button" id="button-reset-two-factor-{{ type }}" type="submit" class="pull-right"><i class="fa fa-refresh"></i> {{ button_text }}</button>
 </form>
 {%- endmacro %}
 

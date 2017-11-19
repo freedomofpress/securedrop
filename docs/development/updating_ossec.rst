@@ -11,10 +11,10 @@ to learn more about how SecureDrop admins set up and monitor OSSEC alerts.
 Alerting Strategy
 -----------------
 
-The goals of the OSSEC alerts in SecureDrop is to notify administrators of:
+The goals of the OSSEC alerts in SecureDrop is to notify admins of:
 
 1. Suspicious security events
-2. Changes that require some kind of administrator action
+2. Changes that require some kind of admin action
 3. Other important notifications regarding system state.
 
 If an alert is purely informational and there is no realistic action an
@@ -91,5 +91,5 @@ configuration files will land on production SecureDrop monitoring servers as
 part of each SecureDrop release. This upgrade will occur automatically.
 
 .. note:: The use of automatic upgrades for release deployment means that any
-          changes made locally by administrators to their OSSEC rules will not
+          changes made locally by admins to their OSSEC rules will not
           persist after a SecureDrop update.

@@ -9,9 +9,12 @@ if [[ "$CIRCLE_BRANCH" != "master"  && "$CIRCLE_BRANCH" != release*  ]]; then
   git config --global user.email "ci@freedom.press"
   git config --global user.name "CI User"
 
+  # Ensure presensce of upstream remote
+  git ls-remote --exit-code --quiet upstream 2>/dev/null || git remote add upstream https://github.com/freedomofpress/securedrop.git
+
   # Fetch and rebase onto the latest in develop
-  git fetch origin develop
-  git rebase origin/develop
+  git fetch upstream develop
+  git rebase upstream/develop
 
   # Print out the current head for debugging potential CI issues
   git rev-parse HEAD

@@ -18,35 +18,37 @@ import version
 
 class TestTemplateFilters(object):
 
-    def verify_datetimeformat(self, app):
+    def verify_rel_datetime_format(self, app):
         with app.test_client() as c:
             c.get('/')
             assert session.get('locale') is None
-            result = template_filters.datetimeformat(
+            result = template_filters.rel_datetime_format(
                 datetime(2016, 1, 1, 1, 1, 1))
             assert "Jan 01, 2016 01:01 AM" == result
 
-            result = template_filters.datetimeformat(
+            result = template_filters.rel_datetime_format(
                 datetime(2016, 1, 1, 1, 1, 1), fmt="yyyy")
             assert "2016" == result
 
             test_time = datetime.utcnow() - timedelta(hours=2)
-            result = template_filters.datetimeformat(test_time, relative=True)
+            result = template_filters.rel_datetime_format(test_time,
+                                                          relative=True)
             assert "2 hours ago" == result
 
             c.get('/?l=fr_FR')
             assert session.get('locale') == 'fr_FR'
-            result = template_filters.datetimeformat(
+            result = template_filters.rel_datetime_format(
                 datetime(2016, 1, 1, 1, 1, 1))
             assert "janv. 01, 2016 01:01 AM" == result
 
-            result = template_filters.datetimeformat(
+            result = template_filters.rel_datetime_format(
                 datetime(2016, 1, 1, 1, 1, 1), fmt="yyyy")
             assert "2016" == result
 
             test_time = datetime.utcnow() - timedelta(hours=2)
-            result = template_filters.datetimeformat(test_time, relative=True)
-            assert "2 heures ago" == result
+            result = template_filters.rel_datetime_format(test_time,
+                                                          relative=True)
+            assert "2 heures" in result
 
     def verify_filesizeformat(self, app):
         with app.test_client() as c:
@@ -102,11 +104,19 @@ class TestTemplateFilters(object):
         pybabel init -i {d}/messages.pot -d {d} -l fr_FR
         """.format(d=config.TEMP_DIR))
 
-        for app in (journalist.app, source.app):
-            app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
-            i18n.setup_app(app)
-            self.verify_filesizeformat(app)
-            self.verify_datetimeformat(app)
+        supported = getattr(config, 'SUPPORTED_LOCALES', None)
+        try:
+            if supported:
+                del config.SUPPORTED_LOCALES
+            for app in (journalist.app, source.app):
+                config.SUPPORTED_LOCALES = ['en_US', 'fr_FR']
+                app.config['BABEL_TRANSLATION_DIRECTORIES'] = config.TEMP_DIR
+                i18n.setup_app(app)
+                self.verify_filesizeformat(app)
+                self.verify_rel_datetime_format(app)
+        finally:
+            if supported:
+                config.SUPPORTED_LOCALES = supported
 
     @classmethod
     def teardown_class(cls):
