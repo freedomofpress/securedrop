@@ -1271,64 +1271,21 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "Revenir à la page d'envoi"
 
-#~ msgid "{source_name}'s collection deleted"
-#~ msgstr "La collection de {source_name} a été supprimée"
 
-#~ msgid "Edit Account"
-#~ msgstr "Modifier le compte"
 
-#~ msgid "Learn how to set it to high"
-#~ msgstr "Apprenez à le régler sur « Élevé »"
 
-#~ msgid ", or ignore this warning to continue."
-#~ msgstr "ou ignorez cet avertissement pour continuer."
 
-#~ msgid ""
-#~ "<strong>We recommend using Tor Browser to access SecureDrop:</strong>"
-#~ msgstr ""
-#~ "<strong>Nous recommandons d'utiliser le navigateur Tor pour accéder à "
-#~ "SecureDrop</strong>"
 
-#~ msgid "Learn how to install it"
-#~ msgstr "Apprenez à l'installer"
 
-#~ msgid "Click the"
-#~ msgstr "Cliquez sur l'"
 
-#~ msgid "Tor icon in the toolbar above"
-#~ msgstr "icône Tor dans la barre d'outil ci-dessus"
 
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "Aucune collection n'a été sélectionnée pour être supprimée !"
 
-#~ msgid "{n} second"
-#~ msgid_plural "{n} seconds"
-#~ msgstr[0] "{n} seconde"
-#~ msgstr[1] "{n} secondes"
 
-#~ msgid "a minute"
-#~ msgstr "une minute"
 
-#~ msgid "{n} minutes"
-#~ msgstr "{n} minutes"
 
-#~ msgid "an hour"
-#~ msgstr "une heure"
 
-#~ msgid "{n} hours"
-#~ msgstr "{n} heures"
 
-#~ msgid "a day"
-#~ msgstr "un jour"
 
-#~ msgid "{n} days"
-#~ msgstr "{n} jours"
 
-#~ msgid "Logout"
-#~ msgstr "Déconnexion"
 
-#~ msgid "EXIT"
-#~ msgstr "QUITTER"
 
-#~ msgid "Edit user"
-#~ msgstr "Modifier l'utilisateur"

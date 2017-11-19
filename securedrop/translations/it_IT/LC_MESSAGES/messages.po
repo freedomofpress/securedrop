@@ -1162,9 +1162,4 @@ msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
 
 #, fuzzy
-#~| msgid "No collections selected to delete!"
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "Non è stato selezionato nessun archivio!"
 
-#~ msgid "Logout"
-#~ msgstr "Logout"

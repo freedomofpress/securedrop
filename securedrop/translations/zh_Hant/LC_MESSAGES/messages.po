@@ -1119,50 +1119,18 @@ msgstr ""
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
 
-#~ msgid "{source_name}'s collection deleted"
-#~ msgstr "{source_journal_designation}的集合已删除"
 
-#~ msgid "Edit Account"
-#~ msgstr "编辑账户"
 
 #, fuzzy
-#~| msgid "No collections selected to delete!"
-#~ msgid "No collections selected for deletion!"
-#~ msgstr "未選擇要刪除的資料夾！"
 
-#~ msgid "{n} second"
-#~ msgid_plural "{n} seconds"
-#~ msgstr[0] "{n}秒"
 
-#~ msgid "a minute"
-#~ msgstr "一分钟"
 
-#~ msgid "{n} minutes"
-#~ msgstr "{n}分钟"
 
-#~ msgid "an hour"
-#~ msgstr "一小时"
 
-#~ msgid "{n} hours"
-#~ msgstr "{n}小时"
 
-#~ msgid "a day"
-#~ msgstr "一天"
 
-#~ msgid "{n} days"
-#~ msgstr "{n}天"
 
-#~ msgid "Logout"
-#~ msgstr "登出"
 
-#~ msgid "EXIT"
-#~ msgstr "退出"
 
-#~ msgid "Edit user"
-#~ msgstr "編輯使用者"
 
-#~ msgid "Two-factor token failed to verify"
-#~ msgstr "两节记号验证失败"
 
-#~ msgid "Two-factor token successfully verified!"
-#~ msgstr "两因子的记号成功地验证了！"
