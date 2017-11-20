@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-20 00:00+0000\n"
+"PO-Revision-Date: 2017-11-20 03:00+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -560,7 +560,7 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
-msgstr "Vennligst skriv inn gammelt passord og tofaktor-kode."
+msgstr "Skriv inn ditt nåværende passord og tofaktor-kode."
 
 #: journalist_templates/edit_account.html:40
 msgid "Current Password"
