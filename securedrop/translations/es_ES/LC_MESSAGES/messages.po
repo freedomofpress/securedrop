@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-20 10:06+0000\n"
+"PO-Revision-Date: 2017-11-20 12:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: template_filters.py:14
 msgid "{time} ago"
-msgstr "{time} atrás"
+msgstr "{time} pasado"
 
 #: journalist_app/__init__.py:34 journalist_app/__init__.py:66
 msgid "You have been logged out due to inactivity"
@@ -315,7 +315,7 @@ msgstr "ENVIAR"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr "Interfaz de administración"
+msgstr "Interfaz de Administración"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:39
@@ -560,7 +560,7 @@ msgstr "ACTUALIZAR"
 
 #: journalist_templates/edit_account.html:22
 msgid "Edit your account"
-msgstr "Edita su cuenta"
+msgstr "Edite su cuenta"
 
 #: journalist_templates/edit_account.html:25
 msgid "Reset Password"
@@ -710,7 +710,7 @@ msgstr "Seleccionar Sin Leer"
 
 #: journalist_templates/js-strings.html:6
 msgid "Select None"
-msgstr "Seleccionar Ninguno"
+msgstr "Seleccionar Nada"
 
 #: journalist_templates/js-strings.html:7
 msgid "Are you sure you want to delete this collection?"
@@ -800,7 +800,7 @@ msgstr "Todas las repuestas han sido eliminadas"
 
 #: source_app/main.py:215
 msgid "Sorry, that is not a recognized codename."
-msgstr "Lo sentimos, este no es un pseudónimo reconocido."
+msgstr "Lo siento, eso no es un nombre en clave reconocido."
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
@@ -809,7 +809,7 @@ msgstr "Protegiendo Periodistas y Fuentes"
 #: source_templates/base.html:24 source_templates/base.html:43
 #: source_templates/index.html:32 source_templates/index.html:84
 msgid "Powered by"
-msgstr "Con tecnología de"
+msgstr "Con Tecnología de"
 
 #: source_templates/base.html:33
 msgid "LOG OUT"
@@ -1059,7 +1059,7 @@ msgstr "Usted puede enviar un archivo, un mensaje, o ambos."
 
 #: source_templates/lookup.html:33
 msgid "Maximum upload size: 500 MB"
-msgstr "Tamaño máximo de carga: 500MB"
+msgstr "Tamaño máximo de carga: 500 MB"
 
 #: source_templates/lookup.html:36
 msgid "Write a message."
@@ -1076,11 +1076,11 @@ msgid ""
 "with them. This also lets us know that you are aware of our reply. You can "
 "respond by submitting a new message above."
 msgstr ""
-"Ha recibido una respuesta. Para proteger su identidad en el improbable caso "
-"de que alguien aprenda su pseudónimo, por favor borre todas las respuestas "
-"cuando haya terminado con ellas. Esto también nos permite saber que usted es "
-"consciente de nuestra respuesta. Usted puede responder enviando un nuevo "
-"mensaje arriba."
+"Usted ha recibido una respuesta. Para proteger su identidad en el improbable "
+"caso de que alguien aprenda su pseudónimo, por favor borre todas las "
+"respuestas cuando haya terminado con ellas. Esto también nos permite saber "
+"que usted es consciente de nuestra respuesta. Usted puede responder enviando "
+"un nuevo mensaje arriba."
 
 #: source_templates/lookup.html:71
 msgid "Delete this reply?"
