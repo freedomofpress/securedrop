@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-20 21:50+0000\n"
+"PO-Revision-Date: 2017-11-20 23:00+0000\n"
 "Last-Translator: AO <french.coordinator@rbox.me>\n"
 "Language-Team: French "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/fr/>\n"
@@ -26,11 +26,11 @@ msgstr "il y a {time}"
 
 #: journalist_app/__init__.py:34 journalist_app/__init__.py:66
 msgid "You have been logged out due to inactivity"
-msgstr "Vous avez été déconnecté pour cause d'inactivité"
+msgstr "Vous avez été déconnecté pour cause d’inactivité"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr "Mot de passe ou code de validation en deux étapes erroné."
+msgstr "Le mot de passe ou le code de validation en deux étapes est erroné."
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
@@ -1008,8 +1008,8 @@ msgid ""
 msgstr ""
 "Nous vous remercions d’avoir mis fin à votre session ! Veuillez sélectionner "
 "« Nouvelle identité » dans le bouton vert en forme d’oignon du navigateur "
-"Tor pour effacer intégralement votre historique d’utilisation de SecureDrop "
-"de cet appareil."
+"Tor pour effacer entièrement votre historique d’utilisation de SecureDrop de "
+"cet appareil."
 
 #: source_templates/lookup.html:11
 msgid "Whew, it’s you! Now, the embarrassing part..."
@@ -1142,11 +1142,11 @@ msgid ""
 "button in the Tor browser to clear all history of your SecureDrop usage from "
 "this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"Votre session est arrivée au bout de son délai en raison d’une inactivité. "
+"Votre session est arrivée au bout de son délai pour cause d’inactivité. "
 "Veuillez vous reconnecter si vous souhaitez continuer à utiliser SecureDrop "
 "ou sélectionnez « Nouvelle identité » dans le bouton vert en forme d’oignon "
-"du navigateur Tor pour effacer intégralement votre historique d’utilisation "
-"de SecureDrop de cet appareil. Si vous n’utilisez pas le navigateur Tor, "
+"du navigateur Tor pour effacer entièrement votre historique d’utilisation de "
+"SecureDrop de cet appareil. Si vous n’utilisez pas le navigateur Tor, "
 "redémarrez votre navigateur."
 
 #: source_templates/tor2web-warning.html:3
