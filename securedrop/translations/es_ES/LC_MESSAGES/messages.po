@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-10 06:39+0000\n"
+"PO-Revision-Date: 2017-11-20 10:06+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
-"Language-Team: Spanish <https://*/projects/securedrop/securedrop/es/>\n"
+"Language-Team: Spanish "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +30,7 @@ msgstr "Su sesión ha sido terminada por inactividad"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr ""
+msgstr "Clave incorrecta o el código de autenticación de dos factores."
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
@@ -52,16 +53,12 @@ msgid "That username is already in use"
 msgstr "Ese nombre de usuario ya esta en uso"
 
 #: journalist_app/admin.py:61
-#, fuzzy
-#| msgid ""
-#| "An error occurred saving this user to the database. Please check the "
-#| "application logs."
 msgid ""
 "An error occurred saving this user to the database. Please inform your "
 "administrator."
 msgstr ""
-"Se produjo un error al guardar este usuario en la base de datos. Por favor "
-"revise los registros de la aplicación."
+"Se error ocurrió al guardar este usuario en la base de datos. Por favor "
+"informe a su administrador."
 
 #: journalist_app/admin.py:84
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -82,14 +79,8 @@ msgstr ""
 
 #: journalist_app/admin.py:128 journalist_app/main.py:107
 #: journalist_app/utils.py:38
-#, fuzzy
-#| msgid ""
-#| "An unexpected error occurred! Please check the application logs or inform "
-#| "your adminstrator."
 msgid "An unexpected error occurred! Please inform your administrator."
-msgstr ""
-"¡Ocurrió un error inesperado! Por favor verifique los registros de la "
-"aplicación o informe a su administrador."
+msgstr "¡Ocurrió un error inesperado! Por favor informe a su administrador."
 
 #: journalist_app/admin.py:161
 msgid "Username \"{user}\" already taken."
@@ -113,12 +104,14 @@ msgstr "Solo administradores tienen acceso a esta pagina."
 
 #: journalist_app/forms.py:17
 msgid "Field must be 40 characters long but got {num_chars}."
-msgstr ""
+msgstr "El area debe ser de 40 caracteres de largo, pero tiene {num_chars}."
 
 #: journalist_app/forms.py:28
 msgid ""
 "Field must be at least {min_chars} characters long but only got {num_chars}."
 msgstr ""
+"El area debe ser por lo menos {min_chars}  caracteres de largo, pero sólo "
+"tiene {num_chars}."
 
 #: journalist_app/forms.py:33 source_app/forms.py:11
 msgid "This field is required."
@@ -157,24 +150,19 @@ msgid "Login failed."
 msgstr "El inicio de sesión falló."
 
 #: journalist_app/utils.py:84
-#, fuzzy
-#| msgid "Please wait at least {seconds} seconds before logging in again."
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
-"Por favor espere al menos {segundos} segundos antes de tratar de iniciar la "
-"session de nuevo."
+"Por favor espere al menos {seconds} segundo antes de iniciar la session de "
+"nuevo."
 msgstr[1] ""
-"Por favor espere al menos {segundos} segundos antes de tratar de iniciar la "
-"session de nuevo."
+"Por favor espere al menos {seconds} segundos antes de iniciar la session de "
+"nuevo."
 
 #: journalist_app/utils.py:95
-#, fuzzy
-#| msgid "Please wait for a new two-factor token before logging in again."
 msgid "Please wait for a new two-factor token before trying again."
 msgstr ""
-"Por favor espere por una token de autenticación de dos factores nueva antes "
-"de conectarse de nuevo."
+"Por favor espere un nuevo token de dos factores antes de intentarlo de nuevo."
 
 #: journalist_app/utils.py:140
 msgid "Submission deleted."
@@ -551,10 +539,8 @@ msgid "PERMANENTLY DELETE FILES"
 msgstr "ELIMINAR PERMANENTEMENTE ARCHIVOS"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}…"
-msgstr "Volver a la lista de documentos para {source_name}..."
+msgstr "Volver a la lista de documentos de {source_name}…"
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -596,13 +582,11 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
-msgstr ""
+msgstr "Por favor ingrese su contraseña actual y el código de dos factores."
 
 #: journalist_templates/edit_account.html:40
-#, fuzzy
-#| msgid "Reset Password"
 msgid "Current Password"
-msgstr "Restablecer Contraseña"
+msgstr "Contraseña Actual"
 
 #: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
 msgid "Two-factor Code"
@@ -775,11 +759,8 @@ msgstr ""
 "esto peligroso? </a>"
 
 #: source_app/forms.py:14
-#, fuzzy
-#| msgid "Field must be between 1 and {max_codename_len} characters long. "
 msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr ""
-"Esta area debe estar entre 1 y {max_codename_len} caracteres de largo. "
+msgstr "Esta area debe estar entre 1 y {max_codename_len} caracteres de largo."
 
 #: source_app/forms.py:17
 msgid "Invalid input."
@@ -911,14 +892,12 @@ msgstr ""
 "seguro, o bien que lo memorize."
 
 #: source_templates/generate.html:45
-#, fuzzy
-#| msgid "ALREADY HAVE A CODENAME?"
 msgid "USE NEW CODENAME"
-msgstr "¿YA TIENE UN PSEUDONIMO?"
+msgstr "USE UN NOMBRE CLAVE NUEVO"
 
 #: source_templates/generate.html:47
 msgid "USE EXISTING CODENAME"
-msgstr ""
+msgstr "USE NOMBRE DE CLAVE EXISTENTE"
 
 #: source_templates/index.html:17
 msgid ""
@@ -1020,18 +999,13 @@ msgid "Important!"
 msgstr "¡Importante!"
 
 #: source_templates/logout_flashed_message.html:6
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green Onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "green onion button in the Tor browser to clear all history of your "
 "SecureDrop usage from this device."
 msgstr ""
 "¡Gracias por salir de su sesión! Por favor seleccione \"Nueva Identidad\" "
-"por medio del botón verde Onion en el navegador Tor para borrar toda la "
+"por medio del botón cebolla verde en el navegador Tor para borrar toda la "
 "historia del uso de SecureDrop de este dispositivo."
 
 #: source_templates/lookup.html:11
@@ -1089,13 +1063,11 @@ msgstr "Tamaño máximo de carga: 500MB"
 
 #: source_templates/lookup.html:36
 msgid "Write a message."
-msgstr ""
+msgstr "Escriba un mensaje."
 
 #: source_templates/lookup.html:53
-#, fuzzy
-#| msgid "Get Replies"
 msgid "Read Replies"
-msgstr "Obtener Contestaciones"
+msgstr "Leer Contestaciones"
 
 #: source_templates/lookup.html:58
 msgid ""
@@ -1159,20 +1131,17 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Lo sentimos, no pudimos localizar lo que pidió."
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green Onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the green onion "
 "button in the Tor browser to clear all history of your SecureDrop usage from "
 "this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"¡Gracias por salir de su sesión! Por favor seleccione \"Nueva Identidad\" "
-"por medio del botón verde Onion en el navegador Tor para borrar toda la "
-"historia del uso de SecureDrop de este dispositivo."
+"La sesión se ha cerrado debido a la inactividad. Por favor entre de nuevo si "
+"desea continuar usando SecureDrop, o seleccione \"Nueva Identidad\" desde el "
+"botón cebolla verde en el navegador Tor para borrar toda la historia de su "
+"uso SecureDrop de este dispositivo. Si no utiliza el navegador Tor, reinicie "
+"el navegador."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"
