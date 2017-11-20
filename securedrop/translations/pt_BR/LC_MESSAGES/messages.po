@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-18 11:00+0000\n"
+"PO-Revision-Date: 2017-11-20 19:00+0000\n"
 "Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) <https://weblate.securedrop.club/projects/"
-"securedrop/securedrop/pt_BR/>\n"
+"Language-Team: Portuguese (Brazil) "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,11 +29,12 @@ msgstr "A sua sessão foi encerrada por inatividade"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr ""
+msgstr "Senha ou código de verificação de dois fatores incorreto."
 
 #: journalist_app/account.py:39
+#, fuzzy
 msgid "Token in two-factor authentication verified."
-msgstr ""
+msgstr "Token de autenticação de dois fatores verificado."
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
 msgid "Could not verify token in two-factor authentication."
@@ -115,16 +116,18 @@ msgstr "Apenas administradores podem acessar esta página."
 
 #: journalist_app/forms.py:17
 msgid "Field must be 40 characters long but got {num_chars}."
-msgstr ""
+msgstr "Campo deve conter 40 caracteres, mas contém {num_chars}."
 
 #: journalist_app/forms.py:28
 msgid ""
 "Field must be at least {min_chars} characters long but only got {num_chars}."
 msgstr ""
+"Campo deve conter pelo menos {min_chars} caracteres, mas contém apenas "
+"{num_chars}."
 
 #: journalist_app/forms.py:33 source_app/forms.py:11
 msgid "This field is required."
-msgstr ""
+msgstr "Este campo é obrigatório."
 
 #: journalist_app/forms.py:50
 msgid "You cannot send an empty reply."
@@ -282,102 +285,109 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
+"Seu telefone agora deve estar em modo \"scan\". Escaneie o código de barras "
+"abaixo:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
 msgid "Can't scan the barcode? Enter the following code manually:"
 msgstr ""
+"Não está conseguindo escanear o código de barras? Insira manualmente o "
+"código abaixo:"
 
 #: journalist_templates/account_new_two_factor.html:15
 #: journalist_templates/admin_new_user_two_factor.html:18
 msgid "Once you have scanned the barcode, enter the 6-digit code below:"
 msgstr ""
+"Depois de escanear o código de barras, insira o código de seis dígitos "
+"abaixo:"
 
 #: journalist_templates/account_new_two_factor.html:17
 #: journalist_templates/admin_new_user_two_factor.html:20
 msgid "Enable YubiKey (OATH-HOTP)"
-msgstr ""
+msgstr "Habilitar YubiKey (OATH-HOTP)"
 
 #: journalist_templates/account_new_two_factor.html:18
 #: journalist_templates/admin_new_user_two_factor.html:21
 msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr ""
+msgstr "Após configurar a sua YubiKey, insira o código de seis dígitos abaixo:"
 
 #: journalist_templates/account_new_two_factor.html:22
 #: journalist_templates/admin_new_user_two_factor.html:25
 msgid "Verification code"
-msgstr ""
+msgstr "Código de verificação"
 
 #: journalist_templates/account_new_two_factor.html:24
 #: journalist_templates/admin_new_user_two_factor.html:27
 #: journalist_templates/col.html:83 source_templates/lookup.html:45
 msgid "SUBMIT"
-msgstr ""
+msgstr "ENVIAR"
 
 #: journalist_templates/admin.html:3
 msgid "Admin Interface"
-msgstr ""
+msgstr "Interface de Administração"
 
 #: journalist_templates/admin.html:6
 #: journalist_templates/admin_add_user.html:39
 msgid "ADD USER"
-msgstr ""
+msgstr "ADICIONAR USUÁRIO"
 
 #: journalist_templates/admin.html:16
 #: journalist_templates/admin_add_user.html:14
 #: journalist_templates/login.html:8
 msgid "Username"
-msgstr ""
+msgstr "Nome de usuário"
 
 #: journalist_templates/admin.html:17
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
-msgstr ""
+msgstr "Excluir"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
-msgstr ""
+msgstr "Criado"
 
 #: journalist_templates/admin.html:20
 msgid "Last login"
-msgstr ""
+msgstr "Último login"
 
 #: journalist_templates/admin.html:25
 msgid "Edit user {username}"
-msgstr ""
+msgstr "Editar usuário {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr ""
+msgstr "Excluir usuário {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
-msgstr ""
+msgstr "nunca"
 
 #: journalist_templates/admin.html:38
 msgid "No users to display"
-msgstr ""
+msgstr "Não há usuários para exibir"
 
 #: journalist_templates/admin_add_user.html:4
 #: journalist_templates/edit_account.html:7
 msgid "Back to admin interface"
-msgstr ""
+msgstr "Voltar à interface de administração"
 
 #: journalist_templates/admin_add_user.html:21
 msgid "The user's password will be:"
-msgstr ""
+msgstr "A senha do usuário será:"
 
 #: journalist_templates/admin_add_user.html:24
 #: journalist_templates/edit_account.html:17
+#, fuzzy
 msgid "Is Administrator"
-msgstr ""
+msgstr "É administrador"
 
 #: journalist_templates/admin_add_user.html:32
 msgid "Is using a YubiKey [HOTP]"
-msgstr ""
+msgstr "Está usando uma YubiKey [HOTP]"
 
 #: journalist_templates/admin_new_user_two_factor.html:6
 msgid ""
