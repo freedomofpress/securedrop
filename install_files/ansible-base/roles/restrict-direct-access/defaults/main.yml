@@ -5,7 +5,7 @@
 # to enable direct access for testing during development.
 ssh_listening_address: 127.0.0.1
 
-enable_ssh_over_tor: false
+enable_ssh_over_tor: true
 
 # This var is defined in the tor-hidden-services role, but won't be available
 # in separate plays, so declaring it within the context of iptables role, so
