@@ -1,11 +1,10 @@
 ---
-# Set the default SSH listening address for the sshd config file.
-# In production, sshd listening to localhost (127.0.0.1), since all SSH
-# connections are forced over Tor. In staging, this value will be 0.0.0.0
-# to enable direct access for testing during development.
-ssh_listening_address: 127.0.0.1
-
 enable_ssh_over_tor: true
+
+# Set the default SSH listening address for the sshd config file.
+# If enable_ssh_over_tor is false, open up SSH (additional iptables templates
+# helps us for restriction) otherwise restrict to localhost (tor).
+ssh_listening_address: "{{ '127.0.0.1' if enable_ssh_over_tor else '0.0.0.0' }}"
 
 # This var is defined in the tor-hidden-services role, but won't be available
 # in separate plays, so declaring it within the context of iptables role, so
