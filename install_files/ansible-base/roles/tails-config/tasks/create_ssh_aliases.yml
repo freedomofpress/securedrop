@@ -1,18 +1,23 @@
 ---
-# Read the Onion URL from the Tor info files that were fetched back during
-# installation. On the Admin Workstation, these files will be present
-# after running the playbooks, but on the Journalist Workstation, they must
-# be copied manually by the Admin.
+- name: Import variables
+  include_vars: "group_vars/all/site-specific"
 
-- name: Look up Application Server SSH Onion URL.
-  command: grep -Po '.{16}\.onion' app-ssh-aths
-  changed_when: false
-  register: app_ssh_lookup_result
+- name: Lookup onion ssh files
+  stat:
+    path: "{{ item }}-ssh-aths"
+  register: "ssh_onion_lookup"
+  with_items:
+    - app
+    - mon
 
-- name: Look up Monitor Server SSH Onion URL.
-  command: grep -Po '.{16}\.onion' mon-ssh-aths
-  changed_when: false
-  register: mon_ssh_lookup_result
+- name: Hacky work-around to get below logic working
+  set_fact:
+    mon_ip: "{{ monitor_ip }}"
+
+- name: Confirm that either the app onion ssh file exists or site-specific file exists
+  assert:
+    that: "item.stat.exists or {{item.item}}_ip is defined"
+  with_items: "{{ ssh_onion_lookup.results }}"
 
 - name: Create SSH config directory.
   become: yes

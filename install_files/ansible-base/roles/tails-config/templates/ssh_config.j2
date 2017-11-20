@@ -1,6 +1,10 @@
-Host app
+{% set svc_grep = "grep -Po '.{16}\.onion' svc-ssh-aths" %}
+{% for svc in ssh_onion_lookup.results %}
+Host {{ svc.item }}
+  {% set svc_grep = "grep -Po '.{16}\.onion' "+svc.item+"-ssh-aths" -%}
+  {% set direct_ip = hostvars[inventory_hostname][svc.item+'_ip'] -%}
   User {{ ssh_users }}
-  Hostname {{ app_ssh_lookup_result.stdout }}
-Host mon
-  User {{ ssh_users }}
-  Hostname {{ mon_ssh_lookup_result.stdout }}
+  Hostname {{ lookup('pipe', svc_grep) if svc.stat.exists else direct_ip }}
+  ProxyCommand {{ '/bin/nc -X 5 -x 127.0.0.1:9050 %h %p' if svc.stat.exists else 'none' }}
+
+{% endfor %}
