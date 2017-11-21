@@ -74,6 +74,7 @@ anonymous sources.
    tails_guide
    tails_printing_guide
    https_source_interface
+   ssh_over_local_net
    training_schedule
    yubikey_setup
    backup_and_restore

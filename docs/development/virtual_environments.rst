@@ -31,8 +31,7 @@ a few exceptions:
 
 * The Debian packages are built from your local copy of the code, instead of
   installing the current stable release packages from https://apt.freedom.press.
-* The production environment only allows SSH over an Authenticated Tor Hidden
-  Service (ATHS), but the staging environment allows direct SSH access so it's
+* The staging environment is configured for direct SSH access so it's
   more ergonomic for developers to interact with the system during debugging.
 * The Postfix service is disabled, so OSSEC alerts will not be sent via email.
 
@@ -108,17 +107,11 @@ Vagrant host's ``install_files/ansible-base`` directory, named:
 
 * ``app-source-ths``
 * ``app-journalist-aths``
-* ``app-ssh-aths``
 
 For working on OSSEC monitoring rules with most system hardening active, update
 the OSSEC-related configuration in
 ``install_files/ansible-base/staging-specific.yml`` so you receive the OSSEC
 alert emails.
-
-A copy of the the Onion URL for SSH access to the *Monitor Server* is written to
-the Vagrant host's ``install_files/ansible-base`` directory, named:
-
-* ``mon-ssh-aths``
 
 Direct SSH access is available via Vagrant for staging hosts, so you can use
 ``vagrant ssh app-staging`` and ``vagrant ssh mon-staging`` to start an
@@ -211,7 +204,7 @@ To create the prod servers, run:
    cd /var/www/securedrop/
    ./manage.py add-admin
 
-A copy of the the Onion URLs for Source and Journalist Interfaces, as well as
+A copy of the Onion URLs for Source and Journalist Interfaces, as well as
 SSH access, are written to the Vagrant host's ``install_files/ansible-base``
 directory, named:
 
@@ -223,5 +216,7 @@ directory, named:
 SSH Access
 ~~~~~~~~~~
 
-Direct SSH access is not available in the prod environment. You will need to log
-in over Tor after initial provisioning. See :ref:`ssh_over_tor` for more info.
+By default, direct SSH access is not enabled in the prod environment. You will need to log
+in over Tor after initial provisioning or set ``enable_ssh_over_tor`` to "false"
+during ``./secure-admin tailsconfig``. See :ref:`ssh_over_tor` or :ref:`ssh_over_local`
+for more info.
