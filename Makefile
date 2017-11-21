@@ -49,7 +49,7 @@ flake8: ## Validates PEP8 compliance for Python source files.
 
 .PHONY: html-lint
 html-lint: ## Validates HTML in web application template files.
-	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation \
+	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,name \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 
 .PHONY: yamllint
