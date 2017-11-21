@@ -47,9 +47,11 @@ flake8: ## Validates PEP8 compliance for Python source files.
 		securedrop/source_app/*.py \
 		securedrop/tests/functional securedrop/tests/*.py
 
+# The --disable=names is required to use the BEM syntax
+# # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
 .PHONY: html-lint
 html-lint: ## Validates HTML in web application template files.
-	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation \
+	html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 
 .PHONY: yamllint
