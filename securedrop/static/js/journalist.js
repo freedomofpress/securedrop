@@ -44,11 +44,11 @@ $(function () {
   unread.css('cursor', 'pointer');
 
   all.click(function() {
-    var checkboxes = $(":checkbox").filter(":visible");
+    var checkboxes = $(".panel :checkbox").filter(":visible");
     checkboxes.prop('checked', true);
   });
   none.click(function() {
-    var checkboxes = $(":checkbox").filter(":visible");
+    var checkboxes = $(".panel :checkbox").filter(":visible");
     checkboxes.prop('checked', false);
   });
   unread.click(function() {
@@ -66,7 +66,7 @@ $(function () {
   });
 
   $("#delete-collections").click(function () {
-    var checked = $("ul#cols li :checkbox").filter(":visible").filter(function(index) {
+    var checked = $(".panel ul#cols li :checkbox").filter(":visible").filter(function(index) {
         return $(this).prop('checked');
     });
     if (checked.length > 0) {
@@ -77,7 +77,7 @@ $(function () {
   });
 
   $("#delete-selected").click(function () {
-      var checked = $("ul#submissions li :checkbox").filter(function() {
+      var checked = $(".panel ul#submissions li :checkbox").filter(function() {
           return $(this).prop('checked')
       });
       if (checked.length > 0) {
