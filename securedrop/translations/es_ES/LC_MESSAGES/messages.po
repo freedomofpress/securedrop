@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-22 00:00+0000\n"
-"Last-Translator: Freddy Martinez <freddymartinez9@gmail.com>\n"
+"PO-Revision-Date: 2017-11-22 07:00+0000\n"
+"Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -53,12 +53,11 @@ msgid "That username is already in use"
 msgstr "Ese nombre de usuario ya esta en uso"
 
 #: journalist_app/admin.py:61
-#, fuzzy
 msgid ""
 "An error occurred saving this user to the database. Please inform your "
 "administrator."
 msgstr ""
-"Se error ocurrió al guardar este usuario en la base de datos. Por favor "
+"Un error ocurrió al guardar este usuario en la base de datos. Por favor "
 "informe a su administrador."
 
 #: journalist_app/admin.py:84
@@ -238,30 +237,29 @@ msgid "Enable Google Authenticator"
 msgstr "Habilite el autenticador de Google (Google Authenticator)"
 
 #: journalist_templates/account_new_two_factor.html:5
-#, fuzzy
 msgid ""
 "You're almost done! To finish resetting your two-factor authentication, "
 "follow the instructions below to set up Google Authenticator. Once you've "
 "added the entry for your account in the app, enter one of the 6-digit codes "
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
-"¡Ya casi termina! Para terminar de reconfigurar la autenticación de dos "
-"factores, siga las instrucciones a continuación para configurar el "
-"Autenticador de Google (Google Authenticator). Una vez que haya agregado la "
-"entrada para su cuenta en la aplicación, introduzca uno de los códigos de 6 "
-"dígitos de la aplicación para confirmar que la autenticación de dos factores "
-"esta configura correctamente."
+"¡Ya casi termina! Para terminar de reajustar la autenticación de dos "
+"factores, siga las instrucciones de abajo para configurar el Autenticador de "
+"Google (Google Authenticator). Una vez que haya agregado la entrada para su "
+"cuenta en la aplicación, introduzca uno de los códigos de 6 dígitos de la "
+"aplicación para confirmar que la autenticación de dos factores esta "
+"configura correctamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
 msgid "Install Google Authenticator on your phone"
 msgstr ""
-"Instale el autenticador de Google (Google Authenticator) en su teléfono"
+"Instalar el Autenticador de Google (Google Authenticator) en su teléfono"
 
 #: journalist_templates/account_new_two_factor.html:9
 #: journalist_templates/admin_new_user_two_factor.html:10
 msgid "Open the Google Authenticator app"
-msgstr "Abrir la aplicación autenticadora de Google (Google Authenticator)"
+msgstr "Abrir la aplicación Autenticador de Google (Google Authenticator)"
 
 #: journalist_templates/account_new_two_factor.html:10
 #: journalist_templates/admin_new_user_two_factor.html:11
@@ -388,7 +386,7 @@ msgid ""
 "them enter one of the 6-digit codes from the app to confirm that two factor "
 "authentication is set up correctly."
 msgstr ""
-"¡ Ya casi termina! Para terminar de agregar este nuevo usuario, haga que "
+"¡Ya casi termina! Para terminar de agregar este nuevo usuario, haga que "
 "ellos sigan las instrucciones de abajo para configurar la autenticación de "
 "dos factores con el Autenticador de Google (Google Authenticator). Una vez "
 "que ellos hayan agregado una entrada para esta cuenta en la aplicación, haga "
@@ -407,7 +405,7 @@ msgstr "Admin"
 
 #: journalist_templates/base.html:28
 msgid "Log Out"
-msgstr "Cerrar Sesión"
+msgstr "Cerrar Sessión"
 
 #: journalist_templates/base.html:40
 msgid ""
@@ -803,7 +801,7 @@ msgstr "Todas las repuestas han sido eliminadas"
 
 #: source_app/main.py:215
 msgid "Sorry, that is not a recognized codename."
-msgstr "Lo siento, eso no es un nombre en clave reconocido."
+msgstr "Lo siento, ese nombre en clave no es reconocida."
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
@@ -1307,9 +1305,10 @@ msgid ""
 "strong> use GPG to sign the encrypted file (with the <code>--sign</code> or "
 "<code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr ""
-"<strong>Tip:</strong> Si tu deseas permanecer anónimo,<strong>no </strong> "
+"<strong>Tip:</strong> Si usted desea permanecer anónimo,<strong>no </strong> "
 "use GPG para firmar el archivo encriptado (con el <code> --sign</code> or "
-"<code> -s</code> marca) ya que esto va revelar su identidad GPG a nosotros."
+"<code> -s</code> marca) ya que esto va revelar su identidad de GPG a "
+"nosotros."
 
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
