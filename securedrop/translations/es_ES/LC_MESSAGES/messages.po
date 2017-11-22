@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-22 22:27+0000\n"
+"PO-Revision-Date: 2017-11-23 00:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
@@ -244,11 +244,10 @@ msgid ""
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
 "¡Ya casi termina! Para terminar de reajustar la autenticación de dos "
-"factores, siga las instrucciones de abajo para configurar el Autenticador de "
-"Google (Google Authenticator). Una vez que haya agregado la entrada para su "
-"cuenta en la aplicación, introduzca uno de los códigos de 6 dígitos de la "
-"aplicación para confirmar que la autenticación de dos factores esta "
-"configura correctamente."
+"factores, siga las instrucciones de abajo para configurar el Autenticador "
+"Google. Una vez que haya agregado la entrada para su cuenta en la "
+"aplicación, introduzca uno de los códigos de 6 dígitos de la aplicación para "
+"confirmar que la autenticación de dos factores esta configura correctamente."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
@@ -800,7 +799,7 @@ msgstr "Todas las repuestas han sido eliminadas"
 
 #: source_app/main.py:215
 msgid "Sorry, that is not a recognized codename."
-msgstr "Lo siento, ese nombre en clave no es reconocida."
+msgstr "Lo siento, ese nombre clave no es reconocido."
 
 #: source_templates/base.html:6 source_templates/index.html:4
 msgid "Protecting Journalists and Sources"
