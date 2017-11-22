@@ -159,8 +159,8 @@ class TestI18N(object):
         with app.test_client() as c:
             c.get('/')
             locales = render_template('locales.html')
-            assert 'fr_FR' in locales
-            assert 'en_US' not in locales
+            assert '?l=fr_FR' in locales
+            assert '?l=en_US' not in locales
             c.get('/?l=ar')
             base = render_template('base.html')
             assert 'dir="rtl"' in base
