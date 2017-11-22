@@ -54,12 +54,18 @@ and to demonstrate control over the Onion URL for your Source Interface.
 
 In order for you to demonstrate control over the Onion URL for your Source
 Interface, DigiCert will provide you with some text and ask you to make it
-available at a specific URL:
-``<onion_url>.onion/.well-known/pki-validation.html``. You will need to
-understand Apache configuration well enough to know how to temporarily
-provision such a page at this specific URL. Once you have received your
-certificate, you should restore the Apache configuration to the stock
-SecureDrop configuration.
+available at a specific URL: ``<onion_url>/.well-known/pki-validation.html``.
+We have support for this work-flow:
+
+.. code:: sh
+
+    # From the admin workstation ssh to the application server
+    $ ssh app
+
+    # Edit the validation file with content the CA provides
+    # Note that the filename can be anything as long as it ends
+    # with .htm or .html
+    $ sudo vi /var/www/securedrop/.well-known/pki-validation.html
 
 While the `CAB forum`_ has specified that ``.onion`` certificates may have a
 maximum lifetime of 15 months, we have heard that some folks have run into
