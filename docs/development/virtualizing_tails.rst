@@ -249,3 +249,58 @@ Disable Shared Clipboard (Optional)
 3. Click **General** and then **Advanced**.
 4. Now that you are finished with copy pasting the patches above you can change
    the **Shared Clipboard** from **Bidirectional** back to **Disabled**.
+
+Linux
+-----
+
+For the Linux instructions, you will use KVM/libvirt to create a Tails VM that
+you can use to install SecureDrop on ``app-prod`` and ``mon-prod``.
+
+Create a libvirt VM
+~~~~~~~~~~~~~~~~~~~
+
+Follow the Tails virt-manager instructions for
+`Running Tails from a virtual USB storage <https://tails.boum.org/doc/advanced_topics/virtualization/virt-manager/index.en.html#index5h1>`__.
+After installing Tails on the removable USB device, shut down the VM
+and edit the boot options. You'll need to manually enable booting from the USB
+device by checking the box labeled **USB Disk 1**.
+
+.. image:: ../images/devenv/tails-libvirt-boot-options.png
+
+Then proceed with booting to the USB drive, and configure a persistence volume.
+
+Shared Folders
+~~~~~~~~~~~~~~
+
+In order to mount the SecureDrop git repository as a folder inside the Tails
+persistence volume, you must add a filesystem via virt-manager.
+
+1. Choose **View ▸ Details** to edit the configuration of the virtual machine.
+2. Click on the **Add Hardware** button on the bottom of the left pane.
+3. Select **Filesystem** in the left pane.
+4. In the right pane, change the **Mode** to **Mapped**.
+5. In the right pane, change **Source path** to the path to the SecureDrop git repository on the host machine.
+6. In the right pane, change **Target path** to **securedrop**.
+7. Click **Finish**.
+
+.. image:: ../images/devenv/tails-libvirt-filesystem-config.png
+
+On the next VM boot, you will be able to mount the SecureDrop git repository
+from the host machine via:
+
+.. code:: sh
+
+  mkdir -p ~/Persistent/securedrop
+  sudo mount -t 9p securedrop ~/Persistent/securedrop
+
+You will need to run the ``mount`` command every time you boot the VM.
+By default only read operations are supported. In order to support modifying files
+in the git repository, you will need to configure file ACLs.
+On the host machine, from within the SecureDrop git repository, run:
+
+.. code:: sh
+
+  make libvirt-share
+
+All files will be created with mode ``0600`` and ownership ``libvirt-qemu:libvirt-qemu``.
+You will need to modify the files manually on the host machine in order to commit them.
