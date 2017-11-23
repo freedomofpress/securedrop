@@ -1,0 +1,16 @@
+#
+# Normalization of contributors to the translation.
+#
+#   git log --pretty='%aN' securedrop/translations | sort -u
+#
+Alain-Olivier <french.coordinator@rbox.me>
+Eric H. <heartsucker@riseup.net>
+Jennifer Helsby <jen@freedom.press>
+Anna Skaja <annskaja@riseup.net>
+Beatrice Martini <mail@beatricemartini.it>
+Shih-Chieh Ilya Li <ilyaericlee@gmail.com>
+Benny Daon <bennydaon@gmail.com>
+Camille Fassett <camillefassett@gmail.com>
+Jean-Marc Manach <weblatesecuredrop@rewriting.net>
+A. Nonymous <noreply@weblate.org>
+A. Nonymous <noreply@weblate.org> <8pj8w9+49mls08deq3l4@sharklasers.com>
