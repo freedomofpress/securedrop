@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-24 00:00+0000\n"
+"PO-Revision-Date: 2017-11-24 02:00+0000\n"
 "Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
@@ -947,7 +947,7 @@ msgstr "ENVIAR DOCUMENTOS"
 
 #: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
-msgstr "CHEQUEAR POR UNA RESPUESTA"
+msgstr "CHEQUEAR POR CONTESTATION"
 
 #: source_templates/index.html:92
 msgid ""
