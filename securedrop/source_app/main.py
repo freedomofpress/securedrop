@@ -153,7 +153,7 @@ def make_blueprint(config):
                 html_msg = render_template(
                     'next_submission_flashed_message.html',
                     html_contents="{0}".format(filename))
-                flash(Markup(html_msg), "info")
+                flash(Markup(html_msg), "next_submission")
 
         if first_submission:
             msg = render_template('first_submission_flashed_message.html')
