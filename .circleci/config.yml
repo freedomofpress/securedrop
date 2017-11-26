@@ -1,25 +1,6 @@
 ---
 version: 2
 jobs:
-  docs-lint:
-    docker:
-      - image: quay.io/freedomofpress/circleci-docker:latest
-
-    steps:
-      - checkout
-
-      - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
-
-      - run:
-          name: Installation pre-reqs
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
-
-      - run:
-          name: Run docs lint
-          command: make docs-lint
-
   staging-test:
     docker:
       - image: quay.io/freedomofpress/circleci-docker:latest
@@ -234,10 +215,9 @@ workflows:
     jobs:
       - lint
       - tests
-      - docs-lint
       - staging-test:
           requires:
-            - docs-lint
+            - lint
       - staging-test-with-rebase:
           requires:
-            - docs-lint
+            - lint
