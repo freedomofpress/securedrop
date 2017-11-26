@@ -1,98 +1,6 @@
 ---
 version: 2
 jobs:
-  staging-test:
-    docker:
-      - image: quay.io/freedomofpress/circleci-docker:latest
-        environment:
-          FPF_CI: true
-          CI_SD_ENV: staging
-          CI_AWS_TYPE: t2.medium
-          FPF_GRSEC: false
-          TEST_REPORTS: /root/sd
-    working_directory: ~/sd
-
-    steps:
-
-      - checkout
-
-      - run:
-          name: Rebase on-top of latest develop
-          command: ./devops/scripts/rebase-develop.sh
-
-      - run:
-          name: Installation pre-reqs
-          command: pip install -U -r securedrop/requirements/develop-requirements.txt
-
-      - run:
-          name: Check Python dependencies for CVEs
-          command: make safety
-
-      - setup_remote_docker
-
-      - run:
-          name: Run Debian builds
-          command: make build-debs
-
-      - run:
-          name: Provision staging servers and run tests
-          command: make ci-go
-
-      - run:
-          name: Ensure environment torn down
-          command: molecule destroy -s aws
-          when: on_fail
-
-      - store_test_results:
-          path: /root/sd/junit
-
-      - store_artifacts:
-          path: /root/sd/junit
-
-  staging-test-with-rebase:
-    docker:
-      - image: quay.io/freedomofpress/circleci-docker:latest
-        environment:
-          FPF_CI: true
-          CI_SD_ENV: staging
-          CI_AWS_TYPE: t2.medium
-          FPF_GRSEC: false
-          TEST_REPORTS: /root/sd
-    working_directory: ~/sd
-
-    steps:
-
-      - checkout
-
-      - run:
-          name: Installation pre-reqs
-          command: pip install -U -r ./securedrop/requirements/develop-requirements.txt
-
-      - run:
-          name: Check Python dependencies for CVEs
-          command: make safety
-
-      - setup_remote_docker
-
-      - run:
-          name: Run Debian builds
-          command: make build-debs
-
-      - run:
-          name: Provision staging servers and run tests
-          command: make ci-go
-
-      - run:
-          name: Ensure environment torn down
-          command: molecule destroy -s aws
-          when: on_fail
-
-      - store_test_results:
-          path: /root/sd/junit
-
-      - store_artifacts:
-          path: /root/sd/junit
-
   tests:
     docker:
       - image: gcr.io/cloud-builders/docker
@@ -203,6 +111,97 @@ jobs:
           name: Run Linting
           command: |
             TAG=${CIRCLE_SHA1} make ci-lint
+  staging-test:
+    docker:
+      - image: quay.io/freedomofpress/circleci-docker:latest
+        environment:
+          FPF_CI: true
+          CI_SD_ENV: staging
+          CI_AWS_TYPE: t2.medium
+          FPF_GRSEC: false
+          TEST_REPORTS: /root/sd
+    working_directory: ~/sd
+
+    steps:
+
+      - checkout
+
+      - run:
+          name: Rebase on-top of latest develop
+          command: ./devops/scripts/rebase-develop.sh
+
+      - run:
+          name: Installation pre-reqs
+          command: pip install -U -r securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Check Python dependencies for CVEs
+          command: make safety
+
+      - setup_remote_docker
+
+      - run:
+          name: Run Debian builds
+          command: make build-debs
+
+      - run:
+          name: Provision staging servers and run tests
+          command: make ci-go
+
+      - run:
+          name: Ensure environment torn down
+          command: molecule destroy -s aws
+          when: on_fail
+
+      - store_test_results:
+          path: /root/sd/junit
+
+      - store_artifacts:
+          path: /root/sd/junit
+
+  staging-test-with-rebase:
+    docker:
+      - image: quay.io/freedomofpress/circleci-docker:latest
+        environment:
+          FPF_CI: true
+          CI_SD_ENV: staging
+          CI_AWS_TYPE: t2.medium
+          FPF_GRSEC: false
+          TEST_REPORTS: /root/sd
+    working_directory: ~/sd
+
+    steps:
+
+      - checkout
+
+      - run:
+          name: Installation pre-reqs
+          command: pip install -U -r ./securedrop/requirements/develop-requirements.txt
+
+      - run:
+          name: Check Python dependencies for CVEs
+          command: make safety
+
+      - setup_remote_docker
+
+      - run:
+          name: Run Debian builds
+          command: make build-debs
+
+      - run:
+          name: Provision staging servers and run tests
+          command: make ci-go
+
+      - run:
+          name: Ensure environment torn down
+          command: molecule destroy -s aws
+          when: on_fail
+
+      - store_test_results:
+          path: /root/sd/junit
+
+      - store_artifacts:
+          path: /root/sd/junit
 
 workflows:
   version: 2
