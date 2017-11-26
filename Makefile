@@ -77,7 +77,6 @@ shellcheck: ## Lints Bash and sh scripts.
 # don't maintain those scripts. Omitting the `.venv/` dir because we don't control
 # files in there. Omitting the ossec packages because there are a LOT of violations,
 # and we have a separate issue dedicated to cleaning those up.
-	-@docker rm -f shellcheck-targets
 	@docker create -v /mnt --name shellcheck-targets circleci/python:2 /bin/true
 	@docker cp $(PWD)/. shellcheck-targets:/mnt/
 	@find "." \( -path "./.venv" -o -path "./install_files/ossec-server" \
