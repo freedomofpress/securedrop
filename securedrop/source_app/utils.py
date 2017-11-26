@@ -63,6 +63,7 @@ def async(f):
 
 @async
 def async_genkey(filesystem_id, codename):
+    current_app.logger.info("async_genkey for {}, {}", filesystem_id, codename)
     crypto_util.genkeypair(filesystem_id, codename)
 
     # Register key generation as update to the source, so sources will
