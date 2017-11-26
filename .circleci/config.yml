@@ -1,6 +1,18 @@
 ---
 version: 2
 jobs:
+  lint:
+    docker:
+      - image: gcr.io/cloud-builders/docker
+    steps:
+      - run: apt-get install -y make
+      - checkout
+      - setup_remote_docker
+
+      - run: TAG=${CIRCLE_SHA1} make ci-lint-image
+
+      - run: TAG=${CIRCLE_SHA1} make ci-lint
+
   tests:
     docker:
       - image: gcr.io/cloud-builders/docker
@@ -66,51 +78,6 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
-  lint:
-    docker:
-      - image: gcr.io/cloud-builders/docker
-    steps:
-      - run: apt-get install -y make
-      - checkout
-      - setup_remote_docker
-
-      - restore_cache:
-          keys:
-            - v1-sd-lint-layers-{{ .Branch }}-
-            - v1-sd-lint-layers-
-          paths:
-            - /caches/layers.tar
-
-      - run:
-          name: Load image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/layers.tar |true
-
-      - run:
-          name: Build Docker images
-          command: |
-            set +o pipefail
-            docker images
-            fromtag=$(docker images |grep securedrop-lint |head -n1 |awk '{print $2}')
-            EXTRA_BUILD_ARGS="--cache-from securedrop-lint:${fromtag:-latest}" TAG=${CIRCLE_SHA1} make ci-lint-image
-
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p /caches
-            docker images
-            docker save -o /caches/layers.tar securedrop-lint:${CIRCLE_SHA1}
-
-      - save_cache:
-          key: v1-sd-lint-layers-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/layers.tar
-
-      - run:
-          name: Run Linting
-          command: |
-            TAG=${CIRCLE_SHA1} make ci-lint
   staging-test:
     docker:
       - image: quay.io/freedomofpress/circleci-docker:latest
