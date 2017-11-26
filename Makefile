@@ -1,6 +1,7 @@
 DEFAULT_GOAL: help
 SHELL := /bin/bash
 PWD := $(shell pwd)
+TAG ?= $(shell git rev-parse HEAD)
 
 .PHONY: app-images
 app-images: ## Create securedrop application docker images
@@ -32,11 +33,11 @@ ci-go: ## Creates, provisions, tests, and destroys AWS EC2 hosts for testing sta
 
 .PHONY: ci-lint-image
 ci-lint-image: ## Builds linting container.
-	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${CIRCLE_SHA1} -f Dockerfile.linting .
+	docker build $(EXTRA_BUILD_ARGS) -t securedrop-lint:${TAG} -f Dockerfile.linting .
 
 .PHONY: ci-lint
 ci-lint: ## Runs linting in linting container.
-	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${CIRCLE_SHA1}
+	docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock securedrop-lint:${TAG}
 
 .PHONY: docs-lint
 docs-lint: ## Check documentation for common syntax errors.

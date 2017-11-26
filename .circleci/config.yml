@@ -209,7 +209,7 @@ jobs:
             set +o pipefail
             docker images
             fromtag=$(docker images |grep securedrop-lint |head -n1 |awk '{print $2}')
-            EXTRA_BUILD_ARGS="--cache-from securedrop-lint:${fromtag:-latest}" make ci-lint-image
+            EXTRA_BUILD_ARGS="--cache-from securedrop-lint:${fromtag:-latest}" TAG=${CIRCLE_SHA1} make ci-lint-image
 
       - run:
           name: Save Docker image layer cache
@@ -226,7 +226,7 @@ jobs:
       - run:
           name: Run Linting
           command: |
-            make ci-lint
+            TAG=${CIRCLE_SHA1} make ci-lint
 
 workflows:
   version: 2
