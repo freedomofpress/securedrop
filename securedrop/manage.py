@@ -422,11 +422,23 @@ def set_clean_tmp_parser(subps, name):
     parser.set_defaults(func=clean_tmp)
 
 
+def setup_gnupg_verbosity():
+    gnupg_logger = logging.getLogger('gnupg')
+    gnupg_logger.setLevel(logging.ERROR)
+    valid_levels = {'INFO': logging.INFO, 'DEBUG': logging.DEBUG}
+    gnupg_level = valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', None), None)
+    if gnupg_level:
+        gnupg_logger.setLevel(gnupg_level)
+
 def setup_verbosity(args):
     if args.verbose:
         logging.getLogger(__name__).setLevel(logging.DEBUG)
     else:
         logging.getLogger(__name__).setLevel(logging.INFO)
+
+
+# run on startup to squelch early on
+setup_gnupg_verbosity()
 
 
 def _run_from_commandline():  # pragma: no cover
