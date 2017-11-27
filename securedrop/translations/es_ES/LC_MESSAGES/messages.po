@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-24 11:00+0000\n"
-"Last-Translator: Daniel Arauz <danarauz@gmail.com>\n"
+"PO-Revision-Date: 2017-11-27 20:00+0000\n"
+"Last-Translator: Freddy Martinez <freddymartinez9@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -264,7 +264,8 @@ msgstr "Abrir la aplicación Autenticador Google"
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
-"Toque en menú, luego toque \"Set up account\", luego toque \"scan a barcode\""
+"Toque en menú, luego toque \"Set up account\", luego toque \"escanaear "
+"código de barras\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
