@@ -119,6 +119,11 @@ update-pip-requirements: ## Updates all Python requirements files via pip-compil
 	pip-compile --output-file securedrop/requirements/securedrop-requirements.txt \
 		securedrop/requirements/securedrop-requirements.in
 
+.PHONY: libvirt-share
+libvirt-share: ## Configure ACLs to allow RWX for libvirt VM (e.g. Admin Workstation)
+	@find "$(PWD)" -type d -and -user $$USER -exec setfacl -m u:libvirt-qemu:rwx {} +
+	@find "$(PWD)" -type f -and -user $$USER -exec setfacl -m u:libvirt-qemu:rw {} +
+
 # Explaination of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
