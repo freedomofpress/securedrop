@@ -99,3 +99,5 @@ worker_logs_dir: /var/log/securedrop_worker
 
 # The locale used when the browser or the user do not have a preference
 securedrop_default_locale: en_US
+# The subset of the available locales that will be proposed to the user
+securedrop_supported_locales: []
