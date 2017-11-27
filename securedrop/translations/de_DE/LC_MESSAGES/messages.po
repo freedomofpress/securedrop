@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-10 18:33+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://weblate.securedrop.club/projects/securedrop/"
-"securedrop/de/>\n"
+"PO-Revision-Date: 2017-11-27 13:00+0000\n"
+"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
+"Language-Team: German "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.14.1\n"
+"X-Generator: Weblate 2.17.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
@@ -25,7 +25,7 @@ msgstr "Sie wurden wegen Inaktivität abgemeldet"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr ""
+msgstr "Falsches Passwort oder Zwei-Faktor-Authentifizierungstoken."
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
@@ -48,16 +48,12 @@ msgid "That username is already in use"
 msgstr "Dieser Benutzername ist bereits vergeben"
 
 #: journalist_app/admin.py:61
-#, fuzzy
-#| msgid ""
-#| "An error occurred saving this user to the database. Please check the "
-#| "application logs."
 msgid ""
 "An error occurred saving this user to the database. Please inform your "
 "administrator."
 msgstr ""
 "Beim Speichern dieses Benutzers in der Datenbank ist ein Fehler aufgetreten. "
-"Bitte überprüfen Sie die Anwendungsprotokolle."
+"Bitte informieren Sie Ihren Administrator."
 
 #: journalist_app/admin.py:84
 msgid "Token in two-factor authentication accepted for user {user}."
@@ -78,14 +74,10 @@ msgstr ""
 
 #: journalist_app/admin.py:128 journalist_app/main.py:107
 #: journalist_app/utils.py:38
-#, fuzzy
-#| msgid ""
-#| "An unexpected error occurred! Please check the application logs or inform "
-#| "your adminstrator."
 msgid "An unexpected error occurred! Please inform your administrator."
 msgstr ""
-"Ein unerwarteter Fehler ist aufgetreten! Bitte überprüfen Sie die "
-"Anwendungsprotokolle oder informieren Sie Ihren Administrator."
+"Ein unerwarteter Fehler ist aufgetreten! Bitte Informieren Sie Ihren "
+"Administrator."
 
 #: journalist_app/admin.py:161
 msgid "Username \"{user}\" already taken."
@@ -109,12 +101,14 @@ msgstr "Nur Administratoren haben Zugriff auf diese Seite."
 
 #: journalist_app/forms.py:17
 msgid "Field must be 40 characters long but got {num_chars}."
-msgstr ""
+msgstr "Das Feld muss 40 Zeichen lang sein, hat aber {num_chars}."
 
 #: journalist_app/forms.py:28
 msgid ""
 "Field must be at least {min_chars} characters long but only got {num_chars}."
 msgstr ""
+"Das Feld muss mindestens {min_chars} Zeichen lang sein, enthält aber nur "
+"{num_chars}."
 
 #: journalist_app/forms.py:33 source_app/forms.py:11
 msgid "This field is required."
@@ -153,24 +147,19 @@ msgid "Login failed."
 msgstr "Anmeldung fehlgeschlagen."
 
 #: journalist_app/utils.py:84
-#, fuzzy
-#| msgid "Please wait at least {seconds} seconds before logging in again."
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
 msgstr[0] ""
-"Bitte warten Sie mindestens {seconds} Sekunden, bevor Sie sich erneut "
+"Bitte warten Sie mindestens {seconds} Sekunde, bevor Sie sich erneut "
 "anmelden."
 msgstr[1] ""
 "Bitte warten Sie mindestens {seconds} Sekunden, bevor Sie sich erneut "
 "anmelden."
 
 #: journalist_app/utils.py:95
-#, fuzzy
-#| msgid "Please wait for a new two-factor token before logging in again."
 msgid "Please wait for a new two-factor token before trying again."
 msgstr ""
-"Bitte warten Sie auf ein neues Zwei-Faktor-Token, bevor Sie sich erneut "
-"anmelden."
+"Bitte warten Sie auf ein neues Zwei-Faktor-Token, bevor Sie erneut versuchen."
 
 #: journalist_app/utils.py:140
 msgid "Submission deleted."
@@ -546,10 +535,8 @@ msgid "PERMANENTLY DELETE FILES"
 msgstr "DATEIEN PERMANENT LÖSCHEN"
 
 #: journalist_templates/delete.html:23
-#, fuzzy
-#| msgid "Return to the list of documents for {source_name}..."
 msgid "Return to the list of documents for {source_name}…"
-msgstr "Zurück zur Dokumentenliste für {source_name}..."
+msgstr "Zurück zur Dokumentenliste für {source_name}…"
 
 #: journalist_templates/edit_account.html:6
 msgid "Edit user \"{user}\""
@@ -589,7 +576,7 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
-msgstr ""
+msgstr "Bitte geben Sie Ihr aktuelles Passwort und Zwei-Faktor-Code ein."
 
 #: journalist_templates/edit_account.html:40
 #, fuzzy
@@ -915,8 +902,9 @@ msgid "USE NEW CODENAME"
 msgstr "HABEN SIE BEREITS EINEN DECKNAMEN?"
 
 #: source_templates/generate.html:47
+#, fuzzy
 msgid "USE EXISTING CODENAME"
-msgstr ""
+msgstr "NUTZE VORHANDENE DECKNAME"
 
 #: source_templates/index.html:17
 msgid ""
@@ -1090,7 +1078,7 @@ msgstr "Maximale Upload-Größe: 500 MB"
 
 #: source_templates/lookup.html:36
 msgid "Write a message."
-msgstr ""
+msgstr "Nachricht schreiben."
 
 #: source_templates/lookup.html:53
 #, fuzzy
