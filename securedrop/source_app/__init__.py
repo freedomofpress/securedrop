@@ -97,7 +97,7 @@ def create_app(config):
         session['expires'] = datetime.utcnow() + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
-                                      30))
+                                      120))
 
         # ignore_static here because `crypto_util.hash_codename` is scrypt
         # (very time consuming), and we don't need to waste time running if
