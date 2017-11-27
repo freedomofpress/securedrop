@@ -18,7 +18,7 @@ pipeline {
         stage('Install with Tor nightly repo') {
             steps {
                 deleteDir()
-                git branch: 'ExtendTorURL', url: 'https://github.com/freedomofpress/securedrop.git'
+                git branch: 'develop', url: 'https://github.com/freedomofpress/securedrop.git'
 
                 sh '''. devops/scripts/aws-jenkins-venv.sh
                     |pip install -r testinfra/requirements.txt '''.stripMargin()
