@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-28 19:00+0000\n"
-"Last-Translator: Anne M <info@numijneigenwebsite.nl>\n"
+"PO-Revision-Date: 2017-11-28 22:54+0000\n"
+"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Dutch "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nl/>\n"
 "Language: nl\n"
@@ -30,15 +30,15 @@ msgstr "U bent uitgelogd wegens inactiviteit"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr "Foutief wachtwoord of twee-factor authentiecatietoken."
+msgstr "Foutief wachtwoord of tweestapstoken."
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
-msgstr "Token voor twee-staps-authenticatie succesvol geverifieerd."
+msgstr "Token voor tweestapsauthenticatie succesvol geverifieerd."
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
 msgid "Could not verify token in two-factor authentication."
-msgstr "Token voor tweeledige verificatie kan niet worden gecontroleerd."
+msgstr "Token voor tweestapsauthenticatie kan niet worden gecontroleerd."
 
 #: journalist_app/admin.py:47
 msgid ""
@@ -63,7 +63,7 @@ msgstr ""
 #: journalist_app/admin.py:84
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
-"Token voor tweeledige verificatie is geaccepteerd voor gebruiker {user}."
+"Token voor tweestapsauthenticatie is geaccepteerd voor gebruiker {user}."
 
 #: journalist_app/admin.py:118
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -159,7 +159,7 @@ msgstr[1] ""
 
 #: journalist_app/utils.py:95
 msgid "Please wait for a new two-factor token before trying again."
-msgstr "Wacht op een nieuw tweefactor token alvorens opnieuw te proberen."
+msgstr "Wacht op een nieuw tweestapstoken alvorens opnieuw te proberen."
 
 #: journalist_app/utils.py:140
 msgid "Submission deleted."
@@ -240,10 +240,10 @@ msgid ""
 "added the entry for your account in the app, enter one of the 6-digit codes "
 "from the app to confirm that two factor authentication is set up correctly."
 msgstr ""
-"U bent bijna klaar! Om het resetten van uw tweeledige verificatie te "
+"U bent bijna klaar! Om het resetten van uw tweestapsauthenticatie te "
 "voltooien volgt u de instructies van Google Authenticator. Zodra u uw "
 "account in de app hebt toegevoegd, moet u de zescijferige code van de app "
-"invoeren om te bevestigen dat de tweeledige verificatie correct is ingesteld."
+"invoeren om te bevestigen dat de tweestapsauthenticatie correct is ingesteld."
 
 #: journalist_templates/account_new_two_factor.html:8
 #: journalist_templates/admin_new_user_two_factor.html:9
@@ -380,7 +380,7 @@ msgid ""
 "authentication is set up correctly."
 msgstr ""
 "U bent bijna klaar! Om het toevoegen van deze nieuwe gebruiker af te ronden, "
-"laat hem/haar onderstaande instructies volgen om de tweeledige authenticatie "
+"laat hem/haar onderstaande instructies volgen om de tweestapsauthenticatie "
 "met de Google Authenticator in te stellen. Zodra hij/zij dit account heeft "
 "toegevoegd, laat hem/haar vervolgens de zescijferige code uit de app "
 "invoeren om te bevestigen dat de authenticatie in twee stappen succesvol is "
@@ -572,8 +572,7 @@ msgstr ""
 
 #: journalist_templates/edit_account.html:34
 msgid "Please enter your current password and two-factor code."
-msgstr ""
-"Gelieve je huidige wachtwoord en tweefactor authenticatietoken in te geven."
+msgstr "Gelieve je huidige wachtwoord en tweestapstoken in te geven."
 
 #: journalist_templates/edit_account.html:40
 msgid "Current Password"
@@ -581,7 +580,7 @@ msgstr "Huidig wachtwoord"
 
 #: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "Tweeledige code"
+msgstr "Tweestapstoken"
 
 #: journalist_templates/edit_account.html:46
 msgid "The user's password will be changed to:"
@@ -597,7 +596,7 @@ msgstr "HERSTEL WACHTWOORD"
 
 #: journalist_templates/edit_account.html:58
 msgid "Reset Two-Factor Authentication"
-msgstr "Herstel tweeledige authenticatie"
+msgstr "Herstel tweestapsauthenticatie"
 
 #: journalist_templates/edit_account.html:61
 msgid ""
@@ -606,12 +605,11 @@ msgid ""
 "is present and ready to set up their device with the new two-factor "
 "credentials. Otherwise, they will be locked out of their account."
 msgstr ""
-"Indien gebruiker zijn inloggegevens voor tweeledige authenticatie kwijt is "
-"of mogelijk niet meer veilig, dan kunt u het hier herstellen. <em>Zorg "
-"ervoor dat de gebruiker aanwezig is op het moment dat dit gedaan wordt en "
-"dat hun apparaat gereed is voor inrichting met een nieuwe tweeledige "
-"authenticatie. Anders kan de gebruiker niet meer inloggen op zijn/haar "
-"account."
+"Indien gebruiker zijn inloggegevens voor tweestapsauthenticatie kwijt is of "
+"mogelijk niet meer veilig, dan kunt u het hier herstellen. <em>Zorg ervoor "
+"dat de gebruiker aanwezig is op het moment dat dit gedaan wordt en dat hun "
+"apparaat gereed is voor inrichting met een nieuwe tweeledige authenticatie. "
+"Anders kan de gebruiker niet meer inloggen op hun account."
 
 #: journalist_templates/edit_account.html:63
 msgid ""
@@ -620,10 +618,10 @@ msgid ""
 "this, make sure you are ready to set up your new device, otherwise you will "
 "be locked out of your account.</em>"
 msgstr ""
-"Indien uw tweeledige verificatiegegevens kwijt of gecompromitteerd zijn of u "
-"heeft een nieuw apparaat, kunt u uw gegevens hier herstellen. <em>Indien u "
-"dit doet, zorg dan dat alles is voorbereid om uw nieuw apparaat in te "
-"stellen, anders wordt u buitengesloten van uw account.</em>"
+"Indien uw  tweestapsauthenticatie kwijt of gecompromitteerd zijn of u heeft "
+"een nieuw apparaat, kunt u uw gegevens hier herstellen. <em>Indien u dit "
+"doet, zorg dan dat alles is voorbereid om uw nieuw apparaat in te stellen, "
+"anders wordt u buitengesloten van uw account.</em>"
 
 #: journalist_templates/edit_account.html:65
 msgid ""
@@ -631,17 +629,17 @@ msgid ""
 "Authenticator or FreeOTP, choose the first option. For hardware tokens like "
 "the Yubikey, choose the second."
 msgstr ""
-"Om tweeledige authenticatie voor mobiele apps zoals Google Authenticator of "
+"Om tweestapsauthenticatie voor mobiele apps zoals Google Authenticator of "
 "FreeOTP te herstellen, kies de eerste optie. Voor hardware-tokens zoals "
 "Yubikey kiest u de tweede."
 
 #: journalist_templates/edit_account.html:85
 msgid "RESET TWO-FACTOR AUTHENTICATION (APP)"
-msgstr "HERSTEL TWEELEDIGE AUTHENTICATIE (APP)"
+msgstr "HERSTEL TWEESTAPSAUTHENTICATIE (APP)"
 
 #: journalist_templates/edit_account.html:87
 msgid "RESET TWO-FACTOR AUTHENTICATION (HARDWARE TOKEN)"
-msgstr "HERSTEL TWEELEDIGE AUTHENTICATIE (HARDWARE TOKEN)"
+msgstr "HERSTEL TWEESTAPSAUTHENTICATIE (HARDWARE TOKEN)"
 
 #: journalist_templates/flag.html:5
 msgid "Thanks!"
@@ -725,7 +723,7 @@ msgstr "Weet u zeker dat u de gebruiker {username} wilt verwijderen?"
 msgid ""
 "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr ""
-"Weet u zeker dat u de tweeledige verificatie voor {username} wilt herstellen?"
+"Weet u zeker dat u de tweestapsauthenticatie voor {username} wilt herstellen?"
 
 #: journalist_templates/login.html:4
 msgid "Login to access the journalist interface"
