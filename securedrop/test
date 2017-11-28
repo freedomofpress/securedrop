@@ -8,6 +8,9 @@ redis-server &
 
 echo -n 4096 > /proc/sys/kernel/random/write_wakeup_threshold
 
+rm /dev/random
+ln -s /dev/urandom /dev/random
+
 touch tests/log/firefox.log
 function cleanup {
   cp tests/log/firefox.log /tmp/test-results/logs/
