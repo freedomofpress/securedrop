@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-27 20:00+0000\n"
+"PO-Revision-Date: 2017-11-28 02:00+0000\n"
 "Last-Translator: Freddy Martinez <freddymartinez9@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
@@ -264,8 +264,8 @@ msgstr "Abrir la aplicación Autenticador Google"
 #: journalist_templates/admin_new_user_two_factor.html:11
 msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 msgstr ""
-"Toque en menú, luego toque \"Set up account\", luego toque \"escanaear "
-"código de barras\""
+"Toque en menú, luego toque \"crear cuenta\", luego toque \"escanaear código "
+"de barras\""
 
 #: journalist_templates/account_new_two_factor.html:11
 #: journalist_templates/admin_new_user_two_factor.html:12
@@ -273,8 +273,8 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
-"Su teléfono estará ahora en modo \"scanning\". Cuando usted esté en este "
-"modo, escanee el código de barras de abajo:"
+"Su teléfono está en modo de detección. Escanee el código que se encuentra "
+"abajo:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
