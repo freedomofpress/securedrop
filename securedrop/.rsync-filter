@@ -59,4 +59,5 @@ include translations/*.pot
 include translations/*/
 include translations/*/*/
 include translations/*/*/*.po
+include .well-known/
 exclude *
