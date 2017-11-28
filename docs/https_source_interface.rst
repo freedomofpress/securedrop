@@ -55,11 +55,11 @@ and to demonstrate control over the Onion URL for your Source Interface.
 In order for you to demonstrate control over the Onion URL for your Source
 Interface, DigiCert will provide you with some text and ask you to make it
 available at a specific URL: ``<onion_url>/.well-known/pki-validation.html``.
-We have support for this work-flow:
+We have support for this workflow:
 
 .. code:: sh
 
-    # From the admin workstation ssh to the application server
+    # From the Admin Workstation, SSH to the Application Server
     $ ssh app
 
     # Edit the validation file with content the CA provides
@@ -117,14 +117,14 @@ the configuration: ::
 
 The webserver configuration will be updated to apply the HTTPS settings.
 Confirm that you can access the Source Interface at
-``https://<your_domain>.onion``, and also that the HTTP URL
-``http://<your_domain.onion`` redirects automatically to HTTPS.
+``https://<onion_url>``, and also that the HTTP URL
+``http://<onion_url>`` redirects automatically to HTTPS.
 
 .. note:: By default, Tor Browser will send an OCSP request to a Certificate
     Authority (CA) to check if the Source Interface certificate has been revoked.
     Fortunately, this occurs through Tor. However, this means that a CA or anyone
     along the path can learn the time that a Tor user visited the SecureDrop
-    Source Interface. In SecureDrop 0.4.1, OCSP stapling support will be added
-    which will remove this request. See `OCSP discussion`_ for the full discussion.
+    Source Interface. Future versions of SecureDrop will add OCSP stapling support
+    to remove this request. See `OCSP discussion`_ for the full discussion.
 
 .. _`OCSP discussion`: https://github.com/freedomofpress/securedrop/issues/1941
