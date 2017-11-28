@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-20 18:00+0000\n"
-"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"PO-Revision-Date: 2017-11-28 22:54+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -70,9 +70,7 @@ msgstr "Ugyldig hemmelighetsformat: Bare bruk bokstavene A-F og tall fra 0-9."
 
 #: journalist_app/admin.py:123
 msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
-msgstr ""
-"Ugyldig hemmelighetsformat: Feilaktig lengde på hemmelighet. Skrev du den "
-"inn feil?"
+msgstr "Feil hemmelighet, du har lagt til eller glemt noe."
 
 #: journalist_app/admin.py:128 journalist_app/main.py:107
 #: journalist_app/utils.py:38
@@ -261,8 +259,8 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
-"Telefonen din vil nå være i \"skanne\"-modus. I dette moduset, pek kameraet "
-"mot QR-koden under og skann:"
+"Telefonen din vil nå være i \"skanne\"-modus, pek kameraet mot QR-koden "
+"under og skann:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
