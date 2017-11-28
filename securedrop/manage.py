@@ -5,6 +5,7 @@ import argparse
 import codecs
 import logging
 import os
+from os.path import dirname, join, realpath
 import shutil
 import signal
 import subprocess
@@ -275,7 +276,7 @@ def clean_tmp(args):  # pragma: no cover
     return 0
 
 
-def translate(args):
+def translate_messages(args):
     messages_file = os.path.join(args.translations_dir, 'messages.pot')
 
     if args.extract_update:
@@ -325,6 +326,60 @@ def translate(args):
         """.format(translations_dir=args.translations_dir))
 
 
+def translate_desktop(args):
+    messages_file = os.path.join(args.translations_dir, 'desktop.pot')
+
+    if args.extract_update:
+        sh("""
+        set -xe
+        cd {translations_dir}
+        xgettext \
+           --output=desktop.pot \
+           --language=Desktop \
+           --keyword \
+           --keyword=Name \
+           --package-version={version} \
+           --msgid-bugs-address='securedrop@freedom.press' \
+           --copyright-holder='Freedom of the Press Foundation' \
+           {sources}
+
+        # remove this line so the file does not change if no
+        # strings are modified
+        sed -i '/^"POT-Creation-Date/d' {messages_file}
+        """.format(translations_dir=args.translations_dir,
+                   messages_file=messages_file,
+                   version=args.version,
+                   sources=" ".join(args.source)))
+
+        changed = subprocess.call("git diff --quiet {}".format(messages_file),
+                                  shell=True)
+
+        if changed:
+            for f in os.listdir(args.translations_dir):
+                if not f.endswith('.po'):
+                    continue
+                po_file = os.path.join(args.translations_dir, f)
+                sh("""
+                msgmerge --update {po_file} {messages_file}
+                """.format(po_file=po_file,
+                           messages_file=messages_file))
+            log.warning("messages translations updated in " + messages_file)
+        else:
+            log.warning("desktop translations are already up to date")
+
+    if args.compile:
+        sh("""
+        set -ex
+        cd {translations_dir}
+        find *.po | sed -e 's/\.po$//' > LINGUAS
+        for source in {sources} ; do
+           target=$(basename $source .in)
+           msgfmt --desktop --template $source -o $target -d .
+        done
+        """.format(translations_dir=args.translations_dir,
+                   sources=" ".join(args.source)))
+
+
 def get_args():
     parser = argparse.ArgumentParser(prog=__file__, description='Management '
                                      'and testing utility for SecureDrop.')
@@ -361,29 +416,24 @@ def get_args():
     set_clean_tmp_parser(subps, 'clean-tmp')
     set_clean_tmp_parser(subps, 'clean_tmp')
 
-    set_translate_parser(subps)
+    set_translate_messages_parser(subps)
+    set_translate_desktop_parser(subps)
 
     return parser
 
 
-def set_translate_parser(subps):
-    parser = subps.add_parser('translate',
-                              help='Update and compile translations')
-    translations_dir = 'translations'
+def set_translate_parser(subps,
+                         parser,
+                         translations_dir,
+                         sources):
     parser.add_argument(
         '--extract-update',
         action='store_true',
-        help='run pybabel extract and pybabel update')
+        help='extract strings to translate and update existing translations')
     parser.add_argument(
         '--compile',
         action='store_true',
-        help='run pybabel compile')
-    mapping = 'babel.cfg'
-    parser.add_argument(
-        '--mapping',
-        default=mapping,
-        help='Mapping of files to consider (default {})'.format(
-            mapping))
+        help='compile translations')
     parser.add_argument(
         '--translations-dir',
         default=translations_dir,
@@ -394,14 +444,28 @@ def set_translate_parser(subps):
         default=version.__version__,
         help='SecureDrop version to store in pot files (default {})'.format(
             version.__version__))
-    sources = ['.', 'source_templates', 'journalist_templates']
     parser.add_argument(
         '--source',
         default=sources,
         action='append',
-        help='Source file or directory to extract (default {})'.format(
+        help='Source files and directories to extract (default {})'.format(
             sources))
-    parser.set_defaults(func=translate)
+
+
+def set_translate_messages_parser(subps):
+    parser = subps.add_parser('translate-messages',
+                              help=('Update and compile '
+                                    'source and template translations'))
+    translations_dir = join(dirname(realpath(__file__)), 'translations')
+    sources = ['.', 'source_templates', 'journalist_templates']
+    set_translate_parser(subps, parser, translations_dir, sources)
+    mapping = 'babel.cfg'
+    parser.add_argument(
+        '--mapping',
+        default=mapping,
+        help='Mapping of files to consider (default {})'.format(
+            mapping))
+    parser.set_defaults(func=translate_messages)
 
 
 def set_clean_tmp_parser(subps, name):
@@ -420,6 +484,18 @@ def set_clean_tmp_parser(subps, name):
         help=('remove old files from DIRECTORY '
               '(default {})'.format(config.TEMP_DIR)))
     parser.set_defaults(func=clean_tmp)
+
+
+def set_translate_desktop_parser(subps):
+    parser = subps.add_parser('translate-desktop',
+                              help=('Update and compile '
+                                    'desktop icons translations'))
+    translations_dir = join(
+        dirname(realpath(__file__)),
+        '../install_files/ansible-base/roles/tails-config/templates')
+    sources = ['desktop-journalist-icon.j2.in', 'desktop-source-icon.j2.in']
+    set_translate_parser(subps, parser, translations_dir, sources)
+    parser.set_defaults(func=translate_desktop)
 
 
 def setup_verbosity(args):
