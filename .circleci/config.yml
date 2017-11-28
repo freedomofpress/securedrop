@@ -126,15 +126,10 @@ jobs:
 
       - restore_cache:
           keys:
+            - v1-sd-layers-{{ .Branch }}-
             - v1-sd-layers-
           paths:
             - /caches/layers.tar.gz
-
-      - restore_cache:
-          keys:
-            - v1-sd-layers-{{ .Branch }}-
-          paths:
-            - /caches/layers.tar
 
       - run:
           name: Load image layer cache

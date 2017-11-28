@@ -52,11 +52,6 @@ def setup():
     init_db()
     # Do tests that should always run on app startup
     crypto_util.do_runtime_tests()
-    # Start the Python-RQ worker if it's not already running
-    if not exists(TEST_WORKER_PIDFILE):
-        subprocess.Popen(["rqworker",
-                          "-P", config.SECUREDROP_ROOT,
-                          "--pid", TEST_WORKER_PIDFILE])
 
 
 def teardown():

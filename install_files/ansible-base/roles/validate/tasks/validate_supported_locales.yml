@@ -1,0 +1,4 @@
+---
+- name: Verify supported locales exist
+  script: validate-supported-locales.sh "{{ securedrop_supported_locales | join(' ') }}"
+  changed_when: false

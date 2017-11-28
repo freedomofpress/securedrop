@@ -16,7 +16,7 @@
   shell: >-
     cp config.py.example config.py ;
     trap 'rm config.py' EXIT ;
-    ./manage.py --verbose translate --compile
+    ./manage.py --verbose translate-messages --compile
   args:
     chdir: "{{ securedrop_code_filtered }}"
   environment:

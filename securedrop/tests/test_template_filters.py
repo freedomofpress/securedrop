@@ -97,7 +97,7 @@ class TestTemplateFilters(object):
         }
         args = argparse.Namespace(**kwargs)
         manage.setup_verbosity(args)
-        manage.translate(args)
+        manage.translate_messages(args)
 
         manage.sh("""
         pybabel init -i {d}/messages.pot -d {d} -l en_US

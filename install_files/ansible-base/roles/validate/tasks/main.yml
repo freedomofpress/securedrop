@@ -3,6 +3,8 @@
 #credentials are not used when running the app and mon playbooks for
 #production.
 
+- include: validate_supported_locales.yml
+
 - include: validate_users.yml
 
 - include: validate_gpg_info.yml

@@ -244,3 +244,19 @@ def test_deb_package_lintian(File, Command, deb, tag):
     c = Command("""lintian --tags {} --no-tag-display-limit {}""".format(
         tag, deb_package.path))
     assert len(c.stdout) == 0
+
+@pytest.mark.parametrize("deb", deb_packages)
+def test_deb_app_package_contains_https_validate_dir(host, deb):
+    """
+    Ensures the `securedrop-app-code` package ships with a validation
+    '.well-known' directory
+    """
+    deb_package = host.file(deb.format(
+        securedrop_test_vars.securedrop_version))
+
+    # Only relevant for the securedrop-app-code package:
+    if "securedrop-app-code" in deb_package.path:
+        c = host.run("dpkg-deb --contents {}".format(deb_package.path))
+        # static/gen/ directory should exist
+        assert re.search("^.*\./var/www/securedrop/"
+                ".well-known/$", c.stdout, re.M)
