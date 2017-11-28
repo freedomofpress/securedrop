@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-28 15:04+0000\n"
+"PO-Revision-Date: 2017-11-28 20:00+0000\n"
 "Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
@@ -400,12 +400,12 @@ msgid ""
 "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop"
 "\">"
 msgstr ""
-"Este site utiliza <br> <img src=\"/static/i/securedrop_small.png\" alt=\""
-"SecureDrop\">"
+"Este site utiliza a tecnologia <br> <img src=\"/static/i/securedrop_small."
+"png\" alt=\"SecureDrop\">"
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "Este site utiliza <em>SecureDrop {version}</em>."
+msgstr "Este site utiliza o <em>SecureDrop {version}</em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
@@ -573,7 +573,7 @@ msgstr "Senha Atual"
 
 #: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
 msgid "Two-factor Code"
-msgstr "Código de Dois Fatores"
+msgstr "Código de dois fatores"
 
 #: journalist_templates/edit_account.html:46
 msgid "The user's password will be changed to:"
@@ -749,8 +749,8 @@ msgid ""
 "You were redirected because you are already logged in. If you want to create "
 "a new account, you should log out first."
 msgstr ""
-"Você foi redirecionado porque já estava conectado. Para criar uma nova "
-"conta, é preciso encerrar a sessão."
+"Você foi redirecionado porque já está conectado. Para criar uma nova conta, "
+"é preciso encerrar a sessão."
 
 #: source_app/main.py:111
 msgid "You must enter a message or choose a file to submit."
@@ -841,7 +841,7 @@ msgid ""
 "our journalists in response to what you submit on the next screen."
 msgstr ""
 "Use este codinome para acessar as respostas de nossos jornalistas ao "
-"material que você enviar na página seguinte."
+"material que será enviado na página seguinte."
 
 #: source_templates/generate.html:29
 msgid ""
@@ -891,8 +891,8 @@ msgid ""
 "ignore this warning to continue."
 msgstr ""
 "<strong>Recomendamos o uso do navegador Tor para acessar o "
-"SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">"
-"Aprenda a instalar o Tor</a>, ou ignore este aviso e continue."
+"SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Veja "
+"como instalar o Tor</a>, ou ignore este aviso e continue."
 
 #: source_templates/index.html:41
 msgid "Submit documents for the first time"
@@ -914,8 +914,7 @@ msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
 msgstr ""
-"Se você já enviou documentos antes, faça login aqui para consultar as "
-"respostas."
+"Se você já enviou documentos antes, faça login aqui para ler as respostas."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
@@ -923,7 +922,7 @@ msgstr "ENVIAR DOCUMENTOS"
 
 #: source_templates/index.html:73
 msgid "CHECK FOR A RESPONSE"
-msgstr "CONSULTAR RESPOSTAS"
+msgstr "LER RESPOSTAS"
 
 #: source_templates/index.html:92
 msgid ""
@@ -1086,7 +1085,7 @@ msgstr "Não há nenhuma resposta por enquanto."
 
 #: source_templates/lookup.html:100
 msgid "Remember your codename is:"
-msgstr "Não esqueça que o seu codinome é:"
+msgstr "Não esqueça o seu codinome:"
 
 #: source_templates/lookup.html:101
 msgid "Show"
