@@ -3,7 +3,9 @@ import os
 import shutil
 import signal
 import subprocess
+import logging
 
+import gnupg
 import psutil
 import pytest
 
@@ -15,6 +17,14 @@ import config
 # It has been intentionally omitted from `config.py.example`
 # in order to isolate the test vars from prod vars.
 TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
+
+# Quiet down gnupg output. (See Issue #2595)
+gnupg_logger = logging.getLogger(gnupg.__name__)
+gnupg_logger.setLevel(logging.ERROR)
+valid_levels = {'INFO': logging.INFO, 'DEBUG': logging.DEBUG}
+gnupg_logger.setLevel(
+   valid_levels.get(os.environ.get('GNUPG_LOG_LEVEL', None), logging.ERROR)
+)
 
 
 def pytest_addoption(parser):
