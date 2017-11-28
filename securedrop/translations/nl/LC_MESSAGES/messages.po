@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-27 13:00+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
+"PO-Revision-Date: 2017-11-28 19:00+0000\n"
+"Last-Translator: Anne M <info@numijneigenwebsite.nl>\n"
 "Language-Team: Dutch "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nl/>\n"
 "Language: nl\n"
@@ -34,7 +34,7 @@ msgstr "Foutief wachtwoord of twee-factor authentiecatietoken."
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
-msgstr "Token voor twee-factor authenticatie succesvol geverifieerd."
+msgstr "Token voor twee-staps-authenticatie succesvol geverifieerd."
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
 msgid "Could not verify token in two-factor authentication."
