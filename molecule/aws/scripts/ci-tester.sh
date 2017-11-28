@@ -7,7 +7,6 @@ if [ "$?" == "0" ]; then
     "staging")
         ./testinfra/test.py "app-$CI_SD_ENV" || export TEST_FAIL=true
         ./testinfra/test.py "mon-$CI_SD_ENV" || export TEST_FAIL=true
-        ./testinfra/test.py apptestclient || export TEST_FAIL=true
         ;;
     "development")
         ./testinfra/test.py development || export TEST_FAIL=true
