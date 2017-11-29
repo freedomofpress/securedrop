@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-27 13:00+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
+"PO-Revision-Date: 2017-11-29 09:49+0000\n"
+"Last-Translator: heartsucker <heartsucker@riseup.net>\n"
 "Language-Team: German "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/de/>\n"
 "Language: de_DE\n"
@@ -579,10 +579,8 @@ msgid "Please enter your current password and two-factor code."
 msgstr "Bitte geben Sie Ihr aktuelles Passwort und Zwei-Faktor-Code ein."
 
 #: journalist_templates/edit_account.html:40
-#, fuzzy
-#| msgid "Reset Password"
 msgid "Current Password"
-msgstr "Passwort zurücksetzen"
+msgstr "Aktuelles Passwort"
 
 #: journalist_templates/edit_account.html:41 journalist_templates/login.html:10
 msgid "Two-factor Code"
@@ -758,10 +756,8 @@ msgstr ""
 "das gefährlich?</a>"
 
 #: source_app/forms.py:14
-#, fuzzy
-#| msgid "Field must be between 1 and {max_codename_len} characters long. "
 msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein. "
+msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
 
 #: source_app/forms.py:17
 msgid "Invalid input."
@@ -896,13 +892,10 @@ msgstr ""
 "sicheren Ort auf oder merken Sie ihn sich."
 
 #: source_templates/generate.html:45
-#, fuzzy
-#| msgid "ALREADY HAVE A CODENAME?"
 msgid "USE NEW CODENAME"
-msgstr "HABEN SIE BEREITS EINEN DECKNAMEN?"
+msgstr "NUTZE EIN NEUER DECKNAMEN"
 
 #: source_templates/generate.html:47
-#, fuzzy
 msgid "USE EXISTING CODENAME"
 msgstr "NUTZE VORHANDENE DECKNAME"
 
@@ -1007,11 +1000,6 @@ msgid "Important!"
 msgstr "Wichtig!"
 
 #: source_templates/logout_flashed_message.html:6
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green Onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Thank you for exiting your session! Please select \"New Identity\" from the "
 "green onion button in the Tor browser to clear all history of your "
@@ -1081,10 +1069,8 @@ msgid "Write a message."
 msgstr "Nachricht schreiben."
 
 #: source_templates/lookup.html:53
-#, fuzzy
-#| msgid "Get Replies"
 msgid "Read Replies"
-msgstr "Antworten abrufen"
+msgstr "Antworten lesen"
 
 #: source_templates/lookup.html:58
 msgid ""
@@ -1148,20 +1134,17 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Leider konnten wir nicht finden, was Sie angefordert haben."
 
 #: source_templates/session_timeout.html:6
-#, fuzzy
-#| msgid ""
-#| "Thank you for exiting your session! Please select \"New Identity\" from "
-#| "the green Onion button in the Tor browser to clear all history of your "
-#| "SecureDrop usage from this device."
 msgid ""
 "Your session timed out due to inactivity. Please login again if you want to "
 "continue using SecureDrop, or select \"New Identity\" from the green onion "
 "button in the Tor browser to clear all history of your SecureDrop usage from "
 "this device. If you are not using Tor Browser, restart your browser."
 msgstr ""
-"Danke, dass Sie Ihre Sitzung beendet haben! Bitte wählen Sie mit der grünen "
-"Onion-Schaltfläche in Ihrem Tor-Browser \"Neue Identität\" aus, um den "
-"gesamten Verlauf Ihrer SecureDrop-Nutzung von diesem Gerät zu löschen."
+"Ihre Sitzung ist aufgrund von Inaktivität abgelaufen. Bitte melden Sie sich "
+"erneut an, wenn Sie SecureDrop weiterhin verwenden möchten, oder wählen Sie "
+"mit der grünen Onion-Schaltfläche in Ihrem Tor-Browser \"Neue Identität\" "
+"aus, um den gesamten Verlauf Ihrer SecureDrop-Nutzung von diesem Gerät zu "
+"löschen. Wenn Sie nutzen Tor-Browser nicht, starten Sie Ihre Browswer neu."
 
 #: source_templates/tor2web-warning.html:3
 msgid "Why is there a warning about Tor2Web?"

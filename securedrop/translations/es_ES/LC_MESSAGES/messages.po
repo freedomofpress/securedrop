@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-28 02:00+0000\n"
-"Last-Translator: Freddy Martinez <freddymartinez9@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 10:00+0000\n"
+"Last-Translator: Anatoli <djanatoli@gmail.com>\n"
 "Language-Team: Spanish "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: template_filters.py:14
 msgid "{time} ago"
-msgstr "{time} pasado"
+msgstr "hace {time}"
 
 #: journalist_app/__init__.py:34 journalist_app/__init__.py:66
 msgid "You have been logged out due to inactivity"

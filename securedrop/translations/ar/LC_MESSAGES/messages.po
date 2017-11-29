@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-28 21:52+0000\n"
-"Last-Translator: Thalia Rahme <trahme@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 12:00+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Arabic "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
@@ -429,7 +429,7 @@ msgstr ""
 
 #: journalist_templates/base.html:54
 msgid "Powered by <em>SecureDrop {version}</em>."
-msgstr "مشغّل من قبل   <em>SecureDrop {version}</em>."
+msgstr "مشغّل من قبل <em>SecureDrop {version} </em>."
 
 #: journalist_templates/col.html:10
 msgid "All Sources"
