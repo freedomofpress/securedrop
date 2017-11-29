@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 14:09+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 14:11+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -334,7 +334,7 @@ msgstr "Editar"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
-msgstr "Excluir"
+msgstr "Apagar"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
@@ -350,7 +350,7 @@ msgstr "Editar usuário {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr "Excluir usuário {username}"
+msgstr "Apagar usuário {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
@@ -388,8 +388,8 @@ msgid ""
 msgstr ""
 "Está quase terminando! Para finalizar a criação este novo usuário, peça para "
 "ele seguir as instruções abaixo e configurar a autenticação de dois fatores "
-"com o Google Authenticator. Ao registrar a nova conta no aplicativo, será "
-"gerado um código de seis dígitos, que deve ser usado pelo usuário para "
+"com o Google Authenticator. Ao registrar a nova conta no aplicativo, um "
+"código de seis dígitos será gerado. Ele deve ser usado pelo usuário para "
 "verificar a configuração da autenticação de dois fatores."
 
 #: journalist_templates/base.html:24
@@ -427,7 +427,7 @@ msgid ""
 "new random codenames as many times as you like."
 msgstr ""
 "Gere um nome codinome aleatório para esta fonte. Recomendamos fazer isso se "
-"o primeiro codinome gerado for difícil de pronunciar ou se lembrar. Você "
+"o primeiro codinome gerado for difícil de pronunciar ou de lembrar. Você "
 "pode gerar novos codinomes aleatórios quantas vezes quiser."
 
 #: journalist_templates/col.html:13
@@ -460,7 +460,7 @@ msgstr "Baixar Seleção"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr "Excluir Seleção"
+msgstr "Apagar Seleção"
 
 #: journalist_templates/col.html:55
 msgid "Uploaded Document"
