@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 13:57+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"PO-Revision-Date: 2017-11-29 14:01+0000\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -183,7 +183,7 @@ msgstr[1] "{num} coleções apagadas"
 
 #: journalist_app/utils.py:228
 msgid "You submitted a bad password! Password not changed."
-msgstr "A senha inserida não é aceitável! A sua senha não foi modificada."
+msgstr "Senha incorreta! A sua senha não foi alterada."
 
 #: journalist_app/utils.py:235
 msgid ""
