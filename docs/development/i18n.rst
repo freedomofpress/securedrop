@@ -31,7 +31,7 @@ Updating strings to be translated
 After modifying a string in the code, templates, javascript or desktop
 labels, the ``securedrop/translations/messages.pot`` files must be
 updated by running the following command in ``/vagrant/securedrop``,
-in the development virtual machine::
+in the development virtual machine:
 
 .. code:: sh
 
