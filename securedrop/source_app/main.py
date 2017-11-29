@@ -15,7 +15,7 @@ from rm import srm
 from source_app.decorators import login_required
 from source_app.utils import (logged_in, generate_unique_codename,
                               async_genkey, normalize_timestamps,
-                              valid_codename)
+                              valid_codename, get_entropy_estimate)
 from source_app.forms import LoginForm
 
 
@@ -160,10 +160,16 @@ def make_blueprint(config):
             g.source.pending = False
 
             # Generate a keypair now, if there's enough entropy (issue #303)
-            entropy_avail = int(
-                open('/proc/sys/kernel/random/entropy_avail').read())
+            # (gpg reads 300 bytes from /dev/random)
+            entropy_avail = get_entropy_estimate()
             if entropy_avail >= 2400:
                 async_genkey(g.filesystem_id, g.codename)
+                current_app.logger.info("generating key, entropy: {}".format(
+                    entropy_avail))
+            else:
+                current_app.logger.warn(
+                        "skipping key generation. entropy: {}".format(
+                                entropy_avail))
 
         g.source.last_updated = datetime.utcnow()
         db_session.commit()

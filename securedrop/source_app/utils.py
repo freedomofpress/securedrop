@@ -54,6 +54,10 @@ def generate_unique_codename():
             return codename
 
 
+def get_entropy_estimate():
+    return int(open('/proc/sys/kernel/random/entropy_avail').read())
+
+
 def async(f):
     def wrapper(*args, **kwargs):
         thread = Thread(target=f, args=args, kwargs=kwargs)
