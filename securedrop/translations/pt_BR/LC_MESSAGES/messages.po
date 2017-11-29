@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: 2017-11-29 13:45+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -124,6 +124,7 @@ msgid "You cannot send an empty reply."
 msgstr "Não é possível enviar uma resposta em branco."
 
 #: journalist_app/main.py:118
+#, fuzzy
 msgid "Thanks. Your reply has been stored."
 msgstr "Obrigado. Sua resposta foi registrada."
 
