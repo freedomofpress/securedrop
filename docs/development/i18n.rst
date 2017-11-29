@@ -148,7 +148,8 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
       $ git fetch lab
       $ git checkout -b wip-i18n origin/develop
-      $ git checkout lab/i18n -- securedrop/translations
+      $ git checkout lab/i18n -- securedrop/translations \
+        install_files/ansible-base/roles/tails-config/templates/{ar,nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
       $ git add translations
       $ vagrant ssh development
       $ cd /vagrant/securedrop ; ./manage.py --verbose translate-desktop --compile
