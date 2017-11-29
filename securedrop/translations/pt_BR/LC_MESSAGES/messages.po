@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: 2017-11-29 13:35+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgstr "Dispositivo de autenticação de dois fatores verificado."
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
 msgid "Could not verify token in two-factor authentication."
-msgstr "Falha na verificação do token de autenticação de dois fatores."
+msgstr "Falha na verificação da prova de autenticação de dois fatores."
 
 #: journalist_app/admin.py:47
 msgid ""
