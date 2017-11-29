@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 13:36+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"PO-Revision-Date: 2017-11-29 13:40+0000\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -62,8 +62,10 @@ msgstr ""
 "informe o administrador."
 
 #: journalist_app/admin.py:84
+#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
-msgstr "Prova de autenticação de dois fatores aceita para o usuário {user}."
+msgstr ""
+"Dispositivo de autenticação de dois fatores aceito para o usuário {user}."
 
 #: journalist_app/admin.py:118
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
