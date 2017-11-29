@@ -312,6 +312,38 @@ class TestSourceApp(TestCase):
             self.assertIn("Thanks! We received your message and document",
                           resp.data)
 
+    @patch('source_app.main.async_genkey')
+    @patch('source_app.main.get_entropy_estimate')
+    def test_submit_message_with_low_entropy(self, get_entropy_estimate,
+                                             async_genkey):
+        get_entropy_estimate.return_value = 300
+
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission(client)
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertFalse(async_genkey.called)
+
+    @patch('source_app.main.async_genkey')
+    @patch('source_app.main.get_entropy_estimate')
+    def test_submit_message_with_enough_entropy(self, get_entropy_estimate,
+                                                async_genkey):
+        get_entropy_estimate.return_value = 2400
+
+        with self.client as client:
+            new_codename(client, session)
+            self._dummy_submission(client)
+            resp = client.post('/submit', data=dict(
+                msg="This is a test.",
+                fh=(StringIO(''), ''),
+            ), follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertTrue(async_genkey.called)
+
     def test_delete_all_successfully_deletes_replies(self):
         journalist, _ = utils.db_helper.init_journalist()
         source, codename = utils.db_helper.init_source()
