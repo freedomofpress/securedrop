@@ -323,7 +323,7 @@ This is a high-level overview of some of the more significant changes between Se
 * Do not set headers in the web app (handle by production config.)
 * Add 2fac auth for journalist interface
 * Allow OSSEC emails to be encrypted with admin GPG key
-* Install app server, monitor server, Python dependencies, and custom configuration via DEB packages
+* Install app server, monitor server, Python dependencies, and custom configuration via Debian packages
 * UI refresh on source and journalist interfaces
 * New UX for journalists:
   * "quick filter" box for codenames
