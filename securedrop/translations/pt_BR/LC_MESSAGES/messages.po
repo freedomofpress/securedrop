@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: 2017-11-29 14:19+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -541,7 +541,7 @@ msgstr "Editar o usuário \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr "Modificar nome de usuário e poderes de administrador"
+msgstr "Alterar nome de usuário e credenciais de administrador"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
