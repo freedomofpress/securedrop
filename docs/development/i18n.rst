@@ -236,6 +236,25 @@ requests for the `SecureDrop git repository`_.
 
 |Weblate commit Unlocked|
 
+Updating the full text index
+----------------------------
+
+The full text index can occasionally not be up to date. The symptom
+may be that the search function fails to find a word that you know
+exists in the source strings. If that happens you can rebuild the
+index from scratch with:
+
+.. code:: sh
+
+      $ ssh debian@weblate.securedrop.club
+      $ cd /app/weblate
+      $ sudo docker-compose run weblate rebuild_index --all --clean
+
+Note that the new index will not be used right away, some workers may
+still have the old index open. Rebooting the machine is an option,
+waiting for a few hours is another option.
+
+
 .. _`gettext`: https://www.gnu.org/software/gettext/
 .. _`pybabel`: http://babel.pocoo.org/
 .. _`Weblate`: http://weblate.securedrop.club/
