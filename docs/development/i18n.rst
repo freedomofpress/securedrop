@@ -25,6 +25,39 @@ The `pybabel`_ and `gettext`_ command line is wrapped into the
 helpers for convenience. It is designed to be used by developers, to
 run tests with fixtures and for packaging.
 
+Creating new translations
+-------------------------
+
+For the applications, a user with weblate admin rights must visit the
+`Weblate translation creation page`_ and add the desired languages.
+
+For the desktop, the translations must be suspended in `Weblate`_ to
+avoid conflicts.
+
+* Go to the `Weblate commit page for SecureDrop`_
+
+|Weblate commit Lock|
+
+* Click ``Lock``
+
+|Weblate commit Locked|
+
+Now new files must be created and pushed to weblate with:
+
+.. code:: sh
+
+    $ git clone -b i18n http://lab.securedrop.club/bot/securedrop
+    $ cd securedrop/install_files/ansible-base/roles/tails-config/templates
+    $ msginit --no-translator --locale ar --output ar.po --input desktop.pot
+    $ git add ar.po
+    $ git commit -m 'i18n: add ar.po' ar.po
+    $ git push
+
+Where ``ar`` is the name of the locale, exactly matching the name of
+the corresponding application translation.
+
+After pushing the new translation, make sure to unlock the translations.
+
 Updating strings to be translated
 ---------------------------------
 
@@ -200,6 +233,7 @@ requests for the `SecureDrop git repository`_.
 .. _`Weblate SecureDrop branch`: http://lab.securedrop.club/bot/securedrop/tree/i18n
 .. _`patch they contain is unique`: https://git-scm.com/docs/git-patch-id
 .. _`Weblate commit page for SecureDrop`: https://weblate.securedrop.club/projects/securedrop/securedrop/#repository
+.. _`Weblate translation creation page`: https://weblate.securedrop.club/new-lang/securedrop/securedrop/
 
 .. |Weblate commit Lock| image:: ../images/weblate/admin-lock.png
 .. |Weblate commit Locked| image:: ../images/weblate/admin-locked.png
