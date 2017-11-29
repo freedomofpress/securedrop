@@ -156,6 +156,15 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git commit -m 'sync with weblate' translations
       $ git push wip-i18n
 
+Verify the translations are not broken:
+
+.. code:: sh
+
+      $ vagrant ssh development
+      $ cd /vagrant/securedrop
+      $ PAGE_LAYOUT_LOCALES='ar,de_DE,es_ES,fr_FR,nb_NO,nl,pt_BR' \
+          pytest -v --page-layout tests/pages-layout
+
 Go to https://github.com/freedomofpress/securedrop and propose a pull request.
 
 .. note:: contrary to the applications translations, the desktop
