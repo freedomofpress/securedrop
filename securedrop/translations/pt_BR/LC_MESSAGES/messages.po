@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 14:29+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 14:42+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -1102,7 +1102,7 @@ msgstr "Mostrar"
 
 #: source_templates/lookup.html:103
 msgid "Hide"
-msgstr "Esconder"
+msgstr "Ocultar"
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
@@ -1161,7 +1161,7 @@ msgid ""
 msgstr ""
 "Para enviar informações, é <strong>altamente recomendado</strong> instalar o "
 "<a href=\"torproject.org/download.html.en\">Tor</a> e usá-lo para acessar "
-"nosso site com segurança e anonimato."
+"nosso site de modo seguro e anônimo."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1211,8 +1211,8 @@ msgid ""
 "If you are already familiar with the GPG encryption software, you may wish "
 "to encrypt your submissions yourself. To do so:"
 msgstr ""
-"Se você já conhece o software de criptografia GPG, pode querer criptografar "
-"seus dados por conta própria. Para fazê-lo:"
+"Se você já conhece o software de criptografia GPG, talvez queira "
+"criptografar seus dados por conta própria. Para fazê-lo:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
