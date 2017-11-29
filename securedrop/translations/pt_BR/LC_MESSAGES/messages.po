@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: 2017-11-29 14:29+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -1044,6 +1044,7 @@ msgid "Maximum upload size: 500 MB"
 msgstr "Tamanho máximo do envio: 500 MB"
 
 #: source_templates/lookup.html:36
+#, fuzzy
 msgid "Write a message."
 msgstr "Escreva uma mensagem."
 
