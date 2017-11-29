@@ -160,7 +160,7 @@ The ``develop`` branch can now be merged into ``i18n`` as follows:
       $ git fetch lab
       $ git checkout -b i18n lab/i18n
       $ git merge origin/develop
-      $ ./manage.py translate --extract-update
+      $ make translate
 
 The ``manage.py`` command examines all the source files, looking for
 strings that need to be translated (i.e. gettext('translate me') etc.)
