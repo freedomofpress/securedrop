@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 13:45+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 13:47+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -134,7 +134,7 @@ msgstr "Nenhuma coleção selecionada para download."
 
 #: journalist_app/main.py:142 journalist_app/utils.py:188
 msgid "No collections selected for deletion."
-msgstr "Nenhuma coleção foi selecionada para ser excluída."
+msgstr "Nenhuma coleção foi selecionada para ser apagada."
 
 #: journalist_app/main.py:168
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
@@ -155,8 +155,12 @@ msgstr "Não foi possível fazer login."
 #: journalist_app/utils.py:84
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
-msgstr[0] "Favor esperar pelo menos {seconds} segundo antes de tentar novamente."
-msgstr[1] "Favor esperar pelo menos {seconds} segundos antes de tentar novamente."
+msgstr[0] ""
+"Por favor, espere pelo menos {seconds} segundo antes de tentar  acessar "
+"novamente."
+msgstr[1] ""
+"Por favor, espere pelo menos {seconds} segundo antes de tentar acessar "
+"novamente."
 
 #: journalist_app/utils.py:95
 msgid "Please wait for a new two-factor token before trying again."
