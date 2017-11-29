@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 14:12+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2017-11-29 14:19+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -493,8 +493,8 @@ msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
-"Uma chave criptográfica será gerada para esta fonte da próxima vez que ela "
-"se conectar, após o que você poderá responder a ela por aqui."
+"Uma chave criptográfica será gerada para esta fonte na próxima vez que ela "
+"se conectar. Em seguida, você poderá responder a ela aqui."
 
 #: journalist_templates/col.html:89
 msgid "Click below if you would like to write a reply to this source."
@@ -529,7 +529,7 @@ msgstr[1] "Os arquivos seguintes serão <strong>excluídos permanentemente</stro
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr "EXCLUIR ARQUIVOS PERMANENTEMENTE"
+msgstr "EXCLUIR ARQUIVOS DEFINITIVAMENTE"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_name}…"
