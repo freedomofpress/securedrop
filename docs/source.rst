@@ -7,18 +7,6 @@ Source Guide
           computer should you use? what network should you be on? etc.
 
 
-Choose who to submit to
------------------------
-
-Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
-
-All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
-
-Most organizations make their landing page prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
-
-.. _`SecureDrop Directory`: https://securedrop.org/directory
-
-
 Get the Tor Browser
 -------------------
 
@@ -38,6 +26,17 @@ While using the Tor Browser on your personal computer helps hide your activity o
 .. _`Tor Project website`: https://www.torproject.org/
 .. _`Tails`: https://tails.boum.org/
 
+
+Choose who to submit to
+-----------------------
+
+Each SecureDrop instance is totally independent, and submissions to that instance are only available to journalists associated with that organization.
+
+All organizations have a *landing page* that provides their own organization-specific recommendations for using SecureDrop. We encourage you to consider an organization's landing page before submitting to them.
+
+Most organizations make their landing page prominently accessible from their main website's homepage. You can also find an incomplete list of organizations accepting submissions through SecureDrop on the `SecureDrop Directory`_ maintained by Freedom of the Press Foundation.
+
+.. _`SecureDrop Directory`: https://securedrop.org/directory
 
 Making your First Submission
 ----------------------------
