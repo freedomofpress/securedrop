@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
 "PO-Revision-Date: 2017-11-30 12:53+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: H.-L. Lee <hsulei.lee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -91,7 +91,7 @@ msgstr "删除了用户\"{user}\""
 
 #: journalist_app/col.py:47
 msgid "{source_name}'s collection deleted"
-msgstr "{source_name} 的館藏已經被刪除。"
+msgstr "{source_name}集合已删除"
 
 #: journalist_app/col.py:58
 msgid "No collections selected."
