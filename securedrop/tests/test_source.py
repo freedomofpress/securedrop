@@ -194,7 +194,9 @@ class TestSourceApp(TestCase):
 
             # sessions always have 'expires', so pop it for the next check
             session.pop('expires', None)
-            self.assertTrue(not session)
+
+            self.assertNotIn('logged_in', session)
+            self.assertNotIn('codename', session)
 
             self.assertIn('Thank you for exiting your session!', resp.data)
 
