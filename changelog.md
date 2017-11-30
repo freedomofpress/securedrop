@@ -323,7 +323,7 @@ This is a high-level overview of some of the more significant changes between Se
 * Do not set headers in the web app (handle by production config.)
 * Add 2fac auth for journalist interface
 * Allow OSSEC emails to be encrypted with admin GPG key
-* Install app server, monitor server, Python dependencies, and custom configuration via deb packages
+* Install app server, monitor server, Python dependencies, and custom configuration via Debian packages
 * UI refresh on source and journalist interfaces
 * New UX for journalists:
   * "quick filter" box for codenames
@@ -333,8 +333,8 @@ This is a high-level overview of some of the more significant changes between Se
   * more detailed source listings
 * Normalize submission timestamps to that of the most recent submission
 to minimize metadata that could be used for correlation
-* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor Hidden Services.
-* Document Interface supports two-factor authentication via Google Authenticator or Yubikey
+* Handle journalist authentication in the Document Interface instead of relying entirely on Authenticated Tor hidden services.
+* Document Interface supports two-factor authentication via Google Authenticator or YubiKey
   * These logins are hardened in a manner similar to that of the `google-authenticator` PAM module: tokens may only be used once, logins are rate limited, etc.
   * If you are using TOTP, the window is expanded from 1 period to 3 in order to help the situation where the server and client's clocks are skewed
 * Add Admin Interface so privileged "admin" users may add, edit, or delete other users on the Document Interface
