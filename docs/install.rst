@@ -25,6 +25,26 @@ on network speed and computing power.
 
 .. _configure_securedrop:
 
+Localization of the source and journalist interfaces
+----------------------------------------------------
+
+The source and journalist interface are translated in the following
+languages:
+
+* Arabic (ar)
+* German (de_DE)
+* Spanish (es_ES)
+* French (fr_FR)
+* Norwegian (nb_NO)
+* Dutch (nl)
+* Portuguese, Brasil (pt_BR)
+
+During the installation you will be given the opportunity to choose the
+list of supported languages to display, using the code shown in
+parentheses. When the source interface is displayed in French (for
+instance), people submitting documents will expect a journalist fluent
+in French is available to read them and followup.
+
 Configure the Installation
 --------------------------
 
