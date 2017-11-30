@@ -231,6 +231,7 @@
   /var/www/securedrop/static/i/flags/nb.png r,
   /var/www/securedrop/static/i/flags/nl.png r,
   /var/www/securedrop/static/i/flags/zh.png r,
+  /var/www/securedrop/static/i/flags/br.png r,
   /var/www/securedrop/static/i/font-awesome/cloud-upload-blue.png r,
   /var/www/securedrop/static/i/font-awesome/cloud-upload-white.png r,
   /var/www/securedrop/static/i/font-awesome/comments-blue.png r,
