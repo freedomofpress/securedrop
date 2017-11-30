@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-10-22 10:04+0000\n"
-"Last-Translator: H.-L. Lee <hsulei.lee@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <https://weblate.securedrop.club/"
-"projects/securedrop/securedrop/zh_Hant/>\n"
+"PO-Revision-Date: 2017-11-30 12:53+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Language-Team: Chinese (Traditional) "
+"<https://weblate.securedrop.club/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.14.1\n"
+"X-Generator: Weblate 2.17.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 #: template_filters.py:14
@@ -30,11 +30,11 @@ msgstr "你因閒置太久已被登出"
 
 #: journalist_app/account.py:26
 msgid "Incorrect password or two-factor code."
-msgstr ""
+msgstr "口令不正确，或者两部分代码不正确"
 
 #: journalist_app/account.py:39
 msgid "Token in two-factor authentication verified."
-msgstr "由两个部分组成的记号的授权已经验证。"
+msgstr "由两部分组成的记号授权已经验证。"
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
 msgid "Could not verify token in two-factor authentication."
@@ -87,7 +87,7 @@ msgstr "用户名“{user}”已存在。"
 
 #: journalist_app/admin.py:197
 msgid "Deleted user '{user}'"
-msgstr "帳戶'{user}'已刪除"
+msgstr "删除了用户\"{user}\""
 
 #: journalist_app/col.py:47
 msgid "{source_name}'s collection deleted"
