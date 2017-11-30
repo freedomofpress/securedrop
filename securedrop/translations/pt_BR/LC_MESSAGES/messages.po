@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-28 22:54+0000\n"
-"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
+"PO-Revision-Date: 2017-11-29 16:00+0000\n"
+"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -32,12 +32,14 @@ msgid "Incorrect password or two-factor code."
 msgstr "Senha ou código de verificação de dois fatores incorreto."
 
 #: journalist_app/account.py:39
+#, fuzzy
 msgid "Token in two-factor authentication verified."
-msgstr "Token de autenticação de dois fatores verificado."
+msgstr "Dispositivo de autenticação de dois fatores verificado."
 
 #: journalist_app/account.py:43 journalist_app/admin.py:91
+#, fuzzy
 msgid "Could not verify token in two-factor authentication."
-msgstr "Falha na verificação do token de autenticação de dois fatores."
+msgstr "O dispositivo de autenticação de dois fatores não pôde ser verificado."
 
 #: journalist_app/admin.py:47
 msgid ""
@@ -56,13 +58,14 @@ msgid ""
 "An error occurred saving this user to the database. Please inform your "
 "administrator."
 msgstr ""
-"Ocorreu um erro ao tentar salvar este usuário no banco de dados. Favor "
-"informar o administrador."
+"Ocorreu um erro ao tentar salvar este usuário no banco de dados. Por favor, "
+"informe o administrador."
 
 #: journalist_app/admin.py:84
+#, fuzzy
 msgid "Token in two-factor authentication accepted for user {user}."
 msgstr ""
-"Token de autenticação de dois fatores foi aceito para o usuário {user}."
+"Dispositivo de autenticação de dois fatores aceito para o usuário {user}."
 
 #: journalist_app/admin.py:118
 msgid "Invalid secret format: please only submit letters A-F and numbers 0-9."
@@ -79,7 +82,7 @@ msgstr ""
 #: journalist_app/admin.py:128 journalist_app/main.py:107
 #: journalist_app/utils.py:38
 msgid "An unexpected error occurred! Please inform your administrator."
-msgstr "Ocorreu um erro inesperado! Favor informar o administrador."
+msgstr "Ocorreu um erro inesperado! Por favor, informe o administrador."
 
 #: journalist_app/admin.py:161
 msgid "Username \"{user}\" already taken."
@@ -91,7 +94,7 @@ msgstr "Usuário '{user}' apagado"
 
 #: journalist_app/col.py:47
 msgid "{source_name}'s collection deleted"
-msgstr "Coleção {source_name} apagada"
+msgstr "A coleção de {source_name} foi apagada"
 
 #: journalist_app/col.py:58
 msgid "No collections selected."
@@ -103,13 +106,13 @@ msgstr "Apenas administradores podem acessar esta página."
 
 #: journalist_app/forms.py:17
 msgid "Field must be 40 characters long but got {num_chars}."
-msgstr "Campo deve conter 40 caracteres, mas contém {num_chars}."
+msgstr "Este campo deve conter 40 caracteres, mas contém {num_chars}."
 
 #: journalist_app/forms.py:28
 msgid ""
 "Field must be at least {min_chars} characters long but only got {num_chars}."
 msgstr ""
-"Campo deve conter pelo menos {min_chars} caracteres, mas contém apenas "
+"Este campo deve conter pelo menos {min_chars} caracteres, mas contém apenas "
 "{num_chars}."
 
 #: journalist_app/forms.py:33 source_app/forms.py:11
@@ -121,6 +124,7 @@ msgid "You cannot send an empty reply."
 msgstr "Não é possível enviar uma resposta em branco."
 
 #: journalist_app/main.py:118
+#, fuzzy
 msgid "Thanks. Your reply has been stored."
 msgstr "Obrigado. Sua resposta foi registrada."
 
@@ -130,7 +134,7 @@ msgstr "Nenhuma coleção selecionada para download."
 
 #: journalist_app/main.py:142 journalist_app/utils.py:188
 msgid "No collections selected for deletion."
-msgstr "Nenhuma coleção foi selecionada para ser excluída."
+msgstr "Nenhuma coleção foi selecionada para ser apagada."
 
 #: journalist_app/main.py:168
 msgid "The source '{original_name}' has been renamed to '{new_name}'"
@@ -151,10 +155,15 @@ msgstr "Não foi possível fazer login."
 #: journalist_app/utils.py:84
 msgid "Please wait at least {seconds} second before logging in again."
 msgid_plural "Please wait at least {seconds} seconds before logging in again."
-msgstr[0] "Favor esperar pelo menos {seconds} segundo antes de tentar novamente."
-msgstr[1] "Favor esperar pelo menos {seconds} segundos antes de tentar novamente."
+msgstr[0] ""
+"Por favor, espere pelo menos {seconds} segundo antes de tentar acessar "
+"novamente."
+msgstr[1] ""
+"Por favor, espere pelo menos {seconds} segundos antes de tentar acessar "
+"novamente."
 
 #: journalist_app/utils.py:95
+#, fuzzy
 msgid "Please wait for a new two-factor token before trying again."
 msgstr ""
 "Favor aguardar um novo token de autenticação de dois fatores antes de tentar "
@@ -174,7 +183,7 @@ msgstr[1] "{num} coleções apagadas"
 
 #: journalist_app/utils.py:228
 msgid "You submitted a bad password! Password not changed."
-msgstr "A senha inserida está incorreta! Senha não alterada."
+msgstr "Senha incorreta! A sua senha não foi alterada."
 
 #: journalist_app/utils.py:235
 msgid ""
@@ -182,8 +191,8 @@ msgid ""
 "correctly. To prevent you from getting locked out of your account, you "
 "should reset your password again."
 msgstr ""
-"Ocorreu um erro, e a nova senha pode não ter sido salva corretamente. Para "
-"não perder o acesso à sua conta, redefina a sua senha."
+"Ocorreu um erro, e a nova senha talvez não tenha sido salva corretamente. "
+"Para não perder o acesso à sua conta, redefina a sua senha."
 
 #: journalist_app/utils.py:244
 msgid ""
@@ -266,8 +275,8 @@ msgid ""
 "Your phone will now be in \"scanning\" mode. When you are in this mode, scan "
 "the barcode below:"
 msgstr ""
-"Seu telefone agora deve estar em modo \"scan\". Escaneie o código de barras "
-"abaixo:"
+"A partir de agora, seu telefone estará em modo \"scan\". Escaneie o código "
+"de barras abaixo:"
 
 #: journalist_templates/account_new_two_factor.html:14
 #: journalist_templates/admin_new_user_two_factor.html:15
@@ -325,7 +334,7 @@ msgstr "Editar"
 
 #: journalist_templates/admin.html:18 journalist_templates/index.html:15
 msgid "Delete"
-msgstr "Excluir"
+msgstr "Apagar"
 
 #: journalist_templates/admin.html:19
 msgid "Created"
@@ -341,7 +350,7 @@ msgstr "Editar usuário {username}"
 
 #: journalist_templates/admin.html:26
 msgid "Delete user {username}"
-msgstr "Excluir usuário {username}"
+msgstr "Apagar usuário {username}"
 
 #: journalist_templates/admin.html:31
 msgid "never"
@@ -379,8 +388,8 @@ msgid ""
 msgstr ""
 "Está quase terminando! Para finalizar a criação este novo usuário, peça para "
 "ele seguir as instruções abaixo e configurar a autenticação de dois fatores "
-"com o Google Authenticator. Ao registrar a nova conta no aplicativo, será "
-"gerado um código de seis dígitos, que deve ser usado pelo usuário para "
+"com o Google Authenticator. Ao registrar a nova conta no aplicativo, um "
+"código de seis dígitos será gerado. Ele deve ser usado pelo usuário para "
 "verificar a configuração da autenticação de dois fatores."
 
 #: journalist_templates/base.html:24
@@ -418,7 +427,7 @@ msgid ""
 "new random codenames as many times as you like."
 msgstr ""
 "Gere um nome codinome aleatório para esta fonte. Recomendamos fazer isso se "
-"o primeiro codinome gerado for difícil de pronunciar ou se lembrar. Você "
+"o primeiro codinome gerado for difícil de pronunciar ou de lembrar. Você "
 "pode gerar novos codinomes aleatórios quantas vezes quiser."
 
 #: journalist_templates/col.html:13
@@ -451,7 +460,7 @@ msgstr "Baixar Seleção"
 
 #: journalist_templates/col.html:27
 msgid "Delete Selected"
-msgstr "Excluir Seleção"
+msgstr "Apagar seleção"
 
 #: journalist_templates/col.html:55
 msgid "Uploaded Document"
@@ -484,8 +493,8 @@ msgid ""
 "An encryption key will be generated for the source the next time they log "
 "in, after which you will be able to reply to the source here."
 msgstr ""
-"Uma chave criptográfica será gerada para esta fonte da próxima vez que ela "
-"se conectar, após o que você poderá responder a ela por aqui."
+"Uma chave criptográfica será gerada para esta fonte na próxima vez que ela "
+"se conectar. Em seguida, você poderá responder a ela aqui."
 
 #: journalist_templates/col.html:89
 msgid "Click below if you would like to write a reply to this source."
@@ -520,7 +529,7 @@ msgstr[1] "Os arquivos seguintes serão <strong>excluídos permanentemente</stro
 
 #: journalist_templates/delete.html:20
 msgid "PERMANENTLY DELETE FILES"
-msgstr "EXCLUIR ARQUIVOS PERMANENTEMENTE"
+msgstr "EXCLUIR ARQUIVOS DEFINITIVAMENTE"
 
 #: journalist_templates/delete.html:23
 msgid "Return to the list of documents for {source_name}…"
@@ -532,7 +541,7 @@ msgstr "Editar o usuário \"{user}\""
 
 #: journalist_templates/edit_account.html:8
 msgid "Change Username &amp; Admin Status"
-msgstr "Modificar nome de usuário e poderes de administrador"
+msgstr "Alterar nome de usuário e credenciais de administrador"
 
 #: journalist_templates/edit_account.html:12
 msgid "Change username"
@@ -703,7 +712,7 @@ msgstr "Tem certeza que quer excluir as {size} coleções selecionadas?"
 
 #: journalist_templates/js-strings.html:9
 msgid "Are you sure you want to delete the {size} selected submissions?"
-msgstr "Tem certeza que quer excluir os {size} itens selecionados?"
+msgstr "Você tem certeza de que quer apagar os {size} itens selecionados?"
 
 #: journalist_templates/js-strings.html:10
 msgid "Are you sure you want to delete the user {username}?"
@@ -824,8 +833,8 @@ msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
 msgstr ""
-"Obrigado por nos enviar esta informação. Volte mais tarde para ler as "
-"respostas."
+"Obrigado por nos enviar esta informação. Por favor, retorne mais tarde para "
+"ler as respostas."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
@@ -913,7 +922,7 @@ msgid ""
 "If you have already submitted documents in the past, log in here to check "
 "for responses."
 msgstr ""
-"Se você já enviou documentos antes, faça login aqui para ler as respostas."
+"Se você já tiver enviado documentos, faça login aqui para ler as respostas."
 
 #: source_templates/index.html:65
 msgid "SUBMIT DOCUMENTS"
@@ -1003,9 +1012,9 @@ msgid ""
 "submission into the hands of a journalist straight away. We’re sorry for the "
 "delay. Please do check back again in a week or so."
 msgstr ""
-"Porém, agora que sabemos que você é mesmo uma pessoa, vamos enviar "
-"imediatamente seus documentos para um jornalista. Pedimos desculpas pelo "
-"atraso. Acesse o site novamente daqui a cerca de uma semana."
+"Agora que sabemos que você é mesmo uma pessoa, vamos enviar imediatamente "
+"seus documentos para um jornalista. Pedimos desculpas pelo atraso. Por "
+"favor, retorne daqui a cerca de uma semana."
 
 #: source_templates/lookup.html:20
 msgid "Submit Materials"
@@ -1035,6 +1044,7 @@ msgid "Maximum upload size: 500 MB"
 msgstr "Tamanho máximo do envio: 500 MB"
 
 #: source_templates/lookup.html:36
+#, fuzzy
 msgid "Write a message."
 msgstr "Escreva uma mensagem."
 
@@ -1092,7 +1102,7 @@ msgstr "Mostrar"
 
 #: source_templates/lookup.html:103
 msgid "Hide"
-msgstr "Esconder"
+msgstr "Ocultar"
 
 #: source_templates/notfound.html:3
 msgid "Page not found"
@@ -1151,7 +1161,7 @@ msgid ""
 msgstr ""
 "Para enviar informações, é <strong>altamente recomendado</strong> instalar o "
 "<a href=\"torproject.org/download.html.en\">Tor</a> e usá-lo para acessar "
-"nosso site com segurança e anonimato."
+"nosso site de modo seguro e anônimo."
 
 #: source_templates/use-tor-browser.html:3
 msgid "You Should Use Tor Browser"
@@ -1201,8 +1211,8 @@ msgid ""
 "If you are already familiar with the GPG encryption software, you may wish "
 "to encrypt your submissions yourself. To do so:"
 msgstr ""
-"Se você já conhece o software de criptografia GPG, pode querer criptografar "
-"seus dados por conta própria. Para fazê-lo:"
+"Se você já conhece o software de criptografia GPG, talvez queira "
+"criptografar seus dados por conta própria. Para fazê-lo:"
 
 #: source_templates/why-journalist-key.html:7
 msgid ""
@@ -1239,6 +1249,7 @@ msgid "Encrypt your submission."
 msgstr "Criptografe o seu envio."
 
 #: source_templates/why-journalist-key.html:16
+#, fuzzy
 msgid ""
 "You will need to be able to identify the key (this is called the \"user ID\" "
 "or UID). Since the public key's filename is the key's fingerprint (with .asc "
@@ -1246,9 +1257,9 @@ msgid ""
 "asc</code>!)"
 msgstr ""
 "Será preciso identificar a chave (chamada \"ID do usuário\", ou \"UID\"). "
-"Como o nome do arquivo da chave pública também funciona como o fingerprint "
-"da chave (com \".asc\" no final), basta copiar e colar esse nome (deixando "
-"de fora a extensão <code>.asc</code>)."
+"Como o nome do arquivo da chave pública também corresponde ao fingerprint da "
+"chave (com \".asc\" no final), basta copiar e colar esse nome (deixando de "
+"fora a extensão <code>.asc</code>)."
 
 #: source_templates/why-journalist-key.html:17
 msgid ""
