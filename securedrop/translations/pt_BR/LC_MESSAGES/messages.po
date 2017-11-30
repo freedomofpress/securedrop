@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 16:00+0000\n"
+"PO-Revision-Date: 2017-11-30 20:00+0000\n"
 "Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
@@ -829,12 +829,13 @@ msgid "Success!"
 msgstr "Sucesso!"
 
 #: source_templates/first_submission_flashed_message.html:3
+#, fuzzy
 msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
 msgstr ""
-"Obrigado por nos enviar esta informação. Por favor, retorne mais tarde para "
-"ler as respostas."
+"Agradecemos pela informação. Por favor, retorne mais tarde para ler as "
+"respostas."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
