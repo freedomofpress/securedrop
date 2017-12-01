@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask_babel import gettext
+from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
                      ValidationError)
@@ -12,25 +12,26 @@ from db import Journalist
 def otp_secret_validation(form, field):
     strip_whitespace = field.data.replace(' ', '')
     if len(strip_whitespace) != 40:
-        raise ValidationError(gettext('Field must be 40 characters long but '
-                                      'got {num_chars}.'.format(
-                                          num_chars=len(strip_whitespace)
-                                      )))
+        raise ValidationError(lazy_gettext(
+            'Field must be 40 characters long but '
+            'got {num_chars}.'.format(
+                num_chars=len(strip_whitespace)
+            )))
 
 
 def minimum_length_validation(form, field):
     if len(field.data) < Journalist.MIN_USERNAME_LEN:
         raise ValidationError(
-            gettext('Field must be at least {min_chars} '
-                    'characters long but only got '
-                    '{num_chars}.'.format(
-                        min_chars=Journalist.MIN_USERNAME_LEN,
-                        num_chars=len(field.data))))
+            lazy_gettext('Field must be at least {min_chars} '
+                         'characters long but only got '
+                         '{num_chars}.'.format(
+                             min_chars=Journalist.MIN_USERNAME_LEN,
+                             num_chars=len(field.data))))
 
 
 class NewUserForm(FlaskForm):
     username = TextField('username', validators=[
-        InputRequired(message=gettext('This field is required.')),
+        InputRequired(message=lazy_gettext('This field is required.')),
         minimum_length_validation
     ])
     password = HiddenField('password')
@@ -47,6 +48,7 @@ class ReplyForm(FlaskForm):
         u'Message',
         id="content-area",
         validators=[
-            InputRequired(message=gettext('You cannot send an empty reply.')),
+            InputRequired(message=lazy_gettext(
+                'You cannot send an empty reply.')),
         ],
     )
