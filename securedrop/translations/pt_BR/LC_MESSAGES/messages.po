@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-11-29 16:00+0000\n"
-"Last-Translator: Bernardo Tonasse <btonasse@gmail.com>\n"
+"PO-Revision-Date: 2017-12-01 04:00+0000\n"
+"Last-Translator: communiaa <ameaneantie@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -124,9 +124,8 @@ msgid "You cannot send an empty reply."
 msgstr "Não é possível enviar uma resposta em branco."
 
 #: journalist_app/main.py:118
-#, fuzzy
 msgid "Thanks. Your reply has been stored."
-msgstr "Obrigado. Sua resposta foi registrada."
+msgstr "Agradecemos pela contribuição. Sua resposta foi registrada"
 
 #: journalist_app/main.py:139
 msgid "No collections selected for download."
@@ -221,7 +220,7 @@ msgstr "{num_unread} não lidas"
 #: journalist_templates/account_edit_hotp_secret.html:6
 #: journalist_templates/admin_edit_hotp_secret.html:7
 msgid "Change Secret"
-msgstr "Alterar segredo"
+msgstr "Alterar Segredo"
 
 #: journalist_templates/account_edit_hotp_secret.html:7
 #: journalist_templates/admin_add_user.html:33
@@ -833,8 +832,8 @@ msgid ""
 "Thank you for sending this information to us. Please check back later for "
 "replies."
 msgstr ""
-"Obrigado por nos enviar esta informação. Por favor, retorne mais tarde para "
-"ler as respostas."
+"Agradecemos pela informação. Por favor, retorne mais tarde para ler as "
+"respostas."
 
 #: source_templates/first_submission_flashed_message.html:5
 msgid "Forgot your codename?"
