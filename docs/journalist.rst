@@ -217,7 +217,7 @@ pre-installed applications for securely working with documents, including
 `the Tor Browser <https://www.torproject.org/>`__, an office suite, graphics
 tools, desktop publishing tools, audio tools, and printing and scanning tools.
 
-Pre-encrypted submissions
+Pre-Encrypted Submissions
 `````````````````````````
 
 SecureDrop sources can optionally encrypt prior to submitting to SecureDrop.
@@ -279,11 +279,19 @@ Risks From Malware
 ~~~~~~~~~~~~~~~~~~
 
 As long as you are using the latest version of Tails, you should be
-able to open any submitted documents without the risk of malicious
+able to open submitted documents with a low risk of malicious
 files compromising the *Secure Viewing Station*. However, even if a
 compromise does occur, Tails is designed so that the next time you
 reboot, the malware will be gone.
 
+`Never scan QR codes`_ from the *Secure Viewing Station* using a network
+connected device. These QR codes can contain links that your connected device
+will automatically visit. In general, you should take care when opening any
+links provided in a SecureDrop submission, as this can leak information to third
+parties. If you are unsure if a link is safe to click, you should consult your
+digital security staff or Freedom of the Press Foundation for assistance.
+
+.. _`Never scan QR codes`: https://securedrop.org/news/security-advisory-do-not-scan-qr-codes-submitted-through-securedrop-connected-devices
 .. _`working with sensitive documents`: https://tails.boum.org/doc/sensitive_documents/index.en.html
 .. _`Metadata Anonymisation Toolkit`: https://mat.boum.org/
 
