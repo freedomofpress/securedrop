@@ -207,16 +207,46 @@ Working with Documents
 ----------------------
 
 This section describes how to handle unusual file formats, safely research
-submissions, remove metadata, and mitigate risks from submitted malware. 
+submissions, remove metadata, and mitigate risks from submitted malware.
 
 Handling File Formats
 ~~~~~~~~~~~~~~~~~~~~~
 
-Tails comes with pre-installed applications for securely working with
-documents, including `the Tor Browser
-<https://www.torproject.org/>`__, an office suite, graphics tools,
-desktop publishing tools, audio tools, and printing and scanning
-tools.
+SecureDrop accepts submissions of any file type. Tails comes with
+pre-installed applications for securely working with documents, including
+`the Tor Browser <https://www.torproject.org/>`__, an office suite, graphics
+tools, desktop publishing tools, audio tools, and printing and scanning tools.
+
+Pre-encrypted submissions
+`````````````````````````
+
+SecureDrop sources can optionally encrypt prior to submitting to SecureDrop.
+This means that once you decrypt the document as you usually do by double
+clicking the document in the file navigator, there will be another layer of
+encryption.
+
+Most often, the file will be encrypted to the SecureDrop key. If the file is
+encrypted to your SecureDrop key, you should be able to double click the file as
+usual once more in the SVS and it should decrypt.
+
+However, it's also possible the file is encrypted to another key, potentially
+your personal key. If this occurs, you will get an error message in Tails that
+reads "Decryption failed. You probably do not have the decryption key".
+To determine which key was used, if you are comfortable at the command line, you
+can open the ``Terminal``, navigate to the file, and use:
+
+.. code:: sh
+
+  gpg --decrypt NAME_OF_FILE
+
+replacing ``NAME_OF_FILE`` with the name of the file you wish to decrypt. This
+command will tell you what key was used to encrypt the file. If you are not
+comfortable at the command line, contact your SecureDrop administrator or
+Freedom of the Press Foundation for assistance.
+
+.. warning:: You should not transfer source material off the SVS for decryption,
+             and should instead transfer cryptographic keys *to* the device for
+             decryption and metadata removal.
 
 Researching Submissions
 ~~~~~~~~~~~~~~~~~~~~~~~
