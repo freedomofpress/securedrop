@@ -206,11 +206,28 @@ of ".jpeg").
 Working with Documents
 ----------------------
 
+This section describes how to handle unusual file formats, safely research
+submissions, remove metadata, and mitigate risks from submitted malware. 
+
+Handling File Formats
+~~~~~~~~~~~~~~~~~~~~~
+
 Tails comes with pre-installed applications for securely working with
 documents, including `the Tor Browser
 <https://www.torproject.org/>`__, an office suite, graphics tools,
 desktop publishing tools, audio tools, and printing and scanning
 tools.
+
+Researching Submissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Journalists should take care to research submissions using the Tor
+Browser, ideally in a new Tails session for highly sensitive
+submissions. For more information, visit the Tails guide to `working
+with sensitive documents`_.
+
+Removing Metadata
+~~~~~~~~~~~~~~~~~
 
 Tails also comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
 is used to help strip metadata from a variety of types of files,
@@ -218,11 +235,6 @@ including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
 documents, pdf, tar, tar.bz2, tar.gz, zip, mp3, mp2, mp1, mpa, ogg,
 and flac. You can open MAT by clicking **Applications** in the top
 left corner, Accessories, Metadata Anonymisation Toolkit.
-
-Journalists should take care to research submissions using the Tor
-Browser, ideally in a new Tails session for highly sensitive
-submissions. For more information, visit the Tails guide to `working
-with sensitive documents`_.
 
 We recommend always doing as much work as possible inside of Tails
 before copying documents back to your *Journalist Workstation*. This
@@ -232,6 +244,9 @@ When you no longer need documents, you can right-click on them and
 choose **Wipe** to delete them.
 
 |Wiping documents|
+
+Risks From Malware
+~~~~~~~~~~~~~~~~~~
 
 As long as you are using the latest version of Tails, you should be
 able to open any submitted documents without the risk of malicious
