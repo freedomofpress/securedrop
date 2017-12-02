@@ -36,15 +36,13 @@
   <p>{{ gettext('Please either write this codename down and keep it in a safe place, or memorize it.') }}</p>
 </aside>
 
-<div class="pull-right">
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button type="submit" class="sd-button btn primary" id="continue-button">
+  <button type="submit" class="sd-button btn btn--space primary pull-right" id="continue-button">
     <img class="icon off-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-white.png') }}" width="17px" height="17px">
     <img class="icon on-hover" src="{{ url_for('static', filename='i/font-awesome/fa-arrow-circle-o-right-blue.png') }}" width="17px" height="17px">
      {{ gettext('USE NEW CODENAME') }}
   </button>
-  <a id="already-have-codename" href="{{ url_for('main.login') }}" class="sd-button btn secondary">{{ gettext('USE EXISTING CODENAME') }}</a>
+  <a id="already-have-codename" href="{{ url_for('main.login') }}" class="sd-button btn btn--space secondary pull-right">{{ gettext('USE EXISTING CODENAME') }}</a>
 </form>
-</div>
 {% endblock %}

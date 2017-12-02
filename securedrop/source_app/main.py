@@ -227,8 +227,11 @@ def make_blueprint(config):
         if logged_in():
             msg = render_template('logout_flashed_message.html')
 
-            # clear the session after we render the message so it's localized
+            # Clear the session after we render the message so it's localized
+            # If a user specified a locale, save it and restore it
+            user_locale = g.locale
             session.clear()
+            session['locale'] = user_locale
 
             flash(Markup(msg), "important hide-if-not-tor-browser")
         return redirect(url_for('.index'))
