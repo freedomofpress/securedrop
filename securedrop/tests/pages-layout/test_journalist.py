@@ -103,7 +103,8 @@ class TestJournalistLayout(
     def test_admin_new_user_two_factor_hotp(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()
-        self._admin_creates_a_user(hotp='123456')
+        valid_hotp = '1234567890123456789012345678901234567890'
+        self._admin_creates_a_user(hotp=valid_hotp)
         self._screenshot('journalist-admin_new_user_two_factor_hotp.png')
 
     def test_admin_new_user_two_factor_totp(self):
