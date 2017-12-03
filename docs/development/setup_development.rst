@@ -1,5 +1,5 @@
-Getting Started
-===============
+Setting up the development environment
+======================================
 
 .. include:: ../includes/docs-branches.txt
 
