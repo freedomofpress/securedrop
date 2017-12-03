@@ -95,6 +95,7 @@ anonymous sources.
    :maxdepth: 2
 
    development/getting_started
+   development/setup_development
    development/virtual_environments
    development/virtualizing_tails
    development/contributor_guidelines
