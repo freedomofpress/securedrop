@@ -34,7 +34,10 @@ See the [Development Guide](https://docs.securedrop.org/en/latest/development/ge
 
 Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop/wiki/Development-Roadmap) to see our plans and priorities for upcoming releases.
 
-We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/).
+For translators, see the [Translator Guide](https://docs.securedrop.org/en/stable/development/l10n.html) to learn how to get started with SecureDrop translations
+in our [translation portal](https://weblate.securedrop.club/).
+
+We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.club/) where you can discuss SecureDrop and ask questions.
 
 ## License
 
@@ -46,3 +49,10 @@ The wordlist we use to generate source passphrases come from various sources:
 
 * [en.txt](/securedrop/wordlists/en.txt) is based off a new [Diceware wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) from the EFF.
 * [fr.txt](/securedrop/wordlists/en.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en).
+
+
+## Acknowledgments
+
+A huge thank you to all SecureDrop contributors! You can see just
+code and documentation contributors in the ["Contributors"](https://github.com/freedomofpress/securedrop/graphs/contributors)
+tab on GitHub, and you can see code, documentation and translation contributors together [here](https://lab.securedrop.club/bot/securedrop/graphs/i18n).
