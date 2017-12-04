@@ -206,11 +206,58 @@ of ".jpeg").
 Working with Documents
 ----------------------
 
-Tails comes with pre-installed applications for securely working with
-documents, including `the Tor Browser
-<https://www.torproject.org/>`__, an office suite, graphics tools,
-desktop publishing tools, audio tools, and printing and scanning
-tools.
+This section describes how to handle unusual file formats, safely research
+submissions, remove metadata, and mitigate risks from submitted malware.
+
+Handling File Formats
+~~~~~~~~~~~~~~~~~~~~~
+
+SecureDrop accepts submissions of any file type. Tails comes with
+pre-installed applications for securely working with documents, including
+`the Tor Browser <https://www.torproject.org/>`__, an office suite, graphics
+tools, desktop publishing tools, audio tools, and printing and scanning tools.
+
+Pre-Encrypted Submissions
+`````````````````````````
+
+SecureDrop sources can optionally encrypt prior to submitting to SecureDrop.
+This means that once you decrypt the document as you usually do by double
+clicking the document in the file navigator, there will be another layer of
+encryption.
+
+Most often, the file will be encrypted to the SecureDrop key. If the file is
+encrypted to your SecureDrop key, you should be able to double click the file as
+usual once more in the SVS and it should decrypt.
+
+However, it's also possible the file is encrypted to another key, potentially
+your personal key. If this occurs, you will get an error message in Tails that
+reads "Decryption failed. You probably do not have the decryption key".
+To determine which key was used, if you are comfortable at the command line, you
+can open the ``Terminal``, navigate to the file, and use:
+
+.. code:: sh
+
+  gpg --decrypt NAME_OF_FILE
+
+replacing ``NAME_OF_FILE`` with the name of the file you wish to decrypt. This
+command will tell you what key was used to encrypt the file. If you are not
+comfortable at the command line, contact your SecureDrop administrator or
+Freedom of the Press Foundation for assistance.
+
+.. warning:: You should not transfer source material off the SVS for decryption,
+             and should instead transfer cryptographic keys *to* the device for
+             decryption and metadata removal.
+
+Researching Submissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Journalists should take care to research submissions using the Tor
+Browser, ideally in a new Tails session for highly sensitive
+submissions. For more information, visit the Tails guide to `working
+with sensitive documents`_.
+
+Removing Metadata
+~~~~~~~~~~~~~~~~~
 
 Tails also comes with the `Metadata Anonymisation Toolkit`_ (MAT) that
 is used to help strip metadata from a variety of types of files,
@@ -218,11 +265,6 @@ including png, jpg, OpenOffice/LibreOffice documents, Microsoft Office
 documents, pdf, tar, tar.bz2, tar.gz, zip, mp3, mp2, mp1, mpa, ogg,
 and flac. You can open MAT by clicking **Applications** in the top
 left corner, Accessories, Metadata Anonymisation Toolkit.
-
-Journalists should take care to research submissions using the Tor
-Browser, ideally in a new Tails session for highly sensitive
-submissions. For more information, visit the Tails guide to `working
-with sensitive documents`_.
 
 We recommend always doing as much work as possible inside of Tails
 before copying documents back to your *Journalist Workstation*. This
@@ -233,12 +275,23 @@ choose **Wipe** to delete them.
 
 |Wiping documents|
 
+Risks From Malware
+~~~~~~~~~~~~~~~~~~
+
 As long as you are using the latest version of Tails, you should be
-able to open any submitted documents without the risk of malicious
+able to open submitted documents with a low risk of malicious
 files compromising the *Secure Viewing Station*. However, even if a
 compromise does occur, Tails is designed so that the next time you
 reboot, the malware will be gone.
 
+`Never scan QR codes`_ from the *Secure Viewing Station* using a network
+connected device. These QR codes can contain links that your connected device
+will automatically visit. In general, you should take care when opening any
+links provided in a SecureDrop submission, as this can leak information to third
+parties. If you are unsure if a link is safe to click, you should consult your
+digital security staff or Freedom of the Press Foundation for assistance.
+
+.. _`Never scan QR codes`: https://securedrop.org/news/security-advisory-do-not-scan-qr-codes-submitted-through-securedrop-connected-devices
 .. _`working with sensitive documents`: https://tails.boum.org/doc/sensitive_documents/index.en.html
 .. _`Metadata Anonymisation Toolkit`: https://mat.boum.org/
 
