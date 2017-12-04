@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-28 22:54+0000\n"
+"PO-Revision-Date: 2017-12-02 10:06+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nb_NO/>\n"
@@ -192,12 +192,12 @@ msgid "No unread submissions in selected collections."
 msgstr "Ingen uleste innsendte bidrag i valgte kildeoppføringer."
 
 #: journalist_templates/_source_row.html:19
-msgid "docs {doc_num}"
-msgstr "dok. {doc_num}"
+msgid "{doc_num} docs"
+msgstr "{doc_num} dok."
 
 #: journalist_templates/_source_row.html:20
-msgid "messages {msg_num}"
-msgstr "meldinger {msg_num}"
+msgid "{msg_num} messages"
+msgstr "{msg_num} meldinger"
 
 #: journalist_templates/_source_row.html:23
 msgid "{num_unread} unread"
@@ -863,11 +863,11 @@ msgid ""
 "memorize it."
 msgstr "Husk, eller skriv ned kodenavnet på et sikkert sted."
 
-#: source_templates/generate.html:45
+#: source_templates/generate.html:44
 msgid "USE NEW CODENAME"
 msgstr "BRUK NYTT KODENAVN"
 
-#: source_templates/generate.html:47
+#: source_templates/generate.html:46
 msgid "USE EXISTING CODENAME"
 msgstr "BRUK EKSISTERENDE KODENAVN"
 
@@ -1280,3 +1280,6 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "messages {msg_num}"
+#~ msgstr "meldinger {msg_num}"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2017-11-28 22:54+0000\n"
+"PO-Revision-Date: 2017-12-04 10:36+0000\n"
 "Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Dutch "
 "<https://weblate.securedrop.club/projects/securedrop/securedrop/nl/>\n"
@@ -200,12 +200,12 @@ msgid "No unread submissions in selected collections."
 msgstr "Geen ongelezen inzendingen in de geselecteerde collecties."
 
 #: journalist_templates/_source_row.html:19
-msgid "docs {doc_num}"
-msgstr "documenten {doc_num}"
+msgid "{doc_num} docs"
+msgstr "{doc_num} documenten"
 
 #: journalist_templates/_source_row.html:20
-msgid "messages {msg_num}"
-msgstr "berichten {msg_num}"
+msgid "{msg_num} messages"
+msgstr "{msg_num} berichten"
 
 #: journalist_templates/_source_row.html:23
 msgid "{num_unread} unread"
@@ -878,11 +878,11 @@ msgstr ""
 "Noteer deze codenaam en bewaar op een veilige plaats of leer hem uit het "
 "hoofd."
 
-#: source_templates/generate.html:45
+#: source_templates/generate.html:44
 msgid "USE NEW CODENAME"
 msgstr "GEBRUIK EEN NIEUWE CODENAAM"
 
-#: source_templates/generate.html:47
+#: source_templates/generate.html:46
 msgid "USE EXISTING CODENAME"
 msgstr "GEBRUIK HUIDIGE CODENAAM"
 
@@ -1299,3 +1299,6 @@ msgstr ""
 #: source_templates/why-journalist-key.html:25
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "messages {msg_num}"
+#~ msgstr "berichten {msg_num}"
