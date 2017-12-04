@@ -1,6 +1,12 @@
 Contributing Guidelines
 =======================
 
+Signing commits
+---------------
+
+Commits should be signed, as `explained in the GitHub documentation <https://help.github.com/articles/signing-commits-using-gpg/>`_.
+This helps verify commits proposed in a pull request are from the expected author.
+
 Branching Strategy
 ------------------
 
