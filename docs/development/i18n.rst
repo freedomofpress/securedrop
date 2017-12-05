@@ -153,7 +153,8 @@ to the ``develop`` branch via pull requests for merge on a regular basis.
       $ git checkout -b wip-i18n origin/develop
       $ git checkout lab/i18n -- securedrop/translations \
         install_files/ansible-base/roles/tails-config/templates/{ar,nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
-      $ git add translations
+      $ git add securedrop/translations/{ar,nl,fr,de_DE,nb_NO,pt_BR,es_ES}/LC_MESSAGES/messages.po \
+        install_files/ansible-base/roles/tails-config/templates/{ar,nl,fr,de_DE,nb_NO,pt_BR,es_ES}.po
       $ vagrant ssh development
       $ cd /vagrant/securedrop ; ./manage.py --verbose translate-desktop --compile
       $ git commit -m 'sync with weblate' translations
