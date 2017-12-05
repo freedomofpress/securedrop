@@ -112,7 +112,7 @@
 
     - name: securedrop_supported_locales
       # the list is from the securedrop/translations repository
-      prompt: Space separated list of additional locales to support (ar de_DE en_US es_ES fr_FR nb_NO nl)
+      prompt: Space separated list of additional locales to support (de_DE en_US es_ES fr_FR nb_NO nl)
       default: ""
       private: no
 
