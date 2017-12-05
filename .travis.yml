@@ -47,8 +47,7 @@ script:
   # are time consuming.
   # * en_US: source strings
   # * fr_FR: left-to-right translations
-  # * ar: right-to-left translations
-  - sh -c "export DISPLAY=:1 ; cd securedrop && PAGE_LAYOUT_LOCALES='en_US,ar,fr_FR' pytest -v tests --page-layout"
+  - sh -c "export DISPLAY=:1 ; cd securedrop && PAGE_LAYOUT_LOCALES='en_US,fr_FR' pytest -v tests --page-layout"
   - pip freeze -l
   - SECUREDROP_TESTINFRA_TARGET_HOST=travis testinfra -v testinfra/development/
 after_success:
