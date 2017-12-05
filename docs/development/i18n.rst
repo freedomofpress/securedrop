@@ -258,6 +258,29 @@ Note that the new index will not be used right away, some workers may
 still have the old index open. Rebooting the machine is an option,
 waiting for a few hours is another option.
 
+Translator credits
+------------------
+
+Verify the names and emails look ok, otherwise add to `.mailmap
+<https://git-scm.com/docs/git-check-mailmap>`_ until it does:
+
+.. code:: sh
+
+      $ git clone https://github.com/freedomofpress/securedrop
+      $ cd securedrop
+      $ git remote add lab http://lab.securedrop.club/bot/securedrop/tree/i18n
+      $ git fetch lab
+      $ previous_version=0.4.4
+      $ git log --pretty='%aN <%aE>' $previous_version..lab/i18n -- \
+         securedrop/translations install_files/ansible-base/roles/tails-config/templates | sort -u
+
+We do not want to publish the translator emails so we strip them:
+
+.. code:: sh
+
+       git log --pretty='%aN' $previous_version..lab/i18n -- \
+        securedrop/translations install_files/ansible-base/roles/tails-config/templates | sort -u
+
 
 .. _`gettext`: https://www.gnu.org/software/gettext/
 .. _`pybabel`: http://babel.pocoo.org/
