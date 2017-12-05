@@ -1,163 +1,190 @@
-Getting Started
-===============
+Contributing to SecureDrop
+==========================
 
-.. include:: ../includes/docs-branches.txt
+If you have time, one hour or a year, we welcome your help in various
+areas. We are committed to make it as easy as possible for you to
+contribute.
 
-Prerequisites
--------------
+* `Programmers`_, to help us develop SecureDrop.
+* `DevOps`_, to work on the community maintained SecureDrop infrastructure.
+* `Release Managers`_, to create and maintain Debian GNU/Linux packages and repositories.
+* `Writers`_, to help improve the documentation.
+* `Translators`_, to translate SecureDrop.
+* `Moderators & Support`_, to answer on `the forums <https://forum.securedrop.club/c/support>`__.
+* `Designers`_, for SecureDrop source and journalist web interfaces and Tails customization.
 
-SecureDrop is a multi-machine design. To make development and testing easy, we
-provide a set of virtual environments, each tailored for a specific type of
-development task. We use Vagrant, VirtualBox, and Docker to conveniently
-develop with a set of virtual environments, and our Ansible playbooks can
-provision these environments on either virtual machines or physical hardware.
+You will find a developer to answer any questions you may have at
+the `SecureDrop instant messaging channel
+<https://gitter.im/freedomofpress/securedrop>`__, whatever your
+timezone is. You should also register to `the forum
+<https://forum.securedrop.club/>`__ for longer discussions and to look
+for answers.
 
-To get started, you will need to install Vagrant, VirtualBox, Docker, and
-Ansible on your development workstation.
+Programmers
+~~~~~~~~~~~
+
+SecureDrop is a system including Flask based web applications for
+sources and journalists and is deployed on multiple machines with
+Ansible.
+
+Here is a list of bugs and features you can work on.
+
+Low hanging fruit
+-----------------
+
+* `Suitable for hackathons <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A"hackathon">`__
+
+Bugs
+----
+
+* `High priority bugs <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AP-high+label%3Abug>`__
+* `Bugs <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Abug>`__
+* `Low priority bugs <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AP-low+label%3Abug>`__
+
+Issues sorted by topic
+----------------------
+
+* `User experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AUX>`__
+* `Internationalization (i18n) <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+i18n%22>`__
+* `Source and journalist applications <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aapp>`__
+* `Source and journalist applications cleanup <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+app+code+cleanup%22>`__
+* `Reading room client for journalists <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22Reading+Room%22>`__
+* `Journalist experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+journalist+experience%22>`__
+* `Improve ansible logic / smoother install <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+Improve+Ansible+logic+%2F+smoother+install%22>`__
+* `Deployment <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aops%2Fdeployment>`__
+* `Improve threat model <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+improve+threat+modeling%22>`__
+* `Reduce IDS noise <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+reduce+IDS+noise%22>`__
+* `OSSEC <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3AOSSEC>`__
+* `Security <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Asecurity>`__
+* `Research <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aresearch>`__
+
+Development environment
+-----------------------
+
+* `Improve developer workflow <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+improve+developer+workflow%22>`__
+* `Tests <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+more+tests%22>`__
+* `Improve the CI <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+sick+CI%22>`__
+
+Once you have chosen something to work on, it is enough to `send a
+pull request
+<https://help.github.com/categories/collaborating-with-issues-and-pull-requests/>`__
+with the proposed change. :doc:`Tests <testing_securedrop>` will be
+automatically run for you.
+
+If you would like to contribute on a regular basis, you should read
+the :doc:`developer documentation <setup_development>` to setup a
+local development environment, run part of the tests locally etc.
+
+Writers
+~~~~~~~
+
+Technical writers are invited to review `this documentation
+<https://docs.securedrop.org/>`__ and fix any mistake in accordance to
+the :doc:`documentation guidelines <documentation_guidelines>`.
+
+Documentation tasks (bugs and improvements), ordered by priority:
+
+* `High <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-high>`__
+* `Unspecified <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs>`__
+* `Low <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-low>`__
+
+DevOps
+~~~~~~
+
+The `SecureDrop web site <https://securedrop.org>`__ and the `GitHub
+repository <https://github.com/freedomofpress>`__ are controlled and
+maintained by `Freedom of the Press Foundation employees
+<https://freedom.press/about/staff>`__. The resources under the
+``securedrop.club`` domain name (listed below) are financed, controlled and
+maintained `by a horizontal community of volunteers
+<https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
+
+You can browse the list of services and their corresponding Ansible
+playbook to find one you would like to improve:
+
+* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__
+* `Discourse <https://forum.securedrop.club>`__ (no playbook yet) and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__
+* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__
+* `Packages <https://packages.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Packages>`__
+* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Other>`__
+
+If you're in doubt, feel free to reach out to the `DevOps section of
+the forum <https://forum.securedrop.club/c/devops>`__ or directly to `a
+team member
+<https://securedrop-club.readthedocs.io/en/latest/team.html>`__.
+
+Release managers
+~~~~~~~~~~~~~~~~
+
+All software deployed with SecureDrop is installed via
+Debian GNU/Linux packages via Ansible. The `primary repository
+<https://apt.freedom.press/>`__ is controlled and maintained and signed
+by `Freedom of the Press Foundation employees
+<https://freedom.press/about/staff>`__. An `alternative repository
+<https://packages.securedrop.club/>`__ is signed by a `community of
+volunteers
+<https://securedrop-club.readthedocs.io/en/latest/team.html>`__ and
+must not be used for production purproses but is convenient for tests
+and demonstrations.
+
+If you are a `Debian Developer <https://www.debian.org/devel/>`__ you
+can help improve packaging and the release process:
+
+* `Building SecureDrop application and OSSEC packages <https://github.com/freedomofpress/securedrop/blob/develop/install_files/ansible-base/build-deb-pkgs.yml>`__ and `pending bugs and tasks <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+package+label%3A%22goals%3A+packaging%22>`__
+* Building `grsecurity kernels <https://github.com/freedomofpress/ansible-role-grsecurity>`__ and `pending bugs and tasks <https://github.com/freedomofpress/ansible-role-grsecurity/issues>`__
+
+Translators
+~~~~~~~~~~~
+
+If English is not your native tongue, your are kindly invited to help
+translate SecureDrop `using the web interface
+<https://weblate.securedrop.club/>`__. It is straightforward but we also
+provide a :doc:`detailed guide <l10n>` to use as a reference for
+details such as the meaning of placeholders etc. If you're in doubt,
+feel free to reach out to the `translation section of the forum
+<https://forum.securedrop.club/c/translations>`__ or even sub-sections
+where non-English discussions are welcome to facilitate discussions.
+
+As a developer or system administrator you can also help `maintain and
+improve
+<http://securedrop-club.readthedocs.io/en/latest/weblate.html>`__ the
+self-hosted `weblate <https://weblate.org/>`__ infrastructure used by
+the community of translators.
+
+Last but not least, if you are a professional proofreader you may want
+to reach out to `Localization Lab <http://localizationlab.org/>`__ and
+become part of their team of reviewers. This is an important part of
+the process to ensure quality translations and there are never enough
+talents to complete this on-going task.
 
 
-Ubuntu/Debian
-~~~~~~~~~~~~~
+Moderators & Support
+~~~~~~~~~~~~~~~~~~~~
 
-.. note:: Tested on: Ubuntu 16.04 and Debian Stretch
+People running a production instance of SecureDrop are encouraged to
+`read the support documentation
+<https://securedrop-support.readthedocs.io/>`__ to get help from the
+`Freedom of the Press Foundation <https://freedom.press>`__. For less
+sensitive topics such as running a demo or getting help to understand
+a concept, a `public forum section
+<https://forum.securedrop.club/c/support>`__ is better suited.
 
-.. code:: sh
+* Look for `the latest unanswered questions in the
+  <https://forum.securedrop.club/c/support>`__ forum and answer them.
+* If you find questions `elsewhere in the forum
+  <https://forum.securedrop.club>`__ that have a better chance at
+  getting an answer in the `support section
+  <https://forum.securedrop.club/c/support>`__, ask a `a team member
+  <https://securedrop-club.readthedocs.io/en/latest/team.html>`__ for
+  permissions to move topics from a category to another.
 
-   sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev \
-       dpkg-dev git linux-headers-$(uname -r) virtualbox
+Designers
+~~~~~~~~~
 
-We recommend using the latest stable version of Vagrant, ``1.8.5`` at the time
-of this writing, which might be newer than what is in your distro's package
-repositories. Older versions of Vagrant has been known to cause problems
-(`GitHub #932`_, `GitHub #1381`_). If ``apt-cache policy vagrant`` says your
-candidate version is not at least 1.8.5, you should download the current version
-from the `Vagrant Downloads page`_ and then install it.
+If you know web design or have experience improving user experience,
+the following tasks are waiting for your help:
 
-.. code:: sh
-
-    # If your OS vagrant is recent enough
-    sudo apt-get install vagrant
-    # OR this, if you downloaded the deb package.
-    sudo dpkg -i vagrant.deb
-
-We recommend using the stable version of Docker CE (Community Edition) which can
-be installed via the official documentation links:
-
-* `Docker CE for Ubuntu`_
-* `Docker CE for Debian`_
-
-.. _`Vagrant Downloads page`: https://www.vagrantup.com/downloads.html
-.. _`GitHub #932`: https://github.com/freedomofpress/securedrop/pull/932
-.. _`GitHub #1381`: https://github.com/freedomofpress/securedrop/issues/1381
-.. _`Docker CE for Ubuntu`: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
-.. _`Docker CE for Debian`: https://docs.docker.com/engine/installation/linux/docker-ce/debian/
-
-.. warning:: We do not recommend installing vagrant-cachier. It destroys apt’s
-            state unless the VMs are always shut down/rebooted with Vagrant,
-            which conflicts with the tasks in the Ansible playbooks. The
-            instructions in Vagrantfile that would enable vagrant-cachier are
-            currently commented out.
-
-.. todo:: This warning is here because a common refrain during hackathons for
-          SecureDrop a while back was "setting up VMs is too slow, you should
-          use vagrant-cachier". We tried it and it had some nasty interactions
-          with Ansible, so we dropped it, and added this note to prevent other
-          people from making the same suggestion. Eventually, we should: (i)
-          Build our own base boxes to dramatically cut down on provisioning
-          times (ii) Remove this note as well as the commented vagrant-cachier
-          lines from the Vagrantfile
-
-VirtualBox should be at least version 5.x. See `GitHub #1381`_ for documentation
-of incompatibility with the older VirtualBox 4.x release series.
-
-Finally, install Ansible so it can be used with Vagrant to automatically
-provision VMs. We recommend installing Ansible from PyPi with ``pip`` to ensure
-you have the latest stable version.
-
-.. code:: sh
-
-    sudo apt-get install python-pip
-
-The version of Ansible recommended to provision SecureDrop VMs may not be the
-same as the version in your distro's repos, or may at some point flux out of
-sync. For this reason, and also just as a good general development practice, we
-recommend using a Python virtual environment to install Ansible and other
-development-related tooling. Using `virtualenvwrapper
-<http://virtualenvwrapper.readthedocs.io/en/stable/>`_:
-
-.. code:: sh
-
-    sudo apt-get install virtualenvwrapper
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-    mkvirtualenv -p /usr/bin/python2 securedrop
-
-.. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
-          to your ``~/.bashrc`` (or whatever your default shell configuration
-          file is) so that the command-line utilities ``virtualenvwrapper``
-          provides are automatically available in the future.
-
-Mac OS X
-~~~~~~~~
-
-Install the dependencies for the development environment:
-
-#. Vagrant_
-#. VirtualBox_
-#. Ansible_
-#. Docker_
-#. rsync >= 3.1.0
-
-.. note:: Note that the version of rsync installed by default on macOS is
-          extremely out-of-date, as is Apple's custom. We recommend using
-          Homebrew_ to install a modern version (3.1.0 or greater):
-          ``brew install rsync``.
-
-There are several ways to install Ansible on a Mac. We recommend installing it
-to a virtual environment using ``virtualenvwrapper`` and ``pip``, so as not to
-install the older version we use system-wide. The following commands assume your
-default Python is the Python2 that ships with macOS. If you are using a
-different version, the path to ``virtualenvwrapper.sh`` will differ. Running
-``pip show virtualenvwrapper`` should help you find it.
-
-.. code:: sh
-
-    sudo easy_install pip # if you don't already have pip
-    pip install -U virtualenvwrapper
-    source /usr/local/bin/virtualenvwrapper.sh
-    mkvirtualenv -p python2 securedrop
-
-.. note:: You'll want to add the command to source ``virtualenvwrapper.sh``
-          to your ``~/.bashrc`` (or whatever your default shell configuration
-          file is) so that the command-line utilities ``virtualenvwrapper``
-          provides are automatically available in the future.
-
-.. _Vagrant: http://www.vagrantup.com/downloads.html
-.. _VirtualBox: https://www.virtualbox.org/wiki/Downloads
-.. _Ansible: http://docs.ansible.com/intro_installation.html
-.. _Homebrew: https://brew.sh/
-.. _Docker: https://store.docker.com/editions/community/docker-ce-desktop-mac
-
-Fork & Clone the repository
----------------------------
-
-Now you are ready to get your own copy of the source code.
-Visit our repository_ fork it and clone it on you local machine:
-
-
-.. code:: sh
-
-   git clone git@github.com:<your_github_username>/securedrop.git
-
-.. _repository: https://github.com/freedomofpress/securedrop
-
-Install python requirments
---------------------------
-
-SecureDrop uses many 3rd party open source packages from the python community.
-Ensure your virtualenv is activated and install the packages.
-
-.. code:: sh
-
-    pip install -r securedrop/requirements/develop-requirements.txt
-
-.. note:: You will need to run this everytime new packages are added.
+* `improving user experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3AUX>`__
+* `using SecureDrop on mobile <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+improve+source+experience+on+mobile%22>`__
+* improving `CSS/SASS <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3ACSS%2FSASS>`__ and `HTML <https://github.com/freedomofpress/securedrop/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3AHTML>`__
+* `better journalist experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+journalist+experience%22>`__
