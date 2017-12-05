@@ -7,13 +7,13 @@ contribute.
 
 * `Programmers`_, to help us develop SecureDrop.
 * `DevOps`_, to work on the community maintained SecureDrop infrastructure.
-* `Release managers`_, to create and maintain Debian GNU/Linux packages and repositories.
+* `Release Managers`_, to create and maintain Debian GNU/Linux packages and repositories.
 * `Writers`_, to help improve the documentation.
-* `Translators`_, to translate SecureDrop
+* `Translators`_, to translate SecureDrop.
 * `Moderators & Support`_, to answer on `the forums <https://forum.securedrop.club/c/support>`__.
 * `Designers`_, for SecureDrop source and journalist web interfaces and Tails customization.
 
-You will find a a developer to answer any questions you may have at
+You will find a developer to answer any questions you may have at
 the `SecureDrop instant messaging channel
 <https://gitter.im/freedomofpress/securedrop>`__, whatever your
 timezone is. You should also register to `the forum
@@ -32,7 +32,7 @@ Here is a list of bugs and features you can work on.
 Low hanging fruit
 -----------------
 
-* `Suitable for hackatons <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A"hackathon">`__
+* `Suitable for hackathons <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A"hackathon">`__
 
 Bugs
 ----
@@ -48,7 +48,7 @@ Issues sorted by topic
 * `Internationalization (i18n) <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3A%22goals%3A+i18n%22>`__
 * `Source and journalist applications <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aapp>`__
 * `Source and journalist applications cleanup <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+app+code+cleanup%22>`__
-* `Reading Room <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22Reading+Room%22>`__
+* `Reading room client for journalists <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22Reading+Room%22>`__
 * `Journalist experience <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+journalist+experience%22>`__
 * `Improve ansible logic / smoother install <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3A%22goals%3A+Improve+Ansible+logic+%2F+smoother+install%22>`__
 * `Deployment <https://github.com/freedomofpress/securedrop/issues?q=is%3Aissue+is%3Aopen+sort%3Acreated-desc+label%3Aops%2Fdeployment>`__
@@ -82,7 +82,7 @@ Technical writers are invited to review `this documentation
 <https://docs.securedrop.org/>`__ and fix any mistake in accordance to
 the :doc:`documentation guidelines <documentation_guidelines>`.
 
-Documentation tasks (bug and improvements), ordered by priority:
+Documentation tasks (bugs and improvements), ordered by priority:
 
 * `High <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs+label%3AP-high>`__
 * `Unspecified <https://github.com/freedomofpress/securedrop/issues?q=is%3Aopen+is%3Aissue+label%3Adocs>`__
@@ -102,9 +102,9 @@ maintained `by a horizontal community of volunteers
 You can browse the list of services and their corresponding Ansible
 playbook to find one you would like to improve:
 
-* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__ 
-* `Discourse <https://forum.securedrop.club>`__ no playbook yet and and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__ 
-* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__ 
+* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__
+* `Discourse <https://forum.securedrop.club>`__ (no playbook yet) and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__
+* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__
 * `Packages <https://packages.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Packages>`__
 * `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Other>`__
 
@@ -138,7 +138,7 @@ Translators
 
 If English is not your native tongue, your are kindly invited to help
 translate SecureDrop `using the web interface
-<https://weblate.securedrop.club/>`__. It is straightfoward but we also
+<https://weblate.securedrop.club/>`__. It is straightforward but we also
 provide a :doc:`detailed guide <l10n>` to use as a reference for
 details such as the meaning of placeholders etc. If you're in doubt,
 feel free to reach out to the `translation section of the forum
@@ -152,7 +152,7 @@ self-hosted `weblate <https://weblate.org/>`__ infrastructure used by
 the community of translators.
 
 Last but not least, if you are a professional proofreader you may want
-to reach out to `localizationlab <http://localizationlab.org/>`__ and
+to reach out to `Localization Lab <http://localizationlab.org/>`__ and
 become part of their team of reviewers. This is an important part of
 the process to ensure quality translations and there are never enough
 talents to complete this on-going task.
